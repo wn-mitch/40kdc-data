@@ -670,8 +670,8 @@ export function resolveAttachedLeader(
  *   - `unitId` is the **bodyguard** → the leader(s) whose
  *     `leader_attachment.bodyguard_ref.id` points at it (body-first, the
  *     {@link resolveAttachedLeader} direction), and
- *   - `unitId` is the **leader** → the bodyguard its own `leader_attachment`
- *     points to.
+ *   - `unitId` is a **leader** → its bodyguard and every other leader in the
+ *     same attachment.
  * Returns the partner {@link RosterUnit}s (deduped, source order). Empty when
  * the unit has no attachment in this roster — the common case, since
  * attachments are optional at game start. Shaped as a list to carry 11th
@@ -681,23 +681,50 @@ export function resolveAttachmentPartners(
   roster: Roster,
   unitId: string,
 ): RosterUnit[] {
-  const seen = new Set<RosterUnit>();
-  const out: RosterUnit[] = [];
-  const add = (u: RosterUnit | undefined) => {
-    if (!u || seen.has(u)) return;
-    seen.add(u);
-    out.push(u);
-  };
+  const memberIds = attachmentMemberIds(roster, unitId);
+  const partners = new Set<RosterUnit>();
+  for (const unit of roster.units) {
+    if (unit.ref.id !== null && unit.ref.id !== unitId && memberIds.has(unit.ref.id)) partners.add(unit);
+  }
+  return [...partners];
+}
 
-  for (const u of roster.units) {
-    // Body-first: leaders pointing down at `unitId`.
-    if (u.leader_attachment?.bodyguard_ref.id === unitId) add(u);
-    // Leader-first: `unitId`'s own entry points down at a bodyguard.
-    if (u.ref.id === unitId && u.leader_attachment) {
-      add(roster.units.find((b) => b.ref.id === u.leader_attachment!.bodyguard_ref.id));
+/** Actual attachment roles, independent of CHARACTER keywords or the Leader ability. */
+export function resolveAttachmentRoles(
+  roster: Roster,
+  unitId: string,
+): Readonly<Record<string, "leader" | "bodyguard">> {
+  const memberIds = attachmentMemberIds(roster, unitId);
+  const roles: Record<string, "leader" | "bodyguard"> = {};
+  for (const unit of roster.units) {
+    const id = unit.ref.id;
+    const bodyguardId = unit.leader_attachment?.bodyguard_ref.id;
+    if (id === null || !memberIds.has(id) || bodyguardId == null || !memberIds.has(bodyguardId)) continue;
+    roles[id] = "leader";
+    roles[bodyguardId] ??= "bodyguard";
+  }
+  return roles;
+}
+
+function attachmentMemberIds(roster: Roster, unitId: string): Set<string> {
+  const present = new Set(roster.units.flatMap((unit) => unit.ref.id === null ? [] : [unit.ref.id]));
+  const members = new Set<string>();
+  if (!present.has(unitId)) return members;
+  members.add(unitId);
+  let changed = true;
+  while (changed) {
+    changed = false;
+    for (const unit of roster.units) {
+      const id = unit.ref.id;
+      const bodyguardId = unit.leader_attachment?.bodyguard_ref.id;
+      if (id === null || bodyguardId == null || !present.has(bodyguardId)) continue;
+      if (!members.has(id) && !members.has(bodyguardId)) continue;
+      if (!members.has(id) || !members.has(bodyguardId)) changed = true;
+      members.add(id);
+      members.add(bodyguardId);
     }
   }
-  return out;
+  return members;
 }
 
 /**

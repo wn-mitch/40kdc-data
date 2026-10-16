@@ -46,12 +46,12 @@ describe("geometry and unit relations", () => {
   });
 
   it("accepts the ability's own unit as a unit-ref inside a selector's eligibility", () => {
-    expect(effectOk({ type: "select-units", selector: { owner: "enemy", count: 1, eligibility: { type: "happened", parameters: { event: "after-roll", subject: "ability-unit", object: "this-unit", window: "phase" } } }, effect: { type: "no-effect" } })).toBe(true);
+    expect(effectOk({ type: "select-units", selector: { filter: { owner: "enemy" }, count: { min: 1, max: 1 }, eligibility: { type: "happened", parameters: { event: "after-roll", subject: "ability-unit", object: "this-unit", window: "phase" } } }, effect: { type: "no-effect" } })).toBe(true);
     expect(effectOk(leaf("feel-no-pain", { threshold: 6 }, "ability-units"))).toBe(false);
   });
 
   it("measures within to the centre of the battlefield", () => {
-    expect(conditionOk({ type: "within", parameters: { subject: "this-model", of: "battlefield-centre", range: { inches: 6 } } })).toBe(true);
+    expect(conditionOk({ type: "matches", parameters: { subject: "this-model", filter: { within: { of: "battlefield-centre", range: { inches: 6 } } } } })).toBe(true);
   });
 
   it("accepts near / away_from / in_region lists and placement lists; wholly selection needs a range", () => {
@@ -60,8 +60,8 @@ describe("geometry and unit relations", () => {
       in_region: { region: { territory: "your-deployment-zone" }, wholly: true }, placement: ["closest-to-original", "on-terrain"],
     }))).toBe(true);
     expect(effectOk(leaf("return-models", { count: 1, placement: ["closest-to-destruction", "unengaged"] }))).toBe(true);
-    const sel = (selector: Record<string, unknown>) => ({ type: "select-units", selector: { owner: "friendly", count: 1, ...selector }, effect: { type: "no-effect" } });
-    expect(effectOk(sel({ within_inches: 6, wholly: true }))).toBe(true);
+    const sel = (selector: Record<string, unknown>) => ({ type: "select-units", selector: { filter: { owner: "friendly" }, count: { min: 1, max: 1 }, ...selector }, effect: { type: "no-effect" } });
+    expect(effectOk(sel({ filter: { within: { range: { inches: 6 }, wholly: true } } }))).toBe(true);
     expect(effectOk(sel({ wholly: true }))).toBe(false);
   });
 });
@@ -144,7 +144,7 @@ describe("battle size and counts", () => {
     expect(effectOk(leaf("resource-die", { pool: "fate-dice-pool", operation: "add", value: "rolled", count: BATTLE_SIZE }))).toBe(true);
     expect(effectOk(leaf("return-models", { count: { count_of: "models-in-bearer-unit", keyword: "SPYDER" } }))).toBe(true);
     expect(effectOk(leaf("army-rule", { rule: "composition", measure: "points", max: BATTLE_SIZE }))).toBe(true);
-    expect(effectOk({ type: "select-units", selector: { owner: "enemy", max_count: BATTLE_SIZE }, effect: { type: "no-effect" } })).toBe(true);
+    expect(effectOk({ type: "select-units", selector: { filter: { owner: "enemy" }, count: { max: BATTLE_SIZE } }, effect: { type: "no-effect" } })).toBe(true);
   });
 
   it("rejects a battle-size value missing a size, and a wargear count without its wargear", () => {
@@ -182,12 +182,12 @@ describe("abilities, usage and expiry", () => {
     expect(abilityOk(ability({ type: "no-effect" }, { usage: limits.slice(0, 1) }))).toBe(false);
   });
 
-  it("shares one expiry vocabulary between scope and designate, keeping the retired designate spellings", () => {
+  it("shares one canonical expiry vocabulary between scope and designate", () => {
     expect(abilityOk(ability({ type: "no-effect" }, { scope: { duration: "until-next-shooting-phase" } }))).toBe(true);
     const designate = (clears_on: string) => leaf("designate", { subject: "selected-unit", tag: "spotted", by: "this-unit", clears_on });
     expect(effectOk(designate("until-end-of-opponent-next-turn"))).toBe(true);
     expect(effectOk(designate("control-lost"))).toBe(true);
-    expect(effectOk(designate("phase-end"))).toBe(true);
+    expect(effectOk(designate("phase"))).toBe(true);
     expect(effectOk(designate("whenever"))).toBe(false);
   });
 
@@ -236,24 +236,24 @@ describe("rules, army and the adopted D18 shapes", () => {
     expect(effectOk(leaf("characteristic-resolution", { stat: "T", rule: "majority", tie: "highest", applies_to: "wound-roll", incoming: true }))).toBe(true);
     expect(effectOk(leaf("characteristic-resolution", { stat: "T", rule: "majority" }))).toBe(false);
     expect(effectOk(leaf("characteristic-resolution", { stat: "T", rule: "highest", tie: "lowest" }))).toBe(false);
-    expect(effectOk(leaf("borrow-weapons", { from: { embarked_in: "this-unit" }, max_models: 2, weapon_type: "ranged", exclude_weapon_keyword: ["ONE SHOT"], until: "attack-sequence" }))).toBe(true);
-    expect(effectOk(leaf("select-weapon", { count: 1, weapon_type: "melee", bind_as: "blade" }, "this-model"))).toBe(true);
-    expect(effectOk(leaf("stat-modifier", { stat: "A", operation: "add", value: 1, weapon_ref: { weapon_var: "blade" } }))).toBe(true);
-    expect(effectOk(leaf("roll-modifier", { roll: "hit", operation: "add", value: 1, weapon_ref: { selected_by: { ability: "firing-deck" } } }))).toBe(true);
+    expect(effectOk(leaf("borrow-weapons", { from: { embarked_in: "this-unit" }, max_models: 2, weapons: { type: "ranged", exclude_keyword: { keyword_id: "one-shot" } }, until: "attack-sequence" }))).toBe(true);
+    expect(effectOk(leaf("select-weapon", { count: 1, weapons: { type: "melee" }, bind_as: "blade" }, "this-model"))).toBe(true);
+    expect(effectOk(leaf("stat-modifier", { stat: "A", operation: "add", value: 1, weapons: { ref: { weapon_var: "blade" } } }))).toBe(true);
+    expect(effectOk(leaf("roll-modifier", { roll: "hit", operation: "add", value: 1, weapons: { ref: { selected_by: { ability: "firing-deck" } } } }))).toBe(true);
     expect(effectOk(leaf("stat-modifier", { stat: "psyker-level", operation: "set", value: 2 }, "this-model"))).toBe(true);
   });
 
-  it("binds objectives with select-objective; range and range_inches are exclusive", () => {
+  it("binds objectives with select-objective; selector uses a typed filter and count bounds", () => {
     const so = (selector: Record<string, unknown>) => ({ type: "select-objective", selector: { bind_as: "o", ...selector }, effect: leaf("designate", { subject: { objective: { selection_var: "o" } }, tag: "mutated" }) });
-    expect(effectOk(so({ count: 1, range: "objective-control", origin: "bearer-unit", controlled_by: "your-army" }))).toBe(true);
-    expect(effectOk(so({ count: "each", filter: { controlled_by: "friendly" } }))).toBe(true);
-    expect(effectOk(so({ count: 1, range: "objective-control", range_inches: 6 }))).toBe(false);
+    expect(effectOk(so({ count: { min: 1, max: 1 }, filter: { controlled_by: "friendly" } }))).toBe(true);
+    expect(effectOk(so({ count: { min: 0 }, filter: { controlled_by: "friendly" } }))).toBe(true);
+    expect(effectOk(so({ count: { min: 1, max: 1 }, range_inches: 6 }))).toBe(false);
   });
 
   it("caps an aura's range and adds the D14 designation predicates", () => {
-    expect(effectOk({ type: "aura", target: "enemy-within-aura", modifier: { range: 3, range_cap: 12, effect: { type: "no-effect" } } })).toBe(true);
+    expect(effectOk({ type: "aura", target: "enemy-within-aura", modifier: { range: { inches: 3 }, range_cap: 12, effect: { type: "no-effect" } } })).toBe(true);
     expect(conditionOk({ type: "guided", parameters: {} })).toBe(true);
-    expect(conditionOk({ type: "designated", parameters: { subject: "defender", tag: "spotted", by: { designated: "observer", all_of: ["MARKERLIGHT"] } } })).toBe(true);
+    expect(conditionOk({ type: "matches", parameters: { subject: "defender", filter: { designated: "spotted" } } })).toBe(true);
   });
 });
 
@@ -299,8 +299,8 @@ describe("integrity: phase-4 bindings", () => {
     expect(await run(leaf("designate", { subject: { objective: { selection_var: "o" } }, tag: "mutated" }))).toEqual([
       'objective {selection_var: "o"} is not inside a select-objective that binds it',
     ]);
-    expect(await run(leaf("stat-modifier", { stat: "A", operation: "add", value: 1, weapon_ref: { weapon_var: "blade" } }))).toEqual([
-      'weapon_ref "blade" is bound by no select-weapon in this ability',
+    expect(await run(leaf("stat-modifier", { stat: "A", operation: "add", value: 1, weapons: { ref: { weapon_var: "blade" } } }))).toEqual([
+      'weapon "blade" is not bound by an earlier select-weapon step',
     ]);
     expect(await run(leaf("split-unit", { model_counts: [5, 5], bind_as: ["a", "b", "c"] }))).toEqual(["split-unit names 3 bindings for 2 resulting units"]);
   });

@@ -266,14 +266,15 @@ function withLimit(owner: CompileLeaf, limit: CompileLeaf): Node {
     negated = !negated;
     node = (node.operands as Node[])[0]!;
   }
-  const { subject: _subject, ...found } = (node.parameters ?? {}) as Node;
+  const lowered = (node.parameters ?? {}) as Node;
+  const { subject: _subject, ...found } = node.type === "matches" ? (((lowered.filter as Node).within ?? {}) as Node) : lowered;
   if (limit.family_id === "in-region") {
     if (parameters.folded_in_region !== undefined) throw new CompileError("A set-up is placed within two regions; the DSL placement holds one.");
     parameters.folded_in_region = { region: found.region, ...(found.wholly === true ? { wholly: true } : {}) };
     return parameters;
   }
   if (limit.parameters.weapon_range !== undefined) throw new CompileError("A half- or full-weapon distance has no placement form.");
-  if (node.type !== "within") throw new CompileError(`A ${limit.family_id} placement limit lowered to ${String(node.type)}, which has no placement form.`);
+  if (node.type !== "within" && (node.type !== "matches" || (lowered.filter as Node).within === undefined)) throw new CompileError(`A ${limit.family_id} placement limit lowered to ${String(node.type)}, which has no placement form.`);
   if (!negated) {
     append("folded_near", { of: found.of, range: found.range, ...(found.wholly === true ? { wholly: true } : {}) });
     return parameters;

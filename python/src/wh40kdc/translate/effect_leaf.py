@@ -12,6 +12,7 @@ import re
 from collections.abc import Callable
 from typing import Any
 
+from wh40kdc.translate.condition_refs import _obj
 from wh40kdc.translate.effect_leaf_access import permission, targeting
 from wh40kdc.translate.effect_leaf_board import describe_board_leaf
 from wh40kdc.translate.effect_leaf_shapes import (
@@ -19,6 +20,7 @@ from wh40kdc.translate.effect_leaf_shapes import (
     ability_limits,
     describe_shape_leaf,
 )
+from wh40kdc.translate.effect_select import select_units_subject, selection_binding
 from wh40kdc.translate.effect_words import (
     Ctx,
     ability_label,
@@ -49,6 +51,7 @@ from wh40kdc.translate.effect_words import (
     weapon_noun,
     weapon_roll_scope,
 )
+from wh40kdc.translate.expiry import expiry_trail
 
 Leaf = dict[str, Any]
 Inline = Callable[[Any, Ctx], str]
@@ -68,6 +71,7 @@ LEAF_TYPES = frozenset(
         "weapon-ability-range",
         "weapon-grant",
         "ability-modifier",
+        "oath-modifier",
         "ability-activate",
         "permission",
         "targeting",
@@ -110,9 +114,8 @@ LEAF_TYPES = frozenset(
 
 def _incoming_lead(m: dict[str, Any], subj: str) -> str:
     """ "each time an attack targets the unit, " — the lead of an ``incoming`` change."""
-    attack = (
-        f"a {jstr(m['weapon_type'])} attack" if m.get("weapon_type") is not None else "an attack"
-    )
+    scope = _obj(m.get("weapons"))
+    attack = f"a {jstr(scope['type'])} attack" if scope.get("type") else "an attack"
     return f"each time {attack} targets {subj}, "
 
 
@@ -157,14 +160,8 @@ def _stat_modifier(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> str:
             f"{_incoming_lead(m, subj)}{_stat_change(m, f'the {stat} of that attack')}{_bounds(m)}"
         )
     if has_weapon(m):
-        # A weapon exclusion names the one weapon the change skips.
-        other = (
-            f" other than \"{jstr(m['exclude_weapon_name'])}\""
-            if m.get("exclude_weapon_name") is not None
-            else ""
-        )
         holder = weapon_holder(e.get("target"), ctx)
-        what = f"the {stat} of {weapon_noun(m)}{other} equipped by {holder}"
+        what = f"the {stat} of {weapon_noun(m)} equipped by {holder}"
         return f"{_stat_change(m, what)}{_bounds(m)}"
     return f"{_stat_change(m, of_or_possessive(subj, stat))}{_bounds(m)}"
 
@@ -344,16 +341,10 @@ def is_defined_grant(e: Any) -> bool:
 
 
 def defined_grant_head(e: Leaf, ctx: Ctx) -> str:
-    """Who holds a printed ability and its name, or "the following rules" for an unnamed one.
-
-    A model-level target holds one copy per unit.
-    """
+    """Who holds a printed ability and its name, or the unnamed grant's rules."""
     m = e.get("modifier") or {}
     definition = m.get("definition") or {}
-    target = e.get("target")
-    base = effect_subject(target, ctx)
-    model_level = isinstance(target, dict) and target.get("level") == "model"
-    subj = f"units with one or more {base.removeprefix('all ')}" if model_level else base
+    subj = effect_subject(e.get("target"), ctx)
     name = definition.get("name")
     if not isinstance(name, str):
         name = ability_label(m.get("ability")) if m.get("ability") is not None else None
@@ -397,14 +388,14 @@ def _keyword_grant(m: dict[str, Any], subj: str) -> str:
 
 
 def _weapon_ability_grant(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> str:
-    # A grant and a removal in one effect read "gain X and lose Y"; an empty list is no change.
+    """Render catalog-backed weapon keyword grants and selectors."""
     gained = (
-        " and ".join(bracket_keyword(a) for a in m["abilities"])
-        if isinstance(m.get("abilities"), list)
+        " and ".join(bracket_keyword(keyword) for keyword in m["keywords"])
+        if isinstance(m.get("keywords"), list)
         else ""
     )
     lost = (
-        " and ".join(bracket_keyword(a) for a in m["removes"])
+        " and ".join(bracket_keyword(keyword) for keyword in m["removes"])
         if isinstance(m.get("removes"), list)
         else ""
     )
@@ -462,6 +453,20 @@ def _ability_modifier(m: dict[str, Any], subj: str, ctx: Ctx, inline: Inline) ->
     whose = _modified_ability(m.get("ability"), subj, ctx)
     aspect = _ASPECTS.get(jstr(m.get("aspect")), jstr(m.get("aspect")))
     raw = m.get("value")
+    if (
+        m.get("aspect") == "selection"
+        and isinstance(m.get("selection"), dict)
+        and m.get("operation") == "set"
+        and isinstance(m.get("ability"), dict)
+        and m["ability"].get("event") == "used"
+    ):
+        selector = m["selection"]
+        duration = expiry_trail(m.get("recipient_duration"))
+        return (
+            f"replace {whose}'s selection with {select_units_subject(selector)}"
+            f"{selection_binding(selector)}; those recipients are affected by "
+            f"that same ability{' ' + duration if duration else ''}"
+        )
     if m.get("aspect") == "range" and is_num(raw):
         value = f'{jstr(raw)}"'
     elif isinstance(raw, str):
@@ -555,8 +560,23 @@ _CORE_RULES = {
 
 
 def _rule_state(m: dict[str, Any], subj: str) -> str:
-    granted = m.get("direction") == "granted"
-    rule = jstr(m.get("rule"))
+    direction = m.get("direction")
+    rule = m.get("rule")
+    if direction == "exchanged":
+        first = ability_label(rule)
+        second = ability_label(m.get("exchange_with"))
+        return (
+            f"if {subj} {v(subj, 'has')} exactly one of the {first} and "
+            f"{second} abilities, {subj} simultaneously {v(subj, 'loses')} "
+            f"that ability and {v(subj, 'gains')} the other"
+        )
+    if direction == "suppressed" and m.get("except_from") == "this-ability":
+        return (
+            f"{subj} {v(subj, 'loses')} the {ability_label(rule)} ability "
+            f"and cannot gain it except from this ability"
+        )
+    granted = direction == "granted"
+    rule = jstr(rule)
     if m.get("rule_kind") == "faction-rule":
         return (
             f"{subj} {v(subj, 'gains')} {ability_label(rule)}"
@@ -587,6 +607,54 @@ def _rule_state(m: dict[str, Any], subj: str) -> str:
     verb = "gains" if granted else "loses"
     label = ability_label(rule) if kind == "ability" else title_case(rule)
     return f"{subj} {v(subj, verb)} the {label} {noun}"
+
+
+def _oath_modifier(m: dict[str, Any], subj: str, ctx: Ctx, inline: Inline) -> str:
+    label = ability_label(m.get("ability"))
+    aspect = m.get("aspect")
+    if aspect == "quality-persistence":
+        duration = expiry_trail(m.get("duration"))
+        return (
+            f"{subj} {v(subj, 'retains')} qualities from {jstr(m.get('from'))} "
+            f"{label} Oaths{' ' + duration if duration else ''}"
+        )
+    if aspect == "deed-reward":
+        method = (
+            "randomly determined "
+            if m.get("selection_method") == "random"
+            else "chosen "
+            if m.get("selection_method") == "chosen"
+            else ""
+        )
+        any_method = (
+            ", regardless of how those deeds were selected"
+            if m.get("selection_method") == "any"
+            else ""
+        )
+        return (
+            f"for {subj}, on completion of {jstr(m.get('applies_to'))} "
+            f"{method}{label} deeds{any_method}, replace their reward with: "
+            f"{inline(m.get('effect'), ctx)}"
+        )
+    domains = m.get("domains")
+    domain_text = (
+        and_list(
+            [
+                "qualities" if domain == "quality" else f"{jstr(domain)}s"
+                for domain in domains
+            ]
+        )
+        if isinstance(domains, list)
+        else ""
+    )
+    clauses = [f"when selecting {domain_text} for {label} for {subj}"]
+    if m.get("exclude_previously_selected") is True:
+        clauses.append(f"exclude previously selected {domain_text}")
+    if m.get("duplicate_roll") == "choose-unselected":
+        clauses.append("if a duplicate is rolled, choose an unselected result in that domain")
+    if m.get("stop_when") == "all-domains-exhausted":
+        clauses.append("stop when every domain is exhausted")
+    return "; ".join(clauses)
 
 
 def _weapon_grant(m: dict[str, Any], subj: str) -> str:
@@ -626,6 +694,8 @@ def describe_leaf(e: Leaf, ctx: Ctx, inline: Inline) -> str:
         return _weapon_grant(m, subj)
     if t == "ability-modifier":
         return _ability_modifier(m, subj, ctx, inline)
+    if t == "oath-modifier":
+        return _oath_modifier(m, subj, ctx, inline)
     if t == "ability-activate":
         return ability_activate(m, subj)
     if t == "permission":

@@ -10,33 +10,58 @@
     "source_digest": "5ea7b9823f7d6499763714ec6ab855e5697594ad130487c41ab248750fb6b3aa",
     "version": "2025-q3",
     "effect": {
-      "type": "designate-target",
-      "designation": "daring-recon-target",
-      "select": {
-        "scope": "enemy-unit",
-        "count": 1,
-        "timing": "start-of-shooting-phase",
-        "within_inches": 18,
-        "reference": "bearer-unit",
-        "visibility_required": true
-      },
-      "applies": {
-        "to": "attackers-of-target",
-        "effect": {
-          "type": "re-roll",
-          "target": {
-            "owner": "friendly",
-            "all_of": [
-              "ASTRA MILITARUM"
-            ]
-          },
-          "modifier": {
-            "roll": "hit",
-            "subset": "ones"
+      "type": "ability-part",
+      "trigger": {
+        "event": "phase-started",
+        "condition": {
+          "type": "phase-is",
+          "parameters": {
+            "phase": "shooting"
           }
         }
       },
-      "duration": "phase"
+      "effect": {
+        "type": "designate-target",
+        "designation": "daring-recon-target",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy",
+              "within": {
+                "range": {
+                  "inches": 18
+                },
+                "of": "this-unit"
+              },
+              "visible": {
+                "to": "this-unit"
+              }
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
+          }
+        },
+        "applies": {
+          "to": "attackers-of-target",
+          "effect": {
+            "type": "re-roll",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "ASTRA MILITARUM"
+              ]
+            },
+            "modifier": {
+              "roll": "hit",
+              "subset": "ones"
+            }
+          }
+        },
+        "duration": "phase"
+      }
     },
     "scope": {
       "duration": "phase"
@@ -72,8 +97,13 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Sustained Hits 1"
+          "keywords": [
+            {
+              "keyword_id": "sustained-hits",
+              "parameters": {
+                "value": 1
+              }
+            }
           ]
         }
       }
@@ -316,19 +346,23 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "subject": "this-model",
-              "of": {
-                "owner": "friendly",
-                "all_of": [
-                  "OFFICER"
-                ],
-                "level": "model"
+              "filter": {
+                "within": {
+                  "range": {
+                    "inches": 6
+                  },
+                  "of": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "OFFICER"
+                    ],
+                    "level": "model"
+                  }
+                }
               },
-              "range": {
-                "inches": 6
-              }
+              "subject": "this-model"
             }
           },
           "effect": {
@@ -351,19 +385,23 @@
             "operator": "not",
             "operands": [
               {
-                "type": "within",
+                "type": "matches",
                 "parameters": {
-                  "subject": "this-model",
-                  "of": {
-                    "owner": "friendly",
-                    "all_of": [
-                      "OFFICER"
-                    ],
-                    "level": "model"
+                  "filter": {
+                    "within": {
+                      "range": {
+                        "inches": 6
+                      },
+                      "of": {
+                        "owner": "friendly",
+                        "all_of": [
+                          "OFFICER"
+                        ],
+                        "level": "model"
+                      }
+                    }
                   },
-                  "range": {
-                    "inches": 6
-                  }
+                  "subject": "this-model"
                 }
               }
             ]
@@ -421,8 +459,13 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Sustained Hits 1"
+          "keywords": [
+            {
+              "keyword_id": "sustained-hits",
+              "parameters": {
+                "value": 1
+              }
+            }
           ]
         }
       }
@@ -620,11 +663,16 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "owner": "friendly",
-        "max_count": 3,
-        "keywords": [
-          "ASTRA MILITARUM"
-        ]
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "ASTRA MILITARUM"
+          ]
+        },
+        "count": {
+          "min": 0,
+          "max": 3
+        }
       },
       "effect": {
         "type": "choice",
@@ -719,7 +767,9 @@
               "to": "battlefield",
               "from": "strategic-reserves",
               "via": "deep-strike",
-              "min_enemy_distance": 6
+              "min_enemy_distance": {
+                "inches": 6
+              }
             }
           },
           {
@@ -884,10 +934,10 @@
     "source_digest": "f14533132e850cc453f36b4719f1da88ebdeec282c78f3ea88fb5e5cf7792dfa",
     "version": "2025-q3",
     "effect": {
-      "type": "weapon-ability-grant",
+      "type": "keyword-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
+        "keywords": [
           "GRENADES"
         ]
       }
@@ -917,8 +967,10 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Lethal Hits"
+        "keywords": [
+          {
+            "keyword_id": "lethal-hits"
+          }
         ]
       }
     },
@@ -1065,8 +1117,13 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Sustained Hits 1"
+          "keywords": [
+            {
+              "keyword_id": "sustained-hits",
+              "parameters": {
+                "value": 1
+              }
+            }
           ]
         }
       }
@@ -1450,16 +1507,20 @@
           {
             "type": "conditional",
             "condition": {
-              "type": "within",
+              "type": "matches",
               "parameters": {
-                "of": {
-                  "owner": "friendly",
-                  "all_of": [
-                    "PLATOON"
-                  ]
-                },
-                "range": {
-                  "inches": 6
+                "filter": {
+                  "within": {
+                    "range": {
+                      "inches": 6
+                    },
+                    "of": {
+                      "owner": "friendly",
+                      "all_of": [
+                        "PLATOON"
+                      ]
+                    }
+                  }
                 }
               }
             },
@@ -1469,7 +1530,9 @@
               "modifier": {
                 "roll": "hit",
                 "succeeds_on": 4,
-                "weapon_type": "ranged"
+                "weapons": {
+                  "type": "ranged"
+                }
               }
             }
           },
@@ -1479,16 +1542,20 @@
               "operator": "not",
               "operands": [
                 {
-                  "type": "within",
+                  "type": "matches",
                   "parameters": {
-                    "of": {
-                      "owner": "friendly",
-                      "all_of": [
-                        "PLATOON"
-                      ]
-                    },
-                    "range": {
-                      "inches": 6
+                    "filter": {
+                      "within": {
+                        "range": {
+                          "inches": 6
+                        },
+                        "of": {
+                          "owner": "friendly",
+                          "all_of": [
+                            "PLATOON"
+                          ]
+                        }
+                      }
                     }
                   }
                 }
@@ -1500,7 +1567,9 @@
               "modifier": {
                 "roll": "hit",
                 "succeeds_on": 5,
-                "weapon_type": "ranged"
+                "weapons": {
+                  "type": "ranged"
+                }
               }
             }
           }
@@ -1603,7 +1672,9 @@
               "hit"
             ],
             "only": "worsening",
-            "weapon_type": "ranged"
+            "weapons": {
+              "type": "ranged"
+            }
           }
         }
       }
@@ -1634,19 +1705,23 @@
         "operator": "and",
         "operands": [
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "ASTRA MILITARUM"
-              ]
+              "filter": {
+                "all_of": [
+                  "ASTRA MILITARUM"
+                ]
+              }
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "INFANTRY"
-              ]
+              "filter": {
+                "all_of": [
+                  "INFANTRY"
+                ]
+              }
             }
           }
         ]
@@ -1840,13 +1915,15 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "subject": "defender",
-          "any_of": [
-            "MONSTER",
-            "VEHICLE"
-          ]
+          "filter": {
+            "any_of": [
+              "MONSTER",
+              "VEHICLE"
+            ]
+          },
+          "subject": "defender"
         }
       },
       "effect": {
@@ -1881,18 +1958,29 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "owner": "friendly",
-        "count": 1,
-        "keywords": [
-          "ASTRA MILITARUM",
-          "INFANTRY"
-        ],
-        "within_inches": 12,
-        "reference": "bearer",
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "ASTRA MILITARUM",
+            "INFANTRY"
+          ],
+          "within": {
+            "range": {
+              "inches": 12
+            },
+            "of": "this-model"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
         "eligibility": {
-          "type": "unit-state",
+          "type": "matches",
           "parameters": {
-            "state": "battle-shocked"
+            "filter": {
+              "state": "battle-shocked"
+            }
           }
         }
       },
@@ -1940,11 +2028,13 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "all_of": [
-            "OFFICER"
-          ]
+          "filter": {
+            "all_of": [
+              "OFFICER"
+            ]
+          }
         }
       },
       "effect": {
@@ -2040,22 +2130,28 @@
         "operator": "and",
         "operands": [
           {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "subject": "event-subject",
-              "of": "this-unit",
-              "range": {
-                "inches": 8
-              }
+              "filter": {
+                "within": {
+                  "range": {
+                    "inches": 8
+                  },
+                  "of": "this-unit"
+                }
+              },
+              "subject": "event-subject"
             }
           },
           {
             "operator": "not",
             "operands": [
               {
-                "type": "unit-state",
+                "type": "matches",
                 "parameters": {
-                  "state": "engaged"
+                  "filter": {
+                    "state": "engaged"
+                  }
                 }
               }
             ]
@@ -2225,23 +2321,35 @@
       "effect": {
         "type": "select-units",
         "selector": {
-          "owner": "friendly",
-          "count": 1,
-          "keywords": [
-            "ASTRA MILITARUM",
-            "INFANTRY"
-          ],
-          "excluded_keywords": [
-            "ARTILLERY"
-          ],
-          "within_inches": 6,
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "ASTRA MILITARUM",
+              "INFANTRY"
+            ],
+            "none_of": [
+              "ARTILLERY"
+            ],
+            "within": {
+              "range": {
+                "inches": 6
+              },
+              "of": "this-model"
+            }
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
           "eligibility": {
             "operator": "not",
             "operands": [
               {
-                "type": "unit-state",
+                "type": "matches",
                 "parameters": {
-                  "state": "engaged"
+                  "filter": {
+                    "state": "engaged"
+                  }
                 }
               }
             ]
@@ -2335,16 +2443,39 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "all_of": [
+                  "OFFICER"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": {
+                    "objective": {}
+                  },
+                  "range": "objective-control"
+                }
+              }
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "ability-grant",
+        "type": "re-roll",
         "target": "this-unit",
         "modifier": {
-          "ability": "benefit-of-cover"
+          "roll": "battle-shock",
+          "result_scope": "any-result"
         }
       }
     },
@@ -2355,7 +2486,7 @@
       "cadian-command-squad"
     ],
     "ability_type": "unit",
-    "behavior": "reactive",
+    "behavior": "activated",
     "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "astra-militarum"
   },
@@ -2373,8 +2504,10 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Assault"
+        "keywords": [
+          {
+            "keyword_id": "assault"
+          }
         ]
       }
     },
@@ -2401,13 +2534,15 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "subject": "defender",
-          "any_of": [
-            "MONSTER",
-            "VEHICLE"
-          ]
+          "filter": {
+            "any_of": [
+              "MONSTER",
+              "VEHICLE"
+            ]
+          },
+          "subject": "defender"
         }
       },
       "effect": {
@@ -2415,7 +2550,9 @@
         "condition": {
           "type": "attack-is",
           "parameters": {
-            "weapon_name": "magma cannon"
+            "weapons": {
+              "name": "magma cannon"
+            }
           }
         },
         "effect": {
@@ -2490,8 +2627,13 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Sustained Hits 1"
+          "keywords": [
+            {
+              "keyword_id": "sustained-hits",
+              "parameters": {
+                "value": 1
+              }
+            }
           ]
         }
       }
@@ -2658,7 +2800,9 @@
       "condition": {
         "type": "attack-is",
         "parameters": {
-          "weapon_name": "quake cannon"
+          "weapons": {
+            "name": "quake cannon"
+          }
         }
       },
       "effect": {
@@ -2693,26 +2837,43 @@
     "source_digest": "99c7651826205c3049d320336a604bf00ce98b91632f2ad4db6cae1df8dec1ec",
     "version": "2025-q3",
     "effect": {
-      "type": "designate-target",
-      "designation": "suppressed",
-      "select": {
-        "scope": "enemy-unit",
-        "count": 1,
-        "timing": "after-this-unit-shoots"
-      },
-      "applies": {
-        "to": "target",
-        "effect": {
-          "type": "roll-modifier",
-          "target": "this-unit",
-          "modifier": {
-            "roll": "hit",
-            "operation": "subtract",
-            "value": 1
-          }
+      "type": "ability-part",
+      "trigger": {
+        "event": "attacks-resolved",
+        "subject": "this-unit",
+        "filter": {
+          "kind": "shoot"
         }
       },
-      "duration": "until-next-command-phase"
+      "effect": {
+        "type": "designate-target",
+        "designation": "suppressed",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
+          }
+        },
+        "applies": {
+          "to": "target",
+          "effect": {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "operation": "subtract",
+              "value": 1
+            }
+          }
+        },
+        "duration": "until-next-command-phase"
+      }
     },
     "scope": {
       "duration": "until-next-command-phase"
@@ -2806,8 +2967,10 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Devastating Wounds"
+        "keywords": [
+          {
+            "keyword_id": "devastating-wounds"
+          }
         ]
       }
     },
@@ -2834,11 +2997,13 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "all_of": [
-            "OFFICER"
-          ]
+          "filter": {
+            "all_of": [
+              "OFFICER"
+            ]
+          }
         }
       },
       "effect": {
@@ -2958,22 +3123,28 @@
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "all_of": [
-                "REGIMENT"
-              ]
+              "filter": {
+                "all_of": [
+                  "REGIMENT"
+                ]
+              },
+              "subject": "defender"
             }
           },
           {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "of": "this-model",
-              "range": {
-                "inches": 3
-              }
+              "filter": {
+                "within": {
+                  "range": {
+                    "inches": 3
+                  },
+                  "of": "this-model"
+                }
+              },
+              "subject": "defender"
             }
           }
         ]
@@ -3115,7 +3286,9 @@
                 }
               },
               "kind": "shoot",
-              "weapon_name": "demolisher battle cannon"
+              "weapons": {
+                "name": "demolisher battle cannon"
+              }
             }
           },
           {
@@ -3127,7 +3300,9 @@
                 "hit"
               ],
               "only": "worsening",
-              "weapon_type": "ranged"
+              "weapons": {
+                "type": "ranged"
+              }
             }
           }
         ]
@@ -3262,33 +3437,26 @@
     "source_digest": "50c02c1c491053465542578d51aa7b56e1d6055fb52b69b74bccb947ca1f7fcf",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "happened",
-        "parameters": {
-          "event": "destroyed",
-          "object": "event-object",
-          "window": "event"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 2,
+      "comparison": "gte",
+      "on_success": {
+        "type": "set-up",
+        "target": "this-model",
+        "modifier": {
+          "to": "battlefield",
+          "placement": [
+            "closest-to-destruction",
+            "unengaged"
+          ],
+          "wounds_remaining": "D3"
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 2,
-        "comparison": "gte",
-        "on_success": {
-          "type": "return-models",
-          "target": "this-model",
-          "modifier": {
-            "count": 1,
-            "wounds_remaining": "D3",
-            "placement": "closest-to-destruction"
-          }
-        }
-      }
+      "on_fail": null
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "unit_ids": [
       "lord-marshal-dreir"
@@ -3297,9 +3465,24 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "usage": {
-      "frequency": "first-this-battle"
+      "frequency": "first-this-battle",
+      "per": "model"
     },
-    "faction_id": "astra-militarum"
+    "faction_id": "astra-militarum",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "model-destroyed",
+          "object": "this-model",
+          "window": "phase",
+          "count": {
+            "min": 1
+          }
+        }
+      }
+    }
   },
   {
     "ability_id": "leading-the-charge-astra-militarum",
@@ -3329,8 +3512,10 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Devastating Wounds"
+          "keywords": [
+            {
+              "keyword_id": "devastating-wounds"
+            }
           ]
         }
       }
@@ -3358,19 +3543,23 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "subject": "this-model",
-          "of": {
-            "owner": "friendly",
-            "all_of": [
-              "ASTRA MILITARUM",
-              "VEHICLE"
-            ]
+          "filter": {
+            "within": {
+              "range": {
+                "inches": 3
+              },
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "ASTRA MILITARUM",
+                  "VEHICLE"
+                ]
+              }
+            }
           },
-          "range": {
-            "inches": 3
-          }
+          "subject": "this-model"
         }
       },
       "effect": {
@@ -3393,7 +3582,7 @@
   },
   {
     "ability_id": "omnissiahs-blessing-astra-militarum",
-    "name": "Omnissiah\u2019s Blessing",
+    "name": "Omnissiah’s Blessing",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -3404,16 +3593,25 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "owner": "friendly",
-        "count": 1,
-        "keywords": [
-          "ASTRA MILITARUM",
-          "VEHICLE"
-        ],
-        "target_kind": "model",
-        "within_inches": 3,
-        "reference": "bearer",
-        "selection_limit": {
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "ASTRA MILITARUM",
+            "VEHICLE"
+          ],
+          "level": "model",
+          "within": {
+            "range": {
+              "inches": 3
+            },
+            "of": "this-model"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "limit": {
           "count": 1,
           "period": "turn"
         }
@@ -3461,23 +3659,17 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "happened",
+        "type": "matches",
         "parameters": {
-          "event": "destroyed",
-          "object": {
-            "owner": "friendly",
-            "all_of": [
-              "ASTRA MILITARUM",
-              "VEHICLE"
-            ],
-            "level": "model",
+          "subject": "event-object",
+          "filter": {
             "within": {
+              "of": "this-model",
               "range": {
                 "inches": 12
               }
             }
-          },
-          "window": "battle"
+          }
         }
       },
       "effect": {
@@ -3487,7 +3679,10 @@
           "stat": "A",
           "operation": "set",
           "value": 6,
-          "weapon_name": "Enginseer axe"
+          "weapons": {
+            "type": "melee",
+            "name": "enginseer axe"
+          }
         }
       }
     },
@@ -3500,7 +3695,18 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "astra-militarum"
+    "faction_id": "astra-militarum",
+    "trigger": {
+      "event": "model-destroyed",
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "ASTRA MILITARUM",
+          "VEHICLE"
+        ],
+        "level": "model"
+      }
+    }
   },
   {
     "ability_id": "tremor-quake-astra-militarum",
@@ -3632,7 +3838,44 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "astra-militarum"
+    "faction_id": "astra-militarum",
+    "trigger": {
+      "event": "before-roll",
+      "filter": {
+        "roll": "deadly-demise"
+      },
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "opponent-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "destroyed",
+              "object": "this-unit",
+              "window": "event"
+            }
+          }
+        ]
+      },
+      "optional": false
+    }
   },
   {
     "ability_id": "airborne-insertion-astra-militarum",
@@ -3788,8 +4031,10 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Devastating Wounds"
+          "keywords": [
+            {
+              "keyword_id": "devastating-wounds"
+            }
           ]
         }
       }
@@ -3825,8 +4070,17 @@
       "effect": {
         "type": "select-units",
         "selector": {
-          "owner": "enemy",
-          "count": 1,
+          "filter": {
+            "owner": "enemy",
+            "none_of": [
+              "MONSTER",
+              "VEHICLE"
+            ]
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
           "eligibility": {
             "type": "happened",
             "parameters": {
@@ -3836,15 +4090,13 @@
                 "roll": "hit",
                 "result": "success",
                 "attack_type": "ranged",
-                "weapon_name": "storm eagle rockets"
+                "weapons": {
+                  "name": "storm eagle rockets"
+                }
               },
               "window": "phase"
             }
-          },
-          "excluded_keywords": [
-            "MONSTER",
-            "VEHICLE"
-          ]
+          }
         },
         "effect": {
           "type": "sequence",
@@ -3965,12 +4217,14 @@
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "attacker",
-              "all_of": [
-                "FLY"
-              ]
+              "filter": {
+                "all_of": [
+                  "FLY"
+                ]
+              },
+              "subject": "attacker"
             }
           }
         ]
@@ -4072,56 +4326,97 @@
             }
           },
           {
-            "type": "has-keyword",
+            "type": "player-turn-is",
             "parameters": {
-              "subject": "defender",
-              "all_of": [
-                "INFANTRY"
-              ]
-            }
-          },
-          {
-            "type": "attack-is",
-            "parameters": {
-              "attack_type": "ranged"
+              "turn": "your-turn"
             }
           }
         ]
       },
       "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "designate",
-            "target": "this-model",
-            "modifier": {
-              "subject": "defender",
-              "tag": "shaken"
-            }
+        "type": "for-each-unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy",
+            "all_of": [
+              "INFANTRY"
+            ]
           },
-          {
-            "type": "stat-modifier",
-            "target": "defender",
-            "modifier": {
-              "stat": "M",
-              "operation": "subtract",
-              "value": 2
-            }
-          },
-          {
-            "type": "roll-modifier",
-            "target": "defender",
-            "modifier": {
-              "roll": "charge",
-              "operation": "subtract",
-              "value": 2
+          "eligibility": {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "subject": "event-subject",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success",
+                "weapons": {
+                  "name": "Earthshaker cannon"
+                }
+              },
+              "window": "event"
             }
           }
-        ]
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "designate",
+              "target": "recipient",
+              "modifier": {
+                "tag": "shaken"
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "recipient",
+                  "filter": {
+                    "designated": "shaken"
+                  }
+                }
+              },
+              "effect": {
+                "type": "stat-modifier",
+                "target": "recipient",
+                "modifier": {
+                  "stat": "M",
+                  "operation": "subtract",
+                  "value": 2
+                }
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "recipient",
+                  "filter": {
+                    "designated": "shaken"
+                  }
+                }
+              },
+              "effect": {
+                "type": "roll-modifier",
+                "target": "recipient",
+                "modifier": {
+                  "roll": "charge",
+                  "operation": "subtract",
+                  "value": 2
+                }
+              }
+            }
+          ]
+        }
       }
     },
     "scope": {
-      "duration": "turn"
+      "duration": "until-next-shooting-phase"
     },
     "unit_ids": [
       "basilisk"
@@ -4129,7 +4424,13 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "astra-militarum"
+    "faction_id": "astra-militarum",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
+    }
   },
   {
     "ability_id": "rolling-fortress-astra-militarum",
@@ -4249,12 +4550,14 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "subject": "defender",
-          "all_of": [
-            "FLY"
-          ]
+          "filter": {
+            "all_of": [
+              "FLY"
+            ]
+          },
+          "subject": "defender"
         }
       },
       "effect": {
@@ -4347,7 +4650,9 @@
               "stat": "WS",
               "operation": "improve",
               "value": 1,
-              "weapon_type": "melee"
+              "weapons": {
+                "type": "melee"
+              }
             }
           }
         },
@@ -4372,7 +4677,11 @@
               "stat": "A",
               "operation": "improve",
               "value": 1,
-              "weapon_keyword": "Rapid Fire"
+              "weapons": {
+                "keyword": {
+                  "keyword_id": "rapid-fire"
+                }
+              }
             }
           }
         },
@@ -4440,12 +4749,10 @@
     "source_digest": "bcf07c7fea3b8623699f88660d8a43bfe7e30f58f8e5515f16be367c1d875cee",
     "version": "2025-q3",
     "effect": {
-      "type": "weapon-ability-grant",
+      "type": "ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "benefit-of-cover"
-        ]
+        "ability": "benefit-of-cover"
       }
     },
     "scope": {
@@ -4475,9 +4782,11 @@
         "operator": "not",
         "operands": [
           {
-            "type": "unit-state",
+            "type": "matches",
             "parameters": {
-              "state": "engaged"
+              "filter": {
+                "state": "engaged"
+              }
             }
           }
         ]
@@ -4573,7 +4882,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ASTRA MILITARUM"
       ]
     }
@@ -4618,7 +4927,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "RATLINGS"
       ]
     }
@@ -4650,7 +4959,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "COMMISSAR"
       ]
     }
@@ -4685,9 +4994,61 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ASTRA MILITARUM"
       ]
+    },
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": {
+        "owner": "friendly",
+        "level": "unit",
+        "unit_ids": [
+          "bullgryn-squad",
+          "ogryn-squad"
+        ],
+        "within": {
+          "range": "objective-control",
+          "of": {
+            "objective": {}
+          }
+        }
+      },
+      "condition": {
+        "operator": "or",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "opponent-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          }
+        ]
+      },
+      "optional": true
     }
   },
   {
@@ -4728,7 +5089,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "RATLINGS"
       ]
     }
@@ -4750,20 +5111,44 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "move",
-      "target": "this-unit",
-      "modifier": {
-        "move_type": "surge",
-        "distance": "D6"
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "targets-selected",
+          "subject": "event-subject",
+          "object": "this-unit",
+          "filter": {
+            "kind": "attack"
+          },
+          "window": "event"
+        }
+      },
+      "effect": {
+        "type": "move",
+        "target": "this-unit",
+        "modifier": {
+          "move_type": "surge",
+          "distance": "D6"
+        }
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ASTRA MILITARUM"
       ]
+    },
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "subject": {
+        "owner": "enemy"
+      }
     }
   },
   {
@@ -4783,24 +5168,58 @@
     "ability_type": "detachment",
     "behavior": "passive",
     "effect": {
-      "type": "designate-target",
-      "designation": "designated",
-      "select": {
-        "scope": "enemy-unit",
-        "count": 1,
-        "timing": "your-shooting-phase",
-        "within_inches": 12,
-        "visibility_required": true
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       },
-      "applies": {
-        "to": "target",
-        "effect": {
-          "type": "stat-modifier",
-          "target": "recipient",
-          "modifier": {
-            "stat": "detection-range",
-            "operation": "add",
-            "value": 3
+      "effect": {
+        "type": "designate-target",
+        "designation": "designated",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy",
+              "within": {
+                "range": {
+                  "inches": 12
+                },
+                "of": "this-model"
+              },
+              "visible": {
+                "to": "this-model"
+              }
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
+          }
+        },
+        "applies": {
+          "to": "target",
+          "effect": {
+            "type": "stat-modifier",
+            "target": "recipient",
+            "modifier": {
+              "stat": "detection-range",
+              "operation": "add",
+              "value": 3
+            }
           }
         }
       }
@@ -4809,7 +5228,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ASTRA MILITARUM"
       ]
     }
@@ -4841,7 +5260,7 @@
       "duration": "one-use"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "Scout Sentinel"
       ]
     }
@@ -4899,7 +5318,7 @@
       "duration": "one-use"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ASTRA MILITARUM",
         "INFANTRY",
         "PLATOON"
@@ -4926,7 +5345,9 @@
       "type": "stat-modifier",
       "target": {
         "owner": "enemy",
-        "visible": true,
+        "visible": {
+          "to": "this-unit"
+        },
         "within": {
           "range": {
             "inches": 6
@@ -4943,7 +5364,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ASTRA MILITARUM",
         "INFANTRY"
       ]
@@ -4966,21 +5387,53 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "move",
-      "target": "this-unit",
-      "modifier": {
-        "move_type": "normal",
-        "distance": "D3+3"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-subject",
+          "filter": {
+            "within": {
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "ASTRA MILITARUM",
+                  "INFANTRY"
+                ],
+                "not_states": [
+                  "engaged"
+                ]
+              },
+              "range": {
+                "inches": 8
+              }
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "move",
+        "target": "this-unit",
+        "modifier": {
+          "move_type": "normal",
+          "distance": "D3+3"
+        }
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ASTRA MILITARUM",
         "INFANTRY"
       ]
+    },
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      }
     }
   },
   {
@@ -5010,10 +5463,31 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ASTRA MILITARUM",
         "INFANTRY"
       ]
+    },
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      },
+      "optional": true
     }
   },
   {
@@ -5086,7 +5560,11 @@
                   {
                     "type": "attack-is",
                     "parameters": {
-                      "weapon_keyword": "Indirect Fire"
+                      "weapons": {
+                        "keyword": {
+                          "keyword_id": "indirect-fire"
+                        }
+                      }
                     }
                   }
                 ]
@@ -5111,7 +5589,9 @@
                 "hit"
               ],
               "only": "worsening",
-              "weapon_type": "ranged"
+              "weapons": {
+                "type": "ranged"
+              }
             }
           }
         }
@@ -5121,7 +5601,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ASTRA MILITARUM"
       ]
     }
@@ -5187,7 +5667,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ASTRA MILITARUM",
         "TITANIC",
         "CHARACTER"
@@ -5222,7 +5702,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ASTRA MILITARUM",
         "TITANIC",
         "CHARACTER"
@@ -5258,7 +5738,7 @@
       "duration": "until-next-command-phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ASTRA MILITARUM",
         "TECH-PRIEST ENGINSEER"
       ]
@@ -5311,7 +5791,7 @@
       "duration": "turn"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ASTRA MILITARUM",
         "TITANIC",
         "CHARACTER",
@@ -5345,7 +5825,9 @@
             "stat": "A",
             "operation": "add",
             "value": 6,
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            }
           }
         },
         {
@@ -5355,7 +5837,9 @@
             "stat": "AP",
             "operation": "improve",
             "value": 2,
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            }
           }
         }
       ]
@@ -5364,7 +5848,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ASTRA MILITARUM",
         "TITANIC"
       ]
@@ -5401,7 +5885,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ASTRA MILITARUM",
         "TITANIC"
       ]
@@ -5429,15 +5913,19 @@
       "modifier": {
         "to": "battlefield",
         "from": "strategic-reserves",
-        "within_edge": 8,
-        "min_enemy_distance": 6
+        "within_edge": {
+          "inches": 8
+        },
+        "min_enemy_distance": {
+          "inches": 6
+        }
       }
     },
     "scope": {
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ASTRA MILITARUM",
         "TITANIC"
       ]
@@ -5474,7 +5962,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ASTRA MILITARUM",
         "VEHICLE"
       ]
@@ -5509,7 +5997,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ASTRA MILITARUM",
         "VEHICLE"
       ]
@@ -5543,7 +6031,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ASTRA MILITARUM"
       ]
     }
@@ -5612,7 +6100,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ASTRA MILITARUM"
       ]
     }
@@ -5659,7 +6147,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ASTRA MILITARUM",
         "OFFICER",
         "INFANTRY"
@@ -5691,9 +6179,11 @@
             "operator": "not",
             "operands": [
               {
-                "type": "unit-state",
+                "type": "matches",
                 "parameters": {
-                  "state": "engaged"
+                  "filter": {
+                    "state": "engaged"
+                  }
                 }
               }
             ]
@@ -5721,26 +6211,39 @@
         "target": "this-unit",
         "modifier": {
           "activity": "embark",
-          "allow": true,
-          "into": {
-            "owner": "friendly",
-            "all_of": [
-              "ASTRA MILITARUM",
-              "TRANSPORT"
-            ]
-          }
+          "allow": true
         }
       }
     },
     "scope": {
-      "duration": "turn"
+      "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ASTRA MILITARUM",
         "OFFICER",
         "INFANTRY"
       ]
+    },
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
     }
   },
   {
@@ -5781,7 +6284,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ASTRA MILITARUM",
         "TECH-PRIEST ENGINSEER"
       ]
@@ -5809,30 +6312,36 @@
         "operator": "or",
         "operands": [
           {
-            "type": "unit-state",
+            "type": "matches",
             "parameters": {
-              "subject": "this-unit",
-              "state": "on-battlefield"
+              "filter": {
+                "state": "on-battlefield"
+              },
+              "subject": "this-unit"
             }
           },
           {
             "operator": "and",
             "operands": [
               {
-                "type": "unit-state",
+                "type": "matches",
                 "parameters": {
-                  "subject": "this-unit",
-                  "state": "embarked"
+                  "filter": {
+                    "state": "embarked"
+                  },
+                  "subject": "this-unit"
                 }
               },
               {
                 "operator": "not",
                 "operands": [
                   {
-                    "type": "unit-state",
+                    "type": "matches",
                     "parameters": {
-                      "subject": "this-unit",
-                      "state": "in-strategic-reserves"
+                      "filter": {
+                        "state": "in-strategic-reserves"
+                      },
+                      "subject": "this-unit"
                     }
                   }
                 ]
@@ -5844,15 +6353,22 @@
       "effect": {
         "type": "select-units",
         "selector": {
-          "owner": "friendly",
-          "max_count": 2,
+          "filter": {
+            "owner": "friendly"
+          },
+          "count": {
+            "min": 0,
+            "max": 2
+          },
           "eligibility": {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "any_of": [
-                "REGIMENT",
-                "SQUADRON"
-              ]
+              "filter": {
+                "any_of": [
+                  "REGIMENT",
+                  "SQUADRON"
+                ]
+              }
             }
           }
         },
@@ -5885,7 +6401,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ASTRA MILITARUM",
         "OFFICER"
       ]
@@ -5926,7 +6442,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ASTRA MILITARUM"
       ]
     }
@@ -5950,13 +6466,15 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "subject": "defender",
-          "any_of": [
-            "MONSTER",
-            "VEHICLE"
-          ]
+          "filter": {
+            "any_of": [
+              "MONSTER",
+              "VEHICLE"
+            ]
+          },
+          "subject": "defender"
         }
       },
       "effect": {
@@ -5972,7 +6490,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "Armoured Skirmisher"
       ]
     }
@@ -6009,7 +6527,7 @@
       "duration": "turn"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "Armoured Skirmisher"
       ]
     }
@@ -6074,7 +6592,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "Armoured Skirmisher"
       ]
     }
@@ -6107,7 +6625,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ASTRA MILITARUM"
       ]
     }
@@ -6141,7 +6659,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ASTRA MILITARUM"
       ]
     }
@@ -6215,7 +6733,9 @@
               "roll": "hit",
               "operation": "add",
               "value": 1,
-              "weapon_type": "ranged"
+              "weapons": {
+                "type": "ranged"
+              }
             }
           }
         }
@@ -6225,7 +6745,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ASTRA MILITARUM"
       ]
     },
@@ -6252,10 +6772,14 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-ability",
+        "type": "matches",
         "parameters": {
-          "subject": "this-unit",
-          "ability": "master-vox-astra-militarum"
+          "filter": {
+            "has_ability": [
+              "master-vox-astra-militarum"
+            ]
+          },
+          "subject": "this-unit"
         }
       },
       "effect": {
@@ -6279,7 +6803,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ASTRA MILITARUM",
         "MILITARUM TEMPESTUS",
         "OFFICER"
@@ -6339,7 +6863,7 @@
       "duration": "one-use"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ASTRA MILITARUM",
         "MILITARUM TEMPESTUS",
         "OFFICER"
@@ -6366,22 +6890,31 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "dice-gated",
-          "dice": "D6",
-          "threshold": 2,
-          "comparison": "gte",
-          "on_success": {
-            "type": "mortal-wounds",
-            "target": "recipient",
-            "modifier": {
-              "count": "D6"
+          "type": "for-each-unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy",
+              "engaged_with": "this-unit"
             }
           },
-          "on_fail": null
+          "effect": {
+            "type": "dice-gated",
+            "dice": "D6",
+            "threshold": 2,
+            "comparison": "gte",
+            "on_success": {
+              "type": "mortal-wounds",
+              "target": "recipient",
+              "modifier": {
+                "count": "D6"
+              }
+            },
+            "on_fail": null
+          }
         },
         {
           "type": "mortal-wounds",
-          "target": "this-model",
+          "target": "this-unit",
           "modifier": {
             "count": "3D3"
           }
@@ -6389,13 +6922,33 @@
       ]
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ASTRA MILITARUM",
         "REGIMENT"
       ]
+    },
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "charge"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
     }
   },
   {
@@ -6428,49 +6981,65 @@
                   {
                     "type": "attack-is",
                     "parameters": {
-                      "weapon_name": "Hot-shot Lascarbine"
+                      "weapons": {
+                        "name": "Hot-shot Lascarbine"
+                      }
                     }
                   },
                   {
                     "type": "attack-is",
                     "parameters": {
-                      "weapon_name": "Hot-shot Lasgun"
+                      "weapons": {
+                        "name": "Hot-shot Lasgun"
+                      }
                     }
                   },
                   {
                     "type": "attack-is",
                     "parameters": {
-                      "weapon_name": "Hot-shot Laspistol"
+                      "weapons": {
+                        "name": "Hot-shot Laspistol"
+                      }
                     }
                   },
                   {
                     "type": "attack-is",
                     "parameters": {
-                      "weapon_name": "Hot-shot Marksman Rifle"
+                      "weapons": {
+                        "name": "Hot-shot Marksman Rifle"
+                      }
                     }
                   },
                   {
                     "type": "attack-is",
                     "parameters": {
-                      "weapon_name": "Hot-shot Volley Gun"
+                      "weapons": {
+                        "name": "Hot-shot Volley Gun"
+                      }
                     }
                   },
                   {
                     "type": "attack-is",
                     "parameters": {
-                      "weapon_name": "Sentry Hot-shot Volley Gun"
+                      "weapons": {
+                        "name": "Sentry Hot-shot Volley Gun"
+                      }
                     }
                   }
                 ]
               },
               {
-                "type": "within",
+                "type": "matches",
                 "parameters": {
-                  "subject": "defender",
-                  "of": "attacker",
-                  "range": {
-                    "inches": 12
-                  }
+                  "filter": {
+                    "within": {
+                      "range": {
+                        "inches": 12
+                      },
+                      "of": "attacker"
+                    }
+                  },
+                  "subject": "defender"
                 }
               }
             ]
@@ -6482,7 +7051,9 @@
               "stat": "S",
               "operation": "add",
               "value": 1,
-              "weapon_type": "ranged"
+              "weapons": {
+                "type": "ranged"
+              }
             }
           }
         },
@@ -6497,49 +7068,65 @@
                   {
                     "type": "attack-is",
                     "parameters": {
-                      "weapon_name": "Hot-shot Lascarbine"
+                      "weapons": {
+                        "name": "Hot-shot Lascarbine"
+                      }
                     }
                   },
                   {
                     "type": "attack-is",
                     "parameters": {
-                      "weapon_name": "Hot-shot Lasgun"
+                      "weapons": {
+                        "name": "Hot-shot Lasgun"
+                      }
                     }
                   },
                   {
                     "type": "attack-is",
                     "parameters": {
-                      "weapon_name": "Hot-shot Laspistol"
+                      "weapons": {
+                        "name": "Hot-shot Laspistol"
+                      }
                     }
                   },
                   {
                     "type": "attack-is",
                     "parameters": {
-                      "weapon_name": "Hot-shot Marksman Rifle"
+                      "weapons": {
+                        "name": "Hot-shot Marksman Rifle"
+                      }
                     }
                   },
                   {
                     "type": "attack-is",
                     "parameters": {
-                      "weapon_name": "Hot-shot Volley Gun"
+                      "weapons": {
+                        "name": "Hot-shot Volley Gun"
+                      }
                     }
                   },
                   {
                     "type": "attack-is",
                     "parameters": {
-                      "weapon_name": "Sentry Hot-shot Volley Gun"
+                      "weapons": {
+                        "name": "Sentry Hot-shot Volley Gun"
+                      }
                     }
                   }
                 ]
               },
               {
-                "type": "within",
+                "type": "matches",
                 "parameters": {
-                  "subject": "defender",
-                  "of": "attacker",
-                  "range": {
-                    "inches": 12
-                  }
+                  "filter": {
+                    "within": {
+                      "range": {
+                        "inches": 12
+                      },
+                      "of": "attacker"
+                    }
+                  },
+                  "subject": "defender"
                 }
               }
             ]
@@ -6551,7 +7138,9 @@
               "stat": "AP",
               "operation": "improve",
               "value": 1,
-              "weapon_type": "ranged"
+              "weapons": {
+                "type": "ranged"
+              }
             }
           }
         }
@@ -6561,7 +7150,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ASTRA MILITARUM"
       ]
     }
@@ -6586,36 +7175,50 @@
       "type": "designate-target",
       "designation": "servo-designated",
       "select": {
-        "scope": "enemy-unit",
-        "count": 1,
-        "eligibility": {
-          "type": "happened",
-          "parameters": {
-            "event": "after-roll",
-            "subject": "stratagem-target",
-            "object": "this-unit",
-            "filter": {
-              "roll": "hit",
-              "result": "success"
-            },
-            "window": "phase"
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "subject": "stratagem-target",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success"
+              },
+              "window": "phase"
+            }
           }
         }
       },
       "applies": {
         "to": "attackers-of-target",
-        "attacker_unit_keywords": [
-          "MILITARUM TEMPESTUS"
-        ],
         "effect": {
           "type": "weapon-ability-grant",
           "target": "attacker",
           "modifier": {
-            "abilities": [
-              "Ignores Cover"
-            ],
-            "weapon_type": "ranged"
+            "weapons": {
+              "type": "ranged"
+            },
+            "keywords": [
+              {
+                "keyword_id": "ignores-cover"
+              }
+            ]
           }
+        },
+        "attacker_unit_filter": {
+          "all_of": [
+            "MILITARUM TEMPESTUS"
+          ]
         }
       },
       "duration": "phase"
@@ -6624,7 +7227,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ASTRA MILITARUM",
         "MILITARUM TEMPESTUS"
       ]
@@ -6661,9 +7264,11 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-state",
+            "type": "matches",
             "parameters": {
-              "state": "benefit-of-cover"
+              "filter": {
+                "state": "benefit-of-cover"
+              }
             }
           },
           "effect": {
@@ -6710,7 +7315,7 @@
     "scope": {
       "duration": "permanent"
     },
-    "community_notes": "[APPROX] Applies to SQUADRON units on Advance (no Advance roll, +6\" Move). The clause allowing the Advance move to pass through \u2014 but not end within \u2014 enemy Engagement Range is not encoded. Full rule in raw-text store."
+    "community_notes": "[APPROX] Applies to SQUADRON units on Advance (no Advance roll, +6\" Move). The clause allowing the Advance move to pass through — but not end within — enemy Engagement Range is not encoded. Full rule in raw-text store."
   },
   {
     "ability_id": "born-soldiers-astra-militarum",
@@ -6737,11 +7342,13 @@
             "operator": "and",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "all_of": [
-                    "REGIMENT"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "REGIMENT"
+                    ]
+                  }
                 }
               },
               {
@@ -6754,13 +7361,15 @@
                 "operator": "not",
                 "operands": [
                   {
-                    "type": "has-keyword",
+                    "type": "matches",
                     "parameters": {
-                      "subject": "defender",
-                      "any_of": [
-                        "MONSTER",
-                        "VEHICLE"
-                      ]
+                      "filter": {
+                        "any_of": [
+                          "MONSTER",
+                          "VEHICLE"
+                        ]
+                      },
+                      "subject": "defender"
                     }
                   }
                 ]
@@ -6771,10 +7380,14 @@
             "type": "weapon-ability-grant",
             "target": "this-unit",
             "modifier": {
-              "abilities": [
-                "Lethal Hits"
-              ],
-              "weapon_type": "ranged"
+              "weapons": {
+                "type": "ranged"
+              },
+              "keywords": [
+                {
+                  "keyword_id": "lethal-hits"
+                }
+              ]
             }
           }
         },
@@ -6784,11 +7397,13 @@
             "operator": "and",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "all_of": [
-                    "SQUADRON"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "SQUADRON"
+                    ]
+                  }
                 }
               },
               {
@@ -6798,13 +7413,15 @@
                 }
               },
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "subject": "defender",
-                  "any_of": [
-                    "MONSTER",
-                    "VEHICLE"
-                  ]
+                  "filter": {
+                    "any_of": [
+                      "MONSTER",
+                      "VEHICLE"
+                    ]
+                  },
+                  "subject": "defender"
                 }
               }
             ]
@@ -6813,10 +7430,14 @@
             "type": "weapon-ability-grant",
             "target": "this-unit",
             "modifier": {
-              "abilities": [
-                "Lethal Hits"
-              ],
-              "weapon_type": "ranged"
+              "weapons": {
+                "type": "ranged"
+              },
+              "keywords": [
+                {
+                  "keyword_id": "lethal-hits"
+                }
+              ]
             }
           }
         }
@@ -6866,9 +7487,11 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "designated",
+            "type": "matches",
             "parameters": {
-              "tag": "affected-by-order"
+              "filter": {
+                "designated": "affected-by-order"
+              }
             }
           },
           "effect": {
@@ -6928,9 +7551,11 @@
         "target": "this-unit",
         "modifier": {
           "roll": "wound",
-          "weapon_type": "ranged",
           "operation": "add",
-          "value": 1
+          "value": 1,
+          "weapons": {
+            "type": "ranged"
+          }
         }
       }
     },
@@ -6960,13 +7585,17 @@
         "operator": "not",
         "operands": [
           {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "of": {
-                "owner": "friendly"
-              },
-              "range": {
-                "inches": 12
+              "filter": {
+                "within": {
+                  "range": {
+                    "inches": 12
+                  },
+                  "of": {
+                    "owner": "friendly"
+                  }
+                }
               }
             }
           }
@@ -7054,9 +7683,11 @@
         "operator": "not",
         "operands": [
           {
-            "type": "unit-state",
+            "type": "matches",
             "parameters": {
-              "state": "battle-shocked"
+              "filter": {
+                "state": "battle-shocked"
+              }
             }
           }
         ]
@@ -7072,8 +7703,10 @@
         "scaling": {
           "per": 3,
           "of": "friendly-models-in-range",
-          "within_inches": 0,
-          "round": "down"
+          "round": "down",
+          "within": {
+            "inches": 0
+          }
         }
       }
     },
@@ -7165,22 +7798,35 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "owner": "friendly",
-        "count": 1,
-        "keywords": [
-          "ASTRA MILITARUM",
-          "INFANTRY"
-        ],
-        "within_inches": 24,
-        "reference": "bearer",
-        "visibility_required": true,
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "ASTRA MILITARUM",
+            "INFANTRY"
+          ],
+          "within": {
+            "range": {
+              "inches": 24
+            },
+            "of": "this-model"
+          },
+          "visible": {
+            "to": "this-model"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
         "eligibility": {
           "operator": "and",
           "operands": [
             {
-              "type": "unit-state",
+              "type": "matches",
               "parameters": {
-                "state": "battle-shocked"
+                "filter": {
+                  "state": "battle-shocked"
+                }
               }
             },
             {
@@ -7224,7 +7870,7 @@
     "usage": {
       "frequency": "once-per-turn"
     },
-    "community_notes": "[APPROX] The selected unit must be Battle-shocked and contain 2+ models, and the cost \u2014 one model in that unit is destroyed \u2014 is not encoded; the selector captures only the friendly ASTRA MILITARUM INFANTRY within 12\" constraint. Full rule in raw-text store.",
+    "community_notes": "[APPROX] The selected unit must be Battle-shocked and contain 2+ models, and the cost — one model in that unit is destroyed — is not encoded; the selector captures only the friendly ASTRA MILITARUM INFANTRY within 12\" constraint. Full rule in raw-text store.",
     "faction_id": "astra-militarum"
   },
   {
@@ -7291,16 +7937,20 @@
       "threshold": 2,
       "comparison": "gte",
       "on_success": {
-        "type": "return-models",
+        "type": "set-up",
         "target": "this-model",
         "modifier": {
-          "count": 1,
+          "to": "battlefield",
+          "min_enemy_distance": {
+            "inches": 1
+          },
           "wounds_remaining": 3
         }
-      }
+      },
+      "on_fail": null
     },
     "scope": {
-      "duration": "one-use"
+      "duration": "permanent"
     },
     "unit_ids": [
       "commissar-yarrick"
@@ -7308,7 +7958,25 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "astra-militarum"
+    "faction_id": "astra-militarum",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "model-destroyed",
+          "object": "this-model",
+          "window": "phase",
+          "count": {
+            "min": 1
+          }
+        }
+      }
+    },
+    "usage": {
+      "frequency": "first-this-battle",
+      "per": "model"
+    }
   },
   {
     "ability_id": "hero-of-hades-hive-astra-militarum",
@@ -7329,220 +7997,255 @@
         }
       },
       "effect": {
-        "type": "stance-select",
-        "mode": "re-selectable",
-        "scope": "unit",
-        "select": "command-phase",
-        "min_choices": 0,
-        "options": [
-          {
-            "name": "Counterstrategist",
-            "effect": {
-              "type": "sequence",
-              "steps": [
-                {
-                  "type": "select-units",
-                  "selector": {
-                    "max_count": 1,
-                    "owner": "enemy",
-                    "within_inches": 8,
-                    "eligibility": {
-                      "operator": "or",
-                      "operands": [
-                        {
-                          "type": "happened",
-                          "parameters": {
-                            "event": "set-up",
-                            "window": "phase"
-                          }
-                        },
-                        {
-                          "type": "happened",
-                          "parameters": {
-                            "event": "move-ended",
-                            "window": "phase"
-                          }
-                        }
-                      ]
-                    }
-                  },
-                  "effect": {
-                    "type": "designate",
-                    "target": "this-unit",
-                    "modifier": {
-                      "subject": "selected-unit",
-                      "tag": "counterstrategist-target",
-                      "clears_on": "phase-end"
-                    }
-                  }
-                },
-                {
-                  "type": "select-units",
-                  "selector": {
-                    "max_count": 1,
-                    "owner": "friendly",
-                    "keywords": [
-                      "REGIMENT"
-                    ],
-                    "within_inches": 6,
-                    "visibility_required": true,
-                    "eligibility": {
-                      "operator": "and",
-                      "operands": [
-                        {
-                          "operator": "not",
-                          "operands": [
-                            {
-                              "type": "happened",
-                              "parameters": {
-                                "event": "move-ended",
-                                "filter": {
-                                  "move_types": [
-                                    "normal"
-                                  ]
-                                },
-                                "window": "phase"
-                              }
-                            }
-                          ]
-                        },
-                        {
-                          "operator": "not",
-                          "operands": [
-                            {
-                              "type": "happened",
-                              "parameters": {
-                                "event": "used",
-                                "filter": {
-                                  "kind": "stratagem",
-                                  "id": "fire-overwatch"
-                                },
-                                "window": "phase"
-                              }
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  },
-                  "effect": {
-                    "type": "choice",
-                    "options": [
-                      {
-                        "type": "move",
-                        "target": "selected-unit",
-                        "modifier": {
-                          "move_type": "normal",
-                          "distance": "D6"
+        "type": "conditional",
+        "condition": {
+          "type": "phase-is",
+          "parameters": {
+            "phase": "command"
+          }
+        },
+        "effect": {
+          "type": "stance-select",
+          "mode": "re-selectable",
+          "min_choices": 0,
+          "options": [
+            {
+              "name": "Counterstrategist",
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "select-units",
+                    "selector": {
+                      "filter": {
+                        "owner": "enemy",
+                        "within": {
+                          "range": {
+                            "inches": 8
+                          },
+                          "of": "this-model"
                         }
                       },
-                      {
-                        "type": "sequence",
-                        "steps": [
+                      "count": {
+                        "min": 0,
+                        "max": 1
+                      },
+                      "eligibility": {
+                        "operator": "or",
+                        "operands": [
                           {
-                            "type": "permission",
-                            "target": "selected-unit",
-                            "modifier": {
-                              "activity": "shoot",
-                              "allow": true
+                            "type": "happened",
+                            "parameters": {
+                              "event": "set-up",
+                              "window": "phase"
                             }
                           },
                           {
-                            "type": "targeting",
-                            "target": "selected-unit",
-                            "modifier": {
-                              "may": "must-target",
-                              "target": {
-                                "designated": "counterstrategist-target"
-                              },
-                              "kind": "shoot"
-                            }
-                          },
-                          {
-                            "type": "roll-result",
-                            "target": "selected-unit",
-                            "modifier": {
-                              "roll": "hit",
-                              "succeeds_on": 6,
-                              "weapon_type": "ranged"
+                            "type": "happened",
+                            "parameters": {
+                              "event": "move-ended",
+                              "window": "phase"
                             }
                           }
                         ]
-                      },
-                      {
-                        "type": "permission",
-                        "target": "selected-unit",
-                        "modifier": {
-                          "activity": "declare-charge",
-                          "allow": true
-                        }
                       }
-                    ]
-                  }
-                }
-              ]
-            }
-          },
-          {
-            "name": "Decisive Command",
-            "effect": {
-              "type": "ability-modifier",
-              "target": "this-model",
-              "modifier": {
-                "ability": "voice-of-command-astra-militarum",
-                "aspect": "range",
-                "operation": "set",
-                "value": 12
-              }
-            }
-          },
-          {
-            "name": "Inspiring Hero",
-            "effect": {
-              "type": "sequence",
-              "steps": [
-                {
-                  "type": "re-roll",
-                  "target": {
-                    "owner": "friendly",
-                    "all_of": [
-                      "ASTRA MILITARUM"
-                    ],
-                    "within": {
-                      "range": {
-                        "inches": 6
-                      },
-                      "of": "this-model"
+                    },
+                    "effect": {
+                      "type": "designate",
+                      "target": "this-unit",
+                      "modifier": {
+                        "subject": "selected-unit",
+                        "tag": "counterstrategist-target",
+                        "clears_on": "phase"
+                      }
                     }
                   },
-                  "modifier": {
-                    "roll": "battle-shock",
-                    "result_scope": "any-result"
-                  }
-                },
-                {
-                  "type": "re-roll",
-                  "target": {
-                    "owner": "friendly",
-                    "all_of": [
-                      "ASTRA MILITARUM"
-                    ],
-                    "within": {
-                      "range": {
-                        "inches": 6
+                  {
+                    "type": "select-units",
+                    "selector": {
+                      "filter": {
+                        "owner": "friendly",
+                        "all_of": [
+                          "REGIMENT"
+                        ],
+                        "within": {
+                          "range": {
+                            "inches": 6
+                          },
+                          "of": "this-model"
+                        },
+                        "visible": {
+                          "to": "this-model"
+                        }
                       },
-                      "of": "this-model"
+                      "count": {
+                        "min": 0,
+                        "max": 1
+                      },
+                      "eligibility": {
+                        "operator": "and",
+                        "operands": [
+                          {
+                            "operator": "not",
+                            "operands": [
+                              {
+                                "type": "happened",
+                                "parameters": {
+                                  "event": "move-ended",
+                                  "filter": {
+                                    "move_types": [
+                                      "normal"
+                                    ]
+                                  },
+                                  "window": "phase"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "operator": "not",
+                            "operands": [
+                              {
+                                "type": "happened",
+                                "parameters": {
+                                  "event": "used",
+                                  "filter": {
+                                    "kind": "stratagem",
+                                    "id": "fire-overwatch"
+                                  },
+                                  "window": "phase"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "effect": {
+                      "type": "choice",
+                      "options": [
+                        {
+                          "type": "move",
+                          "target": "selected-unit",
+                          "modifier": {
+                            "move_type": "normal",
+                            "distance": "D6"
+                          }
+                        },
+                        {
+                          "type": "sequence",
+                          "steps": [
+                            {
+                              "type": "permission",
+                              "target": "selected-unit",
+                              "modifier": {
+                                "activity": "shoot",
+                                "allow": true
+                              }
+                            },
+                            {
+                              "type": "targeting",
+                              "target": "selected-unit",
+                              "modifier": {
+                                "may": "must-target",
+                                "target": {
+                                  "designated": "counterstrategist-target"
+                                },
+                                "kind": "shoot"
+                              }
+                            },
+                            {
+                              "type": "roll-result",
+                              "target": "selected-unit",
+                              "modifier": {
+                                "roll": "hit",
+                                "succeeds_on": 6,
+                                "weapons": {
+                                  "type": "ranged"
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "permission",
+                          "target": "selected-unit",
+                          "modifier": {
+                            "activity": "declare-charge",
+                            "allow": true
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              "id": "option-1"
+            },
+            {
+              "name": "Decisive Command",
+              "effect": {
+                "type": "ability-modifier",
+                "target": "this-model",
+                "modifier": {
+                  "ability": "voice-of-command-astra-militarum",
+                  "aspect": "range",
+                  "operation": "set",
+                  "value": 12
+                }
+              },
+              "id": "option-2"
+            },
+            {
+              "name": "Inspiring Hero",
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "re-roll",
+                    "target": {
+                      "owner": "friendly",
+                      "all_of": [
+                        "ASTRA MILITARUM"
+                      ],
+                      "within": {
+                        "range": {
+                          "inches": 6
+                        },
+                        "of": "this-model"
+                      }
+                    },
+                    "modifier": {
+                      "roll": "battle-shock",
+                      "result_scope": "any-result"
                     }
                   },
-                  "modifier": {
-                    "roll": "leadership",
-                    "result_scope": "any-result"
+                  {
+                    "type": "re-roll",
+                    "target": {
+                      "owner": "friendly",
+                      "all_of": [
+                        "ASTRA MILITARUM"
+                      ],
+                      "within": {
+                        "range": {
+                          "inches": 6
+                        },
+                        "of": "this-model"
+                      }
+                    },
+                    "modifier": {
+                      "roll": "leadership",
+                      "result_scope": "any-result"
+                    }
                   }
-                }
-              ]
+                ]
+              },
+              "id": "option-3"
             }
-          }
-        ]
+          ],
+          "max_choices": 1
+        }
       }
     },
     "scope": {
@@ -7818,12 +8521,14 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "all_of": [
-                "VEHICLE"
-              ]
+              "filter": {
+                "all_of": [
+                  "VEHICLE"
+                ]
+              },
+              "subject": "defender"
             }
           },
           "effect": {
@@ -7854,12 +8559,14 @@
             "operator": "not",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "subject": "defender",
-                  "all_of": [
-                    "VEHICLE"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "VEHICLE"
+                    ]
+                  },
+                  "subject": "defender"
                 }
               }
             ]
@@ -7917,17 +8624,21 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "of": {
-                "owner": "friendly",
-                "all_of": [
-                  "OFFICER"
-                ],
-                "level": "model"
-              },
-              "range": {
-                "inches": 6
+              "filter": {
+                "within": {
+                  "range": {
+                    "inches": 6
+                  },
+                  "of": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "OFFICER"
+                    ],
+                    "level": "model"
+                  }
+                }
               }
             }
           },
@@ -7952,17 +8663,21 @@
             "operator": "not",
             "operands": [
               {
-                "type": "within",
+                "type": "matches",
                 "parameters": {
-                  "of": {
-                    "owner": "friendly",
-                    "all_of": [
-                      "OFFICER"
-                    ],
-                    "level": "model"
-                  },
-                  "range": {
-                    "inches": 6
+                  "filter": {
+                    "within": {
+                      "range": {
+                        "inches": 6
+                      },
+                      "of": {
+                        "owner": "friendly",
+                        "all_of": [
+                          "OFFICER"
+                        ],
+                        "level": "model"
+                      }
+                    }
                   }
                 }
               }
@@ -8016,23 +8731,58 @@
     "source_digest": "2d6d4eccaf2d17acc252a234e1c58c030e32d4b442317bbcaae2f79e17ccf9bd",
     "version": "2026-q3",
     "effect": {
-      "type": "designate-target",
-      "designation": "over-there-target",
-      "select": {
-        "scope": "enemy-unit",
-        "count": 1,
-        "within_inches": 24,
-        "timing": "start-of-your-shooting-phase"
+      "type": "ability-part",
+      "trigger": {
+        "event": "phase-started",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "shooting"
+              }
+            },
+            {
+              "type": "player-turn-is",
+              "parameters": {
+                "turn": "your-turn"
+              }
+            }
+          ]
+        }
       },
-      "applies": {
-        "to": "target",
-        "effect": {
-          "type": "stat-modifier",
-          "target": "defender",
-          "modifier": {
-            "stat": "detection-range",
-            "operation": "add",
-            "value": 3
+      "effect": {
+        "type": "designate-target",
+        "designation": "over-there-target",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy",
+              "within": {
+                "range": {
+                  "inches": 24
+                },
+                "of": "this-model"
+              }
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
+          }
+        },
+        "applies": {
+          "to": "target",
+          "effect": {
+            "type": "stat-modifier",
+            "target": "defender",
+            "modifier": {
+              "stat": "detection-range",
+              "operation": "add",
+              "value": 3
+            }
           }
         }
       }
@@ -8413,7 +9163,7 @@
   },
   {
     "ability_id": "draydens-drill-draydens-lance-astra-militarum",
-    "name": "Drayden\u2019s Drill",
+    "name": "Drayden’s Drill",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -9463,7 +10213,7 @@
   },
   {
     "ability_id": "stalwarts-honours-siege-regiment-astra-militarum",
-    "name": "Stalwart\u2019s Honours",
+    "name": "Stalwart’s Honours",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -9705,7 +10455,7 @@
   },
   {
     "ability_id": "vox-relay-beacon-astra-militarum",
-    "name": "Vox\u2011relay Beacon",
+    "name": "Vox‑relay Beacon",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",

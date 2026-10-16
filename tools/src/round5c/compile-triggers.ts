@@ -1,3 +1,4 @@
+import { abilityUseTrigger } from "./compile-ability-use.js";
 /**
  * EVENT-role leaves as DSL triggers, split out of `compile-conditions.ts`: the fixed kinds'
  * table, phase/turn/step boundaries, the general owned moments, and a folded unit-filter as the
@@ -26,9 +27,10 @@ const TRIGGERS: Record<string, Node> = {
   "event:enemy-ended-move": { event: "move-ended", subject: { owner: "enemy" } },
   "event:enemy-has-shot": { event: "attacks-resolved", filter: { kind: "shoot" }, subject: { owner: "enemy" } },
   "event:enemy-declared-charge": { event: "targets-selected", filter: { kind: "charge" }, subject: { owner: "enemy" } },
-  "turn-start:battle-round": { event: "round-started" },
+  "event:army-selected": { event: "army-selected" },
   "turn-start:player-turn": { event: "turn-started", condition: { type: "player-turn-is", parameters: { turn: "your-turn" } } },
   "turn-start:opponent-turn": { event: "turn-started", condition: { type: "player-turn-is", parameters: { turn: "opponent-turn" } } },
+  "turn-start:battle-round": { event: "round-started" },
   // Version 7 (batch 6): bare game-clock and history moments with no narrowing of their own.
   "event:battle-started": { event: "battle-started" },
   "event:deployment-ended": { event: "deployment-ended" },
@@ -84,6 +86,9 @@ function triggerRoll(leaf: CompileLeaf): unknown {
  * per kind, in the listed order, each with that kind as its roll. Every other leaf is one trigger.
  */
 export function triggerLeaves(leaf: CompileLeaf): CompileLeaf[] {
+  if (leaf.family_id === "event" && leaf.parameters.kind === "unit-or-model-destroyed") {
+    return ["unit-destroyed", "model-destroyed"].map((kind) => ({ ...leaf, parameters: { ...leaf.parameters, kind } }));
+  }
   if (leaf.family_id !== "event" || !Array.isArray(leaf.parameters.rolls)) return [leaf];
   const { rolls, ...rest } = leaf.parameters as { rolls: unknown[] } & Record<string, unknown>;
   return rolls.map((roll) => ({ ...leaf, parameters: { ...rest, roll } }));
@@ -100,11 +105,33 @@ function usedTrigger(leaf: CompileLeaf): Node {
   if (subject === "recipient") throw new CompileError("A used moment of an aura's recipient must follow its aura-range directly, in the same sentence, to become the trigger's subject and proximity.");
   // "When a unit chosen by a Gadget is used": the chosen unit is not who used the rule (compile-named-ability.ts).
   if (leaf.parameters.object === "antecedent") throw new CompileError("A used moment's unit is the one that used the rule; an earlier leaf's unit as the object of a use is not who used it.");
+  const source = leaf.parameters.source;
+  const usage = leaf.parameters.usage;
+  const bindAs = leaf.parameters.bind_as;
+  const sources = source === undefined ? undefined : Array.isArray(source) ? source : null;
+  const usageValue = usage === undefined ? undefined : usage !== null && typeof usage === "object" && !Array.isArray(usage) ? usage as Record<string, unknown> : null;
+  if (sources === null || (source !== undefined && leaf.parameters.activity !== "ability")) throw new CompileError("A used-ability source qualifier needs an ability activity and a source list.");
+  if (usageValue === null || (usage !== undefined && leaf.parameters.activity !== "ability")) throw new CompileError("A used-ability usage qualifier needs an ability activity and a usage object.");
+  if ((source !== undefined || usage !== undefined) && bindAs !== "used-ability") throw new CompileError("A qualified used ability must bind the exact used event as used-ability.");
+  if (bindAs !== undefined && typeof bindAs !== "string") throw new CompileError("A used ability event binding must be a string.");
+  if (usageValue !== undefined && (usageValue.frequency !== "n-per-battle" || usageValue.count !== 1)) throw new CompileError("A used-ability usage qualifier must be once per battle.");
+  if (sources !== undefined && (sources.length < 1 || sources.some((value) => value !== "unit" && value !== "enhancement"))) throw new CompileError("A used-ability source qualifier must list unit and/or enhancement.");
+  if (sources !== undefined && new Set(sources).size !== sources.length) throw new CompileError("A used-ability source qualifier lists a source twice.");
+  const filter = {
+    kind: closed(leaf, "activity"),
+    ...(leaf.parameters.id !== undefined ? { id: closed(leaf, "id") } : {}),
+    ...(leaf.parameters.ability_keyword !== undefined ? { ability_keyword: closed(leaf, "ability_keyword") } : {}),
+    ...(sources !== undefined ? { source: [...sources] } : {}),
+    ...(usageValue !== undefined ? { usage: { ...usageValue } } : {}),
+  };
+  const binding = bindAs !== undefined ? { binds_event_variable: bindAs } : {};
   return {
     event: "used",
-    filter: { kind: closed(leaf, "activity"), ...(leaf.parameters.id !== undefined ? { id: closed(leaf, "id") } : {}) },
+    filter,
     ...(leaf.parameters.owner !== undefined ? { subject: { owner: closed(leaf, "owner") } } : {}),
     ...(subject !== undefined && subject !== "this-unit" ? { subject: closed(leaf, "subject") } : {}),
+    ...(leaf.parameters.targets_level !== undefined ? { object: { owner: "any", level: closed(leaf, "targets_level") } } : {}),
+    ...binding,
   };
 }
 
@@ -190,17 +217,48 @@ function ownedEventTrigger(leaf: CompileLeaf): Node {
   return node;
 }
 
+function destructionRelationCondition(relation: unknown, eventVariable: unknown, direction: "caused_by" | "causes"): Node {
+  if (relation === null || typeof relation !== "object" || Array.isArray(relation) || typeof eventVariable !== "string") {
+    throw new CompileError("An exact destruction relation needs an object and a bound event variable.");
+  }
+  const alternatives = Object.entries(relation as Record<string, unknown>).map(([kind, value]) => {
+    if (value === null || typeof value !== "object" || Array.isArray(value)) throw new CompileError("A destruction relation needs an object filter.");
+    const { within, ...objectFilter } = value as Record<string, unknown>;
+    const proximity = within as { inches: number; of: string } | undefined;
+    return {
+      type: "happened",
+      parameters: {
+        event: kind === "model" ? "model-destroyed" : "destroyed",
+        object: { ...objectFilter, ...(kind === "model" ? { level: "model" } : {}) },
+        filter: { [direction]: { event_var: eventVariable } },
+        window: "event",
+        ...(proximity !== undefined ? { proximity: { of: proximity.of, range: { inches: proximity.inches } } } : {}),
+      },
+    };
+  });
+  return alternatives.length === 1 ? alternatives[0]! : { operator: "or", operands: alternatives };
+}
+
 export function trigger(leaf: CompileLeaf): Node {
   // A list of roll kinds is several triggers; a caller that takes one trigger must use triggerLeaves().
   if (Array.isArray(leaf.parameters.rolls)) throw new CompileError("A moment that names several rolls lowers to one trigger per roll; it cannot be one trigger.");
   const node = eventTrigger(leaf);
-  // "each time a ranged attack is allocated to a model": the allocated attack's type is the trigger's condition.
-  if (leaf.family_id === "event" && leaf.parameters.attack_type !== undefined) {
-    const type = attackTypeCondition({ ...leaf, parameters: { attack_type: closed(leaf, "attack_type") } });
-    if (type) node.condition = node.condition === undefined ? type : { operator: "and", operands: [node.condition, type] };
+  // Attack classifications which describe the event itself stay on its event filter. A mortal
+  // damage allocation and Psychic attacks are not inferred from a concurrent attack predicate.
+  if (leaf.family_id === "event" && leaf.parameters.attack_type !== undefined && leaf.parameters.attack_type !== "any") {
+    const attackType = closed(leaf, "attack_type");
+    if (attackType === "mortal" || leaf.parameters.kind === "attacks-resolved" || leaf.parameters.kind === "model-destroyed") {
+      const filter = (node.filter ?? {}) as Node;
+      node.filter = { ...filter, attack_type: attackType };
+    } else {
+      const type = attackTypeCondition({ ...leaf, parameters: { attack_type: attackType } });
+      if (type) node.condition = node.condition === undefined ? type : { operator: "and", operands: [node.condition, type] };
+    }
   }
-  // "Those attacks": the moment's attacks, which a later effect names (compile-bound-attacks.ts).
-  if (leaf.parameters.binds_event_variable !== undefined && leaf.family_id === "event") node.binds_event_variable = closed(leaf, "binds_event_variable");
+  // Reviewed event-family leaves name exact event identity with bind_as; folded compiler leaves
+  // use binds_event_variable. Both lower to the one canonical trigger property.
+  const eventBinding = leaf.parameters.bind_as ?? leaf.parameters.binds_event_variable;
+  if (eventBinding !== undefined && leaf.family_id === "event") node.binds_event_variable = closed({ ...leaf, parameters: { event_binding: eventBinding } }, "event_binding");
   // A folded unit-filter (compile-unit-filters.ts) names the unit whose action fires it.
   if (leaf.parameters.subject_filter !== undefined) node.subject = structuredClone(leaf.parameters.subject_filter as Node);
   // An aura's recipient's moment (compile-named-ability.ts): within the aura's range of its holder.
@@ -228,6 +286,61 @@ export function trigger(leaf: CompileLeaf): Node {
     // "Destroys an enemy CHARACTER model": the filter names the destroyed model.
     if (node.event === "model-destroyed") (node.object as Node).level = "model";
   }
+  if (leaf.parameters.timing !== undefined) {
+    const filter = (node.filter ?? {}) as Node;
+    node.filter = { ...filter, timing: closed(leaf, "timing") };
+  }
+  if (leaf.parameters.object_designated !== undefined) {
+    const object = node.object !== null && typeof node.object === "object" && !Array.isArray(node.object) ? node.object as Node : {};
+    node.object = { owner: "any", ...object, designated: closed(leaf, "object_designated") };
+  }
+  const correlated: Node[] = [];
+  if (leaf.parameters.same_subject_targeted !== undefined) {
+    correlated.push({
+      type: "happened",
+      parameters: {
+        event: "targets-selected",
+        subject: "event-subject",
+        object: closed(leaf, "same_subject_targeted"),
+        filter: { kind: "attack" },
+        window: "phase",
+      },
+    });
+  }
+  if (leaf.parameters.channelled === true) {
+    if (eventBinding === undefined) throw new CompileError("A Channelled Psychic test must bind the exact test event.");
+    correlated.push({
+      type: "happened",
+      parameters: {
+        event: "after-roll",
+        subject: "event-subject",
+        filter: { roll: "channelling", same_rule_as: { event_var: eventBinding } },
+        window: "event",
+      },
+    });
+  }
+  if (leaf.parameters.before_resolving_activity !== undefined) {
+    if (eventBinding === undefined) throw new CompileError("A same-Ritual timing qualifier must bind the exact Psychic test event.");
+    correlated.push({
+      type: "happened",
+      parameters: {
+        event: "used",
+        subject: "event-subject",
+        filter: { kind: closed(leaf, "before_resolving_activity"), same_rule_as: { event_var: eventBinding } },
+        window: "event",
+      },
+    });
+  }
+  if (leaf.parameters.caused_by_destruction !== undefined) {
+    correlated.push(destructionRelationCondition(leaf.parameters.caused_by_destruction, eventBinding, "causes"));
+  }
+  if (leaf.parameters.causes_destruction !== undefined) {
+    correlated.push(destructionRelationCondition(leaf.parameters.causes_destruction, eventBinding, "caused_by"));
+  }
+  if (correlated.length > 0) {
+    const relation = correlated.length === 1 ? correlated[0]! : { operator: "and", operands: correlated };
+    node.condition = node.condition === undefined ? relation : { operator: "and", operands: [node.condition, relation] };
+  }
   return node;
 }
 
@@ -241,6 +354,8 @@ function disembarkedFromTransport(leaf: CompileLeaf): Node {
 }
 
 function eventTrigger(leaf: CompileLeaf): Node {
+  const specialized = abilityUseTrigger(leaf);
+  if (specialized) return specialized;
   if (leaf.family_id === "event") {
     const kind = String(leaf.parameters.kind);
     if (kind === "disembarked" && leaf.parameters.transport !== undefined) return disembarkedFromTransport(leaf);
@@ -268,6 +383,12 @@ function eventTrigger(leaf: CompileLeaf): Node {
   if (leaf.parameters.destroy_filter !== undefined) {
     if (node.filter !== undefined) throw new CompileError("A destruction already has a filter; it cannot also name its attacks.");
     node.filter = structuredClone(leaf.parameters.destroy_filter as Node);
+  }
+  if (leaf.parameters.kind === "model-destroyed" && leaf.parameters.attack_type !== undefined && leaf.parameters.attack_type !== "any") {
+    const filter = (node.filter ?? {}) as Node;
+    const attackType = closed(leaf, "attack_type");
+    if (filter.attack_type !== undefined && filter.attack_type !== attackType) throw new CompileError("A destruction names conflicting attack classifications.");
+    node.filter = { ...filter, attack_type: attackType };
   }
   // "Each time an attack is allocated to this model".
   if (leaf.parameters.object === "antecedent") throw new CompileError("A moment that names an earlier leaf's unit as its object needs that unit's aura, which names the unit and its range.");

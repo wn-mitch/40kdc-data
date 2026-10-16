@@ -52,22 +52,22 @@ describe("Round 5C test-family compiler", () => {
     expect(compiled([
       leaf("EVENT", "select-unit", { scope: "enemy", distance: "any", visible: false }),
       leaf("EFFECT", "test", { target: "selected-unit", test: "battle-shock" }),
-    ]).mechanics.effect).toEqual({ type: "select-units", selector: { owner: "enemy", count: 1 }, effect: { type: "test", target: "selected-unit", modifier: { test: "battle-shock" } } });
+    ]).mechanics.effect).toEqual({ type: "select-units", selector: { filter: { owner: "enemy" }, count: { min: 1, max: 1 } }, effect: { type: "test", target: "selected-unit", modifier: { test: "battle-shock" } } });
     expect(rendered(base(), [leaf("EFFECT", "test", { target: "this-unit", test: "battle-shock" })]).length).toBeGreaterThan(0);
   });
 
   it("compiles an enemy-within filter target, engagement and inches ranges, matching disease-of-mirth-chaos-daemons' shape", () => {
     expect(compiled([leaf("EFFECT", "test", { target: "enemy", range: "engagement", test: "battle-shock" })]).mechanics.effect)
-      .toEqual({ type: "test", target: { owner: "enemy", within: { range: "engagement" } }, modifier: { test: "battle-shock" } });
+      .toEqual({ type: "test", target: { owner: "enemy", within: { range: "engagement", of: "this-model" } }, modifier: { test: "battle-shock" } });
     expect(compiled([leaf("EFFECT", "test", { target: "enemy", range: "inches", within_inches: 6, test: "battle-shock" })]).mechanics.effect)
-      .toEqual({ type: "test", target: { owner: "enemy", within: { range: { inches: 6 } } }, modifier: { test: "battle-shock" } });
+      .toEqual({ type: "test", target: { owner: "enemy", within: { range: { inches: 6 }, of: "this-model" } }, modifier: { test: "battle-shock" } });
   });
 
   it("folds require/exclude keywords and a modifier/count/per, matching repulsed-by-weakness's shape", () => {
     expect(compiled([leaf("EFFECT", "test", {
       target: "enemy", range: "engagement", exclude_keywords: ["MONSTER", "VEHICLE"], test: "desperate-escape", per: "model",
     })]).mechanics.effect).toEqual({
-      type: "test", target: { owner: "enemy", within: { range: "engagement" }, none_of: ["MONSTER", "VEHICLE"] }, modifier: { test: "desperate-escape", per: "model" },
+      type: "test", target: { owner: "enemy", within: { range: "engagement", of: "this-model" }, none_of: ["MONSTER", "VEHICLE"] }, modifier: { test: "desperate-escape", per: "model" },
     });
     expect(compiled([leaf("EFFECT", "test", { target: "this-unit", test: "battle-shock", modifier: -1 })]).mechanics.effect)
       .toMatchObject({ modifier: { test: "battle-shock", modifier: -1 } });
@@ -139,13 +139,13 @@ describe("Round 5C test-family compiler", () => {
 
   it("compiles borrow-weapons (Firing Deck)", () => {
     expect(compiled([leaf("EFFECT", "borrow-weapons", { target: "this-unit", max_models: 2, weapon_type: "ranged" })]).mechanics.effect)
-      .toEqual({ type: "borrow-weapons", target: "this-unit", modifier: { max_models: 2, weapon_type: "ranged" } });
+      .toEqual({ type: "borrow-weapons", target: "this-unit", modifier: { max_models: 2, weapons: { type: "ranged" } } });
     expect(rendered(base(), [leaf("EFFECT", "borrow-weapons", { target: "this-unit", max_models: 2 })]).length).toBeGreaterThan(0);
   });
 
   it("compiles select-weapon binding a name", () => {
     expect(compiled([leaf("EFFECT", "select-weapon", { target: "this-unit", bind_as: "chosen_weapon", weapon_type: "melee" })]).mechanics.effect)
-      .toEqual({ type: "select-weapon", target: "this-unit", modifier: { bind_as: "chosen_weapon", weapon_type: "melee" } });
+      .toEqual({ type: "select-weapon", target: "this-unit", modifier: { bind_as: "chosen_weapon", weapons: { type: "melee" } } });
     expect(rendered(base(), [leaf("EFFECT", "select-weapon", { target: "this-unit", bind_as: "chosen_weapon" })]).length).toBeGreaterThan(0);
   });
 });
@@ -186,12 +186,12 @@ describe("Round 5C trailing condition on a change to the test just taken", () =>
     if (!result.ok) throw new Error(result.errors.join("; "));
     expect(result.mechanics.effect).toEqual({
       type: "conditional",
-      condition: { type: "unit-state", parameters: { state: "engaged" } },
+      condition: { type: "matches", parameters: { filter: { state: "engaged" } } },
       effect: {
         type: "sequence",
         steps: [
-          { type: "conditional", condition: { type: "unit-state", parameters: { state: "battle-shocked" } }, effect: { type: "test", target: "this-unit", modifier: { test: "desperate-escape", modifier: -1 } } },
-          { type: "conditional", condition: { operator: "not", operands: [{ type: "unit-state", parameters: { state: "battle-shocked" } }] }, effect: { type: "test", target: "this-unit", modifier: { test: "desperate-escape" } } },
+          { type: "conditional", condition: { type: "matches", parameters: { filter: { state: "battle-shocked" } } }, effect: { type: "test", target: "this-unit", modifier: { test: "desperate-escape", modifier: -1 } } },
+          { type: "conditional", condition: { operator: "not", operands: [{ type: "matches", parameters: { filter: { state: "battle-shocked" } } }] }, effect: { type: "test", target: "this-unit", modifier: { test: "desperate-escape" } } },
         ],
       },
     });
@@ -211,7 +211,7 @@ describe("Round 5C trailing condition on a change to the test just taken", () =>
     if (!result.ok) throw new Error(result.errors.join("; "));
     expect(result.mechanics.effect).toMatchObject({
       type: "for-each-unit",
-      selector: { owner: "enemy", engagement_relation: "engaged-with-bearer" },
+      selector: { filter: { owner: "enemy", engaged_with: "this-model" } },
       effect: {
         type: "sequence",
         steps: [
@@ -231,7 +231,7 @@ describe("Round 5C trailing condition on a change to the test just taken", () =>
       type: "sequence",
       steps: [
         { type: "test", target: "this-unit", modifier: { test: "battle-shock" } },
-        { type: "conditional", condition: { type: "has-keyword", parameters: { all_of: ["INFANTRY"] } }, effect: { type: "roll-modifier", target: "this-unit", modifier: { roll: "charge", operation: "subtract", value: 1 } } },
+        { type: "conditional", condition: { type: "matches", parameters: { filter: { all_of: ["INFANTRY"] } } }, effect: { type: "roll-modifier", target: "this-unit", modifier: { roll: "charge", operation: "subtract", value: 1 } } },
       ],
     });
   });
@@ -242,7 +242,7 @@ describe("Round 5C trailing condition on a change to the test just taken", () =>
     if (!result.ok) throw new Error(result.errors.join("; "));
     expect(result.mechanics.effect).toEqual({
       type: "conditional",
-      condition: { type: "has-keyword", parameters: { all_of: ["INFANTRY"] } },
+      condition: { type: "matches", parameters: { filter: { all_of: ["INFANTRY"] } } },
       effect: { type: "roll-modifier", target: "this-unit", modifier: { roll: "charge", operation: "subtract", value: 1 } },
     });
   });
@@ -268,7 +268,7 @@ describe("Round 5C trailing condition on a change to the test just taken", () =>
     if (!result.ok) throw new Error(result.errors.join("; "));
     expect(result.mechanics.effect).toEqual({
       type: "conditional",
-      condition: { type: "has-keyword", parameters: { all_of: ["INFANTRY"] } },
+      condition: { type: "matches", parameters: { filter: { all_of: ["INFANTRY"] } } },
       effect: { type: "test", target: "this-unit", modifier: { test: "battle-shock", modifier: -1 } },
     });
   });
@@ -307,7 +307,7 @@ describe("Round 5C trailing condition on a change to the test just taken", () =>
       ["if that unit is a PSYKER unit", "unit-keyword", { keywords: ["PSYKER"], subject: "antecedent", negated: false }],
     ), text);
     if (!result.ok) throw new Error(result.errors.join("; "));
-    const psyker = { type: "has-keyword", parameters: { all_of: ["PSYKER"] } };
+    const psyker = { type: "matches", parameters: { filter: { all_of: ["PSYKER"] } } };
     const below = { type: "strength", parameters: { subject: "recipient", below: "starting" } };
     expect(JSON.stringify(result.mechanics.effect)).not.toContain('"roll-modifier"');
     expect(result.mechanics.effect).toMatchObject({
@@ -325,7 +325,7 @@ describe("Round 5C trailing condition on a change to the test just taken", () =>
     if (!result.ok) throw new Error(result.errors.join("; "));
     expect(result.mechanics.effect).toEqual({
       type: "conditional",
-      condition: { type: "has-keyword", parameters: { all_of: ["INFANTRY"] } },
+      condition: { type: "matches", parameters: { filter: { all_of: ["INFANTRY"] } } },
       effect: { type: "test", target: "this-unit", modifier: { test: "battle-shock", modifier: -1 } },
     });
   });
@@ -336,8 +336,8 @@ describe("Round 5C trailing condition on a change to the test just taken", () =>
       ["if it is a non-IMPERIUM/CHAOS unit", "unit-keyword", { keywords: ["IMPERIUM", "CHAOS"], subject: "this-unit", negated: true }]), text);
     if (!result.ok) throw new Error(result.errors.join("; "));
     const neither = { operator: "and", operands: [
-      { operator: "not", operands: [{ type: "has-keyword", parameters: { all_of: ["IMPERIUM"] } }] },
-      { operator: "not", operands: [{ type: "has-keyword", parameters: { all_of: ["CHAOS"] } }] },
+      { operator: "not", operands: [{ type: "matches", parameters: { filter: { all_of: ["IMPERIUM"] } } }] },
+      { operator: "not", operands: [{ type: "matches", parameters: { filter: { all_of: ["CHAOS"] } } }] },
     ] };
     expect(result.mechanics.effect).toEqual({
       type: "sequence",
@@ -362,8 +362,8 @@ describe("Round 5C trailing condition on a change to the test just taken", () =>
       effect: {
         type: "sequence",
         steps: [
-          { type: "conditional", condition: { type: "has-keyword", parameters: { subject: "selected-unit", all_of: ["CHAOS"] } }, effect: { type: "test", target: "selected-unit", modifier: { test: "battle-shock", modifier: -2 } } },
-          { type: "conditional", condition: { operator: "not", operands: [{ type: "has-keyword", parameters: { subject: "selected-unit", all_of: ["CHAOS"] } }] }, effect: { type: "test", target: "selected-unit", modifier: { test: "battle-shock" } } },
+          { type: "conditional", condition: { type: "matches", parameters: { subject: "selected-unit", filter: { all_of: ["CHAOS"] } } }, effect: { type: "test", target: "selected-unit", modifier: { test: "battle-shock", modifier: -2 } } },
+          { type: "conditional", condition: { operator: "not", operands: [{ type: "matches", parameters: { subject: "selected-unit", filter: { all_of: ["CHAOS"] } } }] }, effect: { type: "test", target: "selected-unit", modifier: { test: "battle-shock" } } },
         ],
       },
     });

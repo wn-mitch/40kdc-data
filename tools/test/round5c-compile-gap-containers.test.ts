@@ -46,7 +46,6 @@ describe("Round 5C risk-reward compiler", () => {
   const base = () => authored("adeptus-mechanicus", "control-edict-adeptus-mechanicus");
 
   it("reproduces dark-pacts-chaos-space-marines exactly: a leadership risk gating a choice reward", () => {
-    const entry = authored("chaos-space-marines", "dark-pacts-chaos-space-marines");
     const result = compiled([
       leaf("EFFECT", "risk-reward-open", { test: "leadership" }, "A"),
       leaf("EVENT", "on-fail-open", {}, "B"),
@@ -54,9 +53,21 @@ describe("Round 5C risk-reward compiler", () => {
       leaf("EFFECT", "weapon-ability-grant", { subject: "this-unit", keyword: "Lethal Hits" }, "C"),
       leaf("EFFECT", "weapon-ability-grant", { subject: "this-unit", keyword: "Sustained Hits 1" }, "D"),
     ]);
-    // The reward is authored as a bare choice (no choice_label); the real record's own choice_label
-    // ("Dark Pact ability") is describer sugar this batch's opener has no field for — noted in the report.
-    expect(result.mechanics.effect).toEqual({ ...entry.effect, reward: { type: "choice", options: (entry.effect as { reward: { options: unknown[] } }).reward.options } });
+    // Keep the canonical expectation independent of the authored public-data migration.
+    expect(result.mechanics.effect).toEqual({
+      type: "risk-reward",
+      risk: { test: "leadership", on_fail: { type: "mortal-wounds", target: "this-model", modifier: { count: "D3" } } },
+      reward: {
+        type: "choice",
+        options: [
+          { type: "weapon-ability-grant", target: "this-unit", modifier: { keywords: [{ keyword_id: "lethal-hits" }] } },
+          {
+            type: "weapon-ability-grant", target: "this-unit",
+            modifier: { keywords: [{ keyword_id: "sustained-hits", parameters: { value: 1 } }] },
+          },
+        ],
+      },
+    });
     expect(rendered(base(), [
       leaf("EFFECT", "risk-reward-open", { test: "leadership" }, "A"),
       leaf("EVENT", "on-fail-open", {}, "B"),
@@ -105,7 +116,7 @@ describe("Round 5C resource-action-menu compiler", () => {
         when: { event: "phase-started", condition: { operator: "and", operands: [{ type: "phase-is", parameters: { phase: "movement" } }, { type: "player-turn-is", parameters: { turn: "your-turn" } }] } },
         cost: { pool_id: "battle-focus-pool", amount: 1 },
         effect: { type: "stat-modifier", target: "this-unit", modifier: { stat: "M", operation: "add", value: 2 } },
-        duration: "until-end-of-phase",
+        duration: "phase",
       }],
     });
     expect(rendered(base(), [
@@ -116,7 +127,7 @@ describe("Round 5C resource-action-menu compiler", () => {
     ]).length).toBeGreaterThan(0);
   });
 
-  it("compiles an action's eligibility from an ordinary unit-keyword leaf (requires_keyword, and excludes_keyword when negated) and a select-unit leaf (selector_count)", () => {
+  it("compiles an action's eligibility from ordinary keyword and select-unit leaves into filter and count bounds", () => {
     expect(compiled([
       leaf("EFFECT", "resource-action-menu-open", { menu_id: "m", pool_id: "p" }, "A"),
       leaf("EVENT", "menu-action", { action_id: "vehicle-only", label: "Vehicle Only", cost_amount: 1 }, "B"),
@@ -130,8 +141,8 @@ describe("Round 5C resource-action-menu compiler", () => {
       leaf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, "C"),
     ]).mechanics.effect).toMatchObject({
       actions: [
-        { id: "vehicle-only", eligibility: { requires_keyword: ["VEHICLE"] } },
-        { id: "not-titanic", eligibility: { excludes_keyword: ["TITANIC"], selector_count: 1 } },
+        { id: "vehicle-only", eligibility: { filter: { all_of: ["VEHICLE"] } } },
+        { id: "not-titanic", eligibility: { filter: { none_of: ["TITANIC"] }, count: { min: 1, max: 1 } } },
       ],
     });
   });
@@ -146,7 +157,6 @@ describe("Round 5C resource-action-menu compiler", () => {
   });
 
   it("reproduces battle-focus-aeldari exactly, all six actions", () => {
-    const entry = authored("aeldari", "battle-focus-aeldari");
     const cost = { cost_pool_id: "battle-focus-pool", cost_resource_label: "Battle Focus token" };
     const move = (owner: string, moveTypes: string[], fragment: string) => leaf("EVENT", "event", { kind: "move-ended", owner, move_types: moveTypes }, fragment, 9);
     const result = compiled([
@@ -182,7 +192,121 @@ describe("Round 5C resource-action-menu compiler", () => {
       leaf("EVENT", "event", { kind: "attacks-resolved", owner: "enemy", action_kind: "shoot" }, "G", 9),
       leaf("EFFECT", "make-move", { subject: "this-unit", move_type: "normal", distance: "D6+1" }, "G"),
     ]);
-    expect(result.mechanics.effect).toEqual(entry.effect);
+    const moveTriggers = ["normal", "advance", "fall-back"].map((moveType) => ({
+      event: "move-ended",
+      subject: { owner: "friendly" },
+      filter: { move_types: [moveType] },
+    }));
+    const actionCost = { pool_id: "battle-focus-pool", amount: 1, resource_label: "Battle Focus token" };
+    const reactiveMove = { type: "move", target: "this-unit", modifier: { move_type: "normal", distance: "D6+1" } };
+    expect(result.mechanics.effect).toEqual({
+      type: "sequence",
+      steps: [
+        {
+          type: "ability-part",
+          trigger: { event: "round-started" },
+          effect: {
+            type: "resource-gain", target: "this-model",
+            modifier: { pool: "battle-focus-pool", amount: "variable", label: "Battle Focus token" },
+          },
+        },
+        {
+          type: "resource-action-menu",
+          menu_id: "agile-manoeuvres",
+          pool_id: "battle-focus-pool",
+          shared_usage: { unit_max_manoeuvres_per_phase: 1, default_manoeuvre_max_per_phase: 1 },
+          actions: [
+            {
+              id: "swift-as-the-wind", label: "Swift as the Wind", cost: actionCost,
+              duration: "phase", usage: { repeatable_if_different_unit: true },
+              when: moveTriggers,
+              effect: { type: "stat-modifier", target: "this-unit", modifier: { stat: "M", operation: "add", value: 2 } },
+            },
+            {
+              id: "flitting-shadows", label: "Flitting Shadows", cost: actionCost,
+              duration: "turn",
+              when: [
+                ...moveTriggers,
+                { event: "set-up", subject: { owner: "friendly" } },
+                { event: "targets-selected", subject: { owner: "friendly" }, filter: { kind: "charge" } },
+              ],
+              effect: {
+                type: "rule-state", target: "this-unit",
+                modifier: { direction: "suppressed", rule_kind: "core-rule", rule: "overwatch-against-bearer" },
+              },
+            },
+            {
+              id: "star-engines", label: "Star Engines", cost: actionCost,
+              duration: "turn", eligibility: { filter: { all_of: ["VEHICLE"] } },
+              when: { event: "selected", subject: { owner: "friendly" }, filter: { to: "move", move_types: ["advance"] } },
+              effect: {
+                type: "weapon-ability-grant", target: "this-unit",
+                modifier: { weapons: { type: "ranged" }, keywords: [{ keyword_id: "assault" }] },
+              },
+            },
+            {
+              id: "sudden-strike", label: "Sudden Strike", cost: actionCost,
+              duration: "phase",
+              when: { event: "selected", subject: { owner: "friendly" }, filter: { to: "fight" } },
+              effect: {
+                type: "sequence",
+                steps: [
+                  { type: "move", target: "this-unit", modifier: { move_type: "pile-in", distance: 6 } },
+                  { type: "move", target: "this-unit", modifier: { move_type: "consolidation", distance: 6 } },
+                ],
+              },
+            },
+            {
+              id: "opportunity-seized", label: "Opportunity Seized", cost: actionCost,
+              duration: "resolution",
+              when: {
+                event: "move-ended", subject: { owner: "enemy" }, filter: { move_types: ["fall-back"] },
+                binds_event_variable: "triggering-enemy",
+              },
+              eligibility: {
+                filter: { none_of: ["TITANIC"] }, count: { min: 1, max: 1 },
+                requires: [{
+                  type: "unit-state",
+                  parameters: { subject: "selected-unit", state: "engaged", at: "phase-start", with: { event_var: "triggering-enemy" } },
+                }],
+              },
+              effect: reactiveMove,
+            },
+            {
+              id: "fade-back", label: "Fade Back", cost: actionCost,
+              duration: "resolution",
+              when: {
+                event: "attacks-resolved", subject: { owner: "enemy" }, filter: { kind: "shoot" },
+                binds_event_variable: "triggering-shooter",
+              },
+              eligibility: {
+                filter: { none_of: ["TITANIC"] }, count: { min: 1, max: 1 },
+                requires: [
+                  { type: "phase-is", parameters: { phase: "shooting" } },
+                  { type: "player-turn-is", parameters: { turn: "opponent-turn" } },
+                  {
+                    type: "happened",
+                    parameters: {
+                      event: "after-roll", object: "selected-unit", window: "event",
+                      filter: { by: { event_var: "triggering-shooter" }, result: "success", roll: "hit" },
+                    },
+                  },
+                ],
+              },
+              effect: reactiveMove,
+            },
+          ],
+        },
+        {
+          type: "ability-part",
+          trigger: { event: "round-ended" },
+          effect: {
+            type: "resource-spend", target: "this-model",
+            modifier: { pool: "battle-focus-pool", amount: "all", label: "Battle Focus token" },
+          },
+        },
+      ],
+    });
   });
 });
 
@@ -194,9 +318,10 @@ describe("Round 5C persistent-designation compiler", () => {
     const entry = {
       effect: {
         type: "persistent-designation", designation: "unbridled-ardour-slayer", duration: "battle",
-        select: { count: 1, scope: "enemy-unit", selection_policy: "one-time", timing: "on-unit-destroyed" },
+        select: { kind: "unit", selector: { filter: { owner: "enemy" }, count: { min: 1, max: 1 }, bind_as: "unbridled-ardour-slayer-selection" } },
+        selection_policy: "one-time",
         consumer: {
-          beneficiary: "bearer", relation: "attacks-selected-unit",
+          beneficiary: "this-model", relation: "attacks-selected-unit",
           effect: { type: "sequence", steps: [
             { type: "re-roll", target: "this-model", modifier: { roll: "hit", result_scope: "any-result" } },
             { type: "re-roll", target: "this-model", modifier: { roll: "wound", result_scope: "any-result" } },
@@ -217,11 +342,25 @@ describe("Round 5C persistent-designation compiler", () => {
     ]).length).toBeGreaterThan(0);
   });
 
+  it("retains the establishing selection's zero allowance and keyword alternatives", () => {
+    const result = compiled([
+      leaf("EVENT", "select-unit", { distance: "any", visible: false, count: 1, up_to: true }, "A", 6),
+      leaf("CONDITION", "unit-filter", { side: "enemy", any_keywords: ["ALPHA", "BETA"] }, "A", 16),
+      leaf("EFFECT", "persistent-designation-open", { designation: "example-prey", scope: "enemy-unit", timing: "start-of-first-battle-round", beneficiary: "this-unit" }, "A"),
+      leaf("EFFECT", "reroll", { roll: "hit", subset: "ones", weapon_type: "all" }, "B"),
+    ]);
+    expect(result.mechanics.effect).toMatchObject({ type: "ability-part", effect: {
+      type: "persistent-designation",
+      select: { kind: "unit", selector: { filter: { owner: "enemy", any_of: ["ALPHA", "BETA"] }, count: { min: 0, max: 1 }, bind_as: "example-prey-selection" } },
+      consumer: { beneficiary: "this-unit" },
+    } });
+  });
+
   it("compiles the objective-marker scope with the matching within-selected-marker relation", () => {
     expect(compiled([
       leaf("EFFECT", "persistent-designation-open", { designation: "singular-purpose-marker", scope: "objective-marker", timing: "start-of-first-battle-round", beneficiary: "this-model" }, "A"),
       leaf("EFFECT", "feel-no-pain", { subject: "this-model", threshold: 5 }, "B"),
-    ]).mechanics.effect).toMatchObject({ select: { scope: "objective-marker" }, consumer: { relation: "within-selected-marker" } });
+    ]).mechanics.effect).toMatchObject({ type: "ability-part", trigger: { event: "round-started" }, effect: { select: { kind: "objective", selector: { filter: {}, count: { min: 1, max: 1 }, bind_as: "singular-purpose-marker-selection" } }, selection_policy: "one-time", consumer: { relation: "within-selected-marker", beneficiary: "this-model" } } });
   });
 });
 
@@ -234,7 +373,7 @@ describe("Round 5C select-objective compiler", () => {
       leaf("EFFECT", "fights-first", { subject: "this-model" }, "B"),
     ]).mechanics.effect).toEqual({
       type: "select-objective",
-      selector: { bind_as: "target_objective", count: 1, range_inches: 6 },
+      selector: { filter: { within: { range: { inches: 6 }, of: "this-model" } }, bind_as: "target_objective", count: { min: 1, max: 1 } },
       effect: { type: "ability-grant", target: "this-model", modifier: { ability: "fights-first" } },
     });
     expect(rendered(base(), [
@@ -243,10 +382,10 @@ describe("Round 5C select-objective compiler", () => {
     ]).length).toBeGreaterThan(0);
   });
 
-  it("prefers each over count when both are given", () => {
+  it("selects every eligible objective without a maximum count", () => {
     expect(compiled([
       leaf("EFFECT", "select-objective-open", { bind_as: "x", each: true }, "A"),
       leaf("EFFECT", "fights-first", { subject: "this-model" }, "B"),
-    ]).mechanics.effect).toMatchObject({ selector: { count: "each" } });
+    ]).mechanics.effect).toHaveProperty("selector.count", { min: 1 });
   });
 });

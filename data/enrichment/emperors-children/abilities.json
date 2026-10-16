@@ -154,12 +154,14 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "subject": "defender",
-          "all_of": [
-            "INFANTRY"
-          ]
+          "filter": {
+            "all_of": [
+              "INFANTRY"
+            ]
+          },
+          "subject": "defender"
         }
       },
       "effect": {
@@ -223,8 +225,10 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Lethal Hits"
+          "keywords": [
+            {
+              "keyword_id": "lethal-hits"
+            }
           ]
         }
       }
@@ -370,8 +374,13 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Sustained Hits 1"
+          "keywords": [
+            {
+              "keyword_id": "sustained-hits",
+              "parameters": {
+                "value": 1
+              }
+            }
           ]
         }
       }
@@ -408,7 +417,7 @@
         "type": "mortal-wounds",
         "target": "defender",
         "modifier": {
-          "count": "1"
+          "count": 1
         }
       }
     },
@@ -438,22 +447,28 @@
         "operator": "and",
         "operands": [
           {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "subject": "event-subject",
-              "of": "this-unit",
-              "range": {
-                "inches": 8
-              }
+              "filter": {
+                "within": {
+                  "range": {
+                    "inches": 8
+                  },
+                  "of": "this-unit"
+                }
+              },
+              "subject": "event-subject"
             }
           },
           {
             "operator": "not",
             "operands": [
               {
-                "type": "unit-state",
+                "type": "matches",
                 "parameters": {
-                  "state": "engaged"
+                  "filter": {
+                    "state": "engaged"
+                  }
                 }
               }
             ]
@@ -502,19 +517,23 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "subject": "this-model",
-          "of": {
-            "owner": "friendly",
-            "all_of": [
-              "SLAANESH",
-              "INFANTRY"
-            ]
+          "filter": {
+            "within": {
+              "range": {
+                "inches": 3
+              },
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "SLAANESH",
+                  "INFANTRY"
+                ]
+              }
+            }
           },
-          "range": {
-            "inches": 3
-          }
+          "subject": "this-model"
         }
       },
       "effect": {
@@ -549,9 +568,11 @@
       "type": "aura",
       "target": "friendly-within-aura",
       "modifier": {
-        "range": 6,
+        "range": {
+          "inches": 6
+        },
         "recipient_filter": {
-          "required_keywords": [
+          "all_of": [
             "SLAANESH"
           ]
         },
@@ -657,8 +678,13 @@
       "effect": {
         "type": "select-units",
         "selector": {
-          "owner": "enemy",
-          "count": 1,
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
           "eligibility": {
             "type": "happened",
             "parameters": {
@@ -853,7 +879,7 @@
       "type": "mortal-wounds",
       "target": "defender",
       "modifier": {
-        "count": "1"
+        "count": 1
       }
     },
     "scope": {
@@ -940,64 +966,88 @@
     "source_digest": "1432360a67f83b68878067cca831d55ada222f513635b64e9d8ab7d2add03f86",
     "version": "2025-q3",
     "effect": {
-      "type": "stance-select",
-      "mode": "re-selectable",
-      "scope": "unit",
-      "select": "start-of-opponent-command-phase",
-      "options": [
-        {
-          "name": "Beguiling Form",
-          "effect": {
-            "type": "roll-modifier",
-            "target": "this-model",
-            "modifier": {
-              "roll": "hit",
-              "operation": "subtract",
-              "value": 1,
-              "incoming": true
-            }
-          }
-        },
-        {
-          "name": "Daemonic Speed",
-          "effect": {
-            "type": "ability-grant",
-            "target": "this-model",
-            "modifier": {
-              "ability": "fights-first"
-            }
-          }
-        },
-        {
-          "name": "Enthralling Hypnosis",
-          "effect": {
-            "type": "dice-gated",
-            "dice": "2D6",
-            "threshold": "leadership",
-            "comparison": "gte",
-            "test": {
-              "kind": "leadership",
-              "subject": "target"
+      "type": "ability-part",
+      "trigger": {
+        "event": "phase-started",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "command"
+              }
             },
-            "on_fail": {
-              "type": "permission",
-              "target": {
-                "owner": "enemy",
-                "within": {
-                  "range": {
-                    "inches": 6
-                  },
-                  "of": "this-model"
-                }
-              },
-              "modifier": {
-                "activity": "fall-back",
-                "allow": false
+            {
+              "type": "player-turn-is",
+              "parameters": {
+                "turn": "opponent-turn"
               }
             }
-          }
+          ]
         }
-      ]
+      },
+      "effect": {
+        "type": "stance-select",
+        "mode": "re-selectable",
+        "options": [
+          {
+            "name": "Beguiling Form",
+            "effect": {
+              "type": "roll-modifier",
+              "target": "this-model",
+              "modifier": {
+                "roll": "hit",
+                "operation": "subtract",
+                "value": 1,
+                "incoming": true
+              }
+            },
+            "id": "option-1"
+          },
+          {
+            "name": "Daemonic Speed",
+            "effect": {
+              "type": "ability-grant",
+              "target": "this-model",
+              "modifier": {
+                "ability": "fights-first"
+              }
+            },
+            "id": "option-2"
+          },
+          {
+            "name": "Enthralling Hypnosis",
+            "effect": {
+              "type": "dice-gated",
+              "dice": "2D6",
+              "threshold": "leadership",
+              "comparison": "gte",
+              "test": {
+                "kind": "leadership",
+                "subject": "event-subject"
+              },
+              "on_fail": {
+                "type": "permission",
+                "target": {
+                  "owner": "enemy",
+                  "within": {
+                    "range": {
+                      "inches": 6
+                    },
+                    "of": "this-model"
+                  }
+                },
+                "modifier": {
+                  "activity": "fall-back",
+                  "allow": false
+                }
+              }
+            },
+            "id": "option-3"
+          }
+        ]
+      }
     },
     "scope": {
       "duration": "battle-round"
@@ -1070,14 +1120,16 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "subject": "defender",
-          "any_of": [
-            "CHARACTER",
-            "MONSTER",
-            "WALKER"
-          ]
+          "filter": {
+            "any_of": [
+              "CHARACTER",
+              "MONSTER",
+              "WALKER"
+            ]
+          },
+          "subject": "defender"
         }
       },
       "effect": {
@@ -1115,7 +1167,7 @@
   },
   {
     "ability_id": "duellists-hubris-emperors-children",
-    "name": "Duellist\u2019s Hubris",
+    "name": "Duellist’s Hubris",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -1161,12 +1213,14 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "subject": "defender",
-          "all_of": [
-            "FLY"
-          ]
+          "filter": {
+            "all_of": [
+              "FLY"
+            ]
+          },
+          "subject": "defender"
         }
       },
       "effect": {
@@ -1304,12 +1358,11 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "weapon-ability-grant",
+          "type": "roll-result",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Critical Wounds 3+"
-            ]
+            "roll": "wound",
+            "critical_on": 3
           }
         },
         {
@@ -1446,7 +1499,7 @@
       "duration": "turn"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN",
         "TERMINATOR"
       ]
@@ -1502,7 +1555,7 @@
       "duration": "turn"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN",
         "BATTLELINE"
       ]
@@ -1537,7 +1590,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN",
         "FLAWLESS BLADES"
       ]
@@ -1573,10 +1626,14 @@
           "type": "weapon-ability-grant",
           "target": "this-model",
           "modifier": {
-            "abilities": [
-              "Ignores Cover"
-            ],
-            "weapon_type": "ranged"
+            "weapons": {
+              "type": "ranged"
+            },
+            "keywords": [
+              {
+                "keyword_id": "ignores-cover"
+              }
+            ]
           }
         }
       ]
@@ -1585,7 +1642,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN",
         "LORD KAKOPHONIST"
       ]
@@ -1611,8 +1668,13 @@
       "type": "weapon-ability-grant",
       "target": "this-model",
       "modifier": {
-        "abilities": [
-          "Sustained Hits 1"
+        "keywords": [
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 1
+            }
+          }
         ]
       }
     },
@@ -1620,7 +1682,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN",
         "TERMINATOR SQUAD"
       ]
@@ -1649,14 +1711,16 @@
         "stat": "S",
         "operation": "add",
         "value": 1,
-        "weapon_type": "melee"
+        "weapons": {
+          "type": "melee"
+        }
       }
     },
     "scope": {
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN",
         "LORD EXULTANT"
       ]
@@ -1685,14 +1749,16 @@
         "stat": "AP",
         "operation": "improve",
         "value": 1,
-        "weapon_type": "ranged"
+        "weapons": {
+          "type": "ranged"
+        }
       }
     },
     "scope": {
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN",
         "LORD EXULTANT"
       ]
@@ -1727,7 +1793,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN",
         "FLAWLESS BLADES"
       ]
@@ -1773,7 +1839,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN",
         "FLAWLESS BLADES"
       ]
@@ -1804,7 +1870,7 @@
             "of": "attacker",
             "stat": "S"
           },
-          "comparison": "greater-than",
+          "comparison": "gt",
           "right": {
             "of": "defender",
             "stat": "T"
@@ -1813,10 +1879,9 @@
       },
       "effect": {
         "type": "roll-modifier",
-        "target": "this-unit",
+        "target": "attacker",
         "modifier": {
           "roll": "wound",
-          "incoming": true,
           "operation": "subtract",
           "value": 1
         }
@@ -1826,10 +1891,26 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN",
         "TERMINATOR"
       ]
+    },
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "EMPEROR'S CHILDREN",
+          "TERMINATOR"
+        ]
+      }
     }
   },
   {
@@ -1861,7 +1942,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN",
         "TERMINATOR"
       ]
@@ -1895,7 +1976,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN",
         "TERMINATOR"
       ]
@@ -1918,23 +1999,55 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "stat-modifier",
-      "target": "this-unit",
-      "modifier": {
-        "stat": "AP",
-        "operation": "worsen",
-        "value": 1,
-        "incoming": true
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "defender",
+          "filter": {
+            "within": {
+              "of": {
+                "objective": {}
+              },
+              "range": "objective-control"
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "attacker",
+        "modifier": {
+          "stat": "AP",
+          "operation": "worsen",
+          "value": 1
+        }
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "attack-sequence"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN",
         "BATTLELINE"
       ]
+    },
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "BATTLELINE",
+          "EMPEROR'S CHILDREN"
+        ]
+      }
     }
   },
   {
@@ -1956,10 +2069,22 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "count": 1,
-        "owner": "enemy",
-        "range_inches": 12,
-        "visibility_required": true
+        "filter": {
+          "owner": "enemy",
+          "within": {
+            "range": {
+              "inches": 12
+            },
+            "of": "this-model"
+          },
+          "visible": {
+            "to": "this-model"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        }
       },
       "effect": {
         "type": "stat-modifier",
@@ -1975,7 +2100,7 @@
       "duration": "turn"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN",
         "BATTLELINE"
       ]
@@ -2019,7 +2144,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN",
         "BATTLELINE"
       ]
@@ -2045,17 +2170,21 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Precision"
-        ],
-        "weapon_type": "melee"
+        "weapons": {
+          "type": "melee"
+        },
+        "keywords": [
+          {
+            "keyword_id": "precision"
+          }
+        ]
       }
     },
     "scope": {
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "FLAWLESS BLADES"
       ]
     }
@@ -2092,7 +2221,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "FLAWLESS BLADES"
       ]
     }
@@ -2125,7 +2254,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "FLAWLESS BLADES"
       ]
     },
@@ -2161,61 +2290,74 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "all_of": [
-            "CHARACTER"
-          ]
+          "subject": "this-unit",
+          "filter": {
+            "all_of": [
+              "EMPEROR'S CHILDREN"
+            ]
+          }
         }
       },
       "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "ignore-modifiers",
-            "target": "this-unit",
-            "modifier": {
-              "what": "characteristics"
-            }
-          },
-          {
-            "type": "ignore-modifiers",
-            "target": "this-unit",
-            "modifier": {
-              "what": "rolls",
-              "rolls": [
-                "advance"
+        "type": "conditional",
+        "condition": {
+          "type": "matches",
+          "parameters": {
+            "filter": {
+              "all_of": [
+                "CHARACTER"
               ]
-            }
-          },
-          {
-            "type": "ignore-modifiers",
-            "target": "this-unit",
-            "modifier": {
-              "what": "rolls",
-              "rolls": [
-                "charge"
-              ]
-            }
-          },
-          {
-            "type": "re-roll",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "wound",
-              "subset": "all-failures"
             }
           }
-        ]
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "ignore-modifiers",
+              "target": "this-unit",
+              "modifier": {
+                "what": "characteristics"
+              }
+            },
+            {
+              "type": "ignore-modifiers",
+              "target": "this-unit",
+              "modifier": {
+                "what": "rolls",
+                "rolls": [
+                  "advance"
+                ]
+              }
+            },
+            {
+              "type": "ignore-modifiers",
+              "target": "this-unit",
+              "modifier": {
+                "what": "rolls",
+                "rolls": [
+                  "charge"
+                ]
+              }
+            },
+            {
+              "type": "re-roll",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "wound",
+                "subset": "all-failures"
+              }
+            }
+          ]
+        }
       }
     },
     "scope": {
-      "duration": "permanent",
-      "applies_to": [
-        "EMPEROR'S CHILDREN"
-      ]
+      "duration": "permanent"
     },
-    "community_notes": "[APPROX] Models: EMPEROR'S CHILDREN CHARACTERs ignore characteristic modifiers (the rule covers only the Move characteristic; encoded as all characteristics \u2014 strongest case), ignore modifiers to their Advance and Charge rolls, plus the Favoured Champions re-roll (re-roll the Wound roll). Not modeled: the dynamic Favoured Champions designation \u2014 initially the Warlord's unit, reassigned to the EMPEROR'S CHILDREN CHARACTER that first destroys an enemy unit each player-turn \u2014 so the Wound re-roll is expressed as a blanket CHARACTER buff rather than restricted to the single Favoured Champions unit. Full rule in raw-text store."
+    "community_notes": "[APPROX] Models: EMPEROR'S CHILDREN CHARACTERs ignore characteristic modifiers (the rule covers only the Move characteristic; encoded as all characteristics — strongest case), ignore modifiers to their Advance and Charge rolls, plus the Favoured Champions re-roll (re-roll the Wound roll). Not modeled: the dynamic Favoured Champions designation — initially the Warlord's unit, reassigned to the EMPEROR'S CHILDREN CHARACTER that first destroys an enemy unit each player-turn — so the Wound re-roll is expressed as a blanket CHARACTER buff rather than restricted to the single Favoured Champions unit. Full rule in raw-text store."
   },
   {
     "ability_id": "daemonic-empowerment-emperors-children",
@@ -2236,36 +2378,56 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "of": {
-            "owner": "friendly",
+          "subject": "this-unit",
+          "filter": {
             "all_of": [
-              "LEGIONS OF EXCESS"
+              "EMPEROR'S CHILDREN"
             ]
-          },
-          "range": {
-            "inches": 6
           }
         }
       },
       "effect": {
-        "type": "weapon-ability-grant",
-        "target": "this-unit",
-        "modifier": {
-          "abilities": [
-            "Sustained Hits 1"
-          ]
+        "type": "conditional",
+        "condition": {
+          "type": "matches",
+          "parameters": {
+            "filter": {
+              "within": {
+                "range": {
+                  "inches": 6
+                },
+                "of": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "LEGIONS OF EXCESS"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "effect": {
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "sustained-hits",
+                "parameters": {
+                  "value": 1
+                }
+              }
+            ]
+          }
         }
       }
     },
     "scope": {
-      "duration": "permanent",
-      "applies_to": [
-        "EMPEROR'S CHILDREN"
-      ]
+      "duration": "permanent"
     },
-    "community_notes": "[APPROX] Models the Empowered buff \u2014 while within 6\" of a friendly LEGIONS OF EXCESS unit, weapons gain [SUSTAINED HITS 1] \u2014 from the EMPEROR'S CHILDREN side. The symmetric case (a LEGIONS OF EXCESS unit empowered by a nearby EMPEROR'S CHILDREN unit) and the upgrade clause (a weapon that already has [SUSTAINED HITS] instead scores a Critical Hit on an unmodified 5+) are not modeled. Full rule in raw-text store."
+    "community_notes": "[APPROX] Models the Empowered buff — while within 6\" of a friendly LEGIONS OF EXCESS unit, weapons gain [SUSTAINED HITS 1] — from the EMPEROR'S CHILDREN side. The symmetric case (a LEGIONS OF EXCESS unit empowered by a nearby EMPEROR'S CHILDREN unit) and the upgrade clause (a weapon that already has [SUSTAINED HITS] instead scores a Critical Hit on an unmodified 5+) are not modeled. Full rule in raw-text store."
   },
   {
     "ability_id": "exquisite-swordsmanship-emperors-children",
@@ -2304,20 +2466,31 @@
             "type": "weapon-ability-grant",
             "target": "this-model",
             "modifier": {
-              "abilities": [
-                "Lethal Hits"
-              ],
-              "weapon_type": "melee"
+              "weapons": {
+                "type": "melee"
+              },
+              "keywords": [
+                {
+                  "keyword_id": "lethal-hits"
+                }
+              ]
             }
           },
           {
             "type": "weapon-ability-grant",
             "target": "this-model",
             "modifier": {
-              "abilities": [
-                "Sustained Hits 1"
-              ],
-              "weapon_type": "melee"
+              "weapons": {
+                "type": "melee"
+              },
+              "keywords": [
+                {
+                  "keyword_id": "sustained-hits",
+                  "parameters": {
+                    "value": 1
+                  }
+                }
+              ]
             }
           }
         ],
@@ -2348,52 +2521,65 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "or",
-        "operands": [
-          {
-            "type": "has-keyword",
-            "parameters": {
-              "all_of": [
-                "TRANSPORT"
-              ]
-            }
-          },
-          {
-            "type": "happened",
-            "parameters": {
-              "event": "disembarked",
-              "window": "turn"
-            }
+        "type": "matches",
+        "parameters": {
+          "subject": "this-unit",
+          "filter": {
+            "all_of": [
+              "EMPEROR'S CHILDREN"
+            ]
           }
-        ]
+        }
       },
       "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "re-roll",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "hit",
-              "subset": "ones"
+        "type": "conditional",
+        "condition": {
+          "operator": "or",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "all_of": [
+                    "TRANSPORT"
+                  ]
+                }
+              }
+            },
+            {
+              "type": "happened",
+              "parameters": {
+                "event": "disembarked",
+                "window": "turn"
+              }
             }
-          },
-          {
-            "type": "re-roll",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "wound",
-              "subset": "ones"
+          ]
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "re-roll",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "hit",
+                "subset": "ones"
+              }
+            },
+            {
+              "type": "re-roll",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "wound",
+                "subset": "ones"
+              }
             }
-          }
-        ]
+          ]
+        }
       }
     },
     "scope": {
-      "duration": "permanent",
-      "applies_to": [
-        "EMPEROR'S CHILDREN"
-      ]
+      "duration": "permanent"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
@@ -2515,7 +2701,9 @@
               "stat": "S",
               "operation": "add",
               "value": 1,
-              "weapon_type": "melee"
+              "weapons": {
+                "type": "melee"
+              }
             }
           },
           {
@@ -2525,7 +2713,9 @@
               "stat": "AP",
               "operation": "add",
               "value": 1,
-              "weapon_type": "melee"
+              "weapons": {
+                "type": "melee"
+              }
             }
           }
         ]
@@ -2562,7 +2752,7 @@
     "scope": {
       "duration": "permanent"
     },
-    "community_notes": "[APPROX] Models the 1CP reduction as a refund on a Stratagem use. The rule restricts this to the Sinuous Breach and Prideful Superiority Stratagems targeting a FULGRIM unit, and to once per battle round \u2014 restrictions not gated here. Full rule in raw-text store."
+    "community_notes": "[APPROX] Models the 1CP reduction as a refund on a Stratagem use. The rule restricts this to the Sinuous Breach and Prideful Superiority Stratagems targeting a FULGRIM unit, and to once per battle round — restrictions not gated here. Full rule in raw-text store."
   },
   {
     "ability_id": "pledges-to-the-dark-prince-emperors-children",
@@ -2591,11 +2781,13 @@
           "effect": {
             "type": "conditional",
             "condition": {
-              "type": "has-keyword",
+              "type": "matches",
               "parameters": {
-                "all_of": [
-                  "WARLORD"
-                ]
+                "filter": {
+                  "all_of": [
+                    "WARLORD"
+                  ]
+                }
               }
             },
             "effect": {
@@ -2626,9 +2818,9 @@
                       "object": {
                         "owner": "enemy"
                       },
-                      "window": "round"
+                      "window": "battle-round"
                     },
-                    "comparison": "greater-or-equal",
+                    "comparison": "gte",
                     "right": {
                       "pool": "pact-pledge"
                     }
@@ -2656,9 +2848,9 @@
                           "object": {
                             "owner": "enemy"
                           },
-                          "window": "round"
+                          "window": "battle-round"
                         },
-                        "comparison": "greater-or-equal",
+                        "comparison": "gte",
                         "right": {
                           "pool": "pact-pledge"
                         }
@@ -2701,46 +2893,132 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "not",
-        "operands": [
+      "type": "ability-part",
+      "trigger": {
+        "event": "model-destroyed",
+        "object": "model-in-this-unit"
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
           {
-            "type": "happened",
-            "parameters": {
-              "event": "selected",
-              "filter": {
-                "to": "fight"
+            "type": "act-on-death",
+            "target": "event-object",
+            "modifier": {
+              "act": "fight",
+              "resolution": "after-attacking-unit-finishes",
+              "removal": "after-destroyed-model-fights",
+              "gate": {
+                "dice": "D6+1",
+                "threshold": 4,
+                "comparison": "gte",
+                "modifiers": []
               },
-              "window": "phase"
+              "eligibility": {
+                "operator": "and",
+                "operands": [
+                  {
+                    "operator": "not",
+                    "operands": [
+                      {
+                        "type": "happened",
+                        "parameters": {
+                          "subject": "event-subject",
+                          "event": "selected",
+                          "filter": {
+                            "to": "fight"
+                          },
+                          "window": "phase"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "this-unit",
+                      "filter": {
+                        "designated": "favoured-champions"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "type": "act-on-death",
+            "target": "event-object",
+            "modifier": {
+              "act": "fight",
+              "resolution": "after-attacking-unit-finishes",
+              "removal": "after-destroyed-model-fights",
+              "gate": {
+                "dice": "D6",
+                "threshold": 4,
+                "comparison": "gte",
+                "modifiers": []
+              },
+              "eligibility": {
+                "operator": "and",
+                "operands": [
+                  {
+                    "operator": "not",
+                    "operands": [
+                      {
+                        "type": "happened",
+                        "parameters": {
+                          "subject": "event-subject",
+                          "event": "selected",
+                          "filter": {
+                            "to": "fight"
+                          },
+                          "window": "phase"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "operator": "not",
+                    "operands": [
+                      {
+                        "type": "matches",
+                        "parameters": {
+                          "subject": "this-unit",
+                          "filter": {
+                            "designated": "favoured-champions"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
             }
           }
         ]
-      },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 4,
-        "comparison": "gte",
-        "on_success": {
-          "type": "act-on-death",
-          "target": "this-unit",
-          "modifier": {
-            "act": "fight"
-          }
-        }
       }
     },
     "scope": {
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN",
         "CHARACTER"
       ]
     },
-    "community_notes": "Add 1 to the roll while this unit is your army's Favoured Champions; the Favoured Champions bonus is not encoded."
+    "community_notes": "Add 1 to the roll while this unit is your army's Favoured Champions; the Favoured Champions bonus is not encoded.",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
+    }
   },
   {
     "ability_id": "devoted-duellists-slaaneshs-chosen-emperors-children",
@@ -2762,17 +3040,24 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Sustained Hits 1"
-        ],
-        "weapon_type": "melee"
+        "weapons": {
+          "type": "melee"
+        },
+        "keywords": [
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
       }
     },
     "scope": {
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN",
         "CHARACTER"
       ]
@@ -2806,7 +3091,9 @@
           "target": {
             "owner": "enemy",
             "within": {
-              "range": {"inches":6}
+              "range": {
+                "inches": 6
+              }
             }
           },
           "modifier": {
@@ -2818,7 +3105,9 @@
           "target": {
             "owner": "enemy",
             "within": {
-              "range": {"inches":6}
+              "range": {
+                "inches": 6
+              }
             }
           },
           "modifier": {
@@ -2833,7 +3122,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     },
@@ -2858,11 +3147,13 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "all_of": [
-            "CHARACTER"
-          ]
+          "filter": {
+            "all_of": [
+              "CHARACTER"
+            ]
+          }
         }
       },
       "effect": {
@@ -2881,7 +3172,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     },
@@ -2915,7 +3206,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN",
         "CHARACTER"
       ]
@@ -2950,12 +3241,72 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN",
         "CHARACTER"
       ]
     },
-    "community_notes": "If the unit is not your army's Favoured Champions, you can re-roll the surge-distance dice; the re-roll rider is not encoded."
+    "community_notes": "If the unit is not your army's Favoured Champions, you can re-roll the surge-distance dice; the re-roll rider is not encoded.",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "targets-selected",
+              "subject": "event-subject",
+              "object": "stratagem-target",
+              "filter": {
+                "kind": "attack"
+              },
+              "window": "phase"
+            }
+          },
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "opponent-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "stratagem-target",
+              "filter": {
+                "owner": "friendly",
+                "all_of": [
+                  "CHARACTER",
+                  "EMPEROR'S CHILDREN"
+                ],
+                "not_states": [
+                  "engaged"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "dark-apparitions-carnival-of-excess-emperors-children",
@@ -2977,29 +3328,108 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "set-up",
-          "target": "this-unit",
-          "modifier": {
-            "to": "strategic-reserves"
+          "type": "ability-part",
+          "trigger": {
+            "event": "phase-ended",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "phase-is",
+                  "parameters": {
+                    "phase": "fight"
+                  }
+                },
+                {
+                  "type": "player-turn-is",
+                  "parameters": {
+                    "turn": "opponent-turn"
+                  }
+                }
+              ]
+            }
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "filter": {
+                      "within": {
+                        "of": {
+                          "owner": "friendly",
+                          "all_of": [
+                            "EMPEROR'S CHILDREN"
+                          ]
+                        },
+                        "range": {
+                          "inches": 8
+                        },
+                        "wholly": true
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "set-up",
+              "target": "this-unit",
+              "modifier": {
+                "to": "strategic-reserves",
+                "from": "battlefield"
+              }
+            }
           }
         },
         {
-          "type": "set-up",
-          "target": "this-unit",
-          "modifier": {
-            "to": "battlefield",
-            "from": "strategic-reserves",
-            "via": "deep-strike",
-            "min_enemy_distance": 6
+          "type": "ability-part",
+          "trigger": {
+            "event": "set-up"
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "within": {
+                    "of": {
+                      "owner": "friendly",
+                      "all_of": [
+                        "EMPEROR'S CHILDREN"
+                      ]
+                    },
+                    "range": {
+                      "inches": 8
+                    },
+                    "wholly": true
+                  }
+                }
+              }
+            },
+            "effect": {
+              "type": "set-up",
+              "target": "this-unit",
+              "modifier": {
+                "to": "battlefield",
+                "min_enemy_distance": {
+                  "inches": 6
+                }
+              }
+            }
           }
         }
       ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "DAEMONETTES"
       ]
     },
@@ -3022,21 +3452,67 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "move",
-      "target": "this-unit",
-      "modifier": {
-        "move_type": "charge"
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "permission",
+          "target": {
+            "stratagem_target": "second"
+          },
+          "modifier": {
+            "activity": "declare-charge",
+            "allow": true
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "happened",
+            "parameters": {
+              "subject": {
+                "stratagem_target": "second"
+              },
+              "event": "selected",
+              "filter": {
+                "to": "fight"
+              },
+              "window": "phase"
+            }
+          },
+          "effect": {
+            "type": "permission",
+            "target": {
+              "stratagem_target": "second"
+            },
+            "modifier": {
+              "activity": "fight",
+              "allow": false
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     },
-    "community_notes": "Used after a Legions of Excess unit destroys an enemy unit in the Fight phase; a friendly unengaged Emperor's Children unit within 6\" of it can declare a charge. If it already fought this phase, it cannot fight again."
+    "community_notes": "Used after a Legions of Excess unit destroys an enemy unit in the Fight phase; a friendly unengaged Emperor's Children unit within 6\" of it can declare a charge. If it already fought this phase, it cannot fight again.",
+    "trigger": {
+      "event": "destroyed",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "LEGIONS OF EXCESS"
+        ]
+      },
+      "object": {
+        "owner": "enemy"
+      }
+    }
   },
   {
     "ability_id": "sustained-by-agony-carnival-of-excess-emperors-children",
@@ -3055,50 +3531,108 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "choice",
-      "choice_label": "Sustained by Agony",
-      "options": [
-        {
-          "type": "heal",
-          "target": {
-            "owner": "friendly",
-            "within": {
-              "range": {"inches":6}
-            }
-          },
-          "modifier": {
-            "amount": 3
-          }
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "LEGIONS OF EXCESS"
+          ]
         },
-        {
-          "type": "return-models",
-          "target": {
-            "owner": "friendly",
-            "all_of": [
-              "LEGIONS OF EXCESS",
-              "DAEMONETTES"
-            ],
-            "within": {
-              "range": {
-                "inches": 6
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "subject": "selected-unit",
+            "filter": {
+              "within": {
+                "of": "this-unit",
+                "range": {
+                  "inches": 6
+                }
+              }
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "selected-unit",
+                    "filter": {
+                      "all_of": [
+                        "DAEMONETTES"
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "heal",
+              "target": "selected-unit",
+              "modifier": {
+                "amount": 3,
+                "per": "model"
               }
             }
           },
-          "modifier": {
-            "count": "D3+3"
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "selected-unit",
+                "filter": {
+                  "all_of": [
+                    "DAEMONETTES"
+                  ]
+                }
+              }
+            },
+            "effect": {
+              "type": "return-models",
+              "target": "selected-unit",
+              "modifier": {
+                "count": "D3+3"
+              }
+            }
           }
-        }
-      ]
+        ]
+      }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     },
-    "community_notes": "After this unit destroys an enemy unit in the Fight phase, one friendly Legions of Excess unit within 6\" either has one model recover up to 3 lost wounds or, if it is a Daemonettes unit, returns up to D3+3 destroyed models instead."
+    "community_notes": "After this unit destroys an enemy unit in the Fight phase, one friendly Legions of Excess unit within 6\" either has one model recover up to 3 lost wounds or, if it is a Daemonettes unit, returns up to D3+3 destroyed models instead.",
+    "trigger": {
+      "event": "destroyed",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "EMPEROR'S CHILDREN"
+        ]
+      },
+      "object": {
+        "owner": "enemy"
+      }
+    }
   },
   {
     "ability_id": "sycophantic-surge-carnival-of-excess-emperors-children",
@@ -3147,7 +3681,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "Legions of Excess"
       ]
     },
@@ -3171,10 +3705,9 @@
     "behavior": "reactive",
     "effect": {
       "type": "roll-modifier",
-      "target": "this-unit",
+      "target": "attacker",
       "modifier": {
         "roll": "hit",
-        "incoming": true,
         "operation": "subtract",
         "value": 1
       }
@@ -3183,9 +3716,19 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "SLAANESH"
       ]
+    },
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
     }
   },
   {
@@ -3229,7 +3772,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "SLAANESH"
       ]
     },
@@ -3258,14 +3801,16 @@
         "stat": "AP",
         "operation": "improve",
         "value": 1,
-        "weapon_type": "melee"
+        "weapons": {
+          "type": "melee"
+        }
       }
     },
     "scope": {
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     },
@@ -3298,11 +3843,40 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     },
-    "community_notes": "Used just after an enemy unit Falls Back within 6\"; the charge must target that enemy unit and the unit receives no Charge bonus this turn. Vehicles can only be selected if they are Walkers."
+    "community_notes": "Used just after an enemy unit Falls Back within 6\"; the charge must target that enemy unit and the unit receives no Charge bonus this turn. Vehicles can only be selected if they are Walkers.",
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "fall-back"
+        ]
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "optional": true,
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "death-ecstasy-peerless-bladesmen-emperors-children",
@@ -3321,27 +3895,37 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "not",
-        "operands": [
-          {
-            "type": "happened",
-            "parameters": {
-              "event": "selected",
-              "filter": {
-                "to": "fight"
-              },
-              "window": "phase"
-            }
-          }
-        ]
+      "type": "ability-part",
+      "trigger": {
+        "event": "model-destroyed",
+        "object": "model-in-this-unit"
       },
       "effect": {
-        "type": "act-on-death",
-        "target": "this-unit",
-        "modifier": {
-          "act": "fight"
+        "type": "conditional",
+        "condition": {
+          "operator": "not",
+          "operands": [
+            {
+              "type": "happened",
+              "parameters": {
+                "subject": "event-subject",
+                "event": "selected",
+                "filter": {
+                  "to": "fight"
+                },
+                "window": "phase"
+              }
+            }
+          ]
+        },
+        "effect": {
+          "type": "act-on-death",
+          "target": "event-object",
+          "modifier": {
+            "act": "fight",
+            "resolution": "after-attacking-unit-finishes",
+            "removal": "after-destroyed-model-fights"
+          }
         }
       }
     },
@@ -3349,9 +3933,19 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN"
       ]
+    },
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
     }
   },
   {
@@ -3372,10 +3966,9 @@
     "behavior": "reactive",
     "effect": {
       "type": "roll-modifier",
-      "target": "this-unit",
+      "target": "attacker",
       "modifier": {
         "roll": "hit",
-        "incoming": true,
         "operation": "subtract",
         "value": 1
       }
@@ -3384,9 +3977,19 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN"
       ]
+    },
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
     }
   },
   {
@@ -3417,7 +4020,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     },
@@ -3438,7 +4041,7 @@
     "faction_id": "emperors-children",
     "detachment_id": "peerless-bladesmen",
     "ability_type": "stratagem",
-    "behavior": "reactive",
+    "behavior": "activated",
     "effect": {
       "type": "test",
       "target": {
@@ -3457,7 +4060,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     },
@@ -3487,7 +4090,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN",
         "TRANSPORT"
       ]
@@ -3525,7 +4128,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     },
@@ -3560,7 +4163,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN",
         "VEHICLE"
       ]
@@ -3586,47 +4189,77 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "of": {
-            "owner": "friendly",
-            "all_of": [
-              "TRANSPORT"
-            ]
+          "subject": {
+            "stratagem_target": "first"
           },
-          "range": {
-            "inches": 6
-          },
-          "wholly": true
+          "filter": {
+            "within": {
+              "of": {
+                "stratagem_target": "second"
+              },
+              "range": {
+                "inches": 6
+              },
+              "wholly": true
+            }
+          }
         }
       },
       "effect": {
-        "type": "permission",
-        "target": "this-unit",
-        "modifier": {
-          "activity": "embark",
-          "allow": true,
-          "into": {
-            "owner": "friendly",
-            "all_of": [
-              "TRANSPORT"
-            ]
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "permission",
+            "target": {
+              "stratagem_target": "first"
+            },
+            "modifier": {
+              "activity": "embark",
+              "allow": true,
+              "into": {
+                "stratagem_target": "second"
+              }
+            }
           },
-          "despite": [
-            "disembarked-this-turn"
-          ]
-        }
+          {
+            "type": "permission",
+            "target": {
+              "stratagem_target": "first"
+            },
+            "modifier": {
+              "activity": "embark",
+              "allow": true,
+              "despite": [
+                "disembarked-this-turn"
+              ],
+              "into": {
+                "stratagem_target": "second"
+              }
+            }
+          }
+        ]
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     },
-    "community_notes": "At the end of the Fight phase, a unit that destroyed an enemy unit this phase and is wholly within 6\" of a friendly Transport it can embark within may embark, even in a turn it disembarked."
+    "community_notes": "At the end of the Fight phase, a unit that destroyed an enemy unit this phase and is wholly within 6\" of a friendly Transport it can embark within may embark, even in a turn it disembarked.",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    }
   },
   {
     "ability_id": "outflanking-strike-rapid-evisceration-emperors-children",
@@ -3655,12 +4288,33 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN",
         "TRANSPORT"
       ]
     },
-    "community_notes": "At the end of the opponent's Fight phase, one Transport (or up to two Dedicated Transports) wholly within 9\" of a battlefield edge is placed into Strategic Reserves."
+    "community_notes": "At the end of the opponent's Fight phase, one Transport (or up to two Dedicated Transports) wholly within 9\" of a battlefield edge is placed into Strategic Reserves.",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "reactive-disembarkation-rapid-evisceration-emperors-children",
@@ -3681,11 +4335,16 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "count": 1,
-        "owner": "friendly",
-        "keywords": [
-          "EMPEROR’S CHILDREN"
-        ],
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "EMPEROR’S CHILDREN"
+          ]
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
         "eligibility": {
           "type": "unit-state",
           "parameters": {
@@ -3713,12 +4372,40 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN",
         "TRANSPORT"
       ]
     },
-    "community_notes": "Used when the Transport is targeted; one embarked Emperor's Children unit disembarks anywhere wholly within 6\" of the Transport and outside Engagement Range."
+    "community_notes": "Used when the Transport is targeted; one embarked Emperor's Children unit disembarks anywhere wholly within 6\" of the Transport and outside Engagement Range.",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit",
+      "optional": true,
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "capricious-reactions-mercurial-host-emperors-children",
@@ -3738,10 +4425,9 @@
     "behavior": "reactive",
     "effect": {
       "type": "roll-modifier",
-      "target": "this-unit",
+      "target": "attacker",
       "modifier": {
         "roll": "hit",
-        "incoming": true,
         "operation": "subtract",
         "value": 1
       }
@@ -3750,9 +4436,19 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN"
       ]
+    },
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
     }
   },
   {
@@ -3773,10 +4469,9 @@
     "behavior": "reactive",
     "effect": {
       "type": "roll-modifier",
-      "target": "this-unit",
+      "target": "attacker",
       "modifier": {
         "roll": "wound",
-        "incoming": true,
         "operation": "subtract",
         "value": 1
       }
@@ -3785,10 +4480,20 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN",
         "INFANTRY"
       ]
+    },
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
     }
   },
   {
@@ -3811,18 +4516,39 @@
       "type": "set-up",
       "target": "this-unit",
       "modifier": {
-        "to": "strategic-reserves"
+        "to": "strategic-reserves",
+        "from": "battlefield"
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     },
-    "community_notes": "At the end of the opponent's Fight phase, a unit wholly within 9\" of a battlefield edge and more than 3\" horizontally from all enemy units is placed into Strategic Reserves."
+    "community_notes": "At the end of the opponent's Fight phase, a unit wholly within 9\" of a battlefield edge and more than 3\" horizontally from all enemy units is placed into Strategic Reserves.",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "dark-vigour-mercurial-host-emperors-children",
@@ -3849,15 +4575,28 @@
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "applies_to": {
-      "excluded_keywords": [
+      "none_of": [
         "BEASTS",
         "VEHICLE"
       ]
     },
-    "community_notes": "Triggered just after an enemy unit ends a Normal, Advance or Fall Back move within 8\"; the unit makes a Normal move of up to 6\"."
+    "community_notes": "Triggered just after an enemy unit ends a Normal, Advance or Fall Back move within 8\"; the unit makes a Normal move of up to 6\".",
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "move_types": [
+          "normal",
+          "advance",
+          "fall-back"
+        ]
+      }
+    }
   },
   {
     "ability_id": "honour-the-prince-mercurial-host-emperors-children",
@@ -3886,7 +4625,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN",
         "INFANTRY"
       ]
@@ -3913,17 +4652,24 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Sustained Hits 1"
-        ],
-        "weapon_type": "melee"
+        "weapons": {
+          "type": "melee"
+        },
+        "keywords": [
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
       }
     },
     "scope": {
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     }
@@ -3953,14 +4699,23 @@
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     },
-    "community_notes": "Used just after an enemy unit has shot, on a unit that lost one or more wounds to those attacks."
+    "community_notes": "Used just after an enemy unit has shot, on a unit that lost one or more wounds to those attacks.",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "subject": {
+        "owner": "enemy"
+      }
+    }
   },
   {
     "ability_id": "close-quarters-excruciation-court-of-the-phoenician-emperors-children",
@@ -4005,7 +4760,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     },
@@ -4026,7 +4781,7 @@
     "faction_id": "emperors-children",
     "detachment_id": "court-of-the-phoenician",
     "ability_type": "stratagem",
-    "behavior": "reactive",
+    "behavior": "activated",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -4036,7 +4791,7 @@
             "of": "attacker",
             "stat": "S"
           },
-          "comparison": "greater-than",
+          "comparison": "gt",
           "right": {
             "of": "defender",
             "stat": "T"
@@ -4045,10 +4800,9 @@
       },
       "effect": {
         "type": "roll-modifier",
-        "target": "this-unit",
+        "target": "attacker",
         "modifier": {
           "roll": "wound",
-          "incoming": true,
           "operation": "subtract",
           "value": 1
         }
@@ -4058,7 +4812,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     }
@@ -4083,7 +4837,9 @@
       "type": "aura",
       "target": "friendly-within-aura",
       "modifier": {
-        "range": 6,
+        "range": {
+          "inches": 6
+        },
         "effect": {
           "type": "re-roll",
           "target": "recipient",
@@ -4098,7 +4854,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN",
         "DAEMON"
       ]
@@ -4123,12 +4879,14 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "subject": "defender",
-          "all_of": [
-            "CHARACTER"
-          ]
+          "filter": {
+            "all_of": [
+              "CHARACTER"
+            ]
+          },
+          "subject": "defender"
         }
       },
       "effect": {
@@ -4157,7 +4915,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     }
@@ -4196,7 +4954,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN",
         "DAEMON"
       ]
@@ -4220,23 +4978,32 @@
     "behavior": "reactive",
     "effect": {
       "type": "stat-modifier",
-      "target": "this-unit",
+      "target": "attacker",
       "modifier": {
         "stat": "AP",
-        "operation": "add",
-        "value": 1,
-        "incoming": true
+        "operation": "worsen",
+        "value": 1
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "attack-sequence"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     },
-    "community_notes": "Worsens the Armour Penetration of incoming attacks by 1 until the attacking unit has finished making its attacks."
+    "community_notes": "Worsens the Armour Penetration of incoming attacks by 1 until the attacking unit has finished making its attacks.",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
+    }
   },
   {
     "ability_id": "embrace-the-pain-coterie-of-the-conceited-emperors-children",
@@ -4274,7 +5041,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN",
         "INFANTRY"
       ]
@@ -4309,7 +5076,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     }
@@ -4354,9 +5121,28 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN"
       ]
+    },
+    "trigger": {
+      "event": "damage-allocated",
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "EMPEROR'S CHILDREN"
+        ]
+      },
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "all_of": [
+              "EMPEROR'S CHILDREN"
+            ]
+          }
+        }
+      }
     }
   },
   {
@@ -4390,7 +5176,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     },
@@ -4400,7 +5186,48 @@
         "type": "combos-with"
       }
     ],
-    "community_notes": "Used just after the unit destroys an enemy unit; increases your pledge to Slaanesh by 1."
+    "community_notes": "Used just after the unit destroys an enemy unit; increases your pledge to Slaanesh by 1.",
+    "trigger": {
+      "event": "destroyed",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "EMPEROR'S CHILDREN"
+        ]
+      },
+      "object": {
+        "owner": "enemy"
+      },
+      "optional": true,
+      "condition": {
+        "operator": "or",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "unshakeable-opponents-coterie-of-the-conceited-emperors-children",
@@ -4447,7 +5274,7 @@
       "duration": "turn"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     },
@@ -4470,45 +5297,130 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "not",
-        "operands": [
+      "type": "ability-part",
+      "trigger": {
+        "event": "model-destroyed",
+        "object": "model-in-this-unit"
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
           {
-            "type": "happened",
-            "parameters": {
-              "event": "selected",
-              "filter": {
-                "to": "fight"
+            "type": "act-on-death",
+            "target": "event-object",
+            "modifier": {
+              "act": "fight",
+              "resolution": "when-unit-fights",
+              "removal": "after-unit-fights-or-phase-end",
+              "gate": {
+                "dice": "D6+1",
+                "threshold": 4,
+                "comparison": "gte",
+                "modifiers": []
               },
-              "window": "phase"
+              "eligibility": {
+                "operator": "and",
+                "operands": [
+                  {
+                    "operator": "not",
+                    "operands": [
+                      {
+                        "type": "eligible",
+                        "parameters": {
+                          "subject": "this-unit",
+                          "to": "fight"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "filter": {
+                        "all_of": [
+                          "FLAWLESS BLADES"
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "type": "act-on-death",
+            "target": "event-object",
+            "modifier": {
+              "act": "fight",
+              "resolution": "when-unit-fights",
+              "removal": "after-unit-fights-or-phase-end",
+              "gate": {
+                "dice": "D6",
+                "threshold": 4,
+                "comparison": "gte",
+                "modifiers": []
+              },
+              "eligibility": {
+                "operator": "and",
+                "operands": [
+                  {
+                    "operator": "not",
+                    "operands": [
+                      {
+                        "type": "eligible",
+                        "parameters": {
+                          "subject": "this-unit",
+                          "to": "fight"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "operator": "not",
+                    "operands": [
+                      {
+                        "type": "matches",
+                        "parameters": {
+                          "filter": {
+                            "all_of": [
+                              "FLAWLESS BLADES"
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
             }
           }
         ]
-      },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 4,
-        "comparison": "gte",
-        "on_success": {
-          "type": "act-on-death",
-          "target": "this-unit",
-          "modifier": {
-            "act": "fight"
-          }
-        }
       }
     },
     "scope": {
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "CALLOUS BLADES"
       ]
     },
-    "community_notes": "Add 1 to the roll if the unit has Flawless Blades; the bonus is not encoded."
+    "community_notes": "Add 1 to the roll if the unit has Flawless Blades; the bonus is not encoded.",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "CALLOUS BLADES"
+        ]
+      }
+    }
   },
   {
     "ability_id": "profane-desecration-callous-blades-emperors-children",
@@ -4534,7 +5446,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "CALLOUS BLADES"
       ]
     },
@@ -4563,14 +5475,16 @@
         "stat": "D",
         "operation": "add",
         "value": 1,
-        "weapon_type": "melee"
+        "weapons": {
+          "type": "melee"
+        }
       }
     },
     "scope": {
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "CALLOUS BLADES",
         "FLAWLESS BLADES"
       ]
@@ -4604,7 +5518,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     },
@@ -4635,10 +5549,12 @@
             "operator": "not",
             "operands": [
               {
-                "type": "designated",
+                "type": "matches",
                 "parameters": {
-                  "subject": "this-unit",
-                  "tag": "favoured-champions"
+                  "filter": {
+                    "designated": "favoured-champions"
+                  },
+                  "subject": "this-unit"
                 }
               }
             ]
@@ -4664,10 +5580,12 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "designated",
+            "type": "matches",
             "parameters": {
-              "subject": "this-unit",
-              "tag": "favoured-champions"
+              "filter": {
+                "designated": "favoured-champions"
+              },
+              "subject": "this-unit"
             }
           },
           "effect": {
@@ -4695,7 +5613,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     },
@@ -4742,7 +5660,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     },
@@ -4771,21 +5689,27 @@
           "type": "weapon-ability-grant",
           "target": "this-model",
           "modifier": {
-            "abilities": [
-              "Precision"
-            ],
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            },
+            "keywords": [
+              {
+                "keyword_id": "precision"
+              }
+            ]
           }
         },
         {
           "type": "conditional",
           "condition": {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "all_of": [
-                "CHARACTER"
-              ]
+              "filter": {
+                "all_of": [
+                  "CHARACTER"
+                ]
+              },
+              "subject": "defender"
             }
           },
           "effect": {
@@ -4798,7 +5722,9 @@
                   "stat": "S",
                   "operation": "add",
                   "value": 1,
-                  "weapon_type": "melee"
+                  "weapons": {
+                    "type": "melee"
+                  }
                 }
               },
               {
@@ -4808,7 +5734,9 @@
                   "stat": "AP",
                   "operation": "improve",
                   "value": 1,
-                  "weapon_type": "melee"
+                  "weapons": {
+                    "type": "melee"
+                  }
                 }
               }
             ]
@@ -4820,7 +5748,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     }
@@ -4852,7 +5780,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     },
@@ -4877,7 +5805,7 @@
     "usage": {
       "frequency": "n-per-battle",
       "count": 1,
-      "per": "unit"
+      "per": "model"
     },
     "effect": {
       "type": "invulnerable-save",
@@ -4890,10 +5818,21 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN",
         "INFANTRY"
       ]
+    },
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit",
+      "optional": true
     }
   },
   {
@@ -4922,7 +5861,9 @@
             "stat": "A",
             "operation": "add",
             "value": 1,
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            }
           }
         },
         {
@@ -4944,18 +5885,26 @@
                   "stat": "D",
                   "operation": "add",
                   "value": 1,
-                  "weapon_type": "melee"
+                  "weapons": {
+                    "type": "melee"
+                  }
                 }
               },
               {
                 "type": "weapon-ability-grant",
                 "target": "this-model",
                 "modifier": {
-                  "abilities": [
-                    "DevastatingWounds",
-                    "Hazardous"
-                  ],
-                  "weapon_type": "melee"
+                  "weapons": {
+                    "type": "melee"
+                  },
+                  "keywords": [
+                    {
+                      "keyword_id": "devastating-wounds"
+                    },
+                    {
+                      "keyword_id": "hazardous"
+                    }
+                  ]
                 }
               }
             ]
@@ -4967,7 +5916,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     },
@@ -5059,7 +6008,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     },
@@ -5097,7 +6046,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     }
@@ -5128,7 +6077,9 @@
             "stat": "A",
             "operation": "add",
             "value": 1,
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            }
           }
         },
         {
@@ -5138,7 +6089,9 @@
             "stat": "D",
             "operation": "add",
             "value": 1,
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            }
           }
         }
       ]
@@ -5147,7 +6100,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     }
@@ -5184,7 +6137,9 @@
             "level": "model"
           },
           "range": "engagement",
-          "count_min": 3
+          "count": {
+            "min": 3
+          }
         }
       },
       "effect": {
@@ -5215,7 +6170,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN",
         "INFANTRY"
       ]
@@ -5251,16 +6206,23 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "owner": "friendly",
-        "count": 1,
-        "keywords": [
-          "EMPEROR'S CHILDREN",
-          "TRANSPORT"
-        ],
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "EMPEROR'S CHILDREN",
+            "TRANSPORT"
+          ]
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
         "eligibility": {
-          "type": "unit-state",
+          "type": "matches",
           "parameters": {
-            "state": "in-strategic-reserves"
+            "filter": {
+              "state": "in-strategic-reserves"
+            }
           }
         }
       },
@@ -5278,7 +6240,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN",
         "INFANTRY"
       ]
@@ -5337,7 +6299,7 @@
       "duration": "turn"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN",
         "INFANTRY"
       ]
@@ -5361,46 +6323,119 @@
     "behavior": "reactive",
     "usage": {
       "frequency": "once-per-turn",
-      "per": "unit"
+      "per": "model"
     },
     "effect": {
-      "type": "select-units",
-      "selector": {
-        "count": 1,
-        "owner": "friendly",
-        "keywords": [
-          "EMPEROR’S CHILDREN"
-        ],
-        "within_inches": 9
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "conditional",
-        "condition": {
-          "type": "within",
-          "parameters": {
-            "of": {
-              "owner": "friendly",
-              "all_of": [
-                "TRANSPORT"
-              ]
-            },
-            "range": {
-              "inches": 6
-            },
-            "wholly": true
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "EMPEROR'S CHILDREN"
+            ],
+            "within": {
+              "range": {
+                "inches": 9
+              },
+              "of": "this-model"
+            }
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "bind_as": "outer",
+          "eligibility": {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "subject": "event-subject",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success"
+              },
+              "window": "event"
+            }
           }
         },
         "effect": {
-          "type": "permission",
-          "target": "selected-unit",
-          "modifier": {
-            "activity": "embark",
-            "allow": true,
-            "into": {
+          "type": "select-units",
+          "selector": {
+            "filter": {
               "owner": "friendly",
               "all_of": [
                 "TRANSPORT"
               ]
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            },
+            "bind_as": "inner",
+            "eligibility": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": {
+                      "selection_var": "outer"
+                    },
+                    "filter": {
+                      "within": {
+                        "of": "this-unit",
+                        "range": {
+                          "inches": 6
+                        },
+                        "wholly": true
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "eligible",
+                  "parameters": {
+                    "subject": {
+                      "selection_var": "outer"
+                    },
+                    "to": "embark-within",
+                    "transport": "this-unit"
+                  }
+                }
+              ]
+            }
+          },
+          "effect": {
+            "type": "permission",
+            "target": {
+              "selection_var": "outer"
+            },
+            "modifier": {
+              "activity": "embark",
+              "allow": true,
+              "into": {
+                "selection_var": "inner"
+              }
             }
           }
         }
@@ -5410,12 +6445,22 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN",
         "INFANTRY"
       ]
     },
-    "community_notes": "[APPROX] In the opponent's Shooting phase, just after an enemy unit has shot, one friendly Emperor's Children unit within 9\" of the bearer that was hit can embark within a friendly Transport it is wholly within 6\" of. Encoded as an opaque grant."
+    "community_notes": "[APPROX] In the opponent's Shooting phase, just after an enemy unit has shot, one friendly Emperor's Children unit within 9\" of the bearer that was hit can embark within a friendly Transport it is wholly within 6\" of. Encoded as an opaque grant.",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "heretek-adept-rapid-evisceration-emperors-children",
@@ -5434,32 +6479,59 @@
     "ability_type": "enhancement",
     "behavior": "reactive",
     "usage": {
-      "frequency": "once-per-battle-round"
+      "frequency": "once-per-battle-round",
+      "per": "model"
     },
     "effect": {
-      "type": "damage-reduction",
-      "target": {
-        "owner": "friendly",
-        "within": {
-          "range": {
-            "inches": 6
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-subject",
+          "filter": {
+            "within": {
+              "of": "this-model",
+              "range": {
+                "inches": 6
+              }
+            }
           }
         }
       },
-      "modifier": {
-        "reduction": "to-zero"
+      "effect": {
+        "type": "damage-reduction",
+        "target": "event-subject",
+        "modifier": {
+          "reduction": "to-zero"
+        }
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN",
         "INFANTRY"
       ]
     },
-    "community_notes": "When a saving throw is failed for a friendly Emperor's Children Vehicle model within 6\" of the bearer, change that attack's Damage characteristic to 0."
+    "community_notes": "When a saving throw is failed for a friendly Emperor's Children Vehicle model within 6\" of the bearer, change that attack's Damage characteristic to 0.",
+    "trigger": {
+      "event": "after-roll",
+      "filter": {
+        "roll": "save",
+        "result": "failure"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "EMPEROR'S CHILDREN",
+          "VEHICLE"
+        ],
+        "level": "model"
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "steeped-in-suffering-mercurial-host-emperors-children",
@@ -5524,7 +6596,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     }
@@ -5554,7 +6626,7 @@
             "of": "attacker",
             "stat": "S"
           },
-          "comparison": "greater-than",
+          "comparison": "gt",
           "right": {
             "of": "defender",
             "stat": "T"
@@ -5566,10 +6638,12 @@
         "target": "this-unit",
         "modifier": {
           "roll": "wound",
-          "weapon_type": "melee",
           "incoming": true,
           "operation": "subtract",
-          "value": 1
+          "value": 1,
+          "weapons": {
+            "type": "melee"
+          }
         }
       }
     },
@@ -5577,7 +6651,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     }
@@ -5622,7 +6696,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     },
@@ -5657,7 +6731,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     },
@@ -5690,7 +6764,9 @@
             "rolls": [
               "hit"
             ],
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            }
           }
         },
         {
@@ -5701,7 +6777,9 @@
             "rolls": [
               "wound"
             ],
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            }
           }
         }
       ]
@@ -5710,7 +6788,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     },
@@ -5745,7 +6823,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "LORD EXULTANT"
       ]
     }
@@ -5801,7 +6879,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     },
@@ -5833,7 +6911,9 @@
             "stat": "S",
             "operation": "add",
             "value": 1,
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            }
           }
         },
         {
@@ -5843,7 +6923,9 @@
             "stat": "A",
             "operation": "add",
             "value": 1,
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            }
           }
         }
       ]
@@ -5852,7 +6934,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN",
         "DAEMON PRINCE"
       ]
@@ -5911,7 +6993,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     },
@@ -5937,9 +7019,22 @@
       "type": "designate-target",
       "designation": "pledge-of-mortal-pain",
       "select": {
-        "scope": "enemy-unit",
-        "count": 1,
-        "within_inches": 12
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy",
+            "within": {
+              "range": {
+                "inches": 12
+              },
+              "of": "this-model"
+            }
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        }
       },
       "applies": {
         "to": "target",
@@ -5950,14 +7045,16 @@
           "comparison": "gte",
           "test": {
             "kind": "leadership",
-            "subject": "target",
+            "subject": "selected-unit",
             "modifiers": [
               {
                 "condition": {
-                  "type": "unit-state",
+                  "type": "matches",
                   "parameters": {
-                    "subject": "selected-unit",
-                    "state": "battle-shocked"
+                    "filter": {
+                      "state": "battle-shocked"
+                    },
+                    "subject": "selected-unit"
                   }
                 },
                 "value": -2
@@ -5979,7 +7076,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     },
@@ -6011,10 +7108,12 @@
         "operator": "not",
         "operands": [
           {
-            "type": "unit-state",
+            "type": "matches",
             "parameters": {
-              "subject": "this-model",
-              "state": "battle-shocked"
+              "filter": {
+                "state": "battle-shocked"
+              },
+              "subject": "this-model"
             }
           }
         ]
@@ -6053,7 +7152,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     },
@@ -6082,7 +7181,7 @@
       "comparison": "gte",
       "test": {
         "kind": "leadership",
-        "subject": "self"
+        "subject": "this-model"
       },
       "on_success": {
         "type": "return-models",
@@ -6098,7 +7197,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     },
@@ -6126,23 +7225,71 @@
       "per": "army"
     },
     "effect": {
-      "type": "move",
-      "target": "this-unit",
-      "modifier": {
-        "move_type": "surge",
-        "distance": "D3+1"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "opponent-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "subject": "event-subject",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success"
+              },
+              "window": "event"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "move",
+        "target": "this-unit",
+        "modifier": {
+          "move_type": "surge",
+          "distance": "D3+1"
+        }
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "CALLOUS BLADES",
         "LORD EXULTANT"
       ]
     },
-    "community_notes": "In the opponent's Shooting phase, after an enemy unit has shot and hit this unit, the unit can make a surge move of up to D3+1\"."
+    "community_notes": "In the opponent's Shooting phase, after an enemy unit has shot and hit this unit, the unit can make a surge move of up to D3+1\".",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "martial-perfection-callous-blades-emperors-children",
@@ -6166,25 +7313,44 @@
       "per": "army"
     },
     "effect": {
-      "type": "roll-modifier",
-      "target": "this-unit",
-      "modifier": {
-        "roll": "hit",
-        "incoming": true,
-        "operation": "subtract",
-        "value": 1
+      "type": "conditional",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "attacker",
+        "modifier": {
+          "roll": "hit",
+          "operation": "subtract",
+          "value": 1
+        }
       }
     },
     "scope": {
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "CALLOUS BLADES",
         "INFRACTORS"
       ]
     },
-    "community_notes": "Unit Upgrade (Infractors unit only, not a Character Enhancement): once per battle, in the Fight phase when an enemy unit targets this unit, attacks that target it get -1 to Hit rolls."
+    "community_notes": "Unit Upgrade (Infractors unit only, not a Character Enhancement): once per battle, in the Fight phase when an enemy unit targets this unit, attacks that target it get -1 to Hit rolls.",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit",
+      "optional": true
+    }
   },
   {
     "ability_id": "excessive-assault-callous-blades-infractors-emperors-children",
@@ -6211,19 +7377,25 @@
           "modifier": {
             "roll": "wound",
             "subset": "ones",
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            }
           }
         },
         {
           "type": "conditional",
           "condition": {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "of": {
-                "objective": {}
+              "filter": {
+                "within": {
+                  "range": "objective-control",
+                  "of": {
+                    "objective": {}
+                  }
+                }
               },
-              "range": "objective-control"
+              "subject": "defender"
             }
           },
           "effect": {
@@ -6232,7 +7404,9 @@
             "modifier": {
               "roll": "wound",
               "subset": "all-failures",
-              "weapon_type": "melee"
+              "weapons": {
+                "type": "melee"
+              }
             }
           }
         }
@@ -6262,8 +7436,10 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Lethal Hits"
+        "keywords": [
+          {
+            "keyword_id": "lethal-hits"
+          }
         ]
       }
     },

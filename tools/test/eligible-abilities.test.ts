@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { Dataset } from "../src/data/dataset.js";
+import { reachesOtherUnits } from "../src/abilities-resolver/resolver.js";
+import { emptyRawData } from "../src/data/types.js";
 
 const ds = Dataset.embedded();
 
@@ -101,7 +103,7 @@ describe("Dataset.buffsFor (M2 — abilities)", () => {
     expect(armyBuffs).toEqual([]);
     // Its one buff-bearing option is offered as a mutually-exclusive lever.
     const { buffs: levers } = ds.stackableBuffsFor(input, ctx);
-    const devastator = levers.find((l) => l.id === "combat-doctrines-assault-force-adeptus-astartes#Devastator Doctrine");
+    const devastator = levers.find((l) => l.id === "combat-doctrines-assault-force-adeptus-astartes#option-1");
     expect(devastator, "Devastator Doctrine lever missing").toBeDefined();
     expect(devastator!.group).toBe("combat-doctrines-assault-force-adeptus-astartes?stance");
   });
@@ -135,5 +137,86 @@ describe("Dataset.buffsFor (M2 — abilities)", () => {
     expect(keywords(withWeapon)).toContain("weapon-keyword:heavy");
     expect(keywords(withoutWeapon)).not.toContain("weapon-keyword:heavy");
     expect(withWeapon.length).toBeGreaterThan(withoutWeapon.length);
+  });
+});
+
+describe("grant definition reach", () => {
+  const definition = {
+    effect: {
+      type: "re-roll",
+      target: { owner: "friendly", within: { range: { inches: 6 }, of: "this-unit" } },
+      modifier: { roll: "hit", subset: "ones" },
+    },
+  };
+
+  it("isolates model-only granted definitions without hiding unit-granted auras", () => {
+    expect(reachesOtherUnits({ type: "ability-grant", target: "this-model", modifier: { definition } })).toBe(false);
+    expect(reachesOtherUnits({ type: "ability-grant", target: "model-in-this-unit", modifier: { definition } })).toBe(false);
+    expect(reachesOtherUnits({ type: "ability-grant", target: { level: "model", member_of: "this-unit" }, modifier: { definition } })).toBe(false);
+    expect(reachesOtherUnits({ type: "ability-grant", target: "this-unit", modifier: { definition } })).toBe(true);
+    expect(reachesOtherUnits({ type: "ability-grant", target: { owner: "friendly", level: "model" }, modifier: { definition } })).toBe(true);
+  });
+});
+
+describe("actual attachment membership", () => {
+  const base = ds.units.find("Intercessor Squad")!.raw;
+  const ability = {
+    ability_id: "bodyguard-rule",
+    name: "Bodyguard Rule",
+    faction_id: base.faction_id,
+    game_version: base.game_version,
+    effect: {
+      type: "re-roll",
+      target: { level: "model", member_of: "this-unit", attachment_role: "bodyguard" },
+      modifier: { roll: "hit", subset: "ones" },
+    },
+  };
+  const attached = new Dataset({
+    ...emptyRawData(),
+    abilities: [ability as never],
+    units: [
+      { ...base, id: "character-bodyguard", keywords: ["Character", "Infantry"], ability_ids: ["bodyguard-rule", "leader"] },
+      { ...base, id: "first-leader", keywords: ["Character"], ability_ids: ["leader"] },
+      { ...base, id: "second-leader", keywords: ["Infantry"], ability_ids: [] },
+    ],
+  });
+  const attachmentRoles = { "character-bodyguard": "bodyguard", "first-leader": "leader", "second-leader": "leader" } as const;
+  const input = (unitId: string) => ({
+    unitId,
+    factionId: base.faction_id,
+    attachedUnitIds: Object.keys(attachmentRoles).filter((id) => id !== unitId),
+    attachmentRoles,
+  });
+
+  it("includes CHARACTER bodyguards and excludes every actual leader, not Leader capability", () => {
+    expect(attached.buffsFor(input("character-bodyguard"), { phase: "shooting" })
+      .map((buff) => buff.contribution)).toEqual([{ type: "reroll", roll: "hit", subset: "ones" }]);
+    expect(attached.buffsFor(input("first-leader"), { phase: "shooting" })).toEqual([]);
+    expect(attached.buffsFor(input("second-leader"), { phase: "shooting" })).toEqual([]);
+  });
+
+  it("does not guess a bodyguard role from attachment presence or CHARACTER", () => {
+    const { attachmentRoles: _roles, ...unknownRoles } = input("character-bodyguard");
+    expect(attached.buffsFor(unknownRoles, { phase: "shooting" })).toEqual([]);
+  });
+
+  it("keeps explicit context roles and caller context intact", () => {
+    const context = { phase: "shooting", attackerAttachmentRole: "leader" } as const;
+    expect(attached.buffsFor(input("character-bodyguard"), context)).toEqual([]);
+    expect(context).toEqual({ phase: "shooting", attackerAttachmentRole: "leader" });
+  });
+
+  it("uses the defender's actual role without confusing it with the attacker", () => {
+    const defending = new Dataset({
+      ...emptyRawData(),
+      units: attached.units.all.map((unit) => unit.raw),
+      abilities: [{
+        ...ability,
+        effect: { ...ability.effect, modifier: { roll: "save", subset: "ones" } },
+      } as never],
+    });
+    expect(defending.defensiveBuffsFor(input("character-bodyguard"), { phase: "shooting", attackerAttachmentRole: "leader" })
+      .map((buff) => buff.contribution)).toEqual([{ type: "reroll", roll: "save", subset: "ones" }]);
+    expect(defending.defensiveBuffsFor(input("first-leader"), { phase: "shooting", attackerAttachmentRole: "bodyguard" })).toEqual([]);
   });
 });

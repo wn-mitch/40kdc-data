@@ -13,12 +13,14 @@
     attributeStages,
     crunch,
     resolveBuffs,
+    isLegalLeverSelection,
     type AttributedStage,
     type Buff,
     type BuffSource,
     type EngineContext,
     type EngineInput,
     type StackableBuff,
+    type StackableBuffGroup,
     type Unit,
     type Weapon,
     maximalLoadout,
@@ -78,10 +80,10 @@
   // every weapon line. We pass no weaponProfiles: each line's intrinsic weapon
   // keywords are auto-injected by crunch (engine.ts profileBuffsFor), so adding
   // them here too would double-count additive keyword effects.
-  const stackable = $derived.by<StackableBuff[]>(() => {
-    if (!salvo.selectedUnitId) return [];
+  const leverSelection = $derived.by<{ buffs: StackableBuff[]; groups: StackableBuffGroup[] }>(() => {
+    if (!salvo.selectedUnitId) return { buffs: [], groups: [] };
     try {
-      const { buffs } = ds.stackableBuffsFor(
+      return ds.stackableBuffsFor(
         {
           unitId: salvo.selectedUnitId,
           factionId: salvo.selectedFactionId ?? undefined,
@@ -91,11 +93,17 @@
         },
         context,
       );
-      return buffs;
     } catch {
-      return [];
+      return { buffs: [], groups: [] };
     }
   });
+
+  const stackable = $derived(leverSelection.buffs);
+  const selectionValid = $derived(isLegalLeverSelection(
+    stackable,
+    leverSelection.groups,
+    new Set(stackable.filter((b) => salvo.isBuffEnabled(b.id, b.enabled)).map((b) => b.id)),
+  ));
 
   const datasetBuffs = $derived<Buff[]>(
     stackable
@@ -247,6 +255,7 @@
   // keywords. attributeStages runs the leave-one-out decomposition so each
   // cell can show which toggleable buffs lifted it.
   const lineResults = $derived.by(() => {
+    if (!selectionValid) return [];
     return weaponLines.map((line) => {
       try {
         const target = synthTarget(salvo.manualTarget);
@@ -302,6 +311,7 @@
   const COMBINED_CARD = "__combined__";
 
   const projection = $derived.by(() => {
+    if (!selectionValid) return { error: "Selected abilities exceed an allowance or lack a required provider." };
     if (!salvo.selectedUnitId || !salvo.selectedWeaponId) return null;
     const weapon =
       (salvo.selectedFactionId
@@ -434,7 +444,9 @@
   </div>
 {/snippet}
 
-{#if weaponLines.length === 0}
+{#if !selectionValid}
+  <EmptyState>Selected abilities exceed an allowance or lack a required provider. Adjust the ability toggles to see a projection.</EmptyState>
+{:else if weaponLines.length === 0}
   <EmptyState>Pick a unit and target to see a projection.</EmptyState>
 {:else}
   <!-- Below 640px the table becomes stacked weapon cards: headline numbers up

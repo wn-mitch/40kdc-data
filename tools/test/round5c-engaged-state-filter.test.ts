@@ -113,17 +113,17 @@ describe("stacked filters: the merged filter holds one positive state", () => {
   });
 });
 
-describe("aura: engaged and hidden are refused, unengaged still reaches units", () => {
-  it("refuses an aura whose filter is engaged or hidden", () => {
+describe("aura: state restrictions remain on the recipient filter", () => {
+  it("preserves an aura's engaged or hidden restriction", () => {
     for (const state of ["engaged", "hidden"]) {
-      const text = "Friendly engaged ARMIGER unit within 6\" of this unit has the Feel No Pain 6+ ability.";
+      const text = `Friendly ${state} ARMIGER unit within 6" of this unit has the Feel No Pain 6+ ability.`;
       const result = compileLeaves(placed(text,
-        ["Friendly engaged ARMIGER unit", "unit-filter", { side: "friendly", keywords: ["ARMIGER"], states: [state] }],
+        [`Friendly ${state} ARMIGER unit`, "unit-filter", { side: "friendly", keywords: ["ARMIGER"], states: [state] }],
         ["within 6\" of this unit", "aura-range", { inches: 6, of: "this-unit" }],
         ["has the Feel No Pain 6+ ability", "feel-no-pain", { subject: "this-unit", threshold: 6, against: "all" }],
       ), text);
-      expect(result.ok).toBe(false);
-      expect(result.ok ? "" : result.errors.join(" ")).toMatch(/engaged or hidden/u);
+      expect(result.ok).toBe(true);
+      if (result.ok) expect(result.mechanics.effect).toMatchObject({ type: "aura", modifier: { eligible: { owner: "friendly", all_of: ["ARMIGER"], state } } });
     }
   });
 
@@ -152,7 +152,7 @@ describe("integration: where the filter sits", () => {
     if (!result.ok) throw new Error(result.errors.join("; "));
     const target = (result.core as { target_restrictions: Record<string, unknown> }).target_restrictions;
     expect(target).toMatchObject({ required_keywords: ["PLAGUE MARINES"] });
-    expect(nodes(target.eligibility, (node) => node.type === "unit-state").map((node) => node.parameters)).toEqual([{ state: "engaged" }]);
+    expect(nodes(target.eligibility, (node) => node.type === "matches").map((node) => node.parameters)).toEqual([{ filter: { state: "engaged" } }]);
   });
 
   it("a trigger's subject filter carries hidden as its state", () => {
@@ -221,8 +221,8 @@ describe("design records' shapes (fabricated wording)", () => {
 
 describe("describer: the state reads as the printed word", () => {
   it("renders engaged and hidden unit states", () => {
-    expect(describeCondition({ type: "unit-state", parameters: { state: "engaged" } } as never)).toMatch(/engaged/u);
-    expect(describeCondition({ type: "unit-state", parameters: { state: "hidden" } } as never)).toMatch(/hidden/u);
+    expect(describeCondition({ type: "matches", parameters: { filter: { state: "engaged" } } } as never)).toMatch(/engaged/u);
+    expect(describeCondition({ type: "matches", parameters: { filter: { state: "hidden" } } } as never)).toMatch(/hidden/u);
   });
 });
 

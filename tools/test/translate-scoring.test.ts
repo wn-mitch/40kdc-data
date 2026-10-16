@@ -40,14 +40,14 @@ describe("describeCondition", () => {
       parameters: { objective: { role: "central" } },
     };
     expect(describeCondition(c)).toBe("you control 1+ central objectives");
-    expect(describeCondition({ type: "controls", parameters: { objective: { role: "central" }, count_min: 2 } })).toBe(
+    expect(describeCondition({ type: "controls", parameters: { objective: { role: "central" }, count: { min: 2 } } })).toBe(
       "you control 2+ central objectives",
     );
   });
 
   it("controls more objectives than the opponent", () => {
     expect(
-      describeCondition({ type: "controls", parameters: { compare: "more-than-opponent" } }),
+      describeCondition({ type: "controls", parameters: { compare: { comparison: "gt", owner: "enemy" } } }),
     ).toBe("you hold more objectives than the opponent");
   });
 
@@ -55,7 +55,7 @@ describe("describeCondition", () => {
     const c: Condition = {
       operator: "and",
       operands: [
-        { type: "designated", parameters: { subject: { objective: {} }, tag: "mined", count_min: 1 } },
+        { type: "designated", parameters: { subject: { objective: {} }, tag: "mined", count: { min: 1 } } },
         { type: "happened", parameters: { event: "destroyed", object: { owner: "enemy" }, window: "turn" } },
       ],
     };
@@ -78,7 +78,7 @@ describe("describeCondition", () => {
     expect(
       describeCondition({
         type: "destroyed-in-tagged-terrain",
-        parameters: { tag: "mined", at_start_of_turn: true, count_min: 1 },
+        parameters: { tag: "mined", at_start_of_turn: true, count: { min: 1 } },
       }),
     ).toBe("1+ enemy units destroyed that started the turn in mined terrain");
   });
@@ -87,7 +87,7 @@ describe("describeCondition", () => {
     expect(
       describeCondition({
         type: "destroyed-in-tagged-terrain",
-        parameters: { tag: "marked", count_min: 2 },
+        parameters: { tag: "marked", count: { min: 2 } },
       }),
     ).toBe("2+ enemy units destroyed while in marked terrain");
   });
@@ -97,7 +97,7 @@ describe("describeAward", () => {
   it("flat vp with a when clause", () => {
     const a: ScoringAward = {
       trigger: { timing: "end-of-turn", player_turn: "your-turn", battle_round: { max: 2 } },
-      when: { type: "controls", parameters: { compare: "more-than-opponent" } },
+      when: { type: "controls", parameters: { compare: { comparison: "gt", owner: "enemy" } } },
       vp: 2,
     };
     expect(describeAward(a)).toBe(

@@ -232,4 +232,36 @@ export const ABILITY_EXTENSIONS: readonly FamilyExtension[] = [
    * (compile-antecedent.ts).
    */
   ABILITY_MODIFIER_ANTECEDENT,
+  {
+    family: "ability-modifier",
+    version: 5,
+    description: "As the previous version, and a used-ability reference can bind the exact used event by event_var; the binding is required when this modifier changes that event's uses.",
+    schema: (previous) => {
+      const ability = properties(previous).ability!;
+      const branches = (ability.anyOf as Schema[]).map((branch) => {
+        const branchProperties = branch.properties as Record<string, Schema> | undefined;
+        if (branchProperties?.event?.const !== "used") return branch;
+        return {
+          ...branch,
+          required: ["event", "event_var"],
+          properties: {
+            ...branchProperties,
+            event_var: { type: "string", pattern: "^[a-z][a-z0-9_-]*$", minLength: 1 },
+          },
+        };
+      });
+      return withProperties(previous, { ability: { ...ability, anyOf: branches } });
+    },
+    normalize: (input, previous) => {
+      const ability = input.ability;
+      if (ability === null || typeof ability !== "object" || Array.isArray(ability)) return previous(input);
+      const value = ability as Record<string, unknown>;
+      if (value.event !== "used" || value.event_var === undefined) return previous(input);
+      const eventVar = value.event_var;
+      if (typeof eventVar !== "string" || !/^[a-z][a-z0-9_-]*$/u.test(eventVar)) throw new TypeError("ability-modifier.ability.event_var must be a nonblank binding name.");
+      const { event_var: _eventVar, ...unbound } = value;
+      const normalized = previous({ ...input, ability: unbound });
+      return { ...normalized, ability: { event: "used", event_var: eventVar } };
+    },
+  },
 ];

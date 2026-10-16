@@ -38,9 +38,8 @@ describe("a bare unit-filter gated by a hit-by condition after it", () => {
     const mechanics = mechanicsOf(placed(TEXT, SHOOTING, AFTER_SHOT, INFANTRY, HIT_BY, ZAP, PINNED), TEXT);
     const json = JSON.stringify(mechanics);
     expect(json).toContain('"type":"for-each-unit"');
-    expect(json).toContain('"owner":"enemy"');
-    expect(json).toContain('"keywords":["INFANTRY"]');
-    expect(json).toContain('"weapon_name":"zap cannon"');
+    expect(json).toContain('"filter":{"owner":"enemy","all_of":["INFANTRY"]}');
+    expect(json).toContain('"weapons":{"name":"zap cannon"}');
     expect(json).toContain('"object":"this-unit"');
   });
 
@@ -48,7 +47,7 @@ describe("a bare unit-filter gated by a hit-by condition after it", () => {
     const text = "In your Shooting phase, after this model has shot, each enemy INFANTRY unit was hit by one or more of those attacks. Until the end of the turn, that enemy unit is pinned.";
     const json = JSON.stringify(mechanicsOf(placed(text, SHOOTING, AFTER_SHOT, INFANTRY, HIT_BY, PINNED), text));
     expect(json).toContain('"type":"for-each-unit"');
-    expect(json).not.toContain("weapon_name");
+    expect(json).not.toContain('"weapons"');
   });
 
   it("refuses a hit-by condition with no 'that unit' after it", () => {
@@ -123,6 +122,6 @@ describe("the full hit-by shape compiles once the leaves are authored", () => {
     expect(result.ok).toBe(true);
     const json = JSON.stringify(result.ok ? result.mechanics : null);
     expect(json).toContain('"type":"for-each-unit"');
-    expect(json).toContain('"weapon_name":"zap cannon"');
+    expect(json).toContain('"weapons":{"name":"zap cannon"}');
   });
 });

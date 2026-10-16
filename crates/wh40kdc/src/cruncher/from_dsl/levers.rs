@@ -9,11 +9,19 @@ use serde_json::{json, Map, Value};
 use super::applicability::{
     apply_applicability, combine, condition_to_applicability, label_for_buffs, App,
 };
-use super::conditions::evaluate_condition;
+use super::conditions::evaluate_condition_for_source;
 use super::js::*;
 use super::{walk, Lever, Out, WalkOpts, STOCHASTIC_DICE_GATED};
 
 /// Rolls inside every attack: a trigger on one applies to each attack it modifies.
+fn evaluate_condition(condition: &Obj, opts: &WalkOpts) -> Option<bool> {
+    evaluate_condition_for_source(
+        condition,
+        opts.context,
+        opts.perspective,
+        (!opts.granted_holder).then_some(opts.source_meta),
+    )
+}
 fn attack_step_roll(roll: &str) -> bool {
     matches!(roll, "hit" | "wound" | "save" | "damage")
 }
@@ -80,58 +88,218 @@ fn own_move_fact(trigger: &Obj) -> Option<Value> {
     }
 }
 
-/// An effect gated on a trigger (one, or several alternatives) the way a `timing-is` gates it,
-/// so the moment is a player-controlled gate. `None` when nothing gates the effect (the TS
-/// function then returns the effect itself).
-pub fn moment_gate(trigger: Option<&Value>, effect: &Value) -> Option<Value> {
-    if effect.is_null() {
-        return None;
+/// Reserved metadata attached to synthetic conditional nodes. The TS implementation keeps this
+/// in a WeakMap; Rust carries the trigger and canonical source fragment beside the temporary JSON
+/// node so activation requirements survive the value-based walk without entering the public DSL.
+const ACTIVATION_SOURCE: &str = "__activation_source";
+
+fn activation_source(node: &Obj) -> Option<&Obj> {
+    node.get(ACTIVATION_SOURCE).and_then(Value::as_object)
+}
+
+fn activation_trigger(node: &Obj) -> Option<&Value> {
+    activation_source(node)?.get("trigger")
+}
+
+fn activation_fragment(node: &Obj) -> Option<&Obj> {
+    activation_source(node)?
+        .get("fragment")
+        .and_then(Value::as_object)
+}
+
+fn activation_requirement(fragment: &Obj) -> Value {
+    fn strip_defaults(value: &mut Value) {
+        match value {
+            Value::Array(items) => items.iter_mut().for_each(strip_defaults),
+            Value::Object(object) => {
+                object.values_mut().for_each(strip_defaults);
+                if object.get("optional").and_then(Value::as_bool) == Some(false) {
+                    object.remove("optional");
+                }
+            }
+            _ => {}
+        }
     }
+    let mut requirement = Value::Object(fragment.clone());
+    if let Some(requirement) = requirement.as_object_mut() {
+        requirement.remove("effect");
+    }
+    strip_defaults(&mut requirement);
+    requirement
+}
+
+/// Whether a conditional was synthesized from a trigger by [`moment_gate_with_source`].
+fn synthetic_timing_gate(node: &Obj) -> bool {
+    activation_source(node).is_some()
+}
+
+const ACTIVATION_TIMING: &str = "activation";
+
+/// Replace only clock atoms whose activation lifetime has outlived that clock.
+fn activation_condition(condition: &Obj, duration: Option<&Value>) -> Value {
+    let expiry = duration.and_then(Value::as_str).unwrap_or_default();
+    let spans_phases = matches!(
+        expiry,
+        "turn"
+            | "battle-round"
+            | "battle"
+            | "permanent"
+            | "while-leading"
+            | "one-use"
+            | "control-lost"
+    ) || expiry.starts_with("until-");
+    let clock = condition.get("type").and_then(Value::as_str);
+    if spans_phases
+        && (clock == Some("phase-is")
+            || (clock == Some("player-turn-is") && expiry != "turn")
+            || (clock == Some("battle-round") && expiry != "turn" && expiry != "battle-round"))
+    {
+        return json!({
+            "type": "timing-is",
+            "parameters": { "timing": ACTIVATION_TIMING },
+        });
+    }
+    if condition.get("operator").is_some_and(Value::is_string) {
+        if let Some(operands) = condition.get("operands").and_then(Value::as_array) {
+            let mut rewritten = condition.clone();
+            rewritten.insert(
+                "operands".into(),
+                Value::Array(
+                    operands
+                        .iter()
+                        .map(|operand| {
+                            operand.as_object().map_or_else(
+                                || operand.clone(),
+                                |operand| activation_condition(operand, duration),
+                            )
+                        })
+                        .collect(),
+                ),
+            );
+            return Value::Object(rewritten);
+        }
+    }
+    Value::Object(condition.clone())
+}
+
+/// Conditions for one or more trigger alternatives. Attack-step conditions stay current;
+/// activation clocks are rewritten only when the resulting effect outlives them.
+fn moment_condition(trigger: Option<&Value>, duration: Option<&Value>) -> Option<Value> {
     let all: Vec<&Value> = match trigger {
-        Some(Value::Array(a)) => a.iter().collect(),
-        Some(t) => vec![t],
+        Some(Value::Array(items)) => items.iter().collect(),
+        Some(item) => vec![item],
         None => Vec::new(),
     };
     let triggers: Vec<&Obj> = all
         .into_iter()
         .filter_map(Value::as_object)
-        .filter(|t| t.get("event").is_some_and(Value::is_string))
+        .filter(|item| item.get("event").is_some_and(Value::is_string))
         .collect();
     if triggers.is_empty() {
         return None;
     }
-    let mut gates = Vec::new();
-    for t in &triggers {
-        let own = object(t.get("condition")).map(|c| Value::Object(c.clone()));
-        if is_attack_step(&Value::Object((*t).clone())) {
-            // Met by every attack: only its own condition gates the effect.
-            gates.push(own?);
+    let mut gates = Vec::with_capacity(triggers.len());
+    for item in triggers {
+        let own = object(item.get("condition"));
+        if is_attack_step(&Value::Object(item.clone())) {
+            gates.push(Value::Object(own?.clone()));
             continue;
         }
-        // A unit's own Charge or Advance move is a fact the context carries, not a choice.
-        let moment = own_move_fact(t).unwrap_or_else(
-            || json!({ "type": "timing-is", "parameters": { "timing": moment_key(t) } }),
+        let moment = own_move_fact(item).unwrap_or_else(
+            || json!({ "type": "timing-is", "parameters": { "timing": moment_key(item) } }),
         );
-        gates.push(match own {
-            Some(own) => json!({ "operator": "and", "operands": [moment, own] }),
-            None => moment,
-        });
+        gates.push(own.map_or(moment.clone(), |condition| {
+            json!({
+                "operator": "and",
+                "operands": [moment, activation_condition(condition, duration)],
+            })
+        }));
     }
-    let condition = if gates.len() == 1 {
+    Some(if gates.len() == 1 {
         gates.remove(0)
     } else {
         json!({ "operator": "or", "operands": gates })
-    };
-    Some(json!({ "type": "conditional", "condition": condition, "effect": effect }))
+    })
+}
+
+/// An effect gated on a trigger (one, or several alternatives) the way a `timing-is` gates it,
+/// so the moment is a player-controlled gate. `None` when nothing gates the effect (the TS
+/// function then returns the effect itself).
+pub fn moment_gate(trigger: Option<&Value>, effect: &Value) -> Option<Value> {
+    moment_gate_with_source(trigger, effect, None)
+}
+
+/// Internal variant of [`moment_gate`] which preserves the canonical source fragment used for
+/// activation requirements. This mirrors the TS `activationSources` WeakMap.
+pub(crate) fn moment_gate_with_source(
+    trigger: Option<&Value>,
+    effect: &Value,
+    source_fragment: Option<&Obj>,
+) -> Option<Value> {
+    if effect.is_null() {
+        return None;
+    }
+    let condition = moment_condition(trigger, None)?;
+    let fragment = source_fragment.cloned().unwrap_or_else(|| {
+        let mut fragment = Obj::new();
+        fragment.insert("type".into(), Value::from("ability-part"));
+        fragment.insert("trigger".into(), trigger.cloned().unwrap_or(Value::Null));
+        fragment.insert("effect".into(), effect.clone());
+        fragment
+    });
+    let mut gated = json!({ "type": "conditional", "condition": condition, "effect": effect });
+    gated[ACTIVATION_SOURCE] = json!({
+        "trigger": trigger.cloned().unwrap_or(Value::Null),
+        "fragment": fragment,
+    });
+    Some(gated)
 }
 
 pub(super) fn conditional(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     let Some(condition) = object(node.get("condition")) else {
         return;
     };
-    match evaluate_condition(condition, opts.context) {
+    if is_str(condition, "type", "attack-is")
+        && object(condition.get("parameters")).is_some_and(|parameters| {
+            parameters
+                .get("weapons")
+                .is_some_and(|value| !value.is_null())
+        })
+    {
+        if let App::When(applicability) = condition_to_applicability(condition, opts.perspective) {
+            let mut sub = Out::default();
+            walk(node.get("effect").unwrap_or(&Value::Null), opts, &mut sub);
+            out.applied.extend(
+                sub.applied
+                    .into_iter()
+                    .map(|buff| apply_applicability(buff, &applicability)),
+            );
+            out.activatable
+                .extend(sub.activatable.into_iter().map(|mut lever| {
+                    lever.buffs = lever
+                        .buffs
+                        .into_iter()
+                        .map(|buff| apply_applicability(buff, &applicability))
+                        .collect();
+                    lever
+                }));
+            out.unsupported.extend(sub.unsupported);
+            return;
+        }
+    }
+    let evaluated = if synthetic_timing_gate(node) {
+        opts.duration
+            .as_ref()
+            .and_then(|duration| moment_condition(activation_trigger(node), Some(duration)))
+            .unwrap_or_else(|| Value::Object(condition.clone()))
+    } else {
+        Value::Object(condition.clone())
+    };
+    let evaluated = evaluated
+        .as_object()
+        .expect("activation conditions are objects");
+    match evaluate_condition(evaluated, opts) {
         None => {
-            // A timing the player controls is an activation, not a wall.
             if condition_mentions_timing(condition) {
                 enumerate_timing_gate(node, opts, out);
             } else {
@@ -140,7 +308,7 @@ pub(super) fn conditional(node: &Obj, opts: &WalkOpts, out: &mut Out) {
                         "conditional: cannot evaluate condition \"{}\" against current context",
                         js_string(condition.get("type"))
                     ),
-                    node,
+                    activation_fragment(node).unwrap_or(node),
                 );
             }
         }
@@ -152,6 +320,10 @@ pub(super) fn conditional(node: &Obj, opts: &WalkOpts, out: &mut Out) {
 /// A named rule is transparent unless using it requires an activation.
 pub(super) fn named_effect(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     let effect = node.get("effect").cloned().unwrap_or(Value::Null);
+    if let Some(reason) = super::recipient_snapshot_reason(node.get("trigger"), &effect) {
+        out.unsupported(reason, node);
+        return;
+    }
     let activation = is_true(node, "optional")
         || present(node, "cost").is_some()
         || present(node, "trigger").is_some()
@@ -160,30 +332,32 @@ pub(super) fn named_effect(node: &Obj, opts: &WalkOpts, out: &mut Out) {
         walk(&effect, opts, out);
         return;
     }
-    let triggers: Vec<&Value> = match node.get("trigger") {
-        Some(Value::Array(a)) => a.iter().collect(),
-        None | Some(Value::Null) => Vec::new(),
-        Some(t) => vec![t],
-    };
-    let conditions: Vec<Value> = triggers
-        .iter()
-        .filter_map(|t| t.as_object())
-        .filter_map(|t| t.get("condition").filter(|c| c.is_object()).cloned())
-        .collect();
-    let body = if !conditions.is_empty() && conditions.len() == triggers.len() {
-        let condition = if conditions.len() == 1 {
-            conditions[0].clone()
+    let body =
+        if let Some(condition) = moment_condition(node.get("trigger"), opts.duration.as_ref()) {
+            let condition_object = condition
+                .as_object()
+                .expect("activation conditions are objects");
+            let verdict = evaluate_condition(condition_object, opts);
+            if condition_mentions_timing(condition_object) && verdict != Some(false) {
+                effect.clone()
+            } else {
+                json!({ "type": "conditional", "condition": condition, "effect": effect })
+            }
         } else {
-            json!({ "operator": "or", "operands": conditions })
+            effect.clone()
         };
-        json!({ "type": "conditional", "condition": condition, "effect": effect })
-    } else {
-        effect
-    };
+    let requirements = Some(vec![activation_requirement(node)]);
     let mut sub = Out::default();
     walk(&body, opts, &mut sub);
     out.unsupported.extend(sub.unsupported);
-    out.activatable.extend(sub.activatable);
+    for mut lever in sub.activatable {
+        if let Some(requirements) = &requirements {
+            let mut combined = requirements.clone();
+            combined.extend(lever.requires.take().unwrap_or_default());
+            lever.requires = Some(combined);
+        }
+        out.activatable.push(lever);
+    }
     if !sub.applied.is_empty() {
         let name = node
             .get("name")
@@ -194,6 +368,8 @@ pub(super) fn named_effect(node: &Obj, opts: &WalkOpts, out: &mut Out) {
             label: name,
             buffs: sub.applied,
             group: None,
+            requires: requirements,
+            cap_raise: None,
         });
     }
 }
@@ -207,7 +383,7 @@ fn cap(v: Option<&Value>, fallback: i64) -> i64 {
 pub(super) fn enumerate_choice(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     let max = cap(node.get("max_choices"), 1);
     for (i, opt) in list(node.get("options")).iter().enumerate() {
-        let buffs = gated(opt, opts);
+        let buffs = gated_with_diagnostics(opt, opts, &mut out.unsupported);
         if buffs.is_empty() {
             continue;
         }
@@ -216,6 +392,8 @@ pub(super) fn enumerate_choice(node: &Obj, opts: &WalkOpts, out: &mut Out) {
             label: label_for_buffs(&buffs),
             buffs,
             group: Some((format!("{}?choice", opts.ability_id), max)),
+            requires: None,
+            cap_raise: None,
         });
     }
 }
@@ -247,7 +425,7 @@ fn push_named(
     group: &str,
     max: i64,
 ) {
-    let buffs = gated(effect.unwrap_or(&Value::Null), opts);
+    let buffs = gated_with_diagnostics(effect.unwrap_or(&Value::Null), opts, &mut out.unsupported);
     if buffs.is_empty() {
         return;
     }
@@ -260,6 +438,8 @@ fn push_named(
         label: name,
         buffs,
         group: Some((group.to_string(), max)),
+        requires: None,
+        cap_raise: None,
     });
 }
 
@@ -297,7 +477,8 @@ pub(super) fn enumerate_roll_allocation(node: &Obj, opts: &WalkOpts, out: &mut O
     }
     let max = cap(choice.get("max_choices"), 1);
     for (name, effect) in gates {
-        let buffs = gated(effect.unwrap_or(&Value::Null), opts);
+        let buffs =
+            gated_with_diagnostics(effect.unwrap_or(&Value::Null), opts, &mut out.unsupported);
         if buffs.is_empty() {
             continue;
         }
@@ -308,7 +489,9 @@ pub(super) fn enumerate_roll_allocation(node: &Obj, opts: &WalkOpts, out: &mut O
             id: format!("{}#{name}", opts.ability_id),
             label: name,
             buffs,
-            group: Some((opts.ability_id.clone(), max)),
+            group: Some((opts.ability_id.to_owned(), max)),
+            requires: None,
+            cap_raise: None,
         });
     }
     true
@@ -326,29 +509,66 @@ pub(super) fn enumerate_named_options(
         let Some(o) = opt.as_object() else {
             continue;
         };
-        push_named(o.get("effect"), o.get("name"), opts, out, group, max);
+        if is_str(node, "type", "stance-select") {
+            let Some(id) = o.get("id").and_then(Value::as_str) else {
+                out.unsupported("stance-select: option lacks its stable id", o);
+                continue;
+            };
+            let before = out.activatable.len();
+            push_named(o.get("effect"), o.get("name"), opts, out, group, max);
+            if out.activatable.len() > before {
+                out.activatable[before].id = format!("{}#{id}", opts.ability_id);
+            }
+        } else {
+            push_named(o.get("effect"), o.get("name"), opts, out, group, max);
+        }
     }
 }
 
-/// One independent lever per buff-bearing `resource-action-menu` action (no shared cap).
+/// Canonical menu actions retain their costs, timing and shared capacity requirements.
 pub(super) fn enumerate_menu_actions(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     for action in list(node.get("actions")) {
         let Some(a) = action.as_object() else {
             continue;
         };
-        let required = object(a.get("eligibility")).map(|e| list(e.get("requires_keyword")));
-        let mut app = Obj::new();
-        if let Some([only]) = required {
-            if let Some(k) = only.as_str() {
-                app.insert("requiresAttackerKeyword".into(), Value::from(k));
+        let eligibility = object(a.get("eligibility"));
+        if let Some(filter) = eligibility.and_then(|eligibility| eligibility.get("filter")) {
+            match super::conditions::matches_unit_filter(
+                filter,
+                opts.context,
+                opts.perspective,
+                "friendly",
+            ) {
+                Some(false) => continue,
+                None => {
+                    out.unsupported("resource-action-menu eligibility filter is unresolved", a);
+                    continue;
+                }
+                Some(true) => {}
             }
         }
+        if list(eligibility.and_then(|eligibility| eligibility.get("requires")))
+            .iter()
+            .filter_map(Value::as_object)
+            .any(|condition| evaluate_condition(condition, opts) == Some(false))
+        {
+            continue;
+        }
+        let Some(id) = a
+            .get("id")
+            .and_then(Value::as_str)
+            .filter(|id| !id.is_empty())
+        else {
+            out.unsupported("resource-action-menu action has no stable id", a);
+            continue;
+        };
         let mut buffs = Vec::new();
         collect_gated_buffs(
             a.get("effect").unwrap_or(&Value::Null),
             opts,
-            &app,
+            &Obj::new(),
             &mut buffs,
+            &mut out.unsupported,
         );
         if buffs.is_empty() {
             continue;
@@ -356,18 +576,27 @@ pub(super) fn enumerate_menu_actions(node: &Obj, opts: &WalkOpts, out: &mut Out)
         let label = a
             .get("label")
             .and_then(Value::as_str)
-            .filter(|l| !l.is_empty())
+            .filter(|label| !label.is_empty())
             .map_or_else(|| label_for_buffs(&buffs), str::to_string);
-        let id = a
-            .get("id")
-            .and_then(Value::as_str)
-            .filter(|i| !i.is_empty())
-            .map_or_else(|| label.clone(), str::to_string);
+        let mut action = a.clone();
+        action.remove("effect");
+        let mut requirements: Obj = ["menu_id", "pool_id", "shared_usage", "capacity"]
+            .into_iter()
+            .filter_map(|key| node.get(key).map(|value| (key.into(), value.clone())))
+            .collect();
+        requirements.insert("action".into(), Value::Object(action));
+        let group = node
+            .get("shared_usage")
+            .and_then(|usage| usage.get("unit_max_manoeuvres_per_phase"))
+            .and_then(Value::as_i64)
+            .map(|max| (format!("{}?menu", opts.ability_id), max));
         out.activatable.push(Lever {
             id: format!("{}#{id}", opts.ability_id),
             label,
             buffs,
-            group: None,
+            group,
+            requires: Some(vec![Value::Object(requirements)]),
+            cap_raise: None,
         });
     }
 }
@@ -379,6 +608,7 @@ fn enumerate_timing_gate(node: &Obj, opts: &WalkOpts, out: &mut Out) {
         return;
     };
     let effect = node.get("effect").unwrap_or(&Value::Null);
+    let requirement = activation_fragment(node).map(activation_requirement);
     let buffs = gated(effect, opts);
     let mut sub = Out::default();
     walk(effect, opts, &mut sub);
@@ -390,7 +620,16 @@ fn enumerate_timing_gate(node: &Obj, opts: &WalkOpts, out: &mut Out) {
                     .as_object()
                     .is_some_and(|f| is_str(f, "type", "dice-gated"))
         }));
-    out.activatable.extend(sub.activatable);
+    if let Some(requirement) = &requirement {
+        for mut lever in sub.activatable {
+            let mut requirements = vec![requirement.clone()];
+            requirements.extend(lever.requires.take().unwrap_or_default());
+            lever.requires = Some(requirements);
+            out.activatable.push(lever);
+        }
+    } else {
+        out.activatable.extend(sub.activatable);
+    }
     if !buffs.is_empty() {
         let timing = extract_timing(condition).unwrap_or_else(|| "timing".to_string());
         out.activatable.push(Lever {
@@ -398,20 +637,37 @@ fn enumerate_timing_gate(node: &Obj, opts: &WalkOpts, out: &mut Out) {
             label: label_for_buffs(&buffs),
             buffs,
             group: None,
+            requires: requirement.map(|value| vec![value]),
+            cap_raise: None,
         });
     }
 }
 
 /// The buffs a gate's body contributes, with no inherited applicability.
 fn gated(node: &Value, opts: &WalkOpts) -> Vec<Value> {
+    let mut diagnostics = Vec::new();
+    gated_with_diagnostics(node, opts, &mut diagnostics)
+}
+
+fn gated_with_diagnostics(
+    node: &Value,
+    opts: &WalkOpts,
+    diagnostics: &mut Vec<(String, Value)>,
+) -> Vec<Value> {
     let mut buffs = Vec::new();
-    collect_gated_buffs(node, opts, &Obj::new(), &mut buffs);
+    collect_gated_buffs(node, opts, &Obj::new(), &mut buffs, diagnostics);
     buffs
 }
 
 /// Walk the body of a player gate, collecting the buffs it would contribute. Conditions defer
 /// to `applicableWhen` where expressible; nested decisions and stochastic rolls are not modelled.
-fn collect_gated_buffs(node: &Value, opts: &WalkOpts, app: &Obj, out_buffs: &mut Vec<Value>) {
+fn collect_gated_buffs(
+    node: &Value,
+    opts: &WalkOpts,
+    app: &Obj,
+    out_buffs: &mut Vec<Value>,
+    diagnostics: &mut Vec<(String, Value)>,
+) {
     let Some(n) = node.as_object() else {
         return;
     };
@@ -421,31 +677,41 @@ fn collect_gated_buffs(node: &Value, opts: &WalkOpts, app: &Obj, out_buffs: &mut
                 return;
             };
             let effect = n.get("effect").unwrap_or(&Value::Null);
-            match condition_to_applicability(condition) {
+            match condition_to_applicability(condition, opts.perspective) {
                 // A nested timing gate: opting into the activation satisfies it.
-                App::Gate => collect_gated_buffs(effect, opts, app, out_buffs),
+                App::Gate => collect_gated_buffs(effect, opts, app, out_buffs, diagnostics),
                 // No declarative gate: descend only when the context says it is active.
-                App::Context => {
-                    if evaluate_condition(condition, opts.context) == Some(true) {
-                        collect_gated_buffs(effect, opts, app, out_buffs);
-                    }
+                App::Context => match evaluate_condition(condition, opts) {
+                    Some(true) => collect_gated_buffs(effect, opts, app, out_buffs, diagnostics),
+                    None => diagnostics.push((
+                        "activation condition cannot be evaluated against current context".into(),
+                        Value::Object(activation_fragment(n).unwrap_or(n).clone()),
+                    )),
+                    Some(false) => {}
+                },
+                App::When(a) => {
+                    collect_gated_buffs(effect, opts, &combine(app, &a), out_buffs, diagnostics)
                 }
-                App::When(a) => collect_gated_buffs(effect, opts, &combine(app, &a), out_buffs),
             }
         }
         Some("rules-bundle" | "sequence") => {
             for step in list(n.get("steps")) {
-                collect_gated_buffs(step, opts, app, out_buffs);
+                collect_gated_buffs(step, opts, app, out_buffs, diagnostics);
             }
         }
         Some("ability-part") => {
+            let mut part_opts = opts.clone();
+            if let Some(duration) = present(n, "duration") {
+                part_opts.duration = Some(duration.clone());
+            }
             let activation = is_true(n, "optional")
                 || present(n, "cost").is_some()
                 || present(n, "usage").is_some();
             if present(n, "trigger").is_some() || !activation {
                 let effect = n.get("effect").cloned().unwrap_or(Value::Null);
-                let gated = moment_gate(n.get("trigger"), &effect).unwrap_or(effect);
-                collect_gated_buffs(&gated, opts, app, out_buffs);
+                let gated =
+                    moment_gate_with_source(n.get("trigger"), &effect, Some(n)).unwrap_or(effect);
+                collect_gated_buffs(&gated, &part_opts, app, out_buffs, diagnostics);
             }
         }
         // A decision or stochastic roll nested inside an activation is not modelled.
@@ -453,8 +719,9 @@ fn collect_gated_buffs(node: &Value, opts: &WalkOpts, app: &Obj, out_buffs: &mut
         _ => {
             let mut tmp = Out::default();
             walk(node, opts, &mut tmp);
-            for b in tmp.applied {
-                out_buffs.push(apply_applicability(b, app));
+            diagnostics.extend(tmp.unsupported);
+            for buff in tmp.applied {
+                out_buffs.push(apply_applicability(buff, app));
             }
         }
     }

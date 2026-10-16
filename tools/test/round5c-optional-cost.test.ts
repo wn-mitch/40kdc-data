@@ -101,10 +101,10 @@ describe("use-time spend, gated clause later in the same use (S1)", () => {
     expect(steps).toHaveLength(2);
     // "instead": the base grant holds only while the designation is absent; the replacement holds when it is set.
     const [base, replacement] = steps as [Record<string, any>, Record<string, any>];
-    expect(base.effect.modifier.abilities).toEqual(["Sustained Hits 1"]);
-    expect(base.condition).toEqual({ operator: "not", operands: [{ type: "designated", parameters: { subject: "this-unit", tag: "yp-spent-this-use" } }] });
-    expect(replacement.effect.modifier.abilities).toEqual(["Sustained Hits 2"]);
-    expect(replacement.condition).toEqual({ type: "designated", parameters: { subject: "this-unit", tag: "yp-spent-this-use" } });
+    expect(base.effect.modifier.keywords).toEqual([{ keyword_id: "sustained-hits", parameters: { value: 1 } }]);
+    expect(base.condition).toEqual({ operator: "not", operands: [{ type: "matches", parameters: { subject: "this-unit", filter: { designated: "yp-spent-this-use" } } }] });
+    expect(replacement.effect.modifier.keywords).toEqual([{ keyword_id: "sustained-hits", parameters: { value: 2 } }]);
+    expect(replacement.condition).toEqual({ type: "matches", parameters: { subject: "this-unit", filter: { designated: "yp-spent-this-use" } } });
   });
 
   it("refuses a read whose pool has no spend in the same ability", () => {

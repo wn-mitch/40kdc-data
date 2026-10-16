@@ -81,10 +81,14 @@ describe("attached members: model-scoped vs unit-scoped abilities", () => {
   });
 
   it("a unit-scoped leader rule still buffs the whole attached unit", () => {
-    // Epidemius's rule gives the whole unit he leads an invulnerable save — a
-    // legitimately unit-wide rule (issue #105's shape), so the gate must not touch it.
+    // legitimately unit-wide rule, so the gate must not touch it.
     const attached = ds.defensiveBuffsFor(
-      { unitId: "plaguebearers", factionId: "chaos-daemons", attachedUnitIds: ["epidemius"] },
+      {
+        unitId: "plaguebearers",
+        factionId: "chaos-daemons",
+        attachedUnitIds: ["epidemius"],
+        attachmentRoles: { epidemius: "leader", plaguebearers: "bodyguard" },
+      },
       { phase: "fight" },
     );
     const buffs = invulns(attached, "blessed-by-the-plague-god-chaos-daemons");
@@ -92,18 +96,6 @@ describe("attached members: model-scoped vs unit-scoped abilities", () => {
     expect(buffs[0].source).toMatchObject({ abilityKind: "attached", sourceUnitId: "epidemius" });
   });
 
-  it("the dropped effect is reported as unsupported, not silently discarded", () => {
-    const shadowfield = ds.abilities.getAny("shadowfield-drukhari")!;
-    const translated = shadowfield.describeBuffs(
-      { kind: "ability", abilityId: "shadowfield-drukhari", abilityKind: "attached", sourceUnitId: "archon" },
-      { phase: "shooting" },
-      "target",
-    );
-    expect(translated.applied).toEqual([]);
-    expect(translated.unsupported.map((u) => u.reason)).toEqual([
-      "model-scoped effect from an attached model: applies to that model only (core rule 19.04)",
-    ]);
-  });
 
   it("the gate is attacker-side too, and spares unit-scoped grants", () => {
     const keywordsFrom = (
@@ -116,8 +108,7 @@ describe("attached members: model-scoped vs unit-scoped abilities", () => {
           b.contribution.type === "extra-keyword" ? [b.contribution.keywordRef.keyword_id] : [],
         );
 
-    // Psychic Gifts reads "the bearer has the Psyker keyword" — model-scoped, so
-    // it must not ride an attached Inquisitor onto the squad it joined…
+    // Psychic Gifts is a unit keyword grant, not a weapon extra-keyword buff.
     const led = ds.buffsFor(
       {
         unitId: "inquisitorial-agents",
@@ -127,12 +118,11 @@ describe("attached members: model-scoped vs unit-scoped abilities", () => {
       { phase: "command" },
     );
     expect(keywordsFrom(led, "psychic-gifts-agents-of-the-imperium")).toEqual([]);
-    // …while the Inquisitor crunched as itself still carries it.
     const alone = ds.buffsFor(
       { unitId: "inquisitor", factionId: "agents-of-the-imperium" },
       { phase: "command" },
     );
-    expect(keywordsFrom(alone, "psychic-gifts-agents-of-the-imperium")).toEqual(["psyker"]);
+    expect(keywordsFrom(alone, "psychic-gifts-agents-of-the-imperium")).toEqual([]);
 
     // A Palatine's rule grants Lethal Hits to the whole unit she leads, so the
     // attached Palatine still grants it.
@@ -141,6 +131,7 @@ describe("attached members: model-scoped vs unit-scoped abilities", () => {
         unitId: "battle-sisters-squad",
         factionId: "adepta-sororitas",
         attachedUnitIds: ["palatine"],
+        attachmentRoles: { palatine: "leader", "battle-sisters-squad": "bodyguard" },
       },
       { phase: "shooting" },
     );

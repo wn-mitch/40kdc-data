@@ -73,7 +73,7 @@ describe("Round 5C batch-3 families: targeting, eligibility and unit-state effec
       [leaf("EFFECT", "targeting-restriction", { subject: "enemy-units", may: "must-target", kind: "attack", weapon_type: "all" }),
         { type: "targeting", target: { owner: "enemy" }, modifier: { may: "must-target", kind: "attack" } }],
       [leaf("EFFECT", "targeting-restriction", { subject: "this-model", may: "target", kind: "shoot", weapon_type: "ranged", range: 12 }),
-        { type: "targeting", target: "this-model", modifier: { may: "target", kind: "shoot", weapon_type: "ranged", range: { inches: 12 } } }],
+        { type: "targeting", target: "this-model", modifier: { may: "target", kind: "shoot", weapons: { type: "ranged" }, range: { inches: 12 } } }],
     ];
     for (const [input, expected] of cases) {
       expect(compiled([input]).mechanics.effect).toEqual(expected);
@@ -96,7 +96,7 @@ describe("Round 5C batch-3 families: targeting, eligibility and unit-state effec
       [leaf("EFFECT", "damage-reduction", { subject: "this-unit", reduction: "1", weapon_type: "all" }),
         { type: "damage-reduction", target: "this-unit", modifier: { reduction: 1 } }],
       [leaf("EFFECT", "damage-reduction", { subject: "this-unit", reduction: "half", weapon_type: "ranged" }),
-        { type: "damage-reduction", target: "this-unit", modifier: { reduction: "half", weapon_type: "ranged" } }],
+        { type: "damage-reduction", target: "this-unit", modifier: { reduction: "half", weapons: { type: "ranged" } } }],
     ];
     for (const [input, expected] of cases) {
       expect(compiled([input]).mechanics.effect).toEqual(expected);
@@ -114,7 +114,7 @@ describe("Round 5C batch-3 families: targeting, eligibility and unit-state effec
       [leaf("EFFECT", "return-models", { subject: "this-unit", count: "D3" }),
         { type: "return-models", target: "this-unit", modifier: { count: "D3" } }],
       [leaf("EFFECT", "return-models", { subject: "this-unit", count: "1", wounds_remaining: "D3", model_keyword: "BODYGUARD" }),
-        { type: "return-models", target: "this-unit", modifier: { count: 1, wounds_remaining: "D3", model_keyword: "BODYGUARD" } }],
+        { type: "return-models", target: { level: "model", member_of: "this-unit", all_of: ["BODYGUARD"] }, modifier: { count: 1, wounds_remaining: "D3" } }],
       [leaf("EFFECT", "destroy-models", { recipient: "this-unit", count: "1" }),
         { type: "destroy-models", target: "this-unit", modifier: { count: 1 } }],
       [leaf("EFFECT", "destroy-models", { recipient: "defender", count: "all", remove_from_play: true }),

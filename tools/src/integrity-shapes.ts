@@ -7,7 +7,7 @@
  *  - a `{stratagem_target: name}` reference names one of the targets its Stratagem declares;
  *  - `{roll_var}` (a quantity or a dice gate's `from`) sits inside the `roll` step that binds it;
  *  - an objective `{selection_var}` sits inside the `select-objective` that binds it;
- *  - `weapon_ref: {weapon_var}` names a weapon a `select-weapon` in the same record binds;
+ *  - `weapons.ref: {weapon_var}` names a weapon bound by an earlier sequence step;
  *  - a `split-unit` names exactly one binding per resulting unit.
  */
 
@@ -86,6 +86,14 @@ function checkBindings(node: unknown, path: string, scope: Scope, weapons: Reado
   }
   for (const [k, v] of Object.entries(node)) {
     const at = `${path}/${k}`;
+    if (node.type === "sequence" && k === "steps" && Array.isArray(v)) {
+      const available = new Set(weapons);
+      v.forEach((step, index) => {
+        checkBindings(step, `${at}/${index}`, inner, available, out);
+        if (isNode(step) && step.type === "select-weapon" && isNode(step.modifier) && typeof step.modifier.bind_as === "string") available.add(step.modifier.bind_as);
+      });
+      continue;
+    }
     if (isRollRef(v) && !(node.type === "roll" && k === "roll_var")) {
       if (!inner.rolls.has(v.roll_var)) out.push({ path: at, message: `{roll_var: "${v.roll_var}"} is not inside a roll step that binds it` });
       continue;
@@ -93,23 +101,13 @@ function checkBindings(node: unknown, path: string, scope: Scope, weapons: Reado
     if (k === "objective" && isNode(v) && typeof v.selection_var === "string" && !inner.objectives.has(v.selection_var)) {
       out.push({ path: `${at}/selection_var`, message: `objective {selection_var: "${v.selection_var}"} is not inside a select-objective that binds it` });
     }
-    if (k === "weapon_ref" && isNode(v) && typeof v.weapon_var === "string" && !weapons.has(v.weapon_var)) {
-      out.push({ path: `${at}/weapon_var`, message: `weapon_ref "${v.weapon_var}" is bound by no select-weapon in this ability` });
+    if (k === "ref" && isNode(v) && typeof v.weapon_var === "string" && !weapons.has(v.weapon_var)) {
+      out.push({ path: `${at}/weapon_var`, message: `weapon "${v.weapon_var}" is not bound by an earlier select-weapon step` });
     }
     checkBindings(v, at, inner, weapons, out);
   }
 }
 
-/** Every weapon a select-weapon step in the tree binds. */
-function collectWeaponBindings(node: unknown, into: Set<string>): void {
-  if (Array.isArray(node)) {
-    for (const v of node) collectWeaponBindings(v, into);
-    return;
-  }
-  if (!isNode(node)) return;
-  if (node.type === "select-weapon" && isNode(node.modifier) && typeof node.modifier.bind_as === "string") into.add(node.modifier.bind_as);
-  for (const v of Object.values(node)) collectWeaponBindings(v, into);
-}
 
 /** Every `{stratagem_target: name}` in a tree, with its path. */
 function collectStratagemTargets(node: unknown, path: string, out: Array<{ path: string; name: string }>): void {
@@ -174,7 +172,6 @@ export async function checkDslShapes(root: string, result: ValidationResult): Pr
       const issues: Issue[] = [];
       for (const key of ["effect", "trigger", "usage"]) issues.push(...tagIssues(a[key], `/${index}/${key}`));
       const weapons = new Set<string>();
-      collectWeaponBindings(a.effect, weapons);
       checkBindings(a.effect, `/${index}/effect`, { rolls: new Set(), objectives: new Set() }, weapons, issues);
       const refs: Array<{ path: string; name: string }> = [];
       collectStratagemTargets(a.effect, `/${index}/effect`, refs);

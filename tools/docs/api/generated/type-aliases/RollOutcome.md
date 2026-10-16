@@ -8,7 +8,7 @@
 
 > **RollOutcome** = `"success"` \| `"failure"` \| `"critical"`
 
-Defined in: [generated.ts:305](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L305)
+Defined in: [generated.ts:539](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L539)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "roll-outcome".

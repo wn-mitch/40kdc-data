@@ -6,7 +6,7 @@
 
 # Interface: DestroyedInTaggedTerrainCondition
 
-Defined in: [generated.ts:2223](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2223)
+Defined in: [generated.ts:2223](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2223)
 
 [board] Mission: enemy units destroyed in (or that started the turn in) designated terrain.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:2223](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **type**: `"destroyed-in-tagged-terrain"`
 
-Defined in: [generated.ts:2224](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2224)
+Defined in: [generated.ts:2224](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2224)
 
 ***
 
@@ -24,11 +24,11 @@ Defined in: [generated.ts:2224](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > `optional` **parameters?**: `object`
 
-Defined in: [generated.ts:2225](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2225)
+Defined in: [generated.ts:2225](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2225)
 
-#### count\_min?
+#### count?
 
-> `optional` **count\_min?**: `number`
+> `optional` **count?**: [`CountBounds`](CountBounds.md)
 
 #### tag?
 

@@ -76,36 +76,21 @@ pub fn condition_lead_in_value(c: &Value) -> String {
             }
         }
         "player-turn-is" | "battle-round" => onward_to_from(pred()),
-        "rule-active" => format!("while the {} is active", id_label(p.get("rule"))),
-        "has-keyword" => {
-            if nn(p, "chosen_by").is_some() {
-                return format!("if {}", pred());
-            }
-            if is(p, "subject", "defender") {
-                return format!("against {} targets", keyword_names(p));
-            }
-            if nn(p, "subject").is_none() {
-                let plural = p.get("any_of").is_some_and(Value::is_array)
-                    || p.get("all_of")
-                        .and_then(Value::as_array)
-                        .is_some_and(|a| a.len() > 1);
-                return format!(
-                    "if the unit has the {} keyword{}",
-                    keyword_names(p),
-                    if plural { "s" } else { "" }
-                );
-            }
-            format!("if {}", pred())
-        }
+        "rule-active" => format!("while the {} is active", rule_ref_phrase(p.get("rule"))),
+        "matches" => matches_lead_in(c, false),
+        "has-keyword" => format!("if {}", pred()),
         "attachment" => {
             if is(p, "role", "leading")
                 && (is(p, "subject", "this-model") || nn(p, "subject").is_none())
             {
-                let w = obj(p.get("with"));
-                let kw = strs(w.get("all_of"))
-                    .map(|k| format!("{} ", k.join(" ")))
-                    .unwrap_or_default();
-                return format!("while this model is leading a {kw}unit");
+                let predicate = pred();
+                return format!(
+                    "while {}",
+                    predicate
+                        .strip_prefix("the model")
+                        .map(|rest| format!("this model{rest}"))
+                        .unwrap_or(predicate)
+                );
             }
             format!("while {}", pred())
         }
@@ -175,7 +160,7 @@ pub fn condition_lead_in_value(c: &Value) -> String {
             }
             format!("while {}", pred())
         }
-        "unit-state" | "wounds" | "owned-by" => format!("while {}", pred()),
+        "unit-state" | "wounds" => format!("while {}", pred()),
         "attack-is" => {
             if p.get("all_target_same_unit") == Some(&Value::Bool(true)) {
                 return format!("when {}", pred());
@@ -196,23 +181,14 @@ pub fn condition_lead_in_value(c: &Value) -> String {
 }
 
 pub(crate) fn negated_lead_in(c: &Value) -> String {
-    let p = params(c);
     let t = ctype(c).unwrap_or("");
     if t == "same-unit" {
         return format!("if {}", describe_predicate(c, true));
     }
-    if t == "has-keyword" && nn(p, "chosen_by").is_none() && is(p, "subject", "defender") {
-        let kws =
-            strs(p.get("any_of")).unwrap_or_else(|| strs(p.get("all_of")).unwrap_or_default());
-        return negated_target_keywords(&kws);
+    if t == "matches" {
+        return matches_lead_in(c, true);
     }
-    if t == "has-keyword"
-        && nn(p, "chosen_by").is_none()
-        && (nn(p, "subject").is_none() || is(p, "subject", "recipient"))
-    {
-        return format!("unless the unit has the {} keyword", keyword_names(p));
-    }
-    if t == "unit-state" || t == "designated" || t == "owned-by" {
+    if t == "unit-state" || t == "designated" {
         return format!("while {}", describe_predicate(c, true));
     }
     let lead = condition_lead_in_value(c);
@@ -224,7 +200,7 @@ pub(crate) fn negated_lead_in(c: &Value) -> String {
     format!("unless {lead}")
 }
 
-/// The keyword of `not(has-keyword <subject> X)` with a single keyword, else None.
+/// A single canonical keyword filter used for compact lead-in grouping.
 pub(crate) fn not_keyword(op: &Value, subject: &str) -> Option<String> {
     if operator(op) != Some("not") {
         return None;
@@ -235,27 +211,86 @@ pub(crate) fn not_keyword(op: &Value, subject: &str) -> Option<String> {
     }
     let inner = &ops[0];
     let p = params(inner);
-    if ctype(inner) != Some("has-keyword") || !is(p, "subject", subject) {
+    let f = obj(p.get("filter"));
+    if ctype(inner) != Some("matches") || !is(p, "subject", subject) || key_count(f) != 1 {
         return None;
     }
-    let all = p.get("all_of").and_then(Value::as_array)?;
+    let all = f.get("all_of").and_then(Value::as_array)?;
     if all.len() != 1 {
         return None;
     }
     Some(st(Some(&all[0])))
 }
 
-/// A bare single-keyword `has-keyword` on the ability's own unit, else None.
+/// A bare single-keyword filter on the ability's own unit, else None.
 pub(crate) fn own_keyword(op: &Value) -> Option<String> {
     let p = params(op);
-    if ctype(op) != Some("has-keyword") || nn(p, "subject").is_some() {
+    let f = obj(p.get("filter"));
+    if ctype(op) != Some("matches") || nn(p, "subject").is_some() || key_count(f) != 1 {
         return None;
     }
-    let all = p.get("all_of").and_then(Value::as_array)?;
+    let all = f.get("all_of").and_then(Value::as_array)?;
     if all.len() != 1 {
         return None;
     }
     Some(st(Some(&all[0])))
+}
+
+fn matches_lead_in(c: &Value, negated: bool) -> String {
+    let p = params(c);
+    let f = obj(p.get("filter"));
+    let keys = f
+        .iter()
+        .filter(|(key, value)| key.as_str() != "level" && !value.is_null())
+        .count();
+    if keys == 1 && (nn(f, "all_of").is_some() || nn(f, "any_of").is_some()) {
+        if is(p, "subject", "defender") {
+            if negated
+                && nn(f, "any_of").is_none()
+                && f.get("all_of")
+                    .and_then(Value::as_array)
+                    .is_some_and(|words| words.len() > 1)
+            {
+                return format!(
+                    "against a unit that does not have all of {}",
+                    keyword_names(f)
+                );
+            }
+            return if negated {
+                negated_target_keywords(
+                    &strs(f.get("any_of"))
+                        .unwrap_or_else(|| strs(f.get("all_of")).unwrap_or_default()),
+                )
+            } else {
+                format!("against {} targets", keyword_names(f))
+            };
+        }
+        if nn(p, "subject").is_none() || (negated && is(p, "subject", "recipient")) {
+            let plural = !negated
+                && (f.get("any_of").is_some_and(Value::is_array)
+                    || f.get("all_of")
+                        .and_then(Value::as_array)
+                        .is_some_and(|words| words.len() > 1));
+            return format!(
+                "{} the unit has the {} keyword{}",
+                if negated { "unless" } else { "if" },
+                keyword_names(f),
+                if plural { "s" } else { "" }
+            );
+        }
+        return format!(
+            "{} {}",
+            if negated { "unless" } else { "if" },
+            describe_predicate(c, false)
+        );
+    }
+    if keys == 1 && nn(f, "designated").is_some() && is(p, "subject", "defender") && !negated {
+        let tag = st(f.get("designated"));
+        if tag == tag.to_uppercase() {
+            return format!("against {tag} targets");
+        }
+    }
+    format!("while {}", describe_predicate(c, negated))
 }
 
 /// Join the operands of an `and` lead-in. Runs of keyword exclusions collapse into one clause:

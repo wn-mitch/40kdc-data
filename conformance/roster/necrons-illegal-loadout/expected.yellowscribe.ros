@@ -32,12 +32,12 @@
             </profile>
             <profile name="My Will Be Done" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Once per battle, you gain 1CP.</characteristic>
+                <characteristic name="Description">You gain 1CP.</characteristic>
               </characteristics>
             </profile>
             <profile name="Resurrection Orb" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Once per battle, while this model is leading a unit, the unit regains up to D6 lost wounds.</characteristic>
+                <characteristic name="Description">While this model is leading a unit, the unit regains up to D6 lost wounds.</characteristic>
               </characteristics>
             </profile>
           </profiles>

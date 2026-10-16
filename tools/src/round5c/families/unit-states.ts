@@ -1,7 +1,7 @@
 import { ANTECEDENT } from "../antecedent-families.js";
 import { EVENT_SUBJECT, type FamilyExtension, keywordList, optional, properties, standIn, widenedEnum, withProperties } from "../family-extension-helpers.js";
 import { enumValue } from "../family-validation.js";
-import { EACH_TARGET, EMBARKED_IN, FILTERED_UNITS, FOLLOWING_FILTER, bearerTransportSubject, printedKeywordsExtension, standInEachTarget } from "./shared.js";
+import { EACH_TARGET, EMBARKED_IN, FILTERED_UNITS, FOLLOWING_FILTER, NAMED_ID, bearerTransportSubject, namedId, printedKeywordsExtension, standInEachTarget } from "./shared.js";
 
 /**
  * Versions of the unit state conditions and effects: unit-state, battle-shock-state, rule-state,
@@ -287,6 +287,30 @@ export const UNIT_STATE_EXTENSIONS: readonly FamilyExtension[] = [
   },
   printedKeywordsExtension("unit-keyword", 4),
   UNIT_KEYWORD_BEARER,
+  {
+    family: "unit-keyword",
+    version: 6,
+    description: "As the previous version, or chosen_by instead of keywords: the subject has the keyword chosen by the named ability. The choice reference and a literal keyword list are mutually exclusive.",
+    schema: (previous) => ({
+      ...withProperties(previous, {
+        keywords: optional(properties(previous).keywords!),
+        chosen_by: optional({ type: "string", pattern: NAMED_ID.source }),
+      }),
+      required: (previous.required as string[]).filter((key) => key !== "keywords"),
+      oneOf: [
+        { required: ["keywords"], not: { required: ["chosen_by"] } },
+        { required: ["chosen_by"], not: { required: ["keywords"] } },
+      ],
+    }),
+    normalize: (input, previous) => {
+      if (!("chosen_by" in input)) return previous(input);
+      if ("keywords" in input) throw new TypeError("unit-keyword uses keywords or chosen_by, not both.");
+      const { chosen_by, ...rest } = input;
+      const choice = namedId(chosen_by, "unit-keyword.chosen_by");
+      const { keywords: _keywords, ...normalized } = previous({ ...rest, keywords: ["INFANTRY"] });
+      return { ...normalized, chosen_by: choice };
+    },
+  },
   /**
    * Units filtered by an ability ("units with this ability").
    */

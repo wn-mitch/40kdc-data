@@ -8,7 +8,7 @@
 
 > **loadoutCandidates**(`unit`, `modelCount`, `options`, `models?`, `tiers?`, `limit?`): `string`[]
 
-Defined in: [data/loadout.ts:1537](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/loadout.ts#L1537)
+Defined in: [data/loadout.ts:1540](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/loadout.ts#L1540)
 
 Every legal squad build for `modelCount` models, encoded in deterministic
 canonical traversal order as `"<witness> => <counts>"` strings — the candidate

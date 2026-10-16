@@ -48,16 +48,16 @@ const PAIR: Item[] = [FRIENDLY, ALPHA, NEAR, ENEMY, BRAVO, SEEN, DURATION, GRANT
 
 const EXPECTED = {
   type: "select-units",
-  selector: { owner: "friendly", count: 1, keywords: ["ALPHA"], within_inches: 6, bind_as: "alpha-unit" },
+  selector: { filter: { owner: "friendly", all_of: ["ALPHA"], within: { range: { inches: 6 }, of: "this-model" } }, count: { min: 1, max: 1 }, bind_as: "alpha-unit" },
   effect: {
     type: "designate-target",
     designation: "selected-unit",
-    select: { scope: "enemy-unit", count: 1, keywords: ["BRAVO"], eligibility: { type: "visible", parameters: { subject: "selected-unit", to: "this-model" } }, bind_as: "bravo-unit" },
+    select: { kind: "unit", selector: { filter: { owner: "enemy", all_of: ["BRAVO"] }, count: { min: 1, max: 1 }, eligibility: { type: "matches", parameters: { subject: "selected-unit", filter: { visible: { to: "this-model" } } } }, bind_as: "bravo-unit" } },
     applies: {
       to: "bound-unit-attacks-reference",
       beneficiary: { selection_var: "alpha-unit" },
       reference: { selection_var: "bravo-unit" },
-      effect: { type: "weapon-ability-grant", target: { selection_var: "alpha-unit" }, modifier: { abilities: ["Sustained Hits 1"] } },
+      effect: { type: "weapon-ability-grant", target: { selection_var: "alpha-unit" }, modifier: { keywords: [{ keyword_id: "sustained-hits", parameters: { value: 1 } }] } },
     },
     duration: "phase",
   },
@@ -143,7 +143,7 @@ describe("Round 5C independent selection pair: a friendly recipient and an enemy
       ["add 1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1 }])).toEqual({
       type: "designate-target",
       designation: "selected-unit",
-      select: { scope: "enemy-unit", count: 1, keywords: ["BRAVO"], eligibility: { type: "visible", parameters: { subject: "selected-unit", to: "this-model" } } },
+      select: { kind: "unit", selector: { filter: { owner: "enemy", all_of: ["BRAVO"] }, count: { min: 1, max: 1 }, eligibility: { type: "matches", parameters: { subject: "selected-unit", filter: { visible: { to: "this-model" } } } } } },
       applies: { to: "attackers-of-target", effect: { type: "roll-modifier", target: { owner: "friendly" }, modifier: { roll: "hit", operation: "add", value: 1 } } },
     });
   });
@@ -156,7 +156,7 @@ describe("Round 5C independent selection pair: a friendly recipient and an enemy
       ["Select one enemy", "select-unit", { distance: "within", inches: 8, visible: false, within_of: "anchor" }],
       ["BRAVO unit", "unit-filter", { side: "enemy", keywords: ["BRAVO"] }],
       ["That unit suffers 1 mortal wound", "mortal-wounds", { recipient: "that-unit", count: "1" }]);
-    expect(effect.selector).toMatchObject({ target_kind: "model", bind_as: "anchor" });
-    expect(effect.effect.selector).toMatchObject({ within_inches: 8, within_inches_from: { selection_var: "anchor" } });
+    expect(effect.selector).toMatchObject({ filter: { owner: "friendly", all_of: ["ALPHA"], level: "model" }, count: { min: 1, max: 1 }, bind_as: "anchor" });
+    expect(effect.effect.selector.filter).toMatchObject({ within: { range: { inches: 8 }, of: { selection_var: "anchor" } } });
   });
 });

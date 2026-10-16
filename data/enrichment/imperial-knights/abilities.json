@@ -130,8 +130,10 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Lethal Hits"
+        "keywords": [
+          {
+            "keyword_id": "lethal-hits"
+          }
         ]
       }
     },
@@ -287,8 +289,13 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Sustained Hits 1"
+          "keywords": [
+            {
+              "keyword_id": "sustained-hits",
+              "parameters": {
+                "value": 1
+              }
+            }
           ]
         }
       }
@@ -325,8 +332,10 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Devastating Wounds"
+          "keywords": [
+            {
+              "keyword_id": "devastating-wounds"
+            }
           ]
         }
       }
@@ -747,17 +756,28 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "owner": "friendly",
-        "count": 1,
-        "keywords": [
-          "IMPERIUM"
-        ],
-        "within_inches": 12,
-        "reference": "bearer",
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "IMPERIUM"
+          ],
+          "within": {
+            "range": {
+              "inches": 12
+            },
+            "of": "this-model"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
         "eligibility": {
-          "type": "unit-state",
+          "type": "matches",
           "parameters": {
-            "state": "battle-shocked"
+            "filter": {
+              "state": "battle-shocked"
+            }
           }
         }
       },
@@ -828,26 +848,43 @@
     "source_digest": "1a71d6c9acaf6458da96ca39c01ea910e4f0a6fb0300741ba1e1afeb892f167c",
     "version": "2025-q3",
     "effect": {
-      "type": "designate-target",
-      "designation": "suppressed",
-      "select": {
-        "scope": "enemy-unit",
-        "count": 1,
-        "timing": "after-this-unit-shoots"
-      },
-      "applies": {
-        "to": "target",
-        "effect": {
-          "type": "roll-modifier",
-          "target": "this-unit",
-          "modifier": {
-            "roll": "hit",
-            "operation": "subtract",
-            "value": 1
-          }
+      "type": "ability-part",
+      "trigger": {
+        "event": "attacks-resolved",
+        "subject": "this-unit",
+        "filter": {
+          "kind": "shoot"
         }
       },
-      "duration": "until-next-command-phase"
+      "effect": {
+        "type": "designate-target",
+        "designation": "suppressed",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
+          }
+        },
+        "applies": {
+          "to": "target",
+          "effect": {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "operation": "subtract",
+              "value": 1
+            }
+          }
+        },
+        "duration": "until-next-command-phase"
+      }
     },
     "scope": {
       "duration": "until-next-command-phase"
@@ -903,18 +940,22 @@
         "operator": "and",
         "operands": [
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "all_of": [
-                "INFANTRY"
-              ]
+              "filter": {
+                "all_of": [
+                  "INFANTRY"
+                ]
+              },
+              "subject": "defender"
             }
           },
           {
             "type": "attack-is",
             "parameters": {
-              "weapon_name": "Graviton crusher"
+              "weapons": {
+                "name": "Graviton crusher"
+              }
             }
           }
         ]
@@ -1193,7 +1234,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "IMPERIAL KNIGHTS",
         "DOMINUS"
       ]
@@ -1229,7 +1270,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "IMPERIAL KNIGHTS",
         "DOMINUS"
       ]
@@ -1263,7 +1304,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "IMPERIAL KNIGHTS",
         "DOMINUS"
       ]
@@ -1299,7 +1340,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "IMPERIAL KNIGHTS",
         "DOMINUS"
       ]
@@ -1334,7 +1375,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "IMPERIAL KNIGHTS",
         "DOMINUS"
       ]
@@ -1390,17 +1431,21 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Ignores Cover"
-        ],
-        "weapon_type": "ranged"
+        "weapons": {
+          "type": "ranged"
+        },
+        "keywords": [
+          {
+            "keyword_id": "ignores-cover"
+          }
+        ]
       }
     },
     "scope": {
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "IMPERIAL KNIGHTS",
         "ARMIGER"
       ]
@@ -1424,11 +1469,11 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "weapon-ability-grant",
+      "type": "keyword-grant",
       "target": "this-model",
       "modifier": {
-        "abilities": [
-          "Mobile"
+        "keywords": [
+          "MOBILE"
         ]
       }
     },
@@ -1436,7 +1481,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "IMPERIAL KNIGHTS",
         "ARMIGER"
       ]
@@ -1489,7 +1534,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "IMPERIAL KNIGHTS",
         "ARMIGER"
       ]
@@ -1515,17 +1560,28 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "owner": "friendly",
-        "count": 1,
-        "keywords": [
-          "ARMIGER"
-        ],
-        "within_inches": 12,
-        "reference": "bearer-unit",
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "ARMIGER"
+          ],
+          "within": {
+            "range": {
+              "inches": 12
+            },
+            "of": "this-unit"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
         "eligibility": {
-          "type": "unit-state",
+          "type": "matches",
           "parameters": {
-            "state": "battle-shocked"
+            "filter": {
+              "state": "battle-shocked"
+            }
           }
         }
       },
@@ -1572,7 +1628,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "IMPERIAL KNIGHTS"
       ]
     }
@@ -1608,7 +1664,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "IMPERIAL KNIGHTS",
         "ARMIGER"
       ]
@@ -1658,7 +1714,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "IMPERIAL KNIGHTS"
       ]
     }
@@ -1690,7 +1746,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "IMPERIAL KNIGHTS"
       ]
     },
@@ -1723,7 +1779,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "IMPERIAL KNIGHTS"
       ]
     }
@@ -1754,7 +1810,9 @@
             "stat": "A",
             "operation": "add",
             "value": 2,
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            }
           }
         },
         {
@@ -1762,9 +1820,11 @@
           "target": "this-model",
           "modifier": {
             "roll": "hit",
-            "weapon_type": "melee",
             "operation": "add",
-            "value": 1
+            "value": 1,
+            "weapons": {
+              "type": "melee"
+            }
           }
         }
       ]
@@ -1773,7 +1833,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "IMPERIAL KNIGHTS"
       ]
     }
@@ -1798,17 +1858,21 @@
       "type": "weapon-ability-grant",
       "target": "this-model",
       "modifier": {
-        "abilities": [
-          "Ignores Cover"
-        ],
-        "weapon_type": "ranged"
+        "weapons": {
+          "type": "ranged"
+        },
+        "keywords": [
+          {
+            "keyword_id": "ignores-cover"
+          }
+        ]
       }
     },
     "scope": {
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "IMPERIAL KNIGHTS"
       ]
     }
@@ -1828,7 +1892,7 @@
     "faction_id": "imperial-knights",
     "detachment_id": "freeblade-company",
     "ability_type": "stratagem",
-    "behavior": "reactive",
+    "behavior": "activated",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -1845,11 +1909,13 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "ARMIGER"
-              ]
+              "filter": {
+                "all_of": [
+                  "ARMIGER"
+                ]
+              }
             }
           },
           "effect": {
@@ -1868,7 +1934,7 @@
       "duration": "one-use"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "IMPERIAL KNIGHTS"
       ]
     },
@@ -1903,14 +1969,18 @@
           }
         },
         "kind": "shoot",
-        "weapon_keyword": "Blast"
+        "weapons": {
+          "keyword": {
+            "keyword_id": "blast"
+          }
+        }
       }
     },
     "scope": {
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "IMPERIAL KNIGHTS"
       ]
     },
@@ -1957,7 +2027,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "IMPERIAL KNIGHTS"
       ]
     },
@@ -1980,23 +2050,50 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "roll-modifier",
-      "target": "attacker",
-      "modifier": {
-        "roll": "wound",
-        "operation": "subtract",
-        "value": 1
+      "type": "conditional",
+      "condition": {
+        "type": "attack-compare",
+        "parameters": {
+          "left": {
+            "of": "attacker",
+            "stat": "S"
+          },
+          "comparison": "gt",
+          "right": {
+            "of": "defender",
+            "stat": "T"
+          }
+        }
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "attacker",
+        "modifier": {
+          "roll": "wound",
+          "operation": "subtract",
+          "value": 1
+        }
       }
     },
     "scope": {
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "IMPERIAL KNIGHTS"
       ]
     },
-    "community_notes": "-1 to Wound only when attack Strength exceeds the unit's Toughness; S>T gate carried as prose"
+    "community_notes": "-1 to Wound only when attack Strength exceeds the unit's Toughness; S>T gate carried as prose",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
+    }
   },
   {
     "ability_id": "full-tilt-freeblade-company-imperial-knights",
@@ -2025,7 +2122,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "IMPERIAL KNIGHTS"
       ]
     },
@@ -2059,7 +2156,7 @@
       "duration": "one-use"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "IMPERIAL KNIGHTS",
         "ARMIGER"
       ]
@@ -2082,36 +2179,43 @@
     "ability_type": "detachment",
     "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "happened",
-        "parameters": {
-          "event": "move-ended",
-          "filter": {
-            "move_types": [
-              "advance"
-            ]
-          },
-          "window": "turn"
-        }
+      "type": "weapon-ability-grant",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "IMPERIAL KNIGHTS"
+        ],
+        "level": "model"
       },
-      "effect": {
-        "type": "weapon-ability-grant",
-        "target": {
-          "owner": "friendly"
-        },
-        "modifier": {
-          "abilities": [
-            "Assault"
-          ],
-          "weapon_type": "ranged"
+      "modifier": {
+        "keywords": [
+          {
+            "keyword_id": "assault"
+          }
+        ],
+        "weapons": {
+          "type": "ranged"
         }
       }
     },
     "scope": {
       "duration": "turn"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "IMPERIAL KNIGHTS"
+        ]
+      },
+      "filter": {
+        "move_types": [
+          "advance"
+        ]
+      }
+    }
   },
   {
     "ability_id": "cogbound-alliance-imperial-knights",
@@ -2135,11 +2239,13 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "IMPERIAL KNIGHTS"
-              ]
+              "filter": {
+                "all_of": [
+                  "IMPERIAL KNIGHTS"
+                ]
+              }
             }
           },
           "effect": {
@@ -2178,10 +2284,14 @@
                   }
                 },
                 "modifier": {
-                  "abilities": [
-                    "Heavy"
-                  ],
-                  "weapon_type": "ranged"
+                  "weapons": {
+                    "type": "ranged"
+                  },
+                  "keywords": [
+                    {
+                      "keyword_id": "heavy"
+                    }
+                  ]
                 }
               }
             ]
@@ -2193,11 +2303,13 @@
             "operator": "and",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "all_of": [
-                    "TECH PRIEST"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "TECH PRIEST"
+                    ]
+                  }
                 }
               },
               {
@@ -2211,14 +2323,24 @@
           "effect": {
             "type": "select-units",
             "selector": {
-              "max_count": 1,
-              "owner": "friendly",
-              "keywords": [
-                "IMPERIAL KNIGHTS"
-              ],
-              "target_kind": "model",
-              "range_inches": 3,
-              "selection_limit": {
+              "filter": {
+                "owner": "friendly",
+                "all_of": [
+                  "IMPERIAL KNIGHTS"
+                ],
+                "level": "model",
+                "within": {
+                  "range": {
+                    "inches": 3
+                  },
+                  "of": "this-model"
+                }
+              },
+              "count": {
+                "min": 0,
+                "max": 1
+              },
+              "limit": {
                 "count": 1,
                 "period": "phase"
               }
@@ -2285,8 +2407,13 @@
             "type": "weapon-ability-grant",
             "target": "this-model",
             "modifier": {
-              "abilities": [
-                "Sustained Hits 1"
+              "keywords": [
+                {
+                  "keyword_id": "sustained-hits",
+                  "parameters": {
+                    "value": 1
+                  }
+                }
               ]
             }
           }
@@ -2315,93 +2442,156 @@
     "ability_type": "detachment",
     "behavior": "reactive",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "conditional",
-          "condition": {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "has-keyword",
-                "parameters": {
-                  "all_of": [
-                    "HONOURED"
-                  ]
-                }
-              }
-            ]
-          },
-          "effect": {
-            "type": "ability-modifier",
-            "target": "this-model",
-            "modifier": {
-              "ability": {
-                "event": "used"
-              },
-              "aspect": "selections",
-              "operation": "set",
-              "value": 3,
-              "recipients": {
-                "owner": "friendly",
-                "all_of": [
-                  "ARMIGER"
-                ],
-                "level": "model",
-                "within": {
-                  "range": {
-                    "inches": 12
-                  },
-                  "of": "this-model"
-                }
-              }
-            }
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "has-keyword",
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "happened",
             "parameters": {
-              "all_of": [
-                "HONOURED"
+              "event": "used",
+              "subject": {
+                "owner": "friendly",
+                "level": "model",
+                "excluding": {
+                  "event_var": "ability-use"
+                }
+              },
+              "filter": {
+                "kind": "ability",
+                "same_rule_as": {
+                  "event_var": "ability-use"
+                }
+              },
+              "window": "turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "army-state",
+                  "parameters": {
+                    "owner": "friendly",
+                    "state": "honoured"
+                  }
+                }
               ]
+            },
+            "effect": {
+              "type": "ability-modifier",
+              "target": {
+                "event_var": "ability-use"
+              },
+              "modifier": {
+                "ability": {
+                  "event": "used",
+                  "event_var": "ability-use"
+                },
+                "aspect": "selection",
+                "operation": "set",
+                "selection": {
+                  "filter": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "ARMIGER"
+                    ],
+                    "level": "model",
+                    "not_designated": "bondsman-affected",
+                    "within": {
+                      "range": {
+                        "inches": 12
+                      },
+                      "of": {
+                        "event_var": "ability-use"
+                      }
+                    }
+                  },
+                  "count": {
+                    "min": 0,
+                    "max": 3
+                  }
+                },
+                "recipient_duration": "until-next-command-phase"
+              }
             }
           },
-          "effect": {
-            "type": "ability-modifier",
-            "target": "this-model",
-            "modifier": {
-              "ability": {
-                "event": "used"
-              },
-              "aspect": "selections",
-              "operation": "set",
-              "value": 3,
-              "recipients": {
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "army-state",
+              "parameters": {
                 "owner": "friendly",
-                "all_of": [
-                  "ARMIGER"
-                ],
-                "level": "model",
-                "within": {
-                  "range": {
-                    "inches": 15
+                "state": "honoured"
+              }
+            },
+            "effect": {
+              "type": "ability-modifier",
+              "target": {
+                "event_var": "ability-use"
+              },
+              "modifier": {
+                "ability": {
+                  "event": "used",
+                  "event_var": "ability-use"
+                },
+                "aspect": "selection",
+                "operation": "set",
+                "selection": {
+                  "filter": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "ARMIGER"
+                    ],
+                    "level": "model",
+                    "not_designated": "bondsman-affected",
+                    "within": {
+                      "range": {
+                        "inches": 15
+                      },
+                      "of": {
+                        "event_var": "ability-use"
+                      }
+                    }
                   },
-                  "of": "this-model"
-                }
+                  "count": {
+                    "min": 0,
+                    "max": 3
+                  }
+                },
+                "recipient_duration": "until-next-command-phase"
               }
             }
           }
-        }
-      ]
+        ]
+      }
     },
     "scope": {
-      "duration": "until-next-command-phase"
+      "duration": "resolution"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "usage": {
       "frequency": "once-per-turn"
+    },
+    "trigger": {
+      "event": "used",
+      "subject": {
+        "owner": "friendly",
+        "level": "model"
+      },
+      "filter": {
+        "kind": "ability",
+        "ability_keyword": "BONDSMAN"
+      },
+      "binds_event_variable": "ability-use",
+      "optional": true
     }
   },
   {
@@ -2419,27 +2609,92 @@
     "faction_id": "imperial-knights",
     "detachment_id": "questoris-companions",
     "ability_type": "detachment",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "designated",
-        "parameters": {
-          "subject": "this-unit",
-          "tag": "oath-fulfilled"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "turn-started",
+            "condition": {
+              "type": "player-turn-is",
+              "parameters": {
+                "turn": "your-turn"
+              }
+            }
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "oath-state",
+              "parameters": {
+                "ability": "code-chivalric-imperial-knights",
+                "state": "fulfilled"
+              }
+            },
+            "effect": {
+              "type": "ability-activate",
+              "target": "this-unit",
+              "modifier": {
+                "ability": "code-chivalric-imperial-knights",
+                "procedure": "oath"
+              }
+            }
+          }
+        },
+        {
+          "type": "oath-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "ability": "code-chivalric-imperial-knights",
+            "aspect": "selection",
+            "domains": [
+              "deed",
+              "quality"
+            ],
+            "exclude_previously_selected": true,
+            "duplicate_roll": "choose-unselected",
+            "stop_when": "all-domains-exhausted"
+          }
+        },
+        {
+          "type": "oath-modifier",
+          "target": {
+            "owner": "friendly",
+            "level": "model",
+            "has_ability": [
+              "code-chivalric-imperial-knights"
+            ]
+          },
+          "modifier": {
+            "ability": "code-chivalric-imperial-knights",
+            "aspect": "quality-persistence",
+            "from": "fulfilled"
+          }
+        },
+        {
+          "type": "oath-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "ability": "code-chivalric-imperial-knights",
+            "aspect": "deed-reward",
+            "applies_to": "additional",
+            "operation": "replace",
+            "selection_method": "any",
+            "effect": {
+              "type": "cp-gain",
+              "target": "this-model",
+              "modifier": {
+                "amount": 1
+              }
+            }
+          }
         }
-      },
-      "effect": {
-        "type": "ability-activate",
-        "target": "this-unit",
-        "modifier": {
-          "ability": "code-chivalric-imperial-knights",
-          "option": "additional-oath"
-        }
-      }
+      ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "community_notes": "[APPROX] Detachment rule extending the Oath army rule: at the start of your turn, if your current Oath is fulfilled, determine an additional Oath (no repeated Deed/Quality; Qualities from fulfilled Oaths keep applying to Code Chivalric models; completing an additional Oath's Deed grants 1CP instead). This army-rule interaction is not expressible in the effect vocabulary and is modeled as an opaque ability grant. Full rule in raw-text store."
   },
@@ -2576,20 +2831,26 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "of": {
-            "objective": {}
-          },
-          "range": "objective-control"
+          "filter": {
+            "within": {
+              "range": "objective-control",
+              "of": {
+                "objective": {}
+              }
+            }
+          }
         }
       },
       "effect": {
         "type": "weapon-ability-grant",
         "target": "attacker",
         "modifier": {
-          "abilities": [
-            "Ignores Cover"
+          "keywords": [
+            {
+              "keyword_id": "ignores-cover"
+            }
           ]
         }
       }
@@ -2638,7 +2899,9 @@
                       "modifier": {
                         "roll": "hit",
                         "subset": "ones",
-                        "weapon_type": "ranged"
+                        "weapons": {
+                          "type": "ranged"
+                        }
                       }
                     },
                     {
@@ -2647,7 +2910,9 @@
                       "modifier": {
                         "roll": "hit",
                         "subset": "ones",
-                        "weapon_type": "melee"
+                        "weapons": {
+                          "type": "melee"
+                        }
                       }
                     },
                     {
@@ -2656,7 +2921,9 @@
                       "modifier": {
                         "roll": "wound",
                         "subset": "ones",
-                        "weapon_type": "ranged"
+                        "weapons": {
+                          "type": "ranged"
+                        }
                       }
                     },
                     {
@@ -2665,7 +2932,9 @@
                       "modifier": {
                         "roll": "wound",
                         "subset": "ones",
-                        "weapon_type": "melee"
+                        "weapons": {
+                          "type": "melee"
+                        }
                       }
                     }
                   ]
@@ -2673,11 +2942,13 @@
                 {
                   "type": "conditional",
                   "condition": {
-                    "type": "has-keyword",
+                    "type": "matches",
                     "parameters": {
-                      "all_of": [
-                        "CHARACTER"
-                      ]
+                      "filter": {
+                        "all_of": [
+                          "CHARACTER"
+                        ]
+                      }
                     }
                   },
                   "effect": {
@@ -2703,7 +2974,7 @@
                               "owner": "friendly"
                             },
                             "tag": "oath-fulfilled",
-                            "clears_on": "never"
+                            "clears_on": "permanent"
                           }
                         }
                       }
@@ -2753,7 +3024,10 @@
                   "condition": {
                     "type": "controls",
                     "parameters": {
-                      "compare": "more-than-opponent"
+                      "compare": {
+                        "owner": "enemy",
+                        "comparison": "gt"
+                      }
                     }
                   },
                   "effect": {
@@ -2766,7 +3040,7 @@
                         "owner": "friendly"
                       },
                       "tag": "oath-fulfilled",
-                      "clears_on": "never"
+                      "clears_on": "permanent"
                     }
                   }
                 }
@@ -2811,7 +3085,7 @@
                         },
                         "window": "turn"
                       },
-                      "comparison": "greater-or-equal",
+                      "comparison": "gte",
                       "right": {
                         "value": 0
                       }
@@ -2827,7 +3101,7 @@
                         "owner": "friendly"
                       },
                       "tag": "oath-fulfilled",
-                      "clears_on": "never"
+                      "clears_on": "permanent"
                     }
                   }
                 }

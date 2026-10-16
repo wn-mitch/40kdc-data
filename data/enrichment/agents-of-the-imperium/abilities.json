@@ -21,8 +21,13 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Sustained Hits 1"
+          "keywords": [
+            {
+              "keyword_id": "sustained-hits",
+              "parameters": {
+                "value": 1
+              }
+            }
           ]
         }
       }
@@ -166,8 +171,10 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Lethal Hits"
+          "keywords": [
+            {
+              "keyword_id": "lethal-hits"
+            }
           ]
         }
       }
@@ -459,8 +466,14 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Anti PSYKER 4+"
+          "keywords": [
+            {
+              "keyword_id": "anti",
+              "parameters": {
+                "target_keyword": "PSYKER",
+                "threshold": 4
+              }
+            }
           ]
         }
       }
@@ -567,8 +580,12 @@
       "condition": {
         "type": "attachment",
         "parameters": {
-          "subject": "this-model",
-          "role": "leading"
+          "role": "led",
+          "with": {
+            "all_of": [
+              "INQUISITOR"
+            ]
+          }
         }
       },
       "effect": {
@@ -588,12 +605,12 @@
       "inquisitorial-agents"
     ],
     "ability_type": "unit",
-    "behavior": "reactive",
+    "behavior": "passive",
     "faction_id": "agents-of-the-imperium"
   },
   {
     "ability_id": "tome-skull-agents-of-the-imperium",
-    "name": "Tome\u2010skull",
+    "name": "Tome‐skull",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -734,11 +751,11 @@
     "source_digest": "8ffac11ff58d3f2aad0368ebd1e5794f44682abe8ad35f4580f8b2155f9f8a94",
     "version": "2025-q3",
     "effect": {
-      "type": "weapon-ability-grant",
+      "type": "keyword-grant",
       "target": "this-model",
       "modifier": {
-        "abilities": [
-          "Psyker"
+        "keywords": [
+          "PSYKER"
         ]
       }
     },
@@ -766,8 +783,10 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Lethal Hits"
+        "keywords": [
+          {
+            "keyword_id": "lethal-hits"
+          }
         ]
       }
     },
@@ -783,7 +802,7 @@
   },
   {
     "ability_id": "ancients-banner-agents-of-the-imperium",
-    "name": "Ancient\u2019s Banner",
+    "name": "Ancient’s Banner",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -896,8 +915,10 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Lethal Hits"
+          "keywords": [
+            {
+              "keyword_id": "lethal-hits"
+            }
           ]
         }
       }
@@ -1121,13 +1142,13 @@
       "aquila-kill-team"
     ],
     "ability_type": "unit",
-    "behavior": "reactive",
+    "behavior": "passive",
     "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "agents-of-the-imperium"
   },
   {
     "ability_id": "dead-shot-agents-of-the-imperium",
-    "name": "Dead\u2010shot",
+    "name": "Dead‐shot",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -1210,8 +1231,10 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Lethal Hits"
+            "keywords": [
+              {
+                "keyword_id": "lethal-hits"
+              }
             ]
           }
         },
@@ -1219,8 +1242,10 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Precision"
+            "keywords": [
+              {
+                "keyword_id": "precision"
+              }
             ]
           }
         }
@@ -1322,8 +1347,10 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Ignores Cover"
+        "keywords": [
+          {
+            "keyword_id": "ignores-cover"
+          }
         ]
       }
     },
@@ -1383,7 +1410,9 @@
         "may": "target",
         "target": {
           "owner": "enemy",
-          "visible": true,
+          "visible": {
+            "to": "this-unit"
+          },
           "within": {
             "range": {
               "inches": 18
@@ -1422,8 +1451,10 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Ignores Cover"
+        "keywords": [
+          {
+            "keyword_id": "ignores-cover"
+          }
         ]
       }
     },
@@ -1486,9 +1517,13 @@
             }
           },
           {
-            "type": "has-ability",
+            "type": "matches",
             "parameters": {
-              "ability": "deep-strike"
+              "filter": {
+                "has_ability": [
+                  "deep-strike"
+                ]
+              }
             }
           }
         ]
@@ -1507,7 +1542,9 @@
                   "to": "battlefield",
                   "from": "strategic-reserves",
                   "via": "deep-strike",
-                  "min_enemy_distance": 6
+                  "min_enemy_distance": {
+                    "inches": 6
+                  }
                 }
               },
               {
@@ -1747,7 +1784,7 @@
         "type": "mortal-wounds",
         "target": "defender",
         "modifier": {
-          "count": "3"
+          "count": 3
         }
       }
     },
@@ -1902,7 +1939,7 @@
   },
   {
     "ability_id": "glovodan-psyber-eagle-agents-of-the-imperium",
-    "name": "Glovodan Psyber\u2010eagle",
+    "name": "Glovodan Psyber‐eagle",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -1995,7 +2032,7 @@
       "type": "mortal-wounds",
       "target": "defender",
       "modifier": {
-        "count": "1"
+        "count": 1
       }
     },
     "scope": {
@@ -2022,8 +2059,10 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Ignores Cover"
+        "keywords": [
+          {
+            "keyword_id": "ignores-cover"
+          }
         ]
       }
     },
@@ -2112,8 +2151,13 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Sustained Hits 1"
+          "keywords": [
+            {
+              "keyword_id": "sustained-hits",
+              "parameters": {
+                "value": 1
+              }
+            }
           ]
         }
       }
@@ -2179,12 +2223,17 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "max_count": 3,
-        "keywords": [
-          "IMPERIUM",
-          "BATTLELINE"
-        ],
-        "owner": "friendly"
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "IMPERIUM",
+            "BATTLELINE"
+          ]
+        },
+        "count": {
+          "min": 0,
+          "max": 3
+        }
       },
       "effect": {
         "type": "set-up",
@@ -2380,11 +2429,16 @@
       "effect": {
         "type": "select-units",
         "selector": {
-          "max_count": 1,
-          "owner": "friendly",
-          "keywords": [
-            "INFANTRY"
-          ]
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "INFANTRY"
+            ]
+          },
+          "count": {
+            "min": 0,
+            "max": 1
+          }
         },
         "effect": {
           "type": "sequence",
@@ -2449,7 +2503,7 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "detachment_id": "veiled-blade-elimination-force",
-    "community_notes": "[APPROX] When this model is targeted with the Grenades Stratagem, it inflicts a mortal wound on each D6 of 3+ instead of 4+ \u2014 a modifier to another Stratagem's dice, not directly expressible. Full rule in raw-text store.",
+    "community_notes": "[APPROX] When this model is targeted with the Grenades Stratagem, it inflicts a mortal wound on each D6 of 3+ instead of 4+ — a modifier to another Stratagem's dice, not directly expressible. Full rule in raw-text store.",
     "faction_id": "agents-of-the-imperium"
   },
   {
@@ -2518,7 +2572,7 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "detachment_id": "veiled-blade-elimination-force",
-    "community_notes": "[APPROX] Encodes the \u22121 CP when this Eversor Assassin is targeted with the Heroic Intervention Stratagem; the clauses that the use is allowed regardless of other uses of that Stratagem this phase and does not prevent other uses of it are not modeled. Full rule in raw-text store.",
+    "community_notes": "[APPROX] Encodes the −1 CP when this Eversor Assassin is targeted with the Heroic Intervention Stratagem; the clauses that the use is allowed regardless of other uses of that Stratagem this phase and does not prevent other uses of it are not modeled. Full rule in raw-text store.",
     "faction_id": "agents-of-the-imperium"
   },
   {
@@ -2535,11 +2589,26 @@
       "type": "weapon-ability-grant",
       "target": "this-model",
       "modifier": {
-        "abilities": [
-          "Anti MONSTER",
-          "Anti VEHICLE"
+        "keywords": [
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "MONSTER",
+              "threshold": 4
+            }
+          },
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "VEHICLE",
+              "threshold": 4
+            }
+          }
         ],
-        "weapon_name": "exitus-rifle"
+        "weapons": {
+          "type": "ranged",
+          "name": "exitus rifle"
+        }
       }
     },
     "scope": {
@@ -2565,12 +2634,14 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "subject": "defender",
-          "all_of": [
-            "CHARACTER"
-          ]
+          "filter": {
+            "all_of": [
+              "CHARACTER"
+            ]
+          },
+          "subject": "defender"
         }
       },
       "effect": {
@@ -2617,11 +2688,13 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "EVERSOR ASSASSIN"
-              ]
+              "filter": {
+                "all_of": [
+                  "EVERSOR ASSASSIN"
+                ]
+              }
             }
           },
           "effect": {
@@ -2642,7 +2715,17 @@
     "behavior": "reactive",
     "detachment_id": "veiled-blade-elimination-force",
     "community_notes": "community-authored from 11e Imperial Agents faction pack; see #21",
-    "faction_id": "agents-of-the-imperium"
+    "faction_id": "agents-of-the-imperium",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
+    }
   },
   {
     "ability_id": "will-sapping-salvo-veiled-blade-elimination-force-agents-of-the-imperium",
@@ -2661,20 +2744,29 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Sustained Hits 1"
-            ],
-            "weapon_type": "ranged"
+            "weapons": {
+              "type": "ranged"
+            },
+            "keywords": [
+              {
+                "keyword_id": "sustained-hits",
+                "parameters": {
+                  "value": 1
+                }
+              }
+            ]
           }
         },
         {
           "type": "conditional",
           "condition": {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "CULEXUS ASSASSIN"
-              ]
+              "filter": {
+                "all_of": [
+                  "CULEXUS ASSASSIN"
+                ]
+              }
             }
           },
           "effect": {
@@ -2684,7 +2776,9 @@
               "stat": "D",
               "operation": "set",
               "value": 3,
-              "weapon_type": "ranged"
+              "weapons": {
+                "type": "ranged"
+              }
             }
           }
         }
@@ -2711,62 +2805,68 @@
     "source_digest": "ae38d9a3e45ed89339b2dd8f4d3e7b614a49b7f690060907a32a87e008876699",
     "version": "2025-q3",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "conditional",
-          "condition": {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "has-ability",
-                "parameters": {
-                  "ability": "lone-operative"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "attacker",
+              "filter": {
+                "within": {
+                  "of": "this-unit",
+                  "range": {
+                    "inches": 18
+                  }
                 }
               }
-            ]
-          },
-          "effect": {
-            "type": "targeting",
-            "target": {
-              "owner": "enemy"
-            },
-            "modifier": {
-              "may": "cannot-target",
-              "target": "this-unit",
-              "kind": "shoot",
-              "range": {
-                "inches": 18
-              },
-              "weapon_type": "ranged"
             }
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "has-ability",
+          },
+          {
+            "type": "matches",
             "parameters": {
-              "ability": "lone-operative"
+              "subject": "this-unit",
+              "filter": {
+                "has_ability": [
+                  "lone-operative"
+                ]
+              }
             }
           },
-          "effect": {
-            "type": "targeting",
-            "target": {
-              "owner": "enemy"
-            },
-            "modifier": {
-              "may": "cannot-target",
-              "target": "this-unit",
-              "kind": "shoot",
-              "range": {
-                "inches": 6
-              },
-              "weapon_type": "ranged"
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "attacker",
+              "filter": {
+                "within": {
+                  "of": "this-unit",
+                  "range": {
+                    "inches": 6
+                  }
+                }
+              }
             }
           }
+        ]
+      },
+      "effect": {
+        "type": "targeting",
+        "target": {
+          "owner": "enemy"
+        },
+        "modifier": {
+          "by": {
+            "owner": "enemy"
+          },
+          "may": "target",
+          "kind": "attack",
+          "weapons": {
+            "type": "ranged"
+          },
+          "target": "this-unit"
         }
-      ]
+      }
     },
     "scope": {
       "duration": "phase"
@@ -2776,7 +2876,17 @@
     "behavior": "reactive",
     "detachment_id": "veiled-blade-elimination-force",
     "community_notes": "community-authored from 11e Imperial Agents faction pack; see #21",
-    "faction_id": "agents-of-the-imperium"
+    "faction_id": "agents-of-the-imperium",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
+    }
   },
   {
     "ability_id": "blind-grenades-veiled-blade-elimination-force-agents-of-the-imperium",
@@ -2789,13 +2899,58 @@
     "source_digest": "6a8981cdb0b78b53c92b0c832771711a6f804b143e947d43a309ba235c89a28b",
     "version": "2025-q3",
     "effect": {
-      "type": "roll-modifier",
-      "target": "attacker",
-      "modifier": {
-        "roll": "charge",
-        "operation": "subtract",
-        "value": 1
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "all_of": [
+                      "VINDICARE ASSASSIN"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "roll-modifier",
+            "target": "event-subject",
+            "modifier": {
+              "roll": "charge",
+              "operation": "subtract",
+              "value": 1
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "all_of": [
+                  "VINDICARE ASSASSIN"
+                ]
+              }
+            }
+          },
+          "effect": {
+            "type": "roll-modifier",
+            "target": "event-subject",
+            "modifier": {
+              "roll": "charge",
+              "operation": "subtract",
+              "value": 2
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "phase"
@@ -2804,8 +2959,17 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "detachment_id": "veiled-blade-elimination-force",
-    "community_notes": "[APPROX] Encodes the base \u22121 to the charging enemy unit's Charge roll; when the protected unit is a Vindicare Assassin the penalty is \u22122 instead, which is not separately modeled. Full rule in raw-text store.",
-    "faction_id": "agents-of-the-imperium"
+    "community_notes": "[APPROX] Encodes the base −1 to the charging enemy unit's Charge roll; when the protected unit is a Vindicare Assassin the penalty is −2 instead, which is not separately modeled. Full rule in raw-text store.",
+    "faction_id": "agents-of-the-imperium",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "charge"
+      },
+      "subject": {
+        "owner": "enemy"
+      }
+    }
   },
   {
     "ability_id": "ensnaring-trap-veiled-blade-elimination-force-agents-of-the-imperium",
@@ -2821,30 +2985,100 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "permission",
-          "target": "this-unit",
-          "modifier": {
-            "activity": "declare-charge",
-            "allow": true
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "has-keyword",
-            "parameters": {
-              "all_of": [
-                "CALLIDUS ASSASSIN"
+          "type": "ability-part",
+          "trigger": {
+            "event": "phase-ended",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "phase-is",
+                  "parameters": {
+                    "phase": "charge"
+                  }
+                },
+                {
+                  "type": "player-turn-is",
+                  "parameters": {
+                    "turn": "opponent-turn"
+                  }
+                }
               ]
             }
           },
           "effect": {
-            "type": "roll-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "wound",
-              "operation": "add",
-              "value": 1
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "permission",
+                "target": "this-unit",
+                "modifier": {
+                  "activity": "declare-charge",
+                  "allow": true
+                }
+              },
+              {
+                "type": "targeting",
+                "target": "this-unit",
+                "modifier": {
+                  "by": "this-unit",
+                  "may": "must-target",
+                  "kind": "charge",
+                  "target": {
+                    "owner": "enemy",
+                    "within": {
+                      "range": {
+                        "inches": 6
+                      },
+                      "of": "this-unit"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "move-ended",
+            "filter": {
+              "move_types": [
+                "charge"
+              ]
+            }
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "filter": {
+                      "all_of": [
+                        "CALLIDUS ASSASSIN"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "type": "attack-is",
+                  "parameters": {
+                    "attack_type": "melee"
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "roll-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "wound",
+                "operation": "add",
+                "value": 1
+              }
             }
           }
         }
@@ -2871,25 +3105,42 @@
     "source_digest": "19583d764bedf9040abcc98f136ab51aeb9de06a2b118d2efdb10a65adec358d",
     "version": "2025-q3",
     "effect": {
-      "type": "designate-target",
-      "designation": "signal-fire-target",
-      "select": {
-        "scope": "enemy-unit",
-        "count": 1,
-        "timing": "after-this-unit-shoots"
-      },
-      "applies": {
-        "to": "attackers-of-target",
-        "effect": {
-          "type": "re-roll",
-          "target": "this-unit",
-          "modifier": {
-            "roll": "hit",
-            "subset": "all-failures"
-          }
+      "type": "ability-part",
+      "trigger": {
+        "event": "attacks-resolved",
+        "subject": "this-unit",
+        "filter": {
+          "kind": "shoot"
         }
       },
-      "duration": "phase"
+      "effect": {
+        "type": "designate-target",
+        "designation": "signal-fire-target",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
+          }
+        },
+        "applies": {
+          "to": "attackers-of-target",
+          "effect": {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "subset": "all-failures"
+            }
+          }
+        },
+        "duration": "phase"
+      }
     },
     "scope": {
       "duration": "phase"
@@ -2922,7 +3173,9 @@
           "filter": {
             "roll": "hit",
             "result": "success",
-            "weapon_name": "jindarii-tox-cycler"
+            "weapons": {
+              "name": "jindarii-tox-cycler"
+            }
           },
           "window": "phase"
         }
@@ -2937,7 +3190,9 @@
               "stat": "S",
               "operation": "add",
               "value": 2,
-              "weapon_name": "jindarii-tox-cycler"
+              "weapons": {
+                "name": "jindarii-tox-cycler"
+              }
             }
           },
           {
@@ -2947,7 +3202,9 @@
               "stat": "D",
               "operation": "add",
               "value": 2,
-              "weapon_name": "jindarii-tox-cycler"
+              "weapons": {
+                "name": "jindarii-tox-cycler"
+              }
             }
           }
         ]
@@ -2981,87 +3238,144 @@
     "ability_type": "detachment",
     "behavior": "activated",
     "effect": {
-      "type": "stance-select",
-      "mode": "re-selectable",
-      "scope": "army",
-      "select": "start-of-command-phase",
-      "options": [
-        {
-          "name": "Eliminate At All Costs",
-          "effect": {
-            "type": "designate-target",
-            "designation": "eliminate-at-all-costs",
-            "select": {
-              "scope": "enemy-unit",
-              "count": 1,
-              "timing": "start-of-command-phase"
-            },
-            "applies": {
-              "to": "attackers-of-target",
-              "effect": {
-                "type": "roll-modifier",
-                "target": "this-unit",
-                "modifier": {
-                  "roll": "hit",
-                  "operation": "add",
-                  "value": 1
-                }
-              }
-            },
-            "duration": "until-next-command-phase"
-          }
-        },
-        {
-          "name": "Acquire At All Costs",
-          "effect": {
-            "type": "conditional",
-            "condition": {
-              "type": "within",
+      "type": "ability-part",
+      "trigger": {
+        "event": "phase-started",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
               "parameters": {
-                "of": {
-                  "objective": {}
-                },
-                "range": "objective-control"
+                "phase": "command"
               }
             },
+            {
+              "type": "player-turn-is",
+              "parameters": {
+                "turn": "your-turn"
+              }
+            }
+          ]
+        }
+      },
+      "effect": {
+        "type": "stance-select",
+        "mode": "re-selectable",
+        "options": [
+          {
+            "name": "Eliminate At All Costs",
             "effect": {
-              "type": "sequence",
-              "steps": [
-                {
-                  "type": "stat-modifier",
-                  "target": "this-unit",
-                  "modifier": {
-                    "stat": "Ld",
-                    "operation": "add",
-                    "value": 1
+              "type": "ability-part",
+              "trigger": {
+                "event": "phase-started",
+                "condition": {
+                  "operator": "and",
+                  "operands": [
+                    {
+                      "type": "phase-is",
+                      "parameters": {
+                        "phase": "command"
+                      }
+                    },
+                    {
+                      "type": "player-turn-is",
+                      "parameters": {
+                        "turn": "your-turn"
+                      }
+                    }
+                  ]
+                }
+              },
+              "effect": {
+                "type": "designate-target",
+                "designation": "eliminate-at-all-costs",
+                "select": {
+                  "kind": "unit",
+                  "selector": {
+                    "filter": {
+                      "owner": "enemy"
+                    },
+                    "count": {
+                      "min": 1,
+                      "max": 1
+                    }
                   }
                 },
-                {
-                  "type": "stat-modifier",
-                  "target": "this-unit",
-                  "modifier": {
-                    "stat": "OC",
-                    "operation": "add",
-                    "value": 1
+                "applies": {
+                  "to": "attackers-of-target",
+                  "effect": {
+                    "type": "roll-modifier",
+                    "target": "this-unit",
+                    "modifier": {
+                      "roll": "hit",
+                      "operation": "add",
+                      "value": 1
+                    }
                   }
                 },
-                {
-                  "type": "invulnerable-save",
-                  "target": "this-unit",
-                  "modifier": {
-                    "invuln_sv": 5
+                "duration": "until-next-command-phase"
+              }
+            },
+            "id": "option-1"
+          },
+          {
+            "name": "Acquire At All Costs",
+            "effect": {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "within": {
+                      "range": "objective-control",
+                      "of": {
+                        "objective": {}
+                      }
+                    }
                   }
                 }
-              ]
-            }
+              },
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "stat-modifier",
+                    "target": "this-unit",
+                    "modifier": {
+                      "stat": "Ld",
+                      "operation": "add",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "type": "stat-modifier",
+                    "target": "this-unit",
+                    "modifier": {
+                      "stat": "OC",
+                      "operation": "add",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "type": "invulnerable-save",
+                    "target": "this-unit",
+                    "modifier": {
+                      "invuln_sv": 5
+                    }
+                  }
+                ]
+              }
+            },
+            "id": "option-2"
           }
-        }
-      ]
+        ]
+      }
     },
     "scope": {
       "duration": "until-next-command-phase"
     },
-    "community_notes": "[APPROX] At the start of your Command phase, pick one option. Eliminate marks one enemy unit (Agents attacks against it +1 Hit); Acquire selects one objective marker and buffs Agents units within range of THAT marker (+1 Ld, +1 OC, 5+ invuln) \u2014 the objective-marker selection is generalized to any controlled/within-range objective. Full rule in raw-text store."
+    "community_notes": "[APPROX] At the start of your Command phase, pick one option. Eliminate marks one enemy unit (Agents attacks against it +1 Hit); Acquire selects one objective marker and buffs Agents units within range of THAT marker (+1 Ld, +1 OC, 5+ invuln) — the objective-marker selection is generalized to any controlled/within-range objective. Full rule in raw-text store."
   },
   {
     "ability_id": "root-out-heresy-agents-of-the-imperium",
@@ -3086,31 +3400,44 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Ignores Cover"
-            ],
-            "weapon_type": "ranged"
+            "weapons": {
+              "type": "ranged"
+            },
+            "keywords": [
+              {
+                "keyword_id": "ignores-cover"
+              }
+            ]
           }
         },
         {
           "type": "conditional",
           "condition": {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "all_of": [
-                "CHAOS"
-              ]
+              "filter": {
+                "all_of": [
+                  "CHAOS"
+                ]
+              },
+              "subject": "defender"
             }
           },
           "effect": {
             "type": "weapon-ability-grant",
             "target": "this-unit",
             "modifier": {
-              "abilities": [
-                "Sustained Hits 1"
-              ],
-              "weapon_type": "ranged"
+              "weapons": {
+                "type": "ranged"
+              },
+              "keywords": [
+                {
+                  "keyword_id": "sustained-hits",
+                  "parameters": {
+                    "value": 1
+                  }
+                }
+              ]
             }
           }
         }
@@ -3138,48 +3465,81 @@
     "ability_type": "detachment",
     "behavior": "activated",
     "effect": {
-      "type": "stance-select",
-      "mode": "consumable",
-      "scope": "army",
-      "select": "start-of-command-phase",
-      "options": [
-        {
-          "name": "Furor Tactics",
-          "effect": {
-            "type": "weapon-ability-grant",
-            "target": "this-unit",
-            "modifier": {
-              "abilities": [
-                "Sustained Hits 1"
-              ]
+      "type": "ability-part",
+      "trigger": {
+        "event": "phase-started",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "command"
+              }
+            },
+            {
+              "type": "player-turn-is",
+              "parameters": {
+                "turn": "your-turn"
+              }
             }
-          }
-        },
-        {
-          "name": "Malleus Tactics",
-          "effect": {
-            "type": "weapon-ability-grant",
-            "target": "this-unit",
-            "modifier": {
-              "abilities": [
-                "Lethal Hits"
-              ]
-            }
-          }
-        },
-        {
-          "name": "Purgatus Tactics",
-          "effect": {
-            "type": "weapon-ability-grant",
-            "target": "this-unit",
-            "modifier": {
-              "abilities": [
-                "Precision"
-              ]
-            }
-          }
+          ]
         }
-      ]
+      },
+      "effect": {
+        "type": "stance-select",
+        "mode": "consumable",
+        "options": [
+          {
+            "name": "Furor Tactics",
+            "effect": {
+              "type": "weapon-ability-grant",
+              "target": "this-unit",
+              "modifier": {
+                "keywords": [
+                  {
+                    "keyword_id": "sustained-hits",
+                    "parameters": {
+                      "value": 1
+                    }
+                  }
+                ]
+              }
+            },
+            "id": "option-1"
+          },
+          {
+            "name": "Malleus Tactics",
+            "effect": {
+              "type": "weapon-ability-grant",
+              "target": "this-unit",
+              "modifier": {
+                "keywords": [
+                  {
+                    "keyword_id": "lethal-hits"
+                  }
+                ]
+              }
+            },
+            "id": "option-2"
+          },
+          {
+            "name": "Purgatus Tactics",
+            "effect": {
+              "type": "weapon-ability-grant",
+              "target": "this-unit",
+              "modifier": {
+                "keywords": [
+                  {
+                    "keyword_id": "precision"
+                  }
+                ]
+              }
+            },
+            "id": "option-3"
+          }
+        ]
+      }
     },
     "scope": {
       "duration": "until-next-command-phase"
@@ -3216,12 +3576,14 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "all_of": [
-                "DAEMON"
-              ]
+              "filter": {
+                "all_of": [
+                  "DAEMON"
+                ]
+              },
+              "subject": "defender"
             }
           },
           "effect": {
@@ -3257,7 +3619,9 @@
         "stat": "AP",
         "operation": "set",
         "value": 4,
-        "weapon_type": "melee"
+        "weapons": {
+          "type": "melee"
+        }
       }
     },
     "scope": {
@@ -3298,16 +3662,28 @@
         {
           "type": "select-units",
           "selector": {
-            "owner": "friendly",
-            "count": 1,
-            "range_inches": 6,
-            "keywords": [
-              "AGENTS OF THE IMPERIUM"
-            ],
+            "filter": {
+              "owner": "friendly",
+              "all_of": [
+                "AGENTS OF THE IMPERIUM"
+              ],
+              "within": {
+                "range": {
+                  "inches": 6
+                },
+                "of": "this-model"
+              }
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            },
             "eligibility": {
-              "type": "unit-state",
+              "type": "matches",
               "parameters": {
-                "state": "battle-shocked"
+                "filter": {
+                  "state": "battle-shocked"
+                }
               }
             }
           },
@@ -3323,9 +3699,19 @@
         {
           "type": "select-units",
           "selector": {
-            "owner": "enemy",
-            "count": 1,
-            "range_inches": 6
+            "filter": {
+              "owner": "enemy",
+              "within": {
+                "range": {
+                  "inches": 6
+                },
+                "of": "this-model"
+              }
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
           },
           "effect": {
             "type": "test",
@@ -3368,12 +3754,16 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "of": {
-            "objective": {}
-          },
-          "range": "objective-control"
+          "filter": {
+            "within": {
+              "of": {
+                "objective": {}
+              },
+              "range": "objective-control"
+            }
+          }
         }
       },
       "effect": {
@@ -3394,7 +3784,17 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "faction_id": "agents-of-the-imperium"
+    "faction_id": "agents-of-the-imperium",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
+    }
   },
   {
     "ability_id": "zealot-preacher-teguen-agents-of-the-imperium",
@@ -3416,7 +3816,9 @@
             "stat": "A",
             "operation": "add",
             "value": 3,
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            }
           }
         },
         {
@@ -3426,7 +3828,9 @@
             "stat": "S",
             "operation": "add",
             "value": 3,
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            }
           }
         }
       ]
@@ -3476,10 +3880,17 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Sustained Hits 1"
-          ],
-          "weapon_type": "melee"
+          "weapons": {
+            "type": "melee"
+          },
+          "keywords": [
+            {
+              "keyword_id": "sustained-hits",
+              "parameters": {
+                "value": 1
+              }
+            }
+          ]
         }
       }
     },

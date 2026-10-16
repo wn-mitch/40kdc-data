@@ -1,6 +1,8 @@
 import { closed, CompileError, effect, type CompileLeaf } from "./compile-fragments.js";
 import { trigger, triggerLeaves } from "./compile-triggers.js";
 import { canonicalDesignation, designationChoices, findReplacementOpeners, refuseEstablishmentCount, replacementTail, splitReplacementTail } from "./compile-redesignate.js";
+import { selectionFilter } from "./compile-wrappers.js";
+import { canonicalDurationName } from "./compile-durations.js";
 
 /**
  * Container fragments (batch 5). `compile.ts` delegates here in two ways:
@@ -41,17 +43,21 @@ export function isContainerOpener(familyId: string): boolean {
 /** The container batch's one flat (non-wrapping) effect: stance-selection-capacity. */
 export function containerEffect(leaf: CompileLeaf): Node | undefined {
   if (leaf.family_id !== "stance-selection-capacity") return undefined;
+  const stanceId = closed(leaf, "stance_id") as string;
   const modifier: Node = {
-    stance_id: closed(leaf, "stance_id"),
+    ability_id: stanceId,
     additional_selections: closed(leaf, "additional_selections"),
     allocation: closed(leaf, "allocation"),
   };
-  if (leaf.parameters.option_id !== undefined) modifier.option_id = closed(leaf, "option_id");
+  if (leaf.parameters.option_id !== undefined) {
+    modifier.option = { ability_id: stanceId, option_id: closed(leaf, "option_id") };
+  }
   // One shared allowance over these options only ("the assault doctrine or tactical doctrine").
-  if (leaf.parameters.option_ids !== undefined) modifier.option_ids = [...(closed(leaf, "option_ids") as string[])];
-  const node: Node = { type: "stance-selection-capacity", modifier };
-  if (leaf.parameters.scope !== undefined) node.scope = closed(leaf, "scope");
-  return node;
+  if (leaf.parameters.option_ids !== undefined) {
+    modifier.options = [...(closed(leaf, "option_ids") as string[])]
+      .map((optionId) => ({ ability_id: stanceId, option_id: optionId }));
+  }
+  return { type: "stance-selection-capacity", modifier };
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -87,7 +93,7 @@ function effectsOf(leaves: readonly CompileLeaf[], attacker: Record<string, unkn
 let nestedCompiler: ((leaves: readonly CompileLeaf[], objective?: string) => Node) | null = null;
 
 /** A named option's leading `named-option` leaf, and the plain effect leaves after it. */
-function namedOption(group: readonly CompileLeaf[], forRequirement: boolean): { name: unknown; effect: Node; marker: CompileLeaf } {
+function namedOption(group: readonly CompileLeaf[], forRequirement: boolean, sourceIndex = 0): { id: string; name: unknown; effect: Node; marker: CompileLeaf } {
   const marker = group[0];
   if (!marker || marker.family_id !== "named-option") throw new CompileError("Each option here needs a leading named-option leaf giving its name.");
   const hasRequirement = marker.parameters.requirement_type !== undefined || marker.parameters.requirement_any_of !== undefined;
@@ -96,7 +102,11 @@ function namedOption(group: readonly CompileLeaf[], forRequirement: boolean): { 
       ? "A dice-pool-allocation option's named-option leaf needs a dice requirement."
       : "This option's named-option leaf carries a dice requirement, but nothing here uses one.");
   }
-  return { name: closed(marker, "label"), effect: effectsOf(group.slice(1)), marker };
+  // A reviewed option_id wins; otherwise source order supplies a stable identity. Never derive
+  // this id from the display label: labels are mutable player-facing text.
+  const reviewedId = marker.parameters.option_id;
+  const id = typeof reviewedId === "string" && reviewedId.length > 0 ? reviewedId : `option-${sourceIndex + 1}`;
+  return { id, name: closed(marker, "label"), effect: effectsOf(group.slice(1)), marker };
 }
 
 function buildChoice(head: CompileLeaf, groups: CompileLeaf[][]): Node {
@@ -127,12 +137,11 @@ function orRandom(selection: Node, options: Node[], random: { dice: string; coun
 }
 
 function buildStanceSelect(head: CompileLeaf, groups: CompileLeaf[][]): Node {
-  const options = groups.map((group) => {
-    const { name, effect: optionEffect } = namedOption(group, false);
-    return { name, effect: optionEffect };
+  const options = groups.map((group, index) => {
+    const { id, name, effect: optionEffect } = namedOption(group, false, index);
+    return { id, name, effect: optionEffect };
   });
   const node: Node = { type: "stance-select", mode: closed(head, "mode"), options };
-  if (head.parameters.scope !== undefined) node.scope = closed(head, "scope");
   // "in addition to any other combat doctrine": the pick joins the active options instead of replacing them.
   if (head.parameters.additive === true) node.additive = true;
   const min = head.parameters.min_choices;
@@ -145,6 +154,7 @@ function buildStanceSelect(head: CompileLeaf, groups: CompileLeaf[][]): Node {
   return node;
 }
 
+
 function buildIssueOrders(head: CompileLeaf, groups: CompileLeaf[][]): Node {
   const options = groups.map((group) => {
     const { name, effect: optionEffect } = namedOption(group, false);
@@ -152,18 +162,18 @@ function buildIssueOrders(head: CompileLeaf, groups: CompileLeaf[][]): Node {
   });
   const node: Node = { type: "issue-orders", options };
   if (head.parameters.count !== undefined) node.count = closed(head, "count");
-  if (head.parameters.range !== undefined) node.range = closed(head, "range");
-  if (head.parameters.eligible_keyword !== undefined) node.eligible = { keyword: closed(head, "eligible_keyword") };
+  if (head.parameters.range !== undefined) node.range = { inches: closed(head, "range") };
+  if (head.parameters.eligible_keyword !== undefined) node.eligible = { all_of: [closed(head, "eligible_keyword")] };
   return node;
 }
 
 function buildDicePoolAllocation(head: CompileLeaf, groups: CompileLeaf[][]): Node {
-  const options = groups.map((group) => {
-    const { name, effect: optionEffect, marker } = namedOption(group, true);
+  const options = groups.map((group, index) => {
+    const { id, name, effect: optionEffect, marker } = namedOption(group, true, index);
     const requirement = marker.parameters.requirement_any_of !== undefined
       ? { any_of: closed(marker, "requirement_any_of") }
       : { type: closed(marker, "requirement_type"), min_value: closed(marker, "requirement_min_value") };
-    return { name, requirement, effect: optionEffect };
+    return { id, name, requirement, effect: optionEffect };
   });
   return {
     type: "dice-pool-allocation",
@@ -259,10 +269,11 @@ function menuActionHead(marker: CompileLeaf, group: readonly CompileLeaf[]): { e
     }
     cursor += 1;
   }
-  const eligibility: Node = {};
-  if (requiresKeyword.length) eligibility.requires_keyword = requiresKeyword;
-  if (excludesKeyword.length) eligibility.excludes_keyword = excludesKeyword;
-  if (selectorCount !== undefined) eligibility.selector_count = selectorCount;
+  const filter: Node = {};
+  if (requiresKeyword.length) filter.all_of = requiresKeyword;
+  if (excludesKeyword.length) filter.none_of = excludesKeyword;
+  const eligibility: Node = Object.keys(filter).length ? { filter } : {};
+  if (selectorCount !== undefined) eligibility.count = { min: selectorCount, max: selectorCount };
   if (requires.length) eligibility.requires = requires;
   return { eligibility, triggers, consumed: cursor };
 }
@@ -289,7 +300,7 @@ function buildResourceActionMenu(head: CompileLeaf, groups: CompileLeaf[][]): No
       eligibility.requires = [...((eligibility.requires as Node[] | undefined) ?? []), ...flagRequires];
     }
     if (Object.keys(eligibility).length) action.eligibility = eligibility;
-    if (marker.parameters.duration !== undefined) action.duration = closed(marker, "duration");
+    if (marker.parameters.duration !== undefined) action.duration = marker.parameters.duration === "immediate" ? "resolution" : canonicalDurationName(String(closed(marker, "duration")));
     if (marker.parameters.repeatable_if_different_unit === true) action.usage = { repeatable_if_different_unit: true };
     return action;
   });
@@ -329,49 +340,76 @@ function poolLifecycleSequence(head: CompileLeaf, menu: Node): Node {
  * compile-redesignate.ts), the selection is the one that replaces the designated unit when it is
  * destroyed: it binds a selection variable that the consumer and the lifecycle both reference.
  */
-function buildPersistentDesignation(head: CompileLeaf, groups: CompileLeaf[][], replacement?: { optional: boolean }): Node {
+function persistentDesignationTiming(list: readonly CompileLeaf[], sentenceOf: readonly number[], index: number): Node | undefined {
+  const head = list[index]!;
+  if (head.parameters.timing !== "start-of-first-battle-round") return undefined;
+  let battleStart = false;
+  for (let at = index - 1; at >= 0 && sentenceOf[at] === sentenceOf[index] && list[at]!.role !== "EFFECT"; at -= 1) {
+    const item = list[at]!;
+    if (item.family_id === "event" && item.parameters.kind === "battle-started") battleStart = true;
+  }
+  if (battleStart) return { event: "battle-started" };
+  return { event: "round-started", condition: { type: "battle-round", parameters: { min: 1, max: 1 } } };
+}
+
+function buildPersistentDesignation(head: CompileLeaf, groups: CompileLeaf[][], replacement?: { optional: boolean }, timing?: Node): Node {
   const scope = closed(head, "scope") as string;
   const beneficiary = closed(head, "beneficiary") as string;
   const designation = canonicalDesignation(closed(head, "designation"));
   const bindAs = `${designation}-selection`;
+  const objective = scope === "objective-marker";
+  const selector: Node = objective
+    ? { filter: {}, count: { min: 1, max: 1 }, bind_as: bindAs }
+    : {
+      filter: selectionFilter({ ...head, parameters: { ...head.parameters, scope: scope === "enemy-unit" ? "enemy" : "friendly" } }),
+      count: { min: 1, max: 1 },
+      bind_as: bindAs,
+    };
   const node: Node = {
     type: "persistent-designation",
     designation,
-    // "This ability can be used even if this unit is embarked" (compile-embarked-permission.ts).
-    select: { scope, count: 1, timing: closed(head, "timing"), selection_policy: replacement ? "replace-on-destroyed" : "one-time", ...(head.parameters.allow_while_embarked === true ? { allow_while_embarked: true } : {}) },
+    select: { kind: objective ? "objective" : "unit", selector },
+    selection_policy: replacement ? "replace-on-destroyed" : "one-time",
+    ...(head.parameters.allow_while_embarked === true ? { allow_while_embarked: true } : {}),
     consumer: {
       relation: scope === "enemy-unit" ? "attacks-selected-unit" : "within-selected-marker",
-      beneficiary: beneficiary === "this-model" ? "bearer" : "unit",
-      // The consumer's effect targets the same bearer the container already names — a reroll
-      // inside it (no attack leaf of its own) should read "this-model", not fall back to the
-      // platform's ordinary "this-unit" default, when beneficiary is this-model.
+      beneficiary: beneficiary === "this-model" ? "this-model" : "this-unit",
       effect: effectsOf(groups[0]!, beneficiary),
     },
     duration: "battle",
   };
   if (replacement) {
-    (node.select as Node).bind_as = bindAs;
     (node.consumer as Node).reference = { selection_var: bindAs };
     node.lifecycle = {
       replace: { event: "on-unit-destroyed", reference: { selection_var: bindAs }, optional: replacement.optional },
       exclusivity: "one-active-per-bearer-unit",
-      expiry: "battle-end",
     };
   }
-  return node;
+  return timing === undefined ? node : { type: "ability-part", trigger: timing, effect: node };
 }
 
 function buildSelectObjective(head: CompileLeaf, groups: CompileLeaf[][]): Node {
-  const selector: Node = { bind_as: closed(head, "bind_as") };
-  selector.count = head.parameters.each === true ? "each" : head.parameters.count !== undefined ? closed(head, "count") : 1;
-  if (head.parameters.range_inches !== undefined) selector.range_inches = closed(head, "range_inches");
-  if (head.parameters.origin !== undefined) selector.origin = closed(head, "origin") === "this-model" ? "bearer" : "bearer-unit";
-  if (head.parameters.controlled_by !== undefined) selector.controlled_by = closed(head, "controlled_by");
+  const filter: Node = {};
+  if (head.parameters.controlled_by !== undefined) {
+    filter.controlled_by = closed(head, "controlled_by") === "your-army" ? "friendly" : "enemy";
+  }
+  if (head.parameters.range_inches !== undefined) {
+    filter.within = {
+      range: { inches: closed(head, "range_inches") },
+      of: head.parameters.origin !== undefined ? closed(head, "origin") : "this-model",
+    };
+  }
+  const selector: Node = { filter, bind_as: closed(head, "bind_as") };
+  if (head.parameters.each === true) selector.count = { min: 1 };
+  else {
+    const count = head.parameters.count !== undefined ? closed(head, "count") : 1;
+    selector.count = { min: count, max: count };
+  }
   // The body names the objective this select bound, so a move-end inside it can end nearest that objective.
   return { type: "select-objective", selector, effect: effectsOf(groups[0]!, null, String(selector.bind_as)) };
 }
 
-function buildContainer(head: CompileLeaf, groups: CompileLeaf[][], replacement?: { optional: boolean }): Node {
+function buildContainer(head: CompileLeaf, groups: CompileLeaf[][], replacement?: { optional: boolean }, timing?: Node): Node {
   switch (head.family_id) {
     case "choice-open": return buildChoice(head, groups);
     case "stance-select-open": return buildStanceSelect(head, groups);
@@ -379,7 +417,7 @@ function buildContainer(head: CompileLeaf, groups: CompileLeaf[][], replacement?
     case "dice-pool-allocation-open": return buildDicePoolAllocation(head, groups);
     case "risk-reward-open": return buildRiskReward(head, groups);
     case "resource-action-menu-open": return buildResourceActionMenu(head, groups);
-    case "persistent-designation-open": return buildPersistentDesignation(head, groups, replacement);
+    case "persistent-designation-open": return buildPersistentDesignation(head, groups, replacement, timing);
     default: return buildSelectObjective(head, groups);
   }
 }
@@ -503,10 +541,11 @@ function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly n
     const bulletCertain = leaf.family_id === "choice-open" && bulletBoundaries > 0 && sentenceBoundaries === 0;
     if (!byMarker && !SINGLE_BODY_CONTAINERS.has(leaf.family_id) && !bulletCertain && !moveEndOption) nestedCompiler = null;
     try {
-      let node = buildContainer(leaf, sentences, replacementTailOf);
+      let node = buildContainer(leaf, sentences, replacementTailOf, leaf.family_id === "persistent-designation-open"
+        ? persistentDesignationTiming(list, sentenceOf, index) : undefined);
       // "you can select up to one …" establishes the designation only if the controlling player chooses to.
       if (leaf.family_id === "persistent-designation-open" && designationChoices(list, sentenceOf, index).length > 0) {
-        node = { type: "ability-part", optional: true, effect: node };
+        node = node.type === "ability-part" ? { ...node, optional: true } : { type: "ability-part", optional: true, effect: node };
       }
       nodes.set(index, node);
     } finally {

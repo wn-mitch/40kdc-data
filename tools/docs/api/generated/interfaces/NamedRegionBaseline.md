@@ -6,47 +6,23 @@
 
 # Interface: NamedRegionBaseline
 
-Defined in: [generated.ts:4605](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4605)
+Defined in: [generated.ts:3971](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3971)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "named-region-baseline".
 
 ## Properties
 
-### kind
+### region
 
-> **kind**: `"fixed-zone"`
+> **region**: [`RegionRef`](../type-aliases/RegionRef.md)
 
-Defined in: [generated.ts:4606](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4606)
-
-***
-
-### zone
-
-> **zone**: `"own-deployment-zone"`
-
-Defined in: [generated.ts:4607](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4607)
+Defined in: [generated.ts:3972](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3972)
 
 ***
 
-### activation
+### duration
 
-> **activation**: `object`
+> **duration**: [`ScopeDuration`](../type-aliases/ScopeDuration.md)
 
-Defined in: [generated.ts:4608](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4608)
-
-#### event
-
-> **event**: `"always-active"`
-
-***
-
-### expiry
-
-> **expiry**: `object`
-
-Defined in: [generated.ts:4611](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4611)
-
-#### event
-
-> **event**: `"never"`
+Defined in: [generated.ts:3973](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3973)

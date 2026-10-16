@@ -10,6 +10,7 @@ from __future__ import annotations
 import re
 from typing import Any
 
+from wh40kdc.translate.condition_refs import range_phrase
 from wh40kdc.translate.effect_words import (
     dekebab,
     dice_case,
@@ -44,8 +45,8 @@ def scale_source(q: dict[str, Any]) -> str:
         s += f" {title_case(jstr(q.get('wargear')))}"
     if q.get("keyword") is not None:
         s = re.sub(r"^models\b", f"{jstr(q['keyword'])} models", s, count=1)
-    if q.get("within_inches") is not None:
-        s += f' within {jstr(q["within_inches"])}"'
+    if q.get("within") is not None:
+        s += f" within {range_phrase(q['within'])}"
     return s
 
 

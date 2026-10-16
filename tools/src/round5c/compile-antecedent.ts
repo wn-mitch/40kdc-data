@@ -9,6 +9,7 @@ import { refuseDestroyedUnitAntecedent, trailingDestroyerFilter } from "./compil
 import { claimedByEmbarkedState } from "./compile-embarked-exclusion.js";
 import { isTargetRef, TARGET_REF_KEYS } from "./compile-target-refs.js";
 import { placements } from "./compile-placement.js";
+import { namedDestroyerFilterAfter } from "./compile-destruction-participants.js";
 
 /** Leaves that choose a unit an anaphor can point back to. */
 /** A Stratagem's TARGET leaves; the target is the unit its effects name as this-unit. */
@@ -82,7 +83,7 @@ function bareFilterAt(leaves: readonly CompileLeaf[], index: number): number {
   let at = index - 1;
   // Past a per-recipient condition on the same units ("is within range of an objective, that unit's …").
   while (at >= 0 && leaves[at]!.fragment === leaf.fragment
-    && (leaves[at]!.family_id === "unit-owner" || (leaves[at]!.role === "CONDITION" && hasAntecedent(leaves[at]!))
+    && (leaves[at]!.family_id === "unit-owner" || (leaves[at]!.role === "CONDITION" && leaves[at]!.family_id !== "unit-filter" && hasAntecedent(leaves[at]!))
       // "Friendly X units have: Battleline. +1 OC.": each effect of one list takes the same filter. Only an
       // effect passes over another effect; a condition does not skip the effects that precede it.
       || (leaf.role === "EFFECT" && leaves[at]!.role === "EFFECT" && leaves[at]!.parameters.subject === ANTECEDENT))) at -= 1;
@@ -452,6 +453,8 @@ function antecedentRole(leaves: readonly CompileLeaf[], index: number, focus?: (
   // Checked before the Stratagem-target and bare-filter rules, which would otherwise take the antecedent.
   let destroyedAt = -1;
   for (let at = 0; at < index; at += 1) if (momentNamesUnit(leaves, at)) destroyedAt = at;
+  if (destroyedAt >= 0 && namedDestroyerFilterAfter(leaves[destroyedAt], leaves[destroyedAt + 1])
+    && !unitFilterBetween(leaves, destroyedAt + 2, index)) return "event-subject";
   // A unit-filter between the destroyer filter and the antecedent is the nearer unit, so the later rules take it.
   if (destroyedAt >= 0 && trailingDestroyerFilter(leaves, destroyedAt, sourceText) !== null && !unitFilterBetween(leaves, destroyedAt + 2, index)) {
     refuseDestroyedUnitAntecedent(leaves, destroyedAt, leaves[index]!, sourceText);
@@ -509,6 +512,7 @@ function antecedentRole(leaves: readonly CompileLeaf[], index: number, focus?: (
  * unit-filter object, which only an effect's target can hold.
  */
 const ANY_UNIT_KEYS: Readonly<Record<string, readonly string[]>> = {
+  "named-ability-grant": ["subject"], "named-ability-suppression": ["subject"], "named-ability-exchange": ["subject"],
   "characteristic-modifier": ["subject"], "weapon-ability-grant": ["subject"], "weapon-ability-range": ["subject"], "keyword-grant": ["subject"], "feel-no-pain": ["subject"],
   "regain-wounds": ["subject"], "return-models": ["subject"], "eligibility-permission": ["subject", "into"], "core-ability-grant": ["subject"],
   "invulnerable-save": ["subject"], "ability-record-grant": ["subject"], "move-through": ["subject"],
@@ -595,6 +599,20 @@ function boundValue(leaf: CompileLeaf, key: string, role: string): string | null
  * the bound roles.
  */
 export function bindAntecedents(leaves: readonly CompileLeaf[], focus?: (index: number) => string | null, sourceText?: string): CompileLeaf[] {
+  const options = leaves.flatMap((leaf, index) => leaf.family_id === "named-option" ? [index] : []);
+  if (options.length === 0) return bindInScope(leaves, focus, sourceText);
+  const prefix = leaves.slice(0, options[0]!);
+  const result = bindInScope(prefix, focus, sourceText);
+  options.forEach((start, index) => {
+    const group = leaves.slice(start, options[index + 1] ?? leaves.length);
+    // An option inherits its menu's outer binding, never a selection or aura in a sibling option.
+    const scopedFocus = focus ? (at: number) => focus(at < prefix.length ? at : start + at - prefix.length) : undefined;
+    result.push(...bindInScope([...prefix, ...group], scopedFocus, sourceText).slice(prefix.length));
+  });
+  return result;
+}
+
+function bindInScope(leaves: readonly CompileLeaf[], focus?: (index: number) => string | null, sourceText?: string): CompileLeaf[] {
   // "the TRANSPORT this model is embarked within": a Stratagem has no bearer, so it has no such Transport.
   const transport = isStratagem(leaves) ? leaves.find((leaf) => leaf.parameters.subject === "bearer-transport" || leaf.parameters.within_origin === "bearer-transport") : undefined;
   if (transport) throw new CompileError(`${transport.family_id} at byte ${transport.start_byte} names the Transport its bearer is embarked within, but a Stratagem has no bearer.`);
@@ -661,7 +679,15 @@ export function bindAntecedents(leaves: readonly CompileLeaf[], focus?: (index: 
 function momentUnitRole(leaves: readonly CompileLeaf[], index: number, sourceText: string | undefined): string {
   let at = -1;
   for (let other = 0; other < index; other += 1) if (momentNamesUnit(leaves, other)) at = other;
-  if (at < 0) throw new CompileError(`${leaves[index]!.family_id} at byte ${leaves[index]!.start_byte} points back to an earlier unit (${ANTECEDENT}), but no earlier leaf selects a unit, targets a Stratagem or names a unit's moment.`);
+  if (at < 0) {
+    const earlier = leaves.slice(0, index);
+    if (earlier.some((leaf) => leaf.family_id === "select-unit")) return "selected-unit";
+    // Bodyguard membership names the attached unit introduced by a leading/attachment
+    // condition, including a battle-start snapshot whose event has no unit subject.
+    const attachment = earlier.filter((leaf) => leaf.family_id === "leading-unit").at(-1);
+    if (attachment?.parameters.subject === "this-unit" || attachment?.parameters.subject === "this-model") return "this-unit";
+    throw new CompileError(`${leaves[index]!.family_id} at byte ${leaves[index]!.start_byte} points back to an earlier unit (${ANTECEDENT}), but no earlier leaf selects a unit, targets a Stratagem or names a unit's moment.`);
+  }
   const moment = leaves[at]!.parameters;
   if (trailingDestroyerFilter(leaves, at, sourceText) !== null) {
     refuseDestroyedUnitAntecedent(leaves, at, leaves[index]!, sourceText);

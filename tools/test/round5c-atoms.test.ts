@@ -15,6 +15,9 @@ import { abilityReadiness } from "../src/round5c/readiness.js";
 import { getAbility } from "../src/round5c/review.js";
 import { applyAnnotationBatch, applySourceAtomBatch, reviewAbility, undoBatch } from "./round5c-human.js";
 import { currentFamilyVersion } from "../src/round5c/contracts.js";
+import { untiledRuns } from "../src/round5c/leaves.js";
+import { tiledSources } from "../src/round5c/leaf-view.js";
+import { compileLeaves } from "../src/round5c/compile.js";
 
 const DatabaseSync = createRequire(import.meta.url)("node:sqlite").DatabaseSync as { new(path: string): DatabaseType };
 type DatabaseSync = DatabaseType;
@@ -130,6 +133,8 @@ describe("Round 5C structural source authority", () => {
       expect(pending.accounted_fraction).toBe(before.accounted_fraction);
       expect(pending.partition.pending).toBe(Buffer.byteLength("squadmodèls"));
       expect(abilityReadiness(value.db, value.id).reasons.map((reason) => reason.code)).toContain("PENDING_CLAIMS");
+      expect(untiledRuns(pending).map((run) => run.text)).toContain("squad modèls");
+      expect(tiledSources(value.db)).toEqual([]);
 
       accept(value, proposed.proposal_id);
       const after = getAbilityCoverage(value.db, value.id);
@@ -139,6 +144,10 @@ describe("Round 5C structural source authority", () => {
       expect(after.partition).toMatchObject({ structural: Buffer.byteLength("squadmodèls"), pending: 0, residue: 0 });
       expect(after.overlaps).toEqual([]);
       expect(abilityReadiness(value.db, value.id)).toMatchObject({ ready: true, reasons: [] });
+      expect(untiledRuns(after)).toEqual([]);
+      const sources = tiledSources(value.db);
+      expect(sources).toHaveLength(1);
+      expect(compileLeaves(sources[0]!.leaves, sources[0]!.source_text).ok).toBe(true);
     } finally {
       value.db.close();
     }
@@ -176,6 +185,8 @@ describe("Round 5C structural source authority", () => {
       expect(value.db.prepare("SELECT status FROM source_atom_reviews").get()).toEqual({ status: "retracted" });
       expect(value.db.prepare("SELECT status FROM source_atom_proposals").get()).toEqual({ status: "pending" });
       expect(getAbilityCoverage(value.db, value.id).accounted_fraction).toBeLessThan(1);
+      expect(untiledRuns(getAbilityCoverage(value.db, value.id)).map((run) => run.text)).toContain("squad modèls");
+      expect(tiledSources(value.db)).toEqual([]);
 
       const rejected = applySourceAtomBatch(value.db, {
         reviewer: REVIEWER,
@@ -275,6 +286,37 @@ describe("Round 5C structural source authority", () => {
       undoBatch(value.db, parentBatch, { reviewer: REVIEWER });
       const readiness = abilityReadiness(value.db, value.id);
       expect(readiness.reasons.map((reason) => reason.code)).toEqual(expect.arrayContaining(["UNSUPPORTED_STRUCTURE", "UNACCOUNTED_SOURCE"]));
+    } finally {
+      value.db.close();
+    }
+  });
+  it("requires explicit historical authorization for structural proposals", () => {
+    const source = "Lead-state active squad models.";
+    const value = fixture(source);
+    try {
+      value.db.prepare("UPDATE abilities SET current = 0 WHERE id = ?").run(value.id);
+      const proposal = proposeSourceAtom(value.db, {
+        ability_version_id: value.id, source_hash: value.hash, historical: true, fragment: "RAW_TEXT",
+        ...bytes("squad models", source), kind: "participant",
+        description: "historical participant", reviewer: REVIEWER,
+      });
+      expect(() => applySourceAtomBatch(value.db, {
+        reviewer: REVIEWER,
+        decisions: [{ atom_proposal_id: proposal.proposal_id, action: "accept", source_hash: value.hash }],
+      })).toThrow(/stale or has an invalid historical authorization/u);
+      const batch = applySourceAtomBatch(value.db, {
+        reviewer: REVIEWER,
+        decisions: [{ atom_proposal_id: proposal.proposal_id, action: "accept", historical: true, source_hash: value.hash }],
+      });
+      expect(batch.batch_id).toMatch(/^batch_/u);
+      const wrong = proposeSourceAtom(value.db, {
+        ability_version_id: value.id, source_hash: value.hash, historical: true, fragment: "RAW_TEXT",
+        ...bytes("Lead-state", source), kind: "participant", description: "historical participant", reviewer: REVIEWER,
+      });
+      expect(() => applySourceAtomBatch(value.db, {
+        reviewer: REVIEWER,
+        decisions: [{ atom_proposal_id: wrong.proposal_id, action: "accept", historical: true, source_hash: "0".repeat(64) }],
+      })).toThrow(/stale or has an invalid historical authorization/u);
     } finally {
       value.db.close();
     }

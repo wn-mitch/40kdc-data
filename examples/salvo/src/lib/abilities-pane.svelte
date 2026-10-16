@@ -5,6 +5,7 @@
     MANUAL_BUFF_TOGGLES,
     CONTEXT_FLAG_TOGGLES,
   } from "./store.svelte.js";
+  import { isLegalLeverSelection } from "@alpaca-software/40kdc-data";
   import type {
     Buff,
     EngineContext,
@@ -83,11 +84,21 @@
   }
 
   function activeInGroup(groupId: string): number {
-    return stackable.buffs.filter((b) => b.group === groupId && enabled(b)).length;
+    return stackable.buffs.filter(
+      (b) => (b.group === groupId || b.groups?.includes(groupId)) && enabled(b),
+    ).length;
+  }
+
+  function canToggle(b: StackableBuff): boolean {
+    // Removing a selection is always available, including recovery from stale state.
+    if (enabled(b)) return true;
+    const selected = new Set(stackable.buffs.filter(enabled).map((lever) => lever.id));
+    selected.add(b.id);
+    return isLegalLeverSelection(stackable.buffs, stackable.groups, selected);
   }
 
   function toggle(b: StackableBuff) {
-    salvo.setBuffEnabled(b.id, !enabled(b));
+    if (canToggle(b)) salvo.setBuffEnabled(b.id, !enabled(b));
   }
 
   function toggleManual(id: string) {
@@ -97,18 +108,12 @@
     salvo.manualBuffsActive = next;
   }
 
-  // A combined-unit member is a leader if it can itself lead something;
-  // otherwise it's the bodyguard half. Derived from the attachment graph so it
-  // holds regardless of which half is the selected/firing unit.
-  function attachedRole(unitId: string): "leader" | "bodyguard" {
-    return ds.bodyguardsAttachableFrom(unitId).length > 0 ? "leader" : "bodyguard";
-  }
 
   function sourceChip(b: StackableBuff): string {
     if (b.source.kind === "weapon-keyword") return "weapon";
     if (b.source.kind === "manual") return "manual";
     if (b.source.abilityKind === "attached") {
-      return b.source.sourceUnitId ? attachedRole(b.source.sourceUnitId) : "attached";
+      return "attached";
     }
     return b.source.abilityKind === "detachment-stratagem" ? "stratagem" : b.source.abilityKind;
   }
@@ -145,7 +150,7 @@
   <div class="ability-list">
     {#each ungrouped as b (b.id)}
       <label class="ability-row" class:active={enabled(b)}>
-        <input type="checkbox" checked={enabled(b)} onchange={() => toggle(b)} />
+        <input type="checkbox" checked={enabled(b)} disabled={!canToggle(b)} onchange={() => toggle(b)} />
         <span class="name">
           {b.label}
           <small>· {summary(b)}</small>
@@ -156,12 +161,11 @@
 
     {#each pools as p (p.group.id)}
       <div class="section-label">
-        {p.group.label} · pick up to {p.group.maxActivations}
-        ({activeInGroup(p.group.id)}/{p.group.maxActivations})
+        {p.group.label} · base allowance {p.group.maxActivations}
+        ({activeInGroup(p.group.id)} selected)
       </div>
       {#each p.levers as b (b.id)}
-        {@const atCap =
-          !enabled(b) && activeInGroup(p.group.id) >= p.group.maxActivations}
+        {@const atCap = !canToggle(b)}
         <label class="ability-row" class:active={enabled(b)} class:dim={atCap}>
           <input
             type="checkbox"

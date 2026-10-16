@@ -4,29 +4,26 @@ import { fileURLToPath } from "node:url";
 
 import { compileLeaves, type CompileLeaf, type Compiled } from "./compile.js";
 import { REVIEWED_FAMILY_REGISTRY, type SemanticFamilyDefinition } from "./contracts.js";
-import { boundedCombinations, familyCombinations } from "./leaf-coverage-samples.js";
+import { boundedCombinations, familyCombinations, familySampling } from "./leaf-coverage-samples.js";
 
 /**
  * Step-8 leaf coverage: proof, by actually compiling, that every DSL type in the schema catalog
  * (single effects, containers, condition predicates, trigger events, durations, usage
- * frequencies, and a handful of behavior flags) can be produced by some reviewed leaf family.
+ * frequencies, and a handful of behavior flags) has a compiling reviewed-family witness.
  *
  * The inventory (catalogInventory) mirrors `_private/phase4/matrix2/census.py`'s schema-reading
  * step exactly (same four schema files, same closed unions, same five behavior-flag markers).
  * Production differs from that script on purpose: census.py classified a type as covered by
  * grepping for its literal string in round5c source files, which both over- and under-counts
  * (a type can appear in a comment or an unrelated table, and a mapped/computed value such as
- * `event:charge` -> `move-ended` never appears as its own literal anywhere). This module instead
- * builds each reviewed family's leaves for every one of its valid parameter combinations
- * (`familyCombinations` in `leaf-coverage-samples.ts`, in the same spirit as `leaf-describer-audit.ts`'s own
- * `combinations()`: a product over each parameter's domain, `x-only-when` applied in dependency
- * order, invalid combinations dropped by re-running them through `normalizeFingerprintParameters`
- * -- widened here to also flatten `oneOf` the way that file flattens `anyOf`, sample a `pattern`
- * property against a few representative strings, and fall back to a family's own `starter`
- * example for a property shape neither of those covers, since production needs every schema-valid
- * family to yield at least one combination, not just enough samples to audit describer wording),
- * compiles them through the real compiler (`compileLeaves`), and walks the compiled DSL tree for
- * the literals that actually came out the other end.
+ * `event:charge` -> `move-ended` never appears as its own literal anywhere).
+ *
+ * This module instead normalizes reviewed-family samples, compiles them through the real compiler
+ * (`compileLeaves`), and walks the compiled DSL tree for literals that actually came out. Small
+ * families use the full sampled product. Families documented by `familySampling` use bounded
+ * pairwise samples that retain every declared value and one-other-parameter context, but are not
+ * represented as exhaustive. Coverage needs one actual compiling witness per catalog type; exact
+ * three-or-more-parameter authored shapes remain covered by their focused compiler tests.
  */
 
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../../../");
@@ -185,9 +182,8 @@ const FIXED_PARAMETERS: Partial<Record<string, Array<Record<string, unknown>>>> 
       qualified_branch: { kind: "roll-modifier", roll: "wound", operation: "add", value: 1, weapon_keyword: "Psychic", optional: false },
     },
   ],
-  // pool_gain/pool_spend are optional, but each is a required-shaped nested object with no
-  // starter example, so a bounded sample (which only ever varies one property from a baseline)
-  // never includes either — the same reason named-region-state needs a hand-picked set.
+  // pool_gain/pool_spend are optional required-shaped nested objects. `domain()` cannot synthesize
+  // their fields, so even pairwise sampling needs one concrete reviewed-shape witness.
   "resource-action-menu-open": [
     {
       menu_id: "agile-manoeuvres", pool_id: "battle-focus-pool", unit_max_manoeuvres_per_phase: 1, default_manoeuvre_max_per_phase: 1,
@@ -197,20 +193,6 @@ const FIXED_PARAMETERS: Partial<Record<string, Array<Record<string, unknown>>>> 
   ],
 };
 
-/**
- * Families whose independent optional properties are numerous enough that the full cross-product
- * (`familyCombinations` in `leaf-coverage-samples.ts`) is too large to build (`menu-action`'s ~11 independent optional
- * properties once OOM'd the sweep) — `boundedCombinations` samples instead of multiplying: one
- * baseline (every required field, no optionals) plus one variant per optional property in
- * isolation. This is O(properties), not O(values-per-property^properties); it does not reach
- * combinations that need two or more properties set together (`test`'s enemy/friendly filtered
- * target needs `target`+`range`+`within_inches` all at once), but the coverage gate only needs
- * one compiling combination per catalog type, which the baseline alone already supplies — the
- * exact record shapes stay covered by their own pinned tests, not this sweep.
- */
-// characteristic-modifier@16 joins them: its characteristics and keyword domains with its optional names
-// product exhausted the default worker heap.
-const BOUNDED_SAMPLE_FAMILIES = new Set(["menu-action", "test", "test-exemption", "characteristic-modifier"]);
 
 /**
  * `trigger`/`when` are the only fields whose value is genuinely a trigger node (or an array of
@@ -220,7 +202,7 @@ const BOUNDED_SAMPLE_FAMILIES = new Set(["menu-action", "test", "test-exemption"
  * own history filter reuses the game-event enum for what it checks, which is not the same as the
  * ability's own firing moment).
  */
-const TRIGGER_KEYS = new Set(["trigger", "when"]);
+const TRIGGER_KEYS: Record<string, true> = { trigger: true, when: true };
 
 function addLiteral(into: Map<string, Set<string>>, bucket: string, value: string): void {
   const set = into.get(bucket);
@@ -255,7 +237,7 @@ function collectLiterals(node: unknown, into: Map<string, Set<string>>, inTrigge
   if (record.counts_as_move !== undefined) addLiteral(into, "behavior", "counts_as_move");
   if ("wholly" in record) addLiteral(into, "behavior", "wholly");
   for (const [key, value] of Object.entries(record)) {
-    collectLiterals(value, into, key === "parameters" ? false : inTrigger || TRIGGER_KEYS.has(key));
+    collectLiterals(value, into, key === "parameters" ? false : inTrigger || Object.hasOwn(TRIGGER_KEYS, key));
   }
 }
 
@@ -268,6 +250,8 @@ function producedKey(entry: CatalogEntry): string {
 
 export type Produced = Map<string, string[]>;
 
+let producedCache: Produced | undefined;
+
 /** Build the leaves for one family/parameter combination, wrapping a lone non-EFFECT leaf as the compile tests do. */
 function leavesFor(family: SemanticFamilyDefinition, parameters: Record<string, unknown>): CompileLeaf[] {
   const followups = CONTAINER_OPENER_FOLLOWUPS[family.id];
@@ -277,15 +261,28 @@ function leavesFor(family: SemanticFamilyDefinition, parameters: Record<string, 
   return [opener, healLeaf()];
 }
 
-/** Compile every active family's every valid parameter combination and record what each produces. */
+/**
+ * Compile active-family samples until every directly produced catalog type has a witness. Invalid
+ * samples are expected while crossing independent schema domains; an uncovered type still appears
+ * in `leafCoverage().unproduced`, so failures cannot turn into coverage by being ignored here.
+ */
 export function produceLiterals(): Produced {
+  if (producedCache) {
+    return new Map([...producedCache].map(([literal, families]) => [literal, [...families]] as const));
+  }
   const produced: Produced = new Map();
+  const accountedTypes = new Set([...COMPOSED, ...RETIRED].map((entry) => entry.type));
+  const needed = new Set(catalogInventory()
+    .filter((entry) => !accountedTypes.has(entry.type))
+    .map(producedKey));
   const activeFamilies = REVIEWED_FAMILY_REGISTRY.filter((family) => !family.deprecated);
-  for (const family of activeFamilies) {
+  familyLoop: for (const family of activeFamilies) {
     // A COMBINATOR ("instead") replaces an earlier effect of its own family; it owns no DSL type
     // of its own and only compiles inside a fuller ability (see the COMPOSED list).
     if (family.role === "COMBINATOR") continue;
-    const combos = FIXED_PARAMETERS[`${family.id}@${family.version}`] ?? FIXED_PARAMETERS[family.id] ?? (BOUNDED_SAMPLE_FAMILIES.has(family.id) ? boundedCombinations(family) : familyCombinations(family));
+    const combos = FIXED_PARAMETERS[`${family.id}@${family.version}`]
+      ?? FIXED_PARAMETERS[family.id]
+      ?? (familySampling(family) === "pairwise" ? boundedCombinations(family) : familyCombinations(family));
     for (const parameters of combos) {
       let result: Compiled;
       try {
@@ -303,11 +300,14 @@ export function produceLiterals(): Produced {
           const literal = `${bucket}:${value}`;
           const existing = produced.get(literal);
           if (existing) { if (!existing.includes(key)) existing.push(key); } else produced.set(literal, [key]);
+          needed.delete(literal);
         }
       }
+      if (needed.size === 0) break familyLoop;
     }
   }
-  return produced;
+  producedCache = produced;
+  return new Map([...produced].map(([literal, families]) => [literal, [...families]] as const));
 }
 
 // ------------------------------------------------------------------------------------------

@@ -17,6 +17,13 @@
       "uniqueItems": true,
       "maxItems": 3
     },
+    "optional_parameters": {
+      "type": "array",
+      "description": "Additional parameter keys accepted when the granting rule supplies them. Omission never invents a rating.",
+      "items": { "type": "string", "enum": ["value", "target_keyword", "threshold"] },
+      "uniqueItems": true,
+      "maxItems": 3
+    },
     "effect": {
       "oneOf": [
         { "$ref": "../enrichment/ability-dsl/effect.schema.json" },

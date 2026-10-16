@@ -160,7 +160,7 @@
         "type": "mortal-wounds",
         "target": "defender",
         "modifier": {
-          "count": "1"
+          "count": 1
         }
       }
     },
@@ -345,10 +345,22 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "owner": "enemy",
-        "count": 1,
-        "within_inches": 18,
-        "visibility_required": true
+        "filter": {
+          "owner": "enemy",
+          "within": {
+            "range": {
+              "inches": 18
+            },
+            "of": "this-model"
+          },
+          "visible": {
+            "to": "this-model"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        }
       },
       "effect": {
         "type": "roll-modifier",
@@ -384,20 +396,24 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "subject": "this-model",
-          "of": {
-            "owner": "friendly",
-            "all_of": [
-              "AELDARI",
-              "PSYKER"
-            ],
-            "level": "model"
+          "filter": {
+            "within": {
+              "range": {
+                "inches": 12
+              },
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "AELDARI",
+                  "PSYKER"
+                ],
+                "level": "model"
+              }
+            }
           },
-          "range": {
-            "inches": 12
-          }
+          "subject": "this-model"
         }
       },
       "effect": {
@@ -687,8 +703,10 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Lethal Hits"
+            "keywords": [
+              {
+                "keyword_id": "lethal-hits"
+              }
             ]
           }
         },
@@ -696,8 +714,10 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Precision"
+            "keywords": [
+              {
+                "keyword_id": "precision"
+              }
             ]
           }
         }
@@ -744,7 +764,7 @@
   },
   {
     "ability_id": "faolchu-aeldari",
-    "name": "Faolch\u00fa",
+    "name": "Faolchú",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -756,8 +776,10 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Ignores Cover"
+        "keywords": [
+          {
+            "keyword_id": "ignores-cover"
+          }
         ]
       }
     },
@@ -822,7 +844,9 @@
             "roll": "hit",
             "result_scope": "any-result",
             "count": 1,
-            "weapon_type": "ranged"
+            "weapons": {
+              "type": "ranged"
+            }
           }
         },
         {
@@ -832,7 +856,9 @@
             "roll": "wound",
             "result_scope": "any-result",
             "count": 1,
-            "weapon_type": "ranged"
+            "weapons": {
+              "type": "ranged"
+            }
           }
         }
       ]
@@ -1136,8 +1162,10 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Devastating Wounds"
+        "keywords": [
+          {
+            "keyword_id": "devastating-wounds"
+          }
         ]
       }
     },
@@ -1191,10 +1219,15 @@
     "version": "2025-q3",
     "effect": {
       "type": "destroy-models",
-      "target": "this-unit",
+      "target": {
+        "member_of": "this-unit",
+        "level": "model",
+        "all_of": [
+          "SERPENTS SCALE PLATFORM"
+        ]
+      },
       "modifier": {
-        "count": "all",
-        "model_keyword": "SERPENTS SCALE PLATFORM"
+        "count": "all"
       }
     },
     "scope": {
@@ -1252,12 +1285,14 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "subject": "defender",
-          "all_of": [
-            "TITANIC"
-          ]
+          "filter": {
+            "all_of": [
+              "TITANIC"
+            ]
+          },
+          "subject": "defender"
         }
       },
       "effect": {
@@ -1293,8 +1328,10 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Ignores Cover"
+        "keywords": [
+          {
+            "keyword_id": "ignores-cover"
+          }
         ]
       }
     },
@@ -1412,8 +1449,13 @@
       "effect": {
         "type": "select-units",
         "selector": {
-          "owner": "enemy",
-          "count": 1,
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
           "eligibility": {
             "type": "happened",
             "parameters": {
@@ -1437,16 +1479,18 @@
               "modifier": {
                 "subject": "selected-unit",
                 "tag": "whispering-web",
-                "clears_on": "turn-rollover"
+                "clears_on": "turn"
               }
             },
             {
               "type": "conditional",
               "condition": {
-                "type": "designated",
+                "type": "matches",
                 "parameters": {
-                  "subject": "defender",
-                  "tag": "whispering-web"
+                  "filter": {
+                    "designated": "whispering-web"
+                  },
+                  "subject": "defender"
                 }
               },
               "effect": {
@@ -1539,8 +1583,13 @@
             "type": "weapon-ability-grant",
             "target": "this-unit",
             "modifier": {
-              "abilities": [
-                "Sustained Hits 3"
+              "keywords": [
+                {
+                  "keyword_id": "sustained-hits",
+                  "parameters": {
+                    "value": 3
+                  }
+                }
               ]
             }
           },
@@ -1548,8 +1597,10 @@
             "type": "weapon-ability-grant",
             "target": "this-unit",
             "modifier": {
-              "abilities": [
-                "Precision"
+              "keywords": [
+                {
+                  "keyword_id": "precision"
+                }
               ]
             }
           },
@@ -1557,8 +1608,10 @@
             "type": "weapon-ability-grant",
             "target": "this-unit",
             "modifier": {
-              "abilities": [
-                "Ignores Cover"
+              "keywords": [
+                {
+                  "keyword_id": "ignores-cover"
+                }
               ]
             }
           }
@@ -1672,8 +1725,13 @@
             "type": "weapon-ability-grant",
             "target": "this-unit",
             "modifier": {
-              "abilities": [
-                "Sustained Hits 1"
+              "keywords": [
+                {
+                  "keyword_id": "sustained-hits",
+                  "parameters": {
+                    "value": 1
+                  }
+                }
               ]
             }
           }
@@ -1707,27 +1765,33 @@
         "operator": "or",
         "operands": [
           {
-            "type": "unit-state",
+            "type": "matches",
             "parameters": {
-              "state": "on-battlefield"
+              "filter": {
+                "state": "on-battlefield"
+              }
             }
           },
           {
             "operator": "and",
             "operands": [
               {
-                "type": "unit-state",
+                "type": "matches",
                 "parameters": {
-                  "state": "embarked"
+                  "filter": {
+                    "state": "embarked"
+                  }
                 }
               },
               {
                 "operator": "not",
                 "operands": [
                   {
-                    "type": "unit-state",
+                    "type": "matches",
                     "parameters": {
-                      "state": "in-strategic-reserves"
+                      "filter": {
+                        "state": "in-strategic-reserves"
+                      }
                     }
                   }
                 ]
@@ -1739,11 +1803,16 @@
       "effect": {
         "type": "select-units",
         "selector": {
-          "owner": "friendly",
-          "max_count": 3,
-          "keywords": [
-            "AELDARI"
-          ]
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "AELDARI"
+            ]
+          },
+          "count": {
+            "min": 0,
+            "max": 3
+          }
         },
         "effect": {
           "type": "choice",
@@ -1797,65 +1866,38 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent-turn"
-            }
-          },
-          {
-            "type": "unit-state",
-            "parameters": {
-              "state": "on-battlefield"
-            }
-          },
-          {
-            "type": "happened",
-            "parameters": {
-              "event": "destroyed",
-              "object": {
-                "owner": "friendly",
-                "all_of": [
-                  "AELDARI"
-                ]
-              },
-              "window": "turn"
-            }
+        "type": "matches",
+        "parameters": {
+          "subject": "this-model",
+          "filter": {
+            "state": "on-battlefield"
           }
-        ]
+        }
       },
       "effect": {
         "type": "sequence",
         "steps": [
           {
-            "type": "destroy-models",
-            "target": "this-model",
-            "modifier": {
-              "count": 1,
-              "remove_from_play": true
-            }
-          },
-          {
             "type": "set-up",
             "target": "this-model",
             "modifier": {
               "to": "battlefield",
-              "from": "battlefield",
-              "min_distance_from": {
-                "of": {
-                  "owner": "enemy"
-                },
-                "range": "engagement"
-              }
+              "from": "battlefield"
+            }
+          },
+          {
+            "type": "permission",
+            "target": "this-model",
+            "modifier": {
+              "activity": "move",
+              "allow": true
             }
           }
         ]
       }
     },
     "scope": {
-      "duration": "turn"
+      "duration": "permanent"
     },
     "unit_ids": [
       "the-yncarne"
@@ -1864,9 +1906,14 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "usage": {
-      "frequency": "once-per-opponent-turn"
+      "frequency": "once-per-opponent-turn",
+      "per": "model"
     },
-    "faction_id": "aeldari"
+    "faction_id": "aeldari",
+    "trigger": {
+      "event": "destroyed",
+      "optional": true
+    }
   },
   {
     "ability_id": "ethereal-form-aeldari",
@@ -2004,11 +2051,23 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "owner": "enemy",
-        "count": 1,
-        "within_inches": 18,
-        "visibility_required": true,
-        "selection_limit": {
+        "filter": {
+          "owner": "enemy",
+          "within": {
+            "range": {
+              "inches": 18
+            },
+            "of": "this-model"
+          },
+          "visible": {
+            "to": "this-model"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "limit": {
           "count": 1,
           "period": "turn"
         }
@@ -2482,12 +2541,14 @@
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "all_of": [
-                "RIVEN"
-              ]
+              "filter": {
+                "all_of": [
+                  "RIVEN"
+                ]
+              },
+              "subject": "defender"
             }
           }
         ]
@@ -2644,7 +2705,7 @@
   },
   {
     "ability_id": "point-blank-devastation-aeldari",
-    "name": "Point\u2010blank Devastation",
+    "name": "Point‐blank Devastation",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -2672,15 +2733,21 @@
                   {
                     "type": "attack-is",
                     "parameters": {
-                      "weapon_name": "Heavy wraithcannon"
+                      "weapons": {
+                        "name": "Heavy wraithcannon"
+                      }
                     }
                   },
                   {
-                    "type": "within",
+                    "type": "matches",
                     "parameters": {
-                      "subject": "defender",
-                      "of": "attacker",
-                      "range": "half-weapon"
+                      "filter": {
+                        "within": {
+                          "range": "half-weapon",
+                          "of": "attacker"
+                        }
+                      },
+                      "subject": "defender"
                     }
                   }
                 ]
@@ -2691,15 +2758,21 @@
                   {
                     "type": "attack-is",
                     "parameters": {
-                      "weapon_name": "Suncannon"
+                      "weapons": {
+                        "name": "Suncannon"
+                      }
                     }
                   },
                   {
-                    "type": "within",
+                    "type": "matches",
                     "parameters": {
-                      "subject": "defender",
-                      "of": "attacker",
-                      "range": "half-weapon"
+                      "filter": {
+                        "within": {
+                          "range": "half-weapon",
+                          "of": "attacker"
+                        }
+                      },
+                      "subject": "defender"
                     }
                   }
                 ]
@@ -2717,7 +2790,9 @@
             "modifier": {
               "roll": "attacks",
               "subset": "all-failures",
-              "weapon_name": "heavy wraithcannon"
+              "weapons": {
+                "name": "heavy wraithcannon"
+              }
             }
           },
           {
@@ -2726,7 +2801,9 @@
             "modifier": {
               "roll": "attacks",
               "subset": "all-failures",
-              "weapon_name": "suncannon"
+              "weapons": {
+                "name": "suncannon"
+              }
             }
           }
         ]
@@ -2785,7 +2862,7 @@
       "type": "mortal-wounds",
       "target": "defender",
       "modifier": {
-        "count": "1"
+        "count": 1
       }
     },
     "scope": {
@@ -2811,8 +2888,10 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Lance"
+        "keywords": [
+          {
+            "keyword_id": "lance"
+          }
         ]
       }
     },
@@ -2870,7 +2949,7 @@
       "type": "mortal-wounds",
       "target": "defender",
       "modifier": {
-        "count": "1"
+        "count": 1
       }
     },
     "scope": {
@@ -2943,7 +3022,11 @@
           "stat": "Range",
           "operation": "add",
           "value": 6,
-          "weapon_keyword": "Melta"
+          "weapons": {
+            "keyword": {
+              "keyword_id": "melta"
+            }
+          }
         }
       }
     },
@@ -3016,8 +3099,13 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Sustained Hits 1"
+          "keywords": [
+            {
+              "keyword_id": "sustained-hits",
+              "parameters": {
+                "value": 1
+              }
+            }
           ]
         }
       }
@@ -3173,7 +3261,7 @@
   },
   {
     "ability_id": "yvraines-champion-aeldari",
-    "name": "Yvraine\u2019s Champion",
+    "name": "Yvraine’s Champion",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -3305,7 +3393,9 @@
           "range": {
             "inches": 18
           },
-          "weapon_type": "ranged"
+          "weapons": {
+            "type": "ranged"
+          }
         }
       }
     },
@@ -3334,8 +3424,10 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Hazardous"
+        "keywords": [
+          {
+            "keyword_id": "hazardous"
+          }
         ]
       }
     },
@@ -3399,12 +3491,14 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "subject": "defender",
-          "all_of": [
-            "CHARACTER"
-          ]
+          "filter": {
+            "all_of": [
+              "CHARACTER"
+            ]
+          },
+          "subject": "defender"
         }
       },
       "effect": {
@@ -3440,7 +3534,7 @@
       "type": "mortal-wounds",
       "target": "defender",
       "modifier": {
-        "count": "1"
+        "count": 1
       }
     },
     "scope": {
@@ -3526,11 +3620,11 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "weapon-ability-grant",
+      "type": "keyword-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "grenades"
+        "keywords": [
+          "GRENADES"
         ]
       }
     },
@@ -3567,7 +3661,9 @@
         "range": {
           "inches": 18
         },
-        "weapon_type": "ranged"
+        "weapons": {
+          "type": "ranged"
+        }
       }
     },
     "scope": {
@@ -3760,8 +3856,12 @@
       "condition": {
         "type": "attachment",
         "parameters": {
-          "subject": "this-model",
-          "role": "leading"
+          "role": "led",
+          "with": {
+            "all_of": [
+              "FARSEER"
+            ]
+          }
         }
       },
       "effect": {
@@ -3781,7 +3881,7 @@
       "warlock-conclave"
     ],
     "ability_type": "unit",
-    "behavior": "reactive",
+    "behavior": "passive",
     "faction_id": "aeldari"
   },
   {
@@ -3797,11 +3897,23 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "owner": "enemy",
-        "count": 1,
-        "within_inches": 18,
-        "visibility_required": true,
-        "selection_limit": {
+        "filter": {
+          "owner": "enemy",
+          "within": {
+            "range": {
+              "inches": 18
+            },
+            "of": "this-model"
+          },
+          "visible": {
+            "to": "this-model"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "limit": {
           "count": 1,
           "period": "turn"
         }
@@ -3849,55 +3961,94 @@
             }
           },
           {
-            "type": "happened",
+            "type": "player-turn-is",
             "parameters": {
-              "event": "after-roll",
-              "object": "defender",
-              "filter": {
-                "roll": "hit",
-                "result": "success",
-                "weapon_name": "doomweaver"
-              },
-              "window": "phase"
+              "turn": "your-turn"
             }
           }
         ]
       },
       "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "designate",
-            "target": "this-model",
-            "modifier": {
-              "subject": "defender",
-              "tag": "pinned",
-              "clears_on": "turn-rollover"
-            }
+        "type": "for-each-unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
           },
-          {
-            "type": "stat-modifier",
-            "target": "defender",
-            "modifier": {
-              "stat": "M",
-              "operation": "subtract",
-              "value": 2
-            }
-          },
-          {
-            "type": "roll-modifier",
-            "target": "defender",
-            "modifier": {
-              "roll": "charge",
-              "operation": "subtract",
-              "value": 2
+          "eligibility": {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "subject": "event-subject",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success",
+                "weapons": {
+                  "name": "Doomweaver"
+                }
+              },
+              "window": "event"
             }
           }
-        ]
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "designate",
+              "target": "recipient",
+              "modifier": {
+                "tag": "pinned"
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "recipient",
+                  "filter": {
+                    "designated": "pinned"
+                  }
+                }
+              },
+              "effect": {
+                "type": "stat-modifier",
+                "target": "recipient",
+                "modifier": {
+                  "stat": "M",
+                  "operation": "subtract",
+                  "value": 2
+                }
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "recipient",
+                  "filter": {
+                    "designated": "pinned"
+                  }
+                }
+              },
+              "effect": {
+                "type": "roll-modifier",
+                "target": "recipient",
+                "modifier": {
+                  "roll": "charge",
+                  "operation": "subtract",
+                  "value": 2
+                }
+              }
+            }
+          ]
+        }
       }
     },
     "scope": {
-      "duration": "until-next-command-phase"
+      "duration": "until-start-next-turn"
     },
     "unit_ids": [
       "night-spinner"
@@ -3905,7 +4056,13 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "aeldari"
+    "faction_id": "aeldari",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
+    }
   },
   {
     "ability_id": "indomitable-strength-of-will-aeldari",
@@ -3966,8 +4123,13 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Sustained Hits 1"
+        "keywords": [
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 1
+            }
+          }
         ]
       }
     },
@@ -4126,7 +4288,7 @@
   },
   {
     "ability_id": "cegorachs-favour-aeldari",
-    "name": "Cegorach\u2019s Favour",
+    "name": "Cegorach’s Favour",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -4192,23 +4354,29 @@
         "operator": "and",
         "operands": [
           {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "subject": "event-subject",
-              "of": "this-unit",
-              "range": {
-                "inches": 8
-              }
+              "filter": {
+                "within": {
+                  "range": {
+                    "inches": 8
+                  },
+                  "of": "this-unit"
+                }
+              },
+              "subject": "event-subject"
             }
           },
           {
             "operator": "not",
             "operands": [
               {
-                "type": "unit-state",
+                "type": "matches",
                 "parameters": {
-                  "subject": "this-unit",
-                  "state": "engaged"
+                  "filter": {
+                    "state": "engaged"
+                  },
+                  "subject": "this-unit"
                 }
               }
             ]
@@ -4265,12 +4433,14 @@
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "all_of": [
-                "FLY"
-              ]
+              "filter": {
+                "all_of": [
+                  "FLY"
+                ]
+              },
+              "subject": "defender"
             }
           }
         ]
@@ -4352,15 +4522,26 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "max_count": 1,
-        "keywords": [
-          "AELDARI",
-          "INFANTRY"
-        ],
-        "owner": "friendly",
-        "within_inches": 36,
-        "visibility_required": true,
-        "reference": "bearer-unit"
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "AELDARI",
+            "INFANTRY"
+          ],
+          "within": {
+            "range": {
+              "inches": 36
+            },
+            "of": "this-unit"
+          },
+          "visible": {
+            "to": "this-unit"
+          }
+        },
+        "count": {
+          "min": 0,
+          "max": 1
+        }
       },
       "effect": {
         "type": "ability-grant",
@@ -4392,13 +4573,34 @@
     "source_digest": "1b3a9082e1c68cf51bdabc07d20eca37904058a76c0ba337a59776995be089a2",
     "version": "2025-q3",
     "effect": {
-      "type": "roll-modifier",
-      "target": "attacker",
-      "modifier": {
-        "roll": "hit",
-        "operation": "subtract",
-        "value": 1
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "ability": "stealth"
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "melee"
+            }
+          },
+          "effect": {
+            "type": "roll-modifier",
+            "target": "attacker",
+            "modifier": {
+              "roll": "hit",
+              "operation": "subtract",
+              "value": 1
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -4407,7 +4609,7 @@
       "skyweavers"
     ],
     "ability_type": "unit",
-    "behavior": "reactive",
+    "behavior": "passive",
     "faction_id": "aeldari"
   },
   {
@@ -4575,7 +4777,9 @@
         "modifier": {
           "roll": "hit",
           "critical_on": "success",
-          "weapon_type": "ranged"
+          "weapons": {
+            "type": "ranged"
+          }
         }
       }
     },
@@ -4667,35 +4871,37 @@
     "source_digest": "dd7b73a7c2f781d336c36247a57a0429e86b7ad058230d3a1e38d8f642b0dcc5",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "re-roll",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "hit",
-              "subset": "ones"
-            }
-          },
-          {
-            "type": "roll-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "wound",
-              "operation": "add",
-              "value": 1
-            }
+      "type": "choice",
+      "options": [
+        {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "subset": "ones"
           }
-        ]
-      }
+        },
+        {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "wound",
+            "operation": "add",
+            "value": 1
+          }
+        },
+        {
+          "type": "roll-modifier",
+          "target": "attacker",
+          "modifier": {
+            "roll": "hit",
+            "operation": "subtract",
+            "value": 1
+          }
+        }
+      ],
+      "min_choices": 1,
+      "max_choices": 1
     },
     "scope": {
       "duration": "phase"
@@ -4706,7 +4912,16 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "community_notes": "defensive ability (skipped for damage calc)",
-    "faction_id": "aeldari"
+    "faction_id": "aeldari",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    }
   },
   {
     "ability_id": "lithe-embarkation-aeldari",
@@ -4729,13 +4944,23 @@
       "effect": {
         "type": "select-units",
         "selector": {
-          "owner": "friendly",
-          "count": 1,
-          "keywords": [
-            "YNNARI",
-            "INFANTRY"
-          ],
-          "within_inches": 6,
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "YNNARI",
+              "INFANTRY"
+            ],
+            "within": {
+              "range": {
+                "inches": 6
+              },
+              "of": "this-model"
+            }
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
           "eligibility": {
             "operator": "and",
             "operands": [
@@ -4749,9 +4974,11 @@
                 "operator": "not",
                 "operands": [
                   {
-                    "type": "unit-state",
+                    "type": "matches",
                     "parameters": {
-                      "state": "engaged"
+                      "filter": {
+                        "state": "engaged"
+                      }
                     }
                   }
                 ]
@@ -4834,18 +5061,22 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "subject": "this-model",
-          "of": {
-            "owner": "friendly",
-            "all_of": [
-              "WRAITH CONSTRUCT"
-            ]
+          "filter": {
+            "within": {
+              "range": {
+                "inches": 3
+              },
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "WRAITH CONSTRUCT"
+                ]
+              }
+            }
           },
-          "range": {
-            "inches": 3
-          }
+          "subject": "this-model"
         }
       },
       "effect": {
@@ -4879,37 +5110,72 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "owner": "friendly",
-        "count": 1,
-        "keywords": [
-          "WRAITH CONSTRUCT"
-        ],
-        "within_inches": 6,
-        "excluded_keywords": [
-          "TITANIC"
-        ]
-      },
-      "effect": {
-        "type": "designate-target",
-        "designation": "spirit-mark",
-        "select": {
-          "scope": "enemy-unit",
-          "count": 1,
-          "timing": "this-model-starts-or-ends-a-move"
-        },
-        "applies": {
-          "to": "attackers-of-target",
-          "effect": {
-            "type": "weapon-ability-grant",
-            "target": "selected-unit",
-            "modifier": {
-              "abilities": [
-                "Sustained Hits 1"
-              ]
-            }
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "WRAITH CONSTRUCT"
+          ],
+          "none_of": [
+            "TITANIC"
+          ],
+          "within": {
+            "range": {
+              "inches": 6
+            },
+            "of": "this-model"
           }
         },
-        "duration": "until-next-command-phase"
+        "count": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "effect": {
+        "type": "ability-part",
+        "trigger": [
+          {
+            "event": "move-started",
+            "subject": "this-model"
+          },
+          {
+            "event": "move-ended",
+            "subject": "this-model"
+          }
+        ],
+        "effect": {
+          "type": "designate-target",
+          "designation": "spirit-mark",
+          "select": {
+            "kind": "unit",
+            "selector": {
+              "filter": {
+                "owner": "enemy"
+              },
+              "count": {
+                "min": 1,
+                "max": 1
+              }
+            }
+          },
+          "applies": {
+            "to": "attackers-of-target",
+            "effect": {
+              "type": "weapon-ability-grant",
+              "target": "selected-unit",
+              "modifier": {
+                "keywords": [
+                  {
+                    "keyword_id": "sustained-hits",
+                    "parameters": {
+                      "value": 1
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "duration": "until-next-command-phase"
+        }
       }
     },
     "scope": {
@@ -4939,13 +5205,23 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "owner": "friendly",
-        "count": 1,
-        "keywords": [
-          "WRAITH CONSTRUCT"
-        ],
-        "within_inches": 6,
-        "selection_limit": {
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "WRAITH CONSTRUCT"
+          ],
+          "within": {
+            "range": {
+              "inches": 6
+            },
+            "of": "this-model"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "limit": {
           "count": 1,
           "period": "turn"
         }
@@ -4989,13 +5265,23 @@
       "effect": {
         "type": "select-units",
         "selector": {
-          "owner": "friendly",
-          "count": 1,
-          "keywords": [
-            "HARLEQUINS",
-            "INFANTRY"
-          ],
-          "within_inches": 6,
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "HARLEQUINS",
+              "INFANTRY"
+            ],
+            "within": {
+              "range": {
+                "inches": 6
+              },
+              "of": "this-model"
+            }
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
           "eligibility": {
             "operator": "and",
             "operands": [
@@ -5009,9 +5295,11 @@
                 "operator": "not",
                 "operands": [
                   {
-                    "type": "unit-state",
+                    "type": "matches",
                     "parameters": {
-                      "state": "engaged"
+                      "filter": {
+                        "state": "engaged"
+                      }
                     }
                   }
                 ]
@@ -5126,7 +5414,7 @@
               "usage": {
                 "repeatable_if_different_unit": true
               },
-              "duration": "until-end-of-phase",
+              "duration": "phase",
               "effect": {
                 "type": "stat-modifier",
                 "target": "this-unit",
@@ -5195,7 +5483,7 @@
                 "amount": 1,
                 "resource_label": "Battle Focus token"
               },
-              "duration": "until-end-of-turn",
+              "duration": "turn",
               "effect": {
                 "type": "rule-state",
                 "target": "this-unit",
@@ -5222,24 +5510,30 @@
                 }
               },
               "eligibility": {
-                "requires_keyword": [
-                  "VEHICLE"
-                ]
+                "filter": {
+                  "all_of": [
+                    "VEHICLE"
+                  ]
+                }
               },
               "cost": {
                 "pool_id": "battle-focus-pool",
                 "amount": 1,
                 "resource_label": "Battle Focus token"
               },
-              "duration": "until-end-of-turn",
+              "duration": "turn",
               "effect": {
                 "type": "weapon-ability-grant",
                 "target": "this-unit",
                 "modifier": {
-                  "abilities": [
-                    "Assault"
-                  ],
-                  "weapon_type": "ranged"
+                  "weapons": {
+                    "type": "ranged"
+                  },
+                  "keywords": [
+                    {
+                      "keyword_id": "assault"
+                    }
+                  ]
                 }
               }
             },
@@ -5260,7 +5554,7 @@
                 "amount": 1,
                 "resource_label": "Battle Focus token"
               },
-              "duration": "until-end-of-phase",
+              "duration": "phase",
               "effect": {
                 "type": "sequence",
                 "steps": [
@@ -5299,10 +5593,6 @@
                 "binds_event_variable": "triggering-enemy"
               },
               "eligibility": {
-                "selector_count": 1,
-                "excludes_keyword": [
-                  "TITANIC"
-                ],
                 "requires": [
                   {
                     "type": "unit-state",
@@ -5315,14 +5605,23 @@
                       "at": "phase-start"
                     }
                   }
-                ]
+                ],
+                "filter": {
+                  "none_of": [
+                    "TITANIC"
+                  ]
+                },
+                "count": {
+                  "min": 1,
+                  "max": 1
+                }
               },
               "cost": {
                 "pool_id": "battle-focus-pool",
                 "amount": 1,
                 "resource_label": "Battle Focus token"
               },
-              "duration": "immediate",
+              "duration": "resolution",
               "effect": {
                 "type": "move",
                 "target": "this-unit",
@@ -5346,10 +5645,6 @@
                 "binds_event_variable": "triggering-shooter"
               },
               "eligibility": {
-                "selector_count": 1,
-                "excludes_keyword": [
-                  "TITANIC"
-                ],
                 "requires": [
                   {
                     "type": "phase-is",
@@ -5378,14 +5673,23 @@
                       "window": "event"
                     }
                   }
-                ]
+                ],
+                "filter": {
+                  "none_of": [
+                    "TITANIC"
+                  ]
+                },
+                "count": {
+                  "min": 1,
+                  "max": 1
+                }
               },
               "cost": {
                 "pool_id": "battle-focus-pool",
                 "amount": 1,
                 "resource_label": "Battle Focus token"
               },
-              "duration": "immediate",
+              "duration": "resolution",
               "effect": {
                 "type": "move",
                 "target": "this-unit",
@@ -5421,7 +5725,12 @@
     "ability_type": "faction",
     "behavior": "passive",
     "community_notes": "Aeldari army rule, active while the Army Faction is ASURYANI: at the start of each battle round the army gains Battle Focus tokens scaled by the current battle size (Incursion 2, Strike Force 4, Onslaught 6). Spending a token lets one eligible unit perform an Agile Manoeuvre this phase (Swift as the Wind, Flitting Shadows, Star Engines, Sudden Strike, Opportunity Seized, or Fade Back); a unit performs at most one Agile Manoeuvre per phase, and each named manoeuvre triggers at most once per phase, except Swift as the Wind, which different units may each perform. Unspent tokens are lost at the end of the battle round. Fade Back binds the enemy shooter and requires the selected friendly unit to have been hit by an attack from that shooter during its just-finished shooting sequence. Full rule in the raw-text store.",
-    "unit_ids": ["clanblade","dragon-knights","leystalker","stonesinger"]
+    "unit_ids": [
+      "clanblade",
+      "dragon-knights",
+      "leystalker",
+      "stonesinger"
+    ]
   },
   {
     "ability_id": "acrobatic-onslaught-aeldari",
@@ -5473,7 +5782,18 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "conditional",
+      "type": "set-up",
+      "target": "this-unit",
+      "modifier": {
+        "to": "strategic-reserves"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "community_notes": "Used at the end of your opponent's Fight phase on one friendly unengaged HARLEQUINS unit; that unit is placed into Strategic Reserves.",
+    "trigger": {
+      "event": "phase-ended",
       "condition": {
         "operator": "and",
         "operands": [
@@ -5488,44 +5808,14 @@
             "parameters": {
               "turn": "opponent-turn"
             }
-          },
-          {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "unit-state",
-                "parameters": {
-                  "state": "engaged"
-                }
-              }
-            ]
-          },
-          {
-            "type": "has-keyword",
-            "parameters": {
-              "all_of": [
-                "HARLEQUINS"
-              ]
-            }
           }
         ]
-      },
-      "effect": {
-        "type": "set-up",
-        "target": "this-unit",
-        "modifier": {
-          "to": "strategic-reserves"
-        }
       }
-    },
-    "scope": {
-      "duration": "turn"
-    },
-    "community_notes": "Used at the end of your opponent's Fight phase on one friendly unengaged HARLEQUINS unit; that unit is placed into Strategic Reserves."
+    }
   },
   {
     "ability_id": "heroes-fall-fateful-performance-aeldari",
-    "name": "Heroes\u2019 Fall",
+    "name": "Heroes’ Fall",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -5540,45 +5830,35 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
+      "type": "ability-part",
+      "trigger": {
+        "event": "model-destroyed",
+        "object": "model-in-this-unit"
+      },
+      "effect": {
+        "type": "act-on-death",
+        "target": "event-object",
+        "modifier": {
+          "act": "fight",
+          "resolution": "when-unit-fights",
+          "removal": "after-unit-fights-or-phase-end",
+          "gate": {
+            "dice": "D6",
+            "threshold": 4,
+            "comparison": "gte",
+            "modifiers": []
           },
-          {
+          "eligibility": {
             "operator": "not",
             "operands": [
               {
-                "type": "happened",
+                "type": "eligible",
                 "parameters": {
-                  "event": "selected",
-                  "filter": {
-                    "to": "fight"
-                  },
-                  "window": "phase"
+                  "subject": "this-unit",
+                  "to": "fight"
                 }
               }
             ]
-          }
-        ]
-      },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 4,
-        "comparison": "gte",
-        "on_success": {
-          "type": "act-on-death",
-          "target": "model-in-this-unit",
-          "modifier": {
-            "act": "fight",
-            "resolution": "with-unit",
-            "removal": "after-unit-fought-or-end-of-phase"
           }
         }
       }
@@ -5586,7 +5866,22 @@
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "HARLEQUINS"
+        ]
+      }
+    }
   },
   {
     "ability_id": "deceptive-feint-fateful-performance-aeldari",
@@ -5610,9 +5905,11 @@
         "operator": "not",
         "operands": [
           {
-            "type": "unit-state",
+            "type": "matches",
             "parameters": {
-              "state": "engaged"
+              "filter": {
+                "state": "engaged"
+              }
             }
           }
         ]
@@ -5643,7 +5940,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "HARLEQUINS",
         "INFANTRY"
       ]
@@ -5749,20 +6046,24 @@
         "operator": "and",
         "operands": [
           {
-            "type": "owned-by",
+            "type": "matches",
             "parameters": {
-              "subject": "attacker",
-              "owner": "friendly"
+              "filter": {
+                "owner": "friendly"
+              },
+              "subject": "attacker"
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "attacker",
-              "any_of": [
-                "RANGERS",
-                "SHROUD RUNNERS"
-              ]
+              "filter": {
+                "any_of": [
+                  "RANGERS",
+                  "SHROUD RUNNERS"
+                ]
+              },
+              "subject": "attacker"
             }
           }
         ]
@@ -5798,61 +6099,84 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "happened",
-            "parameters": {
-              "event": "after-roll",
-              "object": "defender",
-              "filter": {
-                "roll": "hit",
-                "result": "success",
-                "attack_type": "ranged"
-              },
-              "window": "phase"
-            }
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "type": "happened",
+          "parameters": {
+            "event": "after-roll",
+            "subject": "event-subject",
+            "object": "this-unit",
+            "filter": {
+              "roll": "hit",
+              "result": "success",
+              "attack_type": "ranged"
+            },
+            "window": "event"
           }
-        ]
+        }
       },
       "effect": {
         "type": "sequence",
         "steps": [
           {
-            "type": "test",
-            "target": "defender",
-            "modifier": {
-              "test": "battle-shock"
-            }
-          },
-          {
             "type": "conditional",
             "condition": {
               "type": "happened",
               "parameters": {
-                "event": "destroyed",
-                "object": "event-object",
+                "event": "model-destroyed",
+                "object": {
+                  "level": "model",
+                  "member_of": "selected-unit"
+                },
                 "filter": {
-                  "attack_type": "ranged"
+                  "by": "event-subject"
                 },
                 "window": "event"
               }
             },
             "effect": {
-              "type": "roll-modifier",
-              "target": "defender",
+              "type": "test",
+              "target": "selected-unit",
               "modifier": {
-                "roll": "battle-shock",
-                "operation": "subtract",
-                "value": 1
+                "test": "battle-shock",
+                "modifier": -1
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "happened",
+                  "parameters": {
+                    "event": "model-destroyed",
+                    "object": {
+                      "level": "model",
+                      "member_of": "selected-unit"
+                    },
+                    "filter": {
+                      "by": "event-subject"
+                    },
+                    "window": "event"
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "test",
+              "target": "selected-unit",
+              "modifier": {
+                "test": "battle-shock"
               }
             }
           }
@@ -5862,7 +6186,20 @@
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "subject": {
+        "owner": "friendly",
+        "any_of": [
+          "RANGERS",
+          "SHROUD RUNNERS"
+        ]
+      }
+    }
   },
   {
     "ability_id": "casting-back-the-veil-path-of-the-outcast-aeldari",
@@ -5892,13 +6229,17 @@
         "type": "stat-modifier",
         "target": {
           "owner": "enemy",
-          "visible": true
+          "visible": {
+            "to": "this-unit"
+          }
         },
         "modifier": {
           "stat": "detection-range",
           "operation": "add",
           "value": 6,
-          "weapon_type": "ranged"
+          "weapons": {
+            "type": "ranged"
+          }
         }
       }
     },
@@ -5926,12 +6267,14 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "any_of": [
-            "RANGERS",
-            "SHROUD RUNNERS"
-          ]
+          "filter": {
+            "any_of": [
+              "RANGERS",
+              "SHROUD RUNNERS"
+            ]
+          }
         }
       },
       "effect": {
@@ -6034,7 +6377,7 @@
     "ability_type": "detachment",
     "behavior": "passive",
     "effect": {
-      "type": "weapon-ability-grant",
+      "type": "keyword-grant",
       "target": {
         "owner": "friendly",
         "all_of": [
@@ -6042,8 +6385,8 @@
         ]
       },
       "modifier": {
-        "abilities": [
-          "stealth"
+        "keywords": [
+          "STEALTH"
         ]
       }
     },
@@ -6072,10 +6415,14 @@
       "type": "weapon-ability-grant",
       "target": "this-model",
       "modifier": {
-        "abilities": [
-          "Lance"
-        ],
-        "weapon_type": "melee"
+        "weapons": {
+          "type": "melee"
+        },
+        "keywords": [
+          {
+            "keyword_id": "lance"
+          }
+        ]
       }
     },
     "scope": {
@@ -6197,12 +6544,10 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "weapon-ability-grant",
+      "type": "ability-grant",
       "target": "this-model",
       "modifier": {
-        "abilities": [
-          "fights-first"
-        ]
+        "ability": "fights-first"
       }
     },
     "scope": {
@@ -6227,12 +6572,11 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "weapon-ability-grant",
+      "type": "ability-grant",
       "target": "this-model",
       "modifier": {
-        "abilities": [
-          "scouts-6"
-        ]
+        "ability": "scouts",
+        "value": 6
       }
     },
     "scope": {
@@ -6265,29 +6609,35 @@
             "operator": "and",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "all_of": [
-                    "ASURYANI"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "ASURYANI"
+                    ]
+                  }
                 }
               },
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "all_of": [
-                    "MOUNTED"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "MOUNTED"
+                    ]
+                  }
                 }
               }
             ]
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "VYPER"
-              ]
+              "filter": {
+                "all_of": [
+                  "VYPER"
+                ]
+              }
             }
           }
         ]
@@ -6371,20 +6721,24 @@
             "operator": "and",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "all_of": [
-                    "HARLEQUINS"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "HARLEQUINS"
+                    ]
+                  }
                 }
               },
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "any_of": [
-                    "MOUNTED",
-                    "VEHICLE"
-                  ]
+                  "filter": {
+                    "any_of": [
+                      "MOUNTED",
+                      "VEHICLE"
+                    ]
+                  }
                 }
               }
             ]
@@ -6393,8 +6747,13 @@
             "type": "weapon-ability-grant",
             "target": "this-model",
             "modifier": {
-              "abilities": [
-                "Sustained Hits 1"
+              "keywords": [
+                {
+                  "keyword_id": "sustained-hits",
+                  "parameters": {
+                    "value": 1
+                  }
+                }
               ]
             }
           }
@@ -6405,11 +6764,13 @@
             "operator": "and",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "all_of": [
-                    "HARLEQUINS"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "HARLEQUINS"
+                    ]
+                  }
                 }
               },
               {
@@ -6425,8 +6786,13 @@
             "type": "weapon-ability-grant",
             "target": "this-model",
             "modifier": {
-              "abilities": [
-                "Sustained Hits 1"
+              "keywords": [
+                {
+                  "keyword_id": "sustained-hits",
+                  "parameters": {
+                    "value": 1
+                  }
+                }
               ]
             }
           }
@@ -6453,77 +6819,126 @@
     "faction_id": "aeldari",
     "detachment_id": "spirit-conclave",
     "ability_type": "detachment",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "sequence",
       "steps": [
         {
-          "type": "designate-target",
-          "designation": "vengeful-dead",
-          "select": {
-            "scope": "enemy-unit",
-            "count": 1,
-            "timing": "after-destroying-asuryani-psyker"
-          },
-          "applies": {
-            "to": "attackers-of-target",
-            "effect": {
-              "type": "sequence",
-              "steps": [
-                {
-                  "type": "roll-modifier",
-                  "target": "this-unit",
-                  "modifier": {
-                    "roll": "hit",
-                    "operation": "add",
-                    "value": 1
-                  }
-                },
-                {
-                  "type": "roll-modifier",
-                  "target": "this-unit",
-                  "modifier": {
-                    "roll": "wound",
-                    "operation": "add",
-                    "value": 1
-                  }
-                }
-              ]
+          "type": "ability-part",
+          "trigger": {
+            "event": "model-destroyed",
+            "object": {
+              "owner": "friendly",
+              "all_of": [
+                "ASURYANI",
+                "PSYKER"
+              ],
+              "level": "model"
+            },
+            "subject": {
+              "owner": "enemy"
             }
           },
-          "duration": "battle"
+          "effect": {
+            "type": "designate",
+            "target": "event-subject",
+            "modifier": {
+              "tag": "vengeful-dead"
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "designated": "vengeful-dead"
+              }
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "roll-modifier",
+                "target": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "WRAITH CONSTRUCT"
+                  ],
+                  "level": "model"
+                },
+                "modifier": {
+                  "roll": "hit",
+                  "operation": "add",
+                  "value": 1
+                }
+              },
+              {
+                "type": "roll-modifier",
+                "target": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "WRAITH CONSTRUCT"
+                  ],
+                  "level": "model"
+                },
+                "modifier": {
+                  "roll": "wound",
+                  "operation": "add",
+                  "value": 1
+                }
+              }
+            ]
+          }
         },
         {
           "type": "ability-grant",
           "target": {
             "owner": "friendly",
-            "any_of": [
-              "WRAITHBLADES",
-              "WRAITHGUARD",
-              "WRAITHLORD"
+            "all_of": [
+              "ASURYANI",
+              "PSYKER"
             ],
-            "within": {
-              "range": {
-                "inches": 12
-              },
-              "of": {
-                "owner": "friendly",
-                "all_of": [
-                  "ASURYANI",
-                  "PSYKER"
-                ],
-                "level": "model"
-              }
-            }
+            "level": "model"
           },
           "modifier": {
-            "ability": "battle-focus-aeldari"
+            "ability": "spirit-guides",
+            "definition": {
+              "type": "ability-part",
+              "name": "Spirit Guides",
+              "effect": {
+                "type": "aura",
+                "target": "friendly-within-aura",
+                "modifier": {
+                  "range": {
+                    "inches": 12
+                  },
+                  "effect": {
+                    "type": "ability-grant",
+                    "target": "recipient",
+                    "modifier": {
+                      "ability": "battle-focus-aeldari"
+                    }
+                  },
+                  "eligible": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "WRAITHBLADES",
+                      "WRAITHGUARD",
+                      "WRAITHLORD"
+                    ]
+                  }
+                }
+              }
+            }
           }
         }
       ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "community_notes": "[APPROX] A Vengeful Dead token is placed automatically on whichever enemy destroys an ASURYANI PSYKER (not player-selected), and the +1 Hit / +1 Wound bonus applies only to WRAITH CONSTRUCT attacks against that marked unit (attacker-keyword restriction not modeled). The Spirit Guides half grants Battle Focus to WRAITHBLADES/WRAITHGUARD/WRAITHLORD units within 12\" of an ASURYANI PSYKER (the 12\" range and target-keyword restriction are not modeled). Full rule in raw-text store."
   },
@@ -6547,89 +6962,196 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "conditional",
-          "condition": {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "phase-is",
-                "parameters": {
-                  "phase": "shooting"
+          "type": "ability-part",
+          "trigger": {
+            "event": "phase-ended",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "operator": "and",
+                  "operands": [
+                    {
+                      "type": "phase-is",
+                      "parameters": {
+                        "phase": "shooting"
+                      }
+                    },
+                    {
+                      "type": "player-turn-is",
+                      "parameters": {
+                        "turn": "opponent-turn"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "this-unit",
+                    "filter": {
+                      "owner": "friendly",
+                      "all_of": [
+                        "YNNARI"
+                      ],
+                      "any_of": [
+                        "INFANTRY",
+                        "MOUNTED"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "type": "happened",
+                  "parameters": {
+                    "event": "destroyed",
+                    "object": {
+                      "owner": "friendly",
+                      "all_of": [
+                        "YNNARI"
+                      ]
+                    },
+                    "window": "phase",
+                    "proximity": {
+                      "of": "this-unit",
+                      "range": {
+                        "inches": 6
+                      }
+                    }
+                  }
                 }
-              },
-              {
-                "type": "player-turn-is",
-                "parameters": {
-                  "turn": "opponent-turn"
-                }
-              },
-              {
-                "type": "happened",
-                "parameters": {
-                  "event": "destroyed",
-                  "object": {
-                    "owner": "friendly",
-                    "all_of": [
-                      "YNNARI"
-                    ]
-                  },
-                  "window": "phase"
-                }
-              }
-            ]
-          },
-          "effect": {
-            "type": "move",
-            "target": "this-unit",
-            "modifier": {
-              "move_type": "normal",
-              "distance": "D6+1"
-            }
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "has-keyword",
-            "parameters": {
-              "all_of": [
-                "YNNARI"
               ]
-            }
+            },
+            "optional": true
           },
           "effect": {
-            "type": "move",
-            "target": "this-unit",
-            "modifier": {
-              "move_type": "normal",
-              "distance": "D6+1"
+            "type": "conditional",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "phase-is",
+                  "parameters": {
+                    "phase": "shooting"
+                  }
+                },
+                {
+                  "type": "player-turn-is",
+                  "parameters": {
+                    "turn": "opponent-turn"
+                  }
+                },
+                {
+                  "type": "happened",
+                  "parameters": {
+                    "event": "destroyed",
+                    "object": {
+                      "owner": "friendly",
+                      "all_of": [
+                        "YNNARI"
+                      ]
+                    },
+                    "window": "phase"
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "move",
+              "target": "this-unit",
+              "modifier": {
+                "move_type": "normal",
+                "distance": "D6+1"
+              }
             }
           }
         },
         {
-          "type": "conditional",
-          "condition": {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "phase-is",
-                "parameters": {
-                  "phase": "fight"
-                }
-              },
-              {
-                "type": "strength",
-                "parameters": {
-                  "below": "starting"
-                }
-              }
-            ]
+          "type": "ability-part",
+          "trigger": {
+            "event": "used",
+            "filter": {
+              "kind": "manoeuvre",
+              "id": "fade-back"
+            },
+            "optional": true
           },
           "effect": {
-            "type": "ability-grant",
-            "target": "this-unit",
-            "modifier": {
-              "ability": "fights-first"
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "all_of": [
+                    "YNNARI"
+                  ]
+                }
+              }
+            },
+            "effect": {
+              "type": "move",
+              "target": "this-unit",
+              "modifier": {
+                "move_type": "normal",
+                "distance": "D6+1"
+              }
+            }
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "phase-started",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "phase-is",
+                  "parameters": {
+                    "phase": "fight"
+                  }
+                },
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "this-unit",
+                    "filter": {
+                      "owner": "friendly",
+                      "none_of": [
+                        "TITANIC"
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            "optional": true
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "phase-is",
+                  "parameters": {
+                    "phase": "fight"
+                  }
+                },
+                {
+                  "type": "strength",
+                  "parameters": {
+                    "below": "starting"
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "ability-grant",
+              "target": "this-unit",
+              "modifier": {
+                "ability": "fights-first"
+              }
             }
           }
         }
@@ -6662,36 +7184,46 @@
         "operator": "and",
         "operands": [
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "any_of": [
-                "DIRE AVENGER",
-                "GUARDIAN",
-                "SUPPORT WEAPON",
-                "WAR WALKER"
-              ]
+              "filter": {
+                "any_of": [
+                  "DIRE AVENGER",
+                  "GUARDIAN",
+                  "SUPPORT WEAPON",
+                  "WAR WALKER"
+                ]
+              }
             }
           },
           {
             "operator": "or",
             "operands": [
               {
-                "type": "within",
+                "type": "matches",
                 "parameters": {
-                  "of": {
-                    "objective": {}
-                  },
-                  "range": "objective-control"
+                  "filter": {
+                    "within": {
+                      "range": "objective-control",
+                      "of": {
+                        "objective": {}
+                      }
+                    }
+                  }
                 }
               },
               {
-                "type": "within",
+                "type": "matches",
                 "parameters": {
-                  "subject": "defender",
-                  "of": {
-                    "objective": {}
+                  "filter": {
+                    "within": {
+                      "range": "objective-control",
+                      "of": {
+                        "objective": {}
+                      }
+                    }
                   },
-                  "range": "objective-control"
+                  "subject": "defender"
                 }
               }
             ]
@@ -6739,8 +7271,10 @@
         ]
       },
       "modifier": {
-        "abilities": [
-          "Assault"
+        "keywords": [
+          {
+            "keyword_id": "assault"
+          }
         ]
       }
     },
@@ -6777,13 +7311,17 @@
                 "type": "controls"
               },
               {
-                "type": "within",
+                "type": "matches",
                 "parameters": {
-                  "subject": "defender",
-                  "of": {
-                    "objective": {}
+                  "filter": {
+                    "within": {
+                      "range": "objective-control",
+                      "of": {
+                        "objective": {}
+                      }
+                    }
                   },
-                  "range": "objective-control"
+                  "subject": "defender"
                 }
               }
             ]
@@ -6807,11 +7345,13 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "ANHRATHE"
-              ]
+              "filter": {
+                "all_of": [
+                  "ANHRATHE"
+                ]
+              }
             }
           },
           "effect": {
@@ -6863,7 +7403,7 @@
   },
   {
     "ability_id": "yriels-own-aeldari",
-    "name": "Yriel\u2019s Own",
+    "name": "Yriel’s Own",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -6894,13 +7434,15 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "any_of": [
-                "ANHRATHE",
-                "RANGERS",
-                "SHROUD RUNNERS"
-              ]
+              "filter": {
+                "any_of": [
+                  "ANHRATHE",
+                  "RANGERS",
+                  "SHROUD RUNNERS"
+                ]
+              }
             }
           },
           "effect": {
@@ -7124,12 +7666,14 @@
             ]
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "any_of": [
-                "ASPECT WARRIORS",
-                "AVATAR OF KHAINE"
-              ]
+              "filter": {
+                "any_of": [
+                  "ASPECT WARRIORS",
+                  "AVATAR OF KHAINE"
+                ]
+              }
             }
           }
         ]
@@ -7160,7 +7704,37 @@
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": [
+      {
+        "event": "selected",
+        "filter": {
+          "to": "shoot"
+        },
+        "subject": {
+          "owner": "friendly",
+          "any_of": [
+            "ASPECT WARRIORS",
+            "AVATAR OF KHAINE"
+          ]
+        },
+        "optional": false
+      },
+      {
+        "event": "selected",
+        "filter": {
+          "to": "fight"
+        },
+        "subject": {
+          "owner": "friendly",
+          "any_of": [
+            "ASPECT WARRIORS",
+            "AVATAR OF KHAINE"
+          ]
+        },
+        "optional": false
+      }
+    ]
   },
   {
     "ability_id": "shimmershield-kygharils-protectors-dire-avengers-aeldari",
@@ -7236,10 +7810,17 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Sustained Hits 1"
-        ],
-        "weapon_type": "melee"
+        "weapons": {
+          "type": "melee"
+        },
+        "keywords": [
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -7314,10 +7895,18 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Anti INFANTRY 3+"
-        ],
-        "weapon_type": "ranged"
+        "weapons": {
+          "type": "ranged"
+        },
+        "keywords": [
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "INFANTRY",
+              "threshold": 3
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -7354,16 +7943,20 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "of": {
-            "owner": "friendly",
-            "all_of": [
-              "WRAITH CONSTRUCT"
-            ]
-          },
-          "range": {
-            "inches": 3
+          "filter": {
+            "within": {
+              "range": {
+                "inches": 3
+              },
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "WRAITH CONSTRUCT"
+                ]
+              }
+            }
           }
         }
       },
@@ -7398,17 +7991,21 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "of": {
-            "owner": "friendly",
-            "all_of": [
-              "AELDARI",
-              "PSYKER"
-            ]
-          },
-          "range": {
-            "inches": 12
+          "filter": {
+            "within": {
+              "range": {
+                "inches": 12
+              },
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "AELDARI",
+                  "PSYKER"
+                ]
+              }
+            }
           }
         }
       },
@@ -7506,21 +8103,32 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "subject": "defender",
-          "of": "attacker",
-          "range": "half-weapon"
+          "filter": {
+            "within": {
+              "range": "half-weapon",
+              "of": "attacker"
+            }
+          },
+          "subject": "defender"
         }
       },
       "effect": {
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Sustained Hits 1"
-          ],
-          "weapon_type": "ranged"
+          "weapons": {
+            "type": "ranged"
+          },
+          "keywords": [
+            {
+              "keyword_id": "sustained-hits",
+              "parameters": {
+                "value": 1
+              }
+            }
+          ]
         }
       }
     },
@@ -7561,10 +8169,12 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-state",
+            "type": "matches",
             "parameters": {
-              "subject": "event-subject",
-              "state": "battle-shocked"
+              "filter": {
+                "state": "battle-shocked"
+              },
+              "subject": "event-subject"
             }
           },
           "effect": {
@@ -7582,10 +8192,12 @@
             "operator": "not",
             "operands": [
               {
-                "type": "unit-state",
+                "type": "matches",
                 "parameters": {
-                  "subject": "event-subject",
-                  "state": "battle-shocked"
+                  "filter": {
+                    "state": "battle-shocked"
+                  },
+                  "subject": "event-subject"
                 }
               }
             ]

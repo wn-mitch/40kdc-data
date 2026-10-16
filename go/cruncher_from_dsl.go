@@ -2,7 +2,7 @@ package wh40kdc
 
 import (
 	"math"
-	"regexp"
+	"reflect"
 	"strconv"
 	"strings"
 )
@@ -41,20 +41,94 @@ type dslOpts struct {
 	perspective   string
 	abilityID     string
 	defaultTarget string
+	grantedHolder bool
+	duration      any
 }
 
 // effectToBuffs walks an ability DSL effect tree, producing the buff stack plus
-// unsupported and activatable lists.
-func effectToBuffs(effect any, source map[string]any, context map[string]any, perspective string) *effectTranslation {
+// unsupported and activatable lists. An optional activation record preserves
+// the source usage/cost metadata on every opt-in lever.
+func effectToBuffs(effect any, source map[string]any, context map[string]any, perspective string, activation ...map[string]any) *effectTranslation {
 	out := &effectTranslation{applied: []any{}, unsupported: []any{}, activatable: []any{}}
+	if recipientSnapshotUnavailable(nil, effect) {
+		resolved, reason := resolveRecipientSnapshots(nil, effect, source, context, perspective)
+		if reason != "" {
+			out.unsupported = append(out.unsupported, unsup(reason, effect))
+			return out
+		}
+		effect = resolved
+	}
 	abilityID := "effect"
 	if getStr(source, "kind") == "ability" {
 		if a := getStr(source, "abilityId"); a != "" {
 			abilityID = a
 		}
 	}
+	var act map[string]any
+	if len(activation) > 0 {
+		act = activation[0]
+	}
 	opts := dslOpts{context: context, perspective: perspective, abilityID: abilityID}
+	if act != nil {
+		opts.duration = act["duration"]
+	}
 	dslWalk(effect, source, opts, out)
+	if act == nil || (act["usage"] == nil && act["cost"] == nil && act["optional"] != true) {
+		return out
+	}
+	requirement := cloneMap(act)
+	delete(requirement, "duration")
+	requires := []any{requirement}
+	var counts []float64
+	for _, raw := range getListValue(act["usage"]) {
+		limit, ok := asMap(raw)
+		if !ok || limit == nil || limit["per"] == "model" {
+			continue
+		}
+		if n, ok := num(limit["count"]); ok {
+			counts = append(counts, n)
+		} else if limit["frequency"] != "n-per-battle" {
+			counts = append(counts, 1)
+		}
+	}
+	if limit, ok := asMap(act["usage"]); ok && limit != nil && len(getListValue(act["usage"])) == 0 && limit["per"] != "model" {
+		if n, ok := num(limit["count"]); ok {
+			counts = append(counts, n)
+		} else if limit["frequency"] != "n-per-battle" {
+			counts = append(counts, 1)
+		}
+	}
+	var group map[string]any
+	if len(counts) > 0 {
+		min := counts[0]
+		for _, n := range counts[1:] {
+			if n < min {
+				min = n
+			}
+		}
+		group = map[string]any{"id": abilityID + "?usage", "maxActivations": min}
+	}
+	if len(out.applied) > 0 {
+		out.activatable = append(out.activatable, map[string]any{
+			"id": abilityID + "#activate", "label": labelForBuffs(out.applied),
+			"buffs": append([]any(nil), out.applied...), "group": group,
+		})
+		out.applied = []any{}
+	}
+	for _, raw := range out.activatable {
+		lever, ok := asMap(raw)
+		if !ok || lever == nil {
+			continue
+		}
+		if group != nil {
+			if existing, _ := getMap(lever, "group"); existing == nil {
+				lever["group"] = group
+			} else if getStr(existing, "id") != getStr(group, "id") {
+				lever["groups"] = append(getList(lever, "groups"), group)
+			}
+		}
+		lever["requires"] = append(append([]any{}, requires...), getList(lever, "requires")...)
+	}
 	return out
 }
 
@@ -65,8 +139,7 @@ func effectToBuffs(effect any, source map[string]any, context map[string]any, pe
 // Intercessors it joined.
 //
 // Keyed on the buff source, not on the DSL condition — the leak is not limited to
-// abilities gated on is-attached (an Archon's Shadowfield says only "the bearer"),
-// and the resolver already tags pooled member abilities as abilityKind "attached".
+// abilities whose target filter mentions attachment membership.
 // An ability read as the chosen unit's own (abilityKind "unit") is unaffected.
 func isModelScopedFromAttachedMember(node map[string]any, source map[string]any) bool {
 	if getStr(source, "kind") != "ability" || getStr(source, "abilityKind") != "attached" {
@@ -88,13 +161,50 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 		withTarget["target"] = opts.defaultTarget
 		n = withTarget
 	}
-	// Core rule 19.04 gate, applied before any leaf translation and under both
-	// perspectives. Safe at this level because no container node (sequence,
-	// conditional, choice, …) carries a self/bearer target — only leaves do — so
-	// this can never swallow a subtree holding unit-scoped effects too.
+	// Core rule 19.04 gate, applied before leaf translation on both perspectives.
 	if isModelScopedFromAttachedMember(n, source) {
 		out.unsupported = append(out.unsupported, unsup(modelScopedReason, n))
 		return
+	}
+	if n["target"] == "model-in-this-unit" {
+		out.unsupported = append(out.unsupported, unsup("model-in-this-unit: individual model identity is unresolved", n))
+		return
+	}
+	if n["type"] == "select-units" {
+		if plan := planSelection(n, source, opts.perspective, opts.context); plan.kind != "none" {
+			translateSelection(plan, n, source, opts, out)
+			return
+		}
+	}
+	if n["type"] == "for-each-unit" {
+		selector, _ := getMap(n, "selector")
+		filter, _ := getMap(selector, "filter")
+		if filter == nil {
+			out.unsupported = append(out.unsupported, unsup("for-each-unit: recipient filter is malformed", n))
+			return
+		}
+		dslWalk(bindEachRecipient(n["effect"], filter), source, opts, out)
+		return
+	}
+	// Unit-filter targets are board facts, not merely keyword hints.
+	if filter, ok := asMap(n["target"]); ok && filter != nil {
+		side := opts.perspective
+		if filter["member_of"] == "attacker" {
+			side = "attacker"
+		} else if filter["member_of"] == "defender" || filter["owner"] == "enemy" {
+			side = "target"
+		}
+		owner := "friendly"
+		if filter["owner"] == "enemy" {
+			owner = "enemy"
+		}
+		switch verdict := matchesUnitFilter(filter, opts.context, side, owner); verdict {
+		case false:
+			return
+		case nil:
+			out.unsupported = append(out.unsupported, unsup("unit-filter target: identity, state or model membership is unresolved", n))
+			return
+		}
 	}
 	if hasUnresolvedFidelityBinding(n) {
 		out.unsupported = append(out.unsupported, unsup(fidelityBindingReason, n))
@@ -103,21 +213,43 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 	// A scaled or bound value (a count on the board, the battle size, a bound roll) has no fixed size here:
 	// applying the printed value would over- or under-state it.
 	if reason := unsizedValueReason(n); reason != "" {
+		// A capped scaling ("+2 A per embarked model, to a maximum of +22") is a lever at its cap;
+		// the player vouches for the count that reaches it.
+		if atCap := scaledToCap(n); atCap != nil {
+			offerLever(atCap, source, opts, out, leverSpec{id: opts.abilityID + "#at-cap", label: "At its maximum", requires: []any{n["scaling"]}})
+			return
+		}
 		out.unsupported = append(out.unsupported, unsup(reason, n))
 		return
 	}
-	// A target filter of alternatives ("LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE units")
-	// reaches the unit only when one alternative matches its keywords.
-	switch alternativesMatch(n, opts) {
-	case "false":
-		return
-	case "unknown":
-		out.unsupported = append(out.unsupported, unsup(alternativesReason, n))
+	// An ability another unit provides reaches the crunched unit only through a friendly filter,
+	// an aura's recipient or a selection; its own unit and model are the provider, not the
+	// crunched unit.
+	if t, ok := n["target"].(string); ok && isProvidedByAnotherUnit(source) && providerTargets[t] {
 		return
 	}
 	// An `incoming` change modifies attacks made against its target. On the buffed unit it is the
 	// attacker's side of those attacks, which the `target: "attacker"` form already models; it never
 	// modifies the buffed unit's own attacks.
+	// On the defender it changes every friendly attack against that unit, the buffed unit's among
+	// them, so the attacker perspective reads it as a change for friendly units; the target
+	// perspective has no such attack.
+	if m, ok := getMap(n, "modifier"); ok && m != nil && m["incoming"] == true && classifyTarget(n) == "defender" {
+		if opts.perspective != "attacker" {
+			return
+		}
+		stripped := make(map[string]any, len(m))
+		for k, v := range m {
+			if k != "incoming" {
+				stripped[k] = v
+			}
+		}
+		redirected := cloneMap(n)
+		redirected["target"] = map[string]any{"owner": "friendly"}
+		redirected["modifier"] = stripped
+		dslWalk(redirected, source, opts, out)
+		return
+	}
 	if m, ok := getMap(n, "modifier"); ok && m != nil && m["incoming"] == true && classifyTarget(n) == "self" {
 		if opts.perspective == "attacker" {
 			return
@@ -152,6 +284,8 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 		translateFeelNoPain(n, source, opts, out)
 	case "weapon-ability-grant":
 		translateKeywordGrant(n, source, opts, out)
+	case "keyword-grant":
+		out.unsupported = append(out.unsupported, unsup("effect type \"keyword-grant\" is not modelled by the buff layer", n))
 	case "damage-reduction":
 		translateDamageReduction(n, source, opts, out)
 	case "invulnerable-save":
@@ -165,12 +299,16 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 			dslWalk(step, source, opts, out)
 		}
 	case "ability-part":
-		// A part firing on its own moment is gated like a timing-is step; one with only a cost,
-		// a choice or a usage limit is an activation, as a named effect is.
-		if n["trigger"] == nil && (n["optional"] == true || n["cost"] != nil || n["usage"] != nil) {
-			translateNamedEffect(n, source, opts, out)
+		partOpts := opts
+		if n["duration"] != nil {
+			partOpts.duration = n["duration"]
+		}
+		// A part with its own optionality, cost or usage is an activation.
+		// Otherwise its trigger is only the moment at which its effect fires.
+		if n["optional"] == true || n["cost"] != nil || n["usage"] != nil {
+			translateNamedEffect(n, source, partOpts, out)
 		} else {
-			dslWalk(momentGate(n["trigger"], n["effect"]), source, opts, out)
+			dslWalk(momentGate(n["trigger"], n["effect"], n), source, partOpts, out)
 		}
 	case "choice":
 		enumerateChoice(n, source, opts, out)
@@ -232,33 +370,47 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 		} else {
 			out.unsupported = append(out.unsupported, unsup("aura without nested effect: not a combat buff", n))
 		}
-	case "leader-model-ability-grant":
-		out.unsupported = append(out.unsupported, unsup("leader-model-ability-grant: attached leader beneficiary is not resolved by the buff engine", n))
 	case "persistent-designation":
 		out.unsupported = append(out.unsupported, unsup("persistent-designation: retained selection state is not resolved by the buff engine", n))
 	case "designate-target":
-		// Mark an enemy unit; when `to: attackers-of-target` or `to:
-		// bearer-attacks-target` the nested effect is a buff attacks against that
-		// unit receive (Oath of Moment). Which enemy unit is designated is the
-		// player's pick, so its buffs are one opt-in lever ("this defender is the
-		// designated unit"); the player vouches for the selection's eligibility
-		// (range, visibility, "hit by those attacks"). A `to: target` debuff lands
-		// on the enemy, not the bearer, so it is not a buff in this perspective.
 		applies, _ := getMap(n, "applies")
 		if applies["to"] == "attackers-of-target" || applies["to"] == "bearer-attacks-target" {
+			for _, rawFilter := range []any{applies["attacker_filter"], applies["attacker_unit_filter"]} {
+				if rawFilter == nil {
+					continue
+				}
+				filter, ok := asMap(rawFilter)
+				if !ok || filter == nil {
+					out.unsupported = append(out.unsupported, unsup("designate-target attacker filter is unresolved", n))
+					return
+				}
+				verdict := matchesUnitFilter(filter, opts.context, "attacker", "friendly")
+				if verdict == false {
+					return
+				}
+				if verdict == nil {
+					out.unsupported = append(out.unsupported, unsup("designate-target attacker filter is unresolved", n))
+					return
+				}
+			}
 			sub := &effectTranslation{applied: []any{}, unsupported: []any{}, activatable: []any{}}
 			dslWalk(applies["effect"], source, opts, sub)
 			out.unsupported = append(out.unsupported, sub.unsupported...)
-			out.activatable = append(out.activatable, sub.activatable...)
+			requirement := map[string]any{"select": n["select"], "duration": n["duration"]}
+			for _, raw := range sub.activatable {
+				if lever, ok := asMap(raw); ok && lever != nil {
+					lever["requires"] = append([]any{requirement}, getList(lever, "requires")...)
+					out.activatable = append(out.activatable, lever)
+				}
+			}
 			if len(sub.applied) > 0 {
 				designation, ok := n["designation"].(string)
 				if !ok {
 					designation = "designated"
 				}
 				out.activatable = append(out.activatable, map[string]any{
-					"id":    opts.abilityID + "#" + designation,
-					"label": "Designated target: " + labelForBuffs(sub.applied),
-					"buffs": sub.applied,
+					"id": opts.abilityID + "#" + designation, "label": "Designated target: " + labelForBuffs(sub.applied),
+					"buffs": sub.applied, "requires": []any{requirement},
 				})
 			}
 		} else {
@@ -268,8 +420,14 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 		// The reward is the buff; the risk (self-damage on a failed test) is not.
 		dslWalk(n["reward"], source, opts, out)
 	case "stance-select":
-		// Pick-one modal buff — each option is an opt-in lever (pick one).
-		enumerateNamedOptions(n, source, opts, out, opts.abilityID+"?stance", 1)
+		// Pick-one modal buff — each option is an opt-in lever.
+		maxActivations := float64(1)
+		if value, ok := num(n["max_choices"]); ok {
+			maxActivations = value
+		}
+		enumerateNamedOptions(n, source, opts, out, opts.abilityID+"?stance", maxActivations)
+	case "stance-selection-capacity":
+		translateStanceCapacity(n, opts, out)
 	case "issue-orders":
 		// Officer issues one Order from the menu — each is an opt-in lever.
 		enumerateNamedOptions(n, source, opts, out, opts.abilityID+"?order", 1)
@@ -280,9 +438,83 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 		// usage.repeatable_if_different_unit) can fire in the same phase, so
 		// no shared group/maxActivations cap is attached here.
 		enumerateMenuActions(n, source, opts, out)
+	case "roll-result":
+		translateRollResult(n, source, opts, out)
+	case "ignore-modifiers":
+		translateIgnoreModifiers(n, source, opts, out)
+	case "ability-grant":
+		translateAbilityGrant(n, source, opts, out)
+	case "ability-modifier":
+		translateAbilityModifier(n, source, opts, out)
 	default:
 		out.unsupported = append(out.unsupported, unsup("effect type \""+jsStr(n["type"])+"\" is not modelled by the buff layer", n))
 	}
+}
+
+const recipientSnapshotReason = "trigger-time recipient snapshot is unavailable; current membership cannot establish historical recipients"
+
+func containsForEachUnit(node any) bool {
+	switch value := node.(type) {
+	case map[string]any:
+		if value["type"] == "for-each-unit" {
+			return true
+		}
+		for _, child := range value {
+			if containsForEachUnit(child) {
+				return true
+			}
+		}
+	case []any:
+		for _, child := range value {
+			if containsForEachUnit(child) {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+// recipientSnapshotUnavailable reports the historical-membership case that the
+// buff resolver cannot reconstruct. Attack-step triggers evaluate against the
+// current attack and remain safe; other event triggers need a recipient
+// snapshot at trigger time.
+func recipientSnapshotUnavailable(trigger, effect any) bool {
+	var check func(any, any) bool
+	check = func(value, activeTrigger any) bool {
+		switch item := value.(type) {
+		case []any:
+			for _, child := range item {
+				if check(child, activeTrigger) {
+					return true
+				}
+			}
+			return false
+		case map[string]any:
+			inherited := activeTrigger
+			if item["type"] == "ability-part" && item["trigger"] != nil {
+				inherited = item["trigger"]
+			}
+			if item["type"] == "for-each-unit" {
+				candidates, ok := asList(inherited)
+				if !ok {
+					candidates = []any{inherited}
+				}
+				for _, candidate := range candidates {
+					t, ok := asMap(candidate)
+					if ok && t != nil && getStr(t, "event") != "" && !isAttackStep(t) {
+						return true
+					}
+				}
+			}
+			for key, child := range item {
+				if key != "trigger" && check(child, inherited) {
+					return true
+				}
+			}
+		}
+		return false
+	}
+	return check(effect, trigger)
 }
 
 // attackStepRolls are the rolls inside every attack: a trigger on one applies
@@ -305,6 +537,176 @@ func isAttackStep(trigger any) bool {
 	}
 	r, isStr := roll.(string)
 	return (t["event"] == "before-roll" || t["event"] == "after-roll") && isStr && attackStepRolls[r]
+}
+func snapshotValueEqual(left, right any) bool {
+	if l, lok := left.(map[string]any); lok {
+		r, rok := right.(map[string]any)
+		if !rok || len(l) != len(r) {
+			return false
+		}
+		for key, value := range l {
+			if !snapshotValueEqual(value, r[key]) {
+				return false
+			}
+		}
+		return true
+	}
+	if l, lok := left.([]any); lok {
+		r, rok := right.([]any)
+		if !rok || len(l) != len(r) {
+			return false
+		}
+		for i := range l {
+			if !snapshotValueEqual(l[i], r[i]) {
+				return false
+			}
+		}
+		return true
+	}
+	return reflect.DeepEqual(left, right)
+}
+
+func bindSnapshotRecipient(node map[string]any) (any, bool) {
+	selector := mapOr(node["selector"])
+	bindAs := getStr(selector, "bind_as")
+	bound, other := false, false
+	var bind func(any) any
+	bind = func(value any) any {
+		if list, ok := value.([]any); ok {
+			out := make([]any, len(list))
+			for i, child := range list {
+				out[i] = bind(child)
+			}
+			return out
+		}
+		m, ok := value.(map[string]any)
+		if !ok || m == nil || m["type"] == "select-units" || m["type"] == "for-each-unit" {
+			return value
+		}
+		out := make(map[string]any, len(m))
+		for key, child := range m {
+			recipient := child == "recipient"
+			if bindAs != "" {
+				if ref, ok := child.(map[string]any); ok && getStr(ref, "selection_var") == bindAs {
+					recipient = true
+				}
+			}
+			if key == "target" && recipient {
+				out[key] = "recipient"
+				bound = true
+			} else {
+				out[key] = bind(child)
+				if key == "target" {
+					other = true
+				}
+			}
+		}
+		return out
+	}
+	effect := bind(node["effect"])
+	return effect, bound && !other
+}
+
+func resolveRecipientSnapshots(trigger, effect any, source map[string]any, context map[string]any, perspective string) (any, string) {
+	sideID := getStr(context, map[string]string{"attacker": "attackerUnitId", "target": "targetUnitId"}[perspective])
+	sourceID := ""
+	if getStr(source, "kind") == "ability" {
+		sourceID = getStr(source, "sourceUnitId")
+		if sourceID == "" && getStr(source, "abilityKind") == "unit" {
+			sourceID = sideID
+		}
+	}
+	var reason string
+	var visit func(any, string, any) any
+	visit = func(node any, path string, event any) any {
+		m, ok := node.(map[string]any)
+		if !ok || m == nil {
+			return node
+		}
+		events := []any{}
+		if list, ok := event.([]any); ok {
+			events = list
+		} else {
+			events = []any{event}
+		}
+		historical := []any{}
+		for _, raw := range events {
+			if t, ok := raw.(map[string]any); ok && getStr(t, "event") != "" && !isAttackStep(t) {
+				historical = append(historical, t)
+			}
+		}
+		if m["type"] == "for-each-unit" && len(historical) > 0 {
+			matches := []map[string]any{}
+			for _, raw := range getList(context, "recipientSnapshots") {
+				snapshot, ok := raw.(map[string]any)
+				if !ok || sourceID == "" || sideID == "" {
+					continue
+				}
+				if snapshot["sourceUnitId"] != sourceID || snapshot["perspective"] != perspective || snapshot["recipientUnitId"] != sideID || getStr(snapshot, "selectionPath") != path || !snapshotValueEqual(snapshot["source"], source) || !snapshotValueEqual(snapshot["selector"], m["selector"]) {
+					continue
+				}
+				for _, h := range historical {
+					if snapshotValueEqual(snapshot["trigger"], h) {
+						matches = append(matches, snapshot)
+						break
+					}
+				}
+			}
+			if len(matches) == 0 {
+				reason = recipientSnapshotReason
+				return map[string]any{"type": "sequence", "steps": []any{}}
+			}
+			selected, _ := matches[0]["selected"].(bool)
+			for _, match := range matches[1:] {
+				if value, _ := match["selected"].(bool); value != selected {
+					reason = "conflicting trigger-time recipient snapshots"
+					return map[string]any{"type": "sequence", "steps": []any{}}
+				}
+			}
+			if !selected {
+				return map[string]any{"type": "sequence", "steps": []any{}}
+			}
+			bound, valid := bindSnapshotRecipient(m)
+			if !valid {
+				reason = "recipient snapshot cannot bind mixed or unresolved recipient effects"
+				return map[string]any{"type": "sequence", "steps": []any{}}
+			}
+			return bound
+		}
+		if m["type"] == "for-each-unit" {
+			return momentGate(event, m)
+		}
+		switch m["type"] {
+		case "sequence", "rules-bundle":
+			out := cloneMap(m)
+			steps := getList(m, "steps")
+			next := make([]any, len(steps))
+			for i, step := range steps {
+				next[i] = visit(step, path+"/steps/"+strconv.Itoa(i), event)
+			}
+			out["steps"] = next
+			return out
+		case "conditional":
+			out := cloneMap(m)
+			out["effect"] = visit(m["effect"], path+"/effect", event)
+			return out
+		case "ability-part":
+			out := cloneMap(m)
+			nextEvent := event
+			if m["trigger"] != nil {
+				nextEvent = m["trigger"]
+			}
+			delete(out, "trigger")
+			out["effect"] = visit(m["effect"], path+"/effect", nextEvent)
+			return out
+		}
+		if containsForEachUnit(m) {
+			reason = "recipient snapshot is nested in an unsupported activation composition"
+			return map[string]any{"type": "sequence", "steps": []any{}}
+		}
+		return momentGate(event, m)
+	}
+	return visit(effect, "", trigger), reason
 }
 
 // momentKey is the lever key of a trigger: its event family and the filter
@@ -350,116 +752,148 @@ func ownMoveFact(trigger map[string]any) map[string]any {
 	}}
 }
 
-// momentGate gates an effect on a trigger (one, or several alternatives) the way
-// a timing-is condition gates it, so the moment is a player-controlled gate and a
-// buff behind it an opt-in lever (<ability>@<event>). A trigger on an attack step
-// is met by every attack: only its own condition gates the effect. If any
-// alternative leaves no gate, the effect is returned ungated.
-func momentGate(trigger any, effect any) any {
-	if effect == nil {
-		return effect
+var activationClock = map[string]any{"type": "timing-is", "parameters": map[string]any{"timing": "activation"}}
+
+// activationCondition replaces only clocks crossed by a lasting activation.
+// Non-clock eligibility remains a live condition.
+func activationCondition(condition map[string]any, duration any) map[string]any {
+	expiry, _ := duration.(string)
+	spansPhases := expiry == "turn" || expiry == "battle-round" || expiry == "battle" ||
+		expiry == "permanent" || expiry == "while-leading" || expiry == "one-use" ||
+		expiry == "control-lost" || strings.HasPrefix(expiry, "until-")
+	clock := getStr(condition, "type")
+	if spansPhases && (clock == "phase-is" ||
+		(clock == "player-turn-is" && expiry != "turn") ||
+		(clock == "battle-round" && expiry != "turn" && expiry != "battle-round")) {
+		return cloneMap(activationClock)
 	}
+	if _, ok := condition["operator"].(string); ok {
+		if operands, ok := asList(condition["operands"]); ok {
+			out := cloneMap(condition)
+			rewritten := make([]any, len(operands))
+			for i, operand := range operands {
+				if child, ok := asMap(operand); ok && child != nil {
+					rewritten[i] = activationCondition(child, duration)
+				} else {
+					rewritten[i] = operand
+				}
+			}
+			out["operands"] = rewritten
+			return out
+		}
+	}
+	return condition
+}
+
+func momentCondition(trigger any, duration ...any) (map[string]any, bool) {
 	candidates, ok := trigger.([]any)
 	if !ok {
 		candidates = []any{trigger}
 	}
+	var lifetime any
+	if len(duration) > 0 {
+		lifetime = duration[0]
+	}
 	var gates []any
 	for _, candidate := range candidates {
 		t, ok := asMap(candidate)
-		if !ok || t == nil {
-			continue
-		}
-		if _, ok := t["event"].(string); !ok {
+		if !ok || t == nil || getStr(t, "event") == "" {
 			continue
 		}
 		own, hasOwn := asMap(t["condition"])
 		hasOwn = hasOwn && own != nil
 		if isAttackStep(t) {
 			if !hasOwn {
-				// Met by every attack without a condition: nothing to gate.
-				return effect
+				return nil, false
 			}
 			gates = append(gates, own)
 			continue
 		}
-		// A unit's own Charge or Advance move is a fact the context carries, not a choice.
 		moment := ownMoveFact(t)
 		if moment == nil {
 			moment = map[string]any{"type": "timing-is", "parameters": map[string]any{"timing": momentKey(t)}}
 		}
 		if hasOwn {
-			gates = append(gates, map[string]any{"operator": "and", "operands": []any{moment, own}})
+			gates = append(gates, map[string]any{"operator": "and", "operands": []any{moment, activationCondition(own, lifetime)}})
 		} else {
 			gates = append(gates, moment)
 		}
 	}
 	if len(gates) == 0 {
-		return effect
+		return nil, false
 	}
-	var condition any = gates[0]
-	if len(gates) > 1 {
-		condition = map[string]any{"operator": "or", "operands": gates}
+	if len(gates) == 1 {
+		return mapOr(gates[0]), true
 	}
-	return map[string]any{"type": "conditional", "condition": condition, "effect": effect}
+	return map[string]any{"operator": "or", "operands": gates}, true
 }
 
-// translateNamedEffect treats an un-gated named rule as transparent. Named
-// rules with an optional/cost/trigger/usage gate become one opt-in lever while
-// preserving any nested levers and unsupported fragments discovered in the
-// body. Trigger conditions are wrapped around the body so they remain a
-// resolver-visible guard rather than being silently discarded.
+// momentGate gates an effect on a trigger while retaining the canonical source
+// fragment separately for diagnostics and activation requirements.
+func momentGate(trigger any, effect any, sourceFragment ...map[string]any) any {
+	if effect == nil {
+		return effect
+	}
+	condition, ok := momentCondition(trigger)
+	if !ok {
+		return effect
+	}
+	fragment := any(map[string]any{"type": "ability-part", "trigger": trigger, "effect": effect})
+	if len(sourceFragment) > 0 {
+		fragment = sourceFragment[0]
+	}
+	return map[string]any{
+		"type": "conditional", "condition": condition, "effect": effect,
+		"__activation_source": map[string]any{"trigger": trigger, "fragment": fragment},
+	}
+}
+
+// A named rule is transparent unless using it requires an activation.
 func translateNamedEffect(node, source map[string]any, opts dslOpts, out *effectTranslation) {
+	if recipientSnapshotUnavailable(node["trigger"], node["effect"]) {
+		out.unsupported = append(out.unsupported, unsup(recipientSnapshotReason, node))
+		return
+	}
 	if node["optional"] != true && node["cost"] == nil && node["trigger"] == nil && node["usage"] == nil {
 		dslWalk(node["effect"], source, opts, out)
 		return
 	}
-
-	var triggers []any
-	if raw, ok := asList(node["trigger"]); ok {
-		triggers = raw
-	} else if node["trigger"] != nil {
-		triggers = []any{node["trigger"]}
-	}
-	conditions := make([]any, 0, len(triggers))
-	for _, raw := range triggers {
-		trigger, ok := asMap(raw)
-		if !ok {
-			continue
+	body := momentGate(node["trigger"], node["effect"], node)
+	if condition, ok := momentCondition(node["trigger"], opts.duration); ok {
+		var evalSource map[string]any
+		if !opts.grantedHolder {
+			evalSource = source
 		}
-		if condition, ok := getMap(trigger, "condition"); ok {
-			conditions = append(conditions, condition)
+		verdict := evaluateCondition(condition, opts.context, opts.perspective, evalSource)
+		if conditionMentionsTiming(condition) && verdict != false {
+			body = node["effect"]
+		} else {
+			body = map[string]any{"type": "conditional", "condition": condition, "effect": node["effect"]}
 		}
 	}
-	body := node["effect"]
-	if len(conditions) > 0 && len(conditions) == len(triggers) {
-		var condition any = conditions[0]
-		if len(conditions) > 1 {
-			operands := make([]any, len(conditions))
-			copy(operands, conditions)
-			condition = map[string]any{"operator": "or", "operands": operands}
-		}
-		body = map[string]any{
-			"type":      "conditional",
-			"condition": condition,
-			"effect":    node["effect"],
-		}
-	}
-
 	sub := &effectTranslation{applied: []any{}, unsupported: []any{}, activatable: []any{}}
 	dslWalk(body, source, opts, sub)
 	out.unsupported = append(out.unsupported, sub.unsupported...)
-	out.activatable = append(out.activatable, sub.activatable...)
-	if len(sub.applied) > 0 {
-		name := getStr(node, "name")
-		if name == "" {
-			name = labelForBuffs(sub.applied)
+	requirement := activationRequirement(node)
+	for _, raw := range sub.activatable {
+		lever, ok := asMap(raw)
+		if !ok || lever == nil {
+			continue
 		}
-		out.activatable = append(out.activatable, map[string]any{
-			"id":    opts.abilityID + "#" + name,
-			"label": name,
-			"buffs": sub.applied,
-		})
+		lever["requires"] = append([]any{requirement}, getList(lever, "requires")...)
+		out.activatable = append(out.activatable, lever)
 	}
+	if len(sub.applied) == 0 {
+		return
+	}
+	name := getStr(node, "name")
+	if name == "" {
+		name = labelForBuffs(sub.applied)
+	}
+	out.activatable = append(out.activatable, map[string]any{
+		"id": opts.abilityID + "#" + name, "label": name,
+		"buffs": sub.applied, "requires": []any{requirement},
+	})
 }
 
 // --- activatable-lever enumeration ---
@@ -471,26 +905,22 @@ func enumerateChoice(node, source map[string]any, opts dslOpts, out *effectTrans
 	}
 	for i, opt := range options {
 		var buffs []any
-		collectGatedBuffs(opt, source, opts, map[string]any{}, &buffs)
+		collectGatedBuffs(opt, source, opts, map[string]any{}, &buffs, &out.unsupported)
 		if len(buffs) == 0 {
 			continue
 		}
 		out.activatable = append(out.activatable, map[string]any{
-			"id":    opts.abilityID + "?" + strconv.Itoa(i),
-			"label": labelForBuffs(buffs),
-			"buffs": buffs,
-			"group": map[string]any{"id": opts.abilityID + "?choice", "maxActivations": maxActivations},
+			"id": opts.abilityID + "?" + strconv.Itoa(i), "label": labelForBuffs(buffs),
+			"buffs": buffs, "group": map[string]any{"id": opts.abilityID + "?choice", "maxActivations": maxActivations},
 		})
 	}
 }
 
 func enumerateDicePool(node, source map[string]any, opts dslOpts, out *effectTranslation) {
 	options, _ := asList(node["options"])
-	var maxActivations float64
+	maxActivations := float64(len(options))
 	if isNumber(node["max_activations"]) {
 		maxActivations, _ = num(node["max_activations"])
-	} else {
-		maxActivations = float64(len(options))
 	}
 	for _, optAny := range options {
 		opt, ok := asMap(optAny)
@@ -498,18 +928,16 @@ func enumerateDicePool(node, source map[string]any, opts dslOpts, out *effectTra
 			continue
 		}
 		var buffs []any
-		collectGatedBuffs(opt["effect"], source, opts, map[string]any{}, &buffs)
+		collectGatedBuffs(opt["effect"], source, opts, map[string]any{}, &buffs, &out.unsupported)
 		if len(buffs) == 0 {
 			continue
 		}
-		name, _ := opt["name"].(string)
+		name := getStr(opt, "name")
 		if name == "" {
 			name = labelForBuffs(buffs)
 		}
 		out.activatable = append(out.activatable, map[string]any{
-			"id":    opts.abilityID + "#" + name,
-			"label": name,
-			"buffs": buffs,
+			"id": opts.abilityID + "#" + name, "label": name, "buffs": buffs,
 			"group": map[string]any{"id": opts.abilityID, "maxActivations": maxActivations},
 		})
 	}
@@ -525,35 +953,31 @@ func enumerateNamedOptions(node, source map[string]any, opts dslOpts, out *effec
 			continue
 		}
 		var buffs []any
-		collectGatedBuffs(opt["effect"], source, opts, map[string]any{}, &buffs)
+		collectGatedBuffs(opt["effect"], source, opts, map[string]any{}, &buffs, &out.unsupported)
 		if len(buffs) == 0 {
 			continue
 		}
-		name, _ := opt["name"].(string)
+		name := getStr(opt, "name")
 		if name == "" {
 			name = labelForBuffs(buffs)
 		}
+		id := name
+		if node["type"] == "stance-select" {
+			id = getStr(opt, "id")
+		}
 		out.activatable = append(out.activatable, map[string]any{
-			"id":    opts.abilityID + "#" + name,
-			"label": name,
-			"buffs": buffs,
+			"id": opts.abilityID + "#" + id, "label": name, "buffs": buffs,
 			"group": map[string]any{"id": groupID, "maxActivations": maxActivations},
 		})
 	}
 }
 
 // enumerateMenuActions emits one opt-in lever per buff-bearing
-// resource-action-menu action. Unlike enumerateNamedOptions (stance-select /
-// issue-orders, a pick-one group), each action here is an INDEPENDENT
-// decision with its own trigger and cost — no shared group/maxActivations
-// cap, since a unit's per-phase manoeuvre limit isn't a mutual-exclusion pool
-// the cruncher can enforce (and usage.repeatable_if_different_unit
-// explicitly allows the same action to recur via a different unit in one
-// phase). A single eligibility.requires_keyword narrows the lever to
-// attackers carrying that keyword; multiple required keywords have no
-// single-field applicability representation today and are left ungated
-// (correctness-conservative: the lever still surfaces, just without that
-// extra restriction attached).
+// resource-action-menu action. Unlike stance-select and issue-orders, each
+// action is independent: a unit's per-phase manoeuvre limit is not a
+// mutual-exclusion pool, and repeatable_if_different_unit can allow the same
+// action for another unit. Eligibility is evaluated against the current
+// crunch context; unavailable unit facts remain unsupported.
 func enumerateMenuActions(node, source map[string]any, opts dslOpts, out *effectTranslation) {
 	actions, _ := asList(node["actions"])
 	for _, actionAny := range actions {
@@ -561,32 +985,78 @@ func enumerateMenuActions(node, source map[string]any, opts dslOpts, out *effect
 		if !ok {
 			continue
 		}
-		applicability := map[string]any{}
-		if elig, ok := getMap(action, "eligibility"); ok {
-			requiresKeyword := getStrList(elig, "requires_keyword")
-			if len(requiresKeyword) == 1 {
-				applicability = map[string]any{"requiresAttackerKeyword": requiresKeyword[0]}
+		eligibility, _ := getMap(action, "eligibility")
+		if eligibility != nil && eligibility["filter"] != nil {
+			filter, ok := asMap(eligibility["filter"])
+			if !ok {
+				out.unsupported = append(out.unsupported, unsup("resource-action-menu eligibility filter is unresolved", action))
+				continue
+			}
+			side := "target"
+			if opts.perspective == "attacker" {
+				side = "attacker"
+			}
+			switch matchesUnitFilter(filter, opts.context, side, "friendly") {
+			case false:
+				continue
+			case nil:
+				out.unsupported = append(out.unsupported, unsup("resource-action-menu eligibility filter is unresolved", action))
+				continue
 			}
 		}
+		skip := false
+		for _, raw := range getList(eligibility, "requires") {
+			condition, ok := asMap(raw)
+			if ok && evaluateCondition(condition, opts.context, opts.perspective, source) == false {
+				skip = true
+				break
+			}
+		}
+		if skip {
+			continue
+		}
+		id := getStr(action, "id")
+		if id == "" {
+			out.unsupported = append(out.unsupported, unsup("resource-action-menu action has no stable id", action))
+			continue
+		}
 		var buffs []any
-		collectGatedBuffs(action["effect"], source, opts, applicability, &buffs)
+		collectGatedBuffs(action["effect"], source, opts, map[string]any{}, &buffs, &out.unsupported)
 		if len(buffs) == 0 {
 			continue
 		}
-		label, _ := action["label"].(string)
+		label := getStr(action, "label")
 		if label == "" {
 			label = labelForBuffs(buffs)
 		}
-		id, _ := action["id"].(string)
-		if id == "" {
-			id = label
+		requirement := map[string]any{
+			"menu_id": node["menu_id"], "pool_id": node["pool_id"],
+			"shared_usage": node["shared_usage"], "capacity": node["capacity"],
+			"action": activationRequirement(action),
 		}
-		out.activatable = append(out.activatable, map[string]any{
-			"id":    opts.abilityID + "#" + id,
-			"label": label,
-			"buffs": buffs,
-		})
+		lever := map[string]any{
+			"id": opts.abilityID + "#" + id, "label": label, "buffs": buffs,
+			"requires": []any{requirement},
+		}
+		if shared, ok := getMap(node, "shared_usage"); ok {
+			if cap, ok := num(shared["unit_max_manoeuvres_per_phase"]); ok {
+				lever["group"] = map[string]any{"id": opts.abilityID + "?menu", "maxActivations": cap}
+			}
+		}
+		out.activatable = append(out.activatable, lever)
 	}
+}
+
+func activationMetadata(node map[string]any) map[string]any {
+	metadata, _ := asMap(node["__activation_source"])
+	return metadata
+}
+
+func activationFragment(node map[string]any) any {
+	if metadata := activationMetadata(node); metadata != nil && metadata["fragment"] != nil {
+		return metadata["fragment"]
+	}
+	return node
 }
 
 func enumerateTimingGate(node, source map[string]any, opts dslOpts, out *effectTranslation) {
@@ -594,12 +1064,16 @@ func enumerateTimingGate(node, source map[string]any, opts dslOpts, out *effectT
 	if !ok {
 		return
 	}
+	var requirement map[string]any
+	if metadata := activationMetadata(node); metadata != nil {
+		if fragment, ok := asMap(metadata["fragment"]); ok && fragment != nil {
+			requirement = activationRequirement(fragment)
+		}
+	}
 	var buffs []any
-	collectGatedBuffs(node["effect"], source, opts, map[string]any{}, &buffs)
+	collectGatedBuffs(node["effect"], source, opts, map[string]any{}, &buffs, nil)
 	sub := &effectTranslation{applied: []any{}, unsupported: []any{}, activatable: []any{}}
 	dslWalk(node["effect"], source, opts, sub)
-	// A stochastic branch contributes nothing to a timing activation. Preserve
-	// every other unsupported diagnostic discovered while finding inner levers.
 	for _, unsupported := range sub.unsupported {
 		fragment, ok := asMap(unsupported)
 		if ok && getStr(fragment, "reason") == stochasticDiceGatedReason {
@@ -610,23 +1084,32 @@ func enumerateTimingGate(node, source map[string]any, opts dslOpts, out *effectT
 		}
 		out.unsupported = append(out.unsupported, unsupported)
 	}
-	// Inner independent decisions pass straight through as their own levers.
-	out.activatable = append(out.activatable, sub.activatable...)
-	// Inner unconditional buffs become one lever gated only on the timing.
+	for _, raw := range sub.activatable {
+		lever, ok := asMap(raw)
+		if !ok || lever == nil {
+			continue
+		}
+		if requirement != nil {
+			lever["requires"] = append([]any{requirement}, getList(lever, "requires")...)
+		}
+		out.activatable = append(out.activatable, lever)
+	}
 	if len(buffs) > 0 {
 		timing := extractTiming(condition)
 		if timing == "" {
 			timing = "timing"
 		}
-		out.activatable = append(out.activatable, map[string]any{
-			"id":    opts.abilityID + "@" + timing,
-			"label": labelForBuffs(buffs),
-			"buffs": buffs,
-		})
+		lever := map[string]any{
+			"id": opts.abilityID + "@" + timing, "label": labelForBuffs(buffs), "buffs": buffs,
+		}
+		if requirement != nil {
+			lever["requires"] = []any{requirement}
+		}
+		out.activatable = append(out.activatable, lever)
 	}
 }
 
-func collectGatedBuffs(node any, source map[string]any, opts dslOpts, applicability map[string]any, outBuffs *[]any) {
+func collectGatedBuffs(node any, source map[string]any, opts dslOpts, applicability map[string]any, outBuffs *[]any, diagnostics *[]any) {
 	n, ok := asMap(node)
 	if !ok {
 		return
@@ -637,32 +1120,43 @@ func collectGatedBuffs(node any, source map[string]any, opts dslOpts, applicabil
 		if !ok {
 			return
 		}
-		app := conditionToApplicability(condition)
+		app := conditionToApplicability(condition, opts.perspective)
 		switch a := app.(type) {
 		case string:
 			if a == "gate" {
-				collectGatedBuffs(n["effect"], source, opts, applicability, outBuffs)
+				collectGatedBuffs(n["effect"], source, opts, applicability, outBuffs, diagnostics)
 				return
 			}
 			if a == "context" {
-				if evaluateCondition(condition, opts.context) == true {
-					collectGatedBuffs(n["effect"], source, opts, applicability, outBuffs)
+				var evalSource map[string]any
+				if !opts.grantedHolder {
+					evalSource = source
+				}
+				verdict := evaluateCondition(condition, opts.context, opts.perspective, evalSource)
+				if verdict == true {
+					collectGatedBuffs(n["effect"], source, opts, applicability, outBuffs, diagnostics)
+				} else if verdict == nil && diagnostics != nil {
+					*diagnostics = append(*diagnostics, unsup("activation condition cannot be evaluated against current context", activationFragment(n)))
 				}
 				return
 			}
 		case map[string]any:
-			collectGatedBuffs(n["effect"], source, opts, combineApplicability(applicability, a), outBuffs)
+			collectGatedBuffs(n["effect"], source, opts, combineApplicability(applicability, a), outBuffs, diagnostics)
 			return
 		}
 		return
 	case "rules-bundle", "sequence":
 		for _, step := range getList(n, "steps") {
-			collectGatedBuffs(step, source, opts, applicability, outBuffs)
+			collectGatedBuffs(step, source, opts, applicability, outBuffs, diagnostics)
 		}
 		return
 	case "ability-part":
+		partOpts := opts
+		if n["duration"] != nil {
+			partOpts.duration = n["duration"]
+		}
 		if n["trigger"] != nil || (n["optional"] != true && n["cost"] == nil && n["usage"] == nil) {
-			collectGatedBuffs(momentGate(n["trigger"], n["effect"]), source, opts, applicability, outBuffs)
+			collectGatedBuffs(momentGate(n["trigger"], n["effect"], n), source, partOpts, applicability, outBuffs, diagnostics)
 		}
 		return
 	case "choice", "dice-pool-allocation", "dice-gated":
@@ -670,9 +1164,21 @@ func collectGatedBuffs(node any, source map[string]any, opts dslOpts, applicabil
 	}
 	tmp := &effectTranslation{applied: []any{}, unsupported: []any{}, activatable: []any{}}
 	dslWalk(n, source, opts, tmp)
-	for _, b := range tmp.applied {
-		*outBuffs = append(*outBuffs, applyApplicability(b.(map[string]any), applicability))
+	if diagnostics != nil {
+		*diagnostics = append(*diagnostics, tmp.unsupported...)
 	}
+	for _, b := range tmp.applied {
+		if buff, ok := asMap(b); ok {
+			*outBuffs = append(*outBuffs, applyApplicability(buff, applicability))
+		}
+	}
+}
+
+func activationRequirement(node map[string]any) map[string]any {
+	requirement := cloneMap(node)
+	delete(requirement, "effect")
+	delete(requirement, "__activation_source")
+	return requirement
 }
 
 func unsup(reason string, fragment any) map[string]any {
@@ -681,6 +1187,11 @@ func unsup(reason string, fragment any) map[string]any {
 
 func classifyTarget(node map[string]any) string {
 	// A unit filter reaches every unit it matches: friendly ones are the buffed side, enemy ones the other.
+	if f, ok := asMap(node["target"]); ok && f != nil {
+		if _, present := f["unit_ids"]; present {
+			return "self"
+		}
+	}
 	if f, isMap := asMap(node["target"]); isMap && f != nil {
 		_, ev := f["event_var"]
 		_, sv := f["selection_var"]
@@ -728,36 +1239,12 @@ func auraRecipientFilterMatches(value any, context map[string]any, perspective s
 		return false, "aura recipient_filter is malformed"
 	}
 	for key := range filter {
-		if key != "required_keywords" && key != "excluded_keywords" {
+		if key != "owner" && key != "all_of" && key != "any_of" && key != "none_of" && key != "not_all_of" {
 			return false, "aura recipient_filter has unrecognised keys"
 		}
 	}
-	requiredRaw, ok := asList(filter["required_keywords"])
-	if !ok || len(requiredRaw) == 0 {
-		return false, "aura recipient_filter is missing required keywords"
-	}
-	required := make([]string, len(requiredRaw))
-	for i, raw := range requiredRaw {
-		keyword, ok := raw.(string)
-		if !ok || keyword == "" {
-			return false, "aura recipient_filter has malformed required keywords"
-		}
-		required[i] = strings.ToLower(keyword)
-	}
-	excluded := []string{}
-	if raw, present := filter["excluded_keywords"]; present {
-		excludedRaw, ok := asList(raw)
-		if !ok || len(excludedRaw) == 0 {
-			return false, "aura recipient_filter has malformed excluded keywords"
-		}
-		excluded = make([]string, len(excludedRaw))
-		for i, item := range excludedRaw {
-			keyword, ok := item.(string)
-			if !ok || keyword == "" {
-				return false, "aura recipient_filter has malformed excluded keywords"
-			}
-			excluded[i] = strings.ToLower(keyword)
-		}
+	if owner := getStr(filter, "owner"); owner != "" && owner != "friendly" && owner != "any" {
+		return false, "aura recipient_filter owner cannot be evaluated"
 	}
 	contextKey := "targetKeywords"
 	if perspective == "attacker" {
@@ -777,15 +1264,47 @@ func auraRecipientFilterMatches(value any, context map[string]any, perspective s
 		if !ok || keyword == "" {
 			return false, "aura recipient_filter recipient keywords are malformed"
 		}
-		current[strings.ToLower(keyword)] = true
+		current[keywordKey(keyword)] = true
 	}
-	for _, keyword := range required {
-		if !current[keyword] {
+	has := func(raw any) bool {
+		keyword, ok := raw.(string)
+		return ok && current[keywordKey(keyword)]
+	}
+	if required, ok := asList(filter["all_of"]); ok {
+		for _, raw := range required {
+			if !has(raw) {
+				return false, ""
+			}
+		}
+	}
+	if alternatives, ok := asList(filter["any_of"]); ok {
+		found := false
+		for _, raw := range alternatives {
+			if has(raw) {
+				found = true
+				break
+			}
+		}
+		if !found {
 			return false, ""
 		}
 	}
-	for _, keyword := range excluded {
-		if current[keyword] {
+	if excluded, ok := asList(filter["none_of"]); ok {
+		for _, raw := range excluded {
+			if has(raw) {
+				return false, ""
+			}
+		}
+	}
+	if excludedTogether, ok := asList(filter["not_all_of"]); ok {
+		all := true
+		for _, raw := range excludedTogether {
+			if !has(raw) {
+				all = false
+				break
+			}
+		}
+		if all {
 			return false, ""
 		}
 	}
@@ -819,7 +1338,7 @@ func translateReroll(node, source map[string]any, opts dslOpts, out *effectTrans
 	}
 	if (roll == "hit" || roll == "wound" || roll == "save" || roll == "damage") &&
 		(subset == "ones" || subset == "all-failures") {
-		out.applied = append(out.applied, map[string]any{"source": source, "contribution": map[string]any{"type": "reroll", "roll": roll, "subset": subset}})
+		out.applied = append(out.applied, withApplicability(map[string]any{"source": source, "contribution": map[string]any{"type": "reroll", "roll": roll, "subset": subset}}, weaponApplicability(modifier)))
 		return
 	}
 	out.unsupported = append(out.unsupported, unsup("re-roll on \""+rollLabel(modifier["roll"])+"\" (subset \""+jsStr(modifier["subset"])+"\") is outside the damage path", node))
@@ -867,7 +1386,7 @@ func translateRollModifier(node, source map[string]any, opts dslOpts, out *effec
 		out.unsupported = append(out.unsupported, unsup("roll-modifier on \""+rollLabel(modifier["roll"])+"\" is outside the damage path", node))
 		return
 	}
-	out.applied = append(out.applied, map[string]any{"source": source, "contribution": map[string]any{"type": ct, "value": value}})
+	out.applied = append(out.applied, withApplicability(map[string]any{"source": source, "contribution": map[string]any{"type": ct, "value": value}}, weaponApplicability(modifier)))
 }
 
 func translateStatModifier(node, source map[string]any, opts dslOpts, out *effectTranslation) {
@@ -882,14 +1401,11 @@ func translateStatModifier(node, source map[string]any, opts dslOpts, out *effec
 	}
 	stat, _ := modifier["stat"].(string)
 	isOnBuffedUnit := appliesToBuffedUnit(node, opts.perspective)
-	applicability := attackTypeApplicability(modifier)
+	// attack_type scopes the mod to that attack's phase, and weapon_name to that weapon's attacks.
+	applicability := combineOptional(attackTypeApplicability(modifier), weaponApplicability(modifier))
 
 	emit := func(contribution map[string]any) {
-		buff := map[string]any{"source": source, "contribution": contribution}
-		if applicability != nil {
-			buff["applicableWhen"] = applicability
-		}
-		out.applied = append(out.applied, buff)
+		out.applied = append(out.applied, withApplicability(map[string]any{"source": source, "contribution": contribution}, applicability))
 	}
 
 	if stat == "AP" {
@@ -897,16 +1413,25 @@ func translateStatModifier(node, source map[string]any, opts dslOpts, out *effec
 		return
 	}
 
-	// Ballistic Skill on the attacker is a defender-side rule: it penalises incoming hit rolls
-	// (e.g. Benefit of Cover), so it is a `hit-mod` under target perspective.
-	if stat == "BS" {
-		if opts.perspective != "target" || classifyTarget(node) != "attacker" {
+	// WS/BS on the attacker is a defender-side rule: it penalises incoming hit rolls of that attack
+	// type (e.g. Benefit of Cover), so it is a `hit-mod` under target perspective. On the buffed unit
+	// it changes the characteristic its own attacks hit on.
+	if stat == "BS" || stat == "WS" {
+		translateSkillModifier(node, source, modifier, stat, isOnBuffedUnit, opts, out, emit)
+		return
+	}
+
+	// Setting the Save characteristic is defender-side; any other set stat outside A/S/T is off the
+	// damage path, and a set A/S/T has no single delta.
+	if modifier["operation"] == "set" {
+		if stat == "Sv" {
+			translateSaveSet(node, modifier, isOnBuffedUnit, opts, out, emit)
 			return
 		}
-		if bs, ok := signedValue(modifier); ok {
-			out.applied = append(out.applied, map[string]any{"source": source, "contribution": map[string]any{"type": "hit-mod", "value": bs}})
+		if stat != "A" && stat != "S" && stat != "T" && stat != "D" {
+			out.unsupported = append(out.unsupported, unsup("stat-modifier on \""+jsStr(modifier["stat"])+"\" is outside the damage path", node))
+			return
 		}
-		return
 	}
 
 	value, ok := signedValue(modifier)
@@ -942,7 +1467,11 @@ func translateStatModifier(node, source map[string]any, opts dslOpts, out *effec
 		if !isOnBuffedUnit {
 			return
 		}
-		emit(map[string]any{"type": "save-mod", "value": -value})
+		saveMod := -value
+		if modifier["operation"] == "improve" || modifier["operation"] == "worsen" {
+			saveMod = value
+		}
+		emit(map[string]any{"type": "save-mod", "value": saveMod})
 	default:
 		out.unsupported = append(out.unsupported, unsup("stat-modifier on \""+jsStr(modifier["stat"])+"\" is outside the damage path", node))
 	}
@@ -950,7 +1479,17 @@ func translateStatModifier(node, source map[string]any, opts dslOpts, out *effec
 
 func translateAPModifier(node, modifier map[string]any, opts dslOpts, out *effectTranslation, emit func(map[string]any)) {
 	if classifyTarget(node) == "attacker" {
-		out.unsupported = append(out.unsupported, unsup("stat-modifier AP on the attacker: defender-side AP reduction is not modelled by the buff layer", node))
+		// Worsening the AP of attacks against the buffed unit; the engine floors AP at 0.
+		if opts.perspective != "target" {
+			out.unsupported = append(out.unsupported, unsup("stat-modifier AP on the attacker: defender-side stat; applies when the buffed unit is the target", node))
+			return
+		}
+		incoming, ok := apDelta(modifier)
+		if !ok {
+			out.unsupported = append(out.unsupported, unsup("stat-modifier AP: operation \""+jsStr(modifier["operation"])+"\" not supported", node))
+			return
+		}
+		emit(map[string]any{"type": "ap-mod", "value": incoming})
 		return
 	}
 	if opts.perspective != "attacker" || !appliesToBuffedUnit(node, "attacker") {
@@ -1005,75 +1544,62 @@ func translateFeelNoPain(node, source map[string]any, opts dslOpts, out *effectT
 }
 
 func translateKeywordGrant(node, source map[string]any, opts dslOpts, out *effectTranslation) {
-	if opts.perspective != "attacker" {
-		return
-	}
-	if !appliesToBuffedUnit(node, "attacker") {
+	if opts.perspective != "attacker" || !appliesToBuffedUnit(node, "attacker") {
 		return
 	}
 	modifier, ok := getMap(node, "modifier")
 	if !ok {
 		return
 	}
-	// A selector by keyword would apply the grant to every weapon of the unit: refuse it rather than over-apply it.
-	if modifier["weapon_keyword"] != nil {
-		out.unsupported = append(out.unsupported, unsup("weapon-ability-grant: weapon_keyword selects weapons by a keyword the cruncher cannot resolve", node))
-		return
-	}
-	if removes, ok := asList(modifier["removes"]); ok {
-		for _, k := range removes {
-			if keyword, ok := k.(string); ok {
-				out.unsupported = append(out.unsupported, unsup("weapon-ability-removal: the cruncher does not model removing a weapon ability (\""+keyword+"\")", map[string]any{"removes": []any{keyword}}))
-			}
+	for _, raw := range getList(modifier, "removes") {
+		label := "unresolved keyword"
+		if ref, ok := asMap(raw); ok && getStr(ref, "keyword_id") != "" {
+			label = keywordLabel(ref)
 		}
+		out.unsupported = append(out.unsupported, unsup(
+			"weapon-ability-removal: the cruncher does not model removing a weapon ability (\""+label+"\")",
+			map[string]any{"removes": []any{raw}},
+		))
 	}
-	raws := keywordGrantList(modifier)
-	if len(raws) == 0 {
+	if modifier["if_present"] != nil {
+		out.unsupported = append(out.unsupported, unsup("weapon-ability-grant: incrementing an existing keyword rating is not modelled", node))
 		return
 	}
-	applicability := weaponTypeApplicability(modifier)
-	for _, raw := range raws {
-		ref := parseKeywordGrant(raw)
-		if ref == nil {
-			out.unsupported = append(out.unsupported, unsup("keyword-grant: cannot parse \""+raw+"\" to a catalog keyword", map[string]any{"keyword": raw}))
+	if narrowed := unhonorableNarrowing(modifier); narrowed != "" {
+		out.unsupported = append(out.unsupported, unsup("weapon-ability-grant: unresolved "+narrowed, node))
+		return
+	}
+	applicability := combineOptional(attackTypeApplicability(modifier), weaponApplicability(modifier))
+	for _, raw := range getList(modifier, "keywords") {
+		ref, ok := asMap(raw)
+		if !ok || ref == nil || getStr(ref, "keyword_id") == "" {
+			out.unsupported = append(out.unsupported, unsup("weapon-ability-grant: invalid structured keyword reference", raw))
 			continue
 		}
-		buff := map[string]any{"source": source, "contribution": map[string]any{"type": "extra-keyword", "keywordRef": ref}}
-		if applicability != nil {
-			buff["applicableWhen"] = applicability
-		}
-		out.applied = append(out.applied, buff)
-	}
-}
-
-func keywordGrantList(modifier map[string]any) []string {
-	var out []string
-	if arr, ok := asList(modifier["abilities"]); ok {
-		for _, k := range arr {
-			if s, ok := k.(string); ok {
-				out = append(out, s)
+		if paramsRaw, present := ref["parameters"]; present {
+			params, valid := asMap(paramsRaw)
+			if !valid {
+				out.unsupported = append(out.unsupported, unsup("weapon-ability-grant: invalid structured keyword reference", raw))
+				continue
+			}
+			if value := params["value"]; value != nil && !isNumber(value) {
+				if _, isString := value.(string); !isString {
+					out.unsupported = append(out.unsupported, unsup("weapon-ability-grant: keyword rating quantity is unresolved", raw))
+					continue
+				}
 			}
 		}
+		buff := map[string]any{"source": source, "contribution": map[string]any{"type": "extra-keyword", "keywordRef": ref}}
+		out.applied = append(out.applied, withApplicability(buff, applicability))
 	}
-	return out
-}
-
-func weaponTypeApplicability(modifier map[string]any) map[string]any {
-	switch modifier["weapon_type"] {
-	case "melee":
-		return map[string]any{"phases": []any{"fight"}}
-	case "ranged":
-		return map[string]any{"phases": []any{"shooting"}}
-	}
-	return nil
 }
 
 func attackTypeApplicability(modifier map[string]any) map[string]any {
-	kind := modifier["attack_type"]
-	if kind == nil {
-		kind = modifier["weapon_type"]
+	scope, _ := getMap(modifier, "weapons")
+	if scope == nil {
+		return nil
 	}
-	switch kind {
+	switch scope["type"] {
 	case "melee":
 		return map[string]any{"phases": []any{"fight"}}
 	case "ranged":
@@ -1082,16 +1608,12 @@ func attackTypeApplicability(modifier map[string]any) map[string]any {
 	return nil
 }
 
-var unhonorableNarrowingKeys = []string{
-	"weapon_name", "weapon_profile", "weapon_keyword", "weapon_ref", "weapon_filter",
-	"model_filter", "model_scope",
-}
-
+// Canonical weapon scope refs that require selecting a particular profile are
+// intentionally unsupported by the aggregate cruncher. It must not widen a
+// model-specific rule to every weapon when board selection is unavailable.
 func unhonorableNarrowing(modifier map[string]any) string {
-	for _, k := range unhonorableNarrowingKeys {
-		if modifier[k] != nil {
-			return k
-		}
+	if scope, _ := getMap(modifier, "weapons"); scope != nil && scope["ref"] != nil {
+		return "weapons.ref"
 	}
 	return ""
 }
@@ -1149,39 +1671,13 @@ func translateNamedRegionState(node, source map[string]any, opts dslOpts, out *e
 	}
 	modifier, _ := getMap(node, "modifier")
 	consumer, _ := getMap(modifier, "consumer")
-	gate, _ := getMap(consumer, "beneficiary_gate")
-	rawKeywords, _ := asList(gate["keywords"])
-	keywords := make([]string, 0, len(rawKeywords))
-	for _, raw := range rawKeywords {
-		if keyword, ok := raw.(string); ok {
-			keywords = append(keywords, keyword)
-		}
-	}
-	operator, _ := gate["operator"].(string)
-	attackerKeywords, hasKeywords := asList(opts.context["attackerKeywords"])
-	if len(gate) == 0 || len(keywords) == 0 || (operator != "and" && operator != "or") || !hasKeywords {
-		out.unsupported = append(out.unsupported, unsup("named-region-state beneficiary gate cannot be evaluated against current attacker keywords", node))
+	beneficiary, _ := getMap(consumer, "beneficiary_filter")
+	matches, reason := auraRecipientFilterMatches(beneficiary, opts.context, opts.perspective)
+	if reason != "" {
+		out.unsupported = append(out.unsupported, unsup("named-region-state beneficiary filter cannot be evaluated against current attacker keywords", node))
 		return
 	}
-	current := map[string]bool{}
-	for _, raw := range attackerKeywords {
-		if keyword, ok := raw.(string); ok {
-			current[strings.ToLower(keyword)] = true
-		}
-	}
-	eligible := operator == "and"
-	for _, keyword := range keywords {
-		match := current[strings.ToLower(keyword)]
-		if operator == "and" && !match {
-			eligible = false
-			break
-		}
-		if operator == "or" && match {
-			eligible = true
-			break
-		}
-	}
-	if !eligible {
+	if !matches {
 		return
 	}
 	defaultBranch, ok := getMap(consumer, "default_branch")
@@ -1203,19 +1699,61 @@ func translateConditional(node, source map[string]any, opts dslOpts, out *effect
 	if !ok {
 		return
 	}
-	verdict := evaluateCondition(condition, opts.context)
-	if verdict == nil { // unknown
+	if getStr(condition, "type") == "attack-is" {
+		if params, ok := getMap(condition, "parameters"); ok && params["weapons"] != nil {
+			if applicability, ok := conditionToApplicability(condition, opts.perspective).(map[string]any); ok {
+				sub := &effectTranslation{applied: []any{}, unsupported: []any{}, activatable: []any{}}
+				dslWalk(node["effect"], source, opts, sub)
+				for _, raw := range sub.applied {
+					if buff, ok := asMap(raw); ok {
+						out.applied = append(out.applied, applyApplicability(buff, applicability))
+					}
+				}
+				for _, raw := range sub.activatable {
+					lever, ok := asMap(raw)
+					if !ok {
+						continue
+					}
+					buffs := getList(lever, "buffs")
+					for i, buffRaw := range buffs {
+						if buff, ok := asMap(buffRaw); ok {
+							buffs[i] = applyApplicability(buff, applicability)
+						}
+					}
+					lever["buffs"] = buffs
+					out.activatable = append(out.activatable, lever)
+				}
+				out.unsupported = append(out.unsupported, sub.unsupported...)
+				return
+			}
+		}
+	}
+	evaluated := condition
+	metadata := activationMetadata(node)
+	if metadata != nil && opts.duration != nil {
+		if moment, ok := momentCondition(metadata["trigger"], opts.duration); ok {
+			evaluated = moment
+		}
+	}
+	var evalSource map[string]any
+	if !opts.grantedHolder {
+		evalSource = source
+	}
+	verdict := evaluateCondition(evaluated, opts.context, opts.perspective, evalSource)
+	if verdict == nil {
 		if conditionMentionsTiming(condition) {
 			enumerateTimingGate(node, source, opts, out)
 		} else {
-			out.unsupported = append(out.unsupported, unsup("conditional: cannot evaluate condition \""+jsStr(condition["type"])+"\" against current context", node))
+			out.unsupported = append(out.unsupported, unsup(
+				"conditional: cannot evaluate condition \""+jsStr(condition["type"])+"\" against current context",
+				activationFragment(node),
+			))
 		}
 		return
 	}
-	if verdict != true {
-		return
+	if verdict == true {
+		dslWalk(node["effect"], source, opts, out)
 	}
-	dslWalk(node["effect"], source, opts, out)
 }
 
 func conditionMentionsTiming(condition map[string]any) bool {
@@ -1254,8 +1792,8 @@ func extractTiming(condition map[string]any) string {
 	return ""
 }
 
-// conditionToApplicability returns "gate", "context", or a map[string]any.
-func conditionToApplicability(condition map[string]any) any {
+// conditionToApplicability returns "gate", "context", or a declarative gate.
+func conditionToApplicability(condition map[string]any, perspective string) any {
 	if op, ok := condition["operator"].(string); ok {
 		if operands, ok := asList(condition["operands"]); ok {
 			if op != "and" {
@@ -1267,7 +1805,7 @@ func conditionToApplicability(condition map[string]any) any {
 				if !ok {
 					return "context"
 				}
-				a := conditionToApplicability(operand)
+				a := conditionToApplicability(operand, perspective)
 				if a == "gate" {
 					continue
 				}
@@ -1287,35 +1825,46 @@ func conditionToApplicability(condition map[string]any) any {
 		if phase, ok := params["phase"].(string); ok {
 			return map[string]any{"phases": []any{phase}}
 		}
-		return "context"
-	case "has-keyword":
-		kw, ok := singleKeyword(params)
+	case "matches":
+		filter, ok := getMap(params, "filter")
+		if !ok || len(filter) != 1 || filter["all_of"] == nil {
+			return "context"
+		}
+		kw, ok := singleKeyword(filter)
 		if !ok {
 			return "context"
 		}
-		if params["subject"] == "defender" {
+		switch params["subject"] {
+		case "defender":
 			return map[string]any{"requiresTargetKeyword": kw}
-		}
-		if isBuffedUnit(params["subject"]) {
+		case "attacker":
 			return map[string]any{"requiresAttackerKeyword": kw}
 		}
-		return "context"
+		if isBuffedUnit(params["subject"]) {
+			if perspective == "target" {
+				return map[string]any{"requiresTargetKeyword": kw}
+			}
+			return map[string]any{"requiresAttackerKeyword": kw}
+		}
 	case "attack-is":
-		if params == nil {
+		if params == nil || unhonorableNarrowing(params) != "" {
 			return "context"
 		}
-		for k := range params {
-			if k != "attack_type" {
+		for key := range params {
+			if key != "attack_type" && key != "weapons" {
 				return "context"
 			}
 		}
+		var phase map[string]any
 		switch params["attack_type"] {
 		case "melee":
-			return map[string]any{"phases": []any{"fight"}}
+			phase = map[string]any{"phases": []any{"fight"}}
 		case "ranged":
-			return map[string]any{"phases": []any{"shooting"}}
+			phase = map[string]any{"phases": []any{"shooting"}}
 		}
-		return "context"
+		if applicability := combineOptional(phase, combineOptional(attackTypeApplicability(params), weaponApplicability(params))); applicability != nil {
+			return applicability
+		}
 	}
 	return "context"
 }
@@ -1346,6 +1895,27 @@ func combineApplicability(a, b map[string]any) map[string]any {
 	}
 	if v, ok := b["requiresAttackerKeyword"]; ok && v != nil {
 		out["requiresAttackerKeyword"] = v
+	}
+	if v, ok := b["weaponName"].(string); ok && v != "" {
+		out["weaponName"] = v
+	}
+	if v := b["weaponKeywords"]; v != nil {
+		out["weaponKeywords"] = v
+	}
+	if v := b["excludedWeaponNames"]; v != nil {
+		out["excludedWeaponNames"] = v
+	}
+	if v := b["excludedWeaponKeywords"]; v != nil {
+		out["excludedWeaponKeywords"] = v
+	}
+	if bx, ok := asList(b["excludedTargetKeywords"]); ok {
+		union := []any{}
+		for _, k := range append(append([]any{}, getList(a, "excludedTargetKeywords")...), bx...) {
+			if !containsAnyV(union, k) {
+				union = append(union, k)
+			}
+		}
+		out["excludedTargetKeywords"] = union
 	}
 	return out
 }
@@ -1417,6 +1987,14 @@ func describeContribution(c map[string]any) string {
 		return "-" + numStr(c["value"]) + " damage"
 	case "invulnerable-save":
 		return numStr(c["threshold"]) + "+ invuln"
+	case "crit-threshold":
+		return "critical " + getStr(c, "roll") + " on " + numStr(c["value"]) + "+"
+	case "ignore-modifiers":
+		return "ignore " + getStr(c, "roll") + " modifiers"
+	case "skill-mod":
+		return getStr(c, "stat") + " improved by " + numStr(c["value"])
+	case "save-characteristic":
+		return numStr(c["value"]) + "+ save"
 	}
 	return "cover"
 }
@@ -1474,10 +2052,248 @@ func singleKeyword(params map[string]any) (string, bool) {
 	return kw, ok
 }
 
-func evaluateCondition(condition, ctx map[string]any) any {
+// matchesUnitFilter evaluates only unit facts carried by the crunch context.
+// It returns bool, or nil when a board, model, or relationship fact is unavailable.
+func matchesUnitFilter(filter, ctx map[string]any, side, owner string) any {
+	unknown := false
+	memberSide := filter["member_of"] == "this-unit"
+	if side == "attacker" {
+		memberSide = memberSide || filter["member_of"] == "attacker"
+	} else {
+		memberSide = memberSide || filter["member_of"] == "defender"
+	}
+	keywordsKey := "targetKeywords"
+	if side == "attacker" {
+		keywordsKey = "attackerKeywords"
+	}
+	predicates := map[string]any{}
+	for _, key := range []string{"all_of", "any_of", "none_of", "not_all_of"} {
+		raw, present := filter[key]
+		if !present {
+			continue
+		}
+		items, ok := asList(raw)
+		if !ok {
+			return nil
+		}
+		for _, item := range items {
+			if _, ok := item.(string); !ok {
+				return nil
+			}
+		}
+		predicates[key] = items
+	}
+	if filter["level"] == "model" && len(predicates) > 0 {
+		unknown = true
+	}
+	if len(predicates) > 0 {
+		rawKeywords, present := asList(ctx[keywordsKey])
+		if !present {
+			unknown = true
+		} else {
+			ownedKeywords := make([]string, 0, len(rawKeywords))
+			keywordsValid := true
+			for _, keyword := range rawKeywords {
+				text, ok := keyword.(string)
+				if !ok {
+					unknown = true
+					keywordsValid = false
+					continue
+				}
+				ownedKeywords = append(ownedKeywords, text)
+			}
+			if keywordsValid && !unitMatchesAppliesTo(predicates, ownedKeywords) {
+				return false
+			}
+		}
+	}
+	for key, value := range filter {
+		if _, predicate := predicates[key]; predicate {
+			continue
+		}
+		switch key {
+		case "owner":
+			wanted, ok := value.(string)
+			if !ok {
+				return nil
+			}
+			if wanted != "any" && wanted != owner {
+				return false
+			}
+		case "unit_ids":
+			ids, ok := asList(value)
+			if !ok || len(ids) == 0 || filter["level"] != "unit" {
+				return nil
+			}
+			idKey := "targetUnitId"
+			if side == "attacker" {
+				idKey = "attackerUnitId"
+			}
+			identity, ok := ctx[idKey].(string)
+			if !ok {
+				unknown = true
+				continue
+			}
+			matched := false
+			for _, rawID := range ids {
+				id, ok := rawID.(string)
+				if !ok {
+					return nil
+				}
+				matched = matched || id == identity
+			}
+			if !matched {
+				return false
+			}
+		case "any_of_filters":
+			alternatives, ok := asList(value)
+			if !ok || len(alternatives) == 0 {
+				return nil
+			}
+			matched := false
+			alternativeUnknown := false
+			for _, rawAlternative := range alternatives {
+				alternative, ok := asMap(rawAlternative)
+				if !ok || alternative == nil {
+					alternativeUnknown = true
+					continue
+				}
+				switch matchesUnitFilter(alternative, ctx, side, owner) {
+				case true:
+					matched = true
+				case nil:
+					alternativeUnknown = true
+				}
+			}
+			if !matched {
+				if !alternativeUnknown {
+					return false
+				}
+				unknown = true
+			}
+		case "state":
+			if value != "benefit-of-cover" {
+				unknown = true
+				continue
+			}
+			coverKey := "targetInCover"
+			if side == "attacker" {
+				coverKey = "attackerInCover"
+			}
+			switch ctx[coverKey] {
+			case false:
+				return false
+			case true:
+			default:
+				unknown = true
+			}
+		case "within":
+			within, ok := asMap(value)
+			if !ok || within == nil || within["wholly"] == true {
+				unknown = true
+				continue
+			}
+			other := "attacker"
+			if side == "attacker" {
+				other = "defender"
+			}
+			if within["of"] != other {
+				unknown = true
+				continue
+			}
+			if within["range"] == "half-weapon" {
+				switch ctx["withinHalfRange"] {
+				case false:
+					return false
+				case true:
+				default:
+					unknown = true
+				}
+				continue
+			}
+			rangeRef, ok := asMap(within["range"])
+			if !ok || rangeRef == nil {
+				unknown = true
+				continue
+			}
+			if tiers, ok := asList(rangeRef["per_battle_round"]); ok {
+				battleRound, roundKnown := filterNumber(ctx["battleRound"])
+				if !roundKnown || len(tiers) == 0 {
+					unknown = true
+					continue
+				}
+				index := max(int(battleRound)-1, 0)
+				if index >= len(tiers) {
+					index = len(tiers) - 1
+				}
+				rangeRef, ok = asMap(tiers[index])
+				if !ok || rangeRef == nil {
+					unknown = true
+					continue
+				}
+			}
+			inches, rangeKnown := filterNumber(rangeRef["inches"])
+			distance, distanceKnown := filterNumber(ctx["distanceInches"])
+			if !rangeKnown || !distanceKnown {
+				unknown = true
+			} else if distance > inches {
+				return false
+			}
+		case "level":
+			if value == "unit" || (value == "model" && filter["attachment_role"] != nil && memberSide) {
+				continue
+			}
+			unknown = true
+		case "attachment_role":
+			if filter["level"] != "model" || !memberSide {
+				unknown = true
+				continue
+			}
+			roleKey := "targetAttachmentRole"
+			if side == "attacker" {
+				roleKey = "attackerAttachmentRole"
+			}
+			actual, ok := ctx[roleKey].(string)
+			if !ok {
+				unknown = true
+			} else if actual != value {
+				return false
+			}
+		case "member_of":
+			if !memberSide || filter["attachment_role"] == nil {
+				unknown = true
+			}
+		default:
+			unknown = true
+		}
+	}
+	if unknown {
+		return nil
+	}
+	return true
+}
+
+func filterNumber(value any) (float64, bool) {
+	if !isNumber(value) {
+		return 0, false
+	}
+	return reflect.ValueOf(value).Convert(reflect.TypeOf(float64(0))).Float(), true
+}
+
+func evaluateCondition(condition, ctx map[string]any, rest ...any) any {
+	perspective := "attacker"
+	var source map[string]any
+	if len(rest) > 0 {
+		if value, ok := rest[0].(string); ok && value != "" {
+			perspective = value
+		}
+	}
+	if len(rest) > 1 {
+		source, _ = asMap(rest[1])
+	}
 	if op, ok := condition["operator"].(string); ok {
 		if operands, ok := asList(condition["operands"]); ok {
-			return evaluateCompound(op, operands, ctx)
+			return evaluateCompound(op, operands, ctx, perspective, source)
 		}
 	}
 	params, _ := getMap(condition, "parameters")
@@ -1489,8 +2305,8 @@ func evaluateCondition(condition, ctx map[string]any) any {
 		}
 		return ctx["phase"] == wanted
 	case "attack-is":
-		for k := range params {
-			if k != "attack_type" {
+		for key := range params {
+			if key != "attack_type" {
 				return nil
 			}
 		}
@@ -1503,25 +2319,17 @@ func evaluateCondition(condition, ctx map[string]any) any {
 		return nil
 	case "timing-is":
 		wanted, ok := params["timing"].(string)
-		if !ok {
-			return nil
-		}
-		if ctx["timing"] == nil {
+		if !ok || ctx["timing"] == nil {
 			return nil
 		}
 		return ctx["timing"] == wanted
 	case "happened":
-		var types []any
-		filter, filterIsMap := asMap(params["filter"])
-		if filterIsMap && filter != nil {
-			types, _ = asList(filter["move_types"])
-		}
-		own := params["subject"] == nil && params["object"] == nil && params["count_min"] == nil && params["window"] == "turn"
+		filter, _ := getMap(params, "filter")
+		types, _ := asList(filter["move_types"])
+		own := params["subject"] == nil && params["object"] == nil && params["count"] == nil && params["window"] == "turn"
 		if !own || params["event"] != "move-ended" || len(types) != 1 || len(filter) != 1 {
 			return nil
 		}
-		// Player-controlled context flags for the buffed unit's own move this turn. An undefined
-		// charge flag means the caller couldn't pin it down: stay unknown so the SPA surfaces it.
 		switch types[0] {
 		case "remain-stationary":
 			return ctx["attackerStationary"] == true
@@ -1532,48 +2340,91 @@ func evaluateCondition(condition, ctx map[string]any) any {
 			return ctx["attackerCharged"] == true
 		}
 		return nil
-	case "has-keyword":
-		// A keyword the player picked is not in the context.
-		if params["chosen_by"] != nil {
+	case "attachment":
+		if params["with"] != nil {
 			return nil
 		}
 		subject := params["subject"]
-		var pool []any
-		switch {
-		case subject == "defender":
-			pool = getList(ctx, "targetKeywords")
-		case isBuffedUnit(subject):
-			pool = getList(ctx, "attackerKeywords")
+		explicitSide := ""
+		switch subject {
+		case "attacker":
+			explicitSide = "attacker"
+		case "defender":
+			explicitSide = "target"
 		default:
-			return nil
-		}
-		have := map[string]bool{}
-		for _, k := range pool {
-			if ks, ok := k.(string); ok {
-				have[lower(ks)] = true
-			}
-		}
-		all, _ := asList(params["all_of"])
-		anyOf, _ := asList(params["any_of"])
-		for _, k := range append(append([]any{}, all...), anyOf...) {
-			if _, ok := k.(string); !ok {
+			if subject != nil && subject != "this-model" && subject != "this-unit" && subject != "ability-unit" {
 				return nil
 			}
 		}
-		for _, k := range all {
-			if !have[lower(k.(string))] {
-				return false
+		side := explicitSide
+		if side == "" {
+			side = perspective
+		}
+		var attached any
+		var role any
+		if side == "attacker" {
+			attached = ctx["attackerAttached"]
+			role = ctx["attackerAttachmentRole"]
+		} else {
+			attached = ctx["targetAttached"]
+			role = ctx["targetAttachmentRole"]
+		}
+		if explicitSide == "" && getStr(source, "kind") == "ability" &&
+			(getStr(source, "abilityKind") == "attached" || getStr(source, "abilityKind") == "support") {
+			if roles, ok := getMap(ctx, "attachmentRoles"); ok {
+				role = roles[getStr(source, "sourceUnitId")]
+			} else {
+				role = nil
+			}
+			if getStr(source, "abilityKind") == "attached" {
+				attached = true
+			} else if role == nil {
+				attached = nil
+			} else {
+				attached = true
 			}
 		}
-		if len(anyOf) == 0 {
-			return true
+		if attached == false {
+			return false
 		}
-		for _, k := range anyOf {
-			if have[lower(k.(string))] {
+		switch params["role"] {
+		case "attached":
+			if attached == nil {
+				return nil
+			}
+			return attached == true
+		case "leading":
+			if role == nil {
+				return nil
+			}
+			return role == "leader"
+		case "led":
+			if role == "bodyguard" {
 				return true
 			}
 		}
-		return false
+		return nil
+	case "matches":
+		filter, ok := getMap(params, "filter")
+		if !ok {
+			return nil
+		}
+		side := ""
+		owner := "friendly"
+		switch params["subject"] {
+		case "defender":
+			side, owner = "target", "enemy"
+		case "attacker":
+			side = "attacker"
+		default:
+			if isBuffedUnit(params["subject"]) {
+				side = perspective
+			}
+		}
+		if side == "" {
+			return nil
+		}
+		return matchesUnitFilter(filter, ctx, side, owner)
 	case "army-faction":
 		faction, ok := params["faction"].(string)
 		if !ok || ctx["armyFaction"] == nil {
@@ -1587,27 +2438,15 @@ func evaluateCondition(condition, ctx map[string]any) any {
 		}
 		return ctx["battleSize"] == size
 	case "guided":
-		// Guided is read for the attacking unit: a For the Greater Good unit, not an Observer, targeting a Spotted unit.
 		if (params["subject"] != nil && !isBuffedUnit(params["subject"])) || ctx["attackerGuided"] == nil {
 			return nil
 		}
 		return ctx["attackerGuided"] == true
-	case "attachment":
-		// True whenever the buffed unit is a combined ("attached") unit. We do not thread
-		// per-member leader identity, and a Leader keyword filter is not checked: "attachment
-		// present" is the signal. An undefined flag stays unknown so the SPA surfaces the gap.
-		if params["role"] == "led" || params["with"] != nil {
-			return nil
-		}
-		if ctx["attackerAttached"] == nil {
-			return nil
-		}
-		return ctx["attackerAttached"] == true
 	}
 	return nil
 }
 
-func evaluateCompound(operator string, operands []any, ctx map[string]any) any {
+func evaluateCompound(operator string, operands []any, ctx map[string]any, perspective string, source map[string]any) any {
 	if operator == "not" {
 		if len(operands) == 0 {
 			return nil
@@ -1616,11 +2455,11 @@ func evaluateCompound(operator string, operands []any, ctx map[string]any) any {
 		if !ok {
 			return nil
 		}
-		v := evaluateCondition(first, ctx)
-		if v == nil {
+		value := evaluateCondition(first, ctx, perspective, source)
+		if value == nil {
 			return nil
 		}
-		return !v.(bool)
+		return !value.(bool)
 	}
 	if operator != "and" && operator != "or" {
 		return nil
@@ -1632,15 +2471,15 @@ func evaluateCompound(operator string, operands []any, ctx map[string]any) any {
 			sawUnknown = true
 			continue
 		}
-		v := evaluateCondition(operand, ctx)
-		if v == nil {
+		value := evaluateCondition(operand, ctx, perspective, source)
+		if value == nil {
 			sawUnknown = true
 			continue
 		}
-		if operator == "and" && v == false {
+		if operator == "and" && value == false {
 			return false
 		}
-		if operator == "or" && v == true {
+		if operator == "or" && value == true {
 			return true
 		}
 	}
@@ -1706,35 +2545,6 @@ func apDelta(modifier map[string]any) (float64, bool) {
 	return 0, false
 }
 
-var antiGrantRe = regexp.MustCompile(`(?i)^anti-([A-Za-z][A-Za-z\s-]*(?:/[A-Za-z][A-Za-z\s-]*)*)\s+(\d+)\+?$`)
-var valueGrantRe = regexp.MustCompile(`^(.+?)\s+(\d+)$`)
-
-func parseKeywordGrant(raw string) map[string]any {
-	trimmed := strings.TrimSpace(raw)
-	if trimmed == "" {
-		return nil
-	}
-	if m := antiGrantRe.FindStringSubmatch(trimmed); m != nil {
-		th, _ := strconv.Atoi(m[2])
-		return map[string]any{"keyword_id": "anti", "parameters": map[string]any{
-			"target_keyword": strings.TrimSpace(m[1]),
-			"threshold":      float64(th),
-		}}
-	}
-	if m := valueGrantRe.FindStringSubmatch(trimmed); m != nil {
-		val, _ := strconv.Atoi(m[2])
-		return map[string]any{"keyword_id": toKebabCase(m[1]), "parameters": map[string]any{"value": float64(val)}}
-	}
-	return map[string]any{"keyword_id": toKebabCase(trimmed)}
-}
-
-var kebabSpaceRe = regexp.MustCompile(`[\s_]+`)
-var kebabStripRe = regexp.MustCompile(`[^a-z0-9-]`)
-
-func toKebabCase(s string) string {
-	return kebabStripRe.ReplaceAllString(kebabSpaceRe.ReplaceAllString(strings.ToLower(s), "-"), "")
-}
-
 func containsAnyV(l []any, v any) bool {
 	for _, x := range l {
 		if x == v {
@@ -1746,134 +2556,29 @@ func containsAnyV(l []any, v any) bool {
 
 const fidelityBindingReason = "selection/history/model/attack predicates are not resolved by the buff engine"
 
-const alternativesReason = "unit-filter alternatives (any_of_filters): the unit's keywords are unavailable or an alternative names more than keywords"
-
-// alternativesMatch reports whether a node's unit-filter target with any_of_filters reaches the
-// unit crunched: "true" when any alternative matches, "false" when none can, "unknown" when the
-// keywords are missing or an alternative whose keywords hold also names something else (a
-// state). A friendly filter is read against the crunched side's own keywords; an enemy one
-// only from the target's perspective. Nodes without alternatives are left as before ("true").
-func alternativesMatch(node map[string]any, opts dslOpts) string {
-	target, ok := asMap(node["target"])
-	if !ok || target == nil {
-		return "true"
-	}
-	alternatives, ok := asList(target["any_of_filters"])
-	if !ok {
-		return "true"
-	}
-	key := ""
-	switch {
-	case target["owner"] == "friendly" && opts.perspective == "attacker":
-		key = "attackerKeywords"
-	case target["owner"] == "friendly", target["owner"] == "enemy" && opts.perspective == "target":
-		key = "targetKeywords"
-	default:
-		return "true"
-	}
-	have, ok := lowerKeywordSet(opts.context[key])
-	if !ok {
-		return "unknown"
-	}
-	sawUnknown := false
-	for _, raw := range alternatives {
-		switch alternativeMatches(raw, have) {
-		case "true":
-			return "true"
-		case "unknown":
-			sawUnknown = true
-		}
-	}
-	if sawUnknown {
-		return "unknown"
-	}
-	return "false"
-}
-
-// lowerKeywordSet is a keyword list as a lower-cased set; false when it is missing or malformed.
-func lowerKeywordSet(raw any) (map[string]bool, bool) {
-	list, ok := asList(raw)
-	if !ok {
-		return nil, false
-	}
-	set := map[string]bool{}
-	for _, item := range list {
-		keyword, ok := item.(string)
-		if !ok || keyword == "" {
-			return nil, false
-		}
-		set[strings.ToLower(keyword)] = true
-	}
-	return set, true
-}
-
-// alternativeMatches checks one any_of_filters alternative against a unit's keywords: "false"
-// when its keyword fields (all_of, any_of, none_of) fail, whatever else it names; "true" when they
-// hold and it names nothing else; "unknown" when they hold but it also names something else (a
-// state), or a keyword field is malformed.
-func alternativeMatches(raw any, have map[string]bool) string {
-	alternative, ok := asMap(raw)
-	if !ok || alternative == nil {
-		return "unknown"
-	}
-	fields := map[string]map[string]bool{}
-	other := false
-	for key, value := range alternative {
-		if key != "all_of" && key != "any_of" && key != "none_of" {
-			other = true
-			continue
-		}
-		set, ok := lowerKeywordSet(value)
-		if !ok {
-			return "unknown"
-		}
-		fields[key] = set
-	}
-	for keyword := range fields["all_of"] {
-		if !have[keyword] {
-			return "false"
-		}
-	}
-	if anyOf, ok := fields["any_of"]; ok {
-		found := false
-		for keyword := range anyOf {
-			if have[keyword] {
-				found = true
-				break
-			}
-		}
-		if !found {
-			return "false"
-		}
-	}
-	for keyword := range fields["none_of"] {
-		if have[keyword] {
-			return "false"
-		}
-	}
-	if other {
-		return "unknown"
-	}
-	return "true"
-}
-
 func hasUnresolvedFidelityBinding(n map[string]any) bool {
 	selector, _ := getMap(n, "selector")
 	applies, _ := getMap(n, "applies")
 	modifier, _ := getMap(n, "modifier")
 	consumer, _ := getMap(modifier, "consumer")
-	selectorUnresolved := (n["type"] == "select-units" || n["type"] == "for-each-unit") && (selector["target_kind"] == "model" ||
-		selector["eligibility"] != nil ||
-		selector["reference"] != nil ||
-		selector["origin"] != nil ||
-		selector["selection_limit"] != nil ||
-		selector["bind_as"] != nil ||
-		selector["within_inches_from"] != nil ||
-		selector["visible_to"] != nil ||
-		selector["visibility_required"] == true)
+	selectorUnresolved := false
+	if n["type"] == "select-units" || n["type"] == "for-each-unit" {
+		filter, _ := getMap(selector, "filter")
+		for key := range filter {
+			switch key {
+			case "owner", "level", "member_of", "attachment_role", "all_of", "any_of", "none_of", "not_all_of":
+			default:
+				selectorUnresolved = true
+			}
+		}
+		selectorUnresolved = selectorUnresolved ||
+			selector["eligibility"] != nil ||
+			selector["limit"] != nil ||
+			selector["bind_as"] != nil
+	}
 	// A designation's own selection (range, visibility, eligibility) is what its lever's player vouches for.
-	designationUnresolved := n["type"] == "designate-target" && (applies["attacker_keywords"] != nil ||
-		applies["attacker_unit_keywords"] != nil ||
+	designationUnresolved := n["type"] == "designate-target" && (applies["attacker_filter"] != nil ||
+		applies["attacker_unit_filter"] != nil ||
 		applies["beneficiary"] != nil ||
 		applies["reference"] != nil)
 	triggerUnresolved := n["type"] == "ability-part" && hasUnresolvedTriggerBinding(n["trigger"])

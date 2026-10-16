@@ -153,8 +153,9 @@ describe("a selection's exclusion folds past the selected unit's conditions (com
     const withEffect = `${text} That unit can embark.`;
     const mechanics = mechanicsOf(withEffect, [...pieces.slice(0, 7), ["That unit can embark", "eligibility-permission", { subject: "antecedent", activity: "embark", allow: true }]]);
     const selector = mechanics.effect.selector;
-    expect(selector).toMatchObject({ owner: "friendly", keywords: ["KEYA"], excluded_keywords: ["KEYB"] });
-    expect(selector.eligibility.operands.map((operand: any) => operand.type)).toEqual(["model-count", "within"]);
+    expect(selector).toMatchObject({ filter: { owner: "friendly", all_of: ["KEYA"], none_of: ["KEYB"] } });
+    expect(selector.eligibility.operands.map((operand: { type: string }) => operand.type)).toEqual(["model-count", "matches"]);
+    expect(selector.eligibility.operands[1]).toMatchObject({ parameters: { filter: { within: { range: { inches: 6 }, of: "this-unit", wholly: true } } } });
   });
 
   it("still refuses an exclusion for the other side", () => {

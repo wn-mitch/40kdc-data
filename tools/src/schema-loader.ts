@@ -45,10 +45,10 @@ export function findSchemaFiles(dir: string): string[] {
  * Create and configure an AJV instance with all project schemas loaded.
  * Schemas are registered by their $id so $ref resolution works across files.
  */
-export function createValidator(): Ajv {
+export function createValidator(options: { allErrors?: boolean } = {}): Ajv {
   const ajv = new Ajv({
     strict: false,
-    allErrors: true,
+    allErrors: options.allErrors ?? true,
     validateSchema: false,
   });
   addFormats(ajv);

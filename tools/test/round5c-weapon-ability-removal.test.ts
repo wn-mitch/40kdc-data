@@ -96,8 +96,8 @@ describe("a removal under a scope compiles to the scope's weapons", () => {
       ["Have +1 to Hit rolls.", "roll-modifier", { roll: "hit", operation: "add", value: 1 }],
     ));
     expect(effect.steps).toEqual([
-      { type: "weapon-ability-grant", target: ZETA, modifier: { removes: ["Heavy"], weapon_type: "ranged" } },
-      { type: "roll-modifier", target: ZETA, modifier: { roll: "hit", operation: "add", value: 1, weapon_type: "ranged" } },
+      { type: "weapon-ability-grant", target: ZETA, modifier: { removes: [{ keyword_id: "heavy" }], weapons: { type: "ranged" } } },
+      { type: "roll-modifier", target: ZETA, modifier: { roll: "hit", operation: "add", value: 1, weapons: { type: "ranged" } } },
     ]);
   });
 
@@ -109,8 +109,8 @@ describe("a removal under a scope compiles to the scope's weapons", () => {
       ["Have +1 A.", "characteristic-modifier", { characteristics: ["A"], operation: "improve", value: 1 }],
     ));
     expect(effect.steps).toEqual([
-      { type: "weapon-ability-grant", target: "this-unit", modifier: { removes: ["Blast"], weapon_type: "ranged", weapon_keyword: "Blast" } },
-      { type: "stat-modifier", target: "this-unit", modifier: { stat: "A", operation: "improve", value: 1, weapon_type: "ranged", weapon_keyword: "Blast" } },
+      { type: "weapon-ability-grant", target: "this-unit", modifier: { removes: [{ keyword_id: "blast" }], weapons: { type: "ranged", keyword: { keyword_id: "blast" } } } },
+      { type: "stat-modifier", target: "this-unit", modifier: { stat: "A", operation: "improve", value: 1, weapons: { type: "ranged", keyword: { keyword_id: "blast" } } } },
     ]);
   });
 
@@ -123,9 +123,9 @@ describe("a removal under a scope compiles to the scope's weapons", () => {
       ["Have +1 A.", "characteristic-modifier", { characteristics: ["A"], operation: "improve", value: 1 }],
     ));
     expect(effect.steps).toEqual([
-      { type: "weapon-ability-grant", target: "this-unit", modifier: { removes: ["Blast"], weapon_keyword: "Torrent" } },
-      { type: "weapon-ability-grant", target: "this-unit", modifier: { abilities: ["Close-quarters"], weapon_keyword: "Torrent" } },
-      { type: "stat-modifier", target: "this-unit", modifier: { stat: "A", operation: "improve", value: 1, weapon_keyword: "Torrent" } },
+      { type: "weapon-ability-grant", target: "this-unit", modifier: { removes: [{ keyword_id: "blast" }], weapons: { keyword: { keyword_id: "torrent" } } } },
+      { type: "weapon-ability-grant", target: "this-unit", modifier: { keywords: [{ keyword_id: "close-quarters" }], weapons: { keyword: { keyword_id: "torrent" } } } },
+      { type: "stat-modifier", target: "this-unit", modifier: { stat: "A", operation: "improve", value: 1, weapons: { keyword: { keyword_id: "torrent" } } } },
     ]);
   });
 });
@@ -143,8 +143,8 @@ describe("the Gravis shape: a unit-activity antecedent", () => {
     // The move's unit gates both effects, and both reach the friendly units the filter names.
     const gate = { type: "happened", parameters: { subject: "recipient", event: "move-ended", filter: { move_types: ["normal"] }, window: "turn" } };
     expect(effect.steps).toEqual([
-      { type: "conditional", condition: gate, effect: { type: "weapon-ability-grant", target: ZETA, modifier: { removes: ["Heavy"], weapon_type: "ranged" } } },
-      { type: "conditional", condition: gate, effect: { type: "roll-modifier", target: ZETA, modifier: { roll: "hit", operation: "add", value: 1, weapon_type: "ranged" } } },
+      { type: "conditional", condition: gate, effect: { type: "weapon-ability-grant", target: ZETA, modifier: { removes: [{ keyword_id: "heavy" }], weapons: { type: "ranged" } } } },
+      { type: "conditional", condition: gate, effect: { type: "roll-modifier", target: ZETA, modifier: { roll: "hit", operation: "add", value: 1, weapons: { type: "ranged" } } } },
     ]);
   });
 });
@@ -161,8 +161,8 @@ describe("the Gravis shape with the printed In-a-turn wording", () => {
     ));
     const gate = { type: "happened", parameters: { subject: "recipient", event: "move-ended", filter: { move_types: ["normal"] }, window: "turn" } };
     expect(effect.steps).toEqual([
-      { type: "conditional", condition: gate, effect: { type: "weapon-ability-grant", target: ZETA, modifier: { removes: ["Heavy"], weapon_type: "ranged" } } },
-      { type: "conditional", condition: gate, effect: { type: "roll-modifier", target: ZETA, modifier: { roll: "hit", operation: "add", value: 1, weapon_type: "ranged" } } },
+      { type: "conditional", condition: gate, effect: { type: "weapon-ability-grant", target: ZETA, modifier: { removes: [{ keyword_id: "heavy" }], weapons: { type: "ranged" } } } },
+      { type: "conditional", condition: gate, effect: { type: "roll-modifier", target: ZETA, modifier: { roll: "hit", operation: "add", value: 1, weapons: { type: "ranged" } } } },
     ]);
   });
 });
@@ -183,10 +183,10 @@ describe("the Blast-scoped shape: an engaged trigger filter over a removal", () 
     if (!result.ok) throw new Error(result.errors.join("; "));
     const mechanics = result.mechanics as unknown as Record<string, any>;
     expect(mechanics.trigger.subject).toEqual({ owner: "friendly", all_of: ["DOMINUS", "IMPERIAL KNIGHTS"] });
-    expect(mechanics.effect.condition).toEqual({ type: "unit-state", parameters: { subject: "event-subject", state: "engaged" } });
+    expect(mechanics.effect.condition).toEqual({ type: "matches", parameters: { subject: "event-subject", filter: { state: "engaged" } } });
     expect(mechanics.effect.effect.steps).toEqual([
-      { type: "weapon-ability-grant", target: "this-unit", modifier: { removes: ["Blast"], weapon_type: "ranged", weapon_keyword: "Blast" } },
-      { type: "stat-modifier", target: "this-unit", modifier: { stat: "A", operation: "improve", value: 1, weapon_type: "ranged", weapon_keyword: "Blast" } },
+      { type: "weapon-ability-grant", target: "this-unit", modifier: { removes: [{ keyword_id: "blast" }], weapons: { type: "ranged", keyword: { keyword_id: "blast" } } } },
+      { type: "stat-modifier", target: "this-unit", modifier: { stat: "A", operation: "improve", value: 1, weapons: { type: "ranged", keyword: { keyword_id: "blast" } } } },
     ]);
   });
 });
@@ -251,45 +251,43 @@ describe("a removal under a scope refuses what it cannot bind", () => {
 
 describe("describer and cruncher for removals", () => {
   it("describes a removal with a weapon type as the weapons losing the ability", () => {
-    expect(describeEffect({ type: "weapon-ability-grant", target: "this-unit", modifier: { removes: ["Heavy"], weapon_type: "ranged" } } as unknown as Effect))
+    expect(describeEffect({ type: "weapon-ability-grant", target: "this-unit", modifier: { removes: [{ keyword_id: "heavy" }], weapons: { type: "ranged" } } } as unknown as Effect))
       .toBe("Ranged weapons equipped by models in this unit lose [HEAVY].");
   });
 
   it("describes a keyword selector in both sentences of a Blast removal and stat change", () => {
-    const removal = describeEffect({ type: "weapon-ability-grant", target: "this-unit", modifier: { removes: ["Blast"], weapon_type: "ranged", weapon_keyword: "Blast" } } as unknown as Effect);
-    const stat = describeEffect({ type: "stat-modifier", target: "this-unit", modifier: { stat: "A", operation: "improve", value: 1, weapon_type: "ranged", weapon_keyword: "Blast" } } as unknown as Effect);
+    const removal = describeEffect({ type: "weapon-ability-grant", target: "this-unit", modifier: { removes: [{ keyword_id: "blast" }], weapons: { type: "ranged", keyword: { keyword_id: "blast" } } } } as unknown as Effect);
+    const stat = describeEffect({ type: "stat-modifier", target: "this-unit", modifier: { stat: "A", operation: "improve", value: 1, weapons: { type: "ranged", keyword: { keyword_id: "blast" } } } } as unknown as Effect);
     expect(removal).toBe("Ranged weapons with [BLAST] equipped by models in this unit lose [BLAST].");
     expect(stat).toBe("Improve the Attacks characteristic of ranged weapons with [BLAST] equipped by models in this unit by 1.");
   });
 
-  it("refuses a removal and a keyword selector as unsupported in the cruncher", () => {
+  it("refuses a removal as unsupported in the cruncher and gates a keyword selector on that keyword", () => {
     const source: BuffSource = { kind: "ability", abilityId: "zeta-rule", abilityKind: "unit" };
     const ctx: EngineContext = { phase: "shooting", attackerStationary: false };
-    const removal = effectToBuffs({ type: "weapon-ability-grant", target: "this-unit", modifier: { removes: ["Heavy"], weapon_type: "ranged" } }, source, ctx, "attacker");
+    const removal = effectToBuffs({ type: "weapon-ability-grant", target: "this-unit", modifier: { removes: [{ keyword_id: "heavy" }], weapons: { type: "ranged" } } }, source, ctx, "attacker");
     expect(removal.applied).toEqual([]);
     expect(removal.unsupported.map((entry) => entry.reason)).toEqual([
       'weapon-ability-removal: the cruncher does not model removing a weapon ability ("Heavy")',
     ]);
-    const selector = effectToBuffs({ type: "weapon-ability-grant", target: "this-unit", modifier: { abilities: ["Close-quarters"], weapon_keyword: "Torrent" } }, source, ctx, "attacker");
-    expect(selector.applied).toEqual([]);
-    expect(selector.unsupported.map((entry) => entry.reason)).toEqual([
-      "weapon-ability-grant: weapon_keyword selects weapons by a keyword the cruncher cannot resolve",
-    ]);
+    const selector = effectToBuffs({ type: "weapon-ability-grant", target: "this-unit", modifier: { keywords: [{ keyword_id: "close-quarters" }], weapons: { keyword: { keyword_id: "torrent" } } } }, source, ctx, "attacker");
+    expect(selector.unsupported).toEqual([]);
+    expect(selector.applied.map((buff) => buff.applicableWhen)).toEqual([{ weaponKeywords: [{ keyword_id: "torrent" }] }]);
   });
 });
 
-describe("the effect schema accepts a removal with or without abilities", () => {
+describe("the effect schema accepts a removal with or without keywords", () => {
   const validate = createValidator().getSchema("https://40kdc.dev/schemas/enrichment/ability-dsl/effect.schema.json")!;
   const grant = (modifier: Record<string, unknown>) => ({ type: "weapon-ability-grant", target: "this-unit", modifier });
 
-  it("accepts removes alone, and abilities with removes", () => {
-    expect(validate(grant({ removes: ["Heavy"], weapon_type: "ranged" }))).toBe(true);
-    expect(validate(grant({ abilities: ["Close-quarters"], removes: ["Blast"], weapon_keyword: "Torrent" }))).toBe(true);
+  it("accepts removes alone, and keywords with removes", () => {
+    expect(validate(grant({ removes: [{ keyword_id: "heavy" }], weapons: { type: "ranged" } }))).toBe(true);
+    expect(validate(grant({ keywords: [{ keyword_id: "close-quarters" }], removes: [{ keyword_id: "blast" }], weapons: { keyword: { keyword_id: "torrent" } } }))).toBe(true);
   });
 
   it("refuses a grant with neither list, an empty removes, and a duplicate keyword in removes", () => {
-    expect(validate(grant({ weapon_type: "ranged" }))).toBe(false);
+    expect(validate(grant({ weapons: { type: "ranged" } }))).toBe(false);
     expect(validate(grant({ removes: [] }))).toBe(false);
-    expect(validate(grant({ removes: ["Heavy", "Heavy"] }))).toBe(false);
+    expect(validate(grant({ removes: [{ keyword_id: "heavy" }, { keyword_id: "heavy" }] }))).toBe(false);
   });
 });

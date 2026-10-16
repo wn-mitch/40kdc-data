@@ -5,6 +5,7 @@ import { resolveAuthoredNames } from "../src/round5c/compile-weapon-names.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/round5c/contracts.js";
 import { familyExtension } from "../src/round5c/families/index.js";
 import type { WeaponCatalog } from "../src/round5c/weapon-catalog.js";
+import { keywordRef } from "../src/round5c/compile-fragments.js";
 
 /** The family versions the extensions under test create. */
 const WEAPON_SCOPE_NAME_KEYWORD_EXCLUSION_VERSIONS: ReadonlySet<string> = new Set(["weapon-property-scope@8", "characteristic-set@8", "roll-modifier@8"]);
@@ -168,7 +169,7 @@ describe("a scope that names one weapon: compilation", () => {
       ["Your unit's zap cannon weapons", "weapon-property-scope", { subject: "this-unit", weapon_type: "all", weapon_name: "zap cannon" }],
       ["have the [LETHAL HITS] ability", "weapon-ability-keyword", { keyword: "Lethal Hits" }]), text, UNIT);
     expect(mechanics.effect.type).toBe("weapon-ability-grant");
-    expect(mechanics.effect.modifier.weapon_name).toBe("Zap cannon");
+    expect(mechanics.effect).toMatchObject({ modifier: { weapons: { name: "Zap cannon" } } });
   });
 
   it("refuses a name that is not a weapon of the lookup pool", () => {
@@ -186,8 +187,8 @@ describe("a scope that names one weapon: compilation", () => {
       ["+1 to Hit rolls", "roll-modifier", { roll: "hit", operation: "add", value: 1 }]), text);
     const steps = mechanics.effect.steps as Array<{ type: string; modifier: Record<string, unknown> }>;
     const roll = steps.find((step) => step.type === "roll-modifier")!;
-    expect(roll.modifier).toMatchObject({ roll: "hit", operation: "add", value: 1, weapon_name: "Fab caster" });
-    expect(steps.find((step) => step.type === "weapon-ability-grant")!.modifier.weapon_name).toBe("Fab caster");
+    expect(roll.modifier).toMatchObject({ roll: "hit", operation: "add", value: 1, weapons: { name: "Fab caster" } });
+    expect(steps.find((step) => step.type === "weapon-ability-grant")).toMatchObject({ modifier: { weapons: { name: "Fab caster" } } });
   });
 
   it("carries the name onto a set and both keywords of its own weapon, with the leaf's own name refused as a conflict", () => {
@@ -200,7 +201,7 @@ describe("a scope that names one weapon: compilation", () => {
     ];
     const mechanics = mechanicsOf(placed(text, ...pieces({})), text, UNIT);
     const json = JSON.stringify(mechanics);
-    expect(json.match(/"weapon_name":"Twin lash"/gu)).toHaveLength(2);
+    expect(json.match(/"weapons":\{"name":"Twin lash"/gu)).toHaveLength(2);
     expect(json).toMatch(/"stat":"D"/u);
     expect(refusalOf(placed(text, ...pieces({ weapon_name: "Twin lash" })), text, UNIT)).toMatch(/weapon selection conflicts/u);
   });
@@ -222,8 +223,8 @@ describe("a set by weapon keyword", () => {
     const text = "Change the Attacks characteristic of Torrent weapons to 6.";
     const mechanics = mechanicsOf(placed(text,
       ["the Attacks characteristic of Torrent weapons to 6", "characteristic-set", { subject: "this-unit", characteristic: "A", value: 6, weapon_type: "all", weapon_keyword: "Torrent" }]), text);
-    expect(mechanics.effect).toMatchObject({ type: "stat-modifier", target: "this-unit", modifier: { stat: "A", operation: "set", value: 6, weapon_keyword: "Torrent" } });
-    expect(mechanics.effect.modifier.weapon_type).toBeUndefined();
+    expect(mechanics.effect).toMatchObject({ type: "stat-modifier", target: "this-unit", modifier: { stat: "A", operation: "set", value: 6, weapons: { keyword: { keyword_id: "torrent" } } } });
+    expect(mechanics.effect).not.toHaveProperty("modifier.weapons.type");
   });
 
   it("keeps the keyword a keyword scope hands a set (a set under it was lowered without the keyword)", () => {
@@ -231,7 +232,7 @@ describe("a set by weapon keyword", () => {
     const mechanics = mechanicsOf(placed(text,
       ["Your unit's Torrent weapons have", "weapon-property-scope", { subject: "this-unit", weapon_type: "all", weapon_keyword: "Torrent" }],
       ["a Attacks characteristic of 6", "characteristic-set", { subject: "this-unit", characteristic: "A", value: 6, weapon_type: "all" }]), text);
-    expect(mechanics.effect.modifier).toMatchObject({ stat: "A", operation: "set", value: 6, weapon_keyword: "Torrent" });
+    expect(mechanics.effect.modifier).toMatchObject({ stat: "A", operation: "set", value: 6, weapons: { keyword: { keyword_id: "torrent" } } });
   });
 });
 
@@ -244,7 +245,7 @@ describe("a roll modifier for named weapons", () => {
     const mechanics = mechanicsOf(placed(TEXT, roll()), TEXT, UNIT);
     const steps = mechanics.effect.steps as Array<{ type: string; modifier: Record<string, unknown> }>;
     expect(steps.map((step) => step.type)).toEqual(["roll-modifier", "roll-modifier"]);
-    expect(steps.map((step) => step.modifier.weapon_name)).toEqual(["Plasma lamp", "Plasma pistol"]);
+    expect(steps.map((step) => step.modifier.weapons)).toEqual([{ name: "Plasma lamp" }, { name: "Plasma pistol" }]);
     expect(steps.every((step) => step.modifier.roll === "hazard" && step.modifier.value === 1)).toBe(true);
   });
 
@@ -252,7 +253,7 @@ describe("a roll modifier for named weapons", () => {
     const text = "This unit has +1 to **hit rolls** made with its Zap cannon weapon.";
     const wording = "+1 to **hit rolls** made with its Zap cannon weapon";
     const mechanics = mechanicsOf(placed(text, [wording, "roll-modifier", { roll: "hit", operation: "add", value: 1, subject: "this-unit", weapon_type: "all", weapon_name: "zap cannon" }]), text, UNIT);
-    expect(mechanics.effect).toMatchObject({ type: "roll-modifier", modifier: { roll: "hit", weapon_name: "Zap cannon" } });
+    expect(mechanics.effect).toMatchObject({ type: "roll-modifier", modifier: { roll: "hit", weapons: { name: "Zap cannon" } } });
   });
 
   it("refuses a span that stops at the roll phrase, so the names are not in the leaf's wording", () => {
@@ -280,5 +281,15 @@ describe("a roll modifier for named weapons", () => {
     const wording = "+1 to hazard rolls made for its Plasma lamp and Plasma pistol weapons";
     const text = `This unit has ${wording}.`;
     expect(resolved(text, [wording, "roll-modifier", { roll: "hazard", operation: "add", value: 1, subject: "this-unit", weapon_names: ["Plasma lamp", "Plasma pistol"] }]).parameters.weapon_names).toEqual(["Plasma lamp", "Plasma pistol"]);
+  });
+});
+
+describe("reviewed source keyword lowering", () => {
+  it("emits catalog references without depending on a runtime string parser", () => {
+    expect(keywordRef("Anti-Infantry 3PLUS")).toEqual({ keyword_id: "anti", parameters: { target_keyword: "INFANTRY", threshold: 3 } });
+    expect(keywordRef("Anti-Vehicle")).toEqual({ keyword_id: "anti", parameters: { target_keyword: "VEHICLE" } });
+    expect(keywordRef("Sustained Hits D3")).toEqual({ keyword_id: "sustained-hits", parameters: { value: "D3" } });
+    expect(keywordRef("Blast 1")).toEqual({ keyword_id: "blast", parameters: { value: 1 } });
+    expect(keywordRef("Twin Linked")).toEqual({ keyword_id: "twin-linked" });
   });
 });

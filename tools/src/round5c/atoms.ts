@@ -61,10 +61,11 @@ function createBatch(db: DatabaseSync, reviewer: string, metadata: JsonRecord): 
   return batchId;
 }
 
-function requireCurrent(db: DatabaseSync, abilityVersionId: number, sourceHash: string): void {
+function requireCurrent(db: DatabaseSync, abilityVersionId: number, sourceHash: string, historical = false): void {
   const ability = db.prepare("SELECT current, source_hash FROM abilities WHERE id = ?").get(abilityVersionId) as { current: number; source_hash: string } | undefined;
   if (!ability) throw new SourceAtomError(404, `Unknown ability version ${abilityVersionId}.`);
-  if (ability.current !== 1 || ability.source_hash !== sourceHash) conflict("This ability source version is stale. Reload before labeling source.");
+  const validCurrent = historical ? ability.current === 0 : ability.current === 1;
+  if (!validCurrent || ability.source_hash !== sourceHash) conflict("This ability source version is stale or has an invalid historical authorization.");
 }
 
 function spanFor(db: DatabaseSync, abilityVersionId: number, interval: Interval, exactText: string): number {
@@ -122,6 +123,8 @@ export function proposeSourceAtom(db: DatabaseSync, body: unknown): { batch_id: 
   const input = record(body, "body");
   const abilityVersionId = integer(input.ability_version_id, "ability_version_id", 1);
   const sourceHash = text(input.source_hash, "source_hash", 64);
+  const historical = input.historical === true;
+  if (input.historical !== undefined && typeof input.historical !== "boolean") invalid("historical must be a boolean.");
   const interval = parseInterval(input, "body");
   const exactText = text(input.exact_text, "exact_text", 4096);
   const kind = text(input.kind, "kind", 32);
@@ -133,13 +136,13 @@ export function proposeSourceAtom(db: DatabaseSync, body: unknown): { batch_id: 
     invalid(`connective_kind must be one of ${CONNECTIVE_KINDS.join(", ")}.`);
   }
   return withTransaction(db, () => {
-    requireCurrent(db, abilityVersionId, sourceHash);
+    requireCurrent(db, abilityVersionId, sourceHash, historical);
     const spanId = spanFor(db, abilityVersionId, interval, exactText);
     const overlaps = authoritativeOverlaps(db, abilityVersionId, interval);
     if (overlaps.length > 0) {
       conflict(`This span overlaps a reviewed ${overlaps[0]!.layer}; correct or undo that decision before labeling these bytes again.`);
     }
-    const batchId = createBatch(db, reviewer, { kind: "source-atom-proposal" });
+    const batchId = createBatch(db, reviewer, { kind: "source-atom-proposal", ...(historical ? { historical: true } : {}) });
     const createdAt = new Date().toISOString();
     let proposalId: number;
     if (kind === "CONNECTIVE" || kind === "UNRESOLVED") {
@@ -238,6 +241,7 @@ type AtomDecision = {
   atom_proposal_id: number;
   action: "accept" | "correct" | "reject";
   source_hash: string;
+  historical: boolean;
   kind?: StructuralKind;
   interval?: Interval;
   exact_text?: string;
@@ -248,6 +252,8 @@ function parseDecision(value: unknown, index: number): AtomDecision {
   const input = record(value, `decisions[${index}]`);
   const action = text(input.action, `decisions[${index}].action`, 16);
   if (action !== "accept" && action !== "correct" && action !== "reject") invalid(`decisions[${index}].action must be accept, correct, or reject.`);
+  const historical = input.historical === true;
+  if (input.historical !== undefined && typeof input.historical !== "boolean") invalid(`decisions[${index}].historical must be a boolean.`);
   const kind = input.kind === undefined ? undefined : text(input.kind, `decisions[${index}].kind`, 32);
   if (kind !== undefined && !(STRUCTURAL_KINDS as readonly string[]).includes(kind)) invalid(`decisions[${index}].kind is not a structural kind.`);
   const hasInterval = input.start_byte !== undefined || input.end_byte !== undefined;
@@ -257,6 +263,7 @@ function parseDecision(value: unknown, index: number): AtomDecision {
     atom_proposal_id: integer(input.atom_proposal_id, `decisions[${index}].atom_proposal_id`, 1),
     action: action as AtomDecision["action"],
     source_hash: text(input.source_hash, `decisions[${index}].source_hash`, 64),
+    historical,
     kind: kind as StructuralKind | undefined,
     interval: hasInterval ? parseInterval(input, `decisions[${index}]`) : undefined,
     exact_text: hasInterval ? text(input.exact_text, `decisions[${index}].exact_text`, 4096) : undefined,
@@ -283,7 +290,7 @@ export function applySourceAtomBatch(db: DatabaseSync, body: unknown, actor: Act
     const createdAt = new Date().toISOString();
     for (const decision of decisions) {
       const proposal = atomProposal(db, decision.atom_proposal_id);
-      requireCurrent(db, proposal.ability_version_id, decision.source_hash);
+      requireCurrent(db, proposal.ability_version_id, decision.source_hash, decision.historical);
       if (proposal.status !== "pending") conflict(`Structural proposal ${proposal.id} was already decided.`);
       touched.add(proposal.ability_version_id);
       const outcome = decision.action === "accept" ? "accepted" : decision.action === "correct" ? "corrected" : "rejected";

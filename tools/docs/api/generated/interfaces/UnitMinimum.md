@@ -6,7 +6,7 @@
 
 # Interface: UnitMinimum
 
-Defined in: [generated.ts:1284](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1284)
+Defined in: [generated.ts:2594](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2594)
 
 A minimum number of units carrying a keyword that the detachment requires.
 
@@ -19,7 +19,7 @@ via the `definition` "unit-minimum".
 
 > **keyword**: `string`
 
-Defined in: [generated.ts:1285](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1285)
+Defined in: [generated.ts:2595](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2595)
 
 ***
 
@@ -27,4 +27,4 @@ Defined in: [generated.ts:1285](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **min**: `number`
 
-Defined in: [generated.ts:1286](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1286)
+Defined in: [generated.ts:2596](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2596)

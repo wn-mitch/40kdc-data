@@ -46,7 +46,7 @@ _AFTER = {
     "advance": "Advanced",
     "fall-back": "Fell Back",
     "disembark": "disembarked",
-    "normal-move": "made a Normal move",
+    "normal": "made a Normal move",
     "charge": "made a Charge move",
     "remain-stationary": "Remained Stationary",
     "set-up": "was set up",

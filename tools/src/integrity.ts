@@ -7,6 +7,7 @@ import { checkTargetProfiles } from "./integrity-target-profiles.js";
 import { checkWeaponGrantRefs } from "./integrity-weapon-grant.js";
 import { checkOfAbilityRollRefs } from "./integrity-of-ability-roll.js";
 import { checkDslShapes } from "./integrity-shapes.js";
+import { checkDslContract } from "./integrity-dsl-contract.js";
 import { checkAuraRangeRefs } from "./integrity-aura-ranges.js";
 import { baseLoadout, checkUnitLegality, type LoadoutModel, type LoadoutTier } from "./data/loadout.js";
 import type { Unit, WargearOption } from "./generated.js";
@@ -702,6 +703,7 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
   await checkDetachmentDatasheetRefs(root, result);
   await checkListRequirementRefs(root, result);
   await checkDslShapes(root, result);
+  await checkDslContract(root, result);
   await checkAuraRangeRefs(root, result);
   await checkTargetProfiles(root, result);
   await checkWeaponGrantRefs(root, result);

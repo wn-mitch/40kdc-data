@@ -6,7 +6,7 @@
 
 # Interface: NamedObjectiveState
 
-Defined in: [generated.ts:4687](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4687)
+Defined in: [generated.ts:7238](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7238)
 
 A named state carried by a specific objective marker: the state resolves when its ability-level trigger fires, and may clear itself. Distinct from `objective-tag`, which only marks the objective without carrying a resolution.
 
@@ -19,7 +19,7 @@ via the `definition` "named-objective-state".
 
 > **state\_label**: `string`
 
-Defined in: [generated.ts:4688](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4688)
+Defined in: [generated.ts:7239](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7239)
 
 ***
 
@@ -27,14 +27,14 @@ Defined in: [generated.ts:4688](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **resolution**: [`EffectNode`](../type-aliases/EffectNode.md)
 
-Defined in: [generated.ts:4689](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4689)
+Defined in: [generated.ts:7240](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7240)
 
 ***
 
 ### clears?
 
-> `optional` **clears?**: `"end-of-turn"` \| `"never"` \| `"after-resolving"`
+> `optional` **clears?**: `"phase"` \| `"turn"` \| `"permanent"` \| `"after-resolving"`
 
-Defined in: [generated.ts:4693](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4693)
+Defined in: [generated.ts:7244](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7244)
 
 When the named state is removed from the objective.

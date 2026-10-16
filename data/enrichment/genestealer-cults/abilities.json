@@ -12,13 +12,17 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "of": {
-            "marker": "cult-ambush"
-          },
-          "range": {
-            "inches": 0
+          "filter": {
+            "within": {
+              "range": {
+                "inches": 0
+              },
+              "of": {
+                "marker": "cult-ambush"
+              }
+            }
           }
         }
       },
@@ -75,7 +79,7 @@
       "type": "mortal-wounds",
       "target": "defender",
       "modifier": {
-        "count": "1"
+        "count": 1
       }
     },
     "scope": {
@@ -137,22 +141,28 @@
         "operator": "and",
         "operands": [
           {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "subject": "event-subject",
-              "of": "this-model",
-              "range": {
-                "inches": 8
-              }
+              "filter": {
+                "within": {
+                  "range": {
+                    "inches": 8
+                  },
+                  "of": "this-model"
+                }
+              },
+              "subject": "event-subject"
             }
           },
           {
             "operator": "not",
             "operands": [
               {
-                "type": "unit-state",
+                "type": "matches",
                 "parameters": {
-                  "state": "engaged"
+                  "filter": {
+                    "state": "engaged"
+                  }
                 }
               }
             ]
@@ -387,13 +397,17 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "subject": "event-subject",
-          "of": "this-model",
-          "range": {
-            "inches": 8
-          }
+          "filter": {
+            "within": {
+              "range": {
+                "inches": 8
+              },
+              "of": "this-model"
+            }
+          },
+          "subject": "event-subject"
         }
       },
       "effect": {
@@ -450,8 +464,10 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Devastating Wounds"
+          "keywords": [
+            {
+              "keyword_id": "devastating-wounds"
+            }
           ]
         }
       }
@@ -635,8 +651,10 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Lethal Hits"
+          "keywords": [
+            {
+              "keyword_id": "lethal-hits"
+            }
           ]
         }
       }
@@ -671,7 +689,9 @@
             "stat": "A",
             "operation": "add",
             "value": 3,
-            "weapon_name": "injector goad"
+            "weapons": {
+              "name": "injector goad"
+            }
           }
         },
         {
@@ -681,7 +701,9 @@
             "stat": "D",
             "operation": "add",
             "value": 3,
-            "weapon_name": "injector goad"
+            "weapons": {
+              "name": "injector goad"
+            }
           }
         }
       ]
@@ -709,12 +731,14 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "subject": "defender",
-          "all_of": [
-            "INFANTRY"
-          ]
+          "filter": {
+            "all_of": [
+              "INFANTRY"
+            ]
+          },
+          "subject": "defender"
         }
       },
       "effect": {
@@ -757,11 +781,13 @@
               "operator": "not",
               "operands": [
                 {
-                  "type": "has-keyword",
+                  "type": "matches",
                   "parameters": {
-                    "all_of": [
-                      "HYBRID METAMORPHS"
-                    ]
+                    "filter": {
+                      "all_of": [
+                        "HYBRID METAMORPHS"
+                      ]
+                    }
                   }
                 }
               ]
@@ -777,11 +803,13 @@
           },
           {
             "condition": {
-              "type": "has-keyword",
+              "type": "matches",
               "parameters": {
-                "all_of": [
-                  "HYBRID METAMORPHS"
-                ]
+                "filter": {
+                  "all_of": [
+                    "HYBRID METAMORPHS"
+                  ]
+                }
               }
             },
             "effect": {
@@ -830,7 +858,9 @@
         "label": "cult-ambush-marker",
         "operation": "relocate",
         "placement": "within-12-of-this-model-more-than-8-from-enemy-units",
-        "distance": 12
+        "distance": {
+          "inches": 12
+        }
       }
     },
     "scope": {
@@ -895,10 +925,10 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "weapon-ability-grant",
+          "type": "keyword-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
+            "keywords": [
               "SMOKE"
             ]
           }
@@ -953,7 +983,9 @@
         "stat": "BS",
         "operation": "set",
         "value": 3,
-        "weapon_type": "ranged"
+        "weapons": {
+          "type": "ranged"
+        }
       }
     },
     "scope": {
@@ -981,8 +1013,10 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Ignores Cover"
+        "keywords": [
+          {
+            "keyword_id": "ignores-cover"
+          }
         ]
       }
     },
@@ -1048,11 +1082,16 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "max_count": 3,
-        "keywords": [
-          "GENESTEALER CULTS"
-        ],
-        "owner": "friendly"
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "GENESTEALER CULTS"
+          ]
+        },
+        "count": {
+          "min": 0,
+          "max": 3
+        }
       },
       "effect": {
         "type": "set-up",
@@ -1209,7 +1248,9 @@
         "modifier": {
           "label": "cult-ambush",
           "operation": "relocate",
-          "distance": 6
+          "distance": {
+            "inches": 6
+          }
         }
       }
     },
@@ -1243,22 +1284,28 @@
         "operator": "and",
         "operands": [
           {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "subject": "event-subject",
-              "of": "this-unit",
-              "range": {
-                "inches": 8
-              }
+              "filter": {
+                "within": {
+                  "range": {
+                    "inches": 8
+                  },
+                  "of": "this-unit"
+                }
+              },
+              "subject": "event-subject"
             }
           },
           {
             "operator": "not",
             "operands": [
               {
-                "type": "unit-state",
+                "type": "matches",
                 "parameters": {
-                  "state": "engaged"
+                  "filter": {
+                    "state": "engaged"
+                  }
                 }
               }
             ]
@@ -1374,25 +1421,42 @@
     "source_digest": "567627bb095484e81cda56c94301aca94002b293ee35dce0815652ad8f7532aa",
     "version": "2025-q3",
     "effect": {
-      "type": "designate-target",
-      "designation": "priority-target",
-      "select": {
-        "scope": "enemy-unit",
-        "count": 1,
-        "timing": "after-this-unit-shoots"
-      },
-      "applies": {
-        "to": "attackers-of-target",
-        "effect": {
-          "type": "re-roll",
-          "target": "this-unit",
-          "modifier": {
-            "roll": "hit",
-            "subset": "ones"
-          }
+      "type": "ability-part",
+      "trigger": {
+        "event": "attacks-resolved",
+        "subject": "this-unit",
+        "filter": {
+          "kind": "shoot"
         }
       },
-      "duration": "phase"
+      "effect": {
+        "type": "designate-target",
+        "designation": "priority-target",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
+          }
+        },
+        "applies": {
+          "to": "attackers-of-target",
+          "effect": {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "subset": "ones"
+            }
+          }
+        },
+        "duration": "phase"
+      }
     },
     "scope": {
       "duration": "phase"
@@ -1454,11 +1518,34 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attachment",
+            "parameters": {
+              "role": "led",
+              "with": {
+                "all_of": [
+                  "CHARACTER"
+                ]
+              }
+            }
+          },
+          {
+            "type": "attack-compare",
+            "parameters": {
+              "left": {
+                "of": "attacker",
+                "stat": "S"
+              },
+              "comparison": "gt",
+              "right": {
+                "of": "defender",
+                "stat": "T"
+              }
+            }
+          }
+        ]
       },
       "effect": {
         "type": "roll-modifier",
@@ -1477,7 +1564,7 @@
       "aberrants"
     ],
     "ability_type": "unit",
-    "behavior": "reactive",
+    "behavior": "passive",
     "faction_id": "genestealer-cults"
   },
   {
@@ -1697,8 +1784,10 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Lethal Hits"
+          "keywords": [
+            {
+              "keyword_id": "lethal-hits"
+            }
           ]
         }
       }
@@ -1788,17 +1877,28 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "owner": "friendly",
-        "count": 1,
-        "keywords": [
-          "GENESTEALER CULTS"
-        ],
-        "within_inches": 12,
-        "reference": "bearer",
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "GENESTEALER CULTS"
+          ],
+          "within": {
+            "range": {
+              "inches": 12
+            },
+            "of": "this-model"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
         "eligibility": {
-          "type": "unit-state",
+          "type": "matches",
           "parameters": {
-            "state": "battle-shocked"
+            "filter": {
+              "state": "battle-shocked"
+            }
           }
         }
       },
@@ -1924,7 +2024,9 @@
                   "label": "cult-ambush-marker",
                   "operation": "place",
                   "placement": "more-than-9-from-enemy-units",
-                  "distance": 9
+                  "distance": {
+                    "inches": 9
+                  }
                 }
               }
             ]
@@ -1962,21 +2064,23 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "any_of": [
-                "KELERMORPH",
-                "LOCUS",
-                "REDUCTUS SABOTEUR",
-                "SANCTUS"
-              ]
+              "filter": {
+                "any_of": [
+                  "KELERMORPH",
+                  "LOCUS",
+                  "REDUCTUS SABOTEUR",
+                  "SANCTUS"
+                ]
+              }
             }
           },
           "effect": {
-            "type": "weapon-ability-grant",
+            "type": "keyword-grant",
             "target": "this-model",
             "modifier": {
-              "abilities": [
+              "keywords": [
                 "KILLER"
               ]
             }
@@ -1985,11 +2089,13 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "KILLER"
-              ]
+              "filter": {
+                "all_of": [
+                  "KILLER"
+                ]
+              }
             }
           },
           "effect": {
@@ -2055,7 +2161,93 @@
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "[APPROX] After a friendly KILLER unit's attacks destroy an enemy unit or CHARACTER, each visible battle-shocked GENESTEALER CULTS unit within 12\" is no longer battle-shocked; the kill trigger and the battle-shocked/visibility filter are captured as an opaque grant, as no remove-battle-shock effect exists. Full rule in raw-text store."
+    "community_notes": "[APPROX] After a friendly KILLER unit's attacks destroy an enemy unit or CHARACTER, each visible battle-shocked GENESTEALER CULTS unit within 12\" is no longer battle-shocked; the kill trigger and the battle-shocked/visibility filter are captured as an opaque grant, as no remove-battle-shock effect exists. Full rule in raw-text store.",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "attack"
+      },
+      "binds_event_variable": "killer-attacks",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "or",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "destroyed",
+                  "object": {
+                    "owner": "enemy"
+                  },
+                  "filter": {
+                    "caused_by": {
+                      "event_var": "killer-attacks"
+                    }
+                  },
+                  "window": "event"
+                }
+              },
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "model-destroyed",
+                  "object": {
+                    "owner": "enemy",
+                    "all_of": [
+                      "CHARACTER"
+                    ],
+                    "level": "model"
+                  },
+                  "filter": {
+                    "caused_by": {
+                      "event_var": "killer-attacks"
+                    }
+                  },
+                  "window": "event"
+                }
+              }
+            ]
+          },
+          {
+            "operator": "or",
+            "operands": [
+              {
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "phase-is",
+                    "parameters": {
+                      "phase": "shooting"
+                    }
+                  },
+                  {
+                    "type": "player-turn-is",
+                    "parameters": {
+                      "turn": "your-turn"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "fight"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "KILLER"
+        ]
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "surging-broodworship-heroes-of-the-uprising-genestealer-cults",
@@ -2096,11 +2288,13 @@
             ]
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "KILLER"
-              ]
+              "filter": {
+                "all_of": [
+                  "KILLER"
+                ]
+              }
             }
           }
         ]
@@ -2109,8 +2303,10 @@
         "type": "weapon-ability-grant",
         "target": "this-model",
         "modifier": {
-          "abilities": [
-            "Devastating Wounds"
+          "keywords": [
+            {
+              "keyword_id": "devastating-wounds"
+            }
           ]
         }
       }
@@ -2202,7 +2398,29 @@
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "KILLER"
+        ]
+      },
+      "optional": true,
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    }
   },
   {
     "ability_id": "gene-tailored-toxins-heroes-of-the-uprising-genestealer-cults",
@@ -2227,7 +2445,9 @@
         "stat": "D",
         "operation": "add",
         "value": 1,
-        "weapon_type": "melee"
+        "weapons": {
+          "type": "melee"
+        }
       }
     },
     "scope": {
@@ -2258,7 +2478,9 @@
         "stat": "S",
         "operation": "add",
         "value": 2,
-        "weapon_type": "ranged"
+        "weapons": {
+          "type": "ranged"
+        }
       }
     },
     "scope": {
@@ -2288,9 +2510,11 @@
         "operator": "not",
         "operands": [
           {
-            "type": "unit-state",
+            "type": "matches",
             "parameters": {
-              "state": "engaged"
+              "filter": {
+                "state": "engaged"
+              }
             }
           }
         ]
@@ -2505,7 +2729,9 @@
             "stat": "S",
             "operation": "add",
             "value": 1,
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            }
           }
         }
       ]
@@ -2716,25 +2942,57 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "in-region",
+            "parameters": {
+              "subject": "this-unit",
+              "region": {
+                "terrain_area": {
+                  "footprint": "terrain area"
+                }
+              },
+              "models": "every"
+            }
+          },
+          {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
+            }
+          }
+        ]
       },
       "effect": {
         "type": "stat-modifier",
         "target": "attacker",
         "modifier": {
           "stat": "AP",
-          "operation": "add",
+          "operation": "worsen",
           "value": 1
         }
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "attack-sequence"
     },
-    "community_notes": "[APPROX] While a NEOPHYTE HYBRIDS unit with every model in a terrain area is targeted in your opponent's Shooting phase, ranged attacks against it have -1 AP (modeled as +1 to the attacker's AP characteristic) until that unit has attacked. The terrain-area and 'until it has attacked' conditions are simplified. Full rule in raw-text store."
+    "community_notes": "[APPROX] While a NEOPHYTE HYBRIDS unit with every model in a terrain area is targeted in your opponent's Shooting phase, ranged attacks against it have -1 AP (modeled as +1 to the attacker's AP characteristic) until that unit has attacked. The terrain-area and 'until it has attacked' conditions are simplified. Full rule in raw-text store.",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "NEOPHYTE HYBRIDS"
+        ]
+      }
+    }
   },
   {
     "ability_id": "inspired-to-greatness-xenocult-masses-genestealer-cults",
@@ -2812,35 +3070,60 @@
     "ability_type": "detachment",
     "behavior": "passive",
     "effect": {
-      "type": "designate-target",
-      "designation": "overlapping-fire",
-      "select": {
-        "scope": "enemy-unit",
-        "count": 1,
-        "timing": "when-this-unit-selected-to-shoot",
-        "within_inches": 18,
-        "reference": "bearer-unit",
-        "visibility_required": true
-      },
-      "applies": {
-        "to": "attackers-of-target",
-        "effect": {
-          "type": "roll-modifier",
-          "target": {
-            "owner": "friendly",
-            "all_of": [
-              "GENESTEALER CULTS"
-            ]
-          },
-          "modifier": {
-            "roll": "hit",
-            "operation": "add",
-            "value": 1,
-            "weapon_type": "ranged"
-          }
+      "type": "ability-part",
+      "trigger": {
+        "event": "selected",
+        "subject": "this-unit",
+        "filter": {
+          "to": "shoot"
         }
       },
-      "duration": "phase"
+      "effect": {
+        "type": "designate-target",
+        "designation": "overlapping-fire",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy",
+              "within": {
+                "range": {
+                  "inches": 18
+                },
+                "of": "this-unit"
+              },
+              "visible": {
+                "to": "this-unit"
+              }
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
+          }
+        },
+        "applies": {
+          "to": "attackers-of-target",
+          "effect": {
+            "type": "roll-modifier",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "GENESTEALER CULTS"
+              ]
+            },
+            "modifier": {
+              "roll": "hit",
+              "operation": "add",
+              "value": 1,
+              "weapons": {
+                "type": "ranged"
+              }
+            }
+          }
+        },
+        "duration": "phase"
+      }
     },
     "scope": {
       "duration": "phase"
@@ -2940,13 +3223,15 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "any_of": [
-            "ABERRANTS",
-            "BIOPHAGUS",
-            "PURESTRAIN GENESTEALERS"
-          ]
+          "filter": {
+            "any_of": [
+              "ABERRANTS",
+              "BIOPHAGUS",
+              "PURESTRAIN GENESTEALERS"
+            ]
+          }
         }
       },
       "effect": {
@@ -2982,7 +3267,9 @@
                 "stat": "A",
                 "operation": "add",
                 "value": 1,
-                "weapon_type": "melee"
+                "weapons": {
+                  "type": "melee"
+                }
               }
             }
           }
@@ -3019,9 +3306,11 @@
             "operator": "not",
             "operands": [
               {
-                "type": "unit-state",
+                "type": "matches",
                 "parameters": {
-                  "state": "battle-shocked"
+                  "filter": {
+                    "state": "battle-shocked"
+                  }
                 }
               }
             ]
@@ -3056,20 +3345,24 @@
                   "type": "controls"
                 },
                 {
-                  "type": "within",
+                  "type": "matches",
                   "parameters": {
+                    "filter": {
+                      "within": {
+                        "range": "objective-control",
+                        "of": {
+                          "objective": {
+                            "controlled_by": "friendly"
+                          }
+                        }
+                      }
+                    },
                     "subject": {
                       "owner": "friendly",
                       "all_of": [
                         "ATALAN JACKALS"
                       ]
-                    },
-                    "of": {
-                      "objective": {
-                        "controlled_by": "friendly"
-                      }
-                    },
-                    "range": "objective-control"
+                    }
                   }
                 }
               ]
@@ -3109,12 +3402,14 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "TYRANIDS",
-                "SYNAPSE"
-              ]
+              "filter": {
+                "all_of": [
+                  "TYRANIDS",
+                  "SYNAPSE"
+                ]
+              }
             }
           },
           "effect": {
@@ -3123,18 +3418,29 @@
               {
                 "type": "select-units",
                 "selector": {
-                  "owner": "friendly",
-                  "max_count": 1,
-                  "keywords": [
-                    "GENESTEALER CULTS"
-                  ],
-                  "excluded_keywords": [
-                    "PURESTRAIN GENESTEALER",
-                    "PATRIARCH"
-                  ],
-                  "within_inches": 9,
-                  "reference": "bearer-unit",
-                  "visibility_required": true
+                  "filter": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "GENESTEALER CULTS"
+                    ],
+                    "none_of": [
+                      "PURESTRAIN GENESTEALER",
+                      "PATRIARCH"
+                    ],
+                    "within": {
+                      "range": {
+                        "inches": 9
+                      },
+                      "of": "this-unit"
+                    },
+                    "visible": {
+                      "to": "this-unit"
+                    }
+                  },
+                  "count": {
+                    "min": 0,
+                    "max": 1
+                  }
                 },
                 "effect": {
                   "type": "mortal-wounds",
@@ -3147,14 +3453,25 @@
               {
                 "type": "select-units",
                 "selector": {
-                  "owner": "friendly",
-                  "max_count": 1,
-                  "keywords": [
-                    "TYRANIDS"
-                  ],
-                  "within_inches": 9,
-                  "reference": "bearer-unit",
-                  "visibility_required": true
+                  "filter": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "TYRANIDS"
+                    ],
+                    "within": {
+                      "range": {
+                        "inches": 9
+                      },
+                      "of": "this-unit"
+                    },
+                    "visible": {
+                      "to": "this-unit"
+                    }
+                  },
+                  "count": {
+                    "min": 0,
+                    "max": 1
+                  }
                 },
                 "effect": {
                   "type": "sequence",
@@ -3187,21 +3504,27 @@
             "operator": "and",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "all_of": [
-                    "TYRANIDS"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "TYRANIDS"
+                    ]
+                  }
                 }
               },
               {
-                "type": "within",
+                "type": "matches",
                 "parameters": {
-                  "subject": "defender",
-                  "of": "this-unit",
-                  "range": {
-                    "inches": 6
-                  }
+                  "filter": {
+                    "within": {
+                      "range": {
+                        "inches": 6
+                      },
+                      "of": "this-unit"
+                    }
+                  },
+                  "subject": "defender"
                 }
               }
             ]
@@ -3275,13 +3598,15 @@
           {
             "type": "conditional",
             "condition": {
-              "type": "has-keyword",
+              "type": "matches",
               "parameters": {
-                "any_of": [
-                  "MAGUS",
-                  "PRIMUS",
-                  "ACOLYTE ICONWARD"
-                ]
+                "filter": {
+                  "any_of": [
+                    "MAGUS",
+                    "PRIMUS",
+                    "ACOLYTE ICONWARD"
+                  ]
+                }
               }
             },
             "effect": {
@@ -3323,8 +3648,13 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Sustained Hits 1"
+            "keywords": [
+              {
+                "keyword_id": "sustained-hits",
+                "parameters": {
+                  "value": 1
+                }
+              }
             ]
           }
         },
@@ -3332,8 +3662,10 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Ignores Cover"
+            "keywords": [
+              {
+                "keyword_id": "ignores-cover"
+              }
             ]
           }
         }

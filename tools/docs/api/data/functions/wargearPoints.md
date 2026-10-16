@@ -8,7 +8,7 @@
 
 > **wargearPoints**(`unit`, `counts`): `number`
 
-Defined in: [data/pricing.ts:142](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/pricing.ts#L142)
+Defined in: [data/pricing.ts:153](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/pricing.ts#L153)
 
 Per-item MFM wargear surcharge for a unit whose final loadout has `counts`
 copies of each weapon/wargear id (see [Loadout](../interfaces/Loadout.md)). Each `unit.wargear_costs`

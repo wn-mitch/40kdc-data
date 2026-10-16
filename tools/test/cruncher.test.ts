@@ -42,6 +42,30 @@ function inputFor(
   };
 }
 
+describe("weapon keyword quantity boundaries", () => {
+  it("refuses unresolved contextual profile ratings instead of silently using zero", () => {
+    for (const keyword_id of ["sustained-hits", "rapid-fire", "melta", "blast"]) {
+      for (const value of [{ rating: true }, { roll_var: "damage-roll" }, { count_of: "models-in-bearer-unit" }, { incursion: 1, "strike-force": 2, onslaught: 3 }]) {
+        const input = inputFor("bolt-rifle", 0, 1, "intercessor-squad", { phase: "shooting", withinHalfRange: true }, [], 10);
+        input.attacker.weapon = {
+          ...input.attacker.weapon,
+          profiles: input.attacker.weapon.profiles.map((profile) => ({ ...profile, keywords: [{ keyword_id, parameters: { value } }] })),
+        } as EngineInput["attacker"]["weapon"];
+        expect(() => crunch(input, ds)).toThrow(/unresolved quantity/);
+      }
+    }
+  });
+
+  it("does not invent a Blast rating for an unparameterized DSL grant", () => {
+    const input = inputFor("bolt-rifle", 0, 1, "intercessor-squad", { phase: "shooting" }, [], 10);
+    const baseline = stage(crunch(input, ds), "attacks");
+    input.buffs = [{ source: { kind: "manual", label: "Example grant" }, contribution: { type: "extra-keyword", keywordRef: { keyword_id: "blast" } } }];
+    expect(stage(crunch(input, ds), "attacks")).toBe(baseline);
+    input.buffs = [{ source: { kind: "manual", label: "Example rated grant" }, contribution: { type: "extra-keyword", keywordRef: { keyword_id: "blast", parameters: { value: 1 } } } }];
+    expect(stage(crunch(input, ds), "attacks")).toBe(baseline + 2);
+  });
+});
+
 describe("crunch: bolt-rifle vs intercessor", () => {
   // bolt-rifle profile 0: A=2, S=4, AP=-1, D=1, BS=3; keywords [assault, heavy].
   // intercessor-squad profile 0: T=5, W=2, Sv=3, OC=2, Ld=6.
@@ -131,7 +155,7 @@ describe("crunch: rerolls", () => {
 
   it("Kharn's Legendary Killer rerolls flow through the attachment API to a crunch", () => {
     // End-to-end: sourcing buffs via the public stackableBuffsFor API, attaching
-    // Kharn to Berzerkers surfaces his melee hit/wound rerolls (model-is-leader),
+    // Kharn's actual Leader membership surfaces his melee hit/wound rerolls,
     // which must lift both hits and wounds for the combined unit.
     const enabled = (input: Parameters<typeof ds.stackableBuffsFor>[0]) =>
       ds
@@ -143,6 +167,7 @@ describe("crunch: rerolls", () => {
       unitId: "khorne-berzerkers",
       factionId: "world-eaters",
       attachedUnitIds: ["kharn-the-betrayer"],
+      attachmentRoles: { "khorne-berzerkers": "bodyguard", "kharn-the-betrayer": "leader" } as const,
     };
     const alone = { unitId: "khorne-berzerkers", factionId: "world-eaters" };
 

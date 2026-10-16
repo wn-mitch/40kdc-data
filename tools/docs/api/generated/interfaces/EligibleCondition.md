@@ -6,7 +6,7 @@
 
 # Interface: EligibleCondition
 
-Defined in: [generated.ts:1941](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1941)
+Defined in: [generated.ts:1766](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1766)
 
 [state] The subject is eligible to do this. be-selected: eligible for `source_ability`'s selection.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:1941](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **type**: `"eligible"`
 
-Defined in: [generated.ts:1942](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1942)
+Defined in: [generated.ts:1767](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1767)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:1942](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **parameters**: `object`
 
-Defined in: [generated.ts:1943](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1943)
+Defined in: [generated.ts:1768](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1768)
 
 #### subject?
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:1943](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 #### to
 
-> **to**: `"fight"` \| `"shoot"` \| `"declare-charge"` \| `"start-action"` \| `"be-selected"`
+> **to**: `"fight"` \| `"shoot"` \| `"declare-charge"` \| `"start-action"` \| `"be-selected"` \| `"embark-within"`
 
 #### source\_ability?
 
@@ -48,4 +48,10 @@ Defined in: [generated.ts:1943](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 #### at?
 
-> `optional` **at?**: `"now"` \| `"opponents-previous-turn-end"`
+> `optional` **at?**: `"now"` \| `"opponent-previous-turn-end"`
+
+#### transport?
+
+> `optional` **transport?**: `"this-unit"` \| `"this-model"` \| `"model-in-this-unit"` \| `"attacker"` \| `"defender"` \| `"event-subject"` \| `"event-object"` \| `"stratagem-target"` \| `"selected-unit"` \| `"recipient"` \| `"bearer-transport"` \| `"ability-unit"` \| [`UnitFilter`](UnitFilter.md) \| \{ `event_var`: `string`; \} \| \{ `selection_var`: `string`; \} \| \{ `stratagem_target`: `string`; \}
+
+Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.

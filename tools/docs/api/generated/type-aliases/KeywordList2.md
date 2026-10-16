@@ -6,8 +6,10 @@
 
 # Type Alias: KeywordList2
 
-> **KeywordList2** = [`Keyword`](Keyword.md)[]
+> **KeywordList2** = \[[`Keyword`](Keyword.md), `...Keyword[]`\]
 
-Defined in: [generated.ts:313](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L313)
+Defined in: [generated.ts:477](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L477)
 
-A unit qualifies for this pool when it carries any of these keywords (e.g. ['Legiones Daemonica'], ['Damned'], ['Vanguard Invader']). Empty = the whole `source_faction_id` is the pool.
+## Min Items
+
+1

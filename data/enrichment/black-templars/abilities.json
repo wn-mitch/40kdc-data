@@ -279,53 +279,26 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
+        "type": "happened",
+        "parameters": {
+          "event": "destroyed",
+          "object": {
+            "owner": "enemy"
           },
-          {
-            "type": "attack-is",
-            "parameters": {
-              "attack_type": "melee"
-            }
+          "filter": {
+            "by": "this-unit",
+            "attack_type": "melee"
           },
-          {
-            "type": "happened",
-            "parameters": {
-              "event": "destroyed",
-              "object": {
-                "owner": "enemy"
-              },
-              "window": "phase"
-            }
-          }
-        ]
+          "window": "phase"
+        }
       },
       "effect": {
-        "type": "conditional",
-        "condition": {
-          "operator": "not",
-          "operands": [
-            {
-              "type": "unit-state",
-              "parameters": {
-                "state": "battle-shocked"
-              }
-            }
-          ]
-        },
-        "effect": {
-          "type": "stat-modifier",
-          "target": "this-model",
-          "modifier": {
-            "stat": "OC",
-            "operation": "add",
-            "value": 5
-          }
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "OC",
+          "operation": "improve",
+          "value": 5
         }
       }
     },
@@ -336,7 +309,7 @@
       "crusade-ancient"
     ],
     "ability_type": "unit",
-    "behavior": "reactive",
+    "behavior": "activated",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "usage": {
       "frequency": "n-per-battle",
@@ -361,13 +334,17 @@
         "stat": "A",
         "operation": "add",
         "value": 1,
-        "weapon_type": "melee"
+        "weapons": {
+          "type": "melee"
+        }
       },
       "scaling": {
         "per": 1,
         "of": "enemy-units-in-range",
-        "within_inches": 6,
-        "max_value": 3
+        "max_value": 3,
+        "within": {
+          "inches": 6
+        }
       }
     },
     "scope": {
@@ -437,62 +414,57 @@
         "operator": "and",
         "operands": [
           {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent-turn"
-            }
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "opponent-turn"
+                }
+              }
+            ]
           },
           {
             "type": "happened",
             "parameters": {
-              "event": "destroyed",
-              "object": "event-object",
+              "event": "model-destroyed",
+              "object": "model-in-this-unit",
               "filter": {
-                "attack_type": "ranged"
+                "by": "event-subject"
               },
               "window": "event"
             }
-          },
-          {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "unit-state",
-                "parameters": {
-                  "state": "battle-shocked"
-                }
-              }
-            ]
-          },
-          {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "within",
-                "parameters": {
-                  "of": {
-                    "owner": "enemy"
-                  },
-                  "range": "engagement"
-                }
-              }
-            ]
           }
         ]
       },
       "effect": {
-        "type": "move",
-        "target": "this-unit",
-        "modifier": {
-          "move_type": "surge",
-          "distance": "D6+2"
-        }
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "move",
+            "target": "this-unit",
+            "modifier": {
+              "move_type": "surge",
+              "distance": "D6"
+            }
+          },
+          {
+            "type": "move-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "applies_to_moves": [
+                "surge"
+              ],
+              "distance_bonus": 1
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -504,7 +476,16 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "black-templars"
+    "faction_id": "black-templars",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "subject": {
+        "owner": "enemy"
+      }
+    }
   },
   {
     "ability_id": "templar-vows-black-templars",
@@ -548,8 +529,10 @@
             "type": "weapon-ability-grant",
             "target": "this-unit",
             "modifier": {
-              "abilities": [
-                "Precision"
+              "keywords": [
+                {
+                  "keyword_id": "precision"
+                }
               ]
             }
           }
@@ -587,73 +570,87 @@
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "CENOBYTE SERVITOR"
-              ]
+              "filter": {
+                "all_of": [
+                  "CENOBYTE SERVITOR"
+                ]
+              }
             }
           }
         ]
       },
       "effect": {
-        "type": "stance-select",
-        "mode": "re-selectable",
-        "scope": "unit",
-        "select": "command-phase",
-        "options": [
-          {
-            "name": "Banner of the Emperor Victorious",
-            "effect": {
-              "type": "sequence",
-              "steps": [
-                {
-                  "type": "roll-modifier",
-                  "target": "this-unit",
-                  "modifier": {
-                    "roll": "advance",
-                    "operation": "add",
-                    "value": 1
+        "type": "conditional",
+        "condition": {
+          "type": "phase-is",
+          "parameters": {
+            "phase": "command"
+          }
+        },
+        "effect": {
+          "type": "stance-select",
+          "mode": "re-selectable",
+          "options": [
+            {
+              "name": "Banner of the Emperor Victorious",
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "roll-modifier",
+                    "target": "this-unit",
+                    "modifier": {
+                      "roll": "advance",
+                      "operation": "add",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "type": "roll-modifier",
+                    "target": "this-unit",
+                    "modifier": {
+                      "roll": "charge",
+                      "operation": "add",
+                      "value": 1
+                    }
                   }
-                },
-                {
-                  "type": "roll-modifier",
-                  "target": "this-unit",
-                  "modifier": {
-                    "roll": "charge",
-                    "operation": "add",
-                    "value": 1
+                ]
+              },
+              "id": "option-1"
+            },
+            {
+              "name": "Column from the Major Altar",
+              "effect": {
+                "type": "stat-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "stat": "T",
+                  "operation": "add",
+                  "value": 1
+                }
+              },
+              "id": "option-2"
+            },
+            {
+              "name": "Water from the Stoup of Elucidation",
+              "effect": {
+                "type": "stat-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "stat": "AP",
+                  "operation": "improve",
+                  "value": 1,
+                  "weapons": {
+                    "type": "melee"
                   }
                 }
-              ]
+              },
+              "id": "option-3"
             }
-          },
-          {
-            "name": "Column from the Major Altar",
-            "effect": {
-              "type": "stat-modifier",
-              "target": "this-unit",
-              "modifier": {
-                "stat": "T",
-                "operation": "add",
-                "value": 1
-              }
-            }
-          },
-          {
-            "name": "Water from the Stoup of Elucidation",
-            "effect": {
-              "type": "stat-modifier",
-              "target": "this-unit",
-              "modifier": {
-                "stat": "AP",
-                "operation": "improve",
-                "value": 1,
-                "weapon_type": "melee"
-              }
-            }
-          }
-        ]
+          ]
+        }
       }
     },
     "scope": {
@@ -1572,7 +1569,7 @@
             "of": "attacker",
             "stat": "S"
           },
-          "comparison": "greater-than",
+          "comparison": "gt",
           "right": {
             "of": "defender",
             "stat": "T"

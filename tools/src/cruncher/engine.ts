@@ -46,16 +46,6 @@ export type EngineInput = {
 
 export type EngineOutput = { stages: Stage[]; resolved: ResolvedModifiers };
 
-/**
- * Whether an Anti target matches a unit: one of its slash-separated alternatives. An alternative
- * "non-X" matches a unit without keyword X. `targetKeywords` are lower case.
- */
-function antiTargetMatches(target: string, targetKeywords: readonly string[]): boolean {
-  return target.split("/").some((alternative) => {
-    const keyword = alternative.trim();
-    return keyword.startsWith("non-") ? !targetKeywords.includes(keyword.slice(4)) : targetKeywords.includes(keyword);
-  });
-}
 
 /** Whether a weapon profile may select this target under profile-level restrictions such as Hunter. */
 export function profileCanTarget(profile: Weapon["profiles"][number], target: Unit): boolean {
@@ -96,6 +86,9 @@ export function crunch(input: EngineInput, dataset?: Dataset): EngineOutput {
   const ctx: EngineContext = {
     ...input.context,
     targetKeywords: input.context.targetKeywords ?? targetKeywords,
+    weaponNames: input.context.weaponNames ?? [...new Set([input.attacker.weapon.name, weaponProfile.name].map((name) => name.toLowerCase()))],
+    weaponKeywords: input.context.weaponKeywords ?? [...new Set((weaponProfile.keywords ?? []).map((ref) => ref.keyword_id))],
+    weaponKeywordRefs: input.context.weaponKeywordRefs ?? weaponProfile.keywords,
   };
 
   // Auto-inject weapon-keyword buffs from the attacker profile, then append
@@ -114,8 +107,8 @@ export function crunch(input: EngineInput, dataset?: Dataset): EngineOutput {
   const rapidFireExtraPerModel = rapidFire && halfRange ? evalStatValue(rapidFire.parameters?.value) : 0;
   const blast = findKeyword(resolved, "blast");
   const targetModelCount = input.target.modelCount ?? input.target.unit.model_count?.min ?? 1;
-  const blastExtraPerModel = blast
-    ? Math.floor(targetModelCount / 5) * evalStatValue(blast.parameters?.value ?? 1)
+  const blastExtraPerModel = blast?.parameters?.value !== undefined
+    ? Math.floor(targetModelCount / 5) * evalStatValue(blast.parameters.value)
     : 0;
   const attacks = input.modelsFiring * (attacksPerModel + rapidFireExtraPerModel + blastExtraPerModel);
   stages.push({
@@ -129,10 +122,15 @@ export function crunch(input: EngineInput, dataset?: Dataset): EngineOutput {
   // save bonus. Ranged-only, negated by ignores-cover, and moot for auto-hitting
   // Torrent weapons (no hit roll).
   const ignoresCover = !!findKeyword(resolved, "ignores-cover");
+  // Ignoring hit modifiers also ignores the cover penalty.
   const covered =
-    resolved.cover.active && !ignoresCover && !isMelee;
+    resolved.cover.active && !ignoresCover && !isMelee && !resolved.ignoreModifiers.hit;
   const coverHitPenalty = covered ? -1 : 0;
-  const hitStat = isMelee ? weaponProfile.stats.WS : weaponProfile.stats.BS;
+  const printedHitStat = isMelee ? weaponProfile.stats.WS : weaponProfile.stats.BS;
+  // A WS/BS improvement changes the characteristic itself, floored at 2+.
+  const skillMod = resolved.skillMod[isMelee ? "WS" : "BS"].value;
+  const hitStat = typeof printedHitStat === "number" && skillMod !== 0 ? Math.max(2, printedHitStat - skillMod) : printedHitStat;
+  const critHitThreshold = Math.min(6, resolved.critThresholds.hit?.value ?? 6);
   const torrent = !!findKeyword(resolved, "torrent");
   let hits: number;
   let critHits: number;
@@ -153,16 +151,16 @@ export function crunch(input: EngineInput, dataset?: Dataset): EngineOutput {
       reroll: resolved.rerolls.hit?.subset ?? "none",
       autoFailOnOne: true,
       autoPassOnSix: true,
-      critThreshold: 6,
+      critThreshold: critHitThreshold,
     });
     hits = attacks * probs.pass;
     critHits = attacks * probs.crit;
-    hitsDetail = `${isMelee ? "WS" : "BS"}${hitStat}+ (mod ${signed(resolved.hitMod.value)}${covered ? ", cover -1" : ""}, reroll ${resolved.rerolls.hit?.subset ?? "none"}) → P(hit)=${probs.pass.toFixed(4)}, P(crit)=${probs.crit.toFixed(4)}`;
+    hitsDetail = `${isMelee ? "WS" : "BS"}${hitStat}+ (mod ${signed(resolved.hitMod.value)}${covered ? ", cover -1" : ""}, reroll ${resolved.rerolls.hit?.subset ?? "none"}${critHitThreshold < 6 ? `, crit ${critHitThreshold}+` : ""}) → P(hit)=${probs.pass.toFixed(4)}, P(crit)=${probs.crit.toFixed(4)}`;
   }
   const sustained = findKeyword(resolved, "sustained-hits");
   if (sustained) {
     hits += critHits * evalStatValue(sustained.parameters?.value);
-    hitsDetail += `; +Sustained Hits ${sustained.parameters?.value ?? 1} on ${critHits.toFixed(4)} crits`;
+    hitsDetail += `; +Sustained Hits ${sustained.parameters?.value} on ${critHits.toFixed(4)} crits`;
   }
   stages.push({ name: "hits", expected: hits, detail: hitsDetail });
 
@@ -170,16 +168,20 @@ export function crunch(input: EngineInput, dataset?: Dataset): EngineOutput {
   const S = evalStatValue(weaponProfile.stats.S) + resolved.strengthMod.value;
   const T = unitProfile.T + resolved.toughnessMod.value;
   const stdWoundNeeded = woundThreshold(S, T);
-  const anti = findKeyword(resolved, "anti");
   let antiThreshold = 7; // unreachable
-  if (anti) {
-    const targetKw = (anti.parameters?.target_keyword as string | undefined)?.toLowerCase();
-    if (targetKw && antiTargetMatches(targetKw, targetKeywords)) {
-      const threshold = Number(anti.parameters?.threshold);
-      if (Number.isFinite(threshold)) antiThreshold = threshold;
-    }
+  for (const { keywordRef: anti } of resolved.extraKeywords) {
+    if (anti.keyword_id !== "anti") continue;
+    const targetKeyword = anti.parameters?.target_keyword;
+    const required = anti.parameters?.required_target_keywords_any;
+    const excluded = anti.parameters?.excluded_target_keywords;
+    const hasTarget = typeof targetKeyword === "string" || Array.isArray(required) || Array.isArray(excluded);
+    if (!hasTarget || (typeof targetKeyword === "string" && !targetKeywords.includes(targetKeyword.toLowerCase()))) continue;
+    if (Array.isArray(required) && !required.some((keyword) => typeof keyword === "string" && targetKeywords.includes(keyword.toLowerCase()))) continue;
+    if (Array.isArray(excluded) && excluded.some((keyword) => typeof keyword === "string" && targetKeywords.includes(keyword.toLowerCase()))) continue;
+    const threshold = Number(anti.parameters?.threshold);
+    if (Number.isInteger(threshold) && threshold >= 2 && threshold <= 6) antiThreshold = Math.min(antiThreshold, threshold);
   }
-  const critWoundThreshold = Math.min(6, antiThreshold);
+  const critWoundThreshold = Math.min(6, antiThreshold, resolved.critThresholds.wound?.value ?? 6);
 
   const hasLethal = !!findKeyword(resolved, "lethal-hits");
   const hitsForWoundRoll = hasLethal ? hits - critHits : hits;
@@ -208,9 +210,11 @@ export function crunch(input: EngineInput, dataset?: Dataset): EngineOutput {
 
   // 4. Saves
   const apMod = resolved.apMod.value;
-  const AP = weaponProfile.stats.AP + apMod;
+  // Worsening AP stops at 0.
+  const AP = Math.min(0, weaponProfile.stats.AP + apMod);
   const saveMod = resolved.saveMod.value;
-  const armorTargetRaw = unitProfile.Sv - AP - saveMod;
+  const Sv = resolved.saveCharacteristic?.value ?? unitProfile.Sv;
+  const armorTargetRaw = Sv - AP - saveMod;
   // Cover is a hit penalty (11e), applied in the hits stage above — it no
   // longer touches the save here.
   const armorFinal = clamp(armorTargetRaw, 2, 7);
@@ -242,7 +246,7 @@ export function crunch(input: EngineInput, dataset?: Dataset): EngineOutput {
   stages.push({
     name: "unsaved",
     expected: unsaved,
-    detail: `Sv${unitProfile.Sv}+, AP${signed(AP)}${apMod !== 0 ? ` (apmod ${signed(apMod)})` : ""}${saveMod !== 0 ? `, savemod ${signed(saveMod)}` : ""}${abilityInvuln !== null ? `, invuln ${abilityInvuln}+ (ability)` : ""} → effective ${effectiveSaveTarget}+ (P(save)=${pSaved.toFixed(4)})`,
+    detail: `Sv${Sv}+${Sv !== unitProfile.Sv ? " (set)" : ""}, AP${signed(AP)}${apMod !== 0 ? ` (apmod ${signed(apMod)})` : ""}${saveMod !== 0 ? `, savemod ${signed(saveMod)}` : ""}${abilityInvuln !== null ? `, invuln ${abilityInvuln}+ (ability)` : ""} → effective ${effectiveSaveTarget}+ (P(save)=${pSaved.toFixed(4)})`,
   });
 
   // 5. Damage
@@ -401,10 +405,10 @@ function checkProbabilities(args: {
  * silently return 0 and produce a confidently wrong damage projection.
  */
 function evalStatValue(v: unknown): number {
-  if (typeof v === "number") return v;
-  if (typeof v !== "string") return Number(v) || 0;
+  if (typeof v === "number" && Number.isFinite(v)) return v;
+  if (typeof v !== "string") throw new Error(`evalStatValue: unresolved quantity ${JSON.stringify(v)}`);
   const trimmed = v.trim();
-  if (trimmed === "") return 0;
+  if (trimmed === "") throw new Error("evalStatValue: empty quantity");
   const asNumber = Number(trimmed);
   if (Number.isFinite(asNumber)) return asNumber;
   const match = /^(\d*)D(\d+)([+-]\d+)?$/i.exec(trimmed);

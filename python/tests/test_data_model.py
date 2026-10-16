@@ -173,6 +173,10 @@ def test_unit_scoped_leader_rule_still_buffs_the_attached_unit(dataset: Any) -> 
             "unitId": "plaguebearers",
             "factionId": "chaos-daemons",
             "attachedUnitIds": ["epidemius"],
+            "attachmentRoles": {
+                "epidemius": "leader",
+                "plaguebearers": "bodyguard",
+            },
         },
         {"phase": "fight"},
     )
@@ -224,7 +228,7 @@ def test_gate_is_attacker_side_too_and_spares_unit_scoped_grants(dataset: Any) -
         {"unitId": "inquisitor", "factionId": "agents-of-the-imperium"},
         {"phase": "command"},
     )
-    assert keywords_from(alone, "psychic-gifts-agents-of-the-imperium") == ["psyker"]
+    assert keywords_from(alone, "psychic-gifts-agents-of-the-imperium") == []
 
     # A Palatine's rule grants [LETHAL HITS] to the whole unit she leads, so the
     # attached Palatine still grants it.
@@ -233,6 +237,10 @@ def test_gate_is_attacker_side_too_and_spares_unit_scoped_grants(dataset: Any) -
             "unitId": "battle-sisters-squad",
             "factionId": "adepta-sororitas",
             "attachedUnitIds": ["palatine"],
+            "attachmentRoles": {
+                "palatine": "leader",
+                "battle-sisters-squad": "bodyguard",
+            },
         },
         {"phase": "shooting"},
     )
@@ -425,9 +433,190 @@ def _gated(ability_id: str, context: dict[str, Any] | None = None) -> tuple[int,
 
 
 def test_usage_and_trigger_gating_match_the_reference() -> None:
-    assert _gated("fixture-usage") == (0, ["fixture-usage@n-per-battle"])
-    assert _gated("fixture-stratagem") == (1, [])
+    assert _gated("fixture-usage") == (0, ["fixture-usage#activate"])
+    assert _gated("fixture-stratagem") == (0, ["fixture-stratagem#activate"])
     assert _gated("fixture-moment") == (0, ["fixture-moment@selected:shoot"])
     assert _gated("fixture-attack-step") == (1, [])
     assert _gated("fixture-charge", {"phase": "fight", "attackerCharged": True}) == (1, [])
     assert _gated("fixture-charge", {"phase": "fight", "attackerCharged": False}) == (0, [])
+
+
+def test_public_historical_enhancement_snapshot_persists_recipient_buffs() -> None:
+    from wh40kdc.data import Dataset, empty_raw_data
+
+    version = {"edition": "11th", "dataslate": "test"}
+
+    def unit(
+        unit_id: str, keywords: list[str], ability_ids: list[str] | None = None
+    ) -> dict[str, Any]:
+        return {
+            "id": unit_id,
+            "name": unit_id,
+            "faction_id": "orks",
+            "profiles": [
+                {
+                    "name": unit_id,
+                    "M": 6,
+                    "S": 4,
+                    "T": 5,
+                    "W": 2,
+                    "Sv": 4,
+                    "Ld": 7,
+                    "OC": 2,
+                }
+            ],
+            "keywords": keywords,
+            "faction_keywords": ["Orks"],
+            "model_count": {"min": 1, "max": 5},
+            "ability_ids": ability_ids or [],
+            "game_version": version,
+        }
+
+    raw = empty_raw_data()
+    raw["units"] = [
+        unit("source-leader", ["Character", "Infantry"]),
+        unit("source-bodyguard", ["Infantry"]),
+    ]
+    raw["abilities"] = [
+        {
+            "ability_id": "enhancement-buff",
+            "name": "Enhancement Buff",
+            "faction_id": "orks",
+            "ability_type": "unit",
+            "behavior": "reactive",
+            "trigger": {"event": "battle-start"},
+            "scope": {"duration": "battle"},
+            "effect": {
+                "type": "for-each-unit",
+                "selector": {"filter": {"level": "model", "attachment_role": "bodyguard"}},
+                "effect": {
+                    "type": "sequence",
+                    "steps": [
+                        {
+                            "type": "stat-modifier",
+                            "target": "recipient",
+                            "modifier": {"stat": "S", "operation": "improve", "value": 1},
+                        },
+                        {
+                            "type": "stat-modifier",
+                            "target": "recipient",
+                            "modifier": {"stat": "T", "operation": "improve", "value": 1},
+                        },
+                    ],
+                },
+            },
+            "game_version": version,
+        }
+    ]
+    raw["enhancements"] = [
+        {
+            "id": "enhancement-buff-entry",
+            "name": "Enhancement Buff",
+            "detachment_id": "test-detachment",
+            "cost": 20,
+            "keyword_restrictions": ["Orks"],
+            "ability_id": "enhancement-buff",
+            "game_version": version,
+        }
+    ]
+    ds = Dataset(raw)
+    input_ = {
+        "unitId": "source-bodyguard",
+        "factionId": "orks",
+        "detachmentId": "test-detachment",
+    }
+    source = {
+        "kind": "ability",
+        "abilityId": "enhancement-buff",
+        "abilityKind": "attached",
+        "sourceUnitId": "source-leader",
+    }
+    selector = {"filter": {"level": "model", "attachment_role": "bodyguard"}}
+    trigger = {"event": "battle-start"}
+    snapshot = {
+        "source": source,
+        "sourceUnitId": "source-leader",
+        "trigger": trigger,
+        "selectionPath": "",
+        "selector": selector,
+        "perspective": "attacker",
+        "recipientUnitId": "source-bodyguard",
+        "selected": True,
+    }
+    def stack_contributions(context: dict[str, Any]) -> list[dict[str, Any]]:
+        result = ds.stackable_buffs_for(input_, context)
+        return [
+            buff["contribution"]
+            for lever in result["buffs"]
+            for buff in lever.get("buffs", [])
+        ]
+
+    before = stack_contributions({"phase": "command", "attackerUnitId": "source-bodyguard"})
+    after = stack_contributions(
+        {
+            "phase": "command",
+            "attackerUnitId": "source-bodyguard",
+            "recipientSnapshots": [snapshot],
+        }
+    )
+    assert before == []
+    assert {buff["type"] for buff in after} == {"strength-mod"}
+    target_snapshot = {**snapshot, "perspective": "target"}
+    ability = ds.abilities.get_in_faction("enhancement-buff", "orks")
+    assert ability is not None
+    target_result = ability.describe_buffs(
+        source,
+        {
+            "phase": "command",
+            "targetUnitId": "source-bodyguard",
+            "recipientSnapshots": [target_snapshot],
+        },
+        "target",
+    )
+    target_buffs = list(target_result["applied"])
+    target_buffs.extend(
+        buff
+        for lever in target_result["activatable"]
+        for buff in lever.get("buffs", [])
+    )
+    assert {buff["contribution"]["type"] for buff in target_buffs} == {"toughness-mod"}
+
+    not_selected = {**snapshot, "selected": False}
+    assert stack_contributions(
+        {
+            "phase": "command",
+            "attackerUnitId": "source-bodyguard",
+            "recipientSnapshots": [not_selected],
+        }
+    ) == []
+    wrong_source = {**snapshot, "sourceUnitId": "other-leader"}
+    assert stack_contributions(
+        {
+            "phase": "command",
+            "attackerUnitId": "source-bodyguard",
+            "recipientSnapshots": [wrong_source],
+        }
+    ) == []
+    wrong_detachment = {**input_, "detachmentId": "other-detachment"}
+    assert ds.stackable_buffs_for(
+        wrong_detachment,
+        {
+            "phase": "command",
+            "attackerUnitId": "source-bodyguard",
+            "recipientSnapshots": [snapshot],
+        },
+    )["buffs"] == []
+
+    ability = ds.abilities.get_in_faction("enhancement-buff", "orks")
+    assert ability is not None
+    conflict = ability.describe_buffs(
+        source,
+        {
+            "phase": "command",
+            "attackerUnitId": "source-bodyguard",
+            "recipientSnapshots": [snapshot, {**snapshot, "selected": False}],
+        },
+        "attacker",
+    )
+    assert conflict["applied"] == []
+    assert conflict["unsupported"][0]["reason"] == "conflicting trigger-time recipient snapshots"

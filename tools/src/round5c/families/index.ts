@@ -18,6 +18,7 @@ import { SELECTION_EXTENSIONS } from "./selections.js";
 import { SET_UP_EXTENSIONS } from "./set-up.js";
 import { UNIT_ACTIVITY_EXTENSIONS } from "./unit-activity.js";
 import { UNIT_FILTER_EXTENSIONS } from "./unit-filters.js";
+import { UNIT_NAME_EXTENSIONS } from "./unit-names.js";
 import { UNIT_STATE_EXTENSIONS } from "./unit-states.js";
 import { WEAPON_EXTENSIONS } from "./weapons.js";
 
@@ -38,6 +39,7 @@ export const FAMILY_EXTENSIONS: readonly FamilyExtension[] = [
   ...EVENT_EXTENSIONS,
   ...UNIT_ACTIVITY_EXTENSIONS,
   ...UNIT_FILTER_EXTENSIONS,
+  ...UNIT_NAME_EXTENSIONS,
   ...UNIT_STATE_EXTENSIONS,
   ...CHARACTERISTIC_EXTENSIONS,
   ...ROLL_EXTENSIONS,

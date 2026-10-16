@@ -91,6 +91,7 @@ pub const DESIGNATION_IDS: &[&str] = &[
     "pulse-onslaught-shaken",
     "quarry",
     "remains-under-your-control",
+    "righteous",
     "riled-up",
     "riven",
     "sabotaged",

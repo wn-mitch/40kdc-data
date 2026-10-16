@@ -276,7 +276,12 @@ export function gapsReport(db: DatabaseSync, limit: number): Record<string, unkn
     if (compiled.has(source.source_hash)) continue;
     compiled.add(source.source_hash);
     tiledTexts += 1;
-    const result = compileLeaves(source.leaves, source.source_text, { abilityId: own.get(source.id), name: source.name ?? undefined, weapons: { faction_id: source.faction_id, source_type: source.source_type ?? "" } });
+    const result = compileLeaves(source.leaves, source.source_text, {
+      abilityId: own.get(source.id),
+      name: source.name ?? undefined,
+      weapons: { faction_id: source.faction_id, source_type: source.source_type ?? "" },
+      units: { faction_id: source.faction_id },
+    });
     if (result.ok) continue;
     const key = result.errors[0] ?? "unknown";
     const entry = errors.get(key) ?? { count: 0, examples: [] };

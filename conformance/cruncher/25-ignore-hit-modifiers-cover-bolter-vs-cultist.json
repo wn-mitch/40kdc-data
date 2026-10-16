@@ -1,0 +1,68 @@
+{
+  "name": "bolt-rifle x5 vs cultists in cover with -1 and +1 to hit, ignoring hit modifiers keeps only the +1",
+  "attacker": {
+    "weaponId": "bolt-rifle",
+    "profileIndex": 0
+  },
+  "modelsFiring": 5,
+  "target": {
+    "unitId": "cultist-mob",
+    "profileIndex": 0
+  },
+  "context": {
+    "phase": "shooting"
+  },
+  "buffs": [
+    {
+      "source": {
+        "kind": "manual",
+        "label": "cover"
+      },
+      "contribution": {
+        "type": "cover"
+      }
+    },
+    {
+      "source": {
+        "kind": "manual",
+        "label": "minus one"
+      },
+      "contribution": {
+        "type": "hit-mod",
+        "value": -1
+      }
+    },
+    {
+      "source": {
+        "kind": "manual",
+        "label": "plus one"
+      },
+      "contribution": {
+        "type": "hit-mod",
+        "value": 1
+      }
+    },
+    {
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-ignore-rule",
+        "abilityKind": "unit"
+      },
+      "contribution": {
+        "type": "ignore-modifiers",
+        "roll": "hit"
+      }
+    }
+  ],
+  "expected": {
+    "stages": {
+      "attacks": 10,
+      "hits": 8.3333,
+      "wounds": 5.5556,
+      "unsaved": 5.5556,
+      "damage": 5.5556,
+      "after-fnp": 5.5556,
+      "models-killed": 5.5556
+    }
+  }
+}

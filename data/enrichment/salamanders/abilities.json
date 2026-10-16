@@ -29,7 +29,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ADEPTUS ASTARTES"
       ]
     },
@@ -86,8 +86,13 @@
         {
           "type": "select-units",
           "selector": {
-            "count": 1,
-            "owner": "friendly",
+            "filter": {
+              "owner": "friendly"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            },
             "eligibility": {
               "type": "unit-state",
               "parameters": {
@@ -192,7 +197,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ADEPTUS ASTARTES"
       ]
     },
@@ -218,10 +223,16 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Devastating Wounds"
-        ],
-        "weapon_keyword": "Torrent"
+        "weapons": {
+          "keyword": {
+            "keyword_id": "torrent"
+          }
+        },
+        "keywords": [
+          {
+            "keyword_id": "devastating-wounds"
+          }
+        ]
       }
     },
     "scope": {
@@ -292,14 +303,16 @@
         "stat": "S",
         "operation": "add",
         "value": 3,
-        "weapon_type": "melee"
+        "weapons": {
+          "type": "melee"
+        }
       }
     },
     "scope": {
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ADEPTUS ASTARTES",
         "INFANTRY"
       ]

@@ -70,7 +70,7 @@ describe("Round 5C Stratagems with several targets: groups (A) and naming one (B
     expect(target).toEqual([
       { name: "first", count: "one", side: "your-army", selects: "unit", required_keywords: ["ALPHA", "VEHICLE"] },
       { name: "second", count: "one", side: "your-army", selects: "unit", required_keywords: ["BETA"], eligibility: { operator: "and", operands: [
-        { type: "within", parameters: { of: first, range: { inches: 6 } } },
+        { type: "matches", parameters: { filter: { within: { of: first, range: { inches: 6 } } } } },
         notSame(first),
       ] } },
     ]);
@@ -204,8 +204,8 @@ describe("Round 5C Stratagems with several targets: every and any (C), exactly N
       ["both of those units", "unit-filter", { side: "any", among: "stratagem-targets", targets: "every" }, "EFFECT"],
       ["subtract 1 from the Hit roll", "roll-modifier", { roll: "hit", operation: "subtract", value: 1 }, "EFFECT"]);
     expect(JSON.stringify(mechanics.effect)).toContain(JSON.stringify({ operator: "and", operands: [
-      { type: "visible", parameters: { subject: "attacker", to: first } },
-      { type: "visible", parameters: { subject: "attacker", to: second } },
+      { type: "matches", parameters: { subject: "attacker", filter: { visible: { to: first } } } },
+      { type: "matches", parameters: { subject: "attacker", filter: { visible: { to: second } } } },
     ] }));
     expect(effectOk(mechanics.effect)).toBe(true);
   });
@@ -234,8 +234,8 @@ describe("Round 5C Stratagems with several targets: an optional gated target (E)
     expect(target).toEqual([
       { name: "first", count: "one", side: "your-army", selects: "unit", required_keywords: ["ALPHA"] },
       { name: "second", count: "up-to", count_max: 1, side: "your-army", selects: "unit", required_keywords: ["BETA"], eligibility: { operator: "and", operands: [
-        { type: "has-keyword", parameters: { subject: first, all_of: ["BATTLELINE"] } },
-        { type: "within", parameters: { of: first, range: { inches: 6 } } },
+        { type: "matches", parameters: { subject: first, filter: { all_of: ["BATTLELINE"] } } },
+        { type: "matches", parameters: { filter: { within: { of: first, range: { inches: 6 } } } } },
         notSame(first),
       ] } },
     ]);
@@ -305,7 +305,7 @@ describe("Round 5C Stratagems with several targets: the target in focus", () => 
       ["enemy unit", "unit-filter", { side: "enemy" }, "TARGET"],
       ["within 12\" of it", "unit-position", { kind: "within", inches: 12, of: "antecedent", subject: "this-unit", negated: false }, "TARGET"],
       ["That enemy unit must take a Battle-shock test", "test", { target: "antecedent", test: "battle-shock" }, "EFFECT"]);
-    expect(target[1]).toEqual({ name: "second", count: "one", side: "enemy", selects: "unit", eligibility: { type: "within", parameters: { of: first, range: { inches: 12 } } } });
+    expect(target[1]).toEqual({ name: "second", count: "one", side: "enemy", selects: "unit", eligibility: { type: "matches", parameters: { filter: { within: { of: first, range: { inches: 12 } } } } } });
     expect(mechanics.effect).toMatchObject({ type: "test", target: second });
     expect(effectOk(mechanics.effect)).toBe(true);
   });
@@ -329,7 +329,7 @@ describe("Round 5C Stratagems with several targets: a target with alternatives, 
     // Shoot and charge, each for the first target (gated) and the second.
     const steps = (mechanics.effect as { steps: Array<Record<string, unknown>> }).steps;
     expect(steps).toHaveLength(4);
-    expect(steps[0]).toMatchObject({ type: "conditional", condition: { type: "has-keyword", parameters: { subject: first, all_of: ["ALPHA"] } } });
+    expect(steps[0]).toMatchObject({ type: "conditional", condition: { type: "matches", parameters: { subject: first, filter: { all_of: ["ALPHA"] } } } });
     expect(JSON.stringify(steps[0])).toContain(JSON.stringify(first));
     expect(steps[1]).toMatchObject({ type: "permission", target: second });
     expect(steps[2]).toMatchObject({ type: "conditional", effect: { target: first, modifier: { activity: "declare-charge" } } });
@@ -372,7 +372,7 @@ describe("Round 5C Stratagems with several targets: anaphors in a later target's
       ["your ALPHA unit", "unit-filter", { side: "friendly", keywords: ["ALPHA"], among: "stratagem-targets", targets: "one" }, "EFFECT"],
       ["has the Feel No Pain 4+ ability", "feel-no-pain", { subject: "antecedent", threshold: 4, against: "all" }, "EFFECT"]);
     expect(target[1].eligibility).toEqual({ operator: "and", operands: [
-      { type: "within", parameters: { subject: first, of: "this-unit", range: { inches: 6 } } },
+      { type: "matches", parameters: { subject: first, filter: { within: { of: "this-unit", range: { inches: 6 } } } } },
       notSame(first),
     ] });
     expect(targetValid(target)).toBe(true);
@@ -401,8 +401,8 @@ describe("Round 5C Stratagems with several targets: a unit named only inside a t
     const { target, mechanics } = compiled(text, ...when, binding, ...effect);
     expect(target).toEqual([
       { name: "first", count: "one", side: "your-army", selects: "unit", required_keywords: ["ALPHA"], eligibility: { operator: "and", operands: [
-        { type: "owned-by", parameters: { owner: "friendly" } },
-        { type: "within", parameters: { of: second, range: { inches: 6 } } },
+        { type: "matches", parameters: { filter: { owner: "friendly" } } },
+        { type: "matches", parameters: { filter: { within: { of: second, range: { inches: 6 } } } } },
       ] } },
       { name: "second", count: "one", side: "your-army", selects: "unit", required_keywords: ["BETA"], bound_to: "attacked-unit", eligibility: notSame(first) },
     ]);
@@ -440,7 +440,7 @@ describe("Round 5C Stratagems with several targets: the attacked unit and a seco
       ["your unit", "unit-filter", { side: "friendly", among: "stratagem-targets", targets: "one" }, "EFFECT"],
       ["has the Feel No Pain 4+ ability", "feel-no-pain", { subject: "antecedent", threshold: 4, against: "all" }, "EFFECT"]);
     expect(target[0]).toMatchObject({ name: "first", bound_to: "attacked-unit" });
-    expect(target[1]).toMatchObject({ name: "second", eligibility: { operator: "and", operands: [{ type: "within", parameters: { of: first } }, notSame(first)] } });
+    expect(target[1]).toMatchObject({ name: "second", eligibility: { operator: "and", operands: [{ type: "matches", parameters: { filter: { within: { of: first, range: { inches: 6 } } } } }, notSame(first)] } });
     expect(mechanics.effect).toMatchObject({ type: "feel-no-pain", target: first });
     expect(mechanics.trigger).toMatchObject({ event: "targets-selected", object: first });
     expect(targetValid(target)).toBe(true);

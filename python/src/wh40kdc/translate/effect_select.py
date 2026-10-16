@@ -11,10 +11,19 @@ import re
 from typing import Any
 
 from wh40kdc.translate.condition_leadin import describe_selection_eligibility
+from wh40kdc.translate.condition_refs import unit_ref_phrase
 from wh40kdc.translate.effect_quantity import quantity_phrase
-from wh40kdc.translate.effect_words import Ctx, capitalize, dekebab, jstr, num, or_list, title_case
+from wh40kdc.translate.effect_words import (
+    Ctx,
+    capitalize,
+    dekebab,
+    filter_subject,
+    jstr,
+    num,
+    or_list,
+    title_case,
+)
 from wh40kdc.translate.expiry import expiry_trail
-from wh40kdc.translate.timing import describe_timing
 
 Effect = dict[str, Any]
 
@@ -24,9 +33,7 @@ def _obj(x: Any) -> dict[str, Any]:
 
 
 def duration_clauses(duration: Any) -> tuple[str, str]:
-    """Duration → (lead, trail). ``lead`` fronts the sentence; ``trail`` sits before the effect."""
-    if duration == "one-use":
-        return ("once per battle", "")
+    """Duration → (lead, trail); usage, not duration, controls frequency."""
     return ("", expiry_trail(duration))
 
 
@@ -42,31 +49,61 @@ def selection_ref_name(ref: Any, fallback: str) -> str:
 
 def selection_binding(sel: dict[str, Any]) -> str:
     binding = sel.get("bind_as")
-    if isinstance(binding, str) and binding:
-        it = "them" if sel.get("selection_mode") == "any-number" else "it"
-        return f", binding {it} as {dekebab(binding.replace('_', '-'))}"
-    return ""
+    if not isinstance(binding, str) or not binding:
+        return ""
+    plural = selector_count(sel)[1]
+    name = binding.replace("-", " ").replace("_", " ")
+    return f", binding {'them' if plural else 'it'} as {name}"
 
 
 def reference_origin(reference: Any) -> str:
-    """Range/engagement origin phrase for a selector's ``reference``."""
+    """Range/engagement origin phrase for a selector's ``filter.within``."""
     if reference == "bearer-transport":
         return "this model's unit's Transport"
-    return "this model's unit" if reference == "bearer-unit" else "the bearer"
+    if reference == "bearer-unit":
+        return "this model's unit"
+    if reference == "this-model":
+        return "this model"
+    if reference == "this-unit":
+        return "this model's unit"
+    return unit_ref_phrase(reference, "the bearer")
+
+
+def _selector_filter(sel: dict[str, Any]) -> dict[str, Any]:
+    value = sel.get("filter")
+    return value if isinstance(value, dict) else {}
+
+
+def _selector_level(sel: dict[str, Any]) -> str:
+    return "model" if _selector_filter(sel).get("level") == "model" else "unit"
+
+
+def _selector_bounds(sel: dict[str, Any]) -> tuple[Any, Any]:
+    count = sel.get("count")
+    if not isinstance(count, dict):
+        return (None, None)
+    return count.get("min"), count.get("max")
 
 
 def selection_model_filters(sel: dict[str, Any]) -> str:
+    filt = _selector_filter(sel)
     names = (
-        f" named {or_list([jstr(n) for n in sel['model_names']])}"
-        if isinstance(sel.get("model_names"), list)
+        f" named {or_list([jstr(n) for n in filt['model_names']])}"
+        if isinstance(filt.get("model_names"), list)
         else ""
     )
-    excluded = sel.get("excluded_keywords")
+    unit_ids = filt.get("unit_ids")
+    identity = (
+        f" with unit ID {or_list([jstr(unit_id) for unit_id in unit_ids])}"
+        if isinstance(unit_ids, list) and unit_ids
+        else ""
+    )
+    excluded = filt.get("none_of")
     exclusions = ""
     if isinstance(excluded, list) and excluded:
-        noun = "models" if sel.get("target_kind") == "model" else "units"
+        noun = "models" if _selector_level(sel) == "model" else "units"
         exclusions = f" (excluding {noun} with {or_list([jstr(k) for k in excluded])})"
-    return names + exclusions
+    return names + identity + exclusions
 
 
 def _eligibility(sel: dict[str, Any]) -> str:
@@ -74,109 +111,96 @@ def _eligibility(sel: dict[str, Any]) -> str:
     return f" {describe_selection_eligibility(elig)}" if isinstance(elig, dict) else ""
 
 
+def selector_noun(sel: dict[str, Any]) -> str:
+    return "model" if _selector_filter(sel).get("level") == "model" else "unit"
+
+
+def selector_subject(sel: dict[str, Any], plural: bool) -> str:
+    subject = filter_subject(_selector_filter(sel)).removeprefix("all ")
+    if plural:
+        return subject
+    subject = re.sub(r"\bunits\b", "unit", subject, count=1)
+    subject = re.sub(r"\bmodels\b", "model", subject, count=1)
+    return re.sub(r"\bthat are\b", "that is", subject, count=1)
+
+
+def selector_count(sel: dict[str, Any]) -> tuple[str, bool]:
+    count = sel.get("count")
+    bounds: dict[str, Any] = count if isinstance(count, dict) else {}
+    minimum = bounds.get("min")
+    maximum = bounds.get("max")
+
+    def quantity(value: Any) -> str:
+        if isinstance(value, dict):
+            return quantity_phrase(value)
+        return "one" if num(value) == 1 else jstr(value)
+
+    if minimum is not None and minimum == maximum:
+        return quantity(minimum), maximum != 1
+    if minimum is not None and maximum is not None and minimum != 0:
+        return f"from {quantity(minimum)} through {quantity(maximum)}", maximum != 1
+    if maximum is not None:
+        return f"up to {quantity(maximum)}", maximum != 1
+    if minimum is not None:
+        return f"at least {quantity(minimum)}", True
+    return "each", False
+
+
 def select_units_subject(sel: Any) -> str:
-    """ "one enemy Vehicle unit within 12\\"" — the ``select-units`` selector phrase."""
     sel = _obj(sel)
-    kw = " ".join(title_case(jstr(k)) for k in (sel.get("keywords") or []))
-    exact = sel.get("count")
-    if (
-        exact is None
-        and sel.get("min_count") is not None
-        and num(sel.get("min_count")) == num(sel.get("max_count"))
-    ):
-        exact = sel.get("max_count")
-    bounded = sel.get("min_count") is not None and exact is None
-    count = exact if exact is not None else sel.get("max_count")
-    # A cap set by the battle size or by a count reads after the noun: "up to 1/2/3 enemy units".
-    cap = _obj(count) if isinstance(count, (dict, list)) else None
-    single = num(count) == 1
-    noun_base = "model" if sel.get("target_kind") == "model" else "unit"
-    noun = noun_base if single else f"{noun_base}s"
-    cap_phrase = quantity_phrase(cap) if cap is not None else ""
-    sized = cap is not None and cap.get("count_of") is None
+    phrase, plural = selector_count(sel)
+    bounds = sel.get("count") if isinstance(sel.get("count"), dict) else {}
+    maximum = bounds.get("max")
+    minimum = bounds.get("min")
+    cap = maximum if isinstance(maximum, dict) and (minimum is None or minimum == 0) else None
     if cap is not None:
-        quantity = (
-            f"up to {re.sub(r' [(].*[)]$', '', cap_phrase, count=1)}" if sized else "any number of"
-        )
-    elif exact is not None:
-        quantity = "one" if single else jstr(count)
-    elif bounded:
-        quantity = f"from {jstr(sel.get('min_count'))} through {jstr(sel.get('max_count'))}"
+        cap_phrase = quantity_phrase(cap)
+        if cap.get("count_of") is not None:
+            phrase = "any number of"
+            tail = f" (at most {cap_phrase})"
+        else:
+            before, _, after = cap_phrase.partition(" (")
+            phrase = f"up to {before}"
+            tail = f" ({after.removesuffix(')')})"
     else:
-        quantity = f"up to {jstr(count)}"
-    bound_origin = (
-        f" of {selection_ref_name(sel['within_inches_from'], 'the bound source unit')}"
-        if sel.get("within_inches_from")
-        else ""
-    )
-    wholly = " wholly" if sel.get("wholly") is True else ""
-    if sel.get("within_inches") is not None:
-        within = f'{wholly} within {jstr(sel["within_inches"])}"{bound_origin}'
-    elif sel.get("range_inches") is not None:
-        origin = bound_origin or f" of {reference_origin(sel.get('reference'))}"
-        within = f'{wholly} within {jstr(sel["range_inches"])}"{origin}'
-    else:
-        within = ""
-    if sel.get("visible_to"):
-        visible = f" visible to {selection_ref_name(sel['visible_to'], 'the bound source unit')}"
-    elif sel.get("visibility_required") is True:
-        visible = " visible to the bearer"
-    else:
-        visible = ""
-    inclusive = ", inclusive" if bounded else ""
-    if cap is None:
-        cap_tail = ""
-    elif sized:
-        sizes = re.sub(r"^.*[(](.*)[)]$", r"\1", cap_phrase, count=1)
-        cap_tail = f" ({sizes})"
-    else:
-        cap_tail = f" (at most {cap_phrase})"
-    noun_for = f"{noun_base}s" if cap is not None else noun
+        tail = ""
     return (
-        f"{quantity} {jstr(sel.get('owner'))}{f' {kw}' if kw else ''} "
-        f"{noun_for}{cap_tail}{selection_model_filters(sel)}"
-        f"{inclusive}{within}{visible}{_eligibility(sel)}"
+        f"{phrase} {selector_subject(sel, plural)}{tail}{_eligibility(sel)}"
+        f"{selection_limit(sel.get('limit'), selector_noun(sel))}"
+    )
+
+
+def selection_limit(limit: Any, noun: str) -> str:
+    limit = _obj(limit)
+    if not limit:
+        return ""
+    count = "once" if num(limit.get("count")) == 1 else f"{jstr(limit.get('count'))} times"
+    return (
+        f" (each {noun} can be selected for this ability at most {count} "
+        f"per {jstr(limit.get('period')).replace('-', ' ')} across your army)"
     )
 
 
 def selection_limit_phrase(limit: dict[str, Any], noun: str) -> str:
-    count = "once" if limit.get("count") == 1 else f"{jstr(limit.get('count'))} times"
-    return (
-        f"each {noun} can be selected for this ability at most {count} "
-        f"per {dekebab(jstr(limit.get('period')))} across your army"
-    )
+    return selection_limit(limit, noun).strip(" ()")
 
 
 def select_units_engagement(sel: Any) -> str:
-    sel = _obj(sel)
-    parts: list[str] = []
-    noun = "model" if sel.get("target_kind") == "model" else "unit"
-    origin = reference_origin(sel.get("reference"))
-    if sel.get("engagement_relation") == "engaged-with-bearer":
-        parts.append(f"For each selected {noun}, it must be within Engagement Range of {origin}.")
-    if sel.get("engagement_relation") == "not-engaged-with-bearer":
-        parts.append(
-            f"For each selected {noun}, it must not be within Engagement Range of {origin}."
-        )
-    limit = sel.get("selection_limit")
-    if limit:
-        parts.append(f"{capitalize(selection_limit_phrase(limit, noun))}.")
-    return " ".join(parts)
+    # Canonical selector relations are rendered by filterSubject as part of the subject.
+    return ""
 
 
 def select_units_plural(sel: Any) -> bool:
-    sel = _obj(sel)
-    # A cap set by the battle size or a count can select more than one.
-    if sel.get("count") is None and isinstance(sel.get("max_count"), (dict, list)):
-        return True
-    count = sel.get("count") if sel.get("count") is not None else sel.get("max_count")
-    return num(count) > 1
+    return selector_count(_obj(sel))[1]
 
 
 def selected_recipient(text: str, sel: Any) -> str:
     sel = _obj(sel)
-    noun = "model" if sel.get("target_kind") == "model" else "unit"
+    noun = _selector_level(sel)
     recipient = f"each selected {noun}" if select_units_plural(sel) else f"the selected {noun}"
+    # Membership remains relative to the bearer/current unit, not the selected recipient.
+    membership = "\ue000"
+    text = text.replace("in the unit", membership)
     text = re.sub(
         r"\b[Tt]he unit's\b",
         lambda mt: f"Each selected {noun}'s" if mt.group(0)[0] == "T" else f"{recipient}'s",
@@ -186,11 +210,11 @@ def selected_recipient(text: str, sel: Any) -> str:
         r"\b[Tt]he unit\b",
         lambda mt: f"Each selected {noun}" if mt.group(0)[0] == "T" else recipient,
         text,
-    )
+    ).replace(membership, "in the unit")
 
 
 def selected_context(ctx: Ctx, sel: Any) -> Ctx:
-    selected_model = _obj(sel).get("target_kind") == "model"
+    selected_model = _selector_level(_obj(sel)) == "model"
     return {
         **ctx,
         "selected_unit": not selected_model,
@@ -208,50 +232,13 @@ _MEMBER_OF = {
 
 
 def for_each_unit_subject(sel: Any) -> str:
-    """ "enemy unit within 6\\"" — the ``for-each-unit`` selector phrase."""
-    sel = _obj(sel)
-    keyword_list = (
-        [title_case(jstr(k)) for k in sel["keywords"]]
-        if isinstance(sel.get("keywords"), list)
-        else []
-    )
-    if not keyword_list:
-        keywords = ""
-    elif sel.get("keyword_match") == "any":
-        keywords = f"{or_list(keyword_list)} "
-    else:
-        keywords = f"{' '.join(keyword_list)} "
-    within = ""
-    if sel.get("within_inches") is not None:
-        within += f' within {jstr(sel["within_inches"])}"'
-    if sel.get("within_objective"):
-        within += (
-            " within range of "
-            f"{selection_ref_name(sel['within_objective'], 'the selected objective marker')}"
-        )
-    origin = reference_origin(sel.get("reference"))
-    rel = sel.get("engagement_relation")
-    engagement = (
-        f" in Engagement Range of {origin}"
-        if rel == "engaged-with-bearer"
-        else f" not in Engagement Range of {origin}"
-        if rel == "not-engaged-with-bearer"
+    subject = selector_subject(sel, False)
+    limit = (
+        selection_limit(sel.get("limit"), selector_noun(sel))
+        if isinstance(sel.get("limit"), dict)
         else ""
     )
-    noun = "model" if sel.get("target_kind") == "model" else "unit"
-    eligibility = (
-        f" {describe_selection_eligibility(sel['eligibility'])}"
-        if sel.get("eligibility") is not None
-        else ""
-    )
-    member = _MEMBER_OF.get(sel.get("member_of"), "")
-    # owner any: "each unit within 6\" of …", with no side word.
-    owner = "" if sel.get("owner") == "any" else f"{jstr(sel.get('owner'))} "
-    return (
-        f"{owner}"
-        f"{keywords}{noun}{selection_model_filters(sel)}{member}{within}{engagement}"
-        f"{eligibility}{selection_binding(sel)}"
-    )
+    return f"{subject}{_eligibility(sel)}{selection_binding(sel)}{limit}"
 
 
 def designation_label(designation: Any) -> str:
@@ -260,75 +247,40 @@ def designation_label(designation: Any) -> str:
     return f" (your {label})" if re.search(r"\bTarget$", label) else f" (your {label} target)"
 
 
-def _designation_target_subject_base(sel: dict[str, Any]) -> str:
-    disposition = "friendly" if sel.get("scope") == "friendly-unit" else "enemy"
-    keywords = (
-        [title_case(jstr(k)) for k in sel["keywords"]]
-        if isinstance(sel.get("keywords"), list)
-        else []
-    )
-    join = " or " if sel.get("keyword_match") == "any" else " "
-    keyword_text = f" {join.join(keywords)}" if keywords else ""
-    reference = reference_origin(sel.get("reference"))
-    if sel.get("within_inches_from"):
-        origin = f" of {selection_ref_name(sel['within_inches_from'], 'the bound source unit')}"
-    elif sel.get("reference"):
-        origin = f" of {reference}"
-    else:
-        origin = ""
-    within = (
-        f' within {jstr(sel["within_inches"])}"{origin}'
-        if sel.get("within_inches") is not None
-        else ""
-    )
-    if sel.get("visible_to"):
-        visible = f" visible to {selection_ref_name(sel['visible_to'], 'the bound source unit')}"
-    elif sel.get("visibility_required"):
-        visible = f" visible to {reference}"
-    else:
-        visible = ""
-    excluded = sel.get("excluded_keywords")
-    exclusions = (
-        f" (excluding {' and '.join(jstr(k) for k in excluded)} units)"
-        if isinstance(excluded, list) and excluded
-        else ""
-    )
-    return f"{disposition}{keyword_text} unit{within}{visible}{exclusions}"
+def designation_target_subject(select: dict[str, Any]) -> str:
+    selector = _obj(select.get("selector"))
+    if select.get("kind") == "objective":
+        from wh40kdc.translate.effect_bind import objective_selector_phrase
 
-
-def designation_target_subject(sel: dict[str, Any]) -> str:
-    limit = (
-        f" ({selection_limit_phrase(sel['selection_limit'], 'unit')})"
-        if sel.get("selection_limit")
-        else ""
-    )
-    elig = (
-        f" {describe_selection_eligibility(sel['eligibility'])}"
-        if sel.get("eligibility") is not None
-        else ""
-    )
-    return _designation_target_subject_base(sel) + elig + selection_binding(sel) + limit
+        return objective_selector_phrase(selector)
+    return f"{select_units_subject(selector)}{selection_binding(selector)}"
 
 
 def designation_attacker_phrase(applies: Any, block: bool = False) -> str:
     applies = _obj(applies)
-    model_kw = (
-        " ".join(applies["attacker_keywords"])
-        if applies.get("attacker_keywords") is not None
-        else None
-    )
-    unit_kw = (
-        " ".join(applies["attacker_unit_keywords"])
-        if applies.get("attacker_unit_keywords") is not None
-        else None
-    )
-    if unit_kw:
-        attacker = f"a{f' {model_kw}' if model_kw else ''} model in a friendly {unit_kw} unit"
-    elif model_kw:
-        attacker = f"a friendly {model_kw} model"
+    model = applies.get("attacker_filter")
+    unit = applies.get("attacker_unit_filter")
+    if isinstance(unit, dict):
+        model_subject = (
+            selector_subject(
+                {"filter": {**_obj(model), "owner": "any", "level": "model"}},
+                False,
+            )
+            if isinstance(model, dict)
+            else "model"
+        )
+        unit_subject = selector_subject(
+            {"filter": {"owner": "friendly", **unit}},
+            False,
+        )
+        attacker = f"a {model_subject} in a {unit_subject}"
+    elif isinstance(model, dict):
+        model_filter = {"owner": "friendly", "level": "model", **model}
+        attacker = f"a {selector_subject({'filter': model_filter}, False)}"
     else:
         attacker = "a friendly unit"
-    return f"each time {attacker} {'makes an attack against it' if block else 'attacks it'}"
+    action = "makes an attack against it" if block else "attacks it"
+    return f"each time {attacker} {action}"
 
 
 def designated_attack_when(applies: dict[str, Any]) -> str:
@@ -349,92 +301,102 @@ def designated_recipient_context(applies: Any, ctx: Ctx) -> Ctx:
     }
 
 
-def persistent_designation_name(designation: Any, scope: Any) -> str:
+def persistent_designation_name(designation: Any, kind: Any) -> str:
     label = title_case(jstr(designation))
-    if scope == "objective-marker":
-        return f"your {label}" if re.search(r"\bMarker$", label) else f"your {label} Marker"
+    if kind == "objective":
+        return f"your {label}" if re.search(r"\bMarker$", label) else f"your {label} marker"
     return f"your {label}" if re.search(r"\bTarget$", label) else f"your {label} target"
 
 
-def _persistent_designation_label(designation: Any, scope: Any) -> str:
-    return f" ({persistent_designation_name(designation, scope)})"
+def _persistent_select(e: Effect) -> dict[str, Any]:
+    select = _obj(e.get("select"))
+    selector = _obj(select.get("selector"))
+    return {"kind": select.get("kind"), "selector": selector}
+
+
+def _persistent_kind(e: Effect) -> str:
+    return "objective" if _persistent_select(e).get("kind") == "objective" else "unit"
+
+
+def _persistent_designation_label(designation: Any, kind: Any) -> str:
+    return f" ({persistent_designation_name(designation, kind)})"
 
 
 def persistent_designation_supported(e: Effect) -> bool:
-    sel = _obj(e.get("select"))
+    kind = _persistent_kind(e)
     consumer = _obj(e.get("consumer"))
-    if consumer.get("beneficiary") not in ("bearer", "unit"):
+    beneficiary = consumer.get("beneficiary")
+    if beneficiary not in ("this-model", "this-unit"):
         return False
     return (
-        sel.get("scope") == "enemy-unit" and consumer.get("relation") == "attacks-selected-unit"
+        kind == "unit" and consumer.get("relation") == "attacks-selected-unit"
     ) or (
-        sel.get("scope") == "objective-marker"
-        and consumer.get("relation") == "within-selected-marker"
+        kind == "objective" and consumer.get("relation") == "within-selected-marker"
     )
 
 
 def persistent_designation_lead(e: Effect) -> str:
-    sel = _obj(e.get("select"))
-    noun = "objective marker" if sel.get("scope") == "objective-marker" else "enemy unit"
-    label = _persistent_designation_label(e.get("designation"), sel.get("scope"))
-    lead = f"{describe_timing(sel['timing'])}, select" if sel.get("timing") else "select"
-    clauses = [f"{lead} one {noun}{label}{selection_binding(sel)}."]
-    if sel.get("allow_while_embarked"):
+    selected = _persistent_select(e)
+    selector = selected["selector"]
+    kind = selected["kind"]
+    label = _persistent_designation_label(e.get("designation"), kind)
+    if kind == "objective":
+        from wh40kdc.translate.effect_bind import objective_selector_phrase
+
+        selection = objective_selector_phrase(selector)
+    else:
+        selection = select_units_subject(selector)
+    clauses = [f"select {selection}{selection_binding(selector)}{label}."]
+    if e.get("allow_while_embarked") is True:
         clauses.append("This selection can be made while this unit is embarked.")
     lifecycle = _obj(e.get("lifecycle"))
-    replacement = lifecycle.get("replace")
-    if sel.get("selection_policy") == "replace-on-destroyed" and replacement:
-        replacement = _obj(replacement)
-        name = selection_ref_name(
-            replacement.get("reference"),
-            persistent_designation_name(e.get("designation"), sel.get("scope")),
+    replace = _obj(lifecycle.get("replace"))
+    if replace:
+        name = persistent_designation_name(e.get("designation"), kind)
+        modal = "you may" if replace.get("optional") else "you must"
+        replacement_selection = f"{selection}{selection_binding(selector)}"
+        clauses.append(
+            f"When {name} is destroyed, {modal} select {replacement_selection} to replace it."
         )
-        modal = "you may" if replacement.get("optional") else "you must"
-        clauses.append(f"When {name} is destroyed, {modal} select one new {noun} to replace it.")
     if lifecycle.get("exclusivity") == "one-active-per-bearer-unit":
         clauses.append("Only one such designation can be active for this bearer unit.")
-    if lifecycle.get("expiry") == "battle-end" and e.get("duration") != "battle":
-        clauses.append("This designation expires at the end of the battle.")
     return " ".join(clauses)
 
 
 def persistent_designation_when(e: Effect) -> str:
-    sel = _obj(e.get("select"))
+    selected = _persistent_select(e)
     consumer = _obj(e.get("consumer"))
-    name = selection_ref_name(
-        consumer.get("reference"),
-        persistent_designation_name(e.get("designation"), sel.get("scope")),
+    name = persistent_designation_name(e.get("designation"), selected.get("kind"))
+    bearer = (
+        "a model in this unit"
+        if consumer.get("beneficiary") == "this-unit"
+        else "this model"
     )
-    bearer = "a model in this unit" if consumer.get("beneficiary") == "unit" else "this model"
     if consumer.get("relation") == "within-selected-marker":
         relation = f"while {bearer} is within range of {name}"
     else:
-        relation = (
-            f"each time {bearer} makes an attack against "
-            f"{name if consumer.get('reference') else 'it'}"
-        )
+        relation = f"each time {bearer} makes an attack against it"
     _, trail = duration_clauses(e.get("duration"))
     return f"{capitalize(trail)}, {relation}" if trail else relation
 
 
 def persistent_designation_replacement(e: Effect) -> str:
-    sel = _obj(e.get("select"))
-    replacement = _obj(_obj(e.get("lifecycle")).get("replace"))
+    kind = _persistent_kind(e)
+    replacement = _obj(e.get("replacement"))
     previous = selection_ref_name(
         replacement.get("reference"),
-        persistent_designation_name(e.get("designation"), sel.get("scope")),
+        persistent_designation_name(e.get("designation"), kind),
     )
-    label = _persistent_designation_label(e.get("designation"), sel.get("scope"))
+    label = _persistent_designation_label(e.get("designation"), kind)
     embarked = (
         ". This selection can be made while this unit is embarked"
-        if sel.get("allow_while_embarked")
+        if e.get("allow_while_embarked") is True
         else ""
     )
     modal = "you may" if replacement.get("optional") else "you must"
+    noun = "objective marker" if kind == "objective" else "enemy unit"
     return (
-        f"when {previous} is destroyed, {modal} select one new enemy unit{label} to replace "
-        "this bearer unit's "
-        f"existing designation{selection_binding(sel)}. Its existing effects apply to the new "
-        "target without "
-        f"changing the designation's battle-end expiry{embarked}"
+        f"when {previous} is destroyed, {modal} select one new {noun}{label} to replace "
+        "this bearer unit's existing designation. Its existing effects apply to the new "
+        f"target without changing the designation's expiry{embarked}"
     )

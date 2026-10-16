@@ -34,7 +34,7 @@ describe("signed stat adjustments", () => {
     const parameters = { ...prefillFromSource(family, "+2 S"), subject: "this-model" };
     expect(compileLeaves([adjustment(parameters)])).toMatchObject({ ok: false, errors: ["Stat adjustment needs a reviewed weapon scope."] });
     expect(compileLeaves([adjustment({ ...parameters, weapon_type: "ranged" })])).toMatchObject({ ok: true, mechanics: { effect: {
-      type: "stat-modifier", target: "this-model", modifier: { stat: "S", operation: "improve", value: 2, weapon_type: "ranged" },
+      type: "stat-modifier", target: "this-model", modifier: { stat: "S", operation: "improve", value: 2, weapons: { type: "ranged" } },
     } } });
   });
 
@@ -49,7 +49,7 @@ describe("signed stat adjustments", () => {
     const migrated = mapToLatest(family.id, 4, parameters)!;
     expect(migrated.version).toBe(currentFamilyVersion(family.id));
     expect(compileLeaves([adjustment(migrated.parameters)])).toMatchObject({ ok: true, mechanics: { effect: {
-      type: "stat-modifier", target: "this-model", modifier: { stat: "AP", operation: "improve", value: 2, weapon_type: "melee" },
+      type: "stat-modifier", target: "this-model", modifier: { stat: "AP", operation: "improve", value: 2, weapons: { type: "melee" } },
     } } });
   });
 
@@ -112,7 +112,7 @@ describe("separately scoped characteristic setters", () => {
       scope({ subject: "this-unit", weapon_type: "melee" }),
       setter({ characteristic: "A", value }),
     ])).toMatchObject({ ok: true, mechanics: { effect: {
-      type: "stat-modifier", target: "this-unit", modifier: { stat: "A", operation: "set", value, weapon_type: "melee" },
+      type: "stat-modifier", target: "this-unit", modifier: { stat: "A", operation: "set", value, weapons: { type: "melee" } },
     } } });
   });
 
@@ -123,7 +123,7 @@ describe("separately scoped characteristic setters", () => {
       setter({ characteristic: "S", value: 5 }),
     ])).toMatchObject({ ok: true, mechanics: { effect: {
       type: "select-units", effect: {
-        type: "stat-modifier", target: "selected-unit", modifier: { stat: "S", operation: "set", value: 5, weapon_type: "ranged" },
+        type: "stat-modifier", target: "selected-unit", modifier: { stat: "S", operation: "set", value: 5, weapons: { type: "ranged" } },
       },
     } } });
   });

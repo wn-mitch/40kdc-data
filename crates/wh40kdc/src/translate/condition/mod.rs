@@ -7,6 +7,10 @@
 //! structure. Output is **ASCII-only** with a fixed clause and parameter order,
 //! pinned byte-for-byte against the TS oracle by the conformance corpus; any
 //! phrasing change here is a semantic corpus change (bump `SPEC_VERSION`).
+//!
+//! Ordinary predicates use `matches` and the shared unit filter. Attachment roles identify
+//! actual model membership, and spatial predicates retain their explicit observers and origins.
+//! Specialized historical/count predicates remain separate; snapshot observation is not activation.
 
 mod board;
 mod equipment;
@@ -81,8 +85,9 @@ pub fn describe_selection_eligibility_value(c: &Value) -> String {
         c
     };
     let ip = params(inner);
-    if ctype(inner) == Some("unit-state")
-        && is(ip, "state", "battle-shocked")
+    if ctype(inner) == Some("matches")
+        && is(obj(ip.get("filter")), "state", "battle-shocked")
+        && key_count(obj(ip.get("filter"))) == 1
         && nn(ip, "subject").is_none()
     {
         return if single_not {

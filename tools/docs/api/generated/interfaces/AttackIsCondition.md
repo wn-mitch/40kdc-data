@@ -6,7 +6,7 @@
 
 # Interface: AttackIsCondition
 
-Defined in: [generated.ts:2065](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2065)
+Defined in: [generated.ts:2090](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2090)
 
 [attack] The attack being resolved matches every filter.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:2065](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **type**: `"attack-is"`
 
-Defined in: [generated.ts:2066](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2066)
+Defined in: [generated.ts:2091](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2091)
 
 ***
 
@@ -24,11 +24,11 @@ Defined in: [generated.ts:2066](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **parameters**: `object`
 
-Defined in: [generated.ts:2067](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2067)
+Defined in: [generated.ts:2092](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2092)
 
 #### attack\_type?
 
-> `optional` **attack\_type?**: `"psychic"` \| `"ranged"` \| `"melee"`
+> `optional` **attack\_type?**: [`AttackType`](../type-aliases/AttackType.md)
 
 #### shooting\_type?
 
@@ -38,13 +38,9 @@ Defined in: [generated.ts:2067](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > `optional` **fight\_type?**: `"normal"` \| `"overrun"`
 
-#### weapon\_keyword?
+#### weapons?
 
-> `optional` **weapon\_keyword?**: `string`
-
-#### weapon\_name?
-
-> `optional` **weapon\_name?**: `string`
+> `optional` **weapons?**: [`WeaponScope`](WeaponScope.md)
 
 #### all\_target\_same\_unit?
 

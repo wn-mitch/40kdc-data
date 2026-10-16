@@ -6,7 +6,7 @@
 
 # Interface: NoEffectEffect
 
-Defined in: [generated.ts:3171](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L3171)
+Defined in: [generated.ts:4097](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4097)
 
 Resolve no effect; does not create attacks, damage, selections, or secondary events.
 
@@ -19,4 +19,4 @@ via the `definition` "no-effect-effect".
 
 > **type**: `"no-effect"`
 
-Defined in: [generated.ts:3172](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L3172)
+Defined in: [generated.ts:4098](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4098)

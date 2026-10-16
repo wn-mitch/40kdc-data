@@ -51,7 +51,7 @@ describe("apply-mark@4 by: a designation applied by a unit", () => {
     const mechanics = mechanicsOf(bondsman(), BONDSMAN_TEXT);
     expect(mechanics.effect).toEqual({
       type: "select-units",
-      selector: { owner: "friendly", count: 1, keywords: ["ARMIGER"] },
+      selector: { filter: { owner: "friendly", all_of: ["ARMIGER"] }, count: { min: 1, max: 1 } },
       effect: { type: "designate", target: "selected-unit", modifier: { tag: "bondsman-affected", by: "this-unit", clears_on: "until-next-command-phase" } },
     });
     expect(mechanics.scope.duration).toBe("until-next-command-phase");
@@ -125,15 +125,16 @@ describe("unit-filter@8 designated and designated_by", () => {
     expect(() => normalizeFingerprintParameters("unit-filter", { side: "friendly", designated: "bondsman-affected", designated_by: "enemy-unit" })).toThrow(/designated_by/u);
   });
 
-  it("refuses a designated filter as a selection's units, since a selection holds no designation", () => {
-    const text = "Select one friendly unit affected by this ability.";
+  it("retains a designation and its applier on a selection's unit filter", () => {
+    const text = "Select one friendly unit affected by this ability. That unit regains 1 lost wound.";
     const leaves = placed(text,
       ["Select one friendly", "select-unit", { scope: "friendly", distance: "any", visible: false }],
       ["unit affected by this ability", "unit-filter", { side: "friendly", designated: "bondsman-affected", designated_by: "this-unit" }],
+      ["That unit regains 1 lost wound", "regain-wounds", { subject: "selected-unit", amount: "1" }],
     );
-    const result = compileLeaves(leaves, text);
-    expect(result.ok).toBe(false);
-    expect(result.ok ? "" : result.errors.join(" ")).toMatch(/no selection or aura shape/u);
+    const mechanics = mechanicsOf(leaves, text);
+    expect(mechanics.effect.selector.filter).toEqual({ owner: "friendly", designated: "bondsman-affected", designated_by: "this-unit" });
+    expect(mechanics.effect.effect).toMatchObject({ type: "heal", target: "selected-unit" });
   });
 
   it("stacks two filters into one only when their designations agree", () => {

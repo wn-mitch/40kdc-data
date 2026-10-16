@@ -22,9 +22,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-state",
+        "type": "matches",
         "parameters": {
-          "state": "engaged"
+          "filter": {
+            "state": "engaged"
+          }
         }
       },
       "effect": {"type":"ability-grant","target":"this-unit","modifier":{"ability":"fights-first"}}
@@ -57,7 +59,7 @@
     "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" },
     "effect": {
       "type": "conditional",
-      "condition": {"operator":"not","operands":[{"type":"unit-state","parameters":{"state":"fights-first"}}]},
+      "condition": {"operator":"not","operands":[{"type":"matches","parameters":{"filter":{"state":"fights-first"}}}]},
       "effect": {"type":"stat-modifier","target":"this-unit","modifier":{"stat":"A","operation":"add","value":1}}
     },
     "scope": {"duration":"phase"}
@@ -96,16 +98,12 @@
       "type": "designate",
       "target": "this-model",
       "modifier": {
-        "subject": {
-          "terrain_area": {
-            "footprint_ref": "ruins-central"
-          }
-        },
+        "subject": { "terrain_area": { "footprint_ref": "ruins-central" } },
         "tag": "smoke-screen",
-        "clears_on": "turn-rollover"
+        "clears_on": "turn"
       }
     },
-    "scope": {"duration":"turn"}
+    "scope": { "duration": "turn" }
   },
   {
     "ability_id": "effect-bs-modifier-cover",
@@ -165,7 +163,7 @@
             "objective": {}
           },
           "tag": "consecrated",
-          "count_min": 3
+          "count": { "min": 3 }
         }
       },
       "effect": {"type":"ability-grant","target":{"owner":"friendly"},"modifier":{"ability":"fights-first"}}
@@ -260,7 +258,7 @@
     "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" },
     "effect": {
       "type": "conditional",
-      "condition": { "type": "engagement-fronts", "parameters": { "count_min": 3 } },
+      "condition": { "type": "engagement-fronts", "parameters": { "count": { "min": 3 } } },
       "effect": {"type":"cp-gain","target":"this-model","modifier":{"amount":1}}
     },
     "scope": {"duration":"turn"}
@@ -274,7 +272,7 @@
       "type": "conditional",
       "condition": {
         "type": "destroyed-while-on-objective",
-        "parameters": { "destroyer_on_objective": true, "count_min": 1 }
+        "parameters": { "destroyer_on_objective": true, "count": { "min": 1 } }
       },
       "effect": {"type":"cp-gain","target":"this-model","modifier":{"amount":1}}
     },
@@ -293,7 +291,7 @@
           "objective": {}
         },
         "tag": "consecrated",
-        "clears_on": "never"
+        "clears_on": "permanent"
       }
     },
     "scope": {"duration":"battle"}
@@ -309,7 +307,7 @@
       "modifier": {
         "subject": "event-object",
         "tag": "doomed",
-        "clears_on": "turn-rollover"
+        "clears_on": "turn"
       }
     },
     "scope": {"duration":"turn"}

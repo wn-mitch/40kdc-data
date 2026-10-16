@@ -65,12 +65,12 @@ describe("Round 5C count-scale timing: a count taken once when a lasting rule ap
   it("fixes an on-apply count and marks the scaling evaluated on apply", () => {
     const effect = mechanicsOf(lasting({ timing: "on-apply" }), LASTING).effect;
     expect(effect.type).toBe("stat-modifier");
-    expect(effect.scaling).toEqual({ per: 5, of: "enemy-models-in-range", within_inches: 6, evaluated: "on-apply" });
+    expect(effect.scaling).toEqual({ per: 5, of: "enemy-models-in-range", within: { inches: 6 }, evaluated: "on-apply" });
   });
 
   it("keeps a live count with no evaluated key: timing live is the same leaf as no timing", () => {
-    expect(mechanicsOf(lasting({ timing: "live" }), LASTING).effect.scaling).toEqual({ per: 5, of: "enemy-models-in-range", within_inches: 6 });
-    expect(mechanicsOf(lasting({}), LASTING).effect.scaling).toEqual({ per: 5, of: "enemy-models-in-range", within_inches: 6 });
+    expect(mechanicsOf(lasting({ timing: "live" }), LASTING).effect.scaling).toEqual({ per: 5, of: "enemy-models-in-range", within: { inches: 6 } });
+    expect(mechanicsOf(lasting({}), LASTING).effect.scaling).toEqual({ per: 5, of: "enemy-models-in-range", within: { inches: 6 } });
     expect(normalizeFingerprintParameters("count-scale", { per: 5, timing: "live" }, currentFamilyVersion("count-scale")))
       .toEqual(normalizeFingerprintParameters("count-scale", { per: 5 }, currentFamilyVersion("count-scale")));
   });
@@ -84,7 +84,7 @@ describe("Round 5C count-scale timing: a count taken once when a lasting rule ap
       ["enemy unit", "unit-filter", { side: "enemy" }],
       ["within 6\" of this model", "aura-range", { inches: 6, of: "this-model" }],
       ["to a maximum of +3 A", "scale-cap", { max: 3 }]);
-    expect(mechanicsOf(list, text).effect.scaling).toEqual({ per: 1, of: "enemy-units-in-range", within_inches: 6, max_value: 3, evaluated: "on-apply" });
+    expect(mechanicsOf(list, text).effect.scaling).toEqual({ per: 1, of: "enemy-units-in-range", within: { inches: 6 }, max_value: 3, evaluated: "on-apply" });
   });
 
   it("refuses an on-apply count in a rule with no duration and no triggering moment", () => {
@@ -144,7 +144,7 @@ describe("Round 5C count-scale timing: a count taken once when a lasting rule ap
     const scaled = (evaluated: unknown) => ({
       type: "stat-modifier", target: "this-model",
       modifier: { stat: "A", operation: "add", value: 2 },
-      scaling: { per: 5, of: "enemy-models-in-range", within_inches: 6, evaluated },
+      scaling: { per: 5, of: "enemy-models-in-range", within: { inches: 6 }, evaluated },
     });
     expect(validate!(scaled("on-apply"))).toBe(true);
     expect(validate!(scaled("live"))).toBe(true);

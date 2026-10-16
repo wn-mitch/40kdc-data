@@ -16,7 +16,7 @@ const EXAMPLE_DATA_DIR = resolve(__dirname, "../../data");
 describe("validate", () => {
   it("validates valid core example data without errors", async () => {
     const ajv = createValidator();
-    const result = await validateFiles(ajv, "core/**/*.json", EXAMPLE_DATA_DIR);
+    const result = await validateFiles(ajv, "core/**/*.json", EXAMPLE_DATA_DIR, createValidator({ allErrors: false }));
     expect(result.failed).toBe(0);
     expect(result.passed).toBeGreaterThan(0);
   });
@@ -27,6 +27,7 @@ describe("validate", () => {
       ajv,
       "enrichment/**/*.json",
       EXAMPLE_DATA_DIR,
+      createValidator({ allErrors: false }),
     );
     expect(result.failed).toBe(0);
     expect(result.passed).toBeGreaterThan(0);
@@ -77,14 +78,15 @@ describe("validate", () => {
     expect(result.failed).toBeGreaterThan(0);
   });
 
-  it("reports correct error count for invalid data", async () => {
-    const ajv = createValidator();
+  it("retains every invalid record and independent diagnostics after a fast validity failure", async () => {
     const result = await validateFiles(
-      ajv,
+      createValidator(),
       "invalid/factions-bad.json",
       FIXTURES_DIR,
+      createValidator({ allErrors: false }),
     );
-    // Each invalid item should produce at least one error
-    expect(result.errors.length).toBeGreaterThan(0);
+    expect(result.errors.map((record) => record.index)).toEqual([0, 1, 2]);
+    expect(result.errors[0]!.errors.map((issue) => issue.path)).toEqual(expect.arrayContaining(["/", "/id"]));
+    expect(result.errors[2]!.errors.map((issue) => issue.path)).toContain("/game_version/edition");
   });
 });

@@ -6,7 +6,7 @@
 
 # Interface: GameVersionReference
 
-Defined in: [generated.ts:1095](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1095)
+Defined in: [generated.ts:2401](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2401)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "game-version-ref".
@@ -21,7 +21,7 @@ via the `definition` "game-version-ref".
 
 > **edition**: `string`
 
-Defined in: [generated.ts:1096](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1096)
+Defined in: [generated.ts:2402](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2402)
 
 ***
 
@@ -29,4 +29,4 @@ Defined in: [generated.ts:1096](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **dataslate**: `string`
 
-Defined in: [generated.ts:1097](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1097)
+Defined in: [generated.ts:2403](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2403)

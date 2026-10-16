@@ -6,7 +6,7 @@
 
 # Interface: PlayerTurnIsCondition
 
-Defined in: [generated.ts:1802](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1802)
+Defined in: [generated.ts:1555](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1555)
 
 [clock] It is this player's turn.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:1802](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **type**: `"player-turn-is"`
 
-Defined in: [generated.ts:1803](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1803)
+Defined in: [generated.ts:1556](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1556)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:1803](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **parameters**: `object`
 
-Defined in: [generated.ts:1804](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1804)
+Defined in: [generated.ts:1557](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1557)
 
 #### turn
 

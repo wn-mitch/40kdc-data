@@ -2,16 +2,12 @@ import type { SemanticFamilyDefinition } from "./contracts.js";
 import { boundedInteger, enumSet, enumValue, exactKeys } from "./family-validation.js";
 
 /**
- * `named-region-state` (batch 5): one leaf compiles a whole ability. Its DSL shape
- * (`schemas/enrichment/ability-dsl/effect.schema.json#/$defs/named-region-state-effect`, via
- * `named-region-producer`/`named-region-consumer`) is mostly a fixed template — every authored
- * record (`flow-of-magic-thousand-sons`, `power-matrix-necrons`, `hallowed-ground-grey-knights`)
- * shares the same `producer.mode: "complete"`, the same one-item `baseline` and the same
- * two-item `phase_extensions` (no-mans-land / opponent-deployment-zone, each snapshotting
- * majority control at phase start) — this file hardcodes that template in `compile-containers.ts`.
- * What genuinely varies per record is parameterized here: which region, who benefits, how a
- * model/unit qualifies for the default vs. the qualified branch, the two branches' effects, and
- * an optional unit-proximity extra zone (Hallowed Ground's Purifier Squad aura).
+ * Version 1 describes the original named-region family: its own deployment zone is active for
+ * the battle, while the other two territories are evaluated for majority control at each phase
+ * start. Those immutable leaves keep that recipe when lowered by `compile-named-region.ts`.
+ * Version 2, registered in `families/regions.ts`, adds reviewed baseline and phase-extension
+ * parameters rather than limiting the DSL to that recipe. Both versions preserve model versus
+ * whole-unit membership, optional branch effects, and continuously moving proximity extensions.
  */
 
 const MEMBERSHIP_SCOPES = ["model", "whole-unit"] as const;
@@ -119,7 +115,7 @@ function normalizeBranch(value: unknown, label: string): Record<string, unknown>
   return result;
 }
 
-export function normalizeNamedRegionParameters(family: string, input: Record<string, unknown>): Record<string, unknown> | null {
+export function normalizeNamedRegionParameters(family: string, input: Record<string, unknown>, _version = 1): Record<string, unknown> | null {
   if (family !== "named-region-state") return null;
   const optionalKeys = ["beneficiary_faction", "qualifies_by_keyword", "melee_or_visible_ranged", "proximity_extension"].filter((key) => key in input);
   exactKeys(input, ["region_id", "owner_faction", "behavior", "membership_scope", "beneficiary_operator", "beneficiary_keywords", "default_branch", "qualified_branch", ...optionalKeys], family);

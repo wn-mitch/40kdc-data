@@ -6,7 +6,7 @@
 
 # Interface: UnitKeyword
 
-Defined in: [generated.ts:4026](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4026)
+Defined in: [generated.ts:6738](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6738)
 
 Catalog entry for a universal unit ability (a 'Core ability' in the rulebook: Deep Strike, Scouts X", Feel No Pain X+, Deadly Demise X, etc.). These are the unit-side counterpart of weapon-keyword.schema.json — community-authored mechanic labels, not reproduced rules text. A unit references a parameterised instance from its `ability_ids` (e.g. `scouts-6`); this catalog records the value-agnostic definition keyed by base id (e.g. `scouts`). The optional `effect` describes the mechanic in the Ability DSL; null when the behaviour is modelled per-faction in enrichment data rather than here.
 
@@ -19,7 +19,7 @@ via the `definition` "unit-keyword".
 
 > **id**: `string`
 
-Defined in: [generated.ts:4027](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4027)
+Defined in: [generated.ts:6739](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6739)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [generated.ts:4027](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **name**: `string`
 
-Defined in: [generated.ts:4028](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4028)
+Defined in: [generated.ts:6740](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6740)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [generated.ts:4028](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **required\_parameters**: \[\] \| \[`"value"`\]
 
-Defined in: [generated.ts:4034](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4034)
+Defined in: [generated.ts:6746](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6746)
 
 Parameter keys that must be supplied at each reference site (e.g. Scouts 6" → ['value']). Empty for abilities that take no number (Deep Strike, Infiltrators, Stealth).
 
@@ -49,7 +49,7 @@ Parameter keys that must be supplied at each reference site (e.g. Scouts 6" → 
 
 > **effect**: [`AbilityEffect1`](../type-aliases/AbilityEffect1.md) \| `null`
 
-Defined in: [generated.ts:4038](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4038)
+Defined in: [generated.ts:6750](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6750)
 
 Mechanical effect of this ability. Null when the behaviour is authored per-faction in the enrichment Ability DSL rather than centrally here — engines resolve the per-faction record.
 
@@ -59,4 +59,4 @@ Mechanical effect of this ability. Null when the behaviour is authored per-facti
 
 > **game\_version**: [`GameVersionReference`](GameVersionReference.md)
 
-Defined in: [generated.ts:4039](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4039)
+Defined in: [generated.ts:6751](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6751)

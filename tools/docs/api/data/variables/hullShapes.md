@@ -8,6 +8,6 @@
 
 > `const` **hullShapes**: [`Collection`](../classes/Collection.md)\<[`HullShape`](../../generated/interfaces/HullShape.md), [`HullShape`](../../generated/interfaces/HullShape.md)\> = `dataset.hullShapes`
 
-Defined in: [data/index.ts:190](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/index.ts#L190)
+Defined in: [data/index.ts:193](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/index.ts#L193)
 
 Reusable model collision hulls (polygon footprints) referenced by id.

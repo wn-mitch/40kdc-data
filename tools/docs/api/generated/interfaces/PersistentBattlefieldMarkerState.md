@@ -6,7 +6,7 @@
 
 # Interface: PersistentBattlefieldMarkerState
 
-Defined in: [generated.ts:4701](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4701)
+Defined in: [generated.ts:7252](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7252)
 
 A marker placed on the battlefield that persists after placement: matching units may set up near it, using it may consume it, and enemy proximity removes it. Distinct from `tracking-token`, which is a reminder co-located with a model rather than a placed battlefield object with its own lifecycle.
 
@@ -19,27 +19,17 @@ via the `definition` "persistent-battlefield-marker-state".
 
 > **marker\_label**: `string`
 
-Defined in: [generated.ts:4702](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4702)
+Defined in: [generated.ts:7253](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7253)
 
 ***
 
 ### placement
 
-> **placement**: `"bearer"` \| `"bearer-unit"` \| `"battlefield"`
+> **placement**: `"battlefield"` \| `"bearer"` \| `"bearer-unit"`
 
-Defined in: [generated.ts:4706](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4706)
+Defined in: [generated.ts:7257](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7257)
 
 Where the marker is placed at the moment the ability resolves.
-
-***
-
-### setup\_within\_inches?
-
-> `optional` **setup\_within\_inches?**: `number`
-
-Defined in: [generated.ts:4710](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4710)
-
-Distance from the marker within which matching units may be set up.
 
 ***
 
@@ -47,7 +37,7 @@ Distance from the marker within which matching units may be set up.
 
 > `optional` **setup\_keywords?**: \[`string`, `...string[]`\]
 
-Defined in: [generated.ts:4716](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4716)
+Defined in: [generated.ts:7263](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7263)
 
 When present, only units carrying every listed keyword may use the marker to set up; absent means any friendly unit.
 
@@ -59,18 +49,24 @@ When present, only units carrying every listed keyword may use the marker to set
 
 ### consume?
 
-> `optional` **consume?**: `"never"` \| `"on-use"`
+> `optional` **consume?**: `"on-use"` \| `"never"`
 
-Defined in: [generated.ts:4720](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4720)
+Defined in: [generated.ts:7267](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7267)
 
 Whether a single set-up use spends the marker.
 
 ***
 
-### removed\_by\_enemy\_within\_inches?
+### setup\_within?
 
-> `optional` **removed\_by\_enemy\_within\_inches?**: `number`
+> `optional` **setup\_within?**: [`RangeRef`](../type-aliases/RangeRef.md)
 
-Defined in: [generated.ts:4724](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4724)
+Defined in: [generated.ts:7268](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7268)
 
-Remove the marker once an enemy unit is within this distance of it.
+***
+
+### removed\_by\_enemy\_within?
+
+> `optional` **removed\_by\_enemy\_within?**: [`RangeRef`](../type-aliases/RangeRef.md)
+
+Defined in: [generated.ts:7269](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7269)

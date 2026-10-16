@@ -48,22 +48,31 @@ func returnModelsLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 	if e["target"] == "this-model" {
 		return subj + " is set up again" + where + " with " + w + " remaining" + detach
 	}
-	kw := ""
-	if m["model_keyword"] != nil {
-		kw = ejstr(m["model_keyword"]) + " "
-	} else if m["bodyguard_only"] == true {
-		kw = "Bodyguard "
+	if filter, ok := asMap(e["target"]); ok && filter != nil && filter["level"] == "model" {
+		recipients := map[string]any{}
+		for key, value := range filter {
+			if key != "member_of" {
+				recipients[key] = value
+			}
+		}
+		models := strings.TrimPrefix(effectSubject(recipients, ctx), "all ")
+		kind := "destroyed " + strings.Replace(models, "models", "model", 1)
+		what := amountOf(m["count"], kind, "destroyed "+models)
+		if m["count"] == "all" {
+			what = "all destroyed " + models
+		}
+		to := ""
+		if filter["member_of"] != nil {
+			to = " to " + effectSubject(filter["member_of"], ctx)
+		}
+		return "return " + what + to + where + ", each with " + w + " remaining" + detach
 	}
-	kind := "destroyed " + kw + "model"
+	kind := "destroyed model"
 	what := amountOf(m["count"], kind, kind+"s")
 	if m["count"] == "all" {
 		what = "all " + kind + "s"
 	}
-	excl := ""
-	if l, ok := asList(m["exclude_model_keyword"]); ok {
-		excl = " (excluding " + andList(jstrList(l)) + " models)"
-	}
-	return "return " + what + excl + " to " + subj + where + ", each with " + w + " remaining" + detach
+	return "return " + what + " to " + subj + where + ", each with " + w + " remaining" + detach
 }
 
 func addUnitLeaf(m map[string]any, ctx effCtx) string {

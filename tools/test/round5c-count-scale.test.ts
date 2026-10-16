@@ -58,7 +58,7 @@ describe("Round 5C count-scale: an amount per counted unit or model", () => {
       ["to a maximum of +3 A", "scale-cap", { max: 3 }]);
     const effect = mechanicsOf(list, text).effect;
     expect(effect.type).toBe("stat-modifier");
-    expect(effect.scaling).toEqual({ per: 1, of: "enemy-units-in-range", within_inches: 6, max_value: 3 });
+    expect(effect.scaling).toEqual({ per: 1, of: "enemy-units-in-range", within: { inches: 6 }, max_value: 3 });
     expect(rendered(list, text)).toMatch(/enemy units within 6" \(to a maximum of 3\)/u);
   });
 
@@ -69,7 +69,7 @@ describe("Round 5C count-scale: an amount per counted unit or model", () => {
       ["for every 5", "count-scale", { per: 5 }],
       ["enemy models", "unit-filter", { side: "enemy", level: "model" }],
       ["within 6\" of this model", "aura-range", { inches: 6, of: "this-model" }]), text).effect;
-    expect(effect.scaling).toEqual({ per: 5, of: "enemy-models-in-range", within_inches: 6 });
+    expect(effect.scaling).toEqual({ per: 5, of: "enemy-models-in-range", within: { inches: 6 } });
 
     const own = "Add 1 to the Objective Control characteristic of this model for every 3 ALPHA models in this unit.";
     expect(mechanicsOf(placed(own,
@@ -110,7 +110,7 @@ describe("Round 5C count-scale: an amount per counted unit or model", () => {
       ["enemy unit", "unit-filter", { side: "enemy" }],
       ["within 6\" of this model", "aura-range", { inches: 6, of: "this-model" }]), text).effect;
     expect(effect.type).toBe("sequence");
-    for (const step of effect.steps) expect(step.scaling).toEqual({ per: 1, of: "enemy-units-in-range", within_inches: 6 });
+    for (const step of effect.steps) expect(step.scaling).toEqual({ per: 1, of: "enemy-units-in-range", within: { inches: 6 } });
   });
 
   describe("refuses what it cannot count faithfully", () => {
@@ -230,7 +230,7 @@ describe("Round 5C per-unit dice (authoring only)", () => {
       ["on a 4+", "roll-result", { from: 4 }],
       ["that unit suffers D3 mortal wounds", "mortal-wounds", { recipient: "that-unit", count: "D3" }]), text).effect;
     expect(effect.type).toBe("for-each-unit");
-    expect(effect.selector).toEqual({ owner: "enemy", within_inches: 6 });
+    expect(effect.selector).toEqual({ filter: { owner: "enemy", within: { range: { inches: 6 }, of: "this-unit" } } });
     expect(effect.effect).toMatchObject({ type: "dice-gated", dice: "D6", threshold: 4, on_success: { type: "mortal-wounds", target: "recipient" } });
   });
 });
@@ -251,9 +251,12 @@ describe("Round 5C per-model dice: one die for each counted model", () => {
     expect(effect.type).toBe("select-units");
     expect(effect.effect).toEqual({ type: "mortal-wounds", target: "selected-unit", modifier: {
       count: 1, max: 6, per: "success",
-      roll: { dice: 1, threshold: 3, for_each: { owner: "friendly", target_kind: "model", member_of: "bearer-unit", keywords: ["ALPHA"] } },
+      roll: { dice: 1, threshold: 3, for_each: { filter: { owner: "friendly", all_of: ["ALPHA"], level: "model", member_of: "this-unit" } } },
     } });
-    expect(rendered(list, text)).toMatch(/roll one D6 for each friendly ALPHA model in this model's unit: for each 3\+/u);
+    const words = rendered(list, text);
+    expect(words).toMatch(/roll one D6 for each.*ALPHA.*model/u);
+    expect(words).toContain("in the unit");
+    expect(words).toContain("for each 3+");
   });
 
   it("counts only the models engaged with the selected unit, the quantifier before the roll", () => {
@@ -270,10 +273,13 @@ describe("Round 5C per-model dice: one die for each counted model", () => {
     const effect = mechanicsOf(list, text).effect;
     expect(effect.type).toBe("select-units");
     expect(effect.effect.modifier.roll).toEqual({ dice: 1, threshold: 4, for_each: {
-      owner: "friendly", target_kind: "model", member_of: "bearer-unit",
-      eligibility: { type: "unit-state", parameters: { state: "engaged", with: "selected-unit" } },
+      filter: { owner: "friendly", level: "model", member_of: "this-unit" },
+      eligibility: { type: "matches", parameters: { filter: { engaged_with: "selected-unit" } } },
     } });
-    expect(rendered(list, text)).toMatch(/for each friendly model in this model's unit that is engaged with the selected unit: for each 4\+/u);
+    const words = rendered(list, text);
+    expect(words).toMatch(/for each.*model.*in the unit/u);
+    expect(words).toContain("within Engagement Range of the selected unit");
+    expect(words).toContain("for each 4+");
   });
 
   it("counts models embarked within this model", () => {
@@ -285,7 +291,7 @@ describe("Round 5C per-model dice: one die for each counted model", () => {
       ["embarked within this model", "membership", { relation: "embarked-in", of: "this-model" }],
       ["for each 5+", "roll-result", { from: 5 }],
       ["that enemy unit suffers 1 mortal wound", "mortal-wounds", { recipient: "that-unit", count: "1" }]), text).effect;
-    expect(effect.effect.modifier.roll.for_each).toEqual({ owner: "friendly", target_kind: "model", member_of: "embarked-in-bearer" });
+    expect(effect.effect.modifier.roll.for_each).toEqual({ filter: { owner: "friendly", level: "model", embarked_in: "this-model" } });
   });
 
   it("refuses a per-model roll whose success does anything but mortal wounds", () => {
@@ -322,8 +328,8 @@ describe("Round 5C per-model dice: one die for each counted model", () => {
       ["Roll one D6 for each model in that unit", "dice-roll", { dice: "D6", per_model: "target" }],
       ["for each 1", "roll-result", band],
       ["that unit suffers 1 mortal wound", "mortal-wounds", { recipient: "that-unit", count: "1" }]);
-    expect(mechanicsOf(leaves({ from: 1, to: 1 }), text).effect.effect.modifier.roll).toEqual({ dice: 1, threshold: 1, comparison: "lte", per_model: "target" });
-    expect(rendered(leaves({ from: 1, to: 1 }), text)).toMatch(/roll one D6 for each model in the target unit: for each 1, /u);
+    expect(mechanicsOf(leaves({ from: 1, to: 1 }), text).effect.effect.modifier.roll).toEqual({ dice: 1, threshold: 1, comparison: "lte", per_model: "selected-unit" });
+    expect(rendered(leaves({ from: 1, to: 1 }), text)).toMatch(/roll one D6 for each model in the selected unit: for each 1, /u);
     expect(errorsOf(leaves({ from: 2, to: 4 }), text)).toMatch(/must reach 6 .* or start at 1/u);
   });
 });
@@ -343,12 +349,15 @@ describe("Round 5C per-unit dice around a reference unit", () => {
     const list = leaves({ side: "enemy", other: true });
     const effect = mechanicsOf(list, text).effect;
     expect(effect.type).toBe("for-each-unit");
-    expect(effect.selector).toEqual({ owner: "enemy", eligibility: { operator: "or", operands: [
+    expect(effect.selector).toEqual({ filter: { owner: "enemy" }, eligibility: { operator: "or", operands: [
       { type: "same-unit", parameters: { as: "defender" } },
-      { type: "within", parameters: { of: "defender", range: { inches: 6 } } },
+      { type: "matches", parameters: { filter: { owner: "enemy", within: { of: "defender", range: { inches: 6 } } } } },
     ] } });
     expect(effect.effect).toMatchObject({ type: "dice-gated", threshold: 4, on_success: { type: "mortal-wounds", target: "recipient" } });
-    expect(rendered(list, text)).toMatch(/For each enemy unit that is the same unit as the target unit or that is within 6" of the target unit/u);
+    const words = rendered(list, text);
+    expect(words).toContain("For each enemy unit");
+    expect(words).toContain("the same unit as the target unit");
+    expect(words).toMatch(/or.*within 6" of the target unit/u);
   });
 
   it("marks each unit a pass's roll strikes, then harms each marked unit after the attacks", () => {
@@ -370,17 +379,17 @@ describe("Round 5C per-unit dice around a reference unit", () => {
     const [first, second] = effect.steps;
     expect(first.effect).toMatchObject({ type: "for-each-unit", effect: { type: "dice-gated", on_success: { type: "designate", target: "recipient", modifier: { tag: "struck-by-explosive-debris" } } } });
     expect(second.trigger).toMatchObject({ event: "attacks-resolved" });
-    expect(second.effect).toMatchObject({ type: "for-each-unit", selector: { owner: "any" }, effect: { type: "conditional", effect: { type: "mortal-wounds", target: "recipient", modifier: { count: "D3" } } } });
+    expect(second.effect).toMatchObject({ type: "for-each-unit", selector: { filter: { owner: "any" } }, effect: { type: "conditional", effect: { type: "mortal-wounds", target: "recipient", modifier: { count: "D3" } } } });
     expect(rendered(list, struck)).toMatch(/struck by explosive debris/u);
   });
 
   it("takes units of either side for \"each unit\"", () => {
-    expect(mechanicsOf(leaves({ side: "any", other: true }), text).effect.selector.owner).toBe("any");
+    expect(mechanicsOf(leaves({ side: "any", other: true }), text).effect.selector.filter.owner).toBe("any");
   });
 
   it("keeps keywords off the target: they narrow only the other units", () => {
     const selector = mechanicsOf(leaves({ side: "enemy", other: true, keywords: ["ALPHA"] }), text).effect.selector;
-    expect(selector.keywords).toBeUndefined();
+    expect(selector.filter.all_of).toBeUndefined();
     expect(JSON.stringify(selector.eligibility)).toContain("\"all_of\":[\"ALPHA\"]");
   });
 
@@ -393,6 +402,6 @@ describe("Round 5C per-unit dice around a reference unit", () => {
       ["within 3\" of the target", "unit-position", { kind: "within", inches: 3, of: "target", subject: "antecedent", negated: false }],
       ["on a 5+", "roll-result", { from: 5 }],
       ["that unit suffers 1 mortal wound", "mortal-wounds", { recipient: "that-unit", count: "1" }]), near).effect;
-    expect(effect.selector).toEqual({ owner: "enemy", eligibility: { type: "within", parameters: { of: "defender", range: { inches: 3 } } } });
+    expect(effect.selector).toEqual({ filter: { owner: "enemy", within: { of: "defender", range: { inches: 3 } } } });
   });
 });

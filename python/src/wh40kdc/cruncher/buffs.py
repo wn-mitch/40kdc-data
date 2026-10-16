@@ -26,7 +26,11 @@ ResolvedModifiers = dict[str, Any]
 #: The engine context (TS ``EngineContext``). Beyond phase/timing/attacker state it may carry
 #: ``armyFaction`` (Army Faction id), ``battleSize`` (``incursion`` / ``strike-force`` /
 #: ``onslaught``) and ``attackerGuided`` (the attacker is Guided); each drives its condition
-#: and leaves it "unknown" when absent.
+#: and leaves it "unknown" when absent. ``weaponNames`` (lower-cased names of the attacking
+#: weapon and its profile) drives ``applicableWhen.weaponName``; absent leaves weapon-name gates
+#: permissive. ``weaponKeywords`` (catalog keyword ids printed on the attacking profile) drives
+#: ``applicableWhen.weaponKeyword`` together with keywords live buffs grant; absent leaves
+#: weapon-keyword gates permissive.
 EngineContext = dict[str, Any]
 
 #: Stable ordering used to break ties when multiple buffs claim the same field.
@@ -48,6 +52,76 @@ def _rank(s: BuffSource) -> int:
     return _SOURCE_KIND_RANK.get(s.get("kind", ""), 99)
 
 
+
+def _keyword_ref_matches(actual: dict[str, Any], selector: dict[str, Any]) -> bool:
+    if actual.get("keyword_id") != selector.get("keyword_id"):
+        return False
+    actual_params = actual.get("parameters")
+    if not isinstance(actual_params, dict):
+        actual_params = {}
+    expected_params = selector.get("parameters")
+    if not isinstance(expected_params, dict):
+        expected_params = {}
+    for key, expected in expected_params.items():
+        value = actual_params.get(key)
+        if isinstance(expected, str) and isinstance(value, str) and key == "target_keyword":
+            if expected.lower() != value.lower():
+                return False
+        elif isinstance(expected, list):
+            if not isinstance(value, list) or len(value) != len(expected):
+                return False
+            if not all(
+                isinstance(item, str)
+                and any(
+                    isinstance(candidate, str) and item.lower() == candidate.lower()
+                    for candidate in value
+                )
+                for item in expected
+            ):
+                return False
+        elif value != expected:
+            return False
+    return True
+
+
+
+def _weapon_gate_holds(
+    gate: dict[str, Any], refs: list[dict[str, Any]] | None, ctx: EngineContext
+) -> bool:
+    weapon_names = ctx.get("weaponNames")
+    if gate.get("weaponName") is not None and gate["weaponName"] not in (weapon_names or []):
+        return False
+    if gate.get("excludedWeaponNames") and (
+        weapon_names is None or any(name in weapon_names for name in gate["excludedWeaponNames"])
+    ):
+        return False
+    requirements = gate.get("weaponRequirements") or []
+    if any(not _weapon_gate_holds(req, refs, ctx) for req in requirements):
+        return False
+    selectors = gate.get("weaponKeywords")
+    if selectors is not None:
+        if refs is None or not any(
+            _keyword_ref_matches(ref, selector) for selector in selectors for ref in refs
+        ):
+            return False
+    exclusions = gate.get("excludedWeaponKeywords")
+    if exclusions is not None:
+        if refs is None:
+            return False
+        for selector in exclusions:
+            if any(
+                ref.get("keyword_id") == selector.get("keyword_id")
+                and any(
+                    key not in (ref.get("parameters") or {})
+                    for key in (selector.get("parameters") or {})
+                )
+                for ref in refs
+            ):
+                return False
+            if any(_keyword_ref_matches(ref, selector) for ref in refs):
+                return False
+    return True
+
 def _applies(buff: Buff, ctx: EngineContext) -> bool:
     w = buff.get("applicableWhen")
     if not w:
@@ -66,17 +140,86 @@ def _applies(buff: Buff, ctx: EngineContext) -> bool:
         target = ctx.get("targetKeywords") or []
         if w["requiresTargetKeyword"].lower() not in target:
             return False
+    excluded = w.get("excludedTargetKeywords")
+    target_keywords = ctx.get("targetKeywords")
+    if excluded and target_keywords is not None:
+        if any(keyword.lower() in target_keywords for keyword in excluded):
+            return False
     if w.get("requiresAttackerKeyword"):
         attacker = ctx.get("attackerKeywords") or []
         if w["requiresAttackerKeyword"].lower() not in attacker:
             return False
-    # Range gate: drop only when the distance is known and exceeds the ability's
-    # range (DSL scope.range_inches). Unknown distance is permissive.
     max_range = w.get("maxRangeInches")
     distance = ctx.get("distanceInches")
-    if max_range is not None and distance is not None and distance > max_range:
+    if max_range is not None:
+        if (
+            not isinstance(distance, (int, float))
+            or isinstance(distance, bool)
+            or distance > max_range
+        ):
+            return False
+    weapon_name = w.get("weaponName")
+    weapon_names = ctx.get("weaponNames")
+    if weapon_name is not None and weapon_names is not None and weapon_name not in weapon_names:
+        return False
+    excluded_names = w.get("excludedWeaponNames")
+    if excluded_names and weapon_names is not None and any(
+        name in weapon_names for name in excluded_names
+    ):
+        return False
+    weapon_keywords = ctx.get("weaponKeywords")
+    any_keywords = w.get("weaponKeywordsAny")
+    if any_keywords and weapon_keywords is not None and not any(
+        k in weapon_keywords for k in any_keywords
+    ):
+        return False
+    excluded_weapon_keywords = w.get("excludedWeaponKeywords")
+    if (
+        excluded_weapon_keywords
+        and weapon_keywords is not None
+        and any(k in weapon_keywords for k in excluded_weapon_keywords)
+    ):
         return False
     return True
+def _live_buffs(buffs: list[Buff], ctx: EngineContext) -> list[Buff]:
+    """Resolve weapon gates while preserving structured keyword ratings."""
+    printed = ctx.get("weaponKeywordRefs")
+    if printed is None and ctx.get("weaponKeywords") is not None:
+        printed = [{"keyword_id": keyword} for keyword in ctx["weaponKeywords"]]
+
+    def gated(buff: Buff) -> bool:
+        gate = buff.get("applicableWhen") or {}
+        return any(
+            gate.get(key) is not None
+            for key in (
+                "weaponKeyword",
+                "weaponKeywords",
+                "excludedWeaponKeywords",
+                "weaponRequirements",
+            )
+        )
+
+    base = [buff for buff in buffs if _applies(buff, ctx)]
+    selected: list[Buff] = [buff for buff in base if not gated(buff)]
+    pending = [buff for buff in base if gated(buff)]
+    while True:
+        refs = list(printed) if printed is not None else None
+        if refs is not None:
+            refs.extend(
+                buff["contribution"]["keywordRef"]
+                for buff in selected
+                if buff["contribution"].get("type") == "extra-keyword"
+            )
+        next_buffs = [
+            buff
+            for buff in pending
+            if _weapon_gate_holds(buff.get("applicableWhen") or {}, refs, ctx)
+        ]
+        if not next_buffs:
+            break
+        selected.extend(next_buffs)
+        pending = [buff for buff in pending if buff not in next_buffs]
+    return [buff for buff in buffs if buff in selected]
 
 
 def _key_of(ref: dict[str, Any]) -> str:
@@ -89,7 +232,7 @@ def resolve_buffs(buffs: list[Buff], ctx: EngineContext) -> ResolvedModifiers:
     Pure function; the engine — and any UI that wants to render the resolved
     table before crunching — both go through this.
     """
-    live = [b for b in buffs if _applies(b, ctx)]
+    live = _live_buffs(buffs, ctx)
 
     out: ResolvedModifiers = {
         "hitMod": {"value": 0, "dominantSource": None},
@@ -107,6 +250,14 @@ def resolve_buffs(buffs: list[Buff], ctx: EngineContext) -> ResolvedModifiers:
         "apMod": {"value": 0, "sources": []},
         "damageReduction": {"value": 0, "dominantSource": None},
         "invulnerable": None,
+        # Lowest critical threshold granted per roll; absent rolls crit on a 6.
+        "critThresholds": {},
+        # Rolls whose negative modifiers the attacker ignores.
+        "ignoreModifiers": {},
+        # Summed WS/BS characteristic improvements.
+        "skillMod": {"WS": {"value": 0, "sources": []}, "BS": {"value": 0, "sources": []}},
+        # Ability-set Save characteristic; None keeps the printed one.
+        "saveCharacteristic": None,
     }
 
     # Hit / wound mods: sum, then cap at ±1, with dominant source picked from
@@ -187,9 +338,36 @@ def resolve_buffs(buffs: list[Buff], ctx: EngineContext) -> ResolvedModifiers:
                 )
             ):
                 out["invulnerable"] = {"threshold": c["threshold"], "dominantSource": source}
+        elif ctype == "crit-threshold":
+            cur = out["critThresholds"].get(c["roll"])
+            if (
+                cur is None
+                or c["value"] < cur["value"]
+                or (c["value"] == cur["value"] and _rank(source) < _rank(cur["dominantSource"]))
+            ):
+                out["critThresholds"][c["roll"]] = {"value": c["value"], "dominantSource": source}
+        elif ctype == "ignore-modifiers":
+            cur = out["ignoreModifiers"].get(c["roll"])
+            if cur is None or _rank(source) < _rank(cur["dominantSource"]):
+                out["ignoreModifiers"][c["roll"]] = {"dominantSource": source}
+        elif ctype == "skill-mod":
+            out["skillMod"][c["stat"]]["value"] += c["value"]
+            out["skillMod"][c["stat"]]["sources"].append(source)
+        elif ctype == "save-characteristic":
+            sc = out["saveCharacteristic"]
+            if (
+                sc is None
+                or c["value"] < sc["value"]
+                or (c["value"] == sc["value"] and _rank(source) < _rank(sc["dominantSource"]))
+            ):
+                out["saveCharacteristic"] = {"value": c["value"], "dominantSource": source}
 
-    out["hitMod"] = _cap_modifier(hit_contribs)
-    out["woundMod"] = _cap_modifier(wound_contribs)
+    # An ignored roll keeps only its positive modifiers.
+    def kept(contribs: list[dict[str, Any]], ignored: bool) -> list[dict[str, Any]]:
+        return [c for c in contribs if c["value"] > 0] if ignored else contribs
+
+    out["hitMod"] = _cap_modifier(kept(hit_contribs, "hit" in out["ignoreModifiers"]))
+    out["woundMod"] = _cap_modifier(kept(wound_contribs, "wound" in out["ignoreModifiers"]))
 
     return out
 

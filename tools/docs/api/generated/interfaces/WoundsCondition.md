@@ -6,9 +6,9 @@
 
 # Interface: WoundsCondition
 
-Defined in: [generated.ts:1909](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1909)
+Defined in: [generated.ts:1653](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1653)
 
-[composition] lost: the subject has lost wounds. remaining_max: it has at most this many left. damaged: it is in its datasheet's Damaged bracket.
+[composition] lost: the subject has lost wounds. remaining_max: it has at most this many left ({rating: true}: the unit's printed rating, as core Damaged X reads it). damaged: it is in its datasheet's Damaged bracket.
 
 ## Properties
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:1909](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **type**: `"wounds"`
 
-Defined in: [generated.ts:1910](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1910)
+Defined in: [generated.ts:1654](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1654)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:1910](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **parameters**: `object`
 
-Defined in: [generated.ts:1911](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1911)
+Defined in: [generated.ts:1655](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1655)
 
 #### Index Signature
 

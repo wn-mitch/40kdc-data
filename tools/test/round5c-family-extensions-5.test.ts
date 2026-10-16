@@ -153,8 +153,8 @@ describe("Cult Ambush", () => {
     ]);
     const result = compileLeaves(leaves, text);
     if (!result.ok) throw new Error(result.errors.join("; "));
-    expect(nodes(result.mechanics, (node) => (node.parameters as Record<string, unknown> | undefined)?.of !== undefined)[0]!.parameters)
-      .toMatchObject({ of: { marker: "cult-ambush-marker" }, range: { inches: 8 } });
+    expect(nodes(result.mechanics, (node) => node.type === "matches")[0]!.parameters)
+      .toEqual({ filter: { within: { of: { marker: "cult-ambush-marker" }, range: { inches: 8 } } } });
   });
 
   it("names the marker only with of: marker", () => {

@@ -6,83 +6,47 @@
 
 # Interface: ObjectiveSelector
 
-Defined in: [generated.ts:3187](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L3187)
+Defined in: [generated.ts:2313](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2313)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "objective-selector".
 
 ## Properties
 
-### count
+### filter
 
-> **count**: `1`
+> **filter**: [`ObjectiveFilter`](ObjectiveFilter.md)
 
-Defined in: [generated.ts:3188](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L3188)
-
-***
-
-### range\_inches?
-
-> `optional` **range\_inches?**: `number`
-
-Defined in: [generated.ts:3189](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L3189)
+Defined in: [generated.ts:2314](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2314)
 
 ***
 
-### origin?
+### count?
 
-> `optional` **origin?**: `"bearer"` \| `"bearer-unit"`
+> `optional` **count?**: [`CountBounds`](CountBounds.md)
 
-Defined in: [generated.ts:3190](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L3190)
-
-***
-
-### controlled\_by?
-
-> `optional` **controlled\_by?**: `"opponent"` \| `"your-army"`
-
-Defined in: [generated.ts:3191](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L3191)
+Defined in: [generated.ts:2315](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2315)
 
 ***
 
-### requires\_unit?
+### limit?
 
-> `optional` **requires\_unit?**: `object`
+> `optional` **limit?**: [`SelectionLimit`](SelectionLimit.md)
 
-Defined in: [generated.ts:3192](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L3192)
-
-#### owner
-
-> **owner**: `"friendly"` \| `"enemy"`
-
-#### requires\_ability
-
-> **requires\_ability**: `string`
-
-#### relation
-
-> **relation**: `"within-range"`
+Defined in: [generated.ts:2316](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2316)
 
 ***
 
-### selection\_limit?
+### bind\_as?
 
-> `optional` **selection\_limit?**: `object`
+> `optional` **bind\_as?**: `string`
 
-Defined in: [generated.ts:3197](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L3197)
-
-#### count
-
-> **count**: `number`
-
-#### period
-
-> **period**: `"phase"` \| `"turn"` \| `"battle"` \| `"battle-round"`
+Defined in: [generated.ts:2317](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2317)
 
 ***
 
-### bind\_as
+### eligibility?
 
-> **bind\_as**: `string`
+> `optional` **eligibility?**: [`AbilityDSLCondition1`](../type-aliases/AbilityDSLCondition1.md)
 
-Defined in: [generated.ts:3201](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L3201)
+Defined in: [generated.ts:2318](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2318)

@@ -19,7 +19,9 @@
             "to": "battlefield",
             "from": "strategic-reserves",
             "via": "deep-strike",
-            "min_enemy_distance": 6,
+            "min_enemy_distance": {
+              "inches": 6
+            },
             "placement": "anywhere"
           }
         },
@@ -246,76 +248,114 @@
       "choice_label": "Singular Purpose",
       "options": [
         {
-          "consumer": {
-            "beneficiary": "bearer",
-            "effect": {
-              "steps": [
-                {
-                  "type": "re-roll",
-                  "target": "this-model",
-                  "modifier": {
-                    "roll": "hit",
-                    "subset": "all-failures"
+          "type": "ability-part",
+          "trigger": {
+            "event": "round-started",
+            "condition": {
+              "type": "battle-round",
+              "parameters": {
+                "min": 1,
+                "max": 1
+              }
+            }
+          },
+          "effect": {
+            "consumer": {
+              "beneficiary": "this-model",
+              "effect": {
+                "steps": [
+                  {
+                    "type": "re-roll",
+                    "target": "this-model",
+                    "modifier": {
+                      "roll": "hit",
+                      "subset": "all-failures"
+                    }
+                  },
+                  {
+                    "type": "re-roll",
+                    "target": "this-model",
+                    "modifier": {
+                      "roll": "wound",
+                      "subset": "all-failures"
+                    }
                   }
-                },
-                {
-                  "type": "re-roll",
-                  "target": "this-model",
-                  "modifier": {
-                    "roll": "wound",
-                    "subset": "all-failures"
-                  }
-                }
-              ],
-              "type": "sequence"
+                ],
+                "type": "sequence"
+              },
+              "relation": "attacks-selected-unit"
             },
-            "relation": "attacks-selected-unit"
-          },
-          "designation": "singular-purpose-enemy",
-          "duration": "battle",
-          "select": {
-            "count": 1,
-            "scope": "enemy-unit",
-            "selection_policy": "one-time",
-            "timing": "start-of-first-battle-round"
-          },
-          "type": "persistent-designation"
+            "designation": "singular-purpose-enemy",
+            "duration": "battle",
+            "select": {
+              "kind": "unit",
+              "selector": {
+                "filter": {
+                  "owner": "enemy"
+                },
+                "count": {
+                  "min": 1,
+                  "max": 1
+                }
+              }
+            },
+            "type": "persistent-designation",
+            "selection_policy": "one-time"
+          }
         },
         {
-          "consumer": {
-            "beneficiary": "bearer",
-            "effect": {
-              "steps": [
-                {
-                  "type": "feel-no-pain",
-                  "target": "this-model",
-                  "modifier": {
-                    "threshold": 5
+          "type": "ability-part",
+          "trigger": {
+            "event": "round-started",
+            "condition": {
+              "type": "battle-round",
+              "parameters": {
+                "min": 1,
+                "max": 1
+              }
+            }
+          },
+          "effect": {
+            "consumer": {
+              "beneficiary": "this-model",
+              "effect": {
+                "steps": [
+                  {
+                    "type": "feel-no-pain",
+                    "target": "this-model",
+                    "modifier": {
+                      "threshold": 5
+                    }
+                  },
+                  {
+                    "type": "stat-modifier",
+                    "target": "this-model",
+                    "modifier": {
+                      "stat": "OC",
+                      "operation": "set",
+                      "value": 15
+                    }
                   }
-                },
-                {
-                  "type": "stat-modifier",
-                  "target": "this-model",
-                  "modifier": {
-                    "stat": "OC",
-                    "operation": "set",
-                    "value": 15
-                  }
-                }
-              ],
-              "type": "sequence"
+                ],
+                "type": "sequence"
+              },
+              "relation": "within-selected-marker"
             },
-            "relation": "within-selected-marker"
-          },
-          "designation": "singular-purpose-marker",
-          "duration": "battle",
-          "select": {
-            "count": 1,
-            "scope": "objective-marker",
-            "selection_policy": "one-time",
-            "timing": "start-of-first-battle-round"
-          },
-          "type": "persistent-designation"
+            "designation": "singular-purpose-marker",
+            "duration": "battle",
+            "select": {
+              "kind": "objective",
+              "selector": {
+                "filter": {},
+                "count": {
+                  "min": 1,
+                  "max": 1
+                }
+              }
+            },
+            "type": "persistent-designation",
+            "selection_policy": "one-time"
+          }
         }
       ],
       "type": "choice"
@@ -387,8 +427,13 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Sustained Hits 1"
+          "keywords": [
+            {
+              "keyword_id": "sustained-hits",
+              "parameters": {
+                "value": 1
+              }
+            }
           ]
         }
       }
@@ -452,10 +497,12 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-state",
+        "type": "matches",
         "parameters": {
-          "subject": "defender",
-          "state": "battle-shocked"
+          "filter": {
+            "state": "battle-shocked"
+          },
+          "subject": "defender"
         }
       },
       "effect": {
@@ -582,29 +629,40 @@
     "source_digest": "62492eb906e179e464520d9f1001afcb10a689cc9c8ccf6f99825e7456f6ce78",
     "version": "2025-q3",
     "effect": {
-      "type": "weapon-ability-grant",
-      "target": {
-        "owner": "friendly",
-        "within": {
-          "range": {
-            "inches": 9
-          }
-        }
-      },
+      "type": "aura",
+      "target": "friendly-within-aura",
       "modifier": {
-        "abilities": [
-          "synapse-range"
-        ]
+        "range": {
+          "inches": 9
+        },
+        "effect": {
+          "type": "counts-as",
+          "target": "recipient",
+          "modifier": {
+            "within": {
+              "aura_of": "synapse-tyranids"
+            },
+            "of": {
+              "owner": "friendly"
+            }
+          }
+        },
+        "eligible": {
+          "owner": "friendly",
+          "all_of": [
+            "TYRANIDS"
+          ]
+        }
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "unit_ids": [
       "the-swarmlord"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "aura",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "faction_id": "tyranids"
   },
@@ -619,36 +677,55 @@
     "source_digest": "b99c65e2cab920c57f9ccbf111411b1f5885d291ecbedb9ad3926c1e4f85549b",
     "version": "2025-q3",
     "effect": {
-      "type": "designate-target",
-      "designation": "symbiotic-target",
-      "select": {
-        "scope": "enemy-unit",
-        "count": 1,
-        "timing": "after-this-unit-shoots"
-      },
-      "applies": {
-        "to": "attackers-of-target",
-        "effect": {
-          "type": "conditional",
-          "condition": {
-            "type": "has-keyword",
-            "parameters": {
-              "all_of": [
-                "TYRANIDS"
-              ]
-            }
-          },
-          "effect": {
-            "type": "re-roll",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "hit",
-              "subset": "ones"
-            }
-          }
+      "type": "ability-part",
+      "trigger": {
+        "event": "attacks-resolved",
+        "subject": "this-unit",
+        "filter": {
+          "kind": "shoot"
         }
       },
-      "duration": "phase"
+      "effect": {
+        "type": "designate-target",
+        "designation": "symbiotic-target",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
+          }
+        },
+        "applies": {
+          "to": "attackers-of-target",
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "all_of": [
+                    "TYRANIDS"
+                  ]
+                }
+              }
+            },
+            "effect": {
+              "type": "re-roll",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "hit",
+                "subset": "ones"
+              }
+            }
+          }
+        },
+        "duration": "phase"
+      }
     },
     "scope": {
       "duration": "phase"
@@ -787,7 +864,7 @@
       "type": "mortal-wounds",
       "target": "defender",
       "modifier": {
-        "count": "1"
+        "count": 1
       }
     },
     "scope": {
@@ -861,7 +938,9 @@
         {
           "type": "for-each-unit",
           "selector": {
-            "owner": "friendly",
+            "filter": {
+              "owner": "friendly"
+            },
             "eligibility": {
               "type": "unit-state",
               "parameters": {
@@ -876,7 +955,9 @@
             "modifier": {
               "to": "battlefield",
               "from": "transport",
-              "min_enemy_distance": 8
+              "min_enemy_distance": {
+                "inches": 8
+              }
             }
           }
         }
@@ -1096,8 +1177,13 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Sustained Hits 1"
+        "keywords": [
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 1
+            }
+          }
         ]
       }
     },
@@ -1390,20 +1476,26 @@
             "operator": "and",
             "operands": [
               {
-                "type": "within",
+                "type": "matches",
                 "parameters": {
-                  "subject": "defender",
-                  "of": "this-model",
-                  "range": {
-                    "inches": 12
-                  }
+                  "filter": {
+                    "within": {
+                      "range": {
+                        "inches": 12
+                      },
+                      "of": "this-model"
+                    }
+                  },
+                  "subject": "defender"
                 }
               },
               {
-                "type": "unit-state",
+                "type": "matches",
                 "parameters": {
-                  "subject": "defender",
-                  "state": "battle-shocked"
+                  "filter": {
+                    "state": "battle-shocked"
+                  },
+                  "subject": "defender"
                 }
               }
             ]
@@ -1447,48 +1539,67 @@
     "source_digest": "f5356628e4d36a04a2b8525ad86c9e04550c5850610209d55231b056de6232aa",
     "version": "2025-q3",
     "effect": {
-      "type": "designate-target",
-      "designation": "bio-stimulus-target",
-      "select": {
-        "scope": "enemy-unit",
-        "count": 1,
-        "timing": "after-this-unit-shoots"
-      },
-      "applies": {
-        "to": "attackers-of-target",
-        "effect": {
-          "type": "conditional",
-          "condition": {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "has-keyword",
-                "parameters": {
-                  "all_of": [
-                    "TYRANIDS"
-                  ]
-                }
-              },
-              {
-                "type": "attack-is",
-                "parameters": {
-                  "attack_type": "melee"
-                }
-              }
-            ]
-          },
-          "effect": {
-            "type": "stat-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "stat": "AP",
-              "operation": "improve",
-              "value": 1
-            }
-          }
+      "type": "ability-part",
+      "trigger": {
+        "event": "attacks-resolved",
+        "subject": "this-unit",
+        "filter": {
+          "kind": "shoot"
         }
       },
-      "duration": "turn"
+      "effect": {
+        "type": "designate-target",
+        "designation": "bio-stimulus-target",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
+          }
+        },
+        "applies": {
+          "to": "attackers-of-target",
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "filter": {
+                      "all_of": [
+                        "TYRANIDS"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "type": "attack-is",
+                  "parameters": {
+                    "attack_type": "melee"
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "stat-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "stat": "AP",
+                "operation": "improve",
+                "value": 1
+              }
+            }
+          }
+        },
+        "duration": "turn"
+      }
     },
     "scope": {
       "duration": "turn"
@@ -1658,8 +1769,10 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Devastating Wounds"
+          "keywords": [
+            {
+              "keyword_id": "devastating-wounds"
+            }
           ]
         }
       }
@@ -1726,7 +1839,7 @@
       "type": "mortal-wounds",
       "target": "defender",
       "modifier": {
-        "count": "1"
+        "count": 1
       }
     },
     "scope": {
@@ -1755,12 +1868,14 @@
         "operator": "and",
         "operands": [
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "all_of": [
-                "INFANTRY"
-              ]
+              "filter": {
+                "all_of": [
+                  "INFANTRY"
+                ]
+              },
+              "subject": "defender"
             }
           },
           {
@@ -1770,7 +1885,9 @@
               "object": "event-object",
               "filter": {
                 "attack_type": "melee",
-                "weapon_name": "barbed ovipositor"
+                "weapons": {
+                  "name": "barbed ovipositor"
+                }
               },
               "window": "event"
             }
@@ -2042,7 +2159,7 @@
       "type": "mortal-wounds",
       "target": "defender",
       "modifier": {
-        "count": "1"
+        "count": 1
       }
     },
     "scope": {
@@ -2158,11 +2275,13 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "all_of": [
-            "NEUROTYRANT"
-          ]
+          "filter": {
+            "all_of": [
+              "NEUROTYRANT"
+            ]
+          }
         }
       },
       "effect": {
@@ -2196,10 +2315,12 @@
         "id": "shadow-in-the-warp-tyranids"
       },
       "condition": {
-        "type": "unit-state",
+        "type": "matches",
         "parameters": {
-          "subject": "this-model",
-          "state": "on-battlefield"
+          "filter": {
+            "state": "on-battlefield"
+          },
+          "subject": "this-model"
         }
       }
     },
@@ -2218,13 +2339,22 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "max_count": 2,
-        "owner": "friendly",
-        "keywords": [
-          "TYRANIDS"
-        ],
-        "within_inches": 18,
-        "reference": "bearer-unit"
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "TYRANIDS"
+          ],
+          "within": {
+            "range": {
+              "inches": 18
+            },
+            "of": "this-unit"
+          }
+        },
+        "count": {
+          "min": 0,
+          "max": 2
+        }
       },
       "effect": {
         "type": "counts-as",
@@ -2277,22 +2407,28 @@
         "operator": "and",
         "operands": [
           {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "subject": "event-subject",
-              "of": "this-unit",
-              "range": {
-                "inches": 8
-              }
+              "filter": {
+                "within": {
+                  "range": {
+                    "inches": 8
+                  },
+                  "of": "this-unit"
+                }
+              },
+              "subject": "event-subject"
             }
           },
           {
             "operator": "not",
             "operands": [
               {
-                "type": "unit-state",
+                "type": "matches",
                 "parameters": {
-                  "state": "engaged"
+                  "filter": {
+                    "state": "engaged"
+                  }
                 }
               }
             ]
@@ -2344,49 +2480,32 @@
         "operator": "and",
         "operands": [
           {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent-turn"
-            }
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "opponent-turn"
+                }
+              }
+            ]
           },
           {
             "type": "happened",
             "parameters": {
-              "event": "destroyed",
-              "object": "event-object",
+              "event": "model-destroyed",
+              "object": "model-in-this-unit",
               "filter": {
-                "attack_type": "ranged"
+                "by": "event-subject"
               },
               "window": "event"
             }
-          },
-          {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "unit-state",
-                "parameters": {
-                  "state": "battle-shocked"
-                }
-              }
-            ]
-          },
-          {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "unit-state",
-                "parameters": {
-                  "state": "engaged"
-                }
-              }
-            ]
           }
         ]
       },
@@ -2400,7 +2519,7 @@
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "unit_ids": [
       "tyranid-prime-with-lash-whip"
@@ -2411,7 +2530,17 @@
     "usage": {
       "frequency": "once-per-phase"
     },
-    "faction_id": "tyranids"
+    "faction_id": "tyranids",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "defensive-stance-tyranids",
@@ -2437,14 +2566,18 @@
           {
             "type": "conditional",
             "condition": {
-              "type": "within",
+              "type": "matches",
               "parameters": {
-                "of": {
-                  "objective": {
-                    "controlled_by": "friendly"
+                "filter": {
+                  "within": {
+                    "range": "objective-control",
+                    "of": {
+                      "objective": {
+                        "controlled_by": "friendly"
+                      }
+                    }
                   }
-                },
-                "range": "objective-control"
+                }
               }
             },
             "effect": {
@@ -2453,7 +2586,9 @@
               "modifier": {
                 "roll": "hit",
                 "succeeds_on": 4,
-                "weapon_type": "ranged"
+                "weapons": {
+                  "type": "ranged"
+                }
               }
             }
           },
@@ -2463,14 +2598,18 @@
               "operator": "not",
               "operands": [
                 {
-                  "type": "within",
+                  "type": "matches",
                   "parameters": {
-                    "of": {
-                      "objective": {
-                        "controlled_by": "friendly"
+                    "filter": {
+                      "within": {
+                        "range": "objective-control",
+                        "of": {
+                          "objective": {
+                            "controlled_by": "friendly"
+                          }
+                        }
                       }
-                    },
-                    "range": "objective-control"
+                    }
                   }
                 }
               ]
@@ -2481,7 +2620,9 @@
               "modifier": {
                 "roll": "hit",
                 "succeeds_on": 5,
-                "weapon_type": "ranged"
+                "weapons": {
+                  "type": "ranged"
+                }
               }
             }
           }
@@ -2514,12 +2655,14 @@
         "operator": "and",
         "operands": [
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "all_of": [
-                "INFANTRY"
-              ]
+              "filter": {
+                "all_of": [
+                  "INFANTRY"
+                ]
+              },
+              "subject": "defender"
             }
           },
           {
@@ -2602,27 +2745,31 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "of": {
-            "owner": "friendly",
-            "all_of": [
-              "TYRANIDS"
-            ],
-            "none_of": [
-              "NEUROGAUNTS"
-            ]
-          },
-          "range": {
-            "aura_of": "synapse-tyranids"
+          "filter": {
+            "within": {
+              "range": {
+                "aura_of": "synapse-tyranids"
+              },
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "TYRANIDS"
+                ],
+                "none_of": [
+                  "NEUROGAUNTS"
+                ]
+              }
+            }
           }
         }
       },
       "effect": {
-        "type": "weapon-ability-grant",
+        "type": "keyword-grant",
         "target": "this-model",
         "modifier": {
-          "abilities": [
+          "keywords": [
             "SYNAPSE"
           ]
         }
@@ -2661,12 +2808,14 @@
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "all_of": [
-                "FLY"
-              ]
+              "filter": {
+                "all_of": [
+                  "FLY"
+                ]
+              },
+              "subject": "defender"
             }
           }
         ]
@@ -2704,14 +2853,23 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "owner": "friendly",
-        "count": 1,
-        "keywords": [
-          "TERMAGANTS"
-        ],
-        "within_inches": 6,
-        "reference": "bearer",
-        "selection_limit": {
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "TERMAGANTS"
+          ],
+          "within": {
+            "range": {
+              "inches": 6
+            },
+            "of": "this-model"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "limit": {
           "count": 1,
           "period": "phase"
         }
@@ -2758,10 +2916,14 @@
         }
       },
       "modifier": {
-        "abilities": [
-          "Lethal Hits"
-        ],
-        "weapon_type": "ranged"
+        "weapons": {
+          "type": "ranged"
+        },
+        "keywords": [
+          {
+            "keyword_id": "lethal-hits"
+          }
+        ]
       }
     },
     "scope": {
@@ -2894,33 +3056,53 @@
         "operator": "and",
         "operands": [
           {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent-turn"
-            }
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "opponent-turn"
+                }
+              }
+            ]
           },
           {
             "type": "wounds",
             "parameters": {
-              "subject": "this-model",
+              "subject": "this-unit",
               "lost": true
             }
           }
         ]
       },
       "effect": {
-        "type": "move",
-        "target": "this-unit",
-        "modifier": {
-          "move_type": "surge",
-          "distance": "D6+2"
-        }
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "move",
+            "target": "this-unit",
+            "modifier": {
+              "move_type": "surge",
+              "distance": "D6"
+            }
+          },
+          {
+            "type": "move-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "applies_to_moves": [
+                "surge"
+              ],
+              "distance_bonus": 2
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -2935,7 +3117,16 @@
     "usage": {
       "frequency": "once-per-phase"
     },
-    "faction_id": "tyranids"
+    "faction_id": "tyranids",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "subject": {
+        "owner": "enemy"
+      }
+    }
   },
   {
     "ability_id": "onslaught-tyranids",
@@ -2961,11 +3152,17 @@
         }
       },
       "modifier": {
-        "abilities": [
-          "Assault",
-          "Lethal Hits"
-        ],
-        "weapon_type": "ranged"
+        "weapons": {
+          "type": "ranged"
+        },
+        "keywords": [
+          {
+            "keyword_id": "assault"
+          },
+          {
+            "keyword_id": "lethal-hits"
+          }
+        ]
       }
     },
     "scope": {
@@ -3175,14 +3372,18 @@
           "target": {
             "owner": "friendly",
             "within": {
-              "range": {"inches":6}
+              "range": {
+                "inches": 6
+              }
             }
           },
           "modifier": {
             "stat": "S",
             "operation": "add",
             "value": 1,
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            }
           }
         }
       ]
@@ -3233,7 +3434,13 @@
     "faction_id": "tyranids",
     "ability_type": "faction",
     "behavior": "activated",
-    "unit_ids": ["terror-of-vardenghast","vardenghast-swarm-barbgaunts","vardenghast-swarm-psychophage","vardenghast-swarm-termagants","vardenghast-swarm-von-ryans-leapers"]
+    "unit_ids": [
+      "terror-of-vardenghast",
+      "vardenghast-swarm-barbgaunts",
+      "vardenghast-swarm-psychophage",
+      "vardenghast-swarm-termagants",
+      "vardenghast-swarm-von-ryans-leapers"
+    ]
   },
   {
     "ability_id": "pouncing-leap-tyranids",
@@ -3320,12 +3527,14 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "all_of": [
-                "CHARACTER"
-              ]
+              "filter": {
+                "all_of": [
+                  "CHARACTER"
+                ]
+              },
+              "subject": "defender"
             }
           },
           "effect": {
@@ -3368,44 +3577,33 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
-          },
-          {
-            "type": "designated",
-            "parameters": {
-              "subject": "defender",
-              "tag": "HIDDEN"
-            }
+        "type": "matches",
+        "parameters": {
+          "subject": "defender",
+          "filter": {
+            "designated": "HIDDEN"
           }
-        ]
+        }
       },
       "effect": {
         "type": "sequence",
         "steps": [
           {
             "type": "stat-modifier",
-            "target": "this-model",
+            "target": "this-unit",
             "modifier": {
               "stat": "S",
-              "operation": "add",
-              "value": 1,
-              "weapon_type": "melee"
+              "operation": "improve",
+              "value": 1
             }
           },
           {
             "type": "stat-modifier",
-            "target": "this-model",
+            "target": "this-unit",
             "modifier": {
               "stat": "AP",
-              "operation": "add",
-              "value": 1,
-              "weapon_type": "melee"
+              "operation": "improve",
+              "value": 1
             }
           }
         ]
@@ -3414,7 +3612,22 @@
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "fight"
+      },
+      "subject": {
+        "owner": "friendly",
+        "any_of": [
+          "DEATHLEAPER",
+          "LICTOR",
+          "NEUROLICTOR",
+          "VON RYAN'S LEAPERS"
+        ]
+      }
+    }
   },
   {
     "ability_id": "hypersensory-adaptations-ambush-predators-tyranids",
@@ -3435,10 +3648,22 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "count": 1,
-        "owner": "enemy",
-        "range_inches": 12,
-        "visibility_required": true
+        "filter": {
+          "owner": "enemy",
+          "within": {
+            "range": {
+              "inches": 12
+            },
+            "of": "this-model"
+          },
+          "visible": {
+            "to": "this-model"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        }
       },
       "effect": {
         "type": "stat-modifier",
@@ -3486,9 +3711,11 @@
         "operator": "not",
         "operands": [
           {
-            "type": "unit-state",
+            "type": "matches",
             "parameters": {
-              "state": "engaged"
+              "filter": {
+                "state": "engaged"
+              }
             }
           }
         ]
@@ -3548,38 +3775,32 @@
         "operator": "and",
         "operands": [
           {
-            "type": "has-keyword",
-            "parameters": {
-              "any_of": [
-                "NEUROLICTOR",
-                "LICTOR",
-                "VON RYAN’S LEAPERS"
-              ]
-            }
-          },
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent-turn"
-            }
-          },
-          {
-            "type": "happened",
-            "parameters": {
-              "event": "move-ended",
-              "window": "event",
-              "subject": {
-                "owner": "enemy"
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "movement"
+                }
               },
-              "proximity": {
-                "range": {
-                  "inches": 8
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "opponent-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "event-subject",
+              "filter": {
+                "within": {
+                  "of": "this-unit",
+                  "range": {
+                    "inches": 8
+                  }
                 }
               }
             }
@@ -3588,7 +3809,7 @@
       },
       "effect": {
         "type": "move",
-        "target": "this-model",
+        "target": "this-unit",
         "modifier": {
           "move_type": "normal",
           "distance": "D3+3"
@@ -3596,9 +3817,15 @@
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      }
+    }
   },
   {
     "ability_id": "cryptophotaic-camouflage-upgrade-ambush-predators-tyranids",
@@ -3619,11 +3846,13 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "all_of": [
-            "VON RYAN’S LEAPERS"
-          ]
+          "filter": {
+            "all_of": [
+              "VON RYAN’S LEAPERS"
+            ]
+          }
         }
       },
       "effect": {
@@ -3701,43 +3930,26 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "has-keyword",
-            "parameters": {
-              "all_of": [
-                "NORN ASSIMILATOR"
-              ]
-            }
-          },
-          {
-            "type": "happened",
-            "parameters": {
-              "event": "damage-allocated",
-              "window": "event",
-              "object": "this-unit",
-              "filter": {
-                "attack_type": "mortal"
-              }
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "feel-no-pain",
-        "target": "this-model",
-        "modifier": {
-          "threshold": 4
-        }
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 4,
+        "against": "mortal"
       }
     },
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "damage-allocated",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "NORN ASSIMILATOR"
+        ]
+      }
+    }
   },
   {
     "ability_id": "lesser-prey-talons-of-the-norn-queen-tyranids",
@@ -3770,7 +3982,9 @@
           "stat": "S",
           "operation": "add",
           "value": 2,
-          "weapon_type": "melee"
+          "weapons": {
+            "type": "melee"
+          }
         }
       }
     },
@@ -3796,26 +4010,43 @@
     "ability_type": "stratagem",
     "behavior": "passive",
     "effect": {
-      "type": "designate-target",
-      "designation": "tethered",
-      "select": {
-        "scope": "enemy-unit",
-        "count": 1,
-        "timing": "after-this-unit-shoots"
-      },
-      "applies": {
-        "to": "target",
-        "effect": {
-          "type": "stat-modifier",
-          "target": "defender",
-          "modifier": {
-            "stat": "M",
-            "operation": "set",
-            "value": 2
-          }
+      "type": "ability-part",
+      "trigger": {
+        "event": "attacks-resolved",
+        "subject": "this-unit",
+        "filter": {
+          "kind": "shoot"
         }
       },
-      "duration": "until-next-command-phase"
+      "effect": {
+        "type": "designate-target",
+        "designation": "tethered",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
+          }
+        },
+        "applies": {
+          "to": "target",
+          "effect": {
+            "type": "stat-modifier",
+            "target": "defender",
+            "modifier": {
+              "stat": "M",
+              "operation": "set",
+              "value": 2
+            }
+          }
+        },
+        "duration": "until-next-command-phase"
+      }
     },
     "scope": {
       "duration": "turn"
@@ -3842,10 +4073,18 @@
       "type": "weapon-ability-grant",
       "target": "this-model",
       "modifier": {
-        "abilities": [
-          "Anti CHARACTER 2+"
-        ],
-        "weapon_type": "ranged"
+        "weapons": {
+          "type": "ranged"
+        },
+        "keywords": [
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "CHARACTER",
+              "threshold": 2
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -3906,7 +4145,9 @@
           "target": {
             "owner": "friendly",
             "within": {
-              "range": {"inches":6}
+              "range": {
+                "inches": 6
+              }
             }
           },
           "modifier": {
@@ -3921,7 +4162,9 @@
               "target": {
                 "owner": "friendly",
                 "within": {
-                  "range": {"inches":6}
+                  "range": {
+                    "inches": 6
+                  }
                 }
               },
               "modifier": {
@@ -3935,7 +4178,9 @@
               "target": {
                 "owner": "friendly",
                 "within": {
-                  "range": {"inches":6}
+                  "range": {
+                    "inches": 6
+                  }
                 }
               },
               "modifier": {
@@ -3951,14 +4196,18 @@
           "target": {
             "owner": "friendly",
             "within": {
-              "range": {"inches":6}
+              "range": {
+                "inches": 6
+              }
             }
           },
           "modifier": {
             "roll": "hit",
-            "weapon_type": "melee",
             "operation": "add",
-            "value": 1
+            "value": 1,
+            "weapons": {
+              "type": "melee"
+            }
           }
         }
       ]
@@ -4001,11 +4250,13 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "BURROWER"
-              ]
+              "filter": {
+                "all_of": [
+                  "BURROWER"
+                ]
+              }
             }
           },
           "effect": {
@@ -4077,13 +4328,15 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "any_of": [
-                "TYRANID WARRIORS",
-                "TYRANID PRIME WITH LASH WHIP",
-                "WINGED TYRANID PRIME"
-              ]
+              "filter": {
+                "any_of": [
+                  "TYRANID WARRIORS",
+                  "TYRANID PRIME WITH LASH WHIP",
+                  "WINGED TYRANID PRIME"
+                ]
+              }
             }
           },
           "effect": {
@@ -4126,11 +4379,13 @@
             "operator": "and",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "all_of": [
-                    "MONSTER"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "MONSTER"
+                    ]
+                  }
                 }
               },
               {
@@ -4157,11 +4412,13 @@
             "operator": "and",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "all_of": [
-                    "MONSTER"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "MONSTER"
+                    ]
+                  }
                 }
               },
               {
@@ -4188,11 +4445,13 @@
             "operator": "and",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "all_of": [
-                    "MONSTER"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "MONSTER"
+                    ]
+                  }
                 }
               },
               {
@@ -4210,9 +4469,11 @@
                 "operator": "not",
                 "operands": [
                   {
-                    "type": "unit-state",
+                    "type": "matches",
                     "parameters": {
-                      "state": "battle-shocked"
+                      "filter": {
+                        "state": "battle-shocked"
+                      }
                     }
                   }
                 ]
@@ -4333,7 +4594,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "TYRANIDS",
         "MONSTER"
       ]
@@ -4372,41 +4633,53 @@
             "parameters": {
               "turn": "opponent-turn"
             }
-          },
-          {
-            "type": "has-keyword",
-            "parameters": {
-              "all_of": [
-                "ENDLESS MULTITUDE"
-              ]
-            }
-          },
-          {
-            "type": "happened",
-            "parameters": {
-              "event": "destroyed",
-              "object": "event-object",
-              "filter": {
-                "attack_type": "ranged"
-              },
-              "window": "event"
-            }
           }
         ]
       },
       "effect": {
-        "type": "move",
-        "target": "this-model",
-        "modifier": {
-          "move_type": "surge",
-          "distance": "D6"
+        "type": "conditional",
+        "condition": {
+          "type": "happened",
+          "parameters": {
+            "event": "model-destroyed",
+            "object": {
+              "level": "model",
+              "member_of": "recipient"
+            },
+            "filter": {
+              "by": "event-subject"
+            },
+            "window": "event"
+          }
+        },
+        "effect": {
+          "type": "move",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "ENDLESS MULTITUDE"
+            ]
+          },
+          "modifier": {
+            "move_type": "surge",
+            "distance": "D6"
+          }
         }
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "subject": {
+        "owner": "enemy"
+      }
+    }
   },
   {
     "ability_id": "questing-tendrils-tyranids",
@@ -4430,11 +4703,13 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "TYRANIDS"
-              ]
+              "filter": {
+                "all_of": [
+                  "TYRANIDS"
+                ]
+              }
             }
           },
           "effect": {
@@ -4452,11 +4727,13 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "VANGUARD INVADER"
-              ]
+              "filter": {
+                "all_of": [
+                  "VANGUARD INVADER"
+                ]
+              }
             }
           },
           "effect": {
@@ -4538,86 +4815,115 @@
     "ability_type": "detachment",
     "behavior": "passive",
     "effect": {
-      "type": "stance-select",
-      "mode": "consumable",
-      "scope": "army",
-      "select": "start-of-first-battle-round",
-      "options": [
-        {
-          "name": "Swarming Instincts",
-          "effect": {
-            "type": "conditional",
-            "condition": {
-              "type": "has-keyword",
-              "parameters": {
-                "subject": "defender",
-                "any_of": [
-                  "INFANTRY",
-                  "SWARM"
-                ]
-              }
-            },
-            "effect": {
-              "type": "weapon-ability-grant",
-              "target": "this-unit",
-              "modifier": {
-                "abilities": [
-                  "Sustained Hits 1"
-                ]
-              }
-            }
-          }
-        },
-        {
-          "name": "Hyper-aggression",
-          "effect": {
-            "type": "conditional",
-            "condition": {
-              "type": "has-keyword",
-              "parameters": {
-                "subject": "defender",
-                "any_of": [
-                  "MONSTER",
-                  "VEHICLE"
-                ]
-              }
-            },
-            "effect": {
-              "type": "weapon-ability-grant",
-              "target": "this-unit",
-              "modifier": {
-                "abilities": [
-                  "Lethal Hits"
-                ]
-              }
-            }
-          }
-        },
-        {
-          "name": "Hive Predators",
-          "effect": {
-            "type": "conditional",
-            "condition": {
-              "type": "has-keyword",
-              "parameters": {
-                "subject": "defender",
-                "all_of": [
-                  "CHARACTER"
-                ]
-              }
-            },
-            "effect": {
-              "type": "weapon-ability-grant",
-              "target": "this-unit",
-              "modifier": {
-                "abilities": [
-                  "Precision"
-                ]
-              }
-            }
+      "type": "ability-part",
+      "trigger": {
+        "event": "round-started",
+        "condition": {
+          "type": "battle-round",
+          "parameters": {
+            "min": 1,
+            "max": 1
           }
         }
-      ]
+      },
+      "effect": {
+        "type": "stance-select",
+        "mode": "consumable",
+        "options": [
+          {
+            "name": "Swarming Instincts",
+            "effect": {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "any_of": [
+                      "INFANTRY",
+                      "SWARM"
+                    ]
+                  },
+                  "subject": "defender"
+                }
+              },
+              "effect": {
+                "type": "weapon-ability-grant",
+                "target": "this-unit",
+                "modifier": {
+                  "keywords": [
+                    {
+                      "keyword_id": "sustained-hits",
+                      "parameters": {
+                        "value": 1
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "id": "option-1"
+          },
+          {
+            "name": "Hyper-aggression",
+            "effect": {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "any_of": [
+                      "MONSTER",
+                      "VEHICLE"
+                    ]
+                  },
+                  "subject": "defender"
+                }
+              },
+              "effect": {
+                "type": "weapon-ability-grant",
+                "target": "this-unit",
+                "modifier": {
+                  "keywords": [
+                    {
+                      "keyword_id": "lethal-hits"
+                    }
+                  ]
+                }
+              }
+            },
+            "id": "option-2"
+          },
+          {
+            "name": "Hive Predators",
+            "effect": {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "all_of": [
+                      "CHARACTER"
+                    ]
+                  },
+                  "subject": "defender"
+                }
+              },
+              "effect": {
+                "type": "weapon-ability-grant",
+                "target": "this-unit",
+                "modifier": {
+                  "keywords": [
+                    {
+                      "keyword_id": "precision"
+                    }
+                  ]
+                }
+              }
+            },
+            "id": "option-3"
+          }
+        ]
+      }
     },
     "scope": {
       "duration": "battle"
@@ -4643,24 +4949,35 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "all_of": [
-            "HARVESTER"
-          ]
+          "filter": {
+            "all_of": [
+              "HARVESTER"
+            ]
+          }
         }
       },
       "effect": {
         "type": "select-units",
         "selector": {
-          "owner": "friendly",
-          "count": 1,
-          "keywords": [
-            "TYRANIDS"
-          ],
-          "within_inches": 6,
-          "reference": "bearer-unit",
-          "selection_limit": {
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "TYRANIDS"
+            ],
+            "within": {
+              "range": {
+                "inches": 6
+              },
+              "of": "this-unit"
+            }
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "limit": {
             "count": 1,
             "period": "phase"
           }
@@ -4708,14 +5025,16 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "any_of": [
-                "INFANTRY",
-                "MOUNTED",
-                "BEASTS"
-              ]
+              "filter": {
+                "any_of": [
+                  "INFANTRY",
+                  "MOUNTED",
+                  "BEASTS"
+                ]
+              },
+              "subject": "defender"
             }
           },
           "effect": {
@@ -4724,7 +5043,9 @@
             "modifier": {
               "roll": "wound",
               "critical_on": "success",
-              "weapon_name": "gaping maw"
+              "weapons": {
+                "name": "gaping maw"
+              }
             }
           }
         },
@@ -4745,14 +5066,16 @@
                 }
               },
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "subject": "defender",
-                  "any_of": [
-                    "INFANTRY",
-                    "MOUNTED",
-                    "BEASTS"
-                  ]
+                  "filter": {
+                    "any_of": [
+                      "INFANTRY",
+                      "MOUNTED",
+                      "BEASTS"
+                    ]
+                  },
+                  "subject": "defender"
                 }
               }
             ]
@@ -4796,12 +5119,16 @@
         "operator": "not",
         "operands": [
           {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "of": {
-                "owner": "enemy"
-              },
-              "range": "engagement"
+              "filter": {
+                "within": {
+                  "range": "engagement",
+                  "of": {
+                    "owner": "enemy"
+                  }
+                }
+              }
             }
           }
         ]
@@ -4846,65 +5173,82 @@
     "source_digest": "9d32ea1bad5b84ef876d16105c0011c87735bd40441b69d4e51f818730d4a283",
     "version": "2025-q3",
     "effect": {
-      "type": "designate-target",
-      "designation": "pinned",
-      "select": {
-        "scope": "enemy-unit",
-        "count": 1,
-        "timing": "after-this-unit-shoots",
-        "eligibility": {
-          "type": "happened",
-          "parameters": {
-            "event": "after-roll",
-            "object": "this-unit",
-            "filter": {
-              "roll": "hit",
-              "result": "success",
-              "attack_type": "ranged",
-              "by": {
-                "event_var": "disruption-bombardment-shooting"
-              }
-            },
-            "window": "event"
-          }
+      "type": "ability-part",
+      "trigger": {
+        "event": "attacks-resolved",
+        "subject": "this-unit",
+        "filter": {
+          "kind": "shoot"
         }
       },
-      "applies": {
-        "to": "target",
-        "effect": {
-          "type": "sequence",
-          "steps": [
-            {
-              "type": "stat-modifier",
-              "target": "defender",
-              "modifier": {
-                "stat": "M",
-                "operation": "subtract",
-                "value": 2
-              }
+      "effect": {
+        "type": "designate-target",
+        "designation": "pinned",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
             },
-            {
-              "type": "roll-modifier",
-              "target": "defender",
-              "modifier": {
-                "roll": "advance",
-                "operation": "subtract",
-                "value": 2
-              }
+            "count": {
+              "min": 1,
+              "max": 1
             },
-            {
-              "type": "roll-modifier",
-              "target": "defender",
-              "modifier": {
-                "roll": "charge",
-                "operation": "subtract",
-                "value": 2
+            "eligibility": {
+              "type": "happened",
+              "parameters": {
+                "event": "after-roll",
+                "object": "this-unit",
+                "filter": {
+                  "roll": "hit",
+                  "result": "success",
+                  "attack_type": "ranged",
+                  "by": {
+                    "event_var": "disruption-bombardment-shooting"
+                  }
+                },
+                "window": "event"
               }
             }
-          ]
-        }
-      },
-      "duration": "until-next-command-phase"
+          }
+        },
+        "applies": {
+          "to": "target",
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "stat-modifier",
+                "target": "defender",
+                "modifier": {
+                  "stat": "M",
+                  "operation": "subtract",
+                  "value": 2
+                }
+              },
+              {
+                "type": "roll-modifier",
+                "target": "defender",
+                "modifier": {
+                  "roll": "advance",
+                  "operation": "subtract",
+                  "value": 2
+                }
+              },
+              {
+                "type": "roll-modifier",
+                "target": "defender",
+                "modifier": {
+                  "roll": "charge",
+                  "operation": "subtract",
+                  "value": 2
+                }
+              }
+            ]
+          }
+        },
+        "duration": "until-next-command-phase"
+      }
     },
     "scope": {
       "duration": "permanent"
@@ -5018,9 +5362,11 @@
       "type": "aura",
       "target": "friendly-within-aura",
       "modifier": {
-        "range": 6,
+        "range": {
+          "inches": 6
+        },
         "eligible": {
-          "required_keywords": [
+          "all_of": [
             "TYRANIDS"
           ]
         },
@@ -5091,9 +5437,11 @@
         "operator": "not",
         "operands": [
           {
-            "type": "unit-state",
+            "type": "matches",
             "parameters": {
-              "state": "engaged"
+              "filter": {
+                "state": "engaged"
+              }
             }
           }
         ]

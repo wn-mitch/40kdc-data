@@ -17,7 +17,7 @@
             </profile>
             <profile name="Brigand" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">During the Shooting phase, while the target unit is within range of an objective marker, the unit's weapons gain [IGNORES COVER].</characteristic>
+                <characteristic name="Description">During the Shooting phase, while the target is within range of an objective marker, the unit's weapons gain [IGNORES COVER].</characteristic>
               </characteristics>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
@@ -126,7 +126,7 @@
             </profile>
             <profile name="Brigand" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">During the Shooting phase, while the target unit is within range of an objective marker, the unit's weapons gain [IGNORES COVER].</characteristic>
+                <characteristic name="Description">During the Shooting phase, while the target is within range of an objective marker, the unit's weapons gain [IGNORES COVER].</characteristic>
               </characteristics>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
@@ -806,7 +806,7 @@ If 1+ enemy units destroyed, enemy units within 3" of that unit must take a Batt
             </profile>
             <profile name="Stalker" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Unless an enemy unit other than the target unit is within 6" of the target unit, the unit gets +1 to Wound rolls.</characteristic>
+                <characteristic name="Description">While an enemy unit other than the target unit is not within 6" of the target unit, the unit gets +1 to Wound rolls.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
@@ -905,7 +905,7 @@ If 1+ enemy units destroyed, enemy units within 3" of that unit must take a Batt
             </profile>
             <profile name="Stalker" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Unless an enemy unit other than the target unit is within 6" of the target unit, the unit gets +1 to Wound rolls.</characteristic>
+                <characteristic name="Description">While an enemy unit other than the target unit is not within 6" of the target unit, the unit gets +1 to Wound rolls.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
@@ -1004,7 +1004,7 @@ If 1+ enemy units destroyed, enemy units within 3" of that unit must take a Batt
             </profile>
             <profile name="Stalker" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Unless an enemy unit other than the target unit is within 6" of the target unit, the unit gets +1 to Wound rolls.</characteristic>
+                <characteristic name="Description">While an enemy unit other than the target unit is not within 6" of the target unit, the unit gets +1 to Wound rolls.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
@@ -1103,7 +1103,7 @@ If 1+ enemy units destroyed, enemy units within 3" of that unit must take a Batt
             </profile>
             <profile name="Stalker" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Unless an enemy unit other than the target unit is within 6" of the target unit, the unit gets +1 to Wound rolls.</characteristic>
+                <characteristic name="Description">While an enemy unit other than the target unit is not within 6" of the target unit, the unit gets +1 to Wound rolls.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
@@ -1202,7 +1202,7 @@ If 1+ enemy units destroyed, enemy units within 3" of that unit must take a Batt
             </profile>
             <profile name="Stalker" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Unless an enemy unit other than the target unit is within 6" of the target unit, the unit gets +1 to Wound rolls.</characteristic>
+                <characteristic name="Description">While an enemy unit other than the target unit is not within 6" of the target unit, the unit gets +1 to Wound rolls.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
@@ -1370,7 +1370,7 @@ If 1+ enemy units destroyed, enemy units within 3" of that unit must take a Batt
             </profile>
             <profile name="Infiltrators" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Once per battle, the unit gains the Infiltrators ability.</characteristic>
+                <characteristic name="Description">The unit gains the Infiltrators ability.</characteristic>
               </characteristics>
             </profile>
             <profile name="Mischief Makers" typeName="Abilities">
@@ -1434,7 +1434,7 @@ If 1+ enemy units destroyed, enemy units within 3" of that unit must take a Batt
             </profile>
             <profile name="Infiltrators" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Once per battle, the unit gains the Infiltrators ability.</characteristic>
+                <characteristic name="Description">The unit gains the Infiltrators ability.</characteristic>
               </characteristics>
             </profile>
             <profile name="Mischief Makers" typeName="Abilities">

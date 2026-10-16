@@ -52,10 +52,10 @@ describe("unit-filter subject target after an effect", () => {
     const mechanics = mechanicsOf(GRANT_TEXT, [...GRANT, TARGET_FILTER, TARGET_RANGE]);
     const condition = mechanics.effect.condition;
     // Without the side check the filter would name no owner and the range would gate nothing about the defender's army.
-    expect(condition.operands).toContainEqual({ type: "owned-by", parameters: { subject: "defender", owner: "enemy" } });
-    expect(condition.operands).toContainEqual({ type: "within", parameters: { subject: "defender", of: "attacker", range: { inches: 12 } } });
+    expect(condition.operands).toContainEqual({ type: "matches", parameters: { subject: "defender", filter: { owner: "enemy" } } });
+    expect(condition.operands).toContainEqual({ type: "matches", parameters: { subject: "defender", filter: { within: { of: "attacker", range: { inches: 12 } } } } });
     expect(mechanics.effect.type).toBe("conditional");
-    expect(mechanics.effect.effect).toEqual({ type: "weapon-ability-grant", target: "this-unit", modifier: { abilities: ["Sustained Hits 1"], weapon_type: "ranged" } });
+    expect(mechanics.effect.effect).toEqual({ type: "weapon-ability-grant", target: "this-unit", modifier: { keywords: [{ keyword_id: "sustained-hits", parameters: { value: 1 } }], weapons: { type: "ranged" } } });
   });
 
   it("leaves a filter with no subject refused as before, with the same message", () => {
@@ -94,9 +94,9 @@ describe("trailing while-targeting shapes", () => {
       ["while targeting an enemy unit", "unit-filter", "EFFECT", { side: "enemy", subject: "target" }],
       ["within half range", "unit-position", "EFFECT", { kind: "within", of: "attacker", subject: "target", negated: false, weapon_range: "half" }],
     ]);
-    expect(mechanics.effect.condition.operands).toContainEqual({ type: "owned-by", parameters: { subject: "defender", owner: "enemy" } });
-    expect(mechanics.effect.condition.operands).toContainEqual({ type: "within", parameters: { subject: "defender", of: "attacker", range: "half-weapon" } });
-    expect(mechanics.effect.effect).toEqual({ type: "stat-modifier", target: "this-unit", modifier: { stat: "A", operation: "improve", value: 1, weapon_type: "ranged" } });
+    expect(mechanics.effect.condition.operands).toContainEqual({ type: "matches", parameters: { subject: "defender", filter: { owner: "enemy" } } });
+    expect(mechanics.effect.condition.operands).toContainEqual({ type: "matches", parameters: { subject: "defender", filter: { within: { of: "attacker", range: "half-weapon" } } } });
+    expect(mechanics.effect.effect).toEqual({ type: "stat-modifier", target: "this-unit", modifier: { stat: "A", operation: "improve", value: 1, weapons: { type: "ranged" } } });
   });
 
   it("binds a friendly-keyword range to the target instead of the antecedent", () => {
@@ -108,8 +108,8 @@ describe("trailing while-targeting shapes", () => {
       TARGET_FILTER,
       ["within 6\" of one or more friendly TYRANIDS units", "unit-position", "EFFECT", { kind: "within", inches: 6, of: "matching-unit", of_keywords: ["TYRANIDS"], of_side: "friendly", subject: "target", negated: false }],
     ]);
-    expect(mechanics.effect.condition.operands).toContainEqual({ type: "owned-by", parameters: { subject: "defender", owner: "enemy" } });
-    expect(mechanics.effect.condition.operands).toContainEqual({ type: "within", parameters: { subject: "defender", of: { owner: "friendly", all_of: ["TYRANIDS"] }, range: { inches: 6 } } });
+    expect(mechanics.effect.condition.operands).toContainEqual({ type: "matches", parameters: { subject: "defender", filter: { owner: "enemy" } } });
+    expect(mechanics.effect.condition.operands).toContainEqual({ type: "matches", parameters: { subject: "defender", filter: { within: { of: { owner: "friendly", all_of: ["TYRANIDS"] }, range: { inches: 6 } } } } });
   });
 });
 
@@ -126,7 +126,7 @@ describe("trailing while-targeting with a use window and a duration", () => {
       TARGET_RANGE,
     ]);
     expect(JSON.stringify(mechanics)).toContain('"owner":"enemy"');
-    expect(mechanics.effect.condition.operands).toContainEqual({ type: "within", parameters: { subject: "defender", of: "attacker", range: { inches: 12 } } });
+    expect(mechanics.effect.condition.operands).toContainEqual({ type: "matches", parameters: { subject: "defender", filter: { within: { of: "attacker", range: { inches: 12 } } } } });
     expect(mechanics.effect.effect.type).toBe("weapon-ability-grant");
   });
 
@@ -139,7 +139,7 @@ describe("trailing while-targeting with a use window and a duration", () => {
       TARGET_FILTER,
       ["within half range", "unit-position", "EFFECT", { kind: "within", of: "attacker", subject: "target", negated: false, weapon_range: "half" }],
     ]);
-    expect(mechanics.effect.condition.operands).toContainEqual({ type: "within", parameters: { subject: "defender", of: "attacker", range: "half-weapon" } });
-    expect(mechanics.effect.condition.operands).toContainEqual({ type: "owned-by", parameters: { subject: "defender", owner: "enemy" } });
+    expect(mechanics.effect.condition.operands).toContainEqual({ type: "matches", parameters: { subject: "defender", filter: { within: { of: "attacker", range: "half-weapon" } } } });
+    expect(mechanics.effect.condition.operands).toContainEqual({ type: "matches", parameters: { subject: "defender", filter: { owner: "enemy" } } });
   });
 });

@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 
 import { describe, expect, it } from "vitest";
 import { CompileError, compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
+import { keywordRef } from "../src/round5c/compile-fragments.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/round5c/contracts.js";
 import { foldWeaponKeywords } from "../src/round5c/compile-weapon-keywords.js";
 import { checkEntry, entryWithMechanics } from "../src/round5c/entries.js";
@@ -184,19 +185,19 @@ describe("Round 5C grants & ability control families", () => {
   it("extends weapon-ability-grant@4 with a weapon filter, if_present, and incoming", () => {
     const named = leaf("EFFECT", "weapon-ability-grant", { subject: "this-unit", keyword: "Lethal Hits", weapon_type: "all", weapon_name: "Volkite Charger" }, 4);
     expect(compiled([named]).mechanics.effect).toEqual({
-      type: "weapon-ability-grant", target: "this-unit", modifier: { abilities: ["Lethal Hits"], weapon_name: "Volkite Charger" },
+      type: "weapon-ability-grant", target: "this-unit", modifier: { keywords: [{ keyword_id: "lethal-hits" }], weapons: { name: "Volkite Charger" } },
     });
     const byKeyword = leaf("EFFECT", "weapon-ability-grant", { subject: "this-unit", keyword: "Precision", weapon_type: "ranged", weapon_keyword: "PISTOL" }, 4);
     expect(compiled([byKeyword]).mechanics.effect).toEqual({
-      type: "weapon-ability-grant", target: "this-unit", modifier: { abilities: ["Precision"], weapon_type: "ranged", weapon_keyword: "PISTOL" },
+      type: "weapon-ability-grant", target: "this-unit", modifier: { keywords: [{ keyword_id: "precision" }], weapons: { type: "ranged", keyword: { keyword_id: "pistol" } } },
     });
     const incrementing = leaf("EFFECT", "weapon-ability-grant", { subject: "this-model", keyword: "Sustained Hits 1", weapon_type: "all", if_present: "increment" }, 4);
     expect(compiled([incrementing]).mechanics.effect).toEqual({
-      type: "weapon-ability-grant", target: "this-model", modifier: { abilities: ["Sustained Hits 1"], if_present: "increment" },
+      type: "weapon-ability-grant", target: "this-model", modifier: { keywords: [{ keyword_id: "sustained-hits", parameters: { value: 1 } }], if_present: "increment" },
     });
     const incoming = leaf("EFFECT", "weapon-ability-grant", { subject: "this-unit", keyword: "Devastating Wounds", weapon_type: "melee", incoming: true }, 4);
     expect(compiled([incoming]).mechanics.effect).toEqual({
-      type: "weapon-ability-grant", target: "this-unit", modifier: { abilities: ["Devastating Wounds"], weapon_type: "melee", incoming: true },
+      type: "weapon-ability-grant", target: "this-unit", modifier: { keywords: [{ keyword_id: "devastating-wounds" }], weapons: { type: "melee" }, incoming: true },
     });
     for (const input of [named, byKeyword, incrementing, incoming]) expect(rendered(base, [input]).length).toBeGreaterThan(0);
     // weapon_name and weapon_keyword are alternative filters, never both at once.
@@ -250,7 +251,7 @@ describe("Round 5C weapon-ability grants with recipient leaves between frame and
   it("compiles the folded grant to a model-level recipient", () => {
     const result = compileLeaves(placed(text, [...frame("antecedent")], [...recipient], [...owner], [...keyword]), text);
     expect(result.ok).toBe(true);
-    expect(result.mechanics.effect).toMatchObject({ type: "weapon-ability-grant", modifier: { abilities: ["Ignores Cover"], weapon_type: "ranged" } });
+    expect(result.mechanics.effect).toMatchObject({ type: "weapon-ability-grant", modifier: { keywords: [{ keyword_id: "ignores-cover" }], weapons: { type: "ranged" } } });
   });
 
   it("refuses a duration between the frame and its keyword, so the keyword is not folded across it", () => {
@@ -324,7 +325,7 @@ describe("Round 5C grant and activation shapes from the wave-10 records (fabrica
       ["FOO models", "unit-filter", { side: "friendly", keywords: ["FOO"], level: "model" }],
       ["Ignores Cover", "weapon-ability-keyword", { keyword: "Ignores Cover" }]), text);
     expect(result.ok).toBe(true);
-    expect(result.mechanics.effect).toEqual({ type: "weapon-ability-grant", target: { owner: "friendly", all_of: ["FOO"], level: "model" }, modifier: { abilities: ["Ignores Cover"], weapon_keyword: "Psychic" } });
+    expect(result.mechanics.effect).toEqual({ type: "weapon-ability-grant", target: { owner: "friendly", all_of: ["FOO"], level: "model" }, modifier: { keywords: [{ keyword_id: "ignores-cover" }], weapons: { keyword: { keyword_id: "psychic" } } } });
   });
 });
 
@@ -342,7 +343,7 @@ describe("Round 5C keyword menus under a one-of opener (fabricated wording)", ()
     const text = "Each time the bearer is selected to shoot, select either the Lethal Hits or Sustained Hits 1 ability. Until those attacks are resolved, ranged weapons equipped by the bearer have the selected ability.";
     const result = compileLeaves(placed(text, [...menu], [...alpha], [...beta], [...until], [...frame]), text);
     expect(result.ok).toBe(true);
-    const grant = (ability: string) => ({ type: "weapon-ability-grant", target: "this-model", modifier: { abilities: [ability], weapon_type: "ranged" } });
+    const grant = (ability: string) => ({ type: "weapon-ability-grant", target: "this-model", modifier: { keywords: [keywordRef(ability)], weapons: { type: "ranged" } } });
     expect(result.mechanics.effect).toEqual({ type: "choice", options: [grant("Lethal Hits"), grant("Sustained Hits 1")], choice_label: "Alpha or Beta ability" });
     expect(result.mechanics.scope).toEqual({ duration: "attack-sequence" });
   });
@@ -358,8 +359,8 @@ describe("Round 5C keyword menus under a one-of opener (fabricated wording)", ()
       ["Until the end of the phase", "duration", { endpoint: "end-of-phase" }],
       ["this model's Bolt of Change has that ability", "weapon-ability-grant", { subject: "this-model", weapon_type: "ranged", weapon_name: "Bolt of Change" }]), text);
     expect(result.ok).toBe(true);
-    const options = (choiceOf(result.mechanics.effect) as { options: Array<{ modifier: { abilities: string[] } }> }).options;
-    expect(options.map((option) => option.modifier.abilities)).toEqual([["Ignores Cover"], ["Lethal Hits"], ["Sustained Hits 3"]]);
+    const options = (choiceOf(result.mechanics.effect) as { options: Array<{ modifier: { keywords: unknown[] } }> }).options;
+    expect(options.map((option) => option.modifier.keywords)).toEqual([[{ keyword_id: "ignores-cover" }], [{ keyword_id: "lethal-hits" }], [{ keyword_id: "sustained-hits", parameters: { value: 3 } }]]);
   });
 
   it("folds a bulleted menu under an opener across a duration, and drops the attacks-resolved event (the 6878 and 3470 shapes)", () => {
@@ -389,8 +390,8 @@ describe("Round 5C keyword menus under a one-of opener (fabricated wording)", ()
       ["Until the end of the phase", "duration", { endpoint: "end-of-phase" }],
       ["weapons equipped by models in that unit have that selected ability", "weapon-ability-grant", { subject: "this-unit", weapon_type: "all" }]), text);
     expect(result.ok).toBe(true);
-    const options = (choiceOf(result.mechanics.effect) as { options: Array<{ modifier: { abilities: string[] } }> }).options;
-    expect(options.map((option) => option.modifier.abilities)).toEqual([["Ignores Cover"], ["Lethal Hits"], ["Sustained Hits 3"]]);
+    const options = (choiceOf(result.mechanics.effect) as { options: Array<{ modifier: { keywords: unknown[] } }> }).options;
+    expect(options.map((option) => option.modifier.keywords)).toEqual([[{ keyword_id: "ignores-cover" }], [{ keyword_id: "lethal-hits" }], [{ keyword_id: "sustained-hits", parameters: { value: 3 } }]]);
   });
 
   it("refuses a menu opener whose minimum is not one", () => {
@@ -456,7 +457,7 @@ describe("Round 5C keyword menus under a one-of opener (fabricated wording)", ()
       ["Until the end of the phase", "duration", { endpoint: "end-of-phase" }],
       ["ranged weapons equipped by models in your unit have the picked ability", "weapon-ability-grant", { subject: "this-unit", weapon_type: "ranged" }]), text);
     expect(result.ok).toBe(true);
-    const grant = (ability: string) => ({ type: "weapon-ability-grant", target: "this-unit", modifier: { abilities: [ability], weapon_type: "ranged" } });
+    const grant = (ability: string) => ({ type: "weapon-ability-grant", target: "this-unit", modifier: { keywords: [keywordRef(ability)], weapons: { type: "ranged" } } });
     expect(result.mechanics.effect).toMatchObject({ type: "conditional" });
     expect(choiceOf(result.mechanics.effect)).toEqual({ type: "choice", options: [grant("Lethal Hits"), grant("Sustained Hits 1")], choice_label: "Lethal Hits or Sustained Hits 1 ability" });
     expect(result.mechanics.scope).toEqual({ duration: "phase" });

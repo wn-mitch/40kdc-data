@@ -9,17 +9,41 @@ type Node = Record<string, unknown>;
  * ordinary leaf walk whenever a leaf list is exactly one `named-region-state` leaf.
  */
 
-const CONTROL_GATE: Node = { marker_scope: "markers-in-zone", controlled_by: "owner-army", threshold: { comparison: "at-least", fraction: 0.5 } };
-
-/** The producer's baseline (own deployment zone, always active) and its two phase extensions (no-man's-land, the opponent's deployment zone, each snapshotting majority control at phase start) never vary across the authored corpus. */
-function fixedZones(): { baseline: Node[]; phase_extensions: Node[] } {
+function controlGate(territory: string, fraction: number): Node {
+  const objectiveTerritory = territory === "no-mans-land" ? "no-mans-land" : "enemy-territory";
   return {
-    baseline: [{ kind: "fixed-zone", zone: "own-deployment-zone", activation: { event: "always-active" }, expiry: { event: "never" } }],
-    phase_extensions: (["no-mans-land", "opponent-deployment-zone"] as const).map((zone) => ({
-      kind: "objective-majority-zone", zone,
-      control_gate: structuredClone(CONTROL_GATE),
-      activation: { event: "phase-start", evaluation: "snapshot-once", canonical_condition_ids: ["controls"] },
-      expiry: { event: "phase-end" },
+    type: "controls",
+    parameters: {
+      by: "friendly",
+      objective: { territory: objectiveTerritory },
+      proportion: { comparison: "gte", fraction },
+    },
+  };
+}
+
+/** The complete producer's canonical regions. Baseline and phase extensions are deliberately data
+ * shaped, rather than activation/expiry wrappers: a region is active for its declared duration,
+ * and phase control is evaluated once at the trigger. */
+function fixedZones(parameters: Node): { baseline: Node[]; phase_extensions: Node[] } {
+  const baselineRegion = parameters.baseline_region as Node | undefined;
+  const phaseExtensions = parameters.phase_extensions;
+  if (Array.isArray(phaseExtensions)) {
+    return {
+      baseline: [{ region: structuredClone(baselineRegion ?? { territory: "your-deployment-zone" }), duration: "permanent" }],
+      phase_extensions: structuredClone(phaseExtensions) as Node[],
+    };
+  }
+  return {
+    baseline: [{ region: { territory: "your-deployment-zone" }, duration: "permanent" }],
+    phase_extensions: ([
+      ["no-mans-land", "no-mans-land"],
+      ["opponent-deployment-zone", "enemy-deployment-zone"],
+    ] as const).map(([_, territory]) => ({
+      region: { territory },
+      condition: controlGate(territory, 0.5),
+      trigger: { event: "phase-started" },
+      duration: "phase",
+      evaluation: "snapshot-once",
     })),
   };
 }
@@ -33,18 +57,14 @@ function branchEffectNode(branch: Record<string, unknown>): Node {
     modifier.operation = branch.operation;
     modifier.value = branch.value;
   }
-  if (branch.weapon_keyword !== undefined) modifier.weapon_keyword = branch.weapon_keyword;
+  if (branch.weapon_keyword !== undefined) modifier.weapons = { keyword: { all_of: [branch.weapon_keyword] } };
   return { type: branch.kind === "reroll" ? "re-roll" : "roll-modifier", target: "attacker", modifier };
 }
 
-/** One `default_branch`/`qualified_branch`: identical shape across the authored corpus but for its effect and whether the player may decline it. */
+/** A branch is an ability part; its attack context is carried by the enclosing consumer. */
 function branch(effectNode: Node, optional: boolean): Node {
   return {
-    source: { role: "eligible-source", gate_ref: "beneficiary_gate" },
-    beneficiary: { role: "eligible-beneficiary", gate_ref: "beneficiary_gate" },
-    target: "attacker",
-    timing: { event: "each-attack" },
-    duration: "attack-resolution",
+    type: "ability-part",
     effect: effectNode,
     optional,
   };
@@ -53,16 +73,15 @@ function branch(effectNode: Node, optional: boolean): Node {
 export function compileNamedRegionState(leaf: CompileLeaf): { effect: Node; behavior: string } {
   const p = leaf.parameters;
   const regionRef: Node = { region_id: closed(leaf, "region_id"), owner_faction: closed(leaf, "owner_faction") };
-  const zones = fixedZones();
+  const zones = fixedZones(p);
 
   const additiveExtensions: Node[] = [];
   const proximity = p.proximity_extension as { gate_ref: string; keywords: string[]; radius_inches: number } | undefined;
   if (proximity) {
     additiveExtensions.push({
       kind: "unit-proximity",
-      source_gate: { gate_ref: proximity.gate_ref, owner: "owner-army", unit_predicate: { faction: regionRef.owner_faction, keywords: proximity.keywords } },
-      radius_inches: proximity.radius_inches,
-      activation: { event: "continuous" },
+      filter: { owner: "friendly", all_of: [...proximity.keywords] },
+      range: { inches: proximity.radius_inches },
     });
   }
 
@@ -80,19 +99,17 @@ export function compileNamedRegionState(leaf: CompileLeaf): { effect: Node; beha
   };
   const qualifiedKeyword = p.qualifies_by_keyword as string | undefined;
   const qualifiedCondition: Node = qualifiedKeyword
-    ? { operator: "or", operands: [{ type: "has-keyword", parameters: { all_of: [qualifiedKeyword] } }, inRegion] }
+    ? { operator: "or", operands: [{ type: "matches", parameters: { subject: "this-unit", filter: { all_of: [qualifiedKeyword] } } }, inRegion] }
     : inRegion;
 
-  const beneficiaryGate: Node = {
-    owner: "owner-army",
-    ...(p.beneficiary_faction !== undefined ? { faction: closed(leaf, "beneficiary_faction") } : {}),
-    operator: closed(leaf, "beneficiary_operator"),
-    keywords: p.beneficiary_keywords,
+  const beneficiaryFilter: Node = {
+    owner: "friendly",
+    ...(p.beneficiary_operator === "and" ? { all_of: [...(p.beneficiary_keywords as string[])] } : { any_of: [...(p.beneficiary_keywords as string[])] }),
   };
 
   const consumer: Node = {
     state_ref: structuredClone(regionRef),
-    beneficiary_gate: beneficiaryGate,
+    eligibility: beneficiaryFilter,
     membership: { unit_scope: membershipScope, relation: "wholly-within" },
     qualified_condition: qualifiedCondition,
     default_branch: branch(branchEffectNode(p.default_branch as Record<string, unknown>), Boolean((p.default_branch as Record<string, unknown>).optional)),
@@ -103,7 +120,7 @@ export function compileNamedRegionState(leaf: CompileLeaf): { effect: Node; beha
       operator: "or",
       operands: [
         { type: "attack-is", parameters: { attack_type: "melee" } },
-        { operator: "and", operands: [{ type: "attack-is", parameters: { attack_type: "ranged" } }, { type: "visible", parameters: { subject: "defender", to: "attacker" } }] },
+        { operator: "and", operands: [{ type: "attack-is", parameters: { attack_type: "ranged" } }, { type: "matches", parameters: { subject: "defender", filter: { visible: { to: "attacker" } } } }] },
       ],
     };
   }

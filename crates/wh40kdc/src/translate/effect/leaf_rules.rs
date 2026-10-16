@@ -4,7 +4,7 @@
 use serde_json::{Map, Value};
 
 use super::words::*;
-use crate::translate::condition::{article, nn, obj, objective_phrase, or_list, P};
+use crate::translate::condition::{article, nn, obj, objective_phrase, or_list, range_phrase, P};
 use crate::translate::dekebab;
 use crate::translate::expiry::expiry_trail;
 
@@ -24,7 +24,7 @@ pub(super) fn marker(m: &P) -> String {
     };
     if sv(m, "operation") == Some("relocate") {
         let dist = nn(m, "distance")
-            .map(|d| format!(" up to {}\"", jv(d)))
+            .map(|d| format!(" up to {}", range_phrase(Some(d))))
             .unwrap_or_default();
         let unmoved = if is_true(m, "not_moved_this_turn") {
             " that has not been moved this turn"

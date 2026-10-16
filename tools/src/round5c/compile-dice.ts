@@ -56,7 +56,7 @@ export function perSuccess(planned: Planned[], banded: Planned[], dice: string, 
     modifier.per = "success";
     modifier.roll = {
       dice: count, threshold: low ? to : Number(band.from), ...(low ? { comparison: "lte" } : {}),
-      ...(perModel ? { per_model: perModel === "target" ? "target" : "this" } : {}),
+      ...(perModel ? { per_model: perModel === "target" ? item.node.target : "this-unit" } : {}),
       // One die for each model the selector matches (compile-count-scale.ts).
       ...(forEach ? { for_each: structuredClone(forEach) } : {}),
     };
@@ -122,7 +122,7 @@ export function resolveRolls(planned: Planned[], global: Node[], rolls: readonly
     if (item.leaf.family_id === "fight-on-death" && (item.node.modifier as Node).act === "fight") {
       if (band.to !== faces) throw new CompileError("Fighting on death needs a band that reaches the top face (\"on a 2+\").");
       const modifier = item.node.modifier as Node;
-      modifier.gate = { dice, threshold: band.from, comparison: "gte" };
+      modifier.gate = { dice, threshold: band.from, comparison: "gte", modifiers: [] };
       // As the ability's only effect, the conditions ahead of it ("if that model has not fought")
       // say which destroyed models roll, so they are its eligibility rather than a wrapper.
       if (planned.length === 1) {
@@ -350,8 +350,8 @@ function fightOnDeathConditional(planned: Planned[], global: Node[], item: Plann
   if (band.to !== top) throw new CompileError("Fighting on death needs a band that reaches the top face (\"on a 2+\").");
   if (band.from > top) throw new CompileError(`A result band starts at ${band.from}, beyond the changed ${die}.`);
   const yesGate: Node = value > 0
-    ? { dice: `${die}+${value}`, threshold: band.from, comparison: "gte" }
-    : { dice: die, threshold: band.from - value, comparison: "gte" };
+    ? { dice: `${die}+${value}`, threshold: band.from, comparison: "gte", modifiers: [] }
+    : { dice: die, threshold: band.from - value, comparison: "gte", modifiers: [] };
   if (band.from - value > faces) throw new CompileError(`A fight-on-death threshold of ${band.from - value} is beyond a ${die}; the change cannot succeed.`);
   if (band.from > faces) throw new CompileError(`A fight-on-death threshold of ${band.from} is beyond a ${die}; the unchanged roll cannot succeed.`);
   const base = [...global, ...item.gate.filter((node) => !isRollMarker(node))];
@@ -364,6 +364,6 @@ function fightOnDeathConditional(planned: Planned[], global: Node[], item: Plann
   };
   return [
     side(yesGate, condition),
-    side({ dice: die, threshold: band.from, comparison: "gte" }, notCondition),
+    side({ dice: die, threshold: band.from, comparison: "gte", modifiers: [] }, notCondition),
   ];
 }

@@ -16,8 +16,8 @@
  *    (and, in 11th, support) form one combined unit, so every member's
  *    abilities apply to the whole unit — pulled in full (not aura-filtered),
  *    whichever member is the selected/firing unit.
- * 6. **support** — abilities on supporting units whose scope range is an
- *    aura (not `self` / `unit`).
+ * 6. **support** — abilities on supporting units whose effects can reach
+ *    another unit (auras, unit selections, or friendly/enemy target filters).
  *
  * Each step phase-filters via the existing `Dataset.phasesFor` index. The
  * resolver collects abilities first, *then* filters by phase, so the SPA can
@@ -49,6 +49,8 @@ export type EligibilityInput = {
    * multi-member attachments need no shape change; order is preserved.
    */
   attachedUnitIds?: string[];
+  /** Actual roles within this attached unit, keyed by unit id; never inferred from datasheet abilities. */
+  attachmentRoles?: Readonly<Record<string, "leader" | "bodyguard">>;
   /** Friendly units whose auras could apply (M2 walks only their aura-ranged abilities). */
   supportingUnitIds?: string[];
 };
@@ -160,14 +162,15 @@ export function resolveEligibleAbilities(
     }
   }
 
-  // 6. Supporting units — only aura-scoped abilities (otherwise the buff
-  // would describe a self-target effect that doesn't reach the input unit).
+  // 6. Supporting units — only abilities that can reach another unit (an aura,
+  // a friendly or enemy unit filter, a unit selection); an ability that only
+  // names its own unit describes a buff that never reaches the input unit.
   for (const supportId of input.supportingUnitIds ?? []) {
     const supporter = resolveUnit(supportId, factionId);
     if (!supporter) continue;
     for (const ability of supporter.abilities) {
       if (!phaseMatches(ability, phase)) continue;
-      if (!isAuraScope(ability.raw.scope?.range)) continue;
+      if (!reachesOtherUnits(ability.raw.effect)) continue;
       pushUnique(out, seen, {
         ability,
         source: { kind: "support", sourceUnitId: supportId },
@@ -204,9 +207,23 @@ function intersect(phases: Phase[], phase: Phase): Phase[] {
   return phases.includes(phase) ? [phase] : phases;
 }
 
-function isAuraScope(range: unknown): boolean {
-  if (typeof range !== "string") return false;
-  return range.startsWith("aura-") || range === "any-on-battlefield" || range === "any-visible";
+/**
+ * Whether an effect can reach a unit other than its own: an aura, a unit-filter target (friendly
+ * or enemy), or a unit selection. The translator decides what of it reaches the input unit.
+ */
+export function reachesOtherUnits(effect: unknown): boolean {
+  if (Array.isArray(effect)) return effect.some(reachesOtherUnits);
+  if (effect === null || typeof effect !== "object") return false;
+  const node = effect as Record<string, unknown>;
+  if (node.type === "aura" || node.type === "select-units") return true;
+  const target = node.target;
+  if (target !== null && typeof target === "object" && !Array.isArray(target) && "owner" in target) {
+    if (target.owner === "friendly" || target.owner === "enemy") return true;
+  }
+  // A model-only grant's definition cannot become an aura from the whole unit.
+  if (node.type === "ability-grant" && (target === "this-model" || target === "model-in-this-unit"
+    || (target !== null && typeof target === "object" && "level" in target && target.level === "model"))) return false;
+  return Object.values(node).some(reachesOtherUnits);
 }
 
 function pushUnique(

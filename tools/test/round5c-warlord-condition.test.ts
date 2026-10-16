@@ -102,7 +102,7 @@ describe("Warlord test on a unit-filter (T2, T3, T4)", () => {
     const errors = errorsOf(placed(text,
       ["One", "stratagem-target", { count: "one" }],
       ["friendly ALPHA unit that is your Warlord", "unit-filter", { side: "friendly", keywords: ["ALPHA"], designated: "warlord" }]), text);
-    expect(errors.join()).toMatch(/Warlord|designation/);
+    expect(errors.join()).toMatch(/static Stratagem TARGET metadata/u);
   });
 
   it("throws when dslUnitFilter reads a Warlord filter without the opt-in", () => {
@@ -111,12 +111,13 @@ describe("Warlord test on a unit-filter (T2, T3, T4)", () => {
     expect(dslUnitFilter(filter!, { warlordTest: true })).toMatchObject({ owner: "friendly", all_of: ["ALPHA"], designated: "warlord" });
   });
 
-  it("refuses a Warlord unit-filter after an attack's target condition", () => {
+  it("preserves a Warlord designation on an attack's target filter", () => {
     const text = "Each time a model in this unit makes an attack that targets a friendly ALPHA unit that is your Warlord, add 1 to the Hit roll.";
-    expect(() => compiledEffect(placed(text,
+    const mechanics = compiledEffect(placed(text,
       ["Each time a model in this unit makes an attack", "attack", { direction: "makes", unit: "this-unit", attack_type: "any" }],
       ["that targets a friendly ALPHA unit that is your Warlord", "unit-filter", { side: "friendly", keywords: ["ALPHA"], designated: "warlord" }],
-      ["add 1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1 }]), text)).toThrow();
+      ["add 1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1 }]), text);
+    expect(mechanics.effect.condition).toEqual({ type: "matches", parameters: { subject: "defender", filter: { all_of: ["ALPHA"], designated: "warlord" } } });
   });
 });
 
@@ -173,8 +174,8 @@ describe("Bearer condition on the Warlord (S3: 9113 shape and duplicates, T5 and
     expect(mechanics.effect).toEqual({
       type: "conditional",
       condition: { operator: "and", operands: [
-        { type: "has-ability", parameters: { subject: "this-model", ability: "da-boss-orks" } },
-        { type: "designated", parameters: { subject: "this-model", tag: "warlord" } },
+        { type: "matches", parameters: { subject: "this-model", filter: { has_ability: ["da-boss-orks"] } } },
+        { type: "matches", parameters: { subject: "this-model", filter: { designated: "warlord" } } },
       ] },
       effect: { type: "cp-gain", target: "this-model", modifier: { amount: 1 } },
     });
@@ -239,7 +240,7 @@ describe("Warlord test refused on an aura, a for-each and a unit-filter target (
     const start = text.indexOf(wording);
     const target: CompileLeaf = { role: "CONDITION", family_id: "unit-filter-target", family_version: 1, parameters: { side: "enemy", designated: "warlord" }, start_byte: start, end_byte: start + wording.length, fragment: "RAW_TEXT" };
     const effect = compiledEffect([attack!, target, roll!], text).effect;
-    expect(JSON.stringify(effect)).toContain('{"type":"designated","parameters":{"subject":"defender","tag":"warlord"}}');
+    expect(JSON.stringify(effect)).toContain('{"type":"matches","parameters":{"subject":"defender","filter":{"designated":"warlord"}}}');
   });
 });
 

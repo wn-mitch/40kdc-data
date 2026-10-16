@@ -168,7 +168,7 @@ describe("Round 5C Stratagem target modes (\"or\" between targets, \"Alternative
       DURATION, ELIGIBLE,
     ];
     const { target } = compiled(text, ...items);
-    const engaged = { operator: "not", operands: [{ type: "unit-state", parameters: { state: "engaged" } }] };
+    const engaged = { operator: "not", operands: [{ type: "matches", parameters: { filter: { state: "engaged" } } }] };
     expect(target[0].eligibility).toEqual(engaged);
     expect(target[1].eligibility).toEqual({ operator: "and", operands: [engaged, notSame(first)] });
     expect(targetValid(target)).toBe(true);

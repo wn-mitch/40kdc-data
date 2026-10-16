@@ -11,7 +11,7 @@ from typing import Any
 
 from wh40kdc.translate.condition import dekebab, describe_condition
 from wh40kdc.translate.condition_leadin import condition_lead_in
-from wh40kdc.translate.condition_refs import _or_list
+from wh40kdc.translate.condition_refs import _or_list, range_phrase, unit_ref_phrase
 from wh40kdc.translate.effect_bind import roll_head, select_objective_inline
 from wh40kdc.translate.effect_leaf import LEAF_TYPES, describe_leaf
 from wh40kdc.translate.effect_quantity import (
@@ -45,14 +45,15 @@ from wh40kdc.translate.effect_select import (
 )
 from wh40kdc.translate.effect_words import (
     Ctx,
-    bracket_keyword,
     capitalize,
     dice_case,
+    filter_subject,
     format_comparison,
     is_num,
     jstr,
     num,
     num_str,
+    or_list,
     signed,
     test_name,
     title_case,
@@ -82,27 +83,6 @@ def _select_units_inline(sel: Any, effect: Effect, ctx: Ctx) -> str:
     return f"select {subject}{binding}: {nested}"
 
 
-def leader_model_ability_grant_clause(e: Effect, ctx: Ctx) -> str:
-    """Render the beneficiary-only leader relation without exposing a bearer fallback."""
-    filt = _obj(e.get("leader_filter"))
-    identity = title_case(filt["identity"]) if filt.get("identity") else ""
-    keywords = " and ".join(bracket_keyword(k) for k in (filt.get("keywords") or []))
-    role = (
-        "the attached CHARACTER leader model"
-        if e.get("beneficiary") == "attached-character-leader"
-        else "the attached leader model"
-    )
-    identified = f" identified as {identity}" if identity else ""
-    leader = f"{role}{identified}{f' with {keywords}' if keywords else ''}"
-    unit_keywords = " and ".join(bracket_keyword(k) for k in (e.get("attached_unit_filter") or []))
-    source = f"the bearer unit{f' with {unit_keywords}' if unit_keywords else ''}"
-    nested = _obj(_obj(e.get("grant")).get("effect"))
-    rendered = re.sub(
-        r"^this model\b",
-        "that leader model",
-        describe_effect_inline({**nested, "target": "this-model"}, ctx),
-    )
-    return f"while {leader} leads {source}, {rendered}"
 
 
 _USAGE = {
@@ -158,8 +138,8 @@ def _scaling_wording(s: dict[str, Any]) -> str:
         points = "point" if num(s.get("per")) == 1 else f"{jstr(s.get('per'))} points"
         return f"for every {points} of {scale_source(s)}{cap}"
     c = f"for every {jstr(s.get('per'))} {scale_source(s)}"
-    if s.get("within_inches") is not None and not c.endswith(f'within {jstr(s["within_inches"])}"'):
-        c += f' within {jstr(s["within_inches"])}"'
+    if s.get("within") is not None and not c.endswith(f"within {range_phrase(s['within'])}"):
+        c += f" within {range_phrase(s['within'])}"
     if s.get("round") == "up":
         c += " (rounding up)"
     if s.get("max_value") is not None:
@@ -189,10 +169,29 @@ def _aura_eligible_subject(who: str, eligible: Any) -> str:
 def _keyword_filter_clause(value: Any, noun: str) -> str:
     if not isinstance(value, dict):
         return noun
-    required = " and ".join(_keywords_of(value, "required_keywords"))
-    excluded = " or ".join(_keywords_of(value, "excluded_keywords"))
-    without = f" without {excluded}" if excluded else ""
-    return f"{noun}{f' with {required}' if required else ''}{without}"
+    relations = dict(value)
+    all_of = relations.pop("all_of", None)
+    any_of = relations.pop("any_of", None)
+    none_of = relations.pop("none_of", None)
+    not_all = relations.pop("not_all_of", None)
+    all_text = f" with {' and '.join(map(jstr, all_of))}" if isinstance(all_of, list) else ""
+    any_text = (
+        f" with at least one of {or_list(list(map(jstr, any_of)))}"
+        if isinstance(any_of, list)
+        else ""
+    )
+    none_text = (
+        f" without {or_list(list(map(jstr, none_of)))}"
+        if isinstance(none_of, list)
+        else ""
+    )
+    not_all_text = (
+        f" without all of {' and '.join(map(jstr, not_all))}"
+        if isinstance(not_all, list)
+        else ""
+    )
+    other = f" matching {filter_subject(relations)}" if relations else ""
+    return f"{noun}{all_text}{any_text}{none_text}{not_all_text}{other}"
 
 
 def _aura_clause(e: Effect, m: dict[str, Any], ctx: Ctx) -> str:
@@ -205,23 +204,25 @@ def _aura_clause(e: Effect, m: dict[str, Any], ctx: Ctx) -> str:
             f"the range of this model's {named}abilities is increased by {jstr(m['range_bonus'])}\""
             f"{capped_bonus}"
         )
-    rng = m.get("range")
-    if isinstance(rng, list):
-        range_text = "/".join(f'{jstr(r)}"' for r in rng) + " (by battle round)"
-    elif rng is not None:
-        range_text = f'{jstr(rng)}"'
-    else:
-        range_text = "range"
+    range_text = range_phrase(m["range"]) if m.get("range") is not None else "range"
     capped = (
         f' (to a maximum of {jstr(m["range_cap"])}", extensions included)'
         if m.get("range_cap") is not None
         else ""
     )
-    who = "a friendly unit" if e.get("target") == "friendly-within-aura" else "an enemy unit"
-    eligible_who = _aura_eligible_subject(who, m.get("eligible"))
+    owner = "friendly" if e.get("target") == "friendly-within-aura" else "enemy"
+    recipient_filter = m.get("eligible", m.get("recipient_filter", {}))
+    subject = filter_subject({"owner": owner, **_obj(recipient_filter)})
+    subject = (
+        subject.removeprefix("all ")
+        .replace(" units", " unit", 1)
+        .replace(" models", " model", 1)
+        .replace("that are", "that is", 1)
+    )
+    eligible_who = f"{'an' if re.match(r'^[aeiou]', subject, re.I) else 'a'} {subject}"
     recipient = (
         _keyword_filter_clause(m["recipient_filter"], eligible_who)
-        if m.get("recipient_filter") is not None
+        if m.get("eligible") is not None and m.get("recipient_filter") is not None
         else eligible_who
     )
     emitter = (
@@ -386,8 +387,6 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx) -> str:
         return f"roll {pool_text(e)}: {opts}"
     if t == "select-units":
         return _select_units_inline(e.get("selector"), _obj(e.get("effect")), ctx)
-    if t == "leader-model-ability-grant":
-        return leader_model_ability_grant_clause(e, ctx)
     if t == "persistent-designation":
         if e.get("operation") == "replace":
             return persistent_designation_replacement(e)
@@ -414,7 +413,7 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx) -> str:
         when_clause = f"{dur_trail}, {when}" if dur_trail else when
         recipient_ctx = designated_recipient_context(applies, ctx)
         return (
-            f"{select_lead} one {designation_target_subject(sel)}{desig}; {when_clause}, "
+            f"{select_lead} {designation_target_subject(sel)}{desig}; {when_clause}, "
             f"{inline(applies.get('effect'), recipient_ctx)}"
         )
     if t == "stance-select":
@@ -427,14 +426,19 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx) -> str:
         n = num(m.get("additional_selections"))
         n = 1.0 if n != n or n == 0 else n
         times = "one additional time" if n == 1 else f"{num_str(n)} additional times"
-        # A shared allowance narrowed to some options: spent on any one of them, not one of each.
-        if m.get("allocation") != "fixed-option" and isinstance(m.get("option_ids"), list):
-            names = _or_list([title_case(jstr(i)) for i in m["option_ids"]])
+        if m.get("allocation") != "fixed-option" and isinstance(m.get("options"), list):
+            names = _or_list(
+                [
+                    title_case(jstr(_obj(option).get("option_id")))
+                    for option in m["options"]
+                ]
+            )
             return f"you can select {names} {times} per battle, shared between them"
-        if m.get("allocation") == "fixed-option" and m.get("option_id") is not None:
-            subject = title_case(jstr(m["option_id"]))
+        option = _obj(m.get("option"))
+        if m.get("allocation") == "fixed-option" and option:
+            subject = title_case(jstr(option.get("option_id")))
         else:
-            subject = f"one option of {title_case(jstr(m.get('stance_id')))}"
+            subject = f"one option of {title_case(jstr(m.get('ability_id')))}"
         return f"you can select {subject} {times} per battle"
     if t == "risk-reward":
         risk = _obj(e.get("risk"))
@@ -541,14 +545,7 @@ def part_inline(e: Effect, ctx: Ctx) -> str:
 
 def leadership_test(e: Effect, ctx: Ctx) -> str:
     test = _obj(e.get("test"))
-    subject = test.get("subject")
-    who = (
-        "this model"
-        if subject == "self"
-        else "the target unit"
-        if subject == "target"
-        else "that unit"
-    )
+    who = unit_ref_phrase(test.get("subject"))
     kind = "Battle-shock" if test.get("kind") == "battle-shock" else "Leadership"
     modifiers = "; ".join(
         f"apply {signed('add', _obj(md).get('value'))} if "

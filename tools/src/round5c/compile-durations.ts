@@ -20,8 +20,20 @@ export const NO_ROLL_PLUS_SIX = "An add-6 to Move after a no-advance-roll folds 
 /** A no-advance-roll whose moment is an Advance that already happened (a move-ended or past-tense condition). */
 export const NO_ROLL_AFTER_ADVANCE = "A no-advance-roll cannot follow an Advance that already happened; the moment is the move start.";
 
+/** Legacy printed aliases accepted by older leaves; canonical scope names are the values below. */
+const DURATION_ALIASES: Record<string, string> = {
+  "until-end-of-phase": "phase",
+  "until-end-of-turn": "turn",
+  "until-end-of-battle-round": "battle-round",
+  "until-end-of-battle": "battle",
+};
+
+export function canonicalDurationName(name: string): string {
+  return DURATION_ALIASES[name] ?? name;
+}
 /** Lifetime order of the durations a window part can carry (earlier ends first). */
 const LIFETIME = ["phase", "turn", "until-start-next-turn"];
+
 
 export type DurationBinding = {
   /** Each planned effect's bound duration, keyed by its leaf index. An effect with none is bare. */
@@ -78,7 +90,7 @@ export function bindDurations(list: readonly CompileLeaf[], places: readonly Pla
 
 /** Position of a duration in the lifetime order; an endpoint outside it cannot be compared with a window. */
 export function lifetimeRank(name: string): number {
-  const rank = LIFETIME.indexOf(name);
+  const rank = LIFETIME.indexOf(canonicalDurationName(name));
   if (rank === -1) throw new CompileError(`A duration ${name} cannot be ordered against a window.`);
   return rank;
 }
@@ -89,13 +101,15 @@ export function lifetimeRank(name: string): number {
  */
 export function placeInWindow(bound: string | undefined, window: string): "same" | "inside" | "outside" {
   if (bound === undefined) throw new CompileError(CONFLICTING_DURATIONS);
-  if (bound === window) return "same";
-  return lifetimeRank(bound) < lifetimeRank(window) ? "inside" : "outside";
+  const canonicalBound = canonicalDurationName(bound);
+  const canonicalWindow = canonicalDurationName(window);
+  if (canonicalBound === canonicalWindow) return "same";
+  return lifetimeRank(canonicalBound) < lifetimeRank(canonicalWindow) ? "inside" : "outside";
 }
 
 /** An effect in its own duration: `ability-part {duration, effect}`. */
 export function durationPart(bound: string, effect: Node): Node {
-  return { type: "ability-part", duration: bound, effect };
+  return { type: "ability-part", duration: canonicalDurationName(bound), effect };
 }
 
 const TESTABLE_SUBJECTS = new Set(["selected-unit", "antecedent"]);
@@ -107,8 +121,11 @@ function collect(node: unknown, found: { tests: string[]; marks: string[] }): vo
   const record = node as Node;
   const parameters = record.parameters as Node | undefined;
   const subject = parameters?.subject;
-  if (record.type === "designated" && parameters?.tag !== undefined && typeof subject === "string" && TESTABLE_SUBJECTS.has(subject)) {
-    found.tests.push(`${subject}|${String(parameters.tag)}`);
+  const filter = parameters?.filter as Node | undefined;
+  const designated = filter?.designated;
+  if ((record.type === "matches" && designated !== undefined || record.type === "designated" && parameters?.tag !== undefined)
+    && typeof subject === "string" && TESTABLE_SUBJECTS.has(subject)) {
+    found.tests.push(`${subject}|${String(designated ?? parameters?.tag)}`);
   }
   const modifier = record.modifier as Node | undefined;
   if (record.type === "designate" && modifier?.tag !== undefined && typeof record.target === "string" && TESTABLE_SUBJECTS.has(record.target)) {

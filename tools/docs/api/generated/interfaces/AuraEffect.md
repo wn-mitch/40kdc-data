@@ -6,7 +6,7 @@
 
 # Interface: AuraEffect
 
-Defined in: [generated.ts:2795](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2795)
+Defined in: [generated.ts:3722](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3722)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "aura-effect".
@@ -17,15 +17,15 @@ via the `definition` "aura-effect".
 
 > **type**: `"aura"`
 
-Defined in: [generated.ts:2796](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2796)
+Defined in: [generated.ts:3723](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3723)
 
 ***
 
 ### target
 
-> **target**: `"friendly-within-aura"` \| `"enemy-within-aura"`
+> **target**: `"enemy-within-aura"` \| `"friendly-within-aura"`
 
-Defined in: [generated.ts:2797](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2797)
+Defined in: [generated.ts:3724](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3724)
 
 ***
 
@@ -33,11 +33,11 @@ Defined in: [generated.ts:2797](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:2798](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2798)
+Defined in: [generated.ts:3725](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3725)
 
 #### range?
 
-> `optional` **range?**: `number` \| \[`number`, `...number[]`\]
+> `optional` **range?**: [`RangeRef`](../type-aliases/RangeRef.md)
 
 #### range\_bonus?
 
@@ -53,28 +53,24 @@ Defined in: [generated.ts:2798](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 #### eligible?
 
-> `optional` **eligible?**: `object`
-
-##### eligible.required\_keywords?
-
-> `optional` **required\_keywords?**: \[`string`, `...string[]`\]
-
-###### Min Items
-
-1
-
-##### eligible.excluded\_keywords?
-
-> `optional` **excluded\_keywords?**: \[`string`, `...string[]`\]
-
-###### Min Items
-
-1
+> `optional` **eligible?**: [`UnitFilter`](UnitFilter.md)
 
 #### emitter\_filter?
 
-> `optional` **emitter\_filter?**: [`KeywordFilter`](KeywordFilter.md)
+> `optional` **emitter\_filter?**: [`UnitFilter`](UnitFilter.md)
 
 #### recipient\_filter?
 
-> `optional` **recipient\_filter?**: [`KeywordFilter`](KeywordFilter.md)
+> `optional` **recipient\_filter?**: [`UnitFilter`](UnitFilter.md)
+
+#### range\_cap?
+
+> `optional` **range\_cap?**: `number`
+
+The aura range, extensions included, never exceeds this.
+
+#### wholly?
+
+> `optional` **wholly?**: `true`
+
+The unit must be wholly within the range (no part of it outside), not merely within it (any part inside).

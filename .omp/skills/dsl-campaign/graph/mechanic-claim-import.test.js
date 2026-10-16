@@ -33,6 +33,11 @@ test('generated registry covers every effect wrapper and required nested child p
       ['modifier/consumer/qualified_branch/effect', 'qualified-branch'],
     ],
   )
+  assert.ok(descriptors.some(item => item.container_type === 'oath-modifier' && item.path === 'modifier/effect'))
+  assert.ok(descriptors.some(item => item.container_type === 'ability-grant' && item.path === 'modifier/definition'))
+  for (const retired of ['leader-model-ability-grant', 'formation-attachment-grant', 'paired-designation', 'for-each-objective']) {
+    assert.equal(descriptors.some(item => item.container_type === retired), false, retired)
+  }
 })
 
 test('closed no-effect leaves remain explicit inside dice-table bands', () => {
@@ -55,6 +60,52 @@ test('closed no-effect leaves remain explicit inside dice-table bands', () => {
   assert.deepEqual(valueOf(noop).arguments, [])
   const table = byPredicate(result.assertions, 'mechanic.composition.dice-table')[0]
   assert.ok(argument(table, 'members').some(band => band.results[0] === 1 && band.effect === noop.semantic_key))
+})
+
+test('canonical oath branches and inline ability grants retain nested effect claims', () => {
+  const oath = mapEffectNodeToCandidates({
+    origin_id,
+    node: {
+      type: 'oath-modifier',
+      target: 'this-unit',
+      modifier: {
+        ability: 'fabricated-oath',
+        aspect: 'deed-reward',
+        applies_to: 'additional',
+        operation: 'replace',
+        selection_method: 'chosen',
+        effect: leaf('objective-sticky'),
+      },
+    },
+  })
+  assert.deepEqual(oath.unresolved, [])
+  const oathParent = byPredicate(oath.assertions, 'mechanic.composition.oath-modifier')[0]
+  const oathEffect = byPredicate(oath.assertions, 'mechanic.effect.objective-sticky')[0]
+  assert.equal(argument(oathParent, 'members'), oathEffect.semantic_key)
+  assert.equal(argument(oathParent, 'parameters').modifier.aspect, 'deed-reward')
+
+  const grant = mapEffectNodeToCandidates({
+    origin_id,
+    pointer: '/effect',
+    node: {
+      type: 'ability-grant',
+      target: 'this-unit',
+      modifier: {
+        definition: {
+          type: 'ability-part',
+          name: 'Fabricated Grant',
+          effect: leaf('end-attack-sequence'),
+        },
+      },
+    },
+  })
+  assert.deepEqual(grant.unresolved, [])
+  const grantParent = byPredicate(grant.assertions, 'mechanic.effect.ability-grant')[0]
+  const definition = byPredicate(grant.assertions, 'mechanic.composition.ability-part')[0]
+  const definitionEffect = byPredicate(grant.assertions, 'mechanic.effect.end-attack-sequence')[0]
+  assert.equal(argument(grantParent, 'members'), definition.semantic_key)
+  assert.equal(argument(definition, 'members'), definitionEffect.semantic_key)
+  assert.equal(argument(grantParent, 'parameters'), undefined)
 })
 
 test('Feel No Pain preserves entity, integer threshold, scope, and exact record pointer', () => {
@@ -137,7 +188,6 @@ test('composition mapping preserves sequence order, unordered duplicates, and no
   assert.deepEqual(outcomes.map(outcome => outcome.results).sort((left, right) => left[0] - right[0]), [[1, 2, 3], [4, 5, 6]])
   assert.deepEqual(outcomes.map(outcome => outcome.effect).sort(), tableLeaves)
   assert.deepEqual(argument(table, 'parameters'), { dice: 'D6' })
-
   const repeated = mapEffectNodeToCandidates({
     origin_id,
     node: { type: 'choice', options: [leaf('end-attack-sequence'), leaf('objective-sticky'), leaf('end-attack-sequence')] },
@@ -188,8 +238,8 @@ test('resource action members retain effect, trigger, eligibility, cost, and loc
       id: 'fabricated-action', label: 'Fabricated Action',
       when: [{ event: 'after-move', cost: { cp: 1 } }],
       cost: { pool_id: 'fabricated-pool', amount: 1 },
-      eligibility: { requires_keyword: ['FABRICATED'], requires: [{ type: 'phase-is', parameters: { phase: 'movement' } }] },
-      usage: { repeatable_if_different_unit: true }, duration: 'immediate', effect: leaf('objective-sticky'),
+      eligibility: { filter: { all_of: ['FABRICATED'] }, requires: [{ type: 'phase-is', parameters: { phase: 'movement' } }] },
+      usage: { repeatable_if_different_unit: true }, duration: 'resolution', effect: leaf('objective-sticky'),
     }],
   }
   const result = mapEffectNodeToCandidates({ origin_id, node })
@@ -198,6 +248,7 @@ test('resource action members retain effect, trigger, eligibility, cost, and loc
   assert.match(member.effect, /^[a-f0-9]{64}$/)
   assert.match(member.when[0], /^[a-f0-9]{64}$/)
   assert.match(member.eligibility.requires[0], /^[a-f0-9]{64}$/)
+  assert.deepEqual(member.eligibility.filter, node.actions[0].eligibility.filter)
   assert.deepEqual(member.cost, node.actions[0].cost)
   assert.deepEqual(member.usage, node.actions[0].usage)
   assert.deepEqual(argument(parent, 'parameters'), { menu_id: 'fabricated-menu', pool_id: 'fabricated-pool', shared_usage: node.shared_usage })
@@ -227,9 +278,9 @@ test('ordered move consequences and selector eligibility remain linked graph chi
   const node = {
     type: 'select-units',
     selector: {
-      owner: 'friendly',
-      target_kind: 'model',
-      selection_limit: { count: 1, period: 'turn' },
+      filter: { owner: 'friendly', level: 'model' },
+      count: { min: 1, max: 1 },
+      limit: { count: 1, period: 'turn' },
       eligibility: { type: 'unit-state', parameters: { state: 'battle-shocked' } },
     },
     effect: {
@@ -245,7 +296,7 @@ test('ordered move consequences and selector eligibility remain linked graph chi
   const selection = byPredicate(result.assertions, 'mechanic.composition.select-units')[0]
   const eligibility = byPredicate(result.assertions, 'mechanic.condition.unit-state')[0]
   assert.equal(argument(selection, 'condition'), eligibility.semantic_key)
-  assert.deepEqual(argument(selection, 'parameters').selector.selection_limit, node.selector.selection_limit)
+  assert.deepEqual(argument(selection, 'parameters').selector.limit, node.selector.limit)
   const steps = byPredicate(result.assertions, 'mechanic.composition.sequence')[0]
   const move = byPredicate(result.assertions, 'mechanic.effect.move')[0]
   const restriction = byPredicate(result.assertions, 'mechanic.effect.permission')[0]
@@ -255,14 +306,11 @@ test('ordered move consequences and selector eligibility remain linked graph chi
   assert.equal(restriction.evidence[0].path, '/effect/effect/steps/1')
 })
 
-test('model membership and designation history remain in claim import', () => {
+test('model membership and canonical designation selection remain in claim import', () => {
   const iterator = {
     type: 'for-each-unit',
     selector: {
-      owner: 'friendly',
-      target_kind: 'model',
-      member_of: 'bearer-unit',
-      keywords: ['FABRICATED'],
+      filter: { owner: 'friendly', level: 'model', member_of: 'bearer-unit', all_of: ['FABRICATED'] },
     },
     effect: leaf(),
   }
@@ -276,25 +324,27 @@ test('model membership and designation history remain in claim import', () => {
     origin_id,
     node: {
       type: 'designate-target',
+      designation: 'fabricated-designation',
       select: {
-        eligibility: {
-          type: 'happened',
-          parameters: {
-            event: 'after-roll',
-            object: 'this-unit',
-            filter: { roll: 'hit', result: 'success', attack_type: 'ranged', by: { event_var: 'fabricated-shot' } },
-            window: 'event',
-          },
+        kind: 'unit',
+        selector: {
+          filter: { owner: 'enemy', level: 'unit' },
+          count: { min: 1, max: 1 },
         },
       },
-      applies: { attacker_keywords: ['FABRICATED'], effect: leaf() },
+      applies: {
+        to: 'attackers-of-target',
+        attacker_filter: { all_of: ['FABRICATED'] },
+        effect: leaf(),
+      },
     },
   })
   assert.deepEqual(designation.unresolved, [])
   const target = byPredicate(designation.assertions, 'mechanic.composition.designate-target')[0]
-  const history = byPredicate(designation.assertions, 'mechanic.condition.happened')[0]
-  assert.equal(argument(target, 'condition'), history.semantic_key)
-  assert.deepEqual(argument(target, 'parameters').applies.attacker_keywords, ['FABRICATED'])
+  const designatedEffect = byPredicate(designation.assertions, 'mechanic.effect.objective-sticky')[0]
+  assert.equal(argument(target, 'members'), designatedEffect.semantic_key)
+  assert.deepEqual(argument(target, 'parameters').applies.attacker_filter, { all_of: ['FABRICATED'] })
+  assert.deepEqual(argument(target, 'parameters').select.selector.count, { min: 1, max: 1 })
 })
 
 test('region attack eligibility differs from qualified-branch membership', () => {

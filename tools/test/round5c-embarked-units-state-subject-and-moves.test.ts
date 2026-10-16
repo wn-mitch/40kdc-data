@@ -79,16 +79,25 @@ describe("unit-filter embarked_in", () => {
 });
 
 describe("unit-filter embarked_in in compilation", () => {
-  it("refuses a selection, an aura and a Stratagem target that would drop it", () => {
-    const select = "Select one unit stowed within this Hauler.";
-    expect(refusal(select,
+  it("preserves embarked membership on selections and auras, but refuses a static Stratagem target", () => {
+    const select = "Select one unit stowed within this Hauler. That unit gains Stealth.";
+    expect(mechanicsOf(select,
       ["Select one", "select-unit", { distance: "any", visible: false }],
-      ["unit stowed within this Hauler", "unit-filter", STOWED])).toMatch(/embarked within a unit has no selection, aura or Stratagem target shape/);
-    const target = "Movement phase. One unit stowed within this Hauler.";
+      ["unit stowed within this Hauler", "unit-filter", STOWED],
+      ["That unit gains Stealth", "core-ability-grant", { subject: "antecedent", ability: "stealth" }]).effect)
+      .toMatchObject({ type: "select-units", selector: { filter: { owner: "friendly", embarked_in: "this-unit" } } });
+    const aura = "While a unit stowed within this Hauler is within 6\" of this model, it gains Stealth.";
+    expect(mechanicsOf(aura,
+      ["unit stowed within this Hauler", "unit-filter", STOWED],
+      ["within 6\" of this model", "aura-range", { inches: 6, of: "this-model" }],
+      ["it gains Stealth", "core-ability-grant", { subject: "antecedent", ability: "stealth" }]).effect)
+      .toMatchObject({ type: "aura", modifier: { eligible: { owner: "friendly", embarked_in: "this-unit" } } });
+    const target = "Movement phase. One unit stowed within this Hauler. That unit gains Stealth.";
     expect(refusal(target,
       ["Movement phase", "use-window", { your_phases: ["movement"], opponent_phases: [], either_phases: [] }, "WHEN"],
       ["One", "stratagem-target", { count: "one" }, "TARGET"],
-      ["unit stowed within this Hauler", "unit-filter", STOWED, "TARGET"])).toMatch(/embarked within a unit has no selection, aura or Stratagem target shape/);
+      ["unit stowed within this Hauler", "unit-filter", STOWED, "TARGET"],
+      ["That unit gains Stealth", "core-ability-grant", { subject: "this-unit", ability: "stealth" }, "EFFECT"])).toMatch(/static Stratagem TARGET metadata/u);
   });
 
   it("refuses alternatives that name units embarked within a unit", () => {
@@ -197,17 +206,17 @@ describe("unit-state embarked within a named Transport", () => {
 
   it("compiles to a state of the filter's own units embarked within this unit", () => {
     const mech = mechanicsOf(BIG_MEK, ...bigMek({}));
-    expect(mech.effect.condition).toEqual({ type: "unit-state", parameters: { subject: { owner: "friendly", all_of: ["BIG MEK"], level: "model", embarked_in: "this-unit" }, state: "embarked" } });
+    expect(mech.effect.condition).toEqual({ type: "matches", parameters: { subject: { owner: "friendly", all_of: ["BIG MEK"], level: "model", embarked_in: "this-unit" }, filter: { state: "embarked" } } });
   });
 
   it("reads a negated state as no such unit embarked, and this-model as the model's own Transport", () => {
     const mech = mechanicsOf(BIG_MEK, ...bigMek({ negated: true, with: "this-model" }));
-    expect(mech.effect.condition).toEqual({ operator: "not", operands: [{ type: "unit-state", parameters: { subject: { owner: "friendly", all_of: ["BIG MEK"], level: "model", embarked_in: "this-model" }, state: "embarked" } }] });
+    expect(mech.effect.condition).toEqual({ operator: "not", operands: [{ type: "matches", parameters: { subject: { owner: "friendly", all_of: ["BIG MEK"], level: "model", embarked_in: "this-model" }, filter: { state: "embarked" } } }] });
   });
 
   it("still compiles the plain embarked state (no Transport) unchanged", () => {
     const mech = mechanicsOf(BIG_MEK, ["is stowed within this Hauler", "unit-state", { states: ["embarked"], subject: "this-unit", negated: false }], ["add 1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1 }]);
-    expect(mech.effect.condition).toEqual({ type: "unit-state", parameters: { state: "embarked" } });
+    expect(mech.effect.condition).toEqual({ type: "matches", parameters: { filter: { state: "embarked" } } });
   });
 
   it("refuses a named Transport for a unit that is not a filter's (a selected unit)", () => {
@@ -247,7 +256,7 @@ describe("a Transport target and the unit embarked within it", () => {
     if (!result.ok) throw new Error(result.errors.join("; "));
     expect(result.core?.target_restrictions).toMatchObject({
       required_keywords: ["ALPHA", "TRANSPORT"],
-      eligibility: { type: "unit-state", parameters: { subject: { owner: "friendly", all_of: ["ALPHA", "BATTLELINE"], embarked_in: "this-unit" }, state: "embarked" } },
+      eligibility: { type: "matches", parameters: { subject: { owner: "friendly", all_of: ["ALPHA", "BATTLELINE"], embarked_in: "this-unit" }, filter: { state: "embarked" } } },
     });
   });
 
@@ -277,7 +286,7 @@ describe("a Transport target and the unit embarked within it", () => {
     const text = TEXT.replace(" Add 1", " (excluding Battle-shocked units). Add 1");
     const result = compileLeaves(placed(text, ...items([STATE, ["(excluding Battle-shocked units)", "unit-filter", { side: "friendly", states: ["not-battle-shocked"] }, "TARGET"]])), text);
     if (!result.ok) throw new Error(result.errors.join("; "));
-    expect(result.core?.target_restrictions?.eligibility).toEqual({ type: "unit-state", parameters: { subject: { owner: "friendly", all_of: ["ALPHA", "BATTLELINE"], not_states: ["battle-shocked"], embarked_in: "this-unit" }, state: "embarked" } });
+    expect(result.core?.target_restrictions?.eligibility).toEqual({ type: "matches", parameters: { subject: { owner: "friendly", all_of: ["ALPHA", "BATTLELINE"], not_states: ["battle-shocked"], embarked_in: "this-unit" }, filter: { state: "embarked" } } });
     expect(result.core?.target_restrictions?.required_keywords).toEqual(["ALPHA", "TRANSPORT"]);
   });
 
@@ -297,7 +306,7 @@ describe("units embarked within this model", () => {
     ["add 1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1 }]).effect.condition;
 
   it("names the model as the Transport on both the filter and the state's subject", () => {
-    expect(gate(false)).toEqual({ type: "unit-state", parameters: { subject: { owner: "friendly", all_of: ["ALPHA"], embarked_in: "this-model" }, state: "embarked" } });
+    expect(gate(false)).toEqual({ type: "matches", parameters: { subject: { owner: "friendly", all_of: ["ALPHA"], embarked_in: "this-model" }, filter: { state: "embarked" } } });
   });
 
   it("refuses a filter and a state that name different Transports", () => {

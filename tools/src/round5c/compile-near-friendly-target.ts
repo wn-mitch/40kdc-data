@@ -38,10 +38,10 @@ export function bindNearFriendlyTarget(list: readonly CompileLeaf[], target: Nod
   if (Object.keys(filter).some((key) => !CARRIED.has(key))) return target;
   const { bound_to: _bound, eligibility, ...rest } = target;
   const states: Node[] = [
-    ...(typeof filter.state === "string" ? [{ type: "unit-state", parameters: { state: filter.state } }] : []),
-    ...((filter.not_states as string[] | undefined) ?? []).map((state) => ({ operator: "not", operands: [{ type: "unit-state", parameters: { state } }] })),
+    ...(typeof filter.state === "string" ? [{ type: "matches", parameters: { filter: { state: filter.state } } }] : []),
+    ...(filter.not_states !== undefined ? [{ type: "matches", parameters: { filter: { not_states: filter.not_states } } }] : []),
   ];
-  const within: Node = { type: "within", parameters: { of: "event-subject", range: { inches: pair.parameters.inches } } };
+  const within: Node = { type: "matches", parameters: { filter: { within: { of: "event-subject", range: { inches: pair.parameters.inches } } } } };
   const checks = [...(eligibility === undefined ? [] : [eligibility as Node]), ...states, within];
   const { count, ...others } = rest;
   return { count, side: "your-army", ...others, eligibility: checks.length === 1 ? checks[0]! : { operator: "and", operands: checks } };

@@ -6,7 +6,7 @@
 
 # Interface: SecondaryCard
 
-Defined in: [generated.ts:1632](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1632)
+Defined in: [generated.ts:2973](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2973)
 
 An 11e mission card. The deck-level rule (draw 2 per turn, keep unscored cards) is separate and not modelled here. This is the per-card shape: an optional on-draw deck operation, an optional player action, and zero or more VP-award blocks. Primary mission cards reuse this shape via card_type. Mechanic blocks reference the Ability DSL; prose is community-authored (no reproduced rules text).
 
@@ -19,7 +19,7 @@ via the `definition` "secondary-card".
 
 > **id**: `string`
 
-Defined in: [generated.ts:1633](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1633)
+Defined in: [generated.ts:2974](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2974)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [generated.ts:1633](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **name**: `string`
 
-Defined in: [generated.ts:1634](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1634)
+Defined in: [generated.ts:2975](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2975)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [generated.ts:1634](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > `optional` **card\_type?**: `"secondary"` \| `"primary"`
 
-Defined in: [generated.ts:1638](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1638)
+Defined in: [generated.ts:2979](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2979)
 
 Whether this is a secondary card or a primary mission card (which reuses this shape).
 
@@ -45,7 +45,7 @@ Whether this is a secondary card or a primary mission card (which reuses this sh
 
 > `optional` **subtype?**: `string`
 
-Defined in: [generated.ts:1642](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1642)
+Defined in: [generated.ts:2983](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2983)
 
 Finer classification within the deck (e.g. a category or tactical/fixed split). Free-form — not enum-locked until 11e categories are confirmed.
 
@@ -55,7 +55,7 @@ Finer classification within the deck (e.g. a category or tactical/fixed split). 
 
 > `optional` **when\_drawn?**: `object`
 
-Defined in: [generated.ts:1646](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1646)
+Defined in: [generated.ts:2987](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2987)
 
 Optional deck operation performed when this card is drawn (e.g. redraw, swap). Distinct from combat effects — deck operations have no combat target, so they are not modelled via the Ability DSL effect language. If `condition` is present, the operation fires only when the predicate holds.
 
@@ -93,9 +93,9 @@ Battle-round window in which the draw operation is eligible (e.g. { max: 1 } mea
 
 ### actions?
 
-> `optional` **actions?**: \[\{ `action_id?`: `string`; `starts?`: `"command"` \| `"movement"` \| `"shooting"` \| `"charge"` \| `"fight"`; `timing?`: `"start-of-turn"` \| `"end-of-turn"` \| `"start-of-battle"`; `battle_round?`: \{ `min?`: `number`; `max?`: `number`; \}; `player_turn?`: [`PlayerTurn`](../type-aliases/PlayerTurn.md); `units?`: [`AbilityDSLCondition`](../type-aliases/AbilityDSLCondition.md); `use_limit?`: `number`; `use_limit_scope?`: `"per-turn"` \| `"per-game"`; `completes?`: [`AbilityDSLCondition1`](../type-aliases/AbilityDSLCondition1.md); `effect?`: [`AbilityEffect`](../type-aliases/AbilityEffect.md); `restrictions?`: [`AbilityDSLCondition4`](../type-aliases/AbilityDSLCondition4.md); \}, ...\{ action\_id?: string; starts?: "command" \| "movement" \| "shooting" \| "charge" \| "fight"; timing?: "start-of-turn" \| "end-of-turn" \| "start-of-battle"; battle\_round?: \{ min?: number; max?: number \}; player\_turn?: PlayerTurn; units?: AbilityDSLCondition; use\_limit?: number; use\_limit\_scope?: "per-turn" \| "per-game"; completes?: AbilityDSLCondition1; effect?: AbilityEffect; restrictions?: AbilityDSLCondition4 \}\[\]\]
+> `optional` **actions?**: \[\{ `action_id?`: `string`; `starts?`: `"charge"` \| `"command"` \| `"movement"` \| `"shooting"` \| `"fight"`; `timing?`: `"start-of-turn"` \| `"end-of-turn"` \| `"start-of-battle"`; `battle_round?`: \{ `min?`: `number`; `max?`: `number`; \}; `player_turn?`: [`PlayerTurn`](../type-aliases/PlayerTurn.md); `units?`: [`AbilityDSLCondition2`](../type-aliases/AbilityDSLCondition2.md); `use_limit?`: `number`; `use_limit_scope?`: `"per-turn"` \| `"per-game"`; `completes?`: [`AbilityDSLCondition3`](../type-aliases/AbilityDSLCondition3.md); `effect?`: [`AbilityEffect`](../type-aliases/AbilityEffect.md); `restrictions?`: [`AbilityDSLCondition7`](../type-aliases/AbilityDSLCondition7.md); \}, ...\{ action\_id?: string; starts?: "charge" \| "command" \| "movement" \| "shooting" \| "fight"; timing?: "start-of-turn" \| "end-of-turn" \| "start-of-battle"; battle\_round?: \{ min?: number; max?: number \}; player\_turn?: PlayerTurn; units?: AbilityDSLCondition2; use\_limit?: number; use\_limit\_scope?: "per-turn" \| "per-game"; completes?: AbilityDSLCondition3; effect?: AbilityEffect; restrictions?: AbilityDSLCondition7 \}\[\]\]
 
-Defined in: [generated.ts:1669](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1669)
+Defined in: [generated.ts:3010](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3010)
 
 Optional player actions the card enables. Most cards have a single action; a few (e.g. Observe Enemy, with separate Baited-removal and Spotted actions) have two distinct actions on the same card.
 
@@ -109,7 +109,7 @@ Optional player actions the card enables. Most cards have a single action; a few
 
 > `optional` **awards?**: \[\{\[`k`: `string`\]: `unknown`; \} \| \{\[`k`: `string`\]: `unknown`; \}, ...(\{ \[k: string\]: unknown \} \| \{ \[k: string\]: unknown \})\[\]\]
 
-Defined in: [generated.ts:1744](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1744)
+Defined in: [generated.ts:3085](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3085)
 
 VP-award blocks: each scores when `trigger` fires and the optional `when` condition holds. An award scores either a flat `vp` or a count-scaled `vp_per` (VP per instance of the thing named by `per`). Awards accrue independently and sum; a card's '+ ... CUMULATIVE' rows are modelled as separate awards flagged `cumulative` for faithful round-trip. Awards sharing the same `exclusive_group` value within a card resolve as the highest-scoring single award fires (the card's literal 'OR' rows between tier breakpoints, e.g. Record-Breaking Mission's 3-Fronts vs 4-Fronts).
 
@@ -123,7 +123,7 @@ VP-award blocks: each scores when `trigger` fires and the optional `when` condit
 
 > `optional` **text?**: `string`
 
-Defined in: [generated.ts:1765](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1765)
+Defined in: [generated.ts:3106](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3106)
 
 Community-authored card description (original prose only — no reproduced rules text).
 
@@ -133,4 +133,4 @@ Community-authored card description (original prose only — no reproduced rules
 
 > **game\_version**: [`GameVersionReference`](GameVersionReference.md)
 
-Defined in: [generated.ts:1766](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1766)
+Defined in: [generated.ts:3107](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3107)

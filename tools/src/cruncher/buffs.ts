@@ -10,7 +10,11 @@
  *
  * @packageDocumentation
  */
-import type { Phase } from "../generated.js";
+import type { Phase, WeaponKeywordRef } from "../generated.js";
+export type { WeaponKeywordRef } from "../generated.js";
+import { matchesUnitFilter } from "./unit-filter.js";
+import type { RecipientSnapshot } from "./recipient-snapshots.js";
+export type { RecipientSnapshot } from "./recipient-snapshots.js";
 
 /** Where a buff originated. Drives stable tie-breaking inside `resolveBuffs`. */
 export type BuffSource =
@@ -27,18 +31,13 @@ export type BuffSource =
         | "support";
       /**
        * For `abilityKind: "attached"`, the combined-unit member the ability
-       * came from (so the UI can name it and show its leader/bodyguard role).
-       * Absent for other kinds.
+       * came from (so the UI can name it and show its leader/bodyguard role);
+       * for `"support"`, the other unit that provides it. Absent for other kinds.
        */
       sourceUnitId?: string;
     }
   | { kind: "manual"; label: string };
 
-/** A weapon-keyword reference (id + parameter map), as found on weapon profiles. */
-export type WeaponKeywordRef = {
-  keyword_id: string;
-  parameters?: Record<string, unknown>;
-};
 
 /** One typed contribution; the engine reads `ResolvedModifiers` for the rest. */
 export type BuffContribution =
@@ -89,7 +88,21 @@ export type BuffContribution =
    * picks the better of `printed Sv after AP/cover` and `effective invuln`
    * (invuln bypasses both AP and cover).
    */
-  | { type: "invulnerable-save"; threshold: number };
+  | { type: "invulnerable-save"; threshold: number }
+  /** Attacker-side: an unmodified roll of `value`+ is a critical hit/wound. Lowest wins. */
+  | { type: "crit-threshold"; roll: "hit" | "wound"; value: number }
+  /**
+   * Attacker-side: the attacker ignores every negative modifier to this roll (and, for hits, the
+   * benefit of cover). Positive modifiers still apply.
+   */
+  | { type: "ignore-modifiers"; roll: "hit" | "wound" }
+  /**
+   * Attacker-side: improve the WS or BS characteristic by `value` (a characteristic change, so not
+   * capped like a hit-roll modifier). The engine floors the characteristic at 2+.
+   */
+  | { type: "skill-mod"; stat: "WS" | "BS"; value: number }
+  /** Defender-side: the Save characteristic becomes `value`+. Best (lowest) wins. */
+  | { type: "save-characteristic"; value: number };
 
 /** Optional gating; the resolver drops buffs whose gate fails. */
 export type BuffApplicability = {
@@ -99,13 +112,27 @@ export type BuffApplicability = {
   requiresTargetKeyword?: string;
   /** Attacker must carry this keyword (case-insensitive). */
   requiresAttackerKeyword?: string;
+  attackerFilter?: Record<string, unknown>;
+  targetFilter?: Record<string, unknown>;
+  /** Target must carry none of these keywords (case-insensitive). Permissive when the target's keywords are unknown. */
+  excludedTargetKeywords?: string[];
   /**
-   * Range-gated abilities (DSL `scope.range_inches`, e.g. a "within 18\"" reroll):
-   * the buff applies only when the target is within this many inches. Gate is
-   * permissive when the caller leaves `EngineContext.distanceInches` undefined,
-   * so callers that don't track distance keep their current behavior.
+   * Fixed-distance applicability lowered from canonical range predicates.
+   * Requires a known target distance at or within this inclusive maximum;
+   * absent distance does not establish eligibility.
    */
   maxRangeInches?: number;
+  /**
+   * Only attacks with the weapon of this name (lower case). Missing weapon context does not
+   * establish a match; the engine always supplies its names.
+   */
+  weaponName?: string;
+  /** Structured keyword selectors: inclusion matches any, exclusions reject any. */
+  weaponKeywords?: WeaponKeywordRef[];
+  excludedWeaponKeywords?: WeaponKeywordRef[];
+  excludedWeaponName?: string;
+  /** Additional conjunctive weapon predicates inherited from enclosing effects. */
+  weaponRequirements?: BuffApplicability[];
 };
 
 /** A single buff: where it came from, when it applies, what it contributes. */
@@ -136,8 +163,8 @@ export type EngineContext = {
   withinHalfRange?: boolean;
   /**
    * Distance to the target in inches. Drives `applicableWhen.maxRangeInches`
-   * for range-gated abilities. Undefined when the caller doesn't track distance
-   * — range gates then evaluate permissively (the buff applies).
+   * for range-gated abilities. When absent, explicit maximum-range gates do
+   * not match; buffs without such a gate are unaffected.
    */
   distanceInches?: number;
   /** Attacker benefits from cover (mostly informational; cover applies to defenders). */
@@ -155,15 +182,9 @@ export type EngineContext = {
    * as `"unknown"` and the SPA surfaces a diagnostic.
    */
   timing?: string;
-  /**
-   * The buffed unit is part of a combined ("attached") unit — a leader is
-   * attached to a bodyguard, or vice-versa. Drives the `is-attached` and
-   * `model-is-leader` conditions. Derived from a non-empty
-   * `EligibilityInput.attachedUnitIds`. Left undefined when the caller can't
-   * determine attachment — the conditions then evaluate as `"unknown"` and the
-   * SPA surfaces a diagnostic (mirrors how `timing` undefined behaves).
-   */
+  /** Whether the attacking and defending unit are attached; this alone never establishes a role. */
   attackerAttached?: boolean;
+  targetAttached?: boolean;
   /** The army's Army Faction id. Drives the `army-faction` condition; undefined leaves it "unknown". */
   armyFaction?: string;
   /** The battle size being played. Drives the `battle-size` condition; undefined leaves it "unknown". */
@@ -173,6 +194,37 @@ export type EngineContext = {
    * Drives the `guided` condition; undefined leaves it "unknown".
    */
   attackerGuided?: boolean;
+  /**
+   * Lower-cased names of the attacking weapon and its profile. Drives
+   * `applicableWhen.weaponName`; missing names cannot satisfy a weapon-name gate.
+   */
+  weaponNames?: ReadonlyArray<string>;
+  /**
+   * Catalog IDs printed on the attacking weapon profile, sufficient for rating-agnostic
+   * selectors. The engine also supplies parameter-bearing refs for rated selectors.
+   */
+  weaponKeywords?: ReadonlyArray<string>;
+  /** Parameter-bearing printed keywords, needed for rated weapon selectors. */
+  weaponKeywordRefs?: readonly WeaponKeywordRef[];
+  attackerAttachmentRole?: "leader" | "bodyguard";
+  targetAttachmentRole?: "leader" | "bodyguard";
+  /** Actual per-member roles, used when a condition refers to the ability's source model. */
+  attachmentRoles?: Readonly<Record<string, "leader" | "bodyguard">>;
+  attackerUnitId?: string;
+  targetUnitId?: string;
+  battleRound?: number;
+  /**
+   * Caller-attested trigger-time recipient evidence, not current membership.
+   * Each entry preserves the ability source/sourceUnitId, exact canonical
+   * trigger and selector, selectionPath JSON pointer, perspective,
+   * recipientUnitId, and selected result. Object-key order is immaterial;
+   * array order and every supplied field matter. Callers provide live
+   * event-time evidence and assert activation/equipment; no internal history
+   * or clock is consulted. Missing, mismatched, or conflicting evidence is
+   * unsupported; selected:false resolves to no effect. Parent trigger
+   * identity remains distinct from unrelated effect guards.
+   */
+  recipientSnapshots?: readonly RecipientSnapshot[];
 };
 
 /** Back-compat alias — `resolveBuffs` accepts the shared engine context. */
@@ -212,6 +264,14 @@ export type ResolvedModifiers = {
    * `invuln_sv` from the profile in that case.
    */
   invulnerable: { threshold: number; dominantSource: BuffSource } | null;
+  /** Lowest critical threshold granted per roll; absent rolls crit on a 6. */
+  critThresholds: Partial<Record<"hit" | "wound", { value: number; dominantSource: BuffSource }>>;
+  /** Rolls whose negative modifiers the attacker ignores. */
+  ignoreModifiers: Partial<Record<"hit" | "wound", { dominantSource: BuffSource }>>;
+  /** Summed WS/BS characteristic improvements. */
+  skillMod: Record<"WS" | "BS", { value: number; sources: BuffSource[] }>;
+  /** Ability-set Save characteristic; `null` keeps the printed one. */
+  saveCharacteristic: { value: number; dominantSource: BuffSource } | null;
 };
 
 /** Stable ordering used to break ties when multiple buffs claim the same field. */
@@ -232,9 +292,19 @@ function rank(s: BuffSource): number {
 }
 
 function applies(buff: Buff, ctx: ResolveContext): boolean {
+  if (buff.contribution.type === "extra-keyword") {
+    const parameters = buff.contribution.keywordRef.parameters;
+    const required = parameters?.required_target_keywords_any;
+    const excluded = parameters?.excluded_target_keywords;
+    if ((required !== undefined || excluded !== undefined) && ctx.targetKeywords === undefined) return false;
+    if (Array.isArray(required) && !required.some((keyword) => typeof keyword === "string" && ctx.targetKeywords?.includes(keyword.toLowerCase()))) return false;
+    if (Array.isArray(excluded) && excluded.some((keyword) => typeof keyword === "string" && ctx.targetKeywords?.includes(keyword.toLowerCase()))) return false;
+  }
   const w = buff.applicableWhen;
   if (!w) return true;
-  if (w.phases && w.phases.length > 0 && !w.phases.includes(ctx.phase)) return false;
+  if (w.attackerFilter && matchesUnitFilter(w.attackerFilter, ctx, "attacker", "enemy") !== true) return false;
+  if (w.targetFilter && matchesUnitFilter(w.targetFilter, ctx, "target", "enemy") !== true) return false;
+  if (w.phases && !w.phases.includes(ctx.phase)) return false;
   if (w.rollType && buff.contribution.type === "reroll" && buff.contribution.roll !== w.rollType) {
     return false;
   }
@@ -242,20 +312,81 @@ function applies(buff: Buff, ctx: ResolveContext): boolean {
     const target = ctx.targetKeywords ?? [];
     if (!target.includes(w.requiresTargetKeyword.toLowerCase())) return false;
   }
+  if (w.excludedTargetKeywords && ctx.targetKeywords) {
+    const target = ctx.targetKeywords;
+    if (w.excludedTargetKeywords.some((keyword) => target.includes(keyword.toLowerCase()))) return false;
+  }
   if (w.requiresAttackerKeyword) {
     const attacker = ctx.attackerKeywords ?? [];
     if (!attacker.includes(w.requiresAttackerKeyword.toLowerCase())) return false;
   }
-  // Range gate: drop only when the distance is known and exceeds the ability's
-  // range. Unknown distance is permissive (preserves callers that don't track it).
+  // Unknown distance does not establish an explicit maximum-range predicate.
   if (
     w.maxRangeInches !== undefined &&
-    ctx.distanceInches !== undefined &&
-    ctx.distanceInches > w.maxRangeInches
+    (ctx.distanceInches === undefined || ctx.distanceInches > w.maxRangeInches)
   ) {
     return false;
   }
+  if (w.weaponName !== undefined && !ctx.weaponNames?.includes(w.weaponName)) return false;
+  if (w.excludedWeaponName !== undefined && (ctx.weaponNames === undefined || ctx.weaponNames.includes(w.excludedWeaponName))) return false;
   return true;
+}
+
+/**
+ * The buffs whose gates hold. A weapon-keyword gate reads the weapon's printed keywords plus the
+ * keywords other live buffs grant, so one pass is repeated until no further gated buff joins
+ * ("weapons with Lethal Hits gain Rapid Fire 1" sees a granted Lethal Hits).
+ */
+function liveBuffs(buffs: Buff[], ctx: ResolveContext): Buff[] {
+  const base = buffs.filter((buff) => applies(buff, ctx));
+  const printed = ctx.weaponKeywordRefs ?? ctx.weaponKeywords?.map((keyword_id) => ({ keyword_id }));
+  const selected = new Set<Buff>();
+  const matches = (ref: WeaponKeywordRef, selector: WeaponKeywordRef): boolean =>
+    ref.keyword_id === selector.keyword_id && Object.entries(selector.parameters ?? {}).every(([key, value]) => {
+      const actual = ref.parameters?.[key as keyof NonNullable<WeaponKeywordRef["parameters"]>];
+      if (key === "target_keyword" && typeof actual === "string" && typeof value === "string") return actual.toLowerCase() === value.toLowerCase();
+      if (Array.isArray(value)) return Array.isArray(actual) && actual.length === value.length &&
+        value.every((item) => typeof item === "string" && actual.some((candidate) => typeof candidate === "string" && candidate.toLowerCase() === item.toLowerCase()));
+      return actual === value;
+    });
+  const gatesHold = (gate: BuffApplicability | undefined, refs: readonly WeaponKeywordRef[] | undefined, exclusions: boolean): boolean => {
+    if (!gate) return true;
+    if (gate.weaponName !== undefined && !ctx.weaponNames?.includes(gate.weaponName)) return false;
+    if (gate.excludedWeaponName !== undefined && (ctx.weaponNames === undefined || ctx.weaponNames.includes(gate.excludedWeaponName))) return false;
+    if (gate.weaponRequirements?.some((required) => !gatesHold(required, refs, exclusions))) return false;
+    const selectors = exclusions ? gate.excludedWeaponKeywords : gate.weaponKeywords;
+    if (selectors === undefined) return true;
+    if (refs === undefined) return false;
+    if (exclusions && selectors.some((selector) => refs.some((ref) => ref.keyword_id === selector.keyword_id &&
+      Object.keys(selector.parameters ?? {}).some((key) => ref.parameters?.[key as keyof NonNullable<WeaponKeywordRef["parameters"]>] === undefined)))) return false;
+    const found = selectors.some((selector) => refs.some((ref) => matches(ref, selector)));
+    return exclusions ? !found : found;
+  };
+  // Positive dependencies are monotone. Resolve them first, then apply exclusions against the
+  // complete candidate keyword set so a granted keyword cannot bypass an exclusion.
+  for (;;) {
+    const refs = printed === undefined ? undefined : [...printed];
+    if (refs) for (const buff of selected) {
+      if (buff.contribution.type === "extra-keyword") refs.push(buff.contribution.keywordRef);
+    }
+    const next = base.filter((buff) => !selected.has(buff) && gatesHold(buff.applicableWhen, refs, false));
+    if (next.length === 0) break;
+    for (const buff of next) selected.add(buff);
+  }
+  const refs = printed === undefined ? undefined : [...printed];
+  if (refs) for (const buff of selected) {
+    if (buff.contribution.type === "extra-keyword") refs.push(buff.contribution.keywordRef);
+  }
+  let live = base.filter((buff) => selected.has(buff) && gatesHold(buff.applicableWhen, refs, true));
+  for (;;) {
+    const remaining = printed === undefined ? undefined : [...printed];
+    if (remaining) for (const buff of live) {
+      if (buff.contribution.type === "extra-keyword") remaining.push(buff.contribution.keywordRef);
+    }
+    const next = live.filter((buff) => gatesHold(buff.applicableWhen, remaining, false));
+    if (next.length === live.length) return live;
+    live = next;
+  }
 }
 
 /**
@@ -264,7 +395,7 @@ function applies(buff: Buff, ctx: ResolveContext): boolean {
  * before crunching — both go through this.
  */
 export function resolveBuffs(buffs: Buff[], ctx: ResolveContext): ResolvedModifiers {
-  const live = buffs.filter((b) => applies(b, ctx));
+  const live = liveBuffs(buffs, ctx);
 
   const out: ResolvedModifiers = {
     hitMod: { value: 0, dominantSource: null },
@@ -282,6 +413,10 @@ export function resolveBuffs(buffs: Buff[], ctx: ResolveContext): ResolvedModifi
     apMod: { value: 0, sources: [] },
     damageReduction: { value: 0, dominantSource: null },
     invulnerable: null,
+    critThresholds: {},
+    ignoreModifiers: {},
+    skillMod: { WS: { value: 0, sources: [] }, BS: { value: 0, sources: [] } },
+    saveCharacteristic: null,
   };
 
   // Hit / wound mods: sum, then cap at ±1, with dominant source picked from
@@ -384,11 +519,38 @@ export function resolveBuffs(buffs: Buff[], ctx: ResolveContext): ResolvedModifi
           out.invulnerable = { threshold: c.threshold, dominantSource: b.source };
         }
         break;
+      case "crit-threshold": {
+        const cur = out.critThresholds[c.roll];
+        if (!cur || c.value < cur.value || (c.value === cur.value && rank(b.source) < rank(cur.dominantSource))) {
+          out.critThresholds[c.roll] = { value: c.value, dominantSource: b.source };
+        }
+        break;
+      }
+      case "ignore-modifiers": {
+        const cur = out.ignoreModifiers[c.roll];
+        if (!cur || rank(b.source) < rank(cur.dominantSource)) out.ignoreModifiers[c.roll] = { dominantSource: b.source };
+        break;
+      }
+      case "skill-mod":
+        out.skillMod[c.stat].value += c.value;
+        out.skillMod[c.stat].sources.push(b.source);
+        break;
+      case "save-characteristic":
+        if (
+          out.saveCharacteristic === null ||
+          c.value < out.saveCharacteristic.value ||
+          (c.value === out.saveCharacteristic.value && rank(b.source) < rank(out.saveCharacteristic.dominantSource))
+        ) {
+          out.saveCharacteristic = { value: c.value, dominantSource: b.source };
+        }
+        break;
     }
   }
 
-  out.hitMod = capModifier(hitContribs);
-  out.woundMod = capModifier(woundContribs);
+  // An ignored roll keeps only its positive modifiers.
+  const kept = (contribs: { value: number; source: BuffSource }[], ignored: boolean) => (ignored ? contribs.filter((c) => c.value > 0) : contribs);
+  out.hitMod = capModifier(kept(hitContribs, out.ignoreModifiers.hit !== undefined));
+  out.woundMod = capModifier(kept(woundContribs, out.ignoreModifiers.wound !== undefined));
 
   return out;
 }

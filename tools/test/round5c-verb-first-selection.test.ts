@@ -82,7 +82,7 @@ describe("Round 5C verb-first selections", () => {
     const verbFirst = effectOf(VERB_FIRST, verbFirstPieces);
     expect(verbFirst).toEqual({
       type: "select-units",
-      selector: expect.objectContaining({ owner: "friendly", max_count: 3 }),
+      selector: expect.objectContaining({ filter: { owner: "friendly", all_of: ["ADEPTUS ASTARTES", "INFANTRY"] }, count: { min: 0, max: 3 } }),
       effect: {
         type: "choice",
         options: [
@@ -132,15 +132,15 @@ describe("Round 5C verb-first selections", () => {
     expect(errors).toEqual(['"Or:" needs an effect on each side to choose between.']);
   });
 
-  it("compiles a count of up to three to max_count on the selection", () => {
+  it("compiles a count of up to three to canonical count bounds on the selection", () => {
     const text = "Select up to three friendly units. Move them.";
     const effect = effectOf(text, [
       ["Select up to three", "select-unit", { distance: "any", visible: false, count: 3, up_to: true }],
       ["friendly units", "unit-filter", { side: "friendly", keywords: ["INFANTRY"] }],
       ["Move them", "set-up", { subject: "antecedent", to: "battlefield" }],
     ]) as { selector: Record<string, unknown> };
-    expect(effect.selector).toMatchObject({ max_count: 3 });
-    expect(effect.selector).not.toHaveProperty("count");
+    expect(effect.selector).toMatchObject({ count: { min: 0, max: 3 } });
+    expect(effect.selector).not.toHaveProperty("max_count");
   });
 
   it("compiles the select-first record with a battlefield-or-Strategic-Reserves choice", () => {
@@ -153,7 +153,7 @@ describe("Round 5C verb-first selections", () => {
       ["set them up in Strategic Reserves", "set-up", { subject: "antecedent", to: "strategic-reserves", ignore_limits: true }],
     ]) as { type: string; selector: Record<string, unknown>; effect: { type: string } };
     expect(effect.type).toBe("select-units");
-    expect(effect.selector).toMatchObject({ max_count: 3 });
+    expect(effect.selector).toMatchObject({ count: { min: 0, max: 3 } });
     expect(effect.effect.type).toBe("choice");
   });
 });

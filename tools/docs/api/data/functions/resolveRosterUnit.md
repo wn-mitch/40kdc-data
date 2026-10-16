@@ -8,7 +8,7 @@
 
 > **resolveRosterUnit**(`rosterUnit`, `dataset`, `factionId?`): [`UnitView`](../classes/UnitView.md) \| `undefined`
 
-Defined in: [data/roster-resolve.ts:27](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/roster-resolve.ts#L27)
+Defined in: [data/roster-resolve.ts:32](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/roster-resolve.ts#L32)
 
 Resolve a roster's unit entry against the dataset, returning the linked
 [UnitView](../classes/UnitView.md). Returns `undefined` when:

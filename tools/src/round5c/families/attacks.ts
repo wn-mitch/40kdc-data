@@ -132,6 +132,17 @@ export const ATTACK_EXTENSIONS: readonly FamilyExtension[] = [
    * following-filter. Refused without direction makes, and with unit that-unit.
    */
   ATTACK_TARGET_FOLLOWING,
+  {
+    family: "attack",
+    version: 8,
+    description: "As the previous version, plus refers earlier-permission: resolving the attacks made by the nearest preceding allowed shoot or fight permission in the same fragment. The actor and attack type come from that permission; its attack modifiers last only for that resolution, not afterwards.",
+    schema: (previous) => withProperties(previous, {
+      refers: optional({ enum: ["earlier-attack", "earlier-permission"] }),
+    }),
+    normalize: (input, previous) => input.refers === "earlier-permission"
+      ? standIn(input, "refers", "earlier-attack", previous)
+      : previous(input),
+  },
   /**
    * "Those attacks": the attacks of an earlier shooting moment of the same record. Compilation
    * binds them to that moment (`compile-bound-attacks.ts`); the leaf only records that it points

@@ -96,7 +96,7 @@ export function lowerDelayedDestruction(
     trigger: { event: "phase-ended" },
     condition: {
       type: "happened",
-      parameters: { event: "model-destroyed", object: "this-model", window: "phase", count_min: 1 },
+      parameters: { event: "model-destroyed", object: "this-model", window: "phase", count: { min: 1 } },
     },
   };
 }

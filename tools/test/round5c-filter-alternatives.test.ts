@@ -113,31 +113,29 @@ describe("unit-filter alternatives (compilation)", () => {
     const restrictions = (result.core as Record<string, unknown>).target_restrictions as Record<string, unknown>;
     expect(restrictions.required_keywords).toBeUndefined();
     expect(restrictions.eligibility).toEqual({ operator: "or", operands: [
-      { type: "has-keyword", parameters: { all_of: ["ALPHA"] } },
-      { operator: "and", operands: [{ type: "has-keyword", parameters: { all_of: ["BETA", "GAMMA"] } }, { operator: "not", operands: [{ type: "unit-state", parameters: { state: "engaged" } }] }] },
+      { type: "matches", parameters: { filter: { all_of: ["ALPHA"] } } },
+      { operator: "and", operands: [{ type: "matches", parameters: { filter: { all_of: ["BETA", "GAMMA"] } } }, { type: "matches", parameters: { filter: { not_states: ["engaged"] } } }] },
     ] });
   });
 
-  it("checks a selection's alternatives in its eligibility", () => {
+  it("preserves a selection's alternatives on its filter", () => {
     const text = "Select one friendly ALPHA or BETA GAMMA unit. That unit gains the DELTA keyword.";
     const result = compiled(placed(text,
       ["Select one", "select-unit", { distance: "any", visible: false }],
       ["friendly ALPHA or BETA GAMMA unit", "unit-filter", { side: "friendly", alternatives: ALPHA_OR_BETA_GAMMA }],
       ["That unit gains the DELTA keyword", "keyword-grant", { subject: "antecedent", keywords: ["DELTA"] }]), text);
     const selection = nodes(result.mechanics, (node) => node.type === "select-units")[0]!;
-    expect((selection.selector as Record<string, unknown>).keywords).toBeUndefined();
-    expect((selection.selector as Record<string, unknown>).eligibility).toEqual({ operator: "or", operands: [
-      { type: "has-keyword", parameters: { all_of: ["ALPHA"] } }, { type: "has-keyword", parameters: { all_of: ["BETA", "GAMMA"] } },
-    ] });
+    expect(selection.selector).toEqual({ filter: { owner: "friendly", any_of_filters: [{ all_of: ["ALPHA"] }, { all_of: ["BETA", "GAMMA"] }] }, count: { min: 1, max: 1 } });
   });
 
-  it("refuses an aura over alternatives rather than reaching the union of their keywords", () => {
+  it("preserves each aura alternative rather than reaching the union of their keywords", () => {
     const text = "While a friendly ALPHA or BETA GAMMA unit is within 6\" of this unit, that unit gains the DELTA keyword.";
     const result = compileLeaves(placed(text,
       ["friendly ALPHA or BETA GAMMA unit", "unit-filter", { side: "friendly", alternatives: ALPHA_OR_BETA_GAMMA }],
       ["within 6\" of this unit", "aura-range", { inches: 6, of: "this-unit" }],
       ["that unit gains the DELTA keyword", "keyword-grant", { subject: "antecedent", keywords: ["DELTA"] }]), text);
-    expect(result.ok ? [] : result.errors.join()).toMatch(/alternatives that differ by more than one keyword/u);
+    expect(result.ok).toBe(true);
+    if (result.ok) expect(result.mechanics.effect).toMatchObject({ type: "aura", modifier: { eligible: { owner: "friendly", any_of_filters: [{ all_of: ["ALPHA"] }, { all_of: ["BETA", "GAMMA"] }] } } });
   });
 
   it("checks an attack's target against any one alternative", () => {
@@ -146,9 +144,9 @@ describe("unit-filter alternatives (compilation)", () => {
       ["Each time a model in this unit makes an attack", "attack", { direction: "makes", unit: "this-unit", attack_type: "any" }],
       ["ALPHA or BETA GAMMA unit", "unit-filter", { side: "enemy", alternatives: ALPHA_OR_BETA_GAMMA }],
       ["add 1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1 }]), text);
-    expect(JSON.stringify(result.mechanics)).toContain(JSON.stringify({ operator: "or", operands: [
-      { type: "has-keyword", parameters: { all_of: ["ALPHA"], subject: "defender" } }, { type: "has-keyword", parameters: { all_of: ["BETA", "GAMMA"], subject: "defender" } },
-    ] }));
+    expect(nodes(result.mechanics, (node) => node.type === "matches")).toContainEqual({
+      type: "matches", parameters: { subject: "defender", filter: { any_of_filters: [{ all_of: ["ALPHA"] }, { all_of: ["BETA", "GAMMA"] }] } },
+    });
   });
 
   it("measures a distance to a unit of any one alternative", () => {
@@ -156,8 +154,9 @@ describe("unit-filter alternatives (compilation)", () => {
     const result = compiled(placed(text,
       ["within 3\" of one or more friendly ALPHA or BETA GAMMA units", "unit-position", { kind: "within", inches: 3, subject: "this-unit", negated: false, of: "matching-unit", of_side: "friendly", of_alternatives: ALPHA_OR_BETA_GAMMA }],
       ["this unit gains the DELTA keyword", "keyword-grant", { subject: "this-unit", keywords: ["DELTA"] }]), text);
-    const within = nodes(result.mechanics, (node) => node.type === "within")[0]!;
-    expect((within.parameters as Record<string, unknown>).of).toEqual({ owner: "friendly", any_of_filters: [{ all_of: ["ALPHA"] }, { all_of: ["BETA", "GAMMA"] }] });
+    expect(nodes(result.mechanics, (node) => node.type === "matches")).toContainEqual({
+      type: "matches", parameters: { filter: { within: { range: { inches: 3 }, of: { owner: "friendly", any_of_filters: [{ all_of: ["ALPHA"] }, { all_of: ["BETA", "GAMMA"] }] } } } },
+    });
     expect(checkEntry(entryWithMechanics(authored, result.mechanics)).errors).toEqual([]);
   });
 });

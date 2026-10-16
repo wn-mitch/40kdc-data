@@ -13,14 +13,12 @@ from collections.abc import Callable
 from typing import Any
 
 from wh40kdc.translate.condition_refs import _objective_phrase
-from wh40kdc.translate.effect_quantity import roll_kind_noun
+from wh40kdc.translate.effect_quantity import quantity_phrase, roll_kind_noun
 from wh40kdc.translate.effect_words import (
-    ability_label,
     capitalize,
     dice_case,
     jstr,
     num,
-    range_phrase,
     title_case,
 )
 
@@ -47,55 +45,62 @@ def roll_head(e: dict[str, Any]) -> str:
     return f"roll {dice_case(e.get('dice'))}{extra}{kind}"
 
 
-_ORIGINS = {"bearer": "the bearer", "bearer-unit": "the bearer's unit"}
+def _selector_count(sel: dict[str, Any]) -> tuple[str, bool]:
+    bounds = _obj(sel.get("count"))
+    minimum = bounds.get("min")
+    maximum = bounds.get("max")
+
+    def quantity(value: Any) -> str:
+        if isinstance(value, dict):
+            return quantity_phrase(value)
+        return "one" if num(value) == 1 else jstr(value)
+
+    if minimum is not None and minimum == maximum:
+        return quantity(minimum), maximum != 1
+    if minimum is not None and maximum is not None and minimum != 0:
+        return f"from {quantity(minimum)} through {quantity(maximum)}", maximum != 1
+    if maximum is not None:
+        return f"up to {quantity(maximum)}", maximum != 1
+    if minimum is not None:
+        return f"at least {quantity(minimum)}", True
+    return "each", False
+
+def _selection_binding(sel: dict[str, Any], plural: bool) -> str:
+    binding = sel.get("bind_as")
+    if not isinstance(binding, str) or not binding:
+        return ""
+    name = binding.replace("-", " ").replace("_", " ")
+    return f", binding {'them' if plural else 'it'} as {name}"
+
+
+def _selection_limit(sel: dict[str, Any], noun: str) -> str:
+    limit = _obj(sel.get("limit"))
+    if not limit:
+        return ""
+    times = "once" if num(limit.get("count")) == 1 else f"{jstr(limit.get('count'))} times"
+    period = jstr(limit.get("period")).replace("-", " ")
+    return (
+        f" (each {noun} can be selected for this ability at most {times} "
+        f"per {period} across your army)"
+    )
 
 
 def objective_selector_phrase(sel: dict[str, Any]) -> str:
-    """ "one objective marker you control that the bearer's unit is within range of"."""
-    each = sel.get("count") == "each"
-    n = num(sel["count"] if sel.get("count") is not None else 1)
-    noun = "objective marker" if each or n == 1 else "objective markers"
-    controlled = sel.get("controlled_by")
-    control = (
-        {"controlled_by": "friendly"}
-        if controlled == "your-army"
-        else {"controlled_by": "enemy"}
-        if controlled == "opponent"
-        else {}
-    )
-    base = _objective_phrase({**_obj(sel.get("filter")), **control}, False, noun)
-    quantity = "each" if each else "one" if n == 1 else jstr(sel.get("count"))
-    origin_id = jstr(sel["origin"] if sel.get("origin") is not None else "bearer")
-    origin = _ORIGINS.get(origin_id, "the bearer")
-    s = f"{quantity} {base}"
-    if sel.get("range") == "objective-control":
-        s += f" that {origin} is within range of"
-    elif sel.get("range") is not None:
-        s += f" within {range_phrase(sel['range'])} of {origin}"
-    elif sel.get("range_inches") is not None:
-        s += f' within {jstr(sel["range_inches"])}" of {origin}'
-    req = sel.get("requires_unit")
-    if req is not None:
-        r = _obj(req)
-        who = "an enemy" if r.get("owner") == "enemy" else "a friendly"
-        ability = ability_label(r.get("requires_ability"))
-        s += f" with {who} unit with the {ability} ability within range of it"
-    return s
+    count, plural = _selector_count(sel)
+    noun = "objective markers" if plural else "objective marker"
+    base = _objective_phrase(_obj(sel.get("filter")), False, noun)
+    eligibility = ""
+    if isinstance(sel.get("eligibility"), dict):
+        from wh40kdc.translate.condition_leadin import describe_selection_eligibility
 
-
-def _selection_limit(sel: dict[str, Any]) -> str:
-    limit = sel.get("selection_limit")
-    if limit is None:
-        return ""
-    lim = _obj(limit)
-    times = "once" if num(lim.get("count")) == 1 else f"{jstr(lim.get('count'))} times"
-    period = jstr(lim.get("period")).replace("-", " ")
-    return f" (each objective marker can be selected for this ability at most {times} per {period})"
+        eligibility = f" {describe_selection_eligibility(sel['eligibility'])}"
+    binding = _selection_binding(sel, plural)
+    limit = _selection_limit(sel, "objective marker")
+    return f"{count} {base}{eligibility}{binding}{limit}"
 
 
 def _lead(sel: dict[str, Any]) -> str:
-    verb = "for" if sel.get("count") == "each" else "select"
-    return f"{verb} {objective_selector_phrase(sel)}{_selection_limit(sel)}"
+    return f"{'for' if sel.get('count') is None else 'select'} {objective_selector_phrase(sel)}"
 
 
 def select_objective_inline(e: dict[str, Any], inline: Render) -> str:

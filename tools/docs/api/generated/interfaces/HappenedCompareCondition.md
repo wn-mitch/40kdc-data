@@ -6,7 +6,7 @@
 
 # Interface: HappenedCompareCondition
 
-Defined in: [generated.ts:1975](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1975)
+Defined in: [generated.ts:2003](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2003)
 
 [history] Compares how many times two events happened (mission cards).
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:1975](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **type**: `"happened-compare"`
 
-Defined in: [generated.ts:1976](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1976)
+Defined in: [generated.ts:2004](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2004)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:1976](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **parameters**: `object`
 
-Defined in: [generated.ts:1977](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1977)
+Defined in: [generated.ts:2005](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2005)
 
 #### left
 
@@ -52,7 +52,7 @@ Defined in: [generated.ts:1977](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 #### comparison
 
-> **comparison**: `"greater-than"` \| `"greater-or-equal"`
+> **comparison**: [`Comparison`](../type-aliases/Comparison.md)
 
 #### right
 

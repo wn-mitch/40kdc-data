@@ -6,7 +6,7 @@
 
 # Interface: ResourceCondition
 
-Defined in: [generated.ts:2170](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2170)
+Defined in: [generated.ts:2169](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2169)
 
 [resource] A resource pool holds at least / at most this much. below_max: fewer uses than its maximum have been spent.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:2170](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **type**: `"resource"`
 
-Defined in: [generated.ts:2171](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2171)
+Defined in: [generated.ts:2170](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2170)
 
 ***
 
@@ -24,19 +24,15 @@ Defined in: [generated.ts:2171](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **parameters**: `object`
 
-Defined in: [generated.ts:2172](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2172)
+Defined in: [generated.ts:2171](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2171)
 
 #### pool
 
 > **pool**: `string`
 
-#### at\_least?
+#### count?
 
-> `optional` **at\_least?**: `number`
-
-#### at\_most?
-
-> `optional` **at\_most?**: `number`
+> `optional` **count?**: [`CountBounds`](CountBounds.md)
 
 #### below\_max?
 
@@ -56,4 +52,4 @@ Defined in: [generated.ts:2172](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 #### at?
 
-> `optional` **at?**: `"now"` \| `"opponents-previous-turn-end"`
+> `optional` **at?**: [`Snapshot`](../type-aliases/Snapshot.md)

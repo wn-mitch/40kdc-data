@@ -50,6 +50,7 @@ const parseSeveral = (ref: string) => JSON.parse(ref.slice(SEVERAL.length)) as S
  * binds selected and triggering units to.
  */
 export const TARGET_REF_KEYS: Readonly<Record<string, readonly string[]>> = {
+  "named-ability-grant": ["subject"], "named-ability-suppression": ["subject"], "named-ability-exchange": ["subject"],
   "characteristic-modifier": ["subject"], "weapon-ability-grant": ["subject"], "weapon-ability-range": ["subject"], "keyword-grant": ["subject"], "feel-no-pain": ["subject"],
   "regain-wounds": ["subject"], "return-models": ["subject"], "eligibility-permission": ["subject", "into"], "core-ability-grant": ["subject"],
   "invulnerable-save": ["subject"], "ability-record-grant": ["subject"], "move-through": ["subject"],
@@ -396,7 +397,7 @@ function replaced(node: unknown, from: string, to: unknown): unknown {
 }
 
 /** Whether a target has the keywords its gate names (the alternative it was selected by). */
-const hasKeywords = (name: string, keywords: readonly string[]): Node => ({ type: "has-keyword", parameters: { subject: { stratagem_target: name }, all_of: [...keywords] } });
+const hasKeywords = (name: string, keywords: readonly string[]): Node => ({ type: "matches", parameters: { subject: { stratagem_target: name }, filter: { all_of: [...keywords] } } });
 
 function expand(node: unknown, key: string | null, parent: Position): unknown {
   if (typeof node === "string") {

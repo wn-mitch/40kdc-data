@@ -102,19 +102,23 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "subject": "this-model",
-          "of": {
-            "owner": "friendly",
-            "all_of": [
-              "HERETIC ASTARTES",
-              "INFANTRY"
-            ]
+          "filter": {
+            "within": {
+              "range": {
+                "inches": 3
+              },
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "HERETIC ASTARTES",
+                  "INFANTRY"
+                ]
+              }
+            }
           },
-          "range": {
-            "inches": 3
-          }
+          "subject": "this-model"
         }
       },
       "effect": {
@@ -194,7 +198,7 @@
       "type": "mortal-wounds",
       "target": "defender",
       "modifier": {
-        "count": "1"
+        "count": 1
       }
     },
     "scope": {
@@ -293,10 +297,22 @@
       "effect": {
         "type": "select-units",
         "selector": {
-          "owner": "enemy",
-          "count": 1,
-          "within_inches": 12,
-          "visibility_required": true
+          "filter": {
+            "owner": "enemy",
+            "within": {
+              "range": {
+                "inches": 12
+              },
+              "of": "this-model"
+            },
+            "visible": {
+              "to": "this-model"
+            }
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
         },
         "effect": {
           "type": "dice-gated",
@@ -782,7 +798,7 @@
           "type": "mortal-wounds",
           "target": "defender",
           "modifier": {
-            "count": "1"
+            "count": 1
           }
         }
       ]
@@ -823,8 +839,10 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Indirect Fire"
+          "keywords": [
+            {
+              "keyword_id": "indirect-fire"
+            }
           ]
         }
       }
@@ -1086,8 +1104,10 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Devastating Wounds"
+        "keywords": [
+          {
+            "keyword_id": "devastating-wounds"
+          }
         ]
       }
     },
@@ -1255,17 +1275,28 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "owner": "friendly",
-        "count": 1,
-        "keywords": [
-          "HERETIC ASTARTES"
-        ],
-        "within_inches": 12,
-        "reference": "bearer",
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "HERETIC ASTARTES"
+          ],
+          "within": {
+            "range": {
+              "inches": 12
+            },
+            "of": "this-model"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
         "eligibility": {
-          "type": "unit-state",
+          "type": "matches",
           "parameters": {
-            "state": "battle-shocked"
+            "filter": {
+              "state": "battle-shocked"
+            }
           }
         }
       },
@@ -1310,7 +1341,7 @@
         "type": "mortal-wounds",
         "target": "defender",
         "modifier": {
-          "count": "1"
+          "count": 1
         }
       }
     },
@@ -1340,12 +1371,14 @@
         "operator": "not",
         "operands": [
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "recipient",
-              "all_of": [
-                "VEHICLE"
-              ]
+              "filter": {
+                "all_of": [
+                  "VEHICLE"
+                ]
+              },
+              "subject": "recipient"
             }
           }
         ]
@@ -1496,12 +1529,14 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "subject": "defender",
-          "all_of": [
-            "HERETIC ASTARTES"
-          ]
+          "filter": {
+            "all_of": [
+              "HERETIC ASTARTES"
+            ]
+          },
+          "subject": "defender"
         }
       },
       "effect": {
@@ -1873,16 +1908,34 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
+        "type": "matches",
         "parameters": {
-          "phase": "shooting"
+          "filter": {
+            "within": {
+              "of": {
+                "objective": {}
+              },
+              "range": "objective-control"
+            }
+          }
         }
       },
       "effect": {
-        "type": "ability-grant",
-        "target": "this-unit",
-        "modifier": {
-          "ability": "benefit-of-cover"
+        "type": "conditional",
+        "condition": {
+          "type": "attack-is",
+          "parameters": {
+            "attack_type": "ranged"
+          }
+        },
+        "effect": {
+          "type": "stat-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "stat": "Sv",
+            "operation": "improve",
+            "value": 1
+          }
         }
       }
     },
@@ -1893,7 +1946,7 @@
       "traitor-guardsmen-squad"
     ],
     "ability_type": "unit",
-    "behavior": "reactive",
+    "behavior": "passive",
     "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "chaos-space-marines"
   },
@@ -1909,12 +1962,14 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "subject": "defender",
-          "all_of": [
-            "FLY"
-          ]
+          "filter": {
+            "all_of": [
+              "FLY"
+            ]
+          },
+          "subject": "defender"
         }
       },
       "effect": {
@@ -1972,7 +2027,9 @@
                 }
               },
               "kind": "shoot",
-              "weapon_name": "demolisher cannon"
+              "weapons": {
+                "name": "demolisher cannon"
+              }
             }
           },
           {
@@ -1984,7 +2041,9 @@
                 "hit"
               ],
               "only": "worsening",
-              "weapon_type": "ranged"
+              "weapons": {
+                "type": "ranged"
+              }
             }
           }
         ]
@@ -2014,8 +2073,10 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Devastating Wounds"
+        "keywords": [
+          {
+            "keyword_id": "devastating-wounds"
+          }
         ]
       }
     },
@@ -2042,19 +2103,23 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "subject": "this-model",
-          "of": {
-            "owner": "friendly",
-            "all_of": [
-              "HERETIC ASTARTES",
-              "VEHICLE"
-            ]
+          "filter": {
+            "within": {
+              "range": {
+                "inches": 3
+              },
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "HERETIC ASTARTES",
+                  "VEHICLE"
+                ]
+              }
+            }
           },
-          "range": {
-            "inches": 3
-          }
+          "subject": "this-model"
         }
       },
       "effect": {
@@ -2088,15 +2153,25 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "owner": "friendly",
-        "count": 1,
-        "keywords": [
-          "HERETIC ASTARTES",
-          "VEHICLE"
-        ],
-        "within_inches": 3,
-        "target_kind": "model",
-        "selection_limit": {
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "HERETIC ASTARTES",
+            "VEHICLE"
+          ],
+          "level": "model",
+          "within": {
+            "range": {
+              "inches": 3
+            },
+            "of": "this-model"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "limit": {
           "count": 1,
           "period": "phase"
         }
@@ -2342,41 +2417,32 @@
         "operator": "and",
         "operands": [
           {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent-turn"
-            }
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "opponent-turn"
+                }
+              }
+            ]
           },
           {
             "type": "happened",
             "parameters": {
-              "event": "destroyed",
-              "object": "event-object",
+              "event": "model-destroyed",
+              "object": "model-in-this-unit",
               "filter": {
-                "attack_type": "ranged"
+                "by": "event-subject"
               },
               "window": "event"
             }
-          },
-          {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "within",
-                "parameters": {
-                  "of": {
-                    "owner": "enemy"
-                  },
-                  "range": "engagement"
-                }
-              }
-            ]
           }
         ]
       },
@@ -2384,20 +2450,29 @@
         "type": "move",
         "target": "this-unit",
         "modifier": {
-          "move_type": "normal",
+          "move_type": "surge",
           "distance": "D6"
         }
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "unit_ids": [
       "accursed-cultists"
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "faction_id": "chaos-space-marines"
+    "faction_id": "chaos-space-marines",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "subject": {
+        "owner": "enemy"
+      }
+    }
   },
   {
     "ability_id": "dark-ascension-chaos-space-marines",
@@ -2661,12 +2736,16 @@
             "operator": "not",
             "operands": [
               {
-                "type": "within",
+                "type": "matches",
                 "parameters": {
-                  "of": {
-                    "owner": "enemy"
-                  },
-                  "range": "engagement"
+                  "filter": {
+                    "within": {
+                      "range": "engagement",
+                      "of": {
+                        "owner": "enemy"
+                      }
+                    }
+                  }
                 }
               }
             ]
@@ -2719,9 +2798,11 @@
           "trigger": {
             "event": "battle-started",
             "condition": {
-              "type": "unit-state",
+              "type": "matches",
               "parameters": {
-                "state": "in-strategic-reserves"
+                "filter": {
+                  "state": "in-strategic-reserves"
+                }
               }
             }
           },
@@ -2746,10 +2827,12 @@
             "operator": "not",
             "operands": [
               {
-                "type": "unit-state",
+                "type": "matches",
                 "parameters": {
-                  "subject": "this-model",
-                  "state": "on-battlefield"
+                  "filter": {
+                    "state": "on-battlefield"
+                  },
+                  "subject": "this-model"
                 }
               }
             ]
@@ -2995,15 +3078,19 @@
         "operator": "or",
         "operands": [
           {
-            "type": "unit-state",
+            "type": "matches",
             "parameters": {
-              "state": "on-battlefield"
+              "filter": {
+                "state": "on-battlefield"
+              }
             }
           },
           {
-            "type": "unit-state",
+            "type": "matches",
             "parameters": {
-              "state": "embarked"
+              "filter": {
+                "state": "embarked"
+              }
             }
           }
         ]
@@ -3011,11 +3098,16 @@
       "effect": {
         "type": "select-units",
         "selector": {
-          "owner": "friendly",
-          "max_count": 3,
-          "keywords": [
-            "HERETIC ASTARTES"
-          ]
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "HERETIC ASTARTES"
+            ]
+          },
+          "count": {
+            "min": 0,
+            "max": 3
+          }
         },
         "effect": {
           "type": "choice",
@@ -3069,10 +3161,22 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "owner": "enemy",
-        "count": 1,
-        "within_inches": 12,
-        "visibility_required": true
+        "filter": {
+          "owner": "enemy",
+          "within": {
+            "range": {
+              "inches": 12
+            },
+            "of": "this-model"
+          },
+          "visible": {
+            "to": "this-model"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        }
       },
       "effect": {
         "type": "dice-gated",
@@ -3180,19 +3284,23 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "subject": "this-model",
-          "of": {
-            "owner": "friendly",
-            "all_of": [
-              "DAEMON",
-              "VEHICLE"
-            ]
+          "filter": {
+            "within": {
+              "range": {
+                "inches": 3
+              },
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "DAEMON",
+                  "VEHICLE"
+                ]
+              }
+            }
           },
-          "range": {
-            "inches": 3
-          }
+          "subject": "this-model"
         }
       },
       "effect": {
@@ -3229,10 +3337,12 @@
         "operator": "not",
         "operands": [
           {
-            "type": "unit-state",
+            "type": "matches",
             "parameters": {
-              "subject": "recipient",
-              "state": "battle-shocked"
+              "filter": {
+                "state": "battle-shocked"
+              },
+              "subject": "recipient"
             }
           }
         ]
@@ -3287,23 +3397,29 @@
         "operator": "and",
         "operands": [
           {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "subject": "event-subject",
-              "of": "this-unit",
-              "range": {
-                "inches": 8
-              }
+              "filter": {
+                "within": {
+                  "range": {
+                    "inches": 8
+                  },
+                  "of": "this-unit"
+                }
+              },
+              "subject": "event-subject"
             }
           },
           {
             "operator": "not",
             "operands": [
               {
-                "type": "unit-state",
+                "type": "matches",
                 "parameters": {
-                  "subject": "this-unit",
-                  "state": "engaged"
+                  "filter": {
+                    "state": "engaged"
+                  },
+                  "subject": "this-unit"
                 }
               }
             ]
@@ -3358,7 +3474,7 @@
         "type": "mortal-wounds",
         "target": "defender",
         "modifier": {
-          "count": "1"
+          "count": 1
         }
       }
     },
@@ -3445,117 +3561,127 @@
         ]
       },
       "effect": {
-        "type": "stance-select",
-        "mode": "re-selectable",
-        "scope": "unit",
-        "select": "command-phase",
-        "options": [
-          {
-            "name": "Paragon of Hatred",
-            "effect": {
-              "type": "re-roll",
-              "target": {
-                "owner": "friendly",
-                "all_of": [
-                  "HERETIC ASTARTES"
-                ],
-                "none_of": [
-                  "DAMNED"
-                ],
-                "within": {
-                  "range": {
-                    "inches": 6
-                  },
-                  "of": "this-model"
-                }
-              },
-              "modifier": {
-                "roll": "hit",
-                "result_scope": "any-result"
-              }
-            }
-          },
-          {
-            "name": "Mark of Chaos Ascendant",
-            "effect": {
-              "type": "invulnerable-save",
-              "target": {
-                "owner": "friendly",
-                "all_of": [
-                  "HERETIC ASTARTES"
-                ],
-                "any_of": [
-                  "INFANTRY",
-                  "MOUNTED"
-                ],
-                "none_of": [
-                  "DAMNED"
-                ],
-                "within": {
-                  "range": {
-                    "inches": 6
-                  },
-                  "of": "this-model"
-                }
-              },
-              "modifier": {
-                "invuln_sv": 4
-              }
-            }
-          },
-          {
-            "name": "Lord of the Traitor Legions",
-            "effect": {
-              "type": "sequence",
-              "steps": [
-                {
-                  "type": "re-roll",
-                  "target": {
-                    "owner": "friendly",
-                    "all_of": [
-                      "HERETIC ASTARTES"
-                    ],
-                    "none_of": [
-                      "DAMNED"
-                    ],
-                    "within": {
-                      "range": {
-                        "inches": 6
-                      },
-                      "of": "this-model"
-                    }
-                  },
-                  "modifier": {
-                    "roll": "leadership",
-                    "result_scope": "any-result"
+        "type": "conditional",
+        "condition": {
+          "type": "phase-is",
+          "parameters": {
+            "phase": "command"
+          }
+        },
+        "effect": {
+          "type": "stance-select",
+          "mode": "re-selectable",
+          "options": [
+            {
+              "name": "Paragon of Hatred",
+              "effect": {
+                "type": "re-roll",
+                "target": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "HERETIC ASTARTES"
+                  ],
+                  "none_of": [
+                    "DAMNED"
+                  ],
+                  "within": {
+                    "range": {
+                      "inches": 6
+                    },
+                    "of": "this-model"
                   }
                 },
-                {
-                  "type": "re-roll",
-                  "target": {
-                    "owner": "friendly",
-                    "all_of": [
-                      "HERETIC ASTARTES"
-                    ],
-                    "none_of": [
-                      "DAMNED"
-                    ],
-                    "within": {
-                      "range": {
-                        "inches": 6
-                      },
-                      "of": "this-model"
+                "modifier": {
+                  "roll": "hit",
+                  "result_scope": "any-result"
+                }
+              },
+              "id": "option-1"
+            },
+            {
+              "name": "Mark of Chaos Ascendant",
+              "effect": {
+                "type": "invulnerable-save",
+                "target": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "HERETIC ASTARTES"
+                  ],
+                  "any_of": [
+                    "INFANTRY",
+                    "MOUNTED"
+                  ],
+                  "none_of": [
+                    "DAMNED"
+                  ],
+                  "within": {
+                    "range": {
+                      "inches": 6
+                    },
+                    "of": "this-model"
+                  }
+                },
+                "modifier": {
+                  "invuln_sv": 4
+                }
+              },
+              "id": "option-2"
+            },
+            {
+              "name": "Lord of the Traitor Legions",
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "re-roll",
+                    "target": {
+                      "owner": "friendly",
+                      "all_of": [
+                        "HERETIC ASTARTES"
+                      ],
+                      "none_of": [
+                        "DAMNED"
+                      ],
+                      "within": {
+                        "range": {
+                          "inches": 6
+                        },
+                        "of": "this-model"
+                      }
+                    },
+                    "modifier": {
+                      "roll": "leadership",
+                      "result_scope": "any-result"
                     }
                   },
-                  "modifier": {
-                    "roll": "battle-shock",
-                    "result_scope": "any-result"
+                  {
+                    "type": "re-roll",
+                    "target": {
+                      "owner": "friendly",
+                      "all_of": [
+                        "HERETIC ASTARTES"
+                      ],
+                      "none_of": [
+                        "DAMNED"
+                      ],
+                      "within": {
+                        "range": {
+                          "inches": 6
+                        },
+                        "of": "this-model"
+                      }
+                    },
+                    "modifier": {
+                      "roll": "battle-shock",
+                      "result_scope": "any-result"
+                    }
                   }
-                }
-              ]
+                ]
+              },
+              "id": "option-3"
             }
-          }
-        ]
+          ]
+        }
       }
     },
     "scope": {
@@ -3634,33 +3760,61 @@
     "source_digest": "0a1711c834edadae797bc85d451480da3b083aaca8d619062317f30a7a805956",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
+      "type": "for-each-unit",
+      "selector": {
+        "filter": {
+          "owner": "friendly",
+          "level": "model",
+          "member_of": "this-unit",
+          "attachment_role": "bodyguard"
         }
       },
       "effect": {
-        "type": "stat-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "stat": "S",
-          "operation": "add",
-          "value": 1
-        }
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "stat-modifier",
+            "target": "recipient",
+            "modifier": {
+              "stat": "S",
+              "operation": "add",
+              "value": 1,
+              "weapons": {
+                "type": "melee"
+              }
+            }
+          },
+          {
+            "type": "stat-modifier",
+            "target": "recipient",
+            "modifier": {
+              "stat": "T",
+              "operation": "add",
+              "value": 1
+            }
+          }
+        ]
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "battle"
     },
     "unit_ids": [
       "fabius-bile"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "chaos-space-marines"
+    "behavior": "reactive",
+    "faction_id": "chaos-space-marines",
+    "trigger": {
+      "event": "battle-started",
+      "condition": {
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-unit",
+          "role": "attached"
+        }
+      }
+    }
   },
   {
     "ability_id": "surgeon-acolyte-chaos-space-marines",
@@ -3785,13 +3939,17 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "subject": "event-object",
-          "of": "this-model",
-          "range": {
-            "inches": 3
-          }
+          "filter": {
+            "within": {
+              "range": {
+                "inches": 3
+              },
+              "of": "this-model"
+            }
+          },
+          "subject": "event-object"
         }
       },
       "effect": {
@@ -3920,8 +4078,10 @@
             "type": "weapon-ability-grant",
             "target": "this-unit",
             "modifier": {
-              "abilities": [
-                "Lethal Hits"
+              "keywords": [
+                {
+                  "keyword_id": "lethal-hits"
+                }
               ]
             }
           },
@@ -3929,8 +4089,13 @@
             "type": "weapon-ability-grant",
             "target": "this-unit",
             "modifier": {
-              "abilities": [
-                "Sustained Hits 1"
+              "keywords": [
+                {
+                  "keyword_id": "sustained-hits",
+                  "parameters": {
+                    "value": 1
+                  }
+                }
               ]
             }
           }
@@ -4096,7 +4261,9 @@
                 "stat": "S",
                 "operation": "add",
                 "value": 1,
-                "weapon_type": "ranged"
+                "weapons": {
+                  "type": "ranged"
+                }
               }
             }
           }
@@ -4144,7 +4311,9 @@
                     "stat": "S",
                     "operation": "add",
                     "value": 2,
-                    "weapon_type": "melee"
+                    "weapons": {
+                      "type": "melee"
+                    }
                   }
                 }
               },
@@ -4180,7 +4349,9 @@
                     "stat": "AP",
                     "operation": "improve",
                     "value": 1,
-                    "weapon_type": "melee"
+                    "weapons": {
+                      "type": "melee"
+                    }
                   }
                 }
               }
@@ -4193,10 +4364,10 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "HERETIC ASTARTES"
       ],
-      "excluded_keywords": [
+      "none_of": [
         "KHORNE"
       ]
     }
@@ -4221,11 +4392,11 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "weapon-ability-grant",
+          "type": "keyword-grant",
           "target": "this-model",
           "modifier": {
-            "abilities": [
-              "Psyker"
+            "keywords": [
+              "PSYKER"
             ]
           }
         },
@@ -4233,8 +4404,10 @@
           "type": "weapon-ability-grant",
           "target": "this-model",
           "modifier": {
-            "abilities": [
-              "Psychic"
+            "keywords": [
+              {
+                "keyword_id": "psychic"
+              }
             ]
           }
         }
@@ -4244,10 +4417,10 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "HERETIC ASTARTES"
       ],
-      "excluded_keywords": [
+      "none_of": [
         "KHORNE"
       ]
     }
@@ -4272,21 +4445,25 @@
       "type": "weapon-ability-grant",
       "target": "this-model",
       "modifier": {
-        "abilities": [
-          "Lance"
-        ],
-        "weapon_type": "melee"
+        "weapons": {
+          "type": "melee"
+        },
+        "keywords": [
+          {
+            "keyword_id": "lance"
+          }
+        ]
       }
     },
     "scope": {
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "HERETIC ASTARTES",
         "DAEMON"
       ],
-      "excluded_keywords": [
+      "none_of": [
         "KHORNE"
       ]
     }
@@ -4318,10 +4495,10 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "HERETIC ASTARTES"
       ],
-      "excluded_keywords": [
+      "none_of": [
         "KHORNE"
       ]
     }
@@ -4345,10 +4522,22 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "count": 1,
-        "owner": "enemy",
-        "within_inches": 12,
-        "visibility_required": true
+        "filter": {
+          "owner": "enemy",
+          "within": {
+            "range": {
+              "inches": 12
+            },
+            "of": "this-model"
+          },
+          "visible": {
+            "to": "this-model"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        }
       },
       "effect": {
         "type": "dice-table",
@@ -4403,7 +4592,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "HERETIC ASTARTES",
         "PSYKER"
       ]
@@ -4429,17 +4618,21 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Ignores Cover"
-        ],
-        "weapon_type": "ranged"
+        "weapons": {
+          "type": "ranged"
+        },
+        "keywords": [
+          {
+            "keyword_id": "ignores-cover"
+          }
+        ]
       }
     },
     "scope": {
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "HERETIC ASTARTES",
         "PSYKER"
       ]
@@ -4471,17 +4664,21 @@
         ]
       },
       "modifier": {
-        "abilities": [
-          "Heavy"
-        ],
-        "weapon_type": "ranged"
+        "weapons": {
+          "type": "ranged"
+        },
+        "keywords": [
+          {
+            "keyword_id": "heavy"
+          }
+        ]
       }
     },
     "scope": {
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "HERETIC ASTARTES"
       ]
     }
@@ -4554,7 +4751,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "WARPSMITH"
       ]
     }
@@ -4578,9 +4775,19 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "count": 1,
-        "owner": "enemy",
-        "range_inches": 24
+        "filter": {
+          "owner": "enemy",
+          "within": {
+            "range": {
+              "inches": 24
+            },
+            "of": "this-model"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        }
       },
       "effect": {
         "type": "stat-modifier",
@@ -4596,7 +4803,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "WARPSMITH"
       ]
     }
@@ -4634,11 +4841,20 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Lethal Hits",
-            "Sustained Hits 1"
-          ],
-          "weapon_type": "ranged"
+          "weapons": {
+            "type": "ranged"
+          },
+          "keywords": [
+            {
+              "keyword_id": "lethal-hits"
+            },
+            {
+              "keyword_id": "sustained-hits",
+              "parameters": {
+                "value": 1
+              }
+            }
+          ]
         }
       }
     },
@@ -4646,7 +4862,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "HERETIC ASTARTES"
       ]
     }
@@ -4668,20 +4884,51 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "move",
-      "target": "this-unit",
-      "modifier": {
-        "move_type": "normal",
-        "distance": "D3+3"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-subject",
+          "filter": {
+            "within": {
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "HAVOCS"
+                ],
+                "not_states": [
+                  "engaged"
+                ]
+              },
+              "range": {
+                "inches": 8
+              }
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "move",
+        "target": "this-unit",
+        "modifier": {
+          "move_type": "normal",
+          "distance": "D3+3"
+        }
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "HAVOCS"
       ]
+    },
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      }
     }
   },
   {
@@ -4709,7 +4956,7 @@
             "of": "attacker",
             "stat": "S"
           },
-          "comparison": "greater-than",
+          "comparison": "gt",
           "right": {
             "of": "defender",
             "stat": "T"
@@ -4718,10 +4965,9 @@
       },
       "effect": {
         "type": "roll-modifier",
-        "target": "this-unit",
+        "target": "attacker",
         "modifier": {
           "roll": "wound",
-          "incoming": true,
           "operation": "subtract",
           "value": 1
         }
@@ -4731,9 +4977,25 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "HERETIC ASTARTES"
       ]
+    },
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": {
+        "owner": "friendly",
+        "any_of": [
+          "HAVOCS",
+          "OBLITERATORS"
+        ]
+      }
     }
   },
   {
@@ -4761,10 +5023,12 @@
             "operator": "or",
             "operands": [
               {
-                "type": "unit-state",
+                "type": "matches",
                 "parameters": {
-                  "subject": "defender",
-                  "state": "battle-shocked"
+                  "filter": {
+                    "state": "battle-shocked"
+                  },
+                  "subject": "defender"
                 }
               },
               {
@@ -4793,10 +5057,12 @@
             "operator": "or",
             "operands": [
               {
-                "type": "unit-state",
+                "type": "matches",
                 "parameters": {
-                  "subject": "attacker",
-                  "state": "battle-shocked"
+                  "filter": {
+                    "state": "battle-shocked"
+                  },
+                  "subject": "attacker"
                 }
               },
               {
@@ -4825,7 +5091,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "HERETIC ASTARTES",
         "INFANTRY",
         "FLY"
@@ -4859,7 +5125,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "Chaos Lord with Jump Pack"
       ]
     }
@@ -4884,11 +5150,11 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "weapon-ability-grant",
+          "type": "keyword-grant",
           "target": "this-model",
           "modifier": {
-            "abilities": [
-              "Daemon"
+            "keywords": [
+              "DAEMON"
             ]
           }
         },
@@ -4899,7 +5165,9 @@
             "stat": "A",
             "operation": "add",
             "value": 1,
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            }
           }
         }
       ]
@@ -4908,7 +5176,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "Chaos Lord with Jump Pack"
       ]
     }
@@ -4933,17 +5201,21 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Lance"
-        ],
-        "weapon_type": "melee"
+        "weapons": {
+          "type": "melee"
+        },
+        "keywords": [
+          {
+            "keyword_id": "lance"
+          }
+        ]
       }
     },
     "scope": {
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "HERETIC ASTARTES",
         "INFANTRY",
         "FLY"
@@ -4981,7 +5253,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "HERETIC ASTARTES",
         "INFANTRY",
         "FLY"
@@ -5007,14 +5279,26 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "count": 1,
-        "owner": "enemy",
-        "within_inches": 9,
-        "visibility_required": true,
-        "excluded_keywords": [
-          "MONSTER",
-          "VEHICLE"
-        ]
+        "filter": {
+          "owner": "enemy",
+          "none_of": [
+            "MONSTER",
+            "VEHICLE"
+          ],
+          "within": {
+            "range": {
+              "inches": 9
+            },
+            "of": "this-model"
+          },
+          "visible": {
+            "to": "this-model"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        }
       },
       "effect": {
         "type": "test",
@@ -5029,7 +5313,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "WARP TALONS"
       ]
     }
@@ -5053,8 +5337,13 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "owner": "friendly",
-        "max_count": 3,
+        "filter": {
+          "owner": "friendly"
+        },
+        "count": {
+          "min": 0,
+          "max": 3
+        },
         "eligibility": {
           "operator": "and",
           "operands": [
@@ -5062,21 +5351,25 @@
               "operator": "or",
               "operands": [
                 {
-                  "type": "has-keyword",
+                  "type": "matches",
                   "parameters": {
-                    "all_of": [
-                      "HERETIC ASTARTES",
-                      "TERMINATOR"
-                    ]
+                    "filter": {
+                      "all_of": [
+                        "HERETIC ASTARTES",
+                        "TERMINATOR"
+                      ]
+                    }
                   }
                 },
                 {
-                  "type": "has-keyword",
+                  "type": "matches",
                   "parameters": {
-                    "any_of": [
-                      "OBLITERATORS",
-                      "MUTILATORS"
-                    ]
+                    "filter": {
+                      "any_of": [
+                        "OBLITERATORS",
+                        "MUTILATORS"
+                      ]
+                    }
                   }
                 }
               ]
@@ -5085,9 +5378,11 @@
               "operator": "not",
               "operands": [
                 {
-                  "type": "unit-state",
+                  "type": "matches",
                   "parameters": {
-                    "state": "engaged"
+                    "filter": {
+                      "state": "engaged"
+                    }
                   }
                 }
               ]
@@ -5108,7 +5403,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "HERETIC ASTARTES"
       ]
     }
@@ -5161,10 +5456,10 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "HERETIC ASTARTES"
       ],
-      "excluded_keywords": [
+      "none_of": [
         "DAMNED"
       ]
     }
@@ -5197,7 +5492,7 @@
       "duration": "turn"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "HERETIC ASTARTES"
       ]
     },
@@ -5240,7 +5535,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "HERETIC ASTARTES"
       ]
     }
@@ -5315,7 +5610,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "HERETIC ASTARTES"
       ]
     }
@@ -5350,12 +5645,51 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "HERETIC ASTARTES"
       ],
-      "excluded_keywords": [
+      "none_of": [
         "DAMNED"
       ]
+    },
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit",
+      "optional": true,
+      "condition": {
+        "operator": "or",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "opponent-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          }
+        ]
+      }
     }
   },
   {
@@ -5382,14 +5716,14 @@
           "objective": {}
         },
         "tag": "held",
-        "clears_on": "never"
+        "clears_on": "permanent"
       }
     },
     "scope": {
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "HERETIC ASTARTES"
       ]
     }
@@ -5414,17 +5748,21 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Ignores Cover"
-        ],
-        "weapon_type": "ranged"
+        "weapons": {
+          "type": "ranged"
+        },
+        "keywords": [
+          {
+            "keyword_id": "ignores-cover"
+          }
+        ]
       }
     },
     "scope": {
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "HERETIC ASTARTES"
       ]
     }
@@ -5456,9 +5794,26 @@
       "duration": "turn"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "HERETIC ASTARTES"
       ]
+    },
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit",
+      "optional": true,
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
     }
   },
   {
@@ -5508,7 +5863,7 @@
       "duration": "turn"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "HERETIC ASTARTES"
       ]
     }
@@ -5542,7 +5897,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "HERETIC ASTARTES"
       ]
     }
@@ -5634,7 +5989,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "HERETIC ASTARTES"
       ]
     }
@@ -5682,10 +6037,10 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "HERETIC ASTARTES"
       ],
-      "excluded_keywords": [
+      "none_of": [
         "DAMNED"
       ]
     }
@@ -5707,11 +6062,11 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "weapon-ability-grant",
+      "type": "keyword-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Soul Forge"
+        "keywords": [
+          "SOUL FORGE"
         ]
       }
     },
@@ -5719,10 +6074,10 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "HERETIC ASTARTES"
       ],
-      "excluded_keywords": [
+      "none_of": [
         "DAMNED"
       ]
     }
@@ -5755,10 +6110,10 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "HERETIC ASTARTES"
       ],
-      "excluded_keywords": [
+      "none_of": [
         "DAMNED"
       ]
     }
@@ -5818,7 +6173,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "WARPSMITH"
       ]
     }
@@ -5853,10 +6208,10 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "HERETIC ASTARTES"
       ],
-      "excluded_keywords": [
+      "none_of": [
         "DAMNED"
       ]
     }
@@ -5890,7 +6245,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "Soul Forge"
       ]
     }
@@ -5917,12 +6272,14 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "this-unit",
-              "all_of": [
-                "SOUL FORGE"
-              ]
+              "filter": {
+                "all_of": [
+                  "SOUL FORGE"
+                ]
+              },
+              "subject": "this-unit"
             }
           },
           "effect": {
@@ -5939,12 +6296,14 @@
             "operator": "not",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "subject": "this-unit",
-                  "all_of": [
-                    "SOUL FORGE"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "SOUL FORGE"
+                    ]
+                  },
+                  "subject": "this-unit"
                 }
               }
             ]
@@ -5963,7 +6322,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "HERETIC ASTARTES"
       ]
     }
@@ -6001,11 +6360,13 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "SOUL FORGE"
-              ]
+              "filter": {
+                "all_of": [
+                  "SOUL FORGE"
+                ]
+              }
             }
           },
           "effect": {
@@ -6026,7 +6387,7 @@
       "duration": "turn"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "HERETIC ASTARTES"
       ]
     }
@@ -6060,9 +6421,19 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "Soul Forge"
       ]
+    },
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
     }
   },
   {
@@ -6082,54 +6453,77 @@
     "ability_type": "detachment",
     "behavior": "passive",
     "effect": {
-      "type": "stance-select",
-      "mode": "re-selectable",
-      "scope": "army",
-      "select": "start-of-command-phase",
-      "options": [
-        {
-          "name": "Huron's Elite",
-          "effect": {
-            "type": "roll-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "hit",
-              "operation": "add",
-              "value": 1
-            }
-          }
-        },
-        {
-          "name": "Mobile Marauders",
-          "effect": {
-            "type": "sequence",
-            "steps": [
-              {
-                "type": "permission",
-                "target": "this-unit",
-                "modifier": {
-                  "activity": "shoot",
-                  "allow": true,
-                  "after": [
-                    "fall-back"
-                  ]
-                }
-              },
-              {
-                "type": "permission",
-                "target": "this-unit",
-                "modifier": {
-                  "activity": "declare-charge",
-                  "allow": true,
-                  "after": [
-                    "fall-back"
-                  ]
-                }
+      "type": "ability-part",
+      "trigger": {
+        "event": "phase-started",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "command"
               }
-            ]
-          }
+            },
+            {
+              "type": "player-turn-is",
+              "parameters": {
+                "turn": "your-turn"
+              }
+            }
+          ]
         }
-      ]
+      },
+      "effect": {
+        "type": "stance-select",
+        "mode": "re-selectable",
+        "options": [
+          {
+            "name": "Huron's Elite",
+            "effect": {
+              "type": "roll-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "hit",
+                "operation": "add",
+                "value": 1
+              }
+            },
+            "id": "option-1"
+          },
+          {
+            "name": "Mobile Marauders",
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "permission",
+                  "target": "this-unit",
+                  "modifier": {
+                    "activity": "shoot",
+                    "allow": true,
+                    "after": [
+                      "fall-back"
+                    ]
+                  }
+                },
+                {
+                  "type": "permission",
+                  "target": "this-unit",
+                  "modifier": {
+                    "activity": "declare-charge",
+                    "allow": true,
+                    "after": [
+                      "fall-back"
+                    ]
+                  }
+                }
+              ]
+            },
+            "id": "option-2"
+          }
+        ]
+      }
     },
     "scope": {
       "duration": "until-next-command-phase"
@@ -6153,48 +6547,67 @@
     "ability_type": "detachment",
     "behavior": "passive",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "weapon-ability-grant",
-          "target": {
-            "owner": "friendly"
-          },
-          "modifier": {
-            "abilities": [
-              "Assault"
-            ],
-            "weapon_type": "ranged"
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "within",
-            "parameters": {
-              "of": {
-                "objective": {}
-              },
-              "range": "objective-control"
-            }
-          },
-          "effect": {
-            "type": "stat-modifier",
-            "target": "this-model",
-            "modifier": {
-              "stat": "AP",
-              "operation": "subtract",
-              "value": 1
-            }
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "this-unit",
+          "filter": {
+            "all_of": [
+              "HERETIC ASTARTES"
+            ]
           }
         }
-      ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "weapon-ability-grant",
+            "target": {
+              "owner": "friendly"
+            },
+            "modifier": {
+              "weapons": {
+                "type": "ranged"
+              },
+              "keywords": [
+                {
+                  "keyword_id": "assault"
+                }
+              ]
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "within": {
+                    "range": "objective-control",
+                    "of": {
+                      "objective": {}
+                    }
+                  }
+                }
+              }
+            },
+            "effect": {
+              "type": "stat-modifier",
+              "target": "this-model",
+              "modifier": {
+                "stat": "AP",
+                "operation": "subtract",
+                "value": 1
+              }
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "duration": "permanent",
-      "applies_to": [
-        "HERETIC ASTARTES"
-      ]
+      "duration": "permanent"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
@@ -6217,43 +6630,24 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "has-keyword",
-                "parameters": {
-                  "all_of": [
-                    "DAMNED"
-                  ]
-                }
-              }
-            ]
+        "type": "attack-compare",
+        "parameters": {
+          "left": {
+            "of": "attacker",
+            "stat": "S"
           },
-          {
-            "type": "attack-compare",
-            "parameters": {
-              "left": {
-                "of": "attacker",
-                "stat": "S"
-              },
-              "comparison": "greater-than",
-              "right": {
-                "of": "defender",
-                "stat": "T"
-              }
-            }
+          "comparison": "gt",
+          "right": {
+            "of": "defender",
+            "stat": "T"
           }
-        ]
+        }
       },
       "effect": {
         "type": "roll-modifier",
-        "target": "this-model",
+        "target": "this-unit",
         "modifier": {
           "roll": "wound",
-          "weapon_type": "ranged",
           "operation": "subtract",
           "value": 1
         }
@@ -6262,7 +6656,22 @@
     "scope": {
       "duration": "permanent"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "HERETIC ASTARTES"
+        ],
+        "none_of": [
+          "DAMNED"
+        ]
+      }
+    }
   },
   {
     "ability_id": "masters-of-misdirection-chaos-space-marines",
@@ -6286,12 +6695,14 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "any_of": [
-                "LEGIONARIES",
-                "CULTIST MOB"
-              ]
+              "filter": {
+                "any_of": [
+                  "LEGIONARIES",
+                  "CULTIST MOB"
+                ]
+              }
             }
           },
           "effect": {
@@ -6318,11 +6729,13 @@
                 "operator": "not",
                 "operands": [
                   {
-                    "type": "has-keyword",
+                    "type": "matches",
                     "parameters": {
-                      "all_of": [
-                        "EPIC HEROES"
-                      ]
+                      "filter": {
+                        "all_of": [
+                          "EPIC HEROES"
+                        ]
+                      }
                     }
                   }
                 ]
@@ -6361,44 +6774,59 @@
     "ability_type": "detachment",
     "behavior": "activated",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "roll-modifier",
-          "target": "this-unit",
-          "modifier": {
-            "roll": "battle-shock",
-            "operation": "subtract",
-            "value": 1
-          }
-        },
-        {
-          "type": "roll-modifier",
-          "target": "this-unit",
-          "modifier": {
-            "roll": "wound",
-            "weapon_type": "ranged",
-            "operation": "add",
-            "value": 1
-          }
-        },
-        {
-          "type": "stat-modifier",
-          "target": "this-unit",
-          "modifier": {
-            "stat": "A",
-            "operation": "add",
-            "value": 2,
-            "weapon_type": "melee"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "this-unit",
+          "filter": {
+            "all_of": [
+              "HERETIC ASTARTES"
+            ]
           }
         }
-      ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "battle-shock",
+              "operation": "subtract",
+              "value": 1
+            }
+          },
+          {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "wound",
+              "operation": "add",
+              "value": 1,
+              "weapons": {
+                "type": "ranged"
+              }
+            }
+          },
+          {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "A",
+              "operation": "add",
+              "value": 2,
+              "weapons": {
+                "type": "melee"
+              }
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "duration": "phase",
-      "applies_to": [
-        "HERETIC ASTARTES"
-      ]
+      "duration": "phase"
     },
     "community_notes": "[APPROX] When a HERETIC ASTARTES DAEMON VEHICLE unit invokes its contract on a Dark Pact: −1 to the resulting Leadership test, +1 to ranged Wound rolls, and +2 Attacks to melee weapons. The DAEMON VEHICLE restriction and the optional invoke are noted rather than gated in the tree. Full rule in raw-text store."
   },
@@ -6419,36 +6847,51 @@
     "ability_type": "detachment",
     "behavior": "passive",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "rule-state",
-          "target": "this-unit",
-          "modifier": {
-            "direction": "suppressed",
-            "rule_kind": "ability",
-            "rule": "dark-pacts-chaos-space-marines"
-          }
-        },
-        {
-          "type": "weapon-ability-grant",
-          "target": {
-            "owner": "friendly"
-          },
-          "modifier": {
-            "abilities": [
-              "Assault"
-            ],
-            "weapon_type": "ranged"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "this-unit",
+          "filter": {
+            "all_of": [
+              "HERETIC ASTARTES"
+            ]
           }
         }
-      ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "rule-state",
+            "target": "this-unit",
+            "modifier": {
+              "direction": "suppressed",
+              "rule_kind": "ability",
+              "rule": "dark-pacts-chaos-space-marines"
+            }
+          },
+          {
+            "type": "weapon-ability-grant",
+            "target": {
+              "owner": "friendly"
+            },
+            "modifier": {
+              "weapons": {
+                "type": "ranged"
+              },
+              "keywords": [
+                {
+                  "keyword_id": "assault"
+                }
+              ]
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "duration": "permanent",
-      "applies_to": [
-        "HERETIC ASTARTES"
-      ]
+      "duration": "permanent"
     },
     "community_notes": "[APPROX] Models the two static clauses: HERETIC ASTARTES models lose the Dark Pacts ability and their ranged weapons gain [ASSAULT]. Not modeled: the mustering restriction (cannot use Cults of the Dark Gods), the Vendetta target (re-roll Hit rolls against a chosen enemy unit by non-DAMNED models), and Twisted Doctrine (Default to Doctrine, taking a Battle-shock test to gain shoot/charge-after-Fall-Back or charge-after-Advance). Full rule in raw-text store."
   },
@@ -6493,7 +6936,9 @@
           "effect": {
             "type": "for-each-unit",
             "selector": {
-              "owner": "enemy",
+              "filter": {
+                "owner": "enemy"
+              },
               "eligibility": {
                 "operator": "and",
                 "operands": [
@@ -6504,18 +6949,22 @@
                     }
                   },
                   {
-                    "type": "within",
+                    "type": "matches",
                     "parameters": {
-                      "subject": "this-unit",
-                      "of": {
-                        "owner": "friendly",
-                        "all_of": [
-                          "HERETIC ASTARTES"
-                        ]
+                      "filter": {
+                        "within": {
+                          "range": {
+                            "inches": 12
+                          },
+                          "of": {
+                            "owner": "friendly",
+                            "all_of": [
+                              "HERETIC ASTARTES"
+                            ]
+                          }
+                        }
                       },
-                      "range": {
-                        "inches": 12
-                      }
+                      "subject": "this-unit"
                     }
                   }
                 ]
@@ -6578,42 +7027,55 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "all_of": [
-            "DAMNED"
-          ]
+          "subject": "this-unit",
+          "filter": {
+            "all_of": [
+              "DAMNED"
+            ]
+          }
         }
       },
       "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "stat-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "stat": "M",
-              "operation": "add",
-              "value": 2
-            }
-          },
-          {
-            "type": "roll-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "charge",
-              "operation": "add",
-              "value": 2
+        "type": "conditional",
+        "condition": {
+          "type": "matches",
+          "parameters": {
+            "filter": {
+              "all_of": [
+                "DAMNED"
+              ]
             }
           }
-        ]
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "stat-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "stat": "M",
+                "operation": "add",
+                "value": 2
+              }
+            },
+            {
+              "type": "roll-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "charge",
+                "operation": "add",
+                "value": 2
+              }
+            }
+          ]
+        }
       }
     },
     "scope": {
-      "duration": "phase",
-      "applies_to": [
-        "DAMNED"
-      ]
+      "duration": "phase"
     },
     "community_notes": "[APPROX] Models the Desperate Pact bonus for DAMNED units with Dark Pacts: +2\" Move and +2 to Charge rolls. Not modeled: the optional activation, the exclusion of units that arrived from Reserves this turn, and the Leadership test taken to make a Desperate Pact (D3 mortal wounds on failure). Full rule in raw-text store."
   },
@@ -6634,25 +7096,55 @@
     "ability_type": "detachment",
     "behavior": "activated",
     "effect": {
-      "type": "designate-target",
-      "designation": "focus-of-hatred",
-      "select": {
-        "scope": "enemy-unit",
-        "count": 1,
-        "timing": "start-of-command-phase"
-      },
-      "applies": {
-        "to": "attackers-of-target",
-        "effect": {
-          "type": "re-roll",
-          "target": "this-unit",
-          "modifier": {
-            "roll": "hit",
-            "subset": "all-failures"
-          }
+      "type": "ability-part",
+      "trigger": {
+        "event": "phase-started",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "command"
+              }
+            },
+            {
+              "type": "player-turn-is",
+              "parameters": {
+                "turn": "your-turn"
+              }
+            }
+          ]
         }
       },
-      "duration": "until-next-command-phase"
+      "effect": {
+        "type": "designate-target",
+        "designation": "focus-of-hatred",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
+          }
+        },
+        "applies": {
+          "to": "attackers-of-target",
+          "effect": {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "subset": "all-failures"
+            }
+          }
+        },
+        "duration": "until-next-command-phase"
+      }
     },
     "scope": {
       "duration": "until-next-command-phase"
@@ -6759,11 +7251,13 @@
             "operator": "and",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "all_of": [
-                    "KHORNE"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "KHORNE"
+                    ]
+                  }
                 }
               },
               {
@@ -6783,7 +7277,11 @@
                   {
                     "type": "attack-is",
                     "parameters": {
-                      "weapon_keyword": "LETHAL HITS"
+                      "weapons": {
+                        "keyword": {
+                          "keyword_id": "lethal-hits"
+                        }
+                      }
                     }
                   }
                 ]
@@ -6791,13 +7289,14 @@
             ]
           },
           "effect": {
-            "type": "weapon-ability-grant",
+            "type": "roll-result",
             "target": "this-unit",
             "modifier": {
-              "abilities": [
-                "Critical Hits 5+"
-              ],
-              "weapon_type": "melee"
+              "roll": "hit",
+              "critical_on": 5,
+              "weapons": {
+                "type": "melee"
+              }
             }
           }
         },
@@ -6807,11 +7306,13 @@
             "operator": "and",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "all_of": [
-                    "TZEENTCH"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "TZEENTCH"
+                    ]
+                  }
                 }
               },
               {
@@ -6831,7 +7332,11 @@
                   {
                     "type": "attack-is",
                     "parameters": {
-                      "weapon_keyword": "LETHAL HITS"
+                      "weapons": {
+                        "keyword": {
+                          "keyword_id": "lethal-hits"
+                        }
+                      }
                     }
                   }
                 ]
@@ -6839,13 +7344,14 @@
             ]
           },
           "effect": {
-            "type": "weapon-ability-grant",
+            "type": "roll-result",
             "target": "this-unit",
             "modifier": {
-              "abilities": [
-                "Critical Hits 5+"
-              ],
-              "weapon_type": "ranged"
+              "roll": "hit",
+              "critical_on": 5,
+              "weapons": {
+                "type": "ranged"
+              }
             }
           }
         },
@@ -6855,11 +7361,13 @@
             "operator": "and",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "all_of": [
-                    "NURGLE"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "NURGLE"
+                    ]
+                  }
                 }
               },
               {
@@ -6879,7 +7387,14 @@
                   {
                     "type": "attack-is",
                     "parameters": {
-                      "weapon_keyword": "SUSTAINED HITS 1"
+                      "weapons": {
+                        "keyword": {
+                          "keyword_id": "sustained-hits",
+                          "parameters": {
+                            "value": 1
+                          }
+                        }
+                      }
                     }
                   }
                 ]
@@ -6887,13 +7402,14 @@
             ]
           },
           "effect": {
-            "type": "weapon-ability-grant",
+            "type": "roll-result",
             "target": "this-unit",
             "modifier": {
-              "abilities": [
-                "Critical Hits 5+"
-              ],
-              "weapon_type": "ranged"
+              "roll": "hit",
+              "critical_on": 5,
+              "weapons": {
+                "type": "ranged"
+              }
             }
           }
         },
@@ -6903,11 +7419,13 @@
             "operator": "and",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "all_of": [
-                    "SLAANESH"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "SLAANESH"
+                    ]
+                  }
                 }
               },
               {
@@ -6927,7 +7445,14 @@
                   {
                     "type": "attack-is",
                     "parameters": {
-                      "weapon_keyword": "SUSTAINED HITS 1"
+                      "weapons": {
+                        "keyword": {
+                          "keyword_id": "sustained-hits",
+                          "parameters": {
+                            "value": 1
+                          }
+                        }
+                      }
                     }
                   }
                 ]
@@ -6935,13 +7460,14 @@
             ]
           },
           "effect": {
-            "type": "weapon-ability-grant",
+            "type": "roll-result",
             "target": "this-unit",
             "modifier": {
-              "abilities": [
-                "Critical Hits 5+"
-              ],
-              "weapon_type": "melee"
+              "roll": "hit",
+              "critical_on": 5,
+              "weapons": {
+                "type": "melee"
+              }
             }
           }
         },
@@ -6951,11 +7477,13 @@
             "operator": "and",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "all_of": [
-                    "CHAOS UNDIVIDED"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "CHAOS UNDIVIDED"
+                    ]
+                  }
                 }
               },
               {
@@ -6978,7 +7506,11 @@
                       {
                         "type": "attack-is",
                         "parameters": {
-                          "weapon_keyword": "LETHAL HITS"
+                          "weapons": {
+                            "keyword": {
+                              "keyword_id": "lethal-hits"
+                            }
+                          }
                         }
                       }
                     ]
@@ -7000,7 +7532,14 @@
                       {
                         "type": "attack-is",
                         "parameters": {
-                          "weapon_keyword": "SUSTAINED HITS 1"
+                          "weapons": {
+                            "keyword": {
+                              "keyword_id": "sustained-hits",
+                              "parameters": {
+                                "value": 1
+                              }
+                            }
+                          }
                         }
                       }
                     ]
@@ -7023,7 +7562,14 @@
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "dark-pact"
+      },
+      "optional": false
+    }
   },
   {
     "ability_id": "experimental-augmentations-chaos-space-marines",
@@ -7042,87 +7588,103 @@
     "ability_type": "detachment",
     "behavior": "passive",
     "effect": {
-      "type": "stance-select",
-      "mode": "consumable",
-      "scope": "army",
-      "select": "start-of-battle",
-      "options": [
-        {
-          "name": "Cholinergic Accelerants",
-          "effect": {
-            "type": "stat-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "stat": "A",
-              "operation": "add",
-              "value": 1,
-              "weapon_type": "melee"
-            }
+      "type": "ability-part",
+      "trigger": {
+        "event": "battle-started"
+      },
+      "effect": {
+        "type": "stance-select",
+        "mode": "consumable",
+        "options": [
+          {
+            "name": "Cholinergic Accelerants",
+            "effect": {
+              "type": "stat-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "stat": "A",
+                "operation": "add",
+                "value": 1,
+                "weapons": {
+                  "type": "melee"
+                }
+              }
+            },
+            "id": "option-1"
+          },
+          {
+            "name": "Hyperadrenal Infusion",
+            "effect": {
+              "type": "stat-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "stat": "M",
+                "operation": "add",
+                "value": 2
+              }
+            },
+            "id": "option-2"
+          },
+          {
+            "name": "Paraneural Reactions",
+            "effect": {
+              "type": "stat-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "stat": "WS",
+                "operation": "improve",
+                "value": 1,
+                "weapons": {
+                  "type": "melee"
+                }
+              }
+            },
+            "id": "option-3"
+          },
+          {
+            "name": "Supracutaneous Chitination",
+            "effect": {
+              "type": "stat-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "stat": "T",
+                "operation": "add",
+                "value": 1
+              }
+            },
+            "id": "option-4"
+          },
+          {
+            "name": "Macrotensile Sinews",
+            "effect": {
+              "type": "stat-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "stat": "S",
+                "operation": "add",
+                "value": 1,
+                "weapons": {
+                  "type": "melee"
+                }
+              }
+            },
+            "id": "option-5"
+          },
+          {
+            "name": "Ophthalmic Enhancement",
+            "effect": {
+              "type": "stat-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "stat": "BS",
+                "operation": "improve",
+                "value": 1
+              }
+            },
+            "id": "option-6"
           }
-        },
-        {
-          "name": "Hyperadrenal Infusion",
-          "effect": {
-            "type": "stat-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "stat": "M",
-              "operation": "add",
-              "value": 2
-            }
-          }
-        },
-        {
-          "name": "Paraneural Reactions",
-          "effect": {
-            "type": "stat-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "stat": "WS",
-              "operation": "improve",
-              "value": 1,
-              "weapon_type": "melee"
-            }
-          }
-        },
-        {
-          "name": "Supracutaneous Chitination",
-          "effect": {
-            "type": "stat-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "stat": "T",
-              "operation": "add",
-              "value": 1
-            }
-          }
-        },
-        {
-          "name": "Macrotensile Sinews",
-          "effect": {
-            "type": "stat-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "stat": "S",
-              "operation": "add",
-              "value": 1,
-              "weapon_type": "melee"
-            }
-          }
-        },
-        {
-          "name": "Ophthalmic Enhancement",
-          "effect": {
-            "type": "stat-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "stat": "BS",
-              "operation": "improve",
-              "value": 1
-            }
-          }
-        }
-      ]
+        ]
+      }
     },
     "scope": {
       "duration": "battle"
@@ -7180,25 +7742,38 @@
     "source_digest": "e0d9a2c18653ffe1aeda99d3867a74728fd914da7abe7f719b737ea3e7885f5f",
     "version": "2025-q3",
     "effect": {
-      "type": "designate-target",
-      "designation": "hated-foe",
-      "select": {
-        "scope": "enemy-unit",
-        "count": 1,
-        "timing": "start-of-battle"
+      "type": "ability-part",
+      "trigger": {
+        "event": "battle-started"
       },
-      "applies": {
-        "to": "attackers-of-target",
-        "effect": {
-          "type": "re-roll",
-          "target": "this-unit",
-          "modifier": {
-            "roll": "wound",
-            "subset": "all-failures"
+      "effect": {
+        "type": "designate-target",
+        "designation": "hated-foe",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
           }
-        }
-      },
-      "duration": "battle"
+        },
+        "applies": {
+          "to": "attackers-of-target",
+          "effect": {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "wound",
+              "subset": "all-failures"
+            }
+          }
+        },
+        "duration": "battle"
+      }
     },
     "scope": {
       "duration": "battle"
@@ -7284,8 +7859,10 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Devastating Wounds"
+        "keywords": [
+          {
+            "keyword_id": "devastating-wounds"
+          }
         ]
       }
     },
@@ -7330,19 +7907,25 @@
           "modifier": {
             "roll": "wound",
             "subset": "ones",
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            }
           }
         },
         {
           "type": "conditional",
           "condition": {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "of": {
-                "objective": {}
+              "filter": {
+                "within": {
+                  "range": "objective-control",
+                  "of": {
+                    "objective": {}
+                  }
+                }
               },
-              "range": "objective-control"
+              "subject": "defender"
             }
           },
           "effect": {
@@ -7351,7 +7934,9 @@
             "modifier": {
               "roll": "wound",
               "subset": "all-failures",
-              "weapon_type": "melee"
+              "weapons": {
+                "type": "melee"
+              }
             }
           }
         }
@@ -7393,9 +7978,13 @@
           "target": "this-unit",
           "modifier": {
             "roll": "hit",
-            "weapon_keyword": "Psychic",
             "operation": "add",
-            "value": 1
+            "value": 1,
+            "weapons": {
+              "keyword": {
+                "keyword_id": "psychic"
+              }
+            }
           }
         },
         {
@@ -7403,9 +7992,13 @@
           "target": "this-unit",
           "modifier": {
             "roll": "wound",
-            "weapon_keyword": "Psychic",
             "operation": "add",
-            "value": 1
+            "value": 1,
+            "weapons": {
+              "keyword": {
+                "keyword_id": "psychic"
+              }
+            }
           }
         }
       ]

@@ -51,10 +51,19 @@ def _weapon_phrase(p: P, negated: bool) -> str:
 
 
 def _models_subject(models: P) -> str:
-    at_least = _str(models.get("at_least"))
-    if at_least == "1":
+    count = models.get("count")
+    bounds = count if isinstance(count, dict) else {}
+    minimum = bounds.get("min")
+    maximum = bounds.get("max")
+    if minimum == 1 and maximum is None:
         return "one or more models in this unit"
-    return f"at least {at_least} models in this unit"
+    if minimum is not None and minimum == maximum:
+        return f"exactly {_str(minimum)} models in this unit"
+    if minimum is not None:
+        return f"at least {_str(minimum)} models in this unit"
+    if maximum is not None:
+        return f"at most {_str(maximum)} models in this unit"
+    return "models in this unit"
 
 
 def _unit_level(phrase: str, negated: bool) -> str:

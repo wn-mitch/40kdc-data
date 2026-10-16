@@ -36,38 +36,35 @@ function designateSelect(list: CompileLeaf[]): Record<string, any> {
   if (!result.ok) throw new Error(result.errors.join("; "));
   const effect = (result.mechanics as unknown as { effect: Record<string, any> }).effect;
   expect(effect.type).toBe("designate-target");
-  return effect.select;
+  return effect.select.selector;
 }
 
 // Sub-shape F: a designated select takes its unit-filter's keywords, so the attacks aimed at the
 // designated unit keep the restriction "enemy X unit" carries.
 describe("Round 5C designate-target select keywords from a folded unit-filter", () => {
-  it("maps an any-of filter to select keywords with keyword_match any", () => {
+  it("preserves any-of keywords in the selection filter", () => {
     const select = designateSelect(designated({ any_keywords: ["ALPHA", "BETA"] }));
-    expect(select).toMatchObject({ scope: "enemy-unit", count: 1, keywords: ["ALPHA", "BETA"], keyword_match: "any" });
+    expect(select).toMatchObject({ filter: { owner: "enemy", any_of: ["ALPHA", "BETA"] }, count: { min: 1, max: 1 } });
   });
 
-  it("maps an all-of filter to select keywords with the default match", () => {
+  it("preserves all-of keywords in the selection filter", () => {
     const select = designateSelect(designated({ keywords: ["ALPHA"] }));
-    expect(select.keywords).toEqual(["ALPHA"]);
-    expect(select.keyword_match).toBeUndefined();
+    expect(select.filter).toEqual({ owner: "enemy", all_of: ["ALPHA"] });
   });
 
-  it("maps an exclusion to select excluded_keywords", () => {
+  it("preserves excluded keywords in the selection filter", () => {
     const select = designateSelect(designated({ keywords: ["ALPHA"], excluded_keywords: ["MONSTER"] }));
-    expect(select).toMatchObject({ keywords: ["ALPHA"], excluded_keywords: ["MONSTER"] });
+    expect(select).toMatchObject({ filter: { owner: "enemy", all_of: ["ALPHA"], none_of: ["MONSTER"] } });
   });
 
-  it("refuses an all-of and an any-of list on one filter, which one select field cannot hold", () => {
-    const result = compileLeaves(designated({ keywords: ["ALPHA"], any_keywords: ["BETA", "GAMMA"] }), TEXT);
-    expect(result.ok).toBe(false);
-    expect(result.ok ? [] : result.errors.join(" ")).toMatch(/one keyword list/);
+  it("preserves all-of and any-of lists together on the selection filter", () => {
+    const select = designateSelect(designated({ keywords: ["ALPHA"], any_keywords: ["BETA", "GAMMA"] }));
+    expect(select.filter).toEqual({ owner: "enemy", all_of: ["ALPHA"], any_of: ["BETA", "GAMMA"] });
   });
 
-  it("refuses a filter field designate-target's select has no place for", () => {
-    const result = compileLeaves(designated({ any_keywords: ["ALPHA", "BETA"], states: ["battle-shocked"] }), TEXT);
-    expect(result.ok).toBe(false);
-    expect(result.ok ? [] : result.errors.join(" ")).toMatch(/cannot carry a unit-filter's .*states/);
+  it("preserves state restrictions alongside the selection keywords", () => {
+    const select = designateSelect(designated({ any_keywords: ["ALPHA", "BETA"], states: ["battle-shocked"] }));
+    expect(select.filter).toEqual({ owner: "enemy", any_of: ["ALPHA", "BETA"], state: "battle-shocked" });
   });
 
   it("refuses a selected unit with filter keywords whose bearer's attacks do not target it", () => {
@@ -142,7 +139,7 @@ describe("Round 5C select-unit side and exclusion fold", () => {
       ["(excluding Beta units)", "unit-filter", { side: "enemy", excluded_keywords: ["BETA"] }], ["That unit must take a test", ...SELECT_TEST.slice(1)]);
     expect(result.ok).toBe(true);
     const selector = selectorOf(result);
-    expect(selector).toMatchObject({ owner: "enemy", count: 1, excluded_keywords: ["BETA"] });
+    expect(selector).toMatchObject({ filter: { owner: "enemy", none_of: ["BETA"] }, count: { min: 1, max: 1 } });
   });
 
   it("folds an exclusion past a side-less distance, measured to the bearer's unit", () => {
@@ -151,7 +148,7 @@ describe("Round 5C select-unit side and exclusion fold", () => {
       ['within 8" of this unit', "aura-range", { inches: 8, of: "this-unit" }],
       ["(excluding Beta and Gamma units)", "unit-filter", { side: "enemy", excluded_keywords: ["BETA", "GAMMA"] }], SELECT_TEST);
     expect(result.ok).toBe(true);
-    expect(selectorOf(result)).toMatchObject({ owner: "enemy", excluded_keywords: ["BETA", "GAMMA"], within_inches: 8 });
+    expect(selectorOf(result)).toMatchObject({ filter: { owner: "enemy", none_of: ["BETA", "GAMMA"], within: { range: { inches: 8 }, of: "this-unit" } }, count: { min: 1, max: 1 } });
   });
 
   it("folds an exclusion past a unit-position measured to the selected unit, into a scope-less select's filter", () => {
@@ -162,7 +159,7 @@ describe("Round 5C select-unit side and exclusion fold", () => {
       ["(excluding Beta units)", "unit-filter", { side: "friendly", excluded_keywords: ["BETA"] }], SELECT_TEST);
     expect(result.ok).toBe(true);
     const selector = selectorOf(result);
-    expect(selector).toMatchObject({ owner: "friendly", keywords: ["ALPHA"], excluded_keywords: ["BETA"] });
+    expect(selector).toMatchObject({ filter: { owner: "friendly", all_of: ["ALPHA"], none_of: ["BETA"] }, count: { min: 1, max: 1 } });
   });
 
   it("refuses an exclusion whose side differs from the select's scope", () => {
@@ -208,7 +205,7 @@ describe("Round 5C aura-range side against the unit-filter before it", () => {
   it("folds an aura whose side equals the filter's side into the aura", () => {
     const result = compileLeaves(aura("enemy"), AURA_TEXT);
     expect(result.ok).toBe(true);
-    expect(JSON.stringify(result.ok ? result.mechanics : {})).toContain('"excluded_keywords":["BETA"]');
+    expect(JSON.stringify(result.ok ? result.mechanics : {})).toContain('"none_of":["BETA"]');
   });
 
   it("refuses an aura whose side differs from the filter's side", () => {

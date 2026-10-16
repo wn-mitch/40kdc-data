@@ -5,9 +5,11 @@
 use serde_json::Value;
 
 use super::inline;
+use super::subject::filter_subject;
 use super::words::*;
-use crate::translate::condition::{describe_condition_value, key_count, nn, obj, operands, P};
+use crate::translate::condition::{describe_condition_value, nn, obj, operands, range_phrase, P};
 use crate::translate::dekebab;
+use crate::translate::expiry::expiry_trail;
 
 fn title(v: Option<&Value>) -> String {
     title_case(&jstr(v))
@@ -22,169 +24,70 @@ fn relation(v: Option<&Value>) -> String {
     }
 }
 
-fn keywords(v: Option<&Value>) -> String {
-    match v.and_then(Value::as_array) {
-        Some(a) => a.iter().map(jv).collect::<Vec<_>>().join(" or "),
-        None => "?".to_string(),
-    }
-}
-
 fn entries<'a>(p: &'a P, k: &str) -> &'a [Value] {
     arr(p, k).map(Vec::as_slice).unwrap_or(&[])
+}
+
+fn region_name(v: Option<&Value>) -> String {
+    region_phrase(obj(v))
 }
 
 fn prefix(m: &P) -> String {
     let region = title(obj(m.get("region_ref")).get("region_id"));
     let producer = obj(m.get("producer"));
-    let mut sentences: Vec<String> = Vec::new();
+    let mut sentences = Vec::new();
     for entry in entries(producer, "baseline") {
-        let zone = jstr(obj(Some(entry)).get("zone"));
-        if zone == "own-deployment-zone" {
-            sentences.push(format!("Your deployment zone is always within {region}."));
-        } else if zone != "?" {
-            sentences.push(format!("{} is always within {region}.", title_case(&zone)));
-        }
-    }
-    let mut has_phase_extension = false;
-    for entry in entries(producer, "phase_extensions") {
-        let zone = jstr(obj(Some(entry)).get("zone"));
-        if zone == "no-mans-land" {
-            sentences.push(format!("At the start of each phase, No Man's Land is within {region} until the end of that phase if you control at least half of its objective markers."));
-            has_phase_extension = true;
-        } else if zone == "opponent-deployment-zone" {
-            sentences.push(if has_phase_extension {
-                "The same applies separately to your opponent's deployment zone.".to_string()
-            } else {
-                format!("At the start of each phase, your opponent's deployment zone is within {region} until the end of that phase if you control at least half of its objective markers.")
-            });
-            has_phase_extension = true;
-        } else if zone != "?" {
-            sentences.push(format!("At the start of each phase, {} is within {region} until the end of that phase if you control at least half of its objective markers.", title_case(&zone)));
-            has_phase_extension = true;
-        }
-    }
-    let additions = entries(producer, "additive_extensions");
-    for entry in additions {
-        let addition = obj(Some(entry));
-        if sv(addition, "kind") != Some("unit-proximity") {
-            continue;
-        }
-        let predicate = obj(obj(addition.get("source_gate")).get("unit_predicate"));
-        let kws = match arr(predicate, "keywords") {
-            Some(a) => a.iter().map(jv).collect::<Vec<_>>().join(" and "),
-            None => "?".to_string(),
-        };
+        let entry = obj(Some(entry));
+        let source = capitalize(&region_name(entry.get("region")));
+        let trail = expiry_trail(entry.get("duration"));
         sentences.push(format!(
-            "The area within {}\" of one or more friendly {kws} units is within {region}, continuously as those units move.",
-            jstr(addition.get("radius_inches"))
+            "{source} is within {region}{}.",
+            if trail.is_empty() {
+                String::new()
+            } else {
+                format!(" {trail}")
+            }
         ));
     }
-    let mut sources: Vec<String> = Vec::new();
-    for entry in additions {
-        let addition = obj(Some(entry));
-        if sv(addition, "kind") == Some("unit-proximity") {
-            continue;
-        }
-        let predicate = obj(obj(addition.get("source_gate")).get("unit_predicate"));
-        if key_count(predicate) == 0 {
-            continue;
-        }
-        let radius = nn(addition, "radius_inches")
-            .map(|r| format!(" within {}\"", jv(r)))
-            .unwrap_or_default();
-        let part = format!(
-            "{} units with {}{radius}",
-            title(predicate.get("faction")),
-            keywords(predicate.get("keywords"))
-        );
-        if !sources.contains(&part) {
-            sources.push(part);
-        }
-    }
-    if !sources.is_empty() {
+    for entry in entries(producer, "phase_extensions") {
+        let entry = obj(Some(entry));
+        let source = region_name(entry.get("region"));
+        let condition = nn(entry, "condition")
+            .map(|c| describe_condition_value(c))
+            .unwrap_or_else(|| "?".to_string());
+        let trigger = super::menu::normalize_triggers(entry.get("trigger"))
+            .into_iter()
+            .map(crate::translate::trigger::describe_trigger_value)
+            .filter(|phrase| !phrase.is_empty())
+            .collect::<Vec<_>>()
+            .join(" or ");
+        let trail = expiry_trail(entry.get("duration"));
         sentences.push(format!(
-            "Selected objective markers extend {region} around {}.",
-            sources.join(" or ")
+            "{}, if {condition}, {source} is within {region}{} (evaluated once at that time).",
+            capitalize(&trigger),
+            if trail.is_empty() {
+                String::new()
+            } else {
+                format!(" {trail}")
+            }
+        ));
+    }
+    for entry in entries(producer, "additive_extensions") {
+        let entry = obj(Some(entry));
+        let filter = obj(entry.get("filter"));
+        let source = filter_subject(filter, &Ctx::default());
+        sentences.push(format!(
+            "The area within {} of one or more {source} is within {region}, continuously as those units move.",
+            range_phrase(entry.get("range"))
         ));
     }
     sentences.join(" ")
 }
 
 fn subject(m: &P) -> String {
-    let gate = obj(obj(m.get("consumer")).get("beneficiary_gate"));
-    let faction = match nn(gate, "faction") {
-        Some(f) => title(Some(f)),
-        None => String::new(),
-    };
-    let faction_part = if faction.is_empty() {
-        " from your army".to_string()
-    } else {
-        format!(" from your {faction} army")
-    };
-    format!(
-        "Models in {} units{faction_part}",
-        keywords(gate.get("keywords"))
-    )
-}
-
-fn branch_effect(branch: &P, qualified: bool, ctx: &Ctx) -> String {
-    let effect_v = branch.get("effect").filter(|e| e.is_object());
-    let effect = obj(effect_v);
-    let modifier = obj(effect.get("modifier"));
-    let roll = roll_name(modifier.get("roll"));
-    let mut text = match sv(effect, "type") {
-        Some("re-roll") => {
-            let subset = sv(modifier, "subset");
-            match modifier.get("count").filter(|c| c.is_number()) {
-                Some(cnt) => {
-                    let one = cnt.as_f64() == Some(1.0);
-                    let capped = if jstr(modifier.get("roll")) == "any" {
-                        String::new()
-                    } else {
-                        format!("{roll} ")
-                    };
-                    format!(
-                        "can re-roll {} {}{capped}roll{}{}",
-                        if one {
-                            "one".to_string()
-                        } else {
-                            format!("up to {}", jv(cnt))
-                        },
-                        if subset == Some("all-failures") {
-                            "failed "
-                        } else {
-                            ""
-                        },
-                        if one { "" } else { "s" },
-                        if subset == Some("ones") { " of 1" } else { "" }
-                    )
-                }
-                None if sv(modifier, "result_scope") == Some("any-result") => {
-                    format!("can re-roll the {roll} roll")
-                }
-                None if subset == Some("ones") => format!("can re-roll {roll} rolls of 1"),
-                None => format!("can re-roll {roll} rolls"),
-            }
-        }
-        Some("roll-modifier") if nn(modifier, "value").is_some() => format!(
-            "gets {} to {roll}",
-            signed(modifier.get("operation"), modifier.get("value"))
-        ),
-        _ => inline(&Value::Object(effect.clone()), ctx),
-    };
-    if is_false(branch, "optional") {
-        if let Some(rest) = text.strip_prefix("can re-roll") {
-            text = format!("re-roll{rest}");
-        }
-    }
-    if let Some(k) = nn(modifier, "weapon_keyword") {
-        text.push_str(&format!(
-            " for {}{} attacks",
-            if qualified { "those " } else { "" },
-            jv(k)
-        ));
-    }
-    text
+    let consumer = obj(m.get("consumer"));
+    let beneficiary = obj(consumer.get("beneficiary_filter"));
+    filter_subject(beneficiary, &Ctx::default())
 }
 
 fn branch_text(m: &P, whole_unit: bool, qualified: bool, conditional: bool, ctx: &Ctx) -> String {
@@ -194,29 +97,31 @@ fn branch_text(m: &P, whole_unit: bool, qualified: bool, conditional: bool, ctx:
     } else {
         "default_branch"
     }));
-    let effect = branch_effect(branch, qualified, ctx);
+    let subject = subject(m);
+    let effect_ctx = Ctx {
+        unit_subject: Some(subject.clone()),
+        ..ctx.clone()
+    };
+    let effect = inline(branch.get("effect").unwrap_or(&Value::Null), &effect_ctx);
     if conditional {
-        return format!("{} {effect}", subject(m));
+        return effect;
     }
     if !qualified {
-        return format!("{} {effect}.", subject(m));
+        return format!("{}.", capitalize(&effect));
     }
     let condition = consumer
         .get("qualified_condition")
         .filter(|c| c.is_object());
-    if let Some(c) = condition.filter(|c| nn(obj(Some(c)), "operator").is_some()) {
-        return format!(
-            "If {}, those models {effect} instead",
-            describe_condition_value(c)
-        );
+    if let Some(c) = condition.filter(|c| !obj(Some(c)).is_empty()) {
+        return format!("If {}, {effect} instead", describe_condition_value(c));
     }
     let membership = obj(consumer.get("membership"));
     let region = title(obj(m.get("region_ref")).get("region_id"));
     let rel = relation(membership.get("relation"));
     let who = if whole_unit {
-        format!("If such a unit is {rel} {region}, those models")
+        format!("If such a unit is {rel} {region},")
     } else {
-        format!("If such a model is {rel} {region}, it")
+        format!("If such a model is {rel} {region},")
     };
     format!("{who} {effect} instead")
 }

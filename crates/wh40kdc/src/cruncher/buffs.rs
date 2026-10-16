@@ -14,6 +14,13 @@ use serde_json::Value;
 
 use crate::Phase;
 
+use super::gates::live_buffs;
+pub use super::resolved::{
+    CappedMod, CoverState, CritThresholds, ExtraKeywordEntry, FeelNoPainState, HighestMod,
+    IgnoredRolls, InvulnerableState, RerollState, Rerolls, ResolvedModifiers, SkillMods, SummedMod,
+    ThresholdState,
+};
+
 /// Which side an ability buff was sourced from. Drives stable tie-breaking
 /// inside [`resolve_buffs`].
 #[derive(Clone, Debug, Eq, Hash, PartialEq, Serialize, Deserialize)]
@@ -77,6 +84,23 @@ pub enum RollKind {
     Wound,
     Save,
     Damage,
+}
+
+/// The attacker's own rolls a crit threshold or an ignored-modifier buff applies to.
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "kebab-case")]
+pub enum AttackRoll {
+    Hit,
+    Wound,
+}
+
+/// The skill characteristic a `skill-mod` improves: WS for melee, BS for ranged attacks.
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq, Serialize, Deserialize)]
+pub enum SkillStat {
+    #[serde(rename = "WS")]
+    Ws,
+    #[serde(rename = "BS")]
+    Bs,
 }
 
 /// Re-roll scope. `AllFailures` strictly beats `Ones` when two reroll buffs
@@ -175,6 +199,26 @@ pub enum BuffContribution {
     InvulnerableSave {
         threshold: f64,
     },
+    /// Attacker-side: an unmodified roll of `value`+ is a critical hit/wound. Lowest wins.
+    CritThreshold {
+        roll: AttackRoll,
+        value: f64,
+    },
+    /// Attacker-side: the attacker ignores every negative modifier to this roll (and, for hits,
+    /// the benefit of cover). Positive modifiers still apply.
+    IgnoreModifiers {
+        roll: AttackRoll,
+    },
+    /// Attacker-side: improve the WS or BS characteristic by `value` (a characteristic change, so
+    /// not capped like a hit-roll modifier). The engine floors the characteristic at 2+.
+    SkillMod {
+        stat: SkillStat,
+        value: f64,
+    },
+    /// Defender-side: the Save characteristic becomes `value`+. Best (lowest) wins.
+    SaveCharacteristic {
+        value: f64,
+    },
 }
 
 /// Optional gating; the resolver drops buffs whose gate fails.
@@ -191,11 +235,31 @@ pub struct BuffApplicability {
     /// Attacker must carry this keyword (case-insensitive).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub requires_attacker_keyword: Option<String>,
-    /// Range-gated abilities (DSL `scope.range_inches`): the buff applies only
-    /// when the target is within this many inches. Permissive when the caller
-    /// leaves `EngineContext::distance_inches` unset.
+    /// Target must carry none of these keywords; unknown target keywords fail the gate.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub excluded_target_keywords: Option<Vec<String>>,
+    /// Full canonical predicates retained by enemy selections.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub target_filter: Option<Value>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub attacker_filter: Option<Value>,
+    /// An explicit inch-range gate; an unknown distance does not satisfy it.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub max_range_inches: Option<f64>,
+    /// Only attacks with this lower-case weapon name; unknown names fail the gate.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub weapon_name: Option<String>,
+    /// Canonical name exclusion; unknown weapon names cannot satisfy it.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub excluded_weapon_name: Option<String>,
+    /// Catalog-backed alternatives; all supplied reference parameters must match.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub weapon_keywords: Option<Vec<WeaponKeywordRef>>,
+    /// Conjunctive nested gates preserve separately authored weapon scopes.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub weapon_requirements: Option<Vec<BuffApplicability>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub excluded_weapon_keywords: Option<Vec<WeaponKeywordRef>>,
 }
 
 /// A single buff: where it came from, when it applies, what it contributes.
@@ -208,12 +272,36 @@ pub struct Buff {
     pub contribution: BuffContribution,
 }
 
+/// Actual membership in an attached unit, supplied by the caller's roster state.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "kebab-case")]
+pub enum AttachmentRole {
+    Leader,
+    Bodyguard,
+}
+
 /// Shared engine context. Carries the phase plus a few attacker/target flags
 /// the keyword translator and the resolver both need.
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct EngineContext {
     pub phase: Phase,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub attacker_unit_id: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub target_unit_id: Option<String>,
+    /// Caller-attested event recipients, independent of current attachment state.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub recipient_snapshots: Vec<super::recipient_snapshots::RecipientSnapshot>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub battle_round: Option<u32>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub attacker_attachment_role: Option<AttachmentRole>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub target_attachment_role: Option<AttachmentRole>,
+    /// Actual roles in the combined unit, keyed by source unit id.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub attachment_roles: Option<BTreeMap<String, AttachmentRole>>,
     /// Attacker has not moved this turn — Heavy fires its +1 to hit.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub attacker_stationary: Option<bool>,
@@ -224,7 +312,7 @@ pub struct EngineContext {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub within_half_range: Option<bool>,
     /// Distance to the target in inches; drives `applicable_when.max_range_inches`.
-    /// Unset = range gates evaluate permissively.
+    /// Unset leaves range gates unsatisfied.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub distance_inches: Option<f64>,
     /// Attacker benefits from cover (mostly informational).
@@ -245,6 +333,8 @@ pub struct EngineContext {
     /// The buffed unit is part of a combined ("attached") unit.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub attacker_attached: Option<bool>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub target_attached: Option<bool>,
     /// The army's Army Faction id. Drives the `army-faction` condition; `None` leaves it unknown.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub army_faction: Option<String>,
@@ -256,6 +346,17 @@ pub struct EngineContext {
     /// unit). Drives the `guided` condition; `None` leaves it unknown.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub attacker_guided: Option<bool>,
+    /// Lower-cased names of the attacking weapon and its profile. Drives
+    /// `applicable_when.weapon_name`; unknown names cannot satisfy a constraint.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub weapon_names: Option<Vec<String>>,
+    /// Catalog ids for unrated keyword matching. Rated selectors require
+    /// `weapon_keyword_refs`; live grants retain their full references.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub weapon_keywords: Option<Vec<String>>,
+    /// Printed keyword references, preserving ratings for canonical weapon selectors.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub weapon_keyword_refs: Option<Vec<WeaponKeywordRef>>,
 }
 
 impl EngineContext {
@@ -263,6 +364,13 @@ impl EngineContext {
     pub fn new(phase: Phase) -> Self {
         EngineContext {
             phase,
+            attacker_unit_id: None,
+            target_unit_id: None,
+            recipient_snapshots: Vec::new(),
+            battle_round: None,
+            attacker_attachment_role: None,
+            target_attachment_role: None,
+            attachment_roles: None,
             attacker_stationary: None,
             attacker_charged: None,
             within_half_range: None,
@@ -273,114 +381,15 @@ impl EngineContext {
             target_keywords: None,
             timing: None,
             attacker_attached: None,
+            target_attached: None,
             army_faction: None,
             battle_size: None,
             attacker_guided: None,
+            weapon_names: None,
+            weapon_keywords: None,
+            weapon_keyword_refs: None,
         }
     }
-}
-
-/// Read-out of a resolved buff stack, with provenance per field.
-#[derive(Clone, Debug, Default)]
-pub struct ResolvedModifiers {
-    pub hit_mod: CappedMod,
-    pub wound_mod: CappedMod,
-    pub save_mod: SummedMod,
-    pub cover: CoverState,
-    pub rerolls: Rerolls,
-    pub extra_keywords: Vec<ExtraKeywordEntry>,
-    /// All-wound FNP — fires on the main and mortal damage streams alike.
-    pub feel_no_pain: Option<FeelNoPainState>,
-    /// Mortal-only FNP — fires only on the mortal-wound damage stream.
-    pub feel_no_pain_mortal: Option<FeelNoPainState>,
-    pub damage_mod: SummedMod,
-    pub attacks_mod: SummedMod,
-    pub strength_mod: SummedMod,
-    pub toughness_mod: SummedMod,
-    pub ap_mod: SummedMod,
-    /// Defender-side damage reduction. Highest-wins (multiple sources do not
-    /// stack in 10e); the dominant source is the one whose value matches the
-    /// surviving reduction.
-    pub damage_reduction: HighestMod,
-    /// Ability-granted invulnerable save. Best (lowest threshold) wins. `None`
-    /// when no ability granted one; the engine still uses the unit's printed
-    /// `invuln_sv` from the profile in that case.
-    pub invulnerable: Option<InvulnerableState>,
-}
-
-/// Ability-granted invulnerable save read-out: the surviving threshold plus
-/// the source that produced it. Combined with the unit's printed invuln in
-/// the engine.
-#[derive(Clone, Debug)]
-pub struct InvulnerableState {
-    pub threshold: f64,
-    pub dominant_source: BuffSource,
-}
-
-/// Highest-wins modifier: `value` is the largest contributor, `dominant_source`
-/// is the one that produced it (with rank as the tiebreaker on equal values).
-#[derive(Clone, Debug, Default)]
-pub struct HighestMod {
-    pub value: f64,
-    pub dominant_source: Option<BuffSource>,
-}
-
-/// Hit/wound mod: signed sum clamped to ±1, dominant source picked from the
-/// surviving-sign contributors by the resolver's internal source-rank table.
-#[derive(Clone, Debug, Default)]
-pub struct CappedMod {
-    pub value: f64,
-    pub dominant_source: Option<BuffSource>,
-}
-
-/// Save/AP/damage/A/S/T: monotone additive across contributors.
-#[derive(Clone, Debug, Default)]
-pub struct SummedMod {
-    pub value: f64,
-    pub sources: Vec<BuffSource>,
-}
-
-#[derive(Clone, Debug, Default)]
-pub struct CoverState {
-    pub active: bool,
-    pub source: Option<BuffSource>,
-}
-
-#[derive(Clone, Debug, Default)]
-pub struct Rerolls {
-    pub hit: Option<RerollState>,
-    pub wound: Option<RerollState>,
-    pub save: Option<RerollState>,
-    pub damage: Option<RerollState>,
-}
-
-impl Rerolls {
-    pub fn for_roll(&self, roll: RollKind) -> Option<&RerollState> {
-        match roll {
-            RollKind::Hit => self.hit.as_ref(),
-            RollKind::Wound => self.wound.as_ref(),
-            RollKind::Save => self.save.as_ref(),
-            RollKind::Damage => self.damage.as_ref(),
-        }
-    }
-}
-
-#[derive(Clone, Debug)]
-pub struct RerollState {
-    pub subset: RerollSubset,
-    pub dominant_source: BuffSource,
-}
-
-#[derive(Clone, Debug)]
-pub struct ExtraKeywordEntry {
-    pub keyword_ref: WeaponKeywordRef,
-    pub source: BuffSource,
-}
-
-#[derive(Clone, Debug)]
-pub struct FeelNoPainState {
-    pub threshold: f64,
-    pub dominant_source: BuffSource,
 }
 
 /// Stable ordering used to break ties when multiple buffs claim the same field.
@@ -402,50 +411,6 @@ fn rank(source: &BuffSource) -> u32 {
     }
 }
 
-fn applies(buff: &Buff, ctx: &EngineContext) -> bool {
-    let Some(w) = buff.applicable_when.as_ref() else {
-        return true;
-    };
-    if let Some(phases) = &w.phases {
-        if !phases.is_empty() && !phases.contains(&ctx.phase) {
-            return false;
-        }
-    }
-    if let (Some(want), BuffContribution::Reroll { roll, .. }) = (w.roll_type, &buff.contribution) {
-        if *roll != want {
-            return false;
-        }
-    }
-    if let Some(req) = &w.requires_target_keyword {
-        let req_lower = req.to_lowercase();
-        let ok = ctx
-            .target_keywords
-            .as_ref()
-            .is_some_and(|kws| kws.iter().any(|k| k == &req_lower));
-        if !ok {
-            return false;
-        }
-    }
-    if let Some(req) = &w.requires_attacker_keyword {
-        let req_lower = req.to_lowercase();
-        let ok = ctx
-            .attacker_keywords
-            .as_ref()
-            .is_some_and(|kws| kws.iter().any(|k| k == &req_lower));
-        if !ok {
-            return false;
-        }
-    }
-    // Range gate: drop only when the distance is known and exceeds the range.
-    // Unknown distance is permissive.
-    if let (Some(max), Some(dist)) = (w.max_range_inches, ctx.distance_inches) {
-        if dist > max {
-            return false;
-        }
-    }
-    true
-}
-
 /// Collapse a flat buff stack into a [`ResolvedModifiers`] read-out. Pure
 /// function; the engine — and any UI that wants to render the resolved table
 /// before crunching — both go through this.
@@ -454,7 +419,7 @@ pub fn resolve_buffs(buffs: &[Buff], ctx: &EngineContext) -> ResolvedModifiers {
     let mut hit_contribs: Vec<Contribution> = Vec::new();
     let mut wound_contribs: Vec<Contribution> = Vec::new();
 
-    for b in buffs.iter().filter(|b| applies(b, ctx)) {
+    for b in live_buffs(buffs, ctx) {
         match &b.contribution {
             BuffContribution::HitMod { value } => {
                 hit_contribs.push(Contribution {
@@ -564,12 +529,59 @@ pub fn resolve_buffs(buffs: &[Buff], ctx: &EngineContext) -> ResolvedModifiers {
                     });
                 }
             }
+            BuffContribution::CritThreshold { roll, value } => {
+                let slot = match roll {
+                    AttackRoll::Hit => &mut out.crit_thresholds.hit,
+                    AttackRoll::Wound => &mut out.crit_thresholds.wound,
+                };
+                take_lowest(slot, *value, &b.source);
+            }
+            BuffContribution::IgnoreModifiers { roll } => {
+                let slot = match roll {
+                    AttackRoll::Hit => &mut out.ignore_modifiers.hit,
+                    AttackRoll::Wound => &mut out.ignore_modifiers.wound,
+                };
+                if slot.as_ref().is_none_or(|cur| rank(&b.source) < rank(cur)) {
+                    *slot = Some(b.source.clone());
+                }
+            }
+            BuffContribution::SkillMod { stat, value } => {
+                let summed = match stat {
+                    SkillStat::Ws => &mut out.skill_mod.ws,
+                    SkillStat::Bs => &mut out.skill_mod.bs,
+                };
+                sum_into(summed, *value, &b.source);
+            }
+            BuffContribution::SaveCharacteristic { value } => {
+                take_lowest(&mut out.save_characteristic, *value, &b.source);
+            }
         }
     }
 
-    out.hit_mod = cap_modifier(&hit_contribs);
-    out.wound_mod = cap_modifier(&wound_contribs);
+    // An ignored roll keeps only its positive modifiers.
+    let kept = |contribs: Vec<Contribution>, ignored: bool| -> Vec<Contribution> {
+        if ignored {
+            contribs.into_iter().filter(|c| c.value > 0.0).collect()
+        } else {
+            contribs
+        }
+    };
+    out.hit_mod = cap_modifier(&kept(hit_contribs, out.ignore_modifiers.hit.is_some()));
+    out.wound_mod = cap_modifier(&kept(wound_contribs, out.ignore_modifiers.wound.is_some()));
     out
+}
+
+/// Lowest value wins; an equal value goes to the better-ranked source.
+fn take_lowest(slot: &mut Option<ThresholdState>, value: f64, source: &BuffSource) {
+    let take = slot.as_ref().is_none_or(|cur| {
+        value < cur.value || (value == cur.value && rank(source) < rank(&cur.dominant_source))
+    });
+    if take {
+        *slot = Some(ThresholdState {
+            value,
+            dominant_source: source.clone(),
+        });
+    }
 }
 
 #[derive(Clone)]

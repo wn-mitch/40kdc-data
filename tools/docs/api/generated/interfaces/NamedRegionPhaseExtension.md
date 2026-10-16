@@ -6,83 +6,47 @@
 
 # Interface: NamedRegionPhaseExtension
 
-Defined in: [generated.ts:4619](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4619)
+Defined in: [generated.ts:3979](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3979)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "named-region-phase-extension".
 
 ## Properties
 
-### kind
+### region
 
-> **kind**: `"objective-majority-zone"`
+> **region**: [`RegionRef`](../type-aliases/RegionRef.md)
 
-Defined in: [generated.ts:4620](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4620)
-
-***
-
-### zone
-
-> **zone**: `"no-mans-land"` \| `"opponent-deployment-zone"`
-
-Defined in: [generated.ts:4621](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4621)
+Defined in: [generated.ts:3980](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3980)
 
 ***
 
-### control\_gate
+### condition
 
-> **control\_gate**: `object`
+> **condition**: [`AbilityDSLCondition1`](../type-aliases/AbilityDSLCondition1.md)
 
-Defined in: [generated.ts:4622](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4622)
-
-#### marker\_scope
-
-> **marker\_scope**: `"markers-in-zone"`
-
-#### controlled\_by
-
-> **controlled\_by**: `"owner-army"`
-
-#### threshold
-
-> **threshold**: `object`
-
-##### threshold.comparison
-
-> **comparison**: `"at-least"`
-
-##### threshold.fraction
-
-> **fraction**: `0.5`
+Defined in: [generated.ts:3981](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3981)
 
 ***
 
-### activation
+### trigger
 
-> **activation**: `object`
+> **trigger**: [`AbilityTrigger`](../type-aliases/AbilityTrigger.md)
 
-Defined in: [generated.ts:4630](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4630)
+Defined in: [generated.ts:3982](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3982)
 
-#### event
+***
 
-> **event**: `"phase-start"`
+### duration
 
-#### evaluation
+> **duration**: [`ScopeDuration`](../type-aliases/ScopeDuration.md)
+
+Defined in: [generated.ts:3983](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3983)
+
+***
+
+### evaluation
 
 > **evaluation**: `"snapshot-once"`
 
-#### canonical\_condition\_ids
-
-> **canonical\_condition\_ids**: \[`"controls"`\]
-
-***
-
-### expiry
-
-> **expiry**: `object`
-
-Defined in: [generated.ts:4635](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4635)
-
-#### event
-
-> **event**: `"phase-end"`
+Defined in: [generated.ts:3984](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3984)

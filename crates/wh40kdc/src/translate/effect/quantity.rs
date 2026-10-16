@@ -5,7 +5,7 @@
 use serde_json::Value;
 
 use super::words::*;
-use crate::translate::condition::{nn, obj, P};
+use crate::translate::condition::{nn, obj, range_phrase, P};
 use crate::translate::dekebab;
 
 const BATTLE_SIZES: [&str; 3] = ["incursion", "strike-force", "onslaught"];
@@ -43,8 +43,8 @@ pub(crate) fn scale_source(q: &P) -> String {
             }
         }
     }
-    if let Some(w) = nn(q, "within_inches") {
-        s.push_str(&format!(" within {}\"", jv(w)));
+    if let Some(w) = nn(q, "within") {
+        s.push_str(&format!(" within {}", range_phrase(Some(w))));
     }
     s
 }

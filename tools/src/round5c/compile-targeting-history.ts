@@ -44,49 +44,77 @@ const attackedTarget = (leaf: CompileLeaf) => leaf.fragment === "TARGET"
   && (leaf.family_id === "triggering-target" || (leaf.family_id === "target-binding" && leaf.parameters.bound_to === "attacked-unit"));
 
 /**
- * "When an enemy unit that targeted a friendly unengaged X unit has shot." + "That X unit.": the
- * Stratagem's target is the unit that enemy targeted, not the enemy. Runs after unit-filter
- * folding: the targeted leaf's object becomes the Stratagem's own unit (this-unit), and its
- * folded filter moves to the TARGET leaf as `attacked_filter`, which `targetRestrictions` turns
- * into the attacked-unit binding and its eligibility.
+ * Bind a Stratagem target to the unit an enemy selected as a target. Historical wording carries a
+ * `targeted` leaf; an immediate targets-selected event already carries its object filter. In both
+ * forms the TARGET is the attacked unit, never the enemy actor.
  */
 export function bindTargetedTarget(list: readonly CompileLeaf[]): CompileLeaf[] {
   const targets = list.filter(attackedTarget);
+  if (targets.length !== 1) return [...list];
   const targeted = list.filter((leaf) => leaf.family_id === "targeted" && leaf.fragment === "WHEN" && leaf.parameters.subject === "event-subject"
     && leaf.parameters.object === FOLLOWING_FILTER && leaf.parameters.following_filter !== undefined);
-  if (targets.length !== 1 || targeted.length !== 1) return [...list];
-  const filter = targeted[0]!.parameters.following_filter as Node;
-  // An enemy unit the enemy targeted is never your Stratagem's target.
+  if (targeted.length === 1) {
+    const filter = targeted[0]!.parameters.following_filter as Node;
+    // An enemy unit the enemy targeted is never your Stratagem's target.
+    if (filter.owner === "enemy") return [...list];
+    return list.map((leaf) => {
+      if (leaf === targeted[0]) {
+        const { following_filter: _filter, ...rest } = leaf.parameters;
+        return { ...leaf, parameters: { ...rest, object: "this-unit" } };
+      }
+      return leaf === targets[0] ? { ...leaf, parameters: { ...leaf.parameters, attacked_filter: filter } } : leaf;
+    });
+  }
+  if (targeted.length > 1) return [...list];
+  const immediate = list.filter((leaf) => leaf.family_id === "event" && leaf.fragment === "WHEN"
+    && leaf.parameters.kind === "enemy-selected-targets" && leaf.parameters.object_filter !== undefined);
+  if (immediate.length !== 1) return [...list];
+  const filter = immediate[0]!.parameters.object_filter as Node;
   if (filter.owner === "enemy") return [...list];
-  return list.map((leaf) => {
-    if (leaf === targeted[0]) {
-      const { following_filter: _filter, ...rest } = leaf.parameters;
-      return { ...leaf, parameters: { ...rest, object: "this-unit" } };
-    }
-    return leaf === targets[0] ? { ...leaf, parameters: { ...leaf.parameters, attacked_filter: filter } } : leaf;
-  });
+  return list.map((leaf) => leaf === targets[0]
+    ? { ...leaf, parameters: { ...leaf.parameters, attacked_filter: filter } }
+    : leaf);
 }
+const ATTACKED_FILTER_KEYS: Readonly<Record<string, true>> = {
+  owner: true,
+  all_of: true,
+  any_of: true,
+  none_of: true,
+  not_all_of: true,
+  state: true,
+  not_states: true,
+  level: true,
+  unit_ids: true,
+};
+
 
 /**
  * The attacked unit's filter as eligibility checks on the Stratagem's target, beyond the keywords
- * its TARGET leaf already requires (`allRequired`, every one; `anyRequired`, at least one).
+ * and exact identities its TARGET leaf already requires.
  */
-export function attackedChecks(filter: Node | undefined, allRequired: readonly string[] = [], anyRequired: readonly string[] = []): Node[] {
+export function attackedChecks(
+  filter: Node | undefined,
+  allRequired: readonly string[] = [],
+  anyRequired: readonly string[] = [],
+  idsRequired: readonly string[] = [],
+): Node[] {
   if (filter === undefined) return [];
-  const known = new Set(["owner", "all_of", "any_of", "none_of", "not_all_of", "state", "not_states"]);
-  const unknown = Object.keys(filter).filter((key) => !known.has(key));
+  const unknown = Object.keys(filter).filter((key) => !(key in ATTACKED_FILTER_KEYS));
   if (unknown.length) throw new CompileError(`The attacked unit's ${unknown.join(", ")} has no Stratagem target eligibility form yet.`);
-  const keywordCheck = (key: "all_of" | "any_of", keywords: string[]): Node[] => keywords.length ? [{ type: "has-keyword", parameters: { [key]: keywords } }] : [];
+  if (filter.level !== undefined && filter.level !== "unit") throw new CompileError("A Stratagem's attacked target must be a unit, not a model.");
+  const keywordCheck = (key: "all_of" | "any_of", keywords: string[]): Node[] => keywords.length ? [{ type: "matches", parameters: { filter: { [key]: keywords } } }] : [];
   const allOf = ((filter.all_of as string[] | undefined) ?? []).filter((keyword) => !allRequired.includes(keyword));
   const anyOf = (filter.any_of as string[] | undefined) ?? [];
   const sameAny = anyOf.length === anyRequired.length && anyOf.every((keyword) => anyRequired.includes(keyword));
-  const not = (node: Node): Node => ({ operator: "not", operands: [node] });
+  const unitIds = (filter.unit_ids as string[] | undefined) ?? [];
+  const sameIds = unitIds.length === idsRequired.length && unitIds.every((id) => idsRequired.includes(id));
   return [
     ...keywordCheck("all_of", allOf),
     ...(sameAny ? [] : keywordCheck("any_of", anyOf)),
-    ...((filter.none_of as string[] | undefined) ?? []).map((keyword) => not({ type: "has-keyword", parameters: { all_of: [keyword] } })),
-    ...(filter.not_all_of !== undefined ? [not({ type: "has-keyword", parameters: { all_of: filter.not_all_of } })] : []),
-    ...(filter.state !== undefined ? [{ type: "unit-state", parameters: { state: filter.state } }] : []),
-    ...((filter.not_states as string[] | undefined) ?? []).map((state) => not({ type: "unit-state", parameters: { state } })),
+    ...(unitIds.length && !sameIds ? [{ type: "matches", parameters: { filter: { level: "unit", unit_ids: unitIds } } }] : []),
+    ...(filter.none_of !== undefined ? [{ type: "matches", parameters: { filter: { none_of: filter.none_of } } }] : []),
+    ...(filter.not_all_of !== undefined ? [{ type: "matches", parameters: { filter: { not_all_of: filter.not_all_of } } }] : []),
+    ...(filter.state !== undefined ? [{ type: "matches", parameters: { filter: { state: filter.state } } }] : []),
+    ...(filter.not_states !== undefined ? [{ type: "matches", parameters: { filter: { not_states: filter.not_states } } }] : []),
   ];
 }

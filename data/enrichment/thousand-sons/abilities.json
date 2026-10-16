@@ -85,7 +85,7 @@
       "type": "mortal-wounds",
       "target": "defender",
       "modifier": {
-        "count": "1"
+        "count": 1
       }
     },
     "scope": {
@@ -112,15 +112,19 @@
       "type": "aura",
       "target": "friendly-within-aura",
       "modifier": {
-        "range": 6,
+        "range": {
+          "inches": 6
+        },
         "effect": {
           "type": "conditional",
           "condition": {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "PSYKER"
-              ]
+              "filter": {
+                "all_of": [
+                  "PSYKER"
+                ]
+              }
             }
           },
           "effect": {
@@ -265,10 +269,13 @@
         "steps": [
           {
             "type": "destroy-models",
-            "target": "this-unit",
+            "target": {
+              "member_of": "this-unit",
+              "level": "model",
+              "attachment_role": "bodyguard"
+            },
             "modifier": {
-              "count": 1,
-              "exclude_leader": true
+              "count": 1
             }
           },
           {
@@ -278,7 +285,11 @@
               "stat": "A",
               "operation": "add",
               "value": "D3",
-              "weapon_keyword": "PSYCHIC"
+              "weapons": {
+                "keyword": {
+                  "keyword_id": "psychic"
+                }
+              }
             }
           },
           {
@@ -288,7 +299,11 @@
               "stat": "S",
               "operation": "add",
               "value": "D3",
-              "weapon_keyword": "PSYCHIC"
+              "weapons": {
+                "keyword": {
+                  "keyword_id": "psychic"
+                }
+              }
             }
           }
         ]
@@ -355,8 +370,10 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Lethal Hits"
+          "keywords": [
+            {
+              "keyword_id": "lethal-hits"
+            }
           ]
         }
       }
@@ -445,7 +462,9 @@
                 }
               },
               "kind": "shoot",
-              "weapon_name": "demolisher cannon"
+              "weapons": {
+                "name": "demolisher cannon"
+              }
             }
           },
           {
@@ -457,7 +476,9 @@
                 "hit"
               ],
               "only": "worsening",
-              "weapon_type": "ranged"
+              "weapons": {
+                "type": "ranged"
+              }
             }
           }
         ]
@@ -539,11 +560,16 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "owner": "friendly",
-        "max_count": 3,
-        "keywords": [
-          "THOUSAND SONS"
-        ]
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "THOUSAND SONS"
+          ]
+        },
+        "count": {
+          "min": 0,
+          "max": 3
+        }
       },
       "effect": {
         "type": "choice",
@@ -661,8 +687,10 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Ignores Cover"
+        "keywords": [
+          {
+            "keyword_id": "ignores-cover"
+          }
         ]
       }
     },
@@ -699,8 +727,13 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Sustained Hits 1"
+          "keywords": [
+            {
+              "keyword_id": "sustained-hits",
+              "parameters": {
+                "value": 1
+              }
+            }
           ]
         }
       }
@@ -761,7 +794,7 @@
       "type": "mortal-wounds",
       "target": "defender",
       "modifier": {
-        "count": "1"
+        "count": 1
       }
     },
     "scope": {
@@ -790,22 +823,28 @@
         "operator": "and",
         "operands": [
           {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "subject": "event-subject",
-              "of": "this-unit",
-              "range": {
-                "inches": 8
-              }
+              "filter": {
+                "within": {
+                  "range": {
+                    "inches": 8
+                  },
+                  "of": "this-unit"
+                }
+              },
+              "subject": "event-subject"
             }
           },
           {
             "operator": "not",
             "operands": [
               {
-                "type": "unit-state",
+                "type": "matches",
                 "parameters": {
-                  "state": "engaged"
+                  "filter": {
+                    "state": "engaged"
+                  }
                 }
               }
             ]
@@ -852,12 +891,23 @@
     "source_digest": "37a96662aa07cdfc6587527e329b76be342187db439bf0fc80e793f38cd6df49",
     "version": "2025-q3",
     "effect": {
-      "type": "roll-modifier",
-      "target": "attacker",
-      "modifier": {
-        "roll": "wound",
-        "operation": "subtract",
-        "value": 1
+      "type": "conditional",
+      "condition": {
+        "type": "model-count",
+        "parameters": {
+          "subject": "this-unit",
+          "keyword": "PSYKER",
+          "min": 1
+        }
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "attacker",
+        "modifier": {
+          "roll": "wound",
+          "operation": "subtract",
+          "value": 1
+        }
       }
     },
     "scope": {
@@ -867,7 +917,7 @@
       "scarab-occult-terminators"
     ],
     "ability_type": "unit",
-    "behavior": "reactive",
+    "behavior": "passive",
     "faction_id": "thousand-sons"
   },
   {
@@ -883,10 +933,9 @@
     "effect": {
       "type": "stance-select",
       "mode": "re-selectable",
-      "scope": "unit",
-      "select": "start-of-battle-round",
       "options": [
         {
+          "id": "option-1",
           "name": "Impossible Form",
           "effect": {
             "type": "conditional",
@@ -903,64 +952,117 @@
             },
             "effect": {
               "type": "stat-modifier",
-              "target": "this-model",
+              "target": "attacker",
               "modifier": {
                 "stat": "D",
                 "operation": "subtract",
-                "value": 1,
-                "incoming": true
+                "value": 1
               }
             }
           }
         },
         {
+          "id": "option-2",
           "name": "Treason of Tzeentch",
           "effect": {
-            "type": "select-units",
-            "selector": {
-              "count": 1,
-              "owner": "enemy",
-              "within_inches": 24
-            },
+            "type": "ability-part",
             "effect": {
-              "type": "weapon-ability-grant",
-              "target": "selected-unit",
-              "modifier": {
-                "abilities": [
-                  "HAZARDOUS"
-                ],
-                "weapon_type": "ranged"
+              "type": "select-units",
+              "selector": {
+                "filter": {
+                  "owner": "enemy"
+                },
+                "count": {
+                  "min": 1,
+                  "max": 1
+                },
+                "eligibility": {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "selected-unit",
+                    "filter": {
+                      "within": {
+                        "of": "this-model",
+                        "range": {
+                          "inches": 24
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "effect": {
+                "type": "weapon-ability-grant",
+                "target": "selected-unit",
+                "modifier": {
+                  "keywords": [
+                    {
+                      "keyword_id": "hazardous"
+                    }
+                  ],
+                  "weapons": {
+                    "type": "ranged"
+                  }
+                }
               }
-            }
+            },
+            "trigger": {
+              "event": "phase-started",
+              "condition": {
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "phase-is",
+                    "parameters": {
+                      "phase": "shooting"
+                    }
+                  },
+                  {
+                    "type": "player-turn-is",
+                    "parameters": {
+                      "turn": "opponent-turn"
+                    }
+                  }
+                ]
+              }
+            },
+            "duration": "phase"
           }
         },
         {
+          "id": "option-3",
           "name": "Time Flux",
           "effect": {
-            "type": "stat-modifier",
-            "target": {
-              "owner": "friendly",
-              "all_of": [
-                "THOUSAND SONS"
-              ],
-              "within": {
-                "range": {
-                  "inches": 6
-                },
-                "of": "this-model"
-              }
-            },
+            "type": "aura",
+            "target": "friendly-within-aura",
             "modifier": {
-              "stat": "M",
-              "operation": "add",
-              "value": 2
+              "range": {
+                "inches": 6
+              },
+              "effect": {
+                "type": "stat-modifier",
+                "target": "recipient",
+                "modifier": {
+                  "stat": "M",
+                  "operation": "add",
+                  "value": 2
+                }
+              },
+              "eligible": {
+                "owner": "friendly",
+                "all_of": [
+                  "THOUSAND SONS"
+                ]
+              }
             }
           }
         }
-      ]
+      ],
+      "min_choices": 1,
+      "max_choices": 1
     },
     "scope": {
-      "duration": "battle-round"
+      "duration": "until-next-battle-round"
     },
     "unit_ids": [
       "magnus-the-red"
@@ -1070,13 +1172,15 @@
             "operator": "not",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "subject": "defender",
-                  "any_of": [
-                    "MONSTER",
-                    "VEHICLE"
-                  ]
+                  "filter": {
+                    "any_of": [
+                      "MONSTER",
+                      "VEHICLE"
+                    ]
+                  },
+                  "subject": "defender"
                 }
               }
             ]
@@ -1193,12 +1297,14 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "subject": "defender",
-          "all_of": [
-            "CHARACTER"
-          ]
+          "filter": {
+            "all_of": [
+              "CHARACTER"
+            ]
+          },
+          "subject": "defender"
         }
       },
       "effect": {
@@ -1258,10 +1364,17 @@
           "type": "weapon-ability-grant",
           "target": "this-model",
           "modifier": {
-            "abilities": [
-              "Sustained Hits D3"
-            ],
-            "weapon_name": "Dark Blessing"
+            "weapons": {
+              "name": "Dark Blessing"
+            },
+            "keywords": [
+              {
+                "keyword_id": "sustained-hits",
+                "parameters": {
+                  "value": "D3"
+                }
+              }
+            ]
           }
         },
         {
@@ -1368,12 +1481,16 @@
         "operator": "and",
         "operands": [
           {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "of": {
-                "objective": {}
-              },
-              "range": "objective-control"
+              "filter": {
+                "within": {
+                  "range": "objective-control",
+                  "of": {
+                    "objective": {}
+                  }
+                }
+              }
             }
           },
           {
@@ -1480,7 +1597,9 @@
           "range": {
             "inches": 18
           },
-          "weapon_type": "ranged"
+          "weapons": {
+            "type": "ranged"
+          }
         }
       }
     },
@@ -1511,18 +1630,22 @@
         "operator": "and",
         "operands": [
           {
-            "type": "owned-by",
+            "type": "matches",
             "parameters": {
-              "owner": "enemy"
+              "filter": {
+                "owner": "enemy"
+              }
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "all_of": [
-                "INFANTRY"
-              ]
+              "filter": {
+                "all_of": [
+                  "INFANTRY"
+                ]
+              },
+              "subject": "defender"
             }
           },
           {
@@ -1533,7 +1656,9 @@
               "filter": {
                 "roll": "hit",
                 "result": "success",
-                "weapon_name": "Arcane Fire"
+                "weapons": {
+                  "name": "Arcane Fire"
+                }
               },
               "window": "event"
             }
@@ -1824,26 +1949,45 @@
     "source_digest": "0e91e9ce75838cca115ee817dc5c0c2611e6581d99e5878031672e17a4ac626a",
     "version": "2025-q3",
     "effect": {
-      "type": "designate-target",
-      "designation": "flame-wreathed",
-      "select": {
-        "scope": "enemy-unit",
-        "count": 1,
-        "timing": "end-of-normal-move"
-      },
-      "applies": {
-        "to": "target",
-        "effect": {
-          "type": "rule-state",
-          "target": "this-unit",
-          "modifier": {
-            "direction": "suppressed",
-            "rule_kind": "core-rule",
-            "rule": "benefit-of-cover"
-          }
+      "type": "ability-part",
+      "trigger": {
+        "event": "move-ended",
+        "subject": "this-unit",
+        "filter": {
+          "move_types": [
+            "normal"
+          ]
         }
       },
-      "duration": "turn"
+      "effect": {
+        "type": "designate-target",
+        "designation": "flame-wreathed",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
+          }
+        },
+        "applies": {
+          "to": "target",
+          "effect": {
+            "type": "rule-state",
+            "target": "this-unit",
+            "modifier": {
+              "direction": "suppressed",
+              "rule_kind": "core-rule",
+              "rule": "benefit-of-cover"
+            }
+          }
+        },
+        "duration": "turn"
+      }
     },
     "scope": {
       "duration": "turn"
@@ -1869,19 +2013,23 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "subject": "this-model",
-          "of": {
-            "owner": "friendly",
-            "all_of": [
-              "THOUSAND SONS",
-              "INFANTRY"
-            ]
+          "filter": {
+            "within": {
+              "range": {
+                "inches": 3
+              },
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "THOUSAND SONS",
+                  "INFANTRY"
+                ]
+              }
+            }
           },
-          "range": {
-            "inches": 3
-          }
+          "subject": "this-model"
         }
       },
       "effect": {
@@ -1913,13 +2061,69 @@
     "source_digest": "3aa9a077475b46109a712b8d996df0db4cb92b2cf5a495e614bae52ea30abf86",
     "version": "2025-q3",
     "effect": {
-      "type": "roll-modifier",
-      "target": "this-model",
-      "modifier": {
-        "roll": "psychic",
-        "operation": "add",
-        "value": 1,
-        "cap": 2
+      "type": "ability-part",
+      "trigger": {
+        "event": "model-destroyed",
+        "object": {
+          "owner": "friendly",
+          "all_of": [
+            "PSYKER",
+            "THOUSAND SONS"
+          ],
+          "level": "model",
+          "has_ability": [
+            "cabal-of-sorcerers"
+          ]
+        },
+        "optional": false
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "friendly",
+            "level": "model",
+            "has_ability": [
+              "spirit-snare-thousand-sons"
+            ],
+            "within": {
+              "range": {
+                "inches": 9
+              },
+              "of": "event-object"
+            }
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        },
+        "effect": {
+          "type": "ability-grant",
+          "target": "selected-unit",
+          "modifier": {
+            "definition": {
+              "type": "ability-part",
+              "trigger": {
+                "event": "used",
+                "filter": {
+                  "kind": "ritual"
+                }
+              },
+              "duration": "battle",
+              "effect": {
+                "type": "roll-modifier",
+                "target": "this-model",
+                "modifier": {
+                  "roll": "psychic",
+                  "operation": "add",
+                  "value": 1,
+                  "cap": 2
+                }
+              }
+            }
+          }
+        }
       }
     },
     "scope": {
@@ -1949,25 +2153,29 @@
         "operator": "and",
         "operands": [
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "THOUSAND SONS"
-              ]
+              "filter": {
+                "all_of": [
+                  "THOUSAND SONS"
+                ]
+              }
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "INFANTRY"
-              ]
+              "filter": {
+                "all_of": [
+                  "INFANTRY"
+                ]
+              }
             }
           }
         ]
       },
       "effect": {
-        "type": "weapon-ability-grant",
+        "type": "keyword-grant",
         "target": {
           "owner": "friendly",
           "within": {
@@ -1977,8 +2185,8 @@
           }
         },
         "modifier": {
-          "abilities": [
-            "stealth"
+          "keywords": [
+            "STEALTH"
           ]
         }
       }
@@ -2104,11 +2312,11 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "THOUSAND SONS",
         "PSYKER"
       ],
-      "excluded_keywords": [
+      "none_of": [
         "MONSTER"
       ]
     },
@@ -2148,8 +2356,10 @@
             ]
           },
           "modifier": {
-            "abilities": [
-              "Psychic"
+            "keywords": [
+              {
+                "keyword_id": "psychic"
+              }
             ]
           }
         },
@@ -2177,7 +2387,9 @@
             "stat": "WS",
             "operation": "improve",
             "value": 1,
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            }
           }
         }
       ]
@@ -2186,7 +2398,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "THOUSAND SONS"
       ]
     }
@@ -2244,12 +2456,14 @@
                   }
                 },
                 {
-                  "type": "has-keyword",
+                  "type": "matches",
                   "parameters": {
-                    "subject": "attacker",
-                    "all_of": [
-                      "MUTANT"
-                    ]
+                    "filter": {
+                      "all_of": [
+                        "MUTANT"
+                      ]
+                    },
+                    "subject": "attacker"
                   }
                 }
               ]
@@ -2273,7 +2487,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "THOUSAND SONS"
       ]
     }
@@ -2313,11 +2527,11 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "THOUSAND SONS",
         "PSYKER"
       ],
-      "excluded_keywords": [
+      "none_of": [
         "MONSTER"
       ]
     }
@@ -2349,11 +2563,11 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "THOUSAND SONS",
         "PSYKER"
       ],
-      "excluded_keywords": [
+      "none_of": [
         "MONSTER"
       ]
     },
@@ -2394,12 +2608,22 @@
           "effect": {
             "type": "select-units",
             "selector": {
-              "max_count": 1,
-              "owner": "friendly",
-              "keywords": [
-                "SEKHETAR ROBOTS"
-              ],
-              "range_inches": 3
+              "filter": {
+                "owner": "friendly",
+                "all_of": [
+                  "SEKHETAR ROBOTS"
+                ],
+                "within": {
+                  "range": {
+                    "inches": 3
+                  },
+                  "of": "this-model"
+                }
+              },
+              "count": {
+                "min": 0,
+                "max": 1
+              }
             },
             "effect": {
               "type": "heal",
@@ -2413,18 +2637,22 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "subject": "this-model",
-              "of": {
-                "owner": "friendly",
-                "all_of": [
-                  "SEKHETAR ROBOTS"
-                ]
+              "filter": {
+                "within": {
+                  "range": {
+                    "inches": 3
+                  },
+                  "of": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "SEKHETAR ROBOTS"
+                    ]
+                  }
+                }
               },
-              "range": {
-                "inches": 3
-              }
+              "subject": "this-model"
             }
           },
           "effect": {
@@ -2441,7 +2669,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "THOUSAND SONS",
         "SORCERER"
       ]
@@ -2474,12 +2702,22 @@
       "effect": {
         "type": "select-units",
         "selector": {
-          "owner": "friendly",
-          "count": 1,
-          "keywords": [
-            "SEKHETAR ROBOTS"
-          ],
-          "within_inches": 6
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "SEKHETAR ROBOTS"
+            ],
+            "within": {
+              "range": {
+                "inches": 6
+              },
+              "of": "this-model"
+            }
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
         },
         "effect": {
           "type": "stat-modifier",
@@ -2488,7 +2726,9 @@
             "stat": "BS",
             "operation": "improve",
             "value": 1,
-            "weapon_type": "ranged"
+            "weapons": {
+              "type": "ranged"
+            }
           }
         }
       }
@@ -2497,7 +2737,7 @@
       "duration": "turn"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "THOUSAND SONS",
         "SORCERER"
       ]
@@ -2530,17 +2770,28 @@
       "effect": {
         "type": "select-units",
         "selector": {
-          "owner": "friendly",
-          "count": 1,
-          "keywords": [
-            "MUTANT"
-          ],
-          "within_inches": 6,
-          "reference": "bearer",
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "MUTANT"
+            ],
+            "within": {
+              "range": {
+                "inches": 6
+              },
+              "of": "this-model"
+            }
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
           "eligibility": {
-            "type": "unit-state",
+            "type": "matches",
             "parameters": {
-              "state": "battle-shocked"
+              "filter": {
+                "state": "battle-shocked"
+              }
             }
           }
         },
@@ -2558,7 +2809,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "THOUSAND SONS",
         "TZAANGOR SHAMAN"
       ]
@@ -2590,17 +2841,26 @@
             "stat": "AP",
             "operation": "improve",
             "value": 1,
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            }
           }
         },
         {
           "type": "weapon-ability-grant",
           "target": "this-model",
           "modifier": {
-            "abilities": [
-              "Cleave 1"
-            ],
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            },
+            "keywords": [
+              {
+                "keyword_id": "cleave",
+                "parameters": {
+                  "value": 1
+                }
+              }
+            ]
           }
         }
       ]
@@ -2609,7 +2869,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "SPAWN"
       ]
     }
@@ -2642,10 +2902,24 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "THOUSAND SONS",
         "PSYKER"
       ]
+    },
+    "trigger": {
+      "event": "damage-allocated",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "PSYKER",
+          "THOUSAND SONS"
+        ],
+        "any_of": [
+          "INFANTRY",
+          "MOUNTED"
+        ]
+      }
     }
   },
   {
@@ -2667,10 +2941,14 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "count": 1,
-        "owner": "enemy",
-        "engagement_relation": "engaged-with-bearer",
-        "reference": "bearer-unit"
+        "filter": {
+          "owner": "enemy",
+          "engaged_with": "this-unit"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        }
       },
       "effect": {
         "type": "mortal-wounds",
@@ -2721,7 +2999,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "THOUSAND SONS",
         "PSYKER"
       ]
@@ -2757,7 +3035,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "SEKHETAR ROBOTS"
       ]
     }
@@ -2793,7 +3071,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "SEKHETAR ROBOTS"
       ]
     }
@@ -2817,26 +3095,55 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "attack-compare",
-        "parameters": {
-          "left": {
-            "of": "attacker",
-            "stat": "S"
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "defender",
+              "filter": {
+                "within": {
+                  "of": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "PSYKER",
+                      "THOUSAND SONS"
+                    ]
+                  },
+                  "range": {
+                    "inches": 12
+                  }
+                }
+              }
+            }
           },
-          "comparison": "greater-than",
-          "right": {
-            "of": "defender",
-            "stat": "T"
+          {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
+            }
+          },
+          {
+            "type": "attack-compare",
+            "parameters": {
+              "left": {
+                "of": "attacker",
+                "stat": "S"
+              },
+              "comparison": "gt",
+              "right": {
+                "of": "defender",
+                "stat": "T"
+              }
+            }
           }
-        }
+        ]
       },
       "effect": {
         "type": "roll-modifier",
-        "target": "this-unit",
+        "target": "attacker",
         "modifier": {
           "roll": "wound",
-          "weapon_type": "ranged",
-          "incoming": true,
           "operation": "subtract",
           "value": 1
         }
@@ -2846,9 +3153,24 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "SEKHETAR ROBOTS"
       ]
+    },
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "SEKHETAR ROBOTS"
+        ]
+      }
     }
   },
   {
@@ -2874,10 +3196,14 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Assault"
-            ],
-            "weapon_type": "ranged"
+            "weapons": {
+              "type": "ranged"
+            },
+            "keywords": [
+              {
+                "keyword_id": "assault"
+              }
+            ]
           }
         },
         {
@@ -2915,7 +3241,7 @@
       "duration": "turn"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "MUTANT"
       ]
     }
@@ -2952,7 +3278,7 @@
       "duration": "turn"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "MUTANT"
       ]
     }
@@ -2986,7 +3312,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "MONSTER",
         "MUTANT"
       ]
@@ -3010,7 +3336,9 @@
     "behavior": "aura",
     "effect": {
       "type": "named-region-state",
-      "target": {"owner":"friendly"},
+      "target": {
+        "owner": "friendly"
+      },
       "modifier": {
         "region_ref": {
           "region_id": "flow-of-magic",
@@ -3025,60 +3353,52 @@
           "parent_ref": null,
           "baseline": [
             {
-              "kind": "fixed-zone",
-              "zone": "own-deployment-zone",
-              "activation": {
-                "event": "always-active"
+              "region": {
+                "territory": "your-deployment-zone"
               },
-              "expiry": {
-                "event": "never"
-              }
+              "duration": "permanent"
             }
           ],
           "phase_extensions": [
             {
-              "kind": "objective-majority-zone",
-              "zone": "no-mans-land",
-              "control_gate": {
-                "marker_scope": "markers-in-zone",
-                "controlled_by": "owner-army",
-                "threshold": {
-                  "comparison": "at-least",
-                  "fraction": 0.5
+              "region": {
+                "territory": "no-mans-land"
+              },
+              "condition": {
+                "type": "controls",
+                "parameters": {
+                  "by": "friendly",
+                  "proportion": {
+                    "comparison": "gte",
+                    "fraction": 0.5
+                  }
                 }
               },
-              "activation": {
-                "event": "phase-start",
-                "evaluation": "snapshot-once",
-                "canonical_condition_ids": [
-                  "controls"
-                ]
+              "trigger": {
+                "event": "phase-started"
               },
-              "expiry": {
-                "event": "phase-end"
-              }
+              "duration": "phase",
+              "evaluation": "snapshot-once"
             },
             {
-              "kind": "objective-majority-zone",
-              "zone": "opponent-deployment-zone",
-              "control_gate": {
-                "marker_scope": "markers-in-zone",
-                "controlled_by": "owner-army",
-                "threshold": {
-                  "comparison": "at-least",
-                  "fraction": 0.5
+              "region": {
+                "territory": "enemy-deployment-zone"
+              },
+              "condition": {
+                "type": "controls",
+                "parameters": {
+                  "by": "friendly",
+                  "proportion": {
+                    "comparison": "gte",
+                    "fraction": 0.5
+                  }
                 }
               },
-              "activation": {
-                "event": "phase-start",
-                "evaluation": "snapshot-once",
-                "canonical_condition_ids": [
-                  "controls"
-                ]
+              "trigger": {
+                "event": "phase-started"
               },
-              "expiry": {
-                "event": "phase-end"
-              }
+              "duration": "phase",
+              "evaluation": "snapshot-once"
             }
           ],
           "additive_extensions": []
@@ -3087,14 +3407,6 @@
           "state_ref": {
             "region_id": "flow-of-magic",
             "owner_faction": "thousand-sons"
-          },
-          "beneficiary_gate": {
-            "owner": "owner-army",
-            "faction": "thousand-sons",
-            "operator": "and",
-            "keywords": [
-              "THOUSAND SONS"
-            ]
           },
           "membership": {
             "unit_scope": "model",
@@ -3114,55 +3426,52 @@
             }
           },
           "default_branch": {
-            "source": {
-              "role": "eligible-source",
-              "gate_ref": "beneficiary_gate"
-            },
-            "beneficiary": {
-              "role": "eligible-beneficiary",
-              "gate_ref": "beneficiary_gate"
-            },
-            "target": "attacker",
-            "timing": {
-              "event": "each-attack"
-            },
-            "duration": "attack-resolution",
             "effect": {
-              "type": "re-roll",
-              "target": "attacker",
-              "modifier": {
-                "roll": "wound",
-                "subset": "ones",
-                "weapon_keyword": "Psychic"
-              }
-            },
-            "optional": false
+              "type": "ability-part",
+              "effect": {
+                "type": "re-roll",
+                "target": "attacker",
+                "modifier": {
+                  "roll": "wound",
+                  "subset": "ones",
+                  "weapons": {
+                    "keyword": {
+                      "keyword_id": "psychic"
+                    }
+                  }
+                }
+              },
+              "optional": false,
+              "duration": "resolution"
+            }
           },
           "qualified_branch": {
-            "source": {
-              "role": "eligible-source",
-              "gate_ref": "beneficiary_gate"
-            },
-            "beneficiary": {
-              "role": "eligible-beneficiary",
-              "gate_ref": "beneficiary_gate"
-            },
-            "target": "attacker",
-            "timing": {
-              "event": "each-attack"
-            },
-            "duration": "attack-resolution",
             "effect": {
-              "type": "roll-modifier",
-              "target": "attacker",
-              "modifier": {
-                "operation": "add",
-                "value": 1,
-                "roll": "wound",
-                "weapon_keyword": "Psychic"
-              }
-            },
-            "optional": false
+              "type": "ability-part",
+              "effect": {
+                "type": "roll-modifier",
+                "target": "attacker",
+                "modifier": {
+                  "operation": "add",
+                  "value": 1,
+                  "roll": "wound",
+                  "weapons": {
+                    "keyword": {
+                      "keyword_id": "psychic"
+                    }
+                  }
+                }
+              },
+              "optional": false,
+              "duration": "resolution"
+            }
+          },
+          "beneficiary_filter": {
+            "owner": "friendly",
+            "all_of": [
+              "THOUSAND-SONS",
+              "THOUSAND SONS"
+            ]
           }
         },
         "branch_precedence": "qualified-replaces-default"
@@ -3212,7 +3521,11 @@
               "stat": "S",
               "operation": "add",
               "value": 1,
-              "weapon_keyword": "Psychic"
+              "weapons": {
+                "keyword": {
+                  "keyword_id": "psychic"
+                }
+              }
             }
           }
         },
@@ -3236,7 +3549,11 @@
               "stat": "S",
               "operation": "add",
               "value": 2,
-              "weapon_keyword": "Psychic"
+              "weapons": {
+                "keyword": {
+                  "keyword_id": "psychic"
+                }
+              }
             }
           }
         }
@@ -3296,7 +3613,11 @@
             "modifier": {
               "roll": "hazard",
               "result_scope": "any-result",
-              "weapon_keyword": "PSYCHIC"
+              "weapons": {
+                "keyword": {
+                  "keyword_id": "psychic"
+                }
+              }
             }
           }
         ]
@@ -3329,7 +3650,9 @@
         "stat": "A",
         "operation": "add",
         "value": 3,
-        "weapon_type": "ranged"
+        "weapons": {
+          "type": "ranged"
+        }
       }
     },
     "scope": {
@@ -3431,71 +3754,114 @@
     "source_digest": "b9f97f533dc290c235582f12d158c39bfa0a4292e2f7897e4a44b57726594c0c",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "not",
-        "operands": [
-          {
-            "type": "happened",
-            "parameters": {
-              "event": "selected",
-              "filter": {
-                "to": "fight"
-              },
-              "window": "phase"
-            }
-          }
-        ]
+      "type": "ability-part",
+      "trigger": {
+        "event": "model-destroyed",
+        "object": "model-in-this-unit"
       },
       "effect": {
         "type": "sequence",
         "steps": [
           {
-            "type": "conditional",
-            "condition": {
-              "operator": "not",
-              "operands": [
-                {
-                  "type": "designated",
-                  "parameters": {
-                    "tag": "wholly-within-flow-of-magic"
+            "type": "act-on-death",
+            "target": "event-object",
+            "modifier": {
+              "act": "fight",
+              "resolution": "after-attacking-unit-finishes",
+              "removal": "after-destroyed-model-fights",
+              "gate": {
+                "dice": "D6+1",
+                "threshold": 4,
+                "comparison": "gte",
+                "modifiers": []
+              },
+              "eligibility": {
+                "operator": "and",
+                "operands": [
+                  {
+                    "operator": "not",
+                    "operands": [
+                      {
+                        "type": "happened",
+                        "parameters": {
+                          "subject": "event-subject",
+                          "event": "selected",
+                          "filter": {
+                            "to": "fight"
+                          },
+                          "window": "phase"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "in-region",
+                    "parameters": {
+                      "subject": "this-unit",
+                      "region": {
+                        "rule_region": {
+                          "region_id": "flow-of-magic",
+                          "owner_faction": "thousand-sons"
+                        }
+                      },
+                      "wholly": true
+                    }
                   }
-                }
-              ]
-            },
-            "effect": {
-              "type": "dice-gated",
-              "dice": "D6",
-              "threshold": 4,
-              "comparison": "gte",
-              "on_success": {
-                "type": "act-on-death",
-                "target": "this-unit",
-                "modifier": {
-                  "act": "fight"
-                }
+                ]
               }
             }
           },
           {
-            "type": "conditional",
-            "condition": {
-              "type": "designated",
-              "parameters": {
-                "tag": "wholly-within-flow-of-magic"
-              }
-            },
-            "effect": {
-              "type": "dice-gated",
-              "dice": "D6",
-              "threshold": 3,
-              "comparison": "gte",
-              "on_success": {
-                "type": "act-on-death",
-                "target": "this-unit",
-                "modifier": {
-                  "act": "fight"
-                }
+            "type": "act-on-death",
+            "target": "event-object",
+            "modifier": {
+              "act": "fight",
+              "resolution": "after-attacking-unit-finishes",
+              "removal": "after-destroyed-model-fights",
+              "gate": {
+                "dice": "D6",
+                "threshold": 4,
+                "comparison": "gte",
+                "modifiers": []
+              },
+              "eligibility": {
+                "operator": "and",
+                "operands": [
+                  {
+                    "operator": "not",
+                    "operands": [
+                      {
+                        "type": "happened",
+                        "parameters": {
+                          "subject": "event-subject",
+                          "event": "selected",
+                          "filter": {
+                            "to": "fight"
+                          },
+                          "window": "phase"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "operator": "not",
+                    "operands": [
+                      {
+                        "type": "in-region",
+                        "parameters": {
+                          "subject": "this-unit",
+                          "region": {
+                            "rule_region": {
+                              "region_id": "flow-of-magic",
+                              "owner_faction": "thousand-sons"
+                            }
+                          },
+                          "wholly": true
+                        }
+                      }
+                    ]
+                  }
+                ]
               }
             }
           }
@@ -3510,7 +3876,17 @@
     "behavior": "reactive",
     "detachment_id": "hexwarp-thrallband",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "thousand-sons"
+    "faction_id": "thousand-sons",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
+    }
   },
   {
     "ability_id": "strands-of-time-hexwarp-thrallband-thousand-sons",
@@ -3559,11 +3935,13 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "RUBRIC MARINES"
-              ]
+              "filter": {
+                "all_of": [
+                  "RUBRIC MARINES"
+                ]
+              }
             }
           },
           "effect": {
@@ -3577,11 +3955,13 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "SCARAB OCCULT TERMINATORS"
-              ]
+              "filter": {
+                "all_of": [
+                  "SCARAB OCCULT TERMINATORS"
+                ]
+              }
             }
           },
           "effect": {
@@ -3594,7 +3974,9 @@
                   "to": "battlefield",
                   "from": "strategic-reserves",
                   "via": "deep-strike",
-                  "min_enemy_distance": 6
+                  "min_enemy_distance": {
+                    "inches": 6
+                  }
                 }
               },
               {
@@ -3651,33 +4033,54 @@
             "type": "weapon-ability-grant",
             "target": "this-unit",
             "modifier": {
-              "abilities": [
-                "Ignores Cover"
-              ],
-              "weapon_type": "ranged"
+              "weapons": {
+                "type": "ranged"
+              },
+              "keywords": [
+                {
+                  "keyword_id": "ignores-cover"
+                }
+              ]
             }
           },
           {
-            "type": "designate-target",
-            "designation": "no-benefit-of-cover",
-            "select": {
-              "scope": "enemy-unit",
-              "count": 1,
-              "timing": "after-this-unit-shoots"
-            },
-            "applies": {
-              "to": "target",
-              "effect": {
-                "type": "rule-state",
-                "target": "recipient",
-                "modifier": {
-                  "direction": "suppressed",
-                  "rule_kind": "core-rule",
-                  "rule": "benefit-of-cover"
-                }
+            "type": "ability-part",
+            "trigger": {
+              "event": "attacks-resolved",
+              "subject": "this-unit",
+              "filter": {
+                "kind": "shoot"
               }
             },
-            "duration": "phase"
+            "effect": {
+              "type": "designate-target",
+              "designation": "no-benefit-of-cover",
+              "select": {
+                "kind": "unit",
+                "selector": {
+                  "filter": {
+                    "owner": "enemy"
+                  },
+                  "count": {
+                    "min": 1,
+                    "max": 1
+                  }
+                }
+              },
+              "applies": {
+                "to": "target",
+                "effect": {
+                  "type": "rule-state",
+                  "target": "recipient",
+                  "modifier": {
+                    "direction": "suppressed",
+                    "rule_kind": "core-rule",
+                    "rule": "benefit-of-cover"
+                  }
+                }
+              },
+              "duration": "phase"
+            }
           }
         ]
       }
@@ -3703,13 +4106,57 @@
     "source_digest": "e92550df29472dc78f56c8498713ba08b7f801dc2fdbef9e85bdd18f5405fbb8",
     "version": "2025-q3",
     "effect": {
-      "type": "weapon-ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "abilities": [
-          "stealth"
-        ]
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "in-region",
+            "parameters": {
+              "subject": "this-unit",
+              "region": {
+                "rule_region": {
+                  "region_id": "flow-of-magic",
+                  "owner_faction": "thousand-sons"
+                }
+              },
+              "wholly": true
+            }
+          },
+          "effect": {
+            "type": "ability-grant",
+            "target": "this-unit",
+            "modifier": {
+              "ability": "stealth"
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "in-region",
+            "parameters": {
+              "subject": "this-unit",
+              "region": {
+                "rule_region": {
+                  "region_id": "flow-of-magic",
+                  "owner_faction": "thousand-sons"
+                }
+              },
+              "wholly": true
+            }
+          },
+          "effect": {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "detection-range",
+              "operation": "subtract",
+              "value": 3
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "phase"
@@ -3719,7 +4166,17 @@
     "behavior": "reactive",
     "detachment_id": "hexwarp-thrallband",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "thousand-sons"
+    "faction_id": "thousand-sons",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
+    }
   },
   {
     "ability_id": "infernal-pacts-thousand-sons",
@@ -3746,43 +4203,57 @@
             "operator": "and",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "all_of": [
-                    "SCINTILLATING LEGIONS"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "SCINTILLATING LEGIONS"
+                    ]
+                  }
                 }
               },
               {
                 "operator": "and",
                 "operands": [
                   {
-                    "type": "within",
+                    "type": "matches",
                     "parameters": {
-                      "of": {
-                        "owner": "friendly",
-                        "all_of": [
-                          "THOUSAND SONS"
-                        ],
-                        "visible": true
-                      },
-                      "range": {
-                        "inches": 6
+                      "filter": {
+                        "within": {
+                          "range": {
+                            "inches": 6
+                          },
+                          "of": {
+                            "owner": "friendly",
+                            "all_of": [
+                              "THOUSAND SONS"
+                            ],
+                            "visible": {
+                              "to": "this-unit"
+                            }
+                          }
+                        }
                       }
                     }
                   },
                   {
-                    "type": "within",
+                    "type": "matches",
                     "parameters": {
-                      "of": {
-                        "owner": "friendly",
-                        "all_of": [
-                          "PSYKER"
-                        ],
-                        "visible": true
-                      },
-                      "range": {
-                        "inches": 6
+                      "filter": {
+                        "within": {
+                          "range": {
+                            "inches": 6
+                          },
+                          "of": {
+                            "owner": "friendly",
+                            "all_of": [
+                              "PSYKER"
+                            ],
+                            "visible": {
+                              "to": "this-unit"
+                            }
+                          }
+                        }
                       }
                     }
                   }
@@ -3820,26 +4291,34 @@
             "operator": "and",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "all_of": [
-                    "THOUSAND SONS"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "THOUSAND SONS"
+                    ]
+                  }
                 }
               },
               {
-                "type": "within",
+                "type": "matches",
                 "parameters": {
-                  "of": {
-                    "owner": "friendly",
-                    "all_of": [
-                      "SCINTILLATING LEGIONS",
-                      "PSYKER"
-                    ],
-                    "visible": true
-                  },
-                  "range": {
-                    "inches": 6
+                  "filter": {
+                    "within": {
+                      "range": {
+                        "inches": 6
+                      },
+                      "of": {
+                        "owner": "friendly",
+                        "all_of": [
+                          "SCINTILLATING LEGIONS",
+                          "PSYKER"
+                        ],
+                        "visible": {
+                          "to": "this-unit"
+                        }
+                      }
+                    }
                   }
                 }
               }
@@ -3858,7 +4337,9 @@
                   "inches": 6
                 }
               },
-              "visible": true
+              "visible": {
+                "to": "this-unit"
+              }
             },
             "modifier": {
               "ability": "cabal-of-sorcerers-thousand-sons"
@@ -3897,30 +4378,38 @@
             "operator": "and",
             "operands": [
               {
-                "type": "within",
+                "type": "matches",
                 "parameters": {
-                  "of": {
-                    "owner": "friendly",
-                    "all_of": [
-                      "THOUSAND SONS"
-                    ]
-                  },
-                  "range": {
-                    "inches": 6
+                  "filter": {
+                    "within": {
+                      "range": {
+                        "inches": 6
+                      },
+                      "of": {
+                        "owner": "friendly",
+                        "all_of": [
+                          "THOUSAND SONS"
+                        ]
+                      }
+                    }
                   }
                 }
               },
               {
-                "type": "within",
+                "type": "matches",
                 "parameters": {
-                  "of": {
-                    "owner": "friendly",
-                    "all_of": [
-                      "PSYKER"
-                    ]
-                  },
-                  "range": {
-                    "inches": 6
+                  "filter": {
+                    "within": {
+                      "range": {
+                        "inches": 6
+                      },
+                      "of": {
+                        "owner": "friendly",
+                        "all_of": [
+                          "PSYKER"
+                        ]
+                      }
+                    }
                   }
                 }
               }
@@ -3965,30 +4454,38 @@
                 "operator": "and",
                 "operands": [
                   {
-                    "type": "within",
+                    "type": "matches",
                     "parameters": {
-                      "of": {
-                        "owner": "friendly",
-                        "all_of": [
-                          "THOUSAND SONS"
-                        ]
-                      },
-                      "range": {
-                        "inches": 6
+                      "filter": {
+                        "within": {
+                          "range": {
+                            "inches": 6
+                          },
+                          "of": {
+                            "owner": "friendly",
+                            "all_of": [
+                              "THOUSAND SONS"
+                            ]
+                          }
+                        }
                       }
                     }
                   },
                   {
-                    "type": "within",
+                    "type": "matches",
                     "parameters": {
-                      "of": {
-                        "owner": "friendly",
-                        "all_of": [
-                          "PSYKER"
-                        ]
-                      },
-                      "range": {
-                        "inches": 6
+                      "filter": {
+                        "within": {
+                          "range": {
+                            "inches": 6
+                          },
+                          "of": {
+                            "owner": "friendly",
+                            "all_of": [
+                              "PSYKER"
+                            ]
+                          }
+                        }
                       }
                     }
                   }
@@ -4051,52 +4548,90 @@
     "ability_type": "detachment",
     "behavior": "activated",
     "effect": {
-      "type": "stance-select",
-      "mode": "consumable",
-      "scope": "army",
-      "select": "start-of-command-phase",
-      "options": [
-        {
-          "name": "Imbued Manifestation",
-          "effect": {
-            "type": "stat-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "stat": "Range",
-              "operation": "add",
-              "value": 6,
-              "weapon_type": "ranged",
-              "weapon_keyword": "Psychic"
+      "type": "ability-part",
+      "trigger": {
+        "event": "phase-started",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "command"
+              }
+            },
+            {
+              "type": "player-turn-is",
+              "parameters": {
+                "turn": "your-turn"
+              }
             }
-          }
-        },
-        {
-          "name": "Psychic Maelstrom",
-          "effect": {
-            "type": "roll-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "wound",
-              "weapon_keyword": "Psychic",
-              "operation": "add",
-              "value": 1
-            }
-          }
-        },
-        {
-          "name": "Wrath of the Immaterium",
-          "effect": {
-            "type": "weapon-ability-grant",
-            "target": "this-unit",
-            "modifier": {
-              "abilities": [
-                "Devastating Wounds"
-              ],
-              "weapon_keyword": "Psychic"
-            }
-          }
+          ]
         }
-      ]
+      },
+      "effect": {
+        "type": "stance-select",
+        "mode": "consumable",
+        "options": [
+          {
+            "name": "Imbued Manifestation",
+            "effect": {
+              "type": "stat-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "stat": "Range",
+                "operation": "add",
+                "value": 6,
+                "weapons": {
+                  "type": "ranged",
+                  "keyword": {
+                    "keyword_id": "psychic"
+                  }
+                }
+              }
+            },
+            "id": "option-1"
+          },
+          {
+            "name": "Psychic Maelstrom",
+            "effect": {
+              "type": "roll-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "wound",
+                "operation": "add",
+                "value": 1,
+                "weapons": {
+                  "keyword": {
+                    "keyword_id": "psychic"
+                  }
+                }
+              }
+            },
+            "id": "option-2"
+          },
+          {
+            "name": "Wrath of the Immaterium",
+            "effect": {
+              "type": "weapon-ability-grant",
+              "target": "this-unit",
+              "modifier": {
+                "weapons": {
+                  "keyword": {
+                    "keyword_id": "psychic"
+                  }
+                },
+                "keywords": [
+                  {
+                    "keyword_id": "devastating-wounds"
+                  }
+                ]
+              }
+            },
+            "id": "option-3"
+          }
+        ]
+      }
     },
     "scope": {
       "duration": "until-next-command-phase"
@@ -4170,7 +4705,97 @@
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "[APPROX] Restricted to TZEENTCH MUTANT INFANTRY/MOUNTED units. First option is the defensive sacrifice (-1 to enemy Wound rolls against it), second is the offensive sacrifice (+1 to its own Wound rolls); the D3 mortal-wound self-cost resolves at end of phase (timing not encoded). Full rule in raw-text store."
+    "community_notes": "[APPROX] Restricted to TZEENTCH MUTANT INFANTRY/MOUNTED units. First option is the defensive sacrifice (-1 to enemy Wound rolls against it), second is the offensive sacrifice (+1 to its own Wound rolls); the D3 mortal-wound self-cost resolves at end of phase (timing not encoded). Full rule in raw-text store.",
+    "trigger": [
+      {
+        "event": "selected",
+        "filter": {
+          "to": "shoot"
+        },
+        "subject": {
+          "owner": "enemy"
+        },
+        "optional": false,
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "happened",
+              "parameters": {
+                "event": "targets-selected",
+                "subject": "event-subject",
+                "object": "this-unit",
+                "filter": {
+                  "kind": "attack"
+                },
+                "window": "event"
+              }
+            },
+            {
+              "type": "matches",
+              "parameters": {
+                "subject": "this-unit",
+                "filter": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "MUTANT",
+                    "TZEENTCH"
+                  ],
+                  "any_of": [
+                    "INFANTRY",
+                    "MOUNTED"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "event": "selected",
+        "filter": {
+          "to": "fight"
+        },
+        "subject": {
+          "owner": "enemy"
+        },
+        "optional": false,
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "happened",
+              "parameters": {
+                "event": "targets-selected",
+                "subject": "event-subject",
+                "object": "this-unit",
+                "filter": {
+                  "kind": "attack"
+                },
+                "window": "event"
+              }
+            },
+            {
+              "type": "matches",
+              "parameters": {
+                "subject": "this-unit",
+                "filter": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "MUTANT",
+                    "TZEENTCH"
+                  ],
+                  "any_of": [
+                    "INFANTRY",
+                    "MOUNTED"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
   },
   {
     "ability_id": "all-is-dust-thousand-sons",
@@ -4200,19 +4825,21 @@
                 "of": "attacker",
                 "stat": "D"
               },
-              "comparison": "equal-to",
+              "comparison": "eq",
               "right": {
                 "value": 1
               }
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "all_of": [
-                "RUBRICAE"
-              ]
+              "filter": {
+                "all_of": [
+                  "RUBRICAE"
+                ]
+              },
+              "subject": "defender"
             }
           }
         ]
@@ -4249,15 +4876,42 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "designate-target",
-      "designation": "chronosorcerous-bleed",
-      "select": {
-        "scope": "enemy-unit",
-        "count": 1,
-        "within_inches": 12
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy",
+          "visible": {
+            "to": "this-model"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "subject": "selected-unit",
+            "filter": {
+              "within": {
+                "of": "this-unit",
+                "range": {
+                  "inches": 12
+                }
+              }
+            }
+          }
+        }
       },
-      "applies": {
-        "to": "target",
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "targets-selected",
+          "subject": "selected-unit",
+          "filter": {
+            "kind": "charge"
+          }
+        },
         "effect": {
           "type": "roll-modifier",
           "target": "this-unit",
@@ -4267,13 +4921,32 @@
             "value": 1
           }
         }
-      },
-      "duration": "phase"
+      }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
-    "community_notes": "Used at the start of the opponent's Charge phase by an unengaged Thousand Sons Psyker or Scintillating Legions unit; the selected enemy unit must be visible and within 12\"."
+    "community_notes": "Used at the start of the opponent's Charge phase by an unengaged Thousand Sons Psyker or Scintillating Legions unit; the selected enemy unit must be visible and within 12\".",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "charge"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "deceptive-glamour-changehost-of-deceit-thousand-sons",
@@ -4317,11 +4990,21 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "THOUSAND SONS"
       ]
     },
-    "community_notes": "[APPROX] Enemy models within Engagement Range of this unit can only target it if there are no eligible Scintillating Legions targets for their attacks; the forced target-priority rule is encoded as an opaque grant. Full rule in raw-text store."
+    "community_notes": "[APPROX] Enemy models within Engagement Range of this unit can only target it if there are no eligible Scintillating Legions targets for their attacks; the forced target-priority rule is encoded as an opaque grant. Full rule in raw-text store.",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "ethereal-phantasm-changehost-of-deceit-thousand-sons",
@@ -4340,17 +5023,92 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "move",
-      "target": "this-unit",
-      "modifier": {
-        "move_type": "normal",
-        "distance": "D6"
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "within": {
+                      "of": {
+                        "owner": "friendly",
+                        "all_of": [
+                          "THOUSAND SONS"
+                        ]
+                      },
+                      "range": {
+                        "inches": 6
+                      },
+                      "wholly": true
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "move",
+            "target": "this-unit",
+            "modifier": {
+              "move_type": "normal",
+              "distance": "D6"
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "THOUSAND SONS"
+                    ]
+                  },
+                  "range": {
+                    "inches": 6
+                  },
+                  "wholly": true
+                }
+              }
+            }
+          },
+          "effect": {
+            "type": "move",
+            "target": "this-unit",
+            "modifier": {
+              "move_type": "normal",
+              "distance": 6
+            }
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
-    "community_notes": "[APPROX] Triggered after an enemy unit ends a Normal, Advance or Fall Back move within 8\" of an unengaged Scintillating Legions unit. The move is up to D6\", or a flat 6\" instead while wholly within 6\" of one or more friendly Thousand Sons units; the flat-6 upgrade is not encoded."
+    "community_notes": "[APPROX] Triggered after an enemy unit ends a Normal, Advance or Fall Back move within 8\" of an unengaged Scintillating Legions unit. The move is up to D6\", or a flat 6\" instead while wholly within 6\" of one or more friendly Thousand Sons units; the flat-6 upgrade is not encoded.",
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "move_types": [
+          "normal",
+          "advance",
+          "fall-back"
+        ]
+      }
+    }
   },
   {
     "ability_id": "fractal-disjunction-changehost-of-deceit-thousand-sons",
@@ -4369,29 +5127,58 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "targeting",
-      "target": {
-        "owner": "enemy"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "attacker",
+          "filter": {
+            "within": {
+              "of": "this-unit",
+              "range": {
+                "inches": 18
+              }
+            }
+          }
+        }
       },
-      "modifier": {
-        "may": "cannot-target",
-        "target": "this-unit",
-        "kind": "shoot",
-        "range": {
-          "inches": 18
+      "effect": {
+        "type": "targeting",
+        "target": {
+          "owner": "enemy"
         },
-        "weapon_type": "ranged"
+        "modifier": {
+          "by": {
+            "owner": "enemy"
+          },
+          "may": "target",
+          "kind": "attack",
+          "weapons": {
+            "type": "ranged"
+          },
+          "target": "this-unit"
+        }
       }
     },
     "scope": {
       "duration": "phase"
     },
     "applies_to": {
-      "excluded_keywords": [
+      "none_of": [
         "MONSTER"
       ]
     },
-    "community_notes": "Scintillating Legions units (excluding Monsters) only; the unit can only be selected as the target of a ranged attack if the attacking model is within 18\"."
+    "community_notes": "Scintillating Legions units (excluding Monsters) only; the unit can only be selected as the target of a ranged attack if the attacking model is within 18\".",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
+    }
   },
   {
     "ability_id": "glimmershift-portal-changehost-of-deceit-thousand-sons",
@@ -4410,16 +5197,52 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "set-up",
-      "target": "this-unit",
-      "modifier": {
-        "to": "strategic-reserves"
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "set-up",
+          "target": {
+            "stratagem_target": "first"
+          },
+          "modifier": {
+            "to": "strategic-reserves"
+          }
+        },
+        {
+          "type": "set-up",
+          "target": {
+            "stratagem_target": "second"
+          },
+          "modifier": {
+            "to": "strategic-reserves"
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
-    "community_notes": "Used at the end of the opponent's Fight phase on up to two Scintillating Legions units (excluding Monsters), or one Scintillating Legions Monster unit, that are more than 3\" horizontally away from all enemy units; they are removed and placed into Strategic Reserves."
+    "community_notes": "Used at the end of the opponent's Fight phase on up to two Scintillating Legions units (excluding Monsters), or one Scintillating Legions Monster unit, that are more than 3\" horizontally away from all enemy units; they are removed and placed into Strategic Reserves.",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "sulphurous-veil-changehost-of-deceit-thousand-sons",
@@ -4439,10 +5262,9 @@
     "behavior": "reactive",
     "effect": {
       "type": "roll-modifier",
-      "target": "this-unit",
+      "target": "attacker",
       "modifier": {
         "roll": "hit",
-        "incoming": true,
         "operation": "subtract",
         "value": 1
       }
@@ -4450,7 +5272,17 @@
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "Each time an attack targets this unit, subtract 1 from the Hit roll (incoming modifier)."
+    "community_notes": "Each time an attack targets this unit, subtract 1 from the Hit roll (incoming modifier).",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
+    }
   },
   {
     "ability_id": "cyberspirit-machinations-warpforged-cabal-thousand-sons",
@@ -4483,7 +5315,7 @@
       "duration": "turn"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "THOUSAND SONS",
         "VEHICLE"
       ]
@@ -4513,10 +5345,14 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Psychic"
-            ],
-            "weapon_type": "ranged"
+            "weapons": {
+              "type": "ranged"
+            },
+            "keywords": [
+              {
+                "keyword_id": "psychic"
+              }
+            ]
           }
         },
         {
@@ -4524,9 +5360,11 @@
           "target": "this-unit",
           "modifier": {
             "roll": "wound",
-            "weapon_type": "ranged",
             "operation": "add",
-            "value": 1
+            "value": 1,
+            "weapons": {
+              "type": "ranged"
+            }
           }
         }
       ]
@@ -4535,7 +5373,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "THOUSAND SONS",
         "VEHICLE"
       ]
@@ -4560,24 +5398,33 @@
     "behavior": "reactive",
     "effect": {
       "type": "stat-modifier",
-      "target": "this-unit",
+      "target": "attacker",
       "modifier": {
         "stat": "AP",
-        "operation": "add",
-        "value": 1,
-        "incoming": true
+        "operation": "worsen",
+        "value": 1
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "attack-sequence"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "THOUSAND SONS",
         "VEHICLE"
       ]
     },
-    "community_notes": "Worsens the Armour Penetration of incoming attacks by 1 until the attacking unit has finished making its attacks."
+    "community_notes": "Worsens the Armour Penetration of incoming attacks by 1 until the attacking unit has finished making its attacks.",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
+    }
   },
   {
     "ability_id": "malevolent-animus-warpforged-cabal-thousand-sons",
@@ -4621,7 +5468,7 @@
       "duration": "until-next-command-phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "THOUSAND SONS",
         "VEHICLE"
       ]
@@ -4664,7 +5511,7 @@
                   }
                 },
                 "tag": "mutated",
-                "clears_on": "never"
+                "clears_on": "permanent"
               }
             },
             {
@@ -4686,16 +5533,20 @@
               "effect": {
                 "type": "conditional",
                 "condition": {
-                  "type": "within",
+                  "type": "matches",
                   "parameters": {
-                    "subject": "event-subject",
-                    "of": {
-                      "objective": {
-                        "designated": "mutated",
-                        "controlled_by": "friendly"
+                    "filter": {
+                      "within": {
+                        "range": "objective-control",
+                        "of": {
+                          "objective": {
+                            "designated": "mutated",
+                            "controlled_by": "friendly"
+                          }
+                        }
                       }
                     },
-                    "range": "objective-control"
+                    "subject": "event-subject"
                   }
                 },
                 "effect": {
@@ -4721,7 +5572,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "THOUSAND SONS",
         "PSYKER"
       ]
@@ -4761,12 +5612,7 @@
         },
         {
           "type": "test",
-          "target": {
-            "owner": "enemy",
-            "within": {
-              "range": "engagement"
-            }
-          },
+          "target": "this-unit",
           "modifier": {
             "test": "battle-shock"
           }
@@ -4774,15 +5620,26 @@
       ]
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "THOUSAND SONS",
         "VEHICLE"
       ]
     },
-    "community_notes": "Used just after an enemy unit ends a Charge move within Engagement Range of the Vehicle; roll six D6, one mortal wound per 5+, then that enemy unit takes a Battle-shock test."
+    "community_notes": "Used just after an enemy unit ends a Charge move within Engagement Range of the Vehicle; roll six D6, one mortal wound per 5+, then that enemy unit takes a Battle-shock test.",
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "charge"
+        ]
+      },
+      "subject": {
+        "owner": "enemy"
+      }
+    }
   },
   {
     "ability_id": "arcane-focus-grand-coven-thousand-sons",
@@ -4812,11 +5669,76 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "THOUSAND SONS"
       ]
     },
-    "community_notes": "Used just after taking a Psychic test for a model that Channelled the Warp, before resolving the Ritual; re-roll all of the D6 rolled for that test, including the additional Channelling die."
+    "community_notes": "Used just after taking a Psychic test for a model that Channelled the Warp, before resolving the Ritual; re-roll all of the D6 rolled for that test, including the additional Channelling die.",
+    "trigger": {
+      "event": "after-roll",
+      "filter": {
+        "roll": "psychic"
+      },
+      "binds_event_variable": "psychic-test",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "THOUSAND SONS"
+        ],
+        "level": "model"
+      },
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "subject": "event-subject",
+              "filter": {
+                "roll": "channelling",
+                "same_rule_as": {
+                  "event_var": "psychic-test"
+                }
+              },
+              "window": "event"
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "used",
+              "subject": "event-subject",
+              "filter": {
+                "kind": "ritual",
+                "same_rule_as": {
+                  "event_var": "psychic-test"
+                }
+              },
+              "window": "event"
+            }
+          },
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "desecration-of-worlds-grand-coven-thousand-sons",
@@ -4842,7 +5764,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "THOUSAND SONS",
         "PSYKER"
       ]
@@ -4876,12 +5798,27 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "THOUSAND SONS",
         "PSYKER"
       ]
     },
-    "community_notes": "Used just after a saving throw is failed for the Psyker model; the Damage characteristic of that attack is changed to 0. With fast dice rolling, select one of the failed saves."
+    "community_notes": "Used just after a saving throw is failed for the Psyker model; the Damage characteristic of that attack is changed to 0. With fast dice rolling, select one of the failed saves.",
+    "trigger": {
+      "event": "after-roll",
+      "filter": {
+        "roll": "save",
+        "result": "failure"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "PSYKER",
+          "THOUSAND SONS"
+        ],
+        "level": "model"
+      }
+    }
   },
   {
     "ability_id": "devastating-sorcery-grand-coven-thousand-sons",
@@ -4909,8 +5846,12 @@
             "stat": "Range",
             "operation": "add",
             "value": 9,
-            "weapon_type": "ranged",
-            "weapon_keyword": "Psychic"
+            "weapons": {
+              "type": "ranged",
+              "keyword": {
+                "keyword_id": "psychic"
+              }
+            }
           }
         },
         {
@@ -4919,7 +5860,11 @@
           "modifier": {
             "roll": "hit",
             "result_scope": "any-result",
-            "weapon_keyword": "Psychic"
+            "weapons": {
+              "keyword": {
+                "keyword_id": "psychic"
+              }
+            }
           }
         },
         {
@@ -4928,7 +5873,11 @@
           "modifier": {
             "roll": "wound",
             "result_scope": "any-result",
-            "weapon_keyword": "Psychic"
+            "weapons": {
+              "keyword": {
+                "keyword_id": "psychic"
+              }
+            }
           }
         }
       ]
@@ -4937,7 +5886,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "THOUSAND SONS",
         "PSYKER"
       ]
@@ -4967,7 +5916,7 @@
           "target": "this-unit",
           "modifier": {
             "ability": "kindred-sorcery-thousand-sons",
-            "option": "Imbued Manifestation",
+            "option": "option-1",
             "exclusive": true
           }
         },
@@ -4976,7 +5925,7 @@
           "target": "this-unit",
           "modifier": {
             "ability": "kindred-sorcery-thousand-sons",
-            "option": "Psychic Maelstrom",
+            "option": "option-2",
             "exclusive": true
           }
         },
@@ -4985,7 +5934,7 @@
           "target": "this-unit",
           "modifier": {
             "ability": "kindred-sorcery-thousand-sons",
-            "option": "Wrath of the Immaterium",
+            "option": "option-3",
             "exclusive": true
           }
         }
@@ -4995,7 +5944,7 @@
       "duration": "until-next-command-phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "THOUSAND SONS",
         "PSYKER"
       ]
@@ -5039,11 +5988,17 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Hazardous"
-            ],
-            "weapon_keyword": "Psychic",
-            "incoming": true
+            "incoming": true,
+            "weapons": {
+              "keyword": {
+                "keyword_id": "psychic"
+              }
+            },
+            "keywords": [
+              {
+                "keyword_id": "hazardous"
+              }
+            ]
           }
         }
       ]
@@ -5052,11 +6007,57 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "THOUSAND SONS"
       ]
     },
-    "community_notes": "[APPROX] Attacks made against this unit with Psychic weapons gain [HAZARDOUS] (encoded as an opaque grant) and models in the unit have Feel No Pain 4+ against Psychic Attacks."
+    "community_notes": "[APPROX] Attacks made against this unit with Psychic weapons gain [HAZARDOUS] (encoded as an opaque grant) and models in the unit have Feel No Pain 4+ against Psychic Attacks.",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit",
+      "optional": true,
+      "condition": {
+        "operator": "or",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "charge"
+            }
+          },
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "blessed-transmutations-warpmeld-pact-thousand-sons",
@@ -5085,7 +6086,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "TZAANGORS"
       ]
     },
@@ -5141,7 +6142,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "TZEENTCH",
         "MUTANT"
       ]
@@ -5163,7 +6164,7 @@
     "faction_id": "thousand-sons",
     "detachment_id": "warpmeld-pact",
     "ability_type": "stratagem",
-    "behavior": "reactive",
+    "behavior": "activated",
     "usage": {
       "frequency": "once-per-battle-round"
     },
@@ -5228,7 +6229,7 @@
       "duration": "turn"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "TZEENTCH",
         "MUTANT"
       ]
@@ -5260,7 +6261,9 @@
           "modifier": {
             "to": "battlefield",
             "from": "strategic-reserves",
-            "min_enemy_distance": 6
+            "min_enemy_distance": {
+              "inches": 6
+            }
           }
         },
         {
@@ -5277,7 +6280,7 @@
       "duration": "turn"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "TZEENTCH",
         "MUTANT"
       ]
@@ -5311,9 +6314,19 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "TZAANGORS"
       ]
+    },
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
     }
   },
   {
@@ -5347,7 +6360,7 @@
       "duration": "turn"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "RUBRICAE"
       ]
     }
@@ -5379,12 +6392,40 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "RUBRIC MARINES",
         "PSYKER"
       ]
     },
-    "community_notes": "Each time an attack is allocated to a model in the unit (excluding Psyker models), subtract 1 from its Damage characteristic; the Psyker-model exclusion is not encoded."
+    "community_notes": "Each time an attack is allocated to a model in the unit (excluding Psyker models), subtract 1 from its Damage characteristic; the Psyker-model exclusion is not encoded.",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit",
+      "optional": true,
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "inexorable-advance-rubricae-phalanx-thousand-sons",
@@ -5434,10 +6475,14 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Assault"
-            ],
-            "weapon_type": "ranged"
+            "weapons": {
+              "type": "ranged"
+            },
+            "keywords": [
+              {
+                "keyword_id": "assault"
+              }
+            ]
           }
         }
       ]
@@ -5446,7 +6491,7 @@
       "duration": "turn"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "RUBRICAE"
       ]
     }
@@ -5474,10 +6519,14 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Psychic"
-            ],
-            "weapon_type": "ranged"
+            "weapons": {
+              "type": "ranged"
+            },
+            "keywords": [
+              {
+                "keyword_id": "psychic"
+              }
+            ]
           }
         },
         {
@@ -5487,7 +6536,9 @@
             "stat": "S",
             "operation": "set",
             "value": 5,
-            "weapon_type": "ranged"
+            "weapons": {
+              "type": "ranged"
+            }
           }
         }
       ]
@@ -5496,7 +6547,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "THOUSAND SONS",
         "PSYKER"
       ]
@@ -5520,23 +6571,61 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "permission",
-      "target": "this-unit",
-      "modifier": {
-        "activity": "shoot",
-        "allow": true,
-        "as_if": "shooting-phase"
+      "type": "ability-part",
+      "trigger": {
+        "event": "attacks-resolved",
+        "filter": {
+          "kind": "shoot"
+        },
+        "subject": {
+          "owner": "enemy"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "permission",
+            "target": "this-unit",
+            "modifier": {
+              "activity": "shoot",
+              "allow": true,
+              "as_if": "shooting-phase"
+            }
+          },
+          {
+            "type": "targeting",
+            "target": "this-unit",
+            "modifier": {
+              "by": "this-unit",
+              "may": "must-target",
+              "kind": "shoot",
+              "target": "event-subject"
+            }
+          }
+        ]
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "attack-sequence"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "RUBRICAE"
       ]
     },
-    "community_notes": "Used just after a Thousand Sons Psyker model is destroyed within 6\" of the unit; after the attacking unit has shot, this unit can shoot, but may only target the enemy unit that destroyed the Psyker (if eligible)."
+    "community_notes": "Used just after a Thousand Sons Psyker model is destroyed within 6\" of the unit; after the attacking unit has shot, this unit can shoot, but may only target the enemy unit that destroyed the Psyker (if eligible).",
+    "trigger": {
+      "event": "model-destroyed",
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "PSYKER",
+          "THOUSAND SONS"
+        ],
+        "level": "model"
+      }
+    }
   },
   {
     "ability_id": "unwavering-phalanx-rubricae-phalanx-thousand-sons",
@@ -5555,24 +6644,51 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "roll-modifier",
-      "target": "this-unit",
-      "modifier": {
-        "roll": "wound",
-        "incoming": true,
-        "operation": "subtract",
-        "value": 1
+      "type": "conditional",
+      "condition": {
+        "type": "attack-compare",
+        "parameters": {
+          "left": {
+            "of": "attacker",
+            "stat": "S"
+          },
+          "comparison": "gt",
+          "right": {
+            "of": "defender",
+            "stat": "T"
+          }
+        }
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "attacker",
+        "modifier": {
+          "roll": "wound",
+          "operation": "subtract",
+          "value": 1
+        }
       }
     },
     "scope": {
       "duration": "turn"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "RUBRIC MARINES"
       ]
     },
-    "community_notes": "Used just after an enemy unit ends a Charge move within Engagement Range; each time an attack targets this unit, subtract 1 from the Wound roll (incoming modifier)."
+    "community_notes": "Used just after an enemy unit ends a Charge move within Engagement Range; each time an attack targets this unit, subtract 1 from the Wound roll (incoming modifier).",
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "charge"
+        ]
+      },
+      "subject": {
+        "owner": "enemy"
+      }
+    }
   },
   {
     "ability_id": "embroiling-energies-prism-of-zadophon-thousand-sons",
@@ -5597,10 +6713,14 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Close-quarters"
-            ],
-            "weapon_type": "ranged"
+            "weapons": {
+              "type": "ranged"
+            },
+            "keywords": [
+              {
+                "keyword_id": "close-quarters"
+              }
+            ]
           }
         },
         {
@@ -5608,9 +6728,11 @@
           "target": "this-unit",
           "modifier": {
             "roll": "hit",
-            "weapon_type": "ranged",
             "operation": "add",
-            "value": 1
+            "value": 1,
+            "weapons": {
+              "type": "ranged"
+            }
           }
         }
       ]
@@ -5619,7 +6741,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "RUBRIC MARINES"
       ]
     },
@@ -5644,26 +6766,35 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "attack-compare",
-        "parameters": {
-          "left": {
-            "of": "attacker",
-            "stat": "S"
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
+            }
           },
-          "comparison": "greater-than",
-          "right": {
-            "of": "defender",
-            "stat": "T"
+          {
+            "type": "attack-compare",
+            "parameters": {
+              "left": {
+                "of": "attacker",
+                "stat": "S"
+              },
+              "comparison": "gt",
+              "right": {
+                "of": "defender",
+                "stat": "T"
+              }
+            }
           }
-        }
+        ]
       },
       "effect": {
         "type": "roll-modifier",
-        "target": "this-unit",
+        "target": "attacker",
         "modifier": {
           "roll": "wound",
-          "weapon_type": "ranged",
-          "incoming": true,
           "operation": "subtract",
           "value": 1
         }
@@ -5673,11 +6804,27 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "RUBRIC MARINES"
       ]
     },
-    "community_notes": "Ranged attacks targeting this unit with a Strength greater than the unit's Toughness have -1 to Wound rolls."
+    "community_notes": "Ranged attacks targeting this unit with a Strength greater than the unit's Toughness have -1 to Wound rolls.",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "PRISM OF ZADOPHON",
+          "RUBRIC MARINES"
+        ]
+      }
+    }
   },
   {
     "ability_id": "twist-of-fate-prism-of-zadophon-thousand-sons",
@@ -5706,9 +6853,25 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "MUTANT"
       ]
+    },
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "MUTANT",
+          "PRISM OF ZADOPHON"
+        ]
+      }
     }
   },
   {
@@ -5731,9 +6894,22 @@
       "type": "designate-target",
       "designation": "nethershriek-mind-eater",
       "select": {
-        "scope": "enemy-unit",
-        "count": 1,
-        "within_inches": 12
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy",
+            "within": {
+              "range": {
+                "inches": 12
+              },
+              "of": "this-model"
+            }
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        }
       },
       "applies": {
         "to": "target",
@@ -5750,9 +6926,11 @@
             {
               "type": "conditional",
               "condition": {
-                "type": "unit-state",
+                "type": "matches",
                 "parameters": {
-                  "state": "battle-shocked"
+                  "filter": {
+                    "state": "battle-shocked"
+                  }
                 }
               },
               "effect": {
@@ -5802,7 +6980,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "THOUSAND SONS",
         "INFANTRY"
       ]
@@ -5882,7 +7060,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "THOUSAND SONS",
         "INFANTRY"
       ]
@@ -5907,14 +7085,23 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "owner": "friendly",
-        "count": 1,
-        "keywords": [
-          "THOUSAND SONS",
-          "VEHICLE"
-        ],
-        "within_inches": 6,
-        "reference": "bearer"
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "THOUSAND SONS",
+            "VEHICLE"
+          ],
+          "within": {
+            "range": {
+              "inches": 6
+            },
+            "of": "this-model"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        }
       },
       "effect": {
         "type": "sequence",
@@ -5942,7 +7129,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "THOUSAND SONS"
       ]
     },
@@ -5975,7 +7162,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "THOUSAND SONS",
         "INFANTRY"
       ]
@@ -6036,7 +7223,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "THOUSAND SONS"
       ]
     },
@@ -6061,19 +7248,23 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "subject": "this-model",
-          "of": {
-            "owner": "friendly",
-            "all_of": [
-              "THOUSAND SONS",
-              "VEHICLE"
-            ]
+          "filter": {
+            "within": {
+              "range": {
+                "inches": 6
+              },
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "THOUSAND SONS",
+                  "VEHICLE"
+                ]
+              }
+            }
           },
-          "range": {
-            "inches": 6
-          }
+          "subject": "this-model"
         }
       },
       "effect": {
@@ -6091,7 +7282,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "THOUSAND SONS"
       ]
     },
@@ -6127,7 +7318,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "THOUSAND SONS"
       ]
     }
@@ -6165,7 +7356,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "EXALTED SORCERER"
       ]
     },
@@ -6222,7 +7413,7 @@
       "duration": "turn"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "THOUSAND SONS"
       ]
     },
@@ -6254,7 +7445,11 @@
             "stat": "S",
             "operation": "add",
             "value": 1,
-            "weapon_keyword": "Psychic"
+            "weapons": {
+              "keyword": {
+                "keyword_id": "psychic"
+              }
+            }
           }
         },
         {
@@ -6264,7 +7459,11 @@
             "stat": "D",
             "operation": "add",
             "value": 1,
-            "weapon_keyword": "Psychic"
+            "weapons": {
+              "keyword": {
+                "keyword_id": "psychic"
+              }
+            }
           }
         }
       ]
@@ -6273,7 +7472,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "THOUSAND SONS"
       ]
     }
@@ -6319,7 +7518,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "TZAANGOR SHAMAN"
       ]
     },
@@ -6365,7 +7564,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "TZAANGOR SHAMAN"
       ]
     },
@@ -6441,7 +7640,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "TZAANGOR SHAMAN"
       ]
     }
@@ -6468,12 +7667,17 @@
         {
           "type": "select-units",
           "selector": {
-            "count": 2,
-            "owner": "friendly",
-            "keywords": [
-              "RUBRICAE",
-              "BATTLELINE"
-            ]
+            "filter": {
+              "owner": "friendly",
+              "all_of": [
+                "RUBRICAE",
+                "BATTLELINE"
+              ]
+            },
+            "count": {
+              "min": 2,
+              "max": 2
+            }
           },
           "effect": {
             "type": "ability-grant",
@@ -6486,21 +7690,28 @@
         {
           "type": "select-units",
           "selector": {
-            "count": 1,
-            "owner": "friendly",
-            "keywords": [
-              "RUBRICAE"
-            ],
+            "filter": {
+              "owner": "friendly",
+              "all_of": [
+                "RUBRICAE"
+              ]
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            },
             "eligibility": {
               "operator": "not",
               "operands": [
                 {
-                  "type": "has-keyword",
+                  "type": "matches",
                   "parameters": {
-                    "subject": "recipient",
-                    "all_of": [
-                      "BATTLELINE"
-                    ]
+                    "filter": {
+                      "all_of": [
+                        "BATTLELINE"
+                      ]
+                    },
+                    "subject": "recipient"
                   }
                 }
               ]
@@ -6520,7 +7731,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "THOUSAND SONS"
       ]
     },
@@ -6546,15 +7757,19 @@
       "type": "aura",
       "target": "friendly-within-aura",
       "modifier": {
-        "range": 9,
+        "range": {
+          "inches": 9
+        },
         "effect": {
           "type": "conditional",
           "condition": {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "RUBRICAE"
-              ]
+              "filter": {
+                "all_of": [
+                  "RUBRICAE"
+                ]
+              }
             }
           },
           "effect": {
@@ -6572,7 +7787,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "THOUSAND SONS"
       ]
     }
@@ -6616,7 +7831,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "THOUSAND SONS"
       ]
     },
@@ -6642,18 +7857,27 @@
       "type": "weapon-ability-grant",
       "target": "this-model",
       "modifier": {
-        "abilities": [
-          "Sustained Hits D3",
-          "Devastating Wounds"
-        ],
-        "weapon_type": "melee"
+        "weapons": {
+          "type": "melee"
+        },
+        "keywords": [
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": "D3"
+            }
+          },
+          {
+            "keyword_id": "devastating-wounds"
+          }
+        ]
       }
     },
     "scope": {
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "THOUSAND SONS",
         "INFANTRY"
       ]
@@ -6680,22 +7904,80 @@
       "per": "unit"
     },
     "effect": {
-      "type": "move",
-      "target": "this-unit",
-      "modifier": {
-        "move_type": "normal",
-        "distance": "D3+1"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "movement"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "opponent-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "event-subject",
+              "filter": {
+                "within": {
+                  "of": "this-unit",
+                  "range": {
+                    "inches": 8
+                  }
+                }
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "state": "engaged"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "effect": {
+        "type": "move",
+        "target": "this-unit",
+        "modifier": {
+          "move_type": "normal",
+          "distance": "D3+1"
+        }
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "TZAANGOR SHAMAN"
       ]
     },
-    "community_notes": "In the opponent's Movement phase, when an enemy unit ends a move within 8\" of the bearer's unengaged unit, that unit can make a Normal move of up to D3+1\"."
+    "community_notes": "In the opponent's Movement phase, when an enemy unit ends a move within 8\" of the bearer's unengaged unit, that unit can make a Normal move of up to D3+1\".",
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      }
+    }
   },
   {
     "ability_id": "warp-tainted-shells-prism-of-zadophon-thousand-sons",
@@ -6717,17 +7999,21 @@
       "type": "weapon-ability-grant",
       "target": "this-model",
       "modifier": {
-        "abilities": [
-          "Psychic"
-        ],
-        "weapon_type": "ranged"
+        "weapons": {
+          "type": "ranged"
+        },
+        "keywords": [
+          {
+            "keyword_id": "psychic"
+          }
+        ]
       }
     },
     "scope": {
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "DAEMON PRINCE"
       ]
     },
@@ -6754,13 +8040,17 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "of": {
-                "objective": {}
+              "filter": {
+                "within": {
+                  "range": "objective-control",
+                  "of": {
+                    "objective": {}
+                  }
+                }
               },
-              "range": "objective-control"
+              "subject": "defender"
             }
           },
           "effect": {
@@ -6769,7 +8059,9 @@
             "modifier": {
               "roll": "wound",
               "subset": "all-failures",
-              "weapon_type": "ranged"
+              "weapons": {
+                "type": "ranged"
+              }
             }
           }
         },
@@ -6779,13 +8071,17 @@
             "operator": "not",
             "operands": [
               {
-                "type": "within",
+                "type": "matches",
                 "parameters": {
-                  "subject": "defender",
-                  "of": {
-                    "objective": {}
+                  "filter": {
+                    "within": {
+                      "range": "objective-control",
+                      "of": {
+                        "objective": {}
+                      }
+                    }
                   },
-                  "range": "objective-control"
+                  "subject": "defender"
                 }
               }
             ]
@@ -6796,7 +8092,9 @@
             "modifier": {
               "roll": "wound",
               "subset": "ones",
-              "weapon_type": "ranged"
+              "weapons": {
+                "type": "ranged"
+              }
             }
           }
         }

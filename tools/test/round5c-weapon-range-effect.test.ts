@@ -30,7 +30,7 @@ describe("Round 5C weapon-ability-range: a weapon ability tested at full range",
     expect(result.ok && result.mechanics.effect).toEqual({
       type: "weapon-ability-range",
       target: { owner: "friendly", all_of: ["TACTICUS"] },
-      modifier: { keyword: "Rapid Fire", within: "weapon" },
+      modifier: { keyword: { keyword_id: "rapid-fire" }, range: "weapon" },
     });
   });
 
@@ -38,11 +38,11 @@ describe("Round 5C weapon-ability-range: a weapon ability tested at full range",
     const text = "This unit's Rapid Fire attacks benefit from Rapid Fire.";
     const result = compileLeaves(placed(text, ["Rapid Fire attacks benefit from Rapid Fire", "weapon-ability-range", { subject: "this-unit", keyword: "Rapid Fire", within: "weapon" }]), text, {});
     expect(result.ok).toBe(true);
-    expect(result.ok && result.mechanics.effect).toMatchObject({ type: "weapon-ability-range", target: "this-unit", modifier: { keyword: "Rapid Fire", within: "weapon" } });
+    expect(result.ok && result.mechanics.effect).toMatchObject({ type: "weapon-ability-range", target: "this-unit", modifier: { keyword: { keyword_id: "rapid-fire" }, range: "weapon" } });
   });
 
   it("describes the benefit against the weapon's full range", () => {
-    const effect = { type: "weapon-ability-range", target: "this-unit", modifier: { keyword: "Rapid Fire", within: "weapon" } } as unknown as Effect;
+    const effect = { type: "weapon-ability-range", target: "this-unit", modifier: { keyword: { keyword_id: "rapid-fire" }, range: "weapon" } } as unknown as Effect;
     expect(describeEffect(effect)).toBe("The unit's attacks benefit from [RAPID FIRE] when the target is within the weapon's range.");
   });
 

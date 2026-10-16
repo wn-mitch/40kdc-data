@@ -91,7 +91,7 @@ describe("Round 5C per-unit-count P3: one D6 per model of the moved unit", () =>
     const effect = mechanicsOf(list, text).effect;
     expect(effect.type).toBe("mortal-wounds");
     expect(effect.target).toBe("this-unit");
-    expect(effect.modifier).toMatchObject({ count: 1, per: "success", roll: { dice: 1, per_model: "target", comparison: "lte", threshold: 1 } });
+    expect(effect.modifier).toMatchObject({ count: 1, per: "success", roll: { dice: 1, per_model: "this-unit", comparison: "lte", threshold: 1 } });
   });
 
   it("compiles when the mover is the event subject: the recipient is the antecedent, the count is the mover's models", () => {
@@ -103,7 +103,7 @@ describe("Round 5C per-unit-count P3: one D6 per model of the moved unit", () =>
       ["that unit suffers 1 mortal wound", "mortal-wounds", { recipient: "antecedent", count: "1" }]);
     const effect = mechanicsOf(leaves, other).effect;
     expect(effect.target).toBe("event-subject");
-    expect(effect.modifier).toMatchObject({ count: 1, per: "success", roll: { dice: 1, per_model: "target", comparison: "lte", threshold: 1 } });
+    expect(effect.modifier).toMatchObject({ count: 1, per: "success", roll: { dice: 1, per_model: "event-subject", comparison: "lte", threshold: 1 } });
   });
 
   it("refuses recipient that-unit with an event-subject mover, which names a selection that does not exist", () => {

@@ -1,4 +1,4 @@
-import { closed, type CompileLeaf, unitOf } from "./compile-fragments.js";
+import { closed, type CompileLeaf, unitOf, weaponScope } from "./compile-fragments.js";
 
 type Node = Record<string, unknown>;
 
@@ -18,9 +18,9 @@ function testTarget(leaf: CompileLeaf): Node | string {
   if (target !== "enemy" && target !== "friendly") return target;
   const node: Node = { owner: target };
   const range = leaf.parameters.range;
-  const of = withinOf(leaf);
-  if (range === "inches") node.within = { range: { inches: closed(leaf, "within_inches") }, ...(of !== undefined ? { of } : {}) };
-  else if (range === "engagement") node.within = { range: "engagement", ...(of !== undefined ? { of } : {}) };
+  const of = withinOf(leaf) ?? "this-model";
+  if (range === "inches") node.within = { range: { inches: closed(leaf, "within_inches") }, of };
+  else if (range === "engagement") node.within = { range: "engagement", of };
   const require = leaf.parameters.require_keywords as string[] | undefined;
   const exclude = leaf.parameters.exclude_keywords as string[] | undefined;
   if (require?.length) node.all_of = require;
@@ -59,17 +59,12 @@ export function testEffect(leaf: CompileLeaf): Node | undefined {
       return { type: "characteristic-resolution", target: closed(leaf, "target"), modifier };
     }
     case "borrow-weapons": {
-      const modifier: Node = { max_models: closed(leaf, "max_models") };
-      if (leaf.parameters.weapon_type !== undefined) modifier.weapon_type = closed(leaf, "weapon_type");
-      if (leaf.parameters.exclude_weapon_keyword !== undefined) modifier.exclude_weapon_keyword = closed(leaf, "exclude_weapon_keyword");
+      const modifier: Node = { max_models: closed(leaf, "max_models"), ...weaponScope(leaf) };
       return { type: "borrow-weapons", target: closed(leaf, "target"), modifier };
     }
     case "select-weapon": {
-      const modifier: Node = { bind_as: closed(leaf, "bind_as") };
+      const modifier: Node = { bind_as: closed(leaf, "bind_as"), ...weaponScope(leaf) };
       if (leaf.parameters.count !== undefined) modifier.count = closed(leaf, "count");
-      if (leaf.parameters.weapon_type !== undefined) modifier.weapon_type = closed(leaf, "weapon_type");
-      if (leaf.parameters.weapon_keyword !== undefined) modifier.weapon_keyword = closed(leaf, "weapon_keyword");
-      if (leaf.parameters.weapon_name !== undefined) modifier.weapon_name = closed(leaf, "weapon_name");
       return { type: "select-weapon", target: closed(leaf, "target"), modifier };
     }
     default:

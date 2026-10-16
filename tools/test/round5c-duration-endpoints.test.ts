@@ -227,10 +227,15 @@ describe("expiry describer for the phase-edge values", () => {
 });
 
 describe("scope-duration schema", () => {
-  it("documents that the phase in progress never counts toward a phase-edge value", () => {
+  it("accepts every phase-edge duration emitted by the compiler", () => {
     const schema = JSON.parse(readFileSync(new URL("../../schemas/enrichment/ability-dsl/scope.schema.json", import.meta.url), "utf8"));
     const duration = schema.$defs["scope-duration"];
-    expect(duration.enum).toContain("until-start-of-opponent-next-command-phase");
-    expect(duration.description).toContain("the phase in progress when the effect applies never counts");
+    expect(duration.enum).toEqual(expect.arrayContaining([
+      "until-end-of-your-next-fight-phase",
+      "until-end-of-your-next-shooting-phase",
+      "until-end-of-your-next-movement-phase",
+      "until-end-of-opponent-next-movement-phase",
+      "until-start-of-opponent-next-command-phase",
+    ]));
   });
 });

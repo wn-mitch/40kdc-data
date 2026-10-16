@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 
 import { catalogInventory, COMPOSED, leafCoverage, RETIRED } from "../src/round5c/leaf-coverage.js";
+import { boundedCombinations } from "../src/round5c/leaf-coverage-samples.js";
+import { currentFamilyVersion, reviewedFamily } from "../src/round5c/contracts.js";
 
 /**
  * Step-8 leaf coverage gate: every DSL type the schema catalog defines must be either produced by
@@ -17,6 +19,25 @@ describe("Round 5C leaf-family coverage (step 8)", () => {
     for (const kind of ["effect", "container", "predicate", "trigger", "duration", "usage", "behavior"] as const) {
       expect(catalog.some((entry) => entry.kind === kind)).toBe(true);
     }
+  });
+
+  it("pairwise samples retain every declared value and satisfy dependent contexts", () => {
+    const event = reviewedFamily("event", currentFamilyVersion("event"));
+    const eventProperties = event.parameterSchema.properties as Record<string, { enum?: readonly string[] }>;
+    const eventSamples = boundedCombinations(event);
+    const sampledKinds = new Set(eventSamples.map((sample) => String(sample.kind)));
+    const sampledDesignations = new Set(eventSamples
+      .filter((sample) => sample.kind === "unit-destroyed" && sample.object_designated !== undefined)
+      .map((sample) => String(sample.object_designated)));
+
+    expect(sampledKinds).toEqual(new Set(eventProperties.kind!.enum!));
+    expect(sampledDesignations).toEqual(new Set(eventProperties.object_designated!.enum!));
+    expect(eventSamples.some((sample) => sample.kind === "phase-start"
+      && typeof sample.phase === "string" && typeof sample.turn === "string")).toBe(true);
+
+    const testSamples = boundedCombinations(reviewedFamily("test", currentFamilyVersion("test")));
+    expect(testSamples.some((sample) => sample.target === "enemy"
+      && sample.range === "inches" && typeof sample.within_inches === "number")).toBe(true);
   });
 
   it("every catalog type is produced, composed, or retired", () => {

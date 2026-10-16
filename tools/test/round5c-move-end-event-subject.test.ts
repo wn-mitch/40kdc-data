@@ -170,7 +170,7 @@ describe("the engaged cannot-end (2301, 4041 shape): a model subject", () => {
 });
 
 describe("the glue word but", () => {
-  const coverage = (text: string) => ({ uncovered: [{ start_byte: 0, end_byte: text.length, fragment: "f", text }] }) as unknown as AbilityCoverage;
+  const coverage = (text: string) => ({ unaccounted: [{ start_byte: 0, end_byte: text.length, fragment: "f", text }] }) as unknown as AbilityCoverage;
 
   it("treats a bare connective run as glue, so it is not an untiled run", () => {
     expect(untiledRuns(coverage(", but if it does, "))).toEqual([]);

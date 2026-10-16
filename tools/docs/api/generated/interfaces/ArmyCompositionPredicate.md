@@ -6,7 +6,7 @@
 
 # Interface: ArmyCompositionPredicate
 
-Defined in: [generated.ts:1607](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1607)
+Defined in: [generated.ts:2948](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2948)
 
 A draw-time predicate over an army list (not runtime board state, so deliberately NOT the Ability DSL condition). Used to gate when_drawn operations such as redraws. Example: a card that is void unless the opponent fields a large unit (10e 'Cull the Horde' redrew when the opponent had no unit of 14+ models) is { subject: 'opponent', quantifier: 'none', unit_filter: { model_count_min: 14 } } with operation 'redraw'.
 
@@ -19,7 +19,7 @@ via the `definition` "army-composition-predicate".
 
 > **subject**: `"self"` \| `"opponent"`
 
-Defined in: [generated.ts:1611](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1611)
+Defined in: [generated.ts:2952](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2952)
 
 Whose army list the predicate inspects.
 
@@ -29,7 +29,7 @@ Whose army list the predicate inspects.
 
 > **quantifier**: `"any"` \| `"none"`
 
-Defined in: [generated.ts:1615](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1615)
+Defined in: [generated.ts:2956](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2956)
 
 Whether the army must contain ('any') or lack ('none') a unit matching unit_filter for the predicate to hold.
 
@@ -39,7 +39,7 @@ Whether the army must contain ('any') or lack ('none') a unit matching unit_filt
 
 > **unit\_filter**: `object`
 
-Defined in: [generated.ts:1619](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1619)
+Defined in: [generated.ts:2960](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2960)
 
 Criteria a unit in the army must satisfy to match. All present criteria must hold (logical AND).
 

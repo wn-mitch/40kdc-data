@@ -1,6 +1,5 @@
 import type { SemanticFamilyDefinition } from "./contracts.js";
 import { booleanValue, boundedInteger, enumSet, enumValue, exactKeys } from "./family-validation.js";
-/** A unit keyword as printed: upper case, any script's letters ("BRÔKHYR"), digits, apostrophes, spaces, hyphens. */
 const UNIT_KEYWORD = /^\p{Lu}[\p{Lu}\p{N}' -]*[\p{Lu}\p{N}]$/u;
 
 /**
@@ -22,6 +21,24 @@ const SELECT_DISTANCES = ["any", "within"] as const;
 const AURA_OF = ["this-unit", "this-model"] as const;
 
 export const UNIT_FILTER_FAMILIES: readonly SemanticFamilyDefinition[] = [
+  {
+    id: "aura-emitter",
+    version: 1,
+    role: "CONDITION",
+    label: "Aura emitter",
+    description: "Preamble naming friendly emitter models for the following aura: shared keywords plus one of two or more additional keywords.",
+    starter: { side: "", keywords: [], any_keywords: [] },
+    parameterSchema: {
+      type: "object",
+      required: ["side", "keywords", "any_keywords"],
+      properties: {
+        side: { enum: ["friendly"] },
+        keywords: { type: "array", minItems: 1, uniqueItems: true, items: { type: "string", minLength: 1 } },
+        any_keywords: { type: "array", minItems: 2, uniqueItems: true, items: { type: "string", minLength: 1 } },
+      },
+      additionalProperties: false,
+    },
+  },
   {
     id: "unit-filter",
     version: 1,
@@ -61,6 +78,13 @@ export function normalizeUnitKeywords(value: unknown, label: string): string[] {
 }
 
 export function normalizeUnitFilterParameters(family: string, input: Record<string, unknown>): Record<string, unknown> | null {
+  if (family === "aura-emitter") {
+    exactKeys(input, ["side", "keywords", "any_keywords"], family);
+    const keywords = normalizeUnitKeywords(input.keywords, "aura-emitter.keywords");
+    const anyKeywords = normalizeUnitKeywords(input.any_keywords, "aura-emitter.any_keywords");
+    if (anyKeywords.length < 2) throw new TypeError("aura-emitter.any_keywords names two or more keywords.");
+    return { side: enumValue(input.side, ["friendly"], "aura-emitter.side"), keywords, any_keywords: anyKeywords };
+  }
   if (family !== "unit-filter") return null;
   exactKeys(input, ["side", ...["keywords", "any_keywords", "excluded_keywords", "states", "other", "visible", "level"].filter((key) => key in input)], family);
   const result: Record<string, unknown> = { side: enumValue(input.side, FILTER_SIDES, "unit-filter.side") };

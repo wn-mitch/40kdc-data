@@ -48,8 +48,23 @@ function runAfter(list: readonly CompileLeaf[], index: number, runs: readonly nu
   return run;
 }
 
+/** Carry the source-authorized Blast 1 rating into the catalog reference without defaulting other ratings. */
+function preserveBlastRating(list: readonly CompileLeaf[], sourceText: string | undefined): CompileLeaf[] {
+  if (sourceText === undefined) return [...list];
+  const bytes = Buffer.from(sourceText, "utf8");
+  return list.map((leaf) => {
+    if (leaf.family_id !== KEYWORD && leaf.family_id !== "weapon-ability-grant") return leaf;
+    if (leaf.parameters.keyword !== "Blast" || leaf.start_byte === undefined || leaf.end_byte === undefined) return leaf;
+    const span = bytes.subarray(leaf.start_byte, leaf.end_byte).toString("utf8");
+    return /\bblast\s*1\b/iu.test(span)
+      ? { ...leaf, parameters: { ...leaf.parameters, keyword: "Blast 1" } }
+      : leaf;
+  });
+}
+
 export function foldWeaponKeywords(input: readonly CompileLeaf[], sourceText?: string): CompileLeaf[] {
-  const { list, forced } = absorbMenuOpeners(foldQualifiedKeywordMenus(input, sourceText), sourceText);
+  const { list: foldedMenus, forced } = absorbMenuOpeners(foldQualifiedKeywordMenus(input, sourceText), sourceText);
+  const list = preserveBlastRating(foldedMenus, sourceText);
   if (!list.some((leaf) => leaf.family_id === KEYWORD)) {
     if (list.some(isFrame)) throw new CompileError("A weapon-ability-grant without a keyword needs weapon-ability-keyword leaves to grant.");
     return [...list];

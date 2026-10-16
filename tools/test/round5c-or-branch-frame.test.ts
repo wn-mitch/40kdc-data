@@ -50,10 +50,14 @@ describe("Round 5C antecedent frames on an Or: branch", () => {
       keyword("SUSTAINED HITS 1", "Sustained Hits 1"),
     ));
     expect(effect.steps[0]).toEqual({ type: "choice", options: [
-      { type: "weapon-ability-grant", target: "this-unit", modifier: { abilities: ["Lethal Hits"] } },
-      { type: "weapon-ability-grant", target: "this-unit", modifier: { abilities: ["Sustained Hits 1"] } },
+      { type: "weapon-ability-grant", target: "this-unit", modifier: { keywords: [{ keyword_id: "lethal-hits" }] } },
+      { type: "weapon-ability-grant", target: "this-unit", modifier: { keywords: [{ keyword_id: "sustained-hits", parameters: { value: 1 } }] } },
     ] });
-    expect(effect.steps[1]).toMatchObject({ type: "conditional", condition: { type: "rule-active" }, effect: { type: "weapon-ability-grant", target: "this-unit", modifier: { abilities: ["Lethal Hits", "Sustained Hits 1"] } } });
+    expect(effect.steps[1]).toMatchObject({
+      type: "conditional",
+      condition: { type: "rule-active" },
+      effect: { type: "weapon-ability-grant", target: "this-unit", modifier: { keywords: [{ keyword_id: "lethal-hits" }, { keyword_id: "sustained-hits", parameters: { value: 1 } }] } },
+    });
   });
 
   it("SS-1: without the antecedent frame the branch's keywords are refused", () => {
@@ -81,8 +85,8 @@ describe("Round 5C antecedent frames on an Or: branch", () => {
       ["+1 AP", "weapon-property-scope", { frame: "antecedent" }, "zero"],
       ["+1 AP", "characteristic-modifier", { characteristics: ["AP"], operation: "improve", value: 1 }],
     ));
-    expect(JSON.stringify(effect)).toContain('"stat":"AP","operation":"improve","value":1,"weapon_type":"melee"');
-    expect(JSON.stringify(effect)).toContain('"abilities":["Lance"],"weapon_type":"melee"');
+    expect(JSON.stringify(effect)).toContain('"stat":"AP","operation":"improve","value":1,"weapons":{"type":"melee"}');
+    expect(JSON.stringify(effect)).toContain('"keywords":[{"keyword_id":"lance"}],"weapons":{"type":"melee"}');
   });
 
   it("SS-3 scope path: a qualifier with the ': **' gap gates the keyword under a scope", () => {
@@ -93,11 +97,8 @@ describe("Round 5C antecedent frames on an Or: branch", () => {
       notMonsterVehicle,
     ));
     expect(effect.type).toBe("conditional");
-    expect(effect.condition).toMatchObject({ operator: "and", operands: [
-      { operator: "not", operands: [{ type: "has-keyword", parameters: { subject: "defender", all_of: ["MONSTER"] } }] },
-      { operator: "not", operands: [{ type: "has-keyword", parameters: { subject: "defender", all_of: ["VEHICLE"] } }] },
-    ] });
-    expect(effect.effect).toEqual({ type: "weapon-ability-grant", target: "this-unit", modifier: { abilities: ["Sustained Hits 1"] } });
+    expect(effect.condition).toEqual({ type: "matches", parameters: { subject: "defender", filter: { none_of: ["MONSTER", "VEHICLE"] } } });
+    expect(effect.effect).toEqual({ type: "weapon-ability-grant", target: "this-unit", modifier: { keywords: [{ keyword_id: "sustained-hits", parameters: { value: 1 } }] } });
   });
 
   it("a qualifier gates only its own keyword, not the branch after it", () => {
@@ -111,9 +112,9 @@ describe("Round 5C antecedent frames on an Or: branch", () => {
       keyword("SUSTAINED HITS 1", "Sustained Hits 1"),
     ));
     expect(effect.type).toBe("sequence");
-    expect(effect.steps[0]).toMatchObject({ type: "conditional", condition: { operator: "and" }, effect: { type: "weapon-ability-grant" } });
+    expect(effect.steps[0]).toMatchObject({ type: "conditional", condition: { type: "matches", parameters: { subject: "defender", filter: { none_of: ["MONSTER", "VEHICLE"] } } }, effect: { type: "weapon-ability-grant" } });
     expect(effect.steps[1]).toEqual({ type: "conditional", condition: { type: "rule-active", parameters: { rule: "assault-doctrine" } },
-      effect: { type: "weapon-ability-grant", target: "this-unit", modifier: { abilities: ["Sustained Hits 1"], weapon_type: "melee" } } });
+      effect: { type: "weapon-ability-grant", target: "this-unit", modifier: { keywords: [{ keyword_id: "sustained-hits", parameters: { value: 1 } }], weapons: { type: "melee" } } } });
   });
 
   it("SS-3 frame path: each qualified keyword of a menu is gated, and the menu is a choice of conditional options", () => {
@@ -127,11 +128,11 @@ describe("Round 5C antecedent frames on an Or: branch", () => {
       monsterVehicle,
     ));
     expect(effect.type).toBe("choice");
-    expect(effect.options[0]).toMatchObject({ type: "conditional", effect: { modifier: { abilities: ["Sustained Hits 1"] } } });
-    expect(effect.options[0].condition.operands).toHaveLength(2);
+    expect(effect.options[0]).toMatchObject({ type: "conditional", effect: { modifier: { keywords: [{ keyword_id: "sustained-hits", parameters: { value: 1 } }] } } });
+    expect(effect.options[0].condition).toEqual({ type: "matches", parameters: { subject: "defender", filter: { none_of: ["MONSTER", "VEHICLE"] } } });
     expect(effect.options[1]).toEqual({ type: "conditional",
-      condition: { type: "has-keyword", parameters: { subject: "defender", any_of: ["MONSTER", "VEHICLE"] } },
-      effect: { type: "weapon-ability-grant", target: "this-unit", modifier: { abilities: ["Lethal Hits"] } } });
+      condition: { type: "matches", parameters: { subject: "defender", filter: { any_of: ["MONSTER", "VEHICLE"] } } },
+      effect: { type: "weapon-ability-grant", target: "this-unit", modifier: { keywords: [{ keyword_id: "lethal-hits" }] } } });
   });
 
   it("refuses a qualifier after a keyword with a sentence break or a word in the gap", () => {

@@ -196,4 +196,41 @@ export const REGION_EXTENSIONS: readonly FamilyExtension[] = [
       return { ...previous(rest), not_moved_this_turn: true };
     },
   },
+  {
+    family: "named-region-state",
+    version: 2,
+    description: "As the previous version, with optional canonical baseline_region and phase_extensions recipe values for reviewed named-region variants.",
+    schema: (previous) => withProperties(previous, {
+      baseline_region: optional({ type: "object", required: ["territory"], properties: { territory: { type: "string", minLength: 1 } }, additionalProperties: false }),
+      phase_extensions: optional({ type: "array", items: { type: "object", minProperties: 1 }, minItems: 1 }),
+    }),
+    normalize: (input, previous) => {
+      const { baseline_region: baseline, phase_extensions: phases, ...rest } = input;
+      if (baseline === undefined && phases === undefined) return previous(input);
+      if (baseline !== undefined && (baseline === null || typeof baseline !== "object" || Array.isArray(baseline))) {
+        throw new TypeError("named-region-state.baseline_region must be an object.");
+      }
+      if (phases !== undefined) {
+        if (!Array.isArray(phases) || phases.length === 0) throw new TypeError("named-region-state.phase_extensions must be a non-empty array.");
+        for (const item of phases) {
+          if (item === null || typeof item !== "object" || Array.isArray(item)) throw new TypeError("named-region-state.phase_extensions items must be objects.");
+          const condition = (item as Record<string, unknown>).condition;
+          const parameters = condition !== null && typeof condition === "object" && !Array.isArray(condition)
+            ? (condition as Record<string, unknown>).parameters : undefined;
+          const proportion = parameters !== null && typeof parameters === "object" && !Array.isArray(parameters)
+            ? (parameters as Record<string, unknown>).proportion : undefined;
+          const comparison = proportion !== null && typeof proportion === "object" && !Array.isArray(proportion)
+            ? (proportion as Record<string, unknown>).comparison : undefined;
+          if (comparison !== undefined && !["gt", "gte", "lt", "lte", "eq"].includes(String(comparison))) {
+            throw new TypeError("named-region-state.phase_extensions condition proportion comparison must be gt, gte, lt, lte, or eq.");
+          }
+        }
+      }
+      return {
+        ...previous(rest),
+        ...(baseline !== undefined ? { baseline_region: baseline } : {}),
+        ...(phases !== undefined ? { phase_extensions: phases } : {}),
+      };
+    },
+  },
 ];

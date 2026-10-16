@@ -6,9 +6,9 @@
 
 # Type Alias: HistoryWindow
 
-> **HistoryWindow** = `"phase"` \| `"turn"` \| `"round"` \| `"battle"` \| `"previous-turn"` \| `"event"`
+> **HistoryWindow** = `"phase"` \| `"turn"` \| `"battle-round"` \| `"battle"` \| `"previous-turn"` \| `"event"`
 
-Defined in: [generated.ts:254](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L254)
+Defined in: [generated.ts:546](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L546)
 
 How far back a history condition looks. event: during the triggering event (this attack, this move).
 

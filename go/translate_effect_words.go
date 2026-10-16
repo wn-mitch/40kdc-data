@@ -161,17 +161,38 @@ func diceCase(v any) string {
 var antiRe = regexp.MustCompile(`(?i)^anti[\s-]+(.*)$`)
 var antiRatedRe = regexp.MustCompile(`(?i)^(.*?)[\s-]*(\d+)\s*(?:\+|plus)?$`)
 
-// bracketKeyword renders a GW weapon keyword token as bracketed caps
-// (lethal-hits -> [LETHAL HITS]); Anti-X keeps its hyphen and normalizes to N+.
+// bracketKeyword renders a structured catalog weapon keyword reference.
 func bracketKeyword(k any) string {
-	raw := strings.TrimSpace(ejstr(k))
-	if a := antiRe.FindStringSubmatch(raw); a != nil {
-		if m := antiRatedRe.FindStringSubmatch(a[1]); m != nil {
-			return "[ANTI-" + strings.ToUpper(strings.TrimSpace(dekebab(m[1]))) + " " + m[2] + "+]"
-		}
-		return "[ANTI-" + strings.ToUpper(strings.TrimSpace(dekebab(a[1]))) + "]"
+	ref, ok := asMap(k)
+	if !ok || ref == nil {
+		return "[?]"
 	}
-	return "[" + strings.ToUpper(dekebab(raw)) + "]"
+	parameters := mapOr(ref["parameters"])
+	name := strings.ToUpper(dekebab(ejstr(ref["keyword_id"])))
+	against := ""
+	if values, ok := asList(parameters["required_target_keywords_any"]); ok && len(values) > 0 {
+		against = " (against " + orList(jstrList(values)) + " units)"
+	}
+	excluding := ""
+	if values, ok := asList(parameters["excluded_target_keywords"]); ok && len(values) > 0 {
+		excluding = " (excluding " + orList(jstrList(values)) + " units)"
+	}
+	if ref["keyword_id"] == "anti" {
+		target := ""
+		if parameters["target_keyword"] != nil {
+			target = "-" + strings.ToUpper(ejstr(parameters["target_keyword"]))
+		}
+		rating := ""
+		if parameters["threshold"] != nil {
+			rating = " " + ejstr(parameters["threshold"]) + "+"
+		}
+		return "[ANTI" + target + rating + "]" + against + excluding
+	}
+	rating := ""
+	if parameters["value"] != nil {
+		rating = " " + diceCase(parameters["value"])
+	}
+	return "[" + name + rating + "]" + against + excluding
 }
 
 var testNames = map[string]string{"battle-shock": "Battle-shock", "desperate-escape": "Desperate Escape"}
@@ -394,43 +415,57 @@ func weaponLabel(id any) string {
 var trailingWeaponsRe = regexp.MustCompile(`(?i)\s+weapons?$`)
 var kebabSlugRe = regexp.MustCompile(`^[a-z0-9]+(-[a-z0-9]+)+$`)
 
-// weaponNoun renders a weapon filter as a noun ("ranged Bolt Rifle weapons with [PISTOL]").
+// weaponNoun renders the canonical weapon scope as a noun.
 func weaponNoun(m map[string]any) string {
-	kind, keyword := "", ""
-	if jsTruthy(m["weapon_type"]) {
-		kind = ejstr(m["weapon_type"]) + " "
+	scope := mapOr(m["weapons"])
+	kind := ""
+	if scope["type"] != nil {
+		kind = ejstr(scope["type"]) + " "
 	}
-	if jsTruthy(m["weapon_keyword"]) {
-		keyword = " with [" + strings.ToUpper(ejstr(m["weapon_keyword"])) + "]"
+	keywords := func(value any) string {
+		if values, ok := asList(value); ok {
+			parts := make([]string, len(values))
+			for i, ref := range values {
+				parts[i] = bracketKeyword(ref)
+			}
+			return orList(parts)
+		}
+		return bracketKeyword(value)
 	}
-	// A name that already carries the noun ("hellforged weapons") must not read "weapons weapons".
+	keyword := ""
+	if scope["keyword"] != nil {
+		keyword = " with " + keywords(scope["keyword"])
+	}
+	exclusion := ""
+	if scope["exclude_name"] != nil {
+		exclusion += " other than \"" + ejstr(scope["exclude_name"]) + "\""
+	}
+	if scope["exclude_keyword"] != nil {
+		exclusion += " (excluding weapons with " + keywords(scope["exclude_keyword"]) + ")"
+	}
 	raw := ""
-	if jsTruthy(m["weapon_name"]) {
-		raw = replaceFirst(trailingWeaponsRe, ejstr(m["weapon_name"]), "")
+	if scope["name"] != nil {
+		raw = trailingWeaponsRe.ReplaceAllString(ejstr(scope["name"]), "")
 	}
 	named := raw
 	if kebabSlugRe.MatchString(raw) {
 		named = titleCase(raw)
 	}
-	if ref, ok := asMap(m["weapon_ref"]); ok && ref != nil {
-		// A bound weapon ("the selected weapon") or the weapons picked for a named ability.
-		if sel, ok := asMap(ref["selected_by"]); ok && sel != nil {
-			return "the " + kind + "weapons selected for " + abilityLabel(sel["ability"]) + keyword
+	if ref, ok := asMap(scope["ref"]); ok && ref != nil {
+		if selected, ok := asMap(ref["selected_by"]); ok && selected != nil {
+			return "the " + kind + "weapons selected for " + abilityLabel(selected["ability"]) + keyword + exclusion
 		}
-		return "the selected " + kind + "weapon" + keyword
+		return "the selected " + kind + "weapon" + keyword + exclusion
 	}
 	if named != "" {
 		named += " "
 	}
-	return kind + named + "weapons" + keyword
+	return kind + named + "weapons" + keyword + exclusion
 }
 
-// hasWeapon reports whether a modifier carries a weapon filter.
-func hasWeapon(m map[string]any) bool {
-	return m["weapon_type"] != nil || m["weapon_name"] != nil || m["weapon_keyword"] != nil || m["weapon_ref"] != nil
-}
+// hasWeapon reports whether a modifier carries a canonical weapon scope.
+func hasWeapon(m map[string]any) bool { return m["weapons"] != nil }
 
-// weaponRollScope is " with melee weapons" for a roll scoped to a weapon filter, else "".
 func weaponRollScope(m map[string]any) string {
 	if hasWeapon(m) {
 		return " with " + weaponNoun(m)
@@ -465,7 +500,14 @@ func filterSubject(f map[string]any, ctx effCtx) string {
 	}
 	noun := "units"
 	if f["level"] == "model" {
-		noun = "models"
+		role := ""
+		switch f["attachment_role"] {
+		case "bodyguard":
+			role = "Bodyguard "
+		case "leader":
+			role = "Leader "
+		}
+		noun = role + "models"
 	}
 	// "friendly LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE units": keyword-only alternatives.
 	compact, isCompact := keywordAlternatives(f)
@@ -490,6 +532,12 @@ func filterSubject(f map[string]any, ctx effCtx) string {
 	if l, ok := asList(f["not_all_of"]); ok {
 		s += " (excluding " + strings.Join(jstrList(l), " ") + " " + noun + ")"
 	}
+	if l, ok := asList(f["model_names"]); ok {
+		s += " named " + orList(jstrList(l))
+	}
+	if l, ok := asList(f["unit_ids"]); ok {
+		s += " with unit ID " + orList(jstrList(l))
+	}
 	within, hasWithin := asMap(f["within"])
 	if hasWithin && within != nil {
 		s += " "
@@ -498,14 +546,14 @@ func filterSubject(f map[string]any, ctx effCtx) string {
 		}
 		s += "within " + rangePhrase(within["range"])
 		if within["of"] != nil {
-			s += " of " + effectSubject(within["of"], ctx)
+			s += " of " + placeRefPhrase(within["of"])
 		}
 	} else {
 		hasWithin = false
 	}
 	s += filterRelations(f, ctx)
-	if f["visible"] == true {
-		s += " that are visible"
+	if visible, ok := asMap(f["visible"]); ok && visible != nil {
+		s += " visible to " + effectSubject(visible["to"], ctx)
 	}
 	if f["designated"] != nil {
 		s += " that are " + designationPhrase(ejstr(f["designated"]), true)
@@ -529,7 +577,7 @@ func filterSubject(f map[string]any, ctx effCtx) string {
 	if f["excluding"] != nil {
 		s += " other than " + effectSubject(f["excluding"], ctx)
 	}
-	bounded := hasWithin || f["visible"] == true || f["designated"] != nil || f["not_designated"] != nil || f["state"] != nil || f["not_states"] != nil ||
+	bounded := hasWithin || f["visible"] != nil || f["designated"] != nil || f["not_designated"] != nil || f["state"] != nil || f["not_states"] != nil ||
 		f["embarked_in"] != nil || f["member_of"] != nil || f["engaged_with"] != nil || f["not_engaged_with"] != nil
 	if bounded {
 		return s

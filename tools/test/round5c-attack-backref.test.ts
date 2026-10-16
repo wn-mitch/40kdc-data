@@ -41,7 +41,7 @@ const WOUND_PLUS: Part = ["add 1 to the Wound roll", "roll-modifier", { roll: "w
 const REFERS: Record<string, unknown> = { refers: "earlier-attack" };
 const isMelee = { type: "attack-is", parameters: { attack_type: "melee" } };
 const isRanged = { type: "attack-is", parameters: { attack_type: "ranged" } };
-const zetaDefender = { type: "has-keyword", parameters: { subject: "defender", all_of: ["ZETA"] } };
+const zetaDefender = { type: "matches", parameters: { subject: "defender", filter: { all_of: ["ZETA"] } } };
 const hit = { type: "roll-modifier", target: "this-unit", modifier: { roll: "hit", operation: "add", value: 1 } };
 const wound = { type: "roll-modifier", target: "this-unit", modifier: { roll: "wound", operation: "add", value: 1 } };
 
@@ -125,7 +125,7 @@ describe("Sub-shape A: an earlier attack named again", () => {
     const steps = mechanics.effect.effect.steps as Array<Record<string, any>>;
     expect(steps[0]!.target).toEqual({ owner: "friendly", all_of: ["ZETA"] });
     expect(steps[1]!.effect.target).toEqual({ owner: "friendly", all_of: ["ZETA"] });
-    expect(steps[1]!.condition).toEqual({ type: "has-keyword", parameters: { subject: "defender", all_of: ["OMEGA"] } });
+    expect(steps[1]!.condition).toEqual({ type: "matches", parameters: { subject: "defender", filter: { all_of: ["OMEGA"] } } });
   });
 
   it("never reads a filter before a back-reference as its attacker", () => {
@@ -137,7 +137,7 @@ describe("Sub-shape A: an earlier attack named again", () => {
 
   it("lets an instead clause on the back-reference replace the earlier effect", () => {
     const own = "Now each time a model in this unit makes an attack, re-roll a Wound roll of 1. If the target of that attack is an enemy unit within range of an objective marker, re-roll the Wound roll instead.";
-    const within = { type: "within", parameters: { subject: "defender", of: { objective: {} }, range: "objective-control" } };
+    const within = { type: "matches", parameters: { subject: "defender", filter: { within: { of: { objective: {} }, range: "objective-control" } } } };
     const mechanics = mechanicsOf(own, ANY_BY_UNIT, ["re-roll a Wound roll of 1", "reroll", { roll: "wound", subset: "ones", weapon_type: "all" }],
       ["the target of that attack is an", "attack", REFERS], ["enemy unit", "unit-filter", { side: "enemy" }],
       ["within range of an objective marker", "unit-position", { kind: "objective-range", controlled_by: "any", subject: "target", negated: false }],
@@ -146,7 +146,7 @@ describe("Sub-shape A: an earlier attack named again", () => {
   });
 });
 
-const DESIGNATED = { type: "designated", parameters: { subject: "defender", tag: "afflicted" } };
+const DESIGNATED = { type: "matches", parameters: { subject: "defender", filter: { designated: "afflicted" } } };
 
 describe("Sub-shape C1: an attack on the designated or selected unit", () => {
   const text = "While a unit is afflicted, when a ZETA unit that arrived this turn targets that unit, those attacks have [LETHAL HITS].";
@@ -168,7 +168,7 @@ describe("Sub-shape C1: an attack on the designated or selected unit", () => {
 
   it("without target that-unit leaves the designation on no unit (the version-5 reading)", () => {
     const mechanics = mechanicsOf(text, ...parts(false));
-    expect(JSON.stringify(mechanics)).not.toContain("\"subject\":\"defender\",\"tag\"");
+    expect(JSON.stringify(mechanics)).not.toContain(JSON.stringify(DESIGNATED));
   });
 
   it("binds to the selected unit when no designation names it", () => {
@@ -189,7 +189,7 @@ describe("Sub-shape C1: an attack on the designated or selected unit", () => {
 
 describe("Sub-shape C2: incoming attacks on each unit a filter matches", () => {
   const text = "While a friendly ZETA unit is within range of an objective marker, attacks that target that unit have -1 to Wound rolls.";
-  const within = { type: "within", parameters: { subject: "defender", of: { objective: {} }, range: "objective-control" } };
+  const within = { type: "matches", parameters: { subject: "defender", filter: { within: { of: { objective: {} }, range: "objective-control" } } } };
   const minus = { type: "roll-modifier", target: "attacker", modifier: { roll: "wound", operation: "subtract", value: 1 } };
   const parts = (side: string): Part[] => [
     [`${side} ZETA unit`, "unit-filter", { side: side === "a" ? "any" : side, keywords: ["ZETA"] }],
@@ -201,7 +201,7 @@ describe("Sub-shape C2: incoming attacks on each unit a filter matches", () => {
   it("makes the filter's unit the defender, side included, with its conditions on the defender", () => {
     const mechanics = mechanicsOf(text, ...parts("friendly"));
     expect(mechanics.effect).toEqual({ type: "conditional", condition: { operator: "and", operands: [
-      within, { operator: "and", operands: [zetaDefender, { type: "owned-by", parameters: { subject: "defender", owner: "friendly" } }] },
+      within, { type: "matches", parameters: { subject: "defender", filter: { owner: "friendly", all_of: ["ZETA"] } } },
     ] }, effect: minus });
   });
 

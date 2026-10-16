@@ -25,6 +25,8 @@ export type {
   StackableBuffGroup,
   ReactiveTrigger,
 } from "./dataset.js";
+export { isLegalLeverSelection } from "./lever-selection.js";
+export type { SelectableLever } from "./lever-selection.js";
 export { Collection } from "./collection.js";
 export type { CollectionConfig } from "./collection.js";
 export {
@@ -79,7 +81,7 @@ export {
 export * from "../cruncher/index.js";
 
 // The DSL→Buff translator that powers AbilityView.getBuffs / describeBuffs.
-export { effectToBuffs, parseKeywordGrant } from "../cruncher/from-dsl.js";
+export { effectToBuffs } from "../cruncher/from-dsl.js";
 export type {
   ActivatableBuff,
   ActivatableGroupRef,
@@ -117,6 +119,7 @@ export {
   resolveRosterWargear,
   resolveAttachedLeader,
   resolveAttachmentPartners,
+  resolveAttachmentRoles,
   primaryDetachment,
   primaryDetachmentId,
   checkRosterLegality,

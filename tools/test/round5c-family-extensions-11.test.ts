@@ -154,7 +154,7 @@ describe("a bare \"each\" before a unit-filter", () => {
       ["on a 4+", "roll-result", { from: 4 }],
       ["that enemy unit suffers D3 mortal wounds", "mortal-wounds", { recipient: "that-unit", count: "D3" }]);
     expect(effect.type).toBe("for-each-unit");
-    expect(effect.selector).toEqual({ owner: "enemy", within_inches: 6 });
+    expect(effect.selector).toEqual({ filter: { owner: "enemy", within: { range: { inches: 6 }, of: "this-model" } } });
     expect(JSON.stringify(effect.effect)).toContain('"type":"mortal-wounds","target":"recipient"');
   });
 
@@ -166,7 +166,7 @@ describe("a bare \"each\" before a unit-filter", () => {
       ["engaged with your unit", "unit-state", { states: ["engaged"], subject: "antecedent", with: "this-unit", negated: false }],
       ["makes a Battle-shock roll", "test", { target: "antecedent", test: "battle-shock" }],
       ["with -1 to that Battle-shock roll", "roll-modifier", { roll: "battle-shock", operation: "subtract", value: 1 }]);
-    expect(effect.selector).toEqual({ owner: "enemy", keywords: ["MONSTER"], engagement_relation: "engaged-with-bearer", reference: "bearer-unit" });
+    expect(effect.selector).toEqual({ filter: { owner: "enemy", all_of: ["MONSTER"], engaged_with: "this-unit" } });
     expect(effect.effect).toEqual({ type: "test", target: "recipient", modifier: { test: "battle-shock", modifier: -1 } });
   });
 
@@ -189,7 +189,7 @@ describe("a change to a test another unit takes", () => {
     if (!result.ok) throw new Error(result.errors.join("; "));
     // The change is the test's own modifier under the condition, split from the test on the other side (inside the aura's effect).
     const out = JSON.stringify(result.mechanics);
-    expect(out).toContain('{"type":"conditional","condition":{"type":"unit-state","parameters":{"subject":"recipient","state":"battle-shocked"}},"effect":{"type":"test","target":"recipient","modifier":{"test":"desperate-escape","modifier":-1}}}');
+    expect(out).toContain('{"type":"conditional","condition":{"type":"matches","parameters":{"subject":"recipient","filter":{"state":"battle-shocked"}}},"effect":{"type":"test","target":"recipient","modifier":{"test":"desperate-escape","modifier":-1}}}');
     expect(out).not.toContain('"roll-modifier"');
   });
 });
@@ -205,7 +205,7 @@ describe("a condition on each unit a filter names", () => {
       ["This unit has +1 Move", "characteristic-modifier", { subject: "this-unit", characteristics: ["M"], operation: "add", value: 1 }]), text);
     if (!result.ok) throw new Error(result.errors.join("; "));
     const steps = (result.mechanics as { effect: { steps: Array<Record<string, unknown>> } }).effect.steps;
-    expect(steps[0]).toMatchObject({ type: "conditional", condition: { type: "within", parameters: { subject: "recipient" } }, effect: { target: { owner: "friendly", all_of: ["GRAVIS"] } } });
+    expect(steps[0]).toMatchObject({ type: "conditional", condition: { type: "matches", parameters: { subject: "recipient", filter: { within: { of: { objective: {} }, range: "objective-control" } } } }, effect: { target: { owner: "friendly", all_of: ["GRAVIS"] } } });
     expect(steps[1]).toMatchObject({ type: "stat-modifier", target: "this-unit" });
   });
 });
@@ -255,7 +255,7 @@ describe("wave-4 review fixes", () => {
       ["Each enemy unit", "for-each-unit-select", { scope: "enemy", distance: "any" }],
       ["within Engagement Range of your unit", "unit-state", { states: ["engaged"], subject: "antecedent", with: "this-unit", negated: false }],
       ["must take a Battle-shock test", "test", { target: "recipient", test: "battle-shock" }]), text)) as { mechanics: Record<string, any> };
-    expect(mechanics.effect).toEqual({ type: "for-each-unit", selector: { owner: "enemy", engagement_relation: "engaged-with-bearer", reference: "bearer-unit" }, effect: { type: "test", target: "recipient", modifier: { test: "battle-shock" } } });
+    expect(mechanics.effect).toEqual({ type: "for-each-unit", selector: { filter: { owner: "enemy", engaged_with: "this-unit" } }, effect: { type: "test", target: "recipient", modifier: { test: "battle-shock" } } });
   });
 
   it("reads \"Or:\" between two effects of one kind as the player's choice of one", () => {
@@ -316,9 +316,9 @@ describe("selections narrowed by the attacks that hit them", () => {
       ["That unit is dazed", "apply-mark", { subject: "antecedent", tag: "slowed" }],
       ["While a unit is dazed", "designated-filter", { tag: "slowed" }],
       ["subtract 1 from its Move characteristic", "characteristic-modifier", { subject: "antecedent", characteristics: ["M"], operation: "subtract", value: 1, weapon_type: "all" }]);
-    expect(out).toContain('"filter":{"roll":"hit","result":"success","weapon_name":"Glimmer Lance"}');
+    expect(out).toContain('"filter":{"roll":"hit","result":"success","weapons":{"name":"Glimmer Lance"}}');
     expect(out).not.toContain('"attack-is"');
-    expect(out).toContain('{"type":"designated","parameters":{"subject":"selected-unit","tag":"slowed"}}');
+    expect(out).toContain('{"type":"matches","parameters":{"subject":"selected-unit","filter":{"designated":"slowed"}}}');
   });
 
   it("keeps a weapon filter that does not follow a hit as a gate", () => {
@@ -327,7 +327,7 @@ describe("selections narrowed by the attacks that hit them", () => {
       ["makes an attack", "attack", { direction: "makes", unit: "this-model", attack_type: "any" }],
       ["made with its Glimmer Lance", "attack-filter", { weapon_name: "Glimmer Lance" }],
       ["add 1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1 }]);
-    expect(out).toContain('{"type":"attack-is","parameters":{"weapon_name":"Glimmer Lance"}}');
+    expect(out).toContain('{"type":"attack-is","parameters":{"weapons":{"name":"Glimmer Lance"}}}');
   });
 
   it("gives a designated unit's selection its hit eligibility, and limits the changed attacks inside the designation", () => {
@@ -340,9 +340,26 @@ describe("selections narrowed by the attacks that hit them", () => {
       ["Ranged attacks", "attack", { direction: "makes", unit: "friendly-unit", attack_type: "ranged" }],
       ["that target that unit", "target-is-selected", {}],
       ["have +1 to Hit rolls", "roll-modifier", { roll: "hit", operation: "add", value: 1 }]);
-    expect(out).toMatch(/"select":\{"scope":"enemy-unit","count":1,"eligibility":\{"type":"happened".*"attack_type":"ranged"/u);
-    expect(out).toMatch(/"applies":\{"to":"attackers-of-target","effect":\{"type":"conditional","condition":\{"type":"attack-is"/u);
-    expect(out.startsWith('{"effect":{"type":"designate-target"')).toBe(true);
+    const mechanics = JSON.parse(out) as {
+      effect: {
+        type: string;
+        select: { kind: string; selector: { filter: Record<string, unknown>; count: Record<string, unknown>; eligibility: Record<string, unknown> } };
+        applies: { to: string; effect: { type: string; condition: { type: string; parameters: Record<string, unknown> } } };
+      };
+    };
+    expect(mechanics.effect.type).toBe("designate-target");
+    expect(mechanics.effect.select).toMatchObject({
+      kind: "unit",
+      selector: { filter: { owner: "enemy" }, count: { min: 1, max: 1 } },
+    });
+    expect(mechanics.effect.select.selector.eligibility).toMatchObject({
+      type: "happened",
+      parameters: { event: "after-roll", filter: { attack_type: "ranged" } },
+    });
+    expect(mechanics.effect.applies).toMatchObject({
+      to: "attackers-of-target",
+      effect: { type: "conditional", condition: { type: "attack-is", parameters: { attack_type: "ranged" } } },
+    });
   });
 
   it("binds \"while a unit is\" to the target of the attacks it changes", () => {
@@ -351,14 +368,14 @@ describe("selections narrowed by the attacks that hit them", () => {
       ["While a unit is dazed", "designated-filter", { tag: "slowed" }],
       ["ranged attacks that target that unit", "attack", { direction: "targeted", unit: "that-unit", attack_type: "ranged" }],
       ["can re-roll Hit rolls of 1", "reroll", { roll: "hit", subset: "ones", weapon_type: "all" }]);
-    expect(out).toContain('{"type":"designated","parameters":{"subject":"defender","tag":"slowed"}}');
+    expect(out).toContain('{"type":"matches","parameters":{"subject":"defender","filter":{"designated":"slowed"}}}');
   });
 });
 
 describe("hidden units, a bearer's Transport and floored characteristics", () => {
   it("reads hidden as the core state and keeps the other states it lists", () => {
     const out = JSON.stringify(mechanicsOf(leaves(["unit-state", { states: ["hidden"], subject: "this-unit", negated: false }], heal())));
-    expect(out).toContain('{"type":"unit-state","parameters":{"state":"hidden"}}');
+    expect(out).toContain('{"type":"matches","parameters":{"filter":{"state":"hidden"}}');
     expect(out).not.toContain('"designated"');
     expect(normalizeFingerprintParameters("unit-state", { states: ["engaged", "hidden"], subject: "this-unit", negated: false }, currentFamilyVersion("unit-state")).states).toEqual(["engaged", "hidden"]);
     expect(() => normalizeFingerprintParameters("unit-state", { states: ["hidden"], subject: "this-unit", negated: false, at: "phase-start" }, currentFamilyVersion("unit-state"))).toThrow(/hidden/u);
@@ -367,7 +384,7 @@ describe("hidden units, a bearer's Transport and floored characteristics", () =>
 
   it("names the Transport this model is embarked within", () => {
     const out = JSON.stringify(mechanicsOf(leaves(["unit-state", { states: ["on-battlefield"], subject: "bearer-transport", negated: false }], heal())));
-    expect(out).toContain('{"type":"unit-state","parameters":{"subject":"bearer-transport","state":"on-battlefield"}}');
+    expect(out).toContain('{"type":"matches","parameters":{"subject":"bearer-transport","filter":{"state":"on-battlefield"}}}');
   });
 
   it("floors a lowered characteristic, and refuses a floor on a raise", () => {
@@ -392,7 +409,7 @@ describe("wave-5 review fixes", () => {
       ["if that unit is Battle-shocked", "unit-state", { states: ["battle-shocked"], subject: "event-subject", negated: false }],
       ["subtract 1 from that test", "roll-modifier", { roll: "desperate-escape", operation: "subtract", value: 1 }]).mechanics);
     expect(out).toContain('"effect":{"type":"test","target":"event-subject","modifier":{"test":"desperate-escape","modifier":-1}}');
-    expect(out).toContain('{"type":"conditional","condition":{"operator":"not","operands":[{"type":"unit-state","parameters":{"subject":"event-subject","state":"battle-shocked"}}]},"effect":{"type":"test","target":"event-subject","modifier":{"test":"desperate-escape"}}}');
+    expect(out).toContain('{"type":"conditional","condition":{"operator":"not","operands":[{"type":"matches","parameters":{"subject":"event-subject","filter":{"state":"battle-shocked"}}}]},"effect":{"type":"test","target":"event-subject","modifier":{"test":"desperate-escape"}}}');
     expect(out).not.toContain('"roll-modifier"');
   });
 
@@ -419,7 +436,7 @@ describe("wave-5 review fixes", () => {
     const result = compileLeaves(leaves, text);
     if (!result.ok) throw new Error(result.errors.join("; "));
     const eligibility = JSON.stringify(result.core);
-    expect(eligibility).toContain('{"type":"unit-state","parameters":{"state":"engaged"}}');
+    expect(eligibility).toContain('{"type":"matches","parameters":{"filter":{"state":"engaged"}}}');
     expect(eligibility).not.toContain('"defender"');
   });
 
@@ -509,7 +526,7 @@ describe("an attack-property scope narrowed by its target", () => {
       ["+1 Strength", "characteristic-modifier", { characteristics: ["S"], operation: "add", value: 1 }]), text);
     if (!result.ok) throw new Error(result.errors.join("; "));
     const out = JSON.stringify(result.mechanics);
-    expect(out).toMatch(/"condition":\{"type":"designated","parameters":\{"subject":"defender","tag":"slowed"\}\}/u);
+    expect(out).toContain('"condition":{"type":"matches","parameters":{"subject":"defender","filter":{"designated":"slowed"}}}');
     expect(out).toContain('"weapon-ability-grant"');
     expect(out).toContain('"stat":"S"');
   });

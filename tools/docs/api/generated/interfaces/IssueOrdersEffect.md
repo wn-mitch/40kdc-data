@@ -6,7 +6,7 @@
 
 # Interface: IssueOrdersEffect
 
-Defined in: [generated.ts:2907](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2907)
+Defined in: [generated.ts:3787](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3787)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "issue-orders-effect".
@@ -17,7 +17,7 @@ via the `definition` "issue-orders-effect".
 
 > **type**: `"issue-orders"`
 
-Defined in: [generated.ts:2908](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2908)
+Defined in: [generated.ts:3788](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3788)
 
 ***
 
@@ -25,7 +25,7 @@ Defined in: [generated.ts:2908](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > `optional` **count?**: `number`
 
-Defined in: [generated.ts:2909](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2909)
+Defined in: [generated.ts:3789](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3789)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [generated.ts:2909](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > `optional` **range?**: `number`
 
-Defined in: [generated.ts:2910](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2910)
+Defined in: [generated.ts:3790](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3790)
 
 ***
 
@@ -41,7 +41,7 @@ Defined in: [generated.ts:2910](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > `optional` **eligible?**: `object`
 
-Defined in: [generated.ts:2911](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2911)
+Defined in: [generated.ts:3791](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3791)
 
 #### keyword?
 
@@ -53,7 +53,7 @@ Defined in: [generated.ts:2911](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **options**: \[\{ `name`: `string`; `effect`: [`EffectNode`](../type-aliases/EffectNode.md); \}, `...{ name: string; effect: EffectNode }[]`\]
 
-Defined in: [generated.ts:2917](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2917)
+Defined in: [generated.ts:3797](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3797)
 
 #### Min Items
 

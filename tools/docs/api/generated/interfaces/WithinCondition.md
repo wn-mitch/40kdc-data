@@ -6,9 +6,9 @@
 
 # Interface: WithinCondition
 
-Defined in: [generated.ts:2005](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2005)
+Defined in: [generated.ts:2033](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2033)
 
-[position] The subject is within `range` of `of`. models: every means every model of the subject; wholly means wholly within. `at` reads the position at an earlier point.
+[position] The subject is within `range` of `of`. `models` quantifies the subject's models (`every` requires all); `count` bounds how many subject models are within range. `wholly` requires the subject footprint to be inside the range. `at` reads the position at an earlier point.
 
 ## Properties
 
@@ -16,40 +16,12 @@ Defined in: [generated.ts:2005](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **type**: `"within"`
 
-Defined in: [generated.ts:2006](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2006)
+Defined in: [generated.ts:2034](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2034)
 
 ***
 
 ### parameters
 
-> **parameters**: `object`
+> **parameters**: \{\[`k`: `string`\]: `unknown`; `at`: `"phase-start"`; \} \| \{\[`k`: `string`\]: `unknown`; \}
 
-Defined in: [generated.ts:2007](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2007)
-
-#### subject?
-
-> `optional` **subject?**: [`UnitRef`](../type-aliases/UnitRef.md)
-
-#### of
-
-> **of**: [`UnitRef`](../type-aliases/UnitRef.md) \| \{ `objective`: [`ObjectiveFilter`](ObjectiveFilter.md); \} \| \{ `marker`: `string`; \} \| `"battlefield-edge"`
-
-#### range?
-
-> `optional` **range?**: [`RangeRef`](../type-aliases/RangeRef.md)
-
-#### wholly?
-
-> `optional` **wholly?**: `true`
-
-#### models?
-
-> `optional` **models?**: `"any"` \| `"every"`
-
-#### at?
-
-> `optional` **at?**: `"now"` \| `"phase-start"`
-
-#### count\_min?
-
-> `optional` **count\_min?**: `number`
+Defined in: [generated.ts:2035](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2035)

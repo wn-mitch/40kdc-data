@@ -2,8 +2,8 @@
 //! abilities resolver) and the buff translation of one ability record (rules-bundle
 //! expansion, trigger and usage gates, aura range). Mirrors
 //! `tools/src/abilities-resolver/resolver.ts` and `AbilityView.describeBuffs` /
-//! `triggerGated` / `usageGated` / `auraInches` in `tools/src/data/entities.ts`; the
-//! `conformance/abilities-resolver` corpus pins both.
+//! canonical trigger and activation handling; the
+//! `conformance/abilities-resolver` corpus pins the shared contract.
 
 use std::collections::HashSet;
 
@@ -14,7 +14,7 @@ use super::ability_refs::{rating_of, with_rating};
 use super::dataset::Dataset;
 use crate::cruncher::buffs::{Buff, BuffSource, EngineContext};
 use crate::cruncher::from_dsl::{
-    effect_to_buffs, is_attack_step, moment_gate, strip_nulls, EffectTranslation,
+    effect_to_buffs_with_duration, moment_gate, strip_nulls, EffectTranslation,
     TranslationPerspective,
 };
 use crate::{Ability, Phase, Unit};
@@ -142,9 +142,48 @@ impl<'a> Collector<'a> {
     }
 }
 
-/// A scope range an aura reaches a supporting unit's neighbours with.
-fn is_aura_scope(range: &str) -> bool {
-    range.starts_with("aura-") || range == "any-on-battlefield" || range == "any-visible"
+/// Whether an effect can reach a unit other than its own: an aura, a unit-filter target
+/// (friendly or enemy), or a unit selection. The translator decides what of it reaches the input
+/// unit. Mirrors TS `reachesOtherUnits`.
+pub(crate) fn reaches_other_units(effect: &Value) -> bool {
+    match effect {
+        Value::Array(a) => a.iter().any(reaches_other_units),
+        Value::Object(node) => {
+            if matches!(
+                node.get("type").and_then(Value::as_str),
+                Some("aura" | "select-units")
+            ) {
+                return true;
+            }
+            if node.get("type").and_then(Value::as_str) == Some("ability-grant")
+                && matches!(
+                    node.get("target").and_then(Value::as_str),
+                    Some("this-model" | "model-in-this-unit")
+                )
+            {
+                // A model-only grant remains on that model; its nested definition
+                // must not make the owning unit look like an aura source.
+                return false;
+            }
+            if let Some(Value::Object(target)) = node.get("target") {
+                if matches!(
+                    target.get("owner").and_then(Value::as_str),
+                    Some("friendly" | "enemy")
+                ) {
+                    return true;
+                }
+                if node.get("type").and_then(Value::as_str) == Some("ability-grant")
+                    && target.get("level").and_then(Value::as_str) == Some("model")
+                {
+                    // A model-only grant remains on that model; its nested definition
+                    // must not make the owning unit look like an aura source.
+                    return false;
+                }
+            }
+            node.values().any(reaches_other_units)
+        }
+        _ => false,
+    }
 }
 
 impl Dataset {
@@ -253,17 +292,17 @@ impl Dataset {
                 );
             }
         }
-        // 6. Supporting units: only aura-scoped abilities reach the input unit.
+        // 6. Supporting units: only abilities that can reach another unit (an aura, a friendly or
+        // enemy unit filter, a unit selection); one that only names its own unit describes a buff
+        // that never reaches the input unit.
         for support_id in &input.supporting_unit_ids {
             let Some(supporter) = self.resolve_unit(support_id, Some(&faction_id)) else {
                 continue;
             };
             for ability in self.abilities_of(supporter) {
-                // The schema no longer carries `scope.range`; read it from the JSON form the way
-                // the TS resolver reads the raw record.
-                let scope = serde_json::to_value(&ability.scope).unwrap_or(Value::Null);
-                let range = scope.get("range").and_then(Value::as_str).unwrap_or("");
-                if !is_aura_scope(range) {
+                if !reaches_other_units(
+                    &serde_json::to_value(&ability.effect).unwrap_or(Value::Null),
+                ) {
                     continue;
                 }
                 let source = EligibleAbilitySource::Support {
@@ -276,8 +315,8 @@ impl Dataset {
         c.out
     }
 
-    /// The ability's buff translation: its rules bundles expanded, gated on its trigger (or
-    /// else its usage limit), with an aura's single inch range stamped on every buff. A rated
+    /// Expand rules bundles and resolve triggers before attaching parent usage requirements.
+    /// Independent child groups and costs survive; an aura's inch range remains a gate. A rated
     /// rule (`{rating: true}`) reads `rating`, the rating the owning unit prints
     /// ([`EligibleAbility::rating`]). Mirrors TS `AbilityView.describeBuffs`; `context`
     /// defaults to the shooting phase.
@@ -301,11 +340,56 @@ impl Dataset {
         let effect = raw.get("effect").cloned().unwrap_or(Value::Null);
         let mut seen = vec![ability.ability_id.to_string()];
         let resolved = with_rating(&self.resolve_rules_bundles(&effect, &mut seen), rating);
-        let gated = trigger_gated(raw.get("behavior"), raw.get("trigger"), &resolved)
-            .unwrap_or_else(|| usage_gated(raw.get("ability_type"), raw.get("usage"), &resolved));
-        let mut translated = effect_to_buffs(&gated, source, ctx, perspective);
+        let triggered = if crate::cruncher::from_dsl::recipient_snapshot_reason(
+            raw.get("trigger"),
+            &resolved,
+        )
+        .is_some()
+        {
+            let result = if !matches!(source, BuffSource::Ability { ability_id, .. } if ability_id == ability.ability_id.as_str())
+            {
+                Err("recipient snapshot source does not own this ability")
+            } else {
+                crate::cruncher::recipient_snapshots::resolve_recipient_snapshots(
+                    raw.get("trigger"),
+                    &resolved,
+                    source,
+                    ctx,
+                    perspective,
+                )
+            };
+            match result {
+                Ok(effect) => effect,
+                Err(reason) => {
+                    return EffectTranslation {
+                        unsupported: vec![crate::cruncher::from_dsl::UnsupportedFragment {
+                            reason: reason.into(),
+                            effect_fragment: resolved,
+                        }],
+                        ..Default::default()
+                    }
+                }
+            }
+        } else {
+            trigger_gated(raw.get("behavior"), raw.get("trigger"), &resolved)
+                .unwrap_or_else(|| resolved.clone())
+        };
+        let mut translated = effect_to_buffs_with_duration(
+            &triggered,
+            source,
+            ctx,
+            perspective,
+            raw.pointer("/scope/duration"),
+        );
+        if let Some(usage) = raw.get("usage") {
+            crate::cruncher::from_dsl::apply_activation(
+                &mut translated,
+                ability.ability_id.as_str(),
+                json!({"usage": usage}),
+            );
+        }
         // An aura gates on distance to the target; only a single inch range gates.
-        if let Some(range) = aura_inches(&resolved) {
+        if let Some(range) = aura_inches_for_round(&resolved, ctx.battle_round) {
             let gate = |b: &mut Buff| {
                 b.applicable_when
                     .get_or_insert_with(Default::default)
@@ -372,6 +456,14 @@ impl Dataset {
         if node.get("type").and_then(Value::as_str) != Some("ability-grant") {
             return None;
         }
+        let holder = node.get("target")?;
+        if matches!(holder.as_str(), Some("this-model" | "model-in-this-unit"))
+            || holder.get("level").and_then(Value::as_str) == Some("model")
+        {
+            // Keep model grants intact: expansion must not promote their
+            // nested self references to the entire combined unit.
+            return None;
+        }
         let modifier = node.get("modifier")?.as_object()?;
         let id = modifier.get("ability")?.as_str()?;
         if modifier.get("rules_bundle") != Some(&Value::Bool(true)) || seen.iter().any(|s| s == id)
@@ -379,8 +471,18 @@ impl Dataset {
             return None;
         }
         let target = self.abilities.get(id)?;
-        let effect = strip_nulls(&serde_json::to_value(&target.effect).ok()?);
-        (effect.get("type").and_then(Value::as_str) == Some("rules-bundle")).then_some(effect)
+        let mut effect = strip_nulls(&serde_json::to_value(&target.effect).ok()?);
+        if effect.get("type").and_then(Value::as_str) != Some("rules-bundle") {
+            return None;
+        }
+        // Retain the holder on the expanded bundle so attached model grants
+        // cannot escape the walker's model-isolation guard.
+        if let Some(holder) = node.get("target") {
+            effect
+                .as_object_mut()?
+                .insert("target".into(), holder.clone());
+        }
+        Some(effect)
     }
 }
 
@@ -394,66 +496,55 @@ pub fn trigger_gated(
     if behavior.and_then(Value::as_str) != Some("reactive") {
         return None;
     }
-    let null = Value::Null;
-    let triggers: Vec<&Value> = match trigger {
-        Some(Value::Array(a)) => a.iter().collect(),
-        Some(t) => vec![t],
-        None => vec![&null],
-    };
-    if triggers.into_iter().any(is_attack_step) {
-        return None;
-    }
     moment_gate(trigger, effect)
 }
 
-/// An ability's effect gated on its usage limit: using it is the player's choice, so its buffs
-/// are an opt-in lever. Several limits are one use; the first names the lever. A stratagem is
-/// already opt-in.
-pub fn usage_gated(ability_type: Option<&Value>, usage: Option<&Value>, effect: &Value) -> Value {
-    let limit = match usage {
-        Some(Value::Array(a)) => a.first(),
-        other => other,
-    };
-    let frequency = limit
-        .and_then(Value::as_object)
-        .and_then(|l| l.get("frequency"))
-        .and_then(Value::as_str);
-    match frequency {
-        Some(f)
-            if !effect.is_null() && ability_type.and_then(Value::as_str) != Some("stratagem") =>
-        {
-            json!({
-                "type": "conditional",
-                "condition": { "type": "timing-is", "parameters": { "timing": f } },
-                "effect": effect,
-            })
-        }
-        _ => effect.clone(),
-    }
+/// The one inch range every aura-filtered effect target in `effect` reaches, if exactly one.
+/// This compatibility wrapper keeps the helper useful to callers that do not have a battle
+/// round; tiered ranges are intentionally ignored without that observation context.
+pub fn aura_inches(effect: &Value) -> Option<f64> {
+    aura_inches_for_round(effect, None)
 }
 
-/// The one inch range every aura-filtered effect target in `effect` reaches, if exactly one.
-pub fn aura_inches(effect: &Value) -> Option<f64> {
-    fn walk(node: &Value, found: &mut Vec<f64>) {
+fn aura_inches_for_round(effect: &Value, battle_round: Option<u32>) -> Option<f64> {
+    fn walk(node: &Value, found: &mut Vec<f64>, battle_round: Option<u32>) {
         match node {
-            Value::Array(a) => a.iter().for_each(|x| walk(x, found)),
+            Value::Array(a) => a.iter().for_each(|x| walk(x, found, battle_round)),
             Value::Object(o) => {
-                let inches = o
-                    .get("target")
-                    .and_then(|t| t.pointer("/within/range/inches"))
-                    .and_then(Value::as_f64);
+                let model_grant = o.get("type").and_then(Value::as_str) == Some("ability-grant")
+                    && (matches!(
+                        o.get("target").and_then(Value::as_str),
+                        Some("this-model" | "model-in-this-unit")
+                    ) || o
+                        .get("target")
+                        .and_then(|t| t.get("level"))
+                        .and_then(Value::as_str)
+                        == Some("model"));
+                if model_grant {
+                    return;
+                }
+                let mut range = o.get("target").and_then(|t| t.pointer("/within/range"));
+                if let Some(tiers) = range
+                    .and_then(|r| r.get("per_battle_round"))
+                    .and_then(Value::as_array)
+                {
+                    range = (battle_round.filter(|round| *round > 0))
+                        .filter(|_| !tiers.is_empty())
+                        .and_then(|round| tiers.get((round as usize).min(tiers.len()) - 1));
+                }
+                let inches = range.and_then(|r| r.get("inches")).and_then(Value::as_f64);
                 if let (Some(Value::String(_)), Some(i)) = (o.get("type"), inches) {
                     if !found.contains(&i) {
                         found.push(i);
                     }
                 }
-                o.values().for_each(|x| walk(x, found));
+                o.values().for_each(|x| walk(x, found, battle_round));
             }
             _ => {}
         }
     }
     let mut found = Vec::new();
-    walk(effect, &mut found);
+    walk(effect, &mut found, battle_round);
     match found.as_slice() {
         [only] => Some(*only),
         _ => None,

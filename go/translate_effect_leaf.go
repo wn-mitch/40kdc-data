@@ -17,7 +17,7 @@ var leafTypes = map[string]bool{}
 func init() {
 	for _, t := range []string{
 		"stat-modifier", "ignore-modifiers", "roll-modifier", "re-roll", "roll-result", "end-attack-sequence", "ability-grant",
-		"keyword-grant", "weapon-ability-grant", "weapon-ability-range", "weapon-grant", "ability-modifier", "ability-activate", "permission", "targeting",
+		"keyword-grant", "weapon-ability-grant", "weapon-ability-range", "weapon-grant", "ability-modifier", "ability-activate", "oath-modifier", "permission", "targeting",
 		"counts-as", "rule-state", "mortal-wounds", "damage-reduction", "feel-no-pain", "invulnerable-save", "heal", "return-models",
 		"destroy-models", "act-on-death", "split-unit", "add-unit", "destruction-rule", "move", "move-modifier", "set-up", "marker",
 		"transport-capacity", "test", "state-change", "cp-gain", "cost-modifier", "resource-gain", "resource-spend", "resource-die",
@@ -28,11 +28,14 @@ func init() {
 	}
 }
 
-// incomingLead is "each time an attack targets the unit, " — the lead of an `incoming` change.
 func incomingLead(m map[string]any, subj string) string {
 	attack := "an attack"
-	if m["weapon_type"] != nil {
-		attack = "a " + ejstr(m["weapon_type"]) + " attack"
+	if scope, ok := asMap(m["weapons"]); ok && scope != nil {
+		if kind := cstr(scope["type"]); kind != "" && len(scope) == 1 {
+			attack = "a " + kind + " attack"
+		} else {
+			attack = "an attack with " + weaponNoun(map[string]any{"weapons": scope})
+		}
 	}
 	return "each time " + attack + " targets " + subj + ", "
 }
@@ -96,12 +99,7 @@ func statModifierLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 		return incomingLead(m, subj) + statChange(m, "the "+stat+" of that attack") + bounds(m)
 	}
 	if hasWeapon(m) {
-		// A weapon exclusion names the one weapon the change skips.
-		other := ""
-		if jsTruthy(m["exclude_weapon_name"]) {
-			other = " other than \"" + ejstr(m["exclude_weapon_name"]) + "\""
-		}
-		return statChange(m, "the "+stat+" of "+weaponNoun(m)+other+" equipped by "+weaponHolder(e["target"], ctx)) + bounds(m)
+		return statChange(m, "the "+stat+" of "+weaponNoun(map[string]any{"weapons": m["weapons"]})+" equipped by "+weaponHolder(e["target"], ctx)) + bounds(m)
 	}
 	return statChange(m, ofOrPossessive(subj, stat)) + bounds(m)
 }
@@ -337,7 +335,30 @@ func unmodifiedWord(m map[string]any) string {
 	return ""
 }
 
-// isDefinedGrant reports a grant that prints the ability it gives (modifier.definition).
+func referencedID(value any) string {
+	if s, ok := value.(string); ok {
+		return s
+	}
+	if ref, ok := value.(map[string]any); ok {
+		for _, key := range []string{"ability_id", "rule_id", "id"} {
+			if s, ok := ref[key].(string); ok {
+				return s
+			}
+		}
+	}
+	return ejstr(value)
+}
+
+func abilityReferenceLabel(value any) string {
+	if ref, ok := value.(map[string]any); ok {
+		abilityID := referencedID(ref["ability_id"])
+		definitionID := referencedID(ref["definition_id"])
+		if abilityID != "" && definitionID != "" {
+			return idLabel(definitionID) + " (" + abilityLabel(abilityID) + ")"
+		}
+	}
+	return abilityLabel(referencedID(value))
+}
 func isDefinedGrant(e map[string]any) bool {
 	if e["type"] != "ability-grant" {
 		return false
@@ -351,17 +372,16 @@ func isDefinedGrant(e map[string]any) bool {
 // one copy per unit.
 func definedGrantHead(e map[string]any, ctx effCtx) string {
 	m := mod(e)
-	def, _ := m["definition"].(map[string]any)
-	base := effectSubject(e["target"], ctx)
-	subj := base
-	if t, ok := e["target"].(map[string]any); ok && t["level"] == "model" {
-		subj = "units with one or more " + strings.TrimPrefix(base, "all ")
+	def := mapOr(m["definition"])
+	subj := effectSubject(e["target"], ctx)
+	name := ""
+	if value, ok := def["name"].(string); ok {
+		name = value
+	} else if m["ability"] != nil {
+		name = abilityReferenceLabel(m["ability"])
 	}
-	if name, ok := def["name"].(string); ok {
+	if name != "" {
 		return subj + " " + ev(subj, "gains") + " the " + name + " ability"
-	}
-	if m["ability"] != nil {
-		return subj + " " + ev(subj, "gains") + " the " + abilityLabel(m["ability"]) + " ability"
 	}
 	return subj + " " + ev(subj, "gains") + " the following rules"
 }
@@ -383,11 +403,11 @@ func abilityGrantLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 		return definedGrantHead(e, ctx) + " (" + describeEffectInline(definitionPart(e), ctx) + ")"
 	}
 	// Cover is a state a unit has, not an ability it gains.
-	if m["ability"] == "benefit-of-cover" {
+	if referencedID(m["ability"]) == "benefit-of-cover" {
 		return subj + " " + ev(subj, "has") + " the Benefit of Cover"
 	}
 	inch := ""
-	if m["ability"] == "scouts" || m["ability"] == "deep-strike" {
+	if referencedID(m["ability"]) == "scouts" || referencedID(m["ability"]) == "deep-strike" {
 		inch = "\""
 	}
 	rated := describerRatingRef(m["value"])
@@ -405,7 +425,7 @@ func abilityGrantLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 	if rated {
 		tail = ", X being its rating"
 	}
-	return subj + " " + ev(subj, "gains") + " the " + abilityLabel(m["ability"]) + value + " " + noun + tail
+	return subj + " " + ev(subj, "gains") + " the " + abilityReferenceLabel(m["ability"]) + value + " " + noun + tail
 }
 
 func keywordGrantLeaf(m map[string]any, subj string) string {
@@ -438,7 +458,7 @@ func weaponAbilityGrantLeaf(e, m map[string]any, subj string, ctx effCtx) string
 		}
 		return strings.Join(parts, " and ")
 	}
-	gained := keywordList(m["abilities"])
+	gained := keywordList(m["keywords"])
 	lost := keywordList(m["removes"])
 	increment := ""
 	if m["if_present"] == "increment" {
@@ -501,6 +521,16 @@ func modifiedAbility(ref any, subj string, ctx effCtx) string {
 }
 
 func abilityModifierLeaf(m map[string]any, subj string, ctx effCtx) string {
+	if m["aspect"] == "selection" && m["operation"] == "set" {
+		if selector, ok := asMap(m["selection"]); ok && selector != nil {
+			expiry := expiryTrail(m["recipient_duration"])
+			s := "replace that ability's selection with " + selectUnitsSubject(selector) + selectionBinding(selector) + "; those recipients are affected by that same ability"
+			if expiry != "" {
+				s += " " + expiry
+			}
+			return s
+		}
+	}
 	whose := modifiedAbility(m["ability"], subj, ctx)
 	aspect, ok := abilityAspects[ejstr(m["aspect"])]
 	if !ok {
@@ -556,7 +586,54 @@ func abilityModifierLeaf(m map[string]any, subj string, ctx effCtx) string {
 	if option != "" {
 		s += "; add " + option
 	}
+
 	return s + cap + abilityLimits(m)
+}
+func oathModifierLeaf(m map[string]any, subj string, ctx effCtx) string {
+	label := abilityReferenceLabel(m["ability"])
+	switch m["aspect"] {
+	case "quality-persistence":
+		s := subj + " " + ev(subj, "retains") + " qualities from " + ejstr(m["from"]) + " " + label + " Oaths"
+		if duration := expiryTrail(m["duration"]); duration != "" {
+			s += " " + duration
+		}
+		return s
+	case "deed-reward":
+		method := ""
+		switch m["selection_method"] {
+		case "random":
+			method = "randomly determined "
+		case "chosen":
+			method = "chosen "
+		}
+		regardless := ""
+		if m["selection_method"] == "any" {
+			regardless = ", regardless of how those deeds were selected"
+		}
+		return "for " + subj + ", on completion of " + ejstr(m["applies_to"]) + " " + method + label + " deeds" + regardless + ", replace their reward with: " + describeEffectInline(mapOr(m["effect"]), ctx)
+	default:
+		domains := getList(m, "domains")
+		names := make([]string, len(domains))
+		for i, domain := range domains {
+			name := ejstr(domain)
+			if name == "quality" {
+				names[i] = "qualities"
+			} else {
+				names[i] = name + "s"
+			}
+		}
+		clauses := []string{"when selecting " + andList(names) + " for " + label + " for " + subj}
+		if m["exclude_previously_selected"] == true {
+			clauses = append(clauses, "exclude previously selected "+andList(names))
+		}
+		if m["duplicate_roll"] == "choose-unselected" {
+			clauses = append(clauses, "if a duplicate is rolled, choose an unselected result in that domain")
+		}
+		if m["stop_when"] == "all-domains-exhausted" {
+			clauses = append(clauses, "stop when every domain is exhausted")
+		}
+		return strings.Join(clauses, "; ")
+	}
 }
 
 // abilityLimits renders the limits on a changed allowance: once per battle
@@ -621,12 +698,21 @@ var coreRuleVerbRe = regexp.MustCompile(`^(has|is|stops|does|suffers|receives|lo
 
 func ruleStateLeaf(m map[string]any, subj string) string {
 	granted := m["direction"] == "granted"
-	rule := ejstr(m["rule"])
+	rule := referencedID(m["rule"])
+	if m["direction"] == "exchanged" {
+		other := m["exchange_with"]
+		first := abilityReferenceLabel(m["rule"])
+		second := abilityReferenceLabel(other)
+		return "if " + subj + " " + ev(subj, "has") + " exactly one of the " + first + " and " + second + " abilities, " + subj + " simultaneously " + ev(subj, "loses") + " that ability and " + ev(subj, "gains") + " the other"
+	}
+	if m["direction"] == "suppressed" && m["except_from"] == "this-ability" && m["rule_kind"] == "ability" {
+		return subj + " " + ev(subj, "loses") + " the " + abilityReferenceLabel(m["rule"]) + " ability and cannot gain it except from this ability"
+	}
 	if m["rule_kind"] == "faction-rule" {
 		if granted {
-			return subj + " " + ev(subj, "gains") + " " + abilityLabel(rule)
+			return subj + " " + ev(subj, "gains") + " " + abilityReferenceLabel(m["rule"])
 		}
-		return subj + " cannot use " + abilityLabel(rule)
+		return subj + " cannot use " + abilityReferenceLabel(m["rule"])
 	}
 	if rule == "overwatch-against-bearer" {
 		can := "cannot"
@@ -662,7 +748,7 @@ func ruleStateLeaf(m map[string]any, subj string) string {
 	}
 	label := titleCase(rule)
 	if m["rule_kind"] == "ability" {
-		label = abilityLabel(rule)
+		label = abilityReferenceLabel(m["rule"])
 	}
 	if granted {
 		return subj + " " + ev(subj, "gains") + " the " + label + " " + noun
@@ -711,6 +797,8 @@ func describeLeaf(e map[string]any, ctx effCtx) string {
 		return abilityModifierLeaf(m, subj, ctx)
 	case "ability-activate":
 		return abilityActivateLeaf(m, subj)
+	case "oath-modifier":
+		return oathModifierLeaf(m, subj, ctx)
 	case "permission":
 		return permissionLeaf(m, subj, ctx)
 	case "targeting":

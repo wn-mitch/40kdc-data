@@ -1,12 +1,14 @@
 /**
- * migrate-vocabulary — move every condition and trigger in the data to the round-6 predicate
- * vocabulary and event families. Values are spliced into each file's own text, so only
- * migrated nodes change. A node the rules cannot place is listed for review and left alone
- * (the run then refuses --write) until `vocab-overrides.json` supplies its new form.
- * Nodes already in the new vocabulary are kept, so the tool can be re-run on data that
- * lands later in the old form.
+ * Project the complete vocabulary cutover before validating or writing any data.
+ * Existing pointer overrides normalize historical input first; canonical transforms
+ * then run over the resulting tree. Ambiguities retain record/pointer diagnostics.
+ * Production persistence uses the MFM staged-write seam, including stale-input refusal.
+ * No-op production runs still validate every core/enrichment input. Fixture-only
+ * projection is separate and never authorizes production writes. Inspection
+ * snapshots preserve registry bytes but are not publication-qualified datasets.
  *
- * Usage: npx tsx tools/src/round6/migrate-vocabulary.ts [--write] [--review <out.json>] [paths…]
+ * Usage: npx tsx tools/src/round6/migrate-vocabulary.ts [--write] [--review <out.json>]
+ *   [--projection <out.json>] [--staging-root <new-directory>] [--data-root <directory>] [paths…]
  */
 import * as fs from "fs";
 import * as path from "path";
@@ -22,6 +24,8 @@ import { applyReplacements, type Replacement } from "./json-spans.js";
 import { LEGACY_TYPES, migrateSimple, type KeywordSets, type Place, type Node, type Outcome } from "./vocab-conditions.js";
 import { migrateTrigger } from "./vocab-triggers.js";
 import { LEGACY_ONLY_TYPES, LEGACY_TARGETS, migrateEffect, migrateMovement, targetRef, type EffectContext } from "./vocab-effects.js";
+import { prepareVocabulary, projectVocabulary, type VocabularyProjection } from "./vocab-projection.js";
+import { prepareWrites, type StagedWrite } from "../mfm/apply.js";
 
 const REPO = path.resolve(path.dirname(new URL(import.meta.url).pathname), "../../..");
 const SCHEMAS = path.join(REPO, "schemas");
@@ -38,7 +42,7 @@ const NEW_EVENTS = new Set((loadJson<Node>(path.join(SCHEMAS, "$defs/common.sche
 /** Types whose legacy and new forms share a name; the rules still normalise their parameters. */
 const SHARED = new Set(["phase-is", "player-turn-is", "battle-round", "operation-markers", "engagement-fronts", "destroyed-while-on-objective", "destroyed-in-tagged-terrain"]);
 
-const NEW_SINGLE = createValidator().getSchema("https://40kdc.dev/schemas/enrichment/ability-dsl/effect.schema.json#/$defs/single-effect")!;
+const NEW_SINGLE = createValidator({ allErrors: false }).getSchema("https://40kdc.dev/schemas/enrichment/ability-dsl/effect.schema.json#/$defs/single-effect")!;
 const CONTAINERS = new Set(["aura", "conditional", "sequence", "choice", "select-units", "for-each-unit", "dice-gated", "dice-table", "dice-pool-allocation",
   "rules-bundle", "ability-part", "stance-select", "stance-selection-capacity", "resource-action-menu", "named-region-state", "named-objective-state",
   "designate-target", "persistent-designation", "issue-orders", "risk-reward", "no-effect", "leader-model-ability-grant"]);
@@ -91,15 +95,13 @@ class Migrator {
     if (typeof v.target === "string" && LEGACY_TARGETS.has(v.target)) return true;
     // attacker / defender are spelled the same in both vocabularies; legacy modifier keys tell them apart.
     const m = (v.modifier ?? {}) as Node;
-    return ["attack_type", "grant_type", "ability_id", "keyword", "scope", "pool_id", "resource", "count"].some((k) => k in m) && t !== "mortal-wounds";
+    return ["attack_type", "grant_type", "pool_id", "resource"].some((k) => k in m) || (t === "ability-grant" && "ability_id" in m);
   }
 
   effect(v: Node, file: string, record: string, pointer: string): Outcome {
     const override = this.overrides[this.key(file, record, pointer)];
     if (override !== undefined) return { node: override as Node };
-    let r = v.type === "movement-modifier" ? migrateMovement(v, this.effectCtx) : migrateEffect(v, this.effectCtx);
-    // A rule's output must be a valid effect: a single effect with a legacy value goes to review.
-    if (!("review" in r) && "target" in r.node && !CONTAINERS.has(String(r.node.type)) && !NEW_SINGLE(r.node)) r = { review: `invalid ${String(r.node.type)} output` };
+    const r = v.type === "movement-modifier" ? migrateMovement(v, this.effectCtx) : migrateEffect(v, this.effectCtx);
     if ("review" in r) this.reviews.push({ file, record, pointer, reason: r.review, node: v, target: targetRef(v.target, this.effectCtx), ability_type: this.effectCtx.abilityType, within: this.effectCtx.within });
     return r;
   }
@@ -141,7 +143,7 @@ class Migrator {
       return { node: { operator: c.operator, operands: out } };
     }
     const t = String(c.type);
-    if ((NEW_TYPES.has(t) && !SHARED.has(t)) || (!NEW_TYPES.has(t) && !LEGACY_TYPES.has(t))) return { node: c };
+    if (!LEGACY_TYPES.has(t) || (NEW_TYPES.has(t) && !SHARED.has(t))) return { node: c };
     const r = migrateSimple(c, this.sets, this.place);
     if ("review" in r) this.reviews.push({ file, record, pointer, reason: r.review, node: c });
     return r;
@@ -181,6 +183,7 @@ class Migrator {
     const outerWithin = this.effectCtx.within;
     const selecting = ["select-units", "for-each-unit", "designate-target"].includes(String((v as Node).type));
     for (const [k, child] of Object.entries(v as Node)) {
+      if (k === "output" && file.startsWith("crates/wh40kdc/tests/fixtures/")) continue;
       const p = [...at, k];
       const pointer = p.slice(this.base).join("/");
       this.place = k === "eligibility" || k === "observer_eligibility" ? "eligibility" : selecting && k === "effect" ? "selection" : outer;
@@ -209,8 +212,7 @@ class Migrator {
         continue;
       }
       if (k === "scope" && child && typeof child === "object" && !Array.isArray(child) && ("range" in (child as Node) || "range_inches" in (child as Node))) {
-        const { range: _r, range_inches: _ri, ...rest } = child as Node;
-        out.push({ path: p, value: rest });
+        this.reviews.push({ file, record, pointer, reason: "scope reach requires explicit recipient lowering before removal", node: child });
         continue;
       }
       if (child && typeof child === "object" && !Array.isArray(child) && typeof (child as Node).type === "string" && !CONDITION_SLOTS.has(k) && this.isLegacyEffect(child as Node)) {
@@ -242,7 +244,7 @@ class Migrator {
     this.effectCtx.within = outerWithin;
   }
 
-  file(abs: string, write: boolean): void {
+  file(abs: string): StagedWrite & { originalText: string } {
     const rel = path.relative(REPO, abs);
     const faction = factionOfDataFile(rel);
     const text = fs.readFileSync(abs, "utf8");
@@ -257,14 +259,14 @@ class Migrator {
       this.effectCtx = { scopeRange: scope.range as string | undefined, rangeInches: scope.range_inches as number | undefined, abilityType: r?.ability_type as string | undefined, ruleText: faction ? this.ruleText.get(`${faction}/${id}`) : undefined };
       this.walk(rec, Array.isArray(data) ? [i] : [], rel, id, reps);
     });
-    if (!reps.length) return;
+    if (!reps.length) return { path: abs, value: data, text, originalText: text };
     if (process.argv.includes("--list")) for (const r of reps) console.log(`  ${rel} ${r.path.join("/")}`);
     // A file kept in the compact house style is rewritten in it; any other file is spliced.
     const compact = formatCompact(data) === text;
     const next = compact ? formatCompact(JSON.parse(applyReplacements(text, reps))) : applyReplacements(text, reps);
     JSON.parse(next);
     this.changed += reps.length;
-    if (write) fs.writeFileSync(abs, next);
+    return { path: abs, value: JSON.parse(next) as unknown, text: next, originalText: text };
   }
 }
 
@@ -286,45 +288,96 @@ export function dumpRuleText(repo: RepoProse | null = fs.existsSync(DEFAULT_DUMP
   return out;
 }
 
-function dataFiles(roots: string[]): string[] {
+function dataFiles(roots: string[], includeRegistry = false): string[] {
   const out: string[] = [];
-  const skip = /(^|\/)(_audit|_reports|node_modules)(\/|$)|share-registry\.json$/;
+  const skip = /(^|\/)(_audit|_reports|node_modules)(\/|$)/;
   const walk = (p: string): void => {
     const st = fs.statSync(p);
     if (st.isDirectory()) for (const e of fs.readdirSync(p).sort()) walk(path.join(p, e));
-    else if (p.endsWith(".json") && !skip.test(path.relative(REPO, p))) out.push(p);
+    else if (p.endsWith(".json") && !skip.test(path.relative(REPO, p)) && (includeRegistry || path.basename(p) !== "share-registry.json")) out.push(p);
   };
   for (const r of roots) walk(path.resolve(REPO, r));
   return out;
 }
 
+export interface MigrationOptions {
+  dataRoot?: string;
+  overrides?: Record<string, unknown>;
+  sets?: KeywordSets;
+  ruleText?: ReadonlyMap<string, string>;
+}
+
+/** Stage every input once; no source file is written by this API. */
+export async function stageVocabulary(files: readonly string[], options: MigrationOptions = {}): Promise<VocabularyProjection> {
+  const dataRoot = path.resolve(options.dataRoot ?? path.join(REPO, "data"));
+  // Historical overrides were authored against earlier bytes; never replay them
+  // implicitly over records that may have since been compiled or reviewed.
+  const migrator = new Migrator(options.sets ?? await keywordSets(), options.overrides ?? {}, options.ruleText ?? new Map());
+  const inputs = files.map((file) => migrator.file(path.resolve(file)));
+  return projectVocabulary(inputs, dataRoot, migrator.reviews);
+}
+
 async function main(): Promise<void> {
   const argv = process.argv.slice(2);
-  const write = argv.includes("--write");
-  const reviewAt = argv.indexOf("--review");
-  const reviewOut = reviewAt >= 0 ? argv[reviewAt + 1] : undefined;
-  const roots = argv.filter((a, i) => !a.startsWith("--") && argv[i - 1] !== "--review");
-  const overridesPath = path.join(path.dirname(new URL(import.meta.url).pathname), "vocab-overrides.json");
-  const overrides = fs.existsSync(overridesPath) ? loadJson<Record<string, unknown>>(overridesPath) : {};
-  const sets = await keywordSets();
-  const text = dumpRuleText();
-  const m = new Migrator(sets, overrides, text);
-  const files = dataFiles(roots.length ? roots : ["data", "tools/test/fixtures"]);
-  // A dry pass first: --write only proceeds when nothing needs review.
-  for (const f of files) m.file(f, false);
-  const reasons = new Map<string, number>();
-  for (const r of m.reviews) reasons.set(r.reason.replace(/"[^"]*"/g, '"…"'), (reasons.get(r.reason.replace(/"[^"]*"/g, '"…"')) ?? 0) + 1);
-  console.log(`${m.changed} slot(s) migrate across ${files.length} files; ${m.reviews.length} node(s) need review.`);
-  for (const [reason, n] of [...reasons].sort((a, b) => b[1] - a[1])) console.log(`  ${String(n).padStart(4)}  ${reason}`);
-  if (reviewOut) fs.writeFileSync(path.resolve(reviewOut), JSON.stringify(m.reviews, null, 2) + "\n");
-  if (write) {
-    if (m.reviews.length) {
-      console.error("Refusing --write while nodes need review; add them to vocab-overrides.json.");
-      process.exit(1);
+  const valueFlags = ["--review", "--projection", "--staging-root", "--data-root"];
+  for (const flag of valueFlags) {
+    const index = argv.indexOf(flag);
+    if (index >= 0 && (!argv[index + 1] || argv[index + 1]!.startsWith("--"))) throw new Error(`${flag} requires a value`);
+  }
+  const argument = (flag: string): string | undefined => {
+    const index = argv.indexOf(flag);
+    return index < 0 ? undefined : argv[index + 1];
+  };
+  const dataRoot = path.resolve(argument("--data-root") ?? path.join(REPO, "data"));
+  const roots = argv.filter((arg, i) => !arg.startsWith("--") && !valueFlags.includes(argv[i - 1] ?? ""));
+  const files = dataFiles(roots.length ? roots : [dataRoot]);
+  const projection = await stageVocabulary(files, { dataRoot, ruleText: dumpRuleText() });
+  const stagingRoot = argument("--staging-root");
+  if (stagingRoot) {
+    const destination = path.resolve(fs.realpathSync(path.dirname(path.resolve(stagingRoot))), path.basename(stagingRoot));
+    const relative = path.relative(fs.realpathSync(dataRoot), destination);
+    if (!relative || !relative.startsWith(`..${path.sep}`)) throw new Error("Staging snapshot must be outside the data root.");
+    if (fs.existsSync(destination)) throw new Error("Staging snapshot requires a new directory; existing bytes are never overwritten.");
+    for (const source of projection.sources) {
+      if (fs.readFileSync(source.path, "utf8") !== source.text) throw new Error(`Vocabulary input changed before snapshot: ${source.path}`);
     }
-    const w = new Migrator(sets, overrides, text);
-    for (const f of files) w.file(f, true);
-    console.log(`Wrote ${w.changed} slot(s).`);
+    fs.mkdirSync(destination);
+    const staged = new Map(projection.staged.map((item) => [item.path, item]));
+    for (const file of dataFiles([dataRoot], true)) {
+      const output = path.join(destination, path.relative(dataRoot, file));
+      fs.mkdirSync(path.dirname(output), { recursive: true });
+      fs.writeFileSync(output, staged.get(file)?.text ?? fs.readFileSync(file, "utf8"));
+    }
+    console.log(`Canonical inspection snapshot: ${destination} (not validated for publication).`);
+  }
+  let validationError: string | undefined;
+  try {
+    // Review diagnostics do not conceal schema/integrity failures in the projection.
+    // This prepared handle is intentionally discarded: this is inspection only.
+    // A no-op is still a complete dataset audit, without scheduling unchanged writes.
+    const hasDataInputs = projection.sources.some((source) => {
+      const relative = path.relative(dataRoot, source.path);
+      return relative !== ".." && !relative.startsWith(`..${path.sep}`) && !path.isAbsolute(relative);
+    });
+    if (hasDataInputs) {
+      await prepareWrites(projection.staged, { label: "vocabulary-dry-run", dataRoot, maxDiagnosticsPerRecord: 12, validateUnchanged: true });
+    }
+  } catch (error) {
+    validationError = error instanceof Error ? error.message : String(error);
+  }
+  const reviewOut = argument("--review");
+  const projectionOut = argument("--projection");
+  if (reviewOut) fs.writeFileSync(path.resolve(reviewOut), JSON.stringify(projection.reviews, null, 2) + "\n");
+  if (projectionOut) fs.writeFileSync(path.resolve(projectionOut), JSON.stringify({ ...projection, validationError }, null, 2) + "\n");
+  console.log(`${projection.staged.length} data file(s), ${projection.fixtures.length} fixture file(s) projected; ${projection.reviews.length} node(s) need review.`);
+  if (validationError) console.error(projectionOut ? `${validationError.split("\n", 1)[0]}\nBounded per-record validation diagnostics: ${projectionOut}` : validationError);
+  if (projection.reviews.length || projection.fixtures.length || validationError) {
+    process.exitCode = 1;
+    return;
+  }
+  if (argv.includes("--write")) {
+    const prepared = await prepareVocabulary(projection, dataRoot);
+    prepared.commit();
   }
 }
 

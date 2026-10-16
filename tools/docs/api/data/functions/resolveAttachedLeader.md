@@ -8,7 +8,7 @@
 
 > **resolveAttachedLeader**(`roster`, `bodyguardUnitId`): `RosterUnit` \| `undefined`
 
-Defined in: [data/roster-resolve.ts:506](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/roster-resolve.ts#L506)
+Defined in: [data/roster-resolve.ts:657](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/roster-resolve.ts#L657)
 
 The roster's leader entry attached to `bodyguardUnitId`, if any. Import
 stores the inferred (always-provisional) attachment on the *leader's*

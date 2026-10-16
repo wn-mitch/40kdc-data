@@ -34,8 +34,8 @@ describe("menu-action eligibility in source order", () => {
         id: "tactical-dash",
         when: { event: "move-ended", subject: { owner: "enemy" }, binds_event_variable: "triggering-enemy" },
         eligibility: {
-          selector_count: 1,
-          excludes_keyword: ["TITANIC"],
+          filter: { none_of: ["TITANIC"] },
+          count: { min: 1, max: 1 },
           requires: [{ type: "unit-state", parameters: { subject: "selected-unit", state: "engaged", with: { event_var: "triggering-enemy" }, at: "phase-start" } }],
         },
       }],
@@ -58,7 +58,7 @@ describe("menu-action eligibility in source order", () => {
       actions: [{
         id: "sharp-shot",
         eligibility: {
-          selector_count: 1,
+          count: { min: 1, max: 1 },
           requires: [{ type: "happened", parameters: { event: "after-roll", object: "selected-unit", filter: { roll: "hit", result: "success", by: { event_var: "triggering-shooter" } }, window: "event" } }],
         },
       }],
@@ -106,8 +106,8 @@ describe("menu-action eligibility in source order", () => {
       },
     });
     expect(action!.eligibility).toEqual({
-      selector_count: 1,
-      excludes_keyword: ["TITANIC"],
+      filter: { none_of: ["TITANIC"] },
+      count: { min: 1, max: 1 },
       requires: [{ type: "happened", parameters: { event: "after-roll", object: "selected-unit", filter: { roll: "hit", result: "success", by: { event_var: "triggering-shooter" } }, window: "event" } }],
     });
   });

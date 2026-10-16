@@ -29,14 +29,14 @@ function compile(list: CompileLeaf[], text = TEXT) {
 
 // "Friendly X units' ranged attacks can:" + two rolls. The attack-filter is the rolls' attack type.
 describe("Round 5C attack-filter frame over subjectless rolls", () => {
-  it("folds the attack type into each roll as its weapon_type and drops the frame", () => {
+  it("folds the attack type into each roll as its weapon scope and drops the frame", () => {
     const result = compile(placed(TEXT, ...FRIENDLY_VEHICLES,
       ["ranged attacks can:", "attack-filter", { attack_type: "ranged" }],
       ["Re-roll one hit roll.", "reroll", reroll("hit")],
       ["Re-roll one wound roll.", "reroll", reroll("wound")]));
     expect(result.ok).toBe(true);
-    const steps = (result as { mechanics: { effect: { steps: Array<{ target: unknown; modifier: { roll: string; weapon_type?: string } }> } } }).mechanics.effect.steps;
-    expect(steps.map((step) => step.modifier.weapon_type)).toEqual(["ranged", "ranged"]);
+    const steps = (result as { mechanics: { effect: { steps: Array<{ target: unknown; modifier: { roll: string; weapons?: { type?: string } } }> } } }).mechanics.effect.steps;
+    expect(steps.map((step) => step.modifier.weapons?.type)).toEqual(["ranged", "ranged"]);
     expect(steps.map((step) => step.modifier.roll)).toEqual(["hit", "wound"]);
     // Each roll's recipient is the filter's units, exclusion included, not the attack's target.
     expect(steps[1]!.target).toEqual({ owner: "friendly", all_of: ["ALPHA", "VEHICLE"], none_of: ["WALKER"] });

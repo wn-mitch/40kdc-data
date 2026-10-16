@@ -8,7 +8,7 @@
 
 > **baseUnitPoints**(`unit`, `modelCount`, `ordinal?`): `number`
 
-Defined in: [data/pricing.ts:55](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/pricing.ts#L55)
+Defined in: [data/pricing.ts:61](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/pricing.ts#L61)
 
 Base point cost for a unit of `modelCount` models taken as its `ordinal`-th
 army copy (1-based; defaults to the 1st copy). Among the tiers whose ordinal

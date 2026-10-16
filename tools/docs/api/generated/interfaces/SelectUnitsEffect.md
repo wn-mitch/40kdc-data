@@ -6,14 +6,10 @@
 
 # Interface: SelectUnitsEffect
 
-Defined in: [generated.ts:2630](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2630)
+Defined in: [generated.ts:3704](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3704)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "select-units-effect".
-
-## Indexable
-
-> \[`k`: `string`\]: `unknown`
 
 ## Properties
 
@@ -21,21 +17,15 @@ via the `definition` "select-units-effect".
 
 > **type**: `"select-units"`
 
-Defined in: [generated.ts:2631](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2631)
+Defined in: [generated.ts:3705](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3705)
 
 ***
 
 ### selector
 
-> **selector**: `object`
+> **selector**: [`UnitSelector`](UnitSelector.md)
 
-Defined in: [generated.ts:2635](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2635)
-
-Legacy selectors omit min_count and retain up-to semantics. Bounded authoring requires min_count, max_count, and owner, with min_count <= max_count.
-
-#### Index Signature
-
-\[`k`: `string`\]: `unknown`
+Defined in: [generated.ts:3706](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3706)
 
 ***
 
@@ -43,4 +33,4 @@ Legacy selectors omit min_count and retain up-to semantics. Bounded authoring re
 
 > **effect**: [`EffectNode`](../type-aliases/EffectNode.md)
 
-Defined in: [generated.ts:2638](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2638)
+Defined in: [generated.ts:3707](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3707)

@@ -14,9 +14,6 @@ use crate::translate::trigger::describe_trigger_value;
 /// Duration → woven clause `(lead, trail)`. `lead` sits at the very front of the sentence
 /// ("Once per battle, …"); `trail` sits after the trigger/condition and before the effect.
 pub(crate) fn duration_clauses(duration: Option<&Value>) -> (&'static str, &'static str) {
-    if duration.and_then(Value::as_str) == Some("one-use") {
-        return ("once per battle", "");
-    }
     ("", expiry_trail(duration))
 }
 
@@ -85,12 +82,6 @@ fn scaling_wording(s: &P) -> String {
         _ => {}
     }
     let mut c = format!("for every {} {}", jstr(s.get("per")), scale_source(s));
-    if let Some(w) = nn(s, "within_inches") {
-        let within = format!("within {}\"", jv(w));
-        if !c.ends_with(&within) {
-            c.push_str(&format!(" {within}"));
-        }
-    }
     if sv(s, "round") == Some("up") {
         c.push_str(" (rounding up)");
     }
@@ -116,40 +107,38 @@ pub(crate) fn trigger_phrases(t: Option<&Value>) -> String {
         .join(" or ")
 }
 
-fn keywords_of(elig: &P, k: &str) -> Vec<String> {
-    map_arr(elig, k, jv).unwrap_or_default()
-}
-
-/// The eligible-unit noun phrase for a menu action ("one friendly non-TITANIC unit").
-fn menu_action_subject(elig: &P) -> String {
-    let requires = keywords_of(elig, "requires_keyword");
-    let excludes = keywords_of(elig, "excludes_keyword");
-    if !excludes.is_empty() {
-        return format!("one friendly non-{} unit", excludes.join("/"));
-    }
-    if !requires.is_empty() {
-        return format!("a friendly {} unit", requires.join(" "));
-    }
-    "the unit".to_string()
-}
-
 /// A menu action's `eligibility` → a trailing parenthetical, or `""` when open to any unit.
 fn menu_action_eligibility_clause(elig: Option<&Value>) -> String {
-    let Some(elig) = elig.filter(|e| crate::translate::condition::truthy(Some(e))) else {
+    let Some(elig) = elig.filter(|value| value.is_object()) else {
         return String::new();
     };
     let elig = obj(Some(elig));
-    let gate = !keywords_of(elig, "requires_keyword").is_empty()
-        || !keywords_of(elig, "excludes_keyword").is_empty();
+    let has_filter = nn(elig, "filter").is_some() || nn(elig, "count").is_some();
     let requirements: Vec<String> = arr(elig, "requires")
-        .map(|r| r.iter().map(describe_condition_value).collect())
+        .map(|items| items.iter().map(describe_condition_value).collect())
         .unwrap_or_default();
-    if !gate && requirements.is_empty() {
+    if !has_filter && requirements.is_empty() {
         return String::new();
     }
     let mut parts = Vec::new();
-    if gate {
-        parts.push(format!("only usable by {}", menu_action_subject(elig)));
+    if has_filter {
+        let mut selector = P::new();
+        selector.insert(
+            "filter".into(),
+            elig.get("filter")
+                .cloned()
+                .unwrap_or_else(|| Value::Object(P::new())),
+        );
+        selector.insert(
+            "count".into(),
+            elig.get("count")
+                .cloned()
+                .unwrap_or_else(|| serde_json::json!({"min": 1, "max": 1})),
+        );
+        parts.push(format!(
+            "only usable by {}",
+            super::select::select_units_subject(&selector)
+        ));
     }
     if !requirements.is_empty() {
         parts.push(requirements.join(" and "));
@@ -173,10 +162,10 @@ pub(crate) fn describe_menu_action(a: &Value, ctx: &Ctx) -> String {
         )
     );
     let effect = inline(nn(a, "effect").unwrap_or(empty_value()), ctx);
-    let duration = match sv(a, "duration") {
-        Some("until-end-of-phase") => "until the end of the phase",
-        Some("until-end-of-turn") => "until the end of the turn",
-        _ => "",
+    let duration = if sv(a, "duration") == Some("resolution") {
+        ""
+    } else {
+        expiry_trail(a.get("duration"))
     };
     let repeatable = is_true(obj(a.get("usage")), "repeatable_if_different_unit");
     let usage = if repeatable {

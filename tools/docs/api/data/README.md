@@ -19,7 +19,7 @@ import { units } from "@alpaca-software/40kdc-data";
 
 units.find("Kharn")!.abilities
   .filter(a => a.phases.includes("shooting"))
-  .map(a => a.id); // ["berzerker-frenzy"]
+  .map(a => a.id); // ["berzerker-frenzy-world-eaters"]
 ```
 
 ```ts
@@ -42,6 +42,7 @@ factions.find("World Eaters")!.units.length;
 ## Interfaces
 
 - [HasBuffs](interfaces/HasBuffs.md)
+- [RecipientSnapshot](interfaces/RecipientSnapshot.md)
 - [AffordabilityUnit](interfaces/AffordabilityUnit.md)
 - [AffordabilitySpec](interfaces/AffordabilitySpec.md)
 - [CandidateCost](interfaces/CandidateCost.md)
@@ -70,7 +71,6 @@ factions.find("World Eaters")!.units.length;
 - [StageLift](type-aliases/StageLift.md)
 - [AttributedStage](type-aliases/AttributedStage.md)
 - [BuffSource](type-aliases/BuffSource.md)
-- [WeaponKeywordRef](type-aliases/WeaponKeywordRef.md)
 - [BuffContribution](type-aliases/BuffContribution.md)
 - [BuffApplicability](type-aliases/BuffApplicability.md)
 - [Buff](type-aliases/Buff.md)
@@ -90,6 +90,7 @@ factions.find("World Eaters")!.units.length;
 - [StackableBuff](type-aliases/StackableBuff.md)
 - [StackableBuffGroup](type-aliases/StackableBuffGroup.md)
 - [ReactiveTrigger](type-aliases/ReactiveTrigger.md)
+- [SelectableLever](type-aliases/SelectableLever.md)
 - [RosterViolationCode](type-aliases/RosterViolationCode.md)
 - [UnitProfile](type-aliases/UnitProfile.md)
 - [WeaponProfile](type-aliases/WeaponProfile.md)
@@ -137,12 +138,12 @@ factions.find("World Eaters")!.units.length;
 - [profileCanTarget](functions/profileCanTarget.md)
 - [crunch](functions/crunch.md)
 - [effectToBuffs](functions/effectToBuffs.md)
-- [parseKeywordGrant](functions/parseKeywordGrant.md)
 - [buffsFromKeyword](functions/buffsFromKeyword.md)
 - [getBuffs](functions/getBuffs.md)
 - [candidateAffordability](functions/candidateAffordability.md)
 - [pointsLimitForBattleSize](functions/pointsLimitForBattleSize.md)
 - [detachmentCapForBattleSize](functions/detachmentCapForBattleSize.md)
+- [isLegalLeverSelection](functions/isLegalLeverSelection.md)
 - [optionCap](functions/optionCap.md)
 - [baseLoadout](functions/baseLoadout.md)
 - [maximalLoadout](functions/maximalLoadout.md)
@@ -166,6 +167,7 @@ factions.find("World Eaters")!.units.length;
 - [checkRoster](functions/checkRoster.md)
 - [resolveAttachedLeader](functions/resolveAttachedLeader.md)
 - [resolveAttachmentPartners](functions/resolveAttachmentPartners.md)
+- [resolveAttachmentRoles](functions/resolveAttachmentRoles.md)
 - [primaryDetachment](functions/primaryDetachment.md)
 - [primaryDetachmentId](functions/primaryDetachmentId.md)
 - [emptyRawData](functions/emptyRawData.md)
@@ -173,3 +175,9 @@ factions.find("World Eaters")!.units.length;
 - [encodeShareToken](functions/encodeShareToken.md)
 - [decodeShareToken](functions/decodeShareToken.md)
 - [rosterToShareList](functions/rosterToShareList.md)
+
+## References
+
+### WeaponKeywordRef
+
+Re-exports [WeaponKeywordRef](../generated/interfaces/WeaponKeywordRef.md)

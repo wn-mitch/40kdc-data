@@ -1,4 +1,3 @@
-import type { KeywordOption } from "./compile-keyword-menu.js";
 /**
  * One fixed DSL fragment per leaf family. The composition rules in `compile.ts` decide how the
  * fragments combine; nothing here depends on the other leaves of an ability.
@@ -18,6 +17,10 @@ import { isTargetRef } from "./compile-target-refs.js";
 import { namedRange } from "./named-ranges.js";
 import { matchedPoolOf } from "./compile-matched-set.js";
 import { CompileError } from "./compile-error.js";
+import type { KeywordOption } from "./compile-keyword-menu.js";
+import { namedAbilityStateEffect } from "./compile-named-ability-states.js";
+import { oathEffect } from "./compile-oath.js";
+import { abilityUseEffect } from "./compile-ability-use.js";
 
 export { CompileError };
 
@@ -103,10 +106,75 @@ function models(leaf: CompileLeaf, subject: Node | string): Node | string {
   return { level: "model", member_of: subject, all_of: keywords };
 }
 
-/** A modifier's melee or ranged limit; "all" (or none) limits nothing. */
-function weaponScope(leaf: CompileLeaf): Node {
+/** Maps printed Anti target syntax to the structured catalog parameters consumed by the DSL. */
+function antiParameters(target: string, threshold?: number): Record<string, unknown> {
+  const required: string[] = [];
+  const excluded: string[] = [];
+  for (const raw of target.split("/")) {
+    const keyword = raw.trim().toUpperCase();
+    if (keyword.startsWith("NON-")) excluded.push(keyword.slice(4));
+    else required.push(keyword);
+  }
+  const parameters: Record<string, unknown> = {};
+  if (required.length === 1 && excluded.length === 0) parameters.target_keyword = required[0]!;
+  else {
+    if (required.length > 0) parameters.required_target_keywords_any = required;
+    if (excluded.length > 0) parameters.excluded_target_keywords = excluded;
+  }
+  if (threshold !== undefined) parameters.threshold = threshold;
+  return parameters;
+}
+
+/** Catalog-backed weapon keyword references at the source-leaf boundary. */
+export function keywordRef(value: unknown): Node {
+  if (typeof value === "string") {
+    const trimmed = value.trim();
+    const antiSelector = /^anti-([A-Z][A-Z\s-]*(?:\/[A-Z][A-Z\s-]*)*)\s*$/iu.exec(trimmed);
+    if (antiSelector) return { keyword_id: "anti", parameters: antiParameters(antiSelector[1]!.trim()) };
+    const anti = /^anti-([A-Z][A-Z\s-]*(?:\/[A-Z][A-Z\s-]*)*)\s+(\d+)(?:\+|PLUS)?$/iu.exec(trimmed);
+    if (anti) return { keyword_id: "anti", parameters: antiParameters(anti[1]!.trim(), Number(anti[2])) };
+    const rated = /^(.+?)\s+(\d+|(?:\d+)?D\d+(?:[+-]\d+)?)$/iu.exec(trimmed);
+    const name = rated?.[1] ?? trimmed;
+    const keywordId = name.toLowerCase().replace(/[\s_]+/gu, "-").replace(/[^a-z0-9-]/gu, "");
+    if (!keywordId) throw new CompileError("A weapon keyword must be a non-empty catalog name.");
+    if (!rated) return { keyword_id: keywordId };
+    const rating = rated[2]!;
+    return { keyword_id: keywordId, parameters: { value: /^\d+$/u.test(rating) ? Number(rating) : rating.toUpperCase() } };
+  }
+  if (value !== null && typeof value === "object" && !Array.isArray(value) && "keyword_id" in value) {
+    const candidate = value as Record<string, unknown>;
+    if (typeof candidate.keyword_id !== "string" || candidate.keyword_id === "") {
+      throw new CompileError("A weapon keyword reference needs a catalog keyword_id.");
+    }
+    return candidate.parameters === undefined
+      ? { keyword_id: candidate.keyword_id }
+      : { keyword_id: candidate.keyword_id, parameters: candidate.parameters };
+  }
+  throw new CompileError("A weapon keyword must be a catalog name or reference.");
+}
+
+/** Canonical weapon selector shared by every modifier that narrows its affected weapons. */
+export function weaponScope(leaf: CompileLeaf): Node {
+  const selector = (value: unknown): Node | Node[] => {
+    if (Array.isArray(value)) {
+      if (value.length === 0) throw new CompileError("A weapon scope selector cannot be empty.");
+      const refs = value.map((entry) => keywordRef(entry));
+      return refs.length === 1 ? refs[0]! : refs;
+    }
+    return keywordRef(value);
+  };
   const type = leaf.parameters.weapon_type === undefined ? "all" : closed(leaf, "weapon_type");
-  return type === "all" ? {} : { weapon_type: type };
+  const weapons: Node = {};
+  if (type !== "all") weapons.type = type;
+  if (leaf.parameters.weapon_name !== undefined) weapons.name = closed(leaf, "weapon_name");
+  if (leaf.parameters.weapon_keyword !== undefined) weapons.keyword = selector(closed(leaf, "weapon_keyword"));
+  if (leaf.parameters.weapon_var !== undefined) weapons.ref = { weapon_var: String(leaf.parameters.weapon_var) };
+  else if (leaf.parameters.weapon_ref !== undefined) weapons.ref = closed(leaf, "weapon_ref");
+  if (leaf.parameters.exclude_weapon_name !== undefined) weapons.exclude_name = closed(leaf, "exclude_weapon_name");
+  if (leaf.parameters.exclude_weapon_keyword !== undefined) {
+    weapons.exclude_keyword = selector(closed(leaf, "exclude_weapon_keyword"));
+  }
+  return Object.keys(weapons).length === 0 ? {} : { weapons };
 }
 
 /** Rolls the attacker makes; when an attack targets this unit, modifiers to them belong to the attacker. */
@@ -134,9 +202,12 @@ export function attackOwner(context: { attacker?: Node | string | null; incoming
  * One effect. `subject` is who the ability's own subject resolves to: the unit when a leader
  * is attached, else the family's subject parameter. `incoming` marks an effect on attacks that
  * target this unit, where the attacker's rolls are modified. `defended` is set when an
- * allocation moment precedes the effect (see attackOwner).
+ * allocation moment precedes the effect (see attackOwner). `allocatedToModel` keeps bearer-only
+ * allocation modifiers on the general stat path rather than widening them to unit-wide reduction.
  */
-export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker?: Node | string | null; incoming: boolean; defended?: boolean }): Node {
+export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker?: Node | string | null; incoming: boolean; defended?: boolean; allocatedToModel?: boolean }): Node {
+  const specialized = namedAbilityStateEffect(leaf) ?? oathEffect(leaf) ?? abilityUseEffect(leaf);
+  if (specialized) return specialized;
   // A count folded onto the leaf (compile-count-scale.ts) applies to the whole node it lowers to.
   const { scaling, per_item: perItem, ...parameters } = leaf.parameters;
   if (scaling === undefined && perItem === undefined) return leafEffect(leaf, context);
@@ -183,8 +254,7 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
       // Version 1 leaves have neither field; version 2 adds them, weapon_type defaulting to "all".
       const count = leaf.parameters.count === undefined ? undefined : closed(leaf, "count");
       if (count !== undefined) modifier.count = count;
-      const weaponType = leaf.parameters.weapon_type === undefined ? undefined : closed(leaf, "weapon_type");
-      if (weaponType && weaponType !== "all") modifier.weapon_type = weaponType;
+      Object.assign(modifier, weaponScope(leaf));
       return { type: "re-roll", target: rollTarget(roll), modifier };
     }
     case "ignore-modifiers": {
@@ -206,8 +276,7 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
       }
       const only = leaf.parameters.only === undefined ? undefined : closed(leaf, "only");
       if (only) modifier.only = only;
-      const weaponType = leaf.parameters.weapon_type === undefined ? undefined : closed(leaf, "weapon_type");
-      if (weaponType && weaponType !== "all") modifier.weapon_type = weaponType;
+      Object.assign(modifier, weaponScope(leaf));
       return { type: "ignore-modifiers", target: target(leaf.parameters.subject), modifier };
     }
     case "roll-auto-result": {
@@ -220,8 +289,7 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
       else if (outcome === "counts-as-6") modifier.result = 6;
       else if (outcome === "fails-on") modifier.fails_on = closed(leaf, "value");
       else modifier.result = "pass";
-      const weaponType = leaf.parameters.weapon_type === undefined ? undefined : closed(leaf, "weapon_type");
-      if (weaponType && weaponType !== "all") modifier.weapon_type = weaponType;
+      Object.assign(modifier, weaponScope(leaf));
       return { type: "roll-result", target: rollTarget(roll), modifier };
     }
     case "end-attack-sequence":
@@ -243,7 +311,6 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
         modifier: {
           roll, operation: closed(leaf, "operation"), value: closed(leaf, "value"),
           ...(leaf.parameters.cap !== undefined ? { cap: closed(leaf, "cap") } : {}), ...weaponScope(leaf),
-          ...(leaf.parameters.weapon_name !== undefined ? { weapon_name: closed(leaf, "weapon_name") } : {}),
         },
       };
     }
@@ -256,8 +323,7 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
         type: "roll-result", target: rollTarget(roll),
         modifier: {
           roll, critical_on: value,
-          ...(leaf.parameters.weapon_type !== undefined ? { weapon_type: closed(leaf, "weapon_type") } : {}),
-          ...(leaf.parameters.weapon_keyword !== undefined ? { weapon_keyword: closed(leaf, "weapon_keyword") } : {}),
+          ...weaponScope(leaf),
         },
       };
     }
@@ -288,15 +354,14 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
       return {
         type: "stat-modifier", target: owner,
         modifier: {
-          stat: characteristic, operation: "set", value: closed(leaf, "value"), ...(weaponType && weaponType !== "all" ? { weapon_type: weaponType } : {}),
-          ...(leaf.parameters.weapon_name !== undefined ? { weapon_name: closed(leaf, "weapon_name") } : {}),
-          ...(leaf.parameters.weapon_keyword !== undefined ? { weapon_keyword: closed(leaf, "weapon_keyword") } : {}),
+          stat: characteristic, operation: "set", value: closed(leaf, "value"), ...weaponScope(leaf),
         },
       };
     }
     case "weapon-ability-range": {
-      // "Friendly X units' Rapid Fire attacks benefit … up to that attack's maximum range": the units the subject names, one clause.
-      return { type: "weapon-ability-range", target: target(leaf.parameters.subject), modifier: { keyword: closed(leaf, "keyword"), within: closed(leaf, "within") } };
+      // The range is a shared range reference; the keyword is a catalog selector.
+      const range = leaf.parameters.range !== undefined ? closed(leaf, "range") : closed(leaf, "within");
+      return { type: "weapon-ability-range", target: target(leaf.parameters.subject), modifier: { keyword: keywordRef(closed(leaf, "keyword")), range } };
     }
     case "weapon-ability-grant": {
       // A keyword gated by its own target qualifier (compile-weapon-keywords.ts): only this grant is conditional.
@@ -304,13 +369,11 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
         const { gate, ...rest } = leaf.parameters as Record<string, unknown> & { gate: CompileLeaf };
         return { type: "conditional", condition: condition(gate), effect: effect({ ...leaf, parameters: rest }, context) };
       }
-      const weaponType = closed(leaf, "weapon_type");
-      const weaponName = leaf.parameters.weapon_name;
-      const weaponKeyword = leaf.parameters.weapon_keyword;
       const ifPresent = leaf.parameters.if_present;
       const incoming = leaf.parameters.incoming;
       // A frame folded with its keyword leaves (compile-weapon-keywords.ts) carries `keywords`; a menu grants one of them.
-      const keywords = Array.isArray(leaf.parameters.keywords) ? leaf.parameters.keywords as string[] : [closed(leaf, "keyword")];
+      const rawKeywords = Array.isArray(leaf.parameters.keywords) ? leaf.parameters.keywords : [closed(leaf, "keyword")];
+      const keywords = rawKeywords.map((value) => keywordRef(value));
       if (leaf.parameters.keyword_choice === true && Array.isArray(leaf.parameters.option_groups)) {
         // Options of one or more runs, each run with its own qualifier, under the group's opening condition (compile-keyword-menu.ts).
         const { keywords: _keywords, keyword_choice: _choice, choice_label: _label, option_groups: groups, ...frame } = leaf.parameters as Record<string, unknown> & { option_groups: KeywordOption[] };
@@ -351,12 +414,8 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
       return {
         type: "weapon-ability-grant", target: holder,
         modifier: {
-          abilities: keywords,
-          ...(weaponType && weaponType !== "all" ? { weapon_type: weaponType } : {}),
-          ...(weaponName !== undefined ? { weapon_name: weaponName } : {}),
-          ...(weaponKeyword !== undefined ? { weapon_keyword: weaponKeyword } : {}),
-          // "that weapon": the weapon the record's select-weapon bound (compile-weapon-antecedent.ts).
-          ...(leaf.parameters.weapon_var !== undefined ? { weapon_ref: { weapon_var: String(leaf.parameters.weapon_var) } } : {}),
+          keywords,
+          ...weaponScope(leaf),
           ...(ifPresent !== undefined ? { if_present: ifPresent } : {}),
           ...(incoming === true ? { incoming: true } : {}),
         },
@@ -366,14 +425,11 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
       // "Do not have [Heavy]" under a scope (compile-weapon-scopes.ts bindRemoval): the scope's weapons lose it.
       const subject = leaf.parameters.subject;
       if (subject === undefined) throw new CompileError("A weapon ability removal has no recipient; it needs a weapon-property scope before it.");
-      const weaponType = leaf.parameters.weapon_type;
-      const weaponKeyword = leaf.parameters.weapon_keyword;
       return {
         type: "weapon-ability-grant", target: target(subject),
         modifier: {
-          removes: [closed(leaf, "keyword")],
-          ...(weaponType && weaponType !== "all" ? { weapon_type: weaponType } : {}),
-          ...(weaponKeyword !== undefined ? { weapon_keyword: weaponKeyword } : {}),
+          removes: [keywordRef(closed(leaf, "keyword"))],
+          ...weaponScope(leaf),
         },
       };
     }
@@ -458,7 +514,7 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
       for (const move of leaf.parameters.moves as string[]) {
         for (const act of acts) {
           steps.push(move === "advance" && act === "shoot"
-            ? { type: "weapon-ability-grant", target: owner, modifier: { abilities: ["Assault"], weapon_type: "ranged" } }
+            ? { type: "weapon-ability-grant", target: owner, modifier: { keywords: [keywordRef("Assault")], ...weaponScope({ ...leaf, parameters: { ...leaf.parameters, weapon_type: "ranged" } }) } }
             : { type: "permission", target: owner, modifier: { activity: act === "charge" ? "declare-charge" : act, allow: true, after: [move] } });
         }
       }
@@ -488,24 +544,38 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
       const authoredBearer = !(leaf.antecedent_keys ?? []).includes("subject");
       const bearerWeapons = leaf.parameters.subject === "this-model" && authoredBearer && (leaf.parameters.characteristics as string[]).some((stat) => (WEAPON_CHARACTERISTICS as readonly string[]).includes(stat));
       const owner = leaf.parameters.subject === "attack" ? attackOwner(context) : models(leaf, bearerWeapons ? "this-model" : target(leaf.parameters.subject));
-      const weaponType = closed(leaf, "weapon_type") ?? "all";
+      // Subtracting a fixed amount from the Damage of the attack currently being allocated is a
+      // defender-side reduction, not an offensive change to the attacker's weapon profile. Keep the
+      // distinction narrow: other operations, moments, recipients, and non-fixed amounts remain
+      // ordinary stat modifiers.
+      const allocatedDamageReduction = context.defended === true
+        && context.allocatedToModel !== true
+        && leaf.parameters.subject === "attack"
+        && leaf.parameters.operation === "subtract"
+        && Number.isInteger(leaf.parameters.value)
+        && (leaf.parameters.value as number) >= 1
+        && (leaf.parameters.minimum === undefined || leaf.parameters.minimum === 1);
       // A list of named weapons (compile-weapon-names.ts) changes each characteristic for each weapon: one step per pair.
       const named = Array.isArray(leaf.parameters.weapon_names) ? leaf.parameters.weapon_names as string[] : undefined;
       const names: Array<string | undefined> = named ?? [leaf.parameters.weapon_name === undefined ? undefined : closed(leaf, "weapon_name") as string];
-      const steps = (leaf.parameters.characteristics as string[]).flatMap((stat) => names.map((weaponName) => ({
-        type: "stat-modifier", target: owner,
-        modifier: {
-          stat, operation: closed(leaf, "operation"),
-          // Version 11: halve takes no value.
-          ...(leaf.parameters.value !== undefined ? { value: closed(leaf, "value") } : {}), ...(weaponType !== "all" ? { weapon_type: weaponType } : {}),
-          ...(leaf.parameters.weapon_keyword !== undefined ? { weapon_keyword: closed(leaf, "weapon_keyword") } : {}),
-          ...(weaponName !== undefined ? { weapon_name: weaponName } : {}),
-          ...(leaf.parameters.minimum !== undefined ? { minimum: closed(leaf, "minimum") } : {}),
-          // "That weapon's attacks have": the weapon select-weapon bound (compile-weapon-antecedent.ts).
-          ...(leaf.parameters.weapon_var !== undefined ? { weapon_ref: { weapon_var: String(leaf.parameters.weapon_var) } } : {}),
-          ...(leaf.parameters.exclude_weapon_name !== undefined ? { exclude_weapon_name: closed(leaf, "exclude_weapon_name") } : {}),
-        },
-      })));
+      const steps = (leaf.parameters.characteristics as string[]).flatMap((stat) => names.map((weaponName) => {
+        const scopedLeaf = weaponName === undefined ? leaf : { ...leaf, parameters: { ...leaf.parameters, weapon_name: weaponName } };
+        if (allocatedDamageReduction && stat === "D") {
+          return {
+            type: "damage-reduction", target: "this-unit",
+            modifier: { reduction: closed(leaf, "value"), ...weaponScope(scopedLeaf) },
+          };
+        }
+        return {
+          type: "stat-modifier", target: owner,
+          modifier: {
+            stat, operation: closed(leaf, "operation"),
+            ...(leaf.parameters.value !== undefined ? { value: closed(leaf, "value") } : {}),
+            ...weaponScope(scopedLeaf),
+            ...(leaf.parameters.minimum !== undefined ? { minimum: closed(leaf, "minimum") } : {}),
+          },
+        };
+      }));
       return steps.length === 1 ? steps[0]! : { type: "sequence", steps };
     }
     case "eligibility-permission": {
@@ -533,11 +603,10 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
       // enemy-units / friendly-units are every unit of that side, as a DSL unit-filter.
       // "those X units": the set an earlier unit-position of matching-unit introduced (compile-matched-set.ts).
       const unit = (value: unknown) => value === "matched-units" ? matchedPoolOf(leaf) : value === "enemy-units" ? { owner: "enemy" } : value === "friendly-units" ? { owner: "friendly" } : target(value);
-      const weaponType = closed(leaf, "weapon_type");
       const range = leaf.parameters.range;
       const modifier: Node = {
         may: closed(leaf, "may"), kind: closed(leaf, "kind"),
-        ...(weaponType !== "all" ? { weapon_type: weaponType } : {}),
+        ...weaponScope(leaf),
         ...(range != null ? { range: { inches: range } } : {}),
       };
       // Version 3 names both sides: the effect sits on the unit that targets when the leaf says
@@ -575,8 +644,7 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
     case "damage-reduction": {
       const reductionRaw = String(closed(leaf, "reduction"));
       const reduction = /^\d+$/u.test(reductionRaw) ? Number(reductionRaw) : reductionRaw;
-      const weaponType = closed(leaf, "weapon_type");
-      return { type: "damage-reduction", target: target(leaf.parameters.subject), modifier: { reduction, ...(weaponType !== "all" ? { weapon_type: weaponType } : {}) } };
+      return { type: "damage-reduction", target: target(leaf.parameters.subject), modifier: { reduction, ...weaponScope(leaf) } };
     }
     default: {
       const board = boardEffect(leaf, target);

@@ -21,15 +21,20 @@ from wh40kdc.translate.condition_refs import (
     _truthy,
     _window_phrase,
     _with_window,
+    count_phrase,
     dekebab,
+    event_relation_phrase,
     id_label,
     move_kinds,
     named_use_phrase,
+    place_ref_phrase,
+    range_phrase,
     roll_word,
     title_case,
     unit_ref_phrase,
     used_ability_phrase,
 )
+from wh40kdc.translate.effect_words import weapon_noun
 
 # A rule of one kind being used now, when the filter names none.
 _IN_PROGRESS: dict[str, str] = {
@@ -46,13 +51,14 @@ _IN_PROGRESS: dict[str, str] = {
 }
 
 
-def _describe_happened(p: P, negated: bool) -> str:
+def _describe_happened_core(p: P, negated: bool) -> str:
     neg = "not " if negated else ""
     f = _obj(p.get("filter"))
     event = _str(p.get("event"))
-    who = _subject_of(p)
-    n = p["count_min"] if _is_num(p.get("count_min")) else 1
+    bounds = _obj(p.get("count"))
+    n = bounds.get("min", 1)
     window = p.get("window")
+    who = _subject_of(p)
 
     def did_not(verb: str) -> str:
         return f"did not {verb}" if negated else _past_of(verb)
@@ -109,18 +115,23 @@ def _describe_happened(p: P, negated: bool) -> str:
         obj = unit_ref_phrase(p.get("object"), "the unit")
         target = "the target" if obj == "the target unit" else obj
         atk = f"{_str(f['attack_type'])} " if _truthy(f.get("attack_type")) else ""
-        keyword = (
-            f"[{dekebab(_str(f['weapon_keyword'])).upper()}]"
-            if _truthy(f.get("weapon_keyword"))
-            else ""
-        )
-        if _truthy(f.get("weapon_name")):
-            raw_name = _str(f["weapon_name"])
-            name = (
-                title_case(raw_name)
-                if re.fullmatch(r"[a-z0-9]+(-[a-z0-9]+)+", raw_name)
-                else raw_name
-            )
+        weapons = f.get("weapons")
+        keyword = ""
+        name = ""
+        if isinstance(weapons, dict):
+            kw = weapons.get("keyword")
+            if isinstance(kw, dict):
+                kw = kw.get("keyword_id")
+            if _truthy(kw):
+                keyword = f"[{dekebab(_str(kw)).upper()}]"
+            if _truthy(weapons.get("name")):
+                raw_name = _str(weapons["name"])
+                name = (
+                    title_case(raw_name)
+                    if re.fullmatch(r"[a-z0-9]+(-[a-z0-9]+)+", raw_name)
+                    else raw_name
+                )
+        if name:
             weapon = f" by {name}" + (f" (with {keyword})" if keyword else "")
         elif keyword:
             weapon = f" made with a {keyword} weapon"
@@ -174,9 +185,9 @@ def _describe_happened(p: P, negated: bool) -> str:
         noun = "model" if event == "model-destroyed" else "unit"
         if p.get("object") == "event-object" and window == "event":
             if _truthy(f.get("attack_type")):
-                made = (
-                    f" made with {_str(f['weapon_name'])}" if _truthy(f.get("weapon_name")) else ""
-                )
+                weapons = f.get("weapons")
+                weapon_name = weapons.get("name") if isinstance(weapons, dict) else None
+                made = f" made with {_str(weapon_name)}" if _truthy(weapon_name) else ""
                 return f"{neg}destroyed by a {_str(f['attack_type'])} attack{made}"
             return f"{neg}destroyed by any attack"
         # "this model": the destroyed model is this one, not any model of the unit.
@@ -243,7 +254,37 @@ def _describe_happened(p: P, negated: bool) -> str:
         return f"{neg}{_with_window(f'{_str(n)}+ {units} became {became}', window)}"
     return f"{neg}{_with_window(f'{dekebab(event)} happened', window)}"
 
+def _describe_happened(p: P, negated: bool) -> str:
+    phrase = _describe_happened_core(p, negated)
+    event = _str(p.get("event"))
+    filt = _obj(p.get("filter"))
+    if event in ("destroyed", "model-destroyed") and filt.get("weapons") is not None and not (
+        p.get("object") == "event-object" and p.get("window") == "event"
+    ):
+        phrase += f" made with {weapon_noun({'weapons': filt['weapons']})}"
+    if p.get("count") is not None and event in ("destroyed", "model-destroyed") and (
+        p.get("object") == "this-model"
+        or (p.get("object") == "event-object" and p.get("window") == "event")
+    ):
+        phrase += f" ({count_phrase(p['count'])} times)"
+    phrase += event_relation_phrase(filt)
+    proximity = p.get("proximity")
+    if isinstance(proximity, dict):
+        distance = range_phrase(proximity.get("range"))
+        origin = place_ref_phrase(proximity.get("of"))
+        phrase += f" within {distance} of {origin}"
+    if p.get("count") is not None and event not in (
+        "after-roll",
+        "destroyed",
+        "model-destroyed",
+        "objective-gained",
+        "designation-changed",
+    ) and not (event == "used" and filt.get("kind") == "action"):
+        phrase += f" ({count_phrase(p['count'])} times)"
+    return phrase
 
 def _destroyed_count(side: P) -> str:
     o = _obj(side.get("object"))
-    return f"{_str(o.get('owner'))} units {_window_phrase(side.get('window'))}".rstrip()
+    objects = re.sub(r"^an? ", "", unit_ref_phrase(o))
+    objects = re.sub(r"\b(unit|model)\b", lambda m: f"{m.group(1)}s", objects, count=1)
+    return f"{objects} {_window_phrase(side.get('window'))}".rstrip()

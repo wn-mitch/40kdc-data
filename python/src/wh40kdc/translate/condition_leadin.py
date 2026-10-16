@@ -21,7 +21,6 @@ from wh40kdc.translate.condition_refs import (
     _str,
     _truthy,
     _window_phrase,
-    id_label,
     title_case,
 )
 
@@ -35,11 +34,10 @@ def describe_selection_eligibility(c: Condition) -> str:
         if c.get("operator") == "not" and isinstance(operands, list) and len(operands) == 1
         else c
     )
-    ip = _obj(inner.get("parameters"))
     if (
-        inner.get("type") == "unit-state"
-        and ip.get("state") == "battle-shocked"
-        and ip.get("subject") is None
+        inner.get("type") == "matches"
+        and _obj(inner.get("parameters")).get("filter") == {"state": "battle-shocked"}
+        and _obj(inner.get("parameters")).get("subject") is None
     ):
         return "that is Battle-shocked" if inner is c else "that is not Battle-shocked"
     if c.get("operator") == "and" and operands is not None:
@@ -93,6 +91,37 @@ def _keyword_names(p: P) -> str:
     return _and_list([_str(k) for k in _list(p.get("all_of"))])
 
 
+
+def _matches_lead_in(c: Condition, negated: bool) -> str:
+    p = _obj(c.get("parameters"))
+    f = _obj(p.get("filter"))
+    keys = [key for key in f if key != "level"]
+    if len(keys) == 1 and (f.get("all_of") is not None or f.get("any_of") is not None):
+        if p.get("subject") == "defender":
+            if negated and isinstance(f.get("all_of"), list) and len(f["all_of"]) > 1:
+                keywords = _and_list([_str(k) for k in f["all_of"]])
+                return f"against a unit that does not have all of {keywords}"
+            words = _keyword_names(f)
+            if negated:
+                return f"against a unit that is not a {words}"
+            return f"against {words} targets"
+        if p.get("subject") is None or (negated and p.get("subject") == "recipient"):
+            words = _keyword_names(f)
+            plural = isinstance(f.get("any_of"), list) or len(_list(f.get("all_of"))) > 1
+            lead = "unless" if negated else "if"
+            suffix = "s" if plural and not negated else ""
+            return f"{lead} the unit has the {words} keyword{suffix}"
+        return f"{'unless' if negated else 'if'} {_describe_predicate(c, False)}"
+    if (
+        len(keys) == 1
+        and f.get("designated") is not None
+        and p.get("subject") == "defender"
+        and _str(f["designated"]) == _str(f["designated"]).upper()
+        and not negated
+    ):
+        return f"against {_str(f['designated'])} targets"
+    return f"while {_describe_predicate(c, negated)}"
+
 def condition_lead_in(c: Condition) -> str:
     """A condition as a natural lead-in clause (lowercase-initial; the caller capitalizes at
     the sentence boundary). Falls back to ``if <condition>`` for shapes without a dedicated
@@ -130,7 +159,9 @@ def condition_lead_in(c: Condition) -> str:
             flags=re.ASCII,
         )
     if ctype == "rule-active":
-        return f"while the {id_label(p.get('rule'))} is active"
+        return f"while {_describe_predicate(c, False)}"
+    if ctype == "matches":
+        return _matches_lead_in(c, False)
     if ctype == "has-keyword":
         if p.get("chosen_by") is not None:
             return f"if {_describe_predicate(c, False)}"
@@ -217,22 +248,12 @@ def condition_lead_in(c: Condition) -> str:
 
 
 def _negated_lead_in(c: Condition) -> str:
-    p = _obj(c.get("parameters"))
     ctype = c.get("type")
     if ctype == "same-unit":
         return f"if {_describe_predicate(c, True)}"
-    if ctype == "has-keyword" and p.get("chosen_by") is None and p.get("subject") == "defender":
-        kws = (
-            _list(p.get("any_of")) if isinstance(p.get("any_of"), list) else _list(p.get("all_of"))
-        )
-        return _negated_target_keywords([_str(k) for k in kws])
-    if (
-        ctype == "has-keyword"
-        and p.get("chosen_by") is None
-        and (p.get("subject") is None or p.get("subject") == "recipient")
-    ):
-        return f"unless the unit has the {_keyword_names(p)} keyword"
-    if ctype in ("unit-state", "designated", "owned-by"):
+    if ctype == "matches":
+        return _matches_lead_in(c, True)
+    if ctype in ("unit-state", "designated"):
         return f"while {_describe_predicate(c, True)}"
 
     # Otherwise the positive lead-in, turned: "unless an enemy unit is within 12\"".
@@ -245,16 +266,18 @@ def _negated_lead_in(c: Condition) -> str:
 
 
 def _not_keyword(op: Condition, subject: str) -> str | None:
-    """The keyword of ``not(has-keyword <subject> X)`` with a single keyword, else None."""
+    """The keyword of ``not(matches <subject> X)`` with a single keyword, else None."""
     operands = op.get("operands")
     if op.get("operator") != "not" or not isinstance(operands, list) or len(operands) != 1:
         return None
     inner = operands[0]
     p = _obj(inner.get("parameters"))
-    all_of = p.get("all_of")
+    f = _obj(p.get("filter"))
+    all_of = f.get("all_of")
     if (
-        inner.get("type") != "has-keyword"
+        inner.get("type") != "matches"
         or p.get("subject") != subject
+        or set(f) != {"all_of"}
         or not isinstance(all_of, list)
         or len(all_of) != 1
     ):
@@ -263,12 +286,14 @@ def _not_keyword(op: Condition, subject: str) -> str | None:
 
 
 def _own_keyword(op: Condition) -> str | None:
-    """A bare single-keyword ``has-keyword`` on the ability's own unit, else None."""
+    """A bare single-keyword ``matches`` on the ability's own unit, else None."""
     p = _obj(op.get("parameters"))
-    all_of = p.get("all_of")
+    f = _obj(p.get("filter"))
+    all_of = f.get("all_of")
     if (
-        op.get("type") != "has-keyword"
+        op.get("type") != "matches"
         or p.get("subject") is not None
+        or set(f) != {"all_of"}
         or not isinstance(all_of, list)
         or len(all_of) != 1
     ):

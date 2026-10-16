@@ -6,7 +6,7 @@
 
 # Interface: CompletedLoadout
 
-Defined in: [data/loadout.ts:1070](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/loadout.ts#L1070)
+Defined in: [data/loadout.ts:1073](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/loadout.ts#L1073)
 
 A source loadout completed with only omitted per-model defaults.
 
@@ -16,7 +16,7 @@ A source loadout completed with only omitted per-model defaults.
 
 > **counts**: `Map`\<`string`, `number`\>
 
-Defined in: [data/loadout.ts:1071](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/loadout.ts#L1071)
+Defined in: [data/loadout.ts:1074](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/loadout.ts#L1074)
 
 ***
 
@@ -24,4 +24,4 @@ Defined in: [data/loadout.ts:1071](https://github.com/wn-mitch/40kdc-data/blob/a
 
 > **groups**: [`LoadoutGroup`](LoadoutGroup.md)[] \| `null`
 
-Defined in: [data/loadout.ts:1072](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/loadout.ts#L1072)
+Defined in: [data/loadout.ts:1075](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/loadout.ts#L1075)

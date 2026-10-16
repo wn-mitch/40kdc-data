@@ -79,9 +79,15 @@ fn run_dsl_corpus(filename: &str) {
     let mut failures = Vec::new();
     for case in cases {
         let id = case["abilityId"].as_str().expect("abilityId");
-        // A specimen whose ability left the dataset carries its frozen DSL inline.
-        let raw_effect = match case.get("effect") {
-            Some(frozen) => frozen.clone(),
+        let inline_effect = case.get("effect").cloned();
+        let inline = inline_effect.is_some();
+        // Real records must use the public ability adapter, just like TS
+        // `AbilityView.describeBuffs`: it resolves bundles, trigger timing,
+        // usage metadata, recipient snapshots and aura gates. Inline effects
+        // are intentionally standalone specimens and remain direct translator
+        // probes.
+        let raw_effect = match inline_effect {
+            Some(frozen) => frozen,
             None => {
                 let ability = ds
                     .abilities
@@ -98,8 +104,17 @@ fn run_dsl_corpus(filename: &str) {
             _ => TranslationPerspective::Attacker,
         };
         // A rated rule reads the unit's printed rating; the case supplies it.
-        let effect = with_rating(&raw_effect, case.get("rating").filter(|r| !r.is_null()));
-        let result = effect_to_buffs(&effect, &source, &context, perspective);
+        let rating = case.get("rating").filter(|r| !r.is_null());
+        let result = if inline {
+            let effect = with_rating(&raw_effect, rating);
+            effect_to_buffs(&effect, &source, &context, perspective)
+        } else {
+            let ability = ds
+                .abilities
+                .get_any(id)
+                .unwrap_or_else(|| panic!("unknown ability {id}"));
+            ds.describe_buffs(ability, &source, Some(&context), perspective, rating)
+        };
         let expected = &case["expected"];
         let applied: Vec<Value> = result
             .applied
@@ -135,6 +150,9 @@ fn run_dsl_corpus(filename: &str) {
                         "id": a.id,
                         "label": a.label,
                         "group": a.group,
+                        "groups": a.groups,
+                        "requires": a.requires,
+                        "capRaise": a.cap_raise,
                         "buffs": a.buffs.iter().map(|b| serde_json::to_value(&b.contribution).unwrap()).collect::<Vec<_>>(),
                     })
                 })
@@ -145,10 +163,11 @@ fn run_dsl_corpus(filename: &str) {
                 .iter()
                 .map(|e| {
                     let mut e = e.clone();
-                    e.as_object_mut()
-                        .unwrap()
-                        .entry("group")
-                        .or_insert(Value::Null);
+                    // Optional independent caps and requirements are absent when unused.
+                    let o = e.as_object_mut().unwrap();
+                    for key in ["group", "groups", "requires", "capRaise"] {
+                        o.entry(key).or_insert(Value::Null);
+                    }
                     e
                 })
                 .collect();

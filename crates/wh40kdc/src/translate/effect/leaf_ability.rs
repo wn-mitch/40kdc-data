@@ -17,23 +17,11 @@ pub(super) fn is_defined_grant(e: &P) -> bool {
 }
 
 /// "Friendly X units gain the Shade Ward ability": who holds a printed ability and its name, or
-/// "the following rules" for an unnamed one. A model-level target holds one copy per unit.
+/// "the following rules" for an unnamed one.
 pub(super) fn defined_grant_head(e: &P, ctx: &Ctx) -> String {
     let m = obj(e.get("modifier"));
     let def = obj(m.get("definition"));
-    let target = e.get("target");
-    let base = effect_subject(target, ctx);
-    let model_level = target
-        .and_then(Value::as_object)
-        .is_some_and(|t| t.get("level").and_then(Value::as_str) == Some("model"));
-    let subj = if model_level {
-        format!(
-            "units with one or more {}",
-            base.strip_prefix("all ").unwrap_or(&base)
-        )
-    } else {
-        base
-    };
+    let subj = effect_subject(e.get("target"), ctx);
     let name = match def.get("name").and_then(Value::as_str) {
         Some(name) => Some(name.to_string()),
         None => m
@@ -114,23 +102,24 @@ pub(super) fn keyword_grant(m: &P, subj: &str) -> String {
     )
 }
 
-/// A weapon ability's test out to the attacking weapon's full range, not half of it (Rapid Fire).
+/// A weapon ability's test applies out to the supplied canonical range.
 pub(super) fn weapon_ability_range(m: &P, subj: &str) -> String {
     format!(
-        "{} benefit from {} when the target is within the weapon's range",
+        "{} benefit from {} when the target is within {}",
         of_or_possessive(subj, "attacks"),
-        bracket_keyword(m.get("keyword").unwrap_or(&Value::Null))
+        bracket_keyword(m.get("keyword").unwrap_or(&Value::Null)),
+        if sv(m, "range") == Some("weapon") {
+            "the weapon's range".to_string()
+        } else {
+            range_phrase(m.get("range"))
+        }
     )
 }
 
 pub(super) fn weapon_ability_grant(target: Option<&Value>, m: &P, subj: &str, ctx: &Ctx) -> String {
     // A grant and a removal in one effect read "gain X and lose Y"; an empty list is no change.
-    let gained = map_arr(m, "abilities", bracket_keyword)
-        .map(|k| k.join(" and "))
-        .filter(|k| !k.is_empty());
-    let lost = map_arr(m, "removes", bracket_keyword)
-        .map(|k| k.join(" and "))
-        .filter(|k| !k.is_empty());
+    let gained = map_arr(m, "keywords", bracket_keyword).map(|keywords| keywords.join(" and "));
+    let lost = map_arr(m, "removes", bracket_keyword).map(|keywords| keywords.join(" and "));
     let increment = if sv(m, "if_present") == Some("increment") {
         " (a weapon that already has that ability adds the ratings together)"
     } else {
@@ -156,11 +145,11 @@ pub(super) fn weapon_ability_grant(target: Option<&Value>, m: &P, subj: &str, ct
     } else {
         ("gains", "loses")
     };
-    let mut changes: Vec<String> = Vec::new();
-    if let Some(kws) = &gained {
+    let mut changes = Vec::new();
+    if let Some(kws) = gained.filter(|k| !k.is_empty()) {
         changes.push(format!("{gain} {kws}{increment}"));
     }
-    if let Some(kws) = &lost {
+    if let Some(kws) = lost.filter(|k| !k.is_empty()) {
         changes.push(format!("{lose} {kws}"));
     }
     if changes.is_empty() {
@@ -205,6 +194,16 @@ pub(super) fn modified_ability(r: Option<&Value>, subj: &str, ctx: &Ctx) -> Stri
 }
 
 pub(super) fn ability_modifier(m: &P, subj: &str, ctx: &Ctx) -> String {
+    if sv(m, "aspect") == Some("selection")
+        && sv(m, "operation") == Some("set")
+        && nn(m, "selection").is_some()
+    {
+        let selector = obj(m.get("selection"));
+        let duration = crate::translate::expiry::expiry_trail(m.get("recipient_duration"));
+        return format!("replace that ability's selection with {}{}; those recipients are affected by that same ability{}",
+            super::select::select_units_subject(selector), super::select::selection_binding(selector),
+            if duration.is_empty() { String::new() } else { format!(" {duration}") });
+    }
     let whose = modified_ability(m.get("ability"), subj, ctx);
     let aspect_key = sv(m, "aspect");
     let aspect = aspect_name(&jstr(m.get("aspect")));
@@ -320,7 +319,7 @@ pub(super) fn after_phrase(a: &str) -> Option<&'static str> {
         "advance" => "Advanced",
         "fall-back" => "Fell Back",
         "disembark" => "disembarked",
-        "normal-move" => "made a Normal move",
+        "normal" => "made a Normal move",
         "charge" => "made a Charge move",
         "remain-stationary" => "Remained Stationary",
         "set-up" => "was set up",
@@ -592,6 +591,17 @@ pub(super) fn core_rule(rule: &str) -> Option<(&'static str, &'static str)> {
 }
 
 pub(super) fn rule_state(m: &P, subj: &str) -> String {
+    if sv(m, "direction") == Some("exchanged") {
+        return format!("if {subj} {} exactly one of the {} and {} abilities, {subj} simultaneously {} that ability and {} the other",
+            v(subj, "has"), ability_label(m.get("rule")), ability_label(m.get("exchange_with")), v(subj, "loses"), v(subj, "gains"));
+    }
+    if sv(m, "direction") == Some("suppressed") && sv(m, "except_from") == Some("this-ability") {
+        return format!(
+            "{subj} {} the {} ability and cannot gain it except from this ability",
+            v(subj, "loses"),
+            ability_label(m.get("rule"))
+        );
+    }
     let granted = sv(m, "direction") == Some("granted");
     let rule = jstr(m.get("rule"));
     let kind = sv(m, "rule_kind");
@@ -670,4 +680,55 @@ fn replace_word_all(s: &str, word: &str, repl: &str) -> String {
     }
     out.push_str(rest);
     out
+}
+
+/// Policy changes govern future oath procedures and rewards rather than applying rewards now.
+pub(super) fn oath_modifier(m: &P, subj: &str, ctx: &Ctx) -> String {
+    let label = ability_label(m.get("ability"));
+    if sv(m, "aspect") == Some("quality-persistence") {
+        let duration = crate::translate::expiry::expiry_trail(m.get("duration"));
+        return format!(
+            "{subj} {} qualities from {} {label} Oaths{}",
+            v(subj, "retains"),
+            jstr(m.get("from")),
+            if duration.is_empty() {
+                String::new()
+            } else {
+                format!(" {duration}")
+            }
+        );
+    }
+    if sv(m, "aspect") == Some("deed-reward") {
+        let method = match sv(m, "selection_method") {
+            Some("random") => "randomly determined ",
+            Some("chosen") => "chosen ",
+            _ => "",
+        };
+        return format!("for {subj}, on completion of {} {method}{label} deeds{}, replace their reward with: {}",
+            jstr(m.get("applies_to")),
+            if sv(m, "selection_method") == Some("any") { ", regardless of how those deeds were selected" } else { "" },
+            super::inline(m.get("effect").unwrap_or(&Value::Null), ctx));
+    }
+    let domains = map_arr(m, "domains", |domain| {
+        if domain.as_str() == Some("quality") {
+            "qualities".to_string()
+        } else {
+            format!("{}s", jv(domain))
+        }
+    })
+    .map(|domains| and_list(&domains))
+    .unwrap_or_default();
+    let mut clauses = vec![format!("when selecting {domains} for {label} for {subj}")];
+    if is_true(m, "exclude_previously_selected") {
+        clauses.push(format!("exclude previously selected {domains}"));
+    }
+    if sv(m, "duplicate_roll") == Some("choose-unselected") {
+        clauses.push(
+            "if a duplicate is rolled, choose an unselected result in that domain".to_string(),
+        );
+    }
+    if sv(m, "stop_when") == Some("all-domains-exhausted") {
+        clauses.push("stop when every domain is exhausted".to_string());
+    }
+    clauses.join("; ")
 }

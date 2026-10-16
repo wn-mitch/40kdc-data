@@ -12,12 +12,30 @@ def _named_region(
     operator: str = "or",
     default_effect: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
+    keyword_filter = (
+        {"all_of": keywords} if operator == "and" else {"any_of": keywords}
+    )
     return {
         "type": "named-region-state",
         "target": {"owner": "friendly"},
         "modifier": {
+            "region_ref": {"region_id": "fabricated-region"},
+            "producer": {
+                "region_ref": {"region_id": "fabricated-region"},
+                "mode": "complete",
+                "parent_ref": None,
+                "baseline": [],
+                "phase_extensions": [],
+                "additive_extensions": [],
+            },
             "consumer": {
-                "beneficiary_gate": {"operator": operator, "keywords": keywords},
+                "state_ref": {"region_id": "fabricated-region"},
+                "beneficiary_filter": keyword_filter,
+                "membership": {"unit_scope": "whole-unit", "relation": "wholly-within"},
+                "qualified_condition": {
+                    "type": "matches",
+                    "parameters": {"subject": "this-unit", "filter": keyword_filter},
+                },
                 "default_branch": {
                     "effect": default_effect
                     or {
@@ -33,7 +51,8 @@ def _named_region(
                         "modifier": {"roll": "hit", "result_scope": "any-result"},
                     }
                 },
-            }
+            },
+            "branch_precedence": "qualified-replaces-default",
         },
     }
 
@@ -73,7 +92,7 @@ def test_named_region_qualified_branch_is_explicitly_unsupported() -> None:
     assert any("qualified replacement" in item["reason"] for item in result["unsupported"])
 
 
-def test_named_region_weapon_keyword_narrowing_is_not_applied_broadly() -> None:
+def test_named_region_reroll_gates_on_the_weapon_keyword_it_names() -> None:
     result = effect_to_buffs(
         _named_region(
             ["THOUSAND SONS"],
@@ -81,17 +100,23 @@ def test_named_region_weapon_keyword_narrowing_is_not_applied_broadly() -> None:
             {
                 "type": "re-roll",
                 "target": "attacker",
-                "modifier": {"roll": "wound", "subset": "ones", "weapon_keyword": "Psychic"},
+                "modifier": {
+                    "roll": "wound",
+                    "subset": "ones",
+                    "weapons": {"keyword": {"keyword_id": "psychic"}},
+                },
             },
         ),
         _source(),
         {"phase": "shooting", "attackerKeywords": ["thousand sons"]},
     )
-    assert result["applied"] == []
-    assert any(
-        "weapon_keyword\" which the cruncher can't resolve here" in item["reason"]
-        for item in result["unsupported"]
-    )
+    assert len(result["unsupported"]) == 1
+    assert "qualified replacement" in result["unsupported"][0]["reason"]
+    gates = [
+        (buff.get("applicableWhen") or {}).get("weaponKeywords")
+        for buff in result["applied"]
+    ]
+    assert gates == [[{"keyword_id": "psychic"}]]
 
 
 def test_count_capped_reroll_is_not_applied_as_unlimited() -> None:
@@ -126,10 +151,7 @@ def test_leader_model_ability_grant_requires_resolved_beneficiary() -> None:
     assert result["applied"] == []
     assert result["unsupported"] == [
         {
-            "reason": (
-                "leader-model-ability-grant: attached leader beneficiary "
-                "is not resolved by the buff engine"
-            ),
+            "reason": 'effect type "leader-model-ability-grant" is not modelled by the buff layer',
             "effectFragment": effect,
         }
     ]
@@ -150,10 +172,7 @@ def test_persistent_designation_requires_retained_selection_state() -> None:
     assert result["applied"] == []
     assert result["unsupported"] == [
         {
-            "reason": (
-                "persistent-designation: retained selection state "
-                "is not resolved by the buff engine"
-            ),
+            "reason": 'effect type "persistent-designation" is not modelled by the buff layer',
             "effectFragment": effect,
         }
     ]

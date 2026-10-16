@@ -6,7 +6,7 @@
 
 # Interface: SameUnitCondition
 
-Defined in: [generated.ts:1859](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1859)
+Defined in: [generated.ts:1603](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1603)
 
 [identity] The subject is the same unit as `as` (not(same-unit) is 'another unit').
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:1859](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **type**: `"same-unit"`
 
-Defined in: [generated.ts:1860](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1860)
+Defined in: [generated.ts:1604](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1604)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:1860](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **parameters**: `object`
 
-Defined in: [generated.ts:1861](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1861)
+Defined in: [generated.ts:1605](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1605)
 
 #### subject?
 

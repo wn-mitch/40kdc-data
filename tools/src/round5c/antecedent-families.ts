@@ -55,6 +55,7 @@ export const ANTECEDENT_KEYS: Readonly<Record<string, readonly string[]>> = {
  * schema of its own rather than through an antecedent version above.
  */
 const EXTENDED_ANTECEDENT_KEYS: Readonly<Record<string, readonly string[]>> = {
+  "unit-filter": ["member_of"],
   // "add 3\" to that unit's Contagion Range": the unit an earlier filter, aura or Stratagem target names
   // (families/abilities.ts, ability-modifier@4).
   "ability-modifier": ["subject"],

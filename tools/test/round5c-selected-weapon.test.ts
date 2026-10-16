@@ -45,7 +45,7 @@ describe("selected weapon: weapon-ability-grant weapon antecedent", () => {
     const grants = nodes(effect).filter((node) => node.type === "weapon-ability-grant");
     expect(grants).toEqual([{
       type: "weapon-ability-grant", target: "this-model",
-      modifier: { abilities: ["Devastating Wounds"], weapon_type: "ranged", weapon_ref: { weapon_var: "selected-weapon" } },
+      modifier: { keywords: [{ keyword_id: "devastating-wounds" }], weapons: { type: "ranged", ref: { weapon_var: "selected-weapon" } } },
     }]);
     expect(nodes(effect).filter((node) => node.type === "select-weapon")).toHaveLength(1);
   });
@@ -54,7 +54,7 @@ describe("selected weapon: weapon-ability-grant weapon antecedent", () => {
     const grant = leaf("weapon-ability-grant", { subject: "this-model", weapon: "antecedent", keyword: "Lethal Hits" });
     expect(grant.parameters).not.toHaveProperty("weapon_type");
     const grants = nodes(compiled([selectRanged(), grant])).filter((node) => node.type === "weapon-ability-grant");
-    expect((grants[0]!.modifier as Record<string, unknown>).weapon_type).toBe("ranged");
+    expect(grants[0]!.modifier).toHaveProperty("weapons", { type: "ranged", ref: { weapon_var: "selected-weapon" } });
   });
 
   it("refuses a grant with no earlier select-weapon to bind", () => {
@@ -109,7 +109,7 @@ describe("selected weapon: weapon-ability-grant weapon antecedent", () => {
   it("keeps a grant without the antecedent unchanged: it still needs its weapon_type", () => {
     expect(() => leaf("weapon-ability-grant", { subject: "this-model", keyword: "Lethal Hits" })).toThrow(/needs weapon_type/);
     const plain = compiled([leaf("weapon-ability-grant", { subject: "this-model", keyword: "Lethal Hits", weapon_type: "ranged" })]);
-    expect(plain).toEqual({ type: "weapon-ability-grant", target: "this-model", modifier: { abilities: ["Lethal Hits"], weapon_type: "ranged" } });
+    expect(plain).toEqual({ type: "weapon-ability-grant", target: "this-model", modifier: { keywords: [{ keyword_id: "lethal-hits" }], weapons: { type: "ranged" } } });
   });
 });
 
@@ -119,18 +119,18 @@ describe("selected weapon: attack-filter weapon antecedent", () => {
 
   it("names the attacks made with the weapons the earlier grant gave the keyword", () => {
     const effect = compiled([keywordGrant("ranged"), leaf("attack-filter", { weapon: "antecedent" })]);
-    expect(nodes(effect).filter((node) => node.type === "attack-is")).toEqual([{ type: "attack-is", parameters: { weapon_keyword: "Lethal Hits", attack_type: "ranged" } }]);
+    expect(nodes(effect).filter((node) => node.type === "attack-is")).toEqual([{ type: "attack-is", parameters: { weapons: { keyword: { keyword_id: "lethal-hits" } }, attack_type: "ranged" } }]);
   });
 
   it("names no attack type when the grant covers all weapons", () => {
     const effect = compiled([keywordGrant("all"), leaf("attack-filter", { weapon: "antecedent" })]);
-    expect(nodes(effect).filter((node) => node.type === "attack-is")).toEqual([{ type: "attack-is", parameters: { weapon_keyword: "Lethal Hits" } }]);
+    expect(nodes(effect).filter((node) => node.type === "attack-is")).toEqual([{ type: "attack-is", parameters: { weapons: { keyword: { keyword_id: "lethal-hits" } } } }]);
   });
 
   it("keeps negation, and a stated attack_type that matches the grant", () => {
     const effect = compiled([keywordGrant("melee"), leaf("attack-filter", { weapon: "antecedent", attack_type: "melee", negated: true })]);
     expect(nodes(effect).filter((node) => node.type === "attack-is" || node.type === "not")).toEqual(expect.arrayContaining([
-      expect.objectContaining({ type: "attack-is", parameters: { weapon_keyword: "Lethal Hits", attack_type: "melee" } }),
+      expect.objectContaining({ type: "attack-is", parameters: { weapons: { keyword: { keyword_id: "lethal-hits" } }, attack_type: "melee" } }),
     ]));
   });
 
@@ -198,7 +198,7 @@ describe("selected weapon: the bound weapon across a sentence break", () => {
     expect(result.ok).toBe(true);
     const grants = nodes(result.ok ? result.mechanics.effect : null).filter((node) => node.type === "weapon-ability-grant");
     expect(grants).toHaveLength(1);
-    expect((grants[0]!.modifier as Record<string, unknown>).weapon_ref).toEqual({ weapon_var: "selected-weapon" });
+    expect(grants[0]!.modifier).toHaveProperty("weapons", { type: "ranged", ref: { weapon_var: "selected-weapon" } });
   });
 
   it("refuses the grant when the select is not in the record", () => {
@@ -269,6 +269,6 @@ describe("selected weapon: a bound grant with the usage, event and phase leaves 
     expect(result.mechanics.scope).toEqual({ duration: "phase" });
     expect(result.mechanics.trigger).toEqual({ event: "selected", filter: { to: "shoot" } });
     const grants = nodes(result.mechanics.effect).filter((node) => node.type === "weapon-ability-grant");
-    expect(grants).toEqual([expect.objectContaining({ modifier: expect.objectContaining({ weapon_ref: { weapon_var: "selected-weapon" } }) })]);
+    expect(grants).toEqual([expect.objectContaining({ modifier: expect.objectContaining({ weapons: { type: "ranged", ref: { weapon_var: "selected-weapon" } } }) })]);
   });
 });

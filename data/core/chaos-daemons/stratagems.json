@@ -1323,7 +1323,15 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Battleline",
+        "Legiones Daemonica"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit"
+    },
     "ability_id": "incorporeal-entities-warptide-chaos-daemons",
     "game_version": {
       "edition": "11th",

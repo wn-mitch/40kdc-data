@@ -29,8 +29,10 @@ from wh40kdc.translate.condition import (
 from wh40kdc.translate.condition_refs import (
     _state_phrase,
     alternative_filters,
+    event_relation_phrase,
     named_use_phrase,
     roll_word,
+    unit_ref_phrase,
     used_ability_phrase,
 )
 
@@ -61,6 +63,20 @@ def _article(s: str) -> str:
 # Whose turn, as a trigger window names it.
 _TURN_OWNERS: dict[str, str] = {"your-turn": "your", "opponent-turn": "your opponent's"}
 
+_SIMPLE_ACTOR_KEYS = frozenset(
+    {
+        "owner",
+        "level",
+        "state",
+        "not_states",
+        "all_of",
+        "any_of",
+        "none_of",
+        "not_all_of",
+        "any_of_filters",
+    }
+)
+
 
 def _actor(ref: Any) -> str:
     """The actor of a trigger: "the unit", "an enemy unit", "this model"."""
@@ -74,6 +90,10 @@ def _actor(ref: Any) -> str:
         f = _obj(ref)
         if isinstance(f.get("event_var"), str):
             return "that unit"
+        if f.get("selection_var") is not None or f.get("stratagem_target") is not None:
+            return unit_ref_phrase(f)
+        if any(key not in _SIMPLE_ACTOR_KEYS for key in f):
+            return unit_filter_phrase(f)
         # Keywords on the actor read as a trailing requirement, as the event names them; states read
         # as a relative clause ("an enemy unit that is unengaged").
         owner = (
@@ -97,10 +117,15 @@ def _actor_keywords(ref: Any) -> str:
     """Keyword requirements on a filter actor: " (the triggering unit must have A and B)"."""
     if not isinstance(ref, dict):
         return ""
+    if any(key not in _SIMPLE_ACTOR_KEYS for key in ref):
+        return ""
     noun = "model" if ref.get("level") == "model" else "unit"
     s = ""
     if isinstance(ref.get("all_of"), list):
         s += f" (the triggering {noun} must have {_and_list([_str(k) for k in ref['all_of']])})"
+    if isinstance(ref.get("any_of"), list):
+        keywords = [_str(k) for k in ref["any_of"]]
+        s += f" (the triggering {noun} must have {_or_list(keywords)})"
     # Alternatives: "(the triggering model must be an A model or a B C model)".
     if isinstance(ref.get("any_of_filters"), list):
         alts = [unit_filter_phrase(a) for a in alternative_filters(ref)]
@@ -124,7 +149,7 @@ def _object_phrase(ref: Any) -> str:
     if ref == "model-in-this-unit":
         return "a model in this unit"
     if isinstance(ref, (dict, list)):
-        return unit_filter_phrase(ref)
+        return unit_ref_phrase(ref)
     return dekebab(_str(ref))
 
 
@@ -231,6 +256,7 @@ _SET_UP_FROM: dict[str, str] = {
 }
 
 _FIXED_EVENTS: dict[str, str] = {
+    "army-selected": "when selecting your army",
     "battle-started": "at the start of the battle",
     "battle-formations-declared": "when declaring Battle Formations",
     "deployment-ended": "after deployment",
@@ -296,7 +322,8 @@ def _event_phrase(t: AbilityTrigger) -> str:
         # "at the start of this unit's move", "just before it Consolidates": the move is about to
         # be made.
         kinds = move_kinds(f["move_types"]) if isinstance(f.get("move_types"), list) else ""
-        move = f"{f'{_article(kinds)} {kinds}' if kinds else 'a'} move"
+        article = f"{_article(kinds)} {kinds}" if kinds else "a"
+        move = f"{article} move"
         return f"each time {who} starts {move}" if subject_obj else f"when {who} starts {move}"
     if event == "move-ended":
         if f.get("through") == "tall-terrain":
@@ -308,7 +335,8 @@ def _event_phrase(t: AbilityTrigger) -> str:
         if subject_obj and kinds == "Fall Back" and obj is None:
             return f"each time {who} Falls Back"
         tail = f" from {_object_phrase(obj)}" if obj is not None else ""
-        move = f"{f'{_article(kinds)} {kinds}' if kinds else 'a'} move{tail}"
+        article = f"{_article(kinds)} {kinds}" if kinds else "a"
+        move = f"{article} move{tail}"
         return f"each time {who} ends {move}" if subject_obj else f"when {who} ends {move}"
     if event == "set-up":
         return f"when {who} {_SET_UP_FROM.get(_str(f.get('from')), 'is set up')}"
@@ -550,15 +578,19 @@ def _disembark_battle_shock(c: Any) -> bool:
 
 
 def _destroy_attack_phrase(t: AbilityTrigger, f: dict[str, Any]) -> str:
-    """The attacks a destruction's filter names: "with a quake cannon attack", "with a [PSYCHIC]
-    weapon". A destroyed unit's melee already reads "in melee" in _event_phrase, so a unit's
-    attack type adds nothing here; a model's does ("in melee", "with a ranged attack")."""
+    """The canonical weapons scope on a destruction filter."""
     if t.get("event") not in ("destroyed", "model-destroyed"):
         return ""
-    if _truthy(f.get("weapon_name")):
-        return f" with a {_str(f['weapon_name'])} attack"
-    if _truthy(f.get("weapon_keyword")):
-        return f" with a [{_str(f['weapon_keyword']).upper()}] weapon"
+    weapons = f.get("weapons")
+    if isinstance(weapons, dict):
+        name = weapons.get("name")
+        if _truthy(name):
+            return f" with a {_str(name)} attack"
+        keyword = weapons.get("keyword")
+        if isinstance(keyword, dict):
+            keyword = keyword.get("keyword_id")
+        if _truthy(keyword):
+            return f" with a [{_str(keyword).upper()}] weapon"
     if t.get("event") == "model-destroyed" and _truthy(f.get("attack_type")):
         if f["attack_type"] == "melee":
             return " in melee"
@@ -605,12 +637,13 @@ def describe_trigger(t: AbilityTrigger) -> str:
             if _truthy(f.get("attack_type")) and event != "destroyed"
             else ""
         )
-        weapon = (
-            f" with [{_str(f['weapon_keyword']).upper()}] weapons"
-            if _truthy(f.get("weapon_keyword"))
-            else ""
-        )
+        weapons = f.get("weapons")
+        keyword = weapons.get("keyword") if isinstance(weapons, dict) else None
+        if isinstance(keyword, dict):
+            keyword = keyword.get("keyword_id")
+        weapon = f" with [{_str(keyword).upper()}] weapons" if _truthy(keyword) else ""
         s += f" by {atype}attacks made by {source}{weapon}" if atype or weapon else f" by {source}"
+    s += event_relation_phrase(f)
     prox = t.get("proximity")
     if isinstance(prox, dict) and prox.get("range") is not None:
         of = "this model" if prox.get("of") == "this-model" else "this unit"

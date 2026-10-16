@@ -156,6 +156,42 @@ describe("Round 5C printed granted abilities", () => {
     expect(effect.modifier.definition.effect.target).toBe("this-unit");
   });
 
+  it("keeps a printed aura on each model holder while its body grants only the aura recipient", () => {
+    const text = 'Friendly GLIMMER SAGE models have the following ability:\n**Guiding Echoes (Aura):** While a friendly GLOOM HOUND unit is within 12" of this model, that unit has the Battle Focus ability.';
+    const result = compiled(placed(text,
+      ["Friendly GLIMMER SAGE models", "unit-filter", { side: "friendly", keywords: ["GLIMMER", "SAGE"], level: "model" }],
+      header("have the following ability", "one"), label("Guiding Echoes (Aura", "Guiding Echoes"),
+      ['While a friendly GLOOM HOUND unit is within 12" of this model', "aura-range", { inches: 12, side: "friendly", keywords: ["GLOOM HOUND"], of: "this-model" }],
+      ["that unit has the Battle Focus ability", "ability-record-grant", { subject: "antecedent", ability: "battle-focus-aeldari" }]), text);
+    const effect = result.mechanics.effect as Record<string, any>;
+
+    expect(effect).toMatchObject({
+      type: "ability-grant",
+      target: { owner: "friendly", all_of: ["GLIMMER", "SAGE"], level: "model" },
+      modifier: {
+        ability: "guiding-echoes",
+        definition: {
+          type: "ability-part",
+          name: "Guiding Echoes",
+          effect: {
+            type: "aura",
+            target: "friendly-within-aura",
+            modifier: {
+              range: { inches: 12 },
+              eligible: { owner: "friendly", all_of: ["GLOOM HOUND"] },
+              effect: {
+                type: "ability-grant",
+                target: "recipient",
+                modifier: { ability: "battle-focus-aeldari" },
+              },
+            },
+          },
+        },
+      },
+    });
+    expect(effect.modifier.definition.effect.modifier.effect.target).not.toBe("this-unit");
+  });
+
   it("ends a body at its paragraph and gives the leaves after it back to the host", () => {
     const text = "Friendly GLOOM WARDENS units have the following ability:\n**Shade Ward:** This unit has a 5+ invulnerable save.\nThis model has Feel No Pain 5+.";
     const result = compiled(placed(text, WARDENS, header("have the following ability", "one"), label("Shade Ward", "Shade Ward"),

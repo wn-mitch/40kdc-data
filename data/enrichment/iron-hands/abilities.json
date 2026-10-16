@@ -55,7 +55,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "TECHMARINE"
       ]
     },
@@ -208,19 +208,23 @@
         "operator": "and",
         "operands": [
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "ADEPTUS ASTARTES"
-              ]
+              "filter": {
+                "all_of": [
+                  "ADEPTUS ASTARTES"
+                ]
+              }
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "VEHICLE"
-              ]
+              "filter": {
+                "all_of": [
+                  "VEHICLE"
+                ]
+              }
             }
           }
         ]
@@ -236,8 +240,10 @@
           }
         },
         "modifier": {
-          "abilities": [
-            "Lethal Hits"
+          "keywords": [
+            {
+              "keyword_id": "lethal-hits"
+            }
           ]
         }
       }
@@ -246,7 +252,7 @@
       "duration": "until-next-command-phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "TECHMARINE"
       ]
     },
@@ -279,7 +285,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ADEPTUS ASTARTES"
       ]
     }

@@ -887,41 +887,33 @@ function isRecord(value: unknown): value is RecordValue {
 	return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
-/** "While this model is leading a unit": `attachment` with role `leading` (or the legacy bare `is-attached`). */
-function isParameterlessAttachmentCondition(condition: unknown): boolean {
+/** A leading-model predicate, including one conjunct of a compound condition. */
+function isLeadingCondition(condition: unknown): boolean {
 	if (!isRecord(condition)) return false;
-	if (condition.type === 'is-attached') {
-		return condition.parameters === undefined || (isRecord(condition.parameters) && Object.keys(condition.parameters).length === 0);
-	}
 	if (condition.type === 'attachment') {
 		const p = isRecord(condition.parameters) ? condition.parameters : {};
-		return (p.subject === undefined || p.subject === 'this-model') && (p.role === undefined || p.role === 'leading');
+		return (p.subject === undefined || p.subject === 'this-model') && p.role === 'leading';
 	}
 	if (condition.operator !== 'and' || !Array.isArray(condition.operands)) return false;
-	return condition.operands.some(isParameterlessAttachmentCondition);
+	return condition.operands.some(isLeadingCondition);
 }
 
 /** A leaf aimed at the unit the leader is in: `this-unit` while leading is the combined unit. */
 function hasAttachedUnitLeaf(effect: unknown): boolean {
 	if (!isRecord(effect)) return false;
-	if (effect.target === 'unit' || effect.target === 'attached-unit' || effect.target === 'this-unit') return true;
+	if (effect.target === 'this-unit') return true;
 	if (effect.type !== 'sequence' || !Array.isArray(effect.steps)) return false;
 	return effect.steps.some(hasAttachedUnitLeaf);
 }
 
 function isAttachmentBenefit(effect: unknown): boolean {
 	if (!isRecord(effect) || effect.type !== 'conditional') return false;
-	return isParameterlessAttachmentCondition(effect.condition) && hasAttachedUnitLeaf(effect.effect);
+	return isLeadingCondition(effect.condition) && hasAttachedUnitLeaf(effect.effect);
 }
 
-/** An aura: an `aura` effect with a range, or the legacy `scope.range` aura tags. */
-function isAuraAbility(raw: { effect?: unknown; scope?: unknown }): boolean {
-	const effect = raw.effect;
-	if (isRecord(effect) && effect.type === 'aura' && isRecord(effect.modifier) && typeof effect.modifier.range === 'number') return true;
-	const scope = raw.scope;
-	if (!isRecord(scope)) return false;
-	if (scope.range === 'aura-6' || scope.range === 'aura-9' || scope.range === 'aura-12') return true;
-	return scope.range === 'aura-custom' && typeof scope.range_inches === 'number';
+/** An explicit aura container supplies the recipients and reach. */
+function isAuraAbility(raw: { effect?: unknown }): boolean {
+	return isRecord(raw.effect) && raw.effect.type === 'aura';
 }
 
 function isOwnArmyUnit(unit: BuilderUnit): boolean {

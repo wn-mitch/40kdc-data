@@ -262,12 +262,14 @@
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "all_of": [
-                "CHARACTER"
-              ]
+              "filter": {
+                "all_of": [
+                  "CHARACTER"
+                ]
+              },
+              "subject": "defender"
             }
           }
         ]
@@ -376,16 +378,20 @@
         "operator": "not",
         "operands": [
           {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "of": {
-                "owner": "enemy",
-                "excluding": "defender"
+              "filter": {
+                "within": {
+                  "range": {
+                    "inches": 6
+                  },
+                  "of": {
+                    "owner": "enemy",
+                    "excluding": "defender"
+                  }
+                }
               },
-              "range": {
-                "inches": 6
-              }
+              "subject": "defender"
             }
           }
         ]
@@ -477,7 +483,9 @@
     "scope": {
       "duration": "permanent"
     },
-    "unit_ids": ["venerable-dreadnought"],
+    "unit_ids": [
+      "venerable-dreadnought"
+    ],
     "ability_type": "unit",
     "behavior": "passive",
     "faction_id": "space-wolves"
@@ -541,15 +549,25 @@
       "effect": {
         "type": "select-units",
         "selector": {
-          "owner": "friendly",
-          "max_count": 1,
-          "target_kind": "model",
-          "keywords": [
-            "ADEPTUS ASTARTES",
-            "VEHICLE"
-          ],
-          "range_inches": 3,
-          "selection_limit": {
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "ADEPTUS ASTARTES",
+              "VEHICLE"
+            ],
+            "level": "model",
+            "within": {
+              "range": {
+                "inches": 3
+              },
+              "of": "this-model"
+            }
+          },
+          "count": {
+            "min": 0,
+            "max": 1
+          },
+          "limit": {
             "count": 1,
             "period": "turn"
           }
@@ -568,10 +586,17 @@
               "type": "weapon-ability-grant",
               "target": "selected-unit",
               "modifier": {
-                "abilities": [
-                  "Rapid Fire 1"
-                ],
-                "weapon_type": "ranged"
+                "weapons": {
+                  "type": "ranged"
+                },
+                "keywords": [
+                  {
+                    "keyword_id": "rapid-fire",
+                    "parameters": {
+                      "value": 1
+                    }
+                  }
+                ]
               }
             }
           ]
@@ -680,8 +705,10 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Devastating Wounds"
+            "keywords": [
+              {
+                "keyword_id": "devastating-wounds"
+              }
             ]
           }
         },
@@ -689,8 +716,10 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Precision"
+            "keywords": [
+              {
+                "keyword_id": "precision"
+              }
             ]
           }
         }
@@ -793,15 +822,22 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "owner": "friendly",
-        "count": 1,
-        "keywords": [
-          "SPACE WOLVES"
-        ],
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "SPACE WOLVES"
+          ]
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
         "eligibility": {
-          "type": "unit-state",
+          "type": "matches",
           "parameters": {
-            "state": "in-strategic-reserves"
+            "filter": {
+              "state": "in-strategic-reserves"
+            }
           }
         }
       },
@@ -844,29 +880,35 @@
             "operator": "not",
             "operands": [
               {
-                "type": "unit-state",
+                "type": "matches",
                 "parameters": {
-                  "state": "battle-shocked"
+                  "filter": {
+                    "state": "battle-shocked"
+                  }
                 }
               }
             ]
           },
           {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "of": {
-                "owner": "friendly",
-                "all_of": [
-                  "SPACE WOLVES",
-                  "CHARACTER"
-                ],
-                "none_of": [
-                  "WULFEN"
-                ],
-                "level": "model"
-              },
-              "range": {
-                "inches": 6
+              "filter": {
+                "within": {
+                  "range": {
+                    "inches": 6
+                  },
+                  "of": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "SPACE WOLVES",
+                      "CHARACTER"
+                    ],
+                    "none_of": [
+                      "WULFEN"
+                    ],
+                    "level": "model"
+                  }
+                }
               }
             }
           }
@@ -907,19 +949,23 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "subject": "this-model",
-          "of": {
-            "owner": "friendly",
-            "all_of": [
-              "ADEPTUS ASTARTES",
-              "VEHICLE"
-            ]
+          "filter": {
+            "within": {
+              "range": {
+                "inches": 3
+              },
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "ADEPTUS ASTARTES",
+                  "VEHICLE"
+                ]
+              }
+            }
           },
-          "range": {
-            "inches": 3
-          }
+          "subject": "this-model"
         }
       },
       "effect": {
@@ -1055,29 +1101,37 @@
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "all_of": [
-                "WULFEN"
-              ]
+              "filter": {
+                "all_of": [
+                  "WULFEN"
+                ]
+              },
+              "subject": "defender"
             }
           },
           {
-            "type": "owned-by",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "owner": "friendly"
+              "filter": {
+                "owner": "friendly"
+              },
+              "subject": "defender"
             }
           },
           {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "of": "this-model",
-              "range": {
-                "inches": 6
-              }
+              "filter": {
+                "within": {
+                  "range": {
+                    "inches": 6
+                  },
+                  "of": "this-model"
+                }
+              },
+              "subject": "defender"
             }
           }
         ]
@@ -1195,22 +1249,28 @@
         "operator": "and",
         "operands": [
           {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "subject": "event-subject",
-              "of": "this-unit",
-              "range": {
-                "inches": 8
-              }
+              "filter": {
+                "within": {
+                  "range": {
+                    "inches": 8
+                  },
+                  "of": "this-unit"
+                }
+              },
+              "subject": "event-subject"
             }
           },
           {
             "operator": "not",
             "operands": [
               {
-                "type": "unit-state",
+                "type": "matches",
                 "parameters": {
-                  "state": "engaged"
+                  "filter": {
+                    "state": "engaged"
+                  }
                 }
               }
             ]
@@ -1257,12 +1317,29 @@
     "source_digest": "2c74f0527d46491c5ca15ee326bef7f82e5b5658e34352ebe67152de73182d5b",
     "version": "2025-q3",
     "effect": {
-      "type": "roll-modifier",
-      "target": "attacker",
-      "modifier": {
-        "roll": "wound",
-        "operation": "subtract",
-        "value": 1
+      "type": "conditional",
+      "condition": {
+        "type": "attack-compare",
+        "parameters": {
+          "left": {
+            "of": "attacker",
+            "stat": "S"
+          },
+          "comparison": "gt",
+          "right": {
+            "of": "defender",
+            "stat": "T"
+          }
+        }
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "roll": "wound",
+          "operation": "subtract",
+          "value": 1
+        }
       }
     },
     "scope": {
@@ -1272,7 +1349,7 @@
       "wolf-guard-terminators"
     ],
     "ability_type": "unit",
-    "behavior": "reactive",
+    "behavior": "passive",
     "faction_id": "space-wolves"
   },
   {
@@ -1345,48 +1422,87 @@
     "source_digest": "34ab7981a3b277bac755f1c03c6c491ed8a7a1d8f4a18a1f2bc71d3c9030215d",
     "version": "2025-q3",
     "effect": {
-      "type": "stance-select",
-      "mode": "consumable",
-      "scope": "unit",
-      "select": "start-of-battle",
-      "options": [
-        {
-          "name": "Character",
-          "effect": {
-            "type": "ability-activate",
-            "target": "this-unit",
-            "modifier": {
-              "ability": "sagas-space-wolves",
-              "option": "completed"
-            }
-          }
-        },
-        {
-          "name": "Monster",
-          "effect": {
-            "type": "ability-activate",
-            "target": "this-unit",
-            "modifier": {
-              "ability": "sagas-space-wolves",
-              "option": "completed"
-            }
-          }
-        },
-        {
-          "name": "Vehicle",
-          "effect": {
-            "type": "ability-activate",
-            "target": "this-unit",
-            "modifier": {
-              "ability": "sagas-space-wolves",
-              "option": "completed"
-            }
+      "type": "ability-part",
+      "trigger": {
+        "event": "round-started",
+        "condition": {
+          "type": "battle-round",
+          "parameters": {
+            "min": 1,
+            "max": 1
           }
         }
-      ]
+      },
+      "effect": {
+        "type": "persistent-designation",
+        "designation": "slayers-oath",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy",
+              "any_of": [
+                "CHARACTER",
+                "MONSTER",
+                "VEHICLE"
+              ]
+            },
+            "count": {
+              "min": 0,
+              "max": 1
+            },
+            "bind_as": "slayers-oath-selection"
+          }
+        },
+        "selection_policy": "one-time",
+        "consumer": {
+          "relation": "attacks-selected-unit",
+          "beneficiary": "this-unit",
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "defender",
+                "filter": {
+                  "designated": "slayers-oath"
+                }
+              }
+            },
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "ignore-modifiers",
+                  "target": "this-unit",
+                  "modifier": {
+                    "what": "characteristics",
+                    "stats": [
+                      "WS",
+                      "BS"
+                    ]
+                  }
+                },
+                {
+                  "type": "ignore-modifiers",
+                  "target": "this-unit",
+                  "modifier": {
+                    "what": "rolls",
+                    "rolls": [
+                      "hit"
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "duration": "battle"
+      },
+      "optional": true
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "unit_ids": [
       "ulrik-the-slayer"
@@ -1451,13 +1567,17 @@
           {
             "type": "conditional",
             "condition": {
-              "type": "within",
+              "type": "matches",
               "parameters": {
-                "subject": "defender",
-                "of": "this-unit",
-                "range": {
-                  "inches": 6
-                }
+                "filter": {
+                  "within": {
+                    "range": {
+                      "inches": 6
+                    },
+                    "of": "this-unit"
+                  }
+                },
+                "subject": "defender"
               }
             },
             "effect": {
@@ -1473,8 +1593,13 @@
             "type": "weapon-ability-grant",
             "target": "this-unit",
             "modifier": {
-              "abilities": [
-                "Sustained Hits 1"
+              "keywords": [
+                {
+                  "keyword_id": "sustained-hits",
+                  "parameters": {
+                    "value": 1
+                  }
+                }
               ]
             }
           }
@@ -1513,8 +1638,17 @@
       "effect": {
         "type": "select-units",
         "selector": {
-          "owner": "enemy",
-          "count": 1,
+          "filter": {
+            "owner": "enemy",
+            "none_of": [
+              "MONSTER",
+              "VEHICLE"
+            ]
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
           "eligibility": {
             "type": "happened",
             "parameters": {
@@ -1524,15 +1658,13 @@
                 "roll": "hit",
                 "result": "success",
                 "attack_type": "ranged",
-                "weapon_name": "living lightning"
+                "weapons": {
+                  "name": "living lightning"
+                }
               },
               "window": "phase"
             }
-          },
-          "excluded_keywords": [
-            "MONSTER",
-            "VEHICLE"
-          ]
+          }
         },
         "effect": {
           "type": "sequence",
@@ -1552,8 +1684,10 @@
                 "stat": "Range",
                 "operation": "subtract",
                 "value": 6,
-                "weapon_type": "ranged",
-                "minimum": 12
+                "minimum": 12,
+                "weapons": {
+                  "type": "ranged"
+                }
               }
             }
           ]
@@ -1639,8 +1773,10 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Twin-linked"
+        "keywords": [
+          {
+            "keyword_id": "twin-linked"
+          }
         ]
       }
     },
@@ -1726,8 +1862,10 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Assault"
+          "keywords": [
+            {
+              "keyword_id": "assault"
+            }
           ]
         }
       }
@@ -2341,7 +2479,9 @@
       "dataslate": "launch"
     },
     "stub": true,
-    "unit_ids": ["grey-hunters"],
+    "unit_ids": [
+      "grey-hunters"
+    ],
     "faction_id": "space-wolves",
     "detachment_id": "veterans-of-the-fang",
     "ability_type": "detachment",

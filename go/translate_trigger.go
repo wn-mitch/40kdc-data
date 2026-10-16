@@ -54,8 +54,16 @@ func triggerActor(ref any) string {
 		if _, ok := r["event_var"].(string); ok {
 			return "that unit"
 		}
-		// Keywords on the actor read as a trailing requirement, as the event names them; states read
-		// as a relative clause ("an enemy unit that is unengaged").
+		if r["selection_var"] != nil || r["stratagem_target"] != nil {
+			return unitRefPhrase(r, "the unit")
+		}
+		for key := range r {
+			switch key {
+			case "owner", "level", "state", "not_states", "all_of", "any_of", "none_of", "not_all_of", "any_of_filters":
+			default:
+				return unitFilterPhrase(r)
+			}
+		}
 		owner := "a"
 		switch r["owner"] {
 		case "friendly":
@@ -93,6 +101,13 @@ func actorKeywords(ref any) string {
 	if !ok || f == nil {
 		return ""
 	}
+	for key := range f {
+		switch key {
+		case "owner", "level", "state", "not_states", "all_of", "any_of", "none_of", "not_all_of", "any_of_filters":
+		default:
+			return ""
+		}
+	}
 	noun := "unit"
 	if f["level"] == "model" {
 		noun = "model"
@@ -101,7 +116,9 @@ func actorKeywords(ref any) string {
 	if isList(f["all_of"]) {
 		s += " (the triggering " + noun + " must have " + andList(cstrList(f["all_of"])) + ")"
 	}
-	// Alternatives: "(the triggering model must be a LEGIO CYBERNETICA model or an ADEPTUS MECHANICUS VEHICLE model)".
+	if isList(f["any_of"]) {
+		s += " (the triggering " + noun + " must have " + orList(cstrList(f["any_of"])) + ")"
+	}
 	if isList(f["any_of_filters"]) {
 		alts := []string{}
 		for _, a := range alternativeFilters(f) {
@@ -272,6 +289,8 @@ func triggerEventPhrase(t map[string]any) string {
 	who := triggerActor(t["subject"])
 	object := t["object"]
 	switch t["event"] {
+	case "army-selected":
+		return "when selecting your army"
 	case "battle-started":
 		return "at the start of the battle"
 	case "battle-formations-declared":
@@ -708,11 +727,16 @@ func destroyAttackPhrase(event any, f map[string]any) string {
 	if event != "destroyed" && event != "model-destroyed" {
 		return ""
 	}
-	if jsTruthy(f["weapon_name"]) {
-		return " with a " + cstr(f["weapon_name"]) + " attack"
-	}
-	if jsTruthy(f["weapon_keyword"]) {
-		return " with a [" + strings.ToUpper(cstr(f["weapon_keyword"])) + "] weapon"
+	if weapons := mapOr(f["weapons"]); len(weapons) > 0 {
+		if len(weapons) == 1 && weapons["name"] != nil {
+			return " with a " + cstr(weapons["name"]) + " attack"
+		}
+		if len(weapons) == 1 && weapons["keyword"] != nil {
+			if _, list := asList(weapons["keyword"]); !list {
+				return " with a " + bracketKeyword(weapons["keyword"]) + " weapon"
+			}
+		}
+		return " with " + weaponNoun(map[string]any{"weapons": weapons})
 	}
 	if event == "model-destroyed" && jsTruthy(f["attack_type"]) {
 		if f["attack_type"] == "melee" {
@@ -784,8 +808,8 @@ func describeReactiveTrigger(t map[string]any) string {
 			typ = cstr(f["attack_type"]) + " "
 		}
 		weapon := ""
-		if jsTruthy(f["weapon_keyword"]) {
-			weapon = " with [" + strings.ToUpper(cstr(f["weapon_keyword"])) + "] weapons"
+		if weapons := mapOr(f["weapons"]); len(weapons) > 0 {
+			weapon = " with " + weaponNoun(map[string]any{"weapons": weapons})
 		}
 		if typ != "" || weapon != "" {
 			s += " by " + typ + "attacks made by " + source + weapon
@@ -793,6 +817,7 @@ func describeReactiveTrigger(t map[string]any) string {
 			s += " by " + source
 		}
 	}
+	s += eventRelationPhrase(f)
 	if prox, ok := asMap(t["proximity"]); ok && prox != nil && prox["range"] != nil {
 		of := "this unit"
 		if prox["of"] == "this-model" {

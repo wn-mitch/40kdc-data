@@ -303,29 +303,28 @@ function perModelSelector(list: readonly CompileLeaf[], group: Group): Record<st
   const filter = list[group.filter]!.parameters as { side: string; keywords?: string[]; any_keywords?: string[]; excluded_keywords?: string[] } & Record<string, unknown>;
   const narrower = Object.keys(filter).filter((key) => !["side", "keywords", "any_keywords", "excluded_keywords", "level"].includes(key));
   if (narrower.length) throw new CompileError(`A per-model roll counting models narrowed by ${narrower.join(", ")} has no DSL selector field yet.`);
-  if (filter.keywords?.length && filter.any_keywords?.length) throw new CompileError("A per-model roll's selector holds all-of or any-of keywords, not both.");
   const qualifiers = group.qualifiers.map((at) => list[at]!).filter((leaf) => leaf.family_id !== "unit-owner");
   const memberships = qualifiers.filter((leaf) => leaf.family_id === "membership");
   const ranges = qualifiers.filter((leaf) => leaf.family_id === "aura-range");
   const conditions = qualifiers.filter((leaf) => leaf.family_id !== "membership" && leaf.family_id !== "aura-range");
   if (memberships.length > 1 || ranges.length > 1) throw new CompileError("A per-model roll's models take one membership and one range at most.");
-  const selector: Record<string, unknown> = { owner: filter.side, target_kind: "model" };
+  const candidate: Record<string, unknown> = { owner: filter.side, level: "model" };
   if (memberships.length) {
-    const { relation } = memberships[0]!.parameters;
+    const { relation, of } = memberships[0]!.parameters;
     if (relation === "in-or-embarked-in") throw new CompileError("A per-model roll over models in or embarked within the bearer has no DSL selector membership yet.");
     if (filter.side === "enemy") throw new CompileError("Models in or embarked within the bearer are not enemy models.");
-    selector.owner = "friendly";
-    selector.member_of = relation === "in" ? "bearer-unit" : "embarked-in-bearer";
+    candidate.owner = "friendly";
+    if (relation === "in") candidate.member_of = of;
+    else candidate.embarked_in = of;
   }
-  if (filter.keywords?.length) selector.keywords = filter.keywords;
-  if (filter.any_keywords?.length) Object.assign(selector, { keywords: filter.any_keywords, keyword_match: "any" });
-  if (filter.excluded_keywords?.length) selector.excluded_keywords = filter.excluded_keywords;
+  if (filter.keywords?.length) candidate.all_of = filter.keywords;
+  if (filter.any_keywords?.length) candidate.any_of = filter.any_keywords;
+  if (filter.excluded_keywords?.length) candidate.none_of = filter.excluded_keywords;
   if (ranges.length) {
     if (!BEARER.has(ranges[0]!.parameters.of as string | undefined) || ranges[0]!.parameters.wholly === true) throw new CompileError("A per-model roll's range is measured from the bearer, not wholly.");
-    selector.within_inches = ranges[0]!.parameters.inches;
+    candidate.within = { range: { inches: ranges[0]!.parameters.inches }, of: ranges[0]!.parameters.of ?? "this-model" };
   }
   // In a selector's eligibility the default subject is the candidate: each counted model.
   const checks = conditions.map((leaf) => condition({ ...leaf, parameters: { ...leaf.parameters, subject: "this-unit" } }));
-  if (checks.length) selector.eligibility = checks.length === 1 ? checks[0]! : { operator: "and", operands: checks };
-  return selector;
+  return { filter: candidate, ...(checks.length ? { eligibility: checks.length === 1 ? checks[0]! : { operator: "and", operands: checks } } : {}) };
 }

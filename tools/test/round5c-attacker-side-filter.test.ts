@@ -125,6 +125,48 @@ describe("Round 5C attacker filter on an incoming attack's damage", () => {
     ]);
     expect(mechanics.effect).toEqual({ type: "stat-modifier", target: "this-unit", modifier: { stat: "D", operation: "add", value: 1 } });
   });
+
+  it("does not widen allocation to one model into reduction for its entire unit", () => {
+    const { mechanics } = compiled("Each time an attack is allocated to this model, subtract 1 from the Damage characteristic of that attack.", [
+      ["Each time an attack is allocated to this model", "event", { kind: "damage-allocated", object: "this-model" }],
+      ["subtract 1 from the Damage characteristic of that attack", "characteristic-modifier", { subject: "attack", characteristics: ["D"], operation: "subtract", value: 1, weapon_type: "all" }],
+    ]);
+    expect(mechanics.effect).not.toMatchObject({ type: "damage-reduction", target: "this-unit" });
+  });
+
+  it("lowers only an allocated attack's fixed Damage subtraction as a defensive reduction", () => {
+    const allocatedText = "Each time an attack is allocated to this unit, subtract 1 from the Damage characteristic of that attack.";
+    const allocated = compiled(allocatedText, [
+      ["Each time an attack is allocated to this unit", "event", { kind: "damage-allocated", object: "this-unit" }],
+      ["subtract 1 from the Damage characteristic of that attack", "characteristic-modifier", { subject: "attack", characteristics: ["D"], operation: "subtract", value: 1, weapon_type: "all" }],
+    ]);
+    expect(allocated.mechanics.effect).toEqual({
+      type: "damage-reduction",
+      target: "this-unit",
+      modifier: { reduction: 1 },
+    });
+
+    const outgoingText = "Each time this unit makes an attack, subtract 1 from the Damage characteristic of that attack.";
+    const outgoing = compiled(outgoingText, [
+      ["Each time this unit makes an attack", "attack", { direction: "makes", unit: "this-unit", attack_type: "any" }],
+      ["subtract 1 from the Damage characteristic of that attack", "characteristic-modifier", { subject: "attack", characteristics: ["D"], operation: "subtract", value: 1, weapon_type: "all" }],
+    ]);
+    expect(outgoing.mechanics.effect).toEqual({
+      type: "stat-modifier",
+      target: "this-unit",
+      modifier: { stat: "D", operation: "subtract", value: 1 },
+    });
+
+    const explicitRecipient = compiled(allocatedText, [
+      ["Each time an attack is allocated to this unit", "event", { kind: "damage-allocated", object: "this-unit" }],
+      ["subtract 1 from the Damage characteristic of that attack", "characteristic-modifier", { subject: "this-unit", characteristics: ["D"], operation: "subtract", value: 1, weapon_type: "all" }],
+    ]);
+    expect(explicitRecipient.mechanics.effect).toEqual({
+      type: "stat-modifier",
+      target: "this-unit",
+      modifier: { stat: "D", operation: "subtract", value: 1 },
+    });
+  });
 });
 
 describe("Round 5C attack owner for a subject-attack setter (compile-fragments attackOwner)", () => {
@@ -209,7 +251,7 @@ describe("Round 5C benefit of cover for a marked unit's targets", () => {
   it("grants cover to the targets while the attacking unit is wobbled", () => {
     const { mechanics } = compiled("While a wobbled unit is attacking, its targets have the benefit of cover.", [
       ["While a wobbled unit is attacking", "designated-filter", { tag: "wobbled", subject: "attacker", negated: false }], COVER]);
-    expect(mechanics.effect).toMatchObject({ type: "conditional", condition: { type: "designated", parameters: { subject: "attacker", tag: "wobbled" } }, effect: { type: "rule-state", target: "defender" } });
+    expect(mechanics.effect).toMatchObject({ type: "conditional", condition: { type: "matches", parameters: { subject: "attacker", filter: { designated: "wobbled" } } }, effect: { type: "rule-state", target: "defender" } });
     expect(mechanics.effect.scope ?? mechanics.scope).toEqual({ duration: "permanent" });
   });
 
@@ -242,8 +284,8 @@ describe("Round 5C Or: arm with a Character condition on the bearer (10539 shape
   it("lowers to a choice: the plain arm, or the Character arm under its own condition", () => {
     const { mechanics } = compiled(TEXT, ITEMS);
     expect(mechanics.effect.type).toBe("choice");
-    expect(mechanics.effect.options[0]).toEqual({ type: "weapon-ability-grant", target: "this-unit", modifier: { abilities: ["Lethal Hits"], weapon_type: "melee" } });
-    expect(mechanics.effect.options[1]).toMatchObject({ type: "conditional", condition: { type: "has-keyword", parameters: { all_of: ["CHARACTER"] } }, effect: { modifier: { abilities: ["Lethal Hits", "Lance"] } } });
+    expect(mechanics.effect.options[0]).toEqual({ type: "weapon-ability-grant", target: "this-unit", modifier: { keywords: [{ keyword_id: "lethal-hits" }], weapons: { type: "melee" } } });
+    expect(mechanics.effect.options[1]).toMatchObject({ type: "conditional", condition: { type: "matches", parameters: { filter: { all_of: ["CHARACTER"] } } }, effect: { modifier: { keywords: [{ keyword_id: "lethal-hits" }, { keyword_id: "lance" }] } } });
   });
 });
 
@@ -255,7 +297,7 @@ describe("Round 5C attacker prefix on a qualified weapon ability (10673 shape)",
       ["friendly BLOOD CLAWS units", "unit-filter", { side: "friendly", keywords: ["BLOOD CLAWS"] }],
       ["[LETHAL HITS]", "weapon-ability-keyword", { keyword: "Lethal Hits" }],
     ]);
-    expect(mechanics.effect).toMatchObject({ type: "weapon-ability-grant", target: { owner: "friendly", all_of: ["BLOOD CLAWS"] }, modifier: { abilities: ["Lethal Hits"] } });
+    expect(mechanics.effect).toMatchObject({ type: "weapon-ability-grant", target: { owner: "friendly", all_of: ["BLOOD CLAWS"] }, modifier: { keywords: [{ keyword_id: "lethal-hits" }] } });
   });
 });
 

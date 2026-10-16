@@ -6,7 +6,7 @@
 
 # Interface: Wargear
 
-Defined in: [generated.ts:4267](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4267)
+Defined in: [generated.ts:6996](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6996)
 
 A non-weapon item a model may carry — an icon, attachment, or other piece of equipment with no weapon profile. Weapons live in weapon.schema.json; this entity exists so wargear-option swaps and add-ons can reference equipment that is not a weapon.
 
@@ -19,7 +19,7 @@ via the `definition` "wargear".
 
 > **id**: `string`
 
-Defined in: [generated.ts:4268](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4268)
+Defined in: [generated.ts:6997](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6997)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [generated.ts:4268](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > `optional` **external\_refs?**: [`ExternalReferenceList`](../type-aliases/ExternalReferenceList.md)
 
-Defined in: [generated.ts:4269](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4269)
+Defined in: [generated.ts:6998](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6998)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [generated.ts:4269](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **name**: `string`
 
-Defined in: [generated.ts:4270](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4270)
+Defined in: [generated.ts:6999](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6999)
 
 ***
 
@@ -43,7 +43,7 @@ Defined in: [generated.ts:4270](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > `optional` **category?**: `string` \| `null`
 
-Defined in: [generated.ts:4271](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4271)
+Defined in: [generated.ts:7000](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7000)
 
 ***
 
@@ -51,4 +51,4 @@ Defined in: [generated.ts:4271](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **game\_version**: [`GameVersionReference`](GameVersionReference.md)
 
-Defined in: [generated.ts:4272](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4272)
+Defined in: [generated.ts:7001](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7001)

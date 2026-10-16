@@ -6,7 +6,7 @@
 
 # Interface: LoadoutGroup
 
-Defined in: [data/loadout.ts:451](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/loadout.ts#L451)
+Defined in: [data/loadout.ts:452](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/loadout.ts#L452)
 
 A set of identically-equipped models within a unit: `count` models of model-type
 `model_name`, each carrying `weapons` (counts are *per model*). Produced by
@@ -19,7 +19,7 @@ instead of one unit-wide weapon bag. Mirror of `crates/wh40kdc/src/data/loadout.
 
 > **model\_name**: `string` \| `null`
 
-Defined in: [data/loadout.ts:452](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/loadout.ts#L452)
+Defined in: [data/loadout.ts:453](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/loadout.ts#L453)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [data/loadout.ts:452](https://github.com/wn-mitch/40kdc-data/blob/a2
 
 > **count**: `number`
 
-Defined in: [data/loadout.ts:453](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/loadout.ts#L453)
+Defined in: [data/loadout.ts:454](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/loadout.ts#L454)
 
 ***
 
@@ -35,4 +35,4 @@ Defined in: [data/loadout.ts:453](https://github.com/wn-mitch/40kdc-data/blob/a2
 
 > **weapons**: [`LoadoutGroupWeapon`](LoadoutGroupWeapon.md)[]
 
-Defined in: [data/loadout.ts:454](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/loadout.ts#L454)
+Defined in: [data/loadout.ts:455](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/loadout.ts#L455)

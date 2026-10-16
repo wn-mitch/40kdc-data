@@ -39,15 +39,16 @@ use std::sync::OnceLock;
 
 use serde_json::{Map, Value};
 
-use crate::translate::condition::{condition_lead_in_value, nn, obj, truthy, P};
+use crate::translate::condition::{condition_lead_in_value, nn, obj, range_phrase, truthy, P};
 use designation::*;
 use dice::*;
 use leaf::{describe_leaf, LEAF_TYPES};
-use menu::{duration_clauses, menu_inline, scaling_clause, trigger_phrases, usage_clause};
+pub(crate) use menu::usage_clause;
+use menu::{duration_clauses, menu_inline, scaling_clause, trigger_phrases};
 use region::{describe_named_region_conditional, describe_named_region_state};
 use select::*;
-pub(crate) use words::title_case;
 use words::*;
+pub(crate) use words::{bracket_keyword, dice_case, title_case, weapon_noun};
 
 const CONTAINER_TYPES: &[&str] = &[
     "roll",
@@ -121,52 +122,54 @@ pub(crate) fn inline(e: &Value, ctx: &Ctx) -> String {
     }
 }
 
-fn keyword_filter_clause(value: Option<&Value>, noun: &str) -> String {
-    let Some(filter) = value.and_then(Value::as_object) else {
-        return noun.to_string();
-    };
-    let required = map_arr(filter, "required_keywords", jv)
-        .map(|k| k.join(" and "))
+fn aura_role_filter(filter: &P, noun: &str, ctx: &Ctx) -> String {
+    let all = map_arr(filter, "all_of", jv)
+        .map(|keywords| format!(" with {}", keywords.join(" and ")))
         .unwrap_or_default();
-    let excluded = map_arr(filter, "excluded_keywords", jv)
-        .map(|k| k.join(" or "))
+    let any = map_arr(filter, "any_of", jv)
+        .map(|keywords| {
+            format!(
+                " with at least one of {}",
+                crate::translate::condition::or_list(&keywords)
+            )
+        })
         .unwrap_or_default();
-    let mut s = noun.to_string();
-    if !required.is_empty() {
-        s.push_str(&format!(" with {required}"));
+    let none = map_arr(filter, "none_of", jv)
+        .map(|keywords| {
+            format!(
+                " without {}",
+                crate::translate::condition::or_list(&keywords)
+            )
+        })
+        .unwrap_or_default();
+    let not_all = map_arr(filter, "not_all_of", jv)
+        .map(|keywords| format!(" without all of {}", keywords.join(" and ")))
+        .unwrap_or_default();
+    let mut relations = filter.clone();
+    for key in ["all_of", "any_of", "none_of", "not_all_of"] {
+        relations.remove(key);
     }
-    if !excluded.is_empty() {
-        s.push_str(&format!(" without {excluded}"));
+    if sv(&relations, "owner") == Some("any") {
+        relations.remove("owner");
     }
-    s
-}
-
-fn aura_eligible_subject(who: &str, eligible: Option<&Value>) -> String {
-    let Some(e) = eligible.and_then(Value::as_object) else {
-        return who.to_string();
-    };
-    let required = map_arr(e, "required_keywords", jv).unwrap_or_default();
-    let excluded = map_arr(e, "excluded_keywords", jv).unwrap_or_default();
-    // States, then keywords all of which it has, then keywords one of which it has.
-    let mut words = map_arr(e, "states", jv).unwrap_or_default();
-    words.extend(required);
-    if let Some(any_of) = map_arr(e, "any_keywords", jv) {
-        words.push(any_of.join(" or "));
+    if sv(&relations, "level") == Some("unit") {
+        relations.remove("level");
     }
-    let base = if words.is_empty() {
-        who.to_string()
+    relations.retain(|_, value| match value {
+        Value::Null => false,
+        Value::Array(items) => !items.is_empty(),
+        Value::Object(object) => !object.is_empty(),
+        _ => true,
+    });
+    let other = if relations.is_empty() {
+        String::new()
     } else {
-        format!("{}{} unit", &who[..who.len() - 4], words.join(" "))
+        format!(" matching {}", subject::filter_subject(&relations, ctx))
     };
-    if excluded.is_empty() {
-        base
-    } else {
-        format!("{base} (excluding {} units)", excluded.join(" "))
-    }
+    format!("{noun}{all}{any}{none}{not_all}{other}")
 }
 
 fn aura_clause(e: &P, m: &P, ctx: &Ctx) -> String {
-    // Range-extension of a named aura (e.g. Gift of Poxes: contagion +3").
     if let Some(bonus) = nn(m, "range_bonus") {
         let named = nn(m, "of")
             .map(|of| format!("{} ", title_case(&jv(of))))
@@ -179,33 +182,44 @@ fn aura_clause(e: &P, m: &P, ctx: &Ctx) -> String {
                 .unwrap_or_default()
         );
     }
-    let range_text = match nn(m, "range") {
-        Some(Value::Array(r)) => format!(
-            "{} (by battle round)",
-            r.iter()
-                .map(|x| format!("{}\"", jv(x)))
-                .collect::<Vec<_>>()
-                .join("/")
-        ),
-        Some(r) => format!("{}\"", jv(r)),
-        None => "range".to_string(),
-    };
-    let who = if sv(e, "target") == Some("friendly-within-aura") {
-        "a friendly unit"
+    let range_text = nn(m, "range")
+        .map(|range| range_phrase(Some(range)))
+        .unwrap_or_else(|| "range".to_string());
+    let owner = if sv(e, "target") == Some("friendly-within-aura") {
+        "friendly"
     } else {
-        "an enemy unit"
+        "enemy"
     };
-    let eligible_who = aura_eligible_subject(who, m.get("eligible"));
-    let recipient = if nn(m, "recipient_filter").is_some() {
-        keyword_filter_clause(m.get("recipient_filter"), &eligible_who)
+    let recipient_filter = obj(m.get("eligible").or_else(|| m.get("recipient_filter")));
+    let mut filter = recipient_filter.clone();
+    filter.insert("owner".into(), Value::from(owner));
+    let rendered = subject::filter_subject(&filter, ctx);
+    let subject = rendered
+        .strip_prefix("all ")
+        .unwrap_or(&rendered)
+        .replace(" units", " unit")
+        .replace(" models", " model")
+        .replace(" that are", " that is");
+    let eligible_who = format!(
+        "{} {subject}",
+        if subject
+            .chars()
+            .next()
+            .is_some_and(|character| "aeiouAEIOU".contains(character))
+        {
+            "an"
+        } else {
+            "a"
+        }
+    );
+    let recipient = if nn(m, "eligible").is_some() && nn(m, "recipient_filter").is_some() {
+        aura_role_filter(obj(m.get("recipient_filter")), &eligible_who, ctx)
     } else {
         eligible_who
     };
-    let emitter = if nn(m, "emitter_filter").is_some() {
-        keyword_filter_clause(m.get("emitter_filter"), "this model")
-    } else {
-        "this model".to_string()
-    };
+    let emitter = nn(m, "emitter_filter")
+        .map(|filter| aura_role_filter(obj(Some(filter)), "this model", ctx))
+        .unwrap_or_else(|| "this model".to_string());
     let effect_text = match nn(m, "effect") {
         Some(effect) => inline(
             effect,
@@ -397,7 +411,6 @@ fn inline_base(e: &P, ctx: &Ctx) -> String {
             format!("roll {}: {opts}", pool_phrase(e))
         }
         "select-units" => select_units_inline(obj(nn(e, "selector")), child(e, "effect"), ctx),
-        "leader-model-ability-grant" => leader_model_ability_grant_clause(e, ctx),
         "persistent-designation" => {
             if sv(e, "operation") == Some("replace") {
                 return persistent_replacement(e);
@@ -421,23 +434,31 @@ fn inline_base(e: &P, ctx: &Ctx) -> String {
             )
         }
         "designate-target" => designate_target_inline(e, ctx),
-        "stance-select" => format!(
-            "{}{}: {}",
-            stance_pick(e),
-            stance_additive(e),
-            items(e, "options")
-                .iter()
-                .map(|o| {
-                    let o = obj(Some(o));
-                    format!(
-                        "{} ({})",
-                        jstr(o.get("name")),
-                        inline(child(o, "effect"), ctx)
-                    )
-                })
-                .collect::<Vec<_>>()
-                .join(" / ")
-        ),
+        "stance-select" => {
+            let consumable = if sv(e, "mode") == Some("consumable") {
+                " (each may be chosen once per battle)"
+            } else {
+                ""
+            };
+            format!(
+                "{}{}{}: {}",
+                stance_pick(e),
+                consumable,
+                stance_additive(e),
+                items(e, "options")
+                    .iter()
+                    .map(|o| {
+                        let o = obj(Some(o));
+                        format!(
+                            "{} ({})",
+                            jstr(o.get("name")),
+                            inline(child(o, "effect"), ctx)
+                        )
+                    })
+                    .collect::<Vec<_>>()
+                    .join(" / ")
+            )
+        }
         "stance-selection-capacity" => {
             let n = num(m.get("additional_selections"));
             let n = if n.is_nan() || n == 0.0 { 1.0 } else { n };
@@ -448,18 +469,20 @@ fn inline_base(e: &P, ctx: &Ctx) -> String {
             };
             // A shared allowance narrowed to some options: spent on any one of them, not one of each.
             if sv(m, "allocation") != Some("fixed-option") {
-                if let Some(ids) = arr(m, "option_ids") {
-                    let names: Vec<String> =
-                        ids.iter().map(|id| title_case(&jstr(Some(id)))).collect();
+                if let Some(options) = arr(m, "options") {
+                    let names: Vec<String> = options
+                        .iter()
+                        .map(|option| title_case(&jstr(obj(Some(option)).get("option_id"))))
+                        .collect();
                     return format!(
                         "you can select {} {times} per battle, shared between them",
                         crate::translate::condition::or_list(&names)
                     );
                 }
             }
-            let subject = match nn(m, "option_id") {
-                Some(opt) if sv(m, "allocation") == Some("fixed-option") => title_case(&jv(opt)),
-                _ => format!("one option of {}", title_case(&jstr(m.get("stance_id")))),
+            let subject = match sv(obj(m.get("option")), "option_id") {
+                Some(option) if sv(m, "allocation") == Some("fixed-option") => title_case(option),
+                _ => format!("one option of {}", title_case(&jstr(m.get("ability_id")))),
             };
             format!("you can select {subject} {times} per battle")
         }

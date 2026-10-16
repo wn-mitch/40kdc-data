@@ -419,15 +419,19 @@
           "operator": "or",
           "operands": [
             {
-              "type": "unit-state",
+              "type": "matches",
               "parameters": {
-                "state": "in-cult-ambush"
+                "filter": {
+                  "state": "in-cult-ambush"
+                }
               }
             },
             {
-              "type": "unit-state",
+              "type": "matches",
               "parameters": {
-                "state": "in-strategic-reserves"
+                "filter": {
+                  "state": "in-strategic-reserves"
+                }
               }
             }
           ]
@@ -511,24 +515,30 @@
             "operator": "and",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
                   "subject": {
                     "stratagem_target": "first"
                   },
-                  "all_of": [
-                    "BATTLELINE"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "BATTLELINE"
+                    ]
+                  }
                 }
               },
               {
-                "type": "within",
+                "type": "matches",
                 "parameters": {
-                  "of": {
-                    "stratagem_target": "first"
-                  },
-                  "range": {
-                    "inches": 6
+                  "filter": {
+                    "within": {
+                      "range": {
+                        "inches": 6
+                      },
+                      "of": {
+                        "stratagem_target": "first"
+                      }
+                    }
                   }
                 }
               }
@@ -576,7 +586,7 @@
               "type": "aura",
               "target": "friendly-within-aura",
               "modifier": {
-                "range": 6,
+                "range": { "inches": 6 },
                 "effect": {
                   "type": "stat-modifier",
                   "target": "recipient",
@@ -584,11 +594,11 @@
                     "stat": "WS",
                     "operation": "improve",
                     "value": 1,
-                    "weapon_type": "melee"
+                    "weapons": { "type": "melee" }
                   }
                 },
                 "eligible": {
-                  "required_keywords": [
+                  "all_of": [
                     "GLOOM HOUND"
                   ]
                 }

@@ -111,6 +111,15 @@ export const DURATION_AND_DESIGNATION_EXTENSIONS: readonly FamilyExtension[] = [
     },
   },
   {
+    family: "duration",
+    version: 5,
+    description: "As the previous version, plus after-this-use: the effect expires after the activation finishes resolving, distinct from end-of-this-use, which lasts only during its resolution.",
+    schema: (previous) => withProperties(previous, { endpoint: widenedEnum(previous, "endpoint", ["after-this-use"]) }),
+    normalize: (input, previous) => input.endpoint === "after-this-use"
+      ? standIn(input, "endpoint", "end-of-this-use", previous)
+      : previous(input),
+  },
+  {
     // "Once per battle, in any phase, just after …": every phase, said outright.
     family: "phase-window",
     version: 2,

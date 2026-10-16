@@ -144,11 +144,27 @@ func (a *AbilityView) describeRatedBuffs(source map[string]any, ctx map[string]a
 	}
 	bundled, _ := a.resolveRulesBundles(a.Raw["effect"], map[string]bool{a.ID(): true})
 	resolvedEffect := withRating(bundled, rating, hasRating)
-	gated, byTrigger := triggerGatedStep(a.Raw["behavior"], a.Raw["trigger"], resolvedEffect)
-	if !byTrigger {
-		gated = usageGated(a.Raw["ability_type"], a.Raw["usage"], resolvedEffect)
+	needsSnapshot := recipientSnapshotUnavailable(a.Raw["trigger"], resolvedEffect)
+	if needsSnapshot && (getStr(source, "kind") != "ability" || getStr(source, "abilityId") != a.ID()) {
+		return &effectTranslation{
+			applied: []any{}, activatable: []any{},
+			unsupported: []any{unsup("recipient snapshot source does not own this ability", a.Raw["effect"])},
+		}
 	}
-	translated := effectToBuffs(gated, source, ctx, perspective)
+	moment := resolvedEffect
+	if needsSnapshot {
+		var reason string
+		moment, reason = resolveRecipientSnapshots(a.Raw["trigger"], resolvedEffect, source, ctx, perspective)
+		if reason != "" {
+			return &effectTranslation{
+				applied: []any{}, activatable: []any{},
+				unsupported: []any{unsup(reason, a.Raw["effect"])},
+			}
+		}
+	} else {
+		moment = triggerGated(a.Raw["behavior"], a.Raw["trigger"], resolvedEffect)
+	}
+	translated := effectToBuffs(moment, source, ctx, perspective, map[string]any{"usage": a.Raw["usage"], "duration": mapOr(a.Raw["scope"])["duration"]})
 	rng, ok := auraInches(resolvedEffect)
 	if !ok {
 		return translated
@@ -196,6 +212,9 @@ func buffSourceFromEligible(entry map[string]any) map[string]any {
 	if kind == "attached" {
 		return map[string]any{"kind": "ability", "abilityId": ability.ID(), "abilityKind": "attached", "sourceUnitId": source["unitId"]}
 	}
+	if kind == "support" {
+		return map[string]any{"kind": "ability", "abilityId": ability.ID(), "abilityKind": "support", "sourceUnitId": source["sourceUnitId"]}
+	}
 	abilityKind := kind
 	if kind == "detachment-stratagem" {
 		abilityKind = "detachment-stratagem"
@@ -211,6 +230,16 @@ func (ds *Dataset) derivedContext(input, context map[string]any) map[string]any 
 	ctx := cloneMap(context)
 	if ctx["attackerAttached"] == nil {
 		ctx["attackerAttached"] = len(getList(input, "attachedUnitIds")) > 0
+	}
+	if ctx["attachmentRoles"] == nil {
+		if roles, ok := getMap(input, "attachmentRoles"); ok && roles != nil {
+			ctx["attachmentRoles"] = roles
+		}
+	}
+	if ctx["attackerAttachmentRole"] == nil {
+		if roles, ok := getMap(ctx, "attachmentRoles"); ok {
+			ctx["attackerAttachmentRole"] = roles[getStr(input, "unitId")]
+		}
 	}
 	return ctx
 }
@@ -230,6 +259,12 @@ func (ds *Dataset) weaponFaction(input map[string]any) string {
 func (ds *Dataset) collectBuffs(input, context map[string]any, perspective string) []any {
 	out := []any{}
 	ctx := ds.derivedContext(input, context)
+	if perspective == "attacker" && ctx["attackerUnitId"] == nil {
+		ctx["attackerUnitId"] = getStr(input, "unitId")
+	}
+	if perspective == "target" && ctx["targetUnitId"] == nil {
+		ctx["targetUnitId"] = getStr(input, "unitId")
+	}
 	if perspective == "attacker" {
 		// Weapon ids are shared across factions with divergent stats — resolve
 		// within the input unit's faction (GetAny fallback for cross-faction ids).
@@ -253,7 +288,24 @@ func (ds *Dataset) collectBuffs(input, context map[string]any, perspective strin
 	for _, s := range getStrList(input, "optedInStratagemIds") {
 		optedIn[s] = struct{}{}
 	}
-	for _, entry := range ds.eligibleAbilities(input, getStr(ctx, "phase")) {
+	eligible := ds.eligibleAbilities(input, getStr(ctx, "phase"))
+	for _, entry := range historicalSnapshotAbilities(ds, input, ctx, perspective) {
+		source := entry["source"].(map[string]any)
+		duplicate := false
+		for _, current := range eligible {
+			if current["ability"].(*AbilityView).ID() == entry["ability"].(*AbilityView).ID() && snapshotValueEqual(source, buffSourceFromEligible(current)) {
+				duplicate = true
+				break
+			}
+		}
+		if duplicate {
+			continue
+		}
+		ability := entry["ability"].(*AbilityView)
+		rating, hasRating := entry["rating"]
+		out = append(out, ability.describeRatedBuffs(source, ctx, perspective, rating, hasRating).applied...)
+	}
+	for _, entry := range eligible {
 		source := entry["source"].(map[string]any)
 		if getStr(source, "kind") == "detachment-stratagem" {
 			if _, ok := optedIn[getStr(source, "stratagemId")]; !ok {

@@ -9,7 +9,8 @@ mod event;
 use serde_json::{Map, Value};
 
 use super::condition::{
-    cap_word, describe_condition_value, is, nn, obj, range_phrase, st, truthy, P,
+    cap_word, describe_condition_value, is, key_count, nn, obj, place_ref_phrase, range_phrase, st,
+    truthy, unit_ref_phrase, P,
 };
 use super::dekebab;
 
@@ -180,8 +181,9 @@ fn disembark_battle_shock(c: Option<&Value>) -> bool {
     }
     ctype(&ops[0]) == Some("happened")
         && param(&ops[0], "event").and_then(Value::as_str) == Some("disembarked")
-        && ctype(&ops[1]) == Some("unit-state")
-        && param(&ops[1], "state").and_then(Value::as_str) == Some("battle-shocked")
+        && ctype(&ops[1]) == Some("matches")
+        && is(obj(param(&ops[1], "filter")), "state", "battle-shocked")
+        && key_count(obj(param(&ops[1], "filter"))) == 1
 }
 
 /// The attacks a destruction's filter names: "with a quake cannon attack", "with a [PSYCHIC]
@@ -191,14 +193,20 @@ fn destroy_attack_phrase(event: Option<&str>, f: &P) -> String {
     if !matches!(event, Some("destroyed") | Some("model-destroyed")) {
         return String::new();
     }
-    if truthy(f.get("weapon_name")) {
-        return format!(" with a {} attack", st(f.get("weapon_name")));
-    }
-    if truthy(f.get("weapon_keyword")) {
-        return format!(
-            " with a [{}] weapon",
-            st(f.get("weapon_keyword")).to_uppercase()
-        );
+    if let Some(weapons) = nn(f, "weapons") {
+        let weapons = obj(Some(weapons));
+        if key_count(weapons) == 1 {
+            if let Some(name) = nn(weapons, "name") {
+                return format!(" with a {} attack", st(Some(name)));
+            }
+            if let Some(keyword) = nn(weapons, "keyword").filter(|keyword| !keyword.is_array()) {
+                return format!(
+                    " with a {} weapon",
+                    crate::translate::effect::bracket_keyword(keyword)
+                );
+            }
+        }
+        return format!(" with {}", crate::translate::effect::weapon_noun(f));
     }
     if event == Some("model-destroyed") && truthy(f.get("attack_type")) {
         return if f.get("attack_type").and_then(Value::as_str) == Some("melee") {
@@ -259,22 +267,28 @@ pub fn describe_trigger_value(trigger: &Value) -> String {
     s.push_str(&actor_keywords(t.get("subject")));
     let f = obj(t.get("filter"));
     s.push_str(&destroy_attack_phrase(event, f));
+    if !matches!(event, Some("destroyed" | "model-destroyed"))
+        && nn(f, "weapons").is_some()
+        && nn(f, "by").is_none()
+    {
+        s.push_str(&format!(
+            " with {}",
+            crate::translate::effect::weapon_noun(f)
+        ));
+    }
     if let Some(by) = nn(f, "by") {
-        let source = if by.as_str() == Some("this-model") {
-            "this model"
+        let source = if by.as_str() == Some("this-unit") {
+            "this unit".to_string()
         } else {
-            "this unit"
+            unit_ref_phrase(Some(by), "the unit")
         };
         let kind = if truthy(f.get("attack_type")) && event != Some("destroyed") {
             format!("{} ", st(f.get("attack_type")))
         } else {
             String::new()
         };
-        let weapon = if truthy(f.get("weapon_keyword")) {
-            format!(
-                " with [{}] weapons",
-                st(f.get("weapon_keyword")).to_uppercase()
-            )
+        let weapon = if nn(f, "weapons").is_some() {
+            format!(" with {}", crate::translate::effect::weapon_noun(f))
         } else {
             String::new()
         };
@@ -284,12 +298,13 @@ pub fn describe_trigger_value(trigger: &Value) -> String {
             s.push_str(&format!(" by {source}"));
         }
     }
+    s.push_str(&super::condition::event_relation_phrase(f));
     let proximity = obj(t.get("proximity"));
     if let Some(range) = nn(proximity, "range") {
-        let of = if is(proximity, "of", "this-model") {
-            "this model"
+        let of = if nn(proximity, "of").is_none() || is(proximity, "of", "this-unit") {
+            "this unit".to_string()
         } else {
-            "this unit"
+            place_ref_phrase(proximity.get("of"))
         };
         s.push_str(&format!(" within {} of {of}", range_phrase(Some(range))));
     }

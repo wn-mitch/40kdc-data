@@ -6,7 +6,7 @@
 
 # Interface: ResourceActionMenuEffect
 
-Defined in: [generated.ts:2932](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2932)
+Defined in: [generated.ts:3812](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3812)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "resource-action-menu-effect".
@@ -17,7 +17,7 @@ via the `definition` "resource-action-menu-effect".
 
 > **type**: `"resource-action-menu"`
 
-Defined in: [generated.ts:2933](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2933)
+Defined in: [generated.ts:3813](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3813)
 
 ***
 
@@ -25,7 +25,7 @@ Defined in: [generated.ts:2933](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **menu\_id**: `string`
 
-Defined in: [generated.ts:2934](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2934)
+Defined in: [generated.ts:3814](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3814)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [generated.ts:2934](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **pool\_id**: `string`
 
-Defined in: [generated.ts:2935](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2935)
+Defined in: [generated.ts:3815](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3815)
 
 ***
 
@@ -41,7 +41,7 @@ Defined in: [generated.ts:2935](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > `optional` **shared\_usage?**: `object`
 
-Defined in: [generated.ts:2936](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2936)
+Defined in: [generated.ts:3816](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3816)
 
 #### unit\_max\_manoeuvres\_per\_phase?
 
@@ -57,7 +57,7 @@ Defined in: [generated.ts:2936](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > `optional` **capacity?**: `object`
 
-Defined in: [generated.ts:2940](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2940)
+Defined in: [generated.ts:3820](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3820)
 
 #### amount
 
@@ -73,15 +73,15 @@ Defined in: [generated.ts:2940](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 #### refresh
 
-> **refresh**: `"phase"` \| `"turn"` \| `"battle"` \| `"battle-round"`
+> **refresh**: `"battle-round"` \| `"phase"` \| `"turn"` \| `"battle"`
 
 ***
 
 ### actions
 
-> **actions**: \[\{ `id`: `string`; `label`: `string`; `when`: [`ResourceActionMenuTrigger`](ResourceActionMenuTrigger.md) \| \[[`ResourceActionMenuTrigger`](ResourceActionMenuTrigger.md), `...ResourceActionMenuTrigger[]`\]; `cost`: \{ `pool_id`: `string`; `amount`: `number`; `resource_label?`: `string`; \}; `eligibility?`: \{ `requires_keyword?`: \[`string`, `...string[]`\]; `excludes_keyword?`: \[`string`, `...string[]`\]; `selector_count?`: `number`; `requires?`: \[[`AbilityDSLCondition2`](../type-aliases/AbilityDSLCondition2.md), `...AbilityDSLCondition2[]`\]; \}; `usage?`: \{ `repeatable_if_different_unit?`: `boolean`; \}; `duration?`: `"immediate"` \| `"until-end-of-phase"` \| `"until-end-of-turn"`; `effect`: [`EffectNode`](../type-aliases/EffectNode.md); \}, ...\{ id: string; label: string; when: ResourceActionMenuTrigger \| \[ResourceActionMenuTrigger, ...ResourceActionMenuTrigger\[\]\]; cost: \{ pool\_id: string; amount: number; resource\_label?: string \}; eligibility?: \{ requires\_keyword?: \[string, ...string\[\]\]; excludes\_keyword?: \[string, ...string\[\]\]; selector\_count?: number; requires?: \[AbilityDSLCondition2, ...AbilityDSLCondition2\[\]\] \}; usage?: \{ repeatable\_if\_different\_unit?: boolean \}; duration?: "immediate" \| "until-end-of-phase" \| "until-end-of-turn"; effect: EffectNode \}\[\]\]
+> **actions**: \[\{ `id`: `string`; `label`: `string`; `when`: [`ResourceActionMenuTrigger`](ResourceActionMenuTrigger.md) \| \[[`ResourceActionMenuTrigger`](ResourceActionMenuTrigger.md), `...ResourceActionMenuTrigger[]`\]; `cost`: \{ `pool_id`: `string`; `amount`: `number`; `resource_label?`: `string`; \}; `eligibility?`: \{ `filter?`: [`UnitFilter`](UnitFilter.md); `count?`: [`CountBounds`](CountBounds.md); `requires?`: \[[`AbilityDSLCondition1`](../type-aliases/AbilityDSLCondition1.md), `...AbilityDSLCondition1[]`\]; \}; `usage?`: \{ `repeatable_if_different_unit?`: `boolean`; \}; `duration?`: `"phase"` \| `"turn"` \| `"resolution"`; `effect`: [`EffectNode`](../type-aliases/EffectNode.md); \}, ...\{ id: string; label: string; when: ResourceActionMenuTrigger \| \[ResourceActionMenuTrigger, ...ResourceActionMenuTrigger\[\]\]; cost: \{ pool\_id: string; amount: number; resource\_label?: string \}; eligibility?: \{ filter?: UnitFilter; count?: CountBounds; requires?: \[AbilityDSLCondition1, ...AbilityDSLCondition1\[\]\] \}; usage?: \{ repeatable\_if\_different\_unit?: boolean \}; duration?: "phase" \| "turn" \| "resolution"; effect: EffectNode \}\[\]\]
 
-Defined in: [generated.ts:2949](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2949)
+Defined in: [generated.ts:3829](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3829)
 
 #### Min Items
 

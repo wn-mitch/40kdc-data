@@ -58,7 +58,7 @@ describe("wave-9 weapon-ability keywords", () => {
     const text = "Your unit's melee attacks can have: [CLEAVE 1].";
     const result = compileLeaves(placed(text, MELEE_SCOPE, ["CLEAVE 1", "weapon-ability-keyword", { keyword: "Cleave 1" }]), text);
     expect(result.ok ? [] : result.errors).toEqual([]);
-    expect(JSON.stringify(result.ok ? result.mechanics : {})).toContain("Cleave 1");
+    expect(JSON.stringify(result.ok ? result.mechanics : {})).toContain('"keyword_id":"cleave","parameters":{"value":1}');
   });
 });
 
@@ -74,8 +74,8 @@ describe("weapon-property-scope with a target qualifier", () => {
     const result = compileLeaves(leaves(), text);
     expect(result.ok ? [] : result.errors).toEqual([]);
     const json = JSON.stringify(result.ok ? result.mechanics : {});
-    expect(json).toContain('"subject":"defender","any_of":["CHARACTER","MONSTER"]');
-    expect(json).toContain("Lethal Hits");
+    expect(json).toContain('"subject":"defender","filter":{"any_of":["CHARACTER","MONSTER"]}');
+    expect(json).toContain('"keyword_id":"lethal-hits"');
   });
 
   it("refuses a qualifier after a run of two keywords, rather than gating both on it", () => {
@@ -112,8 +112,7 @@ describe("a keyword or a stat adjustment as a choice", () => {
     const result = compileLeaves(choice(), text);
     expect(result.ok ? [] : result.errors).toEqual([]);
     const json = JSON.stringify(result.ok ? result.mechanics : {});
-    expect(json).toContain('"type":"choice"');
-    expect(json).toContain("Cleave 1");
+    expect(json).toContain('"keyword_id":"cleave","parameters":{"value":1}');
     expect(json).toContain('"AP"');
   });
 
@@ -134,7 +133,7 @@ describe("wave-9 keyword shapes compile", () => {
     const text = "Your unit's melee attacks can have: [CLOSE-QUARTERS].";
     const result = compileLeaves(placed(text, MELEE_SCOPE, ["CLOSE-QUARTERS", "weapon-ability-keyword", { keyword: "Close-quarters" }]), text);
     expect(result.ok ? [] : result.errors).toEqual([]);
-    expect(JSON.stringify(result.ok ? result.mechanics : {})).toContain("Close-quarters");
+    expect(JSON.stringify(result.ok ? result.mechanics : {})).toContain('"keyword_id":"close-quarters"');
   });
 
   it("compiles a Cleave N grant on the unit's own melee attacks, and refuses a Cleave 0 keyword", () => {
@@ -142,7 +141,7 @@ describe("wave-9 keyword shapes compile", () => {
     const grant = compileLeaves(placed(text,
       ["This unit's melee attacks have [Cleave 1]", "weapon-ability-grant", { subject: "this-unit", keyword: "Cleave 1", weapon_type: "melee" }]), text);
     expect(grant.ok ? [] : grant.errors).toEqual([]);
-    expect(JSON.stringify(grant.ok ? grant.mechanics : {})).toContain("Cleave 1");
+    expect(JSON.stringify(grant.ok ? grant.mechanics : {})).toContain('"keyword_id":"cleave","parameters":{"value":1}');
     expect(() => normalizeFingerprintParameters("weapon-ability-keyword", { keyword: "Cleave 0" }, 2)).toThrow();
   });
 
@@ -155,15 +154,15 @@ describe("wave-9 keyword shapes compile", () => {
       ["If that attack already has [CLEAVE], increase that [CLEAVE] by 1 (e.g. [CLEAVE 1] becomes [CLEAVE 2]).", "weapon-ability-grant", { subject: "this-unit", weapon_type: "melee", keyword: "Cleave 1", if_present: "increment" }]), text);
     expect(result.ok ? [] : result.errors).toEqual([]);
     const json = JSON.stringify(result.ok ? result.mechanics : {});
-    expect(json).toContain('"type":"choice"');
+    expect(json).toContain('"keyword_id":"cleave","parameters":{"value":1}');
     expect(json).toContain('"if_present":"increment"');
   });
 
-  it("compiles printed [Blast 1] as the keyword Blast", () => {
+  it("compiles printed [Blast 1] with its canonical value 1", () => {
     const text = "Your unit's melee attacks can have: [BLAST 1].";
     const result = compileLeaves(placed(text, MELEE_SCOPE, ["BLAST 1", "weapon-ability-keyword", { keyword: "Blast" }]), text);
     expect(result.ok ? [] : result.errors).toEqual([]);
-    expect(JSON.stringify(result.ok ? result.mechanics : {})).toContain("Blast");
+    expect(JSON.stringify(result.ok ? result.mechanics : {})).toContain('"keyword_id":"blast","parameters":{"value":1}');
   });
 
   it("refuses a printed Blast rating other than 1, rather than authoring it as plain Blast", () => {
@@ -183,7 +182,7 @@ describe("wave-9 Anti target shapes compile", () => {
     const text = "Your unit's melee attacks can have: [ANTI-MONSTER/VEHICLE 4+].";
     const result = compileLeaves(placed(text, MELEE_SCOPE, ["ANTI-MONSTER/VEHICLE 4+", "weapon-ability-keyword", { keyword: "Anti-Monster/Vehicle 4+" }]), text);
     expect(result.ok ? [] : result.errors).toEqual([]);
-    expect(JSON.stringify(result.ok ? result.mechanics : {})).toContain("Anti-Monster/Vehicle 4+");
+    expect(JSON.stringify(result.ok ? result.mechanics : {})).toContain('"keyword_id":"anti","parameters":{"required_target_keywords_any":["MONSTER","VEHICLE"],"threshold":4}');
   });
 
   it("compiles a negated Anti target, and its printed bold markers bind to the same keyword", () => {
@@ -200,7 +199,7 @@ describe("wave-9 Cleave records with a named weapon or a stat beside the keyword
     const result = compileLeaves(placed(text,
       ["This unit's Maulerfiend Fists have [Cleave 2]", "weapon-ability-grant", { subject: "this-unit", keyword: "Cleave 2", weapon_name: "Maulerfiend Fists" }]), text);
     expect(result.ok ? [] : result.errors).toEqual([]);
-    expect(JSON.stringify(result.ok ? result.mechanics : {})).toContain("Cleave 2");
+    expect(JSON.stringify(result.ok ? result.mechanics : {})).toContain('"keyword_id":"cleave","parameters":{"value":2}');
   });
 
   it("compiles a stat adjustment and a Cleave keyword listed under one melee scope, without a choice", () => {
@@ -211,7 +210,7 @@ describe("wave-9 Cleave records with a named weapon or a stat beside the keyword
       ["CLEAVE 1", "weapon-ability-keyword", { keyword: "Cleave 1" }]), text);
     expect(result.ok ? [] : result.errors).toEqual([]);
     const json = JSON.stringify(result.ok ? result.mechanics : {});
-    expect(json).toContain("Cleave 1");
+    expect(json).toContain('"keyword_id":"cleave","parameters":{"value":1}');
     expect(json).not.toContain('"type":"choice"');
   });
 });

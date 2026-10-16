@@ -81,108 +81,116 @@
     "source_digest": "854c208eec80795297f48659ed28bb898385a1df6a9f8a365867b6eb00ed3b6c",
     "version": "2025-q3",
     "effect": {
-      "type": "stance-select",
-      "mode": "consumable",
-      "scope": "unit",
-      "select": "army-selection",
-      "options": [
-        {
-          "name": "Khorne",
-          "effect": {
-            "type": "sequence",
-            "steps": [
-              {
-                "type": "keyword-grant",
-                "target": "this-model",
-                "modifier": {
-                  "keywords": [
-                    "KHORNE"
-                  ]
+      "type": "ability-part",
+      "trigger": {
+        "event": "army-selected"
+      },
+      "effect": {
+        "type": "stance-select",
+        "mode": "consumable",
+        "options": [
+          {
+            "name": "Khorne",
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "keyword-grant",
+                  "target": "this-model",
+                  "modifier": {
+                    "keywords": [
+                      "KHORNE"
+                    ]
+                  }
+                },
+                {
+                  "type": "weapon-grant",
+                  "target": "this-model",
+                  "modifier": {
+                    "weapon_id": "torrent-of-burning-blood"
+                  }
                 }
-              },
-              {
-                "type": "weapon-grant",
-                "target": "this-model",
-                "modifier": {
-                  "weapon_id": "torrent-of-burning-blood"
+              ]
+            },
+            "id": "option-1"
+          },
+          {
+            "name": "Tzeentch",
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "keyword-grant",
+                  "target": "this-model",
+                  "modifier": {
+                    "keywords": [
+                      "TZEENTCH"
+                    ]
+                  }
+                },
+                {
+                  "type": "weapon-grant",
+                  "target": "this-model",
+                  "modifier": {
+                    "weapon_id": "warp-gaze"
+                  }
                 }
-              }
-            ]
+              ]
+            },
+            "id": "option-2"
+          },
+          {
+            "name": "Nurgle",
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "keyword-grant",
+                  "target": "this-model",
+                  "modifier": {
+                    "keywords": [
+                      "NURGLE"
+                    ]
+                  }
+                },
+                {
+                  "type": "weapon-grant",
+                  "target": "this-model",
+                  "modifier": {
+                    "weapon_id": "phlegm-bombardment"
+                  }
+                }
+              ]
+            },
+            "id": "option-3"
+          },
+          {
+            "name": "Slaanesh",
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "keyword-grant",
+                  "target": "this-model",
+                  "modifier": {
+                    "keywords": [
+                      "SLAANESH"
+                    ]
+                  }
+                },
+                {
+                  "type": "weapon-grant",
+                  "target": "this-model",
+                  "modifier": {
+                    "weapon_id": "scream-of-despair"
+                  }
+                }
+              ]
+            },
+            "id": "option-4"
           }
-        },
-        {
-          "name": "Tzeentch",
-          "effect": {
-            "type": "sequence",
-            "steps": [
-              {
-                "type": "keyword-grant",
-                "target": "this-model",
-                "modifier": {
-                  "keywords": [
-                    "TZEENTCH"
-                  ]
-                }
-              },
-              {
-                "type": "weapon-grant",
-                "target": "this-model",
-                "modifier": {
-                  "weapon_id": "warp-gaze"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "name": "Nurgle",
-          "effect": {
-            "type": "sequence",
-            "steps": [
-              {
-                "type": "keyword-grant",
-                "target": "this-model",
-                "modifier": {
-                  "keywords": [
-                    "NURGLE"
-                  ]
-                }
-              },
-              {
-                "type": "weapon-grant",
-                "target": "this-model",
-                "modifier": {
-                  "weapon_id": "phlegm-bombardment"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "name": "Slaanesh",
-          "effect": {
-            "type": "sequence",
-            "steps": [
-              {
-                "type": "keyword-grant",
-                "target": "this-model",
-                "modifier": {
-                  "keywords": [
-                    "SLAANESH"
-                  ]
-                }
-              },
-              {
-                "type": "weapon-grant",
-                "target": "this-model",
-                "modifier": {
-                  "weapon_id": "scream-of-despair"
-                }
-              }
-            ]
-          }
-        }
-      ]
+        ]
+      }
     },
     "scope": {
       "duration": "battle"
@@ -250,8 +258,10 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Lethal Hits"
+            "keywords": [
+              {
+                "keyword_id": "lethal-hits"
+              }
             ]
           }
         },
@@ -259,8 +269,13 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Sustained Hits 1"
+            "keywords": [
+              {
+                "keyword_id": "sustained-hits",
+                "parameters": {
+                  "value": 1
+                }
+              }
             ]
           }
         },
@@ -268,8 +283,10 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Precision"
+            "keywords": [
+              {
+                "keyword_id": "precision"
+              }
             ]
           }
         }
@@ -299,19 +316,23 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "subject": "this-model",
-          "of": {
-            "owner": "friendly",
-            "all_of": [
-              "LEGIONES DAEMONICA",
-              "INFANTRY"
-            ]
+          "filter": {
+            "within": {
+              "range": {
+                "inches": 3
+              },
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "LEGIONES DAEMONICA",
+                  "INFANTRY"
+                ]
+              }
+            }
           },
-          "range": {
-            "inches": 3
-          }
+          "subject": "this-model"
         }
       },
       "effect": {
@@ -345,16 +366,18 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "subject": "defender",
-          "all_of": [
-            "LEGIONES DAEMONICA"
-          ]
+          "filter": {
+            "all_of": [
+              "LEGIONES DAEMONICA"
+            ]
+          },
+          "subject": "defender"
         }
       },
       "effect": {
-        "type": "weapon-ability-grant",
+        "type": "keyword-grant",
         "target": {
           "owner": "friendly",
           "within": {
@@ -364,8 +387,8 @@
           }
         },
         "modifier": {
-          "abilities": [
-            "stealth"
+          "keywords": [
+            "STEALTH"
           ]
         }
       }
@@ -428,19 +451,23 @@
         "operator": "and",
         "operands": [
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "NURGLE"
-              ]
+              "filter": {
+                "all_of": [
+                  "NURGLE"
+                ]
+              }
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "LEGIONES DAEMONICA"
-              ]
+              "filter": {
+                "all_of": [
+                  "LEGIONES DAEMONICA"
+                ]
+              }
             }
           }
         ]
@@ -497,10 +524,22 @@
       "effect": {
         "type": "select-units",
         "selector": {
-          "owner": "enemy",
-          "max_count": 1,
-          "range_inches": 24,
-          "visibility_required": true
+          "filter": {
+            "owner": "enemy",
+            "within": {
+              "range": {
+                "inches": 24
+              },
+              "of": "this-model"
+            },
+            "visible": {
+              "to": "this-model"
+            }
+          },
+          "count": {
+            "min": 0,
+            "max": 1
+          }
         },
         "effect": {
           "type": "conditional",
@@ -557,7 +596,9 @@
           "target": {
             "owner": "enemy",
             "within": {
-              "range": {"inches":6}
+              "range": {
+                "inches": 6
+              }
             }
           },
           "modifier": {
@@ -571,7 +612,9 @@
           "target": {
             "owner": "enemy",
             "within": {
-              "range": {"inches":6}
+              "range": {
+                "inches": 6
+              }
             }
           },
           "modifier": {
@@ -613,9 +656,19 @@
       "effect": {
         "type": "select-units",
         "selector": {
-          "owner": "enemy",
-          "count": 1,
-          "range_inches": 6
+          "filter": {
+            "owner": "enemy",
+            "within": {
+              "range": {
+                "inches": 6
+              },
+              "of": "this-model"
+            }
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
         },
         "effect": {
           "type": "sequence",
@@ -1008,13 +1061,25 @@
       "effect": {
         "type": "select-units",
         "selector": {
-          "owner": "enemy",
-          "max_count": 1,
-          "range_inches": 12,
+          "filter": {
+            "owner": "enemy",
+            "within": {
+              "range": {
+                "inches": 12
+              },
+              "of": "this-model"
+            }
+          },
+          "count": {
+            "min": 0,
+            "max": 1
+          },
           "eligibility": {
-            "type": "unit-state",
+            "type": "matches",
             "parameters": {
-              "state": "battle-shocked"
+              "filter": {
+                "state": "battle-shocked"
+              }
             }
           }
         },
@@ -1146,38 +1211,52 @@
             {
               "type": "conditional",
               "condition": {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "all_of": [
-                    "PINK HORROR"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "PINK HORROR"
+                    ]
+                  }
                 }
               },
               "effect": {
                 "type": "return-models",
-                "target": "this-unit",
+                "target": {
+                  "member_of": "this-unit",
+                  "level": "model",
+                  "all_of": [
+                    "BLUE HORROR"
+                  ]
+                },
                 "modifier": {
-                  "count": 2,
-                  "model_keyword": "BLUE HORROR"
+                  "count": 2
                 }
               }
             },
             {
               "type": "conditional",
               "condition": {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "all_of": [
-                    "BLUE HORROR"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "BLUE HORROR"
+                    ]
+                  }
                 }
               },
               "effect": {
                 "type": "return-models",
-                "target": "this-unit",
+                "target": {
+                  "member_of": "this-unit",
+                  "level": "model",
+                  "all_of": [
+                    "BRIMSTONE HORROR"
+                  ]
+                },
                 "modifier": {
-                  "count": 1,
-                  "model_keyword": "BRIMSTONE HORROR"
+                  "count": 1
                 }
               }
             }
@@ -1215,11 +1294,13 @@
         "operator": "not",
         "operands": [
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "PINK HORROR"
-              ]
+              "filter": {
+                "all_of": [
+                  "PINK HORROR"
+                ]
+              }
             }
           }
         ]
@@ -1268,15 +1349,41 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
+          },
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "command"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          }
+        ]
       },
       "effect": {
         "type": "return-models",
-        "target": "this-unit",
+        "target": {
+          "level": "model",
+          "member_of": "this-unit",
+          "attachment_role": "bodyguard"
+        },
         "modifier": {
           "count": "D3"
         }
@@ -1289,7 +1396,7 @@
       "infernal-enrapturess"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "activated",
     "faction_id": "chaos-daemons"
   },
   {
@@ -1305,12 +1412,14 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "subject": "defender",
-          "all_of": [
-            "PSYKER"
-          ]
+          "filter": {
+            "all_of": [
+              "PSYKER"
+            ]
+          },
+          "subject": "defender"
         }
       },
       "effect": {
@@ -1324,10 +1433,14 @@
           }
         },
         "modifier": {
-          "abilities": [
-            "Hazardous"
-          ],
-          "weapon_name": "psychic"
+          "weapons": {
+            "name": "psychic"
+          },
+          "keywords": [
+            {
+              "keyword_id": "hazardous"
+            }
+          ]
         }
       }
     },
@@ -1382,19 +1495,23 @@
         "operator": "and",
         "operands": [
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "SLAANESH"
-              ]
+              "filter": {
+                "all_of": [
+                  "SLAANESH"
+                ]
+              }
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "LEGIONES DAEMONICA"
-              ]
+              "filter": {
+                "all_of": [
+                  "LEGIONES DAEMONICA"
+                ]
+              }
             }
           }
         ]
@@ -1458,7 +1575,9 @@
         "stat": "AP",
         "operation": "improve",
         "value": 1,
-        "weapon_type": "melee"
+        "weapons": {
+          "type": "melee"
+        }
       }
     },
     "scope": {
@@ -1650,7 +1769,7 @@
       "type": "mortal-wounds",
       "target": "defender",
       "modifier": {
-        "count": "1"
+        "count": 1
       }
     },
     "scope": {
@@ -1716,19 +1835,23 @@
         "operator": "and",
         "operands": [
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "TZEENTCH"
-              ]
+              "filter": {
+                "all_of": [
+                  "TZEENTCH"
+                ]
+              }
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "LEGIONES DAEMONICA"
-              ]
+              "filter": {
+                "all_of": [
+                  "LEGIONES DAEMONICA"
+                ]
+              }
             }
           }
         ]
@@ -1800,7 +1923,9 @@
           "stat": "S",
           "operation": "add",
           "value": 1,
-          "weapon_type": "ranged"
+          "weapons": {
+            "type": "ranged"
+          }
         }
       }
     },
@@ -1839,8 +1964,10 @@
             "type": "weapon-ability-grant",
             "target": "this-unit",
             "modifier": {
-              "abilities": [
-                "Lethal Hits"
+              "keywords": [
+                {
+                  "keyword_id": "lethal-hits"
+                }
               ]
             }
           },
@@ -1848,8 +1975,10 @@
             "type": "weapon-ability-grant",
             "target": "this-unit",
             "modifier": {
-              "abilities": [
-                "Ignores Cover"
+              "keywords": [
+                {
+                  "keyword_id": "ignores-cover"
+                }
               ]
             }
           }
@@ -1890,8 +2019,13 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Sustained Hits 1"
+          "keywords": [
+            {
+              "keyword_id": "sustained-hits",
+              "parameters": {
+                "value": 1
+              }
+            }
           ]
         }
       }
@@ -2033,21 +2167,25 @@
         "operator": "and",
         "operands": [
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "all_of": [
-                "NURGLE"
-              ]
+              "filter": {
+                "all_of": [
+                  "NURGLE"
+                ]
+              },
+              "subject": "defender"
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "all_of": [
-                "LEGIONES DAEMONICA"
-              ]
+              "filter": {
+                "all_of": [
+                  "LEGIONES DAEMONICA"
+                ]
+              },
+              "subject": "defender"
             }
           }
         ]
@@ -2082,7 +2220,7 @@
   },
   {
     "ability_id": "nurgles-rot-chaos-daemons",
-    "name": "Nurgle\u2019s Rot (Psychic)",
+    "name": "Nurgle’s Rot (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -2196,19 +2334,23 @@
         "operator": "and",
         "operands": [
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "KHORNE"
-              ]
+              "filter": {
+                "all_of": [
+                  "KHORNE"
+                ]
+              }
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "LEGIONES DAEMONICA"
-              ]
+              "filter": {
+                "all_of": [
+                  "LEGIONES DAEMONICA"
+                ]
+              }
             }
           }
         ]
@@ -2272,7 +2414,9 @@
         "stat": "A",
         "operation": "add",
         "value": 1,
-        "weapon_type": "melee"
+        "weapons": {
+          "type": "melee"
+        }
       }
     },
     "scope": {
@@ -2588,8 +2732,10 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Lethal Hits"
+          "keywords": [
+            {
+              "keyword_id": "lethal-hits"
+            }
           ]
         }
       }
@@ -2703,7 +2849,7 @@
   },
   {
     "ability_id": "deaths-heads-chaos-daemons",
-    "name": "Death\u2019s Heads",
+    "name": "Death’s Heads",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -2753,9 +2899,11 @@
       "type": "aura",
       "target": "friendly-within-aura",
       "modifier": {
-        "range": 6,
+        "range": {
+          "inches": 6
+        },
         "recipient_filter": {
-          "required_keywords": [
+          "all_of": [
             "KHORNE",
             "LEGIONES DAEMONICA"
           ]
@@ -2812,7 +2960,7 @@
         "type": "mortal-wounds",
         "target": "defender",
         "modifier": {
-          "count": "1"
+          "count": 1
         }
       }
     },
@@ -2849,8 +2997,10 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Assault"
+          "keywords": [
+            {
+              "keyword_id": "assault"
+            }
           ]
         }
       }
@@ -2886,8 +3036,17 @@
       "effect": {
         "type": "select-units",
         "selector": {
-          "owner": "enemy",
-          "count": 1,
+          "filter": {
+            "owner": "enemy",
+            "none_of": [
+              "MONSTER",
+              "VEHICLE"
+            ]
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
           "eligibility": {
             "type": "happened",
             "parameters": {
@@ -2900,11 +3059,7 @@
               },
               "window": "phase"
             }
-          },
-          "excluded_keywords": [
-            "MONSTER",
-            "VEHICLE"
-          ]
+          }
         },
         "effect": {
           "type": "dice-gated",
@@ -3004,7 +3159,7 @@
   },
   {
     "ability_id": "skullmasters-fury-chaos-daemons",
-    "name": "Skullmaster\u2019s Fury",
+    "name": "Skullmaster’s Fury",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -3025,8 +3180,10 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Devastating Wounds"
+          "keywords": [
+            {
+              "keyword_id": "devastating-wounds"
+            }
           ]
         }
       }
@@ -3263,8 +3420,13 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Sustained Hits 1"
+          "keywords": [
+            {
+              "keyword_id": "sustained-hits",
+              "parameters": {
+                "value": 1
+              }
+            }
           ]
         }
       }
@@ -3343,10 +3505,17 @@
         }
       },
       "modifier": {
-        "abilities": [
-          "Sustained Hits 1"
-        ],
-        "weapon_type": "melee"
+        "weapons": {
+          "type": "melee"
+        },
+        "keywords": [
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -3409,8 +3578,10 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Devastating Wounds"
+          "keywords": [
+            {
+              "keyword_id": "devastating-wounds"
+            }
           ]
         }
       }
@@ -3438,12 +3609,14 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "subject": "defender",
-          "all_of": [
-            "CHARACTER"
-          ]
+          "filter": {
+            "all_of": [
+              "CHARACTER"
+            ]
+          },
+          "subject": "defender"
         }
       },
       "effect": {
@@ -3500,10 +3673,22 @@
       "effect": {
         "type": "select-units",
         "selector": {
-          "owner": "enemy",
-          "count": 1,
-          "range_inches": 18,
-          "visibility_required": true
+          "filter": {
+            "owner": "enemy",
+            "within": {
+              "range": {
+                "inches": 18
+              },
+              "of": "this-model"
+            },
+            "visible": {
+              "to": "this-model"
+            }
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
         },
         "effect": {
           "type": "conditional",
@@ -3847,7 +4032,7 @@
       "type": "mortal-wounds",
       "target": "defender",
       "modifier": {
-        "count": "1"
+        "count": 1
       }
     },
     "scope": {
@@ -3862,7 +4047,7 @@
   },
   {
     "ability_id": "ptarixs-sorcerous-syphon-chaos-daemons",
-    "name": "P\u2019tarix\u2019s Sorcerous Syphon (Aura)",
+    "name": "P’tarix’s Sorcerous Syphon (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -3907,7 +4092,7 @@
   },
   {
     "ability_id": "xiratps-sorcerous-barrages-chaos-daemons",
-    "name": "Xirat\u2019p\u2019s Sorcerous Barrages (Psychic)",
+    "name": "Xirat’p’s Sorcerous Barrages (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -3919,7 +4104,7 @@
       "type": "mortal-wounds",
       "target": "defender",
       "modifier": {
-        "count": "1"
+        "count": 1
       }
     },
     "scope": {
@@ -3947,7 +4132,7 @@
       "steps": [
         {
           "type": "test",
-          "target": "attacker",
+          "target": "event-subject",
           "modifier": {
             "test": "battle-shock"
           }
@@ -3955,16 +4140,19 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-state",
+            "type": "roll-result",
             "parameters": {
-              "state": "battle-shocked"
+              "roll": "battle-shock",
+              "result": "failure"
             }
           },
           "effect": {
             "type": "targeting",
-            "target": "attacker",
+            "target": "event-subject",
             "modifier": {
+              "by": "event-subject",
               "may": "cannot-target",
+              "kind": "attack",
               "target": "this-model"
             }
           }
@@ -3980,7 +4168,16 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "chaos-daemons"
+    "faction_id": "chaos-daemons",
+    "trigger": {
+      "event": "targets-selected",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "kind": "attack"
+      }
+    }
   },
   {
     "ability_id": "mischief-and-confusion-chaos-daemons",
@@ -4156,11 +4353,13 @@
         "operator": "and",
         "operands": [
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "BEASTS OF NURGLE"
-              ]
+              "filter": {
+                "all_of": [
+                  "BEASTS OF NURGLE"
+                ]
+              }
             }
           },
           {
@@ -4433,21 +4632,81 @@
     "source_digest": "0e524fdaf7ee64cb5f60c520242753f0c05646c113efae18dd564ffb571a0c74",
     "version": "2025-q3",
     "effect": {
-      "type": "stance-select",
-      "mode": "re-selectable",
-      "scope": "unit",
-      "select": "start-of-battle-round",
-      "options": [
-        {
-          "name": "Wreathed in Shadows",
-          "effect": {
-            "type": "targeting",
-            "target": {
-              "owner": "enemy",
-              "level": "model"
+      "type": "ability-part",
+      "trigger": {
+        "event": "round-started"
+      },
+      "effect": {
+        "type": "stance-select",
+        "mode": "re-selectable",
+        "options": [
+          {
+            "name": "Wreathed in Shadows",
+            "effect": {
+              "type": "targeting",
+              "target": {
+                "owner": "enemy",
+                "level": "model"
+              },
+              "modifier": {
+                "may": "cannot-target",
+                "target": {
+                  "owner": "friendly",
+                  "any_of": [
+                    "LEGIONES DAEMONICA",
+                    "SHADOW LEGION"
+                  ],
+                  "within": {
+                    "range": {
+                      "inches": 6
+                    },
+                    "of": "this-model"
+                  }
+                },
+                "kind": "shoot",
+                "range": {
+                  "inches": 18
+                }
+              }
             },
-            "modifier": {
-              "may": "cannot-target",
+            "id": "option-1"
+          },
+          {
+            "name": "Pall of Despair",
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "test",
+                  "target": {
+                    "owner": "enemy",
+                    "within": {
+                      "range": {
+                        "inches": 9
+                      },
+                      "of": "this-model"
+                    }
+                  },
+                  "modifier": {
+                    "test": "battle-shock"
+                  }
+                },
+                {
+                  "type": "heal",
+                  "target": "this-model",
+                  "modifier": {
+                    "amount": "D3",
+                    "per": "unit"
+                  }
+                }
+              ]
+            },
+            "id": "option-2"
+          },
+          {
+            "name": "Shadow Lord",
+            "effect": {
+              "type": "re-roll",
               "target": {
                 "owner": "friendly",
                 "any_of": [
@@ -4461,68 +4720,15 @@
                   "of": "this-model"
                 }
               },
-              "kind": "shoot",
-              "range": {
-                "inches": 18
-              }
-            }
-          }
-        },
-        {
-          "name": "Pall of Despair",
-          "effect": {
-            "type": "sequence",
-            "steps": [
-              {
-                "type": "test",
-                "target": {
-                  "owner": "enemy",
-                  "within": {
-                    "range": {
-                      "inches": 9
-                    },
-                    "of": "this-model"
-                  }
-                },
-                "modifier": {
-                  "test": "battle-shock"
-                }
-              },
-              {
-                "type": "heal",
-                "target": "this-model",
-                "modifier": {
-                  "amount": "D3",
-                  "per": "unit"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "name": "Shadow Lord",
-          "effect": {
-            "type": "re-roll",
-            "target": {
-              "owner": "friendly",
-              "any_of": [
-                "LEGIONES DAEMONICA",
-                "SHADOW LEGION"
-              ],
-              "within": {
-                "range": {
-                  "inches": 6
-                },
-                "of": "this-model"
+              "modifier": {
+                "roll": "hit",
+                "subset": "ones"
               }
             },
-            "modifier": {
-              "roll": "hit",
-              "subset": "ones"
-            }
+            "id": "option-3"
           }
-        }
-      ]
+        ]
+      }
     },
     "scope": {
       "duration": "battle-round"
@@ -4629,7 +4835,7 @@
       "duration": "turn"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "LEGIONES DAEMONICA",
         "MOUNTED"
       ]
@@ -4682,11 +4888,11 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "LEGIONES DAEMONICA",
         "CHARACTER"
       ],
-      "excluded_keywords": [
+      "none_of": [
         "MONSTER"
       ]
     }
@@ -4730,10 +4936,14 @@
               "owner": "friendly"
             },
             "modifier": {
-              "abilities": [
-                "Assault"
-              ],
-              "weapon_type": "ranged"
+              "weapons": {
+                "type": "ranged"
+              },
+              "keywords": [
+                {
+                  "keyword_id": "assault"
+                }
+              ]
             }
           },
           {
@@ -4756,7 +4966,7 @@
       "duration": "turn"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "LEGIONES DAEMONICA",
         "BATTLELINE"
       ]
@@ -4791,7 +5001,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "LEGIONES DAEMONICA",
         "MOUNTED"
       ]
@@ -4841,7 +5051,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "LEGIONES DAEMONICA",
         "MOUNTED"
       ]
@@ -4876,11 +5086,11 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "LEGIONES DAEMONICA",
         "CHARACTER"
       ],
-      "excluded_keywords": [
+      "none_of": [
         "MONSTER"
       ]
     }
@@ -4914,7 +5124,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "LEGIONES DAEMONICA",
         "BATTLELINE"
       ]
@@ -4967,7 +5177,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "LEGIONES DAEMONICA",
         "BATTLELINE"
       ]
@@ -5000,7 +5210,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "LEGIONES DAEMONICA",
         "MOUNTED"
       ]
@@ -5035,7 +5245,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "LEGIONES DAEMONICA",
         "MOUNTED"
       ]
@@ -5074,9 +5284,11 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-state",
+            "type": "matches",
             "parameters": {
-              "state": "battle-shocked"
+              "filter": {
+                "state": "battle-shocked"
+              }
             }
           },
           "effect": {
@@ -5123,17 +5335,21 @@
             }
           },
           {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "subject": "event-subject",
-              "of": {
-                "owner": "friendly",
-                "all_of": [
-                  "LEGIONES DAEMONICA",
-                  "MOUNTED"
-                ]
+              "filter": {
+                "within": {
+                  "range": "engagement",
+                  "of": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "LEGIONES DAEMONICA",
+                      "MOUNTED"
+                    ]
+                  }
+                }
               },
-              "range": "engagement"
+              "subject": "event-subject"
             }
           }
         ]
@@ -5182,12 +5398,12 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "LEGIONES DAEMONICA",
         "CHARACTER",
         "SLAANESH"
       ],
-      "excluded_keywords": [
+      "none_of": [
         "MONSTER"
       ]
     }
@@ -5229,7 +5445,9 @@
           "stat": "A",
           "operation": "add",
           "value": 1,
-          "weapon_type": "melee"
+          "weapons": {
+            "type": "melee"
+          }
         }
       }
     },
@@ -5237,12 +5455,12 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "LEGIONES DAEMONICA",
         "CHARACTER",
         "KHORNE"
       ],
-      "excluded_keywords": [
+      "none_of": [
         "MONSTER"
       ]
     }
@@ -5266,10 +5484,22 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "count": 1,
-        "owner": "enemy",
-        "within_inches": 8,
-        "visibility_required": true
+        "filter": {
+          "owner": "enemy",
+          "within": {
+            "range": {
+              "inches": 8
+            },
+            "of": "this-model"
+          },
+          "visible": {
+            "to": "this-model"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        }
       },
       "effect": {
         "type": "mortal-wounds",
@@ -5288,12 +5518,12 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "LEGIONES DAEMONICA",
         "CHARACTER",
         "NURGLE"
       ],
-      "excluded_keywords": [
+      "none_of": [
         "MONSTER"
       ]
     }
@@ -5318,22 +5548,26 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Lethal Hits"
-        ],
-        "weapon_type": "ranged"
+        "weapons": {
+          "type": "ranged"
+        },
+        "keywords": [
+          {
+            "keyword_id": "lethal-hits"
+          }
+        ]
       }
     },
     "scope": {
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "LEGIONES DAEMONICA",
         "CHARACTER",
         "TZEENTCH"
       ],
-      "excluded_keywords": [
+      "none_of": [
         "MONSTER"
       ]
     }
@@ -5365,11 +5599,11 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "LEGIONES DAEMONICA",
         "BATTLELINE"
       ],
-      "excluded_keywords": [
+      "none_of": [
         "PINK",
         "HORRORS"
       ]
@@ -5394,10 +5628,22 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "count": 1,
-        "owner": "enemy",
-        "range_inches": 12,
-        "visibility_required": true
+        "filter": {
+          "owner": "enemy",
+          "within": {
+            "range": {
+              "inches": 12
+            },
+            "of": "this-model"
+          },
+          "visible": {
+            "to": "this-model"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        }
       },
       "effect": {
         "type": "stat-modifier",
@@ -5413,7 +5659,7 @@
       "duration": "turn"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "LEGIONES DAEMONICA",
         "BATTLELINE"
       ]
@@ -5438,26 +5684,35 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "attack-compare",
-        "parameters": {
-          "left": {
-            "of": "attacker",
-            "stat": "S"
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
+            }
           },
-          "comparison": "greater-than",
-          "right": {
-            "of": "defender",
-            "stat": "T"
+          {
+            "type": "attack-compare",
+            "parameters": {
+              "left": {
+                "of": "attacker",
+                "stat": "S"
+              },
+              "comparison": "gt",
+              "right": {
+                "of": "defender",
+                "stat": "T"
+              }
+            }
           }
-        }
+        ]
       },
       "effect": {
         "type": "roll-modifier",
-        "target": "this-unit",
+        "target": "attacker",
         "modifier": {
           "roll": "wound",
-          "weapon_type": "ranged",
-          "incoming": true,
           "operation": "subtract",
           "value": 1
         }
@@ -5467,10 +5722,26 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "LEGIONES DAEMONICA",
         "BATTLELINE"
       ]
+    },
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "BATTLELINE",
+          "LEGIONES DAEMONICA"
+        ]
+      }
     }
   },
   {
@@ -5495,39 +5766,51 @@
         "operator": "and",
         "operands": [
           {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent-turn"
-            }
-          },
-          {
-            "operator": "not",
+            "operator": "and",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "phase-is",
                 "parameters": {
-                  "subject": "recipient",
-                  "all_of": [
-                    "AIRCRAFT"
-                  ]
+                  "phase": "movement"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "opponent-turn"
                 }
               }
             ]
           },
           {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "of": {
-                "owner": "enemy"
-              },
-              "range": {
-                "inches": 8
+              "subject": "event-subject",
+              "filter": {
+                "within": {
+                  "of": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "KHORNE",
+                      "LEGIONES DAEMONICA"
+                    ]
+                  },
+                  "range": {
+                    "inches": 8
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "event-subject",
+              "filter": {
+                "any_of": [
+                  "KHORNE",
+                  "LEGIONES DAEMONICA"
+                ]
               }
             }
           }
@@ -5535,17 +5818,26 @@
       },
       "effect": {
         "type": "move",
-        "target": "this-model",
+        "target": "event-subject",
         "modifier": {
           "move_type": "surge",
-          "distance": 6
+          "distance": "D6"
         }
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy",
+        "none_of": [
+          "AIRCRAFT"
+        ]
+      }
+    }
   },
   {
     "ability_id": "blood-tainted-chaos-daemons",
@@ -5579,12 +5871,16 @@
             }
           },
           {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "of": {
-                "objective": {}
-              },
-              "range": "objective-control"
+              "filter": {
+                "within": {
+                  "range": "objective-control",
+                  "of": {
+                    "objective": {}
+                  }
+                }
+              }
             }
           },
           {
@@ -5622,19 +5918,30 @@
     "ability_type": "detachment",
     "behavior": "passive",
     "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "deep-strike"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "this-unit",
+          "filter": {
+            "all_of": [
+              "LEGIONES DAEMONICA"
+            ]
+          }
+        }
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "ability": "deep-strike"
+        }
       }
     },
     "scope": {
-      "duration": "permanent",
-      "applies_to": [
-        "LEGIONES DAEMONICA"
-      ]
+      "duration": "permanent"
     },
-    "community_notes": "[APPROX] Grants the reduced Deep Strike distance (set up more than 6\" from enemies instead of 9\") as an opaque ability grant. The placement preconditions \u2014 set up wholly within the army's Shadow of Chaos, and/or wholly within 6\" of a friendly Bloodthirster/Great Unclean One/Kairos Fateweaver/Keeper of Secrets/Lord of Change/Rotigus/Shalaxi Helbane/Skarbrand unit sharing its god keyword \u2014 are not gated in the DSL. Full rule in raw-text store."
+    "community_notes": "[APPROX] Grants the reduced Deep Strike distance (set up more than 6\" from enemies instead of 9\") as an opaque ability grant. The placement preconditions — set up wholly within the army's Shadow of Chaos, and/or wholly within 6\" of a friendly Bloodthirster/Great Unclean One/Kairos Fateweaver/Keeper of Secrets/Lord of Change/Rotigus/Shalaxi Helbane/Skarbrand unit sharing its god keyword — are not gated in the DSL. Full rule in raw-text store."
   },
   {
     "ability_id": "melancholic-miasma-chaos-daemons",
@@ -5702,11 +6009,13 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "KHORNE"
-              ]
+              "filter": {
+                "all_of": [
+                  "KHORNE"
+                ]
+              }
             }
           },
           "effect": {
@@ -5716,10 +6025,14 @@
                 "type": "weapon-ability-grant",
                 "target": "this-unit",
                 "modifier": {
-                  "abilities": [
-                    "Assault"
-                  ],
-                  "weapon_type": "ranged"
+                  "weapons": {
+                    "type": "ranged"
+                  },
+                  "keywords": [
+                    {
+                      "keyword_id": "assault"
+                    }
+                  ]
                 }
               },
               {
@@ -5739,22 +6052,24 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "TZEENTCH"
-              ]
+              "filter": {
+                "all_of": [
+                  "TZEENTCH"
+                ]
+              }
             }
           },
           "effect": {
             "type": "sequence",
             "steps": [
               {
-                "type": "weapon-ability-grant",
+                "type": "keyword-grant",
                 "target": "this-unit",
                 "modifier": {
-                  "abilities": [
-                    "Stealth"
+                  "keywords": [
+                    "STEALTH"
                   ]
                 }
               },
@@ -5782,11 +6097,13 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "NURGLE"
-              ]
+              "filter": {
+                "all_of": [
+                  "NURGLE"
+                ]
+              }
             }
           },
           "effect": {
@@ -5798,7 +6115,7 @@
                   "of": "attacker",
                   "stat": "S"
                 },
-                "comparison": "greater-than",
+                "comparison": "gt",
                 "right": {
                   "of": "defender",
                   "stat": "T"
@@ -5819,11 +6136,13 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "SLAANESH"
-              ]
+              "filter": {
+                "all_of": [
+                  "SLAANESH"
+                ]
+              }
             }
           },
           "effect": {
@@ -5850,11 +6169,13 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "UNDIVIDED"
-              ]
+              "filter": {
+                "all_of": [
+                  "UNDIVIDED"
+                ]
+              }
             }
           },
           "effect": {
@@ -5919,29 +6240,40 @@
     "ability_type": "detachment",
     "behavior": "activated",
     "effect": {
-      "type": "resource-die",
-      "target": "this-unit",
-      "modifier": {
-        "pool": "flux-token-pool",
-        "operation": "substitute",
-        "rolls": [
-          "advance",
-          "hit",
-          "wound",
-          "damage",
-          "save",
-          "hazard"
-        ]
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "this-unit",
+          "filter": {
+            "all_of": [
+              "LEGIONES DAEMONICA",
+              "TZEENTCH"
+            ]
+          }
+        }
+      },
+      "effect": {
+        "type": "resource-die",
+        "target": "this-unit",
+        "modifier": {
+          "pool": "flux-token-pool",
+          "operation": "substitute",
+          "rolls": [
+            "advance",
+            "hit",
+            "wound",
+            "damage",
+            "save",
+            "hazard"
+          ]
+        }
       }
     },
     "scope": {
-      "duration": "phase",
-      "applies_to": [
-        "LEGIONES DAEMONICA",
-        "TZEENTCH"
-      ]
+      "duration": "phase"
     },
-    "community_notes": "[APPROX] Modeled with the pooled-resource `replace-roll-from-pool` frame over a `flux-token-pool`, covering the rolls a Flux token affects for your LEGIONES DAEMONICA TZEENTCH units. Semantically a Flux token funds a re-roll (not a die-value substitution), and the token economy \u2014 starting with three tokens, the opponent gaining a token whenever you spend one, the reciprocal opponent re-roll, and the Command-phase regain \u2014 is not modeled. Pool state is not tracked by the buff layer (fail-safe). Full rule in raw-text store."
+    "community_notes": "[APPROX] Modeled with the pooled-resource `replace-roll-from-pool` frame over a `flux-token-pool`, covering the rolls a Flux token affects for your LEGIONES DAEMONICA TZEENTCH units. Semantically a Flux token funds a re-roll (not a die-value substitution), and the token economy — starting with three tokens, the opponent gaining a token whenever you spend one, the reciprocal opponent re-roll, and the Command-phase regain — is not modeled. Pool state is not tracked by the buff layer (fail-safe). Full rule in raw-text store."
   },
   {
     "ability_id": "beguiling-aura-chaos-daemons",
@@ -6029,7 +6361,9 @@
             "modifier": {
               "roll": "hit",
               "subset": "all-failures",
-              "weapon_type": "melee"
+              "weapons": {
+                "type": "melee"
+              }
             }
           },
           {
@@ -6038,7 +6372,9 @@
             "modifier": {
               "roll": "wound",
               "subset": "ones",
-              "weapon_type": "melee"
+              "weapons": {
+                "type": "melee"
+              }
             }
           }
         ]
@@ -6065,27 +6401,31 @@
         "operator": "and",
         "operands": [
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "all_of": [
-                "NURGLE"
-              ]
+              "filter": {
+                "all_of": [
+                  "NURGLE"
+                ]
+              },
+              "subject": "defender"
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "all_of": [
-                "LEGIONES DAEMONICA"
-              ]
+              "filter": {
+                "all_of": [
+                  "LEGIONES DAEMONICA"
+                ]
+              },
+              "subject": "defender"
             }
           }
         ]
       },
       "effect": {
-        "type": "weapon-ability-grant",
+        "type": "keyword-grant",
         "target": {
           "owner": "friendly",
           "within": {
@@ -6095,8 +6435,8 @@
           }
         },
         "modifier": {
-          "abilities": [
-            "stealth"
+          "keywords": [
+            "STEALTH"
           ]
         }
       }
@@ -6189,7 +6529,7 @@
   },
   {
     "ability_id": "argath-the-king-of-blades-daemonic-incursion-chaos-daemons",
-    "name": "A\u2019rgath, The King of Blades",
+    "name": "A’rgath, The King of Blades",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -6756,7 +7096,7 @@
   },
   {
     "ability_id": "fools-flight-blood-legion-chaos-daemons",
-    "name": "Fool\u2019s Flight",
+    "name": "Fool’s Flight",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -6776,7 +7116,7 @@
   },
   {
     "ability_id": "furys-cage-blood-legion-chaos-daemons",
-    "name": "Fury\u2019s Cage",
+    "name": "Fury’s Cage",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",

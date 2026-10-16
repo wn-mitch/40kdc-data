@@ -194,7 +194,7 @@ describe("menu holders and stance flags", () => {
         normalizeFingerprintParameters("stance-selection-capacity",
           { stance_id: "rite-x", additional_selections: 1, allocation: "choose-one-option", option_ids: ["zeal", "aegis"] },
           currentFamilyVersion("stance-selection-capacity"))]);
-    expect(capacity.modifier).toEqual({ stance_id: "rite-x", additional_selections: 1, allocation: "choose-one-option", option_ids: ["aegis", "zeal"] });
+    expect(capacity.modifier).toEqual({ ability_id: "rite-x", additional_selections: 1, allocation: "choose-one-option", options: [{ ability_id: "rite-x", option_id: "aegis" }, { ability_id: "rite-x", option_id: "zeal" }] });
     expect(() => normalizeFingerprintParameters("stance-selection-capacity",
       { stance_id: "rite-x", additional_selections: 1, allocation: "fixed-option", option_id: "zeal", option_ids: ["aegis", "zeal"] },
       currentFamilyVersion("stance-selection-capacity"))).toThrow(/option_ids/u);
@@ -212,9 +212,10 @@ describe("DSL schema and describer for activations", () => {
     expect(effectOk(activate({ select: { by: "player" }, all_options: true }))).toBe(false);
     expect(effectOk(activate({ all_options: true, exclusive: true }))).toBe(false);
     expect(effectOk(activate({ select: { by: "player", count: 1 } }))).toBe(false);
-    const capacity = (modifier: Record<string, unknown>) => ({ type: "stance-selection-capacity", modifier: { stance_id: "rite-x", additional_selections: 1, ...modifier } });
-    expect(effectOk(capacity({ allocation: "choose-one-option", option_ids: ["aegis", "zeal"] }))).toBe(true);
-    expect(effectOk(capacity({ allocation: "fixed-option", option_id: "zeal", option_ids: ["aegis", "zeal"] }))).toBe(false);
+    const capacity = (modifier: Record<string, unknown>) => ({ type: "stance-selection-capacity", modifier: { ability_id: "rite-x", additional_selections: 1, ...modifier } });
+    const options = [{ ability_id: "rite-x", option_id: "aegis" }, { ability_id: "rite-x", option_id: "zeal" }];
+    expect(effectOk(capacity({ allocation: "choose-one-option", options }))).toBe(true);
+    expect(effectOk(capacity({ allocation: "fixed-option", option: options[1], options }))).toBe(false);
   });
 
   it("says which options are active and whether they replace or join the others", () => {
@@ -224,10 +225,10 @@ describe("DSL schema and describer for activations", () => {
     expect(render(activate({ select: { by: "player", from: ["aegis", "zeal"] }, exclusive: true }))).toBe("Select one of the Aegis or Zeal options of Rite X for the unit, in place of any already active.");
     expect(render(activate({ select: { by: "player", count: 2 } }))).toBe("Select 2 options of Rite X for the unit, in addition to any already active.");
     expect(render(activate({ select: { by: "roll" }, exclusive: true }))).toBe("Make a new Rite X roll and activate one result it allows for the unit, in place of any already active.");
-    expect(render({ type: "stance-selection-capacity", modifier: { stance_id: "rite-x", additional_selections: 1, allocation: "choose-one-option", option_ids: ["aegis", "zeal"] } }))
+    expect(render({ type: "stance-selection-capacity", modifier: { ability_id: "rite-x", additional_selections: 1, allocation: "choose-one-option", options: [{ ability_id: "rite-x", option_id: "aegis" }, { ability_id: "rite-x", option_id: "zeal" }] } }))
       .toBe("You can select Aegis or Zeal one additional time per battle, shared between them.");
     const stance = { type: "stance-select", mode: "re-selectable", options: [{ name: "Aegis", effect: activate({}) }, { name: "Zeal", effect: activate({}) }] };
-    expect(render({ ...stance, additive: true })).toContain("select one (in addition to any already active):");
+    expect(render({ ...stance, additive: true })).toMatch(/select one \(in addition to any already active\):/iu);
     expect(render(stance)).not.toContain("in addition");
   });
 });

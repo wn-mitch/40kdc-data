@@ -28,7 +28,6 @@ from wh40kdc.translate.effect_inline import (
     dice_table_head,
     dice_table_result_label,
     inline,
-    leader_model_ability_grant_clause,
     leadership_test,
     part_head,
     part_inline,
@@ -45,6 +44,7 @@ from wh40kdc.translate.effect_region import (
     shared_usage_clause,
 )
 from wh40kdc.translate.effect_select import (
+    _selector_level,
     designated_recipient_context,
     designation_label,
     designation_target_subject,
@@ -66,9 +66,10 @@ from wh40kdc.translate.effect_words import (
     capitalize,
     is_num,
     jstr,
+    or_list,
     test_name,
 )
-from wh40kdc.translate.timing import describe_timing, event_clause
+from wh40kdc.translate.timing import describe_timing
 from wh40kdc.translate.trigger import describe_trigger, normalize_triggers
 
 Effect = dict[str, Any]
@@ -195,8 +196,6 @@ def describe_effect(e: Effect, depth: int = 0, ctx: Ctx | None = None) -> str:
         return "\n".join(lines)
     if t == "select-units":
         return _select_units_block(e, depth, ctx, indent, arrow)
-    if t == "leader-model-ability-grant":
-        return f"{indent}{arrow}{capitalize(leader_model_ability_grant_clause(e, ctx))}."
     if t == "persistent-designation":
         if e.get("operation") == "replace":
             return f"{indent}{arrow}{capitalize(persistent_designation_replacement(e))}."
@@ -220,15 +219,10 @@ def describe_effect(e: Effect, depth: int = 0, ctx: Ctx | None = None) -> str:
     if t == "designate-target":
         return _designate_target_block(e, depth, ctx, indent, arrow)
     if t == "stance-select":
-        when = (
-            capitalize(event_clause(e["select"]))
-            if isinstance(e.get("select"), str)
-            else "At the start of your turn"
-        )
         consum = " (each may be chosen once per battle)" if e.get("mode") == "consumable" else ""
         return "\n".join(
             [
-                f"{indent}{arrow}{when}, {stance_pick(e)}{consum}{stance_additive(e)}:",
+                f"{indent}{arrow}{capitalize(stance_pick(e))}{consum}{stance_additive(e)}:",
                 *_option_lines(e, indent, ctx),
             ]
         )
@@ -278,7 +272,7 @@ def _select_units_block(e: Effect, depth: int, ctx: Ctx, indent: str, arrow: str
     if _is_container(inner):
         bare = re.sub(r"\.$", "", header)
         if select_units_plural(selector):
-            noun = "model" if selector.get("target_kind") == "model" else "unit"
+            noun = _selector_level(selector)
             nested = describe_effect(inner, depth + 2, inner_ctx)
             return f"{bare}:\n{indent}  -> For each selected {noun}:\n{nested}"
         return f"{bare}:\n" + describe_effect(inner, depth + 1, inner_ctx)
@@ -298,9 +292,7 @@ def _designate_target_block(e: Effect, depth: int, ctx: Ctx, indent: str, arrow:
     _, dur_trail = duration_clauses(e.get("duration"))
     when = designate_when(applies, True)
     when_clause = f"{capitalize(dur_trail)}, {when}" if dur_trail else capitalize(when)
-    head = (
-        f"{indent}{arrow}{select_lead} one {designation_target_subject(sel)}{desig}. {when_clause}"
-    )
+    head = f"{indent}{arrow}{select_lead} {designation_target_subject(sel)}{desig}. {when_clause}"
     recipient_ctx = designated_recipient_context(applies, ctx)
     if _is_container(inner):
         return f"{head}:\n" + describe_effect(inner, depth + 1, recipient_ctx)
@@ -308,33 +300,40 @@ def _designate_target_block(e: Effect, depth: int, ctx: Ctx, indent: str, arrow:
 
 
 def describe_scope(s: dict[str, Any] | None) -> str:
-    """``Scope: aura (6"). Duration: phase.`` — retained for the legacy translate CLI footer."""
+    """Render canonical scope range and duration without legacy aliases."""
     if not s or (not s.get("range") and not s.get("duration")):
         return ""
     range_ = dekebab(s.get("range") or "")
-    inches = f' ({jstr(s["range_inches"])}")' if s.get("range_inches") is not None else ""
     d = s.get("duration") or ""
-    duration = (
-        "until the start of the next battle round"
-        if d == "until-next-battle-round"
-        else "until the start of your next turn"
-        if d == "until-start-next-turn"
-        else dekebab(d)
-    )
-    return f"Scope: {range_}{inches}. Duration: {duration}."
+    return f"Scope: {range_}. Duration: {dekebab(d)}."
 
 
 def describe_applies_to(a: dict[str, Any] | None) -> str:
-    """``Applies to: units with Possessed.`` — the roster-highlighting audience."""
+    """Render the canonical static roster-highlighting keyword subset."""
     if not a:
         return ""
-    required = a.get("required_keywords") or []
-    excluded = a.get("excluded_keywords") or []
-    if not required and not excluded:
+    required = a.get("all_of") or []
+    any_of = a.get("any_of") or []
+    excluded = a.get("none_of") or []
+    not_all = a.get("not_all_of") or []
+    if not required and not any_of and not excluded and not not_all:
         return ""
-    base = f"units with {', '.join(required)}" if required else "all units"
-    exc = f" (excluding {', '.join(excluded)})" if excluded else ""
-    return f"Applies to: {base}{exc}."
+    positive = " and ".join(
+        part
+        for part in (
+            ", ".join(map(str, required)),
+            f"at least one of {or_list(list(map(str, any_of)))}" if any_of else "",
+        )
+        if part
+    )
+    base = f"units with {positive}" if positive else "all units"
+    exc = f" (excluding {', '.join(map(str, excluded))})" if excluded else ""
+    partial = (
+        f" (excluding units with all of {', '.join(map(str, not_all))})"
+        if not_all
+        else ""
+    )
+    return f"Applies to: {base}{exc}{partial}."
 
 
 def _assemble_sentence(parts: list[str]) -> str:

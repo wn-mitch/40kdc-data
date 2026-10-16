@@ -27,68 +27,24 @@ func rollHead(e map[string]any) string {
 	return "roll " + diceCase(e["dice"]) + extra + kind
 }
 
-var objectiveOrigins = map[string]string{"bearer": "the bearer", "bearer-unit": "the bearer's unit"}
-
-// objectiveSelectorPhrase renders "one objective marker you control that the
-// bearer's unit is within range of".
+// objectiveSelectorPhrase renders a canonical objective selector including
+// inclusive cardinality, eligibility, binding and per-target allowance.
 func objectiveSelectorPhrase(sel map[string]any) string {
-	each := sel["count"] == "each"
-	countV := sel["count"]
-	if countV == nil {
-		countV = 1.0
+	count, plural := selectorCountPhrase(sel)
+	noun := "objective marker"
+	if plural {
+		noun = "objective markers"
 	}
-	n := jsNumber(countV)
-	noun := "objective markers"
-	if each || n == 1 {
-		noun = "objective marker"
+	base := objectivePhrase(mapOr(sel["filter"]), false, noun)
+	eligibility := ""
+	if condition, ok := asMap(sel["eligibility"]); ok && condition != nil {
+		eligibility = " " + describeSelectionEligibility(condition)
 	}
-	filter := map[string]any{}
-	for k, v := range mapOr(sel["filter"]) {
-		filter[k] = v
-	}
-	switch sel["controlled_by"] {
-	case "your-army":
-		filter["controlled_by"] = "friendly"
-	case "opponent":
-		filter["controlled_by"] = "enemy"
-	}
-	base := objectivePhrase(filter, false, noun)
-	quantity := ejstr(n)
-	switch {
-	case each:
-		quantity = "each"
-	case n == 1:
-		quantity = "one"
-	}
-	originV := sel["origin"]
-	if originV == nil {
-		originV = "bearer"
-	}
-	origin, ok := objectiveOrigins[ejstr(originV)]
-	if !ok {
-		origin = "the bearer"
-	}
-	s := quantity + " " + base
-	switch {
-	case sel["range"] == "objective-control":
-		s += " that " + origin + " is within range of"
-	case sel["range"] != nil:
-		s += " within " + rangePhrase(sel["range"]) + " of " + origin
-	case sel["range_inches"] != nil:
-		s += " within " + ejstr(sel["range_inches"]) + "\" of " + origin
-	}
-	if req, ok := asMap(sel["requires_unit"]); ok && req != nil {
-		who := "a friendly"
-		if req["owner"] == "enemy" {
-			who = "an enemy"
-		}
-		s += " with " + who + " unit with the " + abilityLabel(req["requires_ability"]) + " ability within range of it"
-	}
-	return s
+	return count + " " + base + eligibility + selectionBinding(sel) + selectionLimitCanonical(sel, "objective marker")
 }
 
 func objectiveSelectionLimit(sel map[string]any) string {
-	limit, ok := asMap(sel["selection_limit"])
+	limit, ok := asMap(sel["limit"])
 	if !ok || limit == nil {
 		return ""
 	}

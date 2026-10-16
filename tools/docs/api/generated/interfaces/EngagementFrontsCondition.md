@@ -6,9 +6,9 @@
 
 # Interface: EngagementFrontsCondition
 
-Defined in: [generated.ts:2201](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2201)
+Defined in: [generated.ts:2201](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2201)
 
-[board] Mission: you are engaged on at least count_min fronts.
+[board] Mission: you are engaged on at least the required `count.min` fronts.
 
 ## Properties
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:2201](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **type**: `"engagement-fronts"`
 
-Defined in: [generated.ts:2202](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2202)
+Defined in: [generated.ts:2202](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2202)
 
 ***
 
@@ -24,8 +24,8 @@ Defined in: [generated.ts:2202](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **parameters**: `object`
 
-Defined in: [generated.ts:2203](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2203)
+Defined in: [generated.ts:2203](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2203)
 
-#### count\_min
+#### count
 
-> **count\_min**: `number`
+> **count**: [`CountBounds`](CountBounds.md)

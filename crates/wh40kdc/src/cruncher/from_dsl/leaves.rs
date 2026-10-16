@@ -4,32 +4,26 @@
 
 use serde_json::{json, Value};
 
+use super::damage_leaves::{
+    combine_optional, set_modifier, skill_modifier, unresolved_weapon_scope, weapon_applicability,
+};
 use super::js::*;
 use super::TranslationPerspective::{Attacker, Target};
 use super::{applies_to_buffed_unit, buff, classify_target, walk, Out, Side, WalkOpts};
-use crate::cruncher::buffs::WeaponKeywordRef;
 
-/// Narrowing keys that scope a buff to a named weapon or a model subset the cruncher cannot
-/// resolve here; applying the buff unfiltered would over-apply it.
-const UNHONORABLE_NARROWING: &[&str] = &[
-    "weapon_name",
-    "weapon_profile",
-    "weapon_keyword",
-    "weapon_ref",
-    "weapon_filter",
-    "model_filter",
-    "model_scope",
-];
+/// Model subsets and bound weapon references need state the damage context does not carry.
+const UNHONORABLE_NARROWING: &[&str] = &["model_filter", "model_scope"];
 
-fn unhonorable_narrowing(m: &Obj) -> Option<&'static str> {
+pub(super) fn unhonorable_narrowing(m: &Obj) -> Option<&'static str> {
     UNHONORABLE_NARROWING
         .iter()
         .copied()
         .find(|k| present(m, k).is_some())
+        .or_else(|| unresolved_weapon_scope(m))
 }
 
 /// A roll kind for a diagnostic: "hit", or the ability whose dice it is.
-fn roll_label(roll: Option<&Value>) -> String {
+pub(super) fn roll_label(roll: Option<&Value>) -> String {
     match object(roll)
         .and_then(|r| r.get("of_ability"))
         .and_then(Value::as_str)
@@ -56,10 +50,15 @@ pub(super) fn reroll(node: &Obj, opts: &WalkOpts, out: &mut Out) {
         return;
     }
     let roll = m.get("roll");
-    // A `value: 1` on a re-roll unambiguously means "re-roll rolls of 1".
+    // A `value: 1` on a re-roll unambiguously means "re-roll rolls of 1". An unrestricted optional
+    // re-roll (`result_scope: "any-result"`, no `subset`) is "all-failures" to the expected-value
+    // engine: a rational player re-rolls only failures.
     let one = Value::from("ones");
+    let all_failures = Value::from("all-failures");
     let subset = if m.get("value").and_then(Value::as_f64) == Some(1.0) {
         Some(&one)
+    } else if m.get("subset").is_none() && is_str(m, "result_scope", "any-result") {
+        Some(&all_failures)
     } else {
         m.get("subset")
     };
@@ -79,10 +78,12 @@ pub(super) fn reroll(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     if matches!(r, Some("hit" | "wound" | "save" | "damage"))
         && matches!(s, Some("ones" | "all-failures"))
     {
-        out.applied.push(buff(
+        emit(
             opts,
+            out,
+            &weapon_applicability(m),
             json!({ "type": "reroll", "roll": r, "subset": s }),
-        ));
+        );
         return;
     }
     out.unsupported(
@@ -147,13 +148,18 @@ pub(super) fn roll_modifier(node: &Obj, opts: &WalkOpts, out: &mut Out) {
             return;
         }
     };
-    out.applied
-        .push(buff(opts, json!({ "type": ty, "value": value })));
+    emit(
+        opts,
+        out,
+        &weapon_applicability(m),
+        json!({ "type": ty, "value": value }),
+    );
 }
 
-/// `attack_type` (or `weapon_type`) melee/ranged as the phase that attack happens in.
-fn attack_type_applicability(m: &Obj) -> Option<Value> {
-    let kind = present(m, "attack_type").or_else(|| m.get("weapon_type"));
+/// Attack type and canonical weapon type both narrow the attack phase.
+pub(super) fn attack_type_applicability(m: &Obj) -> Option<Value> {
+    let kind =
+        present(m, "attack_type").or_else(|| object(m.get("weapons")).and_then(|w| w.get("type")));
     phase_gate(kind.and_then(Value::as_str))
 }
 
@@ -165,7 +171,7 @@ fn phase_gate(kind: Option<&str>) -> Option<Value> {
     }
 }
 
-fn emit(opts: &WalkOpts, out: &mut Out, gate: &Option<Value>, contribution: Value) {
+pub(super) fn emit(opts: &WalkOpts, out: &mut Out, gate: &Option<Value>, contribution: Value) {
     let mut b = buff(opts, contribution);
     if let Some(g) = gate {
         b["applicableWhen"] = g.clone();
@@ -187,15 +193,30 @@ pub(super) fn stat_modifier(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     }
     let stat = m.get("stat");
     let on_buffed = applies_to_buffed_unit(node, opts.perspective);
-    let gate = attack_type_applicability(m);
+    // Attack and canonical weapon scopes retain every applicable gate.
+    let gate = combine_optional(attack_type_applicability(m), weapon_applicability(m));
+    let unsupported_operation = |what: &str| {
+        format!(
+            "stat-modifier {what}: operation \"{}\" not supported",
+            js_string(m.get("operation"))
+        )
+    };
     match stat.and_then(Value::as_str) {
         // AP is stored negative and has offensive/defensive variants.
         Some("AP") => {
+            // Worsening the AP of attacks against the buffed unit; the engine floors AP at 0.
             if classify_target(node) == Side::Attacker {
-                out.unsupported(
-                    "stat-modifier AP on the attacker: defender-side AP reduction is not modelled by the buff layer",
-                    node,
-                );
+                if opts.perspective != Target {
+                    out.unsupported(
+                        "stat-modifier AP on the attacker: defender-side stat; applies when the buffed unit is the target",
+                        node,
+                    );
+                    return;
+                }
+                match ap_delta(m) {
+                    Some(d) => emit(opts, out, &gate, json!({ "type": "ap-mod", "value": d })),
+                    None => out.unsupported(unsupported_operation("AP"), node),
+                }
                 return;
             }
             if opts.perspective != Attacker || !applies_to_buffed_unit(node, Attacker) {
@@ -203,28 +224,21 @@ pub(super) fn stat_modifier(node: &Obj, opts: &WalkOpts, out: &mut Out) {
             }
             match ap_delta(m) {
                 Some(d) => emit(opts, out, &gate, json!({ "type": "ap-mod", "value": d })),
-                None => out.unsupported(
-                    format!(
-                        "stat-modifier AP: operation \"{}\" not supported",
-                        js_string(m.get("operation"))
-                    ),
-                    node,
-                ),
+                None => out.unsupported(unsupported_operation("AP"), node),
             }
             return;
         }
-        // Ballistic Skill on the attacker penalises incoming hit rolls: a hit-mod when targeted.
-        Some("BS") => {
-            if opts.perspective != Target || classify_target(node) != Side::Attacker {
-                return;
-            }
-            if let Some(bs) = signed_value(m) {
-                out.applied
-                    .push(buff(opts, json!({ "type": "hit-mod", "value": bs })));
-            }
+        // WS/BS on the attacker penalises incoming hit rolls of that attack type: a hit-mod gated
+        // to its phase when targeted. On the buffed unit it changes the characteristic its own
+        // attacks hit on.
+        Some(skill @ ("BS" | "WS")) => {
+            skill_modifier(node, m, skill, on_buffed, &gate, opts, out);
             return;
         }
         _ => {}
+    }
+    if is_str(m, "operation", "set") && set_modifier(node, m, on_buffed, &gate, opts, out) {
+        return;
     }
     let Some(value) = signed_value(m) else {
         out.unsupported(
@@ -265,7 +279,7 @@ pub(super) fn stat_modifier(node: &Obj, opts: &WalkOpts, out: &mut Out) {
                 );
             }
         }
-        // "+1 Sv" improves the save: a save-mod of -value on the needed roll.
+        // Improvement is a save-roll bonus; literal characteristic addition worsens the Save.
         Some("Sv") => {
             if opts.perspective != Target {
                 out.unsupported(
@@ -273,11 +287,19 @@ pub(super) fn stat_modifier(node: &Obj, opts: &WalkOpts, out: &mut Out) {
                     node,
                 );
             } else if on_buffed {
+                let save_mod = if matches!(
+                    m.get("operation").and_then(Value::as_str),
+                    Some("improve" | "worsen")
+                ) {
+                    value
+                } else {
+                    -value
+                };
                 emit(
                     opts,
                     out,
                     &gate,
-                    json!({ "type": "save-mod", "value": -value }),
+                    json!({ "type": "save-mod", "value": save_mod }),
                 );
             }
         }
@@ -293,13 +315,17 @@ pub(super) fn stat_modifier(node: &Obj, opts: &WalkOpts, out: &mut Out) {
 
 pub(super) fn feel_no_pain(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     // FNP ablates incoming damage: irrelevant while the unit is attacking.
-    if opts.perspective != Target {
+    if opts.perspective != Target || !applies_to_buffed_unit(node, Target) {
         return;
     }
     let Some(m) = object(node.get("modifier")) else {
         out.unsupported("feel-no-pain: missing modifier object", node);
         return;
     };
+    if let Some(key) = unhonorable_narrowing(m) {
+        out.unsupported(format!("feel-no-pain: unresolved {key} selector"), node);
+        return;
+    }
     let Some(threshold) = finite(m.get("threshold")) else {
         out.unsupported("feel-no-pain: threshold not numeric", node);
         return;
@@ -333,7 +359,7 @@ pub(super) fn feel_no_pain(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     } else {
         json!({ "type": "feel-no-pain", "threshold": threshold })
     };
-    out.applied.push(buff(opts, contribution));
+    emit(opts, out, &weapon_applicability(m), contribution);
 }
 
 pub(super) fn keyword_grant(node: &Obj, opts: &WalkOpts, out: &mut Out) {
@@ -344,35 +370,49 @@ pub(super) fn keyword_grant(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     let Some(m) = object(node.get("modifier")) else {
         return;
     };
-    // A selector by keyword would apply the grant to every weapon of the unit: refuse it (as the
-    // TS cruncher does) rather than over-apply it.
-    if m.get("weapon_keyword")
-        .is_some_and(|value| !value.is_null())
-    {
-        out.unsupported("weapon-ability-grant: weapon_keyword selects weapons by a keyword the cruncher cannot resolve", node);
+    if let Some(key) = unhonorable_narrowing(m) {
+        out.unsupported(
+            format!("weapon-ability-grant: unresolved {key} selector"),
+            node,
+        );
         return;
     }
-    for keyword in list(m.get("removes")).iter().filter_map(Value::as_str) {
-        let fragment = json!({ "removes": [keyword] });
+    for keyword in list(m.get("removes")) {
+        let label = if keyword.get("keyword_id").and_then(Value::as_str).is_some() {
+            super::applicability::keyword_label(keyword)
+        } else {
+            "unresolved keyword".into()
+        };
         out.unsupported.push((
-            format!("weapon-ability-removal: the cruncher does not model removing a weapon ability (\"{keyword}\")"),
-            fragment,
+            format!(
+                "weapon-ability-removal: the cruncher does not model removing a weapon ability (\"{label}\")"
+            ),
+            json!({ "removes": [keyword] }),
         ));
     }
-    let raws: Vec<&str> = list(m.get("abilities"))
-        .iter()
-        .filter_map(Value::as_str)
-        .collect();
-    let gate = phase_gate(m.get("weapon_type").and_then(Value::as_str));
-    for raw in raws {
-        let Some(r) = parse_keyword_grant(raw) else {
+    let gate = weapon_applicability(m);
+    for raw in list(m.get("keywords")) {
+        if raw
+            .get("parameters")
+            .and_then(|p| p.get("value"))
+            .is_some_and(|value| !value.is_number() && !value.is_string())
+        {
             out.unsupported.push((
-                format!("keyword-grant: cannot parse \"{raw}\" to a catalog keyword"),
-                json!({ "keyword": raw }),
+                "weapon-ability-grant: keyword rating quantity is unresolved".into(),
+                raw.clone(),
+            ));
+            continue;
+        }
+        let Ok(reference) =
+            serde_json::from_value::<crate::cruncher::buffs::WeaponKeywordRef>(raw.clone())
+        else {
+            out.unsupported.push((
+                "weapon-ability-grant: malformed catalog keyword reference".into(),
+                raw.clone(),
             ));
             continue;
         };
-        let ref_json = serde_json::to_value(&r).expect("a keyword ref serializes");
+        let ref_json = serde_json::to_value(reference).expect("a keyword ref serializes");
         emit(
             opts,
             out,
@@ -390,15 +430,21 @@ pub(super) fn damage_reduction(node: &Obj, opts: &WalkOpts, out: &mut Out) {
         out.unsupported("damage-reduction: missing modifier object", node);
         return;
     };
+    if let Some(key) = unhonorable_narrowing(m) {
+        out.unsupported(format!("damage-reduction: unresolved {key} selector"), node);
+        return;
+    }
     let reduction = m.get("reduction");
     if let Some(r) = reduction
         .and_then(Value::as_f64)
         .filter(|r| r.is_finite() && *r > 0.0)
     {
-        out.applied.push(buff(
+        emit(
             opts,
+            out,
+            &weapon_applicability(m),
             json!({ "type": "damage-reduction", "value": r }),
-        ));
+        );
         return;
     }
     if let Some(r @ ("half" | "to-zero")) = reduction.and_then(Value::as_str) {
@@ -425,11 +471,20 @@ pub(super) fn invulnerable_save(node: &Obj, opts: &WalkOpts, out: &mut Out) {
         out.unsupported("invulnerable-save: missing modifier object", node);
         return;
     };
+    if let Some(key) = unhonorable_narrowing(m) {
+        out.unsupported(
+            format!("invulnerable-save: unresolved {key} selector"),
+            node,
+        );
+        return;
+    }
     match finite(m.get("invuln_sv")).filter(|t| (2.0..=7.0).contains(t)) {
-        Some(t) => out.applied.push(buff(
+        Some(t) => emit(
             opts,
+            out,
+            &weapon_applicability(m),
             json!({ "type": "invulnerable-save", "threshold": t }),
-        )),
+        ),
         None => out.unsupported(
             format!(
                 "invulnerable-save: invuln_sv \"{}\" is not a valid save threshold (2–7)",
@@ -447,50 +502,40 @@ pub(super) fn named_region_state(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     let empty = Obj::new();
     let modifier = object(node.get("modifier")).unwrap_or(&empty);
     let consumer = object(modifier.get("consumer")).unwrap_or(&empty);
-    let gate = object(consumer.get("beneficiary_gate"));
-    let keywords: Vec<&str> = gate
-        .map(|g| {
-            list(g.get("keywords"))
-                .iter()
-                .filter_map(Value::as_str)
-                .collect()
-        })
-        .unwrap_or_default();
-    let operator = gate.and_then(|g| g.get("operator")).and_then(Value::as_str);
-    let attacker = opts.context.attacker_keywords.as_ref();
-    let (Some(op @ ("and" | "or")), Some(attacker)) = (operator, attacker) else {
-        out.unsupported(
-            "named-region-state beneficiary gate cannot be evaluated against current attacker keywords",
-            node,
-        );
+    let Some(filter) = consumer.get("beneficiary_filter") else {
+        out.unsupported("named-region-state beneficiary filter is missing", node);
         return;
     };
-    if keywords.is_empty() {
-        out.unsupported(
-            "named-region-state beneficiary gate cannot be evaluated against current attacker keywords",
-            node,
-        );
-        return;
-    }
-    let current: Vec<String> = attacker.iter().map(|k| k.to_lowercase()).collect();
-    let has = |k: &&str| current.contains(&k.to_lowercase());
-    let eligible = if op == "and" {
-        keywords.iter().all(has)
-    } else {
-        keywords.iter().any(has)
-    };
-    if !eligible {
-        return;
+    match super::conditions::matches_unit_filter(
+        filter,
+        opts.context,
+        super::TranslationPerspective::Attacker,
+        "friendly",
+    ) {
+        Some(false) => return,
+        None => {
+            out.unsupported(
+                "named-region-state beneficiary filter cannot be evaluated against current attacker facts",
+                node,
+            );
+            return;
+        }
+        Some(true) => {}
     }
     let Some(default_branch) = object(consumer.get("default_branch")) else {
         out.unsupported("named-region-state default branch is missing", node);
         return;
     };
-    walk(
-        default_branch.get("effect").unwrap_or(&Value::Null),
-        opts,
-        out,
-    );
+    let effect = default_branch.get("effect").unwrap_or(&Value::Null);
+    if let Some(condition) = consumer.get("attack_condition") {
+        walk(
+            &json!({"type": "conditional", "condition": condition, "effect": effect}),
+            opts,
+            out,
+        );
+    } else {
+        walk(effect, opts, out);
+    }
     if let Some(qualified) = object(consumer.get("qualified_branch")) {
         out.unsupported(
             "named-region-state qualified branch: region membership is unavailable in EngineContext; qualified replacement is unsupported",
@@ -519,97 +564,4 @@ fn ap_delta(m: &Obj) -> Option<f64> {
         Some("subtract") => Some(-value),
         _ => None,
     }
-}
-
-/// Parse a printed weapon keyword (`"Sustained Hits 1"`, `"Anti-INFANTRY 4+"`, `"Lethal Hits"`)
-/// into a catalog reference, or `None` for an empty string. Mirrors TS `parseKeywordGrant`.
-pub fn parse_keyword_grant(raw: &str) -> Option<WeaponKeywordRef> {
-    let trimmed = raw.trim();
-    if trimmed.is_empty() {
-        return None;
-    }
-    if let Some((target, threshold)) = anti_parts(trimmed) {
-        return Some(WeaponKeywordRef {
-            keyword_id: "anti".to_string(),
-            parameters: Some(json!({
-                "target_keyword": target.trim(),
-                "threshold": threshold,
-            })),
-        });
-    }
-    if let Some((name, n)) = value_parts(trimmed) {
-        return Some(WeaponKeywordRef {
-            keyword_id: to_kebab_case(name),
-            parameters: Some(json!({ "value": n })),
-        });
-    }
-    Some(WeaponKeywordRef {
-        keyword_id: to_kebab_case(trimmed),
-        parameters: None,
-    })
-}
-
-/// `/^anti-(X(\/X)*)\s+(\d+)\+?$/i`, where each X is `[A-Z][A-Z\s-]*` (a `non-` prefix included).
-fn anti_parts(s: &str) -> Option<(&str, u64)> {
-    if !s.get(..5)?.eq_ignore_ascii_case("anti-") {
-        return None;
-    }
-    let rest = &s[5..];
-    let body = rest.strip_suffix('+').unwrap_or(rest);
-    let digits_start = body.rfind(|c: char| !c.is_ascii_digit())? + 1;
-    let digits = &body[digits_start..];
-    if digits.is_empty() {
-        return None;
-    }
-    let head = &body[..digits_start];
-    let target = head.trim_end_matches(char::is_whitespace);
-    if target.len() == head.len() || target.is_empty() {
-        return None;
-    }
-    // Slash-separated alternatives ("Monster/Vehicle"), each a keyword or a `non-` keyword.
-    let segment_ok = |segment: &str| {
-        let mut chars = segment.chars();
-        chars.next().is_some_and(|c| c.is_ascii_alphabetic())
-            && chars.all(|c| c.is_ascii_alphabetic() || c.is_whitespace() || c == '-')
-    };
-    if !target.split('/').all(segment_ok) {
-        return None;
-    }
-    Some((target, digits.parse().ok()?))
-}
-
-/// `/^(.+?)\s+(\d+)$/`: the shortest name before whitespace and a trailing number.
-fn value_parts(s: &str) -> Option<(&str, u64)> {
-    let digits_start = s.rfind(|c: char| !c.is_ascii_digit())? + 1;
-    let digits = &s[digits_start..];
-    if digits.is_empty() {
-        return None;
-    }
-    let head = &s[..digits_start];
-    let name = head.trim_end_matches(char::is_whitespace);
-    if name.len() == head.len() || name.is_empty() {
-        return None;
-    }
-    Some((name, digits.parse().ok()?))
-}
-
-fn to_kebab_case(s: &str) -> String {
-    let lower = s.to_lowercase();
-    let mut dashed = String::new();
-    let mut in_run = false;
-    for c in lower.chars() {
-        if c.is_whitespace() || c == '_' {
-            if !in_run {
-                dashed.push('-');
-            }
-            in_run = true;
-        } else {
-            dashed.push(c);
-            in_run = false;
-        }
-    }
-    dashed
-        .chars()
-        .filter(|c| c.is_ascii_lowercase() || c.is_ascii_digit() || *c == '-')
-        .collect()
 }

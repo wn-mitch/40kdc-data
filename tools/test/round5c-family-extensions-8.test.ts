@@ -49,6 +49,12 @@ function nodes(tree: unknown, test: (node: Record<string, unknown>) => boolean):
   const node = tree as Record<string, unknown>;
   return [...(test(node) ? [node] : []), ...Object.values(node).flatMap((value) => nodes(value, test))];
 }
+function isHasAbilityMatch(node: Record<string, unknown>): boolean {
+  if (node.type !== "matches" || typeof node.parameters !== "object" || node.parameters === null || Array.isArray(node.parameters)) return false;
+  const filter = (node.parameters as Record<string, unknown>).filter;
+  return typeof filter === "object" && filter !== null && !Array.isArray(filter)
+    && Array.isArray((filter as Record<string, unknown>).has_ability);
+}
 
 function authored(faction: string, abilityId: string): Record<string, unknown> {
   const enrichment = resolve(dirname(fileURLToPath(import.meta.url)), "../../data/enrichment");
@@ -80,8 +86,8 @@ describe("battlefield edges", () => {
       ["this unit is wholly within 6\" of a battlefield edge", "unit-position", { kind: "within", inches: 6, of: "battlefield-edge", subject: "this-unit", negated: false, wholly: true }],
       ["this unit has the Feel No Pain 6+ ability", "feel-no-pain", FNP],
     ]));
-    expect(nodes(mechanics, (node) => node.type === "within")[0]!.parameters).toEqual({ of: "battlefield-edge", range: { inches: 6 }, wholly: true });
-    expect(schemaErrors(mechanics)).toEqual([]);
+    expect(nodes(mechanics, (node) => node.type === "matches" && (node.parameters as Record<string, any> | undefined)?.filter?.within !== undefined)[0]!.parameters)
+      .toEqual({ filter: { within: { of: "battlefield-edge", range: { inches: 6 }, wholly: true } } });
   });
 });
 
@@ -117,8 +123,12 @@ describe("transport occupancy", () => {
       ["there are no models embarked within this unit", "unit-state", { states: ["carrying-units"], subject: "this-unit", negated: true }],
       ["this unit has the Feel No Pain 6+ ability", "feel-no-pain", FNP],
     ]));
-    const state = nodes(mechanics, (node) => node.type === "unit-state")[0]!;
-    expect(state.parameters).toEqual({ subject: { embarked_in: "this-unit" }, state: "embarked" });
+    const state = nodes(mechanics, (node) => node.type === "matches" && typeof node.parameters === "object" && node.parameters !== null && !Array.isArray(node.parameters)
+      && (node.parameters as Record<string, unknown>).subject !== undefined
+      && typeof (node.parameters as Record<string, unknown>).filter === "object"
+      && (node.parameters as Record<string, unknown>).filter !== null
+      && ((node.parameters as Record<string, unknown>).filter as Record<string, unknown>).state === "embarked")[0]!;
+    expect(state.parameters).toEqual({ subject: { embarked_in: "this-unit" }, filter: { state: "embarked" } });
     expect(nodes(mechanics, (node) => node.operator === "not" && nodes(node.operands, (inner) => inner === state).length > 0)).toHaveLength(1);
     expect(schemaErrors(mechanics)).toEqual([]);
     expect(() => normalize("unit-state", { states: ["carrying-units", "engaged"], subject: "this-unit", negated: false })).toThrow(/other states/u);
@@ -131,7 +141,7 @@ describe("triggering-target keyword prefix", () => {
     const leaf = { role: "RESTRICTION", family_id: "triggering-target", family_version: currentFamilyVersion("triggering-target"), start_byte: 0, end_byte: 1, parameters } as CompileLeaf;
     const restrictions = targetRestrictions([leaf], [])!;
     expect(restrictions.required_keywords).toEqual(["ADEPTUS ASTARTES"]);
-    expect(restrictions.eligibility).toEqual({ type: "has-keyword", parameters: { any_of: ["INFANTRY", "MOUNTED"] } });
+    expect(restrictions.eligibility).toEqual({ type: "matches", parameters: { filter: { any_of: ["INFANTRY", "MOUNTED"] } } });
     expect(() => normalize("triggering-target", { selects: "unit", keywords: ["ADEPTUS ASTARTES"], match: "any", any_keywords: ["INFANTRY", "MOUNTED"] })).toThrow(/match must be all/u);
   });
 });
@@ -142,12 +152,12 @@ describe("weapon ability for the attack being made", () => {
       ["Each time a model in this unit makes an attack", "attack", { direction: "makes", unit: "this-unit", attack_type: "any" }],
       ["that attack has the [LETHAL HITS] ability", "weapon-ability-grant", { subject: "attack", keyword: "Lethal Hits", weapon_type: "all" }],
     ]));
-    expect(nodes(mechanics, (node) => node.type === "weapon-ability-grant")[0]).toMatchObject({ target: "this-unit", modifier: { abilities: ["Lethal Hits"] } });
+    expect(nodes(mechanics, (node) => node.type === "weapon-ability-grant")[0]).toMatchObject({ target: "this-unit", modifier: { keywords: [{ keyword_id: "lethal-hits" }] } });
   });
 });
 
 describe("ability exclusions", () => {
-  it("lowers to lacks_ability, and a selection keeps it as a negated has-ability check", () => {
+  it("retains ability exclusions in a selection's canonical unit filter", () => {
     const filter = { role: "CONDITION", family_id: "unit-filter", family_version: currentFamilyVersion("unit-filter"), start_byte: 0, end_byte: 1,
       parameters: normalize("unit-filter", { side: "enemy", excluded_abilities: ["lone-operative"] }) } as CompileLeaf;
     expect(dslUnitFilter(filter)).toEqual({ owner: "enemy", lacks_ability: ["lone-operative"] });
@@ -156,8 +166,9 @@ describe("ability exclusions", () => {
       ["excluding units with the Lone Operative ability", "unit-filter", { side: "enemy", excluded_abilities: ["lone-operative"] }],
       ["That unit has the Feel No Pain 6+ ability", "feel-no-pain", FNP],
     ]));
-    expect(nodes(mechanics, (node) => node.type === "has-ability")).toEqual([{ type: "has-ability", parameters: { ability: "lone-operative" } }]);
-    expect(nodes(mechanics, (node) => node.operator === "not" && JSON.stringify(node).includes("lone-operative"))).toHaveLength(1);
+    const selector = nodes(mechanics, (node) => node.type === "select-units")[0]!.selector as Record<string, any>;
+    expect(selector.filter).toMatchObject({ lacks_ability: ["lone-operative"] });
+    expect(nodes(mechanics, isHasAbilityMatch)).toEqual([]);
     expect(schemaErrors(mechanics)).toEqual([]);
     // A stacked visible filter merges with it and keeps the exclusion rather than dropping it.
     const merged = compiled(placed("Select one visible enemy unit (excluding units with the Lone Operative ability). That unit has the Feel No Pain 6+ ability.", [
@@ -166,7 +177,8 @@ describe("ability exclusions", () => {
       ["excluding units with the Lone Operative ability", "unit-filter", { side: "enemy", excluded_abilities: ["lone-operative"] }],
       ["That unit has the Feel No Pain 6+ ability", "feel-no-pain", FNP],
     ]));
-    expect(nodes(merged, (node) => node.type === "has-ability")).toHaveLength(1);
+    expect(nodes(merged, (node) => node.type === "select-units")[0]!.selector)
+      .toMatchObject({ filter: { owner: "enemy", lacks_ability: ["lone-operative"], visible: { to: "this-model" } } });
   });
 });
 

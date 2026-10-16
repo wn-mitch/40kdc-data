@@ -71,13 +71,15 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "subject": "defender",
-          "any_of": [
-            "MONSTER",
-            "VEHICLE"
-          ]
+          "filter": {
+            "any_of": [
+              "MONSTER",
+              "VEHICLE"
+            ]
+          },
+          "subject": "defender"
         }
       },
       "effect": {
@@ -89,7 +91,9 @@
             "modifier": {
               "roll": "hit",
               "result_scope": "any-result",
-              "weapon_type": "melee"
+              "weapons": {
+                "type": "melee"
+              }
             }
           },
           {
@@ -98,7 +102,9 @@
             "modifier": {
               "roll": "wound",
               "result_scope": "any-result",
-              "weapon_type": "melee"
+              "weapons": {
+                "type": "melee"
+              }
             }
           },
           {
@@ -107,7 +113,9 @@
             "modifier": {
               "roll": "damage",
               "result_scope": "any-result",
-              "weapon_type": "melee"
+              "weapons": {
+                "type": "melee"
+              }
             }
           }
         ]
@@ -188,7 +196,9 @@
             "stat": "A",
             "operation": "add",
             "value": 3,
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            }
           }
         },
         {
@@ -198,7 +208,9 @@
             "stat": "S",
             "operation": "add",
             "value": 3,
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            }
           }
         }
       ]
@@ -285,13 +297,17 @@
             "operator": "not",
             "operands": [
               {
-                "type": "within",
+                "type": "matches",
                 "parameters": {
-                  "subject": "defender",
-                  "of": {
-                    "objective": {}
+                  "filter": {
+                    "within": {
+                      "range": "objective-control",
+                      "of": {
+                        "objective": {}
+                      }
+                    }
                   },
-                  "range": "objective-control"
+                  "subject": "defender"
                 }
               }
             ]
@@ -308,13 +324,17 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "of": {
-                "objective": {}
+              "filter": {
+                "within": {
+                  "range": "objective-control",
+                  "of": {
+                    "objective": {}
+                  }
+                }
               },
-              "range": "objective-control"
+              "subject": "defender"
             }
           },
           "effect": {
@@ -382,10 +402,14 @@
           "type": "weapon-ability-grant",
           "target": "this-model",
           "modifier": {
-            "abilities": [
-              "Assault"
-            ],
-            "weapon_type": "ranged"
+            "weapons": {
+              "type": "ranged"
+            },
+            "keywords": [
+              {
+                "keyword_id": "assault"
+              }
+            ]
           }
         },
         {
@@ -449,10 +473,14 @@
               }
             },
             {
-              "type": "has-ability",
+              "type": "matches",
               "parameters": {
-                "subject": "event-subject",
-                "ability": "deep-strike"
+                "filter": {
+                  "has_ability": [
+                    "deep-strike"
+                  ]
+                },
+                "subject": "event-subject"
               }
             }
           ]
@@ -494,7 +522,7 @@
       "type": "mortal-wounds",
       "target": "defender",
       "modifier": {
-        "count": "1"
+        "count": 1
       }
     },
     "scope": {
@@ -568,8 +596,10 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Lethal Hits"
+          "keywords": [
+            {
+              "keyword_id": "lethal-hits"
+            }
           ]
         }
       }
@@ -626,30 +656,35 @@
       "type": "designate-target",
       "designation": "guidance-of-the-ancients",
       "select": {
-        "scope": "enemy-unit",
-        "count": 1,
-        "eligibility": {
-          "type": "happened",
-          "parameters": {
-            "event": "after-roll",
-            "object": "this-unit",
-            "filter": {
-              "roll": "hit",
-              "result": "success",
-              "attack_type": "ranged",
-              "by": {
-                "event_var": "guidance-shooting"
-              }
-            },
-            "window": "event"
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success",
+                "attack_type": "ranged",
+                "by": {
+                  "event_var": "guidance-shooting"
+                }
+              },
+              "window": "event"
+            }
           }
         }
       },
       "applies": {
         "to": "attackers-of-target",
-        "attacker_keywords": [
-          "GREY KNIGHTS"
-        ],
         "effect": {
           "type": "roll-modifier",
           "target": "attacker",
@@ -658,6 +693,12 @@
             "operation": "add",
             "value": 1
           }
+        },
+        "attacker_filter": {
+          "level": "model",
+          "all_of": [
+            "GREY KNIGHTS"
+          ]
         }
       },
       "duration": "phase"
@@ -707,39 +748,52 @@
       "type": "designate-target",
       "designation": "guidance-of-the-ancients-crowes-sanctifiers",
       "select": {
-        "scope": "enemy-unit",
-        "count": 1,
-        "eligibility": {
-          "type": "happened",
-          "parameters": {
-            "event": "after-roll",
-            "object": "this-unit",
-            "filter": {
-              "roll": "hit",
-              "result": "success",
-              "attack_type": "ranged",
-              "by": {
-                "event_var": "guidance-of-the-ancients-crowes-sanctifiers-shooting"
-              }
-            },
-            "window": "event"
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success",
+                "attack_type": "ranged",
+                "by": {
+                  "event_var": "guidance-of-the-ancients-crowes-sanctifiers-shooting"
+                }
+              },
+              "window": "event"
+            }
           }
         }
       },
       "applies": {
         "to": "attackers-of-target",
-        "attacker_keywords": [
-          "GREY KNIGHTS"
-        ],
         "effect": {
           "type": "roll-modifier",
           "target": "attacker",
           "modifier": {
             "roll": "hit",
-            "weapon_type": "ranged",
             "operation": "add",
-            "value": 1
+            "value": 1,
+            "weapons": {
+              "type": "ranged"
+            }
           }
+        },
+        "attacker_filter": {
+          "level": "model",
+          "all_of": [
+            "GREY KNIGHTS"
+          ]
         }
       },
       "duration": "phase"
@@ -802,7 +856,9 @@
           "stat": "A",
           "operation": "add",
           "value": 1,
-          "weapon_name": "Purifying Flame"
+          "weapons": {
+            "name": "Purifying Flame"
+          }
         }
       }
     },
@@ -829,12 +885,14 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "subject": "defender",
-          "all_of": [
-            "CHARACTER"
-          ]
+          "filter": {
+            "all_of": [
+              "CHARACTER"
+            ]
+          },
+          "subject": "defender"
         }
       },
       "effect": {
@@ -869,14 +927,18 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "of": {
-            "objective": {
-              "controlled_by": "friendly"
+          "filter": {
+            "within": {
+              "range": "objective-control",
+              "of": {
+                "objective": {
+                  "controlled_by": "friendly"
+                }
+              }
             }
-          },
-          "range": "objective-control"
+          }
         }
       },
       "effect": {
@@ -927,19 +989,23 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "subject": "this-model",
-          "of": {
-            "owner": "friendly",
-            "all_of": [
-              "GREY KNIGHTS",
-              "VEHICLE"
-            ]
+          "filter": {
+            "within": {
+              "range": {
+                "inches": 3
+              },
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "GREY KNIGHTS",
+                  "VEHICLE"
+                ]
+              }
+            }
           },
-          "range": {
-            "inches": 3
-          }
+          "subject": "this-model"
         }
       },
       "effect": {
@@ -992,15 +1058,25 @@
       "effect": {
         "type": "select-units",
         "selector": {
-          "owner": "friendly",
-          "max_count": 1,
-          "target_kind": "model",
-          "keywords": [
-            "GREY KNIGHTS",
-            "VEHICLE"
-          ],
-          "range_inches": 3,
-          "selection_limit": {
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "GREY KNIGHTS",
+              "VEHICLE"
+            ],
+            "level": "model",
+            "within": {
+              "range": {
+                "inches": 3
+              },
+              "of": "this-model"
+            }
+          },
+          "count": {
+            "min": 0,
+            "max": 1
+          },
+          "limit": {
             "count": 1,
             "period": "turn"
           }
@@ -1119,17 +1195,21 @@
         }
       },
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "subject": "event-subject",
-          "of": {
-            "owner": "friendly",
-            "all_of": [
-              "GREY KNIGHTS",
-              "VEHICLE"
-            ]
+          "filter": {
+            "within": {
+              "range": "engagement",
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "GREY KNIGHTS",
+                  "VEHICLE"
+                ]
+              }
+            }
           },
-          "range": "engagement"
+          "subject": "event-subject"
         }
       },
       "optional": true
@@ -1309,9 +1389,13 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "owner": "enemy",
-        "min_count": 1,
-        "max_count": 1,
+        "filter": {
+          "owner": "enemy"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
         "eligibility": {
           "operator": "and",
           "operands": [
@@ -1338,12 +1422,14 @@
                   "operator": "not",
                   "operands": [
                     {
-                      "type": "has-keyword",
+                      "type": "matches",
                       "parameters": {
-                        "subject": "recipient",
-                        "all_of": [
-                          "MONSTER"
-                        ]
+                        "filter": {
+                          "all_of": [
+                            "MONSTER"
+                          ]
+                        },
+                        "subject": "recipient"
                       }
                     }
                   ]
@@ -1352,12 +1438,14 @@
                   "operator": "not",
                   "operands": [
                     {
-                      "type": "has-keyword",
+                      "type": "matches",
                       "parameters": {
-                        "subject": "recipient",
-                        "all_of": [
-                          "VEHICLE"
-                        ]
+                        "filter": {
+                          "all_of": [
+                            "VEHICLE"
+                          ]
+                        },
+                        "subject": "recipient"
                       }
                     }
                   ]
@@ -1454,12 +1542,14 @@
             "operator": "not",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "subject": "recipient",
-                  "all_of": [
-                    "FLY"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "FLY"
+                    ]
+                  },
+                  "subject": "recipient"
                 }
               }
             ]
@@ -1566,9 +1656,11 @@
             "operator": "not",
             "operands": [
               {
-                "type": "unit-state",
+                "type": "matches",
                 "parameters": {
-                  "state": "engaged"
+                  "filter": {
+                    "state": "engaged"
+                  }
                 }
               }
             ]
@@ -1647,17 +1739,28 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "owner": "friendly",
-        "min_count": 1,
-        "max_count": 1,
-        "keywords": [
-          "GREY KNIGHTS"
-        ],
-        "range_inches": 12,
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "GREY KNIGHTS"
+          ],
+          "within": {
+            "range": {
+              "inches": 12
+            },
+            "of": "this-model"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
         "eligibility": {
-          "type": "unit-state",
+          "type": "matches",
           "parameters": {
-            "state": "battle-shocked"
+            "filter": {
+              "state": "battle-shocked"
+            }
           }
         }
       },
@@ -1702,12 +1805,14 @@
     "effect": {
       "type": "for-each-unit",
       "selector": {
-        "owner": "friendly",
-        "target_kind": "model",
-        "keywords": [
-          "PALADIN SQUAD"
-        ],
-        "member_of": "bearer-unit"
+        "filter": {
+          "owner": "friendly",
+          "member_of": "this-unit",
+          "all_of": [
+            "PALADIN SQUAD"
+          ],
+          "level": "model"
+        }
       },
       "effect": {
         "type": "stat-modifier",
@@ -1716,7 +1821,9 @@
           "stat": "D",
           "operation": "add",
           "value": 1,
-          "weapon_type": "melee"
+          "weapons": {
+            "type": "melee"
+          }
         }
       }
     },
@@ -1823,7 +1930,9 @@
             "roll": "hit",
             "operation": "subtract",
             "value": 1,
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            }
           }
         }
       ]
@@ -1851,11 +1960,14 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "owner": "enemy",
-        "min_count": 1,
-        "max_count": 1,
-        "engagement_relation": "engaged-with-bearer",
-        "reference": "bearer-unit"
+        "filter": {
+          "owner": "enemy",
+          "engaged_with": "this-unit"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        }
       },
       "effect": {
         "type": "dice-table",
@@ -1946,12 +2058,14 @@
             "operator": "not",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "subject": "defender",
-                  "all_of": [
-                    "MONSTER"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "MONSTER"
+                    ]
+                  },
+                  "subject": "defender"
                 }
               }
             ]
@@ -1960,12 +2074,14 @@
             "operator": "not",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "subject": "defender",
-                  "all_of": [
-                    "VEHICLE"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "VEHICLE"
+                    ]
+                  },
+                  "subject": "defender"
                 }
               }
             ]
@@ -1979,7 +2095,9 @@
           "stat": "AP",
           "operation": "improve",
           "value": 1,
-          "weapon_type": "melee"
+          "weapons": {
+            "type": "melee"
+          }
         }
       }
     },
@@ -2015,12 +2133,14 @@
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "all_of": [
-                "FLY"
-              ]
+              "filter": {
+                "all_of": [
+                  "FLY"
+                ]
+              },
+              "subject": "defender"
             }
           }
         ]
@@ -2088,9 +2208,11 @@
         "operator": "not",
         "operands": [
           {
-            "type": "unit-state",
+            "type": "matches",
             "parameters": {
-              "state": "engaged"
+              "filter": {
+                "state": "engaged"
+              }
             }
           }
         ]
@@ -2151,19 +2273,25 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "owner": "friendly",
-        "min_count": 1,
-        "max_count": 1,
-        "keywords": [
-          "GREY KNIGHTS"
-        ],
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "GREY KNIGHTS"
+          ]
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
         "eligibility": {
           "operator": "and",
           "operands": [
             {
-              "type": "unit-state",
+              "type": "matches",
               "parameters": {
-                "state": "on-battlefield"
+                "filter": {
+                  "state": "on-battlefield"
+                }
               }
             },
             {
@@ -2175,7 +2303,7 @@
                   "ability_id": "gate-of-infinity-grey-knights",
                   "owner": "friendly"
                 },
-                "at": "opponents-previous-turn-end"
+                "at": "opponent-previous-turn-end"
               }
             }
           ]
@@ -2224,7 +2352,7 @@
                 "ability_id": "gate-of-infinity-grey-knights",
                 "owner": "friendly"
               },
-              "at": "opponents-previous-turn-end"
+              "at": "opponent-previous-turn-end"
             }
           }
         ]
@@ -2255,7 +2383,7 @@
       "comparison": "gte",
       "test": {
         "kind": "leadership",
-        "subject": "unit"
+        "subject": "event-subject"
       },
       "on_success": {
         "type": "choice",
@@ -2264,22 +2392,37 @@
             "type": "weapon-ability-grant",
             "target": "event-subject",
             "modifier": {
-              "abilities": [
-                "Sustained Hits 1"
-              ],
-              "weapon_type": "melee",
-              "weapon_keyword": "Psychic"
+              "weapons": {
+                "type": "melee",
+                "keyword": {
+                  "keyword_id": "psychic"
+                }
+              },
+              "keywords": [
+                {
+                  "keyword_id": "sustained-hits",
+                  "parameters": {
+                    "value": 1
+                  }
+                }
+              ]
             }
           },
           {
             "type": "weapon-ability-grant",
             "target": "event-subject",
             "modifier": {
-              "abilities": [
-                "Lethal Hits"
-              ],
-              "weapon_type": "melee",
-              "weapon_keyword": "Psychic"
+              "weapons": {
+                "type": "melee",
+                "keyword": {
+                  "keyword_id": "psychic"
+                }
+              },
+              "keywords": [
+                {
+                  "keyword_id": "lethal-hits"
+                }
+              ]
             }
           }
         ]
@@ -2297,11 +2440,13 @@
         "to": "fight"
       },
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "all_of": [
-            "GREY KNIGHTS"
-          ]
+          "filter": {
+            "all_of": [
+              "GREY KNIGHTS"
+            ]
+          }
         }
       },
       "optional": true
@@ -2325,7 +2470,9 @@
     "behavior": "passive",
     "effect": {
       "type": "named-region-state",
-      "target": {"owner":"friendly"},
+      "target": {
+        "owner": "friendly"
+      },
       "modifier": {
         "region_ref": {
           "region_id": "hallowed-ground",
@@ -2340,78 +2487,66 @@
           "parent_ref": null,
           "baseline": [
             {
-              "kind": "fixed-zone",
-              "zone": "own-deployment-zone",
-              "activation": {
-                "event": "always-active"
+              "region": {
+                "territory": "your-deployment-zone"
               },
-              "expiry": {
-                "event": "never"
-              }
+              "duration": "permanent"
             }
           ],
           "phase_extensions": [
             {
-              "kind": "objective-majority-zone",
-              "zone": "no-mans-land",
-              "control_gate": {
-                "marker_scope": "markers-in-zone",
-                "controlled_by": "owner-army",
-                "threshold": {
-                  "comparison": "at-least",
-                  "fraction": 0.5
+              "region": {
+                "territory": "no-mans-land"
+              },
+              "condition": {
+                "type": "controls",
+                "parameters": {
+                  "by": "friendly",
+                  "proportion": {
+                    "comparison": "gte",
+                    "fraction": 0.5
+                  }
                 }
               },
-              "activation": {
-                "event": "phase-start",
-                "evaluation": "snapshot-once",
-                "canonical_condition_ids": [
-                  "controls"
-                ]
+              "trigger": {
+                "event": "phase-started"
               },
-              "expiry": {
-                "event": "phase-end"
-              }
+              "duration": "phase",
+              "evaluation": "snapshot-once"
             },
             {
-              "kind": "objective-majority-zone",
-              "zone": "opponent-deployment-zone",
-              "control_gate": {
-                "marker_scope": "markers-in-zone",
-                "controlled_by": "owner-army",
-                "threshold": {
-                  "comparison": "at-least",
-                  "fraction": 0.5
+              "region": {
+                "territory": "enemy-deployment-zone"
+              },
+              "condition": {
+                "type": "controls",
+                "parameters": {
+                  "by": "friendly",
+                  "proportion": {
+                    "comparison": "gte",
+                    "fraction": 0.5
+                  }
                 }
               },
-              "activation": {
-                "event": "phase-start",
-                "evaluation": "snapshot-once",
-                "canonical_condition_ids": [
-                  "controls"
-                ]
+              "trigger": {
+                "event": "phase-started"
               },
-              "expiry": {
-                "event": "phase-end"
-              }
+              "duration": "phase",
+              "evaluation": "snapshot-once"
             }
           ],
           "additive_extensions": [
             {
               "kind": "unit-proximity",
-              "source_gate": {
-                "gate_ref": "purifier-sources",
-                "owner": "owner-army",
-                "unit_predicate": {
-                  "faction": "grey-knights",
-                  "keywords": [
-                    "PURIFIER SQUAD"
-                  ]
-                }
+              "filter": {
+                "owner": "friendly",
+                "all_of": [
+                  "PURIFIER SQUAD",
+                  "GREY-KNIGHTS"
+                ]
               },
-              "radius_inches": 6,
-              "activation": {
-                "event": "continuous"
+              "range": {
+                "inches": 6
               }
             }
           ]
@@ -2421,13 +2556,6 @@
             "region_id": "hallowed-ground",
             "owner_faction": "grey-knights"
           },
-          "beneficiary_gate": {
-            "owner": "owner-army",
-            "operator": "and",
-            "keywords": [
-              "GREY KNIGHTS"
-            ]
-          },
           "membership": {
             "unit_scope": "whole-unit",
             "relation": "wholly-within"
@@ -2436,11 +2564,13 @@
             "operator": "or",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "all_of": [
-                    "PURIFIER SQUAD"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "PURIFIER SQUAD"
+                    ]
+                  }
                 }
               },
               {
@@ -2459,52 +2589,34 @@
             ]
           },
           "default_branch": {
-            "source": {
-              "role": "eligible-source",
-              "gate_ref": "beneficiary_gate"
-            },
-            "beneficiary": {
-              "role": "eligible-beneficiary",
-              "gate_ref": "beneficiary_gate"
-            },
-            "target": "attacker",
-            "timing": {
-              "event": "each-attack"
-            },
-            "duration": "attack-resolution",
             "effect": {
-              "type": "re-roll",
-              "target": "attacker",
-              "modifier": {
-                "roll": "hit",
-                "subset": "ones"
-              }
-            },
-            "optional": false
+              "type": "ability-part",
+              "effect": {
+                "type": "re-roll",
+                "target": "attacker",
+                "modifier": {
+                  "roll": "hit",
+                  "subset": "ones"
+                }
+              },
+              "optional": false,
+              "duration": "resolution"
+            }
           },
           "qualified_branch": {
-            "source": {
-              "role": "eligible-source",
-              "gate_ref": "beneficiary_gate"
-            },
-            "beneficiary": {
-              "role": "eligible-beneficiary",
-              "gate_ref": "beneficiary_gate"
-            },
-            "target": "attacker",
-            "timing": {
-              "event": "each-attack"
-            },
-            "duration": "attack-resolution",
             "effect": {
-              "type": "re-roll",
-              "target": "attacker",
-              "modifier": {
-                "roll": "hit",
-                "result_scope": "any-result"
-              }
-            },
-            "optional": true
+              "type": "ability-part",
+              "effect": {
+                "type": "re-roll",
+                "target": "attacker",
+                "modifier": {
+                  "roll": "hit",
+                  "result_scope": "any-result"
+                }
+              },
+              "optional": true,
+              "duration": "resolution"
+            }
           },
           "attack_condition": {
             "operator": "or",
@@ -2525,14 +2637,24 @@
                     }
                   },
                   {
-                    "type": "visible",
+                    "type": "matches",
                     "parameters": {
-                      "subject": "defender",
-                      "to": "attacker"
+                      "filter": {
+                        "visible": {
+                          "to": "attacker"
+                        }
+                      },
+                      "subject": "defender"
                     }
                   }
                 ]
               }
+            ]
+          },
+          "beneficiary_filter": {
+            "owner": "friendly",
+            "all_of": [
+              "GREY KNIGHTS"
             ]
           }
         },
@@ -2615,19 +2737,23 @@
         "operator": "and",
         "operands": [
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "GREY KNIGHTS"
-              ]
+              "filter": {
+                "all_of": [
+                  "GREY KNIGHTS"
+                ]
+              }
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "TERMINATOR"
-              ]
+              "filter": {
+                "all_of": [
+                  "TERMINATOR"
+                ]
+              }
             }
           }
         ]
@@ -2684,11 +2810,13 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "all_of": [
-            "VEHICLE"
-          ]
+          "filter": {
+            "all_of": [
+              "VEHICLE"
+            ]
+          }
         }
       },
       "effect": {
@@ -2706,10 +2834,14 @@
             "type": "weapon-ability-grant",
             "target": "this-unit",
             "modifier": {
-              "abilities": [
-                "Assault"
-              ],
-              "weapon_type": "ranged"
+              "weapons": {
+                "type": "ranged"
+              },
+              "keywords": [
+                {
+                  "keyword_id": "assault"
+                }
+              ]
             }
           }
         ]
@@ -2745,7 +2877,7 @@
             "of": "attacker",
             "stat": "S"
           },
-          "comparison": "less-than",
+          "comparison": "lt",
           "right": {
             "of": "defender",
             "stat": "T"
@@ -2757,9 +2889,11 @@
         "target": "event-subject",
         "modifier": {
           "roll": "wound",
-          "weapon_type": "melee",
           "operation": "add",
-          "value": 1
+          "value": 1,
+          "weapons": {
+            "type": "melee"
+          }
         }
       }
     },
@@ -2775,11 +2909,13 @@
         "to": "fight"
       },
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "all_of": [
-            "PALADIN SQUAD"
-          ]
+          "filter": {
+            "all_of": [
+              "PALADIN SQUAD"
+            ]
+          }
         }
       }
     }
@@ -2850,11 +2986,13 @@
         "operator": "and",
         "operands": [
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "INTERCEPTOR SQUAD"
-              ]
+              "filter": {
+                "all_of": [
+                  "INTERCEPTOR SQUAD"
+                ]
+              }
             }
           },
           {

@@ -6,25 +6,29 @@ use serde_json::Value;
 use super::words::*;
 use crate::translate::condition::{
     alternative_filters, and_list, article, designation_phrase, keyword_alternatives, nn, obj,
-    or_list, range_phrase, state_phrase, P,
+    or_list, place_ref_phrase, range_phrase, state_phrase, P,
 };
 use crate::translate::dekebab;
 
 pub(super) fn role_subject(role: &str) -> Option<&'static str> {
     Some(match role {
+        "this-unit" => "the unit",
         "this-model" => "this model",
         "model-in-this-unit" => "a model in this unit",
+        "attacker" => "the attacking unit",
         "defender" => "the target",
         "event-subject" => "the triggering unit",
         "event-object" => "that unit",
         "stratagem-target" => "that unit",
+        "selected-unit" => "the selected unit",
+        "recipient" => "the unit",
         "bearer-transport" => "the Transport this unit is embarked within",
         "ability-unit" => "this unit",
         _ => return None,
     })
 }
 
-/// A unit filter as the plural subject of an effect: `friendly INFANTRY units within 6"`.
+/// A canonical unit filter as the plural subject of an effect.
 pub(crate) fn filter_subject(f: &P, ctx: &Ctx) -> String {
     let owner = match sv(f, "owner") {
         Some("friendly") => "friendly ",
@@ -35,51 +39,67 @@ pub(crate) fn filter_subject(f: &P, ctx: &Ctx) -> String {
         .map(|k| format!("{} ", k.join(" ")))
         .unwrap_or_default();
     let noun = if sv(f, "level") == Some("model") {
-        "models"
+        match sv(f, "attachment_role") {
+            Some("bodyguard") => "Bodyguard models",
+            Some("leader") => "Leader models",
+            _ => "models",
+        }
     } else {
         "units"
     };
-    // "friendly LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE units": keyword-only alternatives.
     let compact = keyword_alternatives(f);
     let mut s = match &compact {
-        Some(alts) => format!("{owner}{} {noun}", or_list(alts)),
+        Some(alternatives) => format!("{owner}{} {noun}", or_list(alternatives)),
         None => format!("{owner}{all}{noun}"),
     };
-    // Any other alternatives: "units that are PSYKER units or units that are Battle-shocked".
     if compact.is_none() && f.get("any_of_filters").is_some_and(Value::is_array) {
-        let alts: Vec<String> = alternative_filters(f)
+        let alternatives: Vec<String> = alternative_filters(f)
             .iter()
-            .map(|a| {
-                let phrase = filter_subject(a, ctx);
-                phrase
-                    .strip_prefix("all ")
-                    .map(str::to_string)
-                    .unwrap_or(phrase)
+            .map(|alternative| {
+                let phrase = filter_subject(alternative, ctx);
+                phrase.strip_prefix("all ").unwrap_or(&phrase).to_string()
             })
             .collect();
-        s.push_str(&format!(" that are {}", or_list(&alts)));
+        s.push_str(&format!(" that are {}", or_list(&alternatives)));
     }
     if let Some(any) = map_arr(f, "any_of", jv) {
         s.push_str(&format!(" with the {} keyword", or_list(&any)));
     }
     if let Some(none) = map_arr(f, "none_of", jv) {
-        s.push_str(&format!(" (excluding {} {noun})", or_list(&none)));
+        s.push_str(&format!(" (excluding {} {})", or_list(&none), noun));
     }
     if let Some(not_all) = map_arr(f, "not_all_of", jv) {
-        s.push_str(&format!(" (excluding {} {noun})", not_all.join(" ")));
+        s.push_str(&format!(" (excluding {} {})", not_all.join(" "), noun));
     }
-    let within = nn(f, "within");
-    if let Some(w) = within {
-        let w = obj(Some(w));
-        let wholly = if is_true(w, "wholly") { "wholly " } else { "" };
-        s.push_str(&format!(" {wholly}within {}", range_phrase(w.get("range"))));
-        if let Some(of) = nn(w, "of") {
-            s.push_str(&format!(" of {}", effect_subject(Some(of), ctx)));
-        }
+    if let Some(names) = map_arr(f, "model_names", jv) {
+        s.push_str(&format!(" named {}", or_list(&names)));
+    }
+    if let Some(ids) = map_arr(f, "unit_ids", jv) {
+        s.push_str(&format!(" with unit ID {}", or_list(&ids)));
+    }
+    if let Some(within) = nn(f, "within") {
+        let within = obj(Some(within));
+        s.push_str(&format!(
+            " {}within {}{}",
+            if is_true(within, "wholly") {
+                "wholly "
+            } else {
+                ""
+            },
+            range_phrase(within.get("range")),
+            within
+                .get("of")
+                .map(|of| format!(" of {}", place_ref_phrase(Some(of))))
+                .unwrap_or_default()
+        ));
     }
     s.push_str(&filter_relations(f, ctx));
-    if is_true(f, "visible") {
-        s.push_str(" that are visible");
+    if let Some(visible) = nn(f, "visible") {
+        let visible = obj(Some(visible));
+        s.push_str(&format!(
+            " visible to {}",
+            effect_subject(visible.get("to"), ctx)
+        ));
     }
     if let Some(d) = nn(f, "designated") {
         let by = nn(f, "designated_by")
@@ -105,20 +125,20 @@ pub(crate) fn filter_subject(f: &P, ctx: &Ctx) -> String {
     if let Some(ex) = nn(f, "excluding") {
         s.push_str(&format!(" other than {}", effect_subject(Some(ex), ctx)));
     }
-    let bounded = within.is_some()
-        || is_true(f, "visible")
-        || nn(f, "designated").is_some()
-        || nn(f, "not_designated").is_some()
-        || nn(f, "state").is_some()
-        || nn(f, "not_states").is_some()
-        || [
-            "embarked_in",
-            "member_of",
-            "engaged_with",
-            "not_engaged_with",
-        ]
-        .iter()
-        .any(|k| nn(f, k).is_some());
+    let bounded = [
+        "within",
+        "visible",
+        "designated",
+        "not_designated",
+        "state",
+        "not_states",
+        "embarked_in",
+        "member_of",
+        "engaged_with",
+        "not_engaged_with",
+    ]
+    .iter()
+    .any(|k| nn(f, k).is_some());
     if bounded {
         s
     } else {
@@ -126,8 +146,7 @@ pub(crate) fn filter_subject(f: &P, ctx: &Ctx) -> String {
     }
 }
 
-/// A unit filter's relations to other units and abilities: " embarked within this model",
-/// " with the Deep Strike ability".
+/// A unit filter's relations to other units and abilities.
 fn filter_relations(f: &P, ctx: &Ctx) -> String {
     let mut s = String::new();
     if let Some(has) = map_arr(f, "has_ability", |a| ability_label(Some(a))) {
@@ -143,21 +162,37 @@ fn filter_relations(f: &P, ctx: &Ctx) -> String {
         ));
     }
     if let Some(m) = nn(f, "member_of") {
-        s.push_str(&format!(" in {}", effect_subject(Some(m), ctx)));
+        s.push_str(" in ");
+        if m.as_str() == Some("this-unit") {
+            s.push_str("the unit");
+        } else {
+            s.push_str(&effect_subject(Some(m), ctx));
+        }
     }
-    // "any other friendly unit": a filter excluding the unit with the ability reads "other".
-    let engaged_with = |g: &Value| -> String {
-        let mut x = obj(Some(g)).clone();
+    let relation_phrase = |g: &Value| -> String {
+        let exact = g.is_string()
+            || g.as_object().is_some_and(|o| {
+                o.contains_key("selection_var")
+                    || o.contains_key("event_var")
+                    || o.contains_key("stratagem_target")
+            });
+        if exact {
+            return effect_subject(Some(g), ctx);
+        }
+        let mut filter = obj(Some(g)).clone();
         let other = matches!(
-            x.get("excluding").and_then(Value::as_str),
+            filter.get("excluding").and_then(Value::as_str),
             Some("this-unit" | "this-model")
         );
         if other {
-            x.remove("excluding");
+            filter.remove("excluding");
         }
-        let phrase = strip_all(&filter_subject(&x, ctx));
-        let phrase = replace_word_first(&phrase, " units", " unit", false);
-        let phrase = replace_word_first(&phrase, " models", " model", false);
+        let rendered = filter_subject(&filter, ctx);
+        let phrase = rendered
+            .strip_prefix("all ")
+            .unwrap_or(&rendered)
+            .replace(" units", " unit")
+            .replace(" models", " model");
         if other {
             format!("other {phrase}")
         } else {
@@ -165,19 +200,34 @@ fn filter_relations(f: &P, ctx: &Ctx) -> String {
         }
     };
     if let Some(g) = nn(f, "engaged_with") {
-        let phrase = engaged_with(g);
-        let articled = format!("{} {phrase}", article(&phrase));
-        let articled = articled
-            .strip_prefix("an other ")
-            .or_else(|| articled.strip_prefix("a other "))
-            .map(|rest| format!("another {rest}"))
-            .unwrap_or(articled);
-        s.push_str(&format!(" within Engagement Range of {articled}"));
+        let phrase = relation_phrase(g);
+        let exact = g.is_string()
+            || g.as_object().is_some_and(|o| {
+                o.contains_key("selection_var")
+                    || o.contains_key("event_var")
+                    || o.contains_key("stratagem_target")
+            });
+        let phrase = if exact {
+            phrase
+        } else {
+            format!("{} {phrase}", article(&phrase))
+                .replacen("a other ", "another ", 1)
+                .replacen("an other ", "another ", 1)
+        };
+        s.push_str(&format!(" within Engagement Range of {phrase}"));
     }
     if let Some(g) = nn(f, "not_engaged_with") {
+        let phrase = relation_phrase(g);
+        let exact = g.is_string()
+            || g.as_object().is_some_and(|o| {
+                o.contains_key("selection_var")
+                    || o.contains_key("event_var")
+                    || o.contains_key("stratagem_target")
+            });
         s.push_str(&format!(
-            " that are not within Engagement Range of any {}",
-            engaged_with(g)
+            " that are not within Engagement Range of {}{}",
+            if exact { "" } else { "any " },
+            phrase
         ));
     }
     s

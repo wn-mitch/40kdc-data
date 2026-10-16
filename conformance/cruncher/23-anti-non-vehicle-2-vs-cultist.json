@@ -25,7 +25,7 @@
         "keywordRef": {
           "keyword_id": "anti",
           "parameters": {
-            "target_keyword": "Non-Vehicle",
+            "excluded_target_keywords": ["VEHICLE"],
             "threshold": 2
           }
         }

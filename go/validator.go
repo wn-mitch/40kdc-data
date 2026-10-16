@@ -103,6 +103,46 @@ func (v *SchemaValidator) validateTarget(target string, value any) []map[string]
 }
 
 func (v *SchemaValidator) valid(schema any, instance any, base string) bool {
+	// Boolean probes reject impossible variants before visiting recursive payloads.
+	// Diagnostic checks still collect every failed branch.
+	for {
+		object, ok := schema.(map[string]any)
+		if !ok {
+			break
+		}
+		ref, hasRef := object["$ref"].(string)
+		if !hasRef || len(object) != 1 {
+			break
+		}
+		schema, base = v.resolveRef(base, ref)
+	}
+	if object, ok := schema.(map[string]any); ok {
+		if kind, exists := object["type"]; exists && !typeMatchesAny(kind, instance) {
+			return false
+		}
+		if value, ok := instance.(map[string]any); ok {
+			requiredNames, _ := object["required"].([]any)
+			for _, required := range requiredNames {
+				name, _ := required.(string)
+				if _, present := value[name]; !present {
+					return false
+				}
+			}
+			if properties, ok := object["properties"].(map[string]any); ok {
+				for name, property := range properties {
+					constraint, ok := property.(map[string]any)
+					if !ok {
+						continue
+					}
+					expected, constant := constraint["const"]
+					actual, present := value[name]
+					if constant && present && !jsonEqual(actual, expected) {
+						return false
+					}
+				}
+			}
+		}
+	}
 	var vs []violation
 	v.check(schema, instance, "", base, &vs)
 	return len(vs) == 0

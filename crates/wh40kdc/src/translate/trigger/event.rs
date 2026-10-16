@@ -20,6 +20,33 @@ pub(crate) fn turn_owner(turn: &str) -> Option<&'static str> {
     }
 }
 
+fn has_complex_actor_filter(filter: &P) -> bool {
+    const COMPLEX: &[&str] = &[
+        "within",
+        "visible",
+        "designated",
+        "not_designated",
+        "embarked_in",
+        "member_of",
+        "engaged_with",
+        "not_engaged_with",
+        "model_names",
+        "unit_ids",
+        "has_ability",
+        "lacks_ability",
+        "attachment_role",
+        "excluding",
+    ];
+    COMPLEX.iter().any(|key| {
+        filter.get(*key).is_some_and(|value| match value {
+            Value::Null => false,
+            Value::Array(items) => !items.is_empty(),
+            Value::Object(object) => !object.is_empty(),
+            _ => true,
+        })
+    })
+}
+
 /// The actor of a trigger: "the unit", "an enemy unit", "this model".
 pub(crate) fn actor(r: Option<&Value>) -> String {
     match r {
@@ -33,6 +60,14 @@ pub(crate) fn actor(r: Option<&Value>) -> String {
         Some(Value::Object(f)) => {
             if f.get("event_var").is_some_and(Value::is_string) {
                 return "that unit".to_string();
+            }
+            if f.get("selection_var").is_some_and(Value::is_string)
+                || f.get("stratagem_target").is_some_and(Value::is_string)
+            {
+                return super::unit_ref_phrase(Some(&Value::Object(f.clone())), "the unit");
+            }
+            if has_complex_actor_filter(f) {
+                return unit_filter_phrase(f);
             }
             // Keywords on the actor read as a trailing requirement; states read as a relative
             // clause ("an enemy unit that is unengaged").
@@ -73,6 +108,9 @@ pub(crate) fn actor_keywords(r: Option<&Value>) -> String {
     let Some(f) = r.and_then(Value::as_object) else {
         return String::new();
     };
+    if has_complex_actor_filter(f) {
+        return String::new();
+    }
     let noun = if is(f, "level", "model") {
         "model"
     } else {
@@ -83,6 +121,12 @@ pub(crate) fn actor_keywords(r: Option<&Value>) -> String {
         s.push_str(&format!(
             " (the triggering {noun} must have {})",
             and_list(&all)
+        ));
+    }
+    if let Some(any) = strs(f.get("any_of")) {
+        s.push_str(&format!(
+            " (the triggering {noun} must have {})",
+            or_list(&any)
         ));
     }
     // Alternatives: "(the triggering model must be a LEGIO CYBERNETICA model or an ADEPTUS MECHANICUS VEHICLE model)".
@@ -289,6 +333,7 @@ pub(crate) fn event_phrase(t: &P) -> String {
     let event = t.get("event").and_then(Value::as_str).unwrap_or("");
     match event {
         "battle-started" => "at the start of the battle".to_string(),
+        "army-selected" => "when selecting your army".to_string(),
         "battle-formations-declared" => "when declaring Battle Formations".to_string(),
         "deployment-ended" => "after deployment".to_string(),
         "round-started" => "at the start of the battle round".to_string(),

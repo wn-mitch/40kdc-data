@@ -1,4 +1,7 @@
+import { narrowUnitIds, resolveUnitNames, type UnitNameContext } from "./compile-unit-names.js";
 import { exactSpan } from "./contracts.js";
+import { foldAuraEmitter, lowerConditionalAuras } from "./compile-aura-emitter.js";
+import { foldAbilityUseRefresh } from "./compile-ability-use-refresh.js";
 import { foldActivationPicks, retargetMenu } from "./compile-activation.js";
 import { AURA_RECIPIENT, bindAntecedents, momentNamesUnit } from "./compile-antecedent.js";
 import { refuseHistoryValueWithoutSource } from "./compile-history-values.js";
@@ -19,6 +22,9 @@ import { bandMoments } from "./compile-band-moment.js";
 import { forEachTail } from "./compile-for-each-tail.js";
 import { chooseBetweenGroups } from "./compile-choice-groups.js";
 import { addsAttackGate, attackTargetBinding, isBackref, resolveAttackBackrefs } from "./compile-attack-backref.js";
+import { groupPermissionAttacks } from "./compile-permission-attacks.js";
+import { battleStartSnapshot } from "./compile-recipient-snapshot.js";
+import { compileReactionParts } from "./compile-reaction-parts.js";
 import { bindArmyAntecedents, armyCoreChecks, foldArmyAttachments, foldArmyPer, resolveArmyGroups } from "./compile-army.js";
 import { bindPrecedingRolls, foldConditionalTestModifiers, trailingTestCondition } from "./compile-preceding-roll.js";
 import { CompileError, effect, type CompileLeaf } from "./compile-fragments.js";
@@ -66,6 +72,9 @@ import { gatedMoment, usabilityGates } from "./compile-usability-gate.js";
 import { triggerMoveEnd, type MoveEndRule } from "./compile-move-end.js";
 import { attachMoveEndNearest, bindEngagedPermissions, isBonusNode } from "./compile-move-end-nearest.js";
 import { compileGranted } from "./compile-granted.js";
+import { compileNamedAbilityStates } from "./compile-named-ability-states.js";
+import { compileOathRecord } from "./compile-oath.js";
+import { foldAbilityUseContext } from "./compile-ability-use.js";
 import { bindCharacteristicAmounts } from "./compile-characteristic-amount.js";
 import { bindAdditiveOptions } from "./compile-additive-option.js";
 import { bindIgnoreLists } from "./compile-ignore-list.js";
@@ -179,7 +188,7 @@ const STRATAGEM_FAMILIES = new Set(["use-window", "stratagem-target", "triggerin
  */
 const LASTING_EFFECTS = new Set([
   "ability-grant", "ability-modifier", "act-on-death", "borrow-weapons", "cost-modifier", "counts-as", "damage-reduction",
-  "destruction-rule", "feel-no-pain", "ignore-modifiers", "invulnerable-save", "keyword-grant", "leader-model-ability-grant",
+  "destruction-rule", "feel-no-pain", "ignore-modifiers", "invulnerable-save", "keyword-grant",
   "move-modifier", "named-region-state", "permission", "re-roll", "roll-modifier", "roll-result", "rule-state", "stat-modifier",
   "targeting", "test-exemption", "transport-capacity", "weapon-ability-grant", "weapon-ability-range", "weapon-grant",
 ]);
@@ -222,7 +231,7 @@ const testsMadeAdvance = (gates: Node[]) => gates.some((gate) => /"type":"happen
 function isAdvanceInPlace(node: Node): boolean {
   const modifier = node.modifier as Node | undefined;
   return node.type === "stat-modifier" && node.target !== "attacker" && modifier?.stat === "M" && modifier.operation === "add"
-    && Number(modifier.value) === 6 && modifier.weapon_type === undefined;
+    && Number(modifier.value) === 6 && modifier.weapons === undefined;
 }
 
 /** Words that narrow which models a per-model roll covers; a per_model roll counts every model of its unit. */
@@ -270,6 +279,8 @@ export type CompileOptions = {
   selectedObjective?: string;
   /** The faction's weapons by printed name (compile-weapon-names.ts), so a named weapon resolves to its id. */
   weapons?: WeaponNameContext;
+  /** Exact unit datasheet names resolve only within the owning faction. */
+  units?: UnitNameContext;
 };
 
 /** Compile one ability's reviewed leaves. Failures name what is missing; nothing is guessed. */
@@ -288,13 +299,26 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   }
   // Qualifiers printed apart from their host are bound first: a characteristic amount after its recipient (compile-characteristic-amount.ts), an additive option after its duration (compile-additive-option.ts), and an ignore-modifier list after its lead-in (compile-ignore-list.ts).
   let bound: CompileLeaf[];
-  try { bound = bindIgnoreLists(bindAdditiveOptions(bindCharacteristicAmounts(leaves), sourceText), sourceText); } catch (error) {
+  try {
+    bound = foldAuraEmitter(bindIgnoreLists(
+      bindAdditiveOptions(bindCharacteristicAmounts(resolveUnitNames(leaves, options.units)), sourceText),
+      sourceText,
+    ));
+  } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature: shapeSignature(ordered(leaves), sourceText), errors: [error.message] };
   }
   // An ability the record prints as granted compiles alone, as its holder's own (compile-granted.ts).
   // "This ability" inside a granted body is the granted one, not the record, so a body gets no id.
-  const compiled = compileGranted(bound, sourceText, (host, text) => compileRecord(host, text, options), (body, text) => compileLeaves(body, text), options.abilityId);
+  const compiled = compileNamedAbilityStates(bound, sourceText,
+    (host, text) => compileGranted(host, text, (part, partText) => compileRecord(part, partText, options), (body, bodyText) => compileLeaves(body, bodyText), options.abilityId),
+    (body, text) => compileLeaves(body, text), options.abilityId);
+  if (compiled.ok && bound.some((leaf) => leaf.family_id === "aura-range" && leaf.parameters.conditional_range !== undefined)) {
+    try { compiled.mechanics.effect = lowerConditionalAuras(compiled.mechanics.effect); } catch (error) {
+      if (!(error instanceof CompileError)) throw error;
+      return { ok: false, signature: compiled.signature, errors: [error.message] };
+    }
+  }
   if (compiled.ok && containsRollMarker(compiled.mechanics)) {
     return { ok: false, signature: compiled.signature, errors: ["A roll-result band was left unresolved in the compiled output."] };
   }
@@ -338,6 +362,10 @@ function compileRecord(given: readonly CompileLeaf[], sourceText?: string, optio
     return { ok: false, signature: shapeSignature(ordered(leaves), sourceText), errors: [error.message] };
   }
   if (psychic) return lowerPsychicRecord(psychic, shapeSignature(ordered(leaves), sourceText), (group) => compilePart(group, sourceText, options));
+  const reactions = compileReactionParts(ordered(leaves), sourceText, (group) => compilePart(group, sourceText, options));
+  if (reactions !== null) return reactions;
+  const oath = compileOathRecord(leaves, sourceText, (group) => compilePart(group, sourceText, options));
+  if (oath !== null) return oath;
   const segments = sentenceSegments(ordered(leaves), sourceText);
   if (!segments) return compilePart(leaves, sourceText, options);
   // Independent sentences (compile-segments.ts) compile alone and join as parts of one ability.
@@ -359,6 +387,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     && leaves.some((leaf) => leaf.family_id === "set-up" || leaf.family_id === "add-unit");
   let list: CompileLeaf[];
   try {
+    leaves = foldAbilityUseRefresh(foldAbilityUseContext(leaves));
     refuseBlastRating(leaves, sourceText);
     refuseStratagemTargetActivity(leaves);
     refuseUnboundIfItDoes(leaves, sourceText);
@@ -679,7 +708,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
           }
           // An attack whose properties compile-attack-properties.ts framed has its type on each of them;
           // a back-reference repeats its antecedent's type only where that one's gate does not reach.
-          const gate = addsAttackGate(leaf) ? attackTypeCondition(leaf) : null;
+          const gate = addsAttackGate(leaf) && leaf.parameters.permission_start === undefined ? attackTypeCondition(leaf) : null;
           if (gate) scope(gate);
           // "targets that unit": the designation's unit needs nothing more; the selected unit scopes as a selection.
           if (leaf.parameters.target === "that-unit" && attackTargetBinding(list, index) === "selected") scope("selected");
@@ -727,9 +756,14 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     if (leaf.role !== "EFFECT") return;
     const { sentence, clause } = places[index]!;
     const node = containerNodes.has(index) ? containerNodes.get(index)! : attempt(() => {
-      // The nearest attack before this effect says who attacks and which way; a back-reference
-      // ("that attack") is its antecedent, which still carries the attacker's filter.
-      const attack = list.slice(0, index).reverse().find((item) => item.family_id === "attack" && !isBackref(item));
+      // Find the current attack and event frames without copying the preceding leaves.
+      let attack: CompileLeaf | undefined;
+      let currentMoment: CompileLeaf | undefined;
+      for (let before = index - 1; before >= 0 && (!attack || !currentMoment); before--) {
+        const candidate = list[before]!;
+        if (!attack && candidate.family_id === "attack" && !isBackref(candidate)) attack = candidate;
+        if (!currentMoment && candidate.role === "EVENT") currentMoment = candidate;
+      }
       return effect(leaf, {
         attached,
         attacker: attack && attack.parameters.direction === "makes" ? attackerOf(attack, thatUnit) : null,
@@ -738,7 +772,8 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
         incoming: attack?.parameters.direction === "targeted" || (attack?.parameters.direction !== "makes" && defenderBoundBefore(list, index)),
         // An allocation moment before the effect ("Each time an attack … is allocated to a model in that unit"):
         // the attack a makes-attack names is the one allocated to the bearer's unit (compile-fragments.ts attackOwner).
-        defended: list.slice(0, index).some((item) => item.family_id === "event" && item.parameters.kind === "damage-allocated"),
+        defended: currentMoment?.family_id === "event" && currentMoment.parameters.kind === "damage-allocated",
+        allocatedToModel: currentMoment?.parameters.object === "this-model",
       });
     });
     if (!node) return;
@@ -749,6 +784,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
       replaces: false,
     });
   });
+  attempt(() => groupPermissionAttacks(list, planned));
   // A moment inside a result band holds the effects after it in its sentence as one part of that band's outcome.
   for (const [momentAt, effectAt] of inBand) {
     const members = planned.filter((item) => effectAt.includes(item.index));
@@ -1340,8 +1376,14 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   // "Select one enemy unit to be this model's prey": a persistent designation makes that selection itself.
   // A designation's own select, possibly wrapped optional, is the body's, not a select around it.
   else if (selections.length === 1 && (body?.type === "persistent-designation" || (body?.type === "ability-part" && (body.effect as Node | undefined)?.type === "persistent-designation"))) {
-    // A persistent designation's select has no eligibility field in the DSL, so an eligibility here is refused, not dropped.
-    if (eligibilityIndexes.length) return { ok: false, signature, errors: [...errors, "A persistent designation's select has no eligibility field."] };
+    const designationNode = body!.type === "ability-part" ? body!.effect as Node : body!;
+    const selection = designationNode.select as Node;
+    if (selection.kind !== "unit") return { ok: false, signature, errors: [...errors, "A unit selection cannot establish an objective designation."] };
+    const existing = selection.selector as Node;
+    selection.selector = {
+      ...(selectUnit(selections[0]!, body!, { eligibility, selectionLimit }).selector as Node),
+      ...(existing.bind_as === undefined ? {} : { bind_as: existing.bind_as }),
+    };
   }
   else if (pair && body) {
     // A bound pair: the outer select takes the selection's eligibility, the inner one its candidate's (compile-pair-eligibility.ts).
@@ -1386,9 +1428,13 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     const decidesUse = optional && (!offerMoments || rawOf[triggerIndexes[position]!]! <= optionalSentence);
     const moment: Node = decidesUse ? { ...node, optional: true } : { ...node };
     // The keywords narrow whoever acted: a filter subject gains all_of; this unit gets a keyword condition.
-    if (bound && bound.parameters.match === "all" && (bound.parameters.keywords as string[]).length) {
-      const keywords = bound.parameters.keywords as string[];
-      const withKeywords = (unit: Node) => ({ ...unit, all_of: [...new Set([...((unit.all_of as string[] | undefined) ?? []), ...keywords])] });
+    const unitIds = bound?.parameters.unit_ids as string[] | undefined;
+    if (bound && ((bound.parameters.match === "all" && (bound.parameters.keywords as string[]).length) || unitIds)) {
+      const keywords = bound.parameters.match === "all" ? bound.parameters.keywords as string[] : [];
+      const withKeywords = (unit: Node) => {
+        const narrowed = keywords.length ? { ...unit, all_of: [...new Set([...((unit.all_of as string[] | undefined) ?? []), ...keywords])] } : unit;
+        return unitIds ? narrowUnitIds(narrowed, unitIds) : narrowed;
+      };
       // When an enemy acts ("when an enemy unit targets a friendly X unit", "ends a move within 8\"
       // of a friendly X unit") the Stratagem's unit is never that enemy: it is the moment's
       // object, or else this unit, which the keywords gate.
@@ -1400,13 +1446,13 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
         else if (nearTarget) {
           // The target is the friendly unit the moment's distance names, so the enemy mover needs no keyword gate.
         } else {
-          const gate: Node = { type: "has-keyword", parameters: { all_of: keywords } };
+          const gate: Node = { type: "matches", parameters: { filter: withKeywords({}) } };
           const own = moment.condition as Node | undefined;
           moment.condition = own ? { operator: "and", operands: [own, gate] } : gate;
         }
       } else if (moment.subject !== null && typeof moment.subject === "object") moment.subject = withKeywords(moment.subject as Node);
       else {
-        const gate: Node = { type: "has-keyword", parameters: { ...(moment.subject ? { subject: moment.subject } : {}), all_of: keywords } };
+        const gate: Node = { type: "matches", parameters: { ...(moment.subject ? { subject: moment.subject } : {}), filter: withKeywords({}) } };
         const own = moment.condition as Node | undefined;
         moment.condition = own ? { operator: "and", operands: [own, gate] } : gate;
       }
@@ -1470,18 +1516,20 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature, errors: [error.message] };
   }
+  const lifetime = foldedPhase ? "phase" : period ?? scopeDuration;
+  const snapshot = battleStartSnapshot(resolved.effect, resolved.trigger, lifetime);
   return {
     ok: true,
     signature,
     ...(resolved.core ? { core: resolved.core } : {}),
     mechanics: {
-      effect: resolved.effect,
-      scope: { duration: foldedPhase ? "phase" : period ?? scopeDuration },
+      effect: snapshot.effect,
+      scope: { duration: lifetime },
       // A choice with an event is an optional trigger; a choice without one is activated, as is a
       // stratagem (it has a phase window or a TARGET), which a player always chooses to use. An
       // aura-range leaf always reads as an aura, ahead of any of those.
       behavior,
-      trigger: resolved.trigger as typeof entryTrigger,
+      trigger: snapshot.trigger as typeof entryTrigger,
       ...(usages.length ? { usage: usages[0] } : {}),
     },
     checks: [...checks, ...armyCoreChecks(list)],

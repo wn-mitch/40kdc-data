@@ -92,10 +92,14 @@ describe("Reserves states", () => {
         ["While this unit is held aside", "unit-state", { states: [state], subject: "this-unit", negated: false }],
         ["this unit has the Feel No Pain 6+ ability", "feel-no-pain", FNP],
       ]));
-      expect(nodes(mechanics, (node) => node.type === "unit-state")[0]!.parameters).toMatchObject({ state: lowered });
+      expect(nodes(mechanics, (node) => node.type === "matches" && typeof node.parameters === "object" && node.parameters !== null && !Array.isArray(node.parameters)
+        && typeof (node.parameters as Record<string, unknown>).filter === "object"
+        && (node.parameters as Record<string, unknown>).filter !== null
+        && ((node.parameters as Record<string, unknown>).filter as Record<string, unknown>).state === lowered)[0]!.parameters)
+        .toMatchObject({ filter: { state: lowered } });
       expect(schemaErrors(mechanics)).toEqual([]);
     }
-    expect(describeCondition({ type: "unit-state", parameters: { state: "in-cult-ambush" } } as never)).toBe("the unit is in Cult Ambush");
+    expect(describeCondition({ type: "matches", parameters: { filter: { state: "in-cult-ambush" } } } as never)).toBe("the unit is in Cult Ambush");
   });
 
   it("checks a Stratagem target held in Reserves as being in Strategic Reserves", () => {
@@ -111,7 +115,8 @@ describe("Reserves states", () => {
     if (!result.ok) throw new Error(result.errors.join("; "));
     const target = (result.core as { target_restrictions: Record<string, unknown> }).target_restrictions;
     expect(target).toMatchObject({ side: "your-army", required_keywords: ["JUMP PACK"] });
-    expect(nodes(target.eligibility, (node) => node.type === "unit-state").map((node) => node.parameters)).toEqual([{ state: "in-strategic-reserves" }]);
+    expect(nodes(target.eligibility, (node) => node.type === "matches").map((node) => node.parameters))
+      .toContainEqual({ filter: { state: "in-strategic-reserves" } });
   });
 
   it("lowers arriving from Reserves as being set up from Strategic Reserves, alone or with another activity", () => {
@@ -133,15 +138,15 @@ describe("Reserves states", () => {
       ['Set your unit up wholly within 6" of that Cult Ambush marker', "set-up", { subject: "this-unit", to: "battlefield", via: "cult-ambush-marker", marker_inches: 6, marker_wholly: true }],
       ['Move that Cult Ambush marker up to 6"', "battlefield-marker", { subject: "this-unit", label: "cult-ambush-marker", operation: "relocate", distance: 6, not_moved_this_turn: true }],
     ]));
-    expect(nodes(mechanics, (node) => node.type === "set-up")[0]!.modifier).toEqual({ to: "battlefield", via: "cult-ambush-marker", marker_range: { inches: 6, wholly: true } });
-    expect(nodes(mechanics, (node) => node.type === "marker")[0]!.modifier).toMatchObject({ operation: "relocate", distance: 6, not_moved_this_turn: true });
+    expect(nodes(mechanics, (node) => node.type === "set-up")[0]!.modifier).toEqual({ to: "battlefield", via: "cult-ambush", marker_range: { range: { inches: 6 }, wholly: true } });
+    expect(nodes(mechanics, (node) => node.type === "marker")[0]!.modifier).toMatchObject({ operation: "relocate", distance: { inches: 6 }, not_moved_this_turn: true });
     expect(schemaErrors(mechanics)).toEqual([]);
     expect(() => normalize("set-up", { subject: "this-unit", to: "battlefield", marker_inches: 6 })).toThrow(/cult-ambush-marker/u);
     expect(() => normalize("battlefield-marker", { subject: "this-unit", label: "cult-ambush-marker", operation: "place", not_moved_this_turn: true })).toThrow(/relocate/u);
     const say = (effect: unknown) => describeAbility({ effect, scope: { duration: "resolution" } } as never);
-    expect(say({ type: "set-up", target: "this-unit", modifier: { to: "battlefield", via: "cult-ambush-marker", marker_range: { inches: 6, wholly: true } } }))
+    expect(say({ type: "set-up", target: "this-unit", modifier: { to: "battlefield", via: "cult-ambush", marker_range: { range: { inches: 6 }, wholly: true } } }))
       .toContain('set up on the battlefield using a Cult Ambush marker, wholly within 6" of that marker');
-    expect(say({ type: "marker", target: "this-unit", modifier: { label: "cult-ambush-marker", operation: "relocate", distance: 6, not_moved_this_turn: true } }))
+    expect(say({ type: "marker", target: "this-unit", modifier: { label: "cult-ambush-marker", operation: "relocate", distance: { inches: 6 }, not_moved_this_turn: true } }))
       .toContain('marker that has not been moved this turn up to 6"');
   });
 
@@ -178,13 +183,14 @@ describe("negated filter states and all-of exclusions", () => {
     expect(() => normalize("unit-filter", { side: "enemy", excluded_all_keywords: ["MONSTER"] })).toThrow();
   });
 
-  it("refuses an aura whose units must not be Battle-shocked, which its eligible list cannot say", () => {
-    const result = compileLeaves(...Object.values(placed("While a friendly not battle-shocked unit is within 6\" of this model, that unit has the Feel No Pain 6+ ability.", [
+  it("retains a not Battle-shocked restriction in an aura's eligible filter", () => {
+    const mechanics = compiled(placed("While a friendly not battle-shocked unit is within 6\" of this model, that unit has the Feel No Pain 6+ ability.", [
       ["friendly not battle-shocked unit", "unit-filter", { side: "friendly", states: ["not-battle-shocked"] }],
       ["is within 6\" of this model", "aura-range", { inches: 6 }],
       ["that unit has the Feel No Pain 6+ ability", "feel-no-pain", { ...FNP, subject: "antecedent" }],
-    ])) as [CompileLeaf[], string]);
-    expect(result.ok ? "compiled" : result.errors.join()).toMatch(/not Battle-shocked|aura|anchor/u);
+    ]));
+    expect(nodes(mechanics, (node) => node.type === "aura")[0]!.modifier)
+      .toMatchObject({ eligible: { owner: "friendly", not_states: ["battle-shocked"] } });
   });
 });
 

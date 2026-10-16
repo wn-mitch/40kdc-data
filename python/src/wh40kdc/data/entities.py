@@ -73,6 +73,32 @@ def trigger_gated(behavior: Any, trigger: Any, effect: Any) -> Any:
     return moment_gate(trigger, effect)
 
 
+def _contains_for_each_unit(effect: Any) -> bool:
+    """Whether an effect tree recipient depends on a per-unit selection."""
+    if isinstance(effect, list):
+        return any(_contains_for_each_unit(item) for item in effect)
+    if not isinstance(effect, dict):
+        return False
+    if effect.get("type") == "for-each-unit":
+        return True
+    return any(_contains_for_each_unit(value) for value in effect.values())
+
+
+def _recipient_snapshot_unavailable(behavior: Any, trigger: Any, effect: Any) -> bool:
+    """Triggered recipient selections cannot retain membership after detachment."""
+    if behavior != "reactive" or not _contains_for_each_unit(effect):
+        return False
+    from wh40kdc.cruncher.from_dsl import is_attack_step
+
+    triggers = trigger if isinstance(trigger, list) else [trigger]
+    return any(
+        isinstance(item, dict)
+        and isinstance(item.get("event"), str)
+        and not is_attack_step(item)
+        for item in triggers
+    )
+
+
 class UnitView:
     """A unit, linked to its faction, weapons, and abilities."""
 
@@ -311,19 +337,58 @@ class AbilityView:
     ) -> dict[str, Any]:
         """Full DSL→Buff translation, including the ``unsupported`` list. ``rating`` is
         the rating the owning unit prints for a rated rule (``{rating: true}``)."""
-        from wh40kdc.cruncher.from_dsl import effect_to_buffs
+        from wh40kdc.cruncher.from_dsl import (
+            effect_to_buffs,
+            resolve_recipient_snapshots,
+        )
 
         ctx = context if context is not None else {"phase": "shooting"}
         # A rated rule ({rating: true}) reads the rating the owning unit prints.
         resolved = with_rating(self._resolve_rules_bundles(self.raw.get("effect")), rating)
-        moment = trigger_gated(self.raw.get("behavior"), self.raw.get("trigger"), resolved)
-        translated = effect_to_buffs(
-            moment
-            if moment is not resolved
-            else usage_gated(self.raw.get("ability_type"), self.raw.get("usage"), resolved),
+        snapshot = resolve_recipient_snapshots(
+            self.raw.get("trigger"),
+            resolved,
             source,
             ctx,
             perspective,
+        ) if self.raw.get("behavior") == "reactive" else {"effect": resolved}
+        if snapshot.get("reason"):
+            return {
+                "applied": [],
+                "unsupported": [
+                    {"reason": snapshot["reason"], "effectFragment": resolved}
+                ],
+                "activatable": [],
+            }
+        resolved = snapshot.get("effect", resolved)
+        if _recipient_snapshot_unavailable(
+            self.raw.get("behavior"),
+            self.raw.get("trigger"),
+            resolved,
+        ):
+            return {
+                "applied": [],
+                "unsupported": [
+                    {
+                        "reason": (
+                            "trigger-time recipient snapshot is unavailable; "
+                            "current membership cannot establish historical recipients"
+                        ),
+                        "effectFragment": resolved,
+                    }
+                ],
+                "activatable": [],
+            }
+        moment = trigger_gated(self.raw.get("behavior"), self.raw.get("trigger"), resolved)
+        translated = effect_to_buffs(
+            moment,
+            source,
+            ctx,
+            perspective,
+            {
+                "usage": self.raw.get("usage"),
+                "duration": (self.raw.get("scope") or {}).get("duration"),
+            },
         )
         # An aura (an effect whose target filter reaches units `within` N", e.g. a
         # "within 18\"" reroll) gates on distance to the target. Stamp it here, not
@@ -341,7 +406,7 @@ class AbilityView:
             }
 
         return {
-            "applied": [gate(b) for b in translated.get("applied", [])],
+            "applied": translated.get("applied", []),
             "unsupported": translated.get("unsupported", []),
             "activatable": [
                 {**a, "buffs": [gate(b) for b in a.get("buffs", [])]}

@@ -457,12 +457,19 @@ describe("abilities-resolver conformance corpus", () => {
       const ability = c.effect === undefined ? ds.abilities.getAny(c.abilityId) : undefined;
       if (c.effect === undefined) expect(ability, `unknown ability ${c.abilityId}`).toBeDefined();
       // A rated rule reads the unit's printed rating; the case supplies it.
-      const result = effectToBuffs(
-        withRating(c.effect ?? ability!.raw.effect, c.rating),
-        c.source as never,
-        c.context,
-        c.perspective ?? "attacker",
-      );
+      const result = c.effect === undefined
+        ? ability!.describeBuffs(
+          c.source as never,
+          c.context,
+          c.perspective ?? "attacker",
+          c.rating,
+        )
+        : effectToBuffs(
+          withRating(c.effect, c.rating),
+          c.source as never,
+          c.context,
+          c.perspective ?? "attacker",
+        );
       const appliedContribs = result.applied.map((b) => b.contribution);
       expect(
         appliedContribs,
@@ -478,12 +485,16 @@ describe("abilities-resolver conformance corpus", () => {
           id: a.id,
           label: a.label,
           group: a.group ?? null,
+          requires: a.requires ?? null,
+          capRaise: a.capRaise ?? null,
           buffs: a.buffs.map((b) => b.contribution),
         }));
+        // An expected lever omits `group`, `requires` and `capRaise` when it has none.
+        const want = (c.expected.activatable as Record<string, unknown>[]).map((e) => ({ group: null, requires: null, capRaise: null, ...e }));
         expect(
           acts,
           `activatable levers for ${c.abilityId} (${c.perspective ?? "attacker"})`,
-        ).toEqual(c.expected.activatable);
+        ).toEqual(want);
       }
     }
   }

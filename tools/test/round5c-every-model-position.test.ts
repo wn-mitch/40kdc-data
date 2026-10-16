@@ -114,7 +114,7 @@ describe("unit-position models every: compiled shapes", () => {
       ["every model in this unit is within range of a beacon", "unit-position", { kind: "objective-range", controlled_by: "any", subject: "this-unit", negated: false }],
       ["attacks that target this unit have -1 AP", "characteristic-modifier", { subject: "attack", characteristics: ["AP"], operation: "worsen", value: 1, weapon_type: "all" }],
     ), BEACON_TEXT);
-    expect(mechanics.effect.condition.parameters).not.toHaveProperty("models");
+    expect(mechanics.effect.condition).toEqual({ type: "matches", parameters: { filter: { within: { of: { objective: {} }, range: "objective-control" } } } });
     expect(describeCondition(mechanics.effect.condition)).toBe("the unit is within range of an objective marker");
   });
 
@@ -127,7 +127,7 @@ describe("unit-position models every: compiled shapes", () => {
       ["If each model in that unit is within 3\" of this transport", "unit-position", { kind: "within", inches: 3, of: "this-unit", subject: "antecedent", negated: false, models: "every" }],
       ["that unit can embark within this transport", "make-move", { subject: "antecedent", move_type: "embark" }],
     ), text);
-    expect(mechanics.effect.effect.selector.eligibility.operands[1]).toEqual({
+    expect(mechanics.effect.effect.selector.eligibility).toEqual({
       type: "within",
       parameters: { subject: "selected-unit", of: "this-unit", range: { inches: 3 }, models: "every" },
     });

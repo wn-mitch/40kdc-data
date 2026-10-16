@@ -360,4 +360,35 @@ export const MOVE_EXTENSIONS: readonly FamilyExtension[] = [
   subjectAntecedent("act-after-move", 3, "\"your **VEHICLE** unit\" + \"is eligible to shoot and declare a charge in a turn in which it Fell Back\""),
   subjectAntecedent("no-advance-roll", 3, "\"do not make an Advance roll for it\""),
  NO_ADVANCE_ROLL_EVENT_SUBJECT,
+  /**
+   * An explicit movement-distance override: "that Advance has no maximum distance". This is
+   * deliberately a move modifier, not a make-move action, so it changes the selected Advance
+   * while leaving independent move-through and move-end restrictions in the same clause intact.
+   * The canonical effect carries `maximum: "unlimited"`; no numeric distance is invented.
+   */
+  {
+    family: "move-distance",
+    version: 2,
+    description: "As version 1, plus maximum: unlimited for the explicitly named Advance move; this changes the selected move's distance ceiling without creating another move.",
+    schema: (previous) => {
+      const withoutBonusRequired = { ...previous, required: ((previous.required as string[] | undefined) ?? []).filter((key) => key !== "bonus") };
+      const schema = withProperties(withoutBonusRequired, {
+        bonus: optional(properties(previous).bonus!),
+        maximum: { const: "unlimited", "x-only-when": { move_types: ["advance"] } },
+      });
+      return { ...schema, anyOf: [{ required: ["bonus"] }, { required: ["maximum"] }], not: { required: ["bonus", "maximum"] } };
+    },
+    normalize: (input, previous) => {
+      if (input.maximum === undefined) return previous(input);
+      if (input.maximum !== "unlimited") throw new TypeError("move-distance.maximum must be unlimited.");
+      if (input.bonus !== undefined) throw new TypeError("move-distance.maximum and bonus are mutually exclusive.");
+      if (!Array.isArray(input.move_types) || input.move_types.length !== 1 || input.move_types[0] !== "advance") {
+        throw new TypeError("move-distance.maximum unlimited applies only to exactly one advance move.");
+      }
+      const { maximum: _maximum, ...rest } = input;
+      const normalized = previous({ ...rest, bonus: 1 });
+      const { bonus: _bonus, ...result } = normalized;
+      return { ...result, maximum: "unlimited" };
+    },
+  },
 ];

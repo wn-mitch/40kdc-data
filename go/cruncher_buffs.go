@@ -30,6 +30,19 @@ func rankOf(s map[string]any) int {
 	}
 	return 99
 }
+func anyList(v any) []any {
+	if list, ok := v.([]any); ok {
+		return list
+	}
+	if list, ok := v.([]map[string]any); ok {
+		out := make([]any, len(list))
+		for i, item := range list {
+			out[i] = item
+		}
+		return out
+	}
+	return nil
+}
 
 func buffApplies(buff map[string]any, ctx map[string]any) bool {
 	w, ok := getMap(buff, "applicableWhen")
@@ -52,20 +65,246 @@ func buffApplies(buff map[string]any, ctx map[string]any) bool {
 			return false
 		}
 	}
+	// Excluded target keywords: permissive when the target's keywords are unknown.
+	if excluded, ok := asList(w["excludedTargetKeywords"]); ok && len(excluded) > 0 && ctx["targetKeywords"] != nil {
+		target := getList(ctx, "targetKeywords")
+		for _, k := range excluded {
+			if ks, ok := k.(string); ok && containsAny(target, lower(ks)) {
+				return false
+			}
+		}
+	}
 	if rk := getStr(w, "requiresAttackerKeyword"); rk != "" {
 		if !containsAny(getList(ctx, "attackerKeywords"), lower(rk)) {
 			return false
 		}
 	}
-	// Range gate: drop only when distance is known and exceeds the range.
-	if w["maxRangeInches"] != nil && ctx["distanceInches"] != nil {
-		maxRange, _ := num(w["maxRangeInches"])
-		distance, _ := num(ctx["distanceInches"])
-		if distance > maxRange {
+	maxRangeValue := w["maxRangeInches"]
+	if maxRangeValue == nil {
+		maxRangeValue = w["max_range_inches"]
+	}
+	if maxRangeValue != nil {
+		if ctx["distanceInches"] == nil {
+			return false
+		}
+		maxRange, maxOK := num(maxRangeValue)
+		distance, distanceOK := num(ctx["distanceInches"])
+		if !maxOK || !distanceOK || distance > maxRange {
+			return false
+		}
+	}
+	// Weapon-name gate: permissive when the context carries no weaponNames.
+	if wn, ok := w["weaponName"].(string); ok && ctx["weaponNames"] != nil {
+		if !containsAny(getList(ctx, "weaponNames"), wn) {
+			return false
+		}
+	}
+	if excluded, ok := asList(w["excludedWeaponNames"]); ok && len(excluded) > 0 && ctx["weaponNames"] != nil {
+		for _, name := range excluded {
+			if n, ok := name.(string); ok && containsAny(getList(ctx, "weaponNames"), n) {
+				return false
+			}
+		}
+	}
+	// Structured catalog selectors match any selected keyword. Parameters in
+	// the selector are a partial constraint: omitting a parameter intentionally
+	// means any catalog rating.
+	if refs := anyList(w["weaponKeywords"]); len(refs) > 0 {
+		printedRefs := anyList(ctx["weaponKeywordRefs"])
+		if len(printedRefs) > 0 {
+			if !weaponSelectorSetMatches(refs, printedRefs) {
+				return false
+			}
+		} else if weaponSelectorsNeedParameters(refs) || !weaponSelectorIDsMatch(refs, getList(ctx, "weaponKeywords")) {
+			return false
+		}
+	}
+	if refs := anyList(w["excludedWeaponKeywords"]); len(refs) > 0 {
+		printedRefs := anyList(ctx["weaponKeywordRefs"])
+		if len(printedRefs) > 0 {
+			if weaponSelectorSetMatches(refs, printedRefs) {
+				return false
+			}
+		} else if weaponSelectorsNeedParameters(refs) || weaponSelectorIDsMatch(refs, getList(ctx, "weaponKeywords")) {
+			return false
+		}
+	}
+	if w["unresolvedWeaponRef"] != nil {
+		return false
+	}
+	return true
+}
+
+func weaponSelectorSetMatches(selectors, printed []any) bool {
+	for _, selectorAny := range selectors {
+		selector, ok := asMap(selectorAny)
+		if !ok || selector == nil {
+			continue
+		}
+		wantID := getStr(selector, "keyword_id")
+		for _, printedAny := range printed {
+			ref, ok := asMap(printedAny)
+			if !ok || ref == nil || getStr(ref, "keyword_id") != wantID {
+				continue
+			}
+			if weaponSelectorParametersMatch(mapOr(selector["parameters"]), mapOr(ref["parameters"])) {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func weaponSelectorParametersMatch(want, have map[string]any) bool {
+	for key, value := range want {
+		if have[key] == nil {
+			return false
+		}
+		if canon, ok := value.([]any); ok {
+			haveValues, ok := have[key].([]any)
+			if !ok || !containsAnyV(canon, haveValues) {
+				return false
+			}
+			continue
+		}
+		if value != have[key] {
 			return false
 		}
 	}
 	return true
+}
+
+func weaponKeywordGateRefs(buff map[string]any) []map[string]any {
+	w, _ := getMap(buff, "applicableWhen")
+	raw := anyList(w["weaponKeywords"])
+	refs := make([]map[string]any, 0, len(raw))
+	for _, item := range raw {
+		if ref, ok := asMap(item); ok && ref != nil {
+			refs = append(refs, ref)
+		}
+	}
+	return refs
+}
+func weaponSelectorsNeedParameters(selectors []any) bool {
+	for _, item := range selectors {
+		selector, _ := asMap(item)
+		if selector != nil && len(mapOr(selector["parameters"])) > 0 {
+			return true
+		}
+	}
+	return false
+}
+
+func weaponSelectorIDsMatch(selectors []any, printed []any) bool {
+	for _, item := range selectors {
+		selector, _ := asMap(item)
+		if selector == nil {
+			continue
+		}
+		want := getStr(selector, "keyword_id")
+		for _, value := range printed {
+			if getStr(map[string]any{"keyword_id": value}, "keyword_id") == want {
+				return true
+			}
+			if s, ok := value.(string); ok && s == want {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func weaponKeywordGate(buff map[string]any) (string, bool) {
+	w, _ := getMap(buff, "applicableWhen")
+	k, ok := w["weaponKeyword"].(string)
+	return k, ok
+}
+
+// liveBuffs reports, per buff, whether its gates hold. A weapon-keyword gate
+// reads the weapon's printed keywords plus the keywords other live buffs grant,
+// so one pass is repeated until no further gated buff joins ("weapons with
+// Lethal Hits gain Rapid Fire 1" sees a granted Lethal Hits). Permissive when
+// the context carries no weaponKeywords.
+func liveBuffs(buffs []any, ctx map[string]any) []bool {
+	live := make([]bool, len(buffs))
+	pending := make([]bool, len(buffs))
+	gatedByKeyword := ctx["weaponKeywords"] != nil
+	for i, bAny := range buffs {
+		b, _ := asMap(bAny)
+		structuredRefs := weaponKeywordGateRefs(b)
+		if !buffApplies(b, ctx) {
+			hasParameters := false
+			for _, ref := range structuredRefs {
+				if len(mapOr(ref["parameters"])) > 0 {
+					hasParameters = true
+					break
+				}
+			}
+			if len(structuredRefs) == 0 || hasParameters {
+				continue
+			}
+		}
+		_, legacy := weaponKeywordGate(b)
+		structured := len(structuredRefs) > 0
+		if (legacy || structured) && gatedByKeyword {
+			pending[i] = true
+		} else {
+			live[i] = true
+		}
+	}
+	if !gatedByKeyword {
+		return live
+	}
+	for {
+		keywords := map[string]bool{}
+		for _, k := range getList(ctx, "weaponKeywords") {
+			if ks, ok := k.(string); ok {
+				keywords[keywordKey(ks)] = true
+			}
+		}
+		for _, raw := range getList(ctx, "weaponKeywordRefs") {
+			if ref, ok := asMap(raw); ok {
+				keywords[keywordKey(getStr(ref, "keyword_id"))] = true
+			}
+		}
+		for i, bAny := range buffs {
+			if !live[i] {
+				continue
+			}
+			b, _ := asMap(bAny)
+			c, _ := getMap(b, "contribution")
+			if getStr(c, "type") == "extra-keyword" {
+				ref, _ := getMap(c, "keywordRef")
+				keywords[keywordKey(getStr(ref, "keyword_id"))] = true
+			}
+		}
+		joined := false
+		for i, bAny := range buffs {
+			if !pending[i] {
+				continue
+			}
+			b, _ := asMap(bAny)
+			refs := weaponKeywordGateRefs(b)
+			matched := false
+			for _, ref := range refs {
+				if keywords[keywordKey(getStr(ref, "keyword_id"))] {
+					matched = true
+					break
+				}
+			}
+			if legacy, ok := weaponKeywordGate(b); ok {
+				matched = matched || keywords[keywordKey(legacy)]
+			}
+			if matched {
+				pending[i] = false
+				live[i] = true
+				joined = true
+			}
+		}
+		if !joined {
+			return live
+		}
+	}
 }
 
 func keyOf(ref map[string]any) string {
@@ -88,6 +327,12 @@ type extraKw struct {
 }
 
 type fnpState struct{ threshold float64 }
+
+// rankedValue is a best-wins value with the rank of the source that set it.
+type rankedValue struct {
+	value float64
+	rank  int
+}
 type invState struct{ threshold float64 }
 
 type resolved struct {
@@ -104,6 +349,14 @@ type resolved struct {
 	damageReductionRank                         int
 	invulnerable                                *invState
 	invulnerableRank                            int
+	// critThresholds holds the lowest critical threshold per roll ("hit"/"wound").
+	critThresholds map[string]rankedValue
+	// ignoreModifiers holds the rank of the source per roll whose negative modifiers are ignored.
+	ignoreModifiers map[string]int
+	// skillMod sums WS/BS characteristic improvements.
+	skillMod map[string]float64
+	// saveCharacteristic is the ability-set Save; nil keeps the printed one.
+	saveCharacteristic *rankedValue
 }
 
 type contribAcc struct {
@@ -113,12 +366,18 @@ type contribAcc struct {
 
 // resolveBuffs collapses a flat buff stack into a resolved-modifiers read-out.
 func resolveBuffs(buffs []any, ctx map[string]any) *resolved {
-	out := &resolved{rerolls: map[string]rerollEntry{}}
+	out := &resolved{
+		rerolls:         map[string]rerollEntry{},
+		critThresholds:  map[string]rankedValue{},
+		ignoreModifiers: map[string]int{},
+		skillMod:        map[string]float64{"WS": 0, "BS": 0},
+	}
 
 	var hitContribs, woundContribs []contribAcc
-	for _, bAny := range buffs {
+	live := liveBuffs(buffs, ctx)
+	for i, bAny := range buffs {
 		b, _ := asMap(bAny)
-		if !buffApplies(b, ctx) {
+		if !live[i] {
 			continue
 		}
 		c, _ := getMap(b, "contribution")
@@ -197,11 +456,46 @@ func resolveBuffs(buffs []any, ctx map[string]any) *resolved {
 				out.invulnerable = &invState{threshold}
 				out.invulnerableRank = rankOf(source)
 			}
+		case "crit-threshold":
+			roll := getStr(c, "roll")
+			cur, exists := out.critThresholds[roll]
+			if !exists || val < cur.value || (val == cur.value && rankOf(source) < cur.rank) {
+				out.critThresholds[roll] = rankedValue{val, rankOf(source)}
+			}
+		case "ignore-modifiers":
+			roll := getStr(c, "roll")
+			cur, exists := out.ignoreModifiers[roll]
+			if !exists || rankOf(source) < cur {
+				out.ignoreModifiers[roll] = rankOf(source)
+			}
+		case "skill-mod":
+			out.skillMod[getStr(c, "stat")] += val
+		case "save-characteristic":
+			sc := out.saveCharacteristic
+			if sc == nil || val < sc.value || (val == sc.value && rankOf(source) < sc.rank) {
+				out.saveCharacteristic = &rankedValue{val, rankOf(source)}
+			}
 		}
 	}
-	out.hitMod = capModifier(hitContribs)
-	out.woundMod = capModifier(woundContribs)
+	_, ignoreHit := out.ignoreModifiers["hit"]
+	_, ignoreWound := out.ignoreModifiers["wound"]
+	out.hitMod = capModifier(keptContribs(hitContribs, ignoreHit))
+	out.woundMod = capModifier(keptContribs(woundContribs, ignoreWound))
 	return out
+}
+
+// keptContribs drops the negative modifiers of an ignored roll; its positive ones still apply.
+func keptContribs(contribs []contribAcc, ignored bool) []contribAcc {
+	if !ignored {
+		return contribs
+	}
+	kept := make([]contribAcc, 0, len(contribs))
+	for _, c := range contribs {
+		if c.value > 0 {
+			kept = append(kept, c)
+		}
+	}
+	return kept
 }
 
 func capModifier(contribs []contribAcc) float64 {

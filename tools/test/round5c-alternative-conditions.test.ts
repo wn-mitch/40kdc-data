@@ -35,7 +35,7 @@ describe("alternative conditions", () => {
   it("makes each line after \"if any of the following apply:\" one alternative", () => {
     const mechanics = conditionOf(list, listLeaves());
     expect(mechanics).toContain('"operator":"or"');
-    expect(mechanics).toMatch(/"operator":"or","operands":\[\{"type":"within".*"subject":"defender"/u);
+    expect(mechanics).toMatch(/"operator":"or","operands":\[\{"type":"matches".*"subject":"defender"/u);
   });
 
   it("keeps two conditions on one list line together", () => {

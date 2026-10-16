@@ -55,7 +55,7 @@ describe("filtered-units presence (a condition on the units a bare unit-filter n
 
   it("gates the effect on any such unit being on the battlefield and leaves the trigger without a subject", () => {
     const mechanics = mechanicsOf(leaves({ states: ["on-battlefield"], subject: "filtered-units", negated: false }), text);
-    expect(mechanics.effect.condition).toEqual({ type: "unit-state", parameters: { subject: { owner: "friendly", all_of: ["ALPHA"] }, state: "on-battlefield" } });
+    expect(mechanics.effect.condition).toEqual({ type: "matches", parameters: { subject: { owner: "friendly", all_of: ["ALPHA"] }, filter: { state: "on-battlefield" } } });
     expect(mechanics.effect.effect.target).toEqual({ owner: "enemy" });
     expect(mechanics.trigger.subject).toBeUndefined();
   });
@@ -88,7 +88,7 @@ describe("no other friendly units engaged with that enemy unit", () => {
 
   it("gates only the targeting effect, as other than this unit; an In addition sentence keeps its own gate", () => {
     const [targeting, ignoring] = mechanicsOf(ownLeaves(), own).effect.steps;
-    expect(targeting.effect.condition).toEqual({ operator: "not", operands: [{ type: "unit-state", parameters: { subject: { owner: "friendly", excluding: "this-unit" }, state: "engaged", with: "defender" } }] });
+    expect(targeting.effect.condition).toEqual({ operator: "not", operands: [{ type: "matches", parameters: { subject: { owner: "friendly", excluding: "this-unit" }, filter: { engaged_with: "defender" } } }] });
     expect(targeting.effect.effect.type).toBe("targeting");
     expect(JSON.stringify(ignoring)).not.toContain("engaged");
   });
@@ -113,12 +113,11 @@ describe("no other friendly units engaged with that enemy unit", () => {
   });
 
   it("refuses other_than without other, and any other_than value", () => {
-    const version = currentFamilyVersion("unit-filter");
     expect(norm("unit-filter", { side: "friendly", other: true, other_than: "event-subject" })).toMatchObject({ other: true, other_than: "event-subject" });
     expect(() => norm("unit-filter", { side: "friendly", other_than: "event-subject" })).toThrow();
     expect(() => norm("unit-filter", { side: "friendly", other: false, other_than: "event-subject" })).toThrow();
     expect(() => norm("unit-filter", { side: "friendly", other: true, other_than: "this-unit" })).toThrow();
-    expect(() => norm("unit-filter", { side: "friendly", other: true, other_than: "event-subject" }, version - 1)).toThrow();
+    expect(() => norm("unit-filter", { side: "friendly", other: true, other_than: "event-subject" }, previousVersion("unit-filter"))).toThrow();
     expect(norm("unit-filter", { side: "friendly", other: true })).toEqual(norm("unit-filter", { side: "friendly", other: true }, previousVersion("unit-filter")));
   });
 });
@@ -136,7 +135,7 @@ describe("a conditional bonus on the ability's own roll (filtered-units position
 
   it("selects the boosted dice when any such model is within range, and the plain dice otherwise", () => {
     const [boosted, plain] = mechanicsOf(leaves("filtered-units"), text).effect.steps;
-    const within = { type: "within", parameters: { subject: { owner: "friendly", all_of: ["ALPHA"], level: "model" }, of: "this-unit", range: { inches: 6 } } };
+    const within = { type: "matches", parameters: { subject: { owner: "friendly", all_of: ["ALPHA"], level: "model" }, filter: { within: { of: "this-unit", range: { inches: 6 } } } } };
     expect(boosted.condition).toEqual(within);
     expect(boosted.effect.dice).toBe("D6+1");
     expect(plain.condition).toEqual({ operator: "not", operands: [within] });
@@ -207,7 +206,7 @@ describe("unit-state: filtered-units and a this-model engagement", () => {
       ["this model is not within Engagement Range of one or more enemy units", "unit-state", { ...engagedModel, negated: true }],
       ["it can shoot as if it were your Shooting phase", "eligibility-permission", { subject: "this-model", activity: "shoot", allow: true, as_if: "shooting-phase" }]);
     const mechanics = mechanicsOf(list, text);
-    expect(mechanics.effect.condition.operands[1]).toEqual({ operator: "not", operands: [{ type: "unit-state", parameters: { subject: "this-model", state: "engaged" } }] });
+    expect(mechanics.effect.condition.operands[1]).toEqual({ operator: "not", operands: [{ type: "matches", parameters: { subject: "this-model", filter: { state: "engaged" } } }] });
     expect(mechanics.effect.effect.target).toBe("this-model");
   });
 });
@@ -233,9 +232,9 @@ describe("condition-exclusion (a group of conditions excluded together)", () => 
     const eligibility = mechanicsOf(base(group), text).effect.effect.selector.eligibility.operands;
     expect(eligibility).toHaveLength(3);
     expect(eligibility[2]).toEqual({ operator: "not", operands: [{ operator: "and", operands: [
-      { type: "has-ability", parameters: { subject: "selected-unit", ability: "beacon" } },
+      { type: "matches", parameters: { subject: "selected-unit", filter: { has_ability: ["beacon"] } } },
       { operator: "not", operands: [{ type: "attachment", parameters: { subject: "selected-unit", role: "attached" } }] },
-      { operator: "not", operands: [{ type: "within", parameters: { subject: "selected-unit", of: "this-model", range: { inches: 12 } } }] },
+      { operator: "not", operands: [{ type: "matches", parameters: { subject: "selected-unit", filter: { within: { of: "this-model", range: { inches: 12 } } } } }] },
     ] }] });
   });
 

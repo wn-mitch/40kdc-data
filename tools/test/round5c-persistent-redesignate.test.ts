@@ -50,6 +50,20 @@ const effectOf = (leaves: CompileLeaf[]) => {
   if (!result.ok) throw new Error(result.errors.join("; "));
   return result.mechanics.effect as Record<string, any>;
 };
+type PersistentNode = {
+  type?: unknown;
+  effect?: unknown;
+  lifecycle?: { replace?: { optional?: boolean } };
+  selection_policy?: unknown;
+  designation?: unknown;
+  select?: unknown;
+  consumer?: unknown;
+};
+const persistentEffect = (effect: Record<string, unknown>): PersistentNode => {
+  if (effect.type === "persistent-designation") return effect;
+  if (effect.type === "ability-part" && effect.effect && typeof effect.effect === "object") return effect.effect as PersistentNode;
+  throw new Error("Expected a persistent-designation effect.");
+};
 const errorsOf = (leaves: CompileLeaf[]): string[] => {
   const result = compileLeaves(leaves);
   return result.ok ? [] : result.errors;
@@ -58,15 +72,20 @@ const errorsOf = (leaves: CompileLeaf[]): string[] => {
 describe("Round 5C re-designation: replacement tail", () => {
   it("compiles the re-designation to a replace-on-destroyed selection that validates", () => {
     const effect = effectOf(redesignate());
+    const persistent = persistentEffect(effect);
     expect(effect).toMatchObject({
+      type: "ability-part",
+      trigger: { event: "round-started", condition: { type: "battle-round", parameters: { min: 1, max: 1 } } },
+    });
+    expect(persistent).toMatchObject({
       type: "persistent-designation",
       designation: "quarry",
-      select: { scope: "enemy-unit", count: 1, timing: "start-of-first-battle-round", selection_policy: "replace-on-destroyed", bind_as: "quarry-selection" },
-      consumer: { relation: "attacks-selected-unit", beneficiary: "bearer", reference: { selection_var: "quarry-selection" } },
+      select: { kind: "unit", selector: { filter: { owner: "enemy" }, count: { min: 1, max: 1 }, bind_as: "quarry-selection" } },
+      selection_policy: "replace-on-destroyed",
+      consumer: { relation: "attacks-selected-unit", beneficiary: "this-model", reference: { selection_var: "quarry-selection" } },
       lifecycle: {
         replace: { event: "on-unit-destroyed", reference: { selection_var: "quarry-selection" }, optional: false },
         exclusivity: "one-active-per-bearer-unit",
-        expiry: "battle-end",
       },
       duration: "battle",
     });
@@ -76,32 +95,34 @@ describe("Round 5C re-designation: replacement tail", () => {
 
   it("makes the replacement optional when its trigger's sentence says you may", () => {
     const effect = effectOf(redesignate([destroyed("C"), leaf("RESTRICTION", "optional-use", { who: "you" }, "C"), select("C"), open("C", "on-unit-destroyed")]));
-    expect(effect.lifecycle.replace.optional).toBe(true);
+    expect(persistentEffect(effect).lifecycle?.replace?.optional).toBe(true);
     expect(effectOk(effect)).toBe(true);
   });
 
   it("makes the replacement optional when its selection is up to one", () => {
     const effect = effectOf(redesignate([destroyed("C"), select("C", { count: 1, up_to: true }), open("C", "on-unit-destroyed")]));
-    expect(effect.lifecycle.replace.optional).toBe(true);
-    expect(effect.select.selection_policy).toBe("replace-on-destroyed");
+    expect(persistentEffect(effect).lifecycle?.replace?.optional).toBe(true);
+    expect(persistentEffect(effect).selection_policy).toBe("replace-on-destroyed");
     expect(effectOk(effect)).toBe(true);
   });
 
   it("compiles a replacement with no selection of its own, using the origin's selection", () => {
     const effect = effectOf(redesignate([destroyed("C"), leaf("RESTRICTION", "optional-use", { who: "you" }, "C"), open("C", "on-unit-destroyed")]));
-    expect(effect.lifecycle.replace.optional).toBe(true);
+    expect(persistentEffect(effect).lifecycle?.replace?.optional).toBe(true);
     expect(JSON.stringify(effect)).not.toContain("select-units");
     expect(effectOk(effect)).toBe(true);
   });
 
   it("keeps a standalone destruction-timed selection as it was", () => {
-    const effect = effectOf([
+    const effect = persistentEffect(effectOf([
       destroyed("A"), select("A"), open("A", "on-unit-destroyed", "unbridled-ardour-slayer"),
       reroll("B", "hit"),
-    ]);
-    expect(effect.select).toEqual({ scope: "enemy-unit", count: 1, timing: "on-unit-destroyed", selection_policy: "one-time" });
+    ]));
+    expect(effect.select).toEqual({ kind: "unit", selector: { filter: { owner: "enemy" }, count: { min: 1, max: 1 }, bind_as: "unbridled-ardour-slayer-selection" } });
+    expect(effect.selection_policy).toBe("one-time");
     expect(effect.lifecycle).toBeUndefined();
   });
+
 
   it("refuses a trailing sentence with no unit-destroyed trigger", () => {
     expect(errorsOf(redesignate([select("C"), open("C", "on-unit-destroyed")]))).toEqual(
@@ -203,8 +224,7 @@ describe("Round 5C re-designation: start timing", () => {
     ]);
     expect(result.ok).toBe(true);
     if (!result.ok) return;
-    expect(result.mechanics.trigger).toBeNull();
-    expect(result.mechanics.effect).toMatchObject({ type: "persistent-designation", select: { timing: "start-of-first-battle-round" } });
+    expect(result.mechanics.effect).toMatchObject({ type: "ability-part", trigger: { event: "round-started", condition: { type: "battle-round", parameters: { min: 1, max: 1 } } }, effect: { type: "persistent-designation" } });
   });
 
   it("takes 'at the start of the battle' the same way, as the designation's timing", () => {
@@ -213,9 +233,8 @@ describe("Round 5C re-designation: start timing", () => {
     ]);
     expect(result.ok).toBe(true);
     if (!result.ok) return;
-    expect(result.mechanics.trigger).toBeNull();
-    expect(result.mechanics.effect).toMatchObject({ type: "persistent-designation", designation: "hated-foe", select: { timing: "start-of-first-battle-round" } });
-    expect(JSON.stringify(result.mechanics)).not.toContain("battle-started");
+    expect(result.mechanics.effect).toMatchObject({ type: "ability-part", trigger: { event: "battle-started" }, effect: { type: "persistent-designation", designation: "hated-foe" } });
+    expect(JSON.stringify(result.mechanics)).toContain('"event":"battle-started"');
   });
 
   it("keeps a battle-round gate that is not round one as the ability's gate, not the designation's timing", () => {
@@ -225,7 +244,7 @@ describe("Round 5C re-designation: start timing", () => {
     ]);
     expect(result.ok).toBe(true);
     if (!result.ok) return;
-    expect(result.mechanics.effect).toMatchObject({ type: "conditional", condition: { type: "battle-round", parameters: { min: 2 } }, effect: { type: "persistent-designation" } });
+    expect(result.mechanics.effect).toMatchObject({ type: "conditional", condition: { type: "battle-round", parameters: { min: 2 } }, effect: { type: "ability-part", effect: { type: "persistent-designation" } } });
     expect(effectOk(result.mechanics.effect)).toBe(true);
   });
 });
@@ -260,11 +279,14 @@ describe("Round 5C re-designation: beneficiary this-unit (2146 shape)", () => {
       designatedFilter("B", "prey"), reroll("B", "wound"),
       destroyed("C"), select("C"), replacement,
     ]);
-    expect(effect).toMatchObject({
+    const persistent = persistentEffect(effect);
+    expect(effect).toMatchObject({ type: "ability-part", trigger: { event: "round-started" } });
+    expect(persistent).toMatchObject({
       type: "persistent-designation",
       designation: "prey",
-      select: { timing: "start-of-first-battle-round" },
-      consumer: { beneficiary: "unit" },
+      select: { kind: "unit", selector: { filter: { owner: "enemy" }, count: { min: 1, max: 1 }, bind_as: "prey-selection" } },
+      selection_policy: "replace-on-destroyed",
+      consumer: { beneficiary: "this-unit" },
       lifecycle: { replace: { optional: false }, exclusivity: "one-active-per-bearer-unit" },
     });
     expect(effectOk(effect)).toBe(true);
@@ -276,14 +298,15 @@ describe("Round 5C re-designation: names and registry", () => {
     const effect = effectOf([
       select("A"), open("A", "start-of-first-battle-round", "hated foe"), attack("B"), designatedFilter("B", "hated foe"), reroll("B", "wound"),
     ]);
-    expect(effect.designation).toBe("hated-foe");
-    expect(JSON.stringify(effect.consumer)).toContain('"tag":"hated-foe"');
-    expect(JSON.stringify(effect.consumer)).not.toContain("hated foe");
+    const persistent = persistentEffect(effect);
+    expect(persistent.designation).toBe("hated-foe");
+    expect(JSON.stringify(persistent.consumer)).toContain('"designated":"hated-foe"');
+    expect(JSON.stringify(persistent.consumer)).not.toContain("hated foe");
   });
 
   it("keeps an unregistered designation name as written", () => {
     const effect = effectOf([select("A"), open("A", "start-of-first-battle-round", "Quarry Mark"), attack("B"), reroll("B", "wound")]);
-    expect(effect.designation).toBe("Quarry Mark");
+    expect(persistentEffect(effect).designation).toBe("Quarry Mark");
   });
 
   it("registers mark as a designation id", () => {

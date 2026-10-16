@@ -6,7 +6,7 @@
 
 # Interface: NamedRegionConsumer
 
-Defined in: [generated.ts:4663](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4663)
+Defined in: [generated.ts:4037](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4037)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "named-region-consumer".
@@ -17,39 +17,7 @@ via the `definition` "named-region-consumer".
 
 > **state\_ref**: [`NamedRegionRef`](NamedRegionRef.md)
 
-Defined in: [generated.ts:4664](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4664)
-
-***
-
-### beneficiary\_gate
-
-> **beneficiary\_gate**: `object`
-
-Defined in: [generated.ts:4665](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4665)
-
-#### Index Signature
-
-\[`k`: `string`\]: `unknown`
-
-#### owner
-
-> **owner**: `string`
-
-#### faction?
-
-> `optional` **faction?**: `string`
-
-#### operator
-
-> **operator**: `"and"` \| `"or"`
-
-#### keywords
-
-> **keywords**: \[`string`, `...string[]`\]
-
-##### Min Items
-
-1
+Defined in: [generated.ts:4038](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4038)
 
 ***
 
@@ -57,15 +25,15 @@ Defined in: [generated.ts:4665](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **membership**: [`NamedRegionMembership`](NamedRegionMembership.md)
 
-Defined in: [generated.ts:4675](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4675)
+Defined in: [generated.ts:4039](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4039)
 
 ***
 
 ### qualified\_condition
 
-> **qualified\_condition**: [`AbilityDSLCondition2`](../type-aliases/AbilityDSLCondition2.md)
+> **qualified\_condition**: [`AbilityDSLCondition1`](../type-aliases/AbilityDSLCondition1.md)
 
-Defined in: [generated.ts:4676](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4676)
+Defined in: [generated.ts:4040](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4040)
 
 ***
 
@@ -73,7 +41,7 @@ Defined in: [generated.ts:4676](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **default\_branch**: [`NamedRegionBranch`](NamedRegionBranch.md)
 
-Defined in: [generated.ts:4677](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4677)
+Defined in: [generated.ts:4041](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4041)
 
 ***
 
@@ -81,12 +49,20 @@ Defined in: [generated.ts:4677](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **qualified\_branch**: [`NamedRegionBranch`](NamedRegionBranch.md)
 
-Defined in: [generated.ts:4678](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4678)
+Defined in: [generated.ts:4042](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4042)
 
 ***
 
 ### attack\_condition?
 
-> `optional` **attack\_condition?**: [`AbilityDSLCondition7`](../type-aliases/AbilityDSLCondition7.md)
+> `optional` **attack\_condition?**: [`AbilityDSLCondition4`](../type-aliases/AbilityDSLCondition4.md)
 
-Defined in: [generated.ts:4679](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4679)
+Defined in: [generated.ts:4043](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4043)
+
+***
+
+### beneficiary\_filter
+
+> **beneficiary\_filter**: [`UnitFilter`](UnitFilter.md)
+
+Defined in: [generated.ts:4044](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4044)

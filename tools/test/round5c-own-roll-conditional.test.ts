@@ -70,8 +70,8 @@ describe("Round 5C own-roll conditional change, fight-on-death", () => {
     expect(effect.type).toBe("sequence");
     expect(effect.steps).toHaveLength(2);
     // The condition is the eligibility, evaluated per destroyed model, not a wrapper around the grant.
-    expect(effect.steps[0]).toMatchObject({ type: "act-on-death", modifier: { gate: { dice: "D6+1", threshold: 4, comparison: "gte" }, eligibility: { type: "has-keyword" } } });
-    expect(effect.steps[1]).toMatchObject({ type: "act-on-death", modifier: { gate: { dice: "D6", threshold: 4, comparison: "gte" }, eligibility: { operator: "not" } } });
+    expect(effect.steps[0]).toMatchObject({ type: "act-on-death", modifier: { gate: { dice: "D6+1", threshold: 4, comparison: "gte", modifiers: [] }, eligibility: { type: "matches", parameters: { filter: { all_of: ["INFANTRY"] } } } } });
+    expect(effect.steps[1]).toMatchObject({ type: "act-on-death", modifier: { gate: { dice: "D6", threshold: 4, comparison: "gte", modifiers: [] }, eligibility: { operator: "not", operands: [{ type: "matches", parameters: { filter: { all_of: ["INFANTRY"] } } }] } } });
     expect(JSON.stringify(effect)).not.toContain('"type":"conditional"');
     // The compiled entry validates against the ability schema and renders.
     const check = checkEntry(entryWithMechanics(authoredBase(), result.mechanics));
@@ -82,8 +82,8 @@ describe("Round 5C own-roll conditional change, fight-on-death", () => {
     const effect = effectOf("Roll one D6, subtracting 1 from the result if your unit is a INFANTRY unit: on a 4+, that unit fights.",
       ROLL, SUBTRACT, ["if your unit is a INFANTRY unit", ...INFANTRY_UNIT], ["on a 4+", "roll-result", { from: 4 }],
       ["that unit fights", "fight-on-death", { act: "fight", timing: "when-its-unit-fights" }]);
-    expect(effect.steps[0].modifier.gate).toEqual({ dice: "D6", threshold: 5, comparison: "gte" });
-    expect(effect.steps[1].modifier.gate).toEqual({ dice: "D6", threshold: 4, comparison: "gte" });
+    expect(effect.steps[0].modifier.gate).toEqual({ dice: "D6", threshold: 5, comparison: "gte", modifiers: [] });
+    expect(effect.steps[1].modifier.gate).toEqual({ dice: "D6", threshold: 4, comparison: "gte", modifiers: [] });
   });
 
   it("refuses a subtraction whose raised threshold is above the top face", () => {
@@ -106,7 +106,7 @@ describe("Round 5C own-roll conditional change, one-time roll", () => {
       SELECT, ROLL, ADD, ["if that unit is a VEHICLE unit", ...VEHICLE], ["on a 5+", "roll-result", { from: 5 }],
       ["that unit suffers 1 mortal wound", "mortal-wounds", { recipient: "that-unit", count: "1" }]);
     const steps = effect.effect.steps;
-    expect(steps[0]).toMatchObject({ type: "conditional", condition: { type: "has-keyword", parameters: { subject: "selected-unit", all_of: ["VEHICLE"] } },
+    expect(steps[0]).toMatchObject({ type: "conditional", condition: { type: "matches", parameters: { subject: "selected-unit", filter: { all_of: ["VEHICLE"] } } },
       effect: { type: "dice-gated", dice: "D6+1", threshold: 5, on_success: { type: "mortal-wounds" } } });
     expect(steps[1]).toMatchObject({ type: "conditional", condition: { operator: "not" }, effect: { type: "dice-gated", dice: "D6", threshold: 5 } });
   });
@@ -198,8 +198,8 @@ describe("Round 5C own-roll conditional change, negative one-time roll", () => {
       ["that unit suffers 1 mortal wound", "mortal-wounds", { recipient: "that-unit", count: "1" }]);
     const [yes, no] = effect.effect.steps;
     // A modified 4 is a raw 5, so the yes side rolls a plain D6 at 5+; the no side reads the raw 4+.
-    expect(yes).toMatchObject({ type: "conditional", condition: { type: "has-keyword" }, effect: { type: "dice-gated", dice: "D6", threshold: 5 } });
-    expect(no).toMatchObject({ type: "conditional", condition: { operator: "not" }, effect: { type: "dice-gated", dice: "D6", threshold: 4 } });
+    expect(yes).toMatchObject({ type: "conditional", condition: { type: "matches", parameters: { subject: "selected-unit", filter: { all_of: ["VEHICLE"] } } }, effect: { type: "dice-gated", dice: "D6", threshold: 5 } });
+    expect(no).toMatchObject({ type: "conditional", condition: { operator: "not", operands: [{ type: "matches", parameters: { subject: "selected-unit", filter: { all_of: ["VEHICLE"] } } }] }, effect: { type: "dice-gated", dice: "D6", threshold: 4 } });
   });
 
   it("refuses a single band whose raised threshold passes the top face, since no raw face can reach it", () => {
@@ -235,8 +235,8 @@ describe("Round 5C own-roll conditional change, subject of the condition", () =>
       ROLL, ADD, ["if the bearer is within range of an objective marker you control", "unit-position", { kind: "objective-range", controlled_by: "you", subject: "this-model", negated: false }],
       ["on a 4+", "roll-result", { from: 4 }], GAIN(1));
     const [yes, no] = effect.steps;
-    expect(yes).toMatchObject({ type: "conditional", condition: { type: "within", parameters: { subject: "this-model" } }, effect: { type: "dice-gated", dice: "D6+1", threshold: 4 } });
-    expect(no).toMatchObject({ type: "conditional", condition: { operator: "not", operands: [{ type: "within", parameters: { subject: "this-model" } }] }, effect: { type: "dice-gated", dice: "D6", threshold: 4 } });
+    expect(yes).toMatchObject({ type: "conditional", condition: { type: "matches", parameters: { subject: "this-model", filter: { within: { of: { objective: { controlled_by: "friendly" } }, range: "objective-control" } } } }, effect: { type: "dice-gated", dice: "D6+1", threshold: 4 } });
+    expect(no).toMatchObject({ type: "conditional", condition: { operator: "not", operands: [{ type: "matches", parameters: { subject: "this-model", filter: { within: { of: { objective: { controlled_by: "friendly" } }, range: "objective-control" } } } }] }, effect: { type: "dice-gated", dice: "D6", threshold: 4 } });
   });
 
   it("binds an 'it' condition to the selected unit it refers back to", () => {
@@ -244,7 +244,7 @@ describe("Round 5C own-roll conditional change, subject of the condition", () =>
       SELECT, ROLL, ADD, ["if it is a VEHICLE unit", "unit-keyword", { keywords: ["VEHICLE"], subject: "antecedent", negated: false }], ["on a 5+", "roll-result", { from: 5 }],
       ["that unit suffers 1 mortal wound", "mortal-wounds", { recipient: "that-unit", count: "1" }]);
     const [yes] = effect.effect.steps;
-    expect(yes.condition).toMatchObject({ type: "has-keyword", parameters: { subject: "selected-unit", all_of: ["VEHICLE"] } });
+    expect(yes.condition).toMatchObject({ type: "matches", parameters: { subject: "selected-unit", filter: { all_of: ["VEHICLE"] } } });
   });
 
   it("compiles an 'it' within-range condition with no subject, which is the ability's own unit (this-unit)", () => {
@@ -255,9 +255,9 @@ describe("Round 5C own-roll conditional change, subject of the condition", () =>
       ["on a 4+", "roll-result", { from: 4 }], GAIN(1));
     const [yes, no] = effect.steps;
     const within = yes.condition;
-    expect(within.type).toBe("within");
+    expect(within.type).toBe("matches");
     expect(within.parameters.subject ?? "this-unit").toBe("this-unit");
-    expect(within.parameters.of).toEqual({ objective: {} });
+    expect(within.parameters.filter.within).toEqual({ of: { objective: {} }, range: "objective-control" });
     expect(no.condition.operands[0]).toEqual(within);
   });
 });

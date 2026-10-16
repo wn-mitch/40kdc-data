@@ -155,10 +155,22 @@ describe("event rolls list (event version 19)", () => {
     expect(NORMALIZE_EVENT({ kind: "after-roll", rolls: ["wound", "hit"] })).toEqual({ kind: "after-roll", rolls: ["hit", "wound"] });
   });
 
-  it("lists exactly the roll kinds the DSL trigger's roll-kind enum names", () => {
+  it("keeps every reviewed trigger roll identity in the canonical roll-kind vocabulary", () => {
     const schema = JSON.parse(readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), "../../schemas/$defs/common.schema.json"), "utf8"));
-    const dslKinds = (schema.$defs["roll-kind"].oneOf[0].enum as string[]).filter((kind) => kind !== "dark-pact" && kind !== "manoeuvre");
-    expect([...TRIGGER_ROLL_KINDS].sort()).toEqual([...dslKinds].sort());
+    const dslKinds = schema.$defs["roll-kind"].oneOf[0].enum as string[];
+    expect(dslKinds).toEqual(expect.arrayContaining([...TRIGGER_ROLL_KINDS]));
+    expect(TRIGGER_ROLL_KINDS).not.toContain("any");
+    expect(TRIGGER_ROLL_KINDS).not.toContain("all");
+  });
+
+  it.each(TRIGGER_ROLL_KINDS)("lowers the reviewed %s identity to a schema-valid trigger", (roll) => {
+    const text = "After making the roll, change its result to an unmodified 6.";
+    const mechanics = compiled(placed(text, [
+      ["After making the roll", "event", { kind: "after-roll", roll }],
+      ["change its result to an unmodified 6", "roll-auto-result", { roll: "any", outcome: "counts-as-6" }],
+    ]), text);
+    expect(mechanics.trigger).toEqual({ event: "after-roll", filter: { roll } });
+    expect(schemaErrors(mechanics)).toEqual([]);
   });
 });
 

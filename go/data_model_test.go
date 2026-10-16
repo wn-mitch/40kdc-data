@@ -242,6 +242,7 @@ func TestUnitScopedLeaderRuleStillBuffsAttachedUnit(t *testing.T) {
 		"unitId":          "plaguebearers",
 		"factionId":       "chaos-daemons",
 		"attachedUnitIds": []any{"epidemius"},
+		"attachmentRoles": map[string]any{"epidemius": "leader"},
 	}, map[string]any{"phase": "fight"})
 	got := contribTypesFrom(attached, "blessed-by-the-plague-god-chaos-daemons")
 	if len(got) != 1 || asInt(got[0]["threshold"]) != 4 {
@@ -278,7 +279,7 @@ func TestDroppedModelScopedEffectIsReportedUnsupported(t *testing.T) {
 	}
 }
 
-func TestModelScopeGateIsAttackerSideTooAndSparesUnitScopedGrants(t *testing.T) {
+func TestModelScopeGatePreservesWeaponGrantsWithoutTreatingUnitKeywordsAsWeaponKeywords(t *testing.T) {
 	ds := EmbeddedDataset()
 	keywords := func(buffs []any, abilityID string) []string {
 		var out []string
@@ -292,11 +293,13 @@ func TestModelScopeGateIsAttackerSideTooAndSparesUnitScopedGrants(t *testing.T) 
 		return out
 	}
 
-	// Psychic Gifts reads "the bearer has the Psyker keyword" — model-scoped.
+	// Psychic Gifts grants the bearer the unit keyword Psyker. Unit keyword
+	// grants are not weapon abilities and therefore do not become cruncher buffs.
 	led := ds.buffsFor(map[string]any{
 		"unitId":          "inquisitorial-agents",
 		"factionId":       "agents-of-the-imperium",
 		"attachedUnitIds": []any{"inquisitor"},
+		"attachmentRoles": map[string]any{"inquisitor": "leader"},
 	}, map[string]any{"phase": "command"})
 	if got := keywords(led, "psychic-gifts-agents-of-the-imperium"); len(got) != 0 {
 		t.Errorf("psychic-gifts keywords on the led unit = %v, want none", got)
@@ -305,8 +308,8 @@ func TestModelScopeGateIsAttackerSideTooAndSparesUnitScopedGrants(t *testing.T) 
 		map[string]any{"unitId": "inquisitor", "factionId": "agents-of-the-imperium"},
 		map[string]any{"phase": "command"},
 	)
-	if got := keywords(alone, "psychic-gifts-agents-of-the-imperium"); len(got) != 1 || got[0] != "psyker" {
-		t.Errorf("psychic-gifts keywords on the Inquisitor itself = %v, want [psyker]", got)
+	if got := keywords(alone, "psychic-gifts-agents-of-the-imperium"); len(got) != 0 {
+		t.Errorf("psychic-gifts weapon keywords on the Inquisitor itself = %v, want none", got)
 	}
 
 	// A Palatine's rule grants [LETHAL HITS] to the whole unit she leads, so the
@@ -315,6 +318,7 @@ func TestModelScopeGateIsAttackerSideTooAndSparesUnitScopedGrants(t *testing.T) 
 		"unitId":          "battle-sisters-squad",
 		"factionId":       "adepta-sororitas",
 		"attachedUnitIds": []any{"palatine"},
+		"attachmentRoles": map[string]any{"palatine": "leader"},
 	}, map[string]any{"phase": "shooting"})
 	if got := keywords(sisters, "fury-of-the-righteous-adepta-sororitas"); len(got) != 1 || got[0] != "lethal-hits" {
 		t.Errorf("fury-of-the-righteous keywords = %v, want [lethal-hits]", got)
@@ -600,8 +604,8 @@ func TestUsageAndTriggerGatingMatchTheReference(t *testing.T) {
 		applied int
 		levers  string
 	}{
-		{"fixture-usage", fight, 0, "fixture-usage@n-per-battle"},
-		{"fixture-stratagem", fight, 1, ""},
+		{"fixture-usage", fight, 0, "fixture-usage#activate"},
+		{"fixture-stratagem", fight, 0, "fixture-stratagem#activate"},
 		{"fixture-moment", fight, 0, "fixture-moment@selected:shoot"},
 		{"fixture-attack-step", fight, 1, ""},
 		{"fixture-charge", map[string]any{"phase": "fight", "attackerCharged": true}, 1, ""},
@@ -612,5 +616,78 @@ func TestUsageAndTriggerGatingMatchTheReference(t *testing.T) {
 		if applied != c.applied || strings.Join(levers, ",") != c.levers {
 			t.Fatalf("%s: applied %d levers %v, want %d %q", c.id, applied, levers, c.applied, c.levers)
 		}
+	}
+}
+
+func TestHistoricalSnapshotBuffsRediscoverEligibleEnhancementAfterDetach(t *testing.T) {
+	raw := emptyRawData()
+	abilityID := "persistent-enhancement"
+	sourceUnitID := "former-leader"
+	bodyguardID := "bodyguard"
+	factionID := "fabricated-faction"
+	trigger := map[string]any{"event": "selected"}
+	selector := map[string]any{"filter": map[string]any{"owner": "friendly", "level": "model"}, "count": map[string]any{"min": 1.0, "max": 1.0}}
+	effect := map[string]any{
+		"type": "for-each-unit", "selector": selector,
+		"effect": map[string]any{"type": "stat-modifier", "target": "recipient", "modifier": map[string]any{"stat": "T", "operation": "improve", "value": 1.0}},
+	}
+	raw["abilities"] = []any{map[string]any{
+		"ability_id": abilityID, "name": "Persistent Enhancement", "faction_id": factionID,
+		"ability_type": "unit", "trigger": trigger, "effect": effect,
+	}}
+	raw["units"] = []any{
+		map[string]any{"id": bodyguardID, "name": "Bodyguard", "faction_id": factionID, "keywords": []any{"INFANTRY"}, "abilities": []any{}},
+		map[string]any{"id": sourceUnitID, "name": "Former Leader", "faction_id": factionID, "keywords": []any{"CHARACTER"}, "abilities": []any{}},
+	}
+	raw["enhancements"] = []any{map[string]any{
+		"id": "persistent-enhancement-card", "ability_id": abilityID, "detachment_id": "fabricated-detachment",
+		"keyword_restrictions": []any{"CHARACTER"},
+	}}
+	ds := NewDataset(raw)
+	source := map[string]any{"kind": "ability", "abilityId": abilityID, "abilityKind": "attached", "sourceUnitId": sourceUnitID}
+	snapshot := map[string]any{
+		"source": source, "sourceUnitId": sourceUnitID, "trigger": trigger, "selectionPath": "",
+		"selector": selector, "perspective": "target", "recipientUnitId": bodyguardID, "selected": true,
+	}
+	input := map[string]any{"unitId": bodyguardID, "factionId": factionID, "detachmentId": "fabricated-detachment"}
+	ctx := map[string]any{"phase": "command", "targetUnitId": bodyguardID, "recipientSnapshots": []any{snapshot}}
+	got := ds.defensiveBuffsFor(input, ctx)
+	if contributions := contribTypesFrom(got, abilityID); len(contributions) != 1 {
+		t.Fatalf("historical enhancement contribution = %#v, want one contribution", got)
+	}
+	ctx["recipientSnapshots"] = []any{map[string]any{
+		"source": source, "sourceUnitId": sourceUnitID, "trigger": trigger, "selectionPath": "",
+		"selector": selector, "perspective": "target", "recipientUnitId": bodyguardID, "selected": false,
+	}}
+	if got = ds.defensiveBuffsFor(input, ctx); len(contribTypesFrom(got, abilityID)) != 0 {
+		t.Fatalf("unselected historical snapshot produced buffs: %#v", got)
+	}
+	input["detachmentId"] = "different-detachment"
+	ctx["recipientSnapshots"] = []any{snapshot}
+	if got = ds.defensiveBuffsFor(input, ctx); len(contribTypesFrom(got, abilityID)) != 0 {
+		t.Fatalf("wrong-detachment snapshot produced buffs: %#v", got)
+	}
+	missing := map[string]any{"source": source, "sourceUnitId": "missing-owner", "trigger": trigger, "selectionPath": "", "selector": selector, "perspective": "target", "recipientUnitId": bodyguardID, "selected": true}
+	ctx["recipientSnapshots"] = []any{missing}
+	input["detachmentId"] = "fabricated-detachment"
+	if got = ds.defensiveBuffsFor(input, ctx); len(contribTypesFrom(got, abilityID)) != 0 {
+		t.Fatalf("missing historical owner produced buffs: %#v", got)
+	}
+	wrongSource := map[string]any{"kind": "ability", "abilityId": abilityID, "abilityKind": "attached", "sourceUnitId": "different-owner"}
+	ctx["recipientSnapshots"] = []any{map[string]any{"source": wrongSource, "sourceUnitId": sourceUnitID, "trigger": trigger, "selectionPath": "", "selector": selector, "perspective": "target", "recipientUnitId": bodyguardID, "selected": true}}
+	if got = ds.defensiveBuffsFor(input, ctx); len(contribTypesFrom(got, abilityID)) != 0 {
+		t.Fatalf("wrong historical source produced buffs: %#v", got)
+	}
+	owner, _ := ds.Units.GetInFaction(sourceUnitID, factionID)
+	owner.Raw["keywords"] = []any{"INFANTRY"}
+	ctx["recipientSnapshots"] = []any{snapshot}
+	if got = ds.defensiveBuffsFor(input, ctx); len(contribTypesFrom(got, abilityID)) != 0 {
+		t.Fatalf("ineligible enhancement produced buffs: %#v", got)
+	}
+	owner.Raw["keywords"] = []any{"CHARACTER"}
+	conflict := map[string]any{"source": source, "sourceUnitId": sourceUnitID, "trigger": trigger, "selectionPath": "", "selector": selector, "perspective": "target", "recipientUnitId": bodyguardID, "selected": false}
+	ctx["recipientSnapshots"] = []any{snapshot, conflict}
+	if got = ds.defensiveBuffsFor(input, ctx); len(contribTypesFrom(got, abilityID)) != 0 {
+		t.Fatalf("conflicting historical snapshots produced buffs: %#v", got)
 	}
 }

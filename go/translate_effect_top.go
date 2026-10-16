@@ -7,36 +7,28 @@ import "strings"
 // `Applies to:` footer. Mirror of the top-level half of
 // tools/src/translate/effect.ts.
 
-// menuActionSubject renders the eligible-unit noun phrase for a menu action.
-func menuActionSubject(elig map[string]any) string {
-	requires := jstrList(elig["requires_keyword"])
-	excludes := jstrList(elig["excludes_keyword"])
-	if len(excludes) > 0 {
-		return "one friendly non-" + strings.Join(excludes, "/") + " unit"
-	}
-	if len(requires) > 0 {
-		return "a friendly " + strings.Join(requires, " ") + " unit"
-	}
-	return "the unit"
-}
-
 // menuActionEligibilityClause renders a trailing parenthetical naming which
 // unit may use a menu action and any extra requirements.
 func menuActionEligibilityClause(elig map[string]any) string {
 	if elig == nil {
 		return ""
 	}
-	hasKeywordGate := len(getList(elig, "requires_keyword")) > 0 || len(getList(elig, "excludes_keyword")) > 0
+	hasFilter := elig["filter"] != nil || elig["count"] != nil
 	var reqs []string
-	for _, c := range getList(elig, "requires") {
-		reqs = append(reqs, describeCondition(mapOr(c)))
+	for _, condition := range getList(elig, "requires") {
+		reqs = append(reqs, describeCondition(mapOr(condition)))
 	}
-	if !hasKeywordGate && len(reqs) == 0 {
+	if !hasFilter && len(reqs) == 0 {
 		return ""
 	}
 	var parts []string
-	if hasKeywordGate {
-		parts = append(parts, "only usable by "+menuActionSubject(elig))
+	if hasFilter {
+		filter := mapOr(elig["filter"])
+		count := mapOr(elig["count"])
+		if len(count) == 0 {
+			count = map[string]any{"min": 1.0, "max": 1.0}
+		}
+		parts = append(parts, "only usable by "+selectUnitsSubject(map[string]any{"filter": filter, "count": count}))
 	}
 	if len(reqs) > 0 {
 		parts = append(parts, strings.Join(reqs, " and "))
@@ -45,13 +37,10 @@ func menuActionEligibilityClause(elig map[string]any) string {
 }
 
 func menuActionDurationClause(duration any) string {
-	switch duration {
-	case "until-end-of-phase":
-		return "until the end of the phase"
-	case "until-end-of-turn":
-		return "until the end of the turn"
+	if duration == "resolution" {
+		return ""
 	}
-	return ""
+	return expiryTrail(duration)
 }
 
 // describeMenuAction renders one resource-action-menu action as a bullet body.
@@ -250,20 +239,33 @@ func describeAppliesTo(a map[string]any) string {
 	if a == nil {
 		return ""
 	}
-	required := jstrList(a["required_keywords"])
-	excluded := jstrList(a["excluded_keywords"])
-	if len(required) == 0 && len(excluded) == 0 {
+	required := jstrList(a["all_of"])
+	any := jstrList(a["any_of"])
+	excluded := jstrList(a["none_of"])
+	notAll := jstrList(a["not_all_of"])
+	if len(required) == 0 && len(any) == 0 && len(excluded) == 0 && len(notAll) == 0 {
 		return ""
 	}
-	base := "all units"
+	var positive []string
 	if len(required) > 0 {
-		base = "units with " + strings.Join(required, ", ")
+		positive = append(positive, strings.Join(required, ", "))
+	}
+	if len(any) > 0 {
+		positive = append(positive, "at least one of "+orList(any))
+	}
+	base := "all units"
+	if len(positive) > 0 {
+		base = "units with " + strings.Join(positive, " and ")
 	}
 	exc := ""
 	if len(excluded) > 0 {
 		exc = " (excluding " + strings.Join(excluded, ", ") + ")"
 	}
-	return "Applies to: " + base + exc + "."
+	partial := ""
+	if len(notAll) > 0 {
+		partial = " (excluding units with all of " + strings.Join(notAll, ", ") + ")"
+	}
+	return "Applies to: " + base + exc + partial + "."
 }
 
 func joinNonEmpty(parts []string, sep string) string {

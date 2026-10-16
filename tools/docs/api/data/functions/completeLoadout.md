@@ -8,7 +8,7 @@
 
 > **completeLoadout**(`unit`, `modelCount`, `options`, `models`, `explicitCounts`): [`CompletedLoadout`](../interfaces/CompletedLoadout.md) \| `null`
 
-Defined in: [data/loadout.ts:1085](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/loadout.ts#L1085)
+Defined in: [data/loadout.ts:1088](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/loadout.ts#L1088)
 
 Complete a partial source loadout without inventing optional selections.
 

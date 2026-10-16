@@ -126,7 +126,7 @@ describe("trigger spend read by a later instead clause (8844 shape)", () => {
     const mechanics = mechanicsOf(bastionLeaves(), BASTION_TEXT);
     const part = nodesOf(mechanics, "ability-part").find((node) => node.optional === true)!;
     expect(part.effect.type).toBe("conditional");
-    expect(part.effect.condition).toEqual({ operator: "not", operands: [{ type: "designated", parameters: { subject: "this-unit", tag: "bastion-shield-yp-spent" } }] });
+    expect(part.effect.condition).toEqual({ operator: "not", operands: [{ type: "matches", parameters: { subject: "this-unit", filter: { designated: "bastion-shield-yp-spent" } } }] });
     const steps = part.effect.effect.steps as Record<string, any>[];
     expect(steps.map((step) => step.type)).toEqual(["resource-spend", "designate"]);
     expect(steps[1]).toEqual({ type: "designate", target: "this-unit", modifier: { tag: "bastion-shield-yp-spent", clears_on: "phase" } });
@@ -200,7 +200,7 @@ describe("trigger spend in an or-alternative (8925 shape)", () => {
     const gate = JSON.stringify(grantGates[0]);
     expect(gate).toContain("\"operator\":\"or\"");
     expect(gate).toContain("disembarked");
-    expect(gate).toContain("\"tag\":\"trivarg-yp-spent\"");
+    expect(gate).toContain("\"designated\":\"trivarg-yp-spent\"");
   });
 
   it("gates the spend on the other alternative not holding, and on the designation not set", () => {
@@ -250,7 +250,7 @@ function attackUseLeaves(read: Record<string, unknown>): CompileLeaf[] {
 describe("attacker-subject use read in the attack moment (SS-A, 4213 shape)", () => {
   it("reads the attacker's designation and sets it on this unit for the phase", () => {
     const mechanics = mechanicsOf(attackUseLeaves({ pool: "yp-pool", window: "use", subject: "attacker", tag: "cyberstimm-infusion-yp-spent" }), ATTACK_USE_TEXT);
-    expect(JSON.stringify(mechanics)).toContain("{\"type\":\"designated\",\"parameters\":{\"subject\":\"attacker\",\"tag\":\"cyberstimm-infusion-yp-spent\"}}");
+    expect(JSON.stringify(mechanics)).toContain("{\"type\":\"matches\",\"parameters\":{\"subject\":\"attacker\",\"filter\":{\"designated\":\"cyberstimm-infusion-yp-spent\"}}}");
     const designates = nodesOf(mechanics, "designate");
     expect(designates).toEqual([{ type: "designate", target: "this-unit", modifier: { tag: "cyberstimm-infusion-yp-spent", clears_on: "phase" } }]);
   });
@@ -289,7 +289,7 @@ describe("Pain-token trigger (8289 shape)", () => {
 
   it("replaces the base AP change with the designated one, on the same unit", () => {
     const mechanics = mechanicsOf(painLeaves(), PAIN_TEXT);
-    expect(JSON.stringify(mechanics)).toContain("{\"type\":\"designated\",\"parameters\":{\"subject\":\"this-unit\",\"tag\":\"eye-of-spite-pain-spent\"}}");
+    expect(JSON.stringify(mechanics)).toContain("{\"type\":\"matches\",\"parameters\":{\"subject\":\"this-unit\",\"filter\":{\"designated\":\"eye-of-spite-pain-spent\"}}}");
     expect(nodesOf(mechanics, "designate")[0]!.modifier).toEqual({ tag: "eye-of-spite-pain-spent", clears_on: "phase" });
   });
 
@@ -318,7 +318,7 @@ describe("attacker-subject use read in an instead that changes a characteristic 
     const mechanics = mechanicsOf(leaves, AP_USE_TEXT);
     const json = JSON.stringify(mechanics);
     expect(json.indexOf("\"type\":\"ability-part\"")).toBeLessThan(json.indexOf("\"stat-modifier\""));
-    expect(json).toContain("\"subject\":\"attacker\",\"tag\":\"exposed-flaws-yp-spent\"");
+    expect(json).toContain("\"subject\":\"attacker\",\"filter\":{\"designated\":\"exposed-flaws-yp-spent\"}");
   });
 });
 
@@ -426,8 +426,8 @@ describe("and/or of two optional-spend reads on one attack (4224 shape)", () => 
     const mechanics = mechanicsOf(leavesFor("and/or"), TEXT);
     const json = JSON.stringify(mechanics);
     expect(json).toContain("\"operator\":\"or\"");
-    expect(json).toContain("\"subject\":\"attacker\",\"tag\":\"exposed-flaws-yp-spent\"");
-    expect(json).toContain("\"subject\":\"defender\",\"tag\":\"assailed\"");
+    expect(json).toContain("\"subject\":\"attacker\",\"filter\":{\"designated\":\"exposed-flaws-yp-spent\"}");
+    expect(json).toContain("\"subject\":\"defender\",\"filter\":{\"designated\":\"assailed\"}");
   });
 
   it("gates the re-roll on both reads when the words are a plain and, not an alternative", () => {

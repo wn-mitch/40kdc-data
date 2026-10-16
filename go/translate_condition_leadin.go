@@ -31,6 +31,59 @@ var (
 	negatedLeadInWordsRe = regexp.MustCompile(`^(if|while|when|during|in|against) `)
 )
 
+func matchesLeadIn(c map[string]any, negated bool) string {
+	p := paramsOf(c)
+	f := mapOr(p["filter"])
+	keys := 0
+	for key := range f {
+		if key != "level" {
+			keys++
+		}
+	}
+	if keys == 1 && (f["all_of"] != nil || f["any_of"] != nil) {
+		if p["subject"] == "defender" && negated {
+			if values, ok := asList(f["all_of"]); ok && len(values) > 1 {
+				return "against a unit that does not have all of " + andList(cstrList(f["all_of"]))
+			}
+		}
+		if p["subject"] == "defender" {
+			if negated {
+				return negatedTargetKeywords(cstrList(mapOrValue(f, "any_of", "all_of")))
+			}
+			return "against " + keywordNames(f) + " targets"
+		}
+		if p["subject"] == nil || (negated && p["subject"] == "recipient") {
+			plural := ""
+			if !negated && (isList(f["any_of"]) || len(cstrList(f["all_of"])) > 1) {
+				plural = "s"
+			}
+			lead := "if"
+			if negated {
+				lead = "unless"
+			}
+			return lead + " the unit has the " + keywordNames(f) + " keyword" + plural
+		}
+		lead := "if"
+		if negated {
+			lead = "unless"
+		}
+		return lead + " " + describePredicate(c, false)
+	}
+	if keys == 1 && f["designated"] != nil && p["subject"] == "defender" &&
+		cstr(f["designated"]) == strings.ToUpper(cstr(f["designated"])) && !negated {
+		return "against " + cstr(f["designated"]) + " targets"
+	}
+	return "while " + describePredicate(c, negated)
+}
+
+func mapOrValue(m map[string]any, preferred, fallback string) []any {
+	if values, ok := asList(m[preferred]); ok {
+		return values
+	}
+	values, _ := asList(m[fallback])
+	return values
+}
+
 // conditionLeadIn renders a condition as a natural lead-in clause
 // (lowercase-initial; the caller capitalizes at the sentence boundary). Falls
 // back to `if <condition>` for shapes without a dedicated framing.
@@ -68,30 +121,15 @@ func conditionLeadIn(c map[string]any) string {
 	case "player-turn-is", "battle-round":
 		return battleRoundOnwardRe.ReplaceAllString(describePredicate(c, false), "from the $1 battle round onward")
 	case "rule-active":
-		return "while the " + idLabel(p["rule"]) + " is active"
+		return "while the " + ruleRefPhrase(p["rule"]) + " is active"
+	case "matches":
+		return matchesLeadIn(c, false)
 	case "has-keyword":
-		if p["chosen_by"] != nil {
-			return "if " + describePredicate(c, false)
-		}
-		if p["subject"] == "defender" {
-			return "against " + keywordNames(p) + " targets"
-		}
-		if p["subject"] == nil {
-			plural := ""
-			if isList(p["any_of"]) || len(cstrList(p["all_of"])) > 1 {
-				plural = "s"
-			}
-			return "if the unit has the " + keywordNames(p) + " keyword" + plural
-		}
 		return "if " + describePredicate(c, false)
 	case "attachment":
 		if p["role"] == "leading" && (p["subject"] == "this-model" || p["subject"] == nil) {
-			w := mapOr(p["with"])
-			kw := ""
-			if isList(w["all_of"]) {
-				kw = strings.Join(cstrList(w["all_of"]), " ") + " "
-			}
-			return "while this model is leading a " + kw + "unit"
+			phrase := strings.TrimPrefix(describePredicate(c, false), "the model ")
+			return "while this model " + phrase
 		}
 		return "while " + describePredicate(c, false)
 	case "happened":
@@ -148,18 +186,12 @@ func conditionLeadIn(c map[string]any) string {
 }
 
 func negatedLeadIn(c map[string]any) string {
-	p := paramsOf(c)
 	switch {
 	case c["type"] == "same-unit":
 		return "if " + describePredicate(c, true)
-	case c["type"] == "has-keyword" && p["chosen_by"] == nil && p["subject"] == "defender":
-		if isList(p["any_of"]) {
-			return negatedTargetKeywords(cstrList(p["any_of"]))
-		}
-		return negatedTargetKeywords(cstrList(p["all_of"]))
-	case c["type"] == "has-keyword" && p["chosen_by"] == nil && (p["subject"] == nil || p["subject"] == "recipient"):
-		return "unless the unit has the " + keywordNames(p) + " keyword"
-	case c["type"] == "unit-state" || c["type"] == "designated" || c["type"] == "owned-by":
+	case c["type"] == "matches":
+		return matchesLeadIn(c, true)
+	case c["type"] == "unit-state" || c["type"] == "designated":
 		return "while " + describePredicate(c, true)
 	}
 	// Otherwise the positive lead-in, turned: "unless an enemy unit is within 12\"".
@@ -172,7 +204,7 @@ func negatedLeadIn(c map[string]any) string {
 	return "unless " + lead
 }
 
-// notKeyword returns the keyword of `not(has-keyword <subject> X)` with a single keyword.
+// notKeyword returns the keyword of `not(matches <subject> X)` with a single keyword.
 func notKeyword(op map[string]any, subject string) (string, bool) {
 	ops, ok := conditionOperands(op, "not")
 	if !ok || len(ops) != 1 {
@@ -180,18 +212,20 @@ func notKeyword(op map[string]any, subject string) (string, bool) {
 	}
 	inner := ops[0]
 	p := paramsOf(inner)
-	all, isL := asList(p["all_of"])
-	if inner["type"] != "has-keyword" || p["subject"] != subject || !isL || len(all) != 1 {
+	f := mapOr(p["filter"])
+	all, isL := asList(f["all_of"])
+	if inner["type"] != "matches" || p["subject"] != subject || len(f) != 1 || !isL || len(all) != 1 {
 		return "", false
 	}
 	return cstr(all[0]), true
 }
 
-// ownKeyword returns a bare single-keyword `has-keyword` on the ability's own unit.
+// ownKeyword returns a bare single-keyword `matches` on the ability's own unit.
 func ownKeyword(op map[string]any) (string, bool) {
 	p := paramsOf(op)
-	all, isL := asList(p["all_of"])
-	if op["type"] != "has-keyword" || p["subject"] != nil || !isL || len(all) != 1 {
+	f := mapOr(p["filter"])
+	all, isL := asList(f["all_of"])
+	if op["type"] != "matches" || p["subject"] != nil || len(f) != 1 || !isL || len(all) != 1 {
 		return "", false
 	}
 	return cstr(all[0]), true

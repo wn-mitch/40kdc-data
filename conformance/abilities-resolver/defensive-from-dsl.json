@@ -20,7 +20,8 @@
             "threshold": 5
           }
         ],
-        "unsupportedReasons": []
+        "unsupportedReasons": [],
+        "activatable": []
       },
       "_comment": "Feel No Pain is one core record whose threshold reads the unit's printed rating ({rating: true}); rating is that value (a unit printing Feel No Pain 5+)."
     },
@@ -38,7 +39,8 @@
       "perspective": "attacker",
       "expected": {
         "applied": [],
-        "unsupportedReasons": []
+        "unsupportedReasons": [],
+        "activatable": []
       }
     },
     {
@@ -54,7 +56,12 @@
       "perspective": "target",
       "expected": {
         "applied": [],
-        "unsupportedReasons": []
+        "unsupportedReasons": [
+          "effect type \"permission\" is not modelled by the buff layer",
+          "effect type \"permission\" is not modelled by the buff layer",
+          "effect type \"permission\" is not modelled by the buff layer"
+        ],
+        "activatable": []
       }
     },
     {
@@ -76,7 +83,8 @@
             "threshold": 4
           }
         ],
-        "unsupportedReasons": []
+        "unsupportedReasons": [],
+        "activatable": []
       }
     },
     {
@@ -96,11 +104,12 @@
         "applied": [],
         "unsupportedReasons": [
           "model-scoped effect from an attached model: applies to that model only (core rule 19.04)"
-        ]
+        ],
+        "activatable": []
       }
     },
     {
-      "_comment": "The counterpart: a genuinely unit-scoped leader rule (target unit \u2014 a unit-wide invulnerable save) still reaches the whole combined unit from an attached source. Guards against the 19.04 gate over-reaching.",
+      "_comment": "The counterpart: a genuinely unit-scoped leader rule (target unit — a unit-wide invulnerable save) still reaches the whole combined unit from an attached source. The fabricated witness supplies the source model's explicit leader role; attachment alone is not evidence of leading. Guards against the 19.04 gate over-reaching.",
       "abilityId": "mental-fortress-adeptus-astartes",
       "effect": {
         "type": "conditional",
@@ -127,7 +136,9 @@
       },
       "context": {
         "phase": "shooting",
-        "attackerAttached": true
+        "attachmentRoles": {
+          "librarian": "leader"
+        }
       },
       "perspective": "target",
       "expected": {
@@ -137,7 +148,388 @@
             "threshold": 4
           }
         ],
-        "unsupportedReasons": []
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "Fabricated defender-side rules on the attacked unit: Stealth and the benefit of cover each give cover, a granted Feel No Pain, a set Save, and a worsened incoming AP.",
+      "abilityId": "fabricated-defences",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-defences",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "ability-grant",
+            "target": "this-unit",
+            "modifier": {
+              "ability": "stealth"
+            }
+          },
+          {
+            "type": "ability-grant",
+            "target": "this-unit",
+            "modifier": {
+              "ability": "benefit-of-cover"
+            }
+          },
+          {
+            "type": "ability-grant",
+            "target": "this-unit",
+            "modifier": {
+              "ability": "feel-no-pain",
+              "value": 5
+            }
+          },
+          {
+            "type": "stat-modifier",
+            "target": "this-model",
+            "modifier": {
+              "stat": "Sv",
+              "operation": "set",
+              "value": 3
+            }
+          },
+          {
+            "type": "stat-modifier",
+            "target": "attacker",
+            "modifier": {
+              "stat": "AP",
+              "operation": "worsen",
+              "value": 1
+            }
+          }
+        ]
+      },
+      "expected": {
+        "applied": [
+          {
+            "type": "cover"
+          },
+          {
+            "type": "cover"
+          },
+          {
+            "type": "feel-no-pain",
+            "threshold": 5
+          },
+          {
+            "type": "save-characteristic",
+            "value": 3
+          },
+          {
+            "type": "ap-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "Fabricated penalties to attackers' WS and BS: hit modifiers gated to the matching phase. The unit's own critical threshold does not apply to attacks against it.",
+      "abilityId": "fabricated-skill-penalty",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-skill-penalty",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "fight"
+      },
+      "perspective": "target",
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "stat-modifier",
+            "target": "attacker",
+            "modifier": {
+              "stat": "WS",
+              "operation": "worsen",
+              "value": 1
+            }
+          },
+          {
+            "type": "stat-modifier",
+            "target": "attacker",
+            "modifier": {
+              "stat": "BS",
+              "operation": "worsen",
+              "value": 1
+            }
+          },
+          {
+            "type": "roll-result",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "critical_on": 5
+            }
+          }
+        ]
+      },
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": -1
+          },
+          {
+            "type": "hit-mod",
+            "value": -1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/save-characteristic/improve",
+      "abilityId": "fabricated-save",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-save",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "stat": "Sv",
+          "operation": "improve",
+          "value": 1
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [
+          {
+            "type": "save-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/save-characteristic/worsen",
+      "abilityId": "fabricated-save",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-save",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "stat": "Sv",
+          "operation": "worsen",
+          "value": 1
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [
+          {
+            "type": "save-mod",
+            "value": -1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/save-characteristic/add",
+      "abilityId": "fabricated-save",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-save",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "stat": "Sv",
+          "operation": "add",
+          "value": 1
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [
+          {
+            "type": "save-mod",
+            "value": -1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/save-characteristic/subtract",
+      "abilityId": "fabricated-save",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-save",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "stat": "Sv",
+          "operation": "subtract",
+          "value": 1
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [
+          {
+            "type": "save-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/recipient-snapshot/attested-toughness-after-detachment",
+      "abilityId": "snapshot-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "snapshot-example",
+        "abilityKind": "attached",
+        "sourceUnitId": "source"
+      },
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "battle-started",
+          "condition": {
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
+          }
+        },
+        "duration": "battle",
+        "effect": {
+          "type": "for-each-unit",
+          "selector": {
+            "filter": {
+              "level": "model",
+              "member_of": "this-unit",
+              "attachment_role": "bodyguard"
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "stat-modifier",
+                "target": "recipient",
+                "modifier": {
+                  "stat": "S",
+                  "operation": "add",
+                  "value": 1,
+                  "weapons": {
+                    "type": "melee"
+                  }
+                }
+              },
+              {
+                "type": "stat-modifier",
+                "target": "recipient",
+                "modifier": {
+                  "stat": "T",
+                  "operation": "add",
+                  "value": 1
+                }
+              }
+            ]
+          }
+        }
+      },
+      "context": {
+        "phase": "fight",
+        "targetUnitId": "recipient",
+        "targetKeywords": [
+          "INFANTRY",
+          "CHARACTER"
+        ],
+        "targetAttached": false,
+        "recipientSnapshots": [
+          {
+            "source": {
+              "kind": "ability",
+              "abilityId": "snapshot-example",
+              "abilityKind": "attached",
+              "sourceUnitId": "source"
+            },
+            "sourceUnitId": "source",
+            "trigger": {
+              "event": "battle-started",
+              "condition": {
+                "type": "attachment",
+                "parameters": {
+                  "subject": "this-model",
+                  "role": "leading"
+                }
+              }
+            },
+            "selector": {
+              "filter": {
+                "level": "model",
+                "member_of": "this-unit",
+                "attachment_role": "bodyguard"
+              }
+            },
+            "selectionPath": "/effect",
+            "perspective": "target",
+            "recipientUnitId": "recipient",
+            "selected": true
+          }
+        ]
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [
+          {
+            "type": "toughness-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": []
       }
     }
   ]

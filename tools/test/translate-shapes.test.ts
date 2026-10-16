@@ -86,7 +86,7 @@ describe("targeting", () => {
       render({
         type: "targeting",
         target: { owner: "enemy" },
-        modifier: { may: "cannot-target", target: "this-model", kind: "shoot", range: { inches: 12 }, weapon_type: "ranged" },
+        modifier: { may: "cannot-target", target: "this-model", kind: "shoot", range: { inches: 12 }, weapons: { type: "ranged" } },
       }),
     ).toBe('Enemy units cannot target this model with ranged weapons unless the attacking unit is within 12".');
   });
@@ -118,9 +118,9 @@ describe("targeting", () => {
 describe("leaf English defects found by the corpus sweep", () => {
   it("does not double a noun the name already carries", () => {
     expect(
-      render({ type: "stat-modifier", target: "this-model", modifier: { stat: "S", operation: "add", value: 1, weapon_name: "hellforged weapons" } }),
+      render({ type: "stat-modifier", target: "this-model", modifier: { stat: "S", operation: "add", value: 1, weapons: { name: "hellforged weapons" } } }),
     ).toBe("Add 1 to the Strength characteristic of hellforged weapons equipped by this model.");
-    expect(render({ type: "marker", target: "this-unit", modifier: { label: "cult-ambush-marker", operation: "relocate", distance: 12 } })).toBe(
+    expect(render({ type: "marker", target: "this-unit", modifier: { label: "cult-ambush-marker", operation: "relocate", distance: { inches: 12 } } })).toBe(
       'Move the cult ambush marker up to 12".',
     );
   });

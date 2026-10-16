@@ -69,11 +69,17 @@ fn weapon_phrase(p: &P, negated: bool) -> String {
 }
 
 fn models_subject(models: &P) -> String {
-    let at_least = st(models.get("at_least"));
-    if at_least == "1" {
+    let count = models.get("count");
+    let minimum = count.and_then(|count| count.get("min"));
+    if count.and_then(|count| count.get("max")).is_some() {
+        format!("{} models in this unit", super::refs::count_phrase(count))
+    } else if minimum.and_then(Value::as_u64) == Some(1) {
         "one or more models in this unit".to_string()
     } else {
-        format!("at least {at_least} models in this unit")
+        format!(
+            "at least {} models in this unit",
+            crate::translate::effect::dice_case(minimum)
+        )
     }
 }
 

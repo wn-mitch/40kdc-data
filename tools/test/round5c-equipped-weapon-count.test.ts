@@ -35,8 +35,11 @@ describe("equipped-weapon-count: compile", () => {
       mechanics: {
         effect: {
           type: "conditional",
-          condition: { type: "equipped-weapon-count", parameters: { subject: "this-model", weapon_type: "melee", count: 2, other_than: "Close combat weapon" } },
-          effect: { type: "stat-modifier", target: "this-model", modifier: { stat: "A", operation: "improve", value: 1, weapon_type: "melee", exclude_weapon_name: "Close combat weapon" } },
+          condition: { operator: "and", operands: [
+            { type: "named-weapon", parameters: { subject: "this-model", name: "Close combat weapon", count: 1 } },
+            { type: "equipped-weapon-count", parameters: { subject: "this-model", weapons: { type: "melee", exclude_name: "Close combat weapon" }, count: { min: 2, max: 2 } } },
+          ] },
+          effect: { type: "stat-modifier", target: "this-model", modifier: { stat: "A", operation: "improve", value: 1, weapons: { type: "melee", exclude_name: "Close combat weapon" } } },
         },
       },
     });
@@ -45,7 +48,7 @@ describe("equipped-weapon-count: compile", () => {
   it("compiles the printed value of the stat change with the same shape (add 2)", () => {
     const text = "If this model carries two spear weapons besides its Close combat weapon, add 2 to the Attacks characteristic of those two weapons.";
     const result = compileLeaves(placed(text, countLeaf(), [STAT_WORDING.replace("add 1", "add 2"), "characteristic-modifier", { characteristics: ["A"], operation: "improve", value: 2, weapon_type: "melee", weapon: "antecedent" }]), text);
-    expect(result).toMatchObject({ ok: true, mechanics: { effect: { effect: { type: "stat-modifier", modifier: { value: 2, exclude_weapon_name: "Close combat weapon" } } } } });
+    expect(result).toMatchObject({ ok: true, mechanics: { effect: { effect: { type: "stat-modifier", modifier: { value: 2, weapons: { exclude_name: "Close combat weapon" } } } } } });
   });
 
   it("does not compile a count with no effect beside it", () => {
@@ -99,7 +102,7 @@ describe("equipped-weapon-count: compile", () => {
     const text = "Add 1 to the Attacks characteristic of melee weapons.";
     const result = compileLeaves(placed(text, ["Add 1 to the Attacks characteristic of melee weapons", "characteristic-modifier", { subject: "this-model", characteristics: ["A"], operation: "improve", value: 1, weapon_type: "melee" }]), text);
     expect(result.ok).toBe(true);
-    expect(JSON.stringify(result)).not.toContain("exclude_weapon_name");
+    expect(JSON.stringify(result)).not.toContain("exclude_name");
   });
 });
 
@@ -126,15 +129,15 @@ describe("equipped-weapon-count: family parameters", () => {
 });
 
 describe("equipped-weapon-count: describer", () => {
-  const condition = { type: "equipped-weapon-count", parameters: { subject: "this-model", weapon_type: "melee", count: 2, other_than: "Close combat weapon" } };
+  const condition = { type: "equipped-weapon-count", parameters: { subject: "this-model", weapons: { type: "melee", exclude_name: "Close combat weapon" }, count: { min: 2, max: 2 } } };
 
-  it("reads the count as the model's other weapons beside a named one", () => {
-    expect(describePredicate(condition as never, false)).toBe('this model is equipped with a weapon named "Close combat weapon" and exactly 2 other melee weapons');
-    expect(describePredicate(condition as never, true)).toBe('this model is not equipped with a weapon named "Close combat weapon" and exactly 2 other melee weapons');
+  it("reads the exact count with the named weapon excluded", () => {
+    expect(describePredicate(condition as never, false)).toBe('this model is equipped with exactly 2 melee weapons other than "Close combat weapon"');
+    expect(describePredicate(condition as never, true)).toBe('this model is not equipped with exactly 2 melee weapons other than "Close combat weapon"');
   });
 
   it("names the excluded weapon in the stat adjustment", () => {
-    const effect = { type: "stat-modifier", target: "this-model", modifier: { stat: "A", operation: "improve", value: 1, weapon_type: "melee", exclude_weapon_name: "Close combat weapon" } } as unknown as Effect;
+    const effect = { type: "stat-modifier", target: "this-model", modifier: { stat: "A", operation: "improve", value: 1, weapons: { type: "melee", exclude_name: "Close combat weapon" } } } as unknown as Effect;
     expect(describeAbility({ effect, scope: { duration: "permanent" } } as never)).toContain('of melee weapons other than "Close combat weapon" equipped by this model');
   });
 });

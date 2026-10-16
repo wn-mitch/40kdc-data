@@ -19,6 +19,7 @@ import { attackFrameRolls, defenderCompareAfter, foldAttackFrame, subjectlessRol
 import { isBackref } from "./compile-attack-backref.js";
 import { measuresTargetedFilter, targetedWithin } from "./compile-targeted-within.js";
 import { destroyingAttackBefore, destroyedByFilterAfter, destroyerSideOf, foldDestroyedByFilter, foldDestroyingAttack } from "./compile-destroying-attack.js";
+import { destroyerFilterAfter, foldDestroyerFilter } from "./compile-destruction-participants.js";
 
 /**
  * A unit-filter leaf ("friendly **WRAITH CONSTRUCT** unit") folded into the selection or aura it
@@ -69,20 +70,23 @@ export function assertOneFilterState(states: readonly string[] | undefined, held
  * The who as the DSL's own unit-filter (a unit-ref "any unit that…"), for a trigger's subject or
  * an attack's target. Unengaged is not engaged (`not_states`); a held unit is in its Reserves state.
  */
-// A "your Warlord" test is refused unless the caller passes `warlordTest` (the S2 gate in
-// compile-warlord-test.ts): every other caller would drop or misread it.
+// The Warlord designation needs an explicit army test, attack target or trigger participant.
+// Other folds still refuse it rather than silently losing a mustering restriction.
 export function dslUnitFilter(filter: CompileLeaf, options: { warlordTest?: boolean; warlordTarget?: boolean } = {}): Record<string, unknown> {
   // "one of those X units": the matched set, which bindMatchedPools attached (compile-matched-set.ts).
   if (filter.parameters.among === MATCHED_UNITS) return matchedPoolOf(filter);
-  const p = filter.parameters as { side: string; keywords?: string[]; any_keywords?: string[]; excluded_keywords?: string[]; states?: string[]; other?: boolean; other_than?: string; visible?: boolean; held_in?: string; alternatives?: FilterAlternative[]; designated?: string; designated_by?: string; member_of?: string; nested_engaged_with?: Record<string, unknown> };
-  // A Warlord designation has a shape for a test (warlordTest) and for an attack's target (warlordTarget, compile-conditions.ts).
-  if (p.designated === "warlord" && options.warlordTest !== true && options.warlordTarget !== true) throw new CompileError("A unit-filter naming the Warlord has no shape here; only a Warlord test after a unit-filter compiles.");
+  const p = filter.parameters as { side: string; keywords?: string[]; any_keywords?: string[]; excluded_keywords?: string[]; states?: string[]; other?: boolean; other_than?: string; visible?: boolean; held_in?: string; alternatives?: FilterAlternative[]; designated?: string; not_designated?: string; designated_by?: string; member_of?: string; nested_engaged_with?: Record<string, unknown> };
+  if (p.designated === "warlord" && options.warlordTest !== true && options.warlordTarget !== true) throw new CompileError("A unit-filter naming the Warlord needs an army test or explicit event participant.");
   const held = p.held_in === undefined ? undefined : HELD_STATES[p.held_in];
   if (p.held_in !== undefined && held === undefined) throw new CompileError(`A unit held in ${p.held_in} has no DSL unit-state.`);
   assertOneFilterState(p.states, held);
   if (p.any_keywords?.length && p.alternatives?.length) throw new CompileError("A unit-filter holds one any-of; it cannot also hold alternatives.");
+  if (filter.parameters.attachment_role !== undefined && (filter.parameters.level !== "model" || p.member_of === undefined)) {
+    throw new CompileError("An attachment-role filter needs model level and a bound member_of unit.");
+  }
   return {
     owner: p.side,
+    ...(Array.isArray(filter.parameters.unit_ids) ? { level: "unit", unit_ids: filter.parameters.unit_ids } : {}),
     ...(p.keywords?.length ? { all_of: p.keywords } : {}),
     ...(p.any_keywords?.length ? { any_of: p.any_keywords } : {}),
     // "A or B C unit": any one alternative, each with its own keywords, exclusions and states.
@@ -92,19 +96,21 @@ export function dslUnitFilter(filter: CompileLeaf, options: { warlordTest?: bool
     ...(held !== undefined ? { state: held } : {}),
     ...(notStates(p.states).length ? { not_states: notStates(p.states) } : {}),
     ...(Array.isArray(filter.parameters.excluded_all_keywords) ? { not_all_of: filter.parameters.excluded_all_keywords } : {}),
-    ...(p.visible === true ? { visible: true } : {}),
+    ...(p.visible === true ? { visible: { to: "this-model" } } : {}),
     // "engaged with an enemy unit engaged with a friendly CHARACTER unit": the unit this one is engaged with (nestedEngagedChain).
     ...(p.nested_engaged_with !== undefined ? { engaged_with: p.nested_engaged_with } : {}),
     ...(p.other === true ? { excluding: p.other_than === "event-subject" ? "event-subject" : "this-unit" } : {}),
     ...(filter.parameters.level === "model" ? { level: "model" } : {}),
     // "Character models in this unit" (groupMembership): the unit the models belong to.
     ...(p.member_of !== undefined ? { member_of: p.member_of } : {}),
-    // "that Leader unit" (unit-filter@13 attached_to): units that are part of this unit and have the Leader ability.
+    ...(filter.parameters.attachment_role !== undefined ? { attachment_role: filter.parameters.attachment_role } : {}),
+    // Attached Leader membership is not possession of the Leader ability.
     ...(filter.parameters.attached_to !== undefined ? attachedLeaders(filter) : {}),
     // "units embarked within this unit" (unit-filter@13): the Transport the units are embarked within.
     ...(filter.parameters.embarked_in !== undefined ? { embarked_in: filter.parameters.embarked_in } : {}),
     // "Bondsman-affected units" (unit-filter@8): the designation, and the unit that applied it.
     ...(p.designated !== undefined ? { designated: p.designated } : {}),
+    ...(p.not_designated !== undefined ? { not_designated: p.not_designated } : {}),
     ...(p.designated_by !== undefined ? { designated_by: p.designated_by } : {}),
     // "units with this ability" (compile-holder-abilities.ts) and "(excluding units with X)".
     ...(Array.isArray(filter.parameters.abilities) ? { has_ability: filter.parameters.abilities } : {}),
@@ -114,12 +120,12 @@ export function dslUnitFilter(filter: CompileLeaf, options: { warlordTest?: bool
   };
 }
 
-/** The Leader units attached to this unit, as the DSL names them: members of this unit that have the Leader ability. */
+/** Actual Leader models attached to the named unit, not units merely capable of leading. */
 function attachedLeaders(filter: CompileLeaf): Record<string, unknown> {
   if (filter.parameters.member_of !== undefined || Array.isArray(filter.parameters.abilities)) {
     throw new CompileError("A unit-filter for attached Leaders takes no other membership or ability test.");
   }
-  return { member_of: "this-unit", has_ability: ["leader"] };
+  return { level: "model", member_of: filter.parameters.attached_to, attachment_role: "leader" };
 }
 
 /** The filter's side; a model-level filter only where `models` says the fold can name models, "any" only where `anySide` allows it. */
@@ -152,7 +158,7 @@ function nearOther(leaf: CompileLeaf | undefined, quantifier: CompileLeaf): Reco
  * targets carry them into their own eligibility (compile-wrappers.ts, compile-conditions.ts); a
  * held unit ("that is in Reserves") is one more state there, its DSL Reserves unit-state.
  */
-function filterOf(filter: CompileLeaf): Record<string, unknown> {
+function filterOf(filter: CompileLeaf, staticTarget = false): Record<string, unknown> {
   // A matched set is read by its pool: a selection takes the pool's keywords and exclusions, and its range is the select's distance.
   if (filter.parameters.among === MATCHED_UNITS) {
     const pool = matchedPoolOf(filter);
@@ -160,11 +166,10 @@ function filterOf(filter: CompileLeaf): Record<string, unknown> {
   }
   // Alternatives that are each one keyword are the any-of the eligibility checks already read.
   const { side: _side, visible: _visible, level: _level, held_in: heldIn, ...rest } = collapsedAlternatives(filter.parameters);
-  // A selection or aura reads only the filter fields it knows; a designation would be dropped silently.
-  if (rest.designated !== undefined || rest.not_designated !== undefined) throw new CompileError("A unit-filter naming units by a designation has no selection or aura shape yet.");
-  if (rest.member_of !== undefined) throw new CompileError("A unit-filter whose models belong to a unit has no selection, aura or Stratagem target shape yet.");
-  if (rest.attached_to !== undefined) throw new CompileError("A unit-filter for attached Leaders has no selection, aura or Stratagem target shape yet.");
-  if (rest.embarked_in !== undefined) throw new CompileError("A unit-filter naming units embarked within a unit has no selection, aura or Stratagem target shape yet.");
+  // Core Stratagem TARGET metadata is static and intentionally retains its narrower contract.
+  if (staticTarget && ["designated", "not_designated", "member_of", "attached_to", "embarked_in", "attachment_role"].some((key) => rest[key] !== undefined)) {
+    throw new CompileError("This unit-filter relation has no static Stratagem TARGET metadata field.");
+  }
   if (heldIn === undefined) return rest;
   const held = HELD_STATES[String(heldIn)];
   if (held === undefined) throw new CompileError(`A unit held in ${String(heldIn)} has no DSL unit-state.`);
@@ -180,14 +185,17 @@ function reach(out: CompileLeaf[], range: CompileLeaf | undefined): boolean {
   if (!openAura(range)) return false;
   const selection = out.at(-1)!;
   if (selection.parameters.distance === "within") throw new CompileError("A selection already within a distance cannot take a second range.");
-  if (range!.parameters.wholly === true) throw new CompileError("A selection of units wholly within a range has no DSL shape yet.");
-  out[out.length - 1] = { ...selection, parameters: { ...selection.parameters, distance: "within", inches: range!.parameters.inches } };
+  out[out.length - 1] = { ...selection, parameters: { ...selection.parameters, distance: "within", inches: range!.parameters.inches,
+    ...(range!.parameters.of === undefined ? {} : { within_origin: range!.parameters.of }),
+    ...(range!.parameters.wholly === true ? { wholly: true } : {}),
+  } };
   return true;
 }
 
 type FilterParameters = {
   among?: string; side?: string; keywords?: string[]; any_keywords?: string[]; excluded_keywords?: string[]; states?: string[]; visible?: boolean; other?: boolean; level?: string;
   held_in?: string; abilities?: string[]; excluded_abilities?: string[]; excluded_all_keywords?: string[]; alternatives?: FilterAlternative[]; datasheets?: string[]; designated?: string; designated_by?: string; embarked_in?: string;
+  attachment_role?: string; member_of?: string; not_designated?: string;
 };
 
 const union = (left: string[] | undefined, right: string[] | undefined) => [...new Set([...(left ?? []), ...(right ?? [])])].sort();
@@ -213,6 +221,8 @@ export function mergedFilter(first: CompileLeaf, second: CompileLeaf): CompileLe
   if (a.datasheets !== undefined && b.datasheets !== undefined) return null;
   // Units embarked within different Transports are different sets; one filter names one Transport.
   if (a.embarked_in !== undefined && b.embarked_in !== undefined && a.embarked_in !== b.embarked_in) return null;
+  if (a.attachment_role !== undefined && b.attachment_role !== undefined && a.attachment_role !== b.attachment_role) return null;
+  if (a.member_of !== undefined && b.member_of !== undefined && a.member_of !== b.member_of) return null;
   const parameters: Record<string, unknown> = { side: [...sides][0] ?? "any" };
   const keywords = union(a.keywords, b.keywords);
   const excluded = union(a.excluded_keywords, b.excluded_keywords);
@@ -226,6 +236,8 @@ export function mergedFilter(first: CompileLeaf, second: CompileLeaf): CompileLe
   if (a.visible === true || b.visible === true) parameters.visible = true;
   if (a.other === true || b.other === true) parameters.other = true;
   if (a.level === "model") parameters.level = "model";
+  if (a.attachment_role !== undefined || b.attachment_role !== undefined) parameters.attachment_role = a.attachment_role ?? b.attachment_role;
+  if (a.member_of !== undefined || b.member_of !== undefined) parameters.member_of = a.member_of ?? b.member_of;
   // Fields only the DSL unit-filter keeps carry over rather than being dropped by the merge.
   const held = a.held_in ?? b.held_in;
   if (held !== undefined) parameters.held_in = held;
@@ -248,11 +260,14 @@ export function mergedFilter(first: CompileLeaf, second: CompileLeaf): CompileLe
   if ((memberA ?? memberB) !== undefined) parameters.member_of = memberA ?? memberB;
   const embarkedIn = a.embarked_in ?? b.embarked_in;
   if (embarkedIn !== undefined) parameters.embarked_in = embarkedIn;
-  // "Bondsman-affected" from one filter and a unit from the other: the designation and its applier go together.
+  // Designation inclusion/exclusion survives stacked filters as a candidate predicate.
   if (a.designated !== undefined && b.designated !== undefined && a.designated !== b.designated) return null;
+  if (a.not_designated !== undefined && b.not_designated !== undefined && a.not_designated !== b.not_designated) return null;
   if (a.designated_by !== undefined && b.designated_by !== undefined && a.designated_by !== b.designated_by) return null;
   const designated = a.designated ?? b.designated;
   if (designated !== undefined) parameters.designated = designated;
+  const notDesignated = a.not_designated ?? b.not_designated;
+  if (notDesignated !== undefined) parameters.not_designated = notDesignated;
   const designatedBy = a.designated_by ?? b.designated_by;
   if (designatedBy !== undefined) parameters.designated_by = designatedBy;
   // "A or B C unit" + "(excluding D units)": the narrowing holds for every alternative.
@@ -507,6 +522,8 @@ export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: str
         out[out.length - 1] = { ...condition, end_byte: end, parameters: { ...condition.parameters, following_filter: filterNode } };
         index = at - 1;
       }
+    } else if (isFilter(leaf) && destroyerFilterAfter(out.at(-1), leaf)) {
+      out[out.length - 1] = foldDestroyerFilter(out.at(-1)!, leaf, dslUnitFilter(leaf));
     } else if (isFilter(leaf) && destroyedModelAfter(out.at(-1), leaf)) {
       // "when this unit destroys a" + "enemy CHARACTER model": the destroyed model's owner and keywords.
       out[out.length - 1] = foldDestroyedModelAfter(out.at(-1)!, leaf);
@@ -534,7 +551,7 @@ export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: str
       // "One" + "friendly ADEPTA SORORITAS unit" (+ "from your army"): a Stratagem's TARGET.
       const side = String(next!.parameters.side);
       if (side === "any") throw new CompileError("A Stratagem TARGET's unit-filter must say friendly or enemy.");
-      const { keywords, excluded_keywords: excluded, ...rest } = filterOf(next!) as { keywords?: string[]; excluded_keywords?: string[] } & Record<string, unknown>;
+      const { keywords, excluded_keywords: excluded, ...rest } = filterOf(next!, true) as { keywords?: string[]; excluded_keywords?: string[] } & Record<string, unknown>;
       out.push({ ...leaf, parameters: {
         ...leaf.parameters, side: side === "friendly" ? "your-army" : "enemy", selects: next!.parameters.level ?? "unit",
         keywords: keywords ?? [], match: "all", excluded_keywords: excluded ?? [], filter: rest,
@@ -545,15 +562,15 @@ export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: str
       const at = pastOwners(list, index, leaf);
       // "when a friendly X model" + "is destroyed": what was destroyed, not who destroyed it.
       if (destroyedObject(list[at], leaf)) {
-        out.push({ ...list[at]!, parameters: { ...list[at]!.parameters, object_filter: destroyedFilter(list[at]!, leaf, dslUnitFilter(leaf)) } });
+        out.push({ ...list[at]!, parameters: { ...list[at]!.parameters, object_filter: destroyedFilter(list[at]!, leaf, dslUnitFilter(leaf, { warlordTarget: true })) } });
         index = at;
         continue;
       }
-      out.push({ ...list[at]!, parameters: { ...list[at]!.parameters, subject_filter: dslUnitFilter(leaf) } });
+      out.push({ ...list[at]!, parameters: { ...list[at]!.parameters, subject_filter: dslUnitFilter(leaf, { warlordTarget: true }) } });
       index = at;
       // "is selected to move" + "or" + "declares a charge": the alternative moment is the same unit's.
       for (let alternative = list[index + 1]; orAlternative(list[index]!, alternative, sourceText); alternative = list[index + 1]) {
-        out.push({ ...alternative!, parameters: { ...alternative!.parameters, subject_filter: dslUnitFilter(leaf) } });
+        out.push({ ...alternative!, parameters: { ...alternative!.parameters, subject_filter: dslUnitFilter(leaf, { warlordTarget: true }) } });
         index += 1;
       }
     } else if (isFilter(leaf) && momentOfFilter(list, index) !== null) {
@@ -564,14 +581,15 @@ export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: str
       const between = foldUnitFilters(list.slice(index + 1, at).filter((other) => other.family_id !== "unit-owner"));
       out.push(...between);
       // "a friendly X model" + "within 6\" of this unit" + "is destroyed": what was destroyed.
-      const named = destroyedObject(list[at], leaf) ? { object_filter: destroyedFilter(list[at]!, leaf, dslUnitFilter(leaf)) } : { subject_filter: dslUnitFilter(leaf) };
+      const participant = dslUnitFilter(leaf, { warlordTarget: true });
+      const named = destroyedObject(list[at], leaf) ? { object_filter: destroyedFilter(list[at]!, leaf, participant) } : { subject_filter: participant };
       out.push({ ...list[at]!, parameters: { ...list[at]!.parameters, ...named } });
       index = at;
     } else if (isFilter(leaf) && ownedBy(list[pastOwners(list, index, leaf)], leaf.parameters.side)) {
       // "just after an ADEPTUS CUSTODES unit" + "from your army Falls Back": the event's owner is
       // the filter's own side, so the filter names the unit whose moment it is.
       const at = pastOwners(list, index, leaf);
-      out.push({ ...list[at]!, parameters: { ...list[at]!.parameters, subject_filter: dslUnitFilter(leaf) } });
+      out.push({ ...list[at]!, parameters: { ...list[at]!.parameters, subject_filter: dslUnitFilter(leaf, { warlordTarget: true }) } });
       index = at;
     } else if (isFilter(leaf) && destroyedByFilterAfter(out, list, index, sourceText)) {
       // "a friendly X unit is destroyed by a" + "PENITENT unit from your army": the destroyer is the

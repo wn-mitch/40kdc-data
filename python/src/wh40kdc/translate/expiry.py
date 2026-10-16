@@ -12,6 +12,8 @@ from typing import Any
 _TRAILS: dict[str, str] = {
     "attack-sequence": "until that unit finishes resolving its attacks",
     "resolution": "when resolving this use",
+    "after-resolving": "after resolving this use",
+    "while-leading": "while this model is leading a unit",
     "phase": "until the end of the phase",
     "turn": "until the end of the turn",
     "battle": "for the rest of the battle",

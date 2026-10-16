@@ -61,7 +61,7 @@ describe("or between range clauses that each take a following filter (SS-E)", ()
     const result = compileLeaves(leaves(), text);
     expect(result.ok ? "ok" : result.errors.join(" | ")).toBe("ok");
     const json = JSON.stringify(result.ok ? result.mechanics : {});
-    expect(json).toMatch(/"operator":"and","operands":\[\{"operator":"or","operands":\[\{"type":"within".*"type":"within"/u);
+    expect(json).toMatch(/"operator":"and","operands":\[\{"operator":"or","operands":\[\{"type":"matches".*"type":"matches"/u);
   });
 
   it("refuses an \"or\" between a filtered distance and a condition of another subject", () => {

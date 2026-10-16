@@ -70,7 +70,9 @@
           "range": {
             "inches": 18
           },
-          "weapon_type": "ranged"
+          "weapons": {
+            "type": "ranged"
+          }
         }
       }
     },
@@ -171,7 +173,7 @@
         "type": "mortal-wounds",
         "target": "defender",
         "modifier": {
-          "count": "1"
+          "count": 1
         }
       }
     },
@@ -271,12 +273,14 @@
             "operator": "not",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "subject": "recipient",
-                  "all_of": [
-                    "MONSTER"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "MONSTER"
+                    ]
+                  },
+                  "subject": "recipient"
                 }
               }
             ]
@@ -285,12 +289,14 @@
             "operator": "not",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "subject": "recipient",
-                  "all_of": [
-                    "VEHICLE"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "VEHICLE"
+                    ]
+                  },
+                  "subject": "recipient"
                 }
               }
             ]
@@ -313,11 +319,13 @@
                 "operator": "and",
                 "operands": [
                   {
-                    "type": "has-keyword",
+                    "type": "matches",
                     "parameters": {
-                      "all_of": [
-                        "TYPHUS"
-                      ]
+                      "filter": {
+                        "all_of": [
+                          "TYPHUS"
+                        ]
+                      }
                     }
                   },
                   {
@@ -391,8 +399,13 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Sustained Hits 1"
+          "keywords": [
+            {
+              "keyword_id": "sustained-hits",
+              "parameters": {
+                "value": 1
+              }
+            }
           ]
         }
       }
@@ -558,10 +571,12 @@
             {
               "type": "conditional",
               "condition": {
-                "type": "designated",
+                "type": "matches",
                 "parameters": {
-                  "subject": "defender",
-                  "tag": "AFFLICTED"
+                  "filter": {
+                    "designated": "AFFLICTED"
+                  },
+                  "subject": "defender"
                 }
               },
               "effect": {
@@ -570,7 +585,7 @@
                 "threshold": 4,
                 "comparison": "gte",
                 "on_success": {
-                  "type": "weapon-ability-grant",
+                  "type": "designate",
                   "target": {
                     "owner": "enemy",
                     "within": {
@@ -580,9 +595,15 @@
                     }
                   },
                   "modifier": {
-                    "abilities": [
-                      "Afflicted"
-                    ]
+                    "subject": {
+                      "owner": "enemy",
+                      "within": {
+                        "range": {
+                          "inches": 6
+                        }
+                      }
+                    },
+                    "tag": "afflicted"
                   }
                 }
               }
@@ -593,10 +614,12 @@
                 "operator": "not",
                 "operands": [
                   {
-                    "type": "designated",
+                    "type": "matches",
                     "parameters": {
-                      "subject": "recipient",
-                      "tag": "AFFLICTED"
+                      "filter": {
+                        "designated": "AFFLICTED"
+                      },
+                      "subject": "recipient"
                     }
                   }
                 ]
@@ -607,7 +630,7 @@
                 "threshold": 5,
                 "comparison": "gte",
                 "on_success": {
-                  "type": "weapon-ability-grant",
+                  "type": "designate",
                   "target": {
                     "owner": "enemy",
                     "within": {
@@ -617,9 +640,15 @@
                     }
                   },
                   "modifier": {
-                    "abilities": [
-                      "Afflicted"
-                    ]
+                    "subject": {
+                      "owner": "enemy",
+                      "within": {
+                        "range": {
+                          "inches": 6
+                        }
+                      }
+                    },
+                    "tag": "afflicted"
                   }
                 }
               }
@@ -637,7 +666,35 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "death-guard"
+    "faction_id": "death-guard",
+    "trigger": {
+      "event": "destroyed",
+      "subject": "this-model",
+      "object": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "timing": "before-removal"
+      },
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "optional": false
+    }
   },
   {
     "ability_id": "spore-laced-shock-waves-death-guard",
@@ -698,8 +755,10 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Lethal Hits"
+          "keywords": [
+            {
+              "keyword_id": "lethal-hits"
+            }
           ]
         }
       }
@@ -773,8 +832,13 @@
       "effect": {
         "type": "select-units",
         "selector": {
-          "owner": "enemy",
-          "count": 1,
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
           "eligibility": {
             "type": "happened",
             "parameters": {
@@ -858,15 +922,41 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
+          },
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "command"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          }
+        ]
       },
       "effect": {
         "type": "return-models",
-        "target": "this-unit",
+        "target": {
+          "level": "model",
+          "member_of": "this-unit",
+          "attachment_role": "bodyguard"
+        },
         "modifier": {
           "count": 1
         }
@@ -879,7 +969,7 @@
       "plague-surgeon"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "activated",
     "faction_id": "death-guard"
   },
   {
@@ -944,19 +1034,23 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "subject": "this-model",
-          "of": {
-            "owner": "friendly",
-            "all_of": [
-              "DEATH GUARD",
-              "INFANTRY"
-            ]
+          "filter": {
+            "within": {
+              "range": {
+                "inches": 3
+              },
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "DEATH GUARD",
+                  "INFANTRY"
+                ]
+              }
+            }
           },
-          "range": {
-            "inches": 3
-          }
+          "subject": "this-model"
         }
       },
       "effect": {
@@ -1117,7 +1211,9 @@
       "modifier": {
         "to": "battlefield",
         "via": "deep-strike",
-        "min_enemy_distance": 8,
+        "min_enemy_distance": {
+          "inches": 8
+        },
         "min_distance_from": {
           "of": {
             "owner": "enemy",
@@ -1206,76 +1302,113 @@
     "source_digest": "d4345dcd0da347083bf8f42874969c912a9ef4afad7812d2919fc2f168431b97",
     "version": "2025-q3",
     "effect": {
-      "type": "designate-target",
-      "designation": "blight-bombardment-target",
-      "select": {
-        "scope": "enemy-unit",
-        "count": 1,
-        "timing": "start-of-shooting-phase",
-        "within_inches": 30,
-        "reference": "bearer",
-        "visibility_required": true
-      },
-      "applies": {
-        "to": "attackers-of-target",
-        "effect": {
-          "type": "sequence",
-          "steps": [
-            {
-              "type": "conditional",
-              "condition": {
-                "operator": "not",
-                "operands": [
-                  {
-                    "type": "attack-is",
-                    "parameters": {
-                      "weapon_keyword": "Blast"
-                    }
-                  }
-                ]
-              },
-              "effect": {
-                "type": "re-roll",
-                "target": {
-                  "owner": "friendly",
-                  "all_of": [
-                    "DEATH GUARD"
-                  ]
-                },
-                "modifier": {
-                  "roll": "hit",
-                  "subset": "ones",
-                  "weapon_type": "ranged"
-                }
-              }
-            },
-            {
-              "type": "conditional",
-              "condition": {
-                "type": "attack-is",
-                "parameters": {
-                  "weapon_keyword": "Blast"
-                }
-              },
-              "effect": {
-                "type": "re-roll",
-                "target": {
-                  "owner": "friendly",
-                  "all_of": [
-                    "DEATH GUARD"
-                  ]
-                },
-                "modifier": {
-                  "roll": "hit",
-                  "subset": "all-failures",
-                  "weapon_type": "ranged"
-                }
-              }
-            }
-          ]
+      "type": "ability-part",
+      "trigger": {
+        "event": "phase-started",
+        "condition": {
+          "type": "phase-is",
+          "parameters": {
+            "phase": "shooting"
+          }
         }
       },
-      "duration": "phase"
+      "effect": {
+        "type": "designate-target",
+        "designation": "blight-bombardment-target",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy",
+              "within": {
+                "range": {
+                  "inches": 30
+                },
+                "of": "this-model"
+              },
+              "visible": {
+                "to": "this-model"
+              }
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
+          }
+        },
+        "applies": {
+          "to": "attackers-of-target",
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "conditional",
+                "condition": {
+                  "operator": "not",
+                  "operands": [
+                    {
+                      "type": "attack-is",
+                      "parameters": {
+                        "weapons": {
+                          "keyword": {
+                            "keyword_id": "blast"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "effect": {
+                  "type": "re-roll",
+                  "target": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "DEATH GUARD"
+                    ]
+                  },
+                  "modifier": {
+                    "roll": "hit",
+                    "subset": "ones",
+                    "weapons": {
+                      "type": "ranged"
+                    }
+                  }
+                }
+              },
+              {
+                "type": "conditional",
+                "condition": {
+                  "type": "attack-is",
+                  "parameters": {
+                    "weapons": {
+                      "keyword": {
+                        "keyword_id": "blast"
+                      }
+                    }
+                  }
+                },
+                "effect": {
+                  "type": "re-roll",
+                  "target": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "DEATH GUARD"
+                    ]
+                  },
+                  "modifier": {
+                    "roll": "hit",
+                    "subset": "all-failures",
+                    "weapons": {
+                      "type": "ranged"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "duration": "phase"
+      }
     },
     "scope": {
       "duration": "phase"
@@ -1446,12 +1579,14 @@
             "operator": "not",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "subject": "recipient",
-                  "all_of": [
-                    "MONSTER"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "MONSTER"
+                    ]
+                  },
+                  "subject": "recipient"
                 }
               }
             ]
@@ -1460,12 +1595,14 @@
             "operator": "not",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "subject": "recipient",
-                  "all_of": [
-                    "VEHICLE"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "VEHICLE"
+                    ]
+                  },
+                  "subject": "recipient"
                 }
               }
             ]
@@ -1480,7 +1617,9 @@
             "target": {
               "owner": "enemy",
               "within": {
-                "range": {"inches":6}
+                "range": {
+                  "inches": 6
+                }
               }
             },
             "modifier": {
@@ -1492,9 +1631,11 @@
           {
             "type": "conditional",
             "condition": {
-              "type": "unit-state",
+              "type": "matches",
               "parameters": {
-                "state": "battle-shocked"
+                "filter": {
+                  "state": "battle-shocked"
+                }
               }
             },
             "effect": {
@@ -1652,10 +1793,12 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "designated",
+        "type": "matches",
         "parameters": {
-          "subject": "defender",
-          "tag": "AFFLICTED"
+          "filter": {
+            "designated": "AFFLICTED"
+          },
+          "subject": "defender"
         }
       },
       "effect": {
@@ -1771,7 +1914,314 @@
     "source_digest": "38c3548141790a9e95e4053ecb3572ddf8fe50d9519eb3ef14c22976bfa04e5c",
     "version": "2025-q3",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "move-ended",
+            "filter": {
+              "move_types": [
+                "normal",
+                "advance",
+                "fall-back"
+              ]
+            },
+            "subject": {
+              "owner": "enemy"
+            },
+            "optional": true
+          },
+          "duration": "resolution",
+          "effect": {
+            "type": "select-units",
+            "selector": {
+              "filter": {
+                "owner": "friendly",
+                "all_of": [
+                  "DEATH GUARD"
+                ]
+              },
+              "count": {
+                "min": 1,
+                "max": 1
+              },
+              "eligibility": {
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "filter": {
+                        "within": {
+                          "of": "event-subject",
+                          "range": {
+                            "inches": 8
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "filter": {
+                        "within": {
+                          "of": "this-model",
+                          "range": {
+                            "inches": 6
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "operator": "not",
+                    "operands": [
+                      {
+                        "type": "matches",
+                        "parameters": {
+                          "filter": {
+                            "state": "engaged"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "effect": {
+              "type": "move",
+              "target": "selected-unit",
+              "modifier": {
+                "move_type": "normal",
+                "distance": 5
+              }
+            }
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "targets-selected",
+            "subject": {
+              "owner": "enemy"
+            },
+            "filter": {
+              "kind": "attack"
+            },
+            "object": {
+              "owner": "friendly",
+              "all_of": [
+                "DEATH GUARD"
+              ],
+              "within": {
+                "range": {
+                  "inches": 6
+                },
+                "of": "this-model"
+              }
+            },
+            "binds_event_variable": "reaction-recipient",
+            "condition": {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "fight"
+              }
+            },
+            "optional": true
+          },
+          "duration": "resolution",
+          "effect": {
+            "type": "ability-part",
+            "trigger": {
+              "event": "model-destroyed",
+              "object": {
+                "level": "model",
+                "member_of": {
+                  "event_var": "reaction-recipient"
+                }
+              },
+              "filter": {
+                "attack_type": "melee"
+              }
+            },
+            "effect": {
+              "type": "act-on-death",
+              "target": "event-object",
+              "modifier": {
+                "act": "fight",
+                "resolution": "after-attacking-unit-finishes",
+                "removal": "after-destroyed-model-fights",
+                "gate": {
+                  "dice": "D6",
+                  "threshold": 2,
+                  "comparison": "gte",
+                  "modifiers": []
+                },
+                "eligibility": {
+                  "operator": "not",
+                  "operands": [
+                    {
+                      "type": "happened",
+                      "parameters": {
+                        "subject": "event-object",
+                        "event": "selected",
+                        "filter": {
+                          "to": "fight"
+                        },
+                        "window": "phase"
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "duration": "phase"
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "targets-selected",
+            "subject": {
+              "owner": "enemy"
+            },
+            "filter": {
+              "kind": "attack"
+            },
+            "object": {
+              "owner": "friendly",
+              "all_of": [
+                "DEATH GUARD"
+              ],
+              "within": {
+                "range": {
+                  "inches": 6
+                },
+                "of": "this-model"
+              }
+            },
+            "binds_event_variable": "reaction-recipient",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "phase-is",
+                  "parameters": {
+                    "phase": "shooting"
+                  }
+                },
+                {
+                  "type": "player-turn-is",
+                  "parameters": {
+                    "turn": "opponent-turn"
+                  }
+                }
+              ]
+            },
+            "optional": true
+          },
+          "duration": "resolution",
+          "effect": {
+            "type": "select-units",
+            "selector": {
+              "filter": {
+                "owner": "enemy"
+              },
+              "count": {
+                "min": 1,
+                "max": 1
+              },
+              "bind_as": "reaction-enemy",
+              "eligibility": {
+                "type": "same-unit",
+                "parameters": {
+                  "subject": "this-unit",
+                  "as": "event-subject"
+                }
+              }
+            },
+            "effect": {
+              "type": "ability-part",
+              "trigger": {
+                "event": "attacks-resolved",
+                "subject": {
+                  "selection_var": "reaction-enemy"
+                }
+              },
+              "effect": {
+                "type": "ability-part",
+                "duration": "resolution",
+                "effect": {
+                  "type": "sequence",
+                  "steps": [
+                    {
+                      "type": "permission",
+                      "target": {
+                        "event_var": "reaction-recipient"
+                      },
+                      "modifier": {
+                        "activity": "shoot",
+                        "allow": true,
+                        "as_if": "shooting-phase"
+                      }
+                    },
+                    {
+                      "type": "conditional",
+                      "condition": {
+                        "type": "attack-is",
+                        "parameters": {
+                          "attack_type": "ranged"
+                        }
+                      },
+                      "effect": {
+                        "type": "stat-modifier",
+                        "target": {
+                          "event_var": "reaction-recipient"
+                        },
+                        "modifier": {
+                          "stat": "BS",
+                          "operation": "worsen",
+                          "value": 1
+                        }
+                      }
+                    },
+                    {
+                      "type": "conditional",
+                      "condition": {
+                        "type": "attack-is",
+                        "parameters": {
+                          "attack_type": "ranged"
+                        }
+                      },
+                      "effect": {
+                        "type": "targeting",
+                        "target": {
+                          "event_var": "reaction-recipient"
+                        },
+                        "modifier": {
+                          "by": {
+                            "event_var": "reaction-recipient"
+                          },
+                          "may": "must-target",
+                          "kind": "shoot",
+                          "weapons": {
+                            "type": "ranged"
+                          },
+                          "target": "event-subject"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "duration": "resolution"
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -1780,9 +2230,10 @@
       "mortarion"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "usage": {
-      "frequency": "once-per-turn"
+      "frequency": "once-per-turn",
+      "per": "model"
     },
     "faction_id": "death-guard"
   },
@@ -1863,10 +2314,12 @@
             }
           },
           {
-            "type": "designated",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "tag": "AFFLICTED"
+              "filter": {
+                "designated": "AFFLICTED"
+              },
+              "subject": "defender"
             }
           }
         ]
@@ -1875,8 +2328,13 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Sustained Hits 1"
+          "keywords": [
+            {
+              "keyword_id": "sustained-hits",
+              "parameters": {
+                "value": 1
+              }
+            }
           ]
         }
       }
@@ -1914,18 +2372,22 @@
               "filter": {
                 "roll": "hit",
                 "result": "success",
-                "weapon_name": "Plague Wind"
+                "weapons": {
+                  "name": "Plague Wind"
+                }
               },
               "window": "event"
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "all_of": [
-                "INFANTRY"
-              ]
+              "filter": {
+                "all_of": [
+                  "INFANTRY"
+                ]
+              },
+              "subject": "defender"
             }
           }
         ]
@@ -2176,17 +2638,28 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "owner": "friendly",
-        "count": 1,
-        "keywords": [
-          "DEATH GUARD"
-        ],
-        "within_inches": 12,
-        "reference": "bearer",
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "DEATH GUARD"
+          ],
+          "within": {
+            "range": {
+              "inches": 12
+            },
+            "of": "this-model"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
         "eligibility": {
-          "type": "unit-state",
+          "type": "matches",
           "parameters": {
-            "state": "battle-shocked"
+            "filter": {
+              "state": "battle-shocked"
+            }
           }
         }
       },
@@ -2324,10 +2797,12 @@
             }
           },
           {
-            "type": "designated",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "tag": "AFFLICTED"
+              "filter": {
+                "designated": "AFFLICTED"
+              },
+              "subject": "defender"
             }
           }
         ]
@@ -2354,7 +2829,7 @@
   },
   {
     "ability_id": "nurgles-gift-death-guard",
-    "name": "Nurgle\u2019s Gift (Aura)",
+    "name": "Nurgle’s Gift (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -2540,10 +3015,14 @@
             ]
           },
           "modifier": {
-            "abilities": [
-              "Assault"
-            ],
-            "weapon_type": "ranged"
+            "weapons": {
+              "type": "ranged"
+            },
+            "keywords": [
+              {
+                "keyword_id": "assault"
+              }
+            ]
           }
         }
       ]
@@ -2552,7 +3031,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "DEATH GUARD"
       ]
     }
@@ -2576,11 +3055,16 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "max_count": 2,
-        "owner": "friendly",
-        "keywords": [
-          "PLAGUE MARINES"
-        ]
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "PLAGUE MARINES"
+          ]
+        },
+        "count": {
+          "min": 0,
+          "max": 2
+        }
       },
       "effect": {
         "type": "ability-grant",
@@ -2594,7 +3078,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "DEATH GUARD",
         "PLAGUE MARINES"
       ]
@@ -2637,7 +3121,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "DEATH GUARD",
         "CHARACTER"
       ]
@@ -2662,15 +3146,19 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "subject": "defender",
-          "of": {
-            "owner": "friendly"
+          "filter": {
+            "within": {
+              "range": {
+                "aura_of": "nurgles-gift-death-guard"
+              },
+              "of": {
+                "owner": "friendly"
+              }
+            }
           },
-          "range": {
-            "aura_of": "nurgles-gift-death-guard"
-          }
+          "subject": "defender"
         }
       },
       "effect": {
@@ -2686,7 +3174,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "PLAGUE MARINES"
       ]
     }
@@ -2720,7 +3208,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "PLAGUE MARINES"
       ]
     }
@@ -2750,7 +3238,7 @@
             "of": "attacker",
             "stat": "S"
           },
-          "comparison": "greater-than",
+          "comparison": "gt",
           "right": {
             "of": "defender",
             "stat": "T"
@@ -2772,11 +3260,11 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "DEATH GUARD",
         "INFANTRY"
       ],
-      "excluded_keywords": [
+      "none_of": [
         "TERMINATOR"
       ]
     }
@@ -2821,7 +3309,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "Contagion Engine"
       ]
     }
@@ -2855,7 +3343,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "HELBRUTE"
       ]
     }
@@ -2898,7 +3386,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "DEATH GUARD",
         "INFANTRY"
       ]
@@ -2923,10 +3411,14 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "count": 1,
-        "owner": "enemy",
-        "engagement_relation": "engaged-with-bearer",
-        "reference": "bearer-unit"
+        "filter": {
+          "owner": "enemy",
+          "engaged_with": "this-unit"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        }
       },
       "effect": {
         "type": "test",
@@ -2941,7 +3433,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "PLAGUE MARINES"
       ]
     }
@@ -2971,17 +3463,23 @@
           "modifier": {
             "roll": "hit",
             "subset": "ones",
-            "weapon_type": "ranged"
+            "weapons": {
+              "type": "ranged"
+            }
           }
         },
         {
           "type": "conditional",
           "condition": {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "of": "attacker",
-              "range": "half-weapon"
+              "filter": {
+                "within": {
+                  "range": "half-weapon",
+                  "of": "attacker"
+                }
+              },
+              "subject": "defender"
             }
           },
           "effect": {
@@ -2990,7 +3488,9 @@
             "modifier": {
               "roll": "wound",
               "subset": "ones",
-              "weapon_type": "ranged"
+              "weapons": {
+                "type": "ranged"
+              }
             }
           }
         }
@@ -3000,7 +3500,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "PLAGUE MARINES"
       ]
     }
@@ -3025,17 +3525,21 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Close-quarters"
-        ],
-        "weapon_type": "ranged"
+        "weapons": {
+          "type": "ranged"
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
       }
     },
     "scope": {
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "PLAGUE MARINES"
       ]
     }
@@ -3068,7 +3572,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "Contagion Engine"
       ]
     }
@@ -3092,16 +3596,23 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "owner": "enemy",
-        "count": 1,
-        "visibility_required": true
+        "filter": {
+          "owner": "enemy",
+          "visible": {
+            "to": "this-model"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        }
       },
       "effect": {
         "type": "designate",
         "target": "selected-unit",
         "modifier": {
           "tag": "afflicted",
-          "clears_on": "phase-end"
+          "clears_on": "phase"
         }
       }
     },
@@ -3109,7 +3620,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "Contagion Engine"
       ]
     }
@@ -3177,6 +3688,55 @@
     },
     "scope": {
       "duration": "phase"
+    },
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "move_types": [
+          "fall-back"
+        ],
+        "to": "move"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "optional": true,
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "movement"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "opponent-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "event-subject",
+              "filter": {
+                "engaged_with": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "CONTAGION ENGINES"
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      }
     }
   },
   {
@@ -3208,7 +3768,7 @@
       "duration": "turn"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "DEATH GUARD",
         "CHARACTER"
       ]
@@ -3233,15 +3793,26 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "count": 1,
-        "owner": "enemy",
-        "visibility_required": true,
+        "filter": {
+          "owner": "enemy",
+          "visible": {
+            "to": "this-model"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
         "eligibility": {
-          "type": "within",
+          "type": "matches",
           "parameters": {
-            "of": "this-unit",
-            "range": {
-              "aura_of": "nurgles-gift-death-guard"
+            "filter": {
+              "within": {
+                "range": {
+                  "aura_of": "nurgles-gift-death-guard"
+                },
+                "of": "this-unit"
+              }
             }
           }
         }
@@ -3260,7 +3831,7 @@
       "duration": "turn"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "DEATH GUARD",
         "CHARACTER"
       ]
@@ -3297,7 +3868,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "DEATH GUARD",
         "CHARACTER"
       ]
@@ -3328,29 +3899,37 @@
             "type": "controls"
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "DEATH GUARD"
-              ]
+              "filter": {
+                "all_of": [
+                  "DEATH GUARD"
+                ]
+              }
             }
           },
           {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "of": {
-                "objective": {}
-              },
-              "range": "objective-control"
+              "filter": {
+                "within": {
+                  "range": "objective-control",
+                  "of": {
+                    "objective": {}
+                  }
+                }
+              }
             }
           },
           {
             "operator": "not",
             "operands": [
               {
-                "type": "unit-state",
+                "type": "matches",
                 "parameters": {
-                  "state": "battle-shocked"
+                  "filter": {
+                    "state": "battle-shocked"
+                  }
                 }
               }
             ]
@@ -3367,17 +3946,23 @@
           {
             "type": "for-each-unit",
             "selector": {
-              "owner": "enemy",
+              "filter": {
+                "owner": "enemy"
+              },
               "eligibility": {
-                "type": "within",
+                "type": "matches",
                 "parameters": {
-                  "of": {
-                    "objective": {
-                      "controlled_by": "friendly",
-                      "designated": "secured"
+                  "filter": {
+                    "within": {
+                      "range": "objective-control",
+                      "of": {
+                        "objective": {
+                          "controlled_by": "friendly",
+                          "designated": "secured"
+                        }
+                      }
                     }
-                  },
-                  "range": "objective-control"
+                  }
                 }
               }
             },
@@ -3432,24 +4017,30 @@
             "operator": "and",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "all_of": [
-                    "PLAGUE LEGIONS"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "PLAGUE LEGIONS"
+                    ]
+                  }
                 }
               },
               {
-                "type": "within",
+                "type": "matches",
                 "parameters": {
-                  "of": {
-                    "owner": "friendly",
-                    "all_of": [
-                      "DEATH GUARD"
-                    ]
-                  },
-                  "range": {
-                    "inches": 7
+                  "filter": {
+                    "within": {
+                      "range": {
+                        "inches": 7
+                      },
+                      "of": {
+                        "owner": "friendly",
+                        "all_of": [
+                          "DEATH GUARD"
+                        ]
+                      }
+                    }
                   }
                 }
               }
@@ -3485,24 +4076,30 @@
             "operator": "and",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "all_of": [
-                    "DEATH GUARD"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "DEATH GUARD"
+                    ]
+                  }
                 }
               },
               {
-                "type": "within",
+                "type": "matches",
                 "parameters": {
-                  "of": {
-                    "owner": "friendly",
-                    "all_of": [
-                      "PLAGUE LEGIONS"
-                    ]
-                  },
-                  "range": {
-                    "inches": 7
+                  "filter": {
+                    "within": {
+                      "range": {
+                        "inches": 7
+                      },
+                      "of": {
+                        "owner": "friendly",
+                        "all_of": [
+                          "PLAGUE LEGIONS"
+                        ]
+                      }
+                    }
                   }
                 }
               }
@@ -3598,13 +4195,17 @@
         "operator": "not",
         "operands": [
           {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "of": {
-                "owner": "friendly"
-              },
-              "range": {
-                "inches": 12
+              "filter": {
+                "within": {
+                  "range": {
+                    "inches": 12
+                  },
+                  "of": {
+                    "owner": "friendly"
+                  }
+                }
               }
             }
           }
@@ -3693,7 +4294,7 @@
     "faction_id": "death-guard",
     "detachment_id": "death-lords-chosen",
     "ability_type": "detachment",
-    "behavior": "reactive",
+    "behavior": "passive",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -3712,10 +4313,12 @@
             }
           },
           {
-            "type": "designated",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "tag": "AFFLICTED"
+              "filter": {
+                "designated": "AFFLICTED"
+              },
+              "subject": "defender"
             }
           }
         ]
@@ -3852,8 +4455,13 @@
       "effect": {
         "type": "select-units",
         "selector": {
-          "owner": "enemy",
-          "count": 1,
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
           "eligibility": {
             "type": "happened",
             "parameters": {
@@ -3900,9 +4508,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-state",
+        "type": "matches",
         "parameters": {
-          "state": "engaged"
+          "filter": {
+            "state": "engaged"
+          }
         }
       },
       "effect": {
@@ -3936,24 +4546,48 @@
     "ability_type": "unit",
     "behavior": "activated",
     "effect": {
-      "type": "designate-target",
-      "designation": "spotted",
-      "select": {
-        "scope": "enemy-unit",
-        "count": 1,
-        "timing": "start-of-shooting-phase",
-        "within_inches": 18
+      "type": "ability-part",
+      "trigger": {
+        "event": "phase-started",
+        "condition": {
+          "type": "phase-is",
+          "parameters": {
+            "phase": "shooting"
+          }
+        }
       },
-      "duration": "phase",
-      "applies": {
-        "to": "target",
-        "effect": {
-          "type": "stat-modifier",
-          "target": "defender",
-          "modifier": {
-            "stat": "detection-range",
-            "operation": "add",
-            "value": 6
+      "effect": {
+        "type": "designate-target",
+        "designation": "spotted",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy",
+              "within": {
+                "range": {
+                  "inches": 18
+                },
+                "of": "this-model"
+              }
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
+          }
+        },
+        "duration": "phase",
+        "applies": {
+          "to": "target",
+          "effect": {
+            "type": "stat-modifier",
+            "target": "defender",
+            "modifier": {
+              "stat": "detection-range",
+              "operation": "add",
+              "value": 6
+            }
           }
         }
       }
@@ -4245,7 +4879,7 @@
   },
   {
     "ability_id": "deaths-heads-champions-of-contagion-death-guard",
-    "name": "Death\u2019s Heads",
+    "name": "Death’s Heads",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -4725,7 +5359,7 @@
   },
   {
     "ability_id": "mortarions-teachings-death-lords-chosen-death-guard",
-    "name": "Mortarion\u2019s Teachings",
+    "name": "Mortarion’s Teachings",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -4785,7 +5419,7 @@
   },
   {
     "ability_id": "nurgles-gift-maggot-lords-death-guard",
-    "name": "Nurgle\u2019s Gift (Aura)",
+    "name": "Nurgle’s Gift (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -5372,7 +6006,7 @@
   },
   {
     "ability_id": "deaths-heads-death-guard",
-    "name": "Death\u2019s Heads",
+    "name": "Death’s Heads",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -5505,7 +6139,7 @@
   },
   {
     "ability_id": "nurgles-rot-death-guard",
-    "name": "Nurgle\u2019s Rot",
+    "name": "Nurgle’s Rot",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",

@@ -6,6 +6,7 @@ import {
   primaryDetachmentId,
   resolveAttachedLeader,
   resolveAttachmentPartners,
+  resolveAttachmentRoles,
   resolveRosterUnit,
   resolveRosterWargear,
   validateRosterCore,
@@ -121,6 +122,29 @@ describe("resolveAttachmentPartners", () => {
   it("returns an empty array when the unit is in no attachment", () => {
     const lone = rosterOf([rosterUnit("battle-sisters-squad"), rosterUnit("palatine")]);
     expect(resolveAttachmentPartners(lone, "battle-sisters-squad")).toEqual([]);
+  });
+
+  it("includes all co-leaders from either end without including unrelated units", () => {
+    const multi = rosterOf([
+      rosterUnit("character-bodyguard"),
+      leaderUnit("first-leader", "character-bodyguard"),
+      leaderUnit("second-leader", "character-bodyguard"),
+      rosterUnit("unattached-leader"),
+    ]);
+    expect(resolveAttachmentPartners(multi, "first-leader").map((unit) => unit.ref.id))
+      .toEqual(["character-bodyguard", "second-leader"]);
+    expect(resolveAttachmentRoles(multi, "first-leader")).toEqual({
+      "character-bodyguard": "bodyguard",
+      "first-leader": "leader",
+      "second-leader": "leader",
+    });
+    expect(resolveAttachmentRoles(multi, "unattached-leader")).toEqual({});
+  });
+
+  it("does not invent membership for unresolved or absent bodyguards", () => {
+    const unresolved = leaderUnit("first-leader", "missing-bodyguard");
+    expect(resolveAttachmentRoles(rosterOf([unresolved]), "first-leader")).toEqual({});
+    expect(resolveAttachmentPartners(rosterOf([unresolved]), "first-leader")).toEqual([]);
   });
 });
 

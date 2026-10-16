@@ -38,7 +38,7 @@ describe("Round 5C Range under a weapon-property scope", () => {
     expect(result.ok).toBe(true);
     const json = JSON.stringify((result as { mechanics: unknown }).mechanics);
     expect(json).toContain('"stat":"Range"');
-    expect(json).toContain('"weapon_type":"ranged"');
+    expect(json).toContain('"weapons":{"type":"ranged"}');
     expect(json).toContain('"value":6');
   });
 

@@ -157,7 +157,7 @@ describe("S2 compile lines", () => {
     const mechanics = mechanicsOf("This unit's Zorb Launcher weapons have D3+3 A.", [
       ["This unit's Zorb Launcher weapons have D3+3 A", "characteristic-set", { subject: "this-unit", characteristic: "A", value: "D3+3", weapon_type: "ranged", weapon_name: "Zorb Launcher" }],
     ]);
-    expect(mechanics.effect.modifier).toMatchObject({ stat: "A", operation: "set", value: "D3+3", weapon_name: "Zorb Launcher" });
+    expect(mechanics.effect.modifier).toMatchObject({ stat: "A", operation: "set", value: "D3+3", weapons: { type: "ranged", name: "Zorb Launcher" } });
     validates(mechanics.effect);
   });
 
@@ -213,10 +213,10 @@ describe("S4 alternative dice pools", () => {
     expect(steps[0]!.condition.operands[0].operator).toBe("or");
     expect(steps[0]!.condition.operands[0].operands).toHaveLength(2);
     expect(steps[0]!.effect.modifier.roll).toMatchObject({ dice: 1, threshold: 3 });
-    expect(steps[0]!.effect.modifier.roll.for_each).toMatchObject({ target_kind: "model", keywords: ["ZORB"] });
-    expect(steps[1]!.condition.parameters.all_of).toEqual(["ALPHA"]);
+    expect(steps[0]!.effect.modifier.roll.for_each).toMatchObject({ filter: { owner: "friendly", all_of: ["ZORB"], level: "model", member_of: "this-unit" } });
+    expect(steps[1]!.condition.parameters.filter.all_of).toEqual(["ALPHA"]);
     expect(steps[1]!.effect.modifier.roll).toMatchObject({ dice: 4, threshold: 3 });
-    expect(steps[2]!.condition.parameters.all_of).toEqual(["OMEGA"]);
+    expect(steps[2]!.condition.parameters.filter.all_of).toEqual(["OMEGA"]);
     expect(steps[2]!.effect.modifier.roll).toMatchObject({ dice: 6, threshold: 3 });
     validates(mechanics.effect);
   });
@@ -225,7 +225,7 @@ describe("S4 alternative dice pools", () => {
     const items = POOL_ITEMS.filter((item) => !["or roll six D6", "if your unit has the Omega keyword"].includes(item[0]));
     const steps = mechanicsOf(POOL_TEXT.replace(", or roll six D6 if your unit has the Omega keyword", ""), items).effect.effect.steps as Array<Record<string, any>>;
     expect(steps).toHaveLength(2);
-    expect(steps[0]!.condition).toMatchObject({ operator: "not", operands: [{ type: "has-keyword" }] });
+    expect(steps[0]!.condition).toMatchObject({ operator: "not", operands: [{ type: "matches", parameters: { filter: { all_of: ["ALPHA"] } } }] });
   });
 
   it("refuses an alternative roll with no condition leaf after it", () => {
@@ -264,7 +264,7 @@ describe("S4 alternative dice pools", () => {
       ["that enemy unit suffers 1 mortal wound", "mortal-wounds", { recipient: "that-unit", count: "1" }],
     ]);
     const steps = mechanics.effect.effect.steps as Array<Record<string, any>>;
-    expect(steps[0]!.condition).toMatchObject({ operator: "not", operands: [{ type: "has-keyword" }] });
+    expect(steps[0]!.condition).toMatchObject({ operator: "not", operands: [{ type: "matches", parameters: { filter: { all_of: ["BEAST"] } } }] });
     expect(steps[0]!.effect.modifier.roll.for_each.eligibility ?? steps[0]!.effect.modifier.roll.for_each).toBeDefined();
     expect(steps[1]!.effect.modifier.roll).toMatchObject({ dice: 6, threshold: 4 });
     validates(mechanics.effect);
@@ -286,7 +286,7 @@ describe("S5 conditional bonus on a roll of several dice", () => {
     const mechanics = mechanicsOf(GLIDE_TEXT, glideItems({ dice: "D6", count: 2 }));
     const steps = mechanics.effect.effect.steps as Array<Record<string, any>>;
     expect(steps).toHaveLength(2);
-    expect(steps[0]!.condition.type).toBe("has-keyword");
+    expect(steps[0]!.condition).toMatchObject({ type: "matches", parameters: { subject: "selected-unit", filter: { all_of: ["GLIDE"] } } });
     expect(steps[0]!.effect.modifier).toMatchObject({ count: "D3", per: "success", roll: { dice: 2, threshold: 3 } });
     expect(steps[1]!.condition.operator).toBe("not");
     expect(steps[1]!.effect.modifier.roll).toMatchObject({ dice: 2, threshold: 4 });
@@ -384,7 +384,7 @@ describe("S7 per-model roll that narrows its models", () => {
 
   it("still compiles a roll for every model of the unit", () => {
     const wording = "Roll one D6 for each model in this unit";
-    expect(mechanicsOf(text(wording), body(wording)).effect.effect.modifier.roll.per_model).toBe("this");
+    expect(mechanicsOf(text(wording), body(wording)).effect.effect.modifier.roll.per_model).toBe("this-unit");
   });
 
   it("refuses wording that narrows the models", () => {

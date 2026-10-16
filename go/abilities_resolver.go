@@ -129,7 +129,9 @@ func resolveEligibleAbilities(ds *Dataset, input map[string]any, phase string) [
 		}
 	}
 
-	// 6. Supporting units — aura-scoped only.
+	// 6. Supporting units — only abilities that can reach another unit (an aura,
+	// a friendly or enemy unit filter, a unit selection); an ability that only
+	// names its own unit describes a buff that never reaches the input unit.
 	for _, supportID := range getStrList(input, "supportingUnitIds") {
 		supporter, ok := ds.resolveUnitScoped(supportID, factionID)
 		if !ok {
@@ -139,8 +141,7 @@ func resolveEligibleAbilities(ds *Dataset, input map[string]any, phase string) [
 			if !phaseMatches(ability) {
 				continue
 			}
-			scope, _ := getMap(ability.Raw, "scope")
-			if !isAuraScope(scope["range"]) {
+			if !reachesOtherUnits(ability.Raw["effect"]) {
 				continue
 			}
 			pushUnique(rated(map[string]any{"ability": ability, "source": map[string]any{"kind": "support", "sourceUnitId": supportID}, "phases": intersect(ability.Phases())}, supporter, ability))
@@ -155,6 +156,33 @@ func rated(entry map[string]any, unit *UnitView, ability *AbilityView) map[strin
 		entry["rating"] = r
 	}
 	return entry
+}
+
+// reachesOtherUnits reports whether an effect can reach a unit other than its
+// own: an aura, a unit-filter target (friendly or enemy), or a unit selection.
+// The translator decides what of it reaches the input unit.
+func reachesOtherUnits(effect any) bool {
+	switch node := effect.(type) {
+	case []any:
+		for _, child := range node {
+			if reachesOtherUnits(child) {
+				return true
+			}
+		}
+	case map[string]any:
+		if node["type"] == "aura" || node["type"] == "select-units" {
+			return true
+		}
+		if target, ok := node["target"].(map[string]any); ok && (target["owner"] == "friendly" || target["owner"] == "enemy") {
+			return true
+		}
+		for _, child := range node {
+			if reachesOtherUnits(child) {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 func isAuraScope(rng any) bool {

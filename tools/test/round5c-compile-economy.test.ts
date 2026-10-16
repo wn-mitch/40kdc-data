@@ -111,12 +111,16 @@ describe("Round 5C economy-family compiler", () => {
     expect(rendered(base(), [leaf("EFFECT", "stratagem-cost", { of: "stratagem", operation: "multiply", amount: 2 })]).length).toBeGreaterThan(0);
   });
 
-  it("compiles apply-mark to designate, clear only ever true", () => {
+  it("compiles apply-mark to designate, including the Vengeful Dead token state", () => {
     expect(compiled([leaf("EFFECT", "apply-mark", { subject: "this-unit", tag: "spotted" })]).mechanics.effect)
       .toEqual({ type: "designate", target: "this-unit", modifier: { tag: "spotted" } });
+    expect(compiled([leaf("EFFECT", "apply-mark", { subject: "this-unit", tag: "vengeful-dead" })]).mechanics.effect)
+      .toEqual({ type: "designate", target: "this-unit", modifier: { tag: "vengeful-dead" } });
     expect(compiled([leaf("EFFECT", "apply-mark", { subject: "this-model", tag: "afflicted", clear: true })]).mechanics.effect)
       .toEqual({ type: "designate", target: "this-model", modifier: { tag: "afflicted", clear: true } });
-    expect(() => normalizeFingerprintParameters("apply-mark", { subject: "this-unit", tag: "spotted", clear: false })).toThrow(/must be true, or omitted/u);
+    expect(() => normalizeFingerprintParameters("designated-filter", {
+      subject: "this-unit", tag: "vengeful-dead",
+    })).not.toThrow();
     expect(rendered(base(), [leaf("EFFECT", "apply-mark", { subject: "this-unit", tag: "quarry" })]).length).toBeGreaterThan(0);
   });
 

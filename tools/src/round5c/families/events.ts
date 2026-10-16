@@ -5,12 +5,82 @@ import { PHASE_EVENT_KINDS, PHASES, TURNS } from "../event-family.js";
 import { EVENT_SUBJECT, type FamilyExtension, KEYWORD_ITEMS, keywordList, optional, properties, type Schema, standIn, widenedEnum, withProperties } from "../family-extension-helpers.js";
 import { enumSet, enumValue } from "../family-validation.js";
 import { NAMED_ID, PASSTHROUGH_USED_VALUES, namedId } from "./shared.js";
+// Family schemas are immutable; later designation registrations cannot change event@32.
+import eventV32Designations from "./event-v32-designations.json";
 
 /**
  * Versions of the event family: the moments a rule happens at. Each version checks only its own
  * additions and hands the rest of a leaf to the previous version, so every earlier leaf still fits
  * it unchanged.
  */
+
+const DESTRUCTION_RELATION: Schema = {
+  type: "object",
+  minProperties: 1,
+  additionalProperties: false,
+  properties: {
+    unit: {
+      type: "object",
+      required: ["owner"],
+      additionalProperties: false,
+      properties: {
+        owner: { enum: ["friendly", "enemy", "any"] },
+        all_of: optional({ type: "array", minItems: 1, uniqueItems: true, items: KEYWORD_ITEMS }),
+        within: optional({
+          type: "object",
+          required: ["inches", "of"],
+          additionalProperties: false,
+          properties: {
+            inches: { type: "number", exclusiveMinimum: 0 },
+            of: { enum: ["this-model", "this-unit"] },
+          },
+        }),
+      },
+    },
+    model: {
+      type: "object",
+      required: ["owner"],
+      additionalProperties: false,
+      properties: {
+        owner: { enum: ["friendly", "enemy", "any"] },
+        all_of: optional({ type: "array", minItems: 1, uniqueItems: true, items: KEYWORD_ITEMS }),
+        within: optional({
+          type: "object",
+          required: ["inches", "of"],
+          additionalProperties: false,
+          properties: {
+            inches: { type: "number", exclusiveMinimum: 0 },
+            of: { enum: ["this-model", "this-unit"] },
+          },
+        }),
+      },
+    },
+  },
+};
+
+function destructionRelation(value: unknown, label: string): Record<string, unknown> {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) throw new TypeError(`${label} must name unit and/or model destruction.`);
+  const input = value as Record<string, unknown>;
+  if (Object.keys(input).length === 0 || Object.keys(input).some((key) => key !== "unit" && key !== "model")) throw new TypeError(`${label} must contain only unit and/or model.`);
+  const result: Record<string, unknown> = {};
+  for (const kind of ["unit", "model"]) {
+    if (input[kind] === undefined) continue;
+    if (input[kind] === null || typeof input[kind] !== "object" || Array.isArray(input[kind])) throw new TypeError(`${label}.${kind} must be an object.`);
+    const filter = input[kind] as Record<string, unknown>;
+    if (Object.keys(filter).some((key) => key !== "owner" && key !== "all_of" && key !== "within")) throw new TypeError(`${label}.${kind} contains an unknown key.`);
+    const owner = enumValue(filter.owner, ["friendly", "enemy", "any"], `${label}.${kind}.owner`);
+    const within = filter.within;
+    if (within !== undefined && (within === null || typeof within !== "object" || Array.isArray(within))) throw new TypeError(`${label}.${kind}.within must be an object.`);
+    const proximity = within as Record<string, unknown> | undefined;
+    if (proximity !== undefined && (Object.keys(proximity).length !== 2 || typeof proximity.inches !== "number" || proximity.inches <= 0 || !["this-model", "this-unit"].includes(String(proximity.of)))) throw new TypeError(`${label}.${kind}.within must contain positive inches and this-model or this-unit.`);
+    result[kind] = {
+      owner,
+      ...(filter.all_of !== undefined ? { all_of: keywordList(filter.all_of, `${label}.${kind}.all_of`, 1) } : {}),
+      ...(proximity !== undefined ? { within: { inches: proximity.inches, of: proximity.of } } : {}),
+    };
+  }
+  return result;
+}
 
 const AFTER_ROLL_SUBJECTS = ["this-unit", "this-model", "selected-unit", EVENT_SUBJECT, ANTECEDENT] as const;
 
@@ -484,6 +554,243 @@ export const EVENT_EXTENSIONS: readonly FamilyExtension[] = [
         ...(tag !== undefined ? { tag: spendTag(tag) } : {}),
         ...(object !== undefined ? { object: enumValue(object, SPEND_OBJECTS, "event.object") } : {}),
       };
+    },
+  },
+  {
+    // Army selection is a real game event, not a display-only trigger alias.
+    family: "event",
+    version: 28,
+    description: "As the previous version, plus army-selected: the army selection event emitted by the game clock.",
+    schema: (previous) => withProperties(previous, { kind: widenedEnum(previous, "kind", ["army-selected"]) }),
+    normalize: (input, previous) => input.kind === "army-selected"
+      ? standIn(input, "kind", "battle-started", previous)
+      : previous(input),
+  },
+  {
+    family: "event",
+    version: 29,
+    description: "As the previous version, plus attack_type on model-destroyed: the attack that destroyed the event's model has that classification; any adds no classification restriction.",
+    schema: (previous) => withProperties(previous, {
+      attack_type: optional({ enum: ["ranged", "melee", "any"], "x-only-when": { kind: ["damage-allocated", "model-destroyed"] } }),
+    }),
+    normalize: (input, previous) => {
+      if (input.kind !== "model-destroyed" || input.attack_type === undefined) return previous(input);
+      const { attack_type: attackType, ...rest } = input;
+      return { ...previous(rest), attack_type: enumValue(attackType, ["ranged", "melee", "any"], "event.attack_type") };
+    },
+  },
+  {
+    // A used ability can be qualified by the source definitions and cadence named by the rule.
+    // `bind_as` supplies the exact event identity consumed by an ability-modifier effect.
+    family: "event",
+    version: 30,
+    description: "As the previous version, plus source, bind_as and usage on a used ability moment: source lists the ability definitions (unit for a datasheet ability, enhancement for an Enhancement ability), usage is its once-per-battle cadence, and bind_as names the exact used event for a following ability-modifier.",
+    schema: (previous) => withProperties(previous, {
+      source: optional({
+        type: "array",
+        minItems: 1,
+        uniqueItems: true,
+        items: { enum: ["unit", "enhancement"] },
+        "x-only-when": { kind: ["used"] },
+      }),
+      bind_as: optional({
+        type: "string",
+        pattern: "^[a-z][a-z0-9_-]*$",
+        minLength: 1,
+        "x-only-when": { kind: ["used"] },
+      }),
+      usage: optional({
+        type: "object",
+        required: ["frequency", "count"],
+        additionalProperties: false,
+        properties: {
+          frequency: { const: "n-per-battle" },
+          count: { const: 1 },
+        },
+        "x-only-when": { kind: ["used"] },
+      }),
+    }),
+    normalize: (input, previous) => {
+      const qualified = input.kind === "used" && (input.source !== undefined || input.bind_as !== undefined || input.usage !== undefined);
+      if (!qualified) return previous(input);
+      if (input.activity !== "ability") throw new TypeError("event source, bind_as and usage qualify a used ability, not another used activity.");
+      const { source, bind_as: bindAs, usage, ...rest } = input;
+      const normalized = previous(rest);
+      return {
+        ...normalized,
+        ...(source !== undefined ? { source: enumSet(source, ["unit", "enhancement"], "event.source") } : {}),
+        ...(bindAs !== undefined ? { bind_as: enumValue(bindAs, ["used-ability"], "event.bind_as") } : {}),
+        ...(usage !== undefined ? { usage: (() => {
+          if (usage === null || typeof usage !== "object" || Array.isArray(usage)) throw new TypeError("event.usage must be {frequency: \"n-per-battle\", count: 1}.");
+          const value = usage as Record<string, unknown>;
+          if (Object.keys(value).length !== 2) throw new TypeError("event.usage must contain only frequency and count.");
+          if (value.frequency !== "n-per-battle" || value.count !== 1) throw new TypeError("event.usage must be {frequency: \"n-per-battle\", count: 1}.");
+          return { frequency: "n-per-battle", count: 1 };
+        })() } : {}),
+      };
+    },
+  },
+  {
+    family: "event",
+    version: 31,
+    description: "As the previous version, plus source-reviewed event identity and qualifiers: bind_as on non-use events; mortal/psychic attack classification; Psychic ability use targeting a unit; before-removal destruction timing; and a destroyed designated unit. These fields preserve exact event identity and never infer causation from a shared actor.",
+    schema: (previous) => withProperties(previous, {
+      attack_type: optional({
+        enum: ["ranged", "melee", "psychic", "mortal", "any"],
+        "x-only-when": { kind: ["damage-allocated", "model-destroyed", "attacks-resolved"] },
+      }),
+      ability_keyword: optional({
+        enum: ["psychic"],
+        "x-only-when": { kind: ["used"] },
+      }),
+      targets_level: optional({
+        enum: ["unit"],
+        "x-only-when": { kind: ["used"] },
+      }),
+      timing: optional({
+        enum: ["before-removal"],
+        "x-only-when": { kind: ["unit-destroyed", "model-destroyed"] },
+      }),
+      object_designated: optional({
+        enum: DESIGNATION_IDS,
+        "x-only-when": { kind: ["unit-destroyed"] },
+      }),
+      same_subject_targeted: optional({
+        enum: ["stratagem-target"],
+        "x-only-when": { kind: ["attacks-resolved"] },
+      }),
+      channelled: optional({
+        const: true,
+        "x-only-when": { kind: ["after-roll"] },
+      }),
+      before_resolving_activity: optional({
+        enum: ["ritual"],
+        "x-only-when": { kind: ["after-roll"] },
+      }),
+      bind_as: optional({
+        type: "string",
+        pattern: "^[a-z][a-z0-9_-]*$",
+        minLength: 1,
+        "x-only-when": { kind: ["used", "attacks-resolved", "resource-gained", "after-roll"] },
+      }),
+    }),
+    normalize: (input, previous) => {
+      const { attack_type: attackType, ability_keyword: abilityKeyword, targets_level: targetsLevel, timing, object_designated: objectDesignated, bind_as: bindAs, same_subject_targeted: sameSubjectTargeted, channelled, before_resolving_activity: beforeResolvingActivity, ...rest } = input;
+      const kind = String(input.kind);
+      const newAttackType = attackType === "psychic" || attackType === "mortal" || (kind === "attacks-resolved" && attackType !== undefined);
+      const nonUseBinding = bindAs !== undefined && kind !== "used";
+      const staged = {
+        ...rest,
+        ...(attackType !== undefined && !newAttackType ? { attack_type: attackType } : {}),
+        ...(bindAs !== undefined && !nonUseBinding ? { bind_as: bindAs } : {}),
+      };
+      const normalized = previous(staged);
+      if (attackType !== undefined) {
+        const value = enumValue(attackType, ["ranged", "melee", "psychic", "mortal", "any"], "event.attack_type");
+        if (!["damage-allocated", "model-destroyed", "attacks-resolved"].includes(kind)) throw new TypeError("event.attack_type qualifies allocated damage, a destroyed model, or resolved attacks.");
+        normalized.attack_type = value;
+      }
+      if (abilityKeyword !== undefined || targetsLevel !== undefined) {
+        if (kind !== "used" || normalized.activity !== "ability") throw new TypeError("event ability_keyword and targets_level qualify a used ability.");
+        if (abilityKeyword !== undefined) normalized.ability_keyword = enumValue(abilityKeyword, ["psychic"], "event.ability_keyword");
+        if (targetsLevel !== undefined) normalized.targets_level = enumValue(targetsLevel, ["unit"], "event.targets_level");
+      }
+      if (timing !== undefined) {
+        if (!["unit-destroyed", "model-destroyed"].includes(kind)) throw new TypeError("event.timing before-removal qualifies a destruction.");
+        normalized.timing = enumValue(timing, ["before-removal"], "event.timing");
+      }
+      if (objectDesignated !== undefined) {
+        if (kind !== "unit-destroyed") throw new TypeError("event.object_designated qualifies a destroyed unit.");
+        normalized.object_designated = enumValue(objectDesignated, DESIGNATION_IDS as unknown as readonly string[], "event.object_designated");
+      }
+      if (sameSubjectTargeted !== undefined) {
+        if (kind !== "attacks-resolved") throw new TypeError("event.same_subject_targeted qualifies resolved attacks.");
+        normalized.same_subject_targeted = enumValue(sameSubjectTargeted, ["stratagem-target"], "event.same_subject_targeted");
+      }
+      if (channelled !== undefined || beforeResolvingActivity !== undefined) {
+        if (kind !== "after-roll" || normalized.roll !== "psychic") throw new TypeError("event channelled and before_resolving_activity qualify an after-Psychic-test moment.");
+        if (channelled !== undefined && channelled !== true) throw new TypeError("event.channelled must be true.");
+        if (channelled !== undefined) normalized.channelled = true;
+        if (beforeResolvingActivity !== undefined) normalized.before_resolving_activity = enumValue(beforeResolvingActivity, ["ritual"], "event.before_resolving_activity");
+      }
+      if (nonUseBinding) {
+        if (!/^[a-z][a-z0-9_-]*$/.test(String(bindAs))) throw new TypeError("event.bind_as must be a lower-case event variable.");
+        normalized.bind_as = String(bindAs);
+      }
+      return normalized;
+    },
+  },
+  {
+    family: "event",
+    version: 32,
+    description: "As the previous version, plus exact same-actor targeting, same-test Ritual ordering, and exact caused-by/causes destruction relations. A union destruction is one source event with unit/model alternatives. This version also repairs designation validation without rewriting event@31.",
+    schema: (previous) => withProperties(previous, {
+      kind: widenedEnum(previous, "kind", ["unit-or-model-destroyed"]),
+      object_designated: optional({
+        enum: eventV32Designations,
+        "x-only-when": { kind: ["unit-destroyed"] },
+      }),
+      same_subject_targeted: optional({
+        enum: ["stratagem-target"],
+        "x-only-when": { kind: ["attacks-resolved"] },
+      }),
+      channelled: optional({
+        const: true,
+        "x-only-when": { kind: ["after-roll"] },
+      }),
+      before_resolving_activity: optional({
+        enum: ["ritual"],
+        "x-only-when": { kind: ["after-roll"] },
+      }),
+      caused_by_destruction: {
+        ...optional(DESTRUCTION_RELATION),
+        "x-only-when": { kind: ["resource-gained"] },
+      },
+      causes_destruction: {
+        ...optional(DESTRUCTION_RELATION),
+        "x-only-when": { kind: ["attacks-resolved"] },
+      },
+    }),
+    normalize: (input, previous) => {
+      const {
+        object_designated: objectDesignated,
+        same_subject_targeted: sameSubjectTargeted,
+        channelled,
+        before_resolving_activity: beforeResolvingActivity,
+        caused_by_destruction: causedByDestruction,
+        causes_destruction: causesDestruction,
+        ...rest
+      } = input;
+      const kind = String(input.kind);
+      const unionDestruction = kind === "unit-or-model-destroyed";
+      const normalized = previous({ ...rest, ...(unionDestruction ? { kind: "model-destroyed" } : {}) });
+      if (unionDestruction) normalized.kind = "unit-or-model-destroyed";
+      if (objectDesignated !== undefined) {
+        if (kind !== "unit-destroyed") throw new TypeError("event.object_designated qualifies a destroyed unit.");
+        normalized.object_designated = enumValue(objectDesignated, eventV32Designations, "event.object_designated");
+      }
+      if (sameSubjectTargeted !== undefined) {
+        if (kind !== "attacks-resolved") throw new TypeError("event.same_subject_targeted qualifies resolved attacks.");
+        normalized.same_subject_targeted = enumValue(sameSubjectTargeted, ["stratagem-target"], "event.same_subject_targeted");
+      }
+      if (channelled !== undefined || beforeResolvingActivity !== undefined) {
+        if (kind !== "after-roll" || normalized.roll !== "psychic") throw new TypeError("event channelled and before_resolving_activity qualify an after-Psychic-test moment.");
+        if (channelled !== undefined && channelled !== true) throw new TypeError("event.channelled must be true.");
+        if (channelled !== undefined) normalized.channelled = true;
+        if (beforeResolvingActivity !== undefined) normalized.before_resolving_activity = enumValue(beforeResolvingActivity, ["ritual"], "event.before_resolving_activity");
+      }
+      if (causedByDestruction !== undefined || causesDestruction !== undefined) {
+        if (normalized.bind_as === undefined) throw new TypeError("An exact destruction relation requires bind_as.");
+        if (causedByDestruction !== undefined) {
+          if (kind !== "resource-gained") throw new TypeError("event.caused_by_destruction qualifies a resource-gained event.");
+          normalized.caused_by_destruction = destructionRelation(causedByDestruction, "event.caused_by_destruction");
+        }
+        if (causesDestruction !== undefined) {
+          if (kind !== "attacks-resolved") throw new TypeError("event.causes_destruction qualifies an attacks-resolved event.");
+          normalized.causes_destruction = destructionRelation(causesDestruction, "event.causes_destruction");
+        }
+      }
+      return normalized;
     },
   },
 ];

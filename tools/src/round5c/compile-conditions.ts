@@ -1,3 +1,5 @@
+import { oathCondition } from "./compile-oath.js";
+import { abilityUseCondition } from "./compile-ability-use.js";
 /**
  * Condition and trigger DSL fragments, split out of `compile-fragments.ts` (batch 6) so that
  * file and `compile.ts` stay under the line ceiling. `compile-fragments.ts` keeps the leaf type,
@@ -6,7 +8,7 @@
  */
 
 import { armyIncludesCondition } from "./compile-army.js";
-import { closed, CompileError, type CompileLeaf } from "./compile-fragments.js";
+import { closed, CompileError, weaponScope, type CompileLeaf } from "./compile-fragments.js";
 import { isSelectionRef } from "./compile-pair-eligibility.js";
 import { dslUnitFilter } from "./compile-unit-filters.js";
 import { everyModelFlag } from "./compile-every-model.js";
@@ -28,6 +30,33 @@ import { canonicalDesignation } from "./compile-redesignate.js";
 
 type Node = Record<string, unknown>;
 
+const COMPARISONS: Readonly<Record<string, string>> = {
+  "greater-than": "gt", "greater-or-equal": "gte", "less-than": "lt", "less-or-equal": "lte", equal: "eq", "at-least": "gte",
+};
+const comparison = (leaf: CompileLeaf): unknown => COMPARISONS[String(closed(leaf, "comparison"))] ?? closed(leaf, "comparison");
+const STAT_NAMES: Readonly<Record<string, string>> = {
+  Move: "M", Movement: "M", Toughness: "T", Save: "Sv", Wounds: "W", Leadership: "Ld",
+  "Objective Control": "OC", Range: "Range", Attacks: "A", "Weapon Skill": "WS",
+  "Ballistic Skill": "BS", Strength: "S", "Armour Penetration": "AP", Damage: "D",
+};
+const stat = (leaf: CompileLeaf, key: string): unknown => STAT_NAMES[String(closed(leaf, key))] ?? closed(leaf, key);
+
+function countBounds(leaf: CompileLeaf, minimum = "count_min", maximum = "count_max"): Node {
+  return {
+    ...(leaf.parameters[minimum] === undefined ? {} : { min: closed(leaf, minimum) }),
+    ...(leaf.parameters[maximum] === undefined ? {} : { max: closed(leaf, maximum) }),
+  };
+}
+
+/** Shared weapon scopes narrow attacks without changing their attack classification. */
+function attackFilter(leaf: CompileLeaf, source: Node): Node {
+  const parameters = weaponScope({ ...leaf, parameters: source });
+  for (const key of ["attack_type", "shooting_type", "fight_type", "all_target_same_unit"]) {
+    if (source[key] !== undefined) parameters[key] = source[key];
+  }
+  return parameters;
+}
+
 export const DURATIONS: Record<string, string> = {
   "end-of-phase": "phase", "end-of-turn": "turn", "end-of-battle-round": "battle-round", "end-of-battle": "battle",
   "start-of-next-turn": "until-start-next-turn", "start-of-next-command-phase": "until-next-command-phase",
@@ -36,6 +65,7 @@ export const DURATIONS: Record<string, string> = {
   "end-of-attack-sequence": "attack-sequence", "end-of-this-use": "resolution", "start-of-next-shooting-phase": "until-next-shooting-phase",
   "end-of-your-next-turn": "until-end-of-your-next-turn", "end-of-opponents-next-turn": "until-end-of-opponent-next-turn",
   "this-unit-has-shot": "until-this-unit-has-shot", "control-lost": "control-lost",
+  "after-this-use": "after-resolving",
 };
 
 /** A unit's own activity, as the history it leaves: [event, filter, window]. */
@@ -112,8 +142,28 @@ const MARK_TAGS: Record<string, string> = {
   "riled-up": "riled-up",
 };
 
-/** A predicate with its subject: the target of the attack, or (by default) the ability's unit. */
-const pred = (type: string, parameters: Node, subject?: string): Node => ({ type, parameters: subject ? { subject, ...parameters } : parameters });
+/** Lower a source predicate directly to the one canonical candidate-filter representation. */
+export function pred(type: string, parameters: Node, subject?: unknown): Node {
+  const who = subject === undefined ? {} : { subject };
+  let filter: Node | undefined;
+  if (type === "has-keyword" && parameters.chosen_by === undefined) filter = parameters;
+  else if (type === "has-ability") filter = { has_ability: [parameters.ability] };
+  else if (type === "owned-by") filter = { owner: parameters.owner };
+  else if (type === "unit-state" && (parameters.at === undefined || parameters.at === "now")) {
+    if (parameters.with === undefined) filter = { state: parameters.state };
+    else if (parameters.state === "engaged") filter = { engaged_with: parameters.with };
+  } else if (type === "within" && (parameters.at === undefined || parameters.at === "now")
+    && parameters.models === undefined && parameters.count === undefined) {
+    const { at: _at, ...within } = parameters;
+    filter = { within };
+  } else if (type === "visible" && parameters.fully !== true && parameters.blocked_by === undefined) {
+    filter = { visible: { to: parameters.to ?? "attacker" } };
+  } else if (type === "designated" && parameters.objective === undefined && parameters.count === undefined
+    && parameters.count_min === undefined && parameters.count_max === undefined) {
+    filter = { designated: parameters.tag, ...(parameters.by === undefined ? {} : { designated_by: parameters.by }) };
+  }
+  return filter === undefined ? { type, parameters: { ...who, ...parameters } } : { type: "matches", parameters: { ...who, filter } };
+}
 
 /** Event kinds an attack-time effect already implies (event versions before 4); they add nothing. */
 export const ATTACK_EVENTS = new Set(["attack-made", "hit-roll", "wound-roll"]);
@@ -280,6 +330,8 @@ function isEmbarkedWithin(leaf: CompileLeaf): boolean {
 }
 
 export function condition(leaf: CompileLeaf): Node {
+  const specialized = oathCondition(leaf) ?? abilityUseCondition(leaf);
+  if (specialized) return specialized;
   // "While an enemy unit is within Engagement Range of this unit": the units of the folded filter
   // (compile-unit-filters.ts), as the DSL's "any unit that …" filter in place of a fixed role.
   if (Object.values(leaf.parameters).includes("filtered-units")) {
@@ -351,8 +403,8 @@ export function condition(leaf: CompileLeaf): Node {
         // Version 13: the subject is embarked within some Transport (the state itself, not the units it carries).
         if (state === "embarked" && leaf.parameters.with !== undefined) throw new CompileError("DSL_GAP: a named unit embarked within a named Transport has no DSL form; unit-state has no embarked-within reference.");
         if (state === "embarked") return pred("unit-state", { state: "embarked" }, subject);
-        // Version 7: some unit is embarked within the subject (a Transport carries units).
-        if (state === "carrying-units") return { type: "unit-state", parameters: { subject: { embarked_in: subject ?? "this-unit" }, state: "embarked" } };
+        // A Transport carries units when some unit is embarked in that Transport.
+        if (state === "carrying-units") return pred("unit-state", { state: "embarked" }, { embarked_in: subject ?? "this-unit" });
         // Version 5: engaged with one named unit, the DSL's `with`.
         // Version 10: the state as it was at the start of the phase or turn.
         const at = leaf.parameters.at === undefined ? {} : { at: closed(leaf, "at") };
@@ -367,9 +419,10 @@ export function condition(leaf: CompileLeaf): Node {
       })));
     }
     case "unit-keyword": {
-      const keywords = leaf.parameters.keywords as string[];
-      // Version 2 (batch 6) widens subject beyond this-unit/target.
+      // Version 2 widens the subject; version 6 can reference an ability's keyword choice.
       const subject = leaf.family_version >= 2 ? widenedWho(closed(leaf, "subject")) : who;
+      if (leaf.parameters.chosen_by !== undefined) return polarity(leaf, pred("has-keyword", { chosen_by: closed(leaf, "chosen_by") }, subject));
+      const keywords = leaf.parameters.keywords as string[];
       // "not a MONSTER or VEHICLE" excludes both, so each keyword carries the negation.
       if (leaf.parameters.negated === true) {
         const each = keywords.map((keyword) => negate(pred("has-keyword", { all_of: [keyword] }, subject)));
@@ -416,29 +469,16 @@ export function condition(leaf: CompileLeaf): Node {
       return { type: "happened", parameters: {
         event: "after-roll", subject: leaf.parameters.by === "following-filter" ? followingFilter(leaf) : "event-subject",
         object: leaf.parameters.object === "following-filter" ? followingFilter(leaf) : widenedWho(closed(leaf, "subject")) ?? "this-unit",
-        filter: { roll: "hit", result: "success", ...(leaf.parameters.hit_filter as Node | undefined) },
+        filter: { roll: "hit", result: "success", ...attackFilter(leaf, (leaf.parameters.hit_filter ?? {}) as Node) },
         window: leaf.parameters.window === "phase" ? "phase" : "event",
       } };
     case "unit-filter-target": {
       // A who folded onto an attack's target ("that targets a VEHICLE unit"): each of its fields, said of the defender.
-      const filter = dslUnitFilter(leaf, { warlordTarget: true }) as { owner: string; all_of?: string[]; any_of?: string[]; none_of?: string[]; state?: string; excluding?: string; visible?: true; any_of_filters?: Node[]; has_ability?: string[]; designated?: string };
+      const filter = dslUnitFilter(leaf, { warlordTarget: true });
       if (filter.visible) throw new CompileError("An attack's target is already visible to the attacker; drop visible from its unit-filter.");
-      const checks: Node[] = [
-        ...(filter.all_of ? [pred("has-keyword", { all_of: filter.all_of }, "defender")] : []),
-        ...(filter.any_of ? [pred("has-keyword", { any_of: filter.any_of }, "defender")] : []),
-        ...(filter.any_of_filters ? [alternativesCheck(leaf.parameters.alternatives as FilterAlternative[], "defender")!] : []),
-        ...(filter.none_of ?? []).map((keyword) => negate(pred("has-keyword", { all_of: [keyword] }, "defender"))),
-        ...(filter.state ? [pred("unit-state", { state: filter.state }, "defender")] : []),
-        ...(filter.excluding ? [negate(pred("same-unit", { as: filter.excluding }, "defender"))] : []),
-        // A filter that names the defender itself ("attacks that target that unit" after "a friendly
-        // X unit") says its side as well; after an attack this unit makes, an enemy target is implied.
-        ...(leaf.parameters.owner_explicit === true && filter.owner !== "any" ? [pred("owned-by", { owner: filter.owner }, "defender")] : []),
-        ...(filter.has_ability ?? []).map((ability) => pred("has-ability", { ability }, "defender")),
-        // "targets the enemy WARLORD": the target contains the Warlord model (the designated condition's warlord tag).
-        ...(filter.designated === "warlord" ? [pred("designated", { tag: "warlord" }, "defender")] : []),
-      ];
-      if (checks.length === 0) throw new CompileError("An attack's target unit-filter that names only a side says nothing the attack does not.");
-      return checks.length === 1 ? checks[0]! : { operator: "and", operands: checks };
+      if (leaf.parameters.owner_explicit !== true || filter.owner === "any") delete filter.owner;
+      if (Object.keys(filter).length === 0) throw new CompileError("An attack's target unit-filter that names only a side says nothing the attack does not.");
+      return { type: "matches", parameters: { subject: "defender", filter } };
     }
     case "unit-mark":
       return polarity(leaf, pred("designated", { tag: MARK_TAGS[String(closed(leaf, "mark"))] }, who));
@@ -561,7 +601,7 @@ export function condition(leaf: CompileLeaf): Node {
       const rightKind = closed(leaf, "right_kind");
       const right: Node = rightKind === "tally" ? destroyedSide(leaf.parameters.right_tally_kind)
         : rightKind === "pool" ? { pool: closed(leaf, "right_pool") } : { value: closed(leaf, "right_value") };
-      return polarity(leaf, { type: "happened-compare", parameters: { left, comparison: closed(leaf, "comparison"), right } });
+      return polarity(leaf, { type: "happened-compare", parameters: { left, comparison: comparison(leaf), right } });
     }
     case "in-region": {
       const kind = closed(leaf, "region_kind");
@@ -574,7 +614,7 @@ export function condition(leaf: CompileLeaf): Node {
       return polarity(leaf, pred("in-region", parameters, subjectOf(leaf)));
     }
     case "controls-objective": {
-      if (closed(leaf, "mode") === "more-than-opponent") return polarity(leaf, { type: "controls", parameters: { compare: "more-than-opponent" } });
+      if (closed(leaf, "mode") === "more-than-opponent") return polarity(leaf, { type: "controls", parameters: { compare: { owner: "enemy", comparison: "gt" } } });
       const parameters: Node = {};
       if (leaf.parameters.by !== undefined) parameters.by = closed(leaf, "by");
       const objective: Node = {};
@@ -582,28 +622,23 @@ export function condition(leaf: CompileLeaf): Node {
       if (leaf.parameters.home_of !== undefined) objective.home_of = closed(leaf, "home_of");
       if (leaf.parameters.objective_territory !== undefined) objective.territory = closed(leaf, "objective_territory");
       if (Object.keys(objective).length) parameters.objective = objective;
-      if (leaf.parameters.count_min !== undefined) parameters.count_min = closed(leaf, "count_min");
-      if (leaf.parameters.count_max !== undefined) parameters.count_max = closed(leaf, "count_max");
+      if (leaf.parameters.count_min !== undefined || leaf.parameters.count_max !== undefined) parameters.count = countBounds(leaf);
       return polarity(leaf, { type: "controls", parameters });
     }
     case "attack-filter": {
-      const parameters: Node = {};
-      for (const key of ["attack_type", "shooting_type", "fight_type", "weapon_keyword", "weapon_name"]) {
-        if (leaf.parameters[key] !== undefined) parameters[key] = closed(leaf, key);
-      }
-      if (leaf.parameters.all_target_same_unit === true) parameters.all_target_same_unit = true;
+      const parameters = attackFilter(leaf, leaf.parameters);
       return polarity(leaf, { type: "attack-is", parameters });
     }
     case "attack-compare": {
-      const left: Node = { of: closed(leaf, "left_of"), stat: closed(leaf, "left_stat") };
+      const left: Node = { of: closed(leaf, "left_of"), stat: stat(leaf, "left_stat") };
       if (leaf.parameters.left_reduce !== undefined) left.reduce = closed(leaf, "left_reduce");
       const rightKind = closed(leaf, "right_kind");
       let right: Node;
       if (rightKind === "stat") {
-        right = { of: closed(leaf, "right_of"), stat: closed(leaf, "right_stat") };
+        right = { of: closed(leaf, "right_of"), stat: stat(leaf, "right_stat") };
         if (leaf.parameters.right_reduce !== undefined) right.reduce = closed(leaf, "right_reduce");
       } else right = { value: closed(leaf, "right_value") };
-      return polarity(leaf, { type: "attack-compare", parameters: { left, comparison: closed(leaf, "comparison"), right } });
+      return polarity(leaf, { type: "attack-compare", parameters: { left, comparison: comparison(leaf), right } });
     }
     case "visible": {
       const parameters: Node = {};
@@ -619,8 +654,7 @@ export function condition(leaf: CompileLeaf): Node {
       if (parameters.tag === "warlord" && (leaf.parameters.count_min !== undefined || leaf.parameters.count_max !== undefined)) throw new CompileError("A count of Warlords is not a Warlord test; the Warlord is one model.");
       if (parameters.tag === "warlord" && leaf.parameters.subject === undefined) throw new CompileError("A Warlord test has no subject: name the model or unit it tests.");
       if (leaf.parameters.by !== undefined) parameters.by = closed(leaf, "by");
-      if (leaf.parameters.count_min !== undefined) parameters.count_min = closed(leaf, "count_min");
-      if (leaf.parameters.count_max !== undefined) parameters.count_max = closed(leaf, "count_max");
+      if (leaf.parameters.count_min !== undefined || leaf.parameters.count_max !== undefined) parameters.count = countBounds(leaf);
       return polarity(leaf, pred("designated", parameters, subjectOf(leaf)));
     }
     case "battle-round": {
@@ -656,10 +690,17 @@ export function condition(leaf: CompileLeaf): Node {
     case "named-weapon":
     case "unit-wargear":
       return polarity(leaf, namedEquipmentPredicate(leaf));
-    case "equipped-weapon-count":
-      return polarity(leaf, pred("equipped-weapon-count", {
-        weapon_type: closed(leaf, "weapon_type"), count: closed(leaf, "count"), other_than: closed(leaf, "other_than"),
-      }, subjectOf(leaf)));
+    case "equipped-weapon-count": {
+      const subject = subjectOf(leaf);
+      const name = closed(leaf, "other_than");
+      return polarity(leaf, allOf([
+        pred("named-weapon", { name, count: 1 }, subject),
+        pred("equipped-weapon-count", {
+          weapons: { type: closed(leaf, "weapon_type"), exclude_name: name },
+          count: { min: closed(leaf, "count"), max: closed(leaf, "count") },
+        }, subject),
+      ])!);
+    }
     case "eligible": {
       const parameters: Node = { to: closed(leaf, "to") };
       // "able to embark within" names the Transport; the DSL reads its unit-ref as given (this-unit or ability-unit).
@@ -677,8 +718,7 @@ export function condition(leaf: CompileLeaf): Node {
     }
     case "resource": {
       const parameters: Node = { pool: closed(leaf, "pool") };
-      if (leaf.parameters.at_least !== undefined) parameters.at_least = closed(leaf, "at_least");
-      if (leaf.parameters.at_most !== undefined) parameters.at_most = closed(leaf, "at_most");
+      if (leaf.parameters.at_least !== undefined || leaf.parameters.at_most !== undefined) parameters.count = countBounds(leaf, "at_least", "at_most");
       if (leaf.parameters.below_max === true) parameters.below_max = true;
       if (leaf.parameters.source_ability_id !== undefined) {
         const sourceAbility: Node = { ability_id: closed(leaf, "source_ability_id") };
@@ -690,20 +730,19 @@ export function condition(leaf: CompileLeaf): Node {
     }
     case "operation-markers": {
       const parameters: Node = {};
-      for (const key of ["side", "count_min", "count_max"]) {
-        if (leaf.parameters[key] !== undefined) parameters[key] = closed(leaf, key);
-      }
+      if (leaf.parameters.side !== undefined) parameters.side = closed(leaf, "side");
+      if (leaf.parameters.count_min !== undefined || leaf.parameters.count_max !== undefined) parameters.count = countBounds(leaf);
       for (const flag of ["friendly_unit_in_same_terrain_area", "no_enemy_in_terrain_area"]) {
         if (leaf.parameters[flag] === true) parameters[flag] = true;
       }
-      if (leaf.parameters.within_range_of !== undefined) parameters.within_range_of = closed(leaf, "within_range_of");
+      if (leaf.parameters.within_range_of !== undefined) parameters.within = { of: { objective: { home_of: "enemy" } }, range: "objective-control" };
       return polarity(leaf, { type: "operation-markers", parameters });
     }
     case "engagement-fronts":
-      return polarity(leaf, { type: "engagement-fronts", parameters: { count_min: closed(leaf, "count_min") } });
+      return polarity(leaf, { type: "engagement-fronts", parameters: { count: countBounds(leaf) } });
     case "destroyed-while-on-objective": {
       const parameters: Node = {};
-      if (leaf.parameters.count_min !== undefined) parameters.count_min = closed(leaf, "count_min");
+      if (leaf.parameters.count_min !== undefined) parameters.count = countBounds(leaf);
       if (leaf.parameters.objective_role !== undefined) parameters.objective_role = closed(leaf, "objective_role");
       for (const flag of ["destroyer_on_objective", "victim_on_objective", "victim_started_turn_on_objective"]) {
         if (leaf.parameters[flag] === true) parameters[flag] = true;
@@ -712,7 +751,7 @@ export function condition(leaf: CompileLeaf): Node {
     }
     case "destroyed-in-tagged-terrain": {
       const parameters: Node = {};
-      if (leaf.parameters.count_min !== undefined) parameters.count_min = closed(leaf, "count_min");
+      if (leaf.parameters.count_min !== undefined) parameters.count = countBounds(leaf);
       if (leaf.parameters.tag !== undefined) parameters.tag = closed(leaf, "tag");
       if (leaf.parameters.at_start_of_turn === true) parameters.at_start_of_turn = true;
       return polarity(leaf, { type: "destroyed-in-tagged-terrain", parameters });
@@ -797,19 +836,22 @@ export function targetRestrictions(parts: readonly CompileLeaf[], eligibility: r
   const filter = (selector.parameters.filter ?? {}) as { any_keywords?: string[]; excluded_all_keywords?: string[]; abilities?: string[]; excluded_abilities?: string[]; states?: string[]; other?: boolean; visible?: boolean; alternatives?: FilterAlternative[] };
   if (filter.visible) throw new CompileError("A Stratagem TARGET has no visibility requirement field.");
   const filtered: Node[] = [
-    ...(filter.any_keywords?.length ? [{ type: "has-keyword", parameters: { any_of: filter.any_keywords } }] : []),
+    ...(Array.isArray(selector.parameters.unit_ids) ? [pred("matches", { subject: "this-unit", filter: { level: "unit", unit_ids: selector.parameters.unit_ids } })] : []),
+    ...(Array.isArray((filter as Node).unit_ids) ? [pred("matches", { subject: "this-unit", filter: { level: "unit", unit_ids: (filter as Node).unit_ids } })] : []),
+    ...(filter.any_keywords?.length ? [pred("has-keyword", { any_of: filter.any_keywords })] : []),
     ...(filter.alternatives?.length ? [alternativesCheck(filter.alternatives)!] : []),
     // Version 3: "That ADEPTUS ASTARTES INFANTRY/MOUNTED unit" also has one of these.
-    ...(Array.isArray(selector.parameters.any_keywords) ? [{ type: "has-keyword", parameters: { any_of: selector.parameters.any_keywords } }] : []),
+    ...(Array.isArray(selector.parameters.any_keywords) ? [pred("has-keyword", { any_of: selector.parameters.any_keywords })] : []),
     ...(filter.states ?? []).map((state) => stateCheck(state)),
-    ...(filter.excluded_all_keywords?.length ? [negate({ type: "has-keyword", parameters: { all_of: filter.excluded_all_keywords } })] : []),
+    ...(filter.excluded_all_keywords?.length ? [negate(pred("has-keyword", { all_of: filter.excluded_all_keywords }))] : []),
     ...abilityChecks(filter.excluded_abilities, filter.abilities),
   ];
   // "other" on a unit-filter says the unit is not the bearer. A Stratagem target has no bearer, so the
   // exclusion must be stated in the unit-filter it belongs to, not inferred here.
   if (filter.other === true) throw new CompileError("A Stratagem target has no bearer, so \"other\" has no unit to exclude; state the exclusion in the unit-filter.");
   const anyRequired = selector.parameters.match === "any" ? keywords : (selector.parameters.any_keywords as string[] | undefined) ?? [];
-  const attackedFilter = attackedChecks(attacked, selector.parameters.match === "any" ? [] : keywords, anyRequired);
+  const requiredUnitIds = (selector.parameters.unit_ids as string[] | undefined) ?? [];
+  const attackedFilter = attackedChecks(attacked, selector.parameters.match === "any" ? [] : keywords, anyRequired, requiredUnitIds);
   const eligibilityCondition = allOf([...filtered, ...attackedFilter, ...eligibility]);
   if (eligibilityCondition) restrictions.eligibility = eligibilityCondition;
   return restrictions;

@@ -111,9 +111,11 @@
    "target": "this-unit",
    "modifier": {
     "to": "battlefield",
-    "via": "cult-ambush-marker",
+    "via": "cult-ambush",
     "marker_range": {
-     "inches": 6,
+     "range": {
+      "inches": 6
+     },
      "wholly": true
     }
    }

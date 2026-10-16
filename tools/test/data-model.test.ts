@@ -14,6 +14,7 @@ import {
 } from "../src/data/index.js";
 import { RAW_DATA } from "../src/data/bundle.generated.js";
 import { SHARE_REGISTRY } from "../src/share/registry.generated.js";
+import { auraInches } from "../src/data/entities.js";
 
 describe("terrain (embedded catalog + layout resolution)", () => {
   it("embeds the 11e template catalog and imported layouts", () => {
@@ -483,6 +484,18 @@ describe("AbilityView reusable rules bundles", () => {
           scope: { duration: "permanent" },
         } as never,
         {
+          ability_id: "model-bundle-grant",
+          name: "Model Bundle Grant",
+          authored_by: "40kdc-community",
+          faction_id: "orks",
+          game_version: { edition: "11th", dataslate: "test" },
+          effect: {
+            type: "ability-grant",
+            target: "this-model",
+            modifier: { ability: "shared-rules", rules_bundle: true },
+          },
+        } as never,
+        {
           ability_id: "cycle-a",
           name: "Cycle A",
           authored_by: "40kdc-community",
@@ -533,6 +546,14 @@ describe("AbilityView reusable rules bundles", () => {
     ]);
     expect(result.unsupported).toEqual([]);
 
+    const modelGrant = ds.abilities.get("model-bundle-grant")!.describeBuffs(
+      { kind: "ability", abilityId: "model-bundle-grant", abilityKind: "attached" },
+      { phase: "shooting" },
+    );
+    expect(modelGrant.applied).toEqual([]);
+    expect(modelGrant.activatable).toEqual([]);
+    expect(modelGrant.unsupported.length).toBeGreaterThan(0);
+
     const cyclic = ds.abilities
       .getInFaction("cycle-a", "orks")!
       .describeBuffs(
@@ -543,6 +564,34 @@ describe("AbilityView reusable rules bundles", () => {
     expect(cyclic.unsupported.map(({ reason }) => reason)).toEqual([
       'effect type "ability-grant" is not modelled by the buff layer',
     ]);
+  });
+});
+
+describe("aura range ownership", () => {
+  const aura = {
+    type: "re-roll",
+    target: { owner: "friendly", within: { range: { inches: 6 }, of: "this-unit" } },
+    modifier: { roll: "hit", subset: "ones" },
+  };
+
+  it("does not lift a model-granted definition's aura onto the granting unit", () => {
+    expect(auraInches({ type: "ability-grant", target: "this-model", modifier: { definition: { effect: aura } } }))
+      .toBeUndefined();
+    expect(auraInches({ type: "ability-grant", target: "model-in-this-unit", modifier: { definition: { effect: aura } } }))
+      .toBeUndefined();
+    expect(auraInches({ type: "ability-grant", target: { level: "model", member_of: "this-unit" }, modifier: { definition: { effect: aura } } }))
+      .toBeUndefined();
+    expect(auraInches({ type: "ability-grant", target: "this-unit", modifier: { definition: { effect: aura } } }))
+      .toBe(6);
+  });
+
+  it("resolves per-battle-round ranges without guessing an unknown round", () => {
+    const tiered = { ...aura, target: { owner: "friendly", within: { range: { per_battle_round: [{ inches: 3 }, { inches: 6 }] } } } };
+    expect(auraInches(tiered)).toBeUndefined();
+    expect(auraInches(tiered, 1)).toBe(3);
+    expect(auraInches(tiered, 2)).toBe(6);
+    expect(auraInches(tiered, 5)).toBe(6);
+    expect(auraInches(tiered, 0)).toBeUndefined();
   });
 });
 

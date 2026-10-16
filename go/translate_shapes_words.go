@@ -21,6 +21,7 @@ var designationTerms = map[string]struct{ adjective, noun string }{
 	"empowered":                  {adjective: "Empowered"},
 	"observer":                   {noun: "Observer"},
 	"blessed":                    {adjective: "blessed"},
+	"bondsman-affected":          {adjective: "Bondsman-affected"},
 	"detected":                   {adjective: "detected"},
 	"disrupted":                  {adjective: "disrupted"},
 	"enfeebled":                  {adjective: "enfeebled"},
@@ -48,11 +49,15 @@ var designationTerms = map[string]struct{ adjective, noun string }{
 	"wobbled":                    {adjective: "wobbled"},
 	"wracked-with-agonies":       {adjective: "wracked with agonies"},
 	"zapped":                     {adjective: "zapped"},
+	"yp-spent-this-use":          {adjective: "YP-spent this use"},
 	"unravelling":                {adjective: "unravelling"},
 	"prey":                       {noun: "prey"},
 	"slayers-oath":               {noun: "Slayer's Oath"},
 	"vendetta-target":            {noun: "Vendetta target"},
 	"victim":                     {noun: "victim"},
+	"sabotaged":                  {adjective: "Sabotaged"},
+	"warded":                     {adjective: "Warded"},
+	"corrupted":                  {adjective: "Corrupted"},
 	"warlord":                    {adjective: "the Warlord"},
 }
 
@@ -79,6 +84,8 @@ func designationTerm(id string, plural bool) (string, bool) {
 var expiryTrails = map[string]string{
 	"attack-sequence":                            "until that unit finishes resolving its attacks",
 	"resolution":                                 "when resolving this use",
+	"while-leading":                              "while this model is leading a unit",
+	"after-resolving":                            "after resolving this use",
 	"phase":                                      "until the end of the phase",
 	"turn":                                       "until the end of the turn",
 	"battle":                                     "for the rest of the battle",
@@ -143,16 +150,42 @@ var inProgressPhrases = map[string]string{
 }
 
 func usedAbilityPhrase(f map[string]any) string {
+	var phrase string
 	if f["ability_keyword"] != nil {
-		return "a " + titleCase(strings.ToLower(cstr(f["ability_keyword"]))) + " ability"
-	}
-	if f["same_rule_as"] != nil {
+		phrase = "a " + titleCase(strings.ToLower(cstr(f["ability_keyword"]))) + " ability"
+	} else if f["same_rule_as"] != nil {
 		if f["kind"] == "stratagem" {
-			return "that same Stratagem"
+			phrase = "that same Stratagem"
+		} else {
+			phrase = "that same ability"
 		}
-		return "that same ability"
+	} else if f["source"] != nil || f["usage"] != nil {
+		phrase = namedUsePhrase(f)
+		if phrase == "" {
+			phrase = "an ability"
+		}
 	}
-	return ""
+	if phrase == "" {
+		return ""
+	}
+	if sources := cstrList(f["source"]); len(sources) > 0 {
+		rendered := make([]string, len(sources))
+		for i, source := range sources {
+			switch source {
+			case "unit":
+				rendered[i] = "its datasheet"
+			case "enhancement":
+				rendered[i] = "an Enhancement"
+			default:
+				rendered[i] = dekebab(source)
+			}
+		}
+		phrase += " from " + orList(rendered)
+	}
+	if f["usage"] != nil {
+		phrase += " that can be used " + usageClause(f["usage"])
+	}
+	return phrase
 }
 
 var battleSizeKeys = []string{"incursion", "strike-force", "onslaught"}
@@ -209,8 +242,8 @@ func scaleSource(q map[string]any) string {
 	if q["keyword"] != nil {
 		s = replaceFirst(leadingModelsRe, s, ejstr(q["keyword"])+" models")
 	}
-	if q["within_inches"] != nil {
-		s += " within " + ejstr(q["within_inches"]) + "\""
+	if q["within"] != nil {
+		s += " within " + rangePhrase(q["within"])
 	}
 	return s
 }
@@ -341,10 +374,24 @@ func filterRelations(f map[string]any, ctx effCtx) string {
 		s += " embarked within " + effectSubject(f["embarked_in"], ctx)
 	}
 	if f["member_of"] != nil {
-		s += " in " + effectSubject(f["member_of"], ctx)
+		member := effectSubject(f["member_of"], ctx)
+		if value, ok := f["member_of"].(string); ok && value == "this-unit" {
+			member = "the unit"
+		}
+		s += " in " + member
 	}
 	// "any other friendly unit": a filter excluding the unit with the ability reads "other".
+	exactReference := func(ref any) bool {
+		if _, ok := ref.(string); ok {
+			return true
+		}
+		r, ok := asMap(ref)
+		return ok && r != nil && (r["selection_var"] != nil || r["event_var"] != nil || r["stratagem_target"] != nil)
+	}
 	engagedWith := func(g any) string {
+		if exactReference(g) {
+			return effectSubject(g, ctx)
+		}
 		x := map[string]any{}
 		for k, v := range mapOr(g) {
 			x[k] = v
@@ -362,10 +409,18 @@ func filterRelations(f map[string]any, ctx effCtx) string {
 	}
 	if f["engaged_with"] != nil {
 		w := engagedWith(f["engaged_with"])
-		s += " within Engagement Range of " + replaceFirst(anOtherRe, article(w)+" "+w, "another ")
+		if exactReference(f["engaged_with"]) {
+			s += " within Engagement Range of " + w
+		} else {
+			s += " within Engagement Range of " + replaceFirst(anOtherRe, article(w)+" "+w, "another ")
+		}
 	}
 	if f["not_engaged_with"] != nil {
-		s += " that are not within Engagement Range of any " + engagedWith(f["not_engaged_with"])
+		any := "any "
+		if exactReference(f["not_engaged_with"]) {
+			any = ""
+		}
+		s += " that are not within Engagement Range of " + any + engagedWith(f["not_engaged_with"])
 	}
 	return s
 }

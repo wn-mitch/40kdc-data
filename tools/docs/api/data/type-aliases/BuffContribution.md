@@ -6,9 +6,9 @@
 
 # Type Alias: BuffContribution
 
-> **BuffContribution** = \{ `type`: `"hit-mod"`; `value`: `number`; \} \| \{ `type`: `"wound-mod"`; `value`: `number`; \} \| \{ `type`: `"save-mod"`; `value`: `number`; \} \| \{ `type`: `"cover"`; \} \| \{ `type`: `"reroll"`; `roll`: `"hit"` \| `"wound"` \| `"save"` \| `"damage"`; `subset`: `"ones"` \| `"all-failures"`; \} \| \{ `type`: `"extra-keyword"`; `keywordRef`: [`WeaponKeywordRef`](WeaponKeywordRef.md); \} \| \{ `type`: `"feel-no-pain"`; `threshold`: `number`; `scope?`: `"all"` \| `"mortal"`; \} \| \{ `type`: `"damage-mod"`; `value`: `number`; \} \| \{ `type`: `"attacks-mod"`; `value`: `number`; \} \| \{ `type`: `"strength-mod"`; `value`: `number`; \} \| \{ `type`: `"toughness-mod"`; `value`: `number`; \} \| \{ `type`: `"ap-mod"`; `value`: `number`; \} \| \{ `type`: `"damage-reduction"`; `value`: `number`; \} \| \{ `type`: `"invulnerable-save"`; `threshold`: `number`; \}
+> **BuffContribution** = \{ `type`: `"hit-mod"`; `value`: `number`; \} \| \{ `type`: `"wound-mod"`; `value`: `number`; \} \| \{ `type`: `"save-mod"`; `value`: `number`; \} \| \{ `type`: `"cover"`; \} \| \{ `type`: `"reroll"`; `roll`: `"hit"` \| `"wound"` \| `"save"` \| `"damage"`; `subset`: `"ones"` \| `"all-failures"`; \} \| \{ `type`: `"extra-keyword"`; `keywordRef`: [`WeaponKeywordRef`](../../generated/interfaces/WeaponKeywordRef.md); \} \| \{ `type`: `"feel-no-pain"`; `threshold`: `number`; `scope?`: `"all"` \| `"mortal"`; \} \| \{ `type`: `"damage-mod"`; `value`: `number`; \} \| \{ `type`: `"attacks-mod"`; `value`: `number`; \} \| \{ `type`: `"strength-mod"`; `value`: `number`; \} \| \{ `type`: `"toughness-mod"`; `value`: `number`; \} \| \{ `type`: `"ap-mod"`; `value`: `number`; \} \| \{ `type`: `"damage-reduction"`; `value`: `number`; \} \| \{ `type`: `"invulnerable-save"`; `threshold`: `number`; \} \| \{ `type`: `"crit-threshold"`; `roll`: `"hit"` \| `"wound"`; `value`: `number`; \} \| \{ `type`: `"ignore-modifiers"`; `roll`: `"hit"` \| `"wound"`; \} \| \{ `type`: `"skill-mod"`; `stat`: `"WS"` \| `"BS"`; `value`: `number`; \} \| \{ `type`: `"save-characteristic"`; `value`: `number`; \}
 
-Defined in: [cruncher/buffs.ts:44](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/cruncher/buffs.ts#L44)
+Defined in: [cruncher/buffs.ts:43](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/cruncher/buffs.ts#L43)
 
 One typed contribution; the engine reads `ResolvedModifiers` for the rest.
 
@@ -46,7 +46,7 @@ One typed contribution; the engine reads `ResolvedModifiers` for the rest.
 
 ### Type Literal
 
-\{ `type`: `"extra-keyword"`; `keywordRef`: [`WeaponKeywordRef`](WeaponKeywordRef.md); \}
+\{ `type`: `"extra-keyword"`; `keywordRef`: [`WeaponKeywordRef`](../../generated/interfaces/WeaponKeywordRef.md); \}
 
 ***
 
@@ -124,3 +124,37 @@ Defender-side: ability-granted invulnerable save threshold (e.g. a buff
 that grants a 4+ invuln). Best (lowest) threshold wins; the engine then
 picks the better of `printed Sv after AP/cover` and `effective invuln`
 (invuln bypasses both AP and cover).
+
+***
+
+### Type Literal
+
+\{ `type`: `"crit-threshold"`; `roll`: `"hit"` \| `"wound"`; `value`: `number`; \}
+
+Attacker-side: an unmodified roll of `value`+ is a critical hit/wound. Lowest wins.
+
+***
+
+### Type Literal
+
+\{ `type`: `"ignore-modifiers"`; `roll`: `"hit"` \| `"wound"`; \}
+
+Attacker-side: the attacker ignores every negative modifier to this roll (and, for hits, the
+benefit of cover). Positive modifiers still apply.
+
+***
+
+### Type Literal
+
+\{ `type`: `"skill-mod"`; `stat`: `"WS"` \| `"BS"`; `value`: `number`; \}
+
+Attacker-side: improve the WS or BS characteristic by `value` (a characteristic change, so not
+capped like a hit-roll modifier). The engine floors the characteristic at 2+.
+
+***
+
+### Type Literal
+
+\{ `type`: `"save-characteristic"`; `value`: `number`; \}
+
+Defender-side: the Save characteristic becomes `value`+. Best (lowest) wins.

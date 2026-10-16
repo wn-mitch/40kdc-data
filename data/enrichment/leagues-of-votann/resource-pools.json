@@ -34,7 +34,9 @@
             "objective": {
               "role": "non-home"
             },
-            "count_min": 2
+            "count": {
+              "min": 2
+            }
           }
         },
         "amount": 1
@@ -43,7 +45,10 @@
         "condition": {
           "type": "controls",
           "parameters": {
-            "compare": "more-than-opponent"
+            "compare": {
+              "owner": "enemy",
+              "comparison": "gt"
+            }
           }
         },
         "amount": 1

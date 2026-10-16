@@ -9,9 +9,9 @@ use super::menu::{duration_clauses, normalize_triggers, usage_clause};
 use super::words::*;
 use super::{child, inline, is_container, join_nonempty, ty};
 use crate::generated::{
-    Ability, AbilityAppliesTo, AbilityTrigger, AbilityUsage, EffectNode, Scope,
+    Ability, AbilityTrigger, AbilityUsage, EffectNode, KeywordPredicate, Scope,
 };
-use crate::translate::condition::{condition_lead_in_value, nn, obj};
+use crate::translate::condition::{condition_lead_in_value, nn, obj, or_list};
 use crate::translate::dekebab;
 
 /// Join non-empty clauses with ", ", capitalize the sentence, and end with a period.
@@ -131,26 +131,23 @@ pub fn describe_effect(e: &EffectNode) -> String {
     block(&to_value(e), 0, &Ctx::default())
 }
 
-/// `Scope: <range>. Duration: <duration>.` — retained for the legacy translate footer.
+/// The shared lifetime rendered as a standalone duration line.
 pub fn describe_scope(s: &Scope) -> String {
-    let s = to_value(s);
-    let s = obj(Some(&s));
-    if !truthy_key(s, "range") && !truthy_key(s, "duration") {
+    let value = to_value(s);
+    let s = obj(Some(&value));
+    let Some(duration) = nn(s, "duration") else {
         return String::new();
-    }
-    let range = dekebab(sv(s, "range").unwrap_or(""));
-    let inches = nn(s, "range_inches")
-        .map(|r| format!(" ({}\")", jv(r)))
-        .unwrap_or_default();
-    let duration = match sv(s, "duration") {
-        Some("until-next-battle-round") => "until the start of the next battle round".to_string(),
-        Some("until-start-next-turn") => "until the start of your next turn".to_string(),
-        d => dekebab(d.unwrap_or("")),
     };
-    format!("Scope: {range}{inches}. Duration: {duration}.")
+    let trail = crate::translate::expiry::expiry_trail(Some(duration));
+    let duration = if trail.is_empty() {
+        dekebab(&jv(duration))
+    } else {
+        trail.to_string()
+    };
+    format!("Duration: {duration}.")
 }
 
-/// Effect text plus an optional trailing scope line — legacy composition.
+/// Effect text plus an optional trailing duration line.
 pub fn describe_effect_with_scope(e: &EffectNode, scope: Option<&Scope>) -> String {
     let effect = describe_effect(e);
     match scope.map(describe_scope).filter(|s| !s.is_empty()) {
@@ -161,27 +158,50 @@ pub fn describe_effect_with_scope(e: &EffectNode, scope: Option<&Scope>) -> Stri
 }
 
 /// `Applies to: units with Possessed.` Mirrors `describeAppliesTo`.
-pub fn describe_applies_to(filter: Option<&AbilityAppliesTo>) -> String {
+pub fn describe_applies_to(filter: Option<&KeywordPredicate>) -> String {
     let Some(filter) = filter.map(to_value) else {
         return String::new();
     };
     let filter = obj(Some(&filter));
-    let required = map_arr(filter, "required_keywords", jv).unwrap_or_default();
-    let excluded = map_arr(filter, "excluded_keywords", jv).unwrap_or_default();
-    if required.is_empty() && excluded.is_empty() {
+    let required = map_arr(filter, "all_of", jv).unwrap_or_default();
+    let any = map_arr(filter, "any_of", jv).unwrap_or_default();
+    let excluded = map_arr(filter, "none_of", jv).unwrap_or_default();
+    let not_all = map_arr(filter, "not_all_of", jv).unwrap_or_default();
+    if required.is_empty() && any.is_empty() && excluded.is_empty() && not_all.is_empty() {
         return String::new();
     }
-    let base = if required.is_empty() {
+    let positive = [
+        if required.is_empty() {
+            String::new()
+        } else {
+            required.join(", ")
+        },
+        if any.is_empty() {
+            String::new()
+        } else {
+            format!("at least one of {}", or_list(&any))
+        },
+    ]
+    .into_iter()
+    .filter(|s| !s.is_empty())
+    .collect::<Vec<_>>()
+    .join(" and ");
+    let base = if positive.is_empty() {
         "all units".to_string()
     } else {
-        format!("units with {}", required.join(", "))
+        format!("units with {positive}")
     };
     let exc = if excluded.is_empty() {
         String::new()
     } else {
         format!(" (excluding {})", excluded.join(", "))
     };
-    format!("Applies to: {base}{exc}.")
+    let partial = if not_all.is_empty() {
+        String::new()
+    } else {
+        format!(" (excluding units with all of {})", not_all.join(", "))
+    };
+    format!("Applies to: {base}{exc}{partial}.")
 }
 
 /// Compose the full ability print: woven effect sentence + an optional `Applies to:` line.
@@ -189,7 +209,7 @@ pub fn describe_applies_to(filter: Option<&AbilityAppliesTo>) -> String {
 pub fn describe_ability_parts(
     e: &EffectNode,
     scope: Option<&Scope>,
-    applies_to: Option<&AbilityAppliesTo>,
+    applies_to: Option<&KeywordPredicate>,
     usage: Option<&AbilityUsage>,
     trigger: Option<&AbilityTrigger>,
 ) -> String {

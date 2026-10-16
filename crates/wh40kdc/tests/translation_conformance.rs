@@ -9,8 +9,8 @@ use std::path::PathBuf;
 
 use serde_json::Value;
 use wh40kdc::{
-    describe_ability_parts, describe_scoring_card, AbilityAppliesTo, AbilityTrigger, AbilityUsage,
-    Dataset, EffectNode, Scope,
+    describe_ability_parts, describe_scoring_card, AbilityTrigger, AbilityUsage, Dataset,
+    EffectNode, KeywordPredicate, Scope,
 };
 
 fn corpus(path: &str) -> Value {
@@ -44,7 +44,7 @@ fn effect_translation_matches_goldens() {
         let text = describe_ability_parts(
             &effect,
             part::<Scope>(case, "scope").as_ref(),
-            part::<AbilityAppliesTo>(case, "applies_to").as_ref(),
+            part::<KeywordPredicate>(case, "applies_to").as_ref(),
             part::<AbilityUsage>(case, "usage").as_ref(),
             part::<AbilityTrigger>(case, "trigger").as_ref(),
         );

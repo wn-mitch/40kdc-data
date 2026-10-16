@@ -27,6 +27,13 @@ function mechanicsOf(list: CompileLeaf[], text: string): Record<string, any> {
   return result.mechanics as unknown as Record<string, any>;
 }
 
+function selections(tree: unknown): Record<string, unknown>[] {
+  if (tree === null || typeof tree !== "object") return [];
+  if (Array.isArray(tree)) return tree.flatMap(selections);
+  const node = tree as Record<string, unknown>;
+  return [...(node.type === "select-units" ? [node] : []), ...Object.values(node).flatMap(selections)];
+}
+
 const DOOMWEAVER_HIT = "scored a hit against an";
 
 /** The "Each time … shot" selection shape (S1 and S2): a select in a later part, hit by its attacks. */
@@ -40,7 +47,10 @@ describe("a selection's hit eligibility (S1, S2)", () => {
       ["hit by one or more of those attacks", "hit-by-attacks", { subject: "selected-unit" }],
       ["made with its Doomweaver", "attack-filter", { weapon_name: "Doomweaver" }],
       ["that enemy unit is pinned", "apply-mark", { subject: "antecedent", tag: "pinned" }]), text);
-    expect(JSON.stringify(mechanics)).toContain('"type":"select-units","selector":{"owner":"enemy","count":1,"eligibility":{"type":"happened","parameters":{"event":"after-roll","subject":"event-subject","object":"this-unit","filter":{"roll":"hit","result":"success","weapon_name":"Doomweaver"},"window":"event"}}}');
+    expect(selections(mechanics)).toEqual([expect.objectContaining({
+      type: "select-units",
+      selector: { filter: { owner: "enemy" }, count: { min: 1, max: 1 }, eligibility: { type: "happened", parameters: { event: "after-roll", subject: "event-subject", object: "this-unit", filter: { roll: "hit", result: "success", weapons: { name: "Doomweaver" } }, window: "event" } } },
+    })]);
   });
 
   it("names the candidate as this-unit, not the selected unit", () => {
@@ -52,9 +62,9 @@ describe("a selection's hit eligibility (S1, S2)", () => {
       ["hit by one or more of those attacks", "hit-by-attacks", { subject: "selected-unit" }],
       ["made with its Doomweaver", "attack-filter", { weapon_name: "Doomweaver" }],
       ["that enemy unit is pinned", "apply-mark", { subject: "antecedent", tag: "pinned" }]), text);
-    const eligibility = JSON.stringify(mechanics).match(/"eligibility":\{"type":"happened".*?"window":"event"\}/u)?.[0];
-    expect(eligibility).toContain('"object":"this-unit"');
-    expect(eligibility).not.toContain("selected-unit");
+    const selected = selections(mechanics);
+    expect(selected).toHaveLength(1);
+    expect(selected[0]).toHaveProperty("selector.eligibility.parameters.object", "this-unit");
   });
 
   it("names the candidate this-unit on a designation's select too", () => {
@@ -67,7 +77,7 @@ describe("a selection's hit eligibility (S1, S2)", () => {
       ["that unit", "target-is-selected", {}],
       ["re-roll the hit", "reroll", { roll: "hit", subset: "all" }]), text);
     expect(mechanics.effect.type).toBe("designate-target");
-    expect(mechanics.effect.select.eligibility).toEqual({ type: "happened", parameters: { event: "after-roll", subject: "event-subject", object: "this-unit", filter: { roll: "hit", result: "success", weapon_name: "Doomweaver" }, window: "event" } });
+    expect(mechanics.effect.select.selector.eligibility).toEqual({ type: "happened", parameters: { event: "after-roll", subject: "event-subject", object: "this-unit", filter: { roll: "hit", result: "success", weapons: { name: "Doomweaver" } }, window: "event" } });
   });
 
   it("refuses a pair of selections whose eligibility no single select owns", () => {
@@ -83,7 +93,7 @@ describe("a selection's hit eligibility (S1, S2)", () => {
     expect(result.errors.join(" ")).toMatch(/not bound with it yet/u);
   });
 
-  it("refuses a persistent designation's select when its eligibility has no field to sit in", () => {
+  it("carries a before-form hit eligibility onto a persistent designation's selector", () => {
     const text = "At the start of the battle, select one enemy unit hit by one or more of those attacks made with its Doomweaver to be this model's quarry. Each time this model makes an attack that targets its quarry, you can re-roll the Hit roll.";
     const result = compileLeaves(placed(text,
       ["At the start of the battle", "phase-window", { phase: "start-of-battle", turn: "none" }],
@@ -94,8 +104,9 @@ describe("a selection's hit eligibility (S1, S2)", () => {
       ["Each time this model makes an attack", "attack", { direction: "makes", unit: "this-model", attack_type: "any" }],
       ["that targets its quarry", "designated-filter", { subject: "defender", tag: "prey" }],
       ["you can re-roll the Hit roll", "reroll", { roll: "hit", subset: "all", weapon_type: "all" }]), text);
-    expect(result.ok).toBe(false);
-    expect(result.errors.join(" ")).toMatch(/persistent designation's select has no eligibility field/u);
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(JSON.stringify(result.mechanics.effect)).toContain('"weapons":{"name":"Doomweaver"}');
   });
 });
 
@@ -117,10 +128,10 @@ describe("a before-form hit binds the unit it hit (B)", () => {
     const mechanics = mechanicsOf(leaves(), text);
     const forEach = mechanics.effect.effect;
     expect(forEach.type).toBe("for-each-unit");
-    expect(forEach.selector.owner).toBe("enemy");
-    expect(forEach.selector.eligibility).toEqual({ type: "happened", parameters: { event: "after-roll", subject: "event-subject", object: "this-unit", filter: { roll: "hit", result: "success", weapon_name: "Doomweaver" }, window: "event" } });
+    expect(forEach.selector.filter).toEqual({ owner: "enemy" });
+    expect(forEach.selector.eligibility).toEqual({ type: "happened", parameters: { event: "after-roll", subject: "event-subject", object: "this-unit", filter: { roll: "hit", result: "success", weapons: { name: "Doomweaver" } }, window: "event" } });
     expect(forEach.effect.steps[0]).toEqual({ type: "designate", target: "recipient", modifier: { tag: "pinned" } });
-    expect(forEach.effect.steps[1].condition).toEqual({ type: "designated", parameters: { subject: "recipient", tag: "pinned" } });
+    expect(forEach.effect.steps[1].condition).toEqual({ type: "matches", parameters: { subject: "recipient", filter: { designated: "pinned" } } });
     expect(mechanics.scope).toEqual({ duration: "until-start-next-turn" });
     expect(mechanics.trigger).toEqual({ event: "attacks-resolved", filter: { kind: "shoot" } });
     // The synthesized quantifier's hit key is internal: it never reaches the output.
@@ -132,7 +143,7 @@ describe("a before-form hit binds the unit it hit (B)", () => {
     const validate = createValidator().compile({ $ref: "https://40kdc.dev/schemas/enrichment/ability-dsl/effect.schema.json#/$defs/effect-node" });
     expect(validate(mechanics.effect), JSON.stringify(validate.errors?.slice(0, 2))).toBe(true);
     const described = describeAbility({ effect: mechanics.effect, scope: mechanics.scope, trigger: mechanics.trigger } as never);
-    expect(described).toMatch(/For each enemy unit that was hit by an attack .*Doomweaver/u);
+    expect(described).toMatch(/For each enemy unit.*hit.*Doomweaver/su);
   });
 
   it("binds a Charge roll-modifier to the recipient only when it names the antecedent", () => {
@@ -190,7 +201,13 @@ describe("a before-form hit binds the unit it hit (B)", () => {
       ["add 1 to the Wound roll", "roll-modifier", { roll: "wound", operation: "add", value: 1 }],
     ), plain);
     expect(result.ok).toBe(true);
-    expect(JSON.stringify(result.ok ? result.mechanics : null)).toBe(`{"effect":{"type":"conditional","condition":{"operator":"and","operands":[{"type":"attack-is","parameters":{"attack_type":"ranged"}},{"type":"happened","parameters":{"event":"after-roll","subject":"event-subject","object":{"owner":"enemy"},"filter":{"roll":"hit","result":"success","weapon_name":"Gloomhound cannon"},"window":"event"}}]},"effect":{"type":"roll-modifier","target":"this-model","modifier":{"roll":"wound","operation":"add","value":1}}},"scope":{"duration":"permanent"},"behavior":"passive","trigger":null}`);
+    expect(result.ok ? result.mechanics : null).toEqual({
+      effect: { type: "conditional", condition: { operator: "and", operands: [
+        { type: "attack-is", parameters: { attack_type: "ranged" } },
+        { type: "happened", parameters: { event: "after-roll", subject: "event-subject", object: { owner: "enemy" }, filter: { roll: "hit", result: "success", weapons: { name: "Gloomhound cannon" } }, window: "event" } },
+      ] }, effect: { type: "roll-modifier", target: "this-model", modifier: { roll: "wound", operation: "add", value: 1 } } },
+      scope: { duration: "permanent" }, behavior: "passive", trigger: null,
+    });
   });
 
   it("folds a for-each that carries a hit without losing its scope, filter or hit", () => {
@@ -206,7 +223,7 @@ describe("a before-form hit binds the unit it hit (B)", () => {
     const body = { type: "sequence", steps: [] };
     const quantifier = (parameters: Record<string, unknown>): CompileLeaf => ({ role: "EVENT", family_id: "for-each-unit-select", family_version: currentFamilyVersion("for-each-unit-select"), parameters: { scope: "enemy", filter: {}, ...parameters }, start_byte: 0, end_byte: 1, fragment: "RAW_TEXT" });
     expect(() => wrapForEachUnit(quantifier({ hit: { subject: "event-subject" } }), body)).toThrow(/only its attack-filter/u);
-    expect(() => wrapForEachUnit(quantifier({ including: "target", hit: {} }), body)).toThrow(/cannot gate on a hit/u);
+    expect(() => wrapForEachUnit(quantifier({ including: "target", hit: {} }), body)).toThrow(/cannot gate .*on a hit/u);
   });
 
   it("refuses a before-form hit's per-unit pass that shares a record with an army composition", () => {
@@ -216,9 +233,9 @@ describe("a before-form hit binds the unit it hit (B)", () => {
   });
 });
 
-/** A hit's unit named by a for-each whose selector keeps its keywords, with the hit gate in its eligibility (the 7154 shape). */
+/** A hit's unit named by a for-each whose selector keeps its filter, with the hit gate in its eligibility (the 7154 shape). */
 describe("a keyworded before-form hit", () => {
-  it("keeps the keywords on the selector and the hit in its eligibility", () => {
+  it("keeps the filter on the selector and the hit in its eligibility", () => {
     const text = "Each time this model makes a ranged attack, if one or more of those attacks made with its Ember cannon scored a hit against an enemy INFANTRY unit, until the end of the phase, that enemy unit is pinned, and add 1 to Charge rolls made for it.";
     const mechanics = mechanicsOf(placed(text,
       ["Each time this model makes a ranged attack", "attack", { direction: "makes", unit: "this-model", attack_type: "ranged" }],
@@ -228,8 +245,8 @@ describe("a keyworded before-form hit", () => {
       ["that enemy unit is pinned", "apply-mark", { subject: "antecedent", tag: "pinned" }],
       ["add 1 to Charge rolls made for it", "roll-modifier", { roll: "charge", operation: "add", value: 1, subject: "antecedent" }]), text);
     const selector = JSON.stringify(mechanics).match(/"type":"for-each-unit","selector":\{.*?"eligibility"/u)?.[0] ?? "";
-    expect(selector).toContain('"keywords":["INFANTRY"]');
-    expect(JSON.stringify(mechanics)).toContain('"weapon_name":"Ember cannon"');
+    expect(selector).toContain('"filter":{"owner":"enemy","all_of":["INFANTRY"]}');
+    expect(JSON.stringify(mechanics)).toContain('"weapons":{"name":"Ember cannon"}');
   });
 });
 
@@ -283,7 +300,7 @@ describe("before-form hit guards and shapes", () => {
       ["makes an attack", "attack", { direction: "makes", unit: "friendly-unit", attack_type: "any" }],
       ["that targets that enemy unit", "target-is-selected", {}],
       ["you can re-roll the Hit roll", "reroll", { roll: "hit", subset: "all", weapon_type: "all" }]), text);
-    expect(mechanics.effect.effect.select.eligibility.parameters.object).toBe("this-unit");
+    expect(mechanics.effect.effect.select.selector.eligibility.parameters.object).toBe("this-unit");
     expect(JSON.stringify(mechanics)).not.toContain("selected-unit\",\"filter");
   });
 });

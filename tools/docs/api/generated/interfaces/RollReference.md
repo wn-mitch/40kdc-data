@@ -6,7 +6,9 @@
 
 # Interface: RollReference
 
-Defined in: [generated.ts:4740](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4740)
+Defined in: [generated.ts:1155](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1155)
+
+The result of a roll an enclosing `roll` step bound: its total, or (with successes_on) how many of its dice rolled that value or higher.
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "roll-reference".
@@ -17,4 +19,12 @@ via the `definition` "roll-reference".
 
 > **roll\_var**: `string`
 
-Defined in: [generated.ts:4741](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4741)
+Defined in: [generated.ts:1156](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1156)
+
+***
+
+### successes\_on?
+
+> `optional` **successes\_on?**: `number`
+
+Defined in: [generated.ts:1157](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1157)

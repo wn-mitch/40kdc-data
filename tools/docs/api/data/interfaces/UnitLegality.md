@@ -6,7 +6,7 @@
 
 # Interface: UnitLegality
 
-Defined in: [data/roster-resolve.ts:69](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/roster-resolve.ts#L69)
+Defined in: [data/roster-resolve.ts:74](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/roster-resolve.ts#L74)
 
 The loadout-legality verdict for one resolved roster unit.
 
@@ -16,7 +16,7 @@ The loadout-legality verdict for one resolved roster unit.
 
 > **unitId**: `string`
 
-Defined in: [data/roster-resolve.ts:71](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/roster-resolve.ts#L71)
+Defined in: [data/roster-resolve.ts:76](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/roster-resolve.ts#L76)
 
 Resolved unit id.
 
@@ -26,7 +26,7 @@ Resolved unit id.
 
 > **unitIndex**: `number`
 
-Defined in: [data/roster-resolve.ts:73](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/roster-resolve.ts#L73)
+Defined in: [data/roster-resolve.ts:78](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/roster-resolve.ts#L78)
 
 The unit's position in `roster.units` (source order).
 
@@ -36,7 +36,7 @@ The unit's position in `roster.units` (source order).
 
 > **modelCount**: `number`
 
-Defined in: [data/roster-resolve.ts:75](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/roster-resolve.ts#L75)
+Defined in: [data/roster-resolve.ts:80](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/roster-resolve.ts#L80)
 
 Model count the loadout was checked against.
 
@@ -46,6 +46,6 @@ Model count the loadout was checked against.
 
 > **violations**: [`Violation`](Violation.md)[]
 
-Defined in: [data/roster-resolve.ts:77](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/roster-resolve.ts#L77)
+Defined in: [data/roster-resolve.ts:82](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/roster-resolve.ts#L82)
 
 Every count/swap rule the unit's loadout breaks; empty when legal.
