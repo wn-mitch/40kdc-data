@@ -676,22 +676,31 @@ function enumerateRowCandidates(
   rowName: string | null,
   options: readonly WargearOption[],
   usedVariantBudgets: readonly string[] = [],
+  upper?: ReadonlyMap<string, number>,
 ): RowCandidate[] {
   const applicable: number[] = [];
   for (let i = 0; i < options.length; i++) {
     const name = options[i].model_constraint?.model_name ?? null;
     if (name == null || name === rowName) applicable.push(i);
   }
+  const replaceableIds = new Set(options.flatMap((option) => option.replaces ?? []));
+  const canStillReachUpper = (weapons: ReadonlyMap<string, number>): boolean => {
+    if (!upper) return true;
+    for (const [id, count] of weapons) {
+      if (count > (upper.get(id) ?? 0) && !replaceableIds.has(id)) return false;
+    }
+    return true;
+  };
 
   const stateKey = (w: Map<string, number>, used: readonly number[]) =>
     `${multisetKey(w)}#${[...used].sort((a, b) => a - b).join(",")}#${usedVariantBudgets.join(",")}`;
 
   const result: RowCandidate[] = [];
   const seen = new Set<string>();
-  const queue: { weapons: Map<string, number>; used: number[] }[] = [
-    { weapons: new Map(base), used: [] },
-  ];
-  seen.add(stateKey(base, []));
+  const queue: { weapons: Map<string, number>; used: number[] }[] = canStillReachUpper(base)
+    ? [{ weapons: new Map(base), used: [] }]
+    : [];
+  if (queue.length > 0) seen.add(stateKey(base, []));
 
   for (let head = 0; head < queue.length; head++) {
     const cur = queue[head];
@@ -717,6 +726,7 @@ function enumerateRowCandidates(
         for (const id of replaces) w.set(id, (w.get(id) ?? 0) - 1);
         for (const id of bundle) w.set(id, (w.get(id) ?? 0) + 1);
         for (const [id, c] of [...w]) if (c <= 0) w.delete(id);
+        if (!canStillReachUpper(w)) continue;
         const used = [...cur.used, oi].sort((a, b) => a - b);
         const k = stateKey(w, used);
         if (seen.has(k)) continue;
@@ -741,6 +751,7 @@ function rowCandidates(
   rowCount: number,
   unitCount: number,
   options: readonly WargearOption[],
+  upper?: ReadonlyMap<string, number>,
 ): { candidates: RowCandidate[]; variantCaps: Map<string, number> } {
   const variantCaps = new Map<string, number>();
   for (let bi = 0; bi < (row.loadout_variant_budgets?.length ?? 0); bi++) {
@@ -756,6 +767,8 @@ function rowCandidates(
         toMultiset(row.default_weapon_ids ?? []),
         row.name ?? null,
         options,
+        [],
+        upper,
       ),
       variantCaps,
     };
@@ -783,6 +796,7 @@ function rowCandidates(
       row.name ?? null,
       options,
       variantUses[vi],
+      upper,
     )) {
       const cost = candidate.usedOptions.length;
       let state = states.get(candidate.key);
@@ -873,8 +887,9 @@ function solveAssignment(
   };
 
   const distribute = (ri: number, ci: number, left: number): boolean => {
+    if (left === 0) return assignRow(ri + 1);
     const row = rows[ri];
-    if (ci === row.candidates.length) return left === 0 && assignRow(ri + 1);
+    if (ci === row.candidates.length) return false;
     const cand = row.candidates[ci];
     let hi = left;
     for (const [id, per] of cand.weapons) {
@@ -1015,6 +1030,7 @@ function exactGroups(
   options: readonly WargearOption[],
   models: readonly LoadoutModel[],
   counts: Map<string, number>,
+  prioritizeExactMatch = false,
 ): LoadoutGroup[] | null {
   const bag = new Map<string, number>();
   for (const [id, c] of counts) if (c > 0) bag.set(id, c);
@@ -1039,12 +1055,16 @@ function exactGroups(
         count,
         modelCount,
         effectiveOptions,
+        bag,
       );
       for (const [token, cap] of prepared.variantCaps) variantCaps.set(token, cap);
       const candidates = prepared.candidates
         .filter((candidate) => candidateCanBeSelected(candidate, bag, optionCaps))
         .sort(
           (a, b) =>
+            (prioritizeExactMatch
+              ? explicitContribution(b, bag) - explicitContribution(a, bag)
+              : 0) ||
             a.key.localeCompare(b.key) ||
             a.usedOptions.length - b.usedOptions.length ||
             a.usedOptions.join(",").localeCompare(b.usedOptions.join(",")),
@@ -1067,6 +1087,18 @@ export function groupLoadout(
   const n = Math.max(0, Math.floor(modelCount) || 0);
   if (n <= 1 || !hasRecordedLoadoutBases(models)) return null;
   return exactGroups(unit, n, options, models, counts);
+}
+
+function hasExactGroups(
+  unit: Unit,
+  modelCount: number,
+  options: readonly WargearOption[],
+  models: readonly LoadoutModel[],
+  counts: Map<string, number>,
+): boolean {
+  const n = Math.max(0, Math.floor(modelCount) || 0);
+  return n > 1 && hasRecordedLoadoutBases(models) &&
+    exactGroups(unit, n, options, models, counts, true) !== null;
 }
 
 /** A source loadout completed with only omitted per-model defaults. */
@@ -1160,7 +1192,7 @@ export function completeLoadout(
       for (let index = 0; index < fixedModels.length; index++) {
         const count = rowCounts[index];
         if (count <= 0) continue;
-        const prepared = rowCandidates(fixedModels[index], index, count, n, effectiveOptions);
+        const prepared = rowCandidates(fixedModels[index], index, count, n, effectiveOptions, upper);
         for (const [token, cap] of prepared.variantCaps) variantCaps.set(token, cap);
         const candidates = prepared.candidates
           .filter((candidate) =>
@@ -1270,7 +1302,7 @@ export function validateLoadout(
     }];
   }
 
-  if ((models?.length ?? 0) > 1 && groupLoadout(unit, modelCount, options, models, counts) !== null) return budgets;
+  if (models && hasExactGroups(unit, modelCount, options, models, counts)) return budgets;
   perItemBounds.push(...swapConflicts(unit, modelCount, options, counts, models), ...budgets);
   return sortViolations(perItemBounds);
 }

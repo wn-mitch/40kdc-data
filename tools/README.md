@@ -93,6 +93,34 @@ if (isLegalLeverSelection(buffs, groups, selectedIds)) {
 `id` and `{ability_id, option_id}` references are stable identities; display
 labels and option names are presentation only.
 
+## Local-stack damage matrix
+
+`npm run damage:stack` exercises the same public damage path as Salvo:
+`Dataset.stackableBuffsFor`, `isLegalLeverSelection`,
+`Dataset.defensiveBuffsFor`, the shared loadout helpers, and `crunch`. It searches
+a local combined unit (bodyguard plus legal leader/support attachments), up to
+three detachments within three detachment points, legal Enhancements, at most
+one Stratagem, and external supporting abilities. This is deliberately not a
+whole-army roster optimizer.
+
+The default scope is the four fully ported factions
+`chaos-space-marines,adeptus-mechanicus,death-guard,tau-empire`, every target
+profile, and both `shooting,fight`. Override it with comma-separated
+`HC_FACTIONS`, `HC_TARGETS` (`all` or ids), and `HC_PHASES`. `HC_OUTPUT` selects
+the resumable JSON report. `HC_BODYGUARDS`, `HC_TOP`, and `HC_DEEP` accept a
+positive integer or `Infinity`; all three default to `Infinity`, so candidate
+truncation is never silent. Loadout legality remains exhaustive; its assignment
+search prunes only equipment totals that no later replacement can reduce and
+prioritizes exact target bags without changing rendered loadout grouping. The
+report records effective limits, assumptions, lever requirements and costs,
+supporting units, legal loadouts, defensive translation warnings, and every
+unsupported mechanic without embedding source rules text.
+
+Expanding this campaign to 27 factions requires an explicit ordered 27-faction
+manifest. The data package exposes more faction views than that and does not
+define which 27 belong to this campaign, so directory enumeration is not a
+stable substitute.
+
 ## Also: schema validation
 
 This package also ships the canonical JSON Schemas and an AJV-based validator
