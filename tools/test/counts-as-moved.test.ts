@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
 
-import { CompileError } from "../src/round5c/compile-fragments.js";
-import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
-import { foldCountsAsMoved } from "../src/round5c/compile-counts-as-moved.js";
-import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/round5c/contracts.js";
+import { CompileError } from "../src/semantic-authoring/compile-fragments.js";
+import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
+import { foldCountsAsMoved } from "../src/semantic-authoring/compile-counts-as-moved.js";
+import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { createValidator } from "../src/schema-loader.js";
 
 type Item = [wording: string, family: string, parameters: Record<string, unknown>, fragment?: string];

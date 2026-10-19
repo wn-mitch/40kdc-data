@@ -1,5 +1,5 @@
 //! Describer wording for a within check with `models: every` (every model of the subject).
-//! Pinned to the TypeScript reference (`tools/test/round5c-every-model-position.test.ts`).
+//! Pinned to the TypeScript reference (`tools/test/semantic-authoring-every-model-position.test.ts`).
 
 use serde_json::json;
 use wh40kdc::describe_condition_value;

@@ -16,7 +16,7 @@ import * as path from "path";
 import { buildReferenceVocabularies } from "../audit-dangling-refs.js";
 import { formatCompact } from "../compact-json.js";
 import { createValidator } from "../schema-loader.js";
-import { keywordIndex } from "../round5c/core-keywords.js";
+import { keywordIndex } from "../semantic-authoring/core-keywords.js";
 import { DEFAULT_DUMP_PATH } from "../mfm/loader.js";
 import { loadRepoProse, type RepoProse } from "../mfm/record-prose.js";
 import { storeSource } from "../mfm/store-source.js";

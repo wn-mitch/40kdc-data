@@ -36,8 +36,8 @@ import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { createValidator } from "./schema-loader.js";
 import { isStubEntry } from "./audit-coverage.js";
-import { keywordIndex } from "./round5c/core-keywords.js";
-import { round5cDataRoot } from "./round5c/entries.js";
+import { keywordIndex } from "./semantic-authoring/core-keywords.js";
+import { semanticAuthoringDataRoot } from "./semantic-authoring/entries.js";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const DATA_ROOT = resolve(__dirname, "../../data");
@@ -344,7 +344,7 @@ const TAG_KEYWORDS = new Set(["RILED UP", "SPOTTED", "AFFLICTED", "GUIDED", "HID
 /** A keyword condition's value: one core unit keyword, uppercase as rules print it, or a known tag. */
 function canonicalKeyword(value: unknown): boolean {
   if (typeof value !== "string") return false;
-  return TAG_KEYWORDS.has(value) || (value === value.toUpperCase() && keywordIndex(round5cDataRoot()).has(value));
+  return TAG_KEYWORDS.has(value) || (value === value.toUpperCase() && keywordIndex(semanticAuthoringDataRoot()).has(value));
 }
 
 /** Whose turn, as the schema's player-turn enum spells it. */

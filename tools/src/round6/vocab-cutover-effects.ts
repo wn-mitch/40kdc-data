@@ -5,7 +5,7 @@
  * caller owns recursive traversal, so nested effect/condition nodes are not walked here.
  */
 import type { CutoverContext, Node } from "./vocab-cutover-types.js";
-import { negate } from "../round5c/compile-conditions.js";
+import { negate } from "../semantic-authoring/compile-conditions.js";
 import weaponKeywordCatalog from "../../../data/core/weapon-keywords.json";
 type CatalogKeyword = { id: string; name: string; required_parameters?: readonly string[] };
 const CATALOG: Record<string, CatalogKeyword> = Object.fromEntries(

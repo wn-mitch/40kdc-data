@@ -10,7 +10,7 @@ import { transformFilters } from "./vocab-cutover-filters.js";
 import { transformEffects } from "./vocab-cutover-effects.js";
 import { transformGrantCategories } from "./vocab-cutover-grants.js";
 import { migrateFixtureCall, renderFixture } from "./vocab-fixtures.js";
-import { keywordIndex } from "../round5c/core-keywords.js";
+import { keywordIndex } from "../semantic-authoring/core-keywords.js";
 import type { CutoverContext, Node } from "./vocab-cutover-types.js";
 import type { Review } from "./migrate-vocabulary.js";
 

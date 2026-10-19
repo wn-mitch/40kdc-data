@@ -2,7 +2,7 @@
 
 This is the settled architecture for turning ability source text into trusted semantics and DSL.
 Read it before proposing a change to how abilities are authored. The workbench code lives in
-`tools/src/round5c/`; its CLI is `npm run round5c -- commands`.
+`tools/src/semantic-authoring/`; its CLI is `npm run semantic-authoring -- commands`.
 
 ## Objective
 
@@ -44,10 +44,16 @@ gate pass. Missing or contradictory timing semantics still require an explicit h
 ## Where work happens
 
 One live workbench database (`_private/round5c/workbench.sqlite`) holds all source, proposals,
-decisions and derived rows. All authoring runs through the `round5c` CLI: model stages
+decisions and derived rows. All authoring runs through the `semantic-authoring` CLI: model stages
 (`segment`, `classify`) and mechanical copies (`propagate`) may write to it directly after keeping
 one rolling copy (`workbench.sqlite.pre-run`); human decisions arrive only through
 `review-apply <decisions.json>`, written from the reviewer's answers in chat. There is no review UI.
+
+The `_private/round5c/` directory is intentionally retained as the persisted workbench and
+artifact location so existing local databases and run history remain reachable. Stored algorithm
+and export identifiers, plus historical review reports under `_reports/`, also keep their original
+identities. Active code, commands, environment variables, and test names use
+`semantic-authoring`; these persisted names are not compatibility aliases.
 
 ## Authority
 
@@ -98,9 +104,18 @@ unless it is needed to operate.
   cannot name the unit it binds to. A roll-modifier's `preceding` roll ("adding 1 to the result")
   binds the same way to the nearest roll or test before it (`compile-preceding-roll.ts`). Because the leaf
   stays the same wherever the wording occurs, "that enemy unit is **X**" is one operator.
-- **A family version widens; it never reinterprets.** A later version (`tools/src/round5c/families/`)
+- **A family version widens; it never reinterprets.** A later version (`tools/src/semantic-authoring/families/`)
   adds values or optional parameters and hands the rest of a leaf to the previous version, so
   earlier leaves move across by identity.
+- **Named-region authoring uses version 3.** Versions 1 and 2 remain byte-stable historical
+  contracts so existing reviewed registry fingerprints keep their identity. Version 3 is the
+  current contract: `baseline_region` and `phase_extensions` are validated against the closed
+  canonical DSL recipe fragments, `region_id`, `owner_faction`, and `beneficiary_faction` use
+  canonical entity IDs, and `qualifies_by_keyword` must be nonblank. The v2-to-v3 family mapping
+  preserves already-canonical parameters unchanged. A v2 fingerprint that only satisfies the
+  historical loose recipe boundary remains active and is reported for review rather than being
+  forced through v3 or crashing workbench initialization. Compilation consumes the canonical v3
+  recipe without reinterpreting historical leaves.
 - **Leaves stay compositional.** "Select one enemy unit", "within 24″ of this unit", "visible to
   …" and "excluding …" are separate leaves. Lowering may fold them into one canonical selector;
   authoring does not absorb qualifiers into a broader leaf to raise completion counts. A selector

@@ -3,7 +3,7 @@ package wh40kdc
 import "testing"
 
 // Describer wording for a within check with models every (pinned against the TS reference,
-// tools/test/round5c-every-model-position.test.ts).
+// tools/test/semantic-authoring-every-model-position.test.ts).
 func TestEveryModelObjectiveWithin(t *testing.T) {
 	every := map[string]any{"type": "within", "parameters": map[string]any{
 		"of": map[string]any{"objective": map[string]any{}}, "range": "objective-control", "models": "every",
