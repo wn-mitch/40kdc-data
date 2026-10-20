@@ -117,11 +117,12 @@ describe("stack damage loadout search performance", () => {
       });
     };
 
-    // The Tiger Shark is not a BATTLESUIT, so The Arro'kon Protocol cannot target it.
+    // The Tiger Shark is not a BATTLESUIT, so The Arro'kon Protocol cannot target it. Guardian
+    // Drones penalise only attacks against the bearer's unit, never its own shooting.
     const tigerShark = run(1).winner;
-    expect(tigerShark?.expectedDamage).toBeCloseTo(29.004629629629623, 12);
+    expect(tigerShark?.expectedDamage).toBeCloseTo(29.65277777777777, 12);
     expect(tigerShark?.stratagem?.id).not.toBe("the-arrokon-protocol-retaliation-cadre-tau-empire");
-    expect(run(2).winner?.expectedDamage).toBeCloseTo(29.004629629629623, 12);
+    expect(run(2).winner?.expectedDamage).toBeCloseTo(29.65277777777777, 12);
     const withBroadside = run(3);
     expect(withBroadside.candidateCounts).toMatchObject({
       bodyguards: 3,
@@ -130,7 +131,7 @@ describe("stack damage loadout search performance", () => {
       deepFinalists: 1,
     });
     // Broadsides are BATTLESUITs; Guardsmen (10 models) meet Arro'kon's 6+ band for Sustained Hits 1.
-    expect(withBroadside.winner?.expectedDamage).toBeCloseTo(47.185185185185176, 12);
+    expect(withBroadside.winner?.expectedDamage).toBeCloseTo(53.79629629629628, 12);
     expect(withBroadside.winner?.stratagem?.id).toBe("the-arrokon-protocol-retaliation-cadre-tau-empire");
     expect(withBroadside.winner?.members[0]).toMatchObject({
       unitId: "broadside-battlesuits",

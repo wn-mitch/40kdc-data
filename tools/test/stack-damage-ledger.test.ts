@@ -39,8 +39,10 @@ describe("stack damage ledger", () => {
   });
 
   it("keeps an eligible Stratagem the optimiser did not select", () => {
-    const selected = cell.winner!.stratagem?.id;
-    const unselected = cell.ledger.filter((candidate) =>
+    // Broadsides bring Retaliation Cadre, whose other Stratagems the winner leaves unused.
+    const broadside = tauCell({ HC_BODYGUARDS: "3" });
+    const selected = broadside.winner!.stratagem?.id;
+    const unselected = broadside.ledger.filter((candidate) =>
       candidate.sourceKind === "detachment-stratagem" && candidate.status !== "applied");
     expect(unselected.length).toBeGreaterThan(0);
     expect(unselected.every((candidate) => !selected?.startsWith(candidate.abilityId))).toBe(true);
@@ -52,10 +54,19 @@ describe("stack damage ledger", () => {
   });
 
   it("rejects a provider whose only fragments act outside the attack", () => {
-    expect(entry("drones-sudden-dawn-cadre-tau-empire")[0]).toMatchObject({
+    expect(entry("for-the-greater-good-sudden-dawn-cadre-tau-empire")[0]).toMatchObject({
       status: "rejected",
       relevant: false,
       reasons: ["no current-attack effect", 'effect type "no-effect" is not modelled by the buff layer'],
+    });
+  });
+
+  it("classifies an unevaluable condition by what it gates", () => {
+    // Guardian Drone's gated penalty acts on incoming attacks, so only the drone weapons stay open.
+    expect(entry("drones-tau-empire")[0]).toMatchObject({
+      status: "unresolved",
+      relevant: true,
+      reasons: ['conditional: cannot evaluate condition "unit-wargear" against current context'],
     });
   });
 

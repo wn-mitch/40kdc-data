@@ -4578,25 +4578,143 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "source_digest": "5acbbb23b8774a9c5b79f3054c65835a94b961a3bcc89c6724a40eba04b7d5e8",
+    "source_digest": "0da83ebe422f3e9605827a2afeca7f485d262f4fe489623c31cefaa735a7e9f0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "marker",
+          "target": "this-model",
+          "modifier": {
+            "label": "Drone token",
+            "operation": "place"
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "unit-wargear",
+                "parameters": {
+                  "subject": "this-unit",
+                  "wargear": "guardian-drone"
+                }
+              },
+              {
+                "type": "attack-is",
+                "parameters": {
+                  "attack_type": "ranged"
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "roll-modifier",
+            "target": "attacker",
+            "modifier": {
+              "roll": "wound",
+              "operation": "subtract",
+              "value": 1
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "unit-wargear",
+            "parameters": {
+              "subject": "this-unit",
+              "wargear": "gun-drone"
+            }
+          },
+          "effect": {
+            "type": "weapon-grant",
+            "target": "this-model",
+            "modifier": {
+              "weapon_id": "twin-pulse-carbine"
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "unit-wargear",
+            "parameters": {
+              "subject": "this-unit",
+              "wargear": "marker-drone"
+            }
+          },
+          "effect": {
+            "type": "keyword-grant",
+            "target": "this-unit",
+            "modifier": {
+              "keywords": [
+                "MARKERLIGHT"
+              ]
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "unit-wargear",
+            "parameters": {
+              "subject": "this-unit",
+              "wargear": "marker-drone"
+            }
+          },
+          "effect": {
+            "type": "permission",
+            "target": "this-unit",
+            "modifier": {
+              "activity": "observe",
+              "allow": true,
+              "despite": [
+                "advanced"
+              ]
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "unit-wargear",
+            "parameters": {
+              "subject": "this-unit",
+              "wargear": "missile-drone"
+            }
+          },
+          "effect": {
+            "type": "weapon-grant",
+            "target": "this-model",
+            "modifier": {
+              "weapon_id": "missile-pod"
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "unit-wargear",
+            "parameters": {
+              "subject": "this-unit",
+              "wargear": "shield-drone"
+            }
+          },
+          "effect": {
+            "type": "stat-modifier",
+            "target": "this-model",
+            "modifier": {
+              "stat": "W",
+              "operation": "add",
+              "value": 1
+            }
+          }
         }
-      },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "wound",
-          "operation": "subtract",
-          "value": 1
-        }
-      }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -9866,17 +9984,151 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "tau-empire",
     "detachment_id": null,
     "ability_type": "faction",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "marker",
+          "target": "this-model",
+          "modifier": {
+            "label": "Drone token",
+            "operation": "place"
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "unit-wargear",
+                "parameters": {
+                  "subject": "this-unit",
+                  "wargear": "guardian-drone"
+                }
+              },
+              {
+                "type": "attack-is",
+                "parameters": {
+                  "attack_type": "ranged"
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "roll-modifier",
+            "target": "attacker",
+            "modifier": {
+              "roll": "wound",
+              "operation": "subtract",
+              "value": 1
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "unit-wargear",
+            "parameters": {
+              "subject": "this-unit",
+              "wargear": "gun-drone"
+            }
+          },
+          "effect": {
+            "type": "weapon-grant",
+            "target": "this-model",
+            "modifier": {
+              "weapon_id": "twin-pulse-carbine"
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "unit-wargear",
+            "parameters": {
+              "subject": "this-unit",
+              "wargear": "marker-drone"
+            }
+          },
+          "effect": {
+            "type": "keyword-grant",
+            "target": "this-unit",
+            "modifier": {
+              "keywords": [
+                "MARKERLIGHT"
+              ]
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "unit-wargear",
+            "parameters": {
+              "subject": "this-unit",
+              "wargear": "marker-drone"
+            }
+          },
+          "effect": {
+            "type": "permission",
+            "target": "this-unit",
+            "modifier": {
+              "activity": "observe",
+              "allow": true,
+              "despite": [
+                "advanced"
+              ]
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "unit-wargear",
+            "parameters": {
+              "subject": "this-unit",
+              "wargear": "missile-drone"
+            }
+          },
+          "effect": {
+            "type": "weapon-grant",
+            "target": "this-model",
+            "modifier": {
+              "weapon_id": "missile-pod"
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "unit-wargear",
+            "parameters": {
+              "subject": "this-unit",
+              "wargear": "shield-drone"
+            }
+          },
+          "effect": {
+            "type": "stat-modifier",
+            "target": "this-model",
+            "modifier": {
+              "stat": "W",
+              "operation": "add",
+              "value": 1
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "0da83ebe422f3e9605827a2afeca7f485d262f4fe489623c31cefaa735a7e9f0"
   },
   {
     "ability_id": "for-the-greater-good-sudden-dawn-cadre-tau-empire",

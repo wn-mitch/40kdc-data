@@ -1,5 +1,5 @@
 import type { BuffSource, EngineContext } from "../cruncher/index.js";
-import { POST_ATTACK_MOMENT, type EffectTranslation, type UnsupportedFragment } from "../cruncher/from-dsl.js";
+import { effectToBuffs, POST_ATTACK_MOMENT, type EffectTranslation, type UnsupportedFragment } from "../cruncher/from-dsl.js";
 import type { EligibleAbility } from "../abilities-resolver/index.js";
 import type { AbilityView } from "../data/entities.js";
 import { canTakeEnhancement, grantedRecordIds, grantedRecordLevers } from "../data/lever-providers.js";
@@ -33,6 +33,8 @@ export interface LedgerEntry {
 
 type FragmentClass = "out-of-scope" | "encounter-layer" | "unresolved";
 
+const CLASS_RANK: Record<FragmentClass, number> = { "out-of-scope": 0, "encounter-layer": 1, unresolved: 2 };
+
 /** Effects that never act on the current attack: movement, set-up, CP, objectives, roster and targeting rules, reminder tokens. */
 const OUT_OF_ATTACK_EFFECTS = new Set([
   "no-effect", "permission", "set-up", "test", "test-exemption", "move", "move-modifier", "cp-gain",
@@ -56,7 +58,34 @@ const ENCOUNTER_EFFECTS = new Set(["mortal-wounds", "act-on-death", "designate",
 /** Trigger events that fire on a death or on damage the unit takes, never during its own attack. */
 const ENCOUNTER_EVENTS = new Set(["destroyed", "model-destroyed", "damage-allocated"]);
 
-function fragmentClass(fragment: UnsupportedFragment, ownId: string): FragmentClass {
+/** One translation of a provider, with what it was translated against. */
+interface Reading {
+  translation: EffectTranslation;
+  source: BuffSource;
+  context: EngineContext;
+  perspective: "attacker" | "target";
+}
+
+const UNKNOWN_CONDITION = /^conditional: cannot evaluate condition /u;
+
+/**
+ * An unevaluable condition matters only as much as what it gates: its body is translated as if
+ * the condition held, and a body that yields no buff or lever and whose own fragments are all out
+ * of scope (or all encounter-layer) takes that class. A body that could change the attack keeps
+ * the condition unresolved.
+ */
+function gatedBodyClass(fragment: UnsupportedFragment, ownId: string, reading: Reading, depth: number): FragmentClass {
+  const node = fragment.effectFragment as { type?: unknown; effect?: unknown } | null;
+  if (depth >= 4 || !node || node.type !== "conditional" || node.effect === undefined) return "unresolved";
+  const body = effectToBuffs(node.effect, reading.source, reading.context, reading.perspective);
+  if (body.applied.length > 0 || body.activatable.length > 0) return "unresolved";
+  const classes = body.unsupported.map((inner) => fragmentClass(inner, ownId, reading, depth + 1));
+  if (classes.includes("unresolved")) return "unresolved";
+  return classes.includes("encounter-layer") ? "encounter-layer" : "out-of-scope";
+}
+
+function fragmentClass(fragment: UnsupportedFragment, ownId: string, reading: Reading, depth = 0): FragmentClass {
+  if (UNKNOWN_CONDITION.test(fragment.reason)) return gatedBodyClass(fragment, ownId, reading, depth);
   if (fragment.reason.endsWith("is outside the damage path")) return "out-of-scope";
   if (fragment.reason.startsWith("model-scoped effect from an attached model")) return "out-of-scope";
   if (fragment.reason === POST_ATTACK_MOMENT) return "encounter-layer";
@@ -102,15 +131,18 @@ function sourceOf(entry: EligibleAbility): BuffSource {
 function classify(
   ability: AbilityView,
   side: LedgerEntry["side"],
-  translations: readonly EffectTranslation[],
+  readings: readonly Reading[],
   applied: boolean,
 ): Pick<LedgerEntry, "status" | "relevant" | "reasons"> {
   const encounter = encounterTrigger(ability, side);
   const fragments = new Map<string, FragmentClass>();
-  for (const translation of translations) {
-    for (const fragment of translation.unsupported) {
-      const kind = fragmentClass(fragment, ability.id);
-      fragments.set(fragment.reason, encounter && kind === "unresolved" ? "encounter-layer" : kind);
+  for (const reading of readings) {
+    for (const fragment of reading.translation.unsupported) {
+      const kind = fragmentClass(fragment, ability.id, reading);
+      const settled = encounter && kind === "unresolved" ? "encounter-layer" : kind;
+      // One reason can arise from several fragments; the most consequential class wins.
+      const previous = fragments.get(fragment.reason);
+      if (previous === undefined || CLASS_RANK[settled] > CLASS_RANK[previous]) fragments.set(fragment.reason, settled);
     }
   }
   const of = (kind: FragmentClass) => [...fragments].filter(([, value]) => value === kind).map(([reason]) => reason).sort();
@@ -124,7 +156,7 @@ function classify(
   if (encounter || encounterReasons.length > 0) {
     return { status: "unresolved", relevant: false, reasons: ["encounter-layer", ...encounterReasons] };
   }
-  const offers = translations.some((translation) => translation.applied.length > 0 || translation.activatable.length > 0);
+  const offers = readings.some(({ translation }) => translation.applied.length > 0 || translation.activatable.length > 0);
   if (offers) return { status: "rejected", relevant: false, reasons: ["not selected by the optimiser"] };
   return { status: "rejected", relevant: false, reasons: ["no current-attack effect", ...outOfScope] };
 }
@@ -146,16 +178,16 @@ export function buildLedger(session: DamageScoringSession, result: StackResult):
     ? [`${lever.source.abilityId}|${lever.source.sourceUnitId ?? ""}`]
     : []));
 
-  const gathered = new Map<string, { entry: Omit<LedgerEntry, "status" | "relevant" | "reasons">; ability: AbilityView; translations: EffectTranslation[]; applied: boolean; dropped: boolean }>();
+  const gathered = new Map<string, { entry: Omit<LedgerEntry, "status" | "relevant" | "reasons">; ability: AbilityView; readings: Reading[]; applied: boolean; dropped: boolean }>();
   const gather = (
     entry: Omit<LedgerEntry, "status" | "relevant" | "reasons">,
     ability: AbilityView,
-    translation: EffectTranslation,
+    reading: Reading,
     applied: boolean,
   ) => {
     const key = entryKey(entry);
-    const current = gathered.get(key) ?? { entry, ability, translations: [], applied: false, dropped: config.droppedArmyRules.includes(ability.id) };
-    current.translations.push(translation);
+    const current = gathered.get(key) ?? { entry, ability, readings: [], applied: false, dropped: config.droppedArmyRules.includes(ability.id) };
+    current.readings.push(reading);
     current.applied ||= applied;
     gathered.set(key, current);
   };
@@ -172,17 +204,18 @@ export function buildLedger(session: DamageScoringSession, result: StackResult):
         gather(
           { side: "attacker", abilityId: eligible.ability.id, sourceKind: eligible.source.kind, ...(sourceUnitId ? { sourceUnitId } : {}) },
           eligible.ability,
-          translation,
+          { translation, source, context, perspective: "attacker" },
           selectedSources.has(`${eligible.ability.id}|${source.kind === "ability" ? source.sourceUnitId ?? "" : ""}`),
         );
         for (const { abilityId } of grantedRecordIds(translation)) {
           const record = dataset.abilities.getInFaction(abilityId, spec.factionId) ?? dataset.abilities.getAny(abilityId);
           if (!record) continue;
           const levers = grantedRecordLevers(dataset, abilityId, spec.factionId, { abilityId: eligible.ability.id, source, enabled: false }, context);
+          const grantedSource: BuffSource = { kind: "ability", abilityId: record.id, abilityKind: "unit" };
           gather(
             { side: "attacker", abilityId, sourceKind: "granted", grantedBy: eligible.ability.id },
             record,
-            record.describeBuffs({ kind: "ability", abilityId: record.id, abilityKind: "unit" }, context, "attacker"),
+            { translation: record.describeBuffs(grantedSource, context, "attacker"), source: grantedSource, context, perspective: "attacker" },
             (levers?.buffs ?? []).some((lever) => selectedIds.has(lever.id)),
           );
         }
@@ -198,7 +231,7 @@ export function buildLedger(session: DamageScoringSession, result: StackResult):
         gather(
           { side: "attacker", abilityId: ability.id, sourceKind: "enhancement", sourceUnitId: member.unit.id },
           ability,
-          ability.describeBuffs(source, context, "attacker"),
+          { translation: ability.describeBuffs(source, context, "attacker"), source, context, perspective: "attacker" },
           selectedIds.has(`enhancement:${enhancement.id}@${member.unit.id}`),
         );
       }
@@ -208,19 +241,25 @@ export function buildLedger(session: DamageScoringSession, result: StackResult):
   const target = state.target.unitRaw;
   const targetContext: EngineContext = state.contextFor({ ...spec, members: [], selectedLeverIds: [], detachmentIssues: [], detachmentIds: [] });
   for (const eligible of dataset.eligibleAbilities({ unitId: target.id, factionId: target.faction_id }, targetContext.phase)) {
-    const translation = eligible.ability.describeBuffs(sourceOf(eligible), targetContext, "target", eligible.rating);
+    const targetSource = sourceOf(eligible);
+    const translation = eligible.ability.describeBuffs(targetSource, targetContext, "target", eligible.rating);
     const choice = translation.activatable.length > 0
       ? { ...translation, unsupported: [...translation.unsupported, { reason: "defensive activatable choice is not selected by the attacker benchmark", effectFragment: null }] }
       : translation;
-    gather({ side: "target", abilityId: eligible.ability.id, sourceKind: eligible.source.kind }, eligible.ability, choice, translation.applied.length > 0);
+    gather(
+      { side: "target", abilityId: eligible.ability.id, sourceKind: eligible.source.kind },
+      eligible.ability,
+      { translation: choice, source: targetSource, context: targetContext, perspective: "target" },
+      translation.applied.length > 0,
+    );
   }
 
   return [...gathered.values()]
-    .map(({ entry, ability, translations, applied, dropped }) => ({
+    .map(({ entry, ability, readings, applied, dropped }) => ({
       ...entry,
       ...(dropped
         ? { status: "rejected" as const, relevant: false, reasons: ["dropped by configuration"] }
-        : classify(ability, entry.side, translations, applied)),
+        : classify(ability, entry.side, readings, applied)),
     }))
     .sort((left, right) => entryKey(left).localeCompare(entryKey(right)));
 }
