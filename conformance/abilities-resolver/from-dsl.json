@@ -1795,6 +1795,199 @@
       }
     },
     {
+      "_comment": "event-subject: a friendly trigger subject the buffed unit matches binds the effect to it",
+      "abilityId": "debt-to-the-soul-forge-chaos-space-marines",
+      "source": {
+        "kind": "ability",
+        "abilityId": "debt-to-the-soul-forge-chaos-space-marines",
+        "abilityKind": "detachment"
+      },
+      "context": {
+        "phase": "fight",
+        "attackerKeywords": [
+          "chaos",
+          "daemon",
+          "heretic astartes",
+          "vehicle"
+        ]
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "roll-modifier on \"leadership\" is outside the damage path"
+        ],
+        "activatable": [
+          {
+            "id": "debt-to-the-soul-forge-chaos-space-marines@used:dark-pact",
+            "label": "+1 to wound, +2 attacks",
+            "group": null,
+            "requires": [
+              {
+                "type": "ability-part",
+                "trigger": {
+                  "event": "used",
+                  "filter": {
+                    "kind": "dark-pact"
+                  },
+                  "subject": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "DAEMON",
+                      "HERETIC ASTARTES",
+                      "VEHICLE"
+                    ]
+                  },
+                  "optional": true
+                }
+              }
+            ],
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "wound-mod",
+                "value": 1
+              },
+              {
+                "type": "attacks-mod",
+                "value": 2
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "_comment": "event-subject: a friendly trigger subject the buffed unit fails names another unit",
+      "abilityId": "debt-to-the-soul-forge-chaos-space-marines",
+      "source": {
+        "kind": "ability",
+        "abilityId": "debt-to-the-soul-forge-chaos-space-marines",
+        "abilityKind": "detachment"
+      },
+      "context": {
+        "phase": "fight",
+        "attackerKeywords": [
+          "chaos",
+          "heretic astartes",
+          "infantry"
+        ]
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "event-subject: without attacker keywords the trigger subject is unresolved and reported",
+      "abilityId": "debt-to-the-soul-forge-chaos-space-marines",
+      "source": {
+        "kind": "ability",
+        "abilityId": "debt-to-the-soul-forge-chaos-space-marines",
+        "abilityKind": "detachment"
+      },
+      "context": {
+        "phase": "fight"
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "target \"event-subject\" is not resolved by the buff engine",
+          "target \"event-subject\" is not resolved by the buff engine"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "event-subject: a nested ability part binds its own trigger's this-unit subject",
+      "abilityId": "event-subject-part",
+      "source": {
+        "kind": "ability",
+        "abilityId": "event-subject-part",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "selected",
+          "filter": {
+            "kind": "shoot"
+          },
+          "subject": "this-unit"
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "event-subject",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [
+          {
+            "id": "event-subject-part@selected:shoot",
+            "label": "+1 to hit",
+            "group": null,
+            "requires": [
+              {
+                "type": "ability-part",
+                "trigger": {
+                  "event": "selected",
+                  "filter": {
+                    "kind": "shoot"
+                  },
+                  "subject": "this-unit"
+                }
+              }
+            ],
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "hit-mod",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "_comment": "event-object: an unresolved target binding is reported, not dropped",
+      "abilityId": "event-object-target",
+      "source": {
+        "kind": "ability",
+        "abilityId": "event-object-target",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "event-object",
+        "modifier": {
+          "roll": "hit",
+          "operation": "add",
+          "value": 1
+        }
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "target \"event-object\" is not resolved by the buff engine"
+        ],
+        "activatable": []
+      }
+    },
+    {
       "caseId": "canonical/recipient-snapshot/attested-strength-after-detachment",
       "abilityId": "snapshot-example",
       "source": {

@@ -9,8 +9,11 @@
 //!
 //! The target of each leaf is classified against the perspective: the ability's own unit
 //! (`this-unit`, `ability-unit`, `this-model`, `selected-unit`, `recipient`, a friendly unit
-//! filter) is the buffed side; `defender` and an enemy filter are the other side; any other
-//! binding is not known to be the buffed unit and contributes nothing. Core rule 19.04: a
+//! filter) is the buffed side; `defender` and an enemy filter are the other side. An
+//! `event-subject` under a trigger naming who acts is bound to the buffed unit or to another
+//! unit (see `selection::bind_event_subject`); a binding still unknown (`event-subject`,
+//! `event-object`, `stratagem-target`, `bearer-transport`) is reported as unsupported, and any
+//! other binding is not known to be the buffed unit and contributes nothing. Core rule 19.04: a
 //! `this-model` effect pooled in from another member of a combined unit stays on its model.
 //! Common filters use three-valued matching: unresolved board or model membership
 //! never turns into an automatic buff. Explicit selection levers retain those
@@ -33,6 +36,8 @@ use js::*;
 pub use levers::{is_attack_step, moment_gate, moment_key};
 
 pub(crate) use super::recipient_snapshots::recipient_snapshot_reason;
+
+pub(crate) use selection::bind_event_subject;
 
 pub(crate) fn bind_snapshot_recipient(node: &Obj, target: &Value) -> Option<Value> {
     selection::bind_recipient(node, Some(target))
@@ -365,6 +370,14 @@ pub fn apply_activation(result: &mut EffectTranslation, ability_id: &str, activa
     }
 }
 
+/// Unit-refs that name a unit the buff layer cannot identify with the buffed unit.
+const UNRESOLVED_TARGETS: &[&str] = &[
+    "event-subject",
+    "event-object",
+    "stratagem-target",
+    "bearer-transport",
+];
+
 /// `{source, contribution}` as JSON.
 pub(crate) fn buff(opts: &WalkOpts, contribution: Value) -> Value {
     json!({ "source": opts.source, "contribution": contribution })
@@ -391,6 +404,20 @@ pub(crate) fn walk(node: &Value, opts: &WalkOpts, out: &mut Out) {
             current,
         );
         return;
+    }
+    // An ability grant reports its own unresolved holders.
+    if let Some(target) = current
+        .get("target")
+        .and_then(Value::as_str)
+        .filter(|target| UNRESOLVED_TARGETS.contains(target))
+    {
+        if !is_str(current, "type", "ability-grant") {
+            out.unsupported(
+                format!("target \"{target}\" is not resolved by the buff engine"),
+                current,
+            );
+            return;
+        }
     }
     if is_str(current, "type", "ability-part") {
         if let Some(reason) = recipient_snapshot_reason(
@@ -514,6 +541,19 @@ fn dispatch(node: &Obj, opts: &WalkOpts, out: &mut Out) {
             }
         }
         Some("ability-part") => {
+            if let Some(trigger) = present(node, "trigger") {
+                if let Some(bound) = selection::bind_event_subject(
+                    Some(trigger),
+                    node.get("effect").unwrap_or(&Value::Null),
+                    opts.context,
+                    opts.perspective,
+                ) {
+                    let mut part = node.clone();
+                    part.insert("effect".into(), bound);
+                    walk(&Value::Object(part), opts, out);
+                    return;
+                }
+            }
             let mut part_opts = opts.clone();
             if let Some(duration) = present(node, "duration") {
                 part_opts.duration = Some(duration.clone());

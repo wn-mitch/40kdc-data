@@ -166,3 +166,64 @@ function isObject(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
+
+/** The unit-ref naming the unit whose action fired the enclosing trigger. */
+const EVENT_SUBJECT = "event-subject";
+
+/** Internal binding: the event's subject is another unit, so the effect never reaches the buffed unit. */
+export const OTHER_UNIT = "other-unit";
+
+/**
+ * Bind `event-subject` effects when the trigger says who acts. `this-unit` names the ability's
+ * own unit. A friendly unit filter the buffed unit matches names the buffed unit; one it fails
+ * names another unit. The binding is left in place when the subject is absent, an enemy, differs
+ * across alternative triggers, or cannot be checked, so the translator reports it. A nested
+ * ability part with its own trigger binds its own subject.
+ */
+export function bindEventSubject(
+  trigger: unknown,
+  effect: unknown,
+  context: EngineContext,
+  perspective: "attacker" | "target",
+): unknown {
+  const triggers = (Array.isArray(trigger) ? trigger : [trigger]).filter(isObject);
+  if (triggers.length === 0) return effect;
+  const subject = triggers[0]!.subject;
+  if (triggers.some((item) => JSON.stringify(item.subject) !== JSON.stringify(subject))) return effect;
+  if (subject === "this-unit") return rebindEventSubject(effect, "this-unit");
+  if (!isObject(subject) || subject.owner !== "friendly") return effect;
+  const verdict = matchesUnitFilter(subject, context, perspective);
+  if (verdict === "unknown") return effect;
+  // `selected-unit`, not `this-unit`: in a supporting unit's ability `this-unit` names the provider.
+  return rebindEventSubject(effect, verdict ? SELECTED_UNIT : OTHER_UNIT);
+}
+
+/**
+ * The binding {@link bindEventSubject} makes for a buffed unit that meets the trigger's subject,
+ * for static checks that have no unit to test: an unbound subject is left in place.
+ */
+export function assumeEventSubjectMatches(trigger: unknown, effect: unknown): unknown {
+  const triggers = (Array.isArray(trigger) ? trigger : [trigger]).filter(isObject);
+  if (triggers.length === 0) return effect;
+  const subject = triggers[0]!.subject;
+  if (triggers.some((item) => JSON.stringify(item.subject) !== JSON.stringify(subject))) return effect;
+  if (subject === "this-unit") return rebindEventSubject(effect, "this-unit");
+  return isObject(subject) && subject.owner === "friendly" ? rebindEventSubject(effect, SELECTED_UNIT) : effect;
+}
+
+/** Returns `node` itself when it holds no `event-subject` target to rebind. */
+function rebindEventSubject(node: unknown, to: string): unknown {
+  if (Array.isArray(node)) {
+    const children = node.map((child) => rebindEventSubject(child, to));
+    return children.some((child, index) => child !== node[index]) ? children : node;
+  }
+  if (!isObject(node) || (node.type === "ability-part" && node.trigger != null)) return node;
+  let changed = false;
+  const out: Record<string, unknown> = {};
+  for (const key in node) {
+    const value = node[key];
+    out[key] = key === "target" && value === EVENT_SUBJECT ? to : rebindEventSubject(value, to);
+    if (out[key] !== value) changed = true;
+  }
+  return changed ? out : node;
+}

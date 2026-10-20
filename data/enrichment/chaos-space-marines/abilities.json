@@ -8196,63 +8196,70 @@
     "faction_id": "chaos-space-marines",
     "detachment_id": "soulforged-warpack",
     "ability_type": "detachment",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "matches",
-        "parameters": {
-          "subject": "this-unit",
-          "filter": {
-            "all_of": [
-              "HERETIC ASTARTES"
-            ]
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "roll-modifier",
+          "target": "event-subject",
+          "modifier": {
+            "roll": "leadership",
+            "operation": "subtract",
+            "value": 1
           }
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "roll-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "battle-shock",
-              "operation": "subtract",
-              "value": 1
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
             }
           },
-          {
+          "effect": {
             "type": "roll-modifier",
-            "target": "this-unit",
+            "target": "event-subject",
             "modifier": {
               "roll": "wound",
               "operation": "add",
-              "value": 1,
-              "weapons": {
-                "type": "ranged"
-              }
-            }
-          },
-          {
-            "type": "stat-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "stat": "A",
-              "operation": "add",
-              "value": 2,
-              "weapons": {
-                "type": "melee"
-              }
+              "value": 1
             }
           }
-        ]
-      }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "event-subject",
+          "modifier": {
+            "stat": "A",
+            "operation": "add",
+            "value": 2,
+            "weapons": {
+              "type": "melee"
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "[APPROX] When a HERETIC ASTARTES DAEMON VEHICLE unit invokes its contract on a Dark Pact: −1 to the resulting Leadership test, +1 to ranged Wound rolls, and +2 Attacks to melee weapons. The DAEMON VEHICLE restriction and the optional invoke are noted rather than gated in the tree. Full rule in raw-text store."
+    "community_notes": "[APPROX] When a HERETIC ASTARTES DAEMON VEHICLE unit invokes its contract on a Dark Pact: −1 to the resulting Leadership test, +1 to ranged Wound rolls, and +2 Attacks to melee weapons. The DAEMON VEHICLE restriction and the optional invoke are noted rather than gated in the tree. Full rule in raw-text store.",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "dark-pact"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "DAEMON",
+          "HERETIC ASTARTES",
+          "VEHICLE"
+        ]
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "slaves-to-none-chaos-space-marines",

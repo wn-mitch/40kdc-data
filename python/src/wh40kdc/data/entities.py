@@ -341,6 +341,7 @@ class AbilityView:
             effect_to_buffs,
             resolve_recipient_snapshots,
         )
+        from wh40kdc.cruncher.from_dsl_selection import bind_event_subject
 
         ctx = context if context is not None else {"phase": "shooting"}
         # A rated rule ({rating: true}) reads the rating the owning unit prints.
@@ -379,7 +380,14 @@ class AbilityView:
                 ],
                 "activatable": [],
             }
-        moment = trigger_gated(self.raw.get("behavior"), self.raw.get("trigger"), resolved)
+        trigger = self.raw.get("trigger")
+        # A snapshot-resolved recipient effect is already bound to its trigger-time recipients.
+        bound = (
+            resolved
+            if trigger is None or snapshot.get("resolved")
+            else bind_event_subject(trigger, resolved, ctx, perspective)
+        )
+        moment = trigger_gated(self.raw.get("behavior"), trigger, bound)
         translated = effect_to_buffs(
             moment,
             source,

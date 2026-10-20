@@ -40,6 +40,10 @@ _SELF_TARGETS = frozenset(["this-unit", "ability-unit", "this-model", "selected-
 #: than its unit. Core rule 19.04: a rule affecting one specified model applies
 #: only to that model, even while it is part of an attached unit.
 _MODEL_TARGETS = frozenset(["this-model"])
+#: Unit-refs that name a unit the buff layer cannot identify with the buffed unit.
+_UNRESOLVED_TARGETS = frozenset(
+    ["event-subject", "event-object", "stratagem-target", "bearer-transport"]
+)
 #: Diagnostic emitted for a model-scoped effect pooled in from an attached member.
 _MODEL_SCOPED_REASON = (
     "model-scoped effect from an attached model: applies to that model only (core rule 19.04)"
@@ -225,6 +229,19 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
     if _is_model_scoped_from_attached_member(node, source):
         out["unsupported"].append({"reason": _MODEL_SCOPED_REASON, "effectFragment": node})
         return
+    # An ability grant reports its own unresolved holders.
+    if (
+        isinstance(node.get("target"), str)
+        and node["target"] in _UNRESOLVED_TARGETS
+        and node.get("type") != "ability-grant"
+    ):
+        out["unsupported"].append(
+            {
+                "reason": f'target "{node["target"]}" is not resolved by the buff engine',
+                "effectFragment": node,
+            }
+        )
+        return
     if opts.get("defaultTarget") is not None and "target" not in node:
         node = {**node, "target": opts["defaultTarget"]}
     # A unit selection reaching the selected unit is a player lever; its eligibility is what the
@@ -361,6 +378,14 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
         for step in node.get("steps") or []:
             _walk(step, source, opts, out)
     elif node_type == "ability-part":
+        if node.get("trigger") is not None:
+            effect = node.get("effect")
+            bound = _selection.bind_event_subject(
+                node["trigger"], effect, opts["context"], opts["perspective"]
+            )
+            if bound is not effect:
+                _walk({**node, "effect": bound}, source, opts, out)
+                return
         part_opts = {**opts, "duration": node.get("duration", opts.get("duration"))}
         if (
             node.get("optional") is True

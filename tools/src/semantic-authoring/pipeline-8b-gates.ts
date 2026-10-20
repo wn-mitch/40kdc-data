@@ -4,6 +4,7 @@ import type Ajv from "ajv";
 import { createValidator } from "../schema-loader.js";
 import { diceTableInvariantErrors } from "../integrity.js";
 import { effectToBuffs, type EffectTranslation } from "../cruncher/from-dsl.js";
+import { assumeEventSubjectMatches } from "../cruncher/from-dsl-selection.js";
 import { grantedRecordIds } from "../data/lever-providers.js";
 import type { BuffSource, EngineContext } from "../cruncher/buffs.js";
 import { tiledSources, type TiledSourceOptions } from "./leaf-view.js";
@@ -322,7 +323,8 @@ async function gateCompiledAbility(
   // effect can express). "Unrecognized shape" is reserved for a damage-path effect the cruncher
   // should be able to model but can't parse — a real gap.
   const source: BuffSource = { kind: "ability", abilityId, abilityKind: "unit" };
-  const newTranslation = effectToBuffs(compiled.mechanics.effect, source, CRUNCHER_CONTEXT);
+  // The record's own trigger binds `event-subject` at runtime; judge the effect as a matching unit sees it.
+  const newTranslation = effectToBuffs(assumeEventSubjectMatches(compiled.mechanics.trigger, compiled.mechanics.effect), source, CRUNCHER_CONTEXT);
   const recordEffect = grantedRecordEffect(dataRoot, factionId);
   const { honestUnknown, outsideDamagePath, unrecognizedShape } = classifyUnsupported(newTranslation.unsupported, recordEffect);
   const crunchShapeOk = unrecognizedShape === 0;

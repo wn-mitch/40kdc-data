@@ -25,6 +25,7 @@ import {
   type EffectTranslation,
   type TranslationPerspective,
 } from "../cruncher/from-dsl.js";
+import { bindEventSubject } from "../cruncher/from-dsl-selection.js";
 import { resolveRecipientSnapshots } from "../cruncher/recipient-snapshots.js";
 import type { Dataset } from "./dataset.js";
 import { describeAbility, type AbilityAppliesTo, type AbilityLike } from "../translate/effect.js";
@@ -304,7 +305,8 @@ export class AbilityView {
       applied: [], activatable: [],
       unsupported: [{ reason: snapshot.reason, effectFragment: this.raw.effect }],
     };
-    const moment = snapshot ? snapshot.effect : triggerGated(this.raw.behavior, this.raw.trigger, resolved);
+    const bound = this.raw.trigger == null ? resolved : bindEventSubject(this.raw.trigger, resolved, ctx, perspective);
+    const moment = snapshot ? snapshot.effect : triggerGated(this.raw.behavior, this.raw.trigger, bound);
     const translated = effectToBuffs(
       moment,
       source,

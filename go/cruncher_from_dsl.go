@@ -148,6 +148,10 @@ func isModelScopedFromAttachedMember(node map[string]any, source map[string]any)
 	return modelTargets[getStr(node, "target")]
 }
 
+// unresolvedTargets are the unit-refs that name a unit the buff layer cannot
+// identify with the buffed unit.
+var unresolvedTargets = map[string]bool{"event-subject": true, "event-object": true, "stratagem-target": true, "bearer-transport": true}
+
 func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslation) {
 	n, ok := asMap(node)
 	if !ok || n == nil {
@@ -168,6 +172,11 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 	}
 	if n["target"] == "model-in-this-unit" {
 		out.unsupported = append(out.unsupported, unsup("model-in-this-unit: individual model identity is unresolved", n))
+		return
+	}
+	// An ability grant reports its own unresolved holders.
+	if t, ok := n["target"].(string); ok && unresolvedTargets[t] && n["type"] != "ability-grant" {
+		out.unsupported = append(out.unsupported, unsup("target \""+t+"\" is not resolved by the buff engine", n))
 		return
 	}
 	if n["type"] == "select-units" {
@@ -302,6 +311,14 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 		partOpts := opts
 		if n["duration"] != nil {
 			partOpts.duration = n["duration"]
+		}
+		if n["trigger"] != nil {
+			if bound, changed := bindEventSubject(n["trigger"], n["effect"], opts.context, opts.perspective); changed {
+				rebound := cloneMap(n)
+				rebound["effect"] = bound
+				dslWalk(rebound, source, opts, out)
+				return
+			}
 		}
 		// A part with its own optionality, cost or usage is an activation.
 		// Otherwise its trigger is only the moment at which its effect fires.

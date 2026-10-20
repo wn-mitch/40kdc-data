@@ -390,8 +390,14 @@ impl Dataset {
                 }
             }
         } else {
-            trigger_gated(raw.get("behavior"), raw.get("trigger"), &resolved)
-                .unwrap_or_else(|| resolved.clone())
+            let bound = crate::cruncher::from_dsl::bind_event_subject(
+                raw.get("trigger"),
+                &resolved,
+                ctx,
+                perspective,
+            )
+            .unwrap_or_else(|| resolved.clone());
+            trigger_gated(raw.get("behavior"), raw.get("trigger"), &bound).unwrap_or(bound)
         };
         let mut translated = effect_to_buffs_with_duration(
             &triggered,

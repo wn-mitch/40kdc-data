@@ -162,7 +162,11 @@ func (a *AbilityView) describeRatedBuffs(source map[string]any, ctx map[string]a
 			}
 		}
 	} else {
-		moment = triggerGated(a.Raw["behavior"], a.Raw["trigger"], resolvedEffect)
+		bound := resolvedEffect
+		if a.Raw["trigger"] != nil {
+			bound, _ = bindEventSubject(a.Raw["trigger"], resolvedEffect, ctx, perspective)
+		}
+		moment = triggerGated(a.Raw["behavior"], a.Raw["trigger"], bound)
 	}
 	translated := effectToBuffs(moment, source, ctx, perspective, map[string]any{"usage": a.Raw["usage"], "duration": mapOr(a.Raw["scope"])["duration"]})
 	rng, ok := auraInches(resolvedEffect)

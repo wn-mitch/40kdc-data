@@ -17,9 +17,11 @@
  * "applies to my unit" (an `aura` container's `friendly-within-aura` likewise).
  * `defender`, a `{owner: "enemy"}` filter, and `enemy-within-aura` are dropped
  * without being marked unsupported — those are defender-side mods and surface
- * from the target's perspective, not the attacker's. Any other binding
- * (`event-subject`, `stratagem-target`, …) is not known to be the buffed unit
- * and contributes nothing.
+ * from the target's perspective, not the attacker's. An `event-subject` under a
+ * trigger naming who acts is bound to the buffed unit or to another unit (see
+ * `bindEventSubject`); any binding still unknown (`event-subject`,
+ * `event-object`, `stratagem-target`, `bearer-transport`) is reported as
+ * unsupported rather than silently dropped.
  *
  * The one exception is core rule 19.04: `this-model` names a single *model*,
  * so when such an effect is pooled in from another member of a combined unit
@@ -37,7 +39,7 @@ import type {
   WeaponKeywordRef,
 } from "./buffs.js";
 import type { Phase } from "../generated.js";
-import { bindEachRecipient, planSelection } from "./from-dsl-selection.js";
+import { bindEachRecipient, bindEventSubject, planSelection } from "./from-dsl-selection.js";
 import { matchesUnitFilter } from "./unit-filter.js";
 import { RECIPIENT_SNAPSHOT_UNAVAILABLE, resolveRecipientSnapshots } from "./recipient-snapshots.js";
 
@@ -160,6 +162,9 @@ function isModelScopedFromAttachedMember(
   return typeof node.target === "string" && MODEL_TARGETS.has(node.target);
 }
 
+/** Unit-refs that name a unit the buff layer cannot identify with the buffed unit. */
+const UNRESOLVED_TARGETS = new Set(["event-subject", "event-object", "stratagem-target", "bearer-transport"]);
+
 /** Aliases the DSL uses when a node specifically calls out "the attacker". */
 const ATTACKER_TARGET = "attacker";
 /** The unit-ref that names the other side of an attack from the attacker's view. */
@@ -235,6 +240,11 @@ function walk(
   }
   if (currentNode.target === "model-in-this-unit") {
     out.unsupported.push({ reason: "model-in-this-unit: individual model identity is unresolved", effectFragment: currentNode });
+    return;
+  }
+  // An ability grant reports its own unresolved holders.
+  if (typeof currentNode.target === "string" && UNRESOLVED_TARGETS.has(currentNode.target) && currentNode.type !== "ability-grant") {
+    out.unsupported.push({ reason: `target "${currentNode.target}" is not resolved by the buff engine`, effectFragment: currentNode });
     return;
   }
   // A unit selection reaching the selected unit is a player lever; its eligibility is what the
@@ -345,6 +355,13 @@ function walk(
       return;
     case "ability-part": {
       const partOpts = currentNode.duration === undefined ? opts : { ...opts, duration: currentNode.duration };
+      if (currentNode.trigger != null) {
+        const bound = bindEventSubject(currentNode.trigger, currentNode.effect, opts.context, opts.perspective);
+        if (bound !== currentNode.effect) {
+          walk({ ...currentNode, effect: bound }, source, opts, out);
+          return;
+        }
+      }
       if (currentNode.optional === true || currentNode.cost != null || currentNode.usage != null) {
         translateNamedEffect(currentNode, source, partOpts, out);
       } else {

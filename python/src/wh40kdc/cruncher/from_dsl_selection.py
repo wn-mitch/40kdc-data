@@ -367,3 +367,70 @@ def friendly_filter_excludes(node: dict[str, Any], opts: dict[str, Any]) -> bool
         and (any_of is None or any(_includes_keyword(keywords, k) for k in any_of))
         and not any(_includes_keyword(keywords, k) for k in none_of)
     )
+
+
+#: The unit-ref naming the unit whose action fired the enclosing trigger.
+_EVENT_SUBJECT = "event-subject"
+
+#: Internal binding: the event's subject is another unit, so the effect never reaches the
+#: buffed unit.
+OTHER_UNIT = "other-unit"
+
+
+def bind_event_subject(
+    trigger: Any, effect: Any, context: EngineContext, perspective: str
+) -> Any:
+    """Bind ``event-subject`` effects when the trigger says who acts.
+
+    ``this-unit`` names the ability's own unit. A friendly unit filter the buffed unit matches
+    names the buffed unit; one it fails names another unit. The binding is left in place when the
+    subject is absent, an enemy, differs across alternative triggers, or cannot be checked, so the
+    translator reports it. A nested ability part with its own trigger binds its own subject.
+    Returns ``effect`` itself when nothing is rebound.
+    """
+    from wh40kdc.cruncher import from_dsl as dsl
+
+    triggers = [
+        item for item in (trigger if isinstance(trigger, list) else [trigger])
+        if isinstance(item, dict)
+    ]
+    if not triggers:
+        return effect
+    subject = triggers[0].get("subject")
+    if any(item.get("subject") != subject for item in triggers):
+        return effect
+    if subject == "this-unit":
+        return _rebind_event_subject(effect, "this-unit")
+    if not isinstance(subject, dict) or subject.get("owner") != "friendly":
+        return effect
+    verdict = dsl._matches_unit_filter(
+        subject, context, "attacker" if perspective == "attacker" else "target"
+    )
+    if verdict == "unknown":
+        return effect
+    # `selected-unit`, not `this-unit`: in a supporting unit's ability `this-unit` names the
+    # provider.
+    return _rebind_event_subject(effect, _SELECTED_UNIT if verdict is True else OTHER_UNIT)
+
+
+def _rebind_event_subject(node: Any, to: str) -> Any:
+    """Returns ``node`` itself when it holds no ``event-subject`` target to rebind."""
+    if isinstance(node, list):
+        children = [_rebind_event_subject(child, to) for child in node]
+        changed = any(child is not orig for child, orig in zip(children, node, strict=True))
+        return children if changed else node
+    if not isinstance(node, dict) or (
+        node.get("type") == "ability-part" and node.get("trigger") is not None
+    ):
+        return node
+    changed = False
+    out: dict[str, Any] = {}
+    for key, value in node.items():
+        out[key] = (
+            to
+            if key == "target" and isinstance(value, str) and value == _EVENT_SUBJECT
+            else _rebind_event_subject(value, to)
+        )
+        if out[key] is not value:
+            changed = True
+    return out if changed else node

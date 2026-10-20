@@ -14,9 +14,9 @@ use serde_json::Value;
 
 use super::applicability::{apply_applicability, label_for_buffs};
 use super::js::*;
-use super::TranslationPerspective::Attacker;
+use super::TranslationPerspective::{self, Attacker};
 use super::{applies_to_buffed_unit, walk, Lever, Out, WalkOpts};
-use crate::cruncher::buffs::AbilityKind;
+use crate::cruncher::buffs::{AbilityKind, EngineContext};
 
 const SELECTED_UNIT: &str = "selected-unit";
 
@@ -227,6 +227,85 @@ pub(crate) fn bind_recipient(node: &Obj, target: Option<&Value>) -> Option<Value
         &mut other,
     );
     (found && !other).then_some(effect)
+}
+
+/// The unit-ref naming the unit whose action fired the enclosing trigger.
+const EVENT_SUBJECT: &str = "event-subject";
+
+/// Internal binding: the event's subject is another unit, so the effect never reaches the buffed
+/// unit.
+const OTHER_UNIT: &str = "other-unit";
+
+/// Bind `event-subject` effects when the trigger says who acts. `this-unit` names the ability's
+/// own unit. A friendly unit filter the buffed unit matches names the buffed unit; one it fails
+/// names another unit. The binding is left in place (`None`) when the subject is absent, an
+/// enemy, differs across alternative triggers, or cannot be checked, so the translator reports
+/// it. A nested ability part with its own trigger binds its own subject. Mirrors TS
+/// `bindEventSubject`; `Some` carries the rebound effect only when a target changed.
+pub(crate) fn bind_event_subject(
+    trigger: Option<&Value>,
+    effect: &Value,
+    context: &EngineContext,
+    perspective: TranslationPerspective,
+) -> Option<Value> {
+    let triggers: Vec<&Obj> = match trigger {
+        Some(Value::Array(alternatives)) => {
+            alternatives.iter().filter_map(Value::as_object).collect()
+        }
+        other => object(other).into_iter().collect(),
+    };
+    let subject = triggers.first()?.get("subject");
+    if triggers.iter().any(|item| item.get("subject") != subject) {
+        return None;
+    }
+    if subject.and_then(Value::as_str) == Some("this-unit") {
+        return rebind_event_subject(effect, "this-unit");
+    }
+    let filter =
+        subject.filter(|s| object(Some(s)).is_some_and(|f| is_str(f, "owner", "friendly")))?;
+    let verdict = super::conditions::matches_unit_filter(filter, context, perspective, "friendly")?;
+    // `selected-unit`, not `this-unit`: in a supporting unit's ability `this-unit` names the provider.
+    rebind_event_subject(effect, if verdict { SELECTED_UNIT } else { OTHER_UNIT })
+}
+
+/// The effect with each `event-subject` target rebound to `to`, or `None` when it holds none.
+fn rebind_event_subject(node: &Value, to: &str) -> Option<Value> {
+    match node {
+        Value::Array(children) => {
+            let rebound: Vec<Option<Value>> = children
+                .iter()
+                .map(|child| rebind_event_subject(child, to))
+                .collect();
+            rebound.iter().any(Option::is_some).then(|| {
+                Value::Array(
+                    rebound
+                        .into_iter()
+                        .zip(children)
+                        .map(|(bound, child)| bound.unwrap_or_else(|| child.clone()))
+                        .collect(),
+                )
+            })
+        }
+        Value::Object(o)
+            if !(is_str(o, "type", "ability-part") && present(o, "trigger").is_some()) =>
+        {
+            let mut changed = false;
+            let out: Obj = o
+                .iter()
+                .map(|(key, value)| {
+                    let bound = if key == "target" && value.as_str() == Some(EVENT_SUBJECT) {
+                        Some(Value::from(to))
+                    } else {
+                        rebind_event_subject(value, to)
+                    };
+                    changed |= bound.is_some();
+                    (key.clone(), bound.unwrap_or_else(|| value.clone()))
+                })
+                .collect();
+            changed.then_some(Value::Object(out))
+        }
+        _ => None,
+    }
 }
 
 /// Does the effect name the selected unit as a target anywhere, outside a nested selection?

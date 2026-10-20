@@ -484,3 +484,101 @@ func friendlyFilterExcludes(node map[string]any, opts dslOpts) bool {
 	}
 	return false
 }
+
+// eventSubject is the unit-ref naming the unit whose action fired the enclosing trigger.
+const eventSubject = "event-subject"
+
+// otherUnit is the internal binding for an event subject that is another unit, so the
+// effect never reaches the buffed unit.
+const otherUnit = "other-unit"
+
+// bindEventSubject binds `event-subject` effects when the trigger says who acts.
+// `this-unit` names the ability's own unit. A friendly unit filter the buffed unit
+// matches names the buffed unit; one it fails names another unit. The binding is
+// left in place when the subject is absent, an enemy, differs across alternative
+// triggers, or cannot be checked, so the translator reports it. A nested ability
+// part with its own trigger binds its own subject. changed reports whether any
+// target was rebound. Mirror of bindEventSubject in
+// tools/src/cruncher/from-dsl-selection.ts.
+func bindEventSubject(trigger, effect any, context map[string]any, perspective string) (any, bool) {
+	var triggers []map[string]any
+	items, isList := asList(trigger)
+	if !isList {
+		items = []any{trigger}
+	}
+	for _, item := range items {
+		if m, ok := item.(map[string]any); ok && m != nil {
+			triggers = append(triggers, m)
+		}
+	}
+	if len(triggers) == 0 {
+		return effect, false
+	}
+	subject := triggers[0]["subject"]
+	for _, item := range triggers {
+		if !jsonEqual(item["subject"], subject) {
+			return effect, false
+		}
+	}
+	if subject == "this-unit" {
+		return rebindEventSubject(effect, "this-unit")
+	}
+	filter, ok := subject.(map[string]any)
+	if !ok || filter == nil || filter["owner"] != "friendly" {
+		return effect, false
+	}
+	side := "target"
+	if perspective == "attacker" {
+		side = "attacker"
+	}
+	switch matchesUnitFilter(filter, context, side, "friendly") {
+	case true:
+		// `selected-unit`, not `this-unit`: in a supporting unit's ability `this-unit` names the provider.
+		return rebindEventSubject(effect, selectedUnit)
+	case false:
+		return rebindEventSubject(effect, otherUnit)
+	default:
+		return effect, false
+	}
+}
+
+// rebindEventSubject rewrites every `event-subject` target to `to`, returning node
+// itself and false when it holds none to rebind.
+func rebindEventSubject(node any, to string) (any, bool) {
+	switch value := node.(type) {
+	case []any:
+		out := make([]any, len(value))
+		changed := false
+		for i, child := range value {
+			bound, childChanged := rebindEventSubject(child, to)
+			out[i] = bound
+			changed = changed || childChanged
+		}
+		if !changed {
+			return node, false
+		}
+		return out, true
+	case map[string]any:
+		if value == nil || (value["type"] == "ability-part" && value["trigger"] != nil) {
+			return node, false
+		}
+		out := make(map[string]any, len(value))
+		changed := false
+		for key, child := range value {
+			if key == "target" && child == eventSubject {
+				out[key] = to
+				changed = true
+				continue
+			}
+			bound, childChanged := rebindEventSubject(child, to)
+			out[key] = bound
+			changed = changed || childChanged
+		}
+		if !changed {
+			return node, false
+		}
+		return out, true
+	default:
+		return node, false
+	}
+}
