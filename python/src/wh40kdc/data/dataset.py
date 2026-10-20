@@ -582,6 +582,7 @@ class Dataset:
             combined_unit,
             enhancement_levers,
             resolve_cap_raises,
+            shared_keywords_lower,
         )
 
         buffs: list[dict[str, Any]] = []
@@ -604,6 +605,8 @@ class Dataset:
         ctx = self._derived_context(input, context)
         if ctx.get("attackerKeywords") is None and combined:
             ctx["attackerKeywords"] = combined_keywords_lower(combined)
+        if ctx.get("attackerModelKeywords") is None and combined:
+            ctx["attackerModelKeywords"] = shared_keywords_lower(combined)
 
         # Intrinsic weapon-profile keywords — always on. Weapon ids are
         # shared across factions with divergent stats, so resolve within the
@@ -706,7 +709,7 @@ class Dataset:
         self, input: dict[str, Any], context: dict[str, Any], perspective: str
     ) -> list[dict[str, Any]]:
         """Shared implementation for buffs_for / defensive_buffs_for."""
-        from wh40kdc.data.lever_providers import combined_keywords_lower
+        from wh40kdc.data.lever_providers import combined_keywords_lower, shared_keywords_lower
 
         out: list[dict[str, Any]] = []
         unit = (
@@ -727,6 +730,7 @@ class Dataset:
             if member is not None:
                 combined.append(member)
         keywords = combined_keywords_lower(combined) if combined else None
+        model_keywords = shared_keywords_lower(combined) if combined else None
         attached = bool(input.get("attachedUnitIds"))
         roles = input.get("attachmentRoles")
         if perspective == "attacker":
@@ -751,6 +755,11 @@ class Dataset:
                     keywords
                     if context.get("attackerKeywords") is None
                     else context["attackerKeywords"]
+                ),
+                "attackerModelKeywords": (
+                    model_keywords
+                    if context.get("attackerModelKeywords") is None
+                    else context["attackerModelKeywords"]
                 ),
                 "attachmentRoles": (
                     roles
@@ -780,6 +789,11 @@ class Dataset:
                     keywords
                     if context.get("targetKeywords") is None
                     else context["targetKeywords"]
+                ),
+                "targetModelKeywords": (
+                    model_keywords
+                    if context.get("targetModelKeywords") is None
+                    else context["targetModelKeywords"]
                 ),
                 "attachmentRoles": (
                     roles

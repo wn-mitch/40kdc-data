@@ -200,4 +200,22 @@ describe("Dataset.stackableBuffsFor: costs and providers", () => {
       expect(result.buffs.some((lever) => lever.id.startsWith("fix-grant-rule>"))).toBe(false);
     }
   });
+
+  it("resolves a model-level keyword recipient from the keywords every model of the combined unit carries", () => {
+    const raw = armyRaw();
+    const reroll = (all_of: string[]) => ({ type: "re-roll", target: { owner: "friendly", level: "model", all_of }, modifier: { roll: "hit", subset: "ones" } });
+    raw.units = raw.units.map((record) => record.id === "fix-boss"
+      ? { ...record, ability_ids: ["fix-orks-models", "fix-character-models"] }
+      : record) as never;
+    raw.abilities = [...raw.abilities, ability("fix-orks-models", "unit", reroll(["ORKS"])), ability("fix-character-models", "unit", reroll(["CHARACTER"]))] as never;
+    const army = new Dataset(raw);
+    const buffsOf = (input: Parameters<Dataset["stackableBuffsFor"]>[0], abilityId: string) => army.stackableBuffsFor(input, { phase: "fight" }).buffs
+      .filter((lever) => lever.source.kind === "ability" && lever.source.abilityId === abilityId)
+      .flatMap((lever) => lever.buffs);
+    const led = { ...mob, attachedUnitIds: ["fix-boss"] };
+    // Every model of the mob and its boss is ORKS; only the boss's models are CHARACTER.
+    expect(buffsOf(led, "fix-orks-models")).not.toEqual([]);
+    expect(buffsOf(led, "fix-character-models")).toEqual([]);
+    expect(buffsOf({ unitId: "fix-boss", factionId: "orks" }, "fix-character-models")).not.toEqual([]);
+  });
 });

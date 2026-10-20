@@ -54,6 +54,7 @@ import { historicalSnapshotAbilities } from "./recipient-snapshots.js";
 import {
   abilityLevers,
   combinedKeywordsLower,
+  sharedKeywordsLower,
   enhancementLevers,
   resolveCapRaises,
   type AbilityLevers,
@@ -697,6 +698,7 @@ export class Dataset {
       attackerAttached:
         context.attackerAttached ?? (input.attachedUnitIds?.length ?? 0) > 0,
       attackerKeywords: context.attackerKeywords ?? (combined.length > 0 ? combinedKeywordsLower(combined) : undefined),
+      attackerModelKeywords: context.attackerModelKeywords ?? (combined.length > 0 ? sharedKeywordsLower(combined) : undefined),
       attackerUnitId: context.attackerUnitId ?? input.unitId,
       attackerAttachmentRole: context.attackerAttachmentRole ?? input.attachmentRoles?.[input.unitId],
       attachmentRoles: context.attachmentRoles ?? input.attachmentRoles,
@@ -781,6 +783,7 @@ export class Dataset {
     }
     // Explicit game-state facts win. Roles come only from actual attachment edges.
     const keywords = combined.length > 0 ? combinedKeywordsLower(combined) : undefined;
+    const modelKeywords = combined.length > 0 ? sharedKeywordsLower(combined) : undefined;
     const attached = (input.attachedUnitIds?.length ?? 0) > 0;
     const ctx: EngineContext = perspective === "attacker" ? {
       ...context,
@@ -788,6 +791,7 @@ export class Dataset {
       attackerUnitId: context.attackerUnitId ?? input.unitId,
       attackerAttachmentRole: context.attackerAttachmentRole ?? input.attachmentRoles?.[input.unitId],
       attackerKeywords: context.attackerKeywords ?? keywords,
+      attackerModelKeywords: context.attackerModelKeywords ?? modelKeywords,
       attachmentRoles: context.attachmentRoles ?? input.attachmentRoles,
     } : {
       ...context,
@@ -795,6 +799,7 @@ export class Dataset {
       targetUnitId: context.targetUnitId ?? input.unitId,
       targetAttachmentRole: context.targetAttachmentRole ?? input.attachmentRoles?.[input.unitId],
       targetKeywords: context.targetKeywords ?? keywords,
+      targetModelKeywords: context.targetModelKeywords ?? modelKeywords,
       attachmentRoles: context.attachmentRoles ?? input.attachmentRoles,
     };
 

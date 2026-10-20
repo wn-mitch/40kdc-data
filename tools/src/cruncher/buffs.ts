@@ -176,6 +176,14 @@ export type EngineContext = {
   /** Target keywords (union of unit.keywords + faction_keywords), lower-cased. */
   targetKeywords?: ReadonlyArray<string>;
   /**
+   * Keywords every model making the attack carries, lower-cased: the keywords and faction keywords
+   * shared by the attacking datasheets. Resolves model-level keyword filters; absent leaves them
+   * unknown unless `attackerKeywords` rules every model out.
+   */
+  attackerModelKeywords?: ReadonlyArray<string>;
+  /** Keywords every model of the target carries, lower-cased; the target-side counterpart of {@link attackerModelKeywords}. */
+  targetModelKeywords?: ReadonlyArray<string>;
+  /**
    * Sub-phase timing flag (e.g. `"start-of-phase"`, `"end-of-phase"`,
    * `"on-destroyed"`). Consumed by the `timing-is` condition. Left undefined
    * when the caller can't pin a sub-phase down — the condition then evaluates

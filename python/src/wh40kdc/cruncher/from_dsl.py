@@ -2454,9 +2454,22 @@ def _matches_unit_filter(
         if not isinstance(value, list) or not all(isinstance(item, str) for item in value):
             return "unknown"
         predicates[key] = value
-    if filt.get("level") == "model" and predicates:
-        unknown = True
-    if predicates:
+    model_predicate = filt.get("level") == "model" and bool(predicates)
+    every_model_matches = False
+    if model_predicate:
+        verdict = _model_keyword_verdict(
+            predicates,
+            _context_keywords(
+                ctx.get("attackerModelKeywords" if side == "attacker" else "targetModelKeywords")
+            ),
+            _context_keywords(keywords),
+        )
+        if verdict is False:
+            return False
+        if verdict == "unknown":
+            unknown = True
+        every_model_matches = verdict is True
+    elif predicates:
         if not isinstance(keywords, list) or not all(isinstance(item, str) for item in keywords):
             unknown = True
         elif not unit_matches_applies_to(predicates, keywords):
@@ -2575,6 +2588,14 @@ def _matches_unit_filter(
         elif (
             key == "level"
             and value == "model"
+            and every_model_matches
+            and filt.get("attachment_role") is None
+        ):
+            # Every model meets the keyword predicate, so the filter selects the whole unit.
+            continue
+        elif (
+            key == "level"
+            and value == "model"
             and filt.get("attachment_role") is not None
             and member_side
         ):
@@ -2592,6 +2613,37 @@ def _matches_unit_filter(
         else:
             unknown = True
     return "unknown" if unknown else True
+
+
+def _context_keywords(value: Any) -> list[str] | None:
+    """A context keyword list, or None when absent or malformed."""
+    if isinstance(value, list) and all(isinstance(item, str) for item in value):
+        return value
+    return None
+
+
+def _model_keyword_verdict(
+    predicates: dict[str, list[str]],
+    every: list[str] | None,
+    most: list[str] | None,
+) -> bool | str:
+    """A keyword predicate over a unit's models: True when every model meets it, False when no
+    model can, else "unknown". Every model carries ``every`` and none carries more than ``most``.
+    Clauses that need more keywords (all_of, any_of) are settled for every model by ``every`` and
+    for none by ``most``; clauses that need fewer (none_of, not_all_of) the other way round.
+    """
+    all_models = True
+    for key in ("all_of", "any_of", "none_of", "not_all_of"):
+        value = predicates.get(key)
+        if value is None:
+            continue
+        clause = {key: value}
+        least, upper = (every, most) if key in ("all_of", "any_of") else (most, every)
+        if upper is not None and not unit_matches_applies_to(clause, upper):
+            return False
+        if least is None or not unit_matches_applies_to(clause, least):
+            all_models = False
+    return True if all_models else "unknown"
 
 
 #: States the context lists per unit; the rest are fixed for a unit in an attack, or unknown.

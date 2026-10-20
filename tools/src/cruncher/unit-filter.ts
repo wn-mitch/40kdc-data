@@ -8,8 +8,13 @@ type Side = "attacker" | "target";
 /** States the context lists per unit; the rest are fixed for a unit in an attack, or unknown. */
 const LISTED_STATES: ReadonlySet<string> = new Set<UnitState>(["engaged", "battle-shocked", "hidden"]);
 
+type KeywordPredicate = { all_of?: string[]; any_of?: string[]; none_of?: string[]; not_all_of?: string[] };
+
 /**
- * Evaluate only facts present in the crunch; never infer model membership from keywords. `owner`
+ * Evaluate only facts present in the crunch; never infer model membership from keywords. A
+ * model-level keyword predicate holds when every model of the unit meets it and fails when none
+ * can: each model carries at least the context's model keywords and at most the unit's keywords.
+ * `owner`
  * says whose the filter is relative to the filtered unit: the ability belongs to `side` when the
  * unit is friendly, and to the other side when it is an enemy.
  */
@@ -17,7 +22,7 @@ export function matchesUnitFilter(filter: unknown, context: EngineContext, side:
   if (!isObject(filter)) return "unknown";
   const abilitySide: Side = owner === "friendly" ? side : side === "attacker" ? "target" : "attacker";
   let unknown = false;
-  const predicate: { all_of?: string[]; any_of?: string[]; none_of?: string[]; not_all_of?: string[] } = {};
+  const predicate: KeywordPredicate = {};
   const memberSide = filter.member_of === "this-unit" ||
     (side === "attacker" ? filter.member_of === "attacker" : filter.member_of === "defender");
   const keywords = side === "attacker" ? context.attackerKeywords : context.targetKeywords;
@@ -27,8 +32,14 @@ export function matchesUnitFilter(filter: unknown, context: EngineContext, side:
     if (!Array.isArray(value) || !value.every((item): item is string => typeof item === "string")) return "unknown";
     predicate[key] = value;
   }
-  if (filter.level === "model" && Object.keys(predicate).length > 0) unknown = true;
-  if (Object.keys(predicate).length > 0) {
+  const modelPredicate = filter.level === "model" && Object.keys(predicate).length > 0;
+  let everyModelMatches = false;
+  if (modelPredicate) {
+    const verdict = modelKeywordVerdict(predicate, side === "attacker" ? context.attackerModelKeywords : context.targetModelKeywords, keywords);
+    if (verdict === false) return false;
+    if (verdict === "unknown") unknown = true;
+    everyModelMatches = verdict === true;
+  } else if (Object.keys(predicate).length > 0) {
     if (keywords === undefined) unknown = true;
     else if (!keywordMatchesPredicate(predicate, keywords)) return false;
   }
@@ -86,6 +97,9 @@ export function matchesUnitFilter(filter: unknown, context: EngineContext, side:
       else if (context.distanceInches > range.inches) return false;
     } else if (key === "level" && value === "unit") {
       continue;
+    } else if (key === "level" && value === "model" && everyModelMatches && filter.attachment_role === undefined) {
+      // Every model of the unit meets the keyword predicate, so the filter selects the whole unit.
+      continue;
     } else if (key === "level" && value === "model" && filter.attachment_role !== undefined && memberSide) {
       // The selected unit's actual membership can identify its whole bodyguard/leader model pool.
       continue;
@@ -100,6 +114,25 @@ export function matchesUnitFilter(filter: unknown, context: EngineContext, side:
     }
   }
   return unknown ? "unknown" : true;
+}
+
+/**
+ * A keyword predicate over a unit's models: true when every model meets it, false when no model
+ * can, else unknown. Every model carries `every` and no model carries more than `any`. Clauses that
+ * need more keywords (all_of, any_of) are settled for every model by `every` and for none by `any`;
+ * clauses that need fewer (none_of, not_all_of) the other way round.
+ */
+function modelKeywordVerdict(predicate: KeywordPredicate, every: readonly string[] | undefined, any: readonly string[] | undefined): FilterVerdict {
+  let allModels = true;
+  for (const key of ["all_of", "any_of", "none_of", "not_all_of"] as const) {
+    const value = predicate[key];
+    if (value === undefined) continue;
+    const clause = { [key]: value };
+    const [least, most] = key === "all_of" || key === "any_of" ? [every, any] : [any, every];
+    if (most !== undefined && !keywordMatchesPredicate(clause, most)) return false;
+    if (least === undefined || !keywordMatchesPredicate(clause, least)) allModels = false;
+  }
+  return allModels ? true : "unknown";
 }
 
 /**

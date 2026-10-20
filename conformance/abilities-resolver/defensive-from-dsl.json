@@ -649,6 +649,50 @@
       }
     },
     {
+      "caseId": "model-keywords/target-every-model",
+      "abilityId": "fabricated-model-keywords",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-model-keywords",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": {
+          "owner": "friendly",
+          "level": "model",
+          "all_of": [
+            "INFANTRY"
+          ]
+        },
+        "modifier": {
+          "threshold": 5
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "targetKeywords": [
+          "infantry",
+          "death guard"
+        ],
+        "targetModelKeywords": [
+          "infantry",
+          "death guard"
+        ]
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [
+          {
+            "type": "feel-no-pain",
+            "threshold": 5
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
       "caseId": "canonical/recipient-snapshot/attested-toughness-after-detachment",
       "abilityId": "snapshot-example",
       "source": {

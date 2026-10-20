@@ -2178,6 +2178,53 @@ func singleKeyword(params map[string]any) (string, bool) {
 	return kw, ok
 }
 
+// contextKeywordList reads a context keyword list; ok is false when it is absent or holds a
+// non-string.
+func contextKeywordList(raw any) ([]string, bool) {
+	items, ok := asList(raw)
+	if !ok {
+		return nil, false
+	}
+	out := make([]string, 0, len(items))
+	for _, item := range items {
+		text, ok := item.(string)
+		if !ok {
+			return nil, false
+		}
+		out = append(out, text)
+	}
+	return out, true
+}
+
+// modelKeywordVerdict evaluates a keyword predicate over a unit's models: true when every model
+// meets it, false when no model can, else nil. Every model carries every and none carries more
+// than most. Clauses that need more keywords (all_of, any_of) are settled for every model by
+// every and for none by most; clauses that need fewer (none_of, not_all_of) the other way round.
+func modelKeywordVerdict(predicates map[string]any, every []string, everyKnown bool, most []string, mostKnown bool) any {
+	allModels := true
+	for _, key := range []string{"all_of", "any_of", "none_of", "not_all_of"} {
+		value, present := predicates[key]
+		if !present {
+			continue
+		}
+		clause := map[string]any{key: value}
+		least, leastKnown, upper, upperKnown := every, everyKnown, most, mostKnown
+		if key == "none_of" || key == "not_all_of" {
+			least, leastKnown, upper, upperKnown = most, mostKnown, every, everyKnown
+		}
+		if upperKnown && !unitMatchesAppliesTo(clause, upper) {
+			return false
+		}
+		if !leastKnown || !unitMatchesAppliesTo(clause, least) {
+			allModels = false
+		}
+	}
+	if allModels {
+		return true
+	}
+	return nil
+}
+
 // matchesUnitFilter evaluates only unit facts carried by the crunch context.
 // It returns bool, or nil when a board, model, or relationship fact is unavailable.
 //
@@ -2217,10 +2264,24 @@ func matchesUnitFilter(filter, ctx map[string]any, side, owner string) any {
 		}
 		predicates[key] = items
 	}
-	if filter["level"] == "model" && len(predicates) > 0 {
-		unknown = true
-	}
-	if len(predicates) > 0 {
+	modelPredicate := filter["level"] == "model" && len(predicates) > 0
+	everyModelMatches := false
+	if modelPredicate {
+		modelKeywordsKey := "targetModelKeywords"
+		if side == "attacker" {
+			modelKeywordsKey = "attackerModelKeywords"
+		}
+		every, everyKnown := contextKeywordList(ctx[modelKeywordsKey])
+		most, mostKnown := contextKeywordList(ctx[keywordsKey])
+		switch verdict := modelKeywordVerdict(predicates, every, everyKnown, most, mostKnown); verdict {
+		case false:
+			return false
+		case nil:
+			unknown = true
+		default:
+			everyModelMatches = true
+		}
+	} else if len(predicates) > 0 {
 		rawKeywords, present := asList(ctx[keywordsKey])
 		if !present {
 			unknown = true
@@ -2394,6 +2455,10 @@ func matchesUnitFilter(filter, ctx map[string]any, side, owner string) any {
 			}
 		case "level":
 			if value == "unit" || (value == "model" && filter["attachment_role"] != nil && memberSide) {
+				continue
+			}
+			// Every model of the unit meets the keyword predicate, so the filter selects the whole unit.
+			if value == "model" && everyModelMatches && filter["attachment_role"] == nil {
 				continue
 			}
 			unknown = true

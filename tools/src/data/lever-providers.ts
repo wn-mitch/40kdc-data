@@ -19,6 +19,16 @@ export function combinedKeywordsLower(units: readonly UnitView[]): string[] {
 }
 
 /**
+ * Lower-cased keywords and faction keywords every one of the units carries. The data lists keywords
+ * per datasheet, so these are the keywords every model of the combined unit carries.
+ */
+export function sharedKeywordsLower(units: readonly UnitView[]): string[] {
+  const [first, ...rest] = units.map((unit) => new Set(combinedKeywordsLower([unit])));
+  if (!first) return [];
+  return [...first].filter((keyword) => rest.every((keywords) => keywords.has(keyword)));
+}
+
+/**
  * Whether `bearer` can take `enhancement` under the Select Enhancements rules the roster validator
  * enforces: a CHARACTER (or an Upgrade), not an EPIC HERO, with a model that may take
  * Enhancements, carrying every keyword of one restriction group and none of the exclusions.

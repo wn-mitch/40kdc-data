@@ -4071,6 +4071,219 @@
       }
     },
     {
+      "caseId": "model-keywords/every-model-carries",
+      "abilityId": "fabricated-model-keywords",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-model-keywords",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "re-roll",
+        "target": {
+          "owner": "friendly",
+          "level": "model",
+          "all_of": [
+            "DEATH GUARD"
+          ]
+        },
+        "modifier": {
+          "roll": "hit",
+          "subset": "ones"
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerKeywords": [
+          "death guard",
+          "infantry",
+          "character"
+        ],
+        "attackerModelKeywords": [
+          "death guard",
+          "infantry"
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "reroll",
+            "roll": "hit",
+            "subset": "ones"
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "model-keywords/some-models-carry",
+      "abilityId": "fabricated-model-keywords",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-model-keywords",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "re-roll",
+        "target": {
+          "owner": "friendly",
+          "level": "model",
+          "all_of": [
+            "CHARACTER"
+          ]
+        },
+        "modifier": {
+          "roll": "hit",
+          "subset": "ones"
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerKeywords": [
+          "death guard",
+          "infantry",
+          "character"
+        ],
+        "attackerModelKeywords": [
+          "death guard",
+          "infantry"
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "unit-filter target: identity, state or model membership is unresolved"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "model-keywords/no-model-carries",
+      "abilityId": "fabricated-model-keywords",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-model-keywords",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "re-roll",
+        "target": {
+          "owner": "friendly",
+          "level": "model",
+          "all_of": [
+            "VEHICLE"
+          ]
+        },
+        "modifier": {
+          "roll": "hit",
+          "subset": "ones"
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerKeywords": [
+          "death guard",
+          "infantry",
+          "character"
+        ],
+        "attackerModelKeywords": [
+          "death guard",
+          "infantry"
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "model-keywords/some-models-lack",
+      "abilityId": "fabricated-model-keywords",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-model-keywords",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "re-roll",
+        "target": {
+          "owner": "friendly",
+          "level": "model",
+          "none_of": [
+            "CHARACTER"
+          ]
+        },
+        "modifier": {
+          "roll": "hit",
+          "subset": "ones"
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerKeywords": [
+          "death guard",
+          "infantry",
+          "character"
+        ],
+        "attackerModelKeywords": [
+          "death guard",
+          "infantry"
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "unit-filter target: identity, state or model membership is unresolved"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "model-keywords/model-keywords-absent",
+      "abilityId": "fabricated-model-keywords",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-model-keywords",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "re-roll",
+        "target": {
+          "owner": "friendly",
+          "level": "model",
+          "all_of": [
+            "DEATH GUARD"
+          ]
+        },
+        "modifier": {
+          "roll": "hit",
+          "subset": "ones"
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerKeywords": [
+          "death guard",
+          "infantry",
+          "character"
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "unit-filter target: identity, state or model membership is unresolved"
+        ],
+        "activatable": []
+      }
+    },
+    {
       "caseId": "canonical/recipient-snapshot/attested-strength-after-detachment",
       "abilityId": "snapshot-example",
       "source": {

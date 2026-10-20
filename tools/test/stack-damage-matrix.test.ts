@@ -217,8 +217,10 @@ describe("stack damage loadout search performance", () => {
       broadResults: 4,
       deepFinalists: 1,
     });
-    // Broadsides are BATTLESUITs; Guardsmen (10 models) meet Arro'kon's 6+ band for Sustained Hits 1.
-    expect(withBroadside.winner?.expectedDamage).toBeCloseTo(53.79629629629628, 12);
+    // Broadsides are BATTLESUITs; Guardsmen (10 models) meet Arro'kon's 6+ band for Sustained Hits 1,
+    // and every Broadside model is a BATTLESUIT, so Bonded Heroes' model-level +1 S and AP applies.
+    expect(withBroadside.winner?.expectedDamage).toBeCloseTo(59.84567901234567, 12);
+    expect(withBroadside.winner?.selectedLevers.map((lever) => lever.id)).toContain("detachment:bonded-heroes-tau-empire");
     expect(withBroadside.winner?.stratagem?.id).toBe("the-arrokon-protocol-retaliation-cadre-tau-empire");
     expect(withBroadside.winner?.members[0]).toMatchObject({
       unitId: "broadside-battlesuits",

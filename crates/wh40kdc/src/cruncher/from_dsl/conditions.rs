@@ -381,6 +381,58 @@ pub(crate) fn matches_unit_filter(
     evaluate_filter(filter, keywords, owner, Some((context, side)))
 }
 
+const KEYWORD_CLAUSES: [&str; 4] = ["all_of", "any_of", "none_of", "not_all_of"];
+
+/// Whether one keyword clause holds for a keyword set; keywords compare by `keyword_key`.
+fn clause_holds(clause: &str, list: &[&str], keywords: &[String]) -> bool {
+    let has = |keyword: &&str| {
+        let key = crate::scope::keyword_key(keyword);
+        keywords
+            .iter()
+            .any(|owned| crate::scope::keyword_key(owned) == key)
+    };
+    match clause {
+        "all_of" => list.iter().all(has),
+        "any_of" => list.iter().any(has),
+        "none_of" => !list.iter().any(has),
+        _ => !list.iter().all(has),
+    }
+}
+
+/// A keyword predicate over a unit's models: `Some(true)` when every model meets it, `Some(false)`
+/// when no model can, else `None`. Every model carries `every` and none carries more than `most`.
+/// Clauses that need more keywords (all_of, any_of) are settled for every model by `every` and for
+/// none by `most`; clauses that need fewer (none_of, not_all_of) the other way round. The outer
+/// `None` is a malformed clause.
+fn model_keyword_verdict(
+    f: &Obj,
+    every: Option<&[String]>,
+    most: Option<&[String]>,
+) -> Option<Option<bool>> {
+    let mut all_models = true;
+    for clause in KEYWORD_CLAUSES {
+        let Some(value) = f.get(clause) else {
+            continue;
+        };
+        let list = keyword_list(Some(value))?;
+        if list.is_empty() {
+            continue;
+        }
+        let (least, upper) = if clause == "all_of" || clause == "any_of" {
+            (every, most)
+        } else {
+            (most, every)
+        };
+        if upper.is_some_and(|upper| !clause_holds(clause, &list, upper)) {
+            return Some(Some(false));
+        }
+        if !least.is_some_and(|least| clause_holds(clause, &list, least)) {
+            all_models = false;
+        }
+    }
+    Some(all_models.then_some(true))
+}
+
 fn evaluate_filter(
     filter: &Value,
     keywords: Option<&[String]>,
@@ -401,8 +453,27 @@ fn evaluate_filter(
                 },
             )
         });
+    // A model-level keyword predicate is settled for the whole unit from the keywords every model
+    // carries and the keywords any model carries; see `model_keyword_verdict`.
+    let model_predicate = is_str(f, "level", "model")
+        && context.is_some()
+        && KEYWORD_CLAUSES.iter().any(|clause| f.contains_key(*clause));
+    let mut every_model_matches = false;
+    if let Some((ctx, side)) = context.filter(|_| model_predicate) {
+        let every = if side == TranslationPerspective::Attacker {
+            ctx.attacker_model_keywords.as_deref()
+        } else {
+            ctx.target_model_keywords.as_deref()
+        };
+        match model_keyword_verdict(f, every, keywords)? {
+            Some(false) => return Some(false),
+            None => unknown = true,
+            Some(true) => every_model_matches = true,
+        }
+    }
     for (key, value) in f {
         match key.as_str() {
+            "all_of" | "any_of" | "none_of" | "not_all_of" if model_predicate => {}
             "all_of" | "any_of" | "none_of" | "not_all_of" => {
                 let list = keyword_list(Some(value))?;
                 if is_str(f, "level", "model") {
@@ -415,19 +486,7 @@ fn evaluate_filter(
                     unknown = true;
                     continue;
                 };
-                let has = |keyword: &&str| {
-                    let key = crate::scope::keyword_key(keyword);
-                    keywords
-                        .iter()
-                        .any(|owned| crate::scope::keyword_key(owned) == key)
-                };
-                let holds = match key.as_str() {
-                    "all_of" => list.iter().all(has),
-                    "any_of" => list.iter().any(has),
-                    "none_of" => !list.iter().any(has),
-                    _ => !list.iter().all(has),
-                };
-                if !holds {
+                if !clause_holds(key, &list, keywords) {
                     return Some(false);
                 }
             }
@@ -459,6 +518,11 @@ fn evaluate_filter(
                 }
             }
             "level" if value.as_str() == Some("unit") => {}
+            // Every model of the unit meets the keyword predicate, so the filter selects the whole unit.
+            "level"
+                if value.as_str() == Some("model")
+                    && every_model_matches
+                    && !f.contains_key("attachment_role") => {}
             "level"
                 if value.as_str() == Some("model")
                     && f.contains_key("attachment_role")

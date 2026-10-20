@@ -346,3 +346,37 @@ def test_enhancement_for_a_character_at_its_points_one_per_bearer_none_to_epic_h
     assert not any(id_.startswith("enhancement:") for id_ in mob_levers)
     hero_levers, _ = by_id({**MOB, "attachedUnitIds": ["fix-hero"]})
     assert not any(id_.startswith("enhancement:") for id_ in hero_levers)
+
+
+def test_model_level_keyword_recipient_reads_every_models_keywords() -> None:
+    def reroll(all_of: list[str]) -> dict[str, Any]:
+        return {
+            "type": "re-roll",
+            "target": {"owner": "friendly", "level": "model", "all_of": all_of},
+            "modifier": {"roll": "hit", "subset": "ones"},
+        }
+
+    raw = army_raw()
+    for record in raw["units"]:
+        if record["id"] == "fix-boss":
+            record["ability_ids"] = ["fix-orks-models", "fix-character-models"]
+    raw["abilities"] += [
+        ability("fix-orks-models", "unit", reroll(["ORKS"])),
+        ability("fix-character-models", "unit", reroll(["CHARACTER"])),
+    ]
+    ds = Dataset(raw)
+
+    def buffs_of(input_: dict[str, Any], ability_id: str) -> list[Any]:
+        result = ds.stackable_buffs_for(input_, {"phase": "fight"})
+        return [
+            buff
+            for lever in result["buffs"]
+            if lever["source"].get("abilityId") == ability_id
+            for buff in lever["buffs"]
+        ]
+
+    led = {**MOB, "attachedUnitIds": ["fix-boss"]}
+    # Every model of the mob and its boss is ORKS; only the boss's models are CHARACTER.
+    assert buffs_of(led, "fix-orks-models") != []
+    assert buffs_of(led, "fix-character-models") == []
+    assert buffs_of({"unitId": "fix-boss", "factionId": "orks"}, "fix-character-models") != []

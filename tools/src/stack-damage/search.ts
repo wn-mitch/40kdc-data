@@ -30,6 +30,12 @@ function unitKeywords(members: readonly StackMember[]): string[] {
   return [...values].sort();
 }
 
+/** Lower-cased keywords every one of the members carries. */
+function sharedKeywords(members: readonly StackMember[]): string[] {
+  const [first, ...rest] = members.map((member) => new Set(unitKeywords([member])));
+  return first ? [...first].filter((keyword) => rest.every((keywords) => keywords.has(keyword))).sort() : [];
+}
+
 /** A unit's per-model Wounds when every model is unhurt, from its first profile. */
 function freshWounds(unit: Unit): { remaining: number; starting: number } | undefined {
   const wounds = unit.profiles?.[0]?.W;
@@ -58,10 +64,13 @@ function contextForCell(factionId: string, target: ResolvedTarget, phase: Compar
     armyFaction: factionId,
     attackerAttached: spec.members.length > 1,
     attackerKeywords: unitKeywords(spec.members),
+    // The member's own models make its attacks; without a member, only keywords every member shares.
+    attackerModelKeywords: member ? unitKeywords([member]) : sharedKeywords(spec.members),
     attackerUnitId: member?.unit.id,
     attackerAttachmentRole: member ? (member.role === "bodyguard" ? "bodyguard" as const : "leader" as const) : undefined,
     attachmentRoles: Object.fromEntries(spec.members.map((candidate) => [candidate.unit.id, candidate.role === "bodyguard" ? "bodyguard" : "leader"] as const)),
     targetKeywords,
+    targetModelKeywords: targetKeywords,
     targetUnitId: target.unitRaw.id,
     targetModelCount: target.modelCount,
     targetAttached: false,

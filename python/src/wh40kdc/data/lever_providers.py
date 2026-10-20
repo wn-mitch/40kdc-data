@@ -70,6 +70,19 @@ def combined_keywords_lower(units: list[UnitView]) -> list[str]:
     return list(out)
 
 
+def shared_keywords_lower(units: list[UnitView]) -> list[str]:
+    """Lower-cased keywords and faction keywords every one of the units carries.
+
+    The data lists keywords per datasheet, so these are the keywords every model of the combined
+    unit carries.
+    """
+    if not units:
+        return []
+    first, *rest = (combined_keywords_lower([unit]) for unit in units)
+    others = [set(keywords) for keywords in rest]
+    return [keyword for keyword in first if all(keyword in other for other in others)]
+
+
 def can_take_enhancement(ds: Dataset, enhancement: dict[str, Any], bearer: UnitView) -> bool:
     """Whether ``bearer`` can take ``enhancement`` under the Select Enhancements rules the roster
     validator enforces: a CHARACTER (or an Upgrade), not an EPIC HERO, with a model that may take
