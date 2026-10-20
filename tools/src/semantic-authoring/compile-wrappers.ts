@@ -1,3 +1,5 @@
+import { slug } from "../pack-blocks.js";
+import { DESIGNATION_IDS } from "../translate/designations.js";
 import { closed, CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { condition } from "./compile-conditions.js";
 import { currentFamilyVersion } from "./contracts.js";
@@ -213,11 +215,23 @@ export function friendlyRecipientFrame(leaf: CompileLeaf): boolean {
 }
 
 /**
+ * The registered designation a record's selection applies: the rule's own name ("A Trap Well
+ * Laid" = a-trap-well-laid) or its "<name> target" ("your Blight Bombardment target"). Each rule
+ * keeps its own tag, so one rule's selection never satisfies another's test.
+ */
+export function designationIdFor(name: string | undefined): string {
+  if (!name?.trim()) throw new CompileError("A designated target needs the record's name to name its designation.");
+  const base = slug(name);
+  for (const id of [base, `${base}-target`]) if (DESIGNATION_IDS.has(id)) return id;
+  throw new CompileError(`Designation "${base}-target" is not registered; add it to tools/src/translate/designations.ts.`);
+}
+
+/**
  * The selected unit and the effects on attacks against it, as the DSL's designate-target.
  * `friendlyRecipient` is set only by boundAttackDesignation (below): the selection is then the enemy
  * unit of an independent pair, the frame is the friendly unit's grant, and the select carries its name.
  */
-export function designation(selection: CompileLeaf, leaves: readonly CompileLeaf[], body: Node, lasting: string | undefined, eligibility: Node | null = null, selectionLimit: Node | null = null, friendlyRecipient = false): Node {
+export function designation(recordName: string | undefined, selection: CompileLeaf, leaves: readonly CompileLeaf[], body: Node, lasting: string | undefined, eligibility: Node | null = null, selectionLimit: Node | null = null, friendlyRecipient = false): Node {
   if (selection.parameters.target_kind === "model") throw new CompileError("A designated target is a unit; designate-target selects units, not models.");
   const attack = leaves.find((leaf) => leaf.family_id === "attack" && leaf.start_byte > selection.start_byte) ?? leaves.find((leaf) => leaf.family_id === "attack");
   // "Friendly X units' attacks that target that unit have …": an attack-property scope's frame
@@ -229,7 +243,7 @@ export function designation(selection: CompileLeaf, leaves: readonly CompileLeaf
   const own = attack ? attack.parameters.unit === "this-model" : frame!.parameters.subject === "this-model";
   return {
     type: "designate-target",
-    designation: "selected-unit",
+    designation: designationIdFor(recordName),
     select: { kind: "unit", selector: selectUnit(selection, body, { eligibility, selectionLimit }).selector as Node },
     applies: { to: own ? "bearer-attacks-target" : "attackers-of-target", effect: body },
     ...(lasting ? { duration: lasting } : {}),
@@ -249,11 +263,11 @@ function retarget(node: unknown, to: Node): unknown {
  * select is the enemy selection and whose `applies` binds the friendly unit as the beneficiary
  * and the enemy unit as the reference. The body's positional "selected unit" is the friendly unit.
  */
-export function boundAttackDesignation(pair: { friendly: CompileLeaf; enemy: CompileLeaf }, leaves: readonly CompileLeaf[], body: Node, lasting: string | undefined, eligibility: { friendly: Node | null; enemy: Node | null }): Node {
+export function boundAttackDesignation(recordName: string | undefined, pair: { friendly: CompileLeaf; enemy: CompileLeaf }, leaves: readonly CompileLeaf[], body: Node, lasting: string | undefined, eligibility: { friendly: Node | null; enemy: Node | null }): Node {
   const friendly: Node = { selection_var: String(pair.friendly.parameters.bind_as) };
   const enemy: Node = { selection_var: String(pair.enemy.parameters.bind_as) };
   const effect = retarget(body, friendly) as Node;
   if (JSON.stringify(effect).includes('"selected-unit"')) throw new CompileError("An independent pair binds only attack grants to the friendly unit and attacks that target the enemy unit.");
-  const designated = designation(pair.enemy, leaves, effect, lasting, eligibility.enemy, null, true);
+  const designated = designation(recordName, pair.enemy, leaves, effect, lasting, eligibility.enemy, null, true);
   return selectUnit(pair.friendly, { ...designated, applies: { to: "bound-unit-attacks-reference", beneficiary: friendly, reference: enemy, effect } }, { eligibility: eligibility.friendly });
 }

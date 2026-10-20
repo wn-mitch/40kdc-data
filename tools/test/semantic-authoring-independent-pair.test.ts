@@ -19,7 +19,7 @@ function placed(text: string, ...items: Item[]): CompileLeaf[] {
   });
 }
 
-const run = (text: string, ...items: Item[]) => compileLeaves(placed(text, ...items), text, { abilityId: "fabricated-independent-pair" });
+const run = (text: string, ...items: Item[]) => compileLeaves(placed(text, ...items), text, { abilityId: "fabricated-independent-pair", name: "Bounty Hunters" });
 
 function effectOf(text: string, ...items: Item[]): Record<string, any> {
   const result = run(text, ...items);
@@ -51,7 +51,7 @@ const EXPECTED = {
   selector: { filter: { owner: "friendly", all_of: ["ALPHA"], within: { range: { inches: 6 }, of: "this-model" } }, count: { min: 1, max: 1 }, bind_as: "alpha-unit" },
   effect: {
     type: "designate-target",
-    designation: "selected-unit",
+    designation: "bounty-hunters-target",
     select: { kind: "unit", selector: { filter: { owner: "enemy", all_of: ["BRAVO"] }, count: { min: 1, max: 1 }, eligibility: { type: "matches", parameters: { subject: "selected-unit", filter: { visible: { to: "this-model" } } } }, bind_as: "bravo-unit" } },
     applies: {
       to: "bound-unit-attacks-reference",
@@ -142,7 +142,7 @@ describe("Semantic authoring independent selection pair: a friendly recipient an
       ["Each time a friendly unit makes an attack that targets that unit", "attack", { direction: "makes", unit: "friendly-unit", attack_type: "any", target: "that-unit" }],
       ["add 1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1 }])).toEqual({
       type: "designate-target",
-      designation: "selected-unit",
+      designation: "bounty-hunters-target",
       select: { kind: "unit", selector: { filter: { owner: "enemy", all_of: ["BRAVO"] }, count: { min: 1, max: 1 }, eligibility: { type: "matches", parameters: { subject: "selected-unit", filter: { visible: { to: "this-model" } } } } } },
       applies: { to: "attackers-of-target", effect: { type: "roll-modifier", target: { owner: "friendly" }, modifier: { roll: "hit", operation: "add", value: 1 } } },
     });

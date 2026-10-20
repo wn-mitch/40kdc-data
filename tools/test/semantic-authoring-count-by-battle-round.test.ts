@@ -4,6 +4,9 @@ import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compi
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { createValidator } from "../src/schema-loader.js";
 
+/** A registered designation, so a designate-target compiles (compile-wrappers.ts designationIdFor). */
+const FIXTURE_RULE_NAME = "A Trap Well Laid";
+
 type Item = [string, string, Record<string, unknown>];
 
 /** Leaves on their own wording in `text`, in order (fabricated wording, not rules text). */
@@ -19,7 +22,7 @@ function placed(text: string, ...items: Item[]): CompileLeaf[] {
   });
 }
 
-const run = (text: string, ...items: Item[]) => compileLeaves(placed(text, ...items), text, { abilityId: "fabricated-battle-round" });
+const run = (text: string, ...items: Item[]) => compileLeaves(placed(text, ...items), text, { name: FIXTURE_RULE_NAME,  abilityId: "fabricated-battle-round" });
 
 function errorsOf(text: string, ...items: Item[]): string {
   const result = run(text, ...items);

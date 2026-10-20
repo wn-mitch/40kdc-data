@@ -29,16 +29,16 @@ function leavesIn(text: string, pieces: Piece[]): CompileLeaf[] {
   });
 }
 
-function compiled(text: string, pieces: Piece[]) {
-  const result = compileLeaves(leavesIn(text, pieces), text);
+function compiled(text: string, pieces: Piece[], options: Parameters<typeof compileLeaves>[2] = {}) {
+  const result = compileLeaves(leavesIn(text, pieces), text, options);
   if (!result.ok) throw new Error(result.errors.join("; "));
   const check = checkEntry(entryWithMechanics(base, result.mechanics));
   expect(check.errors).toEqual([]);
   return { ...result, rendered: check.rendered_text! };
 }
 
-const failures = (text: string, pieces: Piece[]) => {
-  const result = compileLeaves(leavesIn(text, pieces), text);
+const failures = (text: string, pieces: Piece[], options: Parameters<typeof compileLeaves>[2] = {}) => {
+  const result = compileLeaves(leavesIn(text, pieces), text, options);
   return result.ok ? [] : result.errors;
 };
 
@@ -467,14 +467,19 @@ describe("Semantic authoring composition rules", () => {
 
   it("binds attacks against a selected unit into one designation", () => {
     const text = "Pick one enemy unit within 12\". Whenever a model in this unit attacks that unit, re-roll the hit.";
-    const result = compiled(text, [
+    const pieces: Piece[] = [
       ["Pick one enemy unit within 12\"", "EVENT", "select-unit", { scope: "enemy", distance: "within", inches: 12, visible: false }],
       ["Whenever a model in this unit attacks", "EVENT", "attack", attack("makes", "this-unit", "any")],
       ["that unit", "CONDITION", "target-is-selected", {}],
       ["re-roll the hit", "EFFECT", "reroll", { roll: "hit", subset: "all" }],
-    ]);
+    ];
+    const result = compiled(text, pieces, { name: "Fire Support" });
+    // The designation is the record's own registered tag, by its name or "<name> target".
+    expect(compiled(text, pieces, { name: "A Trap Well Laid" }).mechanics.effect).toMatchObject({ designation: "a-trap-well-laid" });
+    expect(failures(text, pieces, { name: "Fabricated Unregistered Rule" })).toEqual([expect.stringMatching(/"fabricated-unregistered-rule-target" is not registered/u)]);
+    expect(failures(text, pieces)).toEqual([expect.stringMatching(/needs the record's name/u)]);
     expect(result.mechanics.effect).toEqual({
-      type: "designate-target", designation: "selected-unit",
+      type: "designate-target", designation: "fire-support-target",
       select: { kind: "unit", selector: { filter: { owner: "enemy", within: { range: { inches: 12 }, of: "this-model" } }, count: { min: 1, max: 1 } } },
       applies: { to: "attackers-of-target", effect: { type: "re-roll", target: "this-unit", modifier: { roll: "hit", result_scope: "any-result" } } },
     });

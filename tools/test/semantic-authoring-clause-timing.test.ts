@@ -4,6 +4,9 @@ import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compi
 import { currentFamilyVersion, familyRole } from "../src/semantic-authoring/contracts.js";
 import { inheritClauseBands } from "../src/semantic-authoring/compile-clause-band.js";
 
+/** A registered designation, so a designate-target compiles (compile-wrappers.ts designationIdFor). */
+const FIXTURE_RULE_NAME = "A Trap Well Laid";
+
 /** Leaves on their own wording in `text`, in order (fabricated wording, not rules text). */
 function placed(text: string, ...items: Array<[string, string, Record<string, unknown>]>): CompileLeaf[] {
   const bytes = Buffer.from(text, "utf8");
@@ -18,7 +21,7 @@ function placed(text: string, ...items: Array<[string, string, Record<string, un
 }
 
 function mechanicsOf(list: CompileLeaf[], text: string): Record<string, any> {
-  const result = compileLeaves(list, text);
+  const result = compileLeaves(list, text, { name: FIXTURE_RULE_NAME });
   if (!result.ok) throw new Error(result.errors.join("; "));
   return result.mechanics as unknown as Record<string, any>;
 }
@@ -182,7 +185,7 @@ describe("Optional spend before a designated selection (compile.ts designatedSpe
       ["ranged attacks made by your unit that target that unit", "attack", { direction: "makes", unit: "this-unit", attack_type: "ranged", target: "that-unit" }],
       ["improve the Armour Penetration characteristic by 2", "characteristic-modifier", { subject: "attack", characteristics: ["AP"], operation: "improve", value: 2, weapon_type: "ranged" }],
     );
-    const result = compileLeaves(leaves, text);
+    const result = compileLeaves(leaves, text, { name: FIXTURE_RULE_NAME });
     expect(result.ok).toBe(false);
     expect(result.errors.join(" ")).toContain("not every effect is limited to attacks against it");
   });
@@ -266,7 +269,7 @@ describe("Parenthesised 'or' replaces a test modifier (7100 shape)", () => {
 
   it("refuses an instead whose this-unit condition is worded as another unit", () => {
     const text = "Each enemy unit must take a Battle-shock test, subtracting 1 from that test (or subtracting 2 if that unit is a PSYKER).";
-    const result = compileLeaves(bearerLeaves(text, "if that unit is a PSYKER"), text);
+    const result = compileLeaves(bearerLeaves(text, "if that unit is a PSYKER"), text, { name: FIXTURE_RULE_NAME });
     expect(result.ok).toBe(false);
     expect(result.errors.join(" ")).toContain("another unit's test");
   });

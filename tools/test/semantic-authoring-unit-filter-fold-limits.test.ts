@@ -3,6 +3,9 @@ import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, familyRole } from "../src/semantic-authoring/contracts.js";
 
+/** A registered designation, so a designate-target compiles (compile-wrappers.ts designationIdFor). */
+const FIXTURE_RULE_NAME = "A Trap Well Laid";
+
 /** Leaves on their own wording in `text`, in order (fabricated wording, not rules text). */
 function placed(text: string, ...items: Array<[string, string, Record<string, unknown>]>): CompileLeaf[] {
   const bytes = Buffer.from(text, "utf8");
@@ -17,7 +20,7 @@ function placed(text: string, ...items: Array<[string, string, Record<string, un
 }
 
 function compile(text: string, ...items: Array<[string, string, Record<string, unknown>]>) {
-  return compileLeaves(placed(text, ...items), text);
+  return compileLeaves(placed(text, ...items), text, { name: FIXTURE_RULE_NAME });
 }
 
 function mechanics(text: string, ...items: Array<[string, string, Record<string, unknown>]>): Record<string, any> {

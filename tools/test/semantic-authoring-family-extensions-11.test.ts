@@ -5,6 +5,9 @@ import { targetRestrictions } from "../src/semantic-authoring/compile-conditions
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { designationLabel } from "../src/translate/designations.js";
 
+/** A registered designation, so a designate-target compiles (compile-wrappers.ts designationIdFor). */
+const FIXTURE_RULE_NAME = "A Trap Well Laid";
+
 /** Leaves in source order at the current version of their family. */
 function leaves(...items: Array<[string, Record<string, unknown>, string?]>): CompileLeaf[] {
   return items.map(([family, parameters, fragment], index) => {
@@ -14,7 +17,7 @@ function leaves(...items: Array<[string, Record<string, unknown>, string?]>): Co
 }
 
 function mechanicsOf(list: CompileLeaf[]) {
-  const result = compileLeaves(list);
+  const result = compileLeaves(list, undefined, { name: FIXTURE_RULE_NAME });
   if (!result.ok) throw new Error(result.errors.join("; "));
   return result.mechanics as Record<string, unknown>;
 }
@@ -86,7 +89,7 @@ describe("objective range against one marker", () => {
   it("names a designated marker, and refuses a selected one when nothing selects a marker", () => {
     const designated = JSON.stringify(mechanicsOf(leaves(["unit-position", { kind: "objective-range", controlled_by: "any", subject: "this-unit", negated: false, objective: "designated", objective_tag: "acquisition" }], heal())));
     expect(designated).toContain('"of":{"objective":{"designated":"acquisition"}}');
-    const unselected = compileLeaves(leaves(["unit-position", { kind: "objective-range", controlled_by: "any", subject: "this-unit", negated: false, objective: "selected" }], heal()));
+    const unselected = compileLeaves(leaves(["unit-position", { kind: "objective-range", controlled_by: "any", subject: "this-unit", negated: false, objective: "selected" }], heal()), undefined, { name: FIXTURE_RULE_NAME });
     expect(unselected.ok ? "" : unselected.errors.join()).toMatch(/selects no objective marker/u);
     expect(() => normalizeFingerprintParameters("unit-position", { kind: "objective-range", controlled_by: "any", subject: "this-unit", negated: false, objective: "designated", objective_tag: "not-a-tag" }, currentFamilyVersion("unit-position")))
       .toThrow(/not a registered designation/u);
@@ -119,7 +122,7 @@ describe("a unit-filter before moments joined by \"or\"", () => {
     const version = currentFamilyVersion("regain-wounds");
     const end = Buffer.byteLength(when);
     const heal: CompileLeaf = { role: familyRole("regain-wounds", version), family_id: "regain-wounds", family_version: version, parameters: { subject: "this-unit", amount: "D3" }, start_byte: end + 1, end_byte: end + 2, fragment: "EFFECT" };
-    const result = compileLeaves([...leaves, heal], `${when} ${text}`);
+    const result = compileLeaves([...leaves, heal], `${when} ${text}`, { name: FIXTURE_RULE_NAME });
     if (!result.ok) throw new Error(result.errors.join("; "));
     return (result.mechanics as { trigger: Array<{ subject?: unknown }> }).trigger;
   };
@@ -138,7 +141,7 @@ describe("a unit-filter before moments joined by \"or\"", () => {
 
 describe("a bare \"each\" before a unit-filter", () => {
   const compiled = (text: string, ...items: Array<[string, string, Record<string, unknown>]>) => {
-    const result = compileLeaves(placed(text, "RAW_TEXT", ...items), text);
+    const result = compileLeaves(placed(text, "RAW_TEXT", ...items), text, { name: FIXTURE_RULE_NAME });
     if (!result.ok) throw new Error(result.errors.join("; "));
     return result.mechanics as { effect: Record<string, unknown> };
   };
@@ -172,7 +175,7 @@ describe("a bare \"each\" before a unit-filter", () => {
 
   it("refuses a bare \"each\" with no unit-filter after it", () => {
     const text = "Each time, this unit suffers 1 mortal wound.";
-    const result = compileLeaves(placed(text, "RAW_TEXT", ["Each", "for-each-unit-select", {}], ["this unit suffers 1 mortal wound", "mortal-wounds", { recipient: "this-unit", count: "1" }]), text);
+    const result = compileLeaves(placed(text, "RAW_TEXT", ["Each", "for-each-unit-select", {}], ["this unit suffers 1 mortal wound", "mortal-wounds", { recipient: "this-unit", count: "1" }]), text, { name: FIXTURE_RULE_NAME });
     expect(result.ok ? "" : result.errors.join()).toMatch(/needs a unit-filter right after it/u);
   });
 });
@@ -185,7 +188,7 @@ describe("a change to a test another unit takes", () => {
       ["within 6\" of this model", "aura-range", { inches: 6, of: "this-model" }],
       ["it must take a Desperate Escape test", "test", { target: "antecedent", test: "desperate-escape" }],
       ["that enemy unit is Battle-shocked", "unit-state", { states: ["battle-shocked"], subject: "antecedent", negated: false }],
-      ["subtract 1 from that test", "roll-modifier", { roll: "preceding", operation: "subtract", value: 1 }]), text);
+      ["subtract 1 from that test", "roll-modifier", { roll: "preceding", operation: "subtract", value: 1 }]), text, { name: FIXTURE_RULE_NAME });
     if (!result.ok) throw new Error(result.errors.join("; "));
     // The change is the test's own modifier under the condition, split from the test on the other side (inside the aura's effect).
     const out = JSON.stringify(result.mechanics);
@@ -202,7 +205,7 @@ describe("a condition on each unit a filter names", () => {
       ["within range of an objective", "unit-position", { kind: "objective-range", controlled_by: "any", subject: "antecedent", negated: false }],
       ["that unit's melee attacks have", "weapon-property-scope", { subject: "antecedent", weapon_type: "melee" }],
       ["+1 A", "characteristic-modifier", { characteristics: ["A"], operation: "improve", value: 1 }],
-      ["This unit has +1 Move", "characteristic-modifier", { subject: "this-unit", characteristics: ["M"], operation: "add", value: 1 }]), text);
+      ["This unit has +1 Move", "characteristic-modifier", { subject: "this-unit", characteristics: ["M"], operation: "add", value: 1 }]), text, { name: FIXTURE_RULE_NAME });
     if (!result.ok) throw new Error(result.errors.join("; "));
     const steps = (result.mechanics as { effect: { steps: Array<Record<string, unknown>> } }).effect.steps;
     expect(steps[0]).toMatchObject({ type: "conditional", condition: { type: "matches", parameters: { subject: "recipient", filter: { within: { of: { objective: {} }, range: "objective-control" } } } }, effect: { target: { owner: "friendly", all_of: ["GRAVIS"] } } });
@@ -232,7 +235,7 @@ describe("wave-4 review fixes", () => {
         ["within 8\" of a", "unit-position", { kind: "within", inches: 8, of: "following-filter", subject: "antecedent", negated: false }],
         ["friendly HAVOCS unit", "unit-filter", { side: "friendly", keywords: ["HAVOCS"] }]],
       [["That HAVOCS unit", "triggering-target", { selects: "unit", keywords: ["HAVOCS"], match: "all" }]],
-      [["Your unit can make a Normal move of up to D6", "make-move", { subject: "this-unit", move_type: "normal", distance: "D6" }]]), s.text)) as { mechanics: Record<string, any> };
+      [["Your unit can make a Normal move of up to D6", "make-move", { subject: "this-unit", move_type: "normal", distance: "D6" }]]), s.text, { name: FIXTURE_RULE_NAME })) as { mechanics: Record<string, any> };
     expect(mechanics.trigger.subject).toEqual({ owner: "enemy" });
     // The HAVOCS unit is the friendly unit the distance names, so the enemy mover carries no keyword gate; the target holds the distance instead.
     expect(mechanics.trigger.condition).toBeUndefined();
@@ -245,7 +248,7 @@ describe("wave-4 review fixes", () => {
       ["enemy unit", "unit-filter", { side: "enemy" }],
       ["is selected to Fall Back", "event", { kind: "selected", move_types: ["fall-back"], to: "move" }],
       ["that enemy unit must use the desperate escape mode", "test", { target: "event-subject", test: "desperate-escape" }],
-      ["with -1 to those hazard rolls", "roll-modifier", { roll: "hazard", operation: "subtract", value: 1 }]), text));
+      ["with -1 to those hazard rolls", "roll-modifier", { roll: "hazard", operation: "subtract", value: 1 }]), text, { name: FIXTURE_RULE_NAME }));
     expect(JSON.stringify(mechanics)).toContain('{"type":"test","target":"event-subject","modifier":{"test":"desperate-escape","modifier":-1}}');
   });
 
@@ -254,7 +257,7 @@ describe("wave-4 review fixes", () => {
     const { mechanics } = ok(compileLeaves(placed(text, "RAW_TEXT",
       ["Each enemy unit", "for-each-unit-select", { scope: "enemy", distance: "any" }],
       ["within Engagement Range of your unit", "unit-state", { states: ["engaged"], subject: "antecedent", with: "this-unit", negated: false }],
-      ["must take a Battle-shock test", "test", { target: "recipient", test: "battle-shock" }]), text)) as { mechanics: Record<string, any> };
+      ["must take a Battle-shock test", "test", { target: "recipient", test: "battle-shock" }]), text, { name: FIXTURE_RULE_NAME })) as { mechanics: Record<string, any> };
     expect(mechanics.effect).toEqual({ type: "for-each-unit", selector: { filter: { owner: "enemy", engaged_with: "this-unit" } }, effect: { type: "test", target: "recipient", modifier: { test: "battle-shock" } } });
   });
 
@@ -264,7 +267,7 @@ describe("wave-4 review fixes", () => {
       ["re-roll Hit rolls of 1", "reroll", { roll: "hit", subset: "ones", weapon_type: "all" }],
       ["Or:", "instead", { choice: true }],
       ["the target is a MONSTER", "unit-keyword", { keywords: ["MONSTER"], subject: "target", negated: false }],
-      ["re-roll Hit rolls", "reroll", { roll: "hit", subset: "all", weapon_type: "all" }]), text)) as { mechanics: Record<string, any> };
+      ["re-roll Hit rolls", "reroll", { roll: "hit", subset: "all", weapon_type: "all" }]), text, { name: FIXTURE_RULE_NAME })) as { mechanics: Record<string, any> };
     expect(mechanics.effect.type).toBe("choice");
     expect(mechanics.effect.options[1].type).toBe("conditional");
     expect(mechanics.effect.options[0]).toMatchObject({ type: "re-roll", modifier: { subset: "ones" } });
@@ -300,7 +303,7 @@ describe("rolls that belong to another unit", () => {
 
 describe("selections narrowed by the attacks that hit them", () => {
   const compiled = (text: string, ...items: Array<[string, string, Record<string, unknown>]>) => {
-    const result = compileLeaves(placed(text, "RAW_TEXT", ...items), text);
+    const result = compileLeaves(placed(text, "RAW_TEXT", ...items), text, { name: FIXTURE_RULE_NAME });
     if (!result.ok) throw new Error(result.errors.join("; "));
     return JSON.stringify(result.mechanics);
   };
@@ -396,7 +399,7 @@ describe("hidden units, a bearer's Transport and floored characteristics", () =>
 
 describe("wave-5 review fixes", () => {
   const compiled = (text: string, fragment: string, ...items: Array<[string, string, Record<string, unknown>]>) => {
-    const result = compileLeaves(placed(text, fragment, ...items), text);
+    const result = compileLeaves(placed(text, fragment, ...items), text, { name: FIXTURE_RULE_NAME });
     if (!result.ok) throw new Error(result.errors.join("; "));
     return result;
   };
@@ -433,7 +436,7 @@ describe("wave-5 review fixes", () => {
         ["within Engagement Range of one or more enemy units", "unit-state", { states: ["engaged"], subject: "target", negated: false }]),
       ...placed(text, "EFFECT", ["Add 1 to this unit's Leadership characteristic", "characteristic-modifier", { subject: "this-unit", characteristics: ["Ld"], operation: "add", value: 1, weapon_type: "all" }]),
     ];
-    const result = compileLeaves(leaves, text);
+    const result = compileLeaves(leaves, text, { name: FIXTURE_RULE_NAME });
     if (!result.ok) throw new Error(result.errors.join("; "));
     const eligibility = JSON.stringify(result.core);
     expect(eligibility).toContain('{"type":"matches","parameters":{"filter":{"state":"engaged"}}}');
@@ -467,7 +470,7 @@ describe("a parenthesised alternative", () => {
     const result = compileLeaves(placed(text, "RAW_TEXT",
       ["this model is on the battlefield", "unit-state", { states: ["on-battlefield"], subject: "this-model", negated: false }],
       ["any TRANSPORT it is embarked within is on the battlefield", "unit-state", { states: ["on-battlefield"], subject: "bearer-transport", negated: false }],
-      ["add 1 to this unit's Leadership characteristic", "characteristic-modifier", { subject: "this-unit", characteristics: ["Ld"], operation: "add", value: 1, weapon_type: "all" }]), text);
+      ["add 1 to this unit's Leadership characteristic", "characteristic-modifier", { subject: "this-unit", characteristics: ["Ld"], operation: "add", value: 1, weapon_type: "all" }]), text, { name: FIXTURE_RULE_NAME });
     if (!result.ok) throw new Error(result.errors.join("; "));
     expect(JSON.stringify(result.mechanics)).toContain('"condition":{"operator":"or"');
   });
@@ -481,7 +484,7 @@ describe("a selection a persistent designation makes", () => {
       ["to be this model's quarry", "persistent-designation-open", { designation: "prey", scope: "enemy-unit", timing: "start-of-first-battle-round", beneficiary: "this-model" }],
       ["Each time this model makes an attack", "attack", { direction: "makes", unit: "this-model", attack_type: "any" }],
       ["that targets its quarry", "designated-filter", { subject: "defender", tag: "prey" }],
-      ["you can re-roll the Hit roll", "reroll", { roll: "hit", subset: "all", weapon_type: "all" }]), text);
+      ["you can re-roll the Hit roll", "reroll", { roll: "hit", subset: "all", weapon_type: "all" }]), text, { name: FIXTURE_RULE_NAME });
     if (!result.ok) throw new Error(result.errors.join("; "));
     const out = JSON.stringify(result.mechanics);
     expect(out).toContain('"type":"persistent-designation"');
@@ -503,7 +506,7 @@ describe("an instead of another rule's default", () => {
   const consolidate = (text: string) => compileLeaves(placed(text, "RAW_TEXT",
     ["Each time this unit Consolidates", "event", { kind: "move-ended", move_types: ["consolidation"] }],
     ["it can move up to 6\"", "make-move", { subject: "this-unit", move: "consolidation", distance: 6 }],
-    ["instead", "instead", {}]), text);
+    ["instead", "instead", {}]), text, { name: FIXTURE_RULE_NAME });
 
   it("stands alone when the replaced value is printed after \"instead of\"", () => {
     const result = consolidate("Each time this unit Consolidates, it can move up to 6\" instead of up to 3\".");
@@ -523,7 +526,7 @@ describe("an attack-property scope narrowed by its target", () => {
       ["This unit's ranged attacks", "weapon-property-scope", { subject: "this-unit", weapon_type: "ranged" }],
       ["that target a dazed unit", "designated-filter", { tag: "slowed" }],
       ["LETHAL HITS", "weapon-ability-keyword", { keyword: "Lethal Hits" }],
-      ["+1 Strength", "characteristic-modifier", { characteristics: ["S"], operation: "add", value: 1 }]), text);
+      ["+1 Strength", "characteristic-modifier", { characteristics: ["S"], operation: "add", value: 1 }]), text, { name: FIXTURE_RULE_NAME });
     if (!result.ok) throw new Error(result.errors.join("; "));
     const out = JSON.stringify(result.mechanics);
     expect(out).toContain('"condition":{"type":"matches","parameters":{"subject":"defender","filter":{"designated":"slowed"}}}');
@@ -548,7 +551,7 @@ describe("the model a destroyer destroyed", () => {
     const result = compileLeaves(placed(text, "RAW_TEXT",
       ["this unit destroys an", "event", { kind: "model-destroyed", by: "this-unit" }],
       ["enemy CHARACTER model", "unit-filter", { side: "enemy", keywords: ["CHARACTER"], level: "model" }],
-      ["add 1 to this unit's Leadership characteristic", "characteristic-modifier", { subject: "this-unit", characteristics: ["Ld"], operation: "add", value: 1, weapon_type: "all" }]), text);
+      ["add 1 to this unit's Leadership characteristic", "characteristic-modifier", { subject: "this-unit", characteristics: ["Ld"], operation: "add", value: 1, weapon_type: "all" }]), text, { name: FIXTURE_RULE_NAME });
     if (!result.ok) throw new Error(result.errors.join("; "));
     expect(JSON.stringify(result.mechanics)).toMatch(/"event":"model-destroyed".*"object":\{"owner":"enemy","all_of":\["CHARACTER"\],"level":"model"\}/u);
   });

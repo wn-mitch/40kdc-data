@@ -7,13 +7,16 @@ import { readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
+/** A registered designation, so a designate-target compiles (compile-wrappers.ts designationIdFor). */
+const FIXTURE_RULE_NAME = "A Trap Well Laid";
+
 const dataRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../../data/enrichment");
 const base = (): Record<string, unknown> => (JSON.parse(readFileSync(join(dataRoot, "adeptus-mechanicus", "abilities.json"), "utf8")) as Array<Record<string, unknown>>)
   .find((entry) => entry.ability_id === "control-edict-adeptus-mechanicus")!;
 
 /** The compiled entry validates against the ability schema and renders. */
 function checked(list: CompileLeaf[], text: string): string {
-  const result = compileLeaves(list, text);
+  const result = compileLeaves(list, text, { name: FIXTURE_RULE_NAME });
   if (!result.ok) throw new Error(result.errors.join("; "));
   const check = checkEntry(entryWithMechanics(base(), result.mechanics));
   expect(check.errors).toEqual([]);
@@ -34,7 +37,7 @@ function placed(text: string, ...items: Array<[string, string, Record<string, un
 }
 
 function effectOf(list: CompileLeaf[], text: string): Record<string, any> {
-  const result = compileLeaves(list, text);
+  const result = compileLeaves(list, text, { name: FIXTURE_RULE_NAME });
   if (!result.ok) throw new Error(result.errors.join("; "));
   return (result.mechanics as unknown as Record<string, any>).effect;
 }
@@ -81,7 +84,7 @@ describe("Semantic authoring antecedent slots: \"that unit\" after an earlier fi
     const result = compileLeaves(placed(text,
       friendlyAlpha("friendly ALPHA unit"),
       ["destroys an enemy unit", "event", { kind: "unit-destroyed", by: "antecedent" }],
-      ["that unit can make a Normal move of up to 3\"", "make-move", { subject: "antecedent", move_type: "normal", distance: 3 }]), text);
+      ["that unit can make a Normal move of up to 3\"", "make-move", { subject: "antecedent", move_type: "normal", distance: 3 }]), text, { name: FIXTURE_RULE_NAME });
     expect(result.ok ? [] : result.errors).toEqual([]);
     if (!result.ok) return;
     const mechanics = result.mechanics as unknown as Record<string, any>;
@@ -193,7 +196,7 @@ describe("Semantic authoring attacker gates on a designation are checked per att
   const swap = (from: string, to: [string, string, Record<string, unknown>]) =>
     SHOT_LEAVES.map((leaf) => (leaf[0] === from ? to : leaf));
   const compiled = (text: string, leaves: Array<[string, string, Record<string, unknown>]>): Record<string, any> => {
-    const result = compileLeaves(placed(text, ...leaves), text);
+    const result = compileLeaves(placed(text, ...leaves), text, { name: FIXTURE_RULE_NAME });
     if (!result.ok) throw new Error(result.errors.join("; "));
     return result.mechanics as unknown as Record<string, any>;
   };

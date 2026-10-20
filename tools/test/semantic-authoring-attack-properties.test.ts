@@ -3,6 +3,9 @@ import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, familyRole } from "../src/semantic-authoring/contracts.js";
 
+/** A registered designation, so a designate-target compiles (compile-wrappers.ts designationIdFor). */
+const FIXTURE_RULE_NAME = "A Trap Well Laid";
+
 /** Leaves on their own wording in `text`, in order (fabricated wording, not rules text). */
 function placed(text: string, ...items: Array<[string, string, Record<string, unknown>]>): CompileLeaf[] {
   const bytes = Buffer.from(text, "utf8");
@@ -17,7 +20,7 @@ function placed(text: string, ...items: Array<[string, string, Record<string, un
 }
 
 function effectOf(list: CompileLeaf[], text: string): Record<string, any> {
-  const result = compileLeaves(list, text);
+  const result = compileLeaves(list, text, { name: FIXTURE_RULE_NAME });
   if (!result.ok) throw new Error(result.errors.join("; "));
   return (result.mechanics as unknown as Record<string, any>).effect;
 }
@@ -82,7 +85,7 @@ describe("Semantic authoring properties of an attack with conditions on its targ
       ["attacks", "weapon-property-scope", { subject: "antecedent", weapon_type: "all" }],
       ["that target that unit", "target-is-selected", {}],
       ["until the end of the phase", "duration", { endpoint: "end-of-phase" }],
-      ["LETHAL HITS", "weapon-ability-keyword", { keyword: "Lethal Hits" }]), text);
+      ["LETHAL HITS", "weapon-ability-keyword", { keyword: "Lethal Hits" }]), text, { name: FIXTURE_RULE_NAME });
     expect(result.ok ? [] : result.errors).toEqual([]);
     if (!result.ok) return;
     const json = JSON.stringify(result.mechanics);

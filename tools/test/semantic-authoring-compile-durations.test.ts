@@ -8,6 +8,9 @@ import { currentFamilyVersion, familyRole } from "../src/semantic-authoring/cont
 import { createValidator } from "../src/schema-loader.js";
 import { describeAbility } from "../src/translate/index.js";
 
+/** A registered designation, so a designate-target compiles (compile-wrappers.ts designationIdFor). */
+const FIXTURE_RULE_NAME = "A Trap Well Laid";
+
 /**
  * Several printed durations in one ability (compile-durations.ts). The fixtures under
  * test/fixtures/semantic-authoring-durations are the stored leaves of eleven ability versions, with fabricated
@@ -25,7 +28,7 @@ function fixture(id: number): Fixture {
 
 function compileFixture(id: number) {
   const { leaves, source_text } = fixture(id);
-  return compileLeaves(leaves, source_text);
+  return compileLeaves(leaves, source_text, { name: FIXTURE_RULE_NAME });
 }
 
 function mechanicsOf(id: number): Record<string, any> {
@@ -56,7 +59,7 @@ it("keeps expiry after resolution distinct from a duration during resolution", (
   const compileDuration = (endpoint: string) => {
     const result = compileLeaves(placed("Wait. Gain Assault.",
       ["Wait.", "duration", { endpoint }],
-      ["Gain Assault.", "weapon-ability-grant", ASSAULT]));
+      ["Gain Assault.", "weapon-ability-grant", ASSAULT]), undefined, { name: FIXTURE_RULE_NAME });
     if (!result.ok) throw new Error(result.errors.join("; "));
     return result.mechanics.scope?.duration;
   };
@@ -78,7 +81,7 @@ describe("bound durations on the stored records", () => {
   it("3746 with its stored leaves (move-ended, antecedent subject) refuses: the +6 is on another unit than the no-roll", () => {
     const { leaves, source_text } = fixture(3746);
     const stored = leaves.map((leaf) => (leaf.family_id === "event" ? { ...leaf, parameters: { ...leaf.parameters, kind: "move-ended" } } : leaf));
-    const result = compileLeaves(stored, source_text);
+    const result = compileLeaves(stored, source_text, { name: FIXTURE_RULE_NAME });
     expect(result.ok).toBe(false);
     expect(result.ok ? [] : result.errors).toContain(NO_ROLL_PLUS_SIX);
   });
@@ -86,7 +89,7 @@ describe("bound durations on the stored records", () => {
   it("1185 with its stored leaves (an Advance already happened) refuses: the no-roll cannot follow the Advance", () => {
     const { leaves, source_text } = fixture(1185);
     const stored = leaves.map((leaf) => (leaf.family_id === "event" ? { ...leaf, role: "CONDITION", family_id: "unit-activity", parameters: { activities: ["advanced-this-turn"], subject: "this-unit" } } : leaf));
-    const result = compileLeaves(stored, source_text);
+    const result = compileLeaves(stored, source_text, { name: FIXTURE_RULE_NAME });
     expect(result.ok).toBe(false);
     expect(result.ok ? [] : result.errors).toContain(NO_ROLL_AFTER_ADVANCE);
   });
@@ -168,7 +171,7 @@ describe("bound durations on fabricated sentences", () => {
       ["add 6 to Move", "characteristic-modifier", MOVE_SIX],
       ["until the end of the turn", "duration", DURATION_TURN],
       ["grant ASSAULT", "weapon-ability-grant", ASSAULT]);
-    const result = compileLeaves(leaves, text);
+    const result = compileLeaves(leaves, text, { name: FIXTURE_RULE_NAME });
     expect(result.ok).toBe(true);
     const mechanics = result.ok ? (result.mechanics as any) : null;
     expect(mechanics.effect.steps).toEqual([
@@ -184,7 +187,7 @@ describe("bound durations on fabricated sentences", () => {
       ["Until the end of the phase", "duration", DURATION_PHASE],
       ["is not eligible to charge", "eligibility-permission", { subject: "this-unit", activity: "declare-charge", allow: false }],
       ["until the end of the turn", "duration", DURATION_TURN]);
-    const result = compileLeaves(leaves, text);
+    const result = compileLeaves(leaves, text, { name: FIXTURE_RULE_NAME });
     expect(result.ok).toBe(false);
     expect(result.ok ? [] : result.errors).toContain("Conflicting durations.");
   });
@@ -197,7 +200,7 @@ describe("bound durations on fabricated sentences", () => {
       ["until the end of the turn", "duration", DURATION_TURN],
       ["grant ASSAULT", "weapon-ability-grant", ASSAULT],
       ["subtract 1 from Toughness", "characteristic-modifier", { subject: "this-unit", characteristics: ["T"], operation: "subtract", value: 1, weapon_type: "all" }]);
-    const result = compileLeaves(leaves, text);
+    const result = compileLeaves(leaves, text, { name: FIXTURE_RULE_NAME });
     expect(result.ok).toBe(false);
     expect(result.ok ? [] : result.errors).toContain("Conflicting durations.");
   });
@@ -208,7 +211,7 @@ describe("bound durations on fabricated sentences", () => {
       ["Until the end of the phase", "duration", DURATION_PHASE],
       ["add 6 to Move", "characteristic-modifier", MOVE_SIX],
       ["grant ASSAULT", "weapon-ability-grant", ASSAULT]);
-    const result = compileLeaves(leaves, text);
+    const result = compileLeaves(leaves, text, { name: FIXTURE_RULE_NAME });
     expect(result.ok).toBe(true);
     expect(result.ok ? (result.mechanics as any).scope.duration : null).toBe("phase");
   });
@@ -221,7 +224,7 @@ describe("bound durations on fabricated sentences", () => {
       ["Instead", "instead", {}],
       ["until the end of the turn", "duration", DURATION_TURN],
       ["add 6 to Move", "characteristic-modifier", MOVE_SIX]);
-    const result = compileLeaves(leaves, text);
+    const result = compileLeaves(leaves, text, { name: FIXTURE_RULE_NAME });
     expect(result.ok).toBe(false);
     expect(result.ok ? [] : result.errors).toContain("Conflicting durations.");
   });
@@ -235,7 +238,7 @@ describe("bound durations on fabricated sentences", () => {
       ["when your unit ends an Advance", "event", { kind: "move-ended", owner: "friendly", move_types: ["advance"] }],
       ["until the end of the turn", "duration", DURATION_TURN],
       ["grant ASSAULT", "weapon-ability-grant", ASSAULT]);
-    const result = compileLeaves(leaves, text);
+    const result = compileLeaves(leaves, text, { name: FIXTURE_RULE_NAME });
     expect(result.ok).toBe(true);
     const steps = result.ok ? (result.mechanics.effect as unknown as { steps: Array<Record<string, any>> }).steps : [];
     expect(steps[0]).toMatchObject({ type: "ability-part", duration: "phase", trigger: { event: "move-started" } });
@@ -248,7 +251,7 @@ describe("bound durations on fabricated sentences", () => {
       ["When the step starts", "event", { kind: "step-started", step: "reinforcements", turn: "either" }],
       ["when your unit is set up", "event", { kind: "set-up", owner: "friendly" }],
       ["it can be set up anywhere", "set-up", { subject: "antecedent", to: "battlefield", min_enemy_distance: 6 }]);
-    const result = compileLeaves(leaves, text);
+    const result = compileLeaves(leaves, text, { name: FIXTURE_RULE_NAME });
     expect(result.ok).toBe(false);
     expect(result.ok ? [] : result.errors).toContain("A set-up moment next to another moment has no reading yet.");
   });
@@ -259,7 +262,7 @@ describe("bound durations on fabricated sentences", () => {
       ["When the step starts", "event", { kind: "step-started", step: "reinforcements", turn: "either" }],
       ["when your unit is set up", "event", { kind: "set-up", owner: "friendly" }],
       ["add 6 to Move", "characteristic-modifier", MOVE_SIX]);
-    expect(compileLeaves(leaves, text).ok).toBe(true);
+    expect(compileLeaves(leaves, text, { name: FIXTURE_RULE_NAME }).ok).toBe(true);
   });
 
   it("3545, 8334, 8554, 10074: set-up triggers beside another moment keep their canonical baseline mechanics", () => {
@@ -277,7 +280,7 @@ describe("a no-roll and its add-6 fold into one move", () => {
       ["Until the end of the phase", "duration", DURATION_PHASE],
       ["do not make an Advance roll", "no-advance-roll", { subject: "this-unit" }],
       ["add 6 to Move", "characteristic-modifier", MOVE_SIX]);
-    const result = compileLeaves(leaves, text);
+    const result = compileLeaves(leaves, text, { name: FIXTURE_RULE_NAME });
     expect(result.ok).toBe(true);
     const mechanics = result.ok ? (result.mechanics as any) : null;
     expect(mechanics.effect).toEqual({ type: "move-modifier", target: "this-unit", modifier: { advance: "fixed-6" } });
@@ -311,23 +314,23 @@ describe("kept refusals when an ability prints two durations", () => {
     const base = compileFixture(id);
     expect(base.ok, `av ${id} alone`).toBe(true);
     const { leaves, text } = withTail(id, TWO_DURATIONS_TAIL, TWO_DURATIONS);
-    const result = compileLeaves(leaves, text);
+    const result = compileLeaves(leaves, text, { name: FIXTURE_RULE_NAME });
     expect(result.ok).toBe(false);
     expect(result.ok ? [] : result.errors).toContain(CONFLICTING_DURATIONS);
   });
 
   it("av 6228 (usage limit) refuses with the usage message", () => {
     const { leaves, text } = withTail(6228, TWO_DURATIONS_TAIL, TWO_DURATIONS);
-    const result = compileLeaves(leaves, text);
+    const result = compileLeaves(leaves, text, { name: FIXTURE_RULE_NAME });
     expect(result.ok ? [] : result.errors).toContain("A usage limit in an ability with several durations has no reading yet.");
   });
 
   it("a rules bundle refuses with two durations, and compiles with none", () => {
     const bundle: Array<[string, string, Record<string, unknown>]> = [["Bundle", "rules-bundle-marker", {}]];
     const alone = withTail(7, " Bundle.", bundle);
-    expect(compileLeaves(alone.leaves, alone.text).ok).toBe(true);
+    expect(compileLeaves(alone.leaves, alone.text, { name: FIXTURE_RULE_NAME }).ok).toBe(true);
     const { leaves, text } = withTail(7, " Bundle. Until the end of the phase. Until the end of the turn.", [...bundle, ...TWO_DURATIONS]);
-    const result = compileLeaves(leaves, text);
+    const result = compileLeaves(leaves, text, { name: FIXTURE_RULE_NAME });
     expect(result.ok ? [] : result.errors).toContain(CONFLICTING_DURATIONS);
   });
 
@@ -339,7 +342,7 @@ describe("kept refusals when an ability prints two durations", () => {
       ["You can use this", "optional-use", { who: "this-unit" }],
     ];
     const { leaves, text } = withTail(7, " Used. Spend it. Optional read. You can use this." + TWO_DURATIONS_TAIL, [...spend, ...TWO_DURATIONS]);
-    const result = compileLeaves(leaves, text);
+    const result = compileLeaves(leaves, text, { name: FIXTURE_RULE_NAME });
     expect(result.ok ? [] : result.errors).toContain(CONFLICTING_DURATIONS);
   });
 });

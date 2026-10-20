@@ -3,6 +3,9 @@ import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, familyRole } from "../src/semantic-authoring/contracts.js";
 
+/** A registered designation, so a designate-target compiles (compile-wrappers.ts designationIdFor). */
+const FIXTURE_RULE_NAME = "A Trap Well Laid";
+
 /** Leaves on their own wording in `text`, in order (fabricated wording, not rules text). */
 function placed(text: string, ...items: Array<[string, string, Record<string, unknown>]>): CompileLeaf[] {
   const bytes = Buffer.from(text, "utf8");
@@ -32,7 +35,7 @@ function designated(filter: Record<string, unknown>, attack: Record<string, unkn
 }
 
 function designateSelect(list: CompileLeaf[]): Record<string, any> {
-  const result = compileLeaves(list, TEXT);
+  const result = compileLeaves(list, TEXT, { name: FIXTURE_RULE_NAME });
   if (!result.ok) throw new Error(result.errors.join("; "));
   const effect = (result.mechanics as unknown as { effect: Record<string, any> }).effect;
   expect(effect.type).toBe("designate-target");
@@ -70,7 +73,7 @@ describe("Semantic authoring designate-target select keywords from a folded unit
   it("refuses a selected unit with filter keywords whose bearer's attacks do not target it", () => {
     // Without "that unit" the filter would narrow the selection only; the +1 AP would reach every
     // friendly Gamma ranged attack. Refused, not compiled with the restriction dropped.
-    const result = compileLeaves(designated({ any_keywords: ["ALPHA", "BETA"] }, { direction: "makes", unit: "friendly-unit", attack_type: "ranged" }), TEXT);
+    const result = compileLeaves(designated({ any_keywords: ["ALPHA", "BETA"] }, { direction: "makes", unit: "friendly-unit", attack_type: "ranged" }), TEXT, { name: FIXTURE_RULE_NAME });
     expect(result.ok).toBe(false);
     expect(result.ok ? [] : result.errors.join(" ")).toMatch(/must target that unit/);
   });
@@ -86,7 +89,7 @@ describe("Semantic authoring selection filter without an attack aimed at the sel
       ["That unit's ranged attacks", "attack", { direction: "makes", unit: "that-unit", attack_type: "ranged" }],
       ["-1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "subtract", value: 1 }],
     );
-    const result = compileLeaves(list, text);
+    const result = compileLeaves(list, text, { name: FIXTURE_RULE_NAME });
     expect(result.ok).toBe(true);
   });
 });
@@ -103,7 +106,7 @@ describe("Semantic authoring persistent designation with a filtered selection", 
       ["against that mark", "designated-filter", { subject: "defender", tag: "fabricated-mark" }],
       ["ignore the Hit roll modifiers", "ignore-modifiers", { subject: "this-unit", what: ["rolls"], rolls: ["hit"] }],
     );
-    const result = compileLeaves(list, text);
+    const result = compileLeaves(list, text, { name: FIXTURE_RULE_NAME });
     expect(result.ok).toBe(true);
   });
 });
@@ -115,7 +118,7 @@ const SELECT_WINDOW: [string, string, Record<string, unknown>] = ["Command phase
 const SELECT_TEST: [string, string, Record<string, unknown>] = ["That unit must take a test", "test", { target: "selected-unit", test: "battle-shock" }];
 
 function selectionOf(text: string, ...items: Array<[string, string, Record<string, unknown>]>) {
-  return compileLeaves(placed(text, ...items), text);
+  return compileLeaves(placed(text, ...items), text, { name: FIXTURE_RULE_NAME });
 }
 
 /** The first `selector` object in the compiled mechanics (the select's own selector, under any conditional). */
@@ -203,13 +206,13 @@ describe("Semantic authoring aura-range side against the unit-filter before it",
     ["-1 OC", "characteristic-modifier", { subject: "antecedent", characteristics: ["OC"], operation: "worsen", value: 1 }]);
 
   it("folds an aura whose side equals the filter's side into the aura", () => {
-    const result = compileLeaves(aura("enemy"), AURA_TEXT);
+    const result = compileLeaves(aura("enemy"), AURA_TEXT, { name: FIXTURE_RULE_NAME });
     expect(result.ok).toBe(true);
     expect(JSON.stringify(result.ok ? result.mechanics : {})).toContain('"none_of":["BETA"]');
   });
 
   it("refuses an aura whose side differs from the filter's side", () => {
-    const result = compileLeaves(aura("friendly"), AURA_TEXT);
+    const result = compileLeaves(aura("friendly"), AURA_TEXT, { name: FIXTURE_RULE_NAME });
     expect(result.ok).toBe(false);
     expect(result.ok ? "" : result.errors.join(" ")).toMatch(/aura-range's side differs/);
   });

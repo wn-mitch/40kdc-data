@@ -1358,7 +1358,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     // attacker gate ("that disembarked from this TRANSPORT") narrows it the same way.
     const attackGates = global.filter((node) => node.type === "attack-is" || isAttackerGate(node));
     if (attackGates.length) global.splice(0, global.length, ...global.filter((node) => !attackGates.includes(node)));
-    body = attempt(() => designation(selections[0]!, list, gated(attackGates, body!), durations[0], eligibility, selectionLimit));
+    body = attempt(() => designation(options.name, selections[0]!, list, gated(attackGates, body!), durations[0], eligibility, selectionLimit));
     // The lifted spends come before the designation, so the designation's read of them is set when it is tested.
     if (body && designatedSpends.length) body = { type: "sequence", steps: [...designatedSpends.map((item) => gated(item.gate, item.node)), body] };
   }
@@ -1371,7 +1371,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
       const own = eligibilityIndexes.filter((at) => list.slice(0, at).map((item) => item.family_id === "select-unit").lastIndexOf(true) === list.indexOf(selection));
       return own.length ? allOf(own.map((at) => condition(eligibilityLeaf(list[at]!)))) : null;
     };
-    body = attempt(() => boundAttackDesignation(independent, list, gated(attackGates, body!), durations[0], { friendly: eligibilityOf(independent.friendly), enemy: eligibilityOf(independent.enemy) }));
+    body = attempt(() => boundAttackDesignation(options.name, independent, list, gated(attackGates, body!), durations[0], { friendly: eligibilityOf(independent.friendly), enemy: eligibilityOf(independent.enemy) }));
   }
   // "Select one enemy unit to be this model's prey": a persistent designation makes that selection itself.
   // A designation's own select, possibly wrapped optional, is the body's, not a select around it.

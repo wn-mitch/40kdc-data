@@ -4,6 +4,9 @@ import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compi
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { familyExtension } from "../src/semantic-authoring/families/index.js";
 
+/** A registered designation, so a designate-target compiles (compile-wrappers.ts designationIdFor). */
+const FIXTURE_RULE_NAME = "A Trap Well Laid";
+
 /** The family versions the extensions under test create. */
 const BINDING_BUNDLE_VERSIONS: ReadonlySet<string> = new Set(["usage-limit@5", "event@24", "attack@7"]);
 
@@ -18,7 +21,7 @@ function compileItems(text: string, items: Array<[string, string, Record<string,
     const version = currentFamilyVersion(family);
     return { role: familyRole(family, version), family_id: family, family_version: version, parameters, start_byte: start, end_byte: from, fragment: fragment ?? "RAW_TEXT" };
   });
-  return compileLeaves(leaves, text);
+  return compileLeaves(leaves, text, { name: FIXTURE_RULE_NAME });
 }
 
 function mechanicsOf(text: string, items: Array<[string, string, Record<string, unknown>, string?]>): Record<string, any> {

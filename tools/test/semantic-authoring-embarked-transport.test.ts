@@ -4,6 +4,9 @@ import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compi
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { designation } from "../src/semantic-authoring/compile-wrappers.js";
 
+/** A registered designation, so a designate-target compiles (compile-wrappers.ts designationIdFor). */
+const FIXTURE_RULE_NAME = "A Trap Well Laid";
+
 // Fabricated wording throughout: "stowed within a Hauler" stands for a unit embarked within a Transport.
 
 /** Leaves on their own wording in `text`, in order, all in one fragment (or none). */
@@ -20,7 +23,7 @@ function placed(text: string, fragment: string | undefined, ...items: Array<[str
 }
 
 function compiled(text: string, fragment: string | undefined, ...items: Array<[string, string, Record<string, unknown>]>) {
-  return compileLeaves(placed(text, fragment, ...items), text);
+  return compileLeaves(placed(text, fragment, ...items), text, { name: FIXTURE_RULE_NAME });
 }
 
 function mechanicsOf(text: string, fragment: string | undefined, ...items: Array<[string, string, Record<string, unknown>]>): Record<string, any> {
@@ -151,7 +154,7 @@ describe("select-unit within_origin (wave 10)", () => {
     const [select, attack] = placed(text, undefined,
       ["Select one enemy unit within 6\" of its Hauler", "select-unit", { scope: "enemy", distance: "within", inches: 6, visible: false, within_origin: "bearer-transport" }],
       ["Each time this unit makes an attack", "attack", { direction: "makes", unit: "this-unit", attack_type: "any" }]);
-    expect(designation(select!, [attack!], {}, undefined)).toMatchObject({
+    expect(designation(FIXTURE_RULE_NAME, select!, [attack!], {}, undefined)).toMatchObject({
       type: "designate-target",
       select: { kind: "unit", selector: { filter: { owner: "enemy", within: { range: { inches: 6 }, of: "bearer-transport" } }, count: { min: 1, max: 1 } } },
     });
@@ -197,7 +200,7 @@ describe("embarked-permission folds into the designation before it (wave 10)", (
   it("refuses when no designation precedes it in the same fragment", () => {
     const text = [DESIGNATE, PERMIT].join(" ");
     const list = [...placed(text, "A", ...base()), ...placed(text, "B", permit)];
-    const result = compileLeaves(list, text);
+    const result = compileLeaves(list, text, { name: FIXTURE_RULE_NAME });
     expect(result.ok).toBe(false);
     expect(result.ok ? "" : result.errors.join(" ")).toMatch(/persistent designation before it/);
   });

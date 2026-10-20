@@ -8,6 +8,9 @@ import { currentFamilyVersion, familyRole } from "../src/semantic-authoring/cont
 import { createValidator } from "../src/schema-loader.js";
 import { describeAbility } from "../src/translate/index.js";
 
+/** A registered designation, so a designate-target compiles (compile-wrappers.ts designationIdFor). */
+const FIXTURE_RULE_NAME = "A Trap Well Laid";
+
 /** Leaves on their own wording in `text`, in order (fabricated wording, not rules text). */
 function placed(text: string, ...items: Array<[string, string, Record<string, unknown>]>): CompileLeaf[] {
   const bytes = Buffer.from(text, "utf8");
@@ -22,7 +25,7 @@ function placed(text: string, ...items: Array<[string, string, Record<string, un
 }
 
 function mechanicsOf(list: CompileLeaf[], text: string): Record<string, any> {
-  const result = compileLeaves(list, text);
+  const result = compileLeaves(list, text, { name: FIXTURE_RULE_NAME });
   if (!result.ok) throw new Error(result.errors.join("; "));
   return result.mechanics as unknown as Record<string, any>;
 }
@@ -87,7 +90,7 @@ describe("a selection's hit eligibility (S1, S2)", () => {
       ["select one enemy unit within 6\" of it", "select-unit", { scope: "enemy", distance: "within", within_of: "bearer", visible: false }],
       ["hit by one or more of those attacks", "hit-by-attacks", { subject: "selected-unit" }],
       ["made with its Doomweaver", "attack-filter", { weapon_name: "Doomweaver" }],
-      ["that enemy unit is pinned", "apply-mark", { subject: "antecedent", tag: "pinned" }]), text);
+      ["that enemy unit is pinned", "apply-mark", { subject: "antecedent", tag: "pinned" }]), text, { name: FIXTURE_RULE_NAME });
     expect(result.ok).toBe(false);
     // The bound-pair check in compile.ts refuses any eligibility on a pair before the pair branch is reached.
     expect(result.errors.join(" ")).toMatch(/not bound with it yet/u);
@@ -103,7 +106,7 @@ describe("a selection's hit eligibility (S1, S2)", () => {
       ["to be this model's quarry", "persistent-designation-open", { designation: "prey", scope: "enemy-unit", timing: "start-of-first-battle-round", beneficiary: "this-model" }],
       ["Each time this model makes an attack", "attack", { direction: "makes", unit: "this-model", attack_type: "any" }],
       ["that targets its quarry", "designated-filter", { subject: "defender", tag: "prey" }],
-      ["you can re-roll the Hit roll", "reroll", { roll: "hit", subset: "all", weapon_type: "all" }]), text);
+      ["you can re-roll the Hit roll", "reroll", { roll: "hit", subset: "all", weapon_type: "all" }]), text, { name: FIXTURE_RULE_NAME });
     expect(result.ok).toBe(true);
     if (!result.ok) return;
     expect(JSON.stringify(result.mechanics.effect)).toContain('"weapons":{"name":"Doomweaver"}');
@@ -171,21 +174,21 @@ describe("a before-form hit binds the unit it hit (B)", () => {
 
   it("refuses a before-form hit with no unit-filter after it", () => {
     const without = leaves().filter((leaf) => leaf.family_id !== "unit-filter");
-    const result = compileLeaves(without, text);
+    const result = compileLeaves(without, text, { name: FIXTURE_RULE_NAME });
     expect(result.ok).toBe(false);
     expect(result.errors.join(" ")).toMatch(/before-form/u);
   });
 
   it("refuses a before-form hit with window phase", () => {
     const phased = leaves().map((leaf) => leaf.family_id === "hit-by-attacks" ? { ...leaf, parameters: { ...leaf.parameters, window: "phase" } } : leaf);
-    const result = compileLeaves(phased, text);
+    const result = compileLeaves(phased, text, { name: FIXTURE_RULE_NAME });
     expect(result.ok).toBe(false);
     expect(result.errors.join(" ")).toMatch(/before-form/u);
   });
 
   it("refuses a that-unit anaphor in another part, which the binder cannot reach", () => {
     const split = leaves().map((leaf) => leaf.family_id === "characteristic-modifier" ? { ...leaf, fragment: "OTHER" } : leaf);
-    const result = compileLeaves(split, text);
+    const result = compileLeaves(split, text, { name: FIXTURE_RULE_NAME });
     expect(result.ok).toBe(false);
     expect(result.errors.join(" ")).toMatch(/characteristic-modifier at byte \d+ is in another part/u);
   });
@@ -199,7 +202,7 @@ describe("a before-form hit binds the unit it hit (B)", () => {
       ["scored a hit against an", "hit-by-attacks", { object: "following-filter" }],
       ["enemy unit", "unit-filter", { side: "enemy" }],
       ["add 1 to the Wound roll", "roll-modifier", { roll: "wound", operation: "add", value: 1 }],
-    ), plain);
+    ), plain, { name: FIXTURE_RULE_NAME });
     expect(result.ok).toBe(true);
     expect(result.ok ? result.mechanics : null).toEqual({
       effect: { type: "conditional", condition: { operator: "and", operands: [
@@ -272,7 +275,7 @@ describe("before-form hit guards and shapes", () => {
       ["enemy unit", "unit-filter", { side: "enemy" }],
       ["that enemy unit is pinned", "apply-mark", { subject: "antecedent", tag: "pinned" }],
       ["enemy INFANTRY unit", "unit-filter", { side: "enemy", keywords: ["INFANTRY"] }],
-      ["that unit must take a Battle-shock test", "test", { target: "antecedent", test: "battle-shock" }]), text);
+      ["that unit must take a Battle-shock test", "test", { target: "antecedent", test: "battle-shock" }]), text, { name: FIXTURE_RULE_NAME });
     expect(result.ok).toBe(false);
     expect(result.errors.join(" ")).toMatch(/followed by another unit-filter in its part/u);
   });
@@ -313,7 +316,7 @@ describe("a hit eligibility over two unbound selections", () => {
       ["select one friendly unit", "select-unit", { scope: "friendly", distance: "any", visible: false }],
       ["hit by one or more of those attacks", "hit-by-attacks", { subject: "selected-unit" }],
       ["made with its Doomweaver", "attack-filter", { weapon_name: "Doomweaver" }],
-      ["that enemy unit is pinned", "apply-mark", { subject: "antecedent", tag: "pinned" }]), text);
+      ["that enemy unit is pinned", "apply-mark", { subject: "antecedent", tag: "pinned" }]), text, { name: FIXTURE_RULE_NAME });
     expect(result.ok).toBe(false);
     expect(result.errors.join(" ")).toMatch(/More than one unit is selected/u);
   });

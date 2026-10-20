@@ -3,6 +3,9 @@ import { describe, expect, it } from "vitest";
 import { compileLeaves, shapeSignature, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 
+/** A registered designation, so a designate-target compiles (compile-wrappers.ts designationIdFor). */
+const FIXTURE_RULE_NAME = "A Trap Well Laid";
+
 // Fabricated wording and keywords only; no rules prose.
 
 type Part = [string, string, Record<string, unknown>];
@@ -23,13 +26,13 @@ function placed(text: string, ...items: Part[]): CompileLeaf[] {
 }
 
 function mechanicsOf(text: string, ...items: Part[]): Record<string, any> {
-  const result = compileLeaves(placed(text, ...items), text);
+  const result = compileLeaves(placed(text, ...items), text, { name: FIXTURE_RULE_NAME });
   if (!result.ok) throw new Error(result.errors.join("; "));
   return result.mechanics as unknown as Record<string, any>;
 }
 
 function errorsOf(text: string, ...items: Part[]): string[] {
-  const result = compileLeaves(placed(text, ...items), text);
+  const result = compileLeaves(placed(text, ...items), text, { name: FIXTURE_RULE_NAME });
   if (result.ok) throw new Error(`compiled: ${JSON.stringify(result.mechanics)}`);
   return result.errors;
 }
@@ -216,13 +219,13 @@ describe("Sub-shape C2: incoming attacks on each unit a filter matches", () => {
     const result = compileLeaves(placed(own, ["Select one enemy unit", "select-unit", { scope: "enemy", distance: "any", visible: false }],
       ["ZETA units", "unit-filter", { side: "friendly", keywords: ["ZETA"] }],
       ["attacks that target that unit", "attack", { direction: "targeted", unit: "that-unit", attack_type: "any" }],
-      ["have -1 to Wound rolls", "roll-modifier", { roll: "wound", operation: "subtract", value: 1 }]), own);
+      ["have -1 to Wound rolls", "roll-modifier", { roll: "wound", operation: "subtract", value: 1 }]), own, { name: FIXTURE_RULE_NAME });
     expect(JSON.stringify(result)).not.toContain("owned-by");
   });
 
   it("gives way to a selection before the filter", () => {
     const own = "Select one enemy unit. While a friendly ZETA unit is within range of an objective marker, attacks that target that unit have -1 to Wound rolls.";
-    const result = compileLeaves(placed(own, ["Select one enemy unit", "select-unit", { scope: "enemy", distance: "any", visible: false }], ...parts("friendly")), own);
+    const result = compileLeaves(placed(own, ["Select one enemy unit", "select-unit", { scope: "enemy", distance: "any", visible: false }], ...parts("friendly")), own, { name: FIXTURE_RULE_NAME });
     expect(JSON.stringify(result)).not.toContain("owned-by");
   });
 });
