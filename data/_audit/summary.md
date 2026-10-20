@@ -54,7 +54,7 @@ abilities that translate into cruncher buffs via the real `effectToBuffs`
 - `148` — conditional: cannot evaluate condition "matches" against current context
 - `106` — unit-filter target: identity, state or model membership is unresolved
 - `91` — effect type "mortal-wounds" is not modelled by the buff layer
-- `71` — conditional: cannot evaluate condition "not" against current context
+- `70` — conditional: cannot evaluate condition "not" against current context
 - `68` — effect type "move" is not modelled by the buff layer
 - `60` — conditional: cannot evaluate condition "happened" against current context
 - `57` — effect type "ability-grant" is not modelled by the buff layer

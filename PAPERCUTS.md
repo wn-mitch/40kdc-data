@@ -494,3 +494,7 @@ tooling/parity/differ.py defaults to the prebuilt tools/dist/runner.js; when dis
 ## 2026-10-20T21:23:43Z — opus
 
 npm run damage:stack resolves HC_OUTPUT against the shell cwd (tools/), not the repo root as CLAUDE.md says tool paths do; the 88-cell matrix landed in tools/_private/velochy/ instead of _private/velochy/.
+
+## 2026-10-20T21:39:02Z — opus
+
+npm run damage:stack resumes every cell from an existing HC_OUTPUT file whose config scope matches, even after code changes; a rerun to the same path silently returned the previous results. Write to a fresh path to force a rerun.

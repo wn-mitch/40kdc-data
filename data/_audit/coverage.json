@@ -427,7 +427,7 @@
     },
     {
       "reason": "conditional: cannot evaluate condition \"not\" against current context",
-      "count": 71
+      "count": 70
     },
     {
       "reason": "effect type \"move\" is not modelled by the buff layer",
@@ -23389,7 +23389,7 @@
       "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "conditional: cannot evaluate condition \"not\" against current context"
+      "gap": null
     },
     {
       "faction": "death-guard",
