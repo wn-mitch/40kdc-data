@@ -2262,6 +2262,106 @@
       }
     },
     {
+      "_comment": "attacker roll change: a penalty on the attacker defends the unit attacked, so only the target perspective applies it (attacker)",
+      "abilityId": "stealth",
+      "source": {
+        "kind": "ability",
+        "abilityId": "stealth",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "attacker roll change: a penalty on the attacker defends the unit attacked, so only the target perspective applies it (target)",
+      "abilityId": "stealth",
+      "source": {
+        "kind": "ability",
+        "abilityId": "stealth",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": -1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "attacker roll change: a bonus to the attacker is the attacking side's own rule, so only the attacker perspective applies it (attacker)",
+      "abilityId": "attacker-bonus",
+      "source": {
+        "kind": "ability",
+        "abilityId": "attacker-bonus",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "attacker",
+        "modifier": {
+          "roll": "hit",
+          "operation": "add",
+          "value": 1
+        }
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "attacker roll change: a bonus to the attacker is the attacking side's own rule, so only the attacker perspective applies it (target)",
+      "abilityId": "attacker-bonus",
+      "source": {
+        "kind": "ability",
+        "abilityId": "attacker-bonus",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "attacker",
+        "modifier": {
+          "roll": "hit",
+          "operation": "add",
+          "value": 1
+        }
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
       "caseId": "canonical/recipient-snapshot/attested-strength-after-detachment",
       "abilityId": "snapshot-example",
       "source": {

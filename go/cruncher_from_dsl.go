@@ -1413,7 +1413,13 @@ func translateRollModifier(node, source map[string]any, opts dslOpts, out *effec
 		return
 	}
 	roll, _ := modifier["roll"].(string)
+	// A change to the attacker's roll belongs to the side it favours: one that helps the attacker is
+	// the attacking side's own rule, one that hinders it defends the unit being attacked.
+	attackerChange := classifyTarget(node) == "attacker"
 	if opts.perspective == "attacker" {
+		if attackerChange && value < 0 {
+			return
+		}
 		if !appliesToBuffedUnit(node, "attacker") {
 			return
 		}
@@ -1424,6 +1430,9 @@ func translateRollModifier(node, source map[string]any, opts dslOpts, out *effec
 		cls := classifyTarget(node)
 		if cls == "attacker" {
 			if roll != "hit" && roll != "wound" {
+				return
+			}
+			if attackerChange && value > 0 {
 				return
 			}
 		} else if cls == "self" {

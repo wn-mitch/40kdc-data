@@ -701,9 +701,14 @@ def _translate_roll_modifier(
         )
         return
     roll = modifier.get("roll")
+    # A change to the attacker's roll belongs to the side it favours: one that helps the attacker
+    # is the attacking side's own rule, one that hinders it defends the unit being attacked.
+    attacker_change = _classify_target(node) == "attacker"
     # Each roll type is intrinsically on one side. Hit / wound / damage are
     # attacker-side; save is defender-side.
     if opts["perspective"] == "attacker":
+        if attacker_change and value < 0:
+            return
         if not _applies_to_buffed_unit(node, "attacker"):
             return
         if roll == "save":
@@ -714,6 +719,8 @@ def _translate_roll_modifier(
         cls = _classify_target(node)
         if cls == "attacker":
             if roll not in ("hit", "wound"):
+                return
+            if attacker_change and value > 0:
                 return
         elif cls == "self":
             if roll != "save":

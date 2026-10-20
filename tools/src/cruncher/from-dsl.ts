@@ -689,10 +689,14 @@ function translateRollModifier(
     return;
   }
   const roll = modifier.roll;
+  // A change to the attacker's roll belongs to the side it favours: one that helps the attacker is
+  // the attacking side's own rule, one that hinders it defends the unit being attacked.
+  const attackerChange = classifyTarget(node) === "attacker";
   // Each roll type is intrinsically on one side. Hit / wound / damage are
   // attacker-side; save is defender-side. The perspective decides whether the
   // buffed unit's `target` is the right party for that roll type.
   if (opts.perspective === "attacker") {
+    if (attackerChange && value < 0) return;
     if (!appliesToBuffedUnit(node, "attacker")) return;
     if (roll === "save") return; // saves apply to the defender, not the attacker.
   } else {
@@ -707,6 +711,7 @@ function translateRollModifier(
     const cls = classifyTarget(node);
     if (cls === "attacker") {
       if (roll !== "hit" && roll !== "wound") return; // damage/save against the attacker make no sense here.
+      if (attackerChange && value > 0) return;
     } else if (cls === "self") {
       if (roll !== "save") return;
     } else {

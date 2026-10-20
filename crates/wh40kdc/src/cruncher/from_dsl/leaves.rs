@@ -120,14 +120,21 @@ pub(super) fn roll_modifier(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     };
     let roll = m.get("roll");
     let r = roll.and_then(Value::as_str);
+    // A change to the attacker's roll belongs to the side it favours: one that helps the attacker is
+    // the attacking side's own rule, one that hinders it defends the unit being attacked.
+    let side = classify_target(node);
+    let attacker_change = side == Side::Attacker;
     if opts.perspective == Attacker {
+        if attacker_change && value < 0.0 {
+            return;
+        }
         if !applies_to_buffed_unit(node, Attacker) || r == Some("save") {
             return;
         }
     } else {
         // The buffed unit's own saves, or a penalty to the incoming attacker's hit/wound rolls.
-        match classify_target(node) {
-            Side::Attacker if matches!(r, Some("hit" | "wound")) => {}
+        match side {
+            Side::Attacker if matches!(r, Some("hit" | "wound")) && value <= 0.0 => {}
             Side::Buffed if r == Some("save") => {}
             _ => return,
         }
