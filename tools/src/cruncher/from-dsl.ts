@@ -1286,6 +1286,15 @@ function translateNamedRegionState(
   }
 }
 
+/** An `attack-is` naming weapons, or its negation: the resolver gates these per weapon. */
+function isWeaponScopedCondition(condition: Record<string, unknown>): boolean {
+  if (condition.operator === "not" && Array.isArray(condition.operands) && condition.operands.length === 1) {
+    const operand = condition.operands[0];
+    return isObject(operand) && isWeaponScopedCondition(operand) && operand.operator === undefined;
+  }
+  return condition.type === "attack-is" && isObject(condition.parameters) && condition.parameters.weapons !== undefined;
+}
+
 function translateConditional(
   node: Record<string, unknown>,
   source: BuffSource,
@@ -1295,7 +1304,7 @@ function translateConditional(
   const condition = node.condition;
   const effect = node.effect;
   if (!isObject(condition)) return;
-  if (condition.type === "attack-is" && isObject(condition.parameters) && condition.parameters.weapons !== undefined) {
+  if (isWeaponScopedCondition(condition)) {
     const applicability = conditionToApplicability(condition, opts.perspective);
     if (typeof applicability !== "string") {
       const sub: EffectTranslation = { applied: [], unsupported: [], activatable: [] };
@@ -1787,11 +1796,26 @@ function extractTiming(condition: Record<string, unknown>): string | undefined {
  * or `"context"` when the condition has no declarative buff representation and
  * must fall back to context evaluation.
  */
+/**
+ * `not attack-is {weapons: {keyword}}` as a weapon exclusion: the effect applies to attacks with
+ * none of those weapon keywords. Any other negation needs the attack context.
+ */
+function negatedWeaponApplicability(operands: unknown[]): BuffApplicability | "context" {
+  const operand = operands.length === 1 ? operands[0] : undefined;
+  if (!isObject(operand) || operand.type !== "attack-is" || !isObject(operand.parameters)) return "context";
+  const params = operand.parameters;
+  if (Object.keys(params).some((key) => key !== "weapons") || !isObject(params.weapons) || unhonorableNarrowing(params)) return "context";
+  if (Object.keys(params.weapons).some((key) => key !== "keyword")) return "context";
+  const included = weaponApplicability(params)?.weaponKeywords;
+  return included && included.length > 0 ? { excludedWeaponKeywords: included } : "context";
+}
+
 function conditionToApplicability(
   condition: Record<string, unknown>,
   perspective: TranslationPerspective,
 ): BuffApplicability | "context" | "gate" {
   if (typeof condition.operator === "string" && Array.isArray(condition.operands)) {
+    if (condition.operator === "not") return negatedWeaponApplicability(condition.operands);
     if (condition.operator !== "and") return "context";
     let merged: BuffApplicability = {};
     for (const operand of condition.operands) {

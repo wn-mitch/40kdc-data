@@ -3932,6 +3932,145 @@
       }
     },
     {
+      "caseId": "weapon-scope/attack-is-keyword",
+      "abilityId": "fabricated-weapon-scope",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-weapon-scope",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "attack-is",
+          "parameters": {
+            "weapons": {
+              "keyword": {
+                "keyword_id": "blast"
+              }
+            }
+          }
+        },
+        "effect": {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "subset": "ones"
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "reroll",
+            "roll": "hit",
+            "subset": "ones"
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "weapon-scope/not-attack-is-keyword",
+      "abilityId": "fabricated-weapon-scope",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-weapon-scope",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "operator": "not",
+          "operands": [
+            {
+              "type": "attack-is",
+              "parameters": {
+                "weapons": {
+                  "keyword": {
+                    "keyword_id": "blast"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "effect": {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "subset": "ones"
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "reroll",
+            "roll": "hit",
+            "subset": "ones"
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "weapon-scope/not-attack-is-name",
+      "abilityId": "fabricated-weapon-scope",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-weapon-scope",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "operator": "not",
+          "operands": [
+            {
+              "type": "attack-is",
+              "parameters": {
+                "weapons": {
+                  "name": "Plague spewer"
+                }
+              }
+            }
+          ]
+        },
+        "effect": {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "subset": "ones"
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"not\" against current context"
+        ],
+        "activatable": []
+      }
+    },
+    {
       "caseId": "canonical/recipient-snapshot/attested-strength-after-detachment",
       "abilityId": "snapshot-example",
       "source": {

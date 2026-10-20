@@ -1381,6 +1381,43 @@ def _translate_named_region_state(
         )
 
 
+def _is_weapon_scoped_condition(condition: dict[str, Any]) -> bool:
+    """An ``attack-is`` naming weapons, or its negation: the resolver gates these per weapon."""
+    if condition.get("operator") == "not":
+        operands = condition.get("operands")
+        if not isinstance(operands, list) or len(operands) != 1 or not _is_object(operands[0]):
+            return False
+        return operands[0].get("operator") is None and _is_weapon_scoped_condition(operands[0])
+    params = condition.get("parameters")
+    return (
+        condition.get("type") == "attack-is"
+        and _is_object(params)
+        and params.get("weapons") is not None
+    )
+
+
+def _negated_weapon_applicability(operands: list[Any]) -> Any:
+    """``not attack-is {weapons: {keyword}}`` as a weapon exclusion: the effect applies to attacks
+    with none of those weapon keywords. Any other negation needs the attack context."""
+    if len(operands) != 1 or not _is_object(operands[0]):
+        return "context"
+    operand = operands[0]
+    params = operand.get("parameters")
+    if operand.get("type") != "attack-is" or not _is_object(params):
+        return "context"
+    weapons = params.get("weapons")
+    if (
+        any(k != "weapons" for k in params)
+        or not _is_object(weapons)
+        or _unhonorable_narrowing(params)
+    ):
+        return "context"
+    if any(k != "keyword" for k in weapons):
+        return "context"
+    included = (weapon_applicability(params) or {}).get("weaponKeywords")
+    return {"excludedWeaponKeywords": included} if included else "context"
+
+
 def _translate_conditional(
     node: dict[str, Any], source: BuffSource, opts: dict[str, Any], out: EffectTranslation
 ) -> None:
@@ -1388,6 +1425,18 @@ def _translate_conditional(
     effect = node.get("effect")
     if not _is_object(condition):
         return
+    if _is_weapon_scoped_condition(condition):
+        applicability = _condition_to_applicability(condition, opts["perspective"])
+        if isinstance(applicability, dict):
+            sub: EffectTranslation = {"applied": [], "unsupported": [], "activatable": []}
+            _walk(effect, source, opts, sub)
+            out["applied"].extend(_apply_applicability(b, applicability) for b in sub["applied"])
+            out["activatable"].extend(
+                {**lever, "buffs": [_apply_applicability(b, applicability) for b in lever["buffs"]]}
+                for lever in sub["activatable"]
+            )
+            out["unsupported"].extend(sub["unsupported"])
+            return
     if node.get("_activation_source") is not None and is_post_own_attack_moment(
         node.get("_activation_trigger")
     ):
@@ -2161,6 +2210,8 @@ def _condition_to_applicability(condition: dict[str, Any], perspective: str) -> 
     on. Returns ``"gate"`` for a player-controlled timing, or ``"context"``
     when the condition has no declarative buff representation."""
     if isinstance(condition.get("operator"), str) and isinstance(condition.get("operands"), list):
+        if condition["operator"] == "not":
+            return _negated_weapon_applicability(condition["operands"])
         if condition["operator"] != "and":
             return "context"
         merged: dict[str, Any] = {}
@@ -2202,14 +2253,16 @@ def _condition_to_applicability(condition: dict[str, Any], perspective: str) -> 
             else {"requiresAttackerKeyword": kw}
         )
     if ctype == "attack-is":
-        if params is None or any(k != "attack_type" for k in params):
+        if (
+            params is None
+            or any(k not in ("attack_type", "weapons") for k in params)
+            or _unhonorable_narrowing(params)
+        ):
             return "context"
-        t = params.get("attack_type")
-        if t == "melee":
-            return {"phases": ["fight"]}
-        if t == "ranged":
-            return {"phases": ["shooting"]}
-        return "context"
+        applicability = combine_optional(
+            _attack_type_applicability(params), weapon_applicability(params)
+        )
+        return applicability if applicability is not None else "context"
     return "context"
 
 

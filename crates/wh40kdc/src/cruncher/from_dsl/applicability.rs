@@ -13,6 +13,46 @@ pub(super) enum App {
     When(Obj),
 }
 
+/// `not attack-is {weapons: {keyword}}` as a weapon exclusion: the effect applies to attacks with
+/// none of those weapon keywords. Any other negation needs the attack context.
+fn negated_weapon_applicability(operands: &[Value]) -> App {
+    let [operand] = operands else {
+        return App::Context;
+    };
+    let Some(operand) = operand.as_object() else {
+        return App::Context;
+    };
+    let Some(params) = object(operand.get("parameters")) else {
+        return App::Context;
+    };
+    if !is_str(operand, "type", "attack-is")
+        || params.keys().any(|key| key != "weapons")
+        || super::damage_leaves::unresolved_weapon_scope(params).is_some()
+    {
+        return App::Context;
+    }
+    let Some(weapons) = object(params.get("weapons")) else {
+        return App::Context;
+    };
+    if weapons.keys().any(|key| key != "keyword") {
+        return App::Context;
+    }
+    match super::damage_leaves::weapon_applicability(params)
+        .as_ref()
+        .and_then(|gate| gate.get("weaponKeywords"))
+    {
+        Some(Value::Array(included)) if !included.is_empty() => {
+            let mut gate = Obj::new();
+            gate.insert(
+                "excludedWeaponKeywords".into(),
+                Value::Array(included.clone()),
+            );
+            App::When(gate)
+        }
+        _ => App::Context,
+    }
+}
+
 /// A condition as a buff applicability the resolver can gate on.
 pub(super) fn condition_to_applicability(
     condition: &Obj,
@@ -20,6 +60,9 @@ pub(super) fn condition_to_applicability(
 ) -> App {
     if condition.get("operator").is_some_and(Value::is_string) {
         if let Some(operands) = condition.get("operands").and_then(Value::as_array) {
+            if is_str(condition, "operator", "not") {
+                return negated_weapon_applicability(operands);
+            }
             if !is_str(condition, "operator", "and") {
                 return App::Context;
             }

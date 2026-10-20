@@ -490,3 +490,7 @@ Resolver example lookup used nonexistent test paths; grep skipped them, so the a
 ## 2026-10-20T18:31:17Z — claude-opus-5-5
 
 tooling/parity/differ.py defaults to the prebuilt tools/dist/runner.js; when dist predates a new op the area prints [skip] and the run still reports OK, so a new area can look verified without being checked. Rebuild tools (npm run build) or pass --ts-cmd with tsx src/runner.ts.
+
+## 2026-10-20T21:23:43Z — opus
+
+npm run damage:stack resolves HC_OUTPUT against the shell cwd (tools/), not the repo root as CLAUDE.md says tool paths do; the 88-cell matrix landed in tools/_private/velochy/ instead of _private/velochy/.

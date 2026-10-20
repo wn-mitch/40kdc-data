@@ -30,7 +30,7 @@ function initialReport(config: MatrixConfig): DamageMatrixReport {
       caveats: [
         "This is a local attached-unit and support-ability stack, not a whole-army roster or proof of global optimality.",
         "The benchmark uses the shipped Salvo consumer primitives: Dataset.stackableBuffsFor, isLegalLeverSelection, Dataset.defensiveBuffsFor, loadout helpers and crunch.",
-        "Fight scoring enforces all Extra Attacks plus at most one ordinary melee weapon per model; Salvo's current interactive aggregate permits users to include every visible melee line, so a browser smoke must compare that selection explicitly.",
+        "Fight scoring enforces all Extra Attacks plus at most one ordinary melee weapon per model; Salvo selects its weapon lines with the same unitLoadoutDamage scoring.",
         "Unsupported translated mechanics and unproven activation requirements are reported rather than treated as authored zeroes.",
         "Each cell's ledger lists every eligible provider as applied, rejected or unresolved. A cell is incomplete when an unresolved provider could change the current attack; encounter-layer effects (deaths, reactive attacks, restoration, designations for later attacks) are listed but never scored.",
         "Shooting applies the Pistol rule per model; cells are scored outside Engagement Range.",

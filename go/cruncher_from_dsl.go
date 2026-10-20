@@ -1761,33 +1761,31 @@ func translateConditional(node, source map[string]any, opts dslOpts, out *effect
 	if !ok {
 		return
 	}
-	if getStr(condition, "type") == "attack-is" {
-		if params, ok := getMap(condition, "parameters"); ok && params["weapons"] != nil {
-			if applicability, ok := conditionToApplicability(condition, opts.perspective).(map[string]any); ok {
-				sub := &effectTranslation{applied: []any{}, unsupported: []any{}, activatable: []any{}}
-				dslWalk(node["effect"], source, opts, sub)
-				for _, raw := range sub.applied {
-					if buff, ok := asMap(raw); ok {
-						out.applied = append(out.applied, applyApplicability(buff, applicability))
-					}
+	if isWeaponScopedCondition(condition) {
+		if applicability, ok := conditionToApplicability(condition, opts.perspective).(map[string]any); ok {
+			sub := &effectTranslation{applied: []any{}, unsupported: []any{}, activatable: []any{}}
+			dslWalk(node["effect"], source, opts, sub)
+			for _, raw := range sub.applied {
+				if buff, ok := asMap(raw); ok {
+					out.applied = append(out.applied, applyApplicability(buff, applicability))
 				}
-				for _, raw := range sub.activatable {
-					lever, ok := asMap(raw)
-					if !ok {
-						continue
-					}
-					buffs := getList(lever, "buffs")
-					for i, buffRaw := range buffs {
-						if buff, ok := asMap(buffRaw); ok {
-							buffs[i] = applyApplicability(buff, applicability)
-						}
-					}
-					lever["buffs"] = buffs
-					out.activatable = append(out.activatable, lever)
-				}
-				out.unsupported = append(out.unsupported, sub.unsupported...)
-				return
 			}
+			for _, raw := range sub.activatable {
+				lever, ok := asMap(raw)
+				if !ok {
+					continue
+				}
+				buffs := getList(lever, "buffs")
+				for i, buffRaw := range buffs {
+					if buff, ok := asMap(buffRaw); ok {
+						buffs[i] = applyApplicability(buff, applicability)
+					}
+				}
+				lever["buffs"] = buffs
+				out.activatable = append(out.activatable, lever)
+			}
+			out.unsupported = append(out.unsupported, sub.unsupported...)
+			return
 		}
 	}
 	evaluated := condition
@@ -1864,9 +1862,66 @@ func extractTiming(condition map[string]any) string {
 }
 
 // conditionToApplicability returns "gate", "context", or a declarative gate.
+// negatedWeaponApplicability reads `not attack-is {weapons: {keyword}}` as a weapon exclusion: the
+// effect applies to attacks with none of those weapon keywords. Any other negation needs the
+// attack context.
+func negatedWeaponApplicability(operands []any) any {
+	if len(operands) != 1 {
+		return "context"
+	}
+	operand, ok := asMap(operands[0])
+	if !ok || getStr(operand, "type") != "attack-is" {
+		return "context"
+	}
+	params, ok := getMap(operand, "parameters")
+	if !ok || unhonorableNarrowing(params) != "" {
+		return "context"
+	}
+	for key := range params {
+		if key != "weapons" {
+			return "context"
+		}
+	}
+	weapons, ok := getMap(params, "weapons")
+	if !ok {
+		return "context"
+	}
+	for key := range weapons {
+		if key != "keyword" {
+			return "context"
+		}
+	}
+	included, _ := weaponApplicability(params)["weaponKeywords"].([]map[string]any)
+	if len(included) == 0 {
+		return "context"
+	}
+	return map[string]any{"excludedWeaponKeywords": included}
+}
+
+// isWeaponScopedCondition reports an `attack-is` naming weapons, or its negation: the resolver
+// gates these per weapon.
+func isWeaponScopedCondition(condition map[string]any) bool {
+	if getStr(condition, "operator") == "not" {
+		operands, ok := asList(condition["operands"])
+		if !ok || len(operands) != 1 {
+			return false
+		}
+		operand, ok := asMap(operands[0])
+		return ok && operand["operator"] == nil && isWeaponScopedCondition(operand)
+	}
+	if getStr(condition, "type") != "attack-is" {
+		return false
+	}
+	params, ok := getMap(condition, "parameters")
+	return ok && params["weapons"] != nil
+}
+
 func conditionToApplicability(condition map[string]any, perspective string) any {
 	if op, ok := condition["operator"].(string); ok {
 		if operands, ok := asList(condition["operands"]); ok {
+			if op == "not" {
+				return negatedWeaponApplicability(operands)
+			}
 			if op != "and" {
 				return "context"
 			}

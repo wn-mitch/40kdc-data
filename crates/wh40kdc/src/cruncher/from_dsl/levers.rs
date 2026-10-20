@@ -281,17 +281,33 @@ pub(crate) fn moment_gate_with_source(
     Some(gated)
 }
 
-pub(super) fn conditional(node: &Obj, opts: &WalkOpts, out: &mut Out) {
-    let Some(condition) = object(node.get("condition")) else {
-        return;
-    };
-    if is_str(condition, "type", "attack-is")
+/// An `attack-is` naming weapons, or its negation: the resolver gates these per weapon.
+fn is_weapon_scoped_condition(condition: &Obj) -> bool {
+    if is_str(condition, "operator", "not") {
+        return match condition
+            .get("operands")
+            .and_then(Value::as_array)
+            .map(Vec::as_slice)
+        {
+            Some([operand]) => operand.as_object().is_some_and(|operand| {
+                operand.get("operator").is_none() && is_weapon_scoped_condition(operand)
+            }),
+            _ => false,
+        };
+    }
+    is_str(condition, "type", "attack-is")
         && object(condition.get("parameters")).is_some_and(|parameters| {
             parameters
                 .get("weapons")
                 .is_some_and(|value| !value.is_null())
         })
-    {
+}
+
+pub(super) fn conditional(node: &Obj, opts: &WalkOpts, out: &mut Out) {
+    let Some(condition) = object(node.get("condition")) else {
+        return;
+    };
+    if is_weapon_scoped_condition(condition) {
         if let App::When(applicability) = condition_to_applicability(condition, opts.perspective) {
             let mut sub = Out::default();
             walk(node.get("effect").unwrap_or(&Value::Null), opts, &mut sub);
