@@ -486,3 +486,7 @@ Eval tool results expose text and details through a non-enumerable result object
 ## 2026-10-16T04:29:18Z — sol
 
 Resolver example lookup used nonexistent test paths; grep skipped them, so the actual conformance fixture and exported API contracts were used instead.
+
+## 2026-10-20T18:31:17Z — claude-opus-5-5
+
+tooling/parity/differ.py defaults to the prebuilt tools/dist/runner.js; when dist predates a new op the area prints [skip] and the run still reports OK, so a new area can look verified without being checked. Rebuild tools (npm run build) or pass --ts-cmd with tsx src/runner.ts.
