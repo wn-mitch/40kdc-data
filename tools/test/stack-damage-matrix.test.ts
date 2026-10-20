@@ -1,3 +1,7 @@
+import { mkdtempSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+
 import { describe, expect, it } from "vitest";
 
 import { resolveTarget } from "../src/compare.js";
@@ -5,7 +9,15 @@ import { Dataset } from "../src/data/dataset.js";
 import { DamageCellCache } from "../src/stack-damage/cache.js";
 import { DEFAULT_HC_FACTIONS, parseMatrixConfig, parseScenario } from "../src/stack-damage/config.js";
 import { factionLineageFrom, preferFactionCopies, resolveFactionContext, unitAllowedInFaction } from "../src/stack-damage/factions.js";
-import { damageCellKey, reportCompleteness, type DamageCellReport } from "../src/stack-damage/report.js";
+import {
+  DAMAGE_MATRIX_FORMAT,
+  damageCellKey,
+  matrixScope,
+  readResumableCells,
+  reportCompleteness,
+  sourceFingerprint,
+  type DamageCellReport,
+} from "../src/stack-damage/report.js";
 import { damageScoringSession, emptySpec, runDamageCell } from "../src/stack-damage/search.js";
 import type { Unit } from "../src/generated.js";
 
@@ -30,6 +42,43 @@ describe("stack damage matrix configuration", () => {
     expect(() => parseMatrixConfig({ HC_TARGETS: "all,light" }, catalog)).toThrow("cannot be combined");
     expect(() => parseMatrixConfig({ HC_PHASES: "psychic" }, catalog)).toThrow("unsupported phase");
     expect(() => parseMatrixConfig({ HC_OUTPUT: "matrix.txt" }, catalog)).toThrow(".json");
+  });
+});
+
+describe("stack damage matrix resume", () => {
+  const config = parseMatrixConfig({}, catalog, "/work");
+  const cell = { key: damageCellKey("tau-empire", "light", "shooting") } as DamageCellReport;
+  const report = (scope: string) => {
+    const path = join(mkdtempSync(join(tmpdir(), "matrix-resume-")), "matrix.json");
+    writeFileSync(path, JSON.stringify({ format: DAMAGE_MATRIX_FORMAT, scope, cells: [cell] }));
+    return path;
+  };
+
+  it("resumes only a report written by the same config, scenario, code and data", () => {
+    const scope = matrixScope(config, "source-a");
+    expect(readResumableCells(report(scope), scope)).toEqual({ cells: [cell], discarded: null });
+    for (const stale of [
+      matrixScope(config, "source-b"),
+      matrixScope({ ...config, scenario: { battleRound: 2 } }, "source-a"),
+      matrixScope({ ...config, phases: ["fight"] }, "source-a"),
+    ]) {
+      expect(readResumableCells(report(stale), scope)).toEqual({ cells: [], discarded: expect.stringContaining("differ") });
+    }
+    expect(readResumableCells("/nonexistent/matrix.json", scope)).toEqual({ cells: [], discarded: null });
+  });
+
+  it("fingerprints file content and names", () => {
+    const tree = (files: Record<string, string>) => {
+      const root = mkdtempSync(join(tmpdir(), "matrix-source-"));
+      for (const [name, content] of Object.entries(files)) writeFileSync(join(root, name), content);
+      return sourceFingerprint(root);
+    };
+    const base = tree({ "a.ts": "one", "b.ts": "two" });
+    expect(tree({ "b.ts": "two", "a.ts": "one" })).toBe(base);
+    expect(tree({ "a.ts": "one", "b.ts": "three" })).not.toBe(base);
+    expect(tree({ "a.ts": "one", "c.ts": "two" })).not.toBe(base);
+    // Moving bytes across the file boundary must not collide.
+    expect(tree({ "a.ts": "onet", "b.ts": "wo" })).not.toBe(base);
   });
 });
 

@@ -1,5 +1,6 @@
-import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
-import { dirname } from "node:path";
+import { createHash } from "node:crypto";
+import { existsSync, mkdirSync, readdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
+import { dirname, join, relative } from "node:path";
 
 import type { ComparePhase } from "../compare.js";
 import type { MatrixConfig } from "./config.js";
@@ -138,7 +139,14 @@ export function reportCompleteness(
   return { complete: missing.length === 0 && unexpected.length === 0 && duplicates.length === 0, missing, unexpected, duplicates };
 }
 
-export function matrixScope(config: Pick<MatrixConfig, "factionIds" | "targetIds" | "phases" | "bodyguardLimit" | "attachmentLimit" | "finalistLimit" | "perFiveSensitivity" | "droppedArmyRules">): string {
+/**
+ * The identity a resumed cell must share with the current run: the config that shapes each cell, the
+ * declared scenario, and a fingerprint of the code and embedded data that score it.
+ */
+export function matrixScope(
+  config: Pick<MatrixConfig, "factionIds" | "targetIds" | "phases" | "bodyguardLimit" | "attachmentLimit" | "finalistLimit" | "perFiveSensitivity" | "droppedArmyRules" | "scenario">,
+  sourceFingerprint: string,
+): string {
   return JSON.stringify({
     factions: config.factionIds,
     targets: config.targetIds,
@@ -146,14 +154,42 @@ export function matrixScope(config: Pick<MatrixConfig, "factionIds" | "targetIds
     limits: [config.bodyguardLimit, config.attachmentLimit, config.finalistLimit].map((value) => Number.isFinite(value) ? value : "Infinity"),
     perFiveSensitivity: config.perFiveSensitivity,
     droppedArmyRules: config.droppedArmyRules,
+    scenario: config.scenario,
+    source: sourceFingerprint,
   });
 }
 
-export function readResumableCells(path: string, scope: string): DamageCellReport[] {
-  if (!existsSync(path)) return [];
-  const parsed = JSON.parse(readFileSync(path, "utf8")) as Partial<DamageMatrixReport>;
-  if (parsed.format !== DAMAGE_MATRIX_FORMAT || parsed.scope !== scope || !Array.isArray(parsed.cells)) return [];
-  return parsed.cells;
+/** SHA-256 over every file under `root` (path and content, in path order); `root` holds the scoring code and the embedded data bundle. */
+export function sourceFingerprint(root: string): string {
+  const hash = createHash("sha256");
+  const walk = (dir: string): string[] => readdirSync(dir, { withFileTypes: true })
+    .flatMap((entry) => entry.isDirectory() ? walk(join(dir, entry.name)) : entry.isFile() ? [join(dir, entry.name)] : []);
+  for (const file of walk(root).map((path) => relative(root, path).split("\\").join("/")).sort()) {
+    hash.update(`${file}\0`);
+    hash.update(readFileSync(join(root, file)));
+    hash.update("\0");
+  }
+  return hash.digest("hex");
+}
+
+export interface ResumedCells {
+  cells: DamageCellReport[];
+  /** Why an existing report at the path was not resumed; null when there was none or it was resumed. */
+  discarded: string | null;
+}
+
+/** The cells of an existing report at `path`, when it was written with the same format and scope. */
+export function readResumableCells(path: string, scope: string): ResumedCells {
+  if (!existsSync(path)) return { cells: [], discarded: null };
+  let parsed: Partial<DamageMatrixReport>;
+  try {
+    parsed = JSON.parse(readFileSync(path, "utf8")) as Partial<DamageMatrixReport>;
+  } catch {
+    return { cells: [], discarded: "it is not valid JSON" };
+  }
+  if (parsed.format !== DAMAGE_MATRIX_FORMAT || !Array.isArray(parsed.cells)) return { cells: [], discarded: "it is not a damage matrix report" };
+  if (parsed.scope !== scope) return { cells: [], discarded: "its config, scenario, code or data differ from this run" };
+  return { cells: parsed.cells, discarded: null };
 }
 
 export function writeMatrixReport(path: string, report: DamageMatrixReport): void {

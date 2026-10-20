@@ -1,3 +1,5 @@
+import { fileURLToPath } from "node:url";
+
 import { Dataset } from "../data/dataset.js";
 import { resolveTarget } from "../compare.js";
 import { parseMatrixConfig, serializableConfig, type MatrixConfig } from "./config.js";
@@ -8,14 +10,20 @@ import {
   matrixScope,
   readResumableCells,
   reportCompleteness,
+  sourceFingerprint,
   writeMatrixReport,
   type DamageMatrixReport,
 } from "./report.js";
 import { runDamageCell } from "./search.js";
 import type { DamageScoringInvariants } from "./scoring.js";
 
+/** The package source tree (`src/` under tsx, `dist/` when built): scoring code plus the embedded data bundle. */
+const SOURCE_ROOT = fileURLToPath(new URL("..", import.meta.url));
+
 function initialReport(config: MatrixConfig): DamageMatrixReport {
-  const scope = matrixScope(config);
+  const scope = matrixScope(config, sourceFingerprint(SOURCE_ROOT));
+  const resumed = readResumableCells(config.outputPath, scope);
+  if (resumed.discarded) console.log(`[fresh] not resuming ${config.outputPath}: ${resumed.discarded}`);
   return {
     format: DAMAGE_MATRIX_FORMAT,
     scope,
@@ -38,7 +46,7 @@ function initialReport(config: MatrixConfig): DamageMatrixReport {
       ],
     },
     config: serializableConfig(config),
-    cells: readResumableCells(config.outputPath, scope),
+    cells: resumed.cells,
   };
 }
 

@@ -107,7 +107,9 @@ The default scope is the four fully ported factions
 `chaos-space-marines,adeptus-mechanicus,death-guard,tau-empire`, every target
 profile, and both `shooting,fight`. Override it with comma-separated
 `HC_FACTIONS`, `HC_TARGETS` (`all` or ids), and `HC_PHASES`. `HC_OUTPUT` selects
-the resumable JSON report. `HC_BODYGUARDS`, `HC_TOP`, and `HC_DEEP` accept a
+the JSON report. A run resumes the cells of an existing report at that path only
+when its config, scenario and a fingerprint of `tools/src` (code and embedded data)
+all match; otherwise it logs why and starts over. `HC_BODYGUARDS`, `HC_TOP`, and `HC_DEEP` accept a
 positive integer or `Infinity`; all three default to `Infinity`, so candidate
 truncation is never silent. Loadout legality remains exhaustive; its assignment
 search prunes only equipment totals that no later replacement can reduce and
