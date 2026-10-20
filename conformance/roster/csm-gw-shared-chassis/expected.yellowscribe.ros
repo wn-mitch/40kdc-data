@@ -22,7 +22,7 @@
             </profile>
             <profile name="Self Repair" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">This model regains up to 1 lost wound.</characteristic>
+                <characteristic name="Description">At the start of your Command phase, add 1 to this model's Wounds characteristic.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
@@ -96,7 +96,7 @@
             </profile>
             <profile name="Assault Ramp" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">-&gt; When a friendly unit disembarks from a Transport: if this model made a Normal move this turn, the triggering unit is eligible to declare a charge in a turn in which it disembarked.</characteristic>
+                <characteristic name="Description">When a unit disembarks from this Transport, if this model made a Normal move this turn, the triggering unit is eligible to declare a charge even if it disembarked this turn.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">

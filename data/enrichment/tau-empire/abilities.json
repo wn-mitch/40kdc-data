@@ -39,18 +39,79 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "re-roll",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "wound",
-          "subset": "all-failures"
-        }
+        "type": "designate-target",
+        "designation": "aggressive-deployment-target",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            },
+            "eligibility": {
+              "type": "happened",
+              "parameters": {
+                "event": "after-roll",
+                "subject": "event-subject",
+                "object": "this-unit",
+                "filter": {
+                  "roll": "hit",
+                  "result": "success"
+                },
+                "window": "event"
+              }
+            }
+          }
+        },
+        "applies": {
+          "to": "attackers-of-target",
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "happened",
+              "parameters": {
+                "subject": "attacker",
+                "event": "disembarked",
+                "filter": {
+                  "transport": "this-unit"
+                },
+                "window": "turn"
+              }
+            },
+            "effect": {
+              "type": "re-roll",
+              "target": {
+                "owner": "friendly",
+                "level": "model"
+              },
+              "modifier": {
+                "roll": "wound",
+                "result_scope": "any-result"
+              }
+            }
+          }
+        },
+        "duration": "phase"
       }
     },
     "scope": {
@@ -60,8 +121,14 @@
       "manta"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "tau-empire"
+    "behavior": "reactive",
+    "faction_id": "tau-empire",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
+    }
   },
   {
     "ability_id": "air-caste-colossus-tau-empire",
@@ -75,7 +142,7 @@
     "version": "2025-q3",
     "effect": {
       "type": "cost-modifier",
-      "target": "this-model",
+      "target": "this-unit",
       "modifier": {
         "of": "stratagem",
         "operation": "multiply",
@@ -93,10 +160,7 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "targets-selected",
-      "subject": {
-        "owner": "friendly"
-      },
+      "event": "used",
       "filter": {
         "kind": "stratagem"
       }
@@ -116,20 +180,30 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
+        "type": "attack-is",
         "parameters": {
-          "phase": "shooting"
+          "attack_type": "ranged"
         }
       },
       "effect": {
         "type": "sequence",
         "steps": [
           {
-            "type": "re-roll",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "hit",
-              "subset": "ones"
+            "type": "conditional",
+            "condition": {
+              "type": "strength",
+              "parameters": {
+                "subject": "defender",
+                "below": "starting"
+              }
+            },
+            "effect": {
+              "type": "re-roll",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "hit",
+                "subset": "ones"
+              }
             }
           },
           {
@@ -151,7 +225,7 @@
               "target": "this-unit",
               "modifier": {
                 "roll": "hit",
-                "subset": "all-failures"
+                "result_scope": "any-result"
               }
             }
           }
@@ -181,9 +255,9 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
+        "type": "attack-is",
         "parameters": {
-          "phase": "shooting"
+          "attack_type": "ranged"
         }
       },
       "effect": {
@@ -192,7 +266,7 @@
         "modifier": {
           "what": "rolls",
           "rolls": [
-            "all"
+            "hit"
           ]
         }
       }
@@ -204,7 +278,7 @@
       "crisis-fireknife-battlesuits"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "activated",
     "faction_id": "tau-empire"
   },
   {
@@ -274,8 +348,8 @@
           "modifier": {
             "activity": "observe",
             "allow": true,
-            "after": [
-              "advance"
+            "despite": [
+              "advanced"
             ]
           }
         }
@@ -353,17 +427,28 @@
     "source_digest": "6ae825514e2a677de0df30f0ae9038e3604a8bf997e322710406abfe9c741996",
     "version": "2025-q3",
     "effect": {
-      "type": "test",
-      "target": {
-        "owner": "enemy",
-        "within": {
-          "range": {
-            "inches": 12
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy",
+          "within": {
+            "range": {
+              "inches": 12
+            },
+            "of": "this-unit"
           }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
         }
       },
-      "modifier": {
-        "test": "battle-shock"
+      "effect": {
+        "type": "test",
+        "target": "selected-unit",
+        "modifier": {
+          "test": "battle-shock"
+        }
       }
     },
     "scope": {
@@ -373,8 +458,28 @@
       "piranhas"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "tau-empire"
+    "behavior": "reactive",
+    "faction_id": "tau-empire",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "forward-observers-tau-empire",
@@ -389,32 +494,13 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "designated": "GUIDED"
-              }
-            }
-          },
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "designated": "SPOTTED"
-              },
-              "subject": "defender"
-            }
+        "type": "matches",
+        "parameters": {
+          "subject": "defender",
+          "filter": {
+            "designated": "SPOTTED"
           }
-        ]
+        }
       },
       "effect": {
         "type": "sequence",
@@ -445,9 +531,26 @@
       "stealth-battlesuits"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "auto-generated, partial",
-    "faction_id": "tau-empire"
+    "faction_id": "tau-empire",
+    "trigger": [
+      {
+        "event": "designation-changed",
+        "filter": {
+          "tag": "observer"
+        }
+      },
+      {
+        "event": "attacks-resolved",
+        "subject": {
+          "owner": "friendly"
+        },
+        "filter": {
+          "kind": "shoot"
+        }
+      }
+    ]
   },
   {
     "ability_id": "homing-beacon-tau-empire",
@@ -487,13 +590,50 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "source_digest": "a3521c160179e5366d2c6720d712c781ab289b0bf0eb2ef6371f2106e1e0d896",
+    "source_digest": "1fc32e4560040d1a756eb32af1a136d4c81f30d1f873b62d5fe05d3569d5d7bb",
     "version": "2025-q3",
     "effect": {
-      "type": "mortal-wounds",
-      "target": "defender",
-      "modifier": {
-        "count": 1
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy",
+          "lacks_ability": [
+            "lone-operative"
+          ],
+          "visible": {
+            "to": "this-model"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "subject": "selected-unit",
+            "filter": {
+              "within": {
+                "of": "this-unit",
+                "range": {
+                  "inches": 24
+                }
+              }
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "mortal-wounds",
+        "target": "selected-unit",
+        "modifier": {
+          "count": 1,
+          "per": "success",
+          "roll": {
+            "dice": 6,
+            "threshold": 4
+          }
+        }
       }
     },
     "scope": {
@@ -503,8 +643,28 @@
       "sun-shark-bomber"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "tau-empire"
+    "behavior": "reactive",
+    "faction_id": "tau-empire",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "bounty-hunters-tau-empire",
@@ -517,31 +677,37 @@
     "source_digest": "79bf156bc85af6ad683b88d591b676ea9841e0d61cf96b6621e9593535012d8f",
     "version": "2025-q3",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
+      "type": "designate-target",
+      "designation": "bounty-hunters-target",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        }
+      },
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
             "keywords": [
               {
                 "keyword_id": "lethal-hits"
-              }
-            ]
-          }
-        },
-        {
-          "type": "weapon-ability-grant",
-          "target": "this-unit",
-          "modifier": {
-            "keywords": [
+              },
               {
                 "keyword_id": "precision"
               }
             ]
           }
         }
-      ]
+      }
     },
     "scope": {
       "duration": "permanent"
@@ -550,9 +716,12 @@
       "kroot-farstalkers"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "defensive ability (skipped for damage calc)",
-    "faction_id": "tau-empire"
+    "faction_id": "tau-empire",
+    "trigger": {
+      "event": "battle-started"
+    }
   },
   {
     "ability_id": "pechra-tau-empire",
@@ -572,7 +741,10 @@
           {
             "keyword_id": "ignores-cover"
           }
-        ]
+        ],
+        "weapons": {
+          "type": "ranged"
+        }
       }
     },
     "scope": {
@@ -596,12 +768,38 @@
     "source_digest": "8a246b07bbe24e755beec19fe7daf97c9fccaae40a1fb05c457a2ae285f28d83",
     "version": "2025-q3",
     "effect": {
-      "type": "weapon-ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "keywords": [
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "defender",
+          "filter": {
+            "designated": "SPOTTED"
+          }
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
           {
-            "keyword_id": "ignores-cover"
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "BS",
+              "operation": "improve",
+              "value": 1
+            }
+          },
+          {
+            "type": "weapon-ability-grant",
+            "target": "this-unit",
+            "modifier": {
+              "keywords": [
+                {
+                  "keyword_id": "ignores-cover"
+                }
+              ]
+            }
           }
         ]
       }
@@ -664,7 +862,8 @@
         "operation": "add",
         "value": 6,
         "weapons": {
-          "name": "pulse-carbine"
+          "type": "ranged",
+          "name": "pulse carbine"
         }
       }
     },
@@ -731,54 +930,114 @@
     "source_digest": "044896d013b9677ca0f0a8d22be637727ebfba171ef250e8304e6e3fe98a25a6",
     "version": "2025-q3",
     "effect": {
-      "type": "ability-part",
-      "trigger": {
-        "event": "attacks-resolved",
-        "subject": "this-unit",
-        "filter": {
-          "kind": "shoot"
-        }
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "state": "on-battlefield"
+              }
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "designate-target",
-        "designation": "suppressed",
-        "select": {
-          "kind": "unit",
-          "selector": {
-            "filter": {
-              "owner": "enemy"
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy",
+            "all_of": [
+              "INFANTRY"
+            ]
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "subject": "event-subject",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success"
+              },
+              "window": "event"
+            }
+          }
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "designate",
+              "target": "selected-unit",
+              "modifier": {
+                "tag": "suppressed"
+              }
             },
-            "count": {
-              "min": 1,
-              "max": 1
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "designated": "suppressed"
+                  }
+                }
+              },
+              "effect": {
+                "type": "roll-modifier",
+                "target": "selected-unit",
+                "modifier": {
+                  "roll": "hit",
+                  "operation": "subtract",
+                  "value": 1
+                }
+              }
             }
-          }
-        },
-        "applies": {
-          "to": "target",
-          "effect": {
-            "type": "roll-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "hit",
-              "operation": "subtract",
-              "value": 1
-            }
-          }
-        },
-        "duration": "until-next-command-phase"
+          ]
+        }
       }
     },
     "scope": {
-      "duration": "until-next-command-phase"
+      "duration": "until-start-next-turn"
     },
     "unit_ids": [
       "strike-team"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "Only enemy INFANTRY units can be suppressed.",
-    "faction_id": "tau-empire"
+    "faction_id": "tau-empire",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
+    }
   },
   {
     "ability_id": "ds8-support-turret-tau-empire",
@@ -849,14 +1108,14 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
+        "type": "attack-is",
         "parameters": {
-          "phase": "shooting"
+          "attack_type": "ranged"
         }
       },
       "effect": {
         "type": "roll-modifier",
-        "target": "this-unit",
+        "target": "attacker",
         "modifier": {
           "roll": "wound",
           "operation": "subtract",
@@ -891,49 +1150,40 @@
         "operator": "and",
         "operands": [
           {
-            "type": "phase-is",
+            "type": "attack-is",
             "parameters": {
-              "phase": "shooting"
+              "attack_type": "ranged"
             }
           },
           {
             "type": "closest",
             "parameters": {
               "subject": "defender",
-              "among": "eligible-targets"
+              "among": "eligible-targets",
+              "to": "attacker"
             }
           }
         ]
       },
       "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "weapon-ability-grant",
-            "target": "this-unit",
-            "modifier": {
-              "keywords": [
-                {
-                  "keyword_id": "sustained-hits",
-                  "parameters": {
-                    "value": 1
-                  }
-                }
-              ]
+        "type": "weapon-ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "keywords": [
+            {
+              "keyword_id": "sustained-hits",
+              "parameters": {
+                "value": 1
+              }
+            },
+            {
+              "keyword_id": "ignores-cover"
             }
-          },
-          {
-            "type": "weapon-ability-grant",
-            "target": "this-unit",
-            "modifier": {
-              "keywords": [
-                {
-                  "keyword_id": "ignores-cover"
-                }
-              ]
-            }
+          ],
+          "weapons": {
+            "type": "ranged"
           }
-        ]
+        }
       }
     },
     "scope": {
@@ -955,20 +1205,60 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "source_digest": "ab1597203373a1b78b4a9f696dc461968edc81ccf72707e6e44dac55daa82548",
+    "source_digest": "be59b325d730f4a8be6dc00f03a3658f724dc82c4d480e560d89c7f7b20a2fb8",
     "version": "2025-q3",
     "effect": {
-      "type": "test",
-      "target": {
-        "owner": "enemy",
-        "within": {
-          "range": {
-            "inches": 12
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy",
+          "none_of": [
+            "MONSTER",
+            "VEHICLE"
+          ],
+          "visible": {
+            "to": "this-model"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "subject": "selected-unit",
+            "filter": {
+              "within": {
+                "of": "this-unit",
+                "range": {
+                  "inches": 12
+                }
+              }
+            }
           }
         }
       },
-      "modifier": {
-        "test": "battle-shock"
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "test",
+            "target": "selected-unit",
+            "modifier": {
+              "test": "battle-shock"
+            }
+          },
+          {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "charge",
+              "operation": "subtract",
+              "value": 1
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -978,8 +1268,29 @@
       "the-twin-lance"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "tau-empire"
+    "behavior": "reactive",
+    "faction_id": "tau-empire",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "charge"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "retro-thrusters-tau-empire",
@@ -994,21 +1305,31 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
+        "type": "eligible",
         "parameters": {
-          "phase": "fight"
+          "subject": "this-unit",
+          "to": "fight"
         }
       },
       "effect": {
-        "type": "permission",
-        "target": "this-unit",
-        "modifier": {
-          "activity": "shoot",
-          "allow": true,
-          "after": [
-            "fall-back"
-          ]
-        }
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "move",
+            "target": "this-unit",
+            "modifier": {
+              "move_type": "normal",
+              "distance": 6
+            }
+          },
+          {
+            "type": "move",
+            "target": "this-unit",
+            "modifier": {
+              "move_type": "fall-back"
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -1018,8 +1339,17 @@
       "the-twin-lance"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "tau-empire"
+    "behavior": "reactive",
+    "faction_id": "tau-empire",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    }
   },
   {
     "ability_id": "mv15-gun-drone-tau-empire",
@@ -1063,10 +1393,27 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "defender",
+              "filter": {
+                "none_of": [
+                  "MONSTER",
+                  "VEHICLE"
+                ]
+              }
+            }
+          }
+        ]
       },
       "effect": {
         "type": "stat-modifier",
@@ -1132,16 +1479,73 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "test",
-        "target": "selected-unit",
-        "modifier": {
-          "test": "battle-shock"
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "after-roll",
+                  "subject": "event-subject",
+                  "object": "this-unit",
+                  "filter": {
+                    "roll": "hit",
+                    "result": "success"
+                  },
+                  "window": "event"
+                }
+              },
+              {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "selected-unit",
+                      "filter": {
+                        "all_of": [
+                          "FLY"
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "effect": {
+          "type": "test",
+          "target": "selected-unit",
+          "modifier": {
+            "test": "battle-shock"
+          }
         }
       }
     },
@@ -1152,8 +1556,14 @@
       "tiger-shark"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "tau-empire"
+    "behavior": "reactive",
+    "faction_id": "tau-empire",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
+    }
   },
   {
     "ability_id": "transport-bay-tau-empire",
@@ -1166,13 +1576,30 @@
     "source_digest": "d1769e938a0d3c53dc8ccc2f8e1d0a76b206c60536c6acb4a97f3e9ab40cffb1",
     "version": "2025-q3",
     "effect": {
-      "type": "keyword-grant",
-      "target": "this-model",
-      "modifier": {
-        "keywords": [
-          "TRANSPORT"
-        ]
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "keyword-grant",
+          "target": "this-model",
+          "modifier": {
+            "keywords": [
+              "TRANSPORT"
+            ]
+          }
+        },
+        {
+          "type": "transport-capacity",
+          "target": "this-unit",
+          "modifier": {
+            "capacity": 12,
+            "eligible": {
+              "all_of": [
+                "TACTICAL DRONES"
+              ]
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -1197,17 +1624,36 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "defender",
+              "filter": {
+                "within": {
+                  "of": {
+                    "objective": {}
+                  },
+                  "range": "objective-control"
+                }
+              }
+            }
+          }
+        ]
       },
       "effect": {
         "type": "re-roll",
         "target": "this-unit",
         "modifier": {
           "roll": "wound",
-          "subset": "all-failures"
+          "result_scope": "any-result"
         }
       }
     },
@@ -1232,13 +1678,37 @@
     "source_digest": "3b050bffcccd4298397cb67be6b070a8ee3ea498e6461bd7c7f3b17d95253d2d",
     "version": "2025-q3",
     "effect": {
-      "type": "move-modifier",
-      "target": "this-model",
-      "modifier": {
-        "passthrough": [
-          "all-terrain"
-        ]
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "move-modifier",
+          "target": "this-model",
+          "modifier": {
+            "passthrough": [
+              "non-titanic-models"
+            ],
+            "applies_to_moves": [
+              "normal",
+              "advance",
+              "fall-back"
+            ]
+          }
+        },
+        {
+          "type": "move-modifier",
+          "target": "this-model",
+          "modifier": {
+            "passthrough": [
+              "terrain-le-4"
+            ],
+            "applies_to_moves": [
+              "normal",
+              "advance",
+              "fall-back"
+            ]
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -1247,8 +1717,18 @@
       "stormsurge"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "tau-empire"
+    "behavior": "reactive",
+    "faction_id": "tau-empire",
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "normal",
+          "advance",
+          "fall-back"
+        ]
+      }
+    }
   },
   {
     "ability_id": "support-system-tau-empire",
@@ -1263,9 +1743,9 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
+        "type": "attack-is",
         "parameters": {
-          "phase": "shooting"
+          "attack_type": "ranged"
         }
       },
       "effect": {
@@ -1274,7 +1754,7 @@
         "modifier": {
           "what": "rolls",
           "rolls": [
-            "all"
+            "hit"
           ]
         }
       }
@@ -1286,7 +1766,7 @@
       "stormsurge"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "activated",
     "faction_id": "tau-empire"
   },
   {
@@ -1302,17 +1782,34 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "defender",
+              "filter": {
+                "any_of": [
+                  "TITANIC",
+                  "TOWERING"
+                ]
+              }
+            }
+          }
+        ]
       },
       "effect": {
         "type": "re-roll",
-        "target": "this-unit",
+        "target": "this-model",
         "modifier": {
           "roll": "hit",
-          "subset": "all-failures"
+          "result_scope": "any-result"
         }
       }
     },
@@ -1379,14 +1876,22 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "not",
+        "operands": [
+          {
+            "type": "visible",
+            "parameters": {
+              "subject": "defender",
+              "to": "attacker",
+              "fully": true,
+              "blocked_by": "this-model"
+            }
+          }
+        ]
       },
       "effect": {
         "type": "ability-grant",
-        "target": "this-unit",
+        "target": "event-object",
         "modifier": {
           "ability": "benefit-of-cover"
         }
@@ -1401,8 +1906,11 @@
       "tidewall-shieldline"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "tau-empire"
+    "behavior": "reactive",
+    "faction_id": "tau-empire",
+    "trigger": {
+      "event": "damage-allocated"
+    }
   },
   {
     "ability_id": "loping-pounce-tau-empire",
@@ -1421,15 +1929,15 @@
         "parameters": {
           "filter": {
             "within": {
-              "range": {
-                "inches": 6
-              },
               "of": {
                 "owner": "friendly",
                 "all_of": [
-                  "KROOT",
-                  "INFANTRY"
+                  "INFANTRY",
+                  "KROOT"
                 ]
+              },
+              "range": {
+                "inches": 6
               }
             }
           }
@@ -1454,8 +1962,28 @@
       "kroot-hounds"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "tau-empire"
+    "behavior": "reactive",
+    "faction_id": "tau-empire",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "hunting-hounds-tau-empire",
@@ -1474,15 +2002,15 @@
         "parameters": {
           "filter": {
             "within": {
-              "range": {
-                "inches": 12
-              },
               "of": {
                 "owner": "friendly",
                 "all_of": [
-                  "KROOT",
-                  "CHARACTER"
+                  "CHARACTER",
+                  "KROOT"
                 ]
+              },
+              "range": {
+                "inches": 12
               }
             }
           }
@@ -1557,11 +2085,18 @@
     "source_digest": "e1a5236611393cffb174658a7f2c5b0e22ea8984eb473dc3ae6bfb602d42100a",
     "version": "2025-q3",
     "effect": {
-      "type": "cp-gain",
-      "target": "this-model",
-      "modifier": {
-        "amount": 1
-      }
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 4,
+      "comparison": "gte",
+      "on_success": {
+        "type": "cp-gain",
+        "target": "this-model",
+        "modifier": {
+          "amount": 1
+        }
+      },
+      "on_fail": null
     },
     "scope": {
       "duration": "permanent"
@@ -1570,8 +2105,28 @@
       "ethereal"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "tau-empire"
+    "behavior": "reactive",
+    "faction_id": "tau-empire",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "hover-drone-tau-empire",
@@ -1584,13 +2139,27 @@
     "source_digest": "8c57c774d1dcdc0618cf5af91e2029551cc27d8e1c3c76902482fe46e321d2ee",
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "this-model",
-      "modifier": {
-        "stat": "M",
-        "operation": "set",
-        "value": 10
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "keyword-grant",
+          "target": "this-model",
+          "modifier": {
+            "keywords": [
+              "FLY"
+            ]
+          }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "this-model",
+          "modifier": {
+            "stat": "M",
+            "operation": "set",
+            "value": 10
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -1614,7 +2183,7 @@
     "version": "2025-q3",
     "effect": {
       "type": "permission",
-      "target": "this-unit",
+      "target": "this-model",
       "modifier": {
         "activity": "shoot",
         "allow": true,
@@ -1646,21 +2215,54 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "weapon-ability-grant",
-        "target": "this-unit",
-        "modifier": {
-          "keywords": [
-            {
-              "keyword_id": "devastating-wounds"
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "select-weapon",
+            "target": "this-model",
+            "modifier": {
+              "bind_as": "selected-weapon",
+              "weapons": {
+                "type": "ranged"
+              },
+              "count": 1
             }
-          ]
-        }
+          },
+          {
+            "type": "weapon-ability-grant",
+            "target": "this-model",
+            "modifier": {
+              "keywords": [
+                {
+                  "keyword_id": "devastating-wounds"
+                }
+              ],
+              "weapons": {
+                "type": "ranged",
+                "ref": {
+                  "weapon_var": "selected-weapon"
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -1670,8 +2272,19 @@
       "riptide-battlesuit"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "faction_id": "tau-empire"
+    "behavior": "reactive",
+    "faction_id": "tau-empire",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      }
+    },
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "unit"
+    }
   },
   {
     "ability_id": "weapon-support-system-riptide-battlesuit-tau-empire",
@@ -1686,9 +2299,9 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
+        "type": "attack-is",
         "parameters": {
-          "phase": "shooting"
+          "attack_type": "ranged"
         }
       },
       "effect": {
@@ -1697,7 +2310,7 @@
         "modifier": {
           "what": "rolls",
           "rolls": [
-            "all"
+            "hit"
           ]
         }
       }
@@ -1709,7 +2322,7 @@
       "riptide-battlesuit"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "activated",
     "faction_id": "tau-empire"
   },
   {
@@ -1766,15 +2379,15 @@
           {
             "type": "matches",
             "parameters": {
+              "subject": "defender",
               "filter": {
                 "within": {
+                  "of": "attacker",
                   "range": {
                     "inches": 9
-                  },
-                  "of": "this-unit"
+                  }
                 }
-              },
-              "subject": "defender"
+              }
             }
           }
         ]
@@ -1810,21 +2423,66 @@
     "source_digest": "98fc5d0ec136db92dbaf4239c7ea51df203850797714bd06c55387dada576772",
     "version": "2025-q3",
     "effect": {
-      "type": "cp-gain",
-      "target": "this-model",
-      "modifier": {
-        "amount": 1
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-unit",
+              "filter": {
+                "has_ability": [
+                  "my-will-be-done-necrons"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "cost-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "of": "stratagem",
+          "operation": "decrease",
+          "amount": 1,
+          "applies_to": "the-triggering-use"
+        }
       }
     },
     "scope": {
-      "duration": "one-use"
+      "duration": "permanent"
     },
     "unit_ids": [
       "commander-farsight"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "faction_id": "tau-empire"
+    "behavior": "reactive",
+    "faction_id": "tau-empire",
+    "trigger": {
+      "event": "targets-selected",
+      "subject": {
+        "owner": "friendly"
+      },
+      "filter": {
+        "kind": "stratagem"
+      },
+      "object": "this-unit",
+      "optional": true
+    },
+    "usage": {
+      "frequency": "once-per-battle-round",
+      "per": "army"
+    }
   },
   {
     "ability_id": "independent-power-tau-empire",
@@ -1837,18 +2495,51 @@
     "source_digest": "33f620c09ed81643a54efcc0e91b545de201745b8e6708f1a9f7fc2631e8a9c9",
     "version": "2025-q3",
     "effect": {
-      "type": "army-rule",
-      "target": "this-unit",
-      "modifier": {
-        "rule": "composition",
-        "with": {
-          "owner": "friendly",
-          "all_of": [
-            "ETHEREAL"
-          ]
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "army-rule",
+          "target": "this-unit",
+          "modifier": {
+            "rule": "composition",
+            "with": {
+              "owner": "friendly",
+              "all_of": [
+                "ETHEREAL"
+              ]
+            },
+            "max": 0
+          }
         },
-        "max": 0
-      }
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "army-includes",
+            "parameters": {
+              "filter": {
+                "owner": "friendly",
+                "all_of": [
+                  "ETHEREAL"
+                ]
+              }
+            }
+          },
+          "effect": {
+            "type": "army-rule",
+            "target": "this-unit",
+            "modifier": {
+              "rule": "composition",
+              "with": {
+                "owner": "friendly",
+                "all_of": [
+                  "COMMANDER FARSIGHT"
+                ]
+              },
+              "max": 0
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -1965,7 +2656,7 @@
     "version": "2025-q3",
     "effect": {
       "type": "permission",
-      "target": "this-unit",
+      "target": "this-model",
       "modifier": {
         "activity": "shoot",
         "allow": true,
@@ -1995,24 +2686,19 @@
     "source_digest": "f2f8d678798b6a8a992de1a0211bceff3af5f60fe055b2ec962f2abff5c2d51a",
     "version": "2025-q3",
     "effect": {
-      "type": "aura",
-      "target": "friendly-within-aura",
-      "modifier": {
-        "range": {
-          "inches": 6
-        },
-        "recipient_filter": {
-          "all_of": [
-            "T’AU EMPIRE"
-          ]
-        },
-        "effect": {
-          "type": "conditional",
-          "condition": {
-            "type": "attack-is",
-            "parameters": {
-              "attack_type": "ranged"
-            }
+      "type": "conditional",
+      "condition": {
+        "type": "attack-is",
+        "parameters": {
+          "attack_type": "ranged"
+        }
+      },
+      "effect": {
+        "type": "aura",
+        "target": "friendly-within-aura",
+        "modifier": {
+          "range": {
+            "inches": 6
           },
           "effect": {
             "type": "re-roll",
@@ -2021,6 +2707,12 @@
               "roll": "hit",
               "subset": "ones"
             }
+          },
+          "eligible": {
+            "owner": "friendly",
+            "all_of": [
+              "T'AU EMPIRE"
+            ]
           }
         }
       }
@@ -2032,7 +2724,7 @@
       "commander-shadowsun"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "aura",
     "faction_id": "tau-empire"
   },
   {
@@ -2048,14 +2740,14 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
+        "type": "attack-is",
         "parameters": {
-          "phase": "shooting"
+          "attack_type": "ranged"
         }
       },
       "effect": {
         "type": "roll-modifier",
-        "target": "this-unit",
+        "target": "attacker",
         "modifier": {
           "roll": "wound",
           "operation": "subtract",
@@ -2084,60 +2776,18 @@
     "source_digest": "910b1a948fc09dd14f7c11bcdba24c10e3926151dd310c9f9c48a75ccc2dcbf6",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "within": {
-                  "range": {
-                    "inches": 6
-                  },
-                  "of": "this-model"
-                }
-              },
-              "subject": "stratagem-target"
-            }
-          },
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "all_of": [
-                  "T’AU EMPIRE"
-                ]
-              },
-              "subject": "stratagem-target"
-            }
-          },
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "owner": "friendly"
-              },
-              "subject": "stratagem-target"
-            }
-          }
-        ]
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 5,
+      "comparison": "gte",
+      "on_success": {
+        "type": "cp-gain",
+        "target": "this-model",
+        "modifier": {
+          "amount": 1
+        }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 5,
-        "comparison": "gte",
-        "on_success": {
-          "type": "cp-gain",
-          "target": "this-model",
-          "modifier": {
-            "amount": 1
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "duration": "permanent"
@@ -2146,8 +2796,29 @@
       "commander-shadowsun"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "tau-empire"
+    "behavior": "reactive",
+    "faction_id": "tau-empire",
+    "trigger": {
+      "event": "targets-selected",
+      "subject": {
+        "owner": "friendly"
+      },
+      "filter": {
+        "kind": "stratagem"
+      },
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "T'AU EMPIRE"
+        ],
+        "within": {
+          "of": "this-model",
+          "range": {
+            "inches": 6
+          }
+        }
+      }
+    }
   },
   {
     "ability_id": "supreme-commander-tau-empire",
@@ -2160,10 +2831,22 @@
     "source_digest": "db5f2bae245a8eb3cca1df9d81a364c92d2b3958c0471ebd7f0f15e2bd8a0f90",
     "version": "2025-q3",
     "effect": {
-      "type": "army-rule",
-      "target": "this-model",
-      "modifier": {
-        "rule": "warlord-required"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "this-model",
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      },
+      "effect": {
+        "type": "army-rule",
+        "target": "this-unit",
+        "modifier": {
+          "rule": "warlord-required"
+        }
       }
     },
     "scope": {
@@ -2200,13 +2883,18 @@
       "ghostkeel-battlesuit"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "defensive ability (skipped for damage calc)",
     "usage": {
       "frequency": "n-per-battle",
-      "count": 2
+      "count": 2,
+      "per": "unit"
     },
-    "faction_id": "tau-empire"
+    "faction_id": "tau-empire",
+    "trigger": {
+      "event": "damage-allocated",
+      "optional": true
+    }
   },
   {
     "ability_id": "titan-hunter-tau-empire",
@@ -2303,30 +2991,30 @@
         "operator": "and",
         "operands": [
           {
-            "type": "phase-is",
+            "type": "attack-is",
             "parameters": {
-              "phase": "shooting"
+              "attack_type": "ranged"
             }
           },
           {
             "type": "matches",
             "parameters": {
+              "subject": "defender",
               "filter": {
                 "all_of": [
                   "FLY"
                 ]
-              },
-              "subject": "defender"
+              }
             }
           }
         ]
       },
       "effect": {
         "type": "re-roll",
-        "target": "this-unit",
+        "target": "this-model",
         "modifier": {
           "roll": "hit",
-          "subset": "all-failures"
+          "result_scope": "any-result"
         }
       }
     },
@@ -2401,10 +3089,27 @@
     "source_digest": "049fa9c3c57649000c8638941682aaeb1212a73a3eaab6af82ff7fde7762ee76",
     "version": "2025-q3",
     "effect": {
-      "type": "set-up",
-      "target": "this-unit",
-      "modifier": {
-        "to": "strategic-reserves"
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "state": "engaged"
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "set-up",
+        "target": "this-unit",
+        "modifier": {
+          "to": "strategic-reserves",
+          "from": "battlefield"
+        }
       }
     },
     "scope": {
@@ -2414,8 +3119,18 @@
       "vespid-stingwings"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "tau-empire"
+    "behavior": "reactive",
+    "faction_id": "tau-empire",
+    "trigger": {
+      "event": "turn-ended",
+      "condition": {
+        "type": "player-turn-is",
+        "parameters": {
+          "turn": "opponent-turn"
+        }
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "oversight-drone-tau-empire",
@@ -2425,7 +3140,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "source_digest": "8667980c22b0c4865de40fa2864afb045167bfc04840eca5fb0323e64f474867",
+    "source_digest": "614bb9343d2d84a8c388bb3ab5d857cc7855f8eed55884c5c27dbf2f61de9316",
     "version": "2025-q3",
     "effect": {
       "type": "weapon-ability-grant",
@@ -2435,7 +3150,10 @@
           {
             "keyword_id": "ignores-cover"
           }
-        ]
+        ],
+        "weapons": {
+          "type": "ranged"
+        }
       }
     },
     "scope": {
@@ -2445,8 +3163,19 @@
       "vespid-stingwings"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "faction_id": "tau-empire"
+    "behavior": "reactive",
+    "faction_id": "tau-empire",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      }
+    },
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "unit"
+    }
   },
   {
     "ability_id": "coldstar-commander-tau-empire",
@@ -2468,13 +3197,32 @@
         }
       },
       "effect": {
-        "type": "stat-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "stat": "M",
-          "operation": "set",
-          "value": 12
-        }
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "M",
+              "operation": "set",
+              "value": 12
+            }
+          },
+          {
+            "type": "weapon-ability-grant",
+            "target": "this-unit",
+            "modifier": {
+              "keywords": [
+                {
+                  "keyword_id": "assault"
+                }
+              ],
+              "weapons": {
+                "type": "ranged"
+              }
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -2523,7 +3271,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "source_digest": "b892de8c6925b17b5b5eaea0b909f37e8c1c4464251c8cf9f22e7e23621c1977",
+    "source_digest": "da8622a83b232ecd435fdb4d705be0d0125f937fb09f52dfc016496865960d00",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -2531,17 +3279,34 @@
         "operator": "and",
         "operands": [
           {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "within": {
-                  "range": {
-                    "inches": 8
-                  },
-                  "of": "this-unit"
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "movement"
                 }
               },
-              "subject": "event-subject"
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "opponent-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "event-subject",
+              "filter": {
+                "within": {
+                  "of": "this-unit",
+                  "range": {
+                    "inches": 8
+                  }
+                }
+              }
             }
           },
           {
@@ -2580,8 +3345,7 @@
       "event": "move-ended",
       "subject": {
         "owner": "enemy"
-      },
-      "optional": true
+      }
     },
     "usage": {
       "frequency": "once-per-turn"
@@ -2698,12 +3462,22 @@
     "source_digest": "db189f4b80a39ec8fedfea222da144040e2a82c76ba9435a6ca95f8effd03dd8",
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "this-model",
-      "modifier": {
-        "stat": "W",
-        "operation": "set",
-        "value": 15
+      "type": "conditional",
+      "condition": {
+        "type": "unit-wargear",
+        "parameters": {
+          "subject": "this-unit",
+          "wargear": "tidewall-defence-platform"
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "W",
+          "operation": "set",
+          "value": 15
+        }
       }
     },
     "scope": {
@@ -2760,16 +3534,16 @@
         "operator": "and",
         "operands": [
           {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
             "type": "attachment",
             "parameters": {
               "subject": "this-model",
               "role": "leading"
+            }
+          },
+          {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
             }
           }
         ]
@@ -2820,7 +3594,10 @@
         "modifier": {
           "stat": "A",
           "operation": "add",
-          "value": 1
+          "value": 1,
+          "weapons": {
+            "type": "ranged"
+          }
         }
       }
     },
@@ -2898,14 +3675,35 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "defender",
+                  "filter": {
+                    "all_of": [
+                      "FLY"
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        ]
       },
       "effect": {
         "type": "roll-modifier",
-        "target": "this-unit",
+        "target": "this-model",
         "modifier": {
           "roll": "hit",
           "operation": "add",
@@ -3009,16 +3807,16 @@
         "operator": "and",
         "operands": [
           {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
             "type": "attachment",
             "parameters": {
               "subject": "this-model",
               "role": "leading"
+            }
+          },
+          {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
             }
           }
         ]
@@ -3054,40 +3852,26 @@
     "source_digest": "6ec9f880fc8e99ea0ab88aa44177ad72317350ea92b62c4fc7bb7e369efb8dc8",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "happened",
-        "parameters": {
-          "event": "set-up",
-          "window": "event",
-          "subject": {
-            "owner": "enemy"
-          },
-          "filter": {
-            "from": "strategic-reserves"
-          }
-        }
+      "type": "set-up",
+      "target": {
+        "owner": "enemy"
       },
-      "effect": {
-        "type": "set-up",
-        "target": {
-          "owner": "enemy"
-        },
-        "modifier": {
-          "allow": false,
-          "to": "battlefield",
-          "from": "strategic-reserves",
-          "min_distance_from": {
+      "modifier": {
+        "to": "battlefield",
+        "from": "strategic-reserves",
+        "allow": false,
+        "near": [
+          {
             "of": "this-model",
             "range": {
               "inches": 12
             }
           }
-        }
+        ]
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "unit_ids": [
       "darkstrider"
@@ -3108,12 +3892,27 @@
     "source_digest": "afd9a8c46bffd1778bea42f7b7ef1d707d6df7d00ade62b7849451c5b1fdd6da",
     "version": "2025-q3",
     "effect": {
-      "type": "roll-modifier",
-      "target": "this-unit",
-      "modifier": {
-        "roll": "hit",
-        "operation": "add",
-        "value": 1
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "defender",
+          "filter": {
+            "any_of": [
+              "MONSTER",
+              "VEHICLE"
+            ]
+          }
+        }
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "this-model",
+        "modifier": {
+          "roll": "hit",
+          "operation": "add",
+          "value": 1
+        }
       }
     },
     "scope": {
@@ -3185,21 +3984,21 @@
         "operator": "and",
         "operands": [
           {
-            "type": "phase-is",
+            "type": "attack-is",
             "parameters": {
-              "phase": "shooting"
+              "attack_type": "ranged"
             }
           },
           {
             "type": "matches",
             "parameters": {
+              "subject": "defender",
               "filter": {
                 "any_of": [
                   "MONSTER",
                   "VEHICLE"
                 ]
-              },
-              "subject": "defender"
+              }
             }
           }
         ]
@@ -3212,7 +4011,7 @@
             "target": "this-unit",
             "modifier": {
               "roll": "wound",
-              "subset": "all-failures"
+              "result_scope": "any-result"
             }
           },
           {
@@ -3220,7 +4019,7 @@
             "target": "this-unit",
             "modifier": {
               "roll": "damage",
-              "subset": "all-failures"
+              "result_scope": "any-result"
             }
           }
         ]
@@ -3233,7 +4032,7 @@
       "crisis-sunforge-battlesuits"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "activated",
     "community_notes": "auto-generated, partial",
     "faction_id": "tau-empire"
   },
@@ -3252,10 +4051,10 @@
       "condition": {
         "type": "matches",
         "parameters": {
+          "subject": "defender",
           "filter": {
             "designated": "SPOTTED"
-          },
-          "subject": "defender"
+          }
         }
       },
       "effect": {
@@ -3263,7 +4062,7 @@
         "target": "this-unit",
         "modifier": {
           "roll": "hit",
-          "subset": "all-failures"
+          "result_scope": "any-result"
         }
       }
     },
@@ -3288,8 +4087,26 @@
     "source_digest": "b7839c91742ce711a4223df21826be04e6f781c4b938441d5e232b1abcecd9b2",
     "version": "2025-q3",
     "effect": {
-      "type": "objective-sticky",
-      "target": "this-unit"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "within": {
+              "of": {
+                "objective": {
+                  "controlled_by": "friendly"
+                }
+              },
+              "range": "objective-control"
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "objective-sticky",
+        "target": "this-unit"
+      }
     },
     "scope": {
       "duration": "permanent"
@@ -3298,8 +4115,28 @@
       "kroot-carnivores"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "tau-empire"
+    "behavior": "reactive",
+    "faction_id": "tau-empire",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "bodyguard-tau-empire",
@@ -3341,21 +4178,66 @@
     "source_digest": "98fc5d0ec136db92dbaf4239c7ea51df203850797714bd06c55387dada576772",
     "version": "2025-q3",
     "effect": {
-      "type": "cp-gain",
-      "target": "this-model",
-      "modifier": {
-        "amount": 1
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-unit",
+              "filter": {
+                "has_ability": [
+                  "war-leader-tau-empire"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "cost-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "of": "stratagem",
+          "operation": "decrease",
+          "amount": 1,
+          "applies_to": "the-triggering-use"
+        }
       }
     },
     "scope": {
-      "duration": "one-use"
+      "duration": "permanent"
     },
     "unit_ids": [
       "kroot-war-shaper"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "faction_id": "tau-empire"
+    "behavior": "reactive",
+    "faction_id": "tau-empire",
+    "trigger": {
+      "event": "targets-selected",
+      "subject": {
+        "owner": "friendly"
+      },
+      "filter": {
+        "kind": "stratagem"
+      },
+      "object": "this-unit",
+      "optional": true
+    },
+    "usage": {
+      "frequency": "once-per-battle-round",
+      "per": "army"
+    }
   },
   {
     "ability_id": "root-of-honour-tau-empire",
@@ -3374,25 +4256,39 @@
           "owner": "friendly",
           "all_of": [
             "KROOT"
-          ],
-          "within": {
-            "range": {
-              "inches": 12
-            },
-            "of": "this-model"
-          }
+          ]
         },
         "count": {
           "min": 1,
           "max": 1
         },
         "eligibility": {
-          "type": "matches",
-          "parameters": {
-            "filter": {
-              "state": "battle-shocked"
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "subject": "selected-unit",
+                "filter": {
+                  "state": "battle-shocked"
+                }
+              }
+            },
+            {
+              "type": "matches",
+              "parameters": {
+                "subject": "selected-unit",
+                "filter": {
+                  "within": {
+                    "of": "this-model",
+                    "range": {
+                      "inches": 12
+                    }
+                  }
+                }
+              }
             }
-          }
+          ]
         }
       },
       "effect": {
@@ -3405,14 +4301,23 @@
       }
     },
     "scope": {
-      "duration": "one-use"
+      "duration": "permanent"
     },
     "unit_ids": [
       "kroot-war-shaper"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "faction_id": "tau-empire"
+    "behavior": "reactive",
+    "faction_id": "tau-empire",
+    "trigger": {
+      "event": "phase-started",
+      "optional": true
+    },
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "unit"
+    }
   },
   {
     "ability_id": "advanced-scouting-tau-empire",
@@ -3464,17 +4369,60 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "state": "engaged"
+                  }
+                }
+              }
+            ]
+          }
+        ]
       },
       "effect": {
-        "type": "move",
-        "target": "this-unit",
-        "modifier": {
-          "move_type": "normal"
-        }
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "move",
+            "target": "this-unit",
+            "modifier": {
+              "move_type": "normal",
+              "distance": 6
+            }
+          },
+          {
+            "type": "permission",
+            "target": "this-model",
+            "modifier": {
+              "activity": "declare-charge",
+              "allow": false
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -3484,8 +4432,14 @@
       "kroot-lone-spear"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "tau-empire"
+    "behavior": "reactive",
+    "faction_id": "tau-empire",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
+    }
   },
   {
     "ability_id": "ritual-butchery-tau-empire",
@@ -3517,7 +4471,10 @@
                 "value": 1
               }
             }
-          ]
+          ],
+          "weapons": {
+            "type": "melee"
+          }
         }
       }
     },
@@ -3544,39 +4501,73 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
           {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "phase-is",
+                  "parameters": {
+                    "phase": "fight"
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "feel-no-pain",
+              "target": "this-unit",
+              "modifier": {
+                "threshold": 6
+              }
             }
           },
           {
-            "type": "attachment",
-            "parameters": {
-              "subject": "this-model",
-              "role": "leading"
+            "type": "ability-part",
+            "trigger": {
+              "event": "destroyed",
+              "subject": "this-unit",
+              "object": {
+                "owner": "enemy"
+              }
+            },
+            "effect": {
+              "type": "conditional",
+              "condition": {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "fight"
+                }
+              },
+              "effect": {
+                "type": "feel-no-pain",
+                "target": "this-unit",
+                "modifier": {
+                  "threshold": 5
+                }
+              }
             }
           }
         ]
-      },
-      "effect": {
-        "type": "feel-no-pain",
-        "target": "this-unit",
-        "modifier": {
-          "threshold": 6
-        }
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "battle"
     },
     "unit_ids": [
       "kroot-flesh-shaper"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "faction_id": "tau-empire"
   },
   {
@@ -3700,27 +4691,25 @@
         "operator": "and",
         "operands": [
           {
-            "type": "matches",
+            "type": "guided",
             "parameters": {
-              "filter": {
-                "designated": "GUIDED"
-              }
+              "subject": "this-model"
             }
           },
           {
             "type": "matches",
             "parameters": {
+              "subject": "defender",
               "filter": {
                 "designated": "SPOTTED"
-              },
-              "subject": "defender"
+              }
             }
           }
         ]
       },
       "effect": {
         "type": "re-roll",
-        "target": "this-model",
+        "target": "this-unit",
         "modifier": {
           "roll": "hit",
           "subset": "ones"
@@ -3728,15 +4717,21 @@
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "unit_ids": [
       "taunar-supremacy-armour"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "tau-empire"
+    "faction_id": "tau-empire",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "attack"
+      }
+    }
   },
   {
     "ability_id": "expert-fieldcraft-tau-empire",
@@ -3753,30 +4748,35 @@
     "faction_id": "tau-empire",
     "detachment_id": "advanced-acquisition-cadre",
     "ability_type": "detachment",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "conditional",
-        "condition": {
-          "type": "attack-is",
-          "parameters": {
-            "attack_type": "ranged"
-          }
-        },
-        "effect": {
-          "type": "rule-state",
-          "target": "this-unit",
-          "modifier": {
-            "direction": "suppressed",
-            "rule_kind": "core-rule",
-            "rule": "attacking-ends-hidden"
+        "type": "rule-state",
+        "target": "event-subject",
+        "modifier": {
+          "direction": "suppressed",
+          "rule_kind": "core-rule",
+          "rule": "attacking-ends-hidden",
+          "attacks": {
+            "event_var": "those-attacks"
           }
         }
       }
@@ -3784,7 +4784,21 @@
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
+      "binds_event_variable": "those-attacks",
+      "subject": {
+        "owner": "friendly",
+        "any_of": [
+          "PATHFINDER TEAM",
+          "STEALTH BATTLESUITS"
+        ]
+      }
+    }
   },
   {
     "ability_id": "marker-beacon-advanced-acquisition-cadre-tau-empire",
@@ -3801,13 +4815,17 @@
     "faction_id": "tau-empire",
     "detachment_id": "advanced-acquisition-cadre",
     "ability_type": "stratagem",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "movement"
+      "type": "select-objective",
+      "selector": {
+        "filter": {
+          "controlled_by": "friendly"
+        },
+        "bind_as": "objective",
+        "count": {
+          "min": 1,
+          "max": 1
         }
       },
       "effect": {
@@ -3816,9 +4834,29 @@
       }
     },
     "scope": {
-      "duration": "battle-round"
+      "duration": "permanent"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "microdrone-support-advanced-acquisition-cadre-tau-empire",
@@ -3937,7 +4975,7 @@
     "behavior": "passive",
     "effect": {
       "type": "stat-modifier",
-      "target": "this-model",
+      "target": "this-unit",
       "modifier": {
         "stat": "detection-range",
         "operation": "subtract",
@@ -3964,50 +5002,53 @@
     "faction_id": "tau-empire",
     "detachment_id": "advanced-acquisition-cadre",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "ability-part",
-      "trigger": {
-        "event": "selected",
-        "subject": "this-unit",
+      "type": "select-units",
+      "selector": {
         "filter": {
-          "to": "shoot"
+          "owner": "enemy"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "subject": "selected-unit",
+            "filter": {
+              "within": {
+                "of": "this-unit",
+                "range": {
+                  "inches": 24
+                }
+              }
+            }
+          }
         }
       },
       "effect": {
-        "type": "designate-target",
-        "designation": "unmasked",
-        "select": {
-          "kind": "unit",
-          "selector": {
-            "filter": {
-              "owner": "enemy"
-            },
-            "count": {
-              "min": 1,
-              "max": 1
-            }
-          }
-        },
-        "applies": {
-          "to": "target",
-          "effect": {
-            "type": "stat-modifier",
-            "target": "defender",
-            "modifier": {
-              "stat": "detection-range",
-              "operation": "add",
-              "value": 9
-            }
-          }
-        },
-        "duration": "phase"
+        "type": "stat-modifier",
+        "target": "selected-unit",
+        "modifier": {
+          "stat": "detection-range",
+          "operation": "add",
+          "value": 9
+        }
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "until-this-unit-has-shot"
     },
-    "community_notes": "When the bearer's unit is selected to shoot, mark one enemy unit within 24\"; that enemy unit has +9\" detection range until this unit has shot."
+    "community_notes": "When the bearer's unit is selected to shoot, mark one enemy unit within 24\"; that enemy unit has +9\" detection range until this unit has shot.",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "bonded-heroes-tau-empire",
@@ -4026,72 +5067,89 @@
     "ability_type": "detachment",
     "behavior": "passive",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "conditional",
-          "condition": {
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
+            }
+          },
+          {
             "type": "matches",
             "parameters": {
+              "subject": "defender",
               "filter": {
                 "within": {
+                  "of": "attacker",
                   "range": {
                     "inches": 12
-                  },
-                  "of": {
-                    "owner": "enemy"
                   }
                 }
               }
             }
-          },
-          "effect": {
+          }
+        ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
             "type": "stat-modifier",
-            "target": "attacker",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "BATTLESUIT",
+                "T'AU EMPIRE"
+              ],
+              "level": "model"
+            },
             "modifier": {
               "stat": "S",
-              "operation": "add",
-              "value": 1,
-              "weapons": {
-                "type": "ranged"
-              }
+              "operation": "improve",
+              "value": 1
             }
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "within": {
-                  "range": {
-                    "inches": 8
-                  },
-                  "of": {
-                    "owner": "enemy"
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "defender",
+                "filter": {
+                  "within": {
+                    "of": "attacker",
+                    "range": {
+                      "inches": 8
+                    }
                   }
                 }
               }
-            }
-          },
-          "effect": {
-            "type": "stat-modifier",
-            "target": "attacker",
-            "modifier": {
-              "stat": "AP",
-              "operation": "add",
-              "value": 1,
-              "weapons": {
-                "type": "ranged"
+            },
+            "effect": {
+              "type": "stat-modifier",
+              "target": {
+                "owner": "friendly",
+                "all_of": [
+                  "BATTLESUIT",
+                  "T'AU EMPIRE"
+                ],
+                "level": "model"
+              },
+              "modifier": {
+                "stat": "AP",
+                "operation": "improve",
+                "value": 1
               }
             }
           }
-        }
-      ]
+        ]
+      }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
@@ -4204,12 +5262,19 @@
           "condition": {
             "type": "strength",
             "parameters": {
+              "subject": "defender",
               "below": "starting"
             }
           },
           "effect": {
             "type": "roll-modifier",
-            "target": "attacker",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "KROOT"
+              ],
+              "level": "model"
+            },
             "modifier": {
               "roll": "hit",
               "operation": "add",
@@ -4222,12 +5287,19 @@
           "condition": {
             "type": "strength",
             "parameters": {
+              "subject": "defender",
               "below": "half"
             }
           },
           "effect": {
             "type": "roll-modifier",
-            "target": "attacker",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "KROOT"
+              ],
+              "level": "model"
+            },
             "modifier": {
               "roll": "wound",
               "operation": "add",
@@ -4238,7 +5310,7 @@
       ]
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
@@ -4348,26 +5420,29 @@
     "faction_id": "tau-empire",
     "detachment_id": "kauyon",
     "ability_type": "detachment",
-    "behavior": "passive",
+    "behavior": "activated",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "battle-round",
-            "parameters": {
-              "min": 3,
-              "max": 5
-            }
-          },
-          "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "battle-round",
+        "parameters": {
+          "min": 3,
+          "max": 5
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
             "type": "weapon-ability-grant",
-            "target": "this-unit",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "T'AU EMPIRE"
+              ],
+              "level": "model"
+            },
             "modifier": {
-              "weapons": {
-                "type": "ranged"
-              },
               "keywords": [
                 {
                   "keyword_id": "sustained-hits",
@@ -4375,77 +5450,109 @@
                     "value": 1
                   }
                 }
-              ]
+              ],
+              "weapons": {
+                "type": "ranged"
+              }
             }
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "battle-round",
-                "parameters": {
-                  "min": 3,
-                  "max": 5
-                }
-              },
-              {
-                "type": "matches",
-                "parameters": {
-                  "filter": {
-                    "designated": "GUIDED"
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "battle-round",
+                  "parameters": {
+                    "min": 3,
+                    "max": 5
+                  }
+                },
+                {
+                  "type": "guided",
+                  "parameters": {
+                    "subject": "event-subject"
+                  }
+                },
+                {
+                  "type": "attack-is",
+                  "parameters": {
+                    "attack_type": "ranged"
+                  }
+                },
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "defender",
+                    "filter": {
+                      "designated": "SPOTTED"
+                    }
                   }
                 }
-              },
-              {
-                "type": "attack-is",
-                "parameters": {
-                  "attack_type": "ranged"
-                }
-              },
-              {
-                "type": "matches",
-                "parameters": {
-                  "filter": {
-                    "designated": "SPOTTED"
-                  },
-                  "subject": "defender"
-                }
+              ]
+            },
+            "effect": {
+              "type": "ignore-modifiers",
+              "target": "this-unit",
+              "modifier": {
+                "what": "characteristics",
+                "stats": [
+                  "BS"
+                ]
               }
-            ]
+            }
           },
-          "effect": {
-            "type": "sequence",
-            "steps": [
-              {
-                "type": "ignore-modifiers",
-                "target": "this-model",
-                "modifier": {
-                  "what": "characteristics",
-                  "stats": [
-                    "BS"
-                  ]
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "battle-round",
+                  "parameters": {
+                    "min": 3,
+                    "max": 5
+                  }
+                },
+                {
+                  "type": "guided",
+                  "parameters": {
+                    "subject": "event-subject"
+                  }
+                },
+                {
+                  "type": "attack-is",
+                  "parameters": {
+                    "attack_type": "ranged"
+                  }
+                },
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "defender",
+                    "filter": {
+                      "designated": "SPOTTED"
+                    }
+                  }
                 }
-              },
-              {
-                "type": "ignore-modifiers",
-                "target": "this-model",
-                "modifier": {
-                  "what": "rolls",
-                  "rolls": [
-                    "hit"
-                  ]
-                }
+              ]
+            },
+            "effect": {
+              "type": "ignore-modifiers",
+              "target": "this-unit",
+              "modifier": {
+                "what": "rolls",
+                "rolls": [
+                  "hit"
+                ]
               }
-            ]
+            }
           }
-        }
-      ]
+        ]
+      }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
@@ -4469,150 +5576,175 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "conditional",
-          "condition": {
-            "type": "matches",
-            "parameters": {
-              "filter": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "ability-grant",
+              "target": {
+                "owner": "friendly",
                 "any_of": [
                   "KROOT",
                   "VESPID STINGWINGS"
                 ]
-              }
-            }
-          },
-          "effect": {
-            "type": "conditional",
-            "condition": {
-              "operator": "and",
-              "operands": [
-                {
-                  "type": "phase-is",
-                  "parameters": {
-                    "phase": "shooting"
-                  }
-                },
-                {
-                  "type": "player-turn-is",
-                  "parameters": {
-                    "turn": "your-turn"
-                  }
-                }
-              ]
-            },
-            "effect": {
-              "type": "select-units",
-              "selector": {
-                "filter": {
-                  "owner": "enemy",
-                  "within": {
-                    "range": {
-                      "inches": 12
-                    },
-                    "of": "this-model"
-                  },
-                  "visible": {
-                    "to": "this-model"
-                  }
-                },
-                "count": {
-                  "min": 0,
-                  "max": 1
-                }
               },
-              "effect": {
-                "type": "sequence",
-                "steps": [
-                  {
-                    "type": "designate",
-                    "target": "selected-unit",
-                    "modifier": {
-                      "subject": "selected-unit",
-                      "tag": "prey-marked"
+              "modifier": {
+                "ability": "harnessed-alien-instincts",
+                "definition": {
+                  "type": "ability-part",
+                  "name": "Harnessed Alien Instincts",
+                  "effect": {
+                    "type": "conditional",
+                    "condition": {
+                      "operator": "and",
+                      "operands": [
+                        {
+                          "type": "phase-is",
+                          "parameters": {
+                            "phase": "shooting"
+                          }
+                        },
+                        {
+                          "type": "player-turn-is",
+                          "parameters": {
+                            "turn": "your-turn"
+                          }
+                        }
+                      ]
+                    },
+                    "effect": {
+                      "type": "select-units",
+                      "selector": {
+                        "filter": {
+                          "owner": "enemy",
+                          "visible": {
+                            "to": "this-model"
+                          }
+                        },
+                        "count": {
+                          "min": 1,
+                          "max": 1
+                        },
+                        "eligibility": {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "selected-unit",
+                            "filter": {
+                              "within": {
+                                "of": "this-unit",
+                                "range": {
+                                  "inches": 12
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "effect": {
+                        "type": "sequence",
+                        "steps": [
+                          {
+                            "type": "designate",
+                            "target": "selected-unit",
+                            "modifier": {
+                              "tag": "prey-marked"
+                            }
+                          },
+                          {
+                            "type": "conditional",
+                            "condition": {
+                              "type": "matches",
+                              "parameters": {
+                                "subject": "selected-unit",
+                                "filter": {
+                                  "designated": "prey-marked"
+                                }
+                              }
+                            },
+                            "effect": {
+                              "type": "stat-modifier",
+                              "target": "selected-unit",
+                              "modifier": {
+                                "stat": "detection-range",
+                                "operation": "add",
+                                "value": 3
+                              }
+                            }
+                          }
+                        ]
+                      }
                     }
                   },
-                  {
-                    "type": "stat-modifier",
-                    "target": "selected-unit",
-                    "modifier": {
-                      "stat": "detection-range",
-                      "operation": "add",
-                      "value": 3
-                    }
-                  }
+                  "optional": true,
+                  "duration": "phase"
+                }
+              }
+            },
+            {
+              "type": "ability-grant",
+              "target": {
+                "owner": "friendly",
+                "any_of": [
+                  "GHOSTKEEL BATTLESUIT",
+                  "STEALTH BATTLESUITS"
                 ]
+              },
+              "modifier": {
+                "ability": "localised-stealth-projectors",
+                "definition": {
+                  "type": "ability-part",
+                  "name": "Localised Stealth Projectors",
+                  "effect": {
+                    "type": "aura",
+                    "target": "friendly-within-aura",
+                    "modifier": {
+                      "range": {
+                        "inches": 6
+                      },
+                      "effect": {
+                        "type": "rule-state",
+                        "target": "event-subject",
+                        "modifier": {
+                          "direction": "suppressed",
+                          "rule_kind": "core-rule",
+                          "rule": "attacking-ends-hidden",
+                          "attacks": {
+                            "event_var": "those-attacks"
+                          }
+                        }
+                      },
+                      "eligible": {
+                        "owner": "friendly",
+                        "any_of": [
+                          "KROOT",
+                          "VESPID STINGWINGS"
+                        ]
+                      }
+                    }
+                  },
+                  "trigger": {
+                    "event": "attacks-resolved",
+                    "filter": {
+                      "kind": "shoot"
+                    },
+                    "binds_event_variable": "those-attacks"
+                  }
+                }
               }
             }
-          }
+          ]
         },
         {
-          "type": "conditional",
-          "condition": {
-            "operator": "or",
-            "operands": [
-              {
-                "operator": "and",
-                "operands": [
-                  {
-                    "type": "matches",
-                    "parameters": {
-                      "filter": {
-                        "all_of": [
-                          "GHOSTKEEL"
-                        ]
-                      }
-                    }
-                  },
-                  {
-                    "type": "matches",
-                    "parameters": {
-                      "filter": {
-                        "all_of": [
-                          "BATTLESUIT"
-                        ]
-                      }
-                    }
-                  }
-                ]
-              },
-              {
-                "type": "matches",
-                "parameters": {
-                  "filter": {
-                    "all_of": [
-                      "STEALTH BATTLESUITS"
-                    ]
-                  }
-                }
-              }
-            ]
-          },
-          "effect": {
-            "type": "rule-state",
-            "target": {
-              "owner": "friendly",
-              "any_of": [
-                "KROOT",
-                "VESPID STINGWINGS"
-              ],
-              "within": {
-                "range": {
-                  "inches": 6
-                },
-                "of": "this-unit"
-              }
-            },
-            "modifier": {
-              "direction": "suppressed",
-              "rule_kind": "core-rule",
-              "rule": "attacking-ends-hidden"
-            }
+          "type": "army-rule",
+          "target": "this-unit",
+          "modifier": {
+            "rule": "detachment-tag-exclusive",
+            "tag": "AUXILIARIES"
           }
         }
       ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
@@ -4892,17 +6024,68 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "weapon-ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "weapons": {
-          "type": "ranged"
-        },
-        "keywords": [
+      "type": "conditional",
+      "condition": {
+        "type": "model-count",
+        "parameters": {
+          "subject": "defender",
+          "min": 6
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
           {
-            "keyword_id": "sustained-hits",
-            "parameters": {
-              "value": 1
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "model-count",
+                  "parameters": {
+                    "subject": "defender",
+                    "min": 11
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "weapon-ability-grant",
+              "target": "this-unit",
+              "modifier": {
+                "keywords": [
+                  {
+                    "keyword_id": "sustained-hits",
+                    "parameters": {
+                      "value": 1
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "model-count",
+              "parameters": {
+                "subject": "defender",
+                "min": 11
+              }
+            },
+            "effect": {
+              "type": "weapon-ability-grant",
+              "target": "this-unit",
+              "modifier": {
+                "keywords": [
+                  {
+                    "keyword_id": "sustained-hits",
+                    "parameters": {
+                      "value": 2
+                    }
+                  }
+                ]
+              }
             }
           }
         ]
@@ -4943,8 +6126,6 @@
           "target": "this-unit",
           "modifier": {
             "to": "battlefield",
-            "from": "strategic-reserves",
-            "via": "deep-strike",
             "min_enemy_distance": {
               "inches": 6
             }
@@ -4988,24 +6169,40 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "move",
-          "target": "this-unit",
-          "modifier": {
-            "move_type": "normal"
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "state": "engaged"
+              }
+            }
           }
-        },
-        {
-          "type": "permission",
-          "target": "this-unit",
-          "modifier": {
-            "activity": "declare-charge",
-            "allow": false
+        ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "move",
+            "target": "this-unit",
+            "modifier": {
+              "move_type": "normal"
+            }
+          },
+          {
+            "type": "permission",
+            "target": "this-unit",
+            "modifier": {
+              "activity": "declare-charge",
+              "allow": false
+            }
           }
-        }
-      ]
+        ]
+      }
     },
     "scope": {
       "duration": "turn"
@@ -5034,7 +6231,7 @@
     "faction_id": "tau-empire",
     "detachment_id": "montka",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "move-modifier",
       "target": "this-unit",
@@ -5050,7 +6247,15 @@
         "T’AU EMPIRE"
       ]
     },
-    "community_notes": "If the unit Advances, no Advance roll is made; instead add 6\" to the Move characteristic of its models until the end of the phase."
+    "community_notes": "If the unit Advances, no Advance roll is made; instead add 6\" to the Move characteristic of its models until the end of the phase.",
+    "trigger": {
+      "event": "move-started",
+      "filter": {
+        "move_types": [
+          "advance"
+        ]
+      }
+    }
   },
   {
     "ability_id": "combat-debarkation-montka-tau-empire",
@@ -5160,15 +6365,65 @@
     "faction_id": "tau-empire",
     "detachment_id": "montka",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "stat-modifier",
-      "target": "this-unit",
-      "modifier": {
-        "stat": "AP",
-        "operation": "improve",
-        "value": 1
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "targeting",
+          "target": {
+            "stratagem_target": "first"
+          },
+          "modifier": {
+            "by": {
+              "stratagem_target": "first"
+            },
+            "may": "must-target",
+            "kind": "attack",
+            "target": {
+              "stratagem_target": "third"
+            }
+          }
+        },
+        {
+          "type": "targeting",
+          "target": {
+            "stratagem_target": "second"
+          },
+          "modifier": {
+            "by": {
+              "stratagem_target": "second"
+            },
+            "may": "must-target",
+            "kind": "attack",
+            "target": {
+              "stratagem_target": "third"
+            }
+          }
+        },
+        {
+          "type": "stat-modifier",
+          "target": {
+            "stratagem_target": "first"
+          },
+          "modifier": {
+            "stat": "AP",
+            "operation": "improve",
+            "value": 1
+          }
+        },
+        {
+          "type": "stat-modifier",
+          "target": {
+            "stratagem_target": "second"
+          },
+          "modifier": {
+            "stat": "AP",
+            "operation": "improve",
+            "value": 1
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "phase"
@@ -5178,7 +6433,34 @@
         "T’AU EMPIRE"
       ]
     },
-    "community_notes": "Targets two T'au Empire units and one enemy unit: both units can only attack that enemy unit this phase, with AP improved by 1. Cannot be used in the fourth or fifth battle rounds."
+    "community_notes": "Targets two T'au Empire units and one enemy unit: both units can only attack that enemy unit this phase, with AP improved by 1. Cannot be used in the fourth or fifth battle rounds.",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          },
+          {
+            "type": "battle-round",
+            "parameters": {
+              "min": 1,
+              "max": 3
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "pinpoint-counter-offensive-montka-tau-empire",
@@ -5265,48 +6547,65 @@
     "faction_id": "tau-empire",
     "detachment_id": "montka",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "ability-part",
-      "trigger": {
-        "event": "attacks-resolved",
-        "subject": "this-unit",
-        "filter": {
-          "kind": "shoot"
-        }
-      },
-      "effect": {
-        "type": "designate-target",
-        "designation": "pulse-onslaught-shaken",
-        "select": {
-          "kind": "unit",
-          "selector": {
-            "filter": {
-              "owner": "enemy"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "designate",
+          "target": {
+            "stratagem_target": "second"
+          },
+          "modifier": {
+            "tag": "shaken"
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": {
+                "stratagem_target": "second"
+              },
+              "filter": {
+                "designated": "shaken"
+              }
+            }
+          },
+          "effect": {
+            "type": "stat-modifier",
+            "target": {
+              "stratagem_target": "second"
             },
-            "count": {
-              "min": 1,
-              "max": 1
+            "modifier": {
+              "stat": "M",
+              "operation": "subtract",
+              "value": 2
             }
           }
         },
-        "applies": {
-          "to": "target",
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": {
+                "stratagem_target": "second"
+              },
+              "filter": {
+                "designated": "shaken"
+              }
+            }
+          },
           "effect": {
             "type": "sequence",
             "steps": [
               {
-                "type": "stat-modifier",
-                "target": "this-unit",
-                "modifier": {
-                  "stat": "M",
-                  "operation": "subtract",
-                  "value": 2
-                }
-              },
-              {
                 "type": "roll-modifier",
-                "target": "this-unit",
+                "target": {
+                  "stratagem_target": "second"
+                },
                 "modifier": {
                   "roll": "advance",
                   "operation": "subtract",
@@ -5315,7 +6614,9 @@
               },
               {
                 "type": "roll-modifier",
-                "target": "this-unit",
+                "target": {
+                  "stratagem_target": "second"
+                },
                 "modifier": {
                   "roll": "charge",
                   "operation": "subtract",
@@ -5324,12 +6625,11 @@
               }
             ]
           }
-        },
-        "duration": "turn"
-      }
+        }
+      ]
     },
     "scope": {
-      "duration": "turn"
+      "duration": "until-end-of-opponent-next-turn"
     },
     "applies_to": {
       "all_of": [
@@ -5337,7 +6637,13 @@
         "INFANTRY"
       ]
     },
-    "community_notes": "The selected enemy unit (excluding Monsters and Vehicles) hit by this unit's attacks is shaken until the end of your opponent's next turn."
+    "community_notes": "The selected enemy unit (excluding Monsters and Vehicles) hit by this unit's attacks is shaken until the end of your opponent's next turn.",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
+    }
   },
   {
     "ability_id": "a-trap-well-laid-kroot-hunting-pack-tau-empire",
@@ -5354,12 +6660,22 @@
     "faction_id": "tau-empire",
     "detachment_id": "kroot-hunting-pack",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "ability-part",
-      "trigger": {
-        "event": "attacks-resolved",
-        "subject": "this-unit"
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "attacker",
+              "filter": {
+                "state": "battle-shocked"
+              }
+            }
+          }
+        ]
       },
       "effect": {
         "type": "designate-target",
@@ -5373,6 +6689,19 @@
             "count": {
               "min": 1,
               "max": 1
+            },
+            "eligibility": {
+              "type": "happened",
+              "parameters": {
+                "event": "after-roll",
+                "subject": "event-subject",
+                "object": "this-unit",
+                "filter": {
+                  "roll": "hit",
+                  "result": "success"
+                },
+                "window": "event"
+              }
             }
           }
         },
@@ -5380,7 +6709,13 @@
           "to": "attackers-of-target",
           "effect": {
             "type": "stat-modifier",
-            "target": "this-unit",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "KROOT"
+              ],
+              "level": "model"
+            },
             "modifier": {
               "stat": "AP",
               "operation": "improve",
@@ -5399,7 +6734,10 @@
         "KROOT"
       ]
     },
-    "community_notes": "Applies to attacks made by Kroot models against the selected unit, unless the attacking unit is Battle-shocked."
+    "community_notes": "Applies to attacks made by Kroot models against the selected unit, unless the attacking unit is Battle-shocked.",
+    "trigger": {
+      "event": "attacks-resolved"
+    }
   },
   {
     "ability_id": "emp-grenades-kroot-hunting-pack-tau-empire",
@@ -5492,17 +6830,27 @@
     "faction_id": "tau-empire",
     "detachment_id": "kroot-hunting-pack",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "permission",
-      "target": "this-unit",
-      "modifier": {
-        "activity": "shoot",
-        "allow": true,
-        "after": [
-          "fall-back"
-        ]
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "shoot",
+            "allow": true
+          }
+        },
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "declare-charge",
+            "allow": true
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "turn"
@@ -5511,6 +6859,20 @@
       "all_of": [
         "KROOT"
       ]
+    },
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "KROOT"
+        ]
+      },
+      "filter": {
+        "move_types": [
+          "fall-back"
+        ]
+      }
     }
   },
   {
@@ -5637,30 +6999,101 @@
     "faction_id": "tau-empire",
     "detachment_id": "kroot-hunting-pack",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "aura",
     "effect": {
-      "type": "test",
-      "target": {
-        "owner": "enemy",
-        "within": {
-          "range": {
-            "inches": 6
-          }
-        }
-      },
+      "type": "aura",
+      "target": "enemy-within-aura",
       "modifier": {
-        "test": "battle-shock"
+        "range": {
+          "inches": 6
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "strength",
+                "parameters": {
+                  "subject": "recipient",
+                  "below": "half"
+                }
+              },
+              "effect": {
+                "type": "test",
+                "target": "recipient",
+                "modifier": {
+                  "test": "battle-shock",
+                  "modifier": -1
+                }
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "strength",
+                    "parameters": {
+                      "subject": "recipient",
+                      "below": "half"
+                    }
+                  }
+                ]
+              },
+              "effect": {
+                "type": "test",
+                "target": "recipient",
+                "modifier": {
+                  "test": "battle-shock"
+                }
+              }
+            },
+            {
+              "type": "test-exemption",
+              "target": "recipient",
+              "modifier": {
+                "test": "battle-shock",
+                "window": "phase"
+              }
+            }
+          ]
+        },
+        "eligible": {
+          "owner": "enemy"
+        }
       }
     },
     "scope": {
-      "duration": "turn"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
         "KROOT"
       ]
     },
-    "community_notes": "Used on a unit that destroyed an enemy unit this Fight phase: in the opponent's next Command phase each enemy unit within 6\" takes a Battle-shock test (-1 if Below Half-strength) and skips its other Battle-shock tests that phase."
+    "community_notes": "Used on a unit that destroyed an enemy unit this Fight phase: in the opponent's next Command phase each enemy unit within 6\" takes a Battle-shock test (-1 if Below Half-strength) and skips its other Battle-shock tests that phase.",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "experimental-ammunition-experimental-prototype-cadre-tau-empire",
@@ -5888,10 +7321,10 @@
       "condition": {
         "type": "matches",
         "parameters": {
+          "subject": "defender",
           "filter": {
             "designated": "SPOTTED"
-          },
-          "subject": "defender"
+          }
         }
       },
       "effect": {
@@ -5902,7 +7335,7 @@
             "target": "this-unit",
             "modifier": {
               "stat": "BS",
-              "operation": "subtract",
+              "operation": "improve",
               "value": 1
             }
           },
@@ -5922,9 +7355,6 @@
               "type": "weapon-ability-grant",
               "target": "this-unit",
               "modifier": {
-                "weapons": {
-                  "type": "ranged"
-                },
                 "keywords": [
                   {
                     "keyword_id": "ignores-cover"
@@ -6038,14 +7468,48 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "stat-modifier",
-      "target": "this-unit",
-      "modifier": {
-        "stat": "AP",
-        "operation": "improve",
-        "value": 1,
-        "weapons": {
-          "type": "ranged"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "defender",
+              "filter": {
+                "within": {
+                  "of": "attacker",
+                  "range": {
+                    "inches": 9
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "battle-round",
+          "parameters": {
+            "min": 3
+          }
+        },
+        "effect": {
+          "type": "stat-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "stat": "AP",
+            "operation": "improve",
+            "value": 1
+          }
         }
       }
     },
@@ -6145,22 +7609,35 @@
     "faction_id": "tau-empire",
     "detachment_id": "auxiliary-cadre",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "permission",
       "target": "this-unit",
       "modifier": {
         "activity": "declare-charge",
-        "allow": true,
-        "after": [
-          "advance"
-        ]
+        "allow": true
       }
     },
     "scope": {
-      "duration": "turn"
+      "duration": "phase"
     },
-    "community_notes": "Kroot or Vespid Stingwings unit only; the Advance move does not prevent the unit from being eligible to declare a charge."
+    "community_notes": "Kroot or Vespid Stingwings unit only; the Advance move does not prevent the unit from being eligible to declare a charge.",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "move_types": [
+          "advance"
+        ],
+        "to": "move"
+      },
+      "subject": {
+        "owner": "friendly",
+        "any_of": [
+          "KROOT",
+          "VESPID STINGWINGS"
+        ]
+      }
+    }
   },
   {
     "ability_id": "experimental-modifications-auxiliary-cadre-tau-empire",
@@ -6177,7 +7654,7 @@
     "faction_id": "tau-empire",
     "detachment_id": "auxiliary-cadre",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "stat-modifier",
       "target": "this-unit",
@@ -6190,7 +7667,20 @@
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "Kroot or Vespid Stingwings unit only; applies to the unit's attacks when selected to attack in the Shooting or Fight phase."
+    "community_notes": "Kroot or Vespid Stingwings unit only; applies to the unit's attacks when selected to attack in the Shooting or Fight phase.",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "attack"
+      },
+      "subject": {
+        "owner": "friendly",
+        "any_of": [
+          "KROOT",
+          "VESPID STINGWINGS"
+        ]
+      }
+    }
   },
   {
     "ability_id": "guided-by-unity-auxiliary-cadre-tau-empire",
@@ -6207,19 +7697,42 @@
     "faction_id": "tau-empire",
     "detachment_id": "auxiliary-cadre",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "weapon-ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "weapons": {
-          "type": "ranged"
-        },
-        "keywords": [
-          {
-            "keyword_id": "lethal-hits"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "defender",
+          "filter": {
+            "within": {
+              "of": {
+                "owner": "friendly",
+                "any_of": [
+                  "KROOT",
+                  "VESPID STINGWINGS"
+                ]
+              },
+              "range": {
+                "inches": 9
+              }
+            }
           }
-        ]
+        }
+      },
+      "effect": {
+        "type": "weapon-ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "keywords": [
+            {
+              "keyword_id": "lethal-hits"
+            }
+          ],
+          "weapons": {
+            "type": "ranged"
+          }
+        }
       }
     },
     "scope": {
@@ -6230,7 +7743,23 @@
         "T’AU EMPIRE"
       ]
     },
-    "community_notes": "Applies only to ranged attacks against units within 9\" of a friendly Kroot or Vespid Stingwings unit; the proximity gate is not encoded. Cannot target Kroot or Vespid Stingwings units."
+    "community_notes": "Applies only to ranged attacks against units within 9\" of a friendly Kroot or Vespid Stingwings unit; the proximity gate is not encoded. Cannot target Kroot or Vespid Stingwings units.",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "T'AU EMPIRE"
+        ],
+        "none_of": [
+          "KROOT",
+          "VESPID STINGWINGS"
+        ]
+      }
+    }
   },
   {
     "ability_id": "rapid-acquisition-sudden-dawn-cadre-tau-empire",
@@ -6247,20 +7776,53 @@
     "faction_id": "tau-empire",
     "detachment_id": "sudden-dawn-cadre",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "objective-sticky",
-      "target": "this-unit"
+      "type": "select-objective",
+      "selector": {
+        "filter": {
+          "controlled_by": "friendly"
+        },
+        "bind_as": "objective",
+        "count": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "effect": {
+        "type": "objective-sticky",
+        "target": "this-unit"
+      }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
         "SUDDEN DAWN CADRE"
       ]
     },
-    "community_notes": "At the end of your Movement phase, one objective the unit controls becomes secured."
+    "community_notes": "At the end of your Movement phase, one objective the unit controls becomes secured.",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "suppressing-fire-sudden-dawn-cadre-tau-empire",
@@ -6277,48 +7839,67 @@
     "faction_id": "tau-empire",
     "detachment_id": "sudden-dawn-cadre",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "ability-part",
-      "trigger": {
-        "event": "attacks-resolved",
-        "subject": "this-unit",
+      "type": "select-units",
+      "selector": {
         "filter": {
-          "kind": "shoot"
+          "owner": "enemy"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "type": "happened",
+          "parameters": {
+            "event": "after-roll",
+            "subject": "event-subject",
+            "object": "this-unit",
+            "filter": {
+              "roll": "hit",
+              "result": "success"
+            },
+            "window": "event"
+          }
         }
       },
       "effect": {
-        "type": "designate-target",
-        "designation": "suppressing-fire-pinned",
-        "select": {
-          "kind": "unit",
-          "selector": {
-            "filter": {
-              "owner": "enemy"
-            },
-            "count": {
-              "min": 1,
-              "max": 1
-            }
-          }
-        },
-        "applies": {
-          "to": "target",
-          "effect": {
-            "type": "stat-modifier",
-            "target": "this-unit",
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "designate",
+            "target": "selected-unit",
             "modifier": {
-              "stat": "M",
-              "operation": "subtract",
-              "value": 2
+              "tag": "pinned"
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "selected-unit",
+                "filter": {
+                  "designated": "pinned"
+                }
+              }
+            },
+            "effect": {
+              "type": "stat-modifier",
+              "target": "selected-unit",
+              "modifier": {
+                "stat": "M",
+                "operation": "subtract",
+                "value": 2
+              }
             }
           }
-        },
-        "duration": "turn"
+        ]
       }
     },
     "scope": {
-      "duration": "turn"
+      "duration": "until-next-command-phase"
     },
     "applies_to": {
       "all_of": [
@@ -6326,7 +7907,20 @@
         "INFANTRY"
       ]
     },
-    "community_notes": "One enemy unit hit by this unit's attacks is pinned (-2\" Move) until the start of your next Command phase."
+    "community_notes": "One enemy unit hit by this unit's attacks is pinned (-2\" Move) until the start of your next Command phase.",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "INFANTRY",
+          "SUDDEN DAWN CADRE"
+        ]
+      }
+    }
   },
   {
     "ability_id": "swift-embarkation-sudden-dawn-cadre-tau-empire",
@@ -6518,7 +8112,7 @@
     "faction_id": "tau-empire",
     "detachment_id": "retaliation-cadre",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -6532,25 +8126,44 @@
           }
         },
         {
-          "type": "select-units",
-          "selector": {
+          "type": "ability-part",
+          "trigger": {
+            "event": "move-ended",
             "filter": {
-              "owner": "enemy"
+              "move_types": [
+                "normal"
+              ]
             },
-            "count": {
-              "min": 1,
-              "max": 1
-            }
+            "optional": true
           },
           "effect": {
-            "type": "mortal-wounds",
-            "target": "selected-unit",
-            "modifier": {
-              "count": 1,
-              "per": "success",
-              "roll": {
-                "dice": 6,
-                "threshold": 4
+            "type": "select-units",
+            "selector": {
+              "filter": {
+                "owner": "enemy"
+              },
+              "count": {
+                "min": 1,
+                "max": 1
+              },
+              "eligibility": {
+                "type": "moved-over",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "by": "this-model"
+                }
+              }
+            },
+            "effect": {
+              "type": "mortal-wounds",
+              "target": "selected-unit",
+              "modifier": {
+                "count": 1,
+                "per": "success",
+                "roll": {
+                  "dice": 6,
+                  "threshold": 4
+                }
               }
             }
           }
@@ -6558,7 +8171,7 @@
       ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -6583,32 +8196,28 @@
     "faction_id": "tau-empire",
     "detachment_id": "retaliation-cadre",
     "ability_type": "enhancement",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "choice",
-      "choice_label": "Prototype Weapon System",
       "options": [
         {
           "type": "weapon-ability-grant",
           "target": "this-model",
           "modifier": {
-            "weapons": {
-              "type": "ranged"
-            },
             "keywords": [
               {
                 "keyword_id": "lethal-hits"
               }
-            ]
+            ],
+            "weapons": {
+              "type": "ranged"
+            }
           }
         },
         {
           "type": "weapon-ability-grant",
           "target": "this-model",
           "modifier": {
-            "weapons": {
-              "type": "ranged"
-            },
             "keywords": [
               {
                 "keyword_id": "sustained-hits",
@@ -6616,13 +8225,17 @@
                   "value": 1
                 }
               }
-            ]
+            ],
+            "weapons": {
+              "type": "ranged"
+            }
           }
         }
-      ]
+      ],
+      "choice_label": "LETHAL HITS or SUSTAINED HITS 1"
     },
     "scope": {
-      "duration": "phase"
+      "duration": "attack-sequence"
     },
     "applies_to": {
       "all_of": [
@@ -6630,7 +8243,13 @@
         "BATTLESUIT"
       ]
     },
-    "community_notes": "Selected each time the bearer is selected to shoot; applies to the bearer's ranged weapons until those attacks are resolved."
+    "community_notes": "Selected each time the bearer is selected to shoot; applies to the bearer's ranged weapons until those attacks are resolved.",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      }
+    }
   },
   {
     "ability_id": "exemplar-of-the-montka-montka-tau-empire",
@@ -6924,14 +8543,14 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "weapons": {
-              "type": "ranged"
-            },
             "keywords": [
               {
                 "keyword_id": "ignores-cover"
               }
-            ]
+            ],
+            "weapons": {
+              "type": "ranged"
+            }
           }
         },
         {
@@ -6940,21 +8559,23 @@
             "owner": "enemy"
           },
           "modifier": {
-            "allow": false,
             "to": "battlefield",
             "from": "strategic-reserves",
-            "min_distance_from": {
-              "of": "this-model",
-              "range": {
-                "inches": 12
+            "allow": false,
+            "near": [
+              {
+                "of": "this-model",
+                "range": {
+                  "inches": 12
+                }
               }
-            }
+            ]
           }
         }
       ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -7004,21 +8625,21 @@
             "type": "weapon-ability-grant",
             "target": "this-unit",
             "modifier": {
-              "weapons": {
-                "type": "ranged"
-              },
               "keywords": [
                 {
                   "keyword_id": "assault"
                 }
-              ]
+              ],
+              "weapons": {
+                "type": "ranged"
+              }
             }
           }
         ]
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -7058,7 +8679,7 @@
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -7087,26 +8708,34 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
+          },
+          {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "melee"
+            }
+          }
+        ]
       },
       "effect": {
         "type": "roll-result",
         "target": "this-unit",
         "modifier": {
           "roll": "hit",
-          "critical_on": 5,
-          "weapons": {
-            "type": "melee"
-          }
+          "critical_on": 5
         }
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -7355,18 +8984,27 @@
         }
       },
       "effect": {
-        "type": "ability-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "ability": "patient-hunter-tau-empire",
-          "aspect": "start-round",
-          "operation": "set",
-          "value": 2
+        "type": "conditional",
+        "condition": {
+          "type": "battle-round",
+          "parameters": {
+            "min": 2
+          }
+        },
+        "effect": {
+          "type": "ability-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "ability": "patient-hunter-tau-empire",
+            "aspect": "start-round",
+            "operation": "set",
+            "value": 2
+          }
         }
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -7398,19 +9036,49 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "roll-modifier",
-      "target": "this-model",
-      "modifier": {
-        "roll": "hit",
-        "operation": "add",
-        "value": 1,
-        "weapons": {
-          "type": "ranged"
+      "type": "conditional",
+      "condition": {
+        "type": "attack-is",
+        "parameters": {
+          "attack_type": "ranged"
         }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "roll-modifier",
+            "target": "this-model",
+            "modifier": {
+              "roll": "hit",
+              "operation": "add",
+              "value": 1
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "battle-round",
+              "parameters": {
+                "min": 3,
+                "max": 5
+              }
+            },
+            "effect": {
+              "type": "roll-modifier",
+              "target": "this-model",
+              "modifier": {
+                "roll": "wound",
+                "operation": "add",
+                "value": 1
+              }
+            }
+          }
+        ]
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -7434,36 +9102,55 @@
     "faction_id": "tau-empire",
     "detachment_id": "kauyon",
     "ability_type": "enhancement",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "set-up",
-          "target": "this-unit",
-          "modifier": {
-            "to": "strategic-reserves"
-          }
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "T'AU EMPIRE"
+          ]
         },
-        {
-          "type": "set-up",
-          "target": "this-unit",
-          "modifier": {
-            "to": "strategic-reserves",
-            "ignore_limits": true
-          }
+        "count": {
+          "min": 1,
+          "max": 1
         }
-      ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "set-up",
+            "target": "selected-unit",
+            "modifier": {
+              "to": "battlefield"
+            }
+          },
+          {
+            "type": "set-up",
+            "target": "selected-unit",
+            "modifier": {
+              "to": "strategic-reserves",
+              "ignore_limits": true
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
         "T’AU EMPIRE"
       ]
     },
-    "community_notes": "After deployment, redeploy up to three T'au Empire units, optionally into Strategic Reserves regardless of the usual limits."
+    "community_notes": "After deployment, redeploy up to three T'au Empire units, optionally into Strategic Reserves regardless of the usual limits.",
+    "trigger": {
+      "event": "deployment-ended",
+      "optional": true
+    }
   },
   {
     "ability_id": "through-unity-devastation-kauyon-tau-empire",
@@ -7564,7 +9251,7 @@
     "faction_id": "tau-empire",
     "detachment_id": "auxiliary-cadre",
     "ability_type": "enhancement",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -7572,34 +9259,30 @@
           "owner": "friendly",
           "all_of": [
             "KROOT"
+          ],
+          "any_of": [
+            "CARNIVORES",
+            "FARSTALKERS"
           ]
         },
         "count": {
           "min": 0,
           "max": 3
-        },
-        "eligibility": {
-          "type": "matches",
-          "parameters": {
-            "filter": {
-              "any_of": [
-                "CARNIVORES",
-                "FARSTALKERS"
-              ]
-            }
-          }
         }
       },
       "effect": {
         "type": "ability-grant",
         "target": "selected-unit",
         "modifier": {
-          "ability": "deep-strike"
+          "ability": "deep-strike",
+          "value": {
+            "rating": true
+          }
         }
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -7607,7 +9290,11 @@
         "SHAPER"
       ]
     },
-    "community_notes": "[APPROX] In the Declare Battle Formations step, up to three friendly Kroot Carnivores or Farstalker Kinband units gain Deep Strike. Encoded as an opaque grant."
+    "community_notes": "[APPROX] In the Declare Battle Formations step, up to three friendly Kroot Carnivores or Farstalker Kinband units gain Deep Strike. Encoded as an opaque grant.",
+    "trigger": {
+      "event": "battle-formations-declared",
+      "optional": true
+    }
   },
   {
     "ability_id": "admired-leader-auxiliary-cadre-tau-empire",
@@ -7626,41 +9313,69 @@
     "ability_type": "enhancement",
     "behavior": "activated",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "stat-modifier",
-          "target": {
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
             "owner": "friendly",
+            "any_of": [
+              "KROOT",
+              "VESPID STINGWINGS"
+            ],
             "within": {
               "range": {
                 "inches": 12
-              }
+              },
+              "of": "this-model"
             }
           },
-          "modifier": {
-            "stat": "Ld",
-            "operation": "subtract",
-            "value": 1
+          "count": {
+            "min": 1,
+            "max": 1
           }
         },
-        {
-          "type": "stat-modifier",
-          "target": {
-            "owner": "friendly",
-            "within": {
-              "range": {
-                "inches": 12
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "stat-modifier",
+              "target": "selected-unit",
+              "modifier": {
+                "stat": "Ld",
+                "operation": "improve",
+                "value": 1
+              }
+            },
+            {
+              "type": "stat-modifier",
+              "target": "selected-unit",
+              "modifier": {
+                "stat": "OC",
+                "operation": "improve",
+                "value": 1
               }
             }
-          },
-          "modifier": {
-            "stat": "OC",
-            "operation": "add",
-            "value": 1
-          }
+          ]
         }
-      ]
+      }
     },
     "scope": {
       "duration": "until-next-command-phase"
@@ -7929,25 +9644,36 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
-            "within": {
-              "range": "objective-control",
-              "of": {
-                "objective": {}
-              }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
             }
           },
-          "subject": "defender"
-        }
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "defender",
+              "filter": {
+                "within": {
+                  "of": {
+                    "objective": {}
+                  },
+                  "range": "objective-control"
+                }
+              }
+            }
+          }
+        ]
       },
       "effect": {
         "type": "re-roll",
-        "target": "this-model",
+        "target": "this-unit",
         "modifier": {
           "roll": "wound",
-          "subset": "all-failures",
+          "result_scope": "any-result",
           "weapons": {
             "type": "ranged"
           }
@@ -7957,7 +9683,8 @@
     "scope": {
       "duration": "permanent"
     },
-    "faction_id": "tau-empire"
+    "faction_id": "tau-empire",
+    "source_digest": "aa61a1c45b553430305b77e8e3e2ad5fdf69981df614693abeb8622b628b3a14"
   },
   {
     "ability_id": "target-uploaded-sudden-dawn-cadre-pathfinder-team-tau-empire",
@@ -7976,53 +9703,30 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "attack-is",
-            "parameters": {
-              "attack_type": "ranged"
-            }
-          },
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "designated": "SPOTTED"
-              },
-              "subject": "defender"
-            }
+        "type": "matches",
+        "parameters": {
+          "subject": "defender",
+          "filter": {
+            "designated": "SPOTTED"
           }
-        ]
+        }
       },
       "effect": {
         "type": "sequence",
         "steps": [
           {
             "type": "stat-modifier",
-            "target": "this-model",
+            "target": "this-unit",
             "modifier": {
               "stat": "BS",
               "operation": "improve",
-              "value": 1,
-              "weapons": {
-                "type": "ranged"
-              }
+              "value": 1
             }
           },
           {
             "type": "weapon-ability-grant",
-            "target": "this-model",
+            "target": "this-unit",
             "modifier": {
-              "weapons": {
-                "type": "ranged"
-              },
               "keywords": [
                 {
                   "keyword_id": "ignores-cover"
@@ -8036,7 +9740,8 @@
     "scope": {
       "duration": "permanent"
     },
-    "faction_id": "tau-empire"
+    "faction_id": "tau-empire",
+    "source_digest": "4a79e4d4619fd969144691c64c02147947c5cd68d06b70e037061425ba50d1ac"
   },
   {
     "ability_id": "battlesuit-support-system-ghostkeel-battlesuit-tau-empire",
@@ -8091,17 +9796,67 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "tau-empire",
     "detachment_id": "sudden-dawn-cadre",
     "ability_type": "detachment",
     "effect": {
-      "type": "no-effect"
+      "type": "designate-target",
+      "designation": "co-ordinated-eradication-target",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        }
+      },
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "stat-modifier",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "SUDDEN DAWN CADRE"
+            ]
+          },
+          "modifier": {
+            "stat": "AP",
+            "operation": "improve",
+            "value": 1
+          }
+        }
+      },
+      "duration": "battle"
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "battle"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "SUDDEN DAWN CADRE"
+        ]
+      },
+      "optional": true
+    },
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "army"
+    },
+    "source_digest": "f2bfa9ad03576d836505b91bc19c14478138044fce43698b93473b57698d682d"
   },
   {
     "ability_id": "drones-sudden-dawn-cadre-tau-empire",
@@ -8151,7 +9906,6 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [
       "sudden-dawn-cadre-pathfinder-team"
     ],
@@ -8159,11 +9913,28 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "roll-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "roll": "charge",
+        "operation": "subtract",
+        "value": 2
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "targets-selected",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "kind": "charge"
+      }
+    },
+    "source_digest": "4194c2dbaea40fa5d4797ab6fb1f03f767f8db5149ee45a2eb6f410e20950681"
   },
   {
     "ability_id": "rapid-disembark-tau-empire",
@@ -8195,7 +9966,6 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [
       "broadside-battlesuits",
       "commander-in-coldstar-battlesuit",
@@ -8205,10 +9975,28 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "attack-is",
+        "parameters": {
+          "attack_type": "ranged"
+        }
+      },
+      "effect": {
+        "type": "ignore-modifiers",
+        "target": "this-unit",
+        "modifier": {
+          "what": "rolls",
+          "rolls": [
+            "hit"
+          ]
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "activated",
+    "source_digest": "61e10e3e8ec8f70cfb2e0fb35a9fc6a3406397993798f0bbd286b027a8e2df8a"
   }
 ]

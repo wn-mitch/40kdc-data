@@ -1,0 +1,28 @@
+{
+  "name": "AX-1-0 Tiger Shark (tau-empire) in Retaliation Cadre, shooting: Battlesuit-only stratagems are not eligible",
+  "input": {
+    "unitId": "ax-1-0-tiger-shark",
+    "factionId": "tau-empire",
+    "detachmentId": "retaliation-cadre"
+  },
+  "phase": "shooting",
+  "expected": {
+    "army": [
+      "drones-sudden-dawn-cadre-tau-empire",
+      "drones-tau-empire",
+      "for-the-greater-good-sudden-dawn-cadre-tau-empire",
+      "for-the-greater-good-tau-empire"
+    ],
+    "detachment": [
+      "bonded-heroes-tau-empire"
+    ],
+    "detachment-stratagem": [
+      "fail-safe-detonator-retaliation-cadre-tau-empire"
+    ],
+    "unit": [
+      "damaged",
+      "deadly-demise",
+      "titan-hunter-tau-empire"
+    ]
+  }
+}

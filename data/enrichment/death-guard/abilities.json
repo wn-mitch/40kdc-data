@@ -10,11 +10,13 @@
     "source_digest": "a95e7bfca86869c1e78368993e9bddc9a85bfb8ceff0690a07238e6e7b2f6d2e",
     "version": "2025-q3",
     "effect": {
-      "type": "aura",
-      "target": "enemy-within-aura",
+      "type": "ability-modifier",
+      "target": "this-model",
       "modifier": {
-        "of": "contagion",
-        "range_bonus": 3
+        "ability": "contagion-range",
+        "aspect": "range",
+        "operation": "add",
+        "value": 3
       }
     },
     "scope": {
@@ -41,37 +43,43 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "attachment",
-            "parameters": {
-              "subject": "this-model",
-              "role": "leading"
-            }
-          }
-        ]
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
-        "type": "targeting",
-        "target": {
-          "owner": "enemy"
+        "type": "conditional",
+        "condition": {
+          "operator": "not",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "subject": "attacker",
+                "filter": {
+                  "within": {
+                    "of": "this-unit",
+                    "range": {
+                      "inches": 18
+                    }
+                  }
+                }
+              }
+            }
+          ]
         },
-        "modifier": {
-          "may": "cannot-target",
+        "effect": {
+          "type": "targeting",
           "target": "this-unit",
-          "kind": "shoot",
-          "range": {
-            "inches": 18
-          },
-          "weapons": {
-            "type": "ranged"
+          "modifier": {
+            "may": "cannot-target",
+            "kind": "attack",
+            "weapons": {
+              "type": "ranged"
+            },
+            "target": "this-unit"
           }
         }
       }
@@ -97,13 +105,58 @@
     "source_digest": "f45098adfa15d78d190b764e864e32657d0935ef4df9b50bf877d3560cc21a4c",
     "version": "2025-q3",
     "effect": {
-      "type": "move-modifier",
-      "target": "this-model",
-      "modifier": {
-        "passthrough": [
-          "all-terrain"
-        ]
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "move-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "passthrough": [
+              "non-titanic-models"
+            ]
+          }
+        },
+        {
+          "type": "move-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "passthrough": [
+              "all-terrain"
+            ]
+          }
+        },
+        {
+          "type": "permission",
+          "target": "event-subject",
+          "modifier": {
+            "activity": "move",
+            "allow": true,
+            "despite": [
+              "engaged"
+            ]
+          }
+        },
+        {
+          "type": "move-modifier",
+          "target": "event-subject",
+          "modifier": {
+            "no_end_in_engagement": true,
+            "applies_to_moves": [
+              "normal",
+              "advance",
+              "fall-back"
+            ]
+          }
+        },
+        {
+          "type": "roll-result",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "desperate-escape",
+            "result": "pass"
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -112,8 +165,18 @@
       "defiler"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "death-guard"
+    "behavior": "reactive",
+    "faction_id": "death-guard",
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "normal",
+          "advance",
+          "fall-back"
+        ]
+      }
+    }
   },
   {
     "ability_id": "barrage-of-filth-death-guard",
@@ -128,16 +191,54 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "ability-grant",
-        "target": "this-unit",
-        "modifier": {
-          "ability": "benefit-of-cover"
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "subject": "event-subject",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success"
+              },
+              "window": "event"
+            }
+          }
+        },
+        "effect": {
+          "type": "rule-state",
+          "target": "selected-unit",
+          "modifier": {
+            "direction": "suppressed",
+            "rule_kind": "core-rule",
+            "rule": "benefit-of-cover"
+          }
         }
       }
     },
@@ -148,8 +249,14 @@
       "defiler"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "death-guard"
+    "behavior": "reactive",
+    "faction_id": "death-guard",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
+    }
   },
   {
     "ability_id": "lethal-ichor-death-guard",
@@ -207,14 +314,30 @@
         }
       },
       "effect": {
-        "type": "ignore-modifiers",
-        "target": "this-unit",
-        "modifier": {
-          "what": "rolls",
-          "rolls": [
-            "all"
-          ]
-        }
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "ignore-modifiers",
+            "target": "this-unit",
+            "modifier": {
+              "what": "characteristics",
+              "stats": [
+                "WS",
+                "BS"
+              ]
+            }
+          },
+          {
+            "type": "ignore-modifiers",
+            "target": "this-unit",
+            "modifier": {
+              "what": "rolls",
+              "rolls": [
+                "hit"
+              ]
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -224,7 +347,7 @@
       "tallyman"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "activated",
     "faction_id": "death-guard"
   },
   {
@@ -238,10 +361,51 @@
     "source_digest": "109f95aca57cca9421540fe32144f076b61a6ba5ddeb8302092d72a429be87b4",
     "version": "2025-q3",
     "effect": {
-      "type": "cp-gain",
-      "target": "this-model",
-      "modifier": {
-        "amount": 1
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "command"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-model",
+              "filter": {
+                "state": "on-battlefield"
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "dice-gated",
+        "dice": "2D6",
+        "threshold": 7,
+        "comparison": "gte",
+        "on_success": {
+          "type": "cp-gain",
+          "target": "this-model",
+          "modifier": {
+            "amount": 1
+          }
+        },
+        "on_fail": null
       }
     },
     "scope": {
@@ -405,8 +569,14 @@
               "parameters": {
                 "value": 1
               }
+            },
+            {
+              "keyword_id": "lance"
             }
-          ]
+          ],
+          "weapons": {
+            "type": "melee"
+          }
         }
       }
     },
@@ -431,21 +601,33 @@
     "source_digest": "cb662d91b53aedc479246ce1922b7d0c241e6b157e7cfa49813f2d6fd6c82821",
     "version": "2025-q3",
     "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 2,
-      "on_success": {
-        "type": "return-models",
-        "target": "this-model",
-        "modifier": {
-          "count": 1,
-          "wounds_remaining": 3,
-          "placement": "closest-to-destruction"
-        }
-      }
+      "type": "ability-part",
+      "trigger": {
+        "event": "phase-ended"
+      },
+      "effect": {
+        "type": "dice-gated",
+        "dice": "D6",
+        "threshold": 2,
+        "comparison": "gte",
+        "on_success": {
+          "type": "set-up",
+          "target": "this-model",
+          "modifier": {
+            "to": "battlefield",
+            "min_enemy_distance": {
+              "inches": 1
+            },
+            "placement": "closest-to-destruction",
+            "wounds_remaining": 3
+          }
+        },
+        "on_fail": null
+      },
+      "duration": "phase"
     },
     "scope": {
-      "duration": "one-use"
+      "duration": "permanent"
     },
     "usage": {
       "frequency": "n-per-battle",
@@ -456,9 +638,13 @@
       "lord-of-contagion"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
+    "behavior": "reactive",
     "community_notes": "[APPROX] The first time this model is destroyed in a battle round, roll a D6 at the end of the phase: on a 2+ it is set up again as close as possible to where it was destroyed with 3 wounds remaining. The not-within-Engagement-Range placement clause and the end-of-phase timing are not encoded. Full rule in raw-text store.",
-    "faction_id": "death-guard"
+    "faction_id": "death-guard",
+    "trigger": {
+      "event": "model-destroyed",
+      "object": "model-in-this-unit"
+    }
   },
   {
     "ability_id": "metalophagic-infection-death-guard",
@@ -473,16 +659,111 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "mortal-wounds",
-        "target": "defender",
-        "modifier": {
-          "count": "D3"
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy",
+            "any_of": [
+              "MONSTER",
+              "VEHICLE"
+            ]
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "subject": "event-subject",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success"
+              },
+              "window": "event"
+            }
+          }
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "designated": "afflicted"
+                  }
+                }
+              },
+              "effect": {
+                "type": "dice-gated",
+                "dice": "D6+1",
+                "threshold": 5,
+                "comparison": "gte",
+                "on_success": {
+                  "type": "mortal-wounds",
+                  "target": "selected-unit",
+                  "modifier": {
+                    "count": "D3"
+                  }
+                },
+                "on_fail": null
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "selected-unit",
+                      "filter": {
+                        "designated": "afflicted"
+                      }
+                    }
+                  }
+                ]
+              },
+              "effect": {
+                "type": "dice-gated",
+                "dice": "D6",
+                "threshold": 5,
+                "comparison": "gte",
+                "on_success": {
+                  "type": "mortal-wounds",
+                  "target": "selected-unit",
+                  "modifier": {
+                    "count": "D3"
+                  }
+                },
+                "on_fail": null
+              }
+            }
+          ]
         }
       }
     },
@@ -493,8 +774,14 @@
       "chaos-predator-annihilator"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "death-guard"
+    "behavior": "reactive",
+    "faction_id": "death-guard",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
+    }
   },
   {
     "ability_id": "hail-of-corrosive-disease-death-guard",
@@ -509,19 +796,119 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "stat-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "stat": "AP",
-          "operation": "improve",
-          "value": 1
-        }
+        "type": "designate-target",
+        "designation": "hail-of-corrosive-disease-target",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            },
+            "eligibility": {
+              "operator": "and",
+              "operands": [
+                {
+                  "operator": "and",
+                  "operands": [
+                    {
+                      "operator": "not",
+                      "operands": [
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "selected-unit",
+                            "filter": {
+                              "all_of": [
+                                "MONSTER"
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "operator": "not",
+                      "operands": [
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "selected-unit",
+                            "filter": {
+                              "all_of": [
+                                "VEHICLE"
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "happened",
+                  "parameters": {
+                    "event": "after-roll",
+                    "subject": "event-subject",
+                    "object": "this-unit",
+                    "filter": {
+                      "roll": "hit",
+                      "result": "success"
+                    },
+                    "window": "event"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "applies": {
+          "to": "attackers-of-target",
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "attack-is",
+              "parameters": {
+                "attack_type": "ranged"
+              }
+            },
+            "effect": {
+              "type": "stat-modifier",
+              "target": {
+                "owner": "friendly",
+                "all_of": [
+                  "DEATH GUARD"
+                ]
+              },
+              "modifier": {
+                "stat": "AP",
+                "operation": "improve",
+                "value": 1
+              }
+            }
+          }
+        },
+        "duration": "phase"
       }
     },
     "scope": {
@@ -531,8 +918,18 @@
       "chaos-predator-destructor"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "death-guard"
+    "behavior": "reactive",
+    "faction_id": "death-guard",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
+    },
+    "usage": {
+      "frequency": "once-per-phase",
+      "per": "unit"
+    }
   },
   {
     "ability_id": "explosive-blight-death-guard",
@@ -752,15 +1149,28 @@
         }
       },
       "effect": {
-        "type": "weapon-ability-grant",
-        "target": "this-unit",
-        "modifier": {
-          "keywords": [
-            {
-              "keyword_id": "lethal-hits"
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "weapon-ability-grant",
+            "target": "this-unit",
+            "modifier": {
+              "keywords": [
+                {
+                  "keyword_id": "lethal-hits"
+                }
+              ]
             }
-          ]
-        }
+          },
+          {
+            "type": "roll-result",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "critical_on": 5
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -786,14 +1196,14 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
+        "type": "attack-is",
         "parameters": {
-          "phase": "fight"
+          "attack_type": "melee"
         }
       },
       "effect": {
         "type": "stat-modifier",
-        "target": "this-unit",
+        "target": "this-model",
         "modifier": {
           "stat": "OC",
           "operation": "add",
@@ -802,14 +1212,25 @@
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "battle"
     },
     "unit_ids": [
       "biologus-putrifier"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "death-guard"
+    "behavior": "reactive",
+    "faction_id": "death-guard",
+    "trigger": {
+      "event": "destroyed",
+      "subject": "this-unit",
+      "object": {
+        "owner": "enemy"
+      }
+    },
+    "usage": {
+      "frequency": "first-this-battle",
+      "per": "model"
+    }
   },
   {
     "ability_id": "infused-with-the-blessings-of-nurgle-death-guard",
@@ -824,10 +1245,21 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       },
       "effect": {
         "type": "select-units",
@@ -843,11 +1275,11 @@
             "type": "happened",
             "parameters": {
               "event": "after-roll",
+              "subject": "event-subject",
               "object": "this-unit",
               "filter": {
                 "roll": "hit",
-                "result": "success",
-                "attack_type": "ranged"
+                "result": "success"
               },
               "window": "event"
             }
@@ -863,14 +1295,28 @@
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "until-start-next-turn"
     },
     "unit_ids": [
       "plague-marines"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "faction_id": "death-guard"
+    "behavior": "reactive",
+    "faction_id": "death-guard",
+    "trigger": [
+      {
+        "event": "selected",
+        "filter": {
+          "to": "shoot"
+        }
+      },
+      {
+        "event": "attacks-resolved",
+        "filter": {
+          "kind": "shoot"
+        }
+      }
+    ]
   },
   {
     "ability_id": "icon-of-despair-death-guard",
@@ -883,19 +1329,24 @@
     "source_digest": "692da1646687579e0d1506c228263a78efe61cc31ed761851db5c2d4a1afe2bc",
     "version": "2025-q3",
     "effect": {
-      "type": "roll-modifier",
-      "target": {
-        "owner": "enemy",
-        "within": {
-          "range": {
-            "inches": 6
-          }
-        }
-      },
+      "type": "aura",
+      "target": "enemy-within-aura",
       "modifier": {
-        "roll": "battle-shock",
-        "operation": "subtract",
-        "value": 1
+        "range": {
+          "inches": 6
+        },
+        "effect": {
+          "type": "stat-modifier",
+          "target": "recipient",
+          "modifier": {
+            "stat": "Ld",
+            "operation": "worsen",
+            "value": 1
+          }
+        },
+        "eligible": {
+          "owner": "enemy"
+        }
       }
     },
     "scope": {
@@ -906,7 +1357,7 @@
       "plague-marines"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "aura",
     "faction_id": "death-guard"
   },
   {
@@ -983,32 +1434,79 @@
     "source_digest": "a2756bd5599111c52e1f55cba5b21dba46e355b6277c84811d981782529344ab",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
+      "type": "designate-target",
+      "designation": "inflamed-infections-target",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
           },
-          {
-            "type": "strength",
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "matches",
             "parameters": {
-              "below": "half"
+              "subject": "selected-unit",
+              "filter": {
+                "engaged_with": "this-model"
+              }
             }
           }
-        ]
-      },
-      "effect": {
-        "type": "roll-result",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "hit",
-          "critical_on": 5
         }
-      }
+      },
+      "applies": {
+        "to": "bearer-attacks-target",
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "conditional",
+              "condition": {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "strength",
+                    "parameters": {
+                      "subject": "selected-unit",
+                      "below": "half"
+                    }
+                  }
+                ]
+              },
+              "effect": {
+                "type": "roll-result",
+                "target": "this-model",
+                "modifier": {
+                  "roll": "hit",
+                  "critical_on": 5
+                }
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "strength",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "below": "half"
+                }
+              },
+              "effect": {
+                "type": "roll-result",
+                "target": "this-model",
+                "modifier": {
+                  "roll": "hit",
+                  "critical_on": 4
+                }
+              }
+            }
+          ]
+        }
+      },
+      "duration": "phase"
     },
     "scope": {
       "duration": "phase"
@@ -1017,9 +1515,18 @@
       "plague-surgeon"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "defensive ability (skipped for damage calc)",
-    "faction_id": "death-guard"
+    "faction_id": "death-guard",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    }
   },
   {
     "ability_id": "death-guard-defenders-death-guard",
@@ -1082,34 +1589,71 @@
     "source_digest": "e7c00ec9753f172491785ae9a392cec956e6691dcb5b82205f8685752d7dade7",
     "version": "2025-q3",
     "effect": {
-      "type": "cost-modifier",
-      "target": {
-        "owner": "friendly",
-        "all_of": [
-          "DEATH GUARD"
-        ],
-        "within": {
-          "range": {
-            "inches": 12
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "event-subject",
+              "filter": {
+                "within": {
+                  "of": "this-model",
+                  "range": {
+                    "inches": 12
+                  }
+                }
+              }
+            }
           }
-        }
+        ]
       },
-      "modifier": {
-        "of": "stratagem",
-        "operation": "decrease",
-        "amount": 1,
-        "applies_to": "targeting-this-unit"
+      "effect": {
+        "type": "cost-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "of": "stratagem",
+          "operation": "decrease",
+          "amount": 1,
+          "applies_to": "the-triggering-use"
+        }
       }
     },
     "scope": {
-      "duration": "one-use"
+      "duration": "permanent"
     },
     "unit_ids": [
       "daemon-prince-of-nurgle"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "faction_id": "death-guard"
+    "behavior": "reactive",
+    "faction_id": "death-guard",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "stratagem"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "DEATH GUARD"
+        ]
+      },
+      "optional": true
+    },
+    "usage": {
+      "frequency": "once-per-battle-round",
+      "per": "army"
+    }
   },
   {
     "ability_id": "miasma-of-pestilence-death-guard",
@@ -1124,26 +1668,31 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
+        "type": "attack-is",
         "parameters": {
-          "phase": "shooting"
+          "attack_type": "ranged"
         }
       },
       "effect": {
-        "type": "ability-grant",
-        "target": {
-          "owner": "friendly",
-          "all_of": [
-            "DEATH GUARD"
-          ],
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
+        "type": "aura",
+        "target": "friendly-within-aura",
         "modifier": {
-          "ability": "benefit-of-cover"
+          "range": {
+            "inches": 6
+          },
+          "effect": {
+            "type": "ability-grant",
+            "target": "this-unit",
+            "modifier": {
+              "ability": "benefit-of-cover"
+            }
+          },
+          "eligible": {
+            "owner": "friendly",
+            "all_of": [
+              "DEATH GUARD"
+            ]
+          }
         }
       }
     },
@@ -1154,7 +1703,7 @@
       "daemon-prince-of-nurgle"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "aura",
     "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "death-guard"
   },
@@ -1169,19 +1718,26 @@
     "source_digest": "f3bcba978b03dd42c7347a3283a5ed4d37e87039d38f538b8af20af17a61ef7c",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
-        }
+      "type": "ability-grant",
+      "target": {
+        "level": "model",
+        "member_of": "this-unit",
+        "attachment_role": "leader",
+        "all_of": [
+          "CHARACTER"
+        ]
       },
-      "effect": {
-        "type": "feel-no-pain",
-        "target": "this-unit",
-        "modifier": {
-          "threshold": 4
+      "modifier": {
+        "definition": {
+          "type": "ability-part",
+          "duration": "while-leading",
+          "effect": {
+            "type": "feel-no-pain",
+            "target": "this-model",
+            "modifier": {
+              "threshold": 4
+            }
+          }
         }
       }
     },
@@ -1258,16 +1814,16 @@
         "operator": "and",
         "operands": [
           {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
             "type": "attachment",
             "parameters": {
               "subject": "this-model",
               "role": "leading"
+            }
+          },
+          {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
             }
           }
         ]
@@ -1277,7 +1833,7 @@
         "target": "this-unit",
         "modifier": {
           "roll": "wound",
-          "subset": "all-failures"
+          "result_scope": "any-result"
         }
       }
     },
@@ -1302,42 +1858,60 @@
     "source_digest": "d4345dcd0da347083bf8f42874969c912a9ef4afad7812d2919fc2f168431b97",
     "version": "2025-q3",
     "effect": {
-      "type": "ability-part",
-      "trigger": {
-        "event": "phase-started",
-        "condition": {
-          "type": "phase-is",
-          "parameters": {
-            "phase": "shooting"
+      "type": "designate-target",
+      "designation": "blight-bombardment-target",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "within": {
+                      "of": "this-model",
+                      "range": {
+                        "inches": 30
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "visible": {
+                      "to": "this-model"
+                    }
+                  }
+                }
+              }
+            ]
           }
         }
       },
-      "effect": {
-        "type": "designate-target",
-        "designation": "blight-bombardment-target",
-        "select": {
-          "kind": "unit",
-          "selector": {
-            "filter": {
-              "owner": "enemy",
-              "within": {
-                "range": {
-                  "inches": 30
-                },
-                "of": "this-model"
-              },
-              "visible": {
-                "to": "this-model"
-              }
-            },
-            "count": {
-              "min": 1,
-              "max": 1
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "conditional",
+          "condition": {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
             }
-          }
-        },
-        "applies": {
-          "to": "attackers-of-target",
+          },
           "effect": {
             "type": "sequence",
             "steps": [
@@ -1364,14 +1938,12 @@
                     "owner": "friendly",
                     "all_of": [
                       "DEATH GUARD"
-                    ]
+                    ],
+                    "level": "model"
                   },
                   "modifier": {
                     "roll": "hit",
-                    "subset": "ones",
-                    "weapons": {
-                      "type": "ranged"
-                    }
+                    "subset": "ones"
                   }
                 }
               },
@@ -1393,22 +1965,20 @@
                     "owner": "friendly",
                     "all_of": [
                       "DEATH GUARD"
-                    ]
+                    ],
+                    "level": "model"
                   },
                   "modifier": {
                     "roll": "hit",
-                    "subset": "all-failures",
-                    "weapons": {
-                      "type": "ranged"
-                    }
+                    "result_scope": "any-result"
                   }
                 }
               }
             ]
           }
-        },
-        "duration": "phase"
-      }
+        }
+      },
+      "duration": "phase"
     },
     "scope": {
       "duration": "phase"
@@ -1417,9 +1987,29 @@
       "lord-of-virulence"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "defensive ability (skipped for damage calc)",
-    "faction_id": "death-guard"
+    "faction_id": "death-guard",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "hovering-death-death-guard",
@@ -1432,15 +2022,31 @@
     "source_digest": "6008a1e2bb5541c53a2ae2369c4f146ca6ad4de89a55ca56e409ffc0308df293",
     "version": "2025-q3",
     "effect": {
-      "type": "permission",
-      "target": "this-unit",
-      "modifier": {
-        "activity": "shoot",
-        "allow": true,
-        "after": [
-          "fall-back"
-        ]
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "permission",
+          "target": "this-model",
+          "modifier": {
+            "activity": "shoot",
+            "allow": true,
+            "after": [
+              "fall-back"
+            ]
+          }
+        },
+        {
+          "type": "permission",
+          "target": "this-model",
+          "modifier": {
+            "activity": "declare-charge",
+            "allow": true,
+            "after": [
+              "fall-back"
+            ]
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -1472,12 +2078,39 @@
         }
       },
       "effect": {
-        "type": "re-roll",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "charge",
-          "subset": "all-failures"
-        }
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "M",
+              "operation": "add",
+              "value": 1
+            }
+          },
+          {
+            "type": "choice",
+            "options": [
+              {
+                "type": "re-roll",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "charge",
+                  "result_scope": "any-result"
+                }
+              },
+              {
+                "type": "re-roll",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "advance",
+                  "result_scope": "any-result"
+                }
+              }
+            ]
+          }
+        ]
       }
     },
     "scope": {
@@ -1487,7 +2120,7 @@
       "noxious-blightbringer"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "activated",
     "faction_id": "death-guard"
   },
   {
@@ -1501,27 +2134,175 @@
     "source_digest": "04d7cd03d3f69ed0cfa86a06defa552ea7ea94b86dfa3ca88b151e5d78a20c32",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "strength",
-        "parameters": {
-          "below": "starting"
-        }
-      },
-      "effect": {
-        "type": "test",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 9
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "strength",
+                    "parameters": {
+                      "subject": "recipient",
+                      "below": "starting"
+                    }
+                  },
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "recipient",
+                      "filter": {
+                        "within": {
+                          "of": "this-model",
+                          "range": {
+                            "inches": 9
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "strength",
+                    "parameters": {
+                      "subject": "recipient",
+                      "below": "starting"
+                    }
+                  },
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "recipient",
+                      "filter": {
+                        "within": {
+                          "of": "this-model",
+                          "range": {
+                            "inches": 9
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "recipient",
+                      "filter": {
+                        "all_of": [
+                          "PSYKER"
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "effect": {
+            "type": "test",
+            "target": {
+              "owner": "enemy"
+            },
+            "modifier": {
+              "test": "battle-shock",
+              "modifier": -1
             }
           }
         },
-        "modifier": {
-          "test": "battle-shock"
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "strength",
+                    "parameters": {
+                      "subject": "recipient",
+                      "below": "starting"
+                    }
+                  },
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "recipient",
+                      "filter": {
+                        "within": {
+                          "of": "this-model",
+                          "range": {
+                            "inches": 9
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "operator": "not",
+                "operands": [
+                  {
+                    "operator": "and",
+                    "operands": [
+                      {
+                        "type": "strength",
+                        "parameters": {
+                          "subject": "recipient",
+                          "below": "starting"
+                        }
+                      },
+                      {
+                        "type": "matches",
+                        "parameters": {
+                          "subject": "recipient",
+                          "filter": {
+                            "within": {
+                              "of": "this-model",
+                              "range": {
+                                "inches": 9
+                              }
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "type": "matches",
+                        "parameters": {
+                          "subject": "recipient",
+                          "filter": {
+                            "all_of": [
+                              "PSYKER"
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "effect": {
+            "type": "test",
+            "target": {
+              "owner": "enemy"
+            },
+            "modifier": {
+              "test": "battle-shock"
+            }
+          }
         }
-      }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -1530,8 +2311,20 @@
       "noxious-blightbringer"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "death-guard"
+    "behavior": "reactive",
+    "faction_id": "death-guard",
+    "trigger": {
+      "event": "step-started",
+      "filter": {
+        "step": "battle-shock"
+      },
+      "condition": {
+        "type": "player-turn-is",
+        "parameters": {
+          "turn": "opponent-turn"
+        }
+      }
+    }
   },
   {
     "ability_id": "horrifying-visage-death-guard",
@@ -1544,10 +2337,32 @@
     "source_digest": "dda4f0900d07b34a0ad3306ebd1e051b61cb6c3ba31e03c992da13f0c4da3108",
     "version": "2025-q3",
     "effect": {
-      "type": "test",
-      "target": "selected-unit",
-      "modifier": {
-        "test": "battle-shock"
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "subject": "selected-unit",
+            "filter": {
+              "engaged_with": "this-model"
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "test",
+        "target": "selected-unit",
+        "modifier": {
+          "test": "battle-shock",
+          "modifier": -1
+        }
       }
     },
     "scope": {
@@ -1557,8 +2372,16 @@
       "daemon-prince-of-nurgle-with-wings"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "death-guard"
+    "behavior": "reactive",
+    "faction_id": "death-guard",
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "charge"
+        ]
+      }
+    }
   },
   {
     "ability_id": "enfeebling-miasma-death-guard",
@@ -1571,91 +2394,68 @@
     "source_digest": "5e484d0098aea915c42b34ccda8a34ecda65042ff15ac43d17f05d5f0a9e8d24",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "operator": "not",
-            "operands": [
-              {
+      "type": "aura",
+      "target": "enemy-within-aura",
+      "modifier": {
+        "range": {
+          "inches": 6
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "conditional",
+              "condition": {
                 "type": "matches",
                 "parameters": {
+                  "subject": "event-subject",
                   "filter": {
-                    "all_of": [
-                      "MONSTER"
-                    ]
-                  },
-                  "subject": "recipient"
-                }
-              }
-            ]
-          },
-          {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "matches",
-                "parameters": {
-                  "filter": {
-                    "all_of": [
-                      "VEHICLE"
-                    ]
-                  },
-                  "subject": "recipient"
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "rule-state",
-            "target": {
-              "owner": "enemy",
-              "within": {
-                "range": {
-                  "inches": 6
-                }
-              }
-            },
-            "modifier": {
-              "direction": "suppressed",
-              "rule_kind": "core-rule",
-              "rule": "ordered-retreat"
-            }
-          },
-          {
-            "type": "conditional",
-            "condition": {
-              "type": "matches",
-              "parameters": {
-                "filter": {
-                  "state": "battle-shocked"
-                }
-              }
-            },
-            "effect": {
-              "type": "roll-modifier",
-              "target": {
-                "owner": "enemy",
-                "within": {
-                  "range": {
-                    "inches": 6
+                    "state": "battle-shocked"
                   }
                 }
               },
-              "modifier": {
-                "roll": "desperate-escape",
-                "operation": "subtract",
-                "value": 1
+              "effect": {
+                "type": "test",
+                "target": "recipient",
+                "modifier": {
+                  "test": "desperate-escape",
+                  "modifier": -1
+                }
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "event-subject",
+                      "filter": {
+                        "state": "battle-shocked"
+                      }
+                    }
+                  }
+                ]
+              },
+              "effect": {
+                "type": "test",
+                "target": "recipient",
+                "modifier": {
+                  "test": "desperate-escape"
+                }
               }
             }
-          }
-        ]
+          ]
+        },
+        "eligible": {
+          "owner": "enemy",
+          "none_of": [
+            "MONSTER",
+            "VEHICLE"
+          ]
+        }
       }
     },
     "scope": {
@@ -1667,7 +2467,19 @@
     "ability_type": "unit",
     "behavior": "aura",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "death-guard"
+    "faction_id": "death-guard",
+    "trigger": {
+      "event": "selected",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "move_types": [
+          "fall-back"
+        ],
+        "to": "move"
+      }
+    }
   },
   {
     "ability_id": "putrescent-fog-death-guard",
@@ -1685,15 +2497,17 @@
         "owner": "enemy"
       },
       "modifier": {
-        "allow": false,
         "to": "battlefield",
         "from": "strategic-reserves",
-        "min_distance_from": {
-          "of": "this-model",
-          "range": {
-            "inches": 12
+        "allow": false,
+        "near": [
+          {
+            "of": "this-model",
+            "range": {
+              "inches": 12
+            }
           }
-        }
+        ]
       }
     },
     "scope": {
@@ -1719,14 +2533,22 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "not",
+        "operands": [
+          {
+            "type": "visible",
+            "parameters": {
+              "subject": "defender",
+              "to": "attacker",
+              "fully": true,
+              "blocked_by": "this-model"
+            }
+          }
+        ]
       },
       "effect": {
         "type": "ability-grant",
-        "target": "this-unit",
+        "target": "event-object",
         "modifier": {
           "ability": "benefit-of-cover"
         }
@@ -1739,8 +2561,11 @@
       "miasmic-malignifier"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "death-guard"
+    "behavior": "reactive",
+    "faction_id": "death-guard",
+    "trigger": {
+      "event": "damage-allocated"
+    }
   },
   {
     "ability_id": "fortification-death-guard",
@@ -1795,15 +2620,15 @@
       "condition": {
         "type": "matches",
         "parameters": {
+          "subject": "defender",
           "filter": {
             "designated": "AFFLICTED"
-          },
-          "subject": "defender"
+          }
         }
       },
       "effect": {
         "type": "roll-modifier",
-        "target": "this-unit",
+        "target": "this-model",
         "modifier": {
           "roll": "wound",
           "operation": "add",
@@ -1832,12 +2657,46 @@
     "source_digest": "35a0742f18f5a090fa40c27731e9f9626abee68fbbe2afe7bf8811ac5415dd8e",
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "this-unit",
-      "modifier": {
-        "stat": "A",
-        "operation": "add",
-        "value": 2
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "named-weapon",
+            "parameters": {
+              "subject": "this-model",
+              "name": "Close combat weapon",
+              "count": 1
+            }
+          },
+          {
+            "type": "equipped-weapon-count",
+            "parameters": {
+              "subject": "this-model",
+              "weapons": {
+                "type": "melee",
+                "exclude_name": "Close combat weapon"
+              },
+              "count": {
+                "min": 2,
+                "max": 2
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "A",
+          "operation": "improve",
+          "value": 2,
+          "weapons": {
+            "type": "melee",
+            "exclude_name": "Close combat weapon"
+          }
+        }
       }
     },
     "scope": {
@@ -1863,10 +2722,38 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "defender",
+              "filter": {
+                "any_of": [
+                  "MONSTER",
+                  "VEHICLE"
+                ]
+              }
+            }
+          }
+        ]
       },
       "effect": {
         "type": "sequence",
@@ -2275,10 +3162,22 @@
     "source_digest": "db5f2bae245a8eb3cca1df9d81a364c92d2b3958c0471ebd7f0f15e2bd8a0f90",
     "version": "2025-q3",
     "effect": {
-      "type": "army-rule",
-      "target": "this-model",
-      "modifier": {
-        "rule": "warlord-required"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "this-model",
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      },
+      "effect": {
+        "type": "army-rule",
+        "target": "this-unit",
+        "modifier": {
+          "rule": "warlord-required"
+        }
       }
     },
     "scope": {
@@ -2365,10 +3264,38 @@
         "operator": "and",
         "operands": [
           {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy",
+            "all_of": [
+              "INFANTRY"
+            ]
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
             "type": "happened",
             "parameters": {
               "event": "after-roll",
-              "object": "defender",
+              "subject": "event-subject",
+              "object": "this-unit",
               "filter": {
                 "roll": "hit",
                 "result": "success",
@@ -2378,32 +3305,45 @@
               },
               "window": "event"
             }
-          },
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "all_of": [
-                  "INFANTRY"
-                ]
-              },
-              "subject": "defender"
-            }
           }
-        ]
-      },
-      "effect": {
-        "type": "stat-modifier",
-        "target": "defender",
-        "modifier": {
-          "stat": "M",
-          "operation": "subtract",
-          "value": 2
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "designate",
+              "target": "selected-unit",
+              "modifier": {
+                "tag": "enfeebled"
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "designated": "enfeebled"
+                  }
+                }
+              },
+              "effect": {
+                "type": "stat-modifier",
+                "target": "selected-unit",
+                "modifier": {
+                  "stat": "M",
+                  "operation": "subtract",
+                  "value": 2
+                }
+              }
+            }
+          ]
         }
       }
     },
     "scope": {
-      "duration": "battle-round"
+      "duration": "until-end-of-opponent-next-turn"
     },
     "unit_ids": [
       "malignant-plaguecaster"
@@ -2413,11 +3353,8 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
       "event": "attacks-resolved",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+      "filter": {
+        "kind": "shoot"
       }
     },
     "faction_id": "death-guard"
@@ -2435,18 +3372,79 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "re-roll",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "wound",
-          "subset": "all-failures"
-        }
+        "type": "designate-target",
+        "designation": "fire-support-target",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            },
+            "eligibility": {
+              "type": "happened",
+              "parameters": {
+                "event": "after-roll",
+                "subject": "event-subject",
+                "object": "this-unit",
+                "filter": {
+                  "roll": "hit",
+                  "result": "success"
+                },
+                "window": "event"
+              }
+            }
+          }
+        },
+        "applies": {
+          "to": "attackers-of-target",
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "happened",
+              "parameters": {
+                "subject": "attacker",
+                "event": "disembarked",
+                "filter": {
+                  "transport": "this-unit"
+                },
+                "window": "turn"
+              }
+            },
+            "effect": {
+              "type": "re-roll",
+              "target": {
+                "owner": "friendly",
+                "level": "model"
+              },
+              "modifier": {
+                "roll": "wound",
+                "result_scope": "any-result"
+              }
+            }
+          }
+        },
+        "duration": "phase"
       }
     },
     "scope": {
@@ -2456,8 +3454,14 @@
       "chaos-rhino"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "death-guard"
+    "behavior": "reactive",
+    "faction_id": "death-guard",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
+    }
   },
   {
     "ability_id": "assault-ramp-death-guard",
@@ -2469,39 +3473,29 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "ability-part",
-      "trigger": {
-        "event": "disembarked",
-        "subject": {
-          "owner": "friendly"
-        },
-        "object": "this-model"
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "subject": "this-model",
+          "event": "move-ended",
+          "filter": {
+            "move_types": [
+              "normal"
+            ]
+          },
+          "window": "turn"
+        }
       },
       "effect": {
-        "type": "conditional",
-        "condition": {
-          "type": "happened",
-          "parameters": {
-            "event": "move-ended",
-            "subject": "this-model",
-            "filter": {
-              "move_types": [
-                "normal"
-              ]
-            },
-            "window": "turn"
-          }
-        },
-        "effect": {
-          "type": "permission",
-          "target": "event-subject",
-          "modifier": {
-            "activity": "declare-charge",
-            "allow": true,
-            "after": [
-              "disembark"
-            ]
-          }
+        "type": "permission",
+        "target": "event-subject",
+        "modifier": {
+          "activity": "declare-charge",
+          "allow": true,
+          "despite": [
+            "disembarked-this-turn"
+          ]
         }
       }
     },
@@ -2512,8 +3506,18 @@
       "chaos-land-raider"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "death-guard"
+    "behavior": "reactive",
+    "faction_id": "death-guard",
+    "trigger": {
+      "event": "disembarked",
+      "subject": {
+        "owner": "any"
+      },
+      "filter": {
+        "transport": "this-unit"
+      }
+    },
+    "source_digest": "a6aac7dae3c1f1ea6d27fceef0ffb8662a177efd6901e830cd90b53fda042049"
   },
   {
     "ability_id": "blinding-spray-death-guard",
@@ -2642,25 +3646,39 @@
           "owner": "friendly",
           "all_of": [
             "DEATH GUARD"
-          ],
-          "within": {
-            "range": {
-              "inches": 12
-            },
-            "of": "this-model"
-          }
+          ]
         },
         "count": {
           "min": 1,
           "max": 1
         },
         "eligibility": {
-          "type": "matches",
-          "parameters": {
-            "filter": {
-              "state": "battle-shocked"
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "subject": "selected-unit",
+                "filter": {
+                  "state": "battle-shocked"
+                }
+              }
+            },
+            {
+              "type": "matches",
+              "parameters": {
+                "subject": "selected-unit",
+                "filter": {
+                  "within": {
+                    "of": "this-model",
+                    "range": {
+                      "inches": 12
+                    }
+                  }
+                }
+              }
             }
-          }
+          ]
         }
       },
       "effect": {
@@ -2673,14 +3691,23 @@
       }
     },
     "scope": {
-      "duration": "one-use"
+      "duration": "permanent"
     },
     "unit_ids": [
       "icon-bearer"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "faction_id": "death-guard"
+    "behavior": "reactive",
+    "faction_id": "death-guard",
+    "trigger": {
+      "event": "phase-started",
+      "optional": true
+    },
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "unit"
+    }
   },
   {
     "ability_id": "destroyer-hive-death-guard",
@@ -2698,16 +3725,16 @@
         "operator": "and",
         "operands": [
           {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
-          },
-          {
             "type": "attachment",
             "parameters": {
               "subject": "this-model",
               "role": "leading"
+            }
+          },
+          {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "melee"
             }
           }
         ]
@@ -2978,7 +4005,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "source_digest": "4c27121a9d195fe8b504beebc748e835d5d2c14a8f6d28291b27580fb2235ec3",
+    "source_digest": "912a9e0084248c5ed017f768e093c6ee768c586193b088a48ca6c00b59552ba4",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -2990,45 +4017,58 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "keyword-grant",
-          "target": {
-            "owner": "friendly",
-            "any_of": [
-              "FOETID BLOAT-DRONE",
-              "FOETID BLOAT-DRONE WITH HEAVY BLIGHT LAUNCHER",
-              "HELBRUTE",
-              "MYPHITIC BLIGHT-HAULER"
-            ]
-          },
-          "modifier": {
-            "keywords": [
-              "CONTAGION ENGINE"
-            ]
-          }
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "keyword-grant",
+              "target": {
+                "owner": "friendly",
+                "any_of": [
+                  "FOETID BLOAT-DRONE",
+                  "FOETID BLOAT-DRONE WITH HEAVY BLIGHT LAUNCHER",
+                  "HELBRUTE",
+                  "MYPHITIC BLIGHT-HAULER"
+                ]
+              },
+              "modifier": {
+                "keywords": [
+                  "CONTAGION ENGINES"
+                ]
+              }
+            },
+            {
+              "type": "weapon-ability-grant",
+              "target": {
+                "owner": "friendly",
+                "all_of": [
+                  "CONTAGION ENGINES"
+                ]
+              },
+              "modifier": {
+                "keywords": [
+                  {
+                    "keyword_id": "assault"
+                  }
+                ],
+                "weapons": {
+                  "type": "ranged"
+                }
+              }
+            }
+          ]
         },
         {
-          "type": "weapon-ability-grant",
-          "target": {
-            "owner": "friendly",
-            "all_of": [
-              "CONTAGION ENGINE"
-            ]
-          },
+          "type": "army-rule",
+          "target": "this-unit",
           "modifier": {
-            "weapons": {
-              "type": "ranged"
-            },
-            "keywords": [
-              {
-                "keyword_id": "assault"
-              }
-            ]
+            "rule": "detachment-tag-exclusive",
+            "tag": "ENGINES"
           }
         }
       ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -3105,12 +4145,12 @@
       "target": {
         "owner": "friendly",
         "all_of": [
-          "DEATH GUARD",
-          "CHARACTER"
+          "CHARACTER",
+          "DEATH GUARD"
         ]
       },
       "modifier": {
-        "ability": "nurgles-gift-death-guard",
+        "ability": "contagion-range",
         "aspect": "range",
         "operation": "add",
         "value": 3,
@@ -3118,7 +4158,7 @@
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -3247,10 +4287,9 @@
       },
       "effect": {
         "type": "roll-modifier",
-        "target": "this-unit",
+        "target": "attacker",
         "modifier": {
           "roll": "wound",
-          "incoming": true,
           "operation": "subtract",
           "value": 1
         }
@@ -3284,25 +4323,13 @@
     "faction_id": "death-guard",
     "detachment_id": "contagion-engines",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "happened",
-        "parameters": {
-          "event": "selected",
-          "filter": {
-            "to": "fight"
-          },
-          "window": "phase"
-        }
-      },
-      "effect": {
-        "type": "heal",
-        "target": "model-in-this-unit",
-        "modifier": {
-          "amount": "D3"
-        }
+      "type": "heal",
+      "target": "this-unit",
+      "modifier": {
+        "amount": "D3",
+        "per": "model"
       }
     },
     "scope": {
@@ -3312,6 +4339,9 @@
       "all_of": [
         "Contagion Engine"
       ]
+    },
+    "trigger": {
+      "event": "attacks-resolved"
     }
   },
   {
@@ -3400,24 +4430,32 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "source_digest": "442498295fb2e7af112747a470a587fe13ee34117d81e1d2fd276a408cc48a75",
+    "source_digest": "2f312a3da3efcb559d7ed3463c4d5eafae632783c932ca00bb5a16aa89192152",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "flyblown-host",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "select-units",
       "selector": {
         "filter": {
-          "owner": "enemy",
-          "engaged_with": "this-unit"
+          "owner": "enemy"
         },
         "count": {
           "min": 1,
           "max": 1
+        },
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "subject": "selected-unit",
+            "filter": {
+              "engaged_with": "this-unit"
+            }
+          }
         }
       },
       "effect": {
@@ -3430,12 +4468,21 @@
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
         "PLAGUE MARINES"
       ]
+    },
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
     }
   },
   {
@@ -3446,91 +4493,55 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "source_digest": "6c87d7be78a4a1e24c4959d2753eb3ff1c6294a09cd6d393375dce2598063497",
+    "source_digest": "7460c489560433ad4e555c7b84da5dd12109eb9ab4088f1fb6932fb578f9283a",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "flyblown-host",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "re-roll",
-          "target": "this-unit",
-          "modifier": {
-            "roll": "hit",
-            "subset": "ones",
-            "weapons": {
-              "type": "ranged"
-            }
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "within": {
-                  "range": "half-weapon",
-                  "of": "attacker"
-                }
-              },
-              "subject": "defender"
-            }
-          },
-          "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "attack-is",
+        "parameters": {
+          "attack_type": "ranged"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
             "type": "re-roll",
             "target": "this-unit",
             "modifier": {
-              "roll": "wound",
-              "subset": "ones",
-              "weapons": {
-                "type": "ranged"
+              "roll": "hit",
+              "subset": "ones"
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "defender",
+                "filter": {
+                  "within": {
+                    "of": "attacker",
+                    "range": "half-weapon"
+                  }
+                }
+              }
+            },
+            "effect": {
+              "type": "re-roll",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "wound",
+                "subset": "ones"
               }
             }
-          }
-        }
-      ]
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "applies_to": {
-      "all_of": [
-        "PLAGUE MARINES"
-      ]
-    }
-  },
-  {
-    "ability_id": "eye-of-the-swarm-flyblown-host-death-guard",
-    "name": "Eye of the Swarm",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2b29de52f29c71d990079b015fb173620433e2bf2b9db821d236f7a12d3c6023",
-    "version": "2025-q3",
-    "supersedes": null,
-    "unit_ids": [],
-    "faction_id": "death-guard",
-    "detachment_id": "flyblown-host",
-    "ability_type": "stratagem",
-    "behavior": "activated",
-    "effect": {
-      "type": "weapon-ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "weapons": {
-          "type": "ranged"
-        },
-        "keywords": [
-          {
-            "keyword_id": "close-quarters"
           }
         ]
       }
@@ -3542,6 +4553,69 @@
       "all_of": [
         "PLAGUE MARINES"
       ]
+    },
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "PLAGUE MARINES"
+        ]
+      }
+    }
+  },
+  {
+    "ability_id": "eye-of-the-swarm-flyblown-host-death-guard",
+    "name": "Eye of the Swarm",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "51934a0de92edb3e0ffe25cd82c4868580699dc9d9d7ddf9db3c5a4e38b0ba91",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "flyblown-host",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ],
+        "weapons": {
+          "type": "ranged"
+        }
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "applies_to": {
+      "all_of": [
+        "PLAGUE MARINES"
+      ]
+    },
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "PLAGUE MARINES"
+        ]
+      }
     }
   },
   {
@@ -3552,14 +4626,14 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "source_digest": "93dad3ee806e2db8bfa3cb76bf45fbbcba3f63df445597b15ef8a17b0dc204cd",
+    "source_digest": "b2dbd4478b3f9a63d1da2fd226f0ed86a999972a2fbcf3f07d77408b11dbf848",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "contagion-engines",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "re-roll",
       "target": "this-unit",
@@ -3575,6 +4649,18 @@
       "all_of": [
         "Contagion Engine"
       ]
+    },
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "attack"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "CONTAGION ENGINES"
+        ]
+      }
     }
   },
   {
@@ -3754,13 +4840,13 @@
     "faction_id": "death-guard",
     "detachment_id": "paragons-of-putrescence",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "stat-modifier",
       "target": "this-unit",
       "modifier": {
         "stat": "OC",
-        "operation": "add",
+        "operation": "improve",
         "value": 1
       }
     },
@@ -3772,6 +4858,15 @@
         "DEATH GUARD",
         "CHARACTER"
       ]
+    },
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "command"
+        }
+      }
     }
   },
   {
@@ -3789,7 +4884,7 @@
     "faction_id": "death-guard",
     "detachment_id": "paragons-of-putrescence",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -3806,12 +4901,13 @@
         "eligibility": {
           "type": "matches",
           "parameters": {
+            "subject": "selected-unit",
             "filter": {
               "within": {
+                "of": "this-unit",
                 "range": {
                   "aura_of": "nurgles-gift-death-guard"
-                },
-                "of": "this-unit"
+                }
               }
             }
           }
@@ -3828,13 +4924,33 @@
       }
     },
     "scope": {
-      "duration": "turn"
+      "duration": "phase"
     },
     "applies_to": {
       "all_of": [
         "DEATH GUARD",
         "CHARACTER"
       ]
+    },
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
     }
   },
   {
@@ -3852,7 +4968,7 @@
     "faction_id": "death-guard",
     "detachment_id": "paragons-of-putrescence",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "permission",
       "target": "this-unit",
@@ -3872,6 +4988,19 @@
         "DEATH GUARD",
         "CHARACTER"
       ]
+    },
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "action"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "CHARACTER",
+          "DEATH GUARD"
+        ]
+      }
     }
   },
   {
@@ -4007,44 +5136,30 @@
     "faction_id": "death-guard",
     "detachment_id": "tallyband-summoners",
     "ability_type": "detachment",
-    "behavior": "aura",
+    "behavior": "passive",
     "effect": {
       "type": "sequence",
       "steps": [
         {
           "type": "conditional",
           "condition": {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "matches",
-                "parameters": {
-                  "filter": {
+            "type": "matches",
+            "parameters": {
+              "subject": "recipient",
+              "filter": {
+                "within": {
+                  "of": {
+                    "owner": "friendly",
                     "all_of": [
-                      "PLAGUE LEGIONS"
+                      "DEATH GUARD"
                     ]
-                  }
-                }
-              },
-              {
-                "type": "matches",
-                "parameters": {
-                  "filter": {
-                    "within": {
-                      "range": {
-                        "inches": 7
-                      },
-                      "of": {
-                        "owner": "friendly",
-                        "all_of": [
-                          "DEATH GUARD"
-                        ]
-                      }
-                    }
+                  },
+                  "range": {
+                    "inches": 7
                   }
                 }
               }
-            ]
+            }
           },
           "effect": {
             "type": "ability-grant",
@@ -4052,18 +5167,7 @@
               "owner": "friendly",
               "all_of": [
                 "PLAGUE LEGIONS"
-              ],
-              "within": {
-                "range": {
-                  "inches": 7
-                },
-                "of": {
-                  "owner": "friendly",
-                  "all_of": [
-                    "DEATH GUARD"
-                  ]
-                }
-              }
+              ]
             },
             "modifier": {
               "ability": "nurgles-gift-death-guard"
@@ -4073,37 +5177,23 @@
         {
           "type": "conditional",
           "condition": {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "matches",
-                "parameters": {
-                  "filter": {
+            "type": "matches",
+            "parameters": {
+              "subject": "recipient",
+              "filter": {
+                "within": {
+                  "of": {
+                    "owner": "friendly",
                     "all_of": [
-                      "DEATH GUARD"
+                      "PLAGUE LEGIONS"
                     ]
-                  }
-                }
-              },
-              {
-                "type": "matches",
-                "parameters": {
-                  "filter": {
-                    "within": {
-                      "range": {
-                        "inches": 7
-                      },
-                      "of": {
-                        "owner": "friendly",
-                        "all_of": [
-                          "PLAGUE LEGIONS"
-                        ]
-                      }
-                    }
+                  },
+                  "range": {
+                    "inches": 7
                   }
                 }
               }
-            ]
+            }
           },
           "effect": {
             "type": "ability-modifier",
@@ -4111,21 +5201,10 @@
               "owner": "friendly",
               "all_of": [
                 "DEATH GUARD"
-              ],
-              "within": {
-                "range": {
-                  "inches": 7
-                },
-                "of": {
-                  "owner": "friendly",
-                  "all_of": [
-                    "PLAGUE LEGIONS"
-                  ]
-                }
-              }
+              ]
             },
             "modifier": {
-              "ability": "nurgles-gift-death-guard",
+              "ability": "contagion-range",
               "aspect": "range",
               "operation": "add",
               "value": 3
@@ -4135,7 +5214,7 @@
       ]
     },
     "scope": {
-      "duration": "turn"
+      "duration": "permanent"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
@@ -4391,7 +5470,7 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "source_digest": "b50c173051dce164bc9ebdb3301de6e62434df33331738f35dbe5f8dfa1f67d7",
+    "source_digest": "1515b9a8303d88b255c7a99348ce732ec858cb3d80b8be2e1b53570bf24e2662",
     "version": "2025-q3",
     "unit_ids": [
       "septimol-fulg-maggot-lords-tallyman"
@@ -4399,14 +5478,30 @@
     "ability_type": "unit",
     "behavior": "passive",
     "effect": {
-      "type": "ignore-modifiers",
-      "target": "this-unit",
-      "modifier": {
-        "what": "rolls",
-        "rolls": [
-          "all"
-        ]
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ignore-modifiers",
+          "target": "this-unit",
+          "modifier": {
+            "what": "characteristics",
+            "stats": [
+              "WS",
+              "BS"
+            ]
+          }
+        },
+        {
+          "type": "ignore-modifiers",
+          "target": "this-unit",
+          "modifier": {
+            "what": "rolls",
+            "rolls": [
+              "hit"
+            ]
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -4427,30 +5522,32 @@
       "maggot-lords-plague-marines"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
+    "behavior": "reactive",
     "trigger": {
       "event": "attacks-resolved",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      }
+      "filter": {
+        "kind": "shoot"
+      },
+      "optional": true
     },
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "happened",
-        "parameters": {
-          "event": "after-roll",
-          "object": "defender",
-          "filter": {
-            "roll": "hit",
-            "result": "success",
-            "attack_type": "ranged"
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
           },
-          "window": "event"
-        }
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       },
       "effect": {
         "type": "select-units",
@@ -4466,6 +5563,7 @@
             "type": "happened",
             "parameters": {
               "event": "after-roll",
+              "subject": "event-subject",
               "object": "this-unit",
               "filter": {
                 "roll": "hit",
@@ -4538,64 +5636,65 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "source_digest": "a0753610a750c4d8adea367415c1718f46751c4a0fb739cb43065a0a59e9d6e7",
+    "source_digest": "9ab9dd306dd9aecb5f5a1bc077e8496ab9f70031cdb0160346551e65343245c9",
     "version": "2025-q3",
     "unit_ids": [
       "sholgor-the-putrid"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "ability-part",
-      "trigger": {
-        "event": "phase-started",
-        "condition": {
-          "type": "phase-is",
-          "parameters": {
-            "phase": "shooting"
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy",
+          "within": {
+            "range": {
+              "inches": 18
+            },
+            "of": "this-model"
           }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
         }
       },
       "effect": {
-        "type": "designate-target",
-        "designation": "spotted",
-        "select": {
-          "kind": "unit",
-          "selector": {
-            "filter": {
-              "owner": "enemy",
-              "within": {
-                "range": {
-                  "inches": 18
-                },
-                "of": "this-model"
-              }
-            },
-            "count": {
-              "min": 1,
-              "max": 1
-            }
-          }
-        },
-        "duration": "phase",
-        "applies": {
-          "to": "target",
-          "effect": {
-            "type": "stat-modifier",
-            "target": "defender",
-            "modifier": {
-              "stat": "detection-range",
-              "operation": "add",
-              "value": 6
-            }
-          }
+        "type": "stat-modifier",
+        "target": "selected-unit",
+        "modifier": {
+          "stat": "detection-range",
+          "operation": "add",
+          "value": 6
         }
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
-    "faction_id": "death-guard"
+    "faction_id": "death-guard",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "all-is-rot-tallyband-summoners-death-guard",
@@ -4625,17 +5724,41 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "virulent-vectorium",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "within": {
+              "of": {
+                "objective": {
+                  "controlled_by": "friendly"
+                }
+              },
+              "range": "objective-control"
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "re-roll",
+        "target": "this-unit",
+        "modifier": {
+          "roll": "wound",
+          "result_scope": "any-result"
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "7d66fb856a4e6a17bbc9bdcce2f680c03aa3843e2004a3623491cb6fe32fb9af"
   },
   {
     "ability_id": "avatars-of-decay-tallyband-summoners-death-guard",
@@ -4645,17 +5768,34 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "tallyband-summoners",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "aura",
+      "target": "enemy-within-aura",
+      "modifier": {
+        "range": {
+          "inches": 6
+        },
+        "effect": {
+          "type": "designate",
+          "target": "recipient",
+          "modifier": {
+            "tag": "afflicted"
+          }
+        },
+        "eligible": {
+          "owner": "enemy"
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "aura",
+    "source_digest": "ac7814a4deb8b68e989e32cec3d5064edcd483999fc631189109041548dd7d81"
   },
   {
     "ability_id": "beckoning-blight-tallyband-summoners-death-guard",
@@ -4685,17 +5825,48 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "mortarions-hammer",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "stat-modifier",
+      "target": "this-model",
+      "modifier": {
+        "stat": "Range",
+        "operation": "add",
+        "value": 12,
+        "weapons": {
+          "type": "ranged",
+          "name": "plague wind"
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    },
+    "source_digest": "f91babcad16d23e448ecaa1f7666fc8cc0166447b3d2d4b07ad63089e3dc1e95"
   },
   {
     "ability_id": "blessings-of-filth-champions-of-contagion-death-guard",
@@ -4705,17 +5876,23 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "champions-of-contagion",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "roll-result",
+      "target": "this-unit",
+      "modifier": {
+        "roll": "hit",
+        "critical_on": 5
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "activated",
+    "source_digest": "83ff864154b2e4676f1433d92f1103fbb9883e979f338d401115b22e9b41d041"
   },
   {
     "ability_id": "blighted-land-mortarions-hammer-death-guard",
@@ -4745,17 +5922,28 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "death-lords-chosen",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "contagion-range",
+        "aspect": "range",
+        "operation": "add",
+        "value": 3
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-started"
+    },
+    "source_digest": "29e1e1dac23a1077ba35ed74ac85dc9cbe48b244109cd647933f9948d74841a1"
   },
   {
     "ability_id": "bountiful-regeneration-maggot-lords-death-guard",
@@ -4765,17 +5953,42 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "maggot-lords",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "heal",
+        "target": "this-model",
+        "modifier": {
+          "amount": 1
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "25e83ebd1624bfcb564176cb3f548424386b2c9e9718bc3025a7ecbb296530b2"
   },
   {
     "ability_id": "clutching-corruption-tallyband-summoners-death-guard",
@@ -4785,17 +5998,40 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "tallyband-summoners",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "defender",
+          "filter": {
+            "engaged_with": {
+              "owner": "friendly",
+              "all_of": [
+                "PLAGUE LEGIONS"
+              ]
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "re-roll",
+        "target": "this-unit",
+        "modifier": {
+          "roll": "hit",
+          "result_scope": "any-result"
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "activated",
+    "source_digest": "25ea597b3ad8a4fd7c449638d9169a1126913bd9792dcf8fa07853153aab3396"
   },
   {
     "ability_id": "cornucophagus-champions-of-contagion-death-guard",
@@ -4825,17 +6061,59 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "virulent-vectorium",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "defender",
+              "filter": {
+                "designated": "AFFLICTED"
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "result_scope": "any-result"
+            }
+          },
+          {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "wound",
+              "result_scope": "any-result"
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "activated",
+    "source_digest": "7ad7983b1afbc5eb3fcb002a355e7292d6d77f309fabd2a4012c5bed4fb7fc4d"
   },
   {
     "ability_id": "creeping-rot-death-guard",
@@ -4845,17 +6123,29 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "maggot-lords",
     "ability_type": "detachment",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-grant",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "MAGGOT LORDS",
+          "TERMINATOR"
+        ]
+      },
+      "modifier": {
+        "ability": "scouts",
+        "value": 3
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "7a6686c5017e329ce44286048488ae7c9829c3196c5be39518b375b55358eb46"
   },
   {
     "ability_id": "daemon-weapon-of-nurgle-virulent-vectorium-death-guard",
@@ -4865,17 +6155,32 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "virulent-vectorium",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "attack-is",
+        "parameters": {
+          "attack_type": "melee"
+        }
+      },
+      "effect": {
+        "type": "roll-result",
+        "target": "this-model",
+        "modifier": {
+          "roll": "hit",
+          "critical_on": 5
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "8d8bb61fffb61d6346148438b7e4b5bea29e3a03718a510be8d1865a9d19f9ad"
   },
   {
     "ability_id": "deaths-heads-champions-of-contagion-death-guard",
@@ -4905,17 +6210,38 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "virulent-vectorium",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-part",
+      "trigger": {
+        "event": "damage-allocated"
+      },
+      "effect": {
+        "type": "damage-reduction",
+        "target": "this-unit",
+        "modifier": {
+          "reduction": 1
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
+    },
+    "source_digest": "77664878c61771230d2d24f3277e9b2a1d6cfe29d7bdb8e6f5c1e3ca05497c42"
   },
   {
     "ability_id": "drawn-to-despair-mortarions-hammer-death-guard",
@@ -4925,17 +6251,51 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "mortarions-hammer",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "defender",
+              "filter": {
+                "none_of": [
+                  "AIRCRAFT"
+                ]
+              }
+            }
+          },
+          {
+            "type": "in-region",
+            "parameters": {
+              "subject": "defender",
+              "region": {
+                "territory": "enemy-deployment-zone"
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "re-roll",
+        "target": "this-unit",
+        "modifier": {
+          "roll": "hit",
+          "result_scope": "any-result"
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "activated",
+    "source_digest": "dc6a7035295aadbf423022cfa8894ae8c2b2f993524141144bf1e264eae1de3b"
   },
   {
     "ability_id": "entropic-knell-tallyband-summoners-death-guard",
@@ -4945,17 +6305,59 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "tallyband-summoners",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "for-each-unit",
+      "selector": {
+        "filter": {
+          "owner": "enemy",
+          "within": {
+            "range": {
+              "inches": 6
+            },
+            "of": "this-model"
+          }
+        }
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "strength",
+          "parameters": {
+            "subject": "recipient",
+            "below": "starting"
+          }
+        },
+        "effect": {
+          "type": "test",
+          "target": "recipient",
+          "modifier": {
+            "test": "battle-shock",
+            "modifier": -1
+          }
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "step-started",
+      "filter": {
+        "step": "battle-shock"
+      },
+      "condition": {
+        "type": "player-turn-is",
+        "parameters": {
+          "turn": "opponent-turn"
+        }
+      }
+    },
+    "source_digest": "d56327401b218f9080522852b495ddedc54b53a1b58b6e2d367b42cfebe1141e"
   },
   {
     "ability_id": "eye-of-affliction-mortarions-hammer-death-guard",
@@ -4965,17 +6367,41 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "mortarions-hammer",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "defender",
+          "filter": {
+            "designated": "AFFLICTED"
+          }
+        }
+      },
+      "effect": {
+        "type": "weapon-ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "keywords": [
+            {
+              "keyword_id": "ignores-cover"
+            }
+          ],
+          "weapons": {
+            "type": "ranged"
+          }
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "57fc9a7e3279b3f79f0a4cbc8bf2508cd5638f1b07335b0def67201ce5356b43"
   },
   {
     "ability_id": "eyestinger-storm-mortarions-hammer-death-guard",
@@ -5005,17 +6431,40 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "death-lords-chosen",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "for-each-unit",
+      "selector": {
+        "filter": {
+          "owner": "enemy",
+          "engaged_with": "this-unit"
+        }
+      },
+      "effect": {
+        "type": "test",
+        "target": "recipient",
+        "modifier": {
+          "test": "battle-shock"
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    },
+    "source_digest": "8c4c437158300f2b5ddac2c7c4b1957bde35d8803554f96a7a91bcdb67cb8e1a"
   },
   {
     "ability_id": "fell-harvester-tallyband-summoners-death-guard",
@@ -5025,17 +6474,27 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "tallyband-summoners",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "stat-modifier",
+      "target": "this-model",
+      "modifier": {
+        "stat": "A",
+        "operation": "add",
+        "value": 2,
+        "weapons": {
+          "type": "melee"
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "eefdb415d9e086971a2c6a64152c98744ea9153184e98ab1edd9076e637aadd0"
   },
   {
     "ability_id": "final-ingredient-champions-of-contagion-death-guard",
@@ -5065,17 +6524,35 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "tallyband-summoners",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "move-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "passthrough": [
+          "all-terrain"
+        ],
+        "ignore_vertical": true
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "normal",
+          "advance",
+          "charge"
+        ]
+      }
+    },
+    "source_digest": "da2a9ac6b329cd4b85a58af28affcfe274a4497b838e72f23b92bb6cd1643bf3"
   },
   {
     "ability_id": "font-of-filth-mortarions-hammer-death-guard",
@@ -5085,17 +6562,29 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "mortarions-hammer",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "keywords": [
+          {
+            "keyword_id": "assault"
+          }
+        ],
+        "weapons": {
+          "type": "ranged"
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "activated",
+    "source_digest": "0ebf8c3f4e72410410f2c12b7437638f69050032ddfa87849e5148237f6bca3c"
   },
   {
     "ability_id": "furnace-of-plagues-virulent-vectorium-death-guard",
@@ -5105,17 +6594,63 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "virulent-vectorium",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "stat-modifier",
+              "target": "this-model",
+              "modifier": {
+                "stat": "A",
+                "operation": "add",
+                "value": 1,
+                "weapons": {
+                  "type": "melee"
+                }
+              }
+            },
+            {
+              "type": "stat-modifier",
+              "target": "this-model",
+              "modifier": {
+                "stat": "S",
+                "operation": "add",
+                "value": 1,
+                "weapons": {
+                  "type": "melee"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "weapon-ability-grant",
+          "target": "this-model",
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "devastating-wounds"
+              }
+            ],
+            "weapons": {
+              "type": "melee"
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "02a17548726cba58ca1726c7003e5f6c91b314bb7758b35963ffb4436cd3c8c8"
   },
   {
     "ability_id": "gnawing-hunger-shamblerot-vectorium-death-guard",
@@ -5125,17 +6660,58 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "shamblerot-vectorium",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "stat": "M",
+            "operation": "add",
+            "value": 1
+          }
+        },
+        {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "stat-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "stat": "A",
+                "operation": "add",
+                "value": 1,
+                "weapons": {
+                  "type": "melee"
+                }
+              }
+            },
+            {
+              "type": "stat-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "stat": "S",
+                "operation": "add",
+                "value": 1,
+                "weapons": {
+                  "type": "melee"
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "turn"
+    },
+    "behavior": "activated",
+    "source_digest": "dcb70ecd00621204e24b68e8805f1979053e645625deed0e5578c84e46b21963"
   },
   {
     "ability_id": "grim-reapers-death-lords-chosen-death-guard",
@@ -5145,17 +6721,38 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "death-lords-chosen",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "defender",
+          "filter": {
+            "none_of": [
+              "MONSTER",
+              "VEHICLE"
+            ]
+          }
+        }
+      },
+      "effect": {
+        "type": "re-roll",
+        "target": "this-unit",
+        "modifier": {
+          "roll": "hit",
+          "result_scope": "any-result"
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "activated",
+    "source_digest": "507db1f593cc7fbc9b297261a96d171cdb488084b015bc4ef1cb80f1a40acb6e"
   },
   {
     "ability_id": "grip-of-the-walking-pox-shamblerot-vectorium-death-guard",
@@ -5185,17 +6782,34 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "champions-of-contagion",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "stat-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "stat": "T",
+        "operation": "add",
+        "value": 2
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
+    },
+    "source_digest": "3838d680b4b4805848355a2e17b9a05d2dbe95c58a40c7f8b963bf1425998b77"
   },
   {
     "ability_id": "helm-of-the-fly-king-death-lords-chosen-death-guard",
@@ -5205,17 +6819,59 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "death-lords-chosen",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "operator": "not",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "subject": "attacker",
+                "filter": {
+                  "within": {
+                    "of": "this-unit",
+                    "range": {
+                      "inches": 18
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "effect": {
+          "type": "targeting",
+          "target": "this-unit",
+          "modifier": {
+            "may": "cannot-target",
+            "kind": "attack",
+            "weapons": {
+              "type": "ranged"
+            },
+            "target": "this-unit"
+          }
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "4a4e3ca5c1f2e9cf294a75edc5b1d79b37917c47ada6e66c2845b39a194d4f84"
   },
   {
     "ability_id": "hidden-amongst-the-dead-shamblerot-vectorium-death-guard",
@@ -5225,17 +6881,31 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "shamblerot-vectorium",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "deep-strike",
+        "value": {
+          "rating": true
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "step-started",
+      "filter": {
+        "step": "reinforcements"
+      }
+    },
+    "source_digest": "7e44596aa275b7f44bee8c16799b9f308155ec74b242bcdbb9294b8e2e1f34ce"
   },
   {
     "ability_id": "inexorable-executioners-maggot-lords-death-guard",
@@ -5245,17 +6915,45 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "maggot-lords",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "move-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "passthrough": [
+          {
+            "kind": "models",
+            "excluding": [
+              "MONSTER",
+              "VEHICLE"
+            ]
+          }
+        ]
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "move-started",
+      "filter": {
+        "move_types": [
+          "charge"
+        ]
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "DEATHSHROUD TERMINATORS",
+          "MAGGOT LORDS"
+        ]
+      }
+    },
+    "source_digest": "0c5c2b68b34c7da5085203e76a000df58692c07752cea42851654e40283d42da"
   },
   {
     "ability_id": "leechspore-eruption-virulent-vectorium-death-guard",
@@ -5305,17 +7003,46 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "champions-of-contagion",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "strength",
+        "parameters": {
+          "subject": "defender",
+          "below": "starting"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "result_scope": "any-result"
+            }
+          },
+          {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "wound",
+              "result_scope": "any-result"
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "activated",
+    "source_digest": "9c976e9b6a6e159289dea98d6368820d594d3ada5bb6c1eae97db820ab97c2c5"
   },
   {
     "ability_id": "mireslick-tallyband-summoners-death-guard",
@@ -5365,17 +7092,32 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "death-lords-chosen",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "keywords": [
+          {
+            "keyword_id": "assault"
+          },
+          {
+            "keyword_id": "heavy"
+          }
+        ],
+        "weapons": {
+          "type": "ranged"
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "activated",
+    "source_digest": "92ae2e7566d24518ff70e9755e54f5b116e7fd51844b98f818c780debd57130f"
   },
   {
     "ability_id": "needle-of-nurgle-champions-of-contagion-death-guard",
@@ -5405,17 +7147,58 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "maggot-lords",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "ability": "stealth"
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit",
+      "optional": true
+    },
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "army"
+    },
+    "source_digest": "1fe9ce5972d929c15ea92f21004f698e9d7ad0411b65ce8f2755a80718b9bf95"
   },
   {
     "ability_id": "nurgles-gift-maggot-lords-death-guard",
@@ -5445,17 +7228,91 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "virulent-vectorium",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "subject": "selected-unit",
+            "filter": {
+              "visible": {
+                "to": "this-unit"
+              }
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "targets-selected",
+          "subject": {
+            "owner": "friendly",
+            "all_of": [
+              "DEATH GUARD"
+            ]
+          },
+          "filter": {
+            "kind": "attack"
+          }
+        },
+        "effect": {
+          "type": "conditional",
+          "condition": {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
+            }
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "attacks",
+              "result_scope": "any-result"
+            }
+          }
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "optional": true
+    },
+    "source_digest": "20f4bd2cf4e6d2dc51c772cc8f70d784c6d27e88b03ed121b6e5cbae62a341f9"
   },
   {
     "ability_id": "persistent-pests-tallyband-summoners-death-guard",
@@ -5465,17 +7322,45 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "tallyband-summoners",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "use-stratagem",
+            "allow": true,
+            "despite": [
+              "destroyed"
+            ]
+          }
+        },
+        {
+          "type": "add-unit",
+          "target": "this-unit",
+          "modifier": {
+            "copy_of": "event-object",
+            "count": 1,
+            "at_starting_strength": true,
+            "placement": "strategic-reserves"
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "destroyed",
+      "optional": true
+    },
+    "source_digest": "8922f17fdb809183e44325d7cac527f3f9c4714b7a3be1d9235eb19b9798c999"
   },
   {
     "ability_id": "plaguesurge-virulent-vectorium-death-guard",
@@ -5525,17 +7410,31 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "champions-of-contagion",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "fights-first"
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    },
+    "source_digest": "3ec5dd1397afae4a400acb1847ccee01fa4485ba01e7428da1f8b05474cde7c7"
   },
   {
     "ability_id": "relentless-grind-mortarions-hammer-death-guard",
@@ -5545,17 +7444,35 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "mortarions-hammer",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "move-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "passthrough": [
+          "all-terrain"
+        ],
+        "ignore_vertical": true
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "normal",
+          "advance",
+          "charge"
+        ]
+      }
+    },
+    "source_digest": "4e38941bf8170ab4b4e954b4c441f667d92febde8cf5214140998d3f15952d0a"
   },
   {
     "ability_id": "revolting-regeneration-virulent-vectorium-death-guard",
@@ -5565,17 +7482,22 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "virulent-vectorium",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "feel-no-pain",
+      "target": "this-model",
+      "modifier": {
+        "threshold": 5
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "7e5ded847d9bba5a5cda017a893ad792fa59c3a20632603f35a651b489a99475"
   },
   {
     "ability_id": "sevenfold-chant-septimol-fulg-maggot-lords-tallyman-death-guard",
@@ -5585,7 +7507,6 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [
       "septimol-fulg-maggot-lords-tallyman"
     ],
@@ -5593,11 +7514,58 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "command"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-model",
+              "filter": {
+                "state": "on-battlefield"
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "dice-gated",
+        "dice": "2D6",
+        "threshold": 7,
+        "comparison": "gte",
+        "on_success": {
+          "type": "cp-gain",
+          "target": "this-model",
+          "modifier": {
+            "amount": 1
+          }
+        },
+        "on_fail": null
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "cd1632a3e53d4aa7cb805adf23432baeb2756f913ec58de2f54310bedce26cc4"
   },
   {
     "ability_id": "shambling-wall-shamblerot-vectorium-death-guard",
@@ -5627,17 +7595,46 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "shamblerot-vectorium",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "for-each-unit",
+      "selector": {
+        "filter": {
+          "owner": "enemy",
+          "engaged_with": "this-unit"
+        }
+      },
+      "effect": {
+        "type": "test",
+        "target": "recipient",
+        "modifier": {
+          "test": "battle-shock",
+          "modifier": -1
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "DEATH GUARD"
+        ]
+      },
+      "filter": {
+        "move_types": [
+          "charge"
+        ]
+      }
+    },
+    "source_digest": "c2ab251a413990c02562b8c82c95b417a81d970ef8cb3401a0e9faf1bf913622"
   },
   {
     "ability_id": "shriekworm-familiar-mortarions-hammer-death-guard",
@@ -5647,17 +7644,30 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "mortarions-hammer",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "cost-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "of": "stratagem",
+        "operation": "set",
+        "amount": 0,
+        "applies_to": "targeting-this-unit",
+        "id": "fire-overwatch"
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "activated",
+    "usage": {
+      "frequency": "once-per-battle-round",
+      "per": "model"
+    },
+    "source_digest": "58fb47d7db8ad313c4f9c18bb3ac8b5c98ce9f1a1d17efa9a07f97895a92c4ec"
   },
   {
     "ability_id": "sickening-horror-maggot-lords-death-guard",
@@ -5667,17 +7677,52 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "maggot-lords",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "subject": "selected-unit",
+            "filter": {
+              "engaged_with": "this-unit"
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "test",
+        "target": "selected-unit",
+        "modifier": {
+          "test": "battle-shock"
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    },
+    "source_digest": "fa67bdb8782cf2b2633ddd92b220962ad34a645be3be6e6fa4d9a98c4b98418b"
   },
   {
     "ability_id": "sickening-impact-death-lords-chosen-death-guard",
@@ -5727,17 +7772,66 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "shamblerot-vectorium",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "type": "happened",
+          "parameters": {
+            "event": "targets-selected",
+            "subject": "selected-unit",
+            "object": "this-unit",
+            "filter": {
+              "kind": "attack"
+            },
+            "window": "phase"
+          }
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "permission",
+            "target": "this-unit",
+            "modifier": {
+              "activity": "use-stratagem",
+              "allow": true,
+              "despite": [
+                "destroyed"
+              ]
+            }
+          },
+          {
+            "type": "designate",
+            "target": "selected-unit",
+            "modifier": {
+              "tag": "afflicted"
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "battle"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "destroyed",
+      "optional": true
+    },
+    "source_digest": "477e20b048c03675dd6e2187e82ea781e5651ba8f250253a4e27c71580b207c6"
   },
   {
     "ability_id": "sorrowsyphon-shamblerot-vectorium-death-guard",
@@ -5767,17 +7861,83 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "mortarions-hammer",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy",
+          "visible": {
+            "to": "this-model"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "subject": "selected-unit",
+            "filter": {
+              "within": {
+                "of": "this-unit",
+                "range": {
+                  "inches": 12
+                }
+              }
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "targets-selected",
+          "subject": "selected-unit",
+          "filter": {
+            "kind": "charge"
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "charge",
+            "operation": "subtract",
+            "value": 1
+          }
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "charge"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
+    },
+    "source_digest": "f47ac119e0747f37bc6a2dca95a5f128627c323ced5b99c542d6e46b237f9dba"
   },
   {
     "ability_id": "talisman-of-burgeoning-shamblerot-vectorium-death-guard",
@@ -5787,17 +7947,40 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "shamblerot-vectorium",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": {
+          "level": "model",
+          "member_of": "this-unit",
+          "all_of": [
+            "POXWALKERS"
+          ]
+        },
+        "modifier": {
+          "stat": "T",
+          "operation": "add",
+          "value": 1
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "55399fe28b9df1e07a8cf1574692e939dba07a4d591ff2d5eca8a6b09a0c4e70"
   },
   {
     "ability_id": "tendrilous-emissions-mortarions-hammer-death-guard",
@@ -5807,17 +7990,104 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "mortarions-hammer",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "this-model",
+          "filter": {
+            "within": {
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "DEATH GUARD",
+                  "VEHICLE"
+                ]
+              },
+              "range": {
+                "inches": 3
+              }
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "ability-grant",
+            "target": "this-model",
+            "modifier": {
+              "ability": "lone-operative"
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "attack-is",
+                  "parameters": {
+                    "attack_type": "ranged"
+                  }
+                },
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "defender",
+                    "filter": {
+                      "owner": "enemy"
+                    }
+                  }
+                },
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "defender",
+                    "filter": {
+                      "visible": {
+                        "to": "this-model"
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "re-roll",
+              "target": {
+                "owner": "friendly",
+                "all_of": [
+                  "DEATH GUARD",
+                  "VEHICLE"
+                ],
+                "within": {
+                  "range": {
+                    "inches": 3
+                  },
+                  "of": "this-model"
+                }
+              },
+              "modifier": {
+                "roll": "wound",
+                "subset": "ones"
+              }
+            }
+          }
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "d35a2ba2f5cf3af1d79220973ff852ac61291410ea9dcf1d6b0d7fe75a90e311"
   },
   {
     "ability_id": "tome-of-bounteous-blessings-tallyband-summoners-death-guard",
@@ -5847,17 +8117,63 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "death-lords-chosen",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-part",
+      "trigger": {
+        "event": "model-destroyed",
+        "object": "model-in-this-unit"
+      },
+      "effect": {
+        "type": "act-on-death",
+        "target": "event-object",
+        "modifier": {
+          "act": "fight",
+          "resolution": "after-attacking-unit-finishes",
+          "removal": "after-destroyed-model-fights",
+          "gate": {
+            "dice": "D6",
+            "threshold": 4,
+            "comparison": "gte",
+            "modifiers": []
+          },
+          "eligibility": {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "subject": "event-subject",
+                  "event": "selected",
+                  "filter": {
+                    "to": "fight"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
+    },
+    "source_digest": "c806d7796e41d03e8a3e02e84e486d5c06858fbe84f63203b702fbf0a77d68fc"
   },
   {
     "ability_id": "vile-vigour-death-lords-chosen-death-guard",
@@ -5867,17 +8183,47 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "death-lords-chosen",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "M",
+              "operation": "add",
+              "value": 1
+            }
+          },
+          {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "advance",
+              "result_scope": "any-result"
+            }
+          }
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "activated",
+    "source_digest": "4b7b95fa67ea8e03d4c14f9823dd6c9d9e67300751a27795ca2a42435d352502"
   },
   {
     "ability_id": "visions-of-virulence-champions-of-contagion-death-guard",
@@ -5907,17 +8253,48 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "maggot-lords",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "keywords": [
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ],
+        "weapons": {
+          "type": "ranged",
+          "keyword": {
+            "keyword_id": "lethal-hits"
+          }
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "MAGGOT LORDS",
+          "PLAGUE MARINES"
+        ]
+      }
+    },
+    "source_digest": "89b4ac3cb46e13b2c8c0db172836da27b326635ddea11b76476f9dd544f51c3b"
   },
   {
     "ability_id": "warprot-talisman-death-lords-chosen-death-guard",
@@ -5927,17 +8304,54 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "death-lords-chosen",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "state": "engaged"
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "set-up",
+        "target": "this-unit",
+        "modifier": {
+          "to": "strategic-reserves",
+          "from": "battlefield"
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "turn-ended",
+      "condition": {
+        "type": "player-turn-is",
+        "parameters": {
+          "turn": "opponent-turn"
+        }
+      },
+      "optional": true
+    },
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "model"
+    },
+    "source_digest": "0fa658119197bca091de35b03a3c138e4a7c5205ee9624c413d1802ffc730b85"
   },
   {
     "ability_id": "witherbone-pipes-shamblerot-vectorium-death-guard",
@@ -5947,17 +8361,67 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "shamblerot-vectorium",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading",
+          "with": {
+            "all_of": [
+              "POXWALKERS"
+            ]
+          }
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "OC",
+              "operation": "add",
+              "value": 1
+            }
+          },
+          {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "roll-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "battle-shock",
+                  "operation": "add",
+                  "value": 1
+                }
+              },
+              {
+                "type": "roll-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "leadership",
+                  "operation": "add",
+                  "value": 1
+                }
+              }
+            ]
+          }
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "4a235c642d2184e38d61046d511d080cd7794288d476ce0c06f72e9144174564"
   },
   {
     "ability_id": "daemon-lord-of-nurgle-death-guard",

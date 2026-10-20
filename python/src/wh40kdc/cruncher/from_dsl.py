@@ -2541,6 +2541,30 @@ def _evaluate_condition(
         if not isinstance(faction, str) or ctx.get("armyFaction") is None:
             return "unknown"
         return ctx["armyFaction"] == faction
+    if ctype == "model-count":
+        # "contains N or more models": min and max are inclusive. A keyword-restricted
+        # count needs per-keyword model counts the context does not carry.
+        p = params or {}
+        if p.get("keyword") is not None:
+            return "unknown"
+        subject = p.get("subject")
+        if subject == "defender":
+            side = "target"
+        elif subject == "attacker":
+            side = "attacker"
+        elif _is_buffed_unit(subject):
+            side = "attacker" if perspective == "attacker" else "target"
+        else:
+            return "unknown"
+        count = ctx.get("attackerModelCount" if side == "attacker" else "targetModelCount")
+        if count is None:
+            return "unknown"
+        minimum, maximum = p.get("min"), p.get("max")
+        if isinstance(minimum, int) and count < minimum:
+            return False
+        if isinstance(maximum, int) and count > maximum:
+            return False
+        return True
     if ctype == "battle-size":
         size = params.get("size") if params else None
         if not isinstance(size, str) or ctx.get("battleSize") is None:

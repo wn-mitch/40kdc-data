@@ -41,7 +41,57 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Kroot"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "operator": "or",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "fight"
+                      },
+                      "window": "phase"
+                    }
+                  },
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "shoot"
+                      },
+                      "window": "phase"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "a-trap-well-laid-kroot-hunting-pack-tau-empire",
     "game_version": {
       "edition": "11th",
@@ -70,7 +120,42 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "T’au Empire"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "move"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "aggressive-mobility-montka-tau-empire",
     "game_version": {
       "edition": "11th",
@@ -99,7 +184,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords_any": [
+        "Kroot",
+        "Vespid Stingwings"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "alien-expertise-auxiliary-cadre-tau-empire",
     "game_version": {
       "edition": "11th",
@@ -231,7 +324,36 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "T’au Empire"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-unit",
+              "filter": {
+                "designated": "observer"
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "coordinate-to-engage-kauyon-tau-empire",
     "game_version": {
       "edition": "11th",
@@ -399,7 +521,15 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords_any": [
+        "Kroot",
+        "Vespid Stingwings"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "experimental-modifications-auxiliary-cadre-tau-empire",
     "game_version": {
       "edition": "11th",
@@ -461,7 +591,80 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": [
+      {
+        "required_keywords": [
+          "T’au Empire"
+        ],
+        "name": "first",
+        "count": "one",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "not",
+          "operands": [
+            {
+              "type": "happened",
+              "parameters": {
+                "event": "selected",
+                "filter": {
+                  "to": "shoot"
+                },
+                "window": "phase"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "required_keywords": [
+          "T’au Empire"
+        ],
+        "name": "second",
+        "count": "one",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "happened",
+                  "parameters": {
+                    "event": "selected",
+                    "filter": {
+                      "to": "shoot"
+                    },
+                    "window": "phase"
+                  }
+                }
+              ]
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "same-unit",
+                  "parameters": {
+                    "as": {
+                      "stratagem_target": "first"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "name": "third",
+        "count": "one",
+        "side": "enemy",
+        "selects": "unit"
+      }
+    ],
     "ability_id": "focused-fire-montka-tau-empire",
     "game_version": {
       "edition": "11th",
@@ -549,7 +752,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Kroot"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "guerrilla-warriors-kroot-hunting-pack-tau-empire",
     "game_version": {
       "edition": "11th",
@@ -577,7 +787,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "T’au Empire"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "guided-by-unity-auxiliary-cadre-tau-empire",
     "game_version": {
       "edition": "11th",
@@ -683,7 +900,22 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "any_of": [
+              "PATHFINDER TEAM",
+              "STEALTH BATTLESUITS"
+            ]
+          }
+        }
+      }
+    },
     "ability_id": "marker-beacon-advanced-acquisition-cadre-tau-empire",
     "game_version": {
       "edition": "11th",
@@ -820,7 +1052,42 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "T’au Empire"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "point-blank-ambush-kauyon-tau-empire",
     "game_version": {
       "edition": "11th",
@@ -849,7 +1116,52 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": [
+      {
+        "required_keywords": [
+          "Infantry",
+          "T’au Empire"
+        ],
+        "excluded_keywords": [
+          "Kroot"
+        ],
+        "name": "first",
+        "count": "one",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "filter": {
+              "owner": "friendly"
+            }
+          }
+        }
+      },
+      {
+        "excluded_keywords": [
+          "Monster",
+          "Vehicle"
+        ],
+        "name": "second",
+        "count": "one",
+        "side": "enemy",
+        "selects": "unit",
+        "eligibility": {
+          "type": "happened",
+          "parameters": {
+            "event": "after-roll",
+            "subject": "event-subject",
+            "object": "this-unit",
+            "filter": {
+              "roll": "hit",
+              "result": "success"
+            },
+            "window": "event"
+          }
+        }
+      }
+    ],
     "ability_id": "pulse-onslaught-montka-tau-empire",
     "game_version": {
       "edition": "11th",
@@ -877,7 +1189,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Sudden Dawn Cadre"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit"
+    },
     "ability_id": "rapid-acquisition-sudden-dawn-cadre-tau-empire",
     "game_version": {
       "edition": "11th",
@@ -948,7 +1267,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Infantry",
+        "Sudden Dawn Cadre"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "suppressing-fire-sudden-dawn-cadre-tau-empire",
     "game_version": {
       "edition": "11th",
@@ -1047,7 +1374,43 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Battlesuit",
+        "T’au Empire"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "the-arrokon-protocol-retaliation-cadre-tau-empire",
     "game_version": {
       "edition": "11th",
@@ -1076,7 +1439,40 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Kroot"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "destroyed",
+              "object": {
+                "owner": "enemy"
+              },
+              "filter": {
+                "by": "this-unit"
+              },
+              "window": "phase"
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "the-grisly-feast-kroot-hunting-pack-tau-empire",
     "game_version": {
       "edition": "11th",
@@ -1105,7 +1501,38 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Battlesuit",
+        "T’au Empire"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "set-up",
+              "filter": {
+                "from": "deep-strike"
+              },
+              "window": "phase"
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "the-shortened-blade-retaliation-cadre-tau-empire",
     "game_version": {
       "edition": "11th",
@@ -1134,7 +1561,36 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Battlesuit",
+        "Fly",
+        "T’au Empire"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "attacks-resolved",
+              "window": "phase"
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "the-torchstar-gambit-retaliation-cadre-tau-empire",
     "game_version": {
       "edition": "11th",

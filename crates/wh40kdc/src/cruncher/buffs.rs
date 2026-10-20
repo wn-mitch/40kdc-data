@@ -346,6 +346,12 @@ pub struct EngineContext {
     /// unit). Drives the `guided` condition; `None` leaves it unknown.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub attacker_guided: Option<bool>,
+    /// Models in the attacking unit. Drives `model-count` on the attacker; `None` leaves it unknown.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub attacker_model_count: Option<u32>,
+    /// Models in the target unit. Drives `model-count` on the defender; `None` leaves it unknown.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub target_model_count: Option<u32>,
     /// Lower-cased names of the attacking weapon and its profile. Drives
     /// `applicable_when.weapon_name`; unknown names cannot satisfy a constraint.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -385,6 +391,8 @@ impl EngineContext {
             army_faction: None,
             battle_size: None,
             attacker_guided: None,
+            attacker_model_count: None,
+            target_model_count: None,
             weapon_names: None,
             weapon_keywords: None,
             weapon_keyword_refs: None,

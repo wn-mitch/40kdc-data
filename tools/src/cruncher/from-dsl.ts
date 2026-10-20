@@ -1981,6 +1981,18 @@ function evaluateCondition(
       if (typeof faction !== "string" || ctx.armyFaction === undefined) return "unknown";
       return ctx.armyFaction === faction;
     }
+    case "model-count": {
+      // "contains N or more models": min and max are inclusive. A keyword-restricted count needs
+      // per-keyword model counts the context does not carry.
+      const params = isObject(condition.parameters) ? condition.parameters : {};
+      if (params.keyword !== undefined) return "unknown";
+      const side = params.subject === "defender" ? "target" : params.subject === "attacker" ? "attacker" : isBuffedUnit(params.subject) ? perspective === "attacker" ? "attacker" : "target" : undefined;
+      const count = side === "attacker" ? ctx.attackerModelCount : side === "target" ? ctx.targetModelCount : undefined;
+      if (count === undefined) return "unknown";
+      if (typeof params.min === "number" && count < params.min) return false;
+      if (typeof params.max === "number" && count > params.max) return false;
+      return true;
+    }
     case "battle-size": {
       const size = (condition.parameters as Record<string, unknown> | undefined)?.size;
       if (typeof size !== "string" || ctx.battleSize === undefined) return "unknown";

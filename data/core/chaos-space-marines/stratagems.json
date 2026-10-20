@@ -10,7 +10,43 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Cultist Mob",
+        "Zarkan's Daemonkin"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "not_states": [
+                  "engaged"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": "event-subject",
+                  "range": {
+                    "inches": 8
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "alert-to-danger-zarkans-daemonkin-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -64,7 +100,26 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "excluded_keywords": [
+        "Monster",
+        "Vehicle"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "at-the-tyrants-command-hurons-marauders-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -93,7 +148,23 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes",
+        "Infantry"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "autostimulants-creations-of-bile-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -151,7 +222,25 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "excluded_keywords": [
+        "Damned"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "biomechanoid-regeneration-cult-of-the-arkifane-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -239,7 +328,41 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "excluded_keywords": [
+        "Damned"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "engaged_with": {
+                  "owner": "enemy",
+                  "designated": "focus-of-hatred"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "bringers-of-despair-veterans-of-the-long-war-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -298,7 +421,57 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Damned"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "operator": "or",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "fight"
+                      },
+                      "window": "phase"
+                    }
+                  },
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "shoot"
+                      },
+                      "window": "phase"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "chosen-for-glory-chaos-cult-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -327,7 +500,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "coils-of-deception-deceptors-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -357,7 +537,26 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "excluded_keywords": [
+        "Damned"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "contemptuous-disregard-veterans-of-the-long-war-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -386,7 +585,37 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "selected",
+              "filter": {
+                "to": "shoot"
+              },
+              "window": "phase"
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "corrupted-munitions-renegade-warband-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -415,7 +644,42 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Damned"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "crazed-focus-chaos-cult-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -468,7 +732,26 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes",
+        "Vehicle"
+      ],
+      "excluded_keywords": [
+        "Daemon"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "daemonic-possession-soulforged-warpack-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -526,7 +809,43 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes",
+        "Infantry"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "fight"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "depthless-cruelty-dread-talons-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -556,7 +875,59 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Daemon",
+        "Heretic Astartes",
+        "Vehicle"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "operator": "or",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "fight"
+                      },
+                      "window": "phase"
+                    }
+                  },
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "shoot"
+                      },
+                      "window": "phase"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "desperate-pledge-soulforged-warpack-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -589,7 +960,41 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Character",
+        "Heretic Astartes"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": "event-object",
+                  "range": {
+                    "inches": 18
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "detonator-deceptors-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -618,7 +1023,26 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes",
+        "Infantry"
+      ],
+      "excluded_keywords": [
+        "Damned"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "diabolic-regeneration-creations-of-bile-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -677,7 +1101,57 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "excluded_keywords": [
+        "Monster",
+        "Vehicle"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": "battlefield-edge",
+                  "range": {
+                    "inches": 6
+                  }
+                }
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "state": "engaged"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "encircling-surge-hurons-marauders-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -710,7 +1184,26 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Character",
+        "Heretic Astartes"
+      ],
+      "excluded_keywords": [
+        "Damned"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "endless-ire-veterans-of-the-long-war-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -739,7 +1232,23 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "eternal-hate-pactbound-zealots-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -768,7 +1277,16 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Character",
+        "Heretic Astartes"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "model",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "eye-of-the-gods-pactbound-zealots-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -797,7 +1315,59 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "or",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "all_of": [
+                      "DAEMON",
+                      "HERETIC ASTARTES",
+                      "VEHICLE"
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "all_of": [
+                      "VASHTORR THE ARKIFANE"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "engaged_with": "event-subject"
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "feeding-frenzy-soulforged-warpack-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -826,7 +1396,23 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "festering-miasma-pactbound-zealots-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -882,7 +1468,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "forge-fire-surge-cult-of-the-arkifane-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -999,7 +1592,37 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "set-up",
+              "filter": {
+                "from": "strategic-reserves"
+              },
+              "window": "turn"
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "horrific-incursion-nightmare-hunt-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -1028,7 +1651,42 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Damned"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "fight"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "infernal-sacrifice-chaos-cult-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -1056,7 +1714,28 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "excluded_keywords": [
+        "Khorne"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "any_of": [
+              "DAEMON",
+              "PSYKER"
+            ]
+          }
+        }
+      }
+    },
     "ability_id": "infernal-vigour-cabal-of-chaos-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -1114,7 +1793,23 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes",
+        "Infantry"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "malicious-surge-nightmare-hunt-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -1143,7 +1838,24 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes",
+        "Infantry"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "masters-are-watching-creations-of-bile-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -1172,7 +1884,41 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes",
+        "Infantry"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "state": "engaged"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "merciless-pursuit-dread-talons-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -1201,7 +1947,67 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "excluded_keywords": [
+        "Damned"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "INFANTRY",
+                  "MOUNTED"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": "event-subject",
+                  "range": {
+                    "inches": 8
+                  }
+                }
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "state": "engaged"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "millennia-of-experience-veterans-of-the-long-war-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -1231,7 +2037,24 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes",
+        "Infantry"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "monstrous-visages-creations-of-bile-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -1290,7 +2113,52 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "or",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "fight"
+                  },
+                  "window": "phase"
+                }
+              },
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "never-outgunned-renegade-warband-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -1319,7 +2187,34 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "eligible",
+            "parameters": {
+              "subject": "this-unit",
+              "to": "fight"
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "opportunistic-raiders-renegade-raiders-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -1348,7 +2243,56 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "targets-selected",
+              "subject": {
+                "owner": "any"
+              },
+              "object": "this-unit",
+              "filter": {
+                "kind": "attack"
+              },
+              "window": "phase"
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "fight"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "persistent-assailants-fellhammer-siege-host-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -1377,7 +2321,42 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "pick-them-off-deceptors-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -1406,7 +2385,42 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "pitiless-cannonade-fellhammer-siege-host-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -1435,7 +2449,43 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes",
+        "Infantry"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "pitiless-hunters-dread-talons-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -1463,7 +2513,16 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Fly",
+        "Heretic Astartes",
+        "Infantry"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "plunging-talons-murdertalon-raiders-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -1550,7 +2609,76 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "or",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "all_of": [
+                      "HERETIC ASTARTES",
+                      "VEHICLE"
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "all_of": [
+                      "VASHTORR THE ARKIFANE"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": "event-subject",
+                  "range": {
+                    "inches": 8
+                  }
+                }
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "state": "engaged"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "predatory-pursuit-soulforged-warpack-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -1580,7 +2708,58 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes",
+        "Infantry"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "operator": "or",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "fight"
+                      },
+                      "window": "phase"
+                    }
+                  },
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "shoot"
+                      },
+                      "window": "phase"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "prey-on-the-weak-nightmare-hunt-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -1610,7 +2789,58 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Chaos Undivided",
+        "Heretic Astartes"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "operator": "or",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "fight"
+                      },
+                      "window": "phase"
+                    }
+                  },
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "shoot"
+                      },
+                      "window": "phase"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "profane-zeal-pactbound-zealots-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -1638,7 +2868,16 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Fly",
+        "Heretic Astartes",
+        "Infantry"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "raking-pass-murdertalon-raiders-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -1667,7 +2906,39 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "move-ended",
+              "filter": {
+                "move_types": [
+                  "charge"
+                ]
+              },
+              "window": "turn"
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "reavers-flurry-hurons-marauders-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -1696,7 +2967,38 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "INFANTRY",
+                  "MOUNTED"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "reavers-haste-renegade-raiders-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -1725,7 +3027,44 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "excluded_keywords": [
+        "Monster",
+        "Vehicle"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "subject": "event-subject",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success"
+              },
+              "window": "event"
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "reavers-reaction-renegade-warband-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -1754,7 +3093,22 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Damned"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "reckless-haste-chaos-cult-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -1783,7 +3137,64 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "INFANTRY",
+                  "MOUNTED"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": "event-subject",
+                  "range": {
+                    "inches": 8
+                  }
+                }
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "state": "engaged"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "relentless-pursuit-deceptors-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -1812,7 +3223,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes",
+        "Infantry"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "relentless-terror-dread-talons-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -1841,7 +3260,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "relentless-terror-nightmare-hunt-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -1870,7 +3296,42 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": {
+                    "objective": {
+                      "controlled_by": "friendly"
+                    }
+                  },
+                  "range": "objective-control"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "renegade-claim-renegade-warband-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -1898,7 +3359,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords_any": [
+        "Havocs",
+        "Obliterators"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "ruinations-bounty-devotees-of-destruction-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -1928,7 +3397,64 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "disembarked",
+              "window": "turn"
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "fight"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "ruinous-raid-renegade-raiders-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -1986,7 +3512,42 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "fight"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "scour-and-seize-renegade-raiders-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -2015,7 +3576,22 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "scrambled-coordinates-deceptors-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -2044,7 +3620,36 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes",
+        "Jump Pack"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "state": "in-strategic-reserves"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "screaming-descent-dread-talons-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -2073,7 +3678,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "seize-the-prize-hurons-marauders-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -2189,7 +3801,22 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "skinshift-pactbound-zealots-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -2282,7 +3909,57 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "SOUL FORGE"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "operator": "or",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "fight"
+                      },
+                      "window": "phase"
+                    }
+                  },
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "shoot"
+                      },
+                      "window": "phase"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "soul-tally-offerings-cult-of-the-arkifane-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -2311,7 +3988,43 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes",
+        "Infantry"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "fight"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "specimens-for-the-spider-creations-of-bile-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -2340,7 +4053,26 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "excluded_keywords": [
+        "Damned"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "steadfast-determination-fellhammer-siege-host-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -2370,7 +4102,58 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes",
+        "Infantry"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "operator": "or",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "fight"
+                      },
+                      "window": "phase"
+                    }
+                  },
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "shoot"
+                      },
+                      "window": "phase"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "talons-sunk-deep-nightmare-hunt-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -2399,7 +4182,34 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "wounds",
+            "parameters": {
+              "subject": "this-unit",
+              "lost": true
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "to-the-favoured-the-spoils-hurons-marauders-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -2428,7 +4238,22 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "torpefying-refrain-pactbound-zealots-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -2533,7 +4358,23 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "undying-hatred-renegade-warband-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -2563,7 +4404,26 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "excluded_keywords": [
+        "Damned"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "unfailingly-obdurate-renegade-raiders-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -2638,7 +4498,70 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "VASHTORR THE ARKIFANE",
+                  "VEHICLE"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "operator": "or",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "move-ended",
+                      "filter": {
+                        "move_types": [
+                          "charge"
+                        ]
+                      },
+                      "window": "turn"
+                    }
+                  },
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "move"
+                      },
+                      "window": "phase"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "unstoppable-rampage-soulforged-warpack-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -2668,7 +4591,97 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "or",
+            "operands": [
+              {
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "filter": {
+                        "all_of": [
+                          "INFANTRY"
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "filter": {
+                        "none_of": [
+                          "DAMNED"
+                        ]
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "all_of": [
+                      "MOUNTED"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "operator": "or",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "fight"
+                      },
+                      "window": "phase"
+                    }
+                  },
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "shoot"
+                      },
+                      "window": "phase"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "vengeful-destruction-renegade-warband-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -2697,7 +4710,15 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Legionaries",
+        "Zarkan's Daemonkin"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "vindictive-strategy-zarkans-daemonkin-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -2721,7 +4742,39 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "MUTILATORS",
+                  "OBLITERATORS",
+                  "TERMINATOR"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "warp-flicker-warpstrike-champions-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -2750,7 +4803,54 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "MUTILATORS",
+                  "OBLITERATORS",
+                  "TERMINATOR"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": {
+                    "objective": {
+                      "controlled_by": "friendly"
+                    }
+                  },
+                  "range": "objective-control"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "warp-tainted-warpstrike-champions-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -2779,7 +4879,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Warp Talons"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "warp-twisted-terrors-murdertalon-raiders-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -2808,7 +4915,53 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "MOUNTED",
+                  "TRANSPORT"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "move"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "warpcharged-engines-renegade-raiders-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -2836,7 +4989,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Heretic Astartes",
+        "Psyker"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "wreathed-in-warpflame-cabal-of-chaos-chaos-space-marines",
     "game_version": {
       "edition": "11th",

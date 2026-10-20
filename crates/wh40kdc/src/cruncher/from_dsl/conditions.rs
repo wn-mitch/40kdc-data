@@ -183,6 +183,40 @@ pub(super) fn evaluate_condition_for_source(
             let faction = p.get("faction").and_then(Value::as_str)?;
             Some(ctx.army_faction.as_deref()? == faction)
         }
+        Some("model-count") => {
+            // "contains N or more models": min and max are inclusive. A keyword-restricted count
+            // needs per-keyword model counts the context does not carry.
+            if p.get("keyword").is_some() {
+                return None;
+            }
+            let subject = p.get("subject");
+            let side = if subject.and_then(Value::as_str) == Some("defender") {
+                TranslationPerspective::Target
+            } else if subject.and_then(Value::as_str) == Some("attacker") {
+                TranslationPerspective::Attacker
+            } else if is_buffed_unit(subject) {
+                perspective
+            } else {
+                return None;
+            };
+            let count = match side {
+                TranslationPerspective::Attacker => ctx.attacker_model_count,
+                TranslationPerspective::Target => ctx.target_model_count,
+            }? as u64;
+            if p.get("min")
+                .and_then(Value::as_u64)
+                .is_some_and(|min| count < min)
+            {
+                return Some(false);
+            }
+            if p.get("max")
+                .and_then(Value::as_u64)
+                .is_some_and(|max| count > max)
+            {
+                return Some(false);
+            }
+            Some(true)
+        }
         Some("battle-size") => {
             let size = p.get("size").and_then(Value::as_str)?;
             Some(ctx.battle_size.as_deref()? == size)

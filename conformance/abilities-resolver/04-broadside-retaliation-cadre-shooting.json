@@ -1,0 +1,33 @@
+{
+  "name": "Broadside Battlesuits (tau-empire) in Retaliation Cadre, shooting: Battlesuit stratagems are eligible",
+  "input": {
+    "unitId": "broadside-battlesuits",
+    "factionId": "tau-empire",
+    "detachmentId": "retaliation-cadre"
+  },
+  "phase": "shooting",
+  "expected": {
+    "army": [
+      "drones-sudden-dawn-cadre-tau-empire",
+      "drones-tau-empire",
+      "for-the-greater-good-sudden-dawn-cadre-tau-empire",
+      "for-the-greater-good-tau-empire"
+    ],
+    "detachment": [
+      "bonded-heroes-tau-empire"
+    ],
+    "detachment-stratagem": [
+      "fail-safe-detonator-retaliation-cadre-tau-empire",
+      "stimm-injectors-retaliation-cadre-tau-empire",
+      "the-arrokon-protocol-retaliation-cadre-tau-empire"
+    ],
+    "unit": [
+      "advanced-armour-tau-empire",
+      "gun-drone-tau-empire",
+      "marker-drone-tau-empire",
+      "missile-drone-tau-empire",
+      "shield-drone-tau-empire",
+      "weapon-support-system-tau-empire"
+    ]
+  }
+}

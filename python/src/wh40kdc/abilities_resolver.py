@@ -6,7 +6,8 @@ Resolution order — stable for snapshot tests:
 1. **army** — faction-scoped abilities whose ``ability_type`` is ``"faction"``.
 2. **detachment** — abilities authored against the detachment.
 3. **detachment-stratagem** — stratagems on the detachment, each yielding the
-   ability referenced by ``stratagem.ability_id`` (if any).
+   ability referenced by ``stratagem.ability_id`` (if any), when the combined
+   unit can be the stratagem's friendly target (its keywords).
 4. **unit** — abilities listed in ``unit.ability_ids``.
 5. **attached** — abilities of each attached member (pulled in full).
 6. **support** — abilities on supporting units that can reach another unit (an aura scope, or
@@ -100,12 +101,27 @@ def resolve_eligible_abilities(
             detachment_id, faction_id or ""
         ) or dataset.detachments.get_any(detachment_id)
         if detachment is not None:
+            # The combined unit's keywords: every member's, as one unit.
+            keywords: set[str] = set()
+            members = [unit] + [
+                resolve_unit(member_id, faction_id)
+                for member_id in input.get("attachedUnitIds") or []
+            ]
+            for member in members:
+                if member is None:
+                    continue
+                for keyword in (member.raw.get("keywords") or []) + (
+                    member.raw.get("faction_keywords") or []
+                ):
+                    keywords.add(keyword.lower())
             for strat_id in detachment.get("stratagem_ids") or []:
                 stratagem = dataset.stratagems.get(strat_id)
                 if stratagem is None:
                     continue
                 strat_phases = stratagem.get("phases")
                 if not strat_phases or phase not in strat_phases:
+                    continue
+                if not stratagem_can_target(stratagem, keywords):
                     continue
                 ability_id = stratagem.get("ability_id")
                 # Ability ids are unique: one record per stratagem, wherever its
@@ -216,4 +232,33 @@ def _is_aura_scope(range_: Any) -> bool:
         )
     return isinstance(range_, str) and (
         range_.startswith("aura-") or range_ in ("any-on-battlefield", "any-visible")
+    )
+
+
+def stratagem_can_target(stratagem: dict[str, Any], keywords: set[str]) -> bool:
+    """Whether a unit with ``keywords`` (lower-cased) can be a stratagem's friendly target.
+
+    A stratagem with no friendly target (none printed, or only enemy targets) does not
+    restrict its user here; with several friendly targets, matching any one is enough.
+    Mirrors TS ``stratagemCanTarget``.
+    """
+    raw = stratagem.get("target_restrictions")
+    if not raw:
+        return True
+    targets = raw if isinstance(raw, list) else [raw]
+    friendly = [target for target in targets if target.get("side") != "enemy"]
+    if not friendly:
+        return True
+
+    def lower(target: dict[str, Any], key: str) -> list[str]:
+        return [keyword.lower() for keyword in target.get(key) or []]
+
+    return any(
+        all(k in keywords for k in lower(target, "required_keywords"))
+        and (
+            not lower(target, "required_keywords_any")
+            or any(k in keywords for k in lower(target, "required_keywords_any"))
+        )
+        and not any(k in keywords for k in lower(target, "excluded_keywords"))
+        for target in friendly
     )

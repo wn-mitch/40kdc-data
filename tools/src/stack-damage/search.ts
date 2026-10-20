@@ -44,6 +44,7 @@ function contextForCell(factionId: string, target: ResolvedTarget, phase: Compar
     attachmentRoles: Object.fromEntries(spec.members.map((candidate) => [candidate.unit.id, candidate.role === "bodyguard" ? "bodyguard" : "leader"] as const)),
     targetKeywords,
     targetUnitId: target.unitRaw.id,
+    targetModelCount: target.modelCount,
     targetAttached: false,
   });
 }

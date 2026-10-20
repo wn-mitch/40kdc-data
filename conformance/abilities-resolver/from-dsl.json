@@ -1674,6 +1674,127 @@
       }
     },
     {
+      "_comment": "model-count: no target model count leaves both bands unknown",
+      "abilityId": "the-arrokon-protocol-retaliation-cadre-tau-empire",
+      "source": {
+        "kind": "ability",
+        "abilityId": "the-arrokon-protocol-retaliation-cadre-tau-empire",
+        "abilityKind": "detachment-stratagem"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"model-count\" against current context"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "model-count: 5 models is below both bands (min inclusive)",
+      "abilityId": "the-arrokon-protocol-retaliation-cadre-tau-empire",
+      "source": {
+        "kind": "ability",
+        "abilityId": "the-arrokon-protocol-retaliation-cadre-tau-empire",
+        "abilityKind": "detachment-stratagem"
+      },
+      "context": {
+        "phase": "shooting",
+        "targetModelCount": 5
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "model-count: 6 models meets the first band exactly",
+      "abilityId": "the-arrokon-protocol-retaliation-cadre-tau-empire",
+      "source": {
+        "kind": "ability",
+        "abilityId": "the-arrokon-protocol-retaliation-cadre-tau-empire",
+        "abilityKind": "detachment-stratagem"
+      },
+      "context": {
+        "phase": "shooting",
+        "targetModelCount": 6
+      },
+      "expected": {
+        "applied": [
+          {
+            "type": "extra-keyword",
+            "keywordRef": {
+              "keyword_id": "sustained-hits",
+              "parameters": {
+                "value": 1
+              }
+            }
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "model-count: 10 models is the top of the first band",
+      "abilityId": "the-arrokon-protocol-retaliation-cadre-tau-empire",
+      "source": {
+        "kind": "ability",
+        "abilityId": "the-arrokon-protocol-retaliation-cadre-tau-empire",
+        "abilityKind": "detachment-stratagem"
+      },
+      "context": {
+        "phase": "shooting",
+        "targetModelCount": 10
+      },
+      "expected": {
+        "applied": [
+          {
+            "type": "extra-keyword",
+            "keywordRef": {
+              "keyword_id": "sustained-hits",
+              "parameters": {
+                "value": 1
+              }
+            }
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "model-count: 11 models meets the second band instead",
+      "abilityId": "the-arrokon-protocol-retaliation-cadre-tau-empire",
+      "source": {
+        "kind": "ability",
+        "abilityId": "the-arrokon-protocol-retaliation-cadre-tau-empire",
+        "abilityKind": "detachment-stratagem"
+      },
+      "context": {
+        "phase": "shooting",
+        "targetModelCount": 11
+      },
+      "expected": {
+        "applied": [
+          {
+            "type": "extra-keyword",
+            "keywordRef": {
+              "keyword_id": "sustained-hits",
+              "parameters": {
+                "value": 2
+              }
+            }
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
       "caseId": "canonical/recipient-snapshot/attested-strength-after-detachment",
       "abilityId": "snapshot-example",
       "source": {

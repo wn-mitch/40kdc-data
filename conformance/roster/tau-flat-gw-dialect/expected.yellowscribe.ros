@@ -17,7 +17,7 @@
             </profile>
             <profile name="Jammer Array" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">If an enemy unit was set up from Strategic Reserves, for the rest of the battle, enemy units cannot be set up on the battlefield from Strategic Reserves within 12" of this model.</characteristic>
+                <characteristic name="Description">Enemy units cannot be set up on the battlefield from Strategic Reserves within 12" of this model.</characteristic>
               </characteristics>
             </profile>
             <profile name="Leader" typeName="Abilities">
@@ -27,7 +27,7 @@
             </profile>
             <profile name="Structural Analyser" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">During the Shooting phase, while this model is leading a unit, the unit gets +1 to Wound rolls.</characteristic>
+                <characteristic name="Description">While this model is leading a unit, while making ranged attacks, the unit gets +1 to Wound rolls.</characteristic>
               </characteristics>
             </profile>
             <profile name="Infiltrators" typeName="Abilities">
@@ -105,7 +105,7 @@
             </profile>
             <profile name="Pulse Accelerator Drone" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Add 6 to the Range characteristic of Pulse Carbine weapons equipped by models in this unit.</characteristic>
+                <characteristic name="Description">Add 6 to the Range characteristic of ranged pulse carbine weapons equipped by models in this unit.</characteristic>
               </characteristics>
             </profile>
             <profile name="Recon Drone" typeName="Abilities">
@@ -116,7 +116,9 @@ The unit gains the Infiltrators ability.</characteristic>
             </profile>
             <profile name="Target Uploaded" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit's weapons gain [IGNORES COVER].</characteristic>
+                <characteristic name="Description">Against SPOTTED targets:
+  -&gt; Improve the unit's Ballistic Skill characteristic by 1.
+  -&gt; The unit's weapons gain [IGNORES COVER].</characteristic>
               </characteristics>
             </profile>
             <profile name="Scouts" typeName="Abilities">
@@ -132,7 +134,7 @@ The unit gains the Infiltrators ability.</characteristic>
             <profile name="Marker Drone" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">The unit gains the MARKERLIGHT keyword.
-The unit is eligible to act as an Observer in a turn in which it Advanced.</characteristic>
+The unit is eligible to act as an Observer even if it Advanced this turn.</characteristic>
               </characteristics>
             </profile>
             <profile name="Shield Drone" typeName="Abilities">
@@ -343,7 +345,7 @@ The unit is eligible to act as an Observer in a turn in which it Advanced.</char
             </profile>
             <profile name="Starscythe" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">During the Shooting phase, improve the unit's Armour Penetration characteristic by 1.</characteristic>
+                <characteristic name="Description">While making ranged attacks, while the target does not have "MONSTER" or "VEHICLE", improve the unit's Armour Penetration characteristic by 1.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
@@ -359,7 +361,7 @@ The unit is eligible to act as an Observer in a turn in which it Advanced.</char
             <profile name="Marker Drone" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">The unit gains the MARKERLIGHT keyword.
-The unit is eligible to act as an Observer in a turn in which it Advanced.</characteristic>
+The unit is eligible to act as an Observer even if it Advanced this turn.</characteristic>
               </characteristics>
             </profile>
             <profile name="Shield Drone" typeName="Abilities">

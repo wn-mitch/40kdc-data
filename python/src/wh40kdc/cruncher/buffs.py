@@ -25,7 +25,8 @@ BuffSource = dict[str, Any]
 ResolvedModifiers = dict[str, Any]
 #: The engine context (TS ``EngineContext``). Beyond phase/timing/attacker state it may carry
 #: ``armyFaction`` (Army Faction id), ``battleSize`` (``incursion`` / ``strike-force`` /
-#: ``onslaught``) and ``attackerGuided`` (the attacker is Guided); each drives its condition
+#: ``onslaught``), ``attackerGuided`` (the attacker is Guided) and ``attackerModelCount`` /
+#: ``targetModelCount`` (models in each unit, for ``model-count``); each drives its condition
 #: and leaves it "unknown" when absent. ``weaponNames`` (lower-cased names of the attacking
 #: weapon and its profile) drives ``applicableWhen.weaponName``; absent leaves weapon-name gates
 #: permissive. ``weaponKeywords`` (catalog keyword ids printed on the attacking profile) drives

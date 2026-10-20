@@ -10,7 +10,8 @@
  * 2. **detachment** — abilities authored against the detachment
  *    (`ability_type` is `"detachment"`, `detachment_id` matches).
  * 3. **detachment-stratagem** — stratagems on the detachment, each yielding
- *    the ability referenced by `stratagem.ability_id` (if any).
+ *    the ability referenced by `stratagem.ability_id` (if any), when the
+ *    combined unit can be the stratagem's friendly target (its keywords).
  * 4. **unit** — abilities listed in `unit.ability_ids`.
  * 5. **attached** — abilities of each attached member. A leader + bodyguard
  *    (and, in 11th, support) form one combined unit, so every member's
@@ -111,10 +112,16 @@ export function resolveEligibleAbilities(
       dataset.detachments.getInFaction(input.detachmentId, factionId) ??
       dataset.detachments.getAny(input.detachmentId);
     if (detachment) {
+      // The combined unit's keywords: every member's, as one unit.
+      const keywords = new Set<string>();
+      for (const member of [unit, ...(input.attachedUnitIds ?? []).map((id) => resolveUnit(id, factionId))]) {
+        for (const keyword of [...(member?.keywords ?? []), ...(member?.factionKeywords ?? [])]) keywords.add(keyword.toLowerCase());
+      }
       for (const stratId of detachment.stratagem_ids ?? []) {
         const stratagem = dataset.stratagems.get(stratId);
         if (!stratagem) continue;
         if (!stratagemPhaseMatches(stratagem, phase)) continue;
+        if (!stratagemCanTarget(stratagem, keywords)) continue;
         const ability =
           stratagem.ability_id !== null && stratagem.ability_id !== undefined
             ? // Ability ids are unique: one record per stratagem, wherever its detachment is replicated.
@@ -201,6 +208,24 @@ function phaseMatches(ability: AbilityView, phase: Phase): boolean {
 function stratagemPhaseMatches(stratagem: Stratagem, phase: Phase): boolean {
   if (!stratagem.phases || stratagem.phases.length === 0) return false;
   return (stratagem.phases as Phase[]).includes(phase);
+}
+
+type TargetRestriction = { side?: string; required_keywords?: string[]; required_keywords_any?: string[]; excluded_keywords?: string[] };
+
+/**
+ * Whether a unit with `keywords` (lower-cased) can be a stratagem's friendly target. A stratagem
+ * with no friendly target (none printed, or only enemy targets) does not restrict its user here;
+ * with several friendly targets, matching any one is enough.
+ */
+export function stratagemCanTarget(stratagem: Stratagem, keywords: ReadonlySet<string>): boolean {
+  const raw = stratagem.target_restrictions as TargetRestriction | TargetRestriction[] | null | undefined;
+  if (!raw) return true;
+  const friendly = (Array.isArray(raw) ? raw : [raw]).filter((target) => target.side !== "enemy");
+  if (friendly.length === 0) return true;
+  const has = (keyword: string) => keywords.has(keyword.toLowerCase());
+  return friendly.some((target) => (target.required_keywords ?? []).every(has)
+    && ((target.required_keywords_any ?? []).length === 0 || target.required_keywords_any!.some(has))
+    && !(target.excluded_keywords ?? []).some(has));
 }
 
 function intersect(phases: Phase[], phase: Phase): Phase[] {

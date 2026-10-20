@@ -1,5 +1,7 @@
 package wh40kdc
 
+import "strings"
+
 // Walks the dataset for every ability that could apply to a chosen unit in a
 // chosen phase. Go mirror of python .../abilities_resolver.py. Entries are
 // map[string]any{"ability": *AbilityView, "source": map, "phases": []string}.
@@ -75,6 +77,19 @@ func resolveEligibleAbilities(ds *Dataset, input map[string]any, phase string) [
 			detAny, ok = ds.Detachments.GetAny(detachmentID)
 		}
 		if ok {
+			// The combined unit's keywords: every member's, as one unit.
+			keywords := map[string]bool{}
+			members := []*UnitView{unit}
+			for _, memberID := range getStrList(input, "attachedUnitIds") {
+				if member, ok := ds.resolveUnitScoped(memberID, factionID); ok {
+					members = append(members, member)
+				}
+			}
+			for _, member := range members {
+				for _, keyword := range append(getStrList(member.Raw, "keywords"), getStrList(member.Raw, "faction_keywords")...) {
+					keywords[strings.ToLower(keyword)] = true
+				}
+			}
 			det := detAny.(map[string]any)
 			for _, stratID := range getStrList(det, "stratagem_ids") {
 				stratAny, ok := ds.Stratagems.Get(stratID)
@@ -84,6 +99,9 @@ func resolveEligibleAbilities(ds *Dataset, input map[string]any, phase string) [
 				stratagem := stratAny.(map[string]any)
 				stratPhases := getStrList(stratagem, "phases")
 				if len(stratPhases) == 0 || !contains(stratPhases, phase) {
+					continue
+				}
+				if !stratagemCanTarget(stratagem, keywords) {
 					continue
 				}
 				abilityID, ok := stratagem["ability_id"].(string)
@@ -191,4 +209,50 @@ func isAuraScope(rng any) bool {
 		return false
 	}
 	return len(s) >= 5 && s[:5] == "aura-" || s == "any-on-battlefield" || s == "any-visible"
+}
+
+// stratagemCanTarget reports whether a unit with keywords (lower-cased) can be a stratagem's
+// friendly target. A stratagem with no friendly target (none printed, or only enemy targets) does
+// not restrict its user here; with several friendly targets, matching any one is enough. Mirrors
+// TS stratagemCanTarget.
+func stratagemCanTarget(stratagem map[string]any, keywords map[string]bool) bool {
+	var targets []map[string]any
+	switch raw := stratagem["target_restrictions"].(type) {
+	case map[string]any:
+		targets = []map[string]any{raw}
+	case []any:
+		for _, item := range raw {
+			if target, ok := item.(map[string]any); ok {
+				targets = append(targets, target)
+			}
+		}
+	default:
+		return true
+	}
+	has := func(keyword string) bool { return keywords[strings.ToLower(keyword)] }
+	friendly := 0
+	for _, target := range targets {
+		if getStr(target, "side") == "enemy" {
+			continue
+		}
+		friendly++
+		ok := true
+		for _, keyword := range getStrList(target, "required_keywords") {
+			ok = ok && has(keyword)
+		}
+		if anyOf := getStrList(target, "required_keywords_any"); len(anyOf) > 0 {
+			matched := false
+			for _, keyword := range anyOf {
+				matched = matched || has(keyword)
+			}
+			ok = ok && matched
+		}
+		for _, keyword := range getStrList(target, "excluded_keywords") {
+			ok = ok && !has(keyword)
+		}
+		if ok {
+			return true
+		}
+	}
+	return friendly == 0
 }

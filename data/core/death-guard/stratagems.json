@@ -10,7 +10,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Character",
+        "Death Guard"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit"
+    },
     "ability_id": "aggravus-spasms-paragons-of-putrescence-death-guard",
     "game_version": {
       "edition": "11th",
@@ -68,7 +76,22 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Plague Legions"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "avatars-of-decay-tallyband-summoners-death-guard",
     "game_version": {
       "edition": "11th",
@@ -98,7 +121,64 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Death Guard"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-unit",
+              "role": "attached"
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "operator": "or",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "fight"
+                      },
+                      "window": "phase"
+                    }
+                  },
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "shoot"
+                      },
+                      "window": "phase"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "blessings-of-filth-champions-of-contagion-death-guard",
     "game_version": {
       "edition": "11th",
@@ -188,7 +268,22 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Terminator"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "blooming-pestilence-death-lords-chosen-death-guard",
     "game_version": {
       "edition": "11th",
@@ -217,7 +312,42 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Death Guard"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "fight"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "clutching-corruption-tallyband-summoners-death-guard",
     "game_version": {
       "edition": "11th",
@@ -246,7 +376,43 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Death Guard",
+        "Infantry"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "creeping-blight-virulent-vectorium-death-guard",
     "game_version": {
       "edition": "11th",
@@ -305,7 +471,23 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Death Guard"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "disgustingly-resilient-virulent-vectorium-death-guard",
     "game_version": {
       "edition": "11th",
@@ -334,7 +516,42 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Death Guard"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "drawn-to-despair-mortarions-hammer-death-guard",
     "game_version": {
       "edition": "11th",
@@ -363,7 +580,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Plague Marines"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "droning-horror-flyblown-host-death-guard",
     "game_version": {
       "edition": "11th",
@@ -392,7 +616,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Plague Marines"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "eye-of-the-swarm-flyblown-host-death-guard",
     "game_version": {
       "edition": "11th",
@@ -451,7 +682,60 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Monster",
+        "Plague Legions"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "operator": "or",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "move-ended",
+                      "filter": {
+                        "move_types": [
+                          "charge"
+                        ]
+                      },
+                      "window": "turn"
+                    }
+                  },
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "move"
+                      },
+                      "window": "phase"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "fleshy-avalanche-tallyband-summoners-death-guard",
     "game_version": {
       "edition": "11th",
@@ -480,7 +764,43 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Death Guard",
+        "Vehicle"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "font-of-filth-mortarions-hammer-death-guard",
     "game_version": {
       "edition": "11th",
@@ -509,7 +829,11 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "fresh-vectors-contagion-engines-death-guard",
     "game_version": {
       "edition": "11th",
@@ -538,7 +862,22 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Poxwalkers"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "gnawing-hunger-shamblerot-vectorium-death-guard",
     "game_version": {
       "edition": "11th",
@@ -567,7 +906,42 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Terminator"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "fight"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "grim-reapers-death-lords-chosen-death-guard",
     "game_version": {
       "edition": "11th",
@@ -626,7 +1000,35 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Death Guard"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-unit",
+              "role": "attached"
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "grotesque-fortitude-champions-of-contagion-death-guard",
     "game_version": {
       "edition": "11th",
@@ -655,7 +1057,47 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Poxwalkers"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "state": "in-strategic-reserves"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "attachment",
+                "parameters": {
+                  "subject": "this-unit",
+                  "role": "attached"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "hidden-amongst-the-dead-shamblerot-vectorium-death-guard",
     "game_version": {
       "edition": "11th",
@@ -683,7 +1125,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Deathshroud Terminators",
+        "Maggot Lords"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "inexorable-executioners-maggot-lords-death-guard",
     "game_version": {
       "edition": "11th",
@@ -738,7 +1188,64 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Death Guard"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-unit",
+              "role": "attached"
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "operator": "or",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "fight"
+                      },
+                      "window": "phase"
+                    }
+                  },
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "shoot"
+                      },
+                      "window": "phase"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "malignance-magnified-champions-of-contagion-death-guard",
     "game_version": {
       "edition": "11th",
@@ -825,7 +1332,42 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Terminator"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "mortarions-teachings-death-lords-chosen-death-guard",
     "game_version": {
       "edition": "11th",
@@ -854,7 +1396,22 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Plague Marines"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "state": "engaged"
+          }
+        }
+      }
+    },
     "ability_id": "nauseating-paroxysms-flyblown-host-death-guard",
     "game_version": {
       "edition": "11th",
@@ -883,7 +1440,23 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Character",
+        "Death Guard"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "overwhelming-generosity-virulent-vectorium-death-guard",
     "game_version": {
       "edition": "11th",
@@ -916,7 +1489,22 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Nurglings"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "persistent-pests-tallyband-summoners-death-guard",
     "game_version": {
       "edition": "11th",
@@ -1007,7 +1595,35 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Death Guard"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "model-count",
+            "parameters": {
+              "subject": "this-unit",
+              "keyword": "CHARACTER",
+              "min": 2
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "rabid-infusion-champions-of-contagion-death-guard",
     "game_version": {
       "edition": "11th",
@@ -1037,7 +1653,60 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Death Guard",
+        "Vehicle"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "operator": "or",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "move-ended",
+                      "filter": {
+                        "move_types": [
+                          "charge"
+                        ]
+                      },
+                      "window": "turn"
+                    }
+                  },
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "move"
+                      },
+                      "window": "phase"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "relentless-grind-mortarions-hammer-death-guard",
     "game_version": {
       "edition": "11th",
@@ -1095,7 +1764,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Death Guard"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "shock-and-horror-shamblerot-vectorium-death-guard",
     "game_version": {
       "edition": "11th",
@@ -1123,7 +1799,15 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Infantry",
+        "Maggot Lords"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit"
+    },
     "ability_id": "sickening-horror-maggot-lords-death-guard",
     "game_version": {
       "edition": "11th",
@@ -1205,7 +1889,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Character",
+        "Death Guard"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "simultaneous-contamination-paragons-of-putrescence-death-guard",
     "game_version": {
       "edition": "11th",
@@ -1234,7 +1926,22 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Poxwalkers"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "smeared-with-filth-shamblerot-vectorium-death-guard",
     "game_version": {
       "edition": "11th",
@@ -1291,7 +1998,25 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Death Guard",
+        "Vehicle"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "not_states": [
+              "engaged"
+            ]
+          }
+        }
+      }
+    },
     "ability_id": "stinking-mire-mortarions-hammer-death-guard",
     "game_version": {
       "edition": "11th",
@@ -1319,7 +2044,15 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Character",
+        "Death Guard"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit"
+    },
     "ability_id": "territorial-infection-paragons-of-putrescence-death-guard",
     "game_version": {
       "edition": "11th",
@@ -1348,7 +2081,23 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Terminator"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "undying-spite-death-lords-chosen-death-guard",
     "game_version": {
       "edition": "11th",
@@ -1376,7 +2125,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Maggot Lords",
+        "Plague Marines"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "vomitous-salvoes-maggot-lords-death-guard",
     "game_version": {
       "edition": "11th",

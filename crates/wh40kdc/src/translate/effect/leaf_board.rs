@@ -120,21 +120,24 @@ fn return_models(target: Option<&Value>, m: &P, subj: &str, ctx: &Ctx) -> String
     }
     let target_filter = obj(target);
     if sv(target_filter, "level") == Some("model") {
-        let mut affected_filter = target_filter.clone();
-        affected_filter.remove("member_of");
-        let affected_selector = serde_json::json!({"filter": affected_filter});
-        let model = super::select::selector_subject(obj(Some(&affected_selector)), false);
+        // The plural recipient phrase, singularized at its first "models": a trailing
+        // "(excluding X models)" stays plural.
+        let mut recipients = target_filter.clone();
+        recipients.remove("member_of");
+        let recipients = Value::Object(recipients);
+        let models = effect_subject(Some(&recipients), ctx);
+        let models = models.strip_prefix("all ").unwrap_or(&models).to_string();
+        let kind = format!("destroyed {}", singular_first_models(&models));
+        let what = if sv(m, "count") == Some("all") {
+            format!("all destroyed {models}")
+        } else {
+            amount_of(m.get("count"), &kind, &format!("destroyed {models}"))
+        };
         let destination = target_filter
             .get("member_of")
-            .map(|member| effect_subject(Some(member), ctx))
-            .unwrap_or_else(|| subj.to_string());
-        let kind = format!("destroyed {model}");
-        let what = if sv(m, "count") == Some("all") {
-            format!("all {model}s")
-        } else {
-            amount_of(m.get("count"), &kind, &format!("{kind}s"))
-        };
-        return format!("return {what} to {destination}{place}, each with {w} remaining{detach}");
+            .map(|member| format!(" to {}", effect_subject(Some(member), ctx)))
+            .unwrap_or_default();
+        return format!("return {what}{destination}{place}, each with {w} remaining{detach}");
     }
     let kind = "destroyed model";
     let what = if sv(m, "count") == Some("all") {
@@ -143,6 +146,23 @@ fn return_models(target: Option<&Value>, m: &P, subj: &str, ctx: &Ctx) -> String
         amount_of(m.get("count"), kind, &format!("{kind}s"))
     };
     format!("return {what} to {subj}{place}, each with {w} remaining{detach}")
+}
+
+/// `phrase` with its first whole word "models" made "model" (TS `replace(/\bmodels\b/, "model")`).
+fn singular_first_models(phrase: &str) -> String {
+    let word = |c: char| c.is_ascii_alphanumeric() || c == '_';
+    let mut start = 0;
+    while let Some(found) = phrase[start..].find("models") {
+        let at = start + found;
+        let end = at + "models".len();
+        let before = phrase[..at].chars().next_back().is_none_or(|c| !word(c));
+        let after = phrase[end..].chars().next().is_none_or(|c| !word(c));
+        if before && after {
+            return format!("{}model{}", &phrase[..at], &phrase[end..]);
+        }
+        start = end;
+    }
+    phrase.to_string()
 }
 
 fn destroy_models(target: Option<&Value>, m: &P, subj: &str) -> String {

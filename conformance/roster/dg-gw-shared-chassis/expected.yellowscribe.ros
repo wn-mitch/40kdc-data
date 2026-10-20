@@ -80,7 +80,8 @@
             </profile>
             <profile name="Fire Support" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">During the Shooting phase, until the end of the phase, you can re-roll a failed Wound roll.</characteristic>
+                <characteristic name="Description">After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of the phase:
+  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Fire Support Target). Until the end of the phase, each time a friendly unit makes an attack against it, if the attacking unit disembarked from this Transport this turn, you can re-roll the Wound roll for attacks made by all friendly models.</characteristic>
               </characteristics>
             </profile>
             <profile name="Firing Deck" typeName="Abilities">

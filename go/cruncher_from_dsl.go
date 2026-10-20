@@ -2431,6 +2431,35 @@ func evaluateCondition(condition, ctx map[string]any, rest ...any) any {
 			return nil
 		}
 		return ctx["armyFaction"] == faction
+	case "model-count":
+		// "contains N or more models": min and max are inclusive. A keyword-restricted count needs
+		// per-keyword model counts the context does not carry.
+		if params["keyword"] != nil {
+			return nil
+		}
+		side := ""
+		switch params["subject"] {
+		case "defender":
+			side = "target"
+		case "attacker":
+			side = "attacker"
+		default:
+			if isBuffedUnit(params["subject"]) {
+				side = perspective
+			}
+		}
+		key := map[string]string{"attacker": "attackerModelCount", "target": "targetModelCount"}[side]
+		count, ok := contextNumber(ctx[key])
+		if key == "" || !ok {
+			return nil
+		}
+		if minimum, ok := contextNumber(params["min"]); ok && count < minimum {
+			return false
+		}
+		if maximum, ok := contextNumber(params["max"]); ok && count > maximum {
+			return false
+		}
+		return true
 	case "battle-size":
 		size, ok := params["size"].(string)
 		if !ok || ctx["battleSize"] == nil {
@@ -2603,4 +2632,17 @@ func hasUnresolvedTriggerBinding(raw any) bool {
 	}
 	filter, isFilter := asMap(trigger["filter"])
 	return (isFilter && filter != nil && filter["by"] != nil) || trigger["source_ability"] != nil
+}
+
+// contextNumber reads a JSON number (float64) or a Go-built integer from a context or parameter.
+func contextNumber(value any) (float64, bool) {
+	switch number := value.(type) {
+	case float64:
+		return number, true
+	case int:
+		return float64(number), true
+	case int64:
+		return float64(number), true
+	}
+	return 0, false
 }

@@ -199,11 +199,12 @@ describe("Semantic authoring leaf compiler", () => {
 
   it("reproduces authored leader auras exactly, condition included", () => {
     const edict = authored("adeptus-mechanicus", "control-edict-adeptus-mechanicus");
-    const result = compiled([lead(), attack(), leaf("EFFECT", "reroll", { roll: "hit", subset: "failed" })]);
+    // The published record is the reviewed compile of "re-roll the Hit roll" (any result).
+    const result = compiled([lead(), attack(), leaf("EFFECT", "reroll", { roll: "hit", subset: "all" })]);
     expect(result.mechanics.effect).toEqual(edict.effect);
     expect(result.mechanics.scope).toEqual(edict.scope);
     expect(result.mechanics.behavior).toBe(edict.behavior);
-    expect(rendered(edict, [lead(), attack(), leaf("EFFECT", "reroll", { roll: "hit", subset: "failed" })])).toMatch(/attached|leading/iu);
+    expect(rendered(edict, [lead(), attack(), leaf("EFFECT", "reroll", { roll: "hit", subset: "all" })])).toMatch(/attached|leading/iu);
 
     const two = compiled([lead(), leaf("EFFECT", "roll-modifier", { roll: "hit", operation: "add", value: 1 }),
       leaf("EFFECT", "weapon-ability-grant", { subject: "this-unit", keyword: "Sustained Hits 1", weapon_type: "all" }, 2)]);

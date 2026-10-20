@@ -233,7 +233,23 @@ impl Dataset {
                     c.push_phased(ability, source, None);
                 }
             }
-            // 3. Detachment stratagems, each yielding the ability it references.
+            // 3. Detachment stratagems, each yielding the ability it references, when the combined
+            // unit can be the stratagem's friendly target.
+            let mut keywords: HashSet<String> = HashSet::new();
+            let members = std::iter::once(Some(unit)).chain(
+                input
+                    .attached_unit_ids
+                    .iter()
+                    .map(|id| self.resolve_unit(id, Some(&faction_id))),
+            );
+            for member in members.flatten() {
+                for list in [&member.keywords, &member.faction_keywords]
+                    .into_iter()
+                    .flatten()
+                {
+                    keywords.extend(list.0.iter().map(|k| k.to_lowercase()));
+                }
+            }
             let detachment = self
                 .detachments
                 .get_in_faction(detachment_id, &faction_id)
@@ -246,6 +262,9 @@ impl Dataset {
                     continue;
                 };
                 if !stratagem.phases.contains(&phase) {
+                    continue;
+                }
+                if !stratagem_can_target(stratagem, &keywords) {
                     continue;
                 }
                 // Ability ids are unique: one record per stratagem, wherever its detachment is
@@ -554,3 +573,51 @@ fn aura_inches_for_round(effect: &Value, battle_round: Option<u32>) -> Option<f6
 #[cfg(test)]
 #[path = "abilities_tests.rs"]
 mod tests;
+
+/// Whether a unit with `keywords` (lower-cased) can be a stratagem's friendly target. A stratagem
+/// with no friendly target (none printed, or only enemy targets) does not restrict its user here;
+/// with several friendly targets, matching any one is enough. Mirrors TS `stratagemCanTarget`.
+pub fn stratagem_can_target(stratagem: &crate::Stratagem, keywords: &HashSet<String>) -> bool {
+    let Some(raw) = stratagem
+        .target_restrictions
+        .as_ref()
+        .and_then(|t| serde_json::to_value(t).ok())
+    else {
+        return true;
+    };
+    let targets: Vec<&Value> = match &raw {
+        Value::Array(items) => items.iter().collect(),
+        Value::Null => return true,
+        other => vec![other],
+    };
+    let list = |target: &Value, key: &str| -> Vec<String> {
+        target
+            .get(key)
+            .and_then(Value::as_array)
+            .map(|items| {
+                items
+                    .iter()
+                    .filter_map(Value::as_str)
+                    .map(str::to_lowercase)
+                    .collect()
+            })
+            .unwrap_or_default()
+    };
+    let friendly: Vec<&Value> = targets
+        .into_iter()
+        .filter(|target| target.get("side").and_then(Value::as_str) != Some("enemy"))
+        .collect();
+    if friendly.is_empty() {
+        return true;
+    }
+    friendly.iter().any(|target| {
+        let any = list(target, "required_keywords_any");
+        list(target, "required_keywords")
+            .iter()
+            .all(|k| keywords.contains(k))
+            && (any.is_empty() || any.iter().any(|k| keywords.contains(k)))
+            && !list(target, "excluded_keywords")
+                .iter()
+                .any(|k| keywords.contains(k))
+    })
+}

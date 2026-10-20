@@ -194,6 +194,10 @@ export type EngineContext = {
    * Drives the `guided` condition; undefined leaves it "unknown".
    */
   attackerGuided?: boolean;
+  /** Models in the attacking unit. Drives `model-count` on the attacker; undefined leaves it "unknown". */
+  attackerModelCount?: number;
+  /** Models in the target unit. Drives `model-count` on the defender; undefined leaves it "unknown". */
+  targetModelCount?: number;
   /**
    * Lower-cased names of the attacking weapon and its profile. Drives
    * `applicableWhen.weaponName`; missing names cannot satisfy a weapon-name gate.
