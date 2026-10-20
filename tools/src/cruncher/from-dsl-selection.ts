@@ -176,9 +176,11 @@ export const OTHER_UNIT = "other-unit";
 /**
  * Bind `event-subject` effects when the trigger says who acts. `this-unit` names the ability's
  * own unit. A friendly unit filter the buffed unit matches names the buffed unit; one it fails
- * names another unit. The binding is left in place when the subject is absent, an enemy, differs
- * across alternative triggers, or cannot be checked, so the translator reports it. A nested
- * ability part with its own trigger binds its own subject.
+ * names another unit. Seen from the target, an enemy unit filter the attacker matches names the
+ * attacker (the enemy whose action fired the trigger is the one attacking); one it fails names
+ * another unit. The binding is left in place when the subject is absent, an enemy seen from the
+ * attacker, differs across alternative triggers, or cannot be checked, so the translator reports
+ * it. A nested ability part with its own trigger binds its own subject.
  */
 export function bindEventSubject(
   trigger: unknown,
@@ -191,6 +193,11 @@ export function bindEventSubject(
   const subject = triggers[0]!.subject;
   if (triggers.some((item) => JSON.stringify(item.subject) !== JSON.stringify(subject))) return effect;
   if (subject === "this-unit") return rebindEventSubject(effect, "this-unit");
+  if (isObject(subject) && subject.owner === "enemy" && perspective === "target") {
+    const attacker = matchesUnitFilter(subject, context, "attacker", "enemy");
+    if (attacker === "unknown") return effect;
+    return rebindEventSubject(effect, attacker ? "attacker" : OTHER_UNIT);
+  }
   if (!isObject(subject) || subject.owner !== "friendly") return effect;
   const verdict = matchesUnitFilter(subject, context, perspective);
   if (verdict === "unknown") return effect;
@@ -199,16 +206,20 @@ export function bindEventSubject(
 }
 
 /**
- * The binding {@link bindEventSubject} makes for a buffed unit that meets the trigger's subject,
- * for static checks that have no unit to test: an unbound subject is left in place.
+ * The binding {@link bindEventSubject} makes for a unit that meets the trigger's subject, for static
+ * checks that have no unit to test, with the perspective to judge it from: an enemy subject is the
+ * attacker seen from the target. An unbound subject is left in place.
  */
-export function assumeEventSubjectMatches(trigger: unknown, effect: unknown): unknown {
+export function assumeEventSubjectMatches(trigger: unknown, effect: unknown): { effect: unknown; perspective: "attacker" | "target" } {
   const triggers = (Array.isArray(trigger) ? trigger : [trigger]).filter(isObject);
-  if (triggers.length === 0) return effect;
+  const unbound = { effect, perspective: "attacker" as const };
+  if (triggers.length === 0) return unbound;
   const subject = triggers[0]!.subject;
-  if (triggers.some((item) => JSON.stringify(item.subject) !== JSON.stringify(subject))) return effect;
-  if (subject === "this-unit") return rebindEventSubject(effect, "this-unit");
-  return isObject(subject) && subject.owner === "friendly" ? rebindEventSubject(effect, SELECTED_UNIT) : effect;
+  if (triggers.some((item) => JSON.stringify(item.subject) !== JSON.stringify(subject))) return unbound;
+  if (subject === "this-unit") return { effect: rebindEventSubject(effect, "this-unit"), perspective: "attacker" };
+  if (!isObject(subject)) return unbound;
+  if (subject.owner === "enemy") return { effect: rebindEventSubject(effect, "attacker"), perspective: "target" };
+  return subject.owner === "friendly" ? { effect: rebindEventSubject(effect, SELECTED_UNIT), perspective: "attacker" } : unbound;
 }
 
 /** Returns `node` itself when it holds no `event-subject` target to rebind. */

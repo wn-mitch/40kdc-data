@@ -1393,6 +1393,13 @@ def _translate_conditional(
     effect = node.get("effect")
     if not _is_object(condition):
         return
+    if node.get("_activation_source") is not None and is_post_own_attack_moment(
+        node.get("_activation_trigger")
+    ):
+        out["unsupported"].append(
+            {"reason": POST_ATTACK_MOMENT, "effectFragment": node["_activation_source"]}
+        )
+        return
     evaluated = condition
     if node.get("_activation_source") is not None:
         evaluated = _elide_historical_clocks(condition, opts.get("duration"))
@@ -1403,6 +1410,10 @@ def _translate_conditional(
         None if opts.get("grantedHolder") else source,
     )
     if verdict == "unknown":
+        # An operator condition (`not`, `and`, `or`) is named by its operator.
+        condition_name = condition.get("type")
+        if condition_name is None:
+            condition_name = condition.get("operator")
         if _condition_mentions_timing(evaluated):
             _enumerate_timing_gate({**node, "condition": evaluated}, source, opts, out)
         else:
@@ -1410,7 +1421,7 @@ def _translate_conditional(
                 {
                     "reason": (
                         "conditional: cannot evaluate condition "
-                        f'"{_js_str(condition.get("type"))}" against current context'
+                        f'"{_js_str(condition_name)}" against current context'
                     ),
                     "effectFragment": node.get("_activation_source", node),
                 }
@@ -1523,6 +1534,31 @@ def _own_move_fact(trigger: dict[str, Any]) -> dict[str, Any] | None:
     }
 
 
+#: Reported for a moment after the triggering unit's own attacks: it acts only on later attacks.
+POST_ATTACK_MOMENT = "post-attack moment: applies only to attacks made after the triggering unit's"
+
+
+def is_post_own_attack_moment(trigger: Any) -> bool:
+    """Whether every alternative trigger fires just after the ability's own side resolved its
+    attacks (``attacks-resolved`` with no subject, ``this-unit``, ``this-model`` or a friendly
+    filter). The attacks that fire it are already resolved, so nothing it grants changes them."""
+    values = trigger if isinstance(trigger, list) else [trigger]
+    triggers = [value for value in values if _is_object(value)]
+
+    def own(item: dict[str, Any]) -> bool:
+        if item.get("event") != "attacks-resolved":
+            return False
+        subject = item.get("subject")
+        return (
+            subject is None
+            or subject == "this-unit"
+            or subject == "this-model"
+            or (_is_object(subject) and subject.get("owner") == "friendly")
+        )
+
+    return len(triggers) > 0 and all(own(item) for item in triggers)
+
+
 def moment_gate(trigger: Any, effect: Any, source_fragment: Any = None) -> Any:
     """Wrap non-attack triggers as synthetic activation-time conditions."""
     if effect is None:
@@ -1557,6 +1593,7 @@ def moment_gate(trigger: Any, effect: Any, source_fragment: Any = None) -> Any:
         "condition": condition,
         "effect": effect,
         "_activation_source": source_value,
+        "_activation_trigger": trigger,
     }
 
 

@@ -1,5 +1,5 @@
 import type { BuffSource, EngineContext } from "../cruncher/index.js";
-import type { EffectTranslation, UnsupportedFragment } from "../cruncher/from-dsl.js";
+import { POST_ATTACK_MOMENT, type EffectTranslation, type UnsupportedFragment } from "../cruncher/from-dsl.js";
 import type { EligibleAbility } from "../abilities-resolver/index.js";
 import type { AbilityView } from "../data/entities.js";
 import { canTakeEnhancement, grantedRecordIds, grantedRecordLevers } from "../data/lever-providers.js";
@@ -12,7 +12,7 @@ import type { StackResult } from "./model.js";
  * - `rejected`: it is eligible but adds nothing to this attack (`reasons` say why);
  * - `unresolved`: part of it cannot be evaluated. `relevant` marks whether that part could
  *   change the current attack's damage; an encounter-layer effect (deaths, explosions, reactive
- *   attacks, restoration, designations for later attacks) cannot, and is never scored.
+ *   attacks, restoration, designations and moments after the unit's own attacks) cannot, and is never scored.
  */
 export type LedgerStatus = "applied" | "rejected" | "unresolved";
 
@@ -33,11 +33,11 @@ export interface LedgerEntry {
 
 type FragmentClass = "out-of-scope" | "encounter-layer" | "unresolved";
 
-/** Effects that never act on the current attack: movement, set-up, CP, objectives, roster and targeting rules. */
+/** Effects that never act on the current attack: movement, set-up, CP, objectives, roster and targeting rules, reminder tokens. */
 const OUT_OF_ATTACK_EFFECTS = new Set([
   "no-effect", "permission", "set-up", "test", "test-exemption", "move", "move-modifier", "cp-gain",
   "cost-modifier", "objective-sticky", "transport-capacity", "split-unit", "add-unit", "army-rule",
-  "targeting",
+  "targeting", "marker",
 ]);
 
 /**
@@ -59,6 +59,7 @@ const ENCOUNTER_EVENTS = new Set(["destroyed", "model-destroyed", "damage-alloca
 function fragmentClass(fragment: UnsupportedFragment, ownId: string): FragmentClass {
   if (fragment.reason.endsWith("is outside the damage path")) return "out-of-scope";
   if (fragment.reason.startsWith("model-scoped effect from an attached model")) return "out-of-scope";
+  if (fragment.reason === POST_ATTACK_MOMENT) return "encounter-layer";
   const node = fragment.effectFragment as { type?: unknown; modifier?: { ability?: unknown } } | null;
   const type = node && typeof node === "object" ? node.type : undefined;
   if (type === "ability-grant") {

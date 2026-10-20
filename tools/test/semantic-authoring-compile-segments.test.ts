@@ -185,6 +185,17 @@ describe("Semantic authoring crunch gate: effects off the damage path", () => {
     expect([...cost, ...uses].every(isOutsideDamagePath)).toBe(true);
   });
 
+  it("counts a reminder token as off the damage path, but not a weapon it travels with", () => {
+    const token = unsupported({ type: "marker", target: "this-model", modifier: { label: "Fixture token", operation: "place" } });
+    expect(token.length).toBeGreaterThan(0);
+    expect(token.every(isOutsideDamagePath)).toBe(true);
+    const mixed = unsupported({ type: "sequence", steps: [
+      { type: "marker", target: "this-model", modifier: { label: "Fixture token", operation: "place" } },
+      { type: "rule-state", target: "this-unit", modifier: {} },
+    ] });
+    expect(mixed.every(isOutsideDamagePath)).toBe(false);
+  });
+
   it("counts an aura range lift as off the damage path, and offers an extra selection as a cap-raising lever", () => {
     const range = unsupported({ type: "ability-modifier", target: "this-unit", modifier: { ability: "some-aura", aspect: "range", operation: "add", value: 3 } });
     expect(range.length).toBeGreaterThan(0);

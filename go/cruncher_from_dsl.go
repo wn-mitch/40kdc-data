@@ -1064,6 +1064,42 @@ func enumerateMenuActions(node, source map[string]any, opts dslOpts, out *effect
 	}
 }
 
+// postAttackMoment is the reason a conditional fired by its own side's resolved attacks is
+// reported: the attacks that fire it are already resolved.
+const postAttackMoment = "post-attack moment: applies only to attacks made after the triggering unit's"
+
+// isPostOwnAttackMoment reports whether every alternative trigger fires just after the
+// ability's own side resolved its attacks (`attacks-resolved` with no subject, `this-unit`,
+// `this-model` or a friendly filter). The attacks that fire it are already resolved, so
+// nothing it grants changes them. Mirror of isPostOwnAttackMoment in
+// tools/src/cruncher/from-dsl.ts.
+func isPostOwnAttackMoment(trigger any) bool {
+	items, isList := asList(trigger)
+	if !isList {
+		items = []any{trigger}
+	}
+	count := 0
+	for _, item := range items {
+		m, ok := item.(map[string]any)
+		if !ok || m == nil {
+			continue
+		}
+		count++
+		if m["event"] != "attacks-resolved" {
+			return false
+		}
+		subject := m["subject"]
+		if subject == nil || subject == "this-unit" || subject == "this-model" {
+			continue
+		}
+		if filter, ok := subject.(map[string]any); ok && filter != nil && filter["owner"] == "friendly" {
+			continue
+		}
+		return false
+	}
+	return count > 0
+}
+
 func activationMetadata(node map[string]any) map[string]any {
 	metadata, _ := asMap(node["__activation_source"])
 	return metadata
@@ -1747,6 +1783,10 @@ func translateConditional(node, source map[string]any, opts dslOpts, out *effect
 	}
 	evaluated := condition
 	metadata := activationMetadata(node)
+	if metadata != nil && isPostOwnAttackMoment(metadata["trigger"]) {
+		out.unsupported = append(out.unsupported, unsup(postAttackMoment, metadata["fragment"]))
+		return
+	}
 	if metadata != nil && opts.duration != nil {
 		if moment, ok := momentCondition(metadata["trigger"], opts.duration); ok {
 			evaluated = moment
@@ -1761,8 +1801,13 @@ func translateConditional(node, source map[string]any, opts dslOpts, out *effect
 		if conditionMentionsTiming(condition) {
 			enumerateTimingGate(node, source, opts, out)
 		} else {
+			// An operator condition (`and`, `or`, `not`) has no type; it is named by its operator.
+			conditionName := condition["type"]
+			if conditionName == nil {
+				conditionName = condition["operator"]
+			}
 			out.unsupported = append(out.unsupported, unsup(
-				"conditional: cannot evaluate condition \""+jsStr(condition["type"])+"\" against current context",
+				"conditional: cannot evaluate condition \""+jsStr(conditionName)+"\" against current context",
 				activationFragment(node),
 			))
 		}

@@ -3,7 +3,7 @@ import type Ajv from "ajv";
 
 import { createValidator } from "../schema-loader.js";
 import { diceTableInvariantErrors } from "../integrity.js";
-import { effectToBuffs, type EffectTranslation } from "../cruncher/from-dsl.js";
+import { effectToBuffs, POST_ATTACK_MOMENT, type EffectTranslation } from "../cruncher/from-dsl.js";
 import { assumeEventSubjectMatches } from "../cruncher/from-dsl-selection.js";
 import { grantedRecordIds } from "../data/lever-providers.js";
 import type { BuffSource, EngineContext } from "../cruncher/buffs.js";
@@ -133,7 +133,7 @@ const NON_DAMAGE_EFFECT_TYPES = new Set([
   "heal", "move", "mortal-wounds", "set-up", "permission", "cost-modifier", "stance-selection-capacity",
   "move-modifier", "army-rule", "keyword-grant", "act-on-death", "cp-gain", "resource-gain", "add-unit", "split-unit",
   "transport-capacity", "destroy-models", "designate", "test", "targeting", "state-change", "no-effect",
-  "oath-modifier", "objective-sticky", "counts-as",
+  "oath-modifier", "objective-sticky", "counts-as", "marker",
 ]);
 // Core abilities (and Reanimation Protocols) that decide deployment, movement, fight order, attachment or
 // resurrection; none changes a hit, wound, save or damage roll.
@@ -205,6 +205,8 @@ export function isOutsideDamagePath(item: EffectTranslation["unsupported"][numbe
     return typeof roll !== "string" || !DAMAGE_ROLLS.has(roll);
   }
   if (OBJECTIVE_SELECTION.test(item.reason)) return true;
+  // A moment after the unit's own attacks acts only on later attacks, never the one being crunched.
+  if (item.reason === POST_ATTACK_MOMENT) return true;
   return isNonDamageEffect(item.effectFragment);
 }
 
@@ -324,7 +326,8 @@ async function gateCompiledAbility(
   // should be able to model but can't parse — a real gap.
   const source: BuffSource = { kind: "ability", abilityId, abilityKind: "unit" };
   // The record's own trigger binds `event-subject` at runtime; judge the effect as a matching unit sees it.
-  const newTranslation = effectToBuffs(assumeEventSubjectMatches(compiled.mechanics.trigger, compiled.mechanics.effect), source, CRUNCHER_CONTEXT);
+  const bound = assumeEventSubjectMatches(compiled.mechanics.trigger, compiled.mechanics.effect);
+  const newTranslation = effectToBuffs(bound.effect, source, CRUNCHER_CONTEXT, bound.perspective);
   const recordEffect = grantedRecordEffect(dataRoot, factionId);
   const { honestUnknown, outsideDamagePath, unrecognizedShape } = classifyUnsupported(newTranslation.unsupported, recordEffect);
   const crunchShapeOk = unrecognizedShape === 0;

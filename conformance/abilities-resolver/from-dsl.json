@@ -1988,6 +1988,280 @@
       }
     },
     {
+      "_comment": "event-subject: seen from the target, an enemy trigger subject the attacker matches binds the effect to the attacker",
+      "abilityId": "emp-grenades-kroot-hunting-pack-tau-empire",
+      "source": {
+        "kind": "ability",
+        "abilityId": "emp-grenades-kroot-hunting-pack-tau-empire",
+        "abilityKind": "stratagem"
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerKeywords": [
+          "vehicle",
+          "tank"
+        ]
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [
+          {
+            "id": "emp-grenades-kroot-hunting-pack-tau-empire@selected:shoot",
+            "label": "-1 to hit",
+            "group": null,
+            "requires": [
+              {
+                "type": "ability-part",
+                "trigger": [
+                  {
+                    "event": "selected",
+                    "filter": {
+                      "to": "shoot"
+                    },
+                    "subject": {
+                      "owner": "enemy",
+                      "all_of": [
+                        "VEHICLE"
+                      ]
+                    }
+                  },
+                  {
+                    "event": "selected",
+                    "filter": {
+                      "to": "fight"
+                    },
+                    "subject": {
+                      "owner": "enemy",
+                      "all_of": [
+                        "VEHICLE"
+                      ]
+                    }
+                  }
+                ]
+              }
+            ],
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "hit-mod",
+                "value": -1
+              },
+              {
+                "type": "hit-mod",
+                "value": -1
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "_comment": "event-subject: seen from the target, an enemy trigger subject the attacker fails names another unit",
+      "abilityId": "emp-grenades-kroot-hunting-pack-tau-empire",
+      "source": {
+        "kind": "ability",
+        "abilityId": "emp-grenades-kroot-hunting-pack-tau-empire",
+        "abilityKind": "stratagem"
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerKeywords": [
+          "infantry"
+        ]
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "event-subject: seen from the target, without attacker keywords an enemy trigger subject is unresolved and reported",
+      "abilityId": "emp-grenades-kroot-hunting-pack-tau-empire",
+      "source": {
+        "kind": "ability",
+        "abilityId": "emp-grenades-kroot-hunting-pack-tau-empire",
+        "abilityKind": "stratagem"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "target \"event-subject\" is not resolved by the buff engine",
+          "target \"event-subject\" is not resolved by the buff engine"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "post-attack moment: a designation made after the unit's own attacks never reaches them",
+      "abilityId": "a-trap-well-laid-kroot-hunting-pack-tau-empire",
+      "source": {
+        "kind": "ability",
+        "abilityId": "a-trap-well-laid-kroot-hunting-pack-tau-empire",
+        "abilityKind": "stratagem"
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerKeywords": [
+          "kroot",
+          "infantry"
+        ]
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "post-attack moment: applies only to attacks made after the triggering unit's"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "post-attack moment: an enemy unit's resolved attacks still gate an opt-in lever for the reply",
+      "abilityId": "post-enemy-attack",
+      "source": {
+        "kind": "ability",
+        "abilityId": "post-enemy-attack",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "fight"
+      },
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "attacks-resolved",
+          "subject": {
+            "owner": "enemy"
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [
+          {
+            "id": "post-enemy-attack@attacks-resolved",
+            "label": "+1 to hit",
+            "group": null,
+            "requires": [
+              {
+                "type": "ability-part",
+                "trigger": {
+                  "event": "attacks-resolved",
+                  "subject": {
+                    "owner": "enemy"
+                  }
+                }
+              }
+            ],
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "hit-mod",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "_comment": "post-attack moment: a buff after this unit's own attacks is reported, not offered for them",
+      "abilityId": "post-attack-self",
+      "source": {
+        "kind": "ability",
+        "abilityId": "post-attack-self",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "attacks-resolved",
+          "subject": "this-unit"
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "post-attack moment: applies only to attacks made after the triggering unit's"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "an unevaluable operator condition is named by its operator",
+      "abilityId": "unknown-operator-condition",
+      "source": {
+        "kind": "ability",
+        "abilityId": "unknown-operator-condition",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "operator": "not",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "subject": "attacker",
+                "filter": {
+                  "state": "battle-shocked"
+                }
+              }
+            }
+          ]
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"not\" against current context"
+        ],
+        "activatable": []
+      }
+    },
+    {
       "caseId": "canonical/recipient-snapshot/attested-strength-after-detachment",
       "abilityId": "snapshot-example",
       "source": {

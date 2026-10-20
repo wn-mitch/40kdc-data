@@ -209,14 +209,28 @@ describe("pipeline-8b cruncher unsupported classification", () => {
 
     it("judges a friendly trigger subject as the matching unit sees it", () => {
       const bound = assumeEventSubjectMatches(filtered, effect);
-      expect(effectToBuffs(bound, source, ctx).applied.map((buff) => buff.contribution)).toEqual([{ type: "hit-mod", value: 1 }]);
-      expect(assumeEventSubjectMatches({ ...filtered, subject: { owner: "enemy" } }, effect)).toBe(effect);
+      expect(bound.perspective).toBe("attacker");
+      expect(effectToBuffs(bound.effect, source, ctx).applied.map((buff) => buff.contribution)).toEqual([{ type: "hit-mod", value: 1 }]);
+      expect(assumeEventSubjectMatches({ ...filtered, subject: "enemy" }, effect)).toEqual({ effect, perspective: "attacker" });
+    });
+
+    it("judges an enemy trigger subject from the target, as the attacker", () => {
+      const penalty = { type: "stat-modifier", target: "event-subject", modifier: { stat: "BS", operation: "worsen", value: 1 } };
+      const bound = assumeEventSubjectMatches({ ...filtered, subject: { owner: "enemy", all_of: ["EXAMPLE"] } }, penalty);
+      expect(bound).toMatchObject({ perspective: "target", effect: { target: "attacker" } });
+      const seen = effectToBuffs(bound.effect, source, ctx, bound.perspective);
+      expect(seen.unsupported).toEqual([]);
+      expect(seen.applied.map((buff) => buff.contribution)).toEqual([{ type: "hit-mod", value: -1 }]);
     });
 
     it("binds only a subject the buffed unit meets, and returns the effect itself when nothing binds", () => {
       expect(bindEventSubject(filtered, effect, { phase: "shooting", attackerKeywords: ["example"] }, "attacker")).toMatchObject({ target: "selected-unit" });
       expect(bindEventSubject(filtered, effect, { phase: "shooting", attackerKeywords: ["other"] }, "attacker")).toMatchObject({ target: "other-unit" });
       expect(bindEventSubject(filtered, effect, { phase: "shooting" }, "attacker")).toBe(effect);
+      const enemy = { ...filtered, subject: { owner: "enemy", all_of: ["EXAMPLE"] } };
+      expect(bindEventSubject(enemy, effect, { phase: "shooting", attackerKeywords: ["example"] }, "target")).toMatchObject({ target: "attacker" });
+      expect(bindEventSubject(enemy, effect, { phase: "shooting", attackerKeywords: ["other"] }, "target")).toMatchObject({ target: "other-unit" });
+      expect(bindEventSubject(enemy, effect, { phase: "shooting", attackerKeywords: ["example"] }, "attacker")).toBe(effect);
       const alternatives = [filtered, { ...filtered, subject: "this-unit" }];
       expect(bindEventSubject(alternatives, effect, ctx, "attacker")).toBe(effect);
       const nested = { type: "ability-part", trigger: { event: "selected" }, effect };

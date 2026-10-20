@@ -33,7 +33,9 @@ use serde_json::{json, Map, Value};
 use super::buffs::{AbilityKind, Buff, BuffSource, EngineContext};
 use js::*;
 
-pub use levers::{is_attack_step, moment_gate, moment_key};
+pub use levers::{
+    is_attack_step, is_post_own_attack_moment, moment_gate, moment_key, POST_ATTACK_MOMENT,
+};
 
 pub(crate) use super::recipient_snapshots::recipient_snapshot_reason;
 

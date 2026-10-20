@@ -238,9 +238,11 @@ const OTHER_UNIT: &str = "other-unit";
 
 /// Bind `event-subject` effects when the trigger says who acts. `this-unit` names the ability's
 /// own unit. A friendly unit filter the buffed unit matches names the buffed unit; one it fails
-/// names another unit. The binding is left in place (`None`) when the subject is absent, an
-/// enemy, differs across alternative triggers, or cannot be checked, so the translator reports
-/// it. A nested ability part with its own trigger binds its own subject. Mirrors TS
+/// names another unit. Seen from the target, an enemy unit filter the attacker matches names the
+/// attacker (the enemy whose action fired the trigger is the one attacking); one it fails names
+/// another unit. The binding is left in place (`None`) when the subject is absent, an enemy seen
+/// from the attacker, differs across alternative triggers, or cannot be checked, so the
+/// translator reports it. A nested ability part with its own trigger binds its own subject. Mirrors TS
 /// `bindEventSubject`; `Some` carries the rebound effect only when a target changed.
 pub(crate) fn bind_event_subject(
     trigger: Option<&Value>,
@@ -260,6 +262,15 @@ pub(crate) fn bind_event_subject(
     }
     if subject.and_then(Value::as_str) == Some("this-unit") {
         return rebind_event_subject(effect, "this-unit");
+    }
+    if let Some(filter) =
+        subject.filter(|s| object(Some(s)).is_some_and(|f| is_str(f, "owner", "enemy")))
+    {
+        if perspective == TranslationPerspective::Target {
+            let attacker =
+                super::conditions::matches_unit_filter(filter, context, Attacker, "enemy")?;
+            return rebind_event_subject(effect, if attacker { "attacker" } else { OTHER_UNIT });
+        }
     }
     let filter =
         subject.filter(|s| object(Some(s)).is_some_and(|f| is_str(f, "owner", "friendly")))?;

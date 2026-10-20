@@ -41,6 +41,32 @@ pub fn is_attack_step(trigger: &Value) -> bool {
         && roll.is_some_and(attack_step_roll)
 }
 
+/// Reported for a moment after the triggering unit's own attacks: it acts only on later attacks.
+pub const POST_ATTACK_MOMENT: &str =
+    "post-attack moment: applies only to attacks made after the triggering unit's";
+
+/// Whether every alternative trigger fires just after the ability's own side resolved its attacks
+/// (`attacks-resolved` with no subject, `this-unit`, `this-model` or a friendly filter). The attacks
+/// that fire it are already resolved, so nothing it grants changes them.
+pub fn is_post_own_attack_moment(trigger: &Value) -> bool {
+    let triggers: Vec<&Obj> = match trigger {
+        Value::Array(items) => items.iter().filter_map(Value::as_object).collect(),
+        other => other.as_object().into_iter().collect(),
+    };
+    !triggers.is_empty()
+        && triggers.iter().all(|item| {
+            if !is_str(item, "event", "attacks-resolved") {
+                return false;
+            }
+            match item.get("subject") {
+                None | Some(Value::Null) => true,
+                Some(Value::String(subject)) => subject == "this-unit" || subject == "this-model",
+                Some(Value::Object(subject)) => is_str(subject, "owner", "friendly"),
+                Some(_) => false,
+            }
+        })
+}
+
 /// The lever key of a trigger: its event family and the filter value that tells moments apart.
 pub fn moment_key(trigger: &Map<String, Value>) -> String {
     let empty = Obj::new();
@@ -287,6 +313,15 @@ pub(super) fn conditional(node: &Obj, opts: &WalkOpts, out: &mut Out) {
             return;
         }
     }
+    if synthetic_timing_gate(node)
+        && activation_trigger(node).is_some_and(is_post_own_attack_moment)
+    {
+        out.unsupported(
+            POST_ATTACK_MOMENT,
+            activation_fragment(node).unwrap_or(node),
+        );
+        return;
+    }
     let evaluated = if synthetic_timing_gate(node) {
         opts.duration
             .as_ref()
@@ -306,7 +341,12 @@ pub(super) fn conditional(node: &Obj, opts: &WalkOpts, out: &mut Out) {
                 out.unsupported(
                     format!(
                         "conditional: cannot evaluate condition \"{}\" against current context",
-                        js_string(condition.get("type"))
+                        js_string(
+                            condition
+                                .get("type")
+                                .filter(|kind| !kind.is_null())
+                                .or_else(|| condition.get("operator"))
+                        )
                     ),
                     activation_fragment(node).unwrap_or(node),
                 );

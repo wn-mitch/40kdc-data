@@ -494,10 +494,13 @@ const otherUnit = "other-unit"
 
 // bindEventSubject binds `event-subject` effects when the trigger says who acts.
 // `this-unit` names the ability's own unit. A friendly unit filter the buffed unit
-// matches names the buffed unit; one it fails names another unit. The binding is
-// left in place when the subject is absent, an enemy, differs across alternative
-// triggers, or cannot be checked, so the translator reports it. A nested ability
-// part with its own trigger binds its own subject. changed reports whether any
+// matches names the buffed unit; one it fails names another unit. Seen from the
+// target, an enemy unit filter the attacker matches names the attacker (the enemy
+// whose action fired the trigger is the one attacking); one it fails names another
+// unit. The binding is left in place when the subject is absent, an enemy seen from
+// the attacker, differs across alternative triggers, or cannot be checked, so the
+// translator reports it. A nested ability part with its own trigger binds its own
+// subject. changed reports whether any
 // target was rebound. Mirror of bindEventSubject in
 // tools/src/cruncher/from-dsl-selection.ts.
 func bindEventSubject(trigger, effect any, context map[string]any, perspective string) (any, bool) {
@@ -524,6 +527,16 @@ func bindEventSubject(trigger, effect any, context map[string]any, perspective s
 		return rebindEventSubject(effect, "this-unit")
 	}
 	filter, ok := subject.(map[string]any)
+	if ok && filter != nil && filter["owner"] == "enemy" && perspective == "target" {
+		switch matchesUnitFilter(filter, context, "attacker", "enemy") {
+		case true:
+			return rebindEventSubject(effect, "attacker")
+		case false:
+			return rebindEventSubject(effect, otherUnit)
+		default:
+			return effect, false
+		}
+	}
 	if !ok || filter == nil || filter["owner"] != "friendly" {
 		return effect, false
 	}

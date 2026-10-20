@@ -383,9 +383,12 @@ def bind_event_subject(
     """Bind ``event-subject`` effects when the trigger says who acts.
 
     ``this-unit`` names the ability's own unit. A friendly unit filter the buffed unit matches
-    names the buffed unit; one it fails names another unit. The binding is left in place when the
-    subject is absent, an enemy, differs across alternative triggers, or cannot be checked, so the
-    translator reports it. A nested ability part with its own trigger binds its own subject.
+    names the buffed unit; one it fails names another unit. Seen from the target, an enemy unit
+    filter the attacker matches names the attacker (the enemy whose action fired the trigger is
+    the one attacking); one it fails names another unit. The binding is left in place when the
+    subject is absent, an enemy seen from the attacker, differs across alternative triggers, or
+    cannot be checked, so the translator reports it. A nested ability part with its own trigger
+    binds its own subject.
     Returns ``effect`` itself when nothing is rebound.
     """
     from wh40kdc.cruncher import from_dsl as dsl
@@ -401,6 +404,11 @@ def bind_event_subject(
         return effect
     if subject == "this-unit":
         return _rebind_event_subject(effect, "this-unit")
+    if isinstance(subject, dict) and subject.get("owner") == "enemy" and perspective == "target":
+        attacker = dsl._matches_unit_filter(subject, context, "attacker", "enemy")
+        if attacker == "unknown":
+            return effect
+        return _rebind_event_subject(effect, "attacker" if attacker is True else OTHER_UNIT)
     if not isinstance(subject, dict) or subject.get("owner") != "friendly":
         return effect
     verdict = dsl._matches_unit_filter(

@@ -1302,6 +1302,10 @@ function translateConditional(
     }
   }
   const activation = activationSources.get(node);
+  if (activation && isPostOwnAttackMoment(activation.trigger)) {
+    out.unsupported.push({ reason: POST_ATTACK_MOMENT, effectFragment: activation.fragment });
+    return;
+  }
   const evaluated = activation && opts.duration !== undefined
     ? momentCondition(activation.trigger, opts.duration) ?? condition
     : condition;
@@ -1314,7 +1318,7 @@ function translateConditional(
       enumerateTimingGate(node, source, opts, out);
     } else {
       out.unsupported.push({
-        reason: `conditional: cannot evaluate condition "${String(condition.type)}" against current context`,
+        reason: `conditional: cannot evaluate condition "${String(condition.type ?? condition.operator)}" against current context`,
         effectFragment: activationSources.get(node)?.fragment ?? node,
       });
     }
@@ -1379,6 +1383,23 @@ export function isAttackStep(trigger: unknown): boolean {
   if (trigger.event === "damage-allocated") return true;
   const roll = isObject(trigger.filter) ? trigger.filter.roll : undefined;
   return (trigger.event === "before-roll" || trigger.event === "after-roll") && typeof roll === "string" && ATTACK_STEP_ROLLS.has(roll);
+}
+
+/** Reported for a moment after the triggering unit's own attacks: it acts only on later attacks. */
+export const POST_ATTACK_MOMENT = "post-attack moment: applies only to attacks made after the triggering unit's";
+
+/**
+ * Whether every alternative trigger fires just after the ability's own side resolved its attacks
+ * (`attacks-resolved` with no subject, `this-unit`, `this-model` or a friendly filter). The attacks
+ * that fire it are already resolved, so nothing it grants changes them.
+ */
+export function isPostOwnAttackMoment(trigger: unknown): boolean {
+  const triggers = (Array.isArray(trigger) ? trigger : [trigger]).filter(isObject);
+  return triggers.length > 0 && triggers.every((item) => {
+    if (item.event !== "attacks-resolved") return false;
+    const subject = item.subject;
+    return subject == null || subject === "this-unit" || subject === "this-model" || (isObject(subject) && subject.owner === "friendly");
+  });
 }
 
 /** The lever key of a trigger: its event family and the filter value that tells moments apart. */
