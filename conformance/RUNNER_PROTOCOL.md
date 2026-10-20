@@ -191,6 +191,26 @@ below which lifts and residuals collapse to zero. Response value is the array of
 kind-tagged discriminated union (`"manual"` / `"ability"` / `"weapon-keyword"`
 with camelCase fields).
 
+### `allocate`
+
+```json
+{"op":"allocate","args":{
+  "attacker":{"weaponId":"bolt-rifle","profileIndex":0},
+  "modelsFiring":5,
+  "target":{"unitId":"intercessor-squad","profileIndex":0},
+  "context":{"phase":"shooting","attackerStationary":false,"withinHalfRange":false},
+  "buffs":[]
+}}
+```
+
+Same input envelope as `crunch`. Response value is
+`{damageDealt, modelsDestroyed, modelsDestroyedDistribution}`: the expected
+wounds removed, the expected models destroyed, and the probability of each
+number of models destroyed from `0` to the target's model count. A quantity
+the allocation needs as a whole number (Attacks, Damage, Wounds, model counts)
+that resolves to a fraction answers `CRUNCH_ERROR`. Floats compare with
+`±5e-4` per value; the distribution's length is exact.
+
 ### `translate_scoring`
 
 ```json

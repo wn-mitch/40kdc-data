@@ -26,6 +26,7 @@ The same person *can* author both the implementation change and the second-impl 
 | `weapon-keywords/cases.json` | Each keyword maps to its catalog effect | structural equality |
 | `linked-api/cases.json` | Each Dataset query (`find_*`, `abilities_of`, `weapons_of`, `wargear_options_of`, `base_loadout`, `maximal_loadout`, `phases_of`, `faction_of`, `abilities_of_faction`, `weapons_of_faction`) returns the expected result | per-case comparison mode: `scalar`, `ordered`, or `set` (sorted before compare) |
 | `attribution/cases.json` | Each AttributedStage (per-stage leave-one-out decomposition from `attributeStages`) matches expected/baseline/lifts/residual/intrinsics | per-value `±5e-4` for floats; structural for `source` / `intrinsics` |
+| `allocation/cases.json` | `allocate(input)` allocates one crunch's attacks into the target's models: expected wounds removed, expected models destroyed, and the models-destroyed distribution | per-value `±5e-4`; distribution length exact |
 | `validator/cases.json` | Each input validates (or doesn't) against its target schema, emitting the expected closed-enum error codes | exact set match on `(path, code)` pairs after deduplication |
 | `scoring-translation/cases.json` | `describeScoringCard(card)` humanizes each primary mission card's `awards` into the expected English lines | exact string equality (ASCII-only), `awards` order load-bearing |
 | `scoring/cases.json` | The scoring engine's VP arithmetic — `score_event` (per-card `scoreTurn`/`scoreCap`/`scoreSecondaryEvent`/`scorePrimaryEvent`), `score_state` (per-round + per-game + grand-total caps, score/discard, undo), and `wtc_result` band mapping | exact integer equality (no tolerance); `awards`/op order load-bearing |
@@ -135,6 +136,14 @@ These notes document what is *currently load-bearing* about each corpus area. Fu
 - **Groupable vs. intrinsic buffs.** Only `ability` and `manual` buffs are groupable (drop-one-and-recompute). `weapon-keyword` buffs are intrinsic — they appear in `intrinsics` (a flat list of keyword ids) rather than `lifts`. Cases where the only buff is `weapon-keyword`-typed will have empty lifts and `baseline == expected`.
 - **`residual`** is `expected − baseline − Σ lifts`. Non-zero when buffs collide under a cap (two `+1`s sharing a `±1` cap each show ≈0 lift; the real `+1` lands in the residual). The corpus pins residual within `5e-4`.
 - **Comparison of `BuffSource`** uses serde-derived JSON shape: kind-tagged discriminated union with `kind` snake-cased (`"manual"`, `"ability"`, `"weapon-keyword"`) and field names camelCased on the wire.
+
+### `allocation/cases.json`
+
+- Each case references a cruncher input via `cruncher_case` and pins `{damageDealt, modelsDestroyed, modelsDestroyedDistribution}`. Every probability comes from the same resolved buffs and rolls as the cruncher's expected-value stages; only the allocation differs.
+- **Sequential allocation.** Each unsaved attack deals its Damage roll to one model. Damage beyond that model's remaining wounds is lost, and a damaged model takes the next attack. Feel No Pain rolls once per wound that would be lost.
+- **Devastating Wounds come last.** Critical wounds from a Devastating Wounds weapon become mortal-wound events inflicted after all normal damage, each damaging at most one model with the excess lost. Mortal-only Feel No Pain applies to those events alone.
+- **Within-attack correlation is exact.** Each attack's normal and mortal event counts are one joint distribution (a critical hit's Sustained Hits extra hits and its Lethal Hits auto-wound stay with that attack), and the unit's attack count is the convolution of each firing model's Attacks roll plus Rapid Fire and flat bonuses, floored at 0.
+- **Whole numbers only.** Attacks, Damage, Sustained Hits and Rapid Fire values, Wounds, and model counts must resolve to integers; a fractional value is an error, not a rounded result.
 
 ### `validator/cases.json`
 

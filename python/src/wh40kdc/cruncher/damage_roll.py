@@ -62,6 +62,16 @@ def _parse_damage(stat: Any) -> float | tuple[int, int, int]:
     return (count, die, offset)
 
 
+def quantity_distribution(stat: Any) -> list[tuple[float, float]]:
+    """Exact distribution of a quantity characteristic (a number or a dice
+    expression such as ``D6+1``), as (value, probability) ascending by value."""
+    parsed = _parse_damage(stat)
+    if not isinstance(parsed, tuple):
+        return [(parsed, 1.0)]
+    count, die, offset = parsed
+    return [(total + offset, probability) for total, probability in _dice_totals(count, die)]
+
+
 def _dice_totals(count: int, die: int) -> list[tuple[int, float]]:
     """Distribution of the summed dice, as (total, probability) ascending by total."""
     totals: dict[int, float] = {0: 1.0}

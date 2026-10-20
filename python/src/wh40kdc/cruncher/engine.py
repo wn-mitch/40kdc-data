@@ -17,7 +17,7 @@ from __future__ import annotations
 import json
 import math
 import re
-from typing import Any
+from typing import Any, TypedDict
 
 from wh40kdc.cruncher.buffs import (
     Buff,
@@ -25,11 +25,46 @@ from wh40kdc.cruncher.buffs import (
     ResolvedModifiers,
     resolve_buffs,
 )
-from wh40kdc.cruncher.damage_roll import damage_roll
+from wh40kdc.cruncher.damage_roll import DamageOutcome, damage_roll
 from wh40kdc.data.dataset import Dataset
 
 EngineInput = dict[str, Any]
 EngineOutput = dict[str, Any]
+
+#: Pass and critical probabilities of one roll.
+RollProbabilities = TypedDict("RollProbabilities", {"pass": float, "crit": float})
+
+
+class AttackModel(TypedDict):
+    """The per-roll parameters behind one crunch, for the discrete allocation
+    stage (``allocation.py``): every probability is the one the expected-value
+    stages use. Mirrors the TS ``AttackModel``."""
+
+    modelsFiring: float
+    #: One model's Attacks characteristic, before the flat additions below.
+    attacksStat: Any
+    #: Flat attacks every model adds: the modifier and Blast.
+    attacksBonus: float
+    #: Rapid Fire's extra attacks per model when active, else None.
+    rapidFireStat: Any
+    torrent: bool
+    hit: RollProbabilities
+    #: Sustained Hits' extra hits per critical hit, else None.
+    sustainedStat: Any
+    lethal: bool
+    wound: RollProbabilities
+    devastating: bool
+    #: Probability a wound that reaches the save is not saved.
+    unsaved: float
+    #: Final per-attack damage.
+    damage: list[DamageOutcome]
+    #: Probability each wound is lost despite Feel No Pain: on every wound,
+    #: and on mortal wounds only.
+    woundLost: float
+    mortalWoundLost: float
+    wounds: float
+    modelCount: float
+
 
 _DICE_RE = re.compile(r"^(\d*)D(\d+)([+-]\d+)?$", re.IGNORECASE)
 
@@ -82,6 +117,13 @@ def crunch(input: EngineInput, dataset: Dataset | None = None) -> EngineOutput:
 
     Returns ``{"stages": [{"name", "expected", "detail"}], "resolved": ...}``.
     """
+    return crunch_model(input, dataset)[0]
+
+
+def crunch_model(
+    input: EngineInput, dataset: Dataset | None = None
+) -> tuple[EngineOutput, AttackModel]:
+    """:func:`crunch` with the :class:`AttackModel` its stages were computed from."""
     ds = dataset if dataset is not None else _lazy_embedded_dataset()
     attacker = input["attacker"]
     target = input["target"]
@@ -195,6 +237,7 @@ def crunch(input: EngineInput, dataset: Dataset | None = None) -> EngineOutput:
     )
     crit_hit_threshold = min(6, (resolved["critThresholds"].get("hit") or {}).get("value", 6))
     torrent = _find_keyword(resolved, "torrent") is not None
+    hit_probs: RollProbabilities = {"pass": 1.0, "crit": 0.0}
     if torrent:
         hits = attacks
         crit_hits = 0.0
@@ -214,6 +257,7 @@ def crunch(input: EngineInput, dataset: Dataset | None = None) -> EngineOutput:
             auto_pass_on_six=True,
             crit_threshold=crit_hit_threshold,
         )
+        hit_probs = {"pass": probs[0], "crit": probs[1]}
         hits = attacks * probs[0]
         crit_hits = attacks * probs[1]
         reroll_label = (resolved["rerolls"].get("hit") or {}).get("subset", "none")
@@ -432,7 +476,27 @@ def crunch(input: EngineInput, dataset: Dataset | None = None) -> EngineOutput:
         }
     )
 
-    return {"stages": stages, "resolved": resolved}
+    model: AttackModel = {
+        "modelsFiring": input["modelsFiring"],
+        "attacksStat": stats.get("A"),
+        "attacksBonus": resolved["attacksMod"]["value"] + blast_extra,
+        "rapidFireStat": (
+            (rapid_fire.get("parameters") or {}).get("value") if rapid_fire and half_range else None
+        ),
+        "torrent": torrent,
+        "hit": hit_probs,
+        "sustainedStat": (sustained.get("parameters") or {}).get("value") if sustained else None,
+        "lethal": has_lethal,
+        "wound": {"pass": wound_probs[0], "crit": wound_probs[1]},
+        "devastating": has_devastating,
+        "unsaved": 1 - p_saved,
+        "damage": per_attack["distribution"],
+        "woundLost": p_survive_all,
+        "mortalWoundLost": p_survive_all * p_survive_mortal,
+        "wounds": wounds_stat,
+        "modelCount": target_model_count,
+    }
+    return {"stages": stages, "resolved": resolved}, model
 
 
 # ---------------------------------------------------------------------------

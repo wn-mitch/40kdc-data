@@ -383,6 +383,27 @@ def iter_attribution_cases(corpus: Path) -> Iterator[Case]:
         )
 
 
+def iter_allocation_cases(corpus: Path) -> Iterator[Case]:
+    cases_path = corpus / "allocation" / "cases.json"
+    cruncher_dir = corpus / "cruncher"
+    cases = json.loads(cases_path.read_text(encoding="utf-8"))
+    for entry in cases:
+        crunch_case = json.loads((cruncher_dir / entry["cruncher_case"]).read_text(encoding="utf-8"))
+        yield Case(
+            area="allocation",
+            case_id=f"allocation/{entry['name']}",
+            op="allocate",
+            args={
+                "attacker": crunch_case["attacker"],
+                "modelsFiring": crunch_case["modelsFiring"],
+                "target": crunch_case["target"],
+                "context": crunch_case["context"],
+                "buffs": crunch_case.get("buffs", []),
+            },
+            compare_mode="floats",
+        )
+
+
 def iter_scoring_translation_cases(corpus: Path) -> Iterator[Case]:
     path = corpus / "scoring-translation" / "cases.json"
     cases = json.loads(path.read_text(encoding="utf-8"))
@@ -547,6 +568,7 @@ AREA_ITERATORS: dict[str, Any] = {
     "loadout": iter_loadout_cases,
     "linked-api": iter_linked_api_cases,
     "attribution": iter_attribution_cases,
+    "allocation": iter_allocation_cases,
     "scoring-translation": iter_scoring_translation_cases,
     "effect-translation": iter_effect_translation_cases,
     "applies-to": iter_applies_to_cases,
@@ -681,6 +703,7 @@ def run_corpus(
         "loadout": ["loadout"],
         "linked-api": ["linked_query"],
         "attribution": ["attribution"],
+        "allocation": ["allocate"],
         "scoring-translation": ["translate_scoring"],
         "effect-translation": ["translate_effect"],
         "applies-to": ["match_applies_to"],

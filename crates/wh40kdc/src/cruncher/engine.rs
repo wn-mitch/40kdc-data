@@ -114,6 +114,44 @@ pub struct EngineOutput {
     pub resolved: ResolvedModifiers,
 }
 
+/// A check's probability of passing and of passing as a critical success.
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct RollProbabilities {
+    pub pass: f64,
+    pub crit: f64,
+}
+
+/// The per-roll parameters behind one crunch, for the discrete allocation
+/// stage ([`allocation`](super::allocation)): every probability is the one
+/// the expected-value stages use.
+#[derive(Clone, Debug)]
+pub struct AttackModel {
+    pub models_firing: u64,
+    /// One model's Attacks characteristic, before the flat additions below.
+    pub attacks_stat: Value,
+    /// Flat attacks every model adds: the modifier and Blast.
+    pub attacks_bonus: f64,
+    /// Rapid Fire's extra attacks per model when active, else `None`.
+    pub rapid_fire_stat: Option<Value>,
+    pub torrent: bool,
+    pub hit: RollProbabilities,
+    /// Sustained Hits' extra hits per critical hit, else `None`.
+    pub sustained_stat: Option<Value>,
+    pub lethal: bool,
+    pub wound: RollProbabilities,
+    pub devastating: bool,
+    /// Probability a wound that reaches the save is not saved.
+    pub unsaved: f64,
+    /// Final per-attack damage as (value, probability), ascending by value.
+    pub damage: Vec<(f64, f64)>,
+    /// Probability each wound is lost despite Feel No Pain: on every wound.
+    pub wound_lost: f64,
+    /// As `wound_lost`, for mortal wounds (every-wound and mortal-only Feel No Pain).
+    pub mortal_wound_lost: f64,
+    pub wounds: u64,
+    pub model_count: u64,
+}
+
 /// Failures the engine can't recover from: out-of-range profile indexes,
 /// missing required stats, or unparseable dice-notation strings. Better to
 /// surface these than to silently return zero and produce a confidently wrong
@@ -189,6 +227,14 @@ pub fn crunch(
     input: &EngineInput,
     dataset: Option<&Dataset>,
 ) -> Result<EngineOutput, CruncherError> {
+    crunch_model(input, dataset).map(|(output, _)| output)
+}
+
+/// [`crunch`] with the [`AttackModel`] its stages were computed from.
+pub fn crunch_model(
+    input: &EngineInput,
+    dataset: Option<&Dataset>,
+) -> Result<(EngineOutput, AttackModel), CruncherError> {
     let ds: &Dataset = match dataset {
         Some(d) => d,
         None => Dataset::embedded(),
@@ -345,6 +391,10 @@ pub fn crunch(
         .map_or(6.0, |t| t.value)
         .min(6.0) as i64;
     let torrent = find_extra_keyword(&resolved, "torrent").is_some();
+    let mut hit_probs = RollProbabilities {
+        pass: 1.0,
+        crit: 0.0,
+    };
     let (hits_raw, crit_hits, mut hits_detail) = if torrent {
         (attacks, 0.0, format!("Torrent: auto-hits ({attacks:.4})"))
     } else {
@@ -366,6 +416,10 @@ pub fn crunch(
             auto_pass_on_six: true,
             crit_threshold: crit_hit_threshold,
         });
+        hit_probs = RollProbabilities {
+            pass: probs.pass,
+            crit: probs.crit,
+        };
         let hits = attacks * probs.pass;
         let crits = attacks * probs.crit;
         let detail = format!(
@@ -686,7 +740,38 @@ pub fn crunch(
         ),
     });
 
-    Ok(EngineOutput { stages, resolved })
+    let model = AttackModel {
+        models_firing: input.models_firing,
+        attacks_stat: stat_to_value(&weapon_profile.stats.a),
+        attacks_bonus: resolved.attacks_mod.value + blast_extra_per_model,
+        rapid_fire_stat: rapid_fire
+            .filter(|_| half_range)
+            .and_then(|kw| parameter(kw, "value").cloned()),
+        torrent,
+        hit: hit_probs,
+        sustained_stat: sustained.and_then(|kw| parameter(kw, "value").cloned()),
+        lethal: has_lethal,
+        wound: RollProbabilities {
+            pass: wound_probs.pass,
+            crit: wound_probs.crit,
+        },
+        devastating: has_devastating,
+        unsaved: 1.0 - p_saved,
+        damage: per_attack.distribution,
+        wound_lost: p_survive_all,
+        mortal_wound_lost: p_survive_all * p_survive_mortal,
+        wounds: unit_profile.w.get(),
+        model_count: target_model_count,
+    };
+    Ok((EngineOutput { stages, resolved }, model))
+}
+
+/// A characteristic as the JSON value TS carries it as: a number or a string.
+fn stat_to_value(stat: &StatValue) -> Value {
+    match stat {
+        StatValue::Integer(n) => Value::from(*n),
+        StatValue::DiceExpression(s) => Value::String(s.to_string()),
+    }
 }
 
 // ---------------------------------------------------------------------------

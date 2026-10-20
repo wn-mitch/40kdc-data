@@ -52,7 +52,7 @@ func TestDamageRollRerollsOnlyBelowFreshMean(t *testing.T) {
 	}
 	total := 0.0
 	for _, o := range rolled.distribution {
-		total += o.probability
+		total += o.Probability
 	}
 	assertClose(t, "distribution mass", total, 1)
 }

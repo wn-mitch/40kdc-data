@@ -106,24 +106,31 @@ func stage(name string, expected float64) map[string]any {
 // triple. Returns the stages, the resolved modifiers (for attribution), or an
 // error.
 func crunch(input map[string]any, ds *Dataset) ([]map[string]any, *resolved, error) {
+	stages, res, _, err := crunchModel(input, ds)
+	return stages, res, err
+}
+
+// crunchModel is crunch plus the AttackModel (cruncher_allocation.go) its
+// stages were computed from.
+func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved, *AttackModel, error) {
 	attacker, _ := getMap(input, "attacker")
 	target, _ := getMap(input, "target")
 	weapon, _ := getMap(attacker, "weapon")
 	profiles := getList(weapon, "profiles")
 	profileIndex := asInt(attacker["profileIndex"])
 	if profileIndex < 0 || profileIndex >= len(profiles) {
-		return nil, nil, &crunchError{"crunch: attacker.profileIndex out of range for weapon " + getStr(weapon, "id")}
+		return nil, nil, nil, &crunchError{"crunch: attacker.profileIndex out of range for weapon " + getStr(weapon, "id")}
 	}
 	weaponProfile, _ := asMap(profiles[profileIndex])
 	unit, _ := getMap(target, "unit")
 	unitProfiles := getList(unit, "profiles")
 	targetProfileIndex := asInt(target["profileIndex"])
 	if targetProfileIndex < 0 || targetProfileIndex >= len(unitProfiles) {
-		return nil, nil, &crunchError{"crunch: target.profileIndex out of range for unit " + getStr(unit, "id")}
+		return nil, nil, nil, &crunchError{"crunch: target.profileIndex out of range for unit " + getStr(unit, "id")}
 	}
 	unitProfile, _ := asMap(unitProfiles[targetProfileIndex])
 	if !profileCanTarget(weaponProfile, unit) {
-		return nil, nil, &crunchError{msg: "crunch: weapon " + getStr(weapon, "id") +
+		return nil, nil, nil, &crunchError{msg: "crunch: weapon " + getStr(weapon, "id") +
 			" profile " + strconv.Itoa(profileIndex) + " cannot target unit " + getStr(unit, "id")}
 	}
 
@@ -186,7 +193,7 @@ func crunch(input map[string]any, ds *Dataset) ([]map[string]any, *resolved, err
 	// 1. Attacks
 	baseA, err := evalStatValue(stats["A"])
 	if err != nil {
-		return nil, nil, err
+		return nil, nil, nil, err
 	}
 	attacksPerModel := baseA + res.attacksMod
 	rapidFire := res.findKeyword("rapid-fire")
@@ -195,7 +202,7 @@ func crunch(input map[string]any, ds *Dataset) ([]map[string]any, *resolved, err
 	if rapidFire != nil && halfRange {
 		rapidFireExtra, err = evalStatValue(paramValue(rapidFire, "value"))
 		if err != nil {
-			return nil, nil, err
+			return nil, nil, nil, err
 		}
 	}
 	blast := res.findKeyword("blast")
@@ -237,6 +244,7 @@ func crunch(input map[string]any, ds *Dataset) ([]map[string]any, *resolved, err
 	}
 	torrent := res.findKeyword("torrent") != nil
 	var hits, critHits float64
+	hitPass, hitCrit := 1.0, 0.0
 	if torrent {
 		hits = attacks
 		critHits = 0
@@ -246,7 +254,7 @@ func crunch(input map[string]any, ds *Dataset) ([]map[string]any, *resolved, err
 			if isMelee {
 				ws = "WS"
 			}
-			return nil, nil, &crunchError{"crunch: weapon " + getStr(weapon, "id") + " missing " + ws}
+			return nil, nil, nil, &crunchError{"crunch: weapon " + getStr(weapon, "id") + " missing " + ws}
 		}
 		hitStatN, _ := num(hitStat)
 		// A WS/BS improvement changes the characteristic itself, floored at 2+.
@@ -263,6 +271,7 @@ func crunch(input map[string]any, ds *Dataset) ([]map[string]any, *resolved, err
 		}
 		hitModifier := res.hitMod + coverHitPenalty
 		passP, critP := checkProbabilities(hitStatN, hitModifier, rerollSubset(res, "hit"), true, true, critHitThreshold)
+		hitPass, hitCrit = passP, critP
 		hits = attacks * passP
 		critHits = attacks * critP
 	}
@@ -270,7 +279,7 @@ func crunch(input map[string]any, ds *Dataset) ([]map[string]any, *resolved, err
 	if sustained != nil {
 		sv, err := evalStatValue(paramValue(sustained, "value"))
 		if err != nil {
-			return nil, nil, err
+			return nil, nil, nil, err
 		}
 		hits += critHits * sv
 	}
@@ -279,7 +288,7 @@ func crunch(input map[string]any, ds *Dataset) ([]map[string]any, *resolved, err
 	// 3. Wounds
 	sBase, err := evalStatValue(stats["S"])
 	if err != nil {
-		return nil, nil, err
+		return nil, nil, nil, err
 	}
 	sStat := sBase + res.strengthMod
 	tStat := numOr0(unitProfile["T"]) + res.toughnessMod
@@ -360,14 +369,14 @@ func crunch(input map[string]any, ds *Dataset) ([]map[string]any, *resolved, err
 	// Evaluated first so an unparseable D reports the stat-value error, matching
 	// the reference engine's order.
 	if _, err := evalStatValue(stats["D"]); err != nil {
-		return nil, nil, err
+		return nil, nil, nil, err
 	}
 	melta := res.findKeyword("melta")
 	meltaBonus := 0.0
 	if melta != nil && halfRange {
 		meltaBonus, err = evalStatValue(paramValue(melta, "value"))
 		if err != nil {
-			return nil, nil, err
+			return nil, nil, nil, err
 		}
 	}
 	// 10e damage-reduction abilities always carry the canonical "to a minimum
@@ -386,7 +395,7 @@ func crunch(input map[string]any, ds *Dataset) ([]map[string]any, *resolved, err
 		reroll:    damageReroll,
 	})
 	if err != nil {
-		return nil, nil, err
+		return nil, nil, nil, err
 	}
 	damagePerHit := perAttack.expected
 	damageMain := unsaved * damagePerHit
@@ -410,7 +419,34 @@ func crunch(input map[string]any, ds *Dataset) ([]map[string]any, *resolved, err
 	}
 	stages = append(stages, stage("models-killed", expectedModelsKilled))
 
-	return stages, res, nil
+	var rapidFireStat, sustainedStat any
+	if rapidFire != nil && halfRange {
+		rapidFireStat = paramValue(rapidFire, "value")
+	}
+	if sustained != nil {
+		sustainedStat = paramValue(sustained, "value")
+	}
+	model := &AttackModel{
+		ModelsFiring:    modelsFiring,
+		AttacksStat:     stats["A"],
+		AttacksBonus:    res.attacksMod + blastExtra,
+		RapidFireStat:   rapidFireStat,
+		Torrent:         torrent,
+		HitPass:         hitPass,
+		HitCrit:         hitCrit,
+		SustainedStat:   sustainedStat,
+		Lethal:          hasLethal,
+		WoundPass:       woundPass,
+		WoundCrit:       woundCrit,
+		Devastating:     hasDevastating,
+		Unsaved:         1 - pSaved,
+		Damage:          perAttack.distribution,
+		WoundLost:       pSurviveAll,
+		MortalWoundLost: pSurviveAll * pSurviveMortal,
+		Wounds:          woundsStat,
+		ModelCount:      tmc,
+	}
+	return stages, res, model, nil
 }
 
 func getMapOr(m map[string]any, key string) map[string]any {

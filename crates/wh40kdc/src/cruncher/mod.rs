@@ -31,6 +31,7 @@
 //! assert_eq!(out.stages.len(), 7);
 //! ```
 
+pub mod allocation;
 pub mod attribution;
 pub mod buffs;
 mod damage_roll;
@@ -41,14 +42,15 @@ mod gates;
 pub mod recipient_snapshots;
 mod resolved;
 
+pub use allocation::{allocate, allocate_model, AllocationError, AllocationOutput};
 pub use attribution::{attribute_stages, AttributedStage, StageLift};
 pub use buffs::{
     resolve_buffs, AbilityKind, AttachmentRole, Buff, BuffApplicability, BuffContribution,
     BuffSource, EngineContext, RerollSubset, ResolvedModifiers, RollKind, WeaponKeywordRef,
 };
 pub use engine::{
-    crunch, AttackProfileRef, CruncherError, EngineInput, EngineOutput, Stage, StageName,
-    TargetProfileRef,
+    crunch, crunch_model, AttackModel, AttackProfileRef, CruncherError, EngineInput, EngineOutput,
+    RollProbabilities, Stage, StageName, TargetProfileRef,
 };
 pub use from_dsl::{
     apply_activation, effect_to_buffs, ActivatableBuff, ActivatableGroupRef, CapRaise,

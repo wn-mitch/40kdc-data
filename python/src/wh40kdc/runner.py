@@ -25,7 +25,7 @@ from typing import Any, TypeGuard, cast
 from wh40kdc._spec import SPEC_VERSION
 from wh40kdc._version import __version__ as IMPL_VERSION
 from wh40kdc.compare import LoadoutLine, compare_cell, loadout_cell
-from wh40kdc.cruncher import attribute_stages, crunch
+from wh40kdc.cruncher import allocate, attribute_stages, crunch
 from wh40kdc.data.affordability import candidate_affordability
 from wh40kdc.data.base import encode_base
 from wh40kdc.data.dataset import Dataset
@@ -688,6 +688,18 @@ def _handle_attribution(state: RunnerState, args: Any) -> Response:
         return _err("CRUNCH_ERROR", {"detail": str(e)})
 
 
+def _handle_allocate(state: RunnerState, args: Any) -> Response:
+    if not isinstance(args, dict):
+        return _err("INVALID_INPUT", {"detail": "allocate args must be an object"})
+    input_, error = _build_engine_input(state, args, "allocate")
+    if error is not None:
+        return error
+    try:
+        return _ok(allocate(input_, state.dataset()))
+    except Exception as e:
+        return _err("CRUNCH_ERROR", {"detail": str(e)})
+
+
 def _handle_translate_scoring(state: RunnerState, args: Any) -> Response:
     if not isinstance(args, dict):
         return _err("INVALID_INPUT", {"detail": "translate_scoring args must be an object"})
@@ -966,6 +978,8 @@ def dispatch(state: RunnerState, req: dict[str, Any]) -> Response:
         return _handle_loadout(state, args)
     if op == "attribution":
         return _handle_attribution(state, args)
+    if op == "allocate":
+        return _handle_allocate(state, args)
     if op == "translate_scoring":
         return _handle_translate_scoring(state, args)
     if op == "translate_effect":

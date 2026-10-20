@@ -14,8 +14,8 @@ use serde::Serialize;
 use serde_json::{json, Value};
 
 use wh40kdc::cruncher::{
-    attribute_stages, crunch, AttackProfileRef, AttributedStage, Buff, BuffSource, EngineContext,
-    EngineInput, StageLift, StageName, TargetProfileRef,
+    allocate, attribute_stages, crunch, AttackProfileRef, AttributedStage, Buff, BuffSource,
+    EngineContext, EngineInput, StageLift, StageName, TargetProfileRef,
 };
 use wh40kdc::export::{export_roster_with_dataset, ExportFormat};
 use wh40kdc::import::{
@@ -1250,6 +1250,21 @@ fn handle_attribution(state: &mut RunnerState, args: &Value) -> Value {
     }
 }
 
+fn handle_allocate(state: &mut RunnerState, args: &Value) -> Value {
+    let ds = state.dataset();
+    let (input, _eps) = match build_engine_input(ds, args, "allocate") {
+        Ok(x) => x,
+        Err(e) => return e,
+    };
+    match allocate(&input, Some(ds)) {
+        Ok(out) => ok_value(serde_json::to_value(&out).unwrap_or(Value::Null)),
+        Err(e) => err_value(
+            ErrorKind::CrunchError,
+            Some(json!({ "detail": e.to_string() })),
+        ),
+    }
+}
+
 fn handle_translate_scoring(state: &mut RunnerState, args: &Value) -> Value {
     let Some(card_id) = args.get("cardId").and_then(Value::as_str) else {
         return err_value(
@@ -1680,6 +1695,7 @@ fn dispatch(state: &mut RunnerState, op: &str, args: &Value) -> Value {
         "validate" => handle_validate(args),
         "crunch" => handle_crunch(state, args),
         "attribution" => handle_attribution(state, args),
+        "allocate" => handle_allocate(state, args),
         "translate_scoring" => handle_translate_scoring(state, args),
         "translate_effect" => handle_translate_effect(args),
         "match_applies_to" => handle_match_applies_to(args),

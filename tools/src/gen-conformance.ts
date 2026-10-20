@@ -59,6 +59,7 @@ import { selectAdapter } from "./import/adapter.js";
 import type { ParsedRoster, Roster } from "./import/types.js";
 import { encodeBase } from "./runner.js";
 import { attributeStages } from "./cruncher/attribution.js";
+import { allocate } from "./cruncher/allocation.js";
 import type { EngineInput } from "./cruncher/index.js";
 import {
   resolveLayout,
@@ -1093,6 +1094,35 @@ function genAttribution(): void {
   const serialised = cases.map(({ _order: _o, ...rest }) => rest);
   writeJson(join(CONFORMANCE, "attribution", "cases.json"), serialised);
   console.log(`attribution/cases.json: ${cases.length} cases`);
+}
+
+/**
+ * Discrete allocation corpus: the exact distribution of wounds removed and
+ * models destroyed when one crunch's attacks are allocated into the target's
+ * models. Cases reference cruncher inputs and are chosen to cover overkill,
+ * partial kills on multi-wound models, Sustained/Lethal Hits, Devastating
+ * Wounds with mortal-only Feel No Pain, and variable Damage.
+ */
+const ALLOCATION_CASE_FILES = [
+  "01-bolter-vs-intercessor.json",
+  "03-chainsword-vs-cultist.json",
+  "04-multi-melta-half-range-stationary-vs-knight.json",
+  "06-sustained-hits-chainsword-vs-cultist.json",
+  "10-fnp-vs-mortal-devastating-lascannon-vs-cultists.json",
+  "15-wailing-doom-ranged-vs-intercessor.json",
+  "16-wailing-doom-sweep-melee-vs-intercessor.json",
+  "17-wailing-doom-strike-melee-vs-intercessor.json",
+  "24-crit-threshold-hit-5-lethal-bolter-vs-intercessor.json",
+];
+
+function genAllocation(): void {
+  const ds = Dataset.embedded();
+  const cases = ALLOCATION_CASE_FILES.map((filename) => {
+    const { name, input } = loadAttributionInput(ds, filename);
+    return { name, cruncher_case: filename, expected: allocate(input, ds) };
+  });
+  writeJson(join(CONFORMANCE, "allocation", "cases.json"), cases);
+  console.log(`allocation/cases.json: ${cases.length} cases`);
 }
 
 /**
@@ -4027,6 +4057,7 @@ genNormalize();
 genRosters();
 genLinkedApi();
 genAttribution();
+genAllocation();
 genScoringTranslation();
 genEffectTranslation();
 genResolverDslCases();

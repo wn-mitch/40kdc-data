@@ -1,6 +1,6 @@
 package wh40kdc
 
-// crunch / attribution op handlers. Go mirror of the cruncher handlers in
+// crunch / attribution / allocate op handlers. Go mirror of the cruncher handlers in
 // python .../runner.py. Only the per-stage `expected` (and attribution's
 // baseline/lifts/residual/intrinsics) crosses the wire.
 
@@ -86,4 +86,28 @@ func (s *RunnerState) handleAttribution(args any) map[string]any {
 		return errResp("CRUNCH_ERROR", detail(err.Error()))
 	}
 	return okResp(toAny(stages))
+}
+
+func (s *RunnerState) handleAllocate(args any) map[string]any {
+	a, ok := asMap(args)
+	if !ok {
+		return errResp("INVALID_INPUT", detail("allocate args must be an object"))
+	}
+	input, errR := s.buildEngineInput(a, "allocate")
+	if errR != nil {
+		return errR
+	}
+	out, err := Allocate(input, s.dataset())
+	if err != nil {
+		return errResp("CRUNCH_ERROR", detail(err.Error()))
+	}
+	distribution := make([]any, len(out.ModelsDestroyedDistribution))
+	for i, p := range out.ModelsDestroyedDistribution {
+		distribution[i] = p
+	}
+	return okResp(map[string]any{
+		"damageDealt":                 out.DamageDealt,
+		"modelsDestroyed":             out.ModelsDestroyed,
+		"modelsDestroyedDistribution": distribution,
+	})
 }

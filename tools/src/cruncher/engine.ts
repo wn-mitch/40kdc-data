@@ -47,6 +47,36 @@ export type EngineInput = {
 
 export type EngineOutput = { stages: Stage[]; resolved: ResolvedModifiers };
 
+/**
+ * The per-roll parameters behind one crunch, for the discrete allocation stage
+ * (`allocation.ts`): every probability is the one the expected-value stages use.
+ */
+export type AttackModel = {
+  modelsFiring: number;
+  /** One model's Attacks characteristic, before the flat additions below. */
+  attacksStat: unknown;
+  /** Flat attacks every model adds: the modifier and Blast. */
+  attacksBonus: number;
+  /** Rapid Fire's extra attacks per model when active, else null. */
+  rapidFireStat: unknown;
+  torrent: boolean;
+  hit: { pass: number; crit: number };
+  /** Sustained Hits' extra hits per critical hit, else null. */
+  sustainedStat: unknown;
+  lethal: boolean;
+  wound: { pass: number; crit: number };
+  devastating: boolean;
+  /** Probability a wound that reaches the save is not saved. */
+  unsaved: number;
+  /** Final per-attack damage. */
+  damage: Array<{ value: number; probability: number }>;
+  /** Probability each wound is lost despite Feel No Pain: on every wound, and on mortal wounds only. */
+  woundLost: number;
+  mortalWoundLost: number;
+  wounds: number;
+  modelCount: number;
+};
+
 
 /** Whether a weapon profile may select this target under profile-level restrictions such as Hunter. */
 export function profileCanTarget(profile: Weapon["profiles"][number], target: Unit): boolean {
@@ -64,6 +94,11 @@ export function profileCanTarget(profile: Weapon["profiles"][number], target: Un
  * crunching against a different bundle (e.g. tests).
  */
 export function crunch(input: EngineInput, dataset?: Dataset): EngineOutput {
+  return crunchModel(input, dataset).output;
+}
+
+/** {@link crunch} with the {@link AttackModel} its stages were computed from. */
+export function crunchModel(input: EngineInput, dataset?: Dataset): { output: EngineOutput; model: AttackModel } {
   const ds = dataset ?? lazyEmbeddedDataset();
   const weaponProfile = input.attacker.weapon.profiles[input.attacker.profileIndex];
   if (!weaponProfile) {
@@ -136,6 +171,7 @@ export function crunch(input: EngineInput, dataset?: Dataset): EngineOutput {
   let hits: number;
   let critHits: number;
   let hitsDetail: string;
+  let hitProbs = { pass: 1, crit: 0 };
   if (torrent) {
     hits = attacks;
     critHits = 0;
@@ -154,6 +190,7 @@ export function crunch(input: EngineInput, dataset?: Dataset): EngineOutput {
       autoPassOnSix: true,
       critThreshold: critHitThreshold,
     });
+    hitProbs = probs;
     hits = attacks * probs.pass;
     critHits = attacks * probs.crit;
     hitsDetail = `${isMelee ? "WS" : "BS"}${hitStat}+ (mod ${signed(resolved.hitMod.value)}${covered ? ", cover -1" : ""}, reroll ${resolved.rerolls.hit?.subset ?? "none"}${critHitThreshold < 6 ? `, crit ${critHitThreshold}+` : ""}) → P(hit)=${probs.pass.toFixed(4)}, P(crit)=${probs.crit.toFixed(4)}`;
@@ -300,7 +337,25 @@ export function crunch(input: EngineInput, dataset?: Dataset): EngineOutput {
     detail: `W${W} per model, ${targetModelCount} models in target; ${afterFnp.toFixed(4)} damage / ${W} = ${(afterFnp / W).toFixed(4)} (capped at ${targetModelCount})`,
   });
 
-  return { stages, resolved };
+  const model: AttackModel = {
+    modelsFiring: input.modelsFiring,
+    attacksStat: weaponProfile.stats.A,
+    attacksBonus: resolved.attacksMod.value + blastExtraPerModel,
+    rapidFireStat: rapidFire && halfRange ? rapidFire.parameters?.value : null,
+    torrent,
+    hit: hitProbs,
+    sustainedStat: sustained ? sustained.parameters?.value : null,
+    lethal: hasLethal,
+    wound: woundProbs,
+    devastating: hasDevastating,
+    unsaved: 1 - pSaved,
+    damage: perAttack.distribution,
+    woundLost: pSurviveAll,
+    mortalWoundLost: pSurviveAll * pSurviveMortal,
+    wounds: W,
+    modelCount: targetModelCount,
+  };
+  return { output: { stages, resolved }, model };
 }
 
 // ---------------------------------------------------------------------------

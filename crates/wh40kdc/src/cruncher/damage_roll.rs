@@ -9,6 +9,8 @@
 //! roll rather than on the mean.
 
 use super::buffs::RerollSubset;
+use serde_json::Value;
+
 use super::engine::CruncherError;
 use crate::StatValue;
 
@@ -31,8 +33,6 @@ pub(crate) struct DamageRollInput<'a> {
 #[derive(Clone, Debug)]
 pub(crate) struct DamageRoll {
     /// Probability of each final per-attack damage value, ascending by value.
-    /// The engine reads only `expected`; the unit tests check the distribution.
-    #[cfg_attr(not(test), allow(dead_code))]
     pub distribution: Vec<(f64, f64)>,
     pub expected: f64,
     /// Whether the reroll permission changed any outcome.
@@ -52,10 +52,27 @@ enum ParsedDamage {
 }
 
 fn parse_damage(stat: &StatValue) -> Result<ParsedDamage, CruncherError> {
-    let raw = match stat {
-        StatValue::Integer(n) => return Ok(ParsedDamage::Fixed(*n as f64)),
-        StatValue::DiceExpression(s) => s,
-    };
+    match stat {
+        StatValue::Integer(n) => Ok(ParsedDamage::Fixed(*n as f64)),
+        StatValue::DiceExpression(s) => parse_quantity_str(s),
+    }
+}
+
+/// Parses a keyword-parameter or characteristic value: a finite number or a
+/// string holding a number or dice expression. Anything else is unresolved.
+fn parse_quantity(stat: &Value) -> Result<ParsedDamage, CruncherError> {
+    match stat {
+        Value::Number(n) => n
+            .as_f64()
+            .filter(|value| value.is_finite())
+            .map(ParsedDamage::Fixed)
+            .ok_or_else(|| CruncherError::ParseStat(n.to_string())),
+        Value::String(s) => parse_quantity_str(s),
+        other => Err(CruncherError::ParseStat(other.to_string())),
+    }
+}
+
+fn parse_quantity_str(raw: &str) -> Result<ParsedDamage, CruncherError> {
     let err = || CruncherError::ParseStat(raw.to_string());
     let trimmed = raw.trim();
     if trimmed.is_empty() {
@@ -110,6 +127,18 @@ fn parse_dice_expression(input: &str) -> Option<DiceExpression> {
         count,
         die: die_str.parse().ok()?,
         offset,
+    })
+}
+
+/// Exact distribution of a quantity characteristic (a number or a dice
+/// expression such as `D6+1`), as (value, probability) ascending by value.
+pub fn quantity_distribution(stat: &Value) -> Result<Vec<(f64, f64)>, CruncherError> {
+    Ok(match parse_quantity(stat)? {
+        ParsedDamage::Fixed(n) => vec![(n, 1.0)],
+        ParsedDamage::Dice(dice) => dice_totals(dice.count, dice.die)
+            .into_iter()
+            .map(|(total, probability)| (total as f64 + dice.offset, probability))
+            .collect(),
     })
 }
 

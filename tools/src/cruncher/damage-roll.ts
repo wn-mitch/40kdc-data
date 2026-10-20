@@ -54,6 +54,16 @@ function parseDamage(stat: unknown): number | DiceExpression {
   };
 }
 
+/**
+ * Exact distribution of a quantity characteristic (a number or a dice expression such as `D6+1`),
+ * as (value, probability) ascending by value.
+ */
+export function quantityDistribution(stat: unknown): Array<[number, number]> {
+  const parsed = parseDamage(stat);
+  if (typeof parsed === "number") return [[parsed, 1]];
+  return diceTotals(parsed.count, parsed.die).map(([total, probability]) => [total + parsed.offset, probability]);
+}
+
 /** Distribution of the summed dice, as (total, probability) ascending by total. */
 function diceTotals(count: number, die: number): Array<[number, number]> {
   let totals = new Map<number, number>([[0, 1]]);

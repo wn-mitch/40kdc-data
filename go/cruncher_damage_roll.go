@@ -28,13 +28,14 @@ type damageRollInput struct {
 	reroll    string  // damage-roll reroll permission, "" for none
 }
 
-type damageOutcome struct {
-	value       float64
-	probability float64
+// DamageOutcome is one value of a quantity distribution and its probability.
+type DamageOutcome struct {
+	Value       float64
+	Probability float64
 }
 
 type damageRollResult struct {
-	distribution []damageOutcome // ascending by value
+	distribution []DamageOutcome // ascending by value
 	expected     float64
 	rerollUsed   bool // whether the reroll permission changed any outcome
 }
@@ -78,6 +79,25 @@ func parseDamage(stat any) (float64, *diceExpression, error) {
 		offset, _ = strconv.Atoi(m[3])
 	}
 	return 0, &diceExpression{count, die, float64(offset)}, nil
+}
+
+// quantityDistribution is the exact distribution of a quantity characteristic
+// (a number or a dice expression such as `D6+1`), ascending by value. Mirror of
+// quantityDistribution in tools/src/cruncher/damage-roll.ts.
+func quantityDistribution(stat any) ([]DamageOutcome, error) {
+	fixed, dice, err := parseDamage(stat)
+	if err != nil {
+		return nil, err
+	}
+	if dice == nil {
+		return []DamageOutcome{{fixed, 1}}, nil
+	}
+	totals := diceTotals(dice.count, dice.die)
+	out := make([]DamageOutcome, len(totals))
+	for i, t := range totals {
+		out[i] = DamageOutcome{float64(t.total) + dice.offset, t.probability}
+	}
+	return out, nil
 }
 
 type diceTotal struct {
@@ -129,7 +149,7 @@ func damageRoll(in damageRollInput) (damageRollResult, error) {
 	}
 	if dice == nil {
 		value := final(fixed)
-		return damageRollResult{[]damageOutcome{{value, 1}}, value, false}, nil
+		return damageRollResult{[]DamageOutcome{{value, 1}}, value, false}, nil
 	}
 	totals := diceTotals(dice.count, dice.die)
 	fresh := 0.0
@@ -158,10 +178,10 @@ func damageRoll(in damageRollInput) (damageRollResult, error) {
 		}
 	}
 	sort.Float64s(values)
-	distribution := make([]damageOutcome, 0, len(values))
+	distribution := make([]DamageOutcome, 0, len(values))
 	expected := 0.0
 	for _, v := range values {
-		distribution = append(distribution, damageOutcome{v, outcomes[v]})
+		distribution = append(distribution, DamageOutcome{v, outcomes[v]})
 		expected += v * outcomes[v]
 	}
 	return damageRollResult{distribution, expected, rerollUsed}, nil

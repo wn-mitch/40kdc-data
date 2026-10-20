@@ -48,6 +48,7 @@ import {
 import { selectAdapter } from "./import/adapter.js";
 import { createValidator } from "./schema-loader.js";
 import {
+  allocate,
   attributeStages,
   crunch,
   type Buff,
@@ -993,6 +994,19 @@ function handleAttribution(state: RunnerState, args: unknown): RunnerResponse {
   }
 }
 
+function handleAllocate(state: RunnerState, args: unknown): RunnerResponse {
+  if (typeof args !== "object" || args === null) {
+    return err("INVALID_INPUT", { detail: "allocate args must be an object" });
+  }
+  const built = buildEngineInput(state, args as CrunchArgs, "allocate");
+  if (!built.ok) return built.response;
+  try {
+    return ok(allocate(built.input, getDataset(state)));
+  } catch (e) {
+    return err("CRUNCH_ERROR", { detail: (e as Error).message });
+  }
+}
+
 function handleCompare(state: RunnerState, args: unknown): RunnerResponse {
   if (typeof args !== "object" || args === null) {
     return err("INVALID_INPUT", { detail: "compare args must be an object" });
@@ -1567,6 +1581,8 @@ export function dispatch(
       return handleLoadout(state, req.args);
     case "attribution":
       return handleAttribution(state, req.args);
+    case "allocate":
+      return handleAllocate(state, req.args);
     case "translate_scoring":
       return handleTranslateScoring(state, req.args);
     case "translate_effect":
