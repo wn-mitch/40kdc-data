@@ -13,6 +13,8 @@
     StackableBuffGroup,
   } from "@alpaca-software/40kdc-data";
   import EmptyState from "./EmptyState.svelte";
+  import { activeSupport } from "./defender.js";
+  import { scenarioContext } from "./scenario.js";
 
   // EngineContext for the DSL→Buff translator. Without this the translator
   // defaults to `{ phase: "shooting" }`, so phase-gated branches misfire when
@@ -37,6 +39,9 @@
     attackerCharged: salvo.contextFlags.attackerCharged,
     attackerKeywords,
     targetKeywords: salvo.manualTarget.keywords.map((k) => k.toLowerCase()),
+    attackerAttached: salvo.attachedUnitIds.length > 0,
+    ...(salvo.targetDistance !== null ? { distanceInches: salvo.targetDistance } : {}),
+    ...scenarioContext(salvo.scenario),
   });
 
   // Every buff the attacker could stack, as toggleable levers. The package
@@ -51,6 +56,7 @@
           factionId: salvo.selectedFactionId ?? undefined,
           detachmentId: salvo.selectedDetachmentId ?? undefined,
           attachedUnitIds: salvo.attachedUnitIds,
+          supportingUnitIds: activeSupport(ds, salvo.selectedFactionId, [salvo.selectedUnitId, ...salvo.attachedUnitIds], salvo.supportUnitIds),
           weaponProfiles: salvo.selectedWeaponId
             ? [{ weaponId: salvo.selectedWeaponId, profileIndex: salvo.selectedProfileIndex }]
             : [],

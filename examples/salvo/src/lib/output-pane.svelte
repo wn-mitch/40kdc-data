@@ -24,6 +24,8 @@
     type Unit,
     type Weapon,
     clampWeaponCount,
+    loadoutHitModifier,
+    profileEngineInput,
   } from "@alpaca-software/40kdc-data";
   import EmptyState from "./EmptyState.svelte";
   import {
@@ -35,6 +37,8 @@
     type WeaponLine,
   } from "./weapon-lines.js";
   import { buildDebugSnapshot } from "./debug-export.js";
+  import { activeSupport, defenderBuffs } from "./defender.js";
+  import { scenarioContext } from "./scenario.js";
   import {
     STAGE_COLUMNS,
     aggregateStages,
@@ -79,6 +83,7 @@
     // Drives range-gated abilities (e.g. Furious Onslaught's 18" reroll). Unset
     // → range gates stay permissive.
     ...(salvo.targetDistance !== null ? { distanceInches: salvo.targetDistance } : {}),
+    ...scenarioContext(salvo.scenario),
   });
 
   // Ability/army/detachment/attached levers — weapon-independent, shared by
@@ -94,6 +99,7 @@
           factionId: salvo.selectedFactionId ?? undefined,
           detachmentId: salvo.selectedDetachmentId ?? undefined,
           attachedUnitIds: salvo.attachedUnitIds,
+          supportingUnitIds: activeSupport(ds, salvo.selectedFactionId, [salvo.selectedUnitId, ...salvo.attachedUnitIds], salvo.supportUnitIds),
           weaponProfiles: [],
         },
         context,
@@ -127,20 +133,17 @@
   const defensive = $derived.by<{ buffs: Buff[]; error?: string }>(() => {
     // Defensive abilities for the target — only meaningful when the target
     // is a dataset/roster unit, not the manual stat block.
-    if (salvo.targetMode === "manual") return { buffs: [] };
-    const targetUnitId =
-      salvo.targetMode === "dataset"
-        ? salvo.datasetTargetUnitId
-        : salvo.targetRoster?.units[salvo.rosterTargetUnitIndex ?? -1]?.ref.id ?? null;
+    const targetUnitId = salvo.targetUnitId;
     if (!targetUnitId) return { buffs: [] };
     const tUnit = ds.units.getAny(targetUnitId);
     if (!tUnit) return { buffs: [], error: `Target unit ${targetUnitId} is not in the dataset` };
     try {
       return {
-        buffs: ds.defensiveBuffsFor(
-          { unitId: tUnit.id, factionId: tUnit.raw.faction_id },
-          context,
-        ),
+        buffs: defenderBuffs(ds, tUnit, {
+          detachmentId: salvo.defenderDetachmentId,
+          stratagemIds: salvo.defenderStratagemIds,
+          enhancementId: salvo.defenderEnhancementId,
+        }, context),
       };
     } catch (err) {
       return { buffs: [], error: (err as Error).message };
@@ -237,20 +240,28 @@
   // models firing it. The engine injects each weapon's intrinsic keywords.
   // attributeStages runs the leave-one-out decomposition so each cell can show
   // which toggleable buffs lifted it.
+  function lineHitModifier(line: WeaponLine): number {
+    const owner = memberUnits.find((member) => member.memberId === line.ownerMemberId)?.unit.raw;
+    return owner ? loadoutHitModifier(owner, line.weaponRaw.profiles[line.profileIndex], context) : 0;
+  }
+
   const lineResults = $derived.by(() => {
     if (!selectionValid) return [];
     return weaponLines.map((line) => {
       const models = firing(line);
       if (models <= 0) return { ...line, models, attributed: [] as AttributedStage[], error: "no models carry this weapon" };
       try {
+        // The same engine input the selection scored, including any Big Guns Never Tire penalty.
         const attributed = attributeStages(
-          {
-            attacker: { weapon: line.weaponRaw, profileIndex: line.profileIndex },
-            target: { unit: target, profileIndex: 0, modelCount: salvo.manualTarget.modelCount },
+          profileEngineInput({
+            weapon: line.weaponRaw,
+            profileIndex: line.profileIndex,
+            target: { unit: target, modelCount: salvo.manualTarget.modelCount },
             modelsFiring: models,
             buffs: allBuffs,
             context,
-          },
+            hitModifier: lineHitModifier(line),
+          }),
           ds,
         );
         return { ...line, models, attributed, error: undefined as string | undefined };

@@ -3,6 +3,7 @@
   import { resolveRosterUnit, resolveAttachmentPartners } from "@alpaca-software/40kdc-data";
   import type { UnitView } from "@alpaca-software/40kdc-data";
   import EmptyState from "./EmptyState.svelte";
+  import { supportProviders } from "./defender.js";
 
   type AttachmentPartner = { unit: UnitView; role: "leader" | "bodyguard" };
 
@@ -138,6 +139,17 @@
     if (next.length === current.length && next.every((id, i) => id === current[i])) return;
     salvo.attachedUnitIds = next;
   });
+
+  // Units whose abilities could reach the combined unit if the player places them nearby.
+  const providers = $derived(
+    selectedUnit
+      ? supportProviders(ds, selectedUnit.factionId, [selectedUnit.id, ...salvo.attachedUnitIds])
+      : [],
+  );
+  function toggleSupport(id: string, on: boolean): void {
+    const rest = salvo.supportUnitIds.filter((item) => item !== id);
+    salvo.supportUnitIds = on ? [...rest, id] : rest;
+  }
 
   // Only weapons usable in the current phase: ranged in shooting, melee in fight.
   const weapons = $derived(
@@ -282,6 +294,28 @@
       {/if}
     </select>
   </div>
+{/if}
+
+{#if providers.length > 0}
+  <details class="support">
+    <summary>
+      Nearby support
+      ({providers.filter((u) => salvo.supportUnitIds.includes(u.id)).length} of {providers.length} chosen)
+    </summary>
+    <p class="dim">Tick the units close enough for their auras and unit selections to reach this one.</p>
+    <div class="ability-list">
+      {#each providers as u (u.id)}
+        <label class="ability-row" class:active={salvo.supportUnitIds.includes(u.id)}>
+          <input
+            type="checkbox"
+            checked={salvo.supportUnitIds.includes(u.id)}
+            onchange={(e) => toggleSupport(u.id, (e.currentTarget as HTMLInputElement).checked)}
+          />
+          <span class="name">{u.name}</span>
+        </label>
+      {/each}
+    </div>
+  </details>
 {/if}
 
 <div class="row">

@@ -176,5 +176,15 @@ describe("stack damage loadout search performance", () => {
       modelCount: 3,
       legalityErrors: [],
     });
+    // Each reported profile's attribution reconciles with its damage, and the Stratagem shows its lift.
+    const weapons = withBroadside.winner!.members.flatMap((member) => member.weapons);
+    for (const weapon of weapons) {
+      const attribution = weapon.attribution!;
+      const lifted = attribution.lifts.reduce((sum, lift) => sum + lift.delta, 0);
+      expect(attribution.baseline + lifted + attribution.residual).toBeCloseTo(weapon.stages["after-fnp"], 9);
+    }
+    const strat = weapons.flatMap((weapon) => weapon.attribution!.lifts)
+      .filter((lift) => lift.source.kind === "ability" && lift.source.abilityId.startsWith("the-arrokon-protocol"));
+    expect(strat.reduce((sum, lift) => sum + lift.delta, 0)).toBeGreaterThan(0);
   }, 10_000);
 });

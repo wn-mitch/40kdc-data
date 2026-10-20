@@ -88,14 +88,23 @@ export {
   type ProfileScoreRequest,
   type SelectedWeaponProfile,
 } from "./stack-damage/loadout-scoring.js";
+// Which abilities reach units other than their own (auras, unit selections, filtered targets),
+// and whether a unit may take an Enhancement: what an interactive tool needs to offer supporting
+// units and Enhancement choices.
+export { reachesOtherUnits } from "./abilities-resolver/resolver.js";
+export { canTakeEnhancement } from "./data/lever-providers.js";
 export {
   validateCandidateLoadout,
   type CandidateLoadoutLegality,
 } from "./stack-damage/legality.js";
 export {
+  attributeSelectedProfile,
   crunchProfileScorer,
+  loadoutHitModifier,
+  profileEngineInput,
   resolveUnitWeapon,
   unitLoadoutDamage,
+  type DamageAttribution,
   type UnitLoadoutDamageInput,
 } from "./stack-damage/unit-damage.js";
 

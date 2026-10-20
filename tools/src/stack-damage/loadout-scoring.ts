@@ -33,6 +33,8 @@ export interface SelectedWeaponProfile {
   damagePerModel: number;
   damage: number;
   extraAttacks: boolean;
+  /** The Hit roll modifier the loadout rules imposed on this profile; absent when none. */
+  hitModifier?: number;
   stages: readonly { name: string; expected: number }[];
 }
 
@@ -65,6 +67,9 @@ type ProfileFilter = (profile: Weapon["profiles"][number]) => boolean;
 
 const isPistolProfile: ProfileFilter = (profile) =>
   (profile.keywords ?? []).some((keyword) => keyword.keyword_id === "pistol");
+
+/** Big Guns Never Tire: an engaged Monster or Vehicle shoots its non-Pistol weapons at −1 to hit. */
+export const bigGunsHitModifier = (profile: Weapon["profiles"][number]): number => (isPistolProfile(profile) ? 0 : -1);
 
 function bestProfile<C extends EngineContext>(
   entry: LoadoutWeapon,
@@ -99,6 +104,7 @@ function bestProfile<C extends EngineContext>(
       extraAttacks: (profile.keywords ?? []).some(
         (keyword) => keyword.keyword_id === "extra-attacks",
       ),
+      ...(modifier !== 0 ? { hitModifier: modifier } : {}),
       stages: scored.stages ?? [],
     };
     if (
@@ -203,7 +209,7 @@ export function scoreLoadoutWeapons<C extends EngineContext>(input: {
     const selected = input.weapons
       .map((entry) => input.pistolsExclusive
         ? bestProfile(entry, "shooting", input.context, input.scoreProfile, isPistolProfile)
-        : bestProfile(entry, "shooting", input.context, input.scoreProfile, () => true, (profile) => isPistolProfile(profile) ? 0 : -1))
+        : bestProfile(entry, "shooting", input.context, input.scoreProfile, () => true, bigGunsHitModifier))
       .filter((candidate): candidate is Candidate => candidate !== null)
       .sort(byWeaponThenProfile);
     return {

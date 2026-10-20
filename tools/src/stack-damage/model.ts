@@ -37,6 +37,8 @@ export interface SelectedWeaponResult {
   profileName: string;
   count: number;
   damage: number;
+  /** The Hit roll modifier the loadout rules imposed on this profile; absent when none. */
+  hitModifier?: number;
   stages: readonly { name: string; expected: number }[];
 }
 

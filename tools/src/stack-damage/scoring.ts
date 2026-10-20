@@ -16,13 +16,14 @@ import {
 import { searchLevers, type LeverSpace } from "./lever-search.js";
 import { searchLoadout, type LoadoutScaffold, type LoadoutSpace } from "./loadout-search.js";
 import type { ProfileDamage } from "./loadout-scoring.js";
-import { crunchProfileScorer, unitLoadoutDamage } from "./unit-damage.js";
+import { attributeSelectedProfile, crunchProfileScorer, unitLoadoutDamage, type DamageAttribution } from "./unit-damage.js";
 import type {
   DamageCellState,
   PoolLever,
   StackBuffPool,
   StackMember,
   StackResult,
+  SelectedWeaponResult,
   StackSpec,
   UnitLoadoutResult,
 } from "./model.js";
@@ -346,18 +347,34 @@ export class DamageScoringSession {
     const cached = this.stackCache.get(key);
     if (cached) return cached;
     this.stackEvaluations += 1;
-    const pool = this.pool(spec);
-    const selected = new Set(spec.selectedLeverIds);
-    const members = spec.members.map((member) => {
-      const buffs = [
-        ...pool.levers.filter((lever) => selected.has(lever.id)).flatMap((lever) => lever.perMember.get(member.unit.id) ?? []),
-        ...this.defensiveBuffs,
-      ];
-      return { member, loadout: this.bestLoadout(member.unit, buffs, this.state.contextFor(spec, member)) };
-    });
+    const members = spec.members.map((member) => ({
+      member,
+      loadout: this.bestLoadout(member.unit, this.memberBuffs(spec, member), this.state.contextFor(spec, member)),
+    }));
     const result = { spec, total: members.reduce((sum, member) => sum + member.loadout.total, 0), members };
     this.stackCache.set(key, result);
     return result;
+  }
+
+  /** The buffs a member attacks with under the spec's selected levers, with the target's defensive buffs. */
+  memberBuffs(spec: StackSpec, member: StackMember): Buff[] {
+    const selected = new Set(spec.selectedLeverIds);
+    return [
+      ...this.pool(spec).levers.filter((lever) => selected.has(lever.id)).flatMap((lever) => lever.perMember.get(member.unit.id) ?? []),
+      ...this.defensiveBuffs,
+    ];
+  }
+
+  /** Leave-one-out attribution of one of a member's selected profiles in a scored stack. */
+  attributeWeapon(spec: StackSpec, member: StackMember, weapon: SelectedWeaponResult): DamageAttribution | null {
+    return attributeSelectedProfile({
+      dataset: this.dataset,
+      unit: member.unit.raw,
+      selected: weapon,
+      target: { unit: this.state.target.unitRaw, modelCount: this.state.target.modelCount },
+      buffs: this.memberBuffs(spec, member),
+      context: this.state.contextFor(spec, member),
+    });
   }
 
   /** The stack's lever choices, for {@link searchLevers} and the exhaustive oracle. */

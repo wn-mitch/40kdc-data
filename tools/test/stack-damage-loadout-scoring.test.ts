@@ -3,6 +3,8 @@ import { describe, expect, it } from "vitest";
 import type { EngineContext } from "../src/cruncher/index.js";
 import type { Weapon } from "../src/generated.js";
 import { scoreLoadoutWeapons } from "../src/stack-damage/loadout-scoring.js";
+import { loadoutHitModifier } from "../src/stack-damage/unit-damage.js";
+import type { Unit } from "../src/generated.js";
 
 const GV = { edition: "11th", dataslate: "launch" } as const;
 
@@ -175,6 +177,8 @@ describe("scoreLoadoutWeapons", () => {
     });
     expect(seen).toEqual([["cannon", -1], ["pistol", undefined]]);
     expect(result.total).toBe(5);
+    // The modifier rides on the selection so a recompute (attribution, a UI line) applies it too.
+    expect(result.selected.map((weapon) => [weapon.weaponId, weapon.hitModifier])).toEqual([["cannon", -1], ["pistol", undefined]]);
     expect(result.pistolChoice).toBe("engaged");
   });
 
@@ -188,5 +192,18 @@ describe("scoreLoadoutWeapons", () => {
     expect(result.total).toBe(7);
     expect(result.selected).toHaveLength(2);
     expect(result.pistolChoice).toBe("none");
+  });
+
+  it("gives the Big Guns Never Tire penalty only to an engaged Monster or Vehicle's non-Pistols when shooting", () => {
+    const unit = (keywords: string[]) => ({ keywords }) as unknown as Unit;
+    const gun = ranged("gun").profiles[0];
+    const pistol = ranged("pistol", true).profiles[0];
+    const engaged: EngineContext = { phase: "shooting", attackerStates: ["engaged"] };
+    expect(loadoutHitModifier(unit(["Vehicle"]), gun, engaged)).toBe(-1);
+    expect(loadoutHitModifier(unit(["MONSTER"]), gun, engaged)).toBe(-1);
+    expect(loadoutHitModifier(unit(["Vehicle"]), pistol, engaged)).toBe(0);
+    expect(loadoutHitModifier(unit(["Infantry"]), gun, engaged)).toBe(0);
+    expect(loadoutHitModifier(unit(["Vehicle"]), gun, { phase: "shooting" })).toBe(0);
+    expect(loadoutHitModifier(unit(["Vehicle"]), gun, { phase: "fight", attackerStates: ["engaged"] })).toBe(0);
   });
 });

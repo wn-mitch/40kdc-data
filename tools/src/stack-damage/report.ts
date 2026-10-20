@@ -5,6 +5,7 @@ import type { ComparePhase } from "../compare.js";
 import type { MatrixConfig } from "./config.js";
 import type { LedgerEntry } from "./ledger.js";
 import type { PistolChoice } from "./loadout-scoring.js";
+import type { DamageAttribution } from "./unit-damage.js";
 
 export const DAMAGE_MATRIX_FORMAT = "40kdc-stack-damage-matrix-v1";
 
@@ -22,6 +23,8 @@ export interface WeaponReport {
   profileName: string;
   count: number;
   stages: Record<string, number>;
+  /** What each selected lever and defensive ability contributed to this profile's damage; null when it cannot be recomputed. */
+  attribution: DamageAttribution | null;
 }
 
 export interface MemberReport {
