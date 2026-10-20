@@ -20,6 +20,7 @@ import {
 } from "./buffs.js";
 import { Dataset } from "../data/dataset.js";
 import { isMeleeProfile } from "../data/weapon-profile.js";
+import { damageRoll } from "./damage-roll.js";
 
 export type AttackProfileRef = { weapon: Weapon; profileIndex: number };
 export type TargetProfileRef = {
@@ -253,21 +254,28 @@ export function crunch(input: EngineInput, dataset?: Dataset): EngineOutput {
   const baseD = evalStatValue(weaponProfile.stats.D);
   const melta = findKeyword(resolved, "melta");
   const meltaBonus = melta && halfRange ? evalStatValue(melta.parameters?.value) : 0;
-  const beforeReduction = Math.max(0, baseD + meltaBonus + resolved.damageMod.value);
   const damageReduction = resolved.damageReduction.value;
   // 10e damage-reduction abilities always carry the canonical "to a minimum
   // of 1" clause, so the floor lives in the math, not the data. The clause
   // only applies when damage-reduction is active — without it, a D1 weapon
-  // with a -1 attacker damage-mod still produces 0 damage.
-  const damagePerHit =
-    damageReduction > 0 ? Math.max(1, beforeReduction - damageReduction) : beforeReduction;
+  // with a -1 attacker damage-mod still produces 0 damage. Both floors act on
+  // each Damage roll, as does a damage reroll.
+  const damageReroll = resolved.rerolls.damage?.subset;
+  const perAttack = damageRoll({
+    stat: weaponProfile.stats.D,
+    bonus: meltaBonus,
+    modifier: resolved.damageMod.value,
+    reduction: damageReduction,
+    ...(damageReroll ? { reroll: damageReroll } : {}),
+  });
+  const damagePerHit = perAttack.expected;
   const damageMain = unsaved * damagePerHit;
   const damageMortal = mortalWoundsStream * damagePerHit;
   const damage = damageMain + damageMortal;
   stages.push({
     name: "damage",
     expected: damage,
-    detail: `D ${baseD}${meltaBonus ? ` + Melta ${meltaBonus} (half range)` : ""}${resolved.damageMod.value !== 0 ? ` ${signed(resolved.damageMod.value)} (mod)` : ""}${damageReduction > 0 ? ` -${damageReduction} (defender, min 1)` : ""} = ${damagePerHit} per hit; main ${damageMain.toFixed(4)}, mortal ${damageMortal.toFixed(4)}`,
+    detail: `D ${baseD}${meltaBonus ? ` + Melta ${meltaBonus} (half range)` : ""}${resolved.damageMod.value !== 0 ? ` ${signed(resolved.damageMod.value)} (mod)` : ""}${damageReduction > 0 ? ` -${damageReduction} (defender, min 1)` : ""}${damageReroll ? `, reroll ${damageReroll}${perAttack.rerollUsed ? "" : " (no effect)"}` : ""} = ${damagePerHit} per hit; main ${damageMain.toFixed(4)}, mortal ${damageMortal.toFixed(4)}`,
   });
 
   // 6. FNP

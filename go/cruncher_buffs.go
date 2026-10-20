@@ -106,85 +106,84 @@ func buffApplies(buff map[string]any, ctx map[string]any) bool {
 			}
 		}
 	}
-	// Structured catalog selectors match any selected keyword. Parameters in
-	// the selector are a partial constraint: omitting a parameter intentionally
-	// means any catalog rating.
-	if refs := anyList(w["weaponKeywords"]); len(refs) > 0 {
-		printedRefs := anyList(ctx["weaponKeywordRefs"])
-		if len(printedRefs) > 0 {
-			if !weaponSelectorSetMatches(refs, printedRefs) {
-				return false
-			}
-		} else if weaponSelectorsNeedParameters(refs) || !weaponSelectorIDsMatch(refs, getList(ctx, "weaponKeywords")) {
-			return false
-		}
-	}
-	if refs := anyList(w["excludedWeaponKeywords"]); len(refs) > 0 {
-		printedRefs := anyList(ctx["weaponKeywordRefs"])
-		if len(printedRefs) > 0 {
-			if weaponSelectorSetMatches(refs, printedRefs) {
-				return false
-			}
-		} else if weaponSelectorsNeedParameters(refs) || weaponSelectorIDsMatch(refs, getList(ctx, "weaponKeywords")) {
-			return false
-		}
-	}
+	// Weapon-keyword selectors and weaponRequirements read the weapon's keywords
+	// plus the keywords live buffs grant, so liveBuffs checks them.
 	if w["unresolvedWeaponRef"] != nil {
 		return false
 	}
 	return true
 }
 
-func weaponSelectorSetMatches(selectors, printed []any) bool {
-	for _, selectorAny := range selectors {
-		selector, ok := asMap(selectorAny)
-		if !ok || selector == nil {
-			continue
-		}
-		wantID := getStr(selector, "keyword_id")
-		for _, printedAny := range printed {
-			ref, ok := asMap(printedAny)
-			if !ok || ref == nil || getStr(ref, "keyword_id") != wantID {
+// weaponKeywordRefMatches reports whether a weapon keyword ref meets a structured
+// selector: the same catalog id and every parameter the selector names. A
+// target_keyword compares case-insensitively; a list parameter needs a list of the
+// same length holding every selector item (case-insensitive). Omitting a parameter
+// means any rating. Mirror of `matches` in liveBuffs in tools/src/cruncher/buffs.ts.
+func weaponKeywordRefMatches(ref, selector map[string]any) bool {
+	if getStr(ref, "keyword_id") != getStr(selector, "keyword_id") {
+		return false
+	}
+	actualParams := mapOr(ref["parameters"])
+	for key, want := range mapOr(selector["parameters"]) {
+		actual := actualParams[key]
+		if key == "target_keyword" {
+			a, aOK := actual.(string)
+			b, bOK := want.(string)
+			if aOK && bOK {
+				if lower(a) != lower(b) {
+					return false
+				}
 				continue
 			}
-			if weaponSelectorParametersMatch(mapOr(selector["parameters"]), mapOr(ref["parameters"])) {
-				return true
-			}
 		}
-	}
-	return false
-}
-
-func weaponSelectorParametersMatch(want, have map[string]any) bool {
-	for key, value := range want {
-		if have[key] == nil {
-			return false
-		}
-		if canon, ok := value.([]any); ok {
-			haveValues, ok := have[key].([]any)
-			if !ok || !containsAnyV(canon, haveValues) {
+		if wantList, ok := want.([]any); ok {
+			actualList, ok := actual.([]any)
+			if !ok || len(actualList) != len(wantList) {
 				return false
+			}
+			for _, item := range wantList {
+				text, ok := item.(string)
+				if !ok {
+					return false
+				}
+				found := false
+				for _, candidate := range actualList {
+					if c, ok := candidate.(string); ok && lower(c) == lower(text) {
+						found = true
+						break
+					}
+				}
+				if !found {
+					return false
+				}
 			}
 			continue
 		}
-		if value != have[key] {
+		if !strictScalarEqual(actual, want) {
 			return false
 		}
 	}
 	return true
 }
 
-func weaponKeywordGateRefs(buff map[string]any) []map[string]any {
-	w, _ := getMap(buff, "applicableWhen")
-	raw := anyList(w["weaponKeywords"])
-	refs := make([]map[string]any, 0, len(raw))
-	for _, item := range raw {
-		if ref, ok := asMap(item); ok && ref != nil {
-			refs = append(refs, ref)
+// strictScalarEqual is JS `===` on decoded JSON: scalars compare by value, and
+// objects or lists (compared by identity in JS) never match.
+func strictScalarEqual(a, b any) bool {
+	switch a.(type) {
+	case nil, string, float64, bool, int:
+		switch b.(type) {
+		case nil, string, float64, bool, int:
+			if x, ok := num(a); ok {
+				if y, ok := num(b); ok {
+					return x == y
+				}
+			}
+			return a == b
 		}
 	}
-	return refs
+	return false
 }
+
 func weaponSelectorsNeedParameters(selectors []any) bool {
 	for _, item := range selectors {
 		selector, _ := asMap(item)
@@ -195,113 +194,175 @@ func weaponSelectorsNeedParameters(selectors []any) bool {
 	return false
 }
 
-func weaponSelectorIDsMatch(selectors []any, printed []any) bool {
-	for _, item := range selectors {
-		selector, _ := asMap(item)
+// weaponGatesHold reports whether a buff's weapon gate holds against refs, the
+// weapon's printed keyword refs plus those live buffs grant. exclusions selects
+// whether the inclusion selectors (weaponKeywords) or the exclusions
+// (excludedWeaponKeywords) are checked; weapon names and every weaponRequirements
+// entry are checked either way. An exclusion fails closed when a ref of its
+// keyword lacks a parameter the exclusion names. refs nil means the context
+// carries no weapon keywords: a selector naming no parameters then holds, one
+// naming parameters fails. Mirror of `gatesHold` in tools/src/cruncher/buffs.ts.
+func weaponGatesHold(gate map[string]any, refs []map[string]any, ctx map[string]any, exclusions bool) bool {
+	if gate == nil {
+		return true
+	}
+	if wn, ok := gate["weaponName"].(string); ok && ctx["weaponNames"] != nil && !containsAny(getList(ctx, "weaponNames"), wn) {
+		return false
+	}
+	if excluded, ok := asList(gate["excludedWeaponNames"]); ok && ctx["weaponNames"] != nil {
+		for _, name := range excluded {
+			if n, ok := name.(string); ok && containsAny(getList(ctx, "weaponNames"), n) {
+				return false
+			}
+		}
+	}
+	if gate["unresolvedWeaponRef"] != nil {
+		return false
+	}
+	for _, requirementAny := range anyList(gate["weaponRequirements"]) {
+		requirement, _ := asMap(requirementAny)
+		if !weaponGatesHold(requirement, refs, ctx, exclusions) {
+			return false
+		}
+	}
+	if !exclusions {
+		if legacy, ok := gate["weaponKeyword"].(string); ok && refs != nil {
+			found := false
+			for _, ref := range refs {
+				if keywordKey(getStr(ref, "keyword_id")) == keywordKey(legacy) {
+					found = true
+					break
+				}
+			}
+			if !found {
+				return false
+			}
+		}
+	}
+	key := "weaponKeywords"
+	if exclusions {
+		key = "excludedWeaponKeywords"
+	}
+	selectors := anyList(gate[key])
+	if gate[key] == nil {
+		return true
+	}
+	if refs == nil {
+		return !weaponSelectorsNeedParameters(selectors)
+	}
+	found := false
+	for _, selectorAny := range selectors {
+		selector, _ := asMap(selectorAny)
 		if selector == nil {
 			continue
 		}
-		want := getStr(selector, "keyword_id")
-		for _, value := range printed {
-			if getStr(map[string]any{"keyword_id": value}, "keyword_id") == want {
-				return true
+		for _, ref := range refs {
+			if exclusions && getStr(ref, "keyword_id") == getStr(selector, "keyword_id") {
+				params := mapOr(ref["parameters"])
+				for name := range mapOr(selector["parameters"]) {
+					if _, present := params[name]; !present {
+						return false
+					}
+				}
 			}
-			if s, ok := value.(string); ok && s == want {
-				return true
+			if weaponKeywordRefMatches(ref, selector) {
+				found = true
 			}
 		}
 	}
-	return false
+	return found != exclusions
 }
 
-func weaponKeywordGate(buff map[string]any) (string, bool) {
-	w, _ := getMap(buff, "applicableWhen")
-	k, ok := w["weaponKeyword"].(string)
-	return k, ok
+// printedWeaponKeywordRefs is the weapon's printed keywords as refs: the context's
+// weaponKeywordRefs, else its weaponKeywords ids, else nil when it carries neither.
+func printedWeaponKeywordRefs(ctx map[string]any) []map[string]any {
+	refs := []map[string]any{}
+	if ctx["weaponKeywordRefs"] != nil {
+		for _, raw := range anyList(ctx["weaponKeywordRefs"]) {
+			if ref, ok := asMap(raw); ok && ref != nil {
+				refs = append(refs, ref)
+			}
+		}
+		return refs
+	}
+	if ctx["weaponKeywords"] != nil {
+		for _, raw := range getList(ctx, "weaponKeywords") {
+			if id, ok := raw.(string); ok {
+				refs = append(refs, map[string]any{"keyword_id": id})
+			}
+		}
+		return refs
+	}
+	return nil
 }
 
-// liveBuffs reports, per buff, whether its gates hold. A weapon-keyword gate
-// reads the weapon's printed keywords plus the keywords other live buffs grant,
-// so one pass is repeated until no further gated buff joins ("weapons with
-// Lethal Hits gain Rapid Fire 1" sees a granted Lethal Hits). Permissive when
-// the context carries no weaponKeywords.
+// withGrantedKeywords appends the keyword refs that the included buffs grant to printed.
+func withGrantedKeywords(printed []map[string]any, buffs []any, included []bool) []map[string]any {
+	if printed == nil {
+		return nil
+	}
+	refs := append([]map[string]any{}, printed...)
+	for i, bAny := range buffs {
+		if !included[i] {
+			continue
+		}
+		b, _ := asMap(bAny)
+		c, _ := getMap(b, "contribution")
+		if getStr(c, "type") == "extra-keyword" {
+			if ref, ok := getMap(c, "keywordRef"); ok && ref != nil {
+				refs = append(refs, ref)
+			}
+		}
+	}
+	return refs
+}
+
+// liveBuffs reports, per buff, whether its gates hold. A weapon-keyword gate reads
+// the weapon's printed keywords plus the keywords other live buffs grant, so one
+// pass is repeated until no further gated buff joins ("weapons with Lethal Hits
+// gain Rapid Fire 1" sees a granted Lethal Hits). Positive dependencies resolve
+// first; exclusions then apply against the complete candidate keyword set so a
+// granted keyword cannot bypass one, and buffs whose inclusion rested on an
+// excluded buff's keyword drop out until the set is stable. Mirror of liveBuffs
+// in tools/src/cruncher/buffs.ts.
 func liveBuffs(buffs []any, ctx map[string]any) []bool {
-	live := make([]bool, len(buffs))
-	pending := make([]bool, len(buffs))
-	gatedByKeyword := ctx["weaponKeywords"] != nil
+	gates := make([]map[string]any, len(buffs))
+	base := make([]bool, len(buffs))
 	for i, bAny := range buffs {
 		b, _ := asMap(bAny)
-		structuredRefs := weaponKeywordGateRefs(b)
-		if !buffApplies(b, ctx) {
-			hasParameters := false
-			for _, ref := range structuredRefs {
-				if len(mapOr(ref["parameters"])) > 0 {
-					hasParameters = true
-					break
-				}
-			}
-			if len(structuredRefs) == 0 || hasParameters {
-				continue
-			}
-		}
-		_, legacy := weaponKeywordGate(b)
-		structured := len(structuredRefs) > 0
-		if (legacy || structured) && gatedByKeyword {
-			pending[i] = true
-		} else {
-			live[i] = true
-		}
+		gates[i], _ = getMap(b, "applicableWhen")
+		base[i] = buffApplies(b, ctx)
 	}
-	if !gatedByKeyword {
-		return live
-	}
+	printed := printedWeaponKeywordRefs(ctx)
+	selected := make([]bool, len(buffs))
 	for {
-		keywords := map[string]bool{}
-		for _, k := range getList(ctx, "weaponKeywords") {
-			if ks, ok := k.(string); ok {
-				keywords[keywordKey(ks)] = true
-			}
-		}
-		for _, raw := range getList(ctx, "weaponKeywordRefs") {
-			if ref, ok := asMap(raw); ok {
-				keywords[keywordKey(getStr(ref, "keyword_id"))] = true
-			}
-		}
-		for i, bAny := range buffs {
-			if !live[i] {
-				continue
-			}
-			b, _ := asMap(bAny)
-			c, _ := getMap(b, "contribution")
-			if getStr(c, "type") == "extra-keyword" {
-				ref, _ := getMap(c, "keywordRef")
-				keywords[keywordKey(getStr(ref, "keyword_id"))] = true
-			}
-		}
+		refs := withGrantedKeywords(printed, buffs, selected)
 		joined := false
-		for i, bAny := range buffs {
-			if !pending[i] {
-				continue
-			}
-			b, _ := asMap(bAny)
-			refs := weaponKeywordGateRefs(b)
-			matched := false
-			for _, ref := range refs {
-				if keywords[keywordKey(getStr(ref, "keyword_id"))] {
-					matched = true
-					break
-				}
-			}
-			if legacy, ok := weaponKeywordGate(b); ok {
-				matched = matched || keywords[keywordKey(legacy)]
-			}
-			if matched {
-				pending[i] = false
-				live[i] = true
+		for i := range buffs {
+			if base[i] && !selected[i] && weaponGatesHold(gates[i], refs, ctx, false) {
+				selected[i] = true
 				joined = true
 			}
 		}
 		if !joined {
+			break
+		}
+	}
+	refs := withGrantedKeywords(printed, buffs, selected)
+	live := make([]bool, len(buffs))
+	for i := range buffs {
+		live[i] = selected[i] && weaponGatesHold(gates[i], refs, ctx, true)
+	}
+	for {
+		remaining := withGrantedKeywords(printed, buffs, live)
+		dropped := false
+		for i := range buffs {
+			if live[i] && !weaponGatesHold(gates[i], remaining, ctx, false) {
+				live[i] = false
+				dropped = true
+			}
+		}
+		if !dropped {
 			return live
 		}
 	}

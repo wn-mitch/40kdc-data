@@ -138,14 +138,14 @@
       {
         "name": "damage",
         "expected": 2.716049382716049,
-        "baseline": 1.6296296296296298,
+        "baseline": 1.6296296296296295,
         "lifts": [
           {
             "source": {
               "kind": "manual",
               "label": "Twin-linked (test)"
             },
-            "delta": 1.0864197530864192
+            "delta": 1.0864197530864195
           }
         ],
         "residual": 0,
@@ -156,14 +156,14 @@
       {
         "name": "after-fnp",
         "expected": 2.716049382716049,
-        "baseline": 1.6296296296296298,
+        "baseline": 1.6296296296296295,
         "lifts": [
           {
             "source": {
               "kind": "manual",
               "label": "Twin-linked (test)"
             },
-            "delta": 1.0864197530864192
+            "delta": 1.0864197530864195
           }
         ],
         "residual": 0,
@@ -174,14 +174,14 @@
       {
         "name": "models-killed",
         "expected": 0.10446343779677111,
-        "baseline": 0.06267806267806268,
+        "baseline": 0.06267806267806267,
         "lifts": [
           {
             "source": {
               "kind": "manual",
               "label": "Twin-linked (test)"
             },
-            "delta": 0.04178537511870843
+            "delta": 0.041785375118708445
           }
         ],
         "residual": 0,

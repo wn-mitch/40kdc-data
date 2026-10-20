@@ -152,7 +152,9 @@ func crunch(input map[string]any, ds *Dataset) ([]map[string]any, *resolved, err
 		}
 		ctx["weaponNames"] = names
 	}
-	if ctx["weaponKeywords"] == nil {
+	// The request's weaponKeywords and weaponKeywordRefs each default to the profile's printed
+	// keywords independently, so refs the request supplies survive a defaulted id list.
+	if ctx["weaponKeywords"] == nil || ctx["weaponKeywordRefs"] == nil {
 		keywords := []any{}
 		refs := []any{}
 		for _, refAny := range getList(weaponProfile, "keywords") {
@@ -163,10 +165,12 @@ func crunch(input map[string]any, ds *Dataset) ([]map[string]any, *resolved, err
 				refs = append(refs, ref)
 			}
 		}
-		ctx["weaponKeywords"] = keywords
-		ctx["weaponKeywordRefs"] = refs
-	} else if ctx["weaponKeywordRefs"] == nil {
-		ctx["weaponKeywordRefs"] = getList(weaponProfile, "keywords")
+		if ctx["weaponKeywords"] == nil {
+			ctx["weaponKeywords"] = keywords
+		}
+		if ctx["weaponKeywordRefs"] == nil {
+			ctx["weaponKeywordRefs"] = refs
+		}
 	}
 
 	profBuffs := profileBuffsFor(attacker, ds, ctx)
@@ -280,18 +284,7 @@ func crunch(input map[string]any, ds *Dataset) ([]map[string]any, *resolved, err
 	sStat := sBase + res.strengthMod
 	tStat := numOr0(unitProfile["T"]) + res.toughnessMod
 	stdWoundNeeded := woundThreshold(sStat, tStat)
-	anti := res.findKeyword("anti")
-	antiThreshold := 7.0
-	if anti != nil {
-		params, _ := getMap(anti, "parameters")
-		targetKw, _ := params["target_keyword"].(string)
-		if targetKw != "" && antiTargetMatches(targetKw, targetKeywords) {
-			threshold := jsNumber(params["threshold"])
-			if !math.IsInf(threshold, 0) && !math.IsNaN(threshold) {
-				antiThreshold = threshold
-			}
-		}
-	}
+	antiThreshold := antiWoundThreshold(res.extraKeywords, targetKeywords)
 	critWoundThreshold := math.Min(6, antiThreshold)
 	if crit, ok := res.critThresholds["wound"]; ok {
 		critWoundThreshold = math.Min(critWoundThreshold, crit.value)
@@ -364,8 +357,9 @@ func crunch(input map[string]any, ds *Dataset) ([]map[string]any, *resolved, err
 	stages = append(stages, stage("unsaved", unsaved))
 
 	// 5. Damage
-	baseD, err := evalStatValue(stats["D"])
-	if err != nil {
+	// Evaluated first so an unparseable D reports the stat-value error, matching
+	// the reference engine's order.
+	if _, err := evalStatValue(stats["D"]); err != nil {
 		return nil, nil, err
 	}
 	melta := res.findKeyword("melta")
@@ -376,12 +370,25 @@ func crunch(input map[string]any, ds *Dataset) ([]map[string]any, *resolved, err
 			return nil, nil, err
 		}
 	}
-	beforeReduction := math.Max(0, baseD+meltaBonus+res.damageMod)
-	damageReduction := res.damageReduction
-	damagePerHit := beforeReduction
-	if damageReduction > 0 {
-		damagePerHit = math.Max(1, beforeReduction-damageReduction)
+	// 10e damage-reduction abilities always carry the canonical "to a minimum
+	// of 1" clause, so the floor lives in the math, not the data. The clause
+	// only applies when damage-reduction is active. Both floors act on each
+	// Damage roll, as does a damage reroll.
+	damageReroll := ""
+	if e, ok := res.rerolls["damage"]; ok {
+		damageReroll = e.subset
 	}
+	perAttack, err := damageRoll(damageRollInput{
+		stat:      stats["D"],
+		bonus:     meltaBonus,
+		modifier:  res.damageMod,
+		reduction: res.damageReduction,
+		reroll:    damageReroll,
+	})
+	if err != nil {
+		return nil, nil, err
+	}
+	damagePerHit := perAttack.expected
 	damageMain := unsaved * damagePerHit
 	damageMortal := mortalWoundsStream * damagePerHit
 	damage := damageMain + damageMortal
@@ -440,20 +447,48 @@ func unitKeywordsLower(unit map[string]any) []string {
 	return out
 }
 
-// antiTargetMatches reports whether an Anti target matches a unit: one of its slash-separated
-// alternatives. An alternative "non-X" matches a unit without keyword X. targetKeywords are lower case.
-func antiTargetMatches(target string, targetKeywords []string) bool {
-	for _, alternative := range strings.Split(target, "/") {
-		alternative = lower(strings.TrimSpace(alternative))
-		if keyword, negated := strings.CutPrefix(alternative, "non-"); negated {
-			if !containsStr2(targetKeywords, keyword) {
+// antiWoundThreshold is the lowest critical-wound threshold any Anti keyword grants against the
+// target, or 7 (unreachable) when none applies. An Anti applies when it names a target: its
+// target_keyword the unit has, at least one of its required_target_keywords_any, and none of its
+// excluded_target_keywords. Only an integer threshold in 2..6 counts. targetKeywords are lower
+// case. Mirror of the Anti loop in tools/src/cruncher/engine.ts.
+func antiWoundThreshold(extraKeywords []extraKw, targetKeywords []string) float64 {
+	threshold := 7.0
+	hasAny := func(raw any) bool {
+		list, _ := raw.([]any)
+		for _, keyword := range list {
+			if text, ok := keyword.(string); ok && containsStr2(targetKeywords, lower(text)) {
 				return true
 			}
-		} else if containsStr2(targetKeywords, alternative) {
-			return true
+		}
+		return false
+	}
+	for _, entry := range extraKeywords {
+		if getStr(entry.keywordRef, "keyword_id") != "anti" {
+			continue
+		}
+		params, _ := getMap(entry.keywordRef, "parameters")
+		targetKw, hasTargetKw := params["target_keyword"].(string)
+		required, hasRequired := params["required_target_keywords_any"].([]any)
+		_, hasExcluded := params["excluded_target_keywords"].([]any)
+		if !hasTargetKw && !hasRequired && !hasExcluded {
+			continue
+		}
+		if hasTargetKw && !containsStr2(targetKeywords, lower(targetKw)) {
+			continue
+		}
+		if hasRequired && !hasAny(required) {
+			continue
+		}
+		if hasExcluded && hasAny(params["excluded_target_keywords"]) {
+			continue
+		}
+		value := jsNumber(params["threshold"])
+		if value == math.Trunc(value) && value >= 2 && value <= 6 {
+			threshold = math.Min(threshold, value)
 		}
 	}
-	return false
+	return threshold
 }
 
 func containsStr2(xs []string, x string) bool {

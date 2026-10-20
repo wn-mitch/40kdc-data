@@ -213,8 +213,9 @@ func describeMatches(p map[string]any, negated bool) string {
 	return who + " is " + no + unitFilterPhrase(f)
 }
 
-// describePredicate renders the predicate phrase, optionally negated ("the unit
-// is not below starting strength").
+// controlCountPhrase renders a `{min, max}` count bound ("3+", "exactly 2",
+// "at most 1"); an absent bound reads "1+". Mirror of countPhrase in
+// tools/src/translate/condition-refs.ts.
 func controlCountPhrase(value any) string {
 	bounds, _ := asMap(value)
 	if bounds == nil {
@@ -263,6 +264,8 @@ func controlComparisonPhrase(comparison string) string {
 	}
 }
 
+// describePredicate renders the predicate phrase, optionally negated ("the unit
+// is not below starting strength").
 func describePredicate(c map[string]any, negated bool) string {
 	p := paramsOf(c)
 	// Compound controls clauses need negation around the complete predicate;
@@ -784,13 +787,13 @@ func describePredicate(c map[string]any, negated bool) string {
 		}
 		return neg + s
 	case "engagement-fronts":
-		return neg + "you are engaged on " + countMinOr1(p) + "+ fronts"
+		return neg + "you are engaged on " + controlCountPhrase(p["count"]) + " fronts"
 	case "destroyed-while-on-objective":
 		obj := "an objective"
 		if jsTruthy(p["objective_role"]) {
 			obj = "a " + dekebab(cstr(p["objective_role"])) + " objective"
 		}
-		s := neg + countMinOr1(p) + "+ enemy units destroyed"
+		s := neg + controlCountPhrase(p["count"]) + " enemy units destroyed"
 		if jsTruthy(p["destroyer_on_objective"]) {
 			s += " by a unit on " + obj
 		}
@@ -810,7 +813,7 @@ func describePredicate(c map[string]any, negated bool) string {
 		if p["tag"] != nil {
 			terrain = dekebab(cstr(p["tag"])) + " terrain"
 		}
-		return neg + countMinOr1(p) + "+ enemy units destroyed " + where + " " + terrain
+		return neg + controlCountPhrase(p["count"]) + " enemy units destroyed " + where + " " + terrain
 	case "battle-size":
 		return "the battle size is " + neg + titleCase(cstr(p["size"]))
 	case "army-faction":

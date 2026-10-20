@@ -33,6 +33,7 @@
 
 pub mod attribution;
 pub mod buffs;
+mod damage_roll;
 pub mod engine;
 pub mod from_dsl;
 pub mod from_keyword;

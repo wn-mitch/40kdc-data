@@ -18,6 +18,7 @@ use serde_json::Value;
 use super::buffs::{
     resolve_buffs, Buff, EngineContext, FeelNoPainState, ResolvedModifiers, WeaponKeywordRef,
 };
+use super::damage_roll::{damage_roll, DamageRollInput};
 use super::from_keyword::buffs_from_keyword;
 use crate::data::Dataset;
 use crate::{KeywordList, StatValue, Unit, Weapon, WeaponProfilesItem, WeaponProfilesItemRange};
@@ -597,17 +598,21 @@ pub fn crunch(
         (Some(kw), true) => eval_param_value(parameter(kw, "value"))?,
         _ => 0.0,
     };
-    let before_reduction = (base_d + melta_bonus + resolved.damage_mod.value).max(0.0);
     let damage_reduction = resolved.damage_reduction.value;
     // 10e damage-reduction abilities always carry the canonical "to a minimum
     // of 1" clause, so the floor lives in the math, not the data. The clause
     // only applies when damage-reduction is active — without it, a D1 weapon
-    // with a -1 attacker damage-mod still produces 0 damage.
-    let damage_per_hit = if damage_reduction > 0.0 {
-        (before_reduction - damage_reduction).max(1.0)
-    } else {
-        before_reduction
-    };
+    // with a -1 attacker damage-mod still produces 0 damage. Both floors act on
+    // each Damage roll, as does a damage reroll.
+    let damage_reroll = resolved.rerolls.damage.as_ref().map(|r| r.subset);
+    let per_attack = damage_roll(&DamageRollInput {
+        stat: &weapon_profile.stats.d,
+        bonus: melta_bonus,
+        modifier: resolved.damage_mod.value,
+        reduction: damage_reduction,
+        reroll: damage_reroll,
+    })?;
+    let damage_per_hit = per_attack.expected;
     let damage_main = unsaved * damage_per_hit;
     let damage_mortal = mortal_wounds_stream * damage_per_hit;
     let damage = damage_main + damage_mortal;
@@ -615,7 +620,7 @@ pub fn crunch(
         name: StageName::Damage,
         expected: damage,
         detail: format!(
-            "D {base_d}{}{}{} = {damage_per_hit} per hit; main {damage_main:.4}, mortal {damage_mortal:.4}",
+            "D {base_d}{}{}{}{} = {damage_per_hit} per hit; main {damage_main:.4}, mortal {damage_mortal:.4}",
             if melta_bonus != 0.0 {
                 format!(" + Melta {melta_bonus} (half range)")
             } else {
@@ -630,6 +635,17 @@ pub fn crunch(
                 format!(" -{damage_reduction} (defender, min 1)")
             } else {
                 String::new()
+            },
+            match damage_reroll {
+                Some(subset) => format!(
+                    ", reroll {}{}",
+                    match subset {
+                        super::buffs::RerollSubset::Ones => "ones",
+                        super::buffs::RerollSubset::AllFailures => "all-failures",
+                    },
+                    if per_attack.reroll_used { "" } else { " (no effect)" },
+                ),
+                None => String::new(),
             },
         ),
     });

@@ -5,22 +5,6 @@ import "strings"
 // History predicates (`happened`): what a unit did earlier in the window.
 // Part of the condition describer; mirror of tools/src/translate/condition.ts.
 
-// countMin is `typeof p.count_min === "number" ? p.count_min : 1`.
-func countMin(p map[string]any) float64 {
-	if n, ok := num(p["count_min"]); ok {
-		return n
-	}
-	return 1
-}
-
-// countMinOr1 is `p.count_min ?? 1` rendered through cstr.
-func countMinOr1(p map[string]any) string {
-	if p["count_min"] == nil {
-		return "1"
-	}
-	return cstr(p["count_min"])
-}
-
 var happenedMoveVerbs = map[string]string{
 	"charge": "charge", "advance": "advance", "fall-back": "fall back",
 	"remain-stationary": "remain stationary", "ingress": "make an ingress move",

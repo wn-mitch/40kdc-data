@@ -25,6 +25,7 @@ from wh40kdc.cruncher.buffs import (
     ResolvedModifiers,
     resolve_buffs,
 )
+from wh40kdc.cruncher.damage_roll import damage_roll
 from wh40kdc.data.dataset import Dataset
 
 EngineInput = dict[str, Any]
@@ -363,14 +364,21 @@ def crunch(input: EngineInput, dataset: Dataset | None = None) -> EngineOutput:
     melta_bonus = (
         eval_stat_value((melta.get("parameters") or {}).get("value")) if melta and half_range else 0
     )
-    before_reduction = max(0, base_d + melta_bonus + resolved["damageMod"]["value"])
     damage_reduction = resolved["damageReduction"]["value"]
     # 10e damage-reduction abilities always carry the canonical "to a minimum
     # of 1" clause, so the floor lives in the math, not the data. The clause
-    # only applies when damage-reduction is active.
-    damage_per_hit = (
-        max(1, before_reduction - damage_reduction) if damage_reduction > 0 else before_reduction
+    # only applies when damage-reduction is active — without it, a D1 weapon
+    # with a -1 attacker damage-mod still produces 0 damage. Both floors act on
+    # each Damage roll, as does a damage reroll.
+    damage_reroll = (resolved["rerolls"].get("damage") or {}).get("subset")
+    per_attack = damage_roll(
+        stat=stats.get("D"),
+        bonus=melta_bonus,
+        modifier=resolved["damageMod"]["value"],
+        reduction=damage_reduction,
+        reroll=damage_reroll,
     )
+    damage_per_hit = per_attack["expected"]
     damage_main = unsaved * damage_per_hit
     damage_mortal = mortal_wounds_stream * damage_per_hit
     damage = damage_main + damage_mortal
@@ -381,6 +389,10 @@ def crunch(input: EngineInput, dataset: Dataset | None = None) -> EngineOutput:
         damage_detail += f" {_signed(resolved['damageMod']['value'])} (mod)"
     if damage_reduction > 0:
         damage_detail += f" -{damage_reduction} (defender, min 1)"
+    if damage_reroll:
+        damage_detail += f", reroll {damage_reroll}"
+        if not per_attack["rerollUsed"]:
+            damage_detail += " (no effect)"
     damage_detail += (
         f" = {damage_per_hit} per hit; main {damage_main:.4f}, mortal {damage_mortal:.4f}"
     )
