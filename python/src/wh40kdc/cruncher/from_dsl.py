@@ -104,11 +104,7 @@ def effect_to_buffs(
                 counts.append(float(count))
             elif limit.get("frequency") != "n-per-battle":
                 counts.append(1)
-        group = (
-            {"id": f"{ability_id}?usage", "maxActivations": min(counts)}
-            if counts
-            else None
-        )
+        group = {"id": f"{ability_id}?usage", "maxActivations": min(counts)} if counts else None
         if out["applied"]:
             lever: dict[str, Any] = {
                 "id": f"{ability_id}#activate",
@@ -172,13 +168,10 @@ def _aura_filter_keywords(
         any_of = recipient.get("any_of", [])
         none_of = recipient.get("none_of", [])
         not_all_of = recipient.get("not_all_of", [])
-        if (
-            set(recipient) - {"all_of", "any_of", "none_of", "not_all_of"}
-            or any(
-                not isinstance(keywords, list)
-                or any(not isinstance(keyword, str) or not keyword for keyword in keywords)
-                for keywords in (all_of, any_of, none_of, not_all_of)
-            )
+        if set(recipient) - {"all_of", "any_of", "none_of", "not_all_of"} or any(
+            not isinstance(keywords, list)
+            or any(not isinstance(keyword, str) or not keyword for keyword in keywords)
+            for keywords in (all_of, any_of, none_of, not_all_of)
         ):
             out["unsupported"].append(
                 {
@@ -310,8 +303,7 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
             out["unsupported"].append(
                 {
                     "reason": (
-                        "unit-filter target: identity, state or model membership "
-                        "is unresolved"
+                        "unit-filter target: identity, state or model membership is unresolved"
                     ),
                     "effectFragment": node,
                 }
@@ -478,9 +470,7 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
             ):
                 if filt is None:
                     continue
-                verdict = _matches_unit_filter(
-                    filt, opts["context"], "attacker", "friendly"
-                )
+                verdict = _matches_unit_filter(filt, opts["context"], "attacker", "friendly")
                 if verdict is False:
                     return
                 if verdict == "unknown":
@@ -1113,9 +1103,7 @@ def _translate_keyword_grant(
             "source": source,
             "contribution": {"type": "extra-keyword", "keywordRef": ref},
         }
-        out["applied"].append(
-            {**buff, "applicableWhen": applicability} if applicability else buff
-        )
+        out["applied"].append({**buff, "applicableWhen": applicability} if applicability else buff)
 
 
 def _is_weapon_keyword_ref(value: Any) -> bool:
@@ -1572,9 +1560,7 @@ def moment_gate(trigger: Any, effect: Any, source_fragment: Any = None) -> Any:
         return effect
     values = trigger if isinstance(trigger, list) else [trigger]
     triggers = [
-        value
-        for value in values
-        if _is_object(value) and isinstance(value.get("event"), str)
+        value for value in values if _is_object(value) and isinstance(value.get("event"), str)
     ]
     if not triggers or any(is_attack_step(item) for item in triggers):
         return effect
@@ -1639,16 +1625,11 @@ def recipient_snapshot_reason(trigger: Any, effect: Any) -> str | None:
         )
         triggers = inherited if isinstance(inherited, list) else [inherited]
         if value.get("type") == "for-each-unit" and any(
-            _is_object(item)
-            and isinstance(item.get("event"), str)
-            and not is_attack_step(item)
+            _is_object(item) and isinstance(item.get("event"), str) and not is_attack_step(item)
             for item in triggers
         ):
             return True
-        return any(
-            key != "trigger" and check(child, inherited)
-            for key, child in value.items()
-        )
+        return any(key != "trigger" and check(child, inherited) for key, child in value.items())
 
     return RECIPIENT_SNAPSHOT_UNAVAILABLE if check(effect, trigger) else None
 
@@ -1676,15 +1657,20 @@ def resolve_recipient_snapshots(
             return node
         events = event if isinstance(event, list) else [event]
         historical = [
-            item for item in events if isinstance(item, dict) and isinstance(item.get("event"), str)
+            item
+            for item in events
+            if isinstance(item, dict)
+            and isinstance(item.get("event"), str)
             and not is_attack_step(item)
         ]
         if node.get("type") == "for-each-unit" and historical:
             matches = [
-                snap for snap in snapshots
+                snap
+                for snap in snapshots
                 if isinstance(snap, dict)
                 and source.get("kind") == "ability"
-                and source_id is not None and side_id is not None
+                and source_id is not None
+                and side_id is not None
                 and same_snapshot_value(snap.get("source"), source)
                 and snap.get("sourceUnitId") == source_id
                 and snap.get("perspective") == perspective
@@ -1815,10 +1801,7 @@ def _translate_stance_capacity(
         and not isinstance(additional, bool)
         and allocation in ("fixed-option", "choose-one-option")
         and (allocation != "fixed-option" or is_ref(option))
-        and (
-            options is None
-            or (isinstance(options, list) and all(is_ref(ref) for ref in options))
-        )
+        and (options is None or (isinstance(options, list) and all(is_ref(ref) for ref in options)))
     )
     if not valid:
         out["unsupported"].append(
@@ -1899,9 +1882,7 @@ def _enumerate_menu_actions(
         eligibility = eligibility if _is_object(eligibility) else None
         if eligibility is not None and eligibility.get("filter") is not None:
             side = "attacker" if opts["perspective"] == "attacker" else "target"
-            verdict = _matches_unit_filter(
-                eligibility["filter"], opts["context"], side, "friendly"
-            )
+            verdict = _matches_unit_filter(eligibility["filter"], opts["context"], side, "friendly")
             if verdict is False:
                 continue
             if verdict == "unknown":
@@ -1935,16 +1916,12 @@ def _enumerate_menu_actions(
             )
             continue
         buffs: list[Buff] = []
-        _collect_gated_buffs(
-            action.get("effect"), source, opts, {}, buffs, out["unsupported"]
-        )
+        _collect_gated_buffs(action.get("effect"), source, opts, {}, buffs, out["unsupported"])
         if not buffs:
             continue
         label_value = action.get("label")
         label = (
-            label_value
-            if isinstance(label_value, str) and label_value
-            else _label_for_buffs(buffs)
+            label_value if isinstance(label_value, str) and label_value else _label_for_buffs(buffs)
         )
         requirement = {key: value for key, value in action.items() if key != "effect"}
         shared_usage = node.get("shared_usage")
@@ -2077,9 +2054,7 @@ def _collect_gated_buffs(
         return
     if node_type == "ability-part":
         part_opts = (
-            opts
-            if node.get("duration") is None
-            else {**opts, "duration": node.get("duration")}
+            opts if node.get("duration") is None else {**opts, "duration": node.get("duration")}
         )
         if node.get("trigger") is not None or (
             node.get("optional") is not True
@@ -2128,6 +2103,7 @@ def _duration_spans_clock(duration: Any, clock: str) -> bool:
     if clock == "turn":
         return duration != "turn"
     return duration not in ("turn", "battle-round")
+
 
 def _elide_historical_clocks(condition: dict[str, Any], duration: Any) -> dict[str, Any]:
     """Replace only trigger clocks whose effect lifetime can outlast that clock."""
@@ -2374,6 +2350,21 @@ def _is_buffed_unit(subject: Any) -> bool:
     return subject is None or subject in ("this-unit", "ability-unit", "this-model", "recipient")
 
 
+def _condition_side(subject: Any, perspective: str) -> str | None:
+    """Which unit of the attack a condition's subject names, or None for another unit."""
+    if subject == "defender":
+        return "target"
+    if subject == "attacker":
+        return "attacker"
+    if _is_buffed_unit(subject):
+        return "attacker" if perspective == "attacker" else "target"
+    return None
+
+
+def _is_num(value: Any) -> bool:
+    return isinstance(value, (int, float)) and not isinstance(value, bool)
+
+
 def _single_keyword(params: dict[str, Any] | None) -> str | None:
     """The one keyword a ``has-keyword`` names, else None."""
     all_of = params.get("all_of") if params else None
@@ -2382,15 +2373,21 @@ def _single_keyword(params: dict[str, Any] | None) -> str | None:
         return None
     return all_of[0] if isinstance(all_of[0], str) else None
 
+
 def _matches_unit_filter(
     filt: Any,
     ctx: EngineContext,
     side: str,
     owner: str = "friendly",
 ) -> bool | str:
-    """Evaluate only unit facts carried by the crunch context."""
+    """Evaluate only unit facts carried by the crunch context.
+
+    ``owner`` says whose the filter is relative to the filtered unit: the ability belongs to
+    ``side`` when the unit is friendly, and to the other side when it is an enemy.
+    """
     if not _is_object(filt):
         return "unknown"
+    ability_side = side if owner == "friendly" else ("target" if side == "attacker" else "attacker")
     unknown = False
     predicates: dict[str, list[str]] = {}
     member_side = filt.get("member_of") == "this-unit" or filt.get("member_of") == (
@@ -2444,6 +2441,44 @@ def _matches_unit_filter(
                 return False
             if covered is None:
                 unknown = True
+        elif key == "state" and value == "on-battlefield":
+            continue
+        elif key == "state" and value in ("in-strategic-reserves", "in-cult-ambush"):
+            return False
+        elif key == "state" and isinstance(value, str) and value in _LISTED_STATES:
+            states = ctx.get("attackerStates" if side == "attacker" else "targetStates")
+            if states is None:
+                unknown = True
+            elif value not in states:
+                return False
+        elif key == "designated" and isinstance(value, str):
+            designations = ctx.get(
+                "attackerDesignations" if side == "attacker" else "targetDesignations"
+            )
+            if designations is None:
+                unknown = True
+            elif not any(d.lower() == value.lower() for d in designations):
+                return False
+        elif (
+            key == "within"
+            and _is_object(value)
+            and value.get("wholly") is not True
+            and _is_object(value.get("of"))
+            and _is_object(value["of"].get("objective"))
+        ):
+            verdict = (
+                _within_objective(
+                    value["of"]["objective"],
+                    ctx.get("attackerObjectives" if side == "attacker" else "targetObjectives"),
+                    ability_side,
+                )
+                if value.get("range") == "objective-control"
+                else "unknown"
+            )
+            if verdict is False:
+                return False
+            if verdict == "unknown":
+                unknown = True
         elif (
             key == "within"
             and _is_object(value)
@@ -2451,6 +2486,7 @@ def _matches_unit_filter(
             and (
                 (side == "attacker" and value.get("of") == "defender")
                 or (side == "target" and value.get("of") == "attacker")
+                or (value.get("of") in ("this-unit", "ability-unit") and ability_side != side)
             )
         ):
             range_ref = value.get("range")
@@ -2503,6 +2539,87 @@ def _matches_unit_filter(
         else:
             unknown = True
     return "unknown" if unknown else True
+
+
+#: States the context lists per unit; the rest are fixed for a unit in an attack, or unknown.
+_LISTED_STATES = frozenset(("engaged", "battle-shocked", "hidden"))
+
+
+def _within_objective(filt: dict[str, Any], objectives: Any, ability_side: str) -> bool | str:
+    """Whether one of the unit's objectives meets every property of an objective filter.
+
+    Ownership and territory are read from the ability's side.
+    """
+    if objectives is None:
+        return "unknown"
+    other = "target" if ability_side == "attacker" else "attacker"
+
+    def side_of(relative: Any) -> str | None:
+        if relative == "friendly":
+            return ability_side
+        if relative == "enemy":
+            return other
+        return None
+
+    unknown = False
+    for objective in objectives:
+        verdict: bool | str = True
+        for key, wanted in filt.items():
+            holds: bool | str
+            if key == "controlled_by":
+                controller = objective.get("controller")
+                if controller is None:
+                    holds = "unknown"
+                elif wanted == "any":
+                    holds = controller != "none"
+                elif side_of(wanted) is None:
+                    holds = "unknown"
+                else:
+                    holds = controller == side_of(wanted)
+            elif key == "designated" and isinstance(wanted, str):
+                designations = objective.get("designations")
+                holds = (
+                    "unknown"
+                    if designations is None
+                    else any(d.lower() == wanted.lower() for d in designations)
+                )
+            elif key == "role":
+                role = objective.get("role")
+                holds = "unknown" if role is None else role == wanted
+            elif key == "home_of":
+                home_of = objective.get("homeOf")
+                holds = (
+                    "unknown"
+                    if home_of is None or side_of(wanted) is None
+                    else home_of == side_of(wanted)
+                )
+            elif key == "territory":
+                territory = (
+                    ability_side
+                    if wanted == "your-territory"
+                    else other
+                    if wanted == "enemy-territory"
+                    else "no-mans-land"
+                    if wanted == "no-mans-land"
+                    else None
+                )
+                actual = objective.get("territory")
+                holds = "unknown" if actual is None or territory is None else actual == territory
+            elif key == "name":
+                name = objective.get("name")
+                holds = "unknown" if name is None else name == wanted
+            else:
+                holds = "unknown"
+            if holds is False:
+                verdict = False
+                break
+            if holds == "unknown":
+                verdict = "unknown"
+        if verdict is True:
+            return True
+        if verdict == "unknown":
+            unknown = True
+    return "unknown" if unknown else False
 
 
 def _evaluate_condition(
@@ -2590,20 +2707,13 @@ def _evaluate_condition(
         )
     if ctype == "matches":
         p = params or {}
-        subject = p.get("subject")
-        if subject == "defender":
-            side = "target"
-        elif subject == "attacker":
-            side = "attacker"
-        elif _is_buffed_unit(subject):
-            side = "attacker" if perspective == "attacker" else "target"
-        else:
+        side = _condition_side(p.get("subject"), perspective)
+        if side is None:
             return "unknown"
+        # Ownership is relative to the side whose ability it is.
+        own_side = "attacker" if perspective == "attacker" else "target"
         return _matches_unit_filter(
-            p.get("filter"),
-            ctx,
-            side,
-            "enemy" if subject == "defender" else "friendly",
+            p.get("filter"), ctx, side, "friendly" if side == own_side else "enemy"
         )
     if ctype == "army-faction":
         faction = params.get("faction") if params else None
@@ -2616,14 +2726,8 @@ def _evaluate_condition(
         p = params or {}
         if p.get("keyword") is not None:
             return "unknown"
-        subject = p.get("subject")
-        if subject == "defender":
-            side = "target"
-        elif subject == "attacker":
-            side = "attacker"
-        elif _is_buffed_unit(subject):
-            side = "attacker" if perspective == "attacker" else "target"
-        else:
+        side = _condition_side(p.get("subject"), perspective)
+        if side is None:
             return "unknown"
         count = ctx.get("attackerModelCount" if side == "attacker" else "targetModelCount")
         if count is None:
@@ -2639,6 +2743,82 @@ def _evaluate_condition(
         if not isinstance(size, str) or ctx.get("battleSize") is None:
             return "unknown"
         return ctx["battleSize"] == size
+    if ctype == "battle-round":
+        p = params or {}
+        battle_round = ctx.get("battleRound")
+        if not _is_num(battle_round):
+            return "unknown"
+        if _is_num(p.get("min")) and battle_round < p["min"]:
+            return False
+        if _is_num(p.get("max")) and battle_round > p["max"]:
+            return False
+        return True
+    if ctype == "player-turn-is":
+        # "Your turn" is the turn of the player whose ability it is.
+        turn = params.get("turn") if params else None
+        attacker_turn = ctx.get("attackerTurn")
+        if turn not in ("your-turn", "opponent-turn") or not isinstance(attacker_turn, bool):
+            return "unknown"
+        yours = attacker_turn if perspective == "attacker" else not attacker_turn
+        return yours if turn == "your-turn" else not yours
+    if ctype == "strength":
+        p = params or {}
+        side = _condition_side(p.get("subject"), perspective)
+        strength = (
+            ctx.get("attackerStrength" if side == "attacker" else "targetStrength")
+            if side is not None
+            else None
+        )
+        below = p.get("below")
+        if strength is None or below not in ("starting", "half"):
+            return "unknown"
+        return strength == "below-half" if below == "half" else strength != "full"
+    if ctype == "wounds":
+        # Each listed property must hold; the Damaged bracket needs datasheet data the
+        # context lacks.
+        p = params or {}
+        side = _condition_side(p.get("subject"), perspective)
+        wounds = (
+            ctx.get("attackerWounds" if side == "attacker" else "targetWounds")
+            if side is not None
+            else None
+        )
+        if wounds is None:
+            return "unknown"
+        unknown = "damaged" in p
+        if p.get("lost") is True and wounds["remaining"] >= wounds["starting"]:
+            return False
+        if "remaining_max" in p:
+            if not _is_num(p["remaining_max"]):
+                unknown = True
+            elif wounds["remaining"] > p["remaining_max"]:
+                return False
+        return "unknown" if unknown else True
+    if ctype == "closest":
+        # Only "the target is the closest eligible target to the attacker" is in the context.
+        p = params or {}
+        to = p.get("to")
+        to_attacker = (
+            to is None or to == "attacker" or (perspective == "attacker" and _is_buffed_unit(to))
+        )
+        if (
+            _condition_side(p.get("subject"), perspective) != "target"
+            or p.get("among") != "eligible-targets"
+            or not to_attacker
+        ):
+            return "unknown"
+        closest = ctx.get("targetClosest")
+        if closest is None:
+            return "unknown"
+        if not closest:
+            return False
+        if "range" not in p:
+            return True
+        range_ref = p["range"]
+        distance = ctx.get("distanceInches")
+        if not _is_object(range_ref) or not _is_num(range_ref.get("inches")) or distance is None:
+            return "unknown"
+        return distance <= range_ref["inches"]
     if ctype == "guided":
         # Guided is read for the attacking unit: a For the Greater Good unit, not an
         # Observer, targeting a Spotted unit.
@@ -2654,11 +2834,7 @@ def _evaluate_condition(
             return "unknown"
         subject = p.get("subject")
         explicit_side = (
-            "attacker"
-            if subject == "attacker"
-            else "target"
-            if subject == "defender"
-            else None
+            "attacker" if subject == "attacker" else "target" if subject == "defender" else None
         )
         if explicit_side is None and subject not in (
             None,
@@ -2669,9 +2845,7 @@ def _evaluate_condition(
             return "unknown"
         side = explicit_side or ("attacker" if perspective == "attacker" else "target")
         attached = ctx.get("attackerAttached" if side == "attacker" else "targetAttached")
-        role = ctx.get(
-            "attackerAttachmentRole" if side == "attacker" else "targetAttachmentRole"
-        )
+        role = ctx.get("attackerAttachmentRole" if side == "attacker" else "targetAttachmentRole")
         if (
             explicit_side is None
             and source is not None

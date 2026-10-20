@@ -41,6 +41,7 @@ pub mod from_keyword;
 mod gates;
 pub mod recipient_snapshots;
 mod resolved;
+pub mod scenario;
 
 pub use allocation::{allocate, allocate_model, AllocationError, AllocationOutput};
 pub use attribution::{attribute_stages, AttributedStage, StageLift};
@@ -58,3 +59,7 @@ pub use from_dsl::{
 };
 pub use from_keyword::buffs_from_keyword;
 pub use recipient_snapshots::RecipientSnapshot;
+pub use scenario::{
+    ModelWounds, ObjectiveController, ObjectiveTerritory, ScenarioObjective, ScenarioSide,
+    UnitState, UnitStrength,
+};

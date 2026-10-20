@@ -216,7 +216,41 @@ export type EngineContext = {
   attachmentRoles?: Readonly<Record<string, "leader" | "bodyguard">>;
   attackerUnitId?: string;
   targetUnitId?: string;
+  /** The battle round. Drives `battle-round` and per-round range tables; undefined leaves them "unknown". */
   battleRound?: number;
+  /**
+   * It is the attacking unit's player's turn. Drives `player-turn-is`, read for the side whose
+   * ability it is: "your turn" for a defensive ability is the opponent of the attacker.
+   */
+  attackerTurn?: boolean;
+  /** Each unit against its Starting Strength. Drives `strength`; undefined leaves it "unknown". */
+  attackerStrength?: UnitStrength;
+  targetStrength?: UnitStrength;
+  /** The wounds of each unit's damaged (or only) model. Drives `wounds`; undefined leaves it "unknown". */
+  attackerWounds?: ModelWounds;
+  targetWounds?: ModelWounds;
+  /**
+   * Every designation each unit carries (Spotted, Afflicted, a Stratagem's chosen target,
+   * `warlord`), matched case-insensitively. A supplied list is complete; undefined leaves
+   * `designated` filters "unknown".
+   */
+  attackerDesignations?: readonly string[];
+  targetDesignations?: readonly string[];
+  /**
+   * Every state each unit is in, of `engaged`, `battle-shocked` and `hidden`. A supplied list is
+   * complete; undefined leaves those `state` filters "unknown". Both units of an attack are on the
+   * battlefield and not in Strategic Reserves.
+   */
+  attackerStates?: readonly UnitState[];
+  targetStates?: readonly UnitState[];
+  /** The target is the closest eligible target to the attacker. Drives `closest`; undefined leaves it "unknown". */
+  targetClosest?: boolean;
+  /**
+   * Every objective each unit is within control range of. A supplied list is complete; undefined
+   * leaves objective `within` filters "unknown".
+   */
+  attackerObjectives?: readonly ScenarioObjective[];
+  targetObjectives?: readonly ScenarioObjective[];
   /**
    * Caller-attested trigger-time recipient evidence, not current membership.
    * Each entry preserves the ability source/sourceUnitId, exact canonical
@@ -229,6 +263,27 @@ export type EngineContext = {
    * identity remains distinct from unrelated effect guards.
    */
   recipientSnapshots?: readonly RecipientSnapshot[];
+};
+
+/** A unit against its Starting Strength; below half implies below starting. */
+export type UnitStrength = "full" | "below-starting" | "below-half";
+
+export type ModelWounds = { remaining: number; starting: number };
+
+export type UnitState = "engaged" | "battle-shocked" | "hidden";
+
+/**
+ * An objective a unit is within control range of. `controller` and the sides are read from the
+ * attacking unit's player: `"attacker"` is that player's, `"target"` the opponent's. A field left
+ * out cannot satisfy a filter that names it.
+ */
+export type ScenarioObjective = {
+  controller?: "attacker" | "target" | "none";
+  designations?: readonly string[];
+  role?: "central" | "expansion" | "home" | "non-home";
+  homeOf?: "attacker" | "target";
+  territory?: "attacker" | "target" | "no-mans-land";
+  name?: string;
 };
 
 /** Back-compat alias — `resolveBuffs` accepts the shared engine context. */

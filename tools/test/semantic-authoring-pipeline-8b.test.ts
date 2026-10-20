@@ -44,7 +44,7 @@ function fixture(): DatabaseSync {
   const sourceDir = mkdtempSync(join(tmpdir(), "semantic-authoring-8b-source-"));
   roots.push(sourceDir);
   writeFileSync(join(sourceDir, `${FACTION}.json`), JSON.stringify([
-    { faction_id: FACTION, ability_id: CLOSABLE, raw_text: "If this model is on the battlefield, re-roll a hit roll of 1." },
+    { faction_id: FACTION, ability_id: CLOSABLE, raw_text: "If this unit is Battle-shocked, re-roll a hit roll of 1." },
     { faction_id: FACTION, ability_id: CLOSABLE_BAD_SHAPE, raw_text: "Whenever this model shoots, you can re-roll one Hit roll." },
     ...RESIDUE_WORDS.slice(0, RESIDUE_COUNT).map((word, index) => ({
       faction_id: FACTION, ability_id: `residue-ability-${index}`, raw_text: `Do the improbable ${word} dance nobody else can name.`,
@@ -102,8 +102,8 @@ describe("pipeline-8b", () => {
       expect(report.compile.integrity_pass).toBe(2);
       expect(report.compile.describer_pass).toBe(2); // floor 0 in this test: only checks the render exists
       expect(report.compile.describer_scores).toHaveLength(2);
-      // CLOSABLE's compiled effect gates a "reroll" behind a `unit-state` condition
-      // ("on-battlefield") that `evaluateCondition` has no case for: an honest runtime unknown,
+      // CLOSABLE's compiled effect gates a "reroll" behind a Battle-shocked state that the gate's
+      // context does not declare: an honest runtime unknown,
       // not a shape gap — the gate judges the new compile on its own merits (no old-record
       // comparison) and passes. CLOSABLE_BAD_SHAPE's count-capped re-roll is a real shape gap
       // (`effectToBuffs` explicitly refuses to model it) and must fail the gate on its own merits

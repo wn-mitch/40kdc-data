@@ -3,10 +3,10 @@ import { describe, expect, it } from "vitest";
 import { resolveTarget } from "../src/compare.js";
 import { Dataset } from "../src/data/dataset.js";
 import { DamageCellCache } from "../src/stack-damage/cache.js";
-import { DEFAULT_HC_FACTIONS, parseMatrixConfig } from "../src/stack-damage/config.js";
+import { DEFAULT_HC_FACTIONS, parseMatrixConfig, parseScenario } from "../src/stack-damage/config.js";
 import { factionLineageFrom, preferFactionCopies, resolveFactionContext, unitAllowedInFaction } from "../src/stack-damage/factions.js";
 import { damageCellKey, reportCompleteness, type DamageCellReport } from "../src/stack-damage/report.js";
-import { runDamageCell } from "../src/stack-damage/search.js";
+import { damageScoringSession, emptySpec, runDamageCell } from "../src/stack-damage/search.js";
 import type { Unit } from "../src/generated.js";
 
 const catalog = {
@@ -30,6 +30,44 @@ describe("stack damage matrix configuration", () => {
     expect(() => parseMatrixConfig({ HC_TARGETS: "all,light" }, catalog)).toThrow("cannot be combined");
     expect(() => parseMatrixConfig({ HC_PHASES: "psychic" }, catalog)).toThrow("unsupported phase");
     expect(() => parseMatrixConfig({ HC_OUTPUT: "matrix.txt" }, catalog)).toThrow(".json");
+  });
+});
+
+describe("stack damage scenario", () => {
+  it("rejects undeclared fields and malformed values", () => {
+    expect(parseScenario({ battleRound: 2, targetDesignations: ["spotted"], attackerObjectives: [{ controller: "attacker" }] }))
+      .toEqual({ battleRound: 2, targetDesignations: ["spotted"], attackerObjectives: [{ controller: "attacker" }] });
+    expect(() => parseScenario({ phase: "fight" })).toThrow("unknown field phase");
+    expect(() => parseScenario({ battleRound: 0 })).toThrow("battleRound is malformed");
+    expect(() => parseScenario({ targetStates: ["embarked"] })).toThrow("targetStates is malformed");
+    expect(() => parseScenario({ attackerObjectives: [{ controller: "friendly" }] })).toThrow("attackerObjectives is malformed");
+    expect(() => parseScenario([])).toThrow("must be a JSON object");
+  });
+
+  it("states the crunch's own facts and lets the scenario declare the rest", () => {
+    const dataset = Dataset.embedded();
+    const faction = resolveFactionContext(dataset, "chaos-space-marines");
+    const target = resolveTarget(dataset, dataset.targetProfiles.get("meq-intercessors")!)!;
+    const config = parseMatrixConfig({ HC_FACTIONS: "chaos-space-marines", HC_TARGETS: "meq-intercessors" }, {
+      factionIds: new Set(["chaos-space-marines"]),
+      targetIds: ["meq-intercessors"],
+    });
+    const defiler = faction.units.find((unit) => unit.id === "defiler")!;
+    const member = { unit: defiler, role: "bodyguard" as const };
+    const context = (scenario: typeof config.scenario) =>
+      damageScoringSession({ dataset, config: { ...config, scenario }, faction, target, phase: "shooting" })
+        .state.contextFor(emptySpec(faction.id, [member]), member);
+    const W = defiler.raw.profiles[0]!.W;
+    expect(context({})).toMatchObject({
+      attackerTurn: true,
+      attackerStrength: "full",
+      targetStrength: "full",
+      attackerWounds: { remaining: W, starting: W },
+      targetWounds: { remaining: 2, starting: 2 },
+    });
+    expect(context({}).targetDesignations).toBeUndefined();
+    expect(context({ targetStrength: "below-half", targetDesignations: ["focus-of-hatred"] }))
+      .toMatchObject({ targetStrength: "below-half", targetDesignations: ["focus-of-hatred"], phase: "shooting" });
   });
 });
 

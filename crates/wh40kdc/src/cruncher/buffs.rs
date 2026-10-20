@@ -20,6 +20,7 @@ pub use super::resolved::{
     IgnoredRolls, InvulnerableState, RerollState, Rerolls, ResolvedModifiers, SkillMods, SummedMod,
     ThresholdState,
 };
+use super::scenario::{ModelWounds, ScenarioObjective, UnitState, UnitStrength};
 
 /// Which side an ability buff was sourced from. Drives stable tie-breaking
 /// inside [`resolve_buffs`].
@@ -293,8 +294,44 @@ pub struct EngineContext {
     /// Caller-attested event recipients, independent of current attachment state.
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub recipient_snapshots: Vec<super::recipient_snapshots::RecipientSnapshot>,
+    /// The battle round. Drives `battle-round` and per-round range tables; `None` leaves them unknown.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub battle_round: Option<u32>,
+    /// It is the attacking unit's player's turn. Drives `player-turn-is`, read for the side whose
+    /// ability it is: "your turn" for a defensive ability is the opponent of the attacker.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub attacker_turn: Option<bool>,
+    /// Each unit against its Starting Strength. Drives `strength`; `None` leaves it unknown.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub attacker_strength: Option<UnitStrength>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub target_strength: Option<UnitStrength>,
+    /// The wounds of each unit's damaged (or only) model. Drives `wounds`; `None` leaves it unknown.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub attacker_wounds: Option<ModelWounds>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub target_wounds: Option<ModelWounds>,
+    /// Every designation each unit carries, matched case-insensitively. A supplied list is
+    /// complete; `None` leaves `designated` filters unknown.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub attacker_designations: Option<Vec<String>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub target_designations: Option<Vec<String>>,
+    /// Every listed state each unit is in. A supplied list is complete; `None` leaves those
+    /// `state` filters unknown. Both units of an attack are on the battlefield.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub attacker_states: Option<Vec<UnitState>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub target_states: Option<Vec<UnitState>>,
+    /// The target is the closest eligible target to the attacker. Drives `closest`.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub target_closest: Option<bool>,
+    /// Every objective each unit is within control range of. A supplied list is complete;
+    /// `None` leaves objective `within` filters unknown.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub attacker_objectives: Option<Vec<ScenarioObjective>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub target_objectives: Option<Vec<ScenarioObjective>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub attacker_attachment_role: Option<AttachmentRole>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -374,6 +411,18 @@ impl EngineContext {
             target_unit_id: None,
             recipient_snapshots: Vec::new(),
             battle_round: None,
+            attacker_turn: None,
+            attacker_strength: None,
+            target_strength: None,
+            attacker_wounds: None,
+            target_wounds: None,
+            attacker_designations: None,
+            target_designations: None,
+            attacker_states: None,
+            target_states: None,
+            target_closest: None,
+            attacker_objectives: None,
+            target_objectives: None,
             attacker_attachment_role: None,
             target_attachment_role: None,
             attachment_roles: None,

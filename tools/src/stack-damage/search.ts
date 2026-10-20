@@ -1,9 +1,10 @@
 import type { Dataset } from "../data/dataset.js";
 import { baseLoadout, type LoadoutModel, type LoadoutTier } from "../data/loadout.js";
-import type { Detachment, UnitComposition } from "../generated.js";
+import type { Detachment, Unit, UnitComposition } from "../generated.js";
+import type { EngineContext } from "../cruncher/index.js";
 import type { ResolvedTarget, ComparePhase } from "../compare.js";
 import { assessDetachmentSelection, summarizeSupportCosts, type LegalityIssue } from "./legality.js";
-import type { MatrixConfig } from "./config.js";
+import type { MatrixConfig, Scenario } from "./config.js";
 import { preferFactionCopies, type FactionContext, unitInFaction } from "./factions.js";
 import { DamageScoringSession, type DamageScoringInvariants } from "./scoring.js";
 import { buildLedger } from "./ledger.js";
@@ -29,9 +30,26 @@ function unitKeywords(members: readonly StackMember[]): string[] {
   return [...values].sort();
 }
 
-function contextForCell(factionId: string, target: ResolvedTarget, phase: ComparePhase) {
+/** A unit's per-model Wounds when every model is unhurt, from its first profile. */
+function freshWounds(unit: Unit): { remaining: number; starting: number } | undefined {
+  const wounds = unit.profiles?.[0]?.W;
+  return typeof wounds === "number" ? { remaining: wounds, starting: wounds } : undefined;
+}
+
+/**
+ * The engine context of one stack member in a cell. The crunch fires every model at a full-strength
+ * target in the attacker's own turn, so those facts are stated; the scenario declares the rest.
+ */
+function contextForCell(factionId: string, target: ResolvedTarget, phase: ComparePhase, scenario: Scenario) {
   const targetKeywords = [...(target.unitRaw.keywords ?? []), ...(target.unitRaw.faction_keywords ?? [])].map((keyword) => keyword.toLowerCase());
-  return (spec: StackSpec, member?: StackMember) => ({
+  const targetWounds = freshWounds(target.unitRaw);
+  return (spec: StackSpec, member?: StackMember): EngineContext => ({
+    attackerTurn: true,
+    attackerStrength: "full",
+    targetStrength: "full",
+    ...(targetWounds ? { targetWounds } : {}),
+    ...(member && freshWounds(member.unit.raw) ? { attackerWounds: freshWounds(member.unit.raw) } : {}),
+    ...scenario,
     phase,
     attackerStationary: phase === "shooting",
     attackerCharged: phase === "fight",
@@ -273,7 +291,7 @@ export function damageScoringSession(input: {
     factionId: input.faction.id,
     target: input.target,
     phase: input.phase,
-    contextFor: contextForCell(input.faction.id, input.target, input.phase),
+    contextFor: contextForCell(input.faction.id, input.target, input.phase, input.config.scenario),
   };
   return new DamageScoringSession(input.dataset, state, input.config, input.faction.units, input.invariants);
 }

@@ -1,6 +1,8 @@
+import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 import type { ComparePhase } from "../compare.js";
+import type { EngineContext } from "../cruncher/index.js";
 
 export const DEFAULT_HC_FACTIONS = [
   "chaos-space-marines",
@@ -27,6 +29,54 @@ export interface MatrixConfig {
   droppedArmyRules: string[];
   dpBudget: number;
   maxDetachments: number;
+  /** Board and game state every cell assumes, from the `HC_SCENARIO` JSON file. */
+  scenario: Scenario;
+}
+
+/** The scenario facts a matrix may declare; each is an {@link EngineContext} field. */
+export type Scenario = Pick<EngineContext,
+  | "battleRound" | "attackerTurn" | "attackerStrength" | "targetStrength" | "attackerDesignations"
+  | "targetDesignations" | "attackerStates" | "targetStates" | "targetClosest" | "attackerObjectives"
+  | "targetObjectives" | "attackerGuided">;
+
+const STRENGTHS = ["full", "below-starting", "below-half"];
+const STATES = ["engaged", "battle-shocked", "hidden"];
+const OBJECTIVE_FIELDS: Record<string, (value: unknown) => boolean> = {
+  controller: (value) => value === "attacker" || value === "target" || value === "none",
+  designations: (value) => Array.isArray(value) && value.every((item) => typeof item === "string"),
+  role: (value) => ["central", "expansion", "home", "non-home"].includes(value as string),
+  homeOf: (value) => value === "attacker" || value === "target",
+  territory: (value) => value === "attacker" || value === "target" || value === "no-mans-land",
+  name: (value) => typeof value === "string",
+};
+const strings = (value: unknown) => Array.isArray(value) && value.every((item) => typeof item === "string");
+const objectives = (value: unknown) => Array.isArray(value) && value.every((objective) =>
+  typeof objective === "object" && objective !== null && !Array.isArray(objective) &&
+  Object.entries(objective).every(([key, field]) => OBJECTIVE_FIELDS[key]?.(field) === true));
+const SCENARIO_FIELDS: Record<keyof Scenario, (value: unknown) => boolean> = {
+  battleRound: (value) => Number.isInteger(value) && (value as number) >= 1,
+  attackerTurn: (value) => typeof value === "boolean",
+  attackerStrength: (value) => STRENGTHS.includes(value as string),
+  targetStrength: (value) => STRENGTHS.includes(value as string),
+  attackerDesignations: strings,
+  targetDesignations: strings,
+  attackerStates: (value) => strings(value) && (value as string[]).every((state) => STATES.includes(state)),
+  targetStates: (value) => strings(value) && (value as string[]).every((state) => STATES.includes(state)),
+  targetClosest: (value) => typeof value === "boolean",
+  attackerObjectives: objectives,
+  targetObjectives: objectives,
+  attackerGuided: (value) => typeof value === "boolean",
+};
+
+/** Parse a scenario declaration, rejecting unknown fields and malformed values. */
+export function parseScenario(value: unknown, name = "HC_SCENARIO"): Scenario {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) throw new Error(`${name} must be a JSON object`);
+  for (const [key, field] of Object.entries(value)) {
+    const check = SCENARIO_FIELDS[key as keyof Scenario];
+    if (!check) throw new Error(`${name} has unknown field ${key}`);
+    if (!check(field)) throw new Error(`${name}.${key} is malformed`);
+  }
+  return value as Scenario;
 }
 
 function list(value: string | undefined, fallback: readonly string[], name: string): string[] {
@@ -85,6 +135,7 @@ export function parseMatrixConfig(
     droppedArmyRules: env.HC_DROP_RULE ? list(env.HC_DROP_RULE, [], "HC_DROP_RULE") : [],
     dpBudget: 3,
     maxDetachments: 3,
+    scenario: env.HC_SCENARIO ? parseScenario(JSON.parse(readFileSync(resolve(cwd, env.HC_SCENARIO), "utf8"))) : {},
   };
 }
 
@@ -102,5 +153,6 @@ export function serializableConfig(config: MatrixConfig): Record<string, unknown
     droppedArmyRules: config.droppedArmyRules,
     dpBudget: config.dpBudget,
     maxDetachments: config.maxDetachments,
+    scenario: config.scenario,
   };
 }

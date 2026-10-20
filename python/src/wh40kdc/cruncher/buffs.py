@@ -32,6 +32,20 @@ ResolvedModifiers = dict[str, Any]
 #: permissive. ``weaponKeywords`` (catalog keyword ids printed on the attacking profile) drives
 #: ``applicableWhen.weaponKeyword`` together with keywords live buffs grant; absent leaves
 #: weapon-keyword gates permissive.
+#:
+#: Scenario state, each left "unknown" by its condition or filter when absent:
+#: ``battleRound`` (``battle-round``, per-round range tables); ``attackerTurn`` (it is the
+#: attacking unit's player's turn, for ``player-turn-is`` read from the ability's side);
+#: ``attackerStrength`` / ``targetStrength`` (``full`` / ``below-starting`` / ``below-half``,
+#: for ``strength``); ``attackerWounds`` / ``targetWounds`` (``{remaining, starting}`` of the
+#: damaged or only model, for ``wounds``); ``attackerDesignations`` / ``targetDesignations``
+#: (complete designation lists, matched case-insensitively by ``designated`` filters);
+#: ``attackerStates`` / ``targetStates`` (complete lists of ``engaged`` / ``battle-shocked`` /
+#: ``hidden``); ``targetClosest`` (the target is the closest eligible target, for
+#: ``closest``); ``attackerObjectives`` / ``targetObjectives`` (complete lists of objectives
+#: in control range, each ``{controller?, designations?, role?, homeOf?, territory?, name?}``
+#: with ``controller`` / ``homeOf`` / ``territory`` read from the attacking unit's player as
+#: ``attacker`` / ``target`` (plus ``none`` / ``no-mans-land``)).
 EngineContext = dict[str, Any]
 
 #: Stable ordering used to break ties when multiple buffs claim the same field.
@@ -51,7 +65,6 @@ def _rank(s: BuffSource) -> int:
     if s.get("kind") == "ability":
         return _SOURCE_KIND_RANK.get(f"ability:{s.get('abilityKind')}", 99)
     return _SOURCE_KIND_RANK.get(s.get("kind", ""), 99)
-
 
 
 def _keyword_ref_matches(actual: dict[str, Any], selector: dict[str, Any]) -> bool:
@@ -83,7 +96,6 @@ def _keyword_ref_matches(actual: dict[str, Any], selector: dict[str, Any]) -> bo
         elif value != expected:
             return False
     return True
-
 
 
 def _weapon_gate_holds(
@@ -122,6 +134,7 @@ def _weapon_gate_holds(
             if any(_keyword_ref_matches(ref, selector) for ref in refs):
                 return False
     return True
+
 
 def _applies(buff: Buff, ctx: EngineContext) -> bool:
     w = buff.get("applicableWhen")
@@ -164,14 +177,18 @@ def _applies(buff: Buff, ctx: EngineContext) -> bool:
     if weapon_name is not None and weapon_names is not None and weapon_name not in weapon_names:
         return False
     excluded_names = w.get("excludedWeaponNames")
-    if excluded_names and weapon_names is not None and any(
-        name in weapon_names for name in excluded_names
+    if (
+        excluded_names
+        and weapon_names is not None
+        and any(name in weapon_names for name in excluded_names)
     ):
         return False
     weapon_keywords = ctx.get("weaponKeywords")
     any_keywords = w.get("weaponKeywordsAny")
-    if any_keywords and weapon_keywords is not None and not any(
-        k in weapon_keywords for k in any_keywords
+    if (
+        any_keywords
+        and weapon_keywords is not None
+        and not any(k in weapon_keywords for k in any_keywords)
     ):
         return False
     excluded_weapon_keywords = w.get("excludedWeaponKeywords")
@@ -182,6 +199,8 @@ def _applies(buff: Buff, ctx: EngineContext) -> bool:
     ):
         return False
     return True
+
+
 def _live_buffs(buffs: list[Buff], ctx: EngineContext) -> list[Buff]:
     """Resolve weapon gates while preserving structured keyword ratings."""
     printed = ctx.get("weaponKeywordRefs")

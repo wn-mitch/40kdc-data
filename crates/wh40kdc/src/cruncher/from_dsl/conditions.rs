@@ -7,6 +7,7 @@ use serde_json::Value;
 use super::js::*;
 use super::TranslationPerspective;
 use crate::cruncher::buffs::{AbilityKind, BuffSource, EngineContext};
+use crate::cruncher::scenario::{has_designation, within_objective, UnitStrength};
 
 /// The buffed unit: the ability's own unit (or model), or the unit an aura is applied to.
 pub(super) fn is_buffed_unit(subject: Option<&Value>) -> bool {
@@ -16,6 +17,19 @@ pub(super) fn is_buffed_unit(subject: Option<&Value>) -> bool {
             s.as_str(),
             Some("this-unit" | "ability-unit" | "this-model" | "recipient")
         ),
+    }
+}
+
+/// Which unit of the attack a condition's subject names, or `None` for another unit.
+fn condition_side(
+    subject: Option<&Value>,
+    perspective: TranslationPerspective,
+) -> Option<TranslationPerspective> {
+    match subject.and_then(Value::as_str) {
+        Some("defender") => Some(TranslationPerspective::Target),
+        Some("attacker") => Some(TranslationPerspective::Attacker),
+        _ if is_buffed_unit(subject) => Some(perspective),
+        _ => None,
     }
 }
 
@@ -158,26 +172,14 @@ pub(super) fn evaluate_condition_for_source(
             }
         }
         Some("matches") => {
-            let subject = p.get("subject");
-            let side = if subject.and_then(Value::as_str) == Some("defender") {
-                TranslationPerspective::Target
-            } else if subject.and_then(Value::as_str) == Some("attacker") {
-                TranslationPerspective::Attacker
-            } else if is_buffed_unit(subject) {
-                perspective
+            let side = condition_side(p.get("subject"), perspective)?;
+            // Ownership is relative to the side whose ability it is.
+            let owner = if side == perspective {
+                "friendly"
             } else {
-                return None;
+                "enemy"
             };
-            matches_unit_filter(
-                p.get("filter")?,
-                ctx,
-                side,
-                if subject.and_then(Value::as_str) == Some("defender") {
-                    "enemy"
-                } else {
-                    "friendly"
-                },
-            )
+            matches_unit_filter(p.get("filter")?, ctx, side, owner)
         }
         Some("army-faction") => {
             let faction = p.get("faction").and_then(Value::as_str)?;
@@ -189,16 +191,7 @@ pub(super) fn evaluate_condition_for_source(
             if p.get("keyword").is_some() {
                 return None;
             }
-            let subject = p.get("subject");
-            let side = if subject.and_then(Value::as_str) == Some("defender") {
-                TranslationPerspective::Target
-            } else if subject.and_then(Value::as_str) == Some("attacker") {
-                TranslationPerspective::Attacker
-            } else if is_buffed_unit(subject) {
-                perspective
-            } else {
-                return None;
-            };
+            let side = condition_side(p.get("subject"), perspective)?;
             let count = match side {
                 TranslationPerspective::Attacker => ctx.attacker_model_count,
                 TranslationPerspective::Target => ctx.target_model_count,
@@ -220,6 +213,97 @@ pub(super) fn evaluate_condition_for_source(
         Some("battle-size") => {
             let size = p.get("size").and_then(Value::as_str)?;
             Some(ctx.battle_size.as_deref()? == size)
+        }
+        Some("battle-round") => {
+            let round = f64::from(ctx.battle_round?);
+            if p.get("min")
+                .and_then(Value::as_f64)
+                .is_some_and(|min| round < min)
+            {
+                return Some(false);
+            }
+            if p.get("max")
+                .and_then(Value::as_f64)
+                .is_some_and(|max| round > max)
+            {
+                return Some(false);
+            }
+            Some(true)
+        }
+        Some("player-turn-is") => {
+            // "Your turn" is the turn of the player whose ability it is.
+            let turn = p.get("turn").and_then(Value::as_str);
+            if !matches!(turn, Some("your-turn" | "opponent-turn")) {
+                return None;
+            }
+            let attacker_turn = ctx.attacker_turn?;
+            let yours = if perspective == TranslationPerspective::Attacker {
+                attacker_turn
+            } else {
+                !attacker_turn
+            };
+            Some(if turn == Some("your-turn") {
+                yours
+            } else {
+                !yours
+            })
+        }
+        Some("strength") => {
+            let strength = match condition_side(p.get("subject"), perspective)? {
+                TranslationPerspective::Attacker => ctx.attacker_strength,
+                TranslationPerspective::Target => ctx.target_strength,
+            }?;
+            match p.get("below").and_then(Value::as_str) {
+                Some("half") => Some(strength == UnitStrength::BelowHalf),
+                Some("starting") => Some(strength != UnitStrength::Full),
+                _ => None,
+            }
+        }
+        Some("wounds") => {
+            // Each listed property must hold; the Damaged bracket needs datasheet data the
+            // context lacks.
+            let wounds = match condition_side(p.get("subject"), perspective)? {
+                TranslationPerspective::Attacker => ctx.attacker_wounds,
+                TranslationPerspective::Target => ctx.target_wounds,
+            }?;
+            let mut unknown = p.contains_key("damaged");
+            if is_true(p, "lost") && wounds.remaining >= wounds.starting {
+                return Some(false);
+            }
+            if let Some(max) = p.get("remaining_max") {
+                match max.as_f64() {
+                    None => unknown = true,
+                    Some(max) if wounds.remaining > max => return Some(false),
+                    Some(_) => {}
+                }
+            }
+            (!unknown).then_some(true)
+        }
+        Some("closest") => {
+            // Only "the target is the closest eligible target to the attacker" is in the context.
+            let to = p.get("to");
+            let to_attacker = match to {
+                None => true,
+                Some(v) => {
+                    v.as_str() == Some("attacker")
+                        || (perspective == TranslationPerspective::Attacker
+                            && is_buffed_unit(Some(v)))
+                }
+            };
+            if condition_side(p.get("subject"), perspective) != Some(TranslationPerspective::Target)
+                || !is_str(p, "among", "eligible-targets")
+                || !to_attacker
+            {
+                return None;
+            }
+            if !ctx.target_closest? {
+                return Some(false);
+            }
+            let Some(range) = p.get("range") else {
+                return Some(true);
+            };
+            let inches = object(Some(range))?.get("inches").and_then(Value::as_f64)?;
+            Some(ctx.distance_inches? <= inches)
         }
         Some("guided") => {
             // Guided is read for the attacking unit.
@@ -417,19 +501,103 @@ fn evaluate_filter(
                     Some(true) => {}
                 }
             }
+            // Both units of an attack are on the battlefield, never in reserves.
+            "state" if value.as_str() == Some("on-battlefield") => {}
+            "state"
+                if matches!(
+                    value.as_str(),
+                    Some("in-strategic-reserves" | "in-cult-ambush")
+                ) =>
+            {
+                return Some(false);
+            }
+            "state"
+                if matches!(
+                    value.as_str(),
+                    Some("engaged" | "battle-shocked" | "hidden")
+                ) =>
+            {
+                let states = context.and_then(|(ctx, side)| {
+                    if side == TranslationPerspective::Attacker {
+                        ctx.attacker_states.as_deref()
+                    } else {
+                        ctx.target_states.as_deref()
+                    }
+                });
+                match states {
+                    Some(states) if !states.iter().any(|s| value.as_str() == Some(s.as_str())) => {
+                        return Some(false)
+                    }
+                    None => unknown = true,
+                    Some(_) => {}
+                }
+            }
+            "designated" if value.is_string() => {
+                let designations = context.and_then(|(ctx, side)| {
+                    if side == TranslationPerspective::Attacker {
+                        ctx.attacker_designations.as_deref()
+                    } else {
+                        ctx.target_designations.as_deref()
+                    }
+                });
+                match designations {
+                    Some(list) if !has_designation(list, value.as_str().unwrap_or_default()) => {
+                        return Some(false)
+                    }
+                    None => unknown = true,
+                    Some(_) => {}
+                }
+            }
             "within" => {
                 let Some((ctx, side)) = context else {
                     unknown = true;
                     continue;
                 };
+                let flip = |side| {
+                    if side == TranslationPerspective::Attacker {
+                        TranslationPerspective::Target
+                    } else {
+                        TranslationPerspective::Attacker
+                    }
+                };
+                // The ability belongs to `side` when the filtered unit is friendly.
+                let ability_side = if owner == "friendly" {
+                    side
+                } else {
+                    flip(side)
+                };
+                if value.get("wholly").and_then(Value::as_bool) == Some(true) {
+                    unknown = true;
+                    continue;
+                }
+                if let Some(objective) = object(value.get("of").and_then(|of| of.get("objective")))
+                {
+                    let verdict = if is_str(value.as_object()?, "range", "objective-control") {
+                        let objectives = if side == TranslationPerspective::Attacker {
+                            ctx.attacker_objectives.as_deref()
+                        } else {
+                            ctx.target_objectives.as_deref()
+                        };
+                        within_objective(objective, objectives, ability_side)
+                    } else {
+                        None
+                    };
+                    match verdict {
+                        Some(false) => return Some(false),
+                        None => unknown = true,
+                        Some(true) => {}
+                    }
+                    continue;
+                }
                 let other = if side == TranslationPerspective::Attacker {
                     "defender"
                 } else {
                     "attacker"
                 };
-                if value.get("of").and_then(Value::as_str) != Some(other)
-                    || value.get("wholly").and_then(Value::as_bool) == Some(true)
-                {
+                let of = value.get("of").and_then(Value::as_str);
+                let measured = of == Some(other)
+                    || (matches!(of, Some("this-unit" | "ability-unit")) && ability_side != side);
+                if !measured {
                     unknown = true;
                     continue;
                 }

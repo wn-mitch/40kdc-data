@@ -2125,7 +2125,15 @@ func singleKeyword(params map[string]any) (string, bool) {
 
 // matchesUnitFilter evaluates only unit facts carried by the crunch context.
 // It returns bool, or nil when a board, model, or relationship fact is unavailable.
+//
+// owner says whose the filter is relative to the filtered unit: the ability
+// belongs to side when the unit is friendly, and to the other side when it is
+// an enemy.
 func matchesUnitFilter(filter, ctx map[string]any, side, owner string) any {
+	abilitySide := side
+	if owner != "friendly" {
+		abilitySide = otherSide(side)
+	}
 	unknown := false
 	memberSide := filter["member_of"] == "this-unit"
 	if side == "attacker" {
@@ -2244,7 +2252,12 @@ func matchesUnitFilter(filter, ctx map[string]any, side, owner string) any {
 			}
 		case "state":
 			if value != "benefit-of-cover" {
-				unknown = true
+				switch matchesStateFilter(value, ctx, side) {
+				case false:
+					return false
+				case nil:
+					unknown = true
+				}
 				continue
 			}
 			coverKey := "targetInCover"
@@ -2264,11 +2277,25 @@ func matchesUnitFilter(filter, ctx map[string]any, side, owner string) any {
 				unknown = true
 				continue
 			}
+			if objective, ok := objectiveWithin(within); ok {
+				verdict := any(nil)
+				if within["range"] == "objective-control" {
+					verdict = withinObjective(objective, sideValue(ctx, side, "Objectives"), abilitySide)
+				}
+				switch verdict {
+				case false:
+					return false
+				case nil:
+					unknown = true
+				}
+				continue
+			}
 			other := "attacker"
 			if side == "attacker" {
 				other = "defender"
 			}
-			if within["of"] != other {
+			ofAbilityUnit := (within["of"] == "this-unit" || within["of"] == "ability-unit") && abilitySide != side
+			if within["of"] != other && !ofAbilityUnit {
 				unknown = true
 				continue
 			}
@@ -2329,6 +2356,18 @@ func matchesUnitFilter(filter, ctx map[string]any, side, owner string) any {
 				unknown = true
 			} else if actual != value {
 				return false
+			}
+		case "designated":
+			wanted, ok := value.(string)
+			if !ok {
+				unknown = true
+				continue
+			}
+			switch matchesDesignatedFilter(wanted, ctx, side) {
+			case false:
+				return false
+			case nil:
+				unknown = true
 			}
 		case "member_of":
 			if !memberSide || filter["attachment_role"] == nil {
@@ -2480,20 +2519,14 @@ func evaluateCondition(condition, ctx map[string]any, rest ...any) any {
 		if !ok {
 			return nil
 		}
-		side := ""
-		owner := "friendly"
-		switch params["subject"] {
-		case "defender":
-			side, owner = "target", "enemy"
-		case "attacker":
-			side = "attacker"
-		default:
-			if isBuffedUnit(params["subject"]) {
-				side = perspective
-			}
-		}
+		side := conditionSide(params["subject"], perspective)
 		if side == "" {
 			return nil
+		}
+		// Ownership is relative to the side whose ability it is.
+		owner := "enemy"
+		if side == perspectiveSide(perspective) {
+			owner = "friendly"
 		}
 		return matchesUnitFilter(filter, ctx, side, owner)
 	case "army-faction":
@@ -2508,17 +2541,7 @@ func evaluateCondition(condition, ctx map[string]any, rest ...any) any {
 		if params["keyword"] != nil {
 			return nil
 		}
-		side := ""
-		switch params["subject"] {
-		case "defender":
-			side = "target"
-		case "attacker":
-			side = "attacker"
-		default:
-			if isBuffedUnit(params["subject"]) {
-				side = perspective
-			}
-		}
+		side := conditionSide(params["subject"], perspective)
 		key := map[string]string{"attacker": "attackerModelCount", "target": "targetModelCount"}[side]
 		count, ok := contextNumber(ctx[key])
 		if key == "" || !ok {
@@ -2537,6 +2560,8 @@ func evaluateCondition(condition, ctx map[string]any, rest ...any) any {
 			return nil
 		}
 		return ctx["battleSize"] == size
+	case "battle-round", "player-turn-is", "strength", "wounds", "closest":
+		return evaluateScenarioCondition(getStr(condition, "type"), params, ctx, perspective)
 	case "guided":
 		if (params["subject"] != nil && !isBuffedUnit(params["subject"])) || ctx["attackerGuided"] == nil {
 			return nil

@@ -1940,6 +1940,13 @@ function isBuffedUnit(subject: unknown): boolean {
   return subject == null || subject === "this-unit" || subject === "ability-unit" || subject === "this-model" || subject === "recipient";
 }
 
+/** Which unit of the attack a condition's subject names, or undefined for another unit. */
+function conditionSide(subject: unknown, perspective: TranslationPerspective): "attacker" | "target" | undefined {
+  if (subject === "defender") return "target";
+  if (subject === "attacker") return "attacker";
+  return isBuffedUnit(subject) ? perspective === "attacker" ? "attacker" : "target" : undefined;
+}
+
 /** The single required keyword in a canonical filter, else undefined. */
 function singleKeyword(params: Record<string, unknown> | undefined): string | undefined {
   const all = Array.isArray(params?.all_of) ? params!.all_of : [];
@@ -2015,8 +2022,9 @@ function evaluateCondition(
     }
     case "matches": {
       const params = isObject(condition.parameters) ? condition.parameters : {};
-      const side = params.subject === "defender" ? "target" : params.subject === "attacker" ? "attacker" : isBuffedUnit(params.subject) ? perspective === "attacker" ? "attacker" : "target" : undefined;
-      const owner = params.subject === "defender" ? "enemy" : "friendly";
+      const side = conditionSide(params.subject, perspective);
+      // Ownership is relative to the side whose ability it is.
+      const owner = side === (perspective === "attacker" ? "attacker" : "target") ? "friendly" : "enemy";
       return side ? matchesUnitFilter(params.filter, ctx, side, owner) : "unknown";
     }
     case "army-faction": {
@@ -2029,7 +2037,7 @@ function evaluateCondition(
       // per-keyword model counts the context does not carry.
       const params = isObject(condition.parameters) ? condition.parameters : {};
       if (params.keyword !== undefined) return "unknown";
-      const side = params.subject === "defender" ? "target" : params.subject === "attacker" ? "attacker" : isBuffedUnit(params.subject) ? perspective === "attacker" ? "attacker" : "target" : undefined;
+      const side = conditionSide(params.subject, perspective);
       const count = side === "attacker" ? ctx.attackerModelCount : side === "target" ? ctx.targetModelCount : undefined;
       if (count === undefined) return "unknown";
       if (typeof params.min === "number" && count < params.min) return false;
@@ -2040,6 +2048,53 @@ function evaluateCondition(
       const size = (condition.parameters as Record<string, unknown> | undefined)?.size;
       if (typeof size !== "string" || ctx.battleSize === undefined) return "unknown";
       return ctx.battleSize === size;
+    }
+    case "battle-round": {
+      const params = isObject(condition.parameters) ? condition.parameters : {};
+      if (ctx.battleRound === undefined) return "unknown";
+      if (typeof params.min === "number" && ctx.battleRound < params.min) return false;
+      if (typeof params.max === "number" && ctx.battleRound > params.max) return false;
+      return true;
+    }
+    case "player-turn-is": {
+      // "Your turn" is the turn of the player whose ability it is.
+      const turn = (condition.parameters as Record<string, unknown> | undefined)?.turn;
+      if ((turn !== "your-turn" && turn !== "opponent-turn") || ctx.attackerTurn === undefined) return "unknown";
+      const yours = perspective === "attacker" ? ctx.attackerTurn : !ctx.attackerTurn;
+      return turn === "your-turn" ? yours : !yours;
+    }
+    case "strength": {
+      const params = isObject(condition.parameters) ? condition.parameters : {};
+      const side = conditionSide(params.subject, perspective);
+      const strength = side === "attacker" ? ctx.attackerStrength : side === "target" ? ctx.targetStrength : undefined;
+      if (strength === undefined || (params.below !== "starting" && params.below !== "half")) return "unknown";
+      return params.below === "half" ? strength === "below-half" : strength !== "full";
+    }
+    case "wounds": {
+      // Each listed property must hold; the Damaged bracket needs datasheet data the context lacks.
+      const params = isObject(condition.parameters) ? condition.parameters : {};
+      const side = conditionSide(params.subject, perspective);
+      const wounds = side === "attacker" ? ctx.attackerWounds : side === "target" ? ctx.targetWounds : undefined;
+      if (wounds === undefined) return "unknown";
+      let unknown = params.damaged !== undefined;
+      if (params.lost === true && wounds.remaining >= wounds.starting) return false;
+      if (params.remaining_max !== undefined) {
+        if (typeof params.remaining_max !== "number") unknown = true;
+        else if (wounds.remaining > params.remaining_max) return false;
+      }
+      return unknown ? "unknown" : true;
+    }
+    case "closest": {
+      // Only "the target is the closest eligible target to the attacker" is in the context.
+      const params = isObject(condition.parameters) ? condition.parameters : {};
+      const toAttacker = params.to === undefined || params.to === "attacker" || (perspective === "attacker" && isBuffedUnit(params.to));
+      if (conditionSide(params.subject, perspective) !== "target" || params.among !== "eligible-targets" || !toAttacker) return "unknown";
+      if (ctx.targetClosest === undefined) return "unknown";
+      if (!ctx.targetClosest) return false;
+      if (params.range === undefined) return true;
+      const range = params.range;
+      if (!isObject(range) || typeof range.inches !== "number" || ctx.distanceInches === undefined) return "unknown";
+      return ctx.distanceInches <= range.inches;
     }
     case "guided": {
       // Guided is read for the attacking unit: a For the Greater Good unit, not an Observer, targeting a Spotted unit.
