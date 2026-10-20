@@ -17,7 +17,7 @@ interface SearchCounts {
   deepFinalists: number;
 }
 
-function emptySpec(factionId: string, members: StackMember[], detachmentIds: string[] = []): StackSpec {
+export function emptySpec(factionId: string, members: StackMember[], detachmentIds: string[] = []): StackSpec {
   return { factionId, members, detachmentIds, selectedLeverIds: [], detachmentIssues: [] };
 }
 
@@ -118,7 +118,7 @@ function memberChoices(
   return output;
 }
 
-function legalDetachmentSpec(
+export function legalDetachmentSpec(
   session: DamageScoringSession,
   factionId: string,
   members: StackMember[],
@@ -260,6 +260,24 @@ function winnerReport(dataset: Dataset, faction: FactionContext, session: Damage
   };
 }
 
+/** The scoring session one damage cell searches with. */
+export function damageScoringSession(input: {
+  dataset: Dataset;
+  config: MatrixConfig;
+  faction: FactionContext;
+  target: ResolvedTarget;
+  phase: ComparePhase;
+  invariants?: DamageScoringInvariants;
+}): DamageScoringSession {
+  const state: DamageCellState = {
+    factionId: input.faction.id,
+    target: input.target,
+    phase: input.phase,
+    contextFor: contextForCell(input.faction.id, input.target, input.phase),
+  };
+  return new DamageScoringSession(input.dataset, state, input.config, input.faction.units, input.invariants);
+}
+
 export function runDamageCell(input: {
   dataset: Dataset;
   config: MatrixConfig;
@@ -269,13 +287,7 @@ export function runDamageCell(input: {
   invariants?: DamageScoringInvariants;
 }): DamageCellReport {
   const started = Date.now();
-  const state: DamageCellState = {
-    factionId: input.faction.id,
-    target: input.target,
-    phase: input.phase,
-    contextFor: contextForCell(input.faction.id, input.target, input.phase),
-  };
-  const session = new DamageScoringSession(input.dataset, state, input.config, input.faction.units, input.invariants);
+  const session = damageScoringSession(input);
   const bodyguards = input.faction.units.filter((unit) => unit.weapons.length > 0).slice(0, input.config.bodyguardLimit);
   const counts: SearchCounts = { bodyguards: bodyguards.length, memberStacks: 0, broadResults: 0, deepFinalists: 0 };
   const broad: StackResult[] = [];

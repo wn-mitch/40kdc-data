@@ -5,7 +5,7 @@ import { baseLoadout, optionCap, type LoadoutModel, type LoadoutTier } from "../
 import { reachesOtherUnits } from "../abilities-resolver/resolver.js";
 import type { EligibilityInput, EligibleAbility } from "../abilities-resolver/index.js";
 import type { UnitView } from "../data/entities.js";
-import type { WargearOption, Weapon } from "../generated.js";
+import type { Weapon } from "../generated.js";
 import type { MatrixConfig } from "./config.js";
 import { DamageCellCache } from "./cache.js";
 import {
@@ -14,6 +14,8 @@ import {
   type CandidateLoadoutLegality,
   type LocalStackMember,
 } from "./legality.js";
+import { searchLevers, type LeverSpace } from "./lever-search.js";
+import { searchLoadout, type LoadoutScaffold, type LoadoutSpace } from "./loadout-search.js";
 import { scoreLoadoutWeapons, type ProfileDamage } from "./loadout-scoring.js";
 import type {
   DamageCellState,
@@ -24,19 +26,6 @@ import type {
   StackSpec,
   UnitLoadoutResult,
 } from "./model.js";
-
-interface LoadoutScaffold {
-  models: LoadoutModel[];
-  modelCount: number;
-  options: WargearOption[];
-  caps: number[];
-  base: Map<string, number>;
-}
-
-interface OptionPlan {
-  branch: number;
-  count: number;
-}
 
 export interface DamageScoringInvariants {
   loadoutLegality: Map<string, CandidateLoadoutLegality>;
@@ -77,30 +66,6 @@ function memberKeywords(members: readonly StackMember[]): string[] {
 
 function attachmentRoles(members: readonly StackMember[]): Record<string, "leader" | "bodyguard"> {
   return Object.fromEntries(members.map((member) => [member.unit.id, member.role === "bodyguard" ? "bodyguard" : "leader"]));
-}
-
-function applyOptionOnce(counts: ReadonlyMap<string, number>, option: WargearOption, branch: number): Map<string, number> | null {
-  const next = new Map(counts);
-  for (const id of option.replaces ?? []) {
-    const have = next.get(id) ?? 0;
-    if (have <= 0) return null;
-    next.set(id, have - 1);
-  }
-  for (const id of option.replacement ?? option.replacement_choice?.[branch] ?? []) next.set(id, (next.get(id) ?? 0) + 1);
-  for (const [id, count] of next) if (count === 0) next.delete(id);
-  return next;
-}
-
-function countsFromPlan(base: ReadonlyMap<string, number>, options: readonly WargearOption[], plan: readonly OptionPlan[]): Map<string, number> | null {
-  let counts = new Map(base);
-  for (let index = 0; index < options.length; index++) {
-    for (let copy = 0; copy < plan[index].count; copy++) {
-      const next = applyOptionOnce(counts, options[index], plan[index].branch);
-      if (!next) return null;
-      counts = next;
-    }
-  }
-  return counts;
 }
 
 function enhancementIdentity(leverId: string): { enhancementId: string; bearerId: string } | null {
@@ -248,6 +213,16 @@ export class DamageScoringSession {
     };
   }
 
+  /** The unit's wargear choices under `buffs`, for {@link searchLoadout} and the exhaustive oracle. */
+  loadoutSpace(unit: UnitView, buffs: Buff[], context: EngineContext): LoadoutSpace<UnitLoadoutResult> {
+    const scaffold = this.scaffold(unit);
+    return {
+      scaffold,
+      legal: (counts) => this.loadoutLegality(unit, scaffold, counts).legal,
+      score: (counts) => this.scoreCounts(unit, counts, buffs, context),
+    };
+  }
+
   bestLoadout(unit: UnitView, buffs: Buff[], context: EngineContext): UnitLoadoutResult {
     const cacheKey = `${unit.id}|${buffKey(buffs)}|${JSON.stringify(context)}`;
     const cached = this.loadoutCache.get(cacheKey);
@@ -260,34 +235,7 @@ export class DamageScoringSession {
       this.loadoutCache.set(cacheKey, invalid);
       return invalid;
     }
-    let plan = scaffold.options.map(() => ({ branch: 0, count: 0 }));
-    let best = this.scoreCounts(unit, scaffold.base, buffs, context);
-    for (let sweep = 0; sweep < 4; sweep++) {
-      let improved = false;
-      for (let optionIndex = 0; optionIndex < scaffold.options.length; optionIndex++) {
-        const branches = scaffold.options[optionIndex].replacement ? 1 : scaffold.options[optionIndex].replacement_choice?.length ?? 1;
-        for (let branch = 0; branch < branches; branch++) {
-          for (let count = 0; count <= scaffold.caps[optionIndex]; count++) {
-            if (plan[optionIndex].branch === branch && plan[optionIndex].count === count) continue;
-            const trialPlan = plan.map((entry, index) => index === optionIndex ? { branch, count } : entry);
-            const trialCounts = countsFromPlan(scaffold.base, scaffold.options, trialPlan);
-            if (!trialCounts) continue;
-            const legality = this.loadoutLegality(unit, scaffold, trialCounts);
-            if (!legality.legal) {
-              this.illegalLoadoutsRejected += 1;
-              continue;
-            }
-            const trial = this.scoreCounts(unit, trialCounts, buffs, context);
-            if (trial.total > best.total + 1e-9) {
-              plan = trialPlan;
-              best = trial;
-              improved = true;
-            }
-          }
-        }
-      }
-      if (!improved) break;
-    }
+    const best = searchLoadout(this.loadoutSpace(unit, buffs, context), () => { this.illegalLoadoutsRejected += 1; });
     this.loadoutCache.set(cacheKey, best);
     return best;
   }
@@ -428,58 +376,24 @@ export class DamageScoringSession {
     return result;
   }
 
-  private candidateSelection(
-    spec: StackSpec,
-    selected: readonly string[],
-    lever: PoolLever,
-    pool: StackBuffPool,
-  ): string[] | null {
-    const withRequirements = (ids: readonly string[]): string[] => {
-      const output = [...ids];
-      for (let index = 0; index < output.length; index++) {
-        const required = pool.levers.find((candidate) => candidate.id === output[index])?.requiresLever;
-        if (required && !output.includes(required)) output.push(required);
-      }
-      return output;
+  /** The stack's lever choices, for {@link searchLevers} and the exhaustive oracle. */
+  leverSpace(spec: StackSpec): LeverSpace<StackResult> {
+    const legality = new Map<string, boolean>();
+    return {
+      levers: this.pool(spec).levers,
+      legal: (selected) => {
+        const key = [...selected].sort().join("+");
+        let legal = legality.get(key);
+        if (legal === undefined) legality.set(key, legal = this.legalLeverSelection(spec, selected));
+        return legal;
+      },
+      score: (selected) => this.scoreStack({ ...spec, selectedLeverIds: [...selected] }),
     };
-    const base = withRequirements([...selected, lever.id]);
-    if (this.legalLeverSelection(spec, base)) return base;
-    const providers = pool.levers.filter((candidate) =>
-      candidate.raisesCap !== undefined && !base.includes(candidate.id),
-    );
-    const choose = (offset: number, additions: string[]): string[] | null => {
-      const candidate = withRequirements([...base, ...additions]);
-      if (this.legalLeverSelection(spec, candidate)) return candidate;
-      for (let index = offset; index < providers.length; index++) {
-        const found = choose(index + 1, [...additions, providers[index].id]);
-        if (found) return found;
-      }
-      return null;
-    };
-    return choose(0, []);
   }
 
+  /** The best lever set for the spec's members and detachments; its own selection is ignored. */
   optimiseLevers(spec: StackSpec): StackResult {
-    const pool = this.pool(spec);
-    let selected = pool.levers.filter((lever) => lever.enabled).map((lever) => lever.id);
-    if (!this.legalLeverSelection(spec, selected)) selected = [];
-    let best = this.scoreStack({ ...spec, selectedLeverIds: selected });
-    for (let round = 0; round < 2; round++) {
-      let improved = false;
-      for (const lever of pool.levers) {
-        if (selected.includes(lever.id)) continue;
-        const candidate = this.candidateSelection(spec, selected, lever, pool);
-        if (!candidate) continue;
-        const result = this.scoreStack({ ...spec, selectedLeverIds: candidate });
-        if (result.total > best.total + 1e-9) {
-          selected = candidate;
-          best = result;
-          improved = true;
-        }
-      }
-      if (!improved) break;
-    }
-    return best;
+    return searchLevers(this.leverSpace(spec));
   }
 
   relevantWarnings(result: StackResult): StackBuffPool["warnings"] {
