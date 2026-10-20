@@ -292,7 +292,7 @@ export class DamageScoringSession {
     return best;
   }
 
-  private eligibilityInput(spec: StackSpec, member: StackMember, detachmentId?: string): StackEligibilityInput {
+  eligibilityInput(spec: StackSpec, member: StackMember, detachmentId?: string): StackEligibilityInput {
     return {
       unitId: member.unit.id,
       factionId: spec.factionId,

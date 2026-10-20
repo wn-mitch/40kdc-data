@@ -32,6 +32,8 @@ function initialReport(config: MatrixConfig): DamageMatrixReport {
         "The benchmark uses the shipped Salvo consumer primitives: Dataset.stackableBuffsFor, isLegalLeverSelection, Dataset.defensiveBuffsFor, loadout helpers and crunch.",
         "Fight scoring enforces all Extra Attacks plus at most one ordinary melee weapon per model; Salvo's current interactive aggregate permits users to include every visible melee line, so a browser smoke must compare that selection explicitly.",
         "Unsupported translated mechanics and unproven activation requirements are reported rather than treated as authored zeroes.",
+        "Each cell's ledger lists every eligible provider as applied, rejected or unresolved. A cell is incomplete when an unresolved provider could change the current attack; encounter-layer effects (deaths, reactive attacks, restoration, designations for later attacks) are listed but never scored.",
+        "Shooting applies the Pistol rule per model; cells are scored outside Engagement Range.",
         "Expansion to 27 factions requires an explicit ordered manifest; the repository has 34 faction views but no authoritative 27-faction campaign list.",
       ],
     },

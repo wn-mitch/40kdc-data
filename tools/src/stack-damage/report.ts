@@ -3,6 +3,7 @@ import { dirname } from "node:path";
 
 import type { ComparePhase } from "../compare.js";
 import type { MatrixConfig } from "./config.js";
+import type { LedgerEntry } from "./ledger.js";
 import type { PistolChoice } from "./loadout-scoring.js";
 
 export const DAMAGE_MATRIX_FORMAT = "40kdc-stack-damage-matrix-v1";
@@ -67,8 +68,11 @@ export interface DamageCellReport {
     modelCount: number;
   };
   phase: ComparePhase;
+  /** `incomplete` when the ledger holds a relevant unresolved provider, or the winner has detachment or legality issues. */
   status: "complete" | "incomplete";
   winner: WinnerReport | null;
+  /** Every provider eligible for the winning stack and the target, with what became of it. */
+  ledger: LedgerEntry[];
   unsupported: UnsupportedWarning[];
   defensiveWarnings: UnsupportedWarning[];
   candidateCounts: {
