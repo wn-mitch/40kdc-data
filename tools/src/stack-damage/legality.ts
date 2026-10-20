@@ -2,6 +2,7 @@ import type { Dataset } from "../data/dataset.js";
 import {
   completeLoadout,
   validateLoadout,
+  type LoadoutGroup,
   type LoadoutModel,
   type Violation as LoadoutViolation,
 } from "../data/loadout.js";
@@ -34,6 +35,8 @@ export interface LegalityResult {
 export interface CandidateLoadoutLegality {
   legal: boolean;
   violations: LoadoutViolation[];
+  /** Per-model loadouts of a legal candidate, when whole-model completion applies. */
+  groups: LoadoutGroup[] | null;
 }
 
 export interface LocalStackMember {
@@ -104,6 +107,7 @@ export function validateCandidateLoadout(input: {
     new Map(input.counts),
     input.models,
   );
+  let groups: LoadoutGroup[] | null = null;
   if (violations.length === 0) {
     const completed = completeLoadout(input.unit, input.modelCount, input.options, input.models, new Map(input.counts));
     if (completed && !sameCounts(completed.counts, input.counts)) {
@@ -112,9 +116,11 @@ export function validateCandidateLoadout(input: {
         code: "swap-conflict",
         message: `${input.unit.id}: no legal whole-model assignment carries exactly these counts`,
       });
+    } else {
+      groups = completed?.groups ?? null;
     }
   }
-  return { legal: violations.length === 0, violations };
+  return { legal: violations.length === 0, violations, groups };
 }
 
 const ENHANCEMENT_CODES: Record<string, true> = {

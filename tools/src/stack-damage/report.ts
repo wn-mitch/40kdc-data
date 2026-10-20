@@ -3,6 +3,7 @@ import { dirname } from "node:path";
 
 import type { ComparePhase } from "../compare.js";
 import type { MatrixConfig } from "./config.js";
+import type { PistolChoice } from "./loadout-scoring.js";
 
 export const DAMAGE_MATRIX_FORMAT = "40kdc-stack-damage-matrix-v1";
 
@@ -30,6 +31,8 @@ export interface MemberReport {
   expectedDamage: number;
   loadout: { weaponId: string; count: number }[];
   weapons: WeaponReport[];
+  /** How the Pistol rule shaped `weapons`; see {@link PistolChoice}. */
+  pistolChoice: PistolChoice;
   legalityErrors: string[];
 }
 

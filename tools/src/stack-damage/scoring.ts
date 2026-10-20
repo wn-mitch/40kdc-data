@@ -205,17 +205,23 @@ export class DamageScoringSession {
 
   private scoreCounts(unit: UnitView, counts: ReadonlyMap<string, number>, buffs: Buff[], context: EngineContext): UnitLoadoutResult {
     const scaffold = this.scaffold(unit);
+    const keywords = (unit.raw.keywords ?? []).map((keyword) => keyword.toLowerCase());
     const scored = scoreLoadoutWeapons({
       phase: this.state.phase,
       modelCount: scaffold.modelCount,
+      pistolsExclusive: !keywords.includes("monster") && !keywords.includes("vehicle"),
+      groups: this.loadoutLegality(unit, scaffold, counts).groups,
       weapons: [...counts].flatMap(([weaponId, count]) => {
         const weapon = this.resolveWeapon(unit, weaponId);
         return weapon ? [{ weapon, count }] : [];
       }),
       context,
-      scoreProfile: ({ weapon, profileIndex, modelsFiring, context: sharedContext }) => {
+      scoreProfile: ({ weapon, profileIndex, modelsFiring, context: sharedContext, hitModifier }) => {
         if (!profileCanTarget(weapon.profiles[profileIndex], this.state.target.unitRaw)) return null;
-        const key = `${unit.id}|${weapon.id}|${profileIndex}|${buffKey(buffs)}|${JSON.stringify(sharedContext)}`;
+        const profileBuffs: Buff[] = hitModifier
+          ? [...buffs, { source: { kind: "manual", label: "Big Guns Never Tire" }, contribution: { type: "hit-mod", value: hitModifier } }]
+          : buffs;
+        const key = `${unit.id}|${weapon.id}|${profileIndex}|${buffKey(profileBuffs)}|${JSON.stringify(sharedContext)}`;
         const cached = this.scoreCache.get(key);
         if (cached !== undefined) return cached;
         this.crunchCount += 1;
@@ -223,7 +229,7 @@ export class DamageScoringSession {
           attacker: { weapon, profileIndex },
           target: { unit: this.state.target.unitRaw, profileIndex: 0, modelCount: this.state.target.modelCount },
           modelsFiring,
-          buffs,
+          buffs: profileBuffs,
           context: sharedContext,
         }, this.dataset);
         const damage = output.stages.find((stage) => stage.name === "after-fnp")?.expected ?? 0;
@@ -237,6 +243,7 @@ export class DamageScoringSession {
       modelCount: scaffold.modelCount,
       total: scored.total,
       selectedWeapons: scored.selected,
+      pistolChoice: scored.pistolChoice,
       legalityErrors: [],
     };
   }
@@ -249,7 +256,7 @@ export class DamageScoringSession {
     const baseLegality = this.loadoutLegality(unit, scaffold, scaffold.base);
     if (!baseLegality.legal) {
       this.illegalLoadoutsRejected += 1;
-      const invalid = { counts: scaffold.base, modelCount: scaffold.modelCount, total: 0, selectedWeapons: [], legalityErrors: baseLegality.violations.map((violation) => violation.code) };
+      const invalid = { counts: scaffold.base, modelCount: scaffold.modelCount, total: 0, selectedWeapons: [], pistolChoice: "none" as const, legalityErrors: baseLegality.violations.map((violation) => violation.code) };
       this.loadoutCache.set(cacheKey, invalid);
       return invalid;
     }

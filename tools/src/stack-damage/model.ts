@@ -3,6 +3,7 @@ import type { UnitView } from "../data/entities.js";
 import type { Buff, EngineContext } from "../cruncher/index.js";
 import type { ResolvedTarget, ComparePhase } from "../compare.js";
 import type { LegalityIssue } from "./legality.js";
+import type { PistolChoice } from "./loadout-scoring.js";
 import type { UnsupportedWarning } from "./report.js";
 
 export type MemberRole = "bodyguard" | "leader" | "support";
@@ -44,6 +45,7 @@ export interface UnitLoadoutResult {
   modelCount: number;
   total: number;
   selectedWeapons: SelectedWeaponResult[];
+  pistolChoice: PistolChoice;
   legalityErrors: string[];
 }
 

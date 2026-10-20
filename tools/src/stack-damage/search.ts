@@ -232,6 +232,7 @@ function winnerReport(dataset: Dataset, faction: FactionContext, session: Damage
           stages: Object.fromEntries(weapon.stages.map((stage) => [stage.name, stage.expected * weapon.count])),
         };
       }),
+      pistolChoice: loadout.pistolChoice,
       legalityErrors: loadout.legalityErrors,
     })),
     detachments: result.spec.detachmentIds.map((id) => {
