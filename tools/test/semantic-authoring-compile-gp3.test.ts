@@ -54,6 +54,21 @@ describe("an If-led sentence gates its own sentence only (compile-instead-scope.
     ] } });
   });
 
+  it("scopes each bulleted If item to its own item when the If is outside the leaf", () => {
+    // A leading colon sentence with no effect joins the first bullet; its "■ If" must still open that item.
+    const text = "Each model in this unit:\n■ If the unit has KEYA, this unit has +1 OC.\n■ If the unit has KEYB, this unit has +3 OC.";
+    const mechanics = mechanicsOf(text, [
+      ["the unit has KEYA", "unit-keyword", keyword("KEYA")],
+      ["this unit has +1 OC", "characteristic-modifier", stat("OC", 1)],
+      ["the unit has KEYB", "unit-keyword", keyword("KEYB")],
+      ["this unit has +3 OC", "characteristic-modifier", stat("OC", 3)],
+    ]);
+    expect(mechanics.effect).toMatchObject({ type: "sequence", steps: [
+      { type: "conditional", condition: hasKeyword("KEYA"), effect: { type: "stat-modifier", modifier: { value: 1 } } },
+      { type: "conditional", condition: hasKeyword("KEYB"), effect: { type: "stat-modifier", modifier: { value: 3 } } },
+    ] });
+  });
+
   it("stops an If-led condition at its sentence when a later sentence opens a moment", () => {
     const text = "At the start of the phase. If it is a KEYA unit, it has +1 OC. When this unit is set up, if it is a KEYB unit it has +2 OC.";
     const mechanics = mechanicsOf(text, [

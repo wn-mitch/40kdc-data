@@ -77,10 +77,10 @@ export function ifGatedConditions(list: readonly CompileLeaf[], places: readonly
   return found;
 }
 
-/** A sentence-opening "If" in the text before a leaf: the "if" is the first word of its sentence or line. */
-const IF_OPENS = /(?:^|[.;:\r\n])[\s*]*if[\s*]*$/iu;
-/** The text before a leaf ends where a sentence or line starts. */
-const SENTENCE_START = /(?:^|[.;:\r\n])[\s*]*$/u;
+/** A sentence-opening "If" in the text before a leaf: the "if" is the first word of its sentence, line or bulleted item. */
+const IF_OPENS = /(?:^|[.;:\r\n])[\s*■•●▪]*if[\s*]*$/iu;
+/** The text before a leaf ends where a sentence, line or bulleted item starts. */
+const SENTENCE_START = /(?:^|[.;:\r\n])[\s*■•●▪]*$/u;
 /** A leaf whose own wording is led by "If" ("If this unit has X"). */
 const IF_LED = /^[\s*]*if\b/iu;
 
