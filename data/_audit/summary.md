@@ -48,21 +48,21 @@ abilities that translate into cruncher buffs via the real `effectToBuffs`
 ## Unsupported-effect reasons (offensive walk)
 
 - `1461` — effect type "no-effect" is not modelled by the buff layer
-- `264` — conditional: cannot evaluate condition "and" against current context
+- `263` — conditional: cannot evaluate condition "and" against current context
 - `190` — conditional: cannot evaluate condition "attachment" against current context
-- `156` — effect type "permission" is not modelled by the buff layer
-- `154` — conditional: cannot evaluate condition "matches" against current context
+- `157` — effect type "permission" is not modelled by the buff layer
+- `148` — conditional: cannot evaluate condition "matches" against current context
 - `106` — unit-filter target: identity, state or model membership is unresolved
 - `91` — effect type "mortal-wounds" is not modelled by the buff layer
-- `70` — conditional: cannot evaluate condition "not" against current context
+- `71` — conditional: cannot evaluate condition "not" against current context
 - `68` — effect type "move" is not modelled by the buff layer
 - `60` — conditional: cannot evaluate condition "happened" against current context
 - `57` — effect type "ability-grant" is not modelled by the buff layer
-- `54` — effect type "set-up" is not modelled by the buff layer
+- `55` — effect type "set-up" is not modelled by the buff layer
 - `53` — effect type "army-rule" is not modelled by the buff layer
 - `42` — effect type "move-modifier" is not modelled by the buff layer
 - `41` — effect type "cost-modifier" is not modelled by the buff layer
-- `39` — dice-gated effect: stochastic; not expressible as a buff
+- `40` — dice-gated effect: stochastic; not expressible as a buff
 - `39` — conditional: cannot evaluate condition "strength" against current context
 - `35` — effect type "ability-modifier" is not modelled by the buff layer
 - `34` — effect type "keyword-grant" is not modelled by the buff layer
@@ -70,28 +70,28 @@ abilities that translate into cruncher buffs via the real `effectToBuffs`
 - `33` — effect type "test" is not modelled by the buff layer
 - `32` — effect type "cp-gain" is not modelled by the buff layer
 - `31` — stat-modifier on "D" is outside the damage path
-- `26` — selection/history/model/attack predicates are not resolved by the buff engine
+- `27` — selection/history/model/attack predicates are not resolved by the buff engine
 - `25` — re-roll on "charge" (subset …) is outside the damage path
+- `25` — effect type "heal" is not modelled by the buff layer
 - `25` — effect type "objective-sticky" is not modelled by the buff layer
-- `24` — effect type "heal" is not modelled by the buff layer
 - `24` — effect type "designate" is not modelled by the buff layer
 - `24` — target "event-subject" is not resolved by the buff engine
 - `22` — effect type "rule-state" is not modelled by the buff layer
 - `21` — stat-modifier on "OC" is outside the damage path
 - `20` — effect type "resource-gain" is not modelled by the buff layer
-- `19` — activation condition cannot be evaluated against current context
-- `19` — effect type "resource-spend" is not modelled by the buff layer
+- `20` — effect type "resource-spend" is not modelled by the buff layer
 - `19` — conditional: cannot evaluate condition "attack-compare" against current context
+- `18` — activation condition cannot be evaluated against current context
 - `17` — post-attack moment: applies only to attacks made after the triggering unit's
 - `17` — stat-modifier on "detection-range" is outside the damage path
 - `16` — effect type "targeting" is not modelled by the buff layer
 - `16` — stat-modifier on "W" is outside the damage path
-- `16` — conditional: cannot evaluate condition "or" against current context
 - `14` — effect type "act-on-death" is not modelled by the buff layer
 - `14` — roll-modifier on "charge" is outside the damage path
 - `14` — stat-modifier T: defender-side stat; applies when the buffed unit is the target
 - `14` — target "event-object" is not resolved by the buff engine
 - `13` — conditional: cannot evaluate condition "attack-is" against current context
+- `12` — conditional: cannot evaluate condition "or" against current context
 - `10` — effect type "return-models" is not modelled by the buff layer
 - `10` — stat-modifier AP on the attacker: defender-side stat; applies when the buffed unit is the target
 - `10` — ignore-modifiers: only hit and wound rolls and WS/BS are modelled
@@ -103,6 +103,7 @@ abilities that translate into cruncher buffs via the real `effectToBuffs`
 - `8` — effect type "dice-table" is not modelled by the buff layer
 - `7` — target "stratagem-target" is not resolved by the buff engine
 - `7` — roll-result on "hit": only a critical threshold on hit or wound rolls is modelled
+- `6` — effect type "resource-die" is not modelled by the buff layer
 - `6` — roll-modifier on "battle-shock" is outside the damage path
 - `6` — effect type "marker" is not modelled by the buff layer
 - `6` — roll-result on "wound": only a critical threshold on hit or wound rolls is modelled
@@ -113,18 +114,18 @@ abilities that translate into cruncher buffs via the real `effectToBuffs`
 - `6` — effect type "transport-capacity" is not modelled by the buff layer
 - `6` — designate-target debuff on the marked unit: not a buff on the bearer
 - `5` — stat-modifier: operation "set" not supported
-- `5` — effect type "resource-die" is not modelled by the buff layer
 - `5` — re-roll on "attacks" (subset …) is outside the damage path
 - `5` — roll-modifier on "advance" is outside the damage path
 - `5` — effect type "ability-activate" is not modelled by the buff layer
+- `5` — re-roll: count-capped permissions are not modelled by the expected-value engine
 - `5` — conditional: cannot evaluate condition "closest" against current context
 - `5` — roll-result on "desperate-escape" is outside the damage path
 - `5` — effect type "add-unit" is not modelled by the buff layer
 - `4` — roll-result on "deadly-demise" is outside the damage path
 - `4` — roll-result on "save": only a critical threshold on hit or wound rolls is modelled
 - `4` — effect type "split-unit" is not modelled by the buff layer
-- `4` — re-roll: count-capped permissions are not modelled by the expected-value engine
 - `4` — re-roll on "leadership" (subset …) is outside the damage path
+- `3` — re-roll on "any" (subset …) is outside the damage path
 - `3` — ability-grant: its value is set by the battle size; not resolved by the buff engine
 - `3` — conditional: cannot evaluate condition "wounds" against current context
 - `3` — conditional: cannot evaluate condition "eligible" against current context
@@ -132,7 +133,6 @@ abilities that translate into cruncher buffs via the real `effectToBuffs`
 - `3` — persistent-designation: retained selection state is not resolved by the buff engine
 - `3` — conditional: cannot evaluate condition "controls" against current context
 - `3` — conditional: cannot evaluate condition "unit-wargear" against current context
-- `2` — re-roll on "any" (subset …) is outside the damage path
 - `2` — stat-modifier BS: operation "subtract" not supported
 - `2` — effect type "state-change" is not modelled by the buff layer
 - `2` — re-roll on "desperate-escape" (subset …) is outside the damage path

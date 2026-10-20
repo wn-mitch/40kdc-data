@@ -403,7 +403,7 @@
     },
     {
       "reason": "conditional: cannot evaluate condition \"and\" against current context",
-      "count": 264
+      "count": 263
     },
     {
       "reason": "conditional: cannot evaluate condition \"attachment\" against current context",
@@ -411,11 +411,11 @@
     },
     {
       "reason": "effect type \"permission\" is not modelled by the buff layer",
-      "count": 156
+      "count": 157
     },
     {
       "reason": "conditional: cannot evaluate condition \"matches\" against current context",
-      "count": 154
+      "count": 148
     },
     {
       "reason": "unit-filter target: identity, state or model membership is unresolved",
@@ -427,7 +427,7 @@
     },
     {
       "reason": "conditional: cannot evaluate condition \"not\" against current context",
-      "count": 70
+      "count": 71
     },
     {
       "reason": "effect type \"move\" is not modelled by the buff layer",
@@ -443,7 +443,7 @@
     },
     {
       "reason": "effect type \"set-up\" is not modelled by the buff layer",
-      "count": 54
+      "count": 55
     },
     {
       "reason": "effect type \"army-rule\" is not modelled by the buff layer",
@@ -459,7 +459,7 @@
     },
     {
       "reason": "dice-gated effect: stochastic; not expressible as a buff",
-      "count": 39
+      "count": 40
     },
     {
       "reason": "conditional: cannot evaluate condition \"strength\" against current context",
@@ -491,19 +491,19 @@
     },
     {
       "reason": "selection/history/model/attack predicates are not resolved by the buff engine",
-      "count": 26
+      "count": 27
     },
     {
       "reason": "re-roll on \"charge\" (subset …) is outside the damage path",
       "count": 25
     },
     {
-      "reason": "effect type \"objective-sticky\" is not modelled by the buff layer",
+      "reason": "effect type \"heal\" is not modelled by the buff layer",
       "count": 25
     },
     {
-      "reason": "effect type \"heal\" is not modelled by the buff layer",
-      "count": 24
+      "reason": "effect type \"objective-sticky\" is not modelled by the buff layer",
+      "count": 25
     },
     {
       "reason": "effect type \"designate\" is not modelled by the buff layer",
@@ -526,16 +526,16 @@
       "count": 20
     },
     {
-      "reason": "activation condition cannot be evaluated against current context",
-      "count": 19
-    },
-    {
       "reason": "effect type \"resource-spend\" is not modelled by the buff layer",
-      "count": 19
+      "count": 20
     },
     {
       "reason": "conditional: cannot evaluate condition \"attack-compare\" against current context",
       "count": 19
+    },
+    {
+      "reason": "activation condition cannot be evaluated against current context",
+      "count": 18
     },
     {
       "reason": "post-attack moment: applies only to attacks made after the triggering unit's",
@@ -551,10 +551,6 @@
     },
     {
       "reason": "stat-modifier on \"W\" is outside the damage path",
-      "count": 16
-    },
-    {
-      "reason": "conditional: cannot evaluate condition \"or\" against current context",
       "count": 16
     },
     {
@@ -576,6 +572,10 @@
     {
       "reason": "conditional: cannot evaluate condition \"attack-is\" against current context",
       "count": 13
+    },
+    {
+      "reason": "conditional: cannot evaluate condition \"or\" against current context",
+      "count": 12
     },
     {
       "reason": "effect type \"return-models\" is not modelled by the buff layer",
@@ -622,6 +622,10 @@
       "count": 7
     },
     {
+      "reason": "effect type \"resource-die\" is not modelled by the buff layer",
+      "count": 6
+    },
+    {
       "reason": "roll-modifier on \"battle-shock\" is outside the damage path",
       "count": 6
     },
@@ -662,10 +666,6 @@
       "count": 5
     },
     {
-      "reason": "effect type \"resource-die\" is not modelled by the buff layer",
-      "count": 5
-    },
-    {
       "reason": "re-roll on \"attacks\" (subset …) is outside the damage path",
       "count": 5
     },
@@ -675,6 +675,10 @@
     },
     {
       "reason": "effect type \"ability-activate\" is not modelled by the buff layer",
+      "count": 5
+    },
+    {
+      "reason": "re-roll: count-capped permissions are not modelled by the expected-value engine",
       "count": 5
     },
     {
@@ -702,12 +706,12 @@
       "count": 4
     },
     {
-      "reason": "re-roll: count-capped permissions are not modelled by the expected-value engine",
+      "reason": "re-roll on \"leadership\" (subset …) is outside the damage path",
       "count": 4
     },
     {
-      "reason": "re-roll on \"leadership\" (subset …) is outside the damage path",
-      "count": 4
+      "reason": "re-roll on \"any\" (subset …) is outside the damage path",
+      "count": 3
     },
     {
       "reason": "ability-grant: its value is set by the battle size; not resolved by the buff engine",
@@ -736,10 +740,6 @@
     {
       "reason": "conditional: cannot evaluate condition \"unit-wargear\" against current context",
       "count": 3
-    },
-    {
-      "reason": "re-roll on \"any\" (subset …) is outside the damage path",
-      "count": 2
     },
     {
       "reason": "stat-modifier BS: operation \"subtract\" not supported",
@@ -2329,7 +2329,7 @@
       "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "conditional: cannot evaluate condition \"matches\" against current context"
+      "gap": "effect type \"resource-spend\" is not modelled by the buff layer"
     },
     {
       "faction": "adepta-sororitas",
@@ -3169,7 +3169,7 @@
       "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "conditional: cannot evaluate condition \"or\" against current context"
+      "gap": null
     },
     {
       "faction": "adeptus-astartes",
@@ -8779,7 +8779,7 @@
       "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "conditional: cannot evaluate condition \"or\" against current context"
+      "gap": null
     },
     {
       "faction": "aeldari",
@@ -8789,7 +8789,7 @@
       "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "conditional: cannot evaluate condition \"matches\" against current context"
+      "gap": "effect type \"set-up\" is not modelled by the buff layer"
     },
     {
       "faction": "aeldari",
@@ -14069,7 +14069,7 @@
       "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "conditional: cannot evaluate condition \"or\" against current context"
+      "gap": "effect type \"set-up\" is not modelled by the buff layer"
     },
     {
       "faction": "astra-militarum",
@@ -19529,7 +19529,7 @@
       "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "conditional: cannot evaluate condition \"matches\" against current context"
+      "gap": "re-roll on \"any\" (subset …) is outside the damage path"
     },
     {
       "faction": "chaos-knights",
@@ -20189,7 +20189,7 @@
       "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "effect type \"set-up\" is not modelled by the buff layer"
+      "gap": null
     },
     {
       "faction": "chaos-space-marines",
@@ -20259,7 +20259,7 @@
       "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "conditional: cannot evaluate condition \"or\" against current context"
+      "gap": null
     },
     {
       "faction": "chaos-space-marines",
@@ -21409,7 +21409,7 @@
       "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "conditional: cannot evaluate condition \"matches\" against current context"
+      "gap": "dice-gated effect: stochastic; not expressible as a buff"
     },
     {
       "faction": "chaos-space-marines",
@@ -34519,7 +34519,7 @@
       "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "conditional: cannot evaluate condition \"matches\" against current context"
+      "gap": "selection/history/model/attack predicates are not resolved by the buff engine"
     },
     {
       "faction": "necrons",
@@ -34859,7 +34859,7 @@
       "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "conditional: cannot evaluate condition \"matches\" against current context"
+      "gap": "effect type \"heal\" is not modelled by the buff layer"
     },
     {
       "faction": "necrons",
@@ -45099,7 +45099,7 @@
       "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "conditional: cannot evaluate condition \"and\" against current context"
+      "gap": null
     },
     {
       "faction": "world-eaters",
@@ -45109,7 +45109,7 @@
       "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "activation condition cannot be evaluated against current context"
+      "gap": "re-roll: count-capped permissions are not modelled by the expected-value engine"
     },
     {
       "faction": "world-eaters",
