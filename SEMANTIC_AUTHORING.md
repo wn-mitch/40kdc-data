@@ -49,6 +49,12 @@ decisions and derived rows. All authoring runs through the `semantic-authoring` 
 one rolling copy (`workbench.sqlite.pre-run`); human decisions arrive only through
 `review-apply <decisions.json>`, written from the reviewer's answers in chat. There is no review UI.
 
+Publication follows the same rule. `review-sheet <faction>` (read-only) compiles and gates every
+fully described source in a faction, renders each beside its published record, and drafts an
+unsigned decisions file of `approve-shape` decisions for the members that pass every gate. The
+reviewer signs it; `review-apply` records the approvals as `compiled_entries`; `publishable` lists
+the approved entries that would change tracked data; `prepare-publication` and `publish` write them.
+
 The `_private/round5c/` directory is intentionally retained as the persisted workbench and
 artifact location so existing local databases and run history remain reachable. Stored algorithm
 and export identifiers, plus historical review reports under `_reports/`, also keep their original

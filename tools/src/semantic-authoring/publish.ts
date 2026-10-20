@@ -499,6 +499,19 @@ export async function preparePublication(
   };
 }
 
+/**
+ * Validate what publishing these entries would write, exactly as `preparePublication` does,
+ * without recording a batch: the projected dataset passes or the error lists every failure.
+ */
+export async function checkPublication(db: DatabaseSync, options: { faction_id: string; entry_ids: string[] }): Promise<{ faction_id: string; ability_ids: string[]; valid: true }> {
+  const projection = buildProjection(db, options);
+  await prepareWrites(
+    stagedWrites(projection, projection.afterText, projection.core?.afterText),
+    { label: `semantic-authoring publication check ${options.faction_id}`, dataRoot: projection.dataRoot },
+  );
+  return { faction_id: options.faction_id, ability_ids: projection.snapshots.map((snapshot) => snapshot.ability_id), valid: true };
+}
+
 /** Explicitly commit one previously prepared, source-checked publication batch. */
 export async function publishPublication(
   db: DatabaseSync,

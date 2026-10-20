@@ -10,7 +10,9 @@ import { initializeWorkbench } from "../src/semantic-authoring/db.js";
 import { preparePublication, publishPublication } from "../src/semantic-authoring/publish.js";
 import { publishableEntries } from "../src/semantic-authoring/publish-queue.js";
 
-import { getShape, listShapes } from "../src/semantic-authoring/shapes.js";
+import { applyChatReview } from "../src/semantic-authoring/review-apply.js";
+import { factionReviewSheet, writeReviewSheet } from "../src/semantic-authoring/review-sheet.js";
+import { getShape, listShapes, reviewMembers } from "../src/semantic-authoring/shapes.js";
 import { refreshSources } from "../src/semantic-authoring/source.js";
 import { approveShape, confirmSurface, moveSurface, rejectShapeMembers, undoBatch } from "./semantic-authoring-human.js";
 
@@ -134,4 +136,53 @@ describe("Semantic authoring shapes", () => {
     expect(published.find((entry) => entry.ability_id === "partial")!.effect).toEqual(authoredEntry("partial").effect);
     expect(publishableEntries(db)).toEqual({ factions: [], stale: 0, unchanged: 3 });
   }, 120_000);
+
+  it("applies approve-shape and reject-shape from a signed decisions file, and refuses an unsigned draft", () => {
+    reroll("ones");
+    const other = getShape(db, SHAPE).members.find((member) => member.abilities[0]!.ability_id === "other")!.ability_version_ids;
+    const rest = ids().filter((id) => !other.includes(id));
+    expect(() => applyChatReview(db, { reviewer: "<reviewer>", decisions: [{ action: "approve-shape", signature: SHAPE, ability_version_ids: rest }] })).toThrow(/unsigned draft/u);
+    expect(db.prepare("SELECT count(*) AS n FROM compiled_entries").get()).toEqual({ n: 0 });
+
+    const result = applyChatReview(db, { reviewer: REVIEWER, decisions: [
+      { action: "approve-shape", signature: SHAPE, ability_version_ids: rest },
+      { action: "reject-shape", signature: SHAPE, ability_version_ids: other },
+      { action: "approve-shape", signature: "EFFECT(reroll)", ability_version_ids: other },
+    ] });
+    expect(result.applied).toHaveLength(2);
+    expect(result.failed).toEqual([expect.objectContaining({ error: expect.stringMatching(/no longer has this shape/u) })]);
+    expect(db.prepare("SELECT status, count(*) AS n FROM compiled_entries GROUP BY status ORDER BY status").all()).toEqual([{ status: "approved", n: 2 }, { status: "rejected", n: 1 }]);
+    expect((db.prepare("SELECT DISTINCT reviewer FROM annotation_batches WHERE metadata_json LIKE '%shape-%'").all() as Array<{ reviewer: string }>).map((row) => row.reviewer)).toEqual([REVIEWER]);
+  });
+
+  it("lists each fully described source once with its shape and state", () => {
+    reroll("ones");
+    const before = reviewMembers(db);
+    expect(before.map((row) => row.ability_id).sort()).toEqual(["alpha", "copy", "other"]);
+    expect(before.every((row) => row.signature === SHAPE && row.state === "open" && row.differs)).toBe(true);
+    approveShape(db, { reviewer: REVIEWER, signature: SHAPE, ability_version_ids: before.filter((row) => row.ability_id === "alpha").map((row) => row.ability_version_id) });
+    expect(reviewMembers(db).find((row) => row.ability_id === "alpha")!.state).toBe("approved");
+  });
+
+  it("drafts approvals only for passing, undecided members of a faction", async () => {
+    reroll("ones");
+    const other = getShape(db, SHAPE).members.find((member) => member.abilities[0]!.ability_id === "other")!.ability_version_ids;
+    rejectShapeMembers(db, { reviewer: REVIEWER, signature: SHAPE, ability_version_ids: other });
+    const sheet = await factionReviewSheet(db, "fixture");
+    expect(sheet.totals.tiled).toBe(3);
+    const drafted = sheet.proposed_decisions.decisions.flatMap((decision) => decision.ability_version_ids ?? []);
+    expect(drafted.length).toBeGreaterThan(0);
+    expect(drafted.some((id) => other.includes(id))).toBe(false);
+    const passing = [...sheet.changed, ...sheet.unchanged].map((row) => row.ability_version_id).filter((id) => !other.includes(id));
+    expect(drafted.sort()).toEqual(passing.sort());
+    expect(sheet.proposed_decisions.reviewer).toBe("<reviewer>");
+  }, 120_000);
+
+  it("refuses to write a review sheet into tracked repository paths", () => {
+    const sheet = { faction_id: "fixture", totals: { tiled: 0, all_gates: 0, changed: 0, unchanged: 0, approved: 0, failing: 0 }, changed: [], unchanged: [], approved: [], failing: [], proposed_decisions: { reviewer: "<reviewer>", decisions: [] } };
+    expect(() => writeReviewSheet(sheet, join(process.cwd(), "src"))).toThrow(/_private/u);
+    const outside = mkdtempSync(join(tmpdir(), "review-sheet-"));
+    roots.push(outside);
+    expect(writeReviewSheet(sheet, outside).decisions).toBe(join(outside, "fixture.decisions.json"));
+  });
 });

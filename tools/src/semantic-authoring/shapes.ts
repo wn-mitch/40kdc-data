@@ -148,6 +148,32 @@ export function getShape(db: DatabaseSync, signature: string, options: { faction
   };
 }
 
+export type ReviewMember = {
+  ability_version_id: number; faction_id: string; ability_id: string; name: string | null; signature: string;
+  state: ShapeMember["state"]; differs: boolean; authored_text: string | null; compiled_text: string | null; errors: string[];
+};
+
+/**
+ * Every fully described source, each compiled once, with its shape and both renders: the
+ * per-faction review sheet's rows. `abilityVersionIds` narrows the set.
+ */
+export function reviewMembers(db: DatabaseSync, options: { factionId?: string; abilityVersionIds?: ReadonlySet<number> } = {}): ReviewMember[] {
+  const states = entryStates(db);
+  const compileOptions = ownOptions(db);
+  const rows: ReviewMember[] = [];
+  for (const member of tiledMembers(db, options.factionId?.trim() || null)) {
+    if (options.abilityVersionIds && !options.abilityVersionIds.has(member.id)) continue;
+    const compiled = compileLeaves(member.leaves, member.source_text, compileOptions(member));
+    const shown = render(member.faction_id, member.ability_id, compiled);
+    rows.push({
+      ability_version_id: member.id, faction_id: member.faction_id, ability_id: member.ability_id, name: member.name, signature: compiled.signature,
+      state: memberState(states.get(member.id), compilationInputsHash(db, member.id), compiled),
+      differs: shown.differs, authored_text: shown.authored, compiled_text: shown.compiled, errors: shown.errors,
+    });
+  }
+  return rows;
+}
+
 function parse(value: unknown): { reviewer: string; signature: string; ids: number[] } {
   if (value === null || typeof value !== "object" || Array.isArray(value)) throw new ShapeError(422, "Expected {reviewer, signature, ability_version_ids}.");
   const input = value as Record<string, unknown>;

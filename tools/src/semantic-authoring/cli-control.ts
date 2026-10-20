@@ -11,6 +11,9 @@ import { classificationHealth, familyStatus, frontier, FRONTIER_KINDS, gapsRepor
 import { classifyBatch, segmentBatch, unsegmentedAbilities } from "./control-machine.js";
 import { propagateDuplicateTexts } from "./propagate.js";
 import { runGatesOnly } from "./pipeline-8b.js";
+import { publishableEntries } from "./publish-queue.js";
+import { checkPublication } from "./publish.js";
+import { factionReviewSheet, writeReviewSheet } from "./review-sheet.js";
 
 /**
  * The control-plane commands an agent drives: every one prints a single JSON envelope
@@ -198,6 +201,45 @@ const COMMANDS: Record<string, ControlCommand> = {
       } finally { db.close(); }
     },
   },
+  "review-sheet": {
+    effect: () => "read", usage: "review-sheet <faction> [--out dir]",
+    summary: "One faction's publication review: compiled vs published renders and gates for every fully described source, plus an unsigned approve-shape decisions draft. --out writes <faction>.md and <faction>.decisions.json (under _private/ in the repo).",
+    run: async (flags) => {
+      const faction = flags.positional[0];
+      if (!faction) throw Object.assign(new Error("review-sheet needs a faction id."), { code: "INVALID_ARGUMENT" });
+      const db = openWorkbenchReadOnly();
+      try {
+        const sheet = await factionReviewSheet(db, faction);
+        const out = flags.values.get("out");
+        if (!out) return sheet;
+        return { totals: sheet.totals, written: writeReviewSheet(sheet, out), shapes: sheet.proposed_decisions.decisions.length };
+      } finally { db.close(); }
+    },
+  },
+  publishable: {
+    effect: () => "read", usage: "publishable [--faction id]",
+    summary: "Approved compiled entries whose publication would change the tracked record, with the entry ids prepare-publication takes.",
+    run: (flags) => reading((db) => {
+      const report = publishableEntries(db);
+      const faction = flags.values.get("faction");
+      return faction ? { ...report, factions: report.factions.filter((item) => item.faction_id === faction) } : report;
+    }),
+  },
+  "publish-check": {
+    effect: () => "read", usage: "publish-check <faction> [entry-id,entry-id]",
+    summary: "Validate the projected dataset publishing these approved entries (default: every publishable entry of the faction) would write, without recording a batch.",
+    run: async (flags) => {
+      const faction = flags.positional[0];
+      if (!faction) throw Object.assign(new Error("publish-check needs a faction id."), { code: "INVALID_ARGUMENT" });
+      const db = openWorkbenchReadOnly();
+      try {
+        const ids = flags.positional[1]?.split(",").map((id) => id.trim()).filter(Boolean)
+          ?? publishableEntries(db).factions.find((item) => item.faction_id === faction)?.entries.map((entry) => entry.entry_id) ?? [];
+        if (ids.length === 0) return { faction_id: faction, ability_ids: [], valid: true };
+        return await checkPublication(db, { faction_id: faction, entry_ids: ids });
+      } finally { db.close(); }
+    },
+  },
   propagate: {
     effect: (flags) => flags.switches.has("dry-run") ? "read" : "derive",
     usage: "propagate --duplicate-texts [--abilities id,id] [--dry-run]",
@@ -231,7 +273,7 @@ const COMMANDS: Record<string, ControlCommand> = {
   },
   "review-apply": {
     effect: () => "human", usage: "review-apply <decisions.json>",
-    summary: "Apply Will's decisions from a conversational review (confirm, correct, reject, novel, ambiguous, connective, add, gap, surface, retire-surface; pilot-reviewed marks) as his own.",
+    summary: "Apply Will's decisions from a conversational review (confirm, correct, reject, novel, ambiguous, connective, add, gap, surface, retire-surface, approve-shape, reject-shape; pilot-reviewed marks) as his own.",
     run: (flags) => {
       const path = flags.positional[0];
       if (!path) throw Object.assign(new Error("review-apply needs a decisions file."), { code: "INVALID_ARGUMENT" });

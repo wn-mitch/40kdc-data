@@ -7,6 +7,7 @@ import { confirmSurface, leafSurface, moveSurface, retireSurface } from "./leave
 import { confirmConnectiveSpan, confirmConnectiveSurface } from "./connective-surfaces.js";
 import { confirmOperator, type OperatorSlot } from "./leaf-operators.js";
 import { NAME_FRAGMENT } from "./compile-name.js";
+import { approveShape, rejectShapeMembers } from "./shapes.js";
 import { exactSpan } from "./contracts.js";
 
 /**
@@ -18,6 +19,8 @@ import { exactSpan } from "./contracts.js";
  * (and optionally new bytes as `exact_text`, found within the proposal's or annotation's fragment); `reject`,
  * `novel` and `ambiguous` record the refusal or the gap. `connective` confirms a connective.
  * `add` with `fragment: "NAME"` locates its wording in the record's name (a psyker level printed in the name).
+ * `approve-shape` approves the compiled entries of the listed members of one shape (`signature`,
+ * `ability_version_ids`) for publication; `reject-shape` refuses them until their leaves change.
  */
 
 export type ChatDecision = {
@@ -40,7 +43,11 @@ export type ChatDecision = {
   allow_overlap?: boolean;
   /** For `correct` of an annotation: same-role leaves inside the new wording that it absorbs (one list, one leaf). */
   merges_annotation_ids?: number[];
-  action: "confirm" | "correct" | "retire" | "reject" | "novel" | "ambiguous" | "connective" | "add" | "gap" | "surface" | "retire-surface" | "connective-surface" | "add-connective" | "operator" | "move-surface";
+  action: "confirm" | "correct" | "retire" | "reject" | "novel" | "ambiguous" | "connective" | "add" | "gap" | "surface" | "retire-surface" | "connective-surface" | "add-connective" | "operator" | "move-surface" | "approve-shape" | "reject-shape";
+  /** For `approve-shape` / `reject-shape`: the shape signature the members compile to. */
+  signature?: string;
+  /** For `approve-shape` / `reject-shape`: the source versions decided. */
+  ability_version_ids?: number[];
   /** For `add` with an explicit occurrence, the UTF-8 byte end (paired with `start_byte`). */
   end_byte?: number;
   /** For `connective-surface`: the composition relation the joiner expresses, if any. */
@@ -63,6 +70,9 @@ export type ChatDecision = {
   fixed?: Record<string, unknown>;
   combinations?: Array<Record<string, string>>;
 };
+
+/** The reviewer a drafted decisions file carries until a person signs it with their own name. */
+export const UNSIGNED_REVIEWER = "<reviewer>";
 
 export type ChatReview = { reviewer: string; decisions: ChatDecision[]; pilot_reviewed?: number[] };
 
@@ -243,6 +253,7 @@ function decision(db: DatabaseSync, item: ChatDecision): Record<string, unknown>
 
 /** Apply Will's conversational review: one batch per decision, so one bad decision stops only itself. */
 export function applyChatReview(db: DatabaseSync, review: ChatReview): { applied: Array<{ proposal_id?: number; annotation_id?: number; ability_version_id?: number; batch_id: string }>; failed: Array<{ proposal_id?: number; annotation_id?: number; error: string }>; pilot_reviewed: number[] } {
+  if (review.reviewer === UNSIGNED_REVIEWER) throw new Error("This decisions file is an unsigned draft; set reviewer to your own name before applying it.");
   const actor = humanActor(review.reviewer, "review-apply");
   const applied: Array<{ proposal_id?: number; annotation_id?: number; ability_version_id?: number; batch_id: string }> = [];
   const failed: Array<{ proposal_id?: number; annotation_id?: number; error: string }> = [];
@@ -298,6 +309,13 @@ export function applyChatReview(db: DatabaseSync, review: ChatReview): { applied
         const row = db.prepare("SELECT id FROM leaf_surfaces WHERE normalized_surface = ? AND status = 'active'").get(surface) as { id: number } | undefined;
         if (!row) throw new Error(`No active surface "${surface}".`);
         applied.push({ batch_id: retireSurface(db, { reviewer: actor.reviewer, surface_id: row.id }, actor).batch_id });
+        continue;
+      }
+      if (item.action === "approve-shape" || item.action === "reject-shape") {
+        // Publication approval of compiled entries; the shape module re-compiles and checks each member.
+        const body = { reviewer: actor.reviewer, signature: item.signature, ability_version_ids: item.ability_version_ids };
+        const report = item.action === "approve-shape" ? approveShape(db, body, actor) : rejectShapeMembers(db, body, actor);
+        applied.push({ batch_id: report.batch_id, shape: { signature: item.signature, recorded: report.recorded } } as never);
         continue;
       }
       if (item.action === "gap") {

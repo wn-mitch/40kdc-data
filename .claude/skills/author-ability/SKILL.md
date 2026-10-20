@@ -298,18 +298,28 @@ Seeds empty stubs into live `abilities.json` and writes the canonical author-inp
 (the manifest's `raw_text` goes only there). Note its summary (esp. the "merged into authored" count) for
 the final report.
 
-### 5. Author: propose → repair-until-converged → apply (the autonomous core)
+### 5. Author: leaves → review → compile → approve → publish
 
-1. `npm run author:propose -- <faction>` (Haiku). Note the `gateable` count.
-2. **Repair loop** — `author:repair` re-touches ONLY still-ungated residue and recovers
-   failed batches, so loop it:
-   - `npm run author:repair -- <faction> --batch 3` (Sonnet). Re-run while `gateable`
-     keeps rising (cap ~3 passes). Use a **small `--batch`**: the default 8 overflows a
-     single `claude -p` call on conditional stratagems and fails whole batches.
-   - One final escalation on the stubborn residue: `npm run author:repair -- <faction>
-     --batch 2 --model claude-opus-4-8`.
-3. `npm run author:apply -- <faction>` (autonomous). Splices the gated set into stubs;
-   already-authored entries are skipped as "not-a-stub".
+All commands run from `tools/` as `npm run semantic-authoring -- <cmd>`; `--abilities` takes
+workbench `ability_version_id`s (`query "SELECT id FROM abilities WHERE ability_id='…' AND current=1"`).
+
+1. Propose: `segment <batch> --abilities <ids>` then `classify <batch>`. These are machine rows only.
+2. Review: present the proposals to the user in chat and write their answers as a decisions
+   file (`confirm`/`correct`/`add`/`surface`/`gap`/…, see `review-apply.ts`), signed with the
+   user's reviewer name. Apply it with `review-apply <file>`, then
+   `propagate --duplicate-texts --abilities <ids>`.
+3. Compile and gate: `gates --abilities <ids>` (read-only).
+4. Publication review: `review-sheet <faction> --out ../_private/round5c/review` writes
+   `<faction>.md` (published vs compiled renders, lever diffs, failing gates) and an unsigned
+   `<faction>.decisions.json` of `approve-shape` decisions for the members that pass every gate.
+   The user reads the sheet and signs (sets `reviewer`) or edits the decisions; only then run
+   `review-apply` on it. An unsigned draft is refused.
+5. Publish: `publishable --faction <faction>` lists the approved entries that change the tracked
+   record; `prepare-publication <faction> <entry-ids>` then `publish <batch-id> <preview-hash>`.
+   Publication validates the whole projected dataset before writing.
+
+The older `author:propose`/`author:repair`/`author:apply` scripts apply model output without
+leaf review. Do not use them for new authoring.
 
 ### 6. Validate, measure & emit the fidelity-review report
 
