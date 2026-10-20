@@ -42,7 +42,7 @@
   // Every buff the attacker could stack, as toggleable levers. The package
   // does the DSL walk once and hands back (buff, enabled) pairs plus the
   // activation groups (dice-pool / choice) that cap how many fire at once.
-  const stackable = $derived.by<{ buffs: StackableBuff[]; groups: StackableBuffGroup[] }>(() => {
+  const stackable = $derived.by<{ buffs: StackableBuff[]; groups: StackableBuffGroup[]; error?: string }>(() => {
     if (!salvo.selectedUnitId) return { buffs: [], groups: [] };
     try {
       return ds.stackableBuffsFor(
@@ -57,8 +57,8 @@
         },
         engineContext,
       );
-    } catch {
-      return { buffs: [], groups: [] };
+    } catch (err) {
+      return { buffs: [], groups: [], error: (err as Error).message };
     }
   });
 
@@ -144,6 +144,8 @@
 
 {#if !salvo.selectedUnitId}
   <EmptyState>Pick an attacker unit to see eligible buffs.</EmptyState>
+{:else if stackable.error}
+  <p class="error" role="alert">Abilities could not be read: {stackable.error}</p>
 {:else if stackable.buffs.length === 0}
   <EmptyState>No buffs available in the {salvo.phase} phase.</EmptyState>
 {:else}

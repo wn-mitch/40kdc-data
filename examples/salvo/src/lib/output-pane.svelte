@@ -85,7 +85,7 @@
   // every weapon line. We pass no weaponProfiles: each line's intrinsic weapon
   // keywords are auto-injected by crunch (engine.ts profileBuffsFor), so adding
   // them here too would double-count additive keyword effects.
-  const leverSelection = $derived.by<{ buffs: StackableBuff[]; groups: StackableBuffGroup[] }>(() => {
+  const leverSelection = $derived.by<{ buffs: StackableBuff[]; groups: StackableBuffGroup[]; error?: string }>(() => {
     if (!salvo.selectedUnitId) return { buffs: [], groups: [] };
     try {
       return ds.stackableBuffsFor(
@@ -98,8 +98,8 @@
         },
         context,
       );
-    } catch {
-      return { buffs: [], groups: [] };
+    } catch (err) {
+      return { buffs: [], groups: [], error: (err as Error).message };
     }
   });
 
@@ -124,26 +124,29 @@
     ),
   );
 
-  const defensiveBuffs = $derived.by<Buff[]>(() => {
+  const defensive = $derived.by<{ buffs: Buff[]; error?: string }>(() => {
     // Defensive abilities for the target — only meaningful when the target
     // is a dataset/roster unit, not the manual stat block.
-    if (salvo.targetMode === "manual") return [];
+    if (salvo.targetMode === "manual") return { buffs: [] };
     const targetUnitId =
       salvo.targetMode === "dataset"
         ? salvo.datasetTargetUnitId
         : salvo.targetRoster?.units[salvo.rosterTargetUnitIndex ?? -1]?.ref.id ?? null;
-    if (!targetUnitId) return [];
+    if (!targetUnitId) return { buffs: [] };
     const tUnit = ds.units.getAny(targetUnitId);
-    if (!tUnit) return [];
+    if (!tUnit) return { buffs: [], error: `Target unit ${targetUnitId} is not in the dataset` };
     try {
-      return ds.defensiveBuffsFor(
-        { unitId: tUnit.id, factionId: tUnit.raw.faction_id },
-        context,
-      );
-    } catch {
-      return [];
+      return {
+        buffs: ds.defensiveBuffsFor(
+          { unitId: tUnit.id, factionId: tUnit.raw.faction_id },
+          context,
+        ),
+      };
+    } catch (err) {
+      return { buffs: [], error: (err as Error).message };
     }
   });
+  const defensiveBuffs = $derived(defensive.buffs);
 
   const allBuffs = $derived<Buff[]>([...datasetBuffs, ...manualBuffs, ...defensiveBuffs]);
 
@@ -312,12 +315,12 @@
     }
   });
 
-  const resolved = $derived.by(() => {
-    if (!projection || "error" in projection) return null;
+  const resolved = $derived.by<{ value: ReturnType<typeof resolveBuffs> | null; error?: string }>(() => {
+    if (!projection || "error" in projection) return { value: null };
     try {
-      return resolveBuffs(allBuffs, context);
-    } catch {
-      return null;
+      return { value: resolveBuffs(allBuffs, context) };
+    } catch (err) {
+      return { value: null, error: (err as Error).message };
     }
   });
 
@@ -332,7 +335,7 @@
       stackable,
       allBuffs,
       projection,
-      resolved,
+      resolved: resolved.value,
     });
     try {
       await navigator.clipboard.writeText(JSON.stringify(snapshot, null, 2));
@@ -429,6 +432,12 @@
 {:else if weaponLines.length === 0}
   <EmptyState>Pick a unit and target to see a projection.</EmptyState>
 {:else}
+  {#if leverSelection.error}
+    <p class="error" role="alert">Abilities could not be read: {leverSelection.error}</p>
+  {/if}
+  {#if defensive.error}
+    <p class="error" role="alert">Target abilities could not be read: {defensive.error}</p>
+  {/if}
   {#if selection.error}
     <p class="error" role="alert">Loadout scoring failed: {selection.error}</p>
   {/if}
@@ -566,8 +575,10 @@
     <span class="dim">{allBuffs.length} buff(s) in play</span>
   </div>
 
-  {#if showDebug && resolved}
-    <pre class="debug-dump">{JSON.stringify(resolved, null, 2)}</pre>
+  {#if showDebug && resolved.error}
+    <p class="error" role="alert">Resolving modifiers failed: {resolved.error}</p>
+  {:else if showDebug && resolved.value}
+    <pre class="debug-dump">{JSON.stringify(resolved.value, null, 2)}</pre>
   {/if}
 {/if}
 
