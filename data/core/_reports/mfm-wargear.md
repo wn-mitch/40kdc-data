@@ -15,9 +15,9 @@ dump-absent (repo-only) units. Unresolved weapon names are triaged, never guesse
 | chaos-daemons | 53 | 14 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 92 | 0 |
 | chaos-knights | 20 | 20 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | chaos-space-marines | 58 | 96 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 3 | 99 | 0 |
-| death-guard | 35 | 37 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 | 0 |
+| death-guard | 41 | 41 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | drukhari | 27 | 40 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
-| emperors-children | 20 | 25 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 6 | 0 |
+| emperors-children | 25 | 28 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 1 | 0 |
 | genestealer-cults | 28 | 17 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
 | grey-knights | 30 | 44 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 |
 | imperial-knights | 23 | 31 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
@@ -25,10 +25,10 @@ dump-absent (repo-only) units. Unresolved weapon names are triaged, never guesse
 | necrons | 57 | 28 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | orks | 60 | 51 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 | 0 | 0 | 0 |
 | tau-empire | 47 | 94 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| thousand-sons | 32 | 41 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 | 0 |
+| thousand-sons | 38 | 43 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | tyranids | 57 | 20 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
-| world-eaters | 29 | 40 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 | 0 |
-| **TOTAL** | **1077** | **1266** | **0** | **0** | **0** | **0** | **0** | **0** | **0** | **19** | **20** | **214** | **0** |
+| world-eaters | 34 | 43 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| **TOTAL** | **1099** | **1278** | **0** | **0** | **0** | **0** | **0** | **0** | **0** | **19** | **20** | **192** | **0** |
 
 ## adeptus-astartes
 

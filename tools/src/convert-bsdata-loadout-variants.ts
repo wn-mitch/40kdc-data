@@ -83,7 +83,16 @@ function fixedCopies(node: JsonNode): number | undefined {
   return min === max && min > 0 ? min : undefined;
 }
 
-function fixedEquipment(peer: JsonNode): FixedEquipment {
+const isWeaponProfile = (profile: JsonNode | undefined): boolean => / weapons$/i.test(str(profile?.typeName) ?? "");
+
+/**
+ * Fixed equipment of one model peer. An inline upgrade entry carries its weapon
+ * either as its own profile or as an infoLink to a shared profile, looked up in
+ * `sourceNodes`. A profile link that resolves nowhere in the source cannot be
+ * classified, so the entry is kept and left to the equipment resolver, which
+ * reports it when no repo weapon or wargear matches.
+ */
+function fixedEquipment(peer: JsonNode, sourceNodes: ReadonlyMap<string, JsonNode>): FixedEquipment {
   const links: JsonNode[] = [];
   let item: string | undefined;
   let reason: string | undefined;
@@ -101,7 +110,12 @@ function fixedEquipment(peer: JsonNode): FixedEquipment {
   };
   const visit = (node: JsonNode, includeNode = false): void => {
     if (includeNode && node.type === "selectionEntry" && str(node.targetId)) add(node);
-    else if (includeNode && arr(node.profiles).some((profile) => / weapons$/i.test(str(profile.typeName) ?? ""))) add(node);
+    else if (includeNode && arr(node.profiles).some(isWeaponProfile)) add(node);
+    else if (includeNode) {
+      const profileLinks = arr(node.infoLinks).filter((link) => link.type === "profile");
+      const targets = profileLinks.map((link) => sourceNodes.get(str(link.targetId) ?? ""));
+      if (targets.some((target) => target === undefined || isWeaponProfile(target))) add(node);
+    }
     for (const link of arr(node.entryLinks)) {
       const min = constraint(link, "min");
       if (link.type === "selectionEntry" && (min === undefined || min > 0) && !/ upgrade$/i.test(str(link.name) ?? "")) add(link);
@@ -149,7 +163,14 @@ export function projectBudget(group: JsonNode, names: string[]): LoadoutVariantB
   return { variant_names: names, count, per_models: perModels, scope: "unit" };
 }
 
-export function projectUnit(unit: JsonNode, rows: JsonNode[], equipment: JsonNode[], unitId: string, factionUnitIds: readonly string[] = []): VariantIssue[] {
+export function projectUnit(
+  unit: JsonNode,
+  rows: JsonNode[],
+  equipment: JsonNode[],
+  unitId: string,
+  factionUnitIds: readonly string[] = [],
+  sourceNodes: ReadonlyMap<string, JsonNode> = new Map(),
+): VariantIssue[] {
   const issues: VariantIssue[] = [];
   const resolve = makeEquipmentResolver(equipment, unitId, factionUnitIds);
   const grouped = new Map<string, { rowName: string; variants: LoadoutVariant[]; budgets: LoadoutVariantBudget[] }>();
@@ -161,7 +182,7 @@ export function projectUnit(unit: JsonNode, rows: JsonNode[], equipment: JsonNod
     let complete = true;
     for (const peer of peers) {
       const name = str(peer.name) ?? "unnamed";
-      const fixed = fixedEquipment(peer);
+      const fixed = fixedEquipment(peer, sourceNodes);
       if (fixed.reason) {
         issues.push({ unit: unitId, model_row: base, variant: name, item: fixed.item ?? "(no fixed equipment)", reason: fixed.reason });
         complete = false;
@@ -268,7 +289,7 @@ export function prepareFactionProjection(
     );
     if (sourceVariantCount > 0) discoveredUnits += 1;
     discoveredVariants += sourceVariantCount;
-    issues.push(...projectUnit(source, rows, equipment, str(repoUnit.id)!, factionUnitIds));
+    issues.push(...projectUnit(source, rows, equipment, str(repoUnit.id)!, factionUnitIds, sourceNodes));
     const variantCount = rows.reduce((sum, row) => sum + arr(row.loadout_variants).length, 0);
     if (variantCount > 0) projectedUnits += 1;
     projectedVariants += variantCount;

@@ -346,24 +346,56 @@
     "replaces": [
       "radium-carbine"
     ],
-    "replacement_choice": [
-      [
-        "transuranic-arquebus"
-      ],
-      [
-        "plasma-caliver"
-      ],
-      [
-        "arc-rifle"
-      ]
+    "replacement": [
+      "transuranic-arquebus"
     ],
     "model_constraint": {
       "model_name": "Skitarii Vanguard",
-      "max_count": 3
+      "max_count": 1
     }
   },
   {
     "id": "skitarii-vanguard-wgo-mfm-4",
+    "unit_id": "skitarii-vanguard",
+    "faction_id": "adeptus-mechanicus",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replaces": [
+      "radium-carbine"
+    ],
+    "replacement": [
+      "plasma-caliver"
+    ],
+    "model_constraint": {
+      "model_name": "Skitarii Vanguard",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "skitarii-vanguard-wgo-mfm-5",
+    "unit_id": "skitarii-vanguard",
+    "faction_id": "adeptus-mechanicus",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replaces": [
+      "radium-carbine"
+    ],
+    "replacement": [
+      "arc-rifle"
+    ],
+    "model_constraint": {
+      "model_name": "Skitarii Vanguard",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "skitarii-vanguard-wgo-mfm-6",
     "unit_id": "skitarii-vanguard",
     "faction_id": "adeptus-mechanicus",
     "game_version": {
@@ -512,7 +544,7 @@
     ],
     "model_constraint": {
       "model_name": "Serberys Raider",
-      "any_number": true
+      "max_count": 1
     }
   },
   {
@@ -670,20 +702,52 @@
     "replaces": [
       "galvanic-rifle"
     ],
-    "replacement_choice": [
-      [
-        "arc-rifle"
-      ],
-      [
-        "transuranic-arquebus"
-      ],
-      [
-        "plasma-caliver"
-      ]
+    "replacement": [
+      "arc-rifle"
     ],
     "model_constraint": {
       "model_name": "Skitarii Ranger",
-      "max_count": 3
+      "max_count": 1
+    }
+  },
+  {
+    "id": "skitarii-rangers-wgo-mfm-5",
+    "unit_id": "skitarii-rangers",
+    "faction_id": "adeptus-mechanicus",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replaces": [
+      "galvanic-rifle"
+    ],
+    "replacement": [
+      "transuranic-arquebus"
+    ],
+    "model_constraint": {
+      "model_name": "Skitarii Ranger",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "skitarii-rangers-wgo-mfm-6",
+    "unit_id": "skitarii-rangers",
+    "faction_id": "adeptus-mechanicus",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replaces": [
+      "galvanic-rifle"
+    ],
+    "replacement": [
+      "plasma-caliver"
+    ],
+    "model_constraint": {
+      "model_name": "Skitarii Ranger",
+      "max_count": 1
     }
   },
   {

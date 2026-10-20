@@ -1,5 +1,6 @@
 import type { Dataset } from "../data/dataset.js";
 import {
+  completeLoadout,
   validateLoadout,
   type LoadoutModel,
   type Violation as LoadoutViolation,
@@ -76,7 +77,19 @@ function rosterSpec(input: {
   };
 }
 
-/** Authoritative in-loop loadout gate; callers must reject every nonempty result. */
+function sameCounts(left: ReadonlyMap<string, number>, right: ReadonlyMap<string, number>): boolean {
+  const ids = new Set([...left.keys(), ...right.keys()]);
+  return [...ids].every((id) => (left.get(id) ?? 0) === (right.get(id) ?? 0));
+}
+
+/**
+ * Authoritative in-loop loadout gate; callers must reject every nonempty result.
+ * A candidate is an exact whole-unit loadout, not an importer's sparse selection,
+ * so when whole-model completion applies it must reproduce these counts exactly.
+ * Completion otherwise tolerates exporter double-counting by dropping the lower
+ * bound on items shared by several bundled branches, which would accept any
+ * count of such an item.
+ */
 export function validateCandidateLoadout(input: {
   unit: Unit;
   modelCount: number;
@@ -91,6 +104,16 @@ export function validateCandidateLoadout(input: {
     new Map(input.counts),
     input.models,
   );
+  if (violations.length === 0) {
+    const completed = completeLoadout(input.unit, input.modelCount, input.options, input.models, new Map(input.counts));
+    if (completed && !sameCounts(completed.counts, input.counts)) {
+      violations.push({
+        id: input.unit.id,
+        code: "swap-conflict",
+        message: `${input.unit.id}: no legal whole-model assignment carries exactly these counts`,
+      });
+    }
+  }
   return { legal: violations.length === 0, violations };
 }
 

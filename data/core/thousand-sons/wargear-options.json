@@ -421,13 +421,28 @@
     "replaces": [
       "inferno-boltgun"
     ],
-    "replacement_choice": [
-      [
-        "soulreaper-cannon"
-      ],
-      [
-        "warpflamer"
-      ]
+    "replacement": [
+      "soulreaper-cannon"
+    ],
+    "model_constraint": {
+      "model_name": "Rubric Marine",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "rubric-marines-wgo-mfm-3",
+    "unit_id": "rubric-marines",
+    "faction_id": "thousand-sons",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replaces": [
+      "inferno-boltgun"
+    ],
+    "replacement": [
+      "warpflamer"
     ],
     "model_constraint": {
       "model_name": "Rubric Marine",
@@ -435,7 +450,7 @@
     }
   },
   {
-    "id": "rubric-marines-wgo-mfm-3",
+    "id": "rubric-marines-wgo-mfm-4",
     "unit_id": "rubric-marines",
     "faction_id": "thousand-sons",
     "game_version": {
@@ -448,7 +463,7 @@
     ],
     "model_constraint": {
       "model_name": "Rubric Marine",
-      "any_number": true
+      "max_count": 1
     }
   },
   {
@@ -781,21 +796,9 @@
     "replaces": [
       "tzaangor-blades"
     ],
-    "replacement_choice": [
-      [
-        "autopistol",
-        "chainsword-tzaangors"
-      ],
-      [
-        "autopistol",
-        "chainsword-tzaangors",
-        "brayhorn"
-      ],
-      [
-        "chainsword-tzaangors",
-        "herd-banner",
-        "autopistol"
-      ]
+    "replacement": [
+      "autopistol",
+      "chainsword-tzaangors"
     ],
     "model_constraint": {
       "model_name": "Tzaangor",
@@ -811,17 +814,73 @@
       "dataslate": "launch"
     },
     "is_free": true,
-    "replacement_choice": [
-      [
-        "herd-banner"
-      ],
-      [
-        "brayhorn"
-      ]
+    "replaces": [
+      "tzaangor-blades"
+    ],
+    "replacement": [
+      "autopistol",
+      "chainsword-tzaangors",
+      "brayhorn"
     ],
     "model_constraint": {
       "model_name": "Tzaangor",
-      "any_number": true
+      "max_count": 1
+    }
+  },
+  {
+    "id": "tzaangors-wgo-mfm-4",
+    "unit_id": "tzaangors",
+    "faction_id": "thousand-sons",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replaces": [
+      "tzaangor-blades"
+    ],
+    "replacement": [
+      "chainsword-tzaangors",
+      "herd-banner",
+      "autopistol"
+    ],
+    "model_constraint": {
+      "model_name": "Tzaangor",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "tzaangors-wgo-mfm-5",
+    "unit_id": "tzaangors",
+    "faction_id": "thousand-sons",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replacement": [
+      "herd-banner"
+    ],
+    "model_constraint": {
+      "model_name": "Tzaangor",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "tzaangors-wgo-mfm-6",
+    "unit_id": "tzaangors",
+    "faction_id": "thousand-sons",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replacement": [
+      "brayhorn"
+    ],
+    "model_constraint": {
+      "model_name": "Tzaangor",
+      "max_count": 1
     }
   },
   {
@@ -1089,16 +1148,27 @@
       "dataslate": "launch"
     },
     "is_free": true,
-    "replacement_choice": [
-      [
-        "instrument-of-chaos"
-      ],
-      [
-        "daemonic-icon"
-      ]
+    "replacement": [
+      "instrument-of-chaos"
     ],
     "model_constraint": {
-      "any_number": true
+      "max_count": 1
+    }
+  },
+  {
+    "id": "pink-horrors-wgo-mfm-2",
+    "unit_id": "pink-horrors",
+    "faction_id": "thousand-sons",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replacement": [
+      "daemonic-icon"
+    ],
+    "model_constraint": {
+      "max_count": 1
     }
   }
 ]

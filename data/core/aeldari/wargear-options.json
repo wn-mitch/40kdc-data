@@ -519,17 +519,32 @@
     "replaces": [
       "shuriken-pistol"
     ],
-    "replacement_choice": [
-      [
-        "fusion-gun"
-      ],
-      [
-        "flamer"
-      ]
+    "replacement": [
+      "fusion-gun"
     ],
     "model_constraint": {
       "model_name": "Storm Guardian",
-      "max_count": 4
+      "max_count": 2
+    }
+  },
+  {
+    "id": "storm-guardians-wgo-mfm-3",
+    "unit_id": "storm-guardians",
+    "faction_id": "aeldari",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replaces": [
+      "shuriken-pistol"
+    ],
+    "replacement": [
+      "flamer"
+    ],
+    "model_constraint": {
+      "model_name": "Storm Guardian",
+      "max_count": 2
     }
   },
   {
@@ -1549,23 +1564,72 @@
     "replaces": [
       "splinter-rifle"
     ],
-    "replacement_choice": [
-      [
-        "dark-lance"
-      ],
-      [
-        "shredder"
-      ],
-      [
-        "blaster"
-      ],
-      [
-        "splinter-cannon"
-      ]
+    "replacement": [
+      "dark-lance"
     ],
     "model_constraint": {
       "model_name": "Kabalite Warrior",
-      "max_count": 4
+      "max_count": 1
+    }
+  },
+  {
+    "id": "ynnari-kabalite-warriors-wgo-mfm-5",
+    "unit_id": "ynnari-kabalite-warriors",
+    "faction_id": "aeldari",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replaces": [
+      "splinter-rifle"
+    ],
+    "replacement": [
+      "shredder"
+    ],
+    "model_constraint": {
+      "model_name": "Kabalite Warrior",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "ynnari-kabalite-warriors-wgo-mfm-6",
+    "unit_id": "ynnari-kabalite-warriors",
+    "faction_id": "aeldari",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replaces": [
+      "splinter-rifle"
+    ],
+    "replacement": [
+      "blaster"
+    ],
+    "model_constraint": {
+      "model_name": "Kabalite Warrior",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "ynnari-kabalite-warriors-wgo-mfm-7",
+    "unit_id": "ynnari-kabalite-warriors",
+    "faction_id": "aeldari",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replaces": [
+      "splinter-rifle"
+    ],
+    "replacement": [
+      "splinter-cannon"
+    ],
+    "model_constraint": {
+      "model_name": "Kabalite Warrior",
+      "max_count": 1
     }
   },
   {

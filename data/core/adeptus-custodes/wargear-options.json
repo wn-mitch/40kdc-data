@@ -333,7 +333,7 @@
       "vexilla"
     ],
     "model_constraint": {
-      "any_number": true
+      "max_count": 1
     }
   },
   {

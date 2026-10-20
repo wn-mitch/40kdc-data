@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { dataset } from "../src/data/index.js";
 import type { Detachment, Enhancement, Unit, WargearOption } from "../src/generated.js";
+import type { LoadoutModel } from "../src/data/loadout.js";
 import {
   assessDetachmentSelection,
   assessEnhancementAssignment,
@@ -165,5 +166,44 @@ describe("summarizeSupportCosts", () => {
     expect(result.status).toBe("incomplete");
     expect(result.totalPoints).toBeNull();
     expect(result.issues[0]?.code).toBe("support-points-unresolved");
+  });
+});
+
+describe("Legionaries heavy melee allowance", () => {
+  // The dump lets one ordinary Legionary and the Aspiring Champion take heavy
+  // melee weapons; the champion's two-weapon swap carries a pair.
+  const legionaries = dataset.units.getInFaction("legionaries", "chaos-space-marines")!.raw;
+  const composition = dataset.unitCompositionOf(legionaries) as { models: LoadoutModel[] };
+  const options = dataset.wargearOptionsOf(legionaries);
+  const check = (heavy: number, boltguns: number, pistols: number) => validateCandidateLoadout({
+    unit: legionaries,
+    modelCount: 10,
+    options,
+    counts: new Map([
+      ["heavy-melee-weapon", heavy],
+      ["boltgun", boltguns],
+      ["bolt-pistol", pistols],
+      ["close-combat-weapon", 10],
+    ]),
+    models: composition.models,
+  });
+
+  it("accepts the champion's pair plus one Legionary", () => {
+    expect(check(3, 8, 9).legal).toBe(true);
+  });
+
+  it("rejects a second ordinary Legionary with a heavy melee weapon", () => {
+    // Every bolt pistol kept: the champion can add only one blade (via its
+    // boltgun), so the other two must sit on ordinary Legionaries.
+    expect(check(3, 7, 10).legal).toBe(false);
+    expect(check(4, 7, 9).legal).toBe(false);
+  });
+
+  it("accepts the champion and one Legionary each swapping a boltgun", () => {
+    expect(check(2, 8, 10).legal).toBe(true);
+  });
+
+  it("rejects the squad-wide heavy melee loadout the matrix used to pick", () => {
+    expect(check(10, 1, 10).legal).toBe(false);
   });
 });

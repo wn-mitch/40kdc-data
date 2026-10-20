@@ -351,7 +351,7 @@
     ],
     "model_constraint": {
       "model_name": "Kroot Farstalker",
-      "any_number": true
+      "max_count": 1
     }
   },
   {
@@ -1320,28 +1320,13 @@
         "plasma-rifle-commander-in-coldstar-battlesuit"
       ],
       [
-        "battlesuit-support-system"
-      ],
-      [
-        "cyclic-ion-blaster-commander-in-coldstar-battlesuit"
-      ],
-      [
-        "weapon-support-system"
-      ],
-      [
         "fusion-blaster-commander-in-coldstar-battlesuit"
       ],
       [
         "missile-pod-commander-in-coldstar-battlesuit"
       ],
       [
-        "shield-generator"
-      ],
-      [
         "tau-flamer"
-      ],
-      [
-        "airbursting-fragmentation-projector"
       ]
     ],
     "model_constraint": {
@@ -1350,6 +1335,101 @@
   },
   {
     "id": "commander-in-coldstar-battlesuit-wgo-mfm-2",
+    "unit_id": "commander-in-coldstar-battlesuit",
+    "faction_id": "tau-empire",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replaces": [
+      "high-output-burst-cannon"
+    ],
+    "replacement": [
+      "battlesuit-support-system"
+    ],
+    "model_constraint": {
+      "max_count": 1
+    }
+  },
+  {
+    "id": "commander-in-coldstar-battlesuit-wgo-mfm-3",
+    "unit_id": "commander-in-coldstar-battlesuit",
+    "faction_id": "tau-empire",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replaces": [
+      "high-output-burst-cannon"
+    ],
+    "replacement": [
+      "cyclic-ion-blaster-commander-in-coldstar-battlesuit"
+    ],
+    "model_constraint": {
+      "max_count": 1
+    }
+  },
+  {
+    "id": "commander-in-coldstar-battlesuit-wgo-mfm-4",
+    "unit_id": "commander-in-coldstar-battlesuit",
+    "faction_id": "tau-empire",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replaces": [
+      "high-output-burst-cannon"
+    ],
+    "replacement": [
+      "weapon-support-system"
+    ],
+    "model_constraint": {
+      "max_count": 1
+    }
+  },
+  {
+    "id": "commander-in-coldstar-battlesuit-wgo-mfm-5",
+    "unit_id": "commander-in-coldstar-battlesuit",
+    "faction_id": "tau-empire",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replaces": [
+      "high-output-burst-cannon"
+    ],
+    "replacement": [
+      "shield-generator"
+    ],
+    "model_constraint": {
+      "max_count": 1
+    }
+  },
+  {
+    "id": "commander-in-coldstar-battlesuit-wgo-mfm-6",
+    "unit_id": "commander-in-coldstar-battlesuit",
+    "faction_id": "tau-empire",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replaces": [
+      "high-output-burst-cannon"
+    ],
+    "replacement": [
+      "airbursting-fragmentation-projector"
+    ],
+    "model_constraint": {
+      "max_count": 1
+    }
+  },
+  {
+    "id": "commander-in-coldstar-battlesuit-wgo-mfm-7",
     "unit_id": "commander-in-coldstar-battlesuit",
     "faction_id": "tau-empire",
     "game_version": {
@@ -1374,7 +1454,7 @@
     }
   },
   {
-    "id": "commander-in-coldstar-battlesuit-wgo-mfm-3",
+    "id": "commander-in-coldstar-battlesuit-wgo-mfm-8",
     "unit_id": "commander-in-coldstar-battlesuit",
     "faction_id": "tau-empire",
     "game_version": {
@@ -1690,24 +1770,66 @@
     "replaces": [
       "burst-cannon-commander-in-enforcer-battlesuit"
     ],
+    "replacement": [
+      "battlesuit-support-system"
+    ],
+    "model_constraint": {
+      "max_count": 1
+    }
+  },
+  {
+    "id": "commander-in-enforcer-battlesuit-wgo-mfm-4",
+    "unit_id": "commander-in-enforcer-battlesuit",
+    "faction_id": "tau-empire",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replaces": [
+      "burst-cannon-commander-in-enforcer-battlesuit"
+    ],
+    "replacement": [
+      "weapon-support-system"
+    ],
+    "model_constraint": {
+      "max_count": 1
+    }
+  },
+  {
+    "id": "commander-in-enforcer-battlesuit-wgo-mfm-5",
+    "unit_id": "commander-in-enforcer-battlesuit",
+    "faction_id": "tau-empire",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replaces": [
+      "burst-cannon-commander-in-enforcer-battlesuit"
+    ],
+    "replacement": [
+      "cyclic-ion-blaster-commander-in-enforcer-battlesuit"
+    ],
+    "model_constraint": {
+      "max_count": 1
+    }
+  },
+  {
+    "id": "commander-in-enforcer-battlesuit-wgo-mfm-6",
+    "unit_id": "commander-in-enforcer-battlesuit",
+    "faction_id": "tau-empire",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replaces": [
+      "burst-cannon-commander-in-enforcer-battlesuit"
+    ],
     "replacement_choice": [
       [
-        "battlesuit-support-system"
-      ],
-      [
-        "weapon-support-system"
-      ],
-      [
-        "cyclic-ion-blaster-commander-in-enforcer-battlesuit"
-      ],
-      [
         "missile-pod-commander-in-enforcer-battlesuit"
-      ],
-      [
-        "airbursting-fragmentation-projector"
-      ],
-      [
-        "shield-generator"
       ],
       [
         "plasma-rifle-commander-in-enforcer-battlesuit"
@@ -1721,6 +1843,44 @@
     ],
     "model_constraint": {
       "any_number": true
+    }
+  },
+  {
+    "id": "commander-in-enforcer-battlesuit-wgo-mfm-7",
+    "unit_id": "commander-in-enforcer-battlesuit",
+    "faction_id": "tau-empire",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replaces": [
+      "burst-cannon-commander-in-enforcer-battlesuit"
+    ],
+    "replacement": [
+      "airbursting-fragmentation-projector"
+    ],
+    "model_constraint": {
+      "max_count": 1
+    }
+  },
+  {
+    "id": "commander-in-enforcer-battlesuit-wgo-mfm-8",
+    "unit_id": "commander-in-enforcer-battlesuit",
+    "faction_id": "tau-empire",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replaces": [
+      "burst-cannon-commander-in-enforcer-battlesuit"
+    ],
+    "replacement": [
+      "shield-generator"
+    ],
+    "model_constraint": {
+      "max_count": 1
     }
   },
   {

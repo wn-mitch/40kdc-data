@@ -655,16 +655,30 @@ function deriveDefaults(
 }
 
 /**
+ * A per-option cap from one mini-scoped single-weapon limited set: either a
+ * "1 per N models" ratio (`perN`) or, for a set whose only `wargear_limit` rows
+ * have `modelCount = 0`, a flat count of models of that miniature (`maxCount`).
+ */
+interface MiniCap {
+  perN: number | null;
+  maxCount: number | null;
+  setId: string;
+}
+
+/**
  * Per-weapon caps from the **mini-scoped single-weapon** limited sets only.
- * The set identity is retained as well as `per_n_models`: two independent
- * "1 per N" rules can be projected into one app choice menu, but remain two
- * independently usable swaps in the game contract.
+ * The set identity is retained as well as the cap: two independent "1 per N"
+ * rules can be projected into one app choice menu, but remain two
+ * independently usable swaps in the game contract. A flat set (Legionaries'
+ * heavy melee weapon, 1 per unit on the ordinary Legionary) caps the models of
+ * its miniature only, so it binds even when another miniature (the champion)
+ * may also take the weapon and the weapon therefore carries no unit budget.
  */
 function miniScopedSingleCaps(
   dump: MfmDump,
   datasheetId: string,
   resolve: (name: string) => string | null,
-): Map<string, { perN: number; setId: string }> {
+): Map<string, MiniCap> {
   const sets =
     dump.groupBy("limited_wargear_choice_set", "datasheetId").get(datasheetId) ?? [];
   const limitsBySet = dump.groupBy("wargear_limit", "limitedWargearChoiceSetId");
@@ -672,7 +686,7 @@ function miniScopedSingleCaps(
   const itemsByChoice = dump.groupBy("limited_wargear_choice_wargear_item", "limitedWargearChoiceId");
   const wiName = dump.byId("wargear_item");
 
-  const out = new Map<string, { perN: number; setId: string }>();
+  const out = new Map<string, MiniCap>();
   for (const s of sets) {
     if (!s.miniatureId) continue; // datasheet-wide → a budget, not a per-option cap
     const itemIds = new Set<string>();
@@ -684,13 +698,31 @@ function miniScopedSingleCaps(
     }
     if (itemIds.size !== 1) continue; // shared (≥2) sets are budgets
     let minRatio: number | null = null;
+    let flat: number | null = null;
     for (const l of limitsBySet.get(s.id) ?? []) {
-      if (l.modelCount > 0 && l.choiceLimit > 0) {
+      if (l.choiceLimit <= 0) continue;
+      if (l.modelCount > 0) {
         const ratio = l.choiceLimit / l.modelCount;
         if (minRatio == null || ratio < minRatio) minRatio = ratio;
+      } else if (flat == null || l.choiceLimit < flat) {
+        flat = l.choiceLimit;
       }
     }
-    if (minRatio == null) continue;
+    const [id] = [...itemIds];
+    const key = `${s.miniatureId}::${id}`;
+    if (minRatio == null) {
+      if (flat == null) continue;
+      const current = out.get(key);
+      // A ratio cap from another set wins; among flat caps the tightest binds.
+      if (
+        !current ||
+        (current.perN == null &&
+          (flat < current.maxCount! || (flat === current.maxCount && s.id.localeCompare(current.setId) < 0)))
+      ) {
+        out.set(key, { perN: null, maxCount: flat, setId: s.id });
+      }
+      continue;
+    }
     // Only an exactly-expressible "1 per N" ratio becomes a per-option cap:
     // `per_n_models` computes floor(models / N), so a k-per-N row with k > 1
     // (e.g. Plague Marines' "2 per 5" → 1/ratio = 2.5) has no faithful N —
@@ -698,15 +730,14 @@ function miniScopedSingleCaps(
     // squads. Those stay loose (any_number); under-enforcing beats false-illegal.
     const perN = 1 / minRatio;
     if (!Number.isInteger(perN)) continue;
-    const [id] = [...itemIds];
-    const key = `${s.miniatureId}::${id}`;
     const current = out.get(key);
     if (
       !current ||
+      current.perN == null ||
       perN < current.perN ||
       (perN === current.perN && s.id.localeCompare(current.setId) < 0)
     ) {
-      out.set(key, { perN, setId: s.id });
+      out.set(key, { perN, maxCount: null, setId: s.id });
     }
   }
   return out;
@@ -1326,7 +1357,10 @@ export function deriveWargear(
       //      the tightest ratio on every branch falsely caps the loose ones;
       //   2. flat budgets covering every granted weapon of the partition — the
       //      summed allowance (several GW rules can collapse into one dump
-      //      menu, so the flat budget's total bounds the swaps away).
+      //      menu, so the flat budget's total bounds the swaps away);
+      //   3. the mini-scoped single-weapon flat sets — a per-unit count of
+      //      models of this miniature, which binds where no unit budget exists
+      //      because another miniature may take the same weapon.
       // There is deliberately NO input-type (checkbox) heuristic: the app's
       // checkbox is a per-MODEL-card toggle ("any number of models can each be
       // equipped with 1 bio-plasma" ships as a checkbox), and every true
@@ -1336,9 +1370,9 @@ export function deriveWargear(
       // Branches partition by their source limited-set identity, not merely
       // their ratio. Separate "1 per 5" meltagun and plasma-gun rules may share
       // one app menu, but each grants one independently legal swap.
-      const branchCap = (
-        branch: string[],
-      ): { perN: number; setId: string } | null => {
+      // Ratio caps precede flat caps, so a branch that already carried a
+      // ratio keeps it; a flat cap binds only branches with no ratio.
+      const branchCap = (branch: string[]): MiniCap | null => {
         if (!set.miniatureId) return null;
         return branch
           .flatMap((id) => {
@@ -1347,17 +1381,19 @@ export function deriveWargear(
           })
           .sort(
             (a, b) =>
-              a.perN - b.perN ||
+              (a.perN == null ? 1 : 0) - (b.perN == null ? 1 : 0) ||
+              (a.perN ?? 0) - (b.perN ?? 0) ||
+              (a.maxCount ?? 0) - (b.maxCount ?? 0) ||
               a.setId.localeCompare(b.setId),
           )[0] ?? null;
       };
       const partitions = new Map<
         string,
-        { cap: { perN: number; setId: string } | null; branches: string[][] }
+        { cap: MiniCap | null; branches: string[][] }
       >();
       for (const branch of added) {
         const cap = branchCap(branch);
-        const key = cap ? `${cap.perN}:${cap.setId}` : "uncapped";
+        const key = cap ? `${cap.perN ?? "flat"}:${cap.maxCount ?? ""}:${cap.setId}` : "uncapped";
         const partition = partitions.get(key) ?? { cap, branches: [] };
         partition.branches.push(branch);
         partitions.set(key, partition);
@@ -1373,7 +1409,7 @@ export function deriveWargear(
           // A unit-scoped menu is selected once for the whole unit. Its
           // loadout_choice_set.limit is therefore a flat unit-wide cap.
           mc.max_count = setLimit;
-        } else if (cap) {
+        } else if (cap?.perN != null) {
           mc.per_n_models = cap.perN;
         } else if (flatCovered) {
           const byBudget = new Map<string, number>();
@@ -1382,6 +1418,8 @@ export function deriveWargear(
             byBudget.set(budget.key, budget.count);
           }
           mc.max_count = [...byBudget.values()].reduce((sum, count) => sum + count, 0);
+        } else if (cap?.maxCount != null) {
+          mc.max_count = cap.maxCount;
         } else {
           mc.any_number = true;
         }

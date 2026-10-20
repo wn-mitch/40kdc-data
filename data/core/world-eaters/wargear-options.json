@@ -1100,17 +1100,29 @@
       "dataslate": "launch"
     },
     "is_free": true,
-    "replacement_choice": [
-      [
-        "daemonic-icon"
-      ],
-      [
-        "instrument-of-chaos"
-      ]
+    "replacement": [
+      "daemonic-icon"
     ],
     "model_constraint": {
       "model_name": "Bloodcrusher",
-      "any_number": true
+      "max_count": 1
+    }
+  },
+  {
+    "id": "bloodcrushers-wgo-mfm-2",
+    "unit_id": "bloodcrushers",
+    "faction_id": "world-eaters",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replacement": [
+      "instrument-of-chaos"
+    ],
+    "model_constraint": {
+      "model_name": "Bloodcrusher",
+      "max_count": 1
     }
   },
   {
@@ -1122,17 +1134,29 @@
       "dataslate": "launch"
     },
     "is_free": true,
-    "replacement_choice": [
-      [
-        "instrument-of-chaos"
-      ],
-      [
-        "daemonic-icon"
-      ]
+    "replacement": [
+      "instrument-of-chaos"
     ],
     "model_constraint": {
       "model_name": "Bloodletter",
-      "any_number": true
+      "max_count": 1
+    }
+  },
+  {
+    "id": "bloodletters-wgo-mfm-2",
+    "unit_id": "bloodletters",
+    "faction_id": "world-eaters",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replacement": [
+      "daemonic-icon"
+    ],
+    "model_constraint": {
+      "model_name": "Bloodletter",
+      "max_count": 1
     }
   },
   {

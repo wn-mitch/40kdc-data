@@ -798,24 +798,50 @@
       "dataslate": "launch"
     },
     "is_free": true,
-    "replacement_choice": [
-      [
-        "soulguilt-scanner"
-      ],
-      [
-        "excruciator-maul"
-      ],
-      [
-        "arbites-medi-kit"
-      ]
+    "replacement": [
+      "soulguilt-scanner"
     ],
     "model_constraint": {
       "model_name": "Exaction Vigilant",
-      "any_number": true
+      "max_count": 1
     }
   },
   {
     "id": "exaction-squad-wgo-mfm-3",
+    "unit_id": "exaction-squad",
+    "faction_id": "agents-of-the-imperium",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replacement": [
+      "excruciator-maul"
+    ],
+    "model_constraint": {
+      "model_name": "Exaction Vigilant",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "exaction-squad-wgo-mfm-4",
+    "unit_id": "exaction-squad",
+    "faction_id": "agents-of-the-imperium",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replacement": [
+      "arbites-medi-kit"
+    ],
+    "model_constraint": {
+      "model_name": "Exaction Vigilant",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "exaction-squad-wgo-mfm-5",
     "unit_id": "exaction-squad",
     "faction_id": "agents-of-the-imperium",
     "game_version": {

@@ -284,9 +284,6 @@
       ],
       [
         "burna-kommandos"
-      ],
-      [
-        "kustom-shoota-kommandos"
       ]
     ],
     "model_constraint": {
@@ -296,6 +293,23 @@
   },
   {
     "id": "kommandos-wgo-mfm-2",
+    "unit_id": "kommandos",
+    "faction_id": "orks",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replacement": [
+      "kustom-shoota-kommandos"
+    ],
+    "model_constraint": {
+      "model_name": "Kommando",
+      "max_count": 2
+    }
+  },
+  {
+    "id": "kommandos-wgo-mfm-3",
     "unit_id": "kommandos",
     "faction_id": "orks",
     "game_version": {
@@ -320,7 +334,7 @@
     }
   },
   {
-    "id": "kommandos-wgo-mfm-3",
+    "id": "kommandos-wgo-mfm-4",
     "unit_id": "kommandos",
     "faction_id": "orks",
     "game_version": {

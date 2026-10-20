@@ -433,7 +433,7 @@
     ],
     "model_constraint": {
       "model_name": "Plague Marine",
-      "any_number": true
+      "max_count": 1
     }
   },
   {
@@ -1018,17 +1018,29 @@
       "dataslate": "launch"
     },
     "is_free": true,
-    "replacement_choice": [
-      [
-        "instrument-of-chaos"
-      ],
-      [
-        "daemonic-icon"
-      ]
+    "replacement": [
+      "instrument-of-chaos"
     ],
     "model_constraint": {
       "model_name": "Plague Drone",
-      "any_number": true
+      "max_count": 1
+    }
+  },
+  {
+    "id": "plague-drones-wgo-mfm-2",
+    "unit_id": "plague-drones",
+    "faction_id": "death-guard",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replacement": [
+      "daemonic-icon"
+    ],
+    "model_constraint": {
+      "model_name": "Plague Drone",
+      "max_count": 1
     }
   },
   {
@@ -1040,17 +1052,29 @@
       "dataslate": "launch"
     },
     "is_free": true,
-    "replacement_choice": [
-      [
-        "daemonic-icon"
-      ],
-      [
-        "instrument-of-chaos"
-      ]
+    "replacement": [
+      "daemonic-icon"
     ],
     "model_constraint": {
       "model_name": "Plaguebearer",
-      "any_number": true
+      "max_count": 1
+    }
+  },
+  {
+    "id": "plaguebearers-wgo-mfm-2",
+    "unit_id": "plaguebearers",
+    "faction_id": "death-guard",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replacement": [
+      "instrument-of-chaos"
+    ],
+    "model_constraint": {
+      "model_name": "Plaguebearer",
+      "max_count": 1
     }
   }
 ]

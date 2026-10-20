@@ -85,7 +85,7 @@
       "anchorite-sarcophagus"
     ],
     "model_constraint": {
-      "any_number": true
+      "max_count": 1
     }
   },
   {
@@ -277,13 +277,8 @@
     "replaces": [
       "condemnor-bolt-pistol"
     ],
-    "replacement_choice": [
-      [
-        "denuncia-oratory"
-      ],
-      [
-        "ministorum-hand-flamer"
-      ]
+    "replacement": [
+      "denuncia-oratory"
     ],
     "model_constraint": {
       "model_name": "Celestian Insidiant",
@@ -292,6 +287,26 @@
   },
   {
     "id": "celestian-insidiants-wgo-mfm-2",
+    "unit_id": "celestian-insidiants",
+    "faction_id": "adepta-sororitas",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replaces": [
+      "condemnor-bolt-pistol"
+    ],
+    "replacement": [
+      "ministorum-hand-flamer"
+    ],
+    "model_constraint": {
+      "model_name": "Celestian Insidiant",
+      "max_count": 2
+    }
+  },
+  {
+    "id": "celestian-insidiants-wgo-mfm-3",
     "unit_id": "celestian-insidiants",
     "faction_id": "adepta-sororitas",
     "game_version": {
@@ -308,7 +323,7 @@
     }
   },
   {
-    "id": "celestian-insidiants-wgo-mfm-3",
+    "id": "celestian-insidiants-wgo-mfm-4",
     "unit_id": "celestian-insidiants",
     "faction_id": "adepta-sororitas",
     "game_version": {
@@ -320,13 +335,8 @@
       "condemnor-bolt-pistol",
       "null-mace"
     ],
-    "replacement_choice": [
-      [
-        "virge-of-admonition"
-      ],
-      [
-        "blessed-sword"
-      ]
+    "replacement": [
+      "virge-of-admonition"
     ],
     "model_constraint": {
       "model_name": "Celestian Insidiant",
@@ -334,7 +344,28 @@
     }
   },
   {
-    "id": "celestian-insidiants-wgo-mfm-4",
+    "id": "celestian-insidiants-wgo-mfm-5",
+    "unit_id": "celestian-insidiants",
+    "faction_id": "adepta-sororitas",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replaces": [
+      "condemnor-bolt-pistol",
+      "null-mace"
+    ],
+    "replacement": [
+      "blessed-sword"
+    ],
+    "model_constraint": {
+      "model_name": "Celestian Insidiant",
+      "max_count": 2
+    }
+  },
+  {
+    "id": "celestian-insidiants-wgo-mfm-6",
     "unit_id": "celestian-insidiants",
     "faction_id": "adepta-sororitas",
     "game_version": {

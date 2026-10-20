@@ -200,6 +200,44 @@ describe("BSData loadout variant projection", () => {
     ]);
   });
 
+  it("projects an upgrade whose weapon profile is an infoLink", () => {
+    const linked = (target: string) => ({
+      ...model("Trooper w/ Blade", "gun"),
+      selectionEntries: [{
+        name: "Heavy blade",
+        type: "upgrade",
+        constraints: [{ field: "selections", type: "min", value: 1 }, { field: "selections", type: "max", value: 1 }],
+        infoLinks: [{ name: "Heavy blade", targetId: target, type: "profile" }],
+      }],
+    });
+    const nodes = new Map([
+      ["blade-profile", { id: "blade-profile", typeName: "Melee Weapons" }],
+      ["banner-profile", { id: "banner-profile", typeName: "Abilities" }],
+    ]);
+    const project = (target: string) => {
+      const rows: Record<string, unknown>[] = [{ name: "Trooper" }];
+      const issues = projectUnit({ selectionEntryGroups: [{ selectionEntries: [model("Trooper", "gun"), linked(target)] }] }, rows, [
+        { id: "gun", external_refs: [{ namespace: "bsdata", id: "gun" }] },
+        { id: "heavy-blade" },
+      ], "troopers", [], nodes);
+      return { issues, variants: rows[0].loadout_variants };
+    };
+    expect(project("blade-profile")).toEqual({
+      issues: [],
+      variants: [
+        { name: "Trooper", weapon_ids: ["gun"], max_count: 2 },
+        { name: "Trooper w/ Blade", weapon_ids: ["gun", "heavy-blade"], max_count: 2 },
+      ],
+    });
+    // A non-weapon profile is not equipment.
+    expect(project("banner-profile").variants).toEqual([
+      { name: "Trooper", weapon_ids: ["gun"], max_count: 2 },
+      { name: "Trooper w/ Blade", weapon_ids: ["gun"], max_count: 2 },
+    ]);
+    // A dangling link falls to the equipment resolver rather than being dropped.
+    expect(project("missing-profile").variants?.[1]).toEqual({ name: "Trooper w/ Blade", weapon_ids: ["gun", "heavy-blade"], max_count: 2 });
+  });
+
   it("normalizes both model-loadout suffix forms", () => {
     expect(normModelName("Boy w/ Shoota")).toBe("boy");
     expect(normModelName("Boy with Shoota")).toBe("boy");
