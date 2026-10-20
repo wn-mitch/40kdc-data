@@ -23,12 +23,17 @@
     type StackableBuffGroup,
     type Unit,
     type Weapon,
-    maximalLoadout,
-    weaponBounds,
     clampWeaponCount,
-    type WeaponBound,
   } from "@alpaca-software/40kdc-data";
   import EmptyState from "./EmptyState.svelte";
+  import {
+    defaultWeaponCount,
+    memberLoadout,
+    selectLines,
+    weaponLines as buildWeaponLines,
+    type LineSelection,
+    type WeaponLine,
+  } from "./weapon-lines.js";
   import { buildDebugSnapshot } from "./debug-export.js";
   import {
     STAGE_COLUMNS,
@@ -144,134 +149,110 @@
 
   // The combined unit declares all its attacks at once: one line per profile of
   // every phase-eligible weapon across the selected unit AND its attached
-  // members. Each line carries its owning member so volume (model count) and the
-  // disambiguating label come from the right unit.
-  type WeaponLine = {
-    id: string;
-    weaponId: string;
-    profileIndex: number;
-    label: string;
-    weaponRaw: Weapon;
-    ownerMemberId: string;
-    defaultModels: number;
-  };
-  // Per-member wargear loadout: the maximal (take-every-swap) default
-  // distribution and the per-weapon valid count range, computed once from this
-  // unit's wargear options. Units with no options collapse to "every weapon on
-  // every model" — identical to the old `model_count.min` default. Dogfooding
-  // the crate's own loadout maths (see @alpaca-software/40kdc-data/loadout).
-  type MemberLoadout = {
-    counts: Map<string, number>;
-    bounds: Map<string, WeaponBound>;
-    modelCount: number;
-  };
-  function loadoutFor(memberId: string): MemberLoadout | undefined {
-    const unit =
-      (salvo.selectedFactionId &&
-        ds.units.getInFaction(memberId, salvo.selectedFactionId)) ||
-      ds.units.getAny(memberId);
-    if (!unit) return undefined;
-    const modelCount = unit.raw.model_count?.min ?? 1;
-    const options = ds.wargearOptionsOf(unit.raw);
-    return {
-      counts: maximalLoadout(unit.raw, modelCount, options).counts,
-      bounds: weaponBounds(unit.raw, modelCount, options),
-      modelCount,
-    };
-  }
-  const loadoutByMember = $derived.by<Map<string, MemberLoadout>>(() => {
-    const map = new Map<string, MemberLoadout>();
-    for (const memberId of [salvo.selectedUnitId, ...salvo.attachedUnitIds]) {
-      if (!memberId) continue;
-      const lo = loadoutFor(memberId);
-      if (lo) map.set(memberId, lo);
-    }
-    return map;
-  });
-
-  const weaponLines = $derived.by<WeaponLine[]>(() => {
-    const members = [salvo.selectedUnitId, ...salvo.attachedUnitIds].filter(
-      (id): id is string => !!id,
-    );
-    const multiMember = members.length > 1;
-    const lines: WeaponLine[] = [];
-    for (const memberId of members) {
-      // Resolve within the selected faction so a shared chassis (e.g.
-      // `chaos-land-raider`) uses this faction's copy, not whichever was
-      // registered first. Falls back to the faction-blind lookup.
+  // members. Resolve each member within the selected faction so a shared
+  // chassis (e.g. `chaos-land-raider`) uses this faction's copy.
+  const memberUnits = $derived.by(() =>
+    [salvo.selectedUnitId, ...salvo.attachedUnitIds].flatMap((memberId) => {
+      if (!memberId) return [];
       const unit =
-        (salvo.selectedFactionId &&
-          ds.units.getInFaction(memberId, salvo.selectedFactionId)) ||
+        (salvo.selectedFactionId && ds.units.getInFaction(memberId, salvo.selectedFactionId)) ||
         ds.units.getAny(memberId);
-      if (!unit) continue;
-      const lo = loadoutByMember.get(memberId);
-      const modelCount = lo?.modelCount ?? unit.raw.model_count?.min ?? 1;
-      for (const w of unit.weapons) {
-        if (w.raw.type !== weaponTypeForPhase(salvo.phase)) continue;
-        w.raw.profiles.forEach((p, profileIndex) => {
-          const weaponPart =
-            w.raw.profiles.length > 1 ? `${w.name} — ${p.name}` : w.name;
-          lines.push({
-            id: `${memberId}:${w.id}:${profileIndex}`,
-            weaponId: w.id,
-            profileIndex,
-            label: multiMember ? `${unit.name} · ${weaponPart}` : weaponPart,
-            weaponRaw: w.raw,
-            ownerMemberId: memberId,
-            // Maximal-loadout count for this weapon (e.g. 7 bolt pistols, 3
-            // plasma pistols on a 10-model Berzerker squad); falls back to the
-            // full model count for weapons untouched by any option.
-            defaultModels: lo?.counts.get(w.id) ?? modelCount,
-          });
-        });
-      }
-    }
-    return lines;
-  });
+      return unit ? [{ memberId, unit, loadout: memberLoadout(ds, unit.raw) }] : [];
+    }),
+  );
 
-  // Per-line model count (volume). Read-with-default from an override map — no
-  // $effect seeds it, so lines appearing after a unit/phase change fall through
-  // to their owning member's model count without a fresh-ref write that would
-  // trip Svelte's update-depth guard.
-  const modelsOverrides = $state(new SvelteMap<string, number>());
-  function modelsFor(line: WeaponLine): number {
-    return modelsOverrides.get(line.id) ?? line.defaultModels;
+  const weaponLines = $derived<WeaponLine[]>(
+    buildWeaponLines(
+      memberUnits.map(({ memberId, unit }) => ({ memberId, name: unit.name, weapons: unit.weapons.map((w) => w.raw) })),
+      weaponTypeForPhase(salvo.phase),
+    ),
+  );
+
+  // Per-weapon model count (how many of a member's models carry it), read with
+  // a default from an override map — no $effect seeds it, so lines appearing
+  // after a unit/phase change fall through to the loadout default without a
+  // fresh-ref write that would trip Svelte's update-depth guard.
+  const countOverrides = $state(new SvelteMap<string, number>());
+  const weaponKey = (memberId: string, weaponId: string) => `${memberId}:${weaponId}`;
+  function carriedBy(memberId: string, weaponId: string): number {
+    const override = countOverrides.get(weaponKey(memberId, weaponId));
+    if (override !== undefined) return override;
+    const loadout = memberUnits.find((member) => member.memberId === memberId)?.loadout;
+    return loadout ? defaultWeaponCount(loadout, weaponId) : 0;
   }
   // Clamp the requested count into this weapon's valid range so an invalid
   // wargear config is unreachable (e.g. plasma pistols can't exceed 3 on a
-  // 10-model Berzerker squad). Weapons with no bound (a unit without options)
-  // keep the old "≥1" floor.
-  function setModels(line: WeaponLine, n: number): void {
-    const bounds = loadoutByMember.get(line.ownerMemberId)?.bounds;
-    if (bounds?.has(line.weaponId)) {
-      modelsOverrides.set(line.id, clampWeaponCount(bounds, line.weaponId, n));
-    } else {
-      modelsOverrides.set(line.id, Math.max(1, Math.floor(n) || 1));
-    }
+  // 10-model Berzerker squad). Weapons with no bound keep a "≥0" floor.
+  function setCarried(line: WeaponLine, n: number): void {
+    const bounds = memberUnits.find((member) => member.memberId === line.ownerMemberId)?.loadout.bounds;
+    const count = bounds?.has(line.weaponId)
+      ? clampWeaponCount(bounds, line.weaponId, n)
+      : Math.max(0, Math.floor(n) || 0);
+    countOverrides.set(weaponKey(line.ownerMemberId, line.weaponId), count);
   }
 
-  // Crunch every line with the shared (weapon-agnostic) buff stack and that
-  // line's own model count. The engine injects each weapon's intrinsic
-  // keywords. attributeStages runs the leave-one-out decomposition so each
-  // cell can show which toggleable buffs lifted it.
+  // Which lines the models actually use, and with how many models: the
+  // package's loadout scoring (Pistols or other ranged weapons per model, one
+  // ordinary melee weapon per model), the same the damage matrix applies.
+  const target = $derived(synthTarget(salvo.manualTarget));
+  const selection = $derived.by<{ value: LineSelection | null; error?: string }>(() => {
+    if (!selectionValid) return { value: null };
+    try {
+      return {
+        value: selectLines({
+          ds,
+          members: memberUnits.map(({ memberId, unit, loadout }) => ({
+            memberId,
+            loadout,
+            counts: new Map(unit.weapons.map((w) => [w.id, carriedBy(memberId, w.id)] as const).filter(([, n]) => n > 0)),
+          })),
+          target: { unit: target, modelCount: salvo.manualTarget.modelCount },
+          buffs: allBuffs,
+          context,
+        }),
+      };
+    } catch (err) {
+      return { value: null, error: (err as Error).message };
+    }
+  });
+
+  // Manual include/exclude per line; without one, a line is in play exactly
+  // when the loadout scoring uses it.
+  const inclusion = $state(new SvelteMap<string, boolean>());
+  function included(id: string): boolean {
+    return inclusion.get(id) ?? (selection.value?.firing.has(id) ?? false);
+  }
+  function toggleLine(id: string): void {
+    inclusion.set(id, !included(id));
+  }
+  /** Models firing a line: the scored count when it is used, else every model carrying it. */
+  function firing(line: WeaponLine): number {
+    return selection.value?.firing.get(line.id) ?? carriedBy(line.ownerMemberId, line.weaponId);
+  }
+
+  // Crunch every line with the shared (weapon-agnostic) buff stack and the
+  // models firing it. The engine injects each weapon's intrinsic keywords.
+  // attributeStages runs the leave-one-out decomposition so each cell can show
+  // which toggleable buffs lifted it.
   const lineResults = $derived.by(() => {
     if (!selectionValid) return [];
     return weaponLines.map((line) => {
+      const models = firing(line);
+      if (models <= 0) return { ...line, models, attributed: [] as AttributedStage[], error: "no models carry this weapon" };
       try {
-        const target = synthTarget(salvo.manualTarget);
         const attributed = attributeStages(
           {
             attacker: { weapon: line.weaponRaw, profileIndex: line.profileIndex },
             target: { unit: target, profileIndex: 0, modelCount: salvo.manualTarget.modelCount },
-            modelsFiring: modelsFor(line),
+            modelsFiring: models,
             buffs: allBuffs,
             context,
           },
           ds,
         );
-        return { ...line, attributed, error: undefined as string | undefined };
+        return { ...line, models, attributed, error: undefined as string | undefined };
       } catch (err) {
-        return { ...line, attributed: [] as AttributedStage[], error: (err as Error).message };
+        return { ...line, models, attributed: [] as AttributedStage[], error: (err as Error).message };
       }
     });
   });
@@ -281,20 +262,11 @@
     return labelForSourceIn(ds, s);
   }
 
-  // Excluded set (default empty = all included). An exclude-set means lines
-  // that appear after a unit/phase change are included with no $effect — so we
-  // never write a fresh Set into an effect that reads the same state.
-  const excludedLines = $state(new SvelteSet<string>());
-  function toggleLine(id: string): void {
-    if (excludedLines.has(id)) excludedLines.delete(id);
-    else excludedLines.add(id);
-  }
-
   // The "Combined" row, decomposed the same way per-line cells are (see
   // aggregateStages for the additive vs models-killed math).
   const aggregate = $derived.by<AttributedStage[]>(() =>
     aggregateStages(
-      lineResults.filter((r) => !excludedLines.has(r.id) && !r.error),
+      lineResults.filter((r) => included(r.id) && !r.error),
       salvo.manualTarget.W,
       salvo.manualTarget.modelCount,
     ),
@@ -431,6 +403,14 @@
   </div>
 {/snippet}
 
+{#snippet usage(r: { id: string; models: number; ownerMemberId: string; weaponId: string })}
+  {#if !selection.value?.firing.has(r.id)}
+    <span class="usage dim" title="The loadout scoring uses another profile or weapon for these models">not used</span>
+  {:else if r.models !== carriedBy(r.ownerMemberId, r.weaponId)}
+    <span class="usage dim" title="Models that use this line; the rest use another weapon">{r.models} fire</span>
+  {/if}
+{/snippet}
+
 {#snippet headline(stages: AttributedStage[])}
   <div class="wcard-headline">
     <span class="metric">
@@ -449,6 +429,12 @@
 {:else if weaponLines.length === 0}
   <EmptyState>Pick a unit and target to see a projection.</EmptyState>
 {:else}
+  {#if selection.error}
+    <p class="error" role="alert">Loadout scoring failed: {selection.error}</p>
+  {/if}
+  {#each [...(selection.value?.violations ?? [])] as [memberId, messages] (memberId)}
+    <p class="error" role="alert">Illegal wargear: {messages.join("; ")}</p>
+  {/each}
   <!-- Below 640px the table becomes stacked weapon cards: headline numbers up
        front, the full pipeline and buff breakdown behind a per-card toggle. -->
   <div class="proj-cards">
@@ -471,11 +457,11 @@
     </article>
 
     {#each lineResults as r (r.id)}
-      <article class="wcard" class:excluded={excludedLines.has(r.id)}>
+      <article class="wcard" class:excluded={!included(r.id)}>
         <div class="wcard-top">
           <input
             type="checkbox"
-            checked={!excludedLines.has(r.id)}
+            checked={included(r.id)}
             onchange={() => toggleLine(r.id)}
             aria-label={`Include ${r.label} in combined total`}
           />
@@ -492,12 +478,13 @@
             <span>models</span>
             <input
               type="number"
-              min="1"
+              min="0"
               class="models-input"
-              value={modelsFor(r)}
-              oninput={(e) => setModels(r, Number((e.currentTarget as HTMLInputElement).value))}
-              aria-label={`Models firing ${r.label}`}
+              value={carriedBy(r.ownerMemberId, r.weaponId)}
+              oninput={(e) => setCarried(r, Number((e.currentTarget as HTMLInputElement).value))}
+              aria-label={`Models carrying ${r.label}`}
             />
+            {@render usage(r)}
           </label>
         </div>
         {#if r.error}
@@ -527,11 +514,11 @@
     </thead>
     <tbody>
       {#each lineResults as r (r.id)}
-        <tr class:excluded={excludedLines.has(r.id)}>
+        <tr class:excluded={!included(r.id)}>
           <td>
             <input
               type="checkbox"
-              checked={!excludedLines.has(r.id)}
+              checked={included(r.id)}
               onchange={() => toggleLine(r.id)}
               aria-label={`Include ${r.label} in combined total`}
             />
@@ -540,17 +527,18 @@
           <td class="value">
             <input
               type="number"
-              min="1"
+              min="0"
               class="models-input"
-              value={modelsFor(r)}
-              oninput={(e) => setModels(r, Number((e.currentTarget as HTMLInputElement).value))}
-              aria-label={`Models firing ${r.label}`}
+              value={carriedBy(r.ownerMemberId, r.weaponId)}
+              oninput={(e) => setCarried(r, Number((e.currentTarget as HTMLInputElement).value))}
+              aria-label={`Models carrying ${r.label}`}
             />
+            {@render usage(r)}
           </td>
           {#each STAGE_COLUMNS as col, idx (col.name)}
             {@render numCell(
               r.error ? undefined : stageOf(r.attributed, col.name),
-              excludedLines.has(r.id) || !!r.error,
+              !included(r.id) || !!r.error,
               idx >= 4,
             )}
           {/each}
@@ -732,6 +720,11 @@
     width: 52px;
     text-align: right;
     font-family: var(--font-mono);
+  }
+  .usage {
+    display: block;
+    font-size: var(--text-xs);
+    white-space: nowrap;
   }
 
   /* Per-cell buff-lift popover. The cell is the positioning context; the

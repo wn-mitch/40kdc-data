@@ -74,6 +74,31 @@ export * from "./cruncher/index.js";
 // math is pinned against Python by the `conformance/compare` corpus.
 export * from "./compare.js";
 
+// One unit's damage with a chosen loadout: which weapons and profiles its models use (the
+// Pistol rule, one ordinary melee weapon per model) and what each deals. Shared by the damage
+// matrix and interactive tools so one scenario scores the same in both. Pure — Node + browser.
+export {
+  scoreLoadoutWeapons,
+  type LoadoutDamageResult,
+  type LoadoutWeapon,
+  type ModelLoadoutGroup,
+  type PistolChoice,
+  type ProfileDamage,
+  type ProfileScorer,
+  type ProfileScoreRequest,
+  type SelectedWeaponProfile,
+} from "./stack-damage/loadout-scoring.js";
+export {
+  validateCandidateLoadout,
+  type CandidateLoadoutLegality,
+} from "./stack-damage/legality.js";
+export {
+  crunchProfileScorer,
+  resolveUnitWeapon,
+  unitLoadoutDamage,
+  type UnitLoadoutDamageInput,
+} from "./stack-damage/unit-damage.js";
+
 // Roster-highlighting scope: resolve which units an ability's curated
 // `applies_to` keyword filter benefits. Mirrors `wh40kdc::scope` (Rust) and
 // `wh40kdc.scope` (Python); pinned by the `conformance/applies-to` corpus.

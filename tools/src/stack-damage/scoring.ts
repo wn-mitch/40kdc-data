@@ -1,11 +1,10 @@
-import { crunch, profileCanTarget, type Buff, type BuffSource, type EngineContext } from "../cruncher/index.js";
+import type { Buff, BuffSource, EngineContext } from "../cruncher/index.js";
 import type { Dataset, StackableBuffGroup } from "../data/dataset.js";
 import { isLegalLeverSelection } from "../data/lever-selection.js";
 import { baseLoadout, optionCap, type LoadoutModel, type LoadoutTier } from "../data/loadout.js";
 import { reachesOtherUnits } from "../abilities-resolver/resolver.js";
 import type { EligibilityInput, EligibleAbility } from "../abilities-resolver/index.js";
 import type { UnitView } from "../data/entities.js";
-import type { Weapon } from "../generated.js";
 import type { MatrixConfig } from "./config.js";
 import { DamageCellCache } from "./cache.js";
 import {
@@ -16,7 +15,8 @@ import {
 } from "./legality.js";
 import { searchLevers, type LeverSpace } from "./lever-search.js";
 import { searchLoadout, type LoadoutScaffold, type LoadoutSpace } from "./loadout-search.js";
-import { scoreLoadoutWeapons, type ProfileDamage } from "./loadout-scoring.js";
+import type { ProfileDamage } from "./loadout-scoring.js";
+import { crunchProfileScorer, unitLoadoutDamage } from "./unit-damage.js";
 import type {
   DamageCellState,
   PoolLever,
@@ -164,41 +164,25 @@ export class DamageScoringSession {
     return legality;
   }
 
-  private resolveWeapon(unit: UnitView, weaponId: string): Weapon | undefined {
-    return this.dataset.weapons.getInFaction(weaponId, unit.raw.faction_id)?.raw ?? this.dataset.weapons.getAny(weaponId)?.raw;
-  }
-
   private scoreCounts(unit: UnitView, counts: ReadonlyMap<string, number>, buffs: Buff[], context: EngineContext): UnitLoadoutResult {
     const scaffold = this.scaffold(unit);
-    const keywords = (unit.raw.keywords ?? []).map((keyword) => keyword.toLowerCase());
-    const scored = scoreLoadoutWeapons({
-      phase: this.state.phase,
+    const target = { unit: this.state.target.unitRaw, modelCount: this.state.target.modelCount };
+    const crunchProfile = crunchProfileScorer(this.dataset, target, buffs);
+    const scored = unitLoadoutDamage({
+      dataset: this.dataset,
+      unit: unit.raw,
       modelCount: scaffold.modelCount,
-      pistolsExclusive: !keywords.includes("monster") && !keywords.includes("vehicle"),
-      groups: this.loadoutLegality(unit, scaffold, counts).groups,
-      weapons: [...counts].flatMap(([weaponId, count]) => {
-        const weapon = this.resolveWeapon(unit, weaponId);
-        return weapon ? [{ weapon, count }] : [];
-      }),
+      counts,
+      target,
+      buffs,
       context,
-      scoreProfile: ({ weapon, profileIndex, modelsFiring, context: sharedContext, hitModifier }) => {
-        if (!profileCanTarget(weapon.profiles[profileIndex], this.state.target.unitRaw)) return null;
-        const profileBuffs: Buff[] = hitModifier
-          ? [...buffs, { source: { kind: "manual", label: "Big Guns Never Tire" }, contribution: { type: "hit-mod", value: hitModifier } }]
-          : buffs;
-        const key = `${unit.id}|${weapon.id}|${profileIndex}|${buffKey(profileBuffs)}|${JSON.stringify(sharedContext)}`;
+      groups: this.loadoutLegality(unit, scaffold, counts).groups,
+      scoreProfile: (request) => {
+        const key = `${unit.id}|${request.weapon.id}|${request.profileIndex}|${buffKey(buffs)}|${request.hitModifier ?? 0}|${JSON.stringify(request.context)}`;
         const cached = this.scoreCache.get(key);
         if (cached !== undefined) return cached;
         this.crunchCount += 1;
-        const output = crunch({
-          attacker: { weapon, profileIndex },
-          target: { unit: this.state.target.unitRaw, profileIndex: 0, modelCount: this.state.target.modelCount },
-          modelsFiring,
-          buffs: profileBuffs,
-          context: sharedContext,
-        }, this.dataset);
-        const damage = output.stages.find((stage) => stage.name === "after-fnp")?.expected ?? 0;
-        const value = { damage, stages: output.stages.map((stage) => ({ name: stage.name, expected: stage.expected })) };
+        const value = crunchProfile(request);
         this.scoreCache.set(key, value);
         return value;
       },
