@@ -514,11 +514,19 @@
               "close-combat-weapon",
               "ministorum-hand-flamer",
               "ministorum-hand-flamer"
-            ],
-            "max_count": 2
+            ]
           }
         ],
         "loadout_variant_budgets": [
+          {
+            "variant_names": [
+              "Seraphim with Special Weapons"
+            ],
+            "count": 2,
+            "per_models": 5,
+            "scope": "unit",
+            "stepped": true
+          },
           {
             "variant_names": [
               "Seraphim",

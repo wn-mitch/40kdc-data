@@ -257,9 +257,10 @@
               "Purifier w/ psilencer",
               "Purifier w/ psycannon"
             ],
-            "count": 4,
-            "per_models": 0,
-            "scope": "model-row"
+            "count": 2,
+            "per_models": 5,
+            "scope": "unit",
+            "stepped": true
           }
         ]
       }
@@ -1091,16 +1092,31 @@
           {
             "name": "Paladin with Ancient's Banner",
             "weapon_ids": [
-              "nemesis-force-weapon-paladin-squad"
+              "nemesis-force-weapon-paladin-squad",
+              "storm-bolter-paladin-squad"
             ],
             "max_count": 1
           },
           {
-            "name": "Paladin with Heavy Weapon",
+            "name": "Paladin with Heavy Weapon (Incinerator)",
             "weapon_ids": [
-              "nemesis-force-weapon-paladin-squad"
-            ],
-            "max_count": 2
+              "nemesis-force-weapon-paladin-squad",
+              "incinerator"
+            ]
+          },
+          {
+            "name": "Paladin with Heavy Weapon (Psycannon)",
+            "weapon_ids": [
+              "nemesis-force-weapon-paladin-squad",
+              "psycannon"
+            ]
+          },
+          {
+            "name": "Paladin with Heavy Weapon (Psilencer)",
+            "weapon_ids": [
+              "nemesis-force-weapon-paladin-squad",
+              "psilencer"
+            ]
           },
           {
             "name": "Paladin with Narthecium",
@@ -1113,9 +1129,22 @@
         "loadout_variant_budgets": [
           {
             "variant_names": [
+              "Paladin with Heavy Weapon (Incinerator)",
+              "Paladin with Heavy Weapon (Psycannon)",
+              "Paladin with Heavy Weapon (Psilencer)"
+            ],
+            "count": 2,
+            "per_models": 5,
+            "scope": "unit",
+            "stepped": true
+          },
+          {
+            "variant_names": [
               "Paladin",
               "Paladin with Ancient's Banner",
-              "Paladin with Heavy Weapon",
+              "Paladin with Heavy Weapon (Incinerator)",
+              "Paladin with Heavy Weapon (Psycannon)",
+              "Paladin with Heavy Weapon (Psilencer)",
               "Paladin with Narthecium"
             ],
             "count": 9,

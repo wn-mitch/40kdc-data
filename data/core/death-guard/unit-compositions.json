@@ -397,16 +397,14 @@
             "weapon_ids": [
               "plague-knives-plague-marines",
               "bubotic-weapons"
-            ],
-            "max_count": 4
+            ]
           },
           {
             "name": "Plague Marine w/ heavy plague weapon",
             "weapon_ids": [
               "plague-knives-plague-marines",
               "heavy-plague-weapon"
-            ],
-            "max_count": 4
+            ]
           },
           {
             "name": "Plague Marine w/ blight launcher",
@@ -465,6 +463,24 @@
           }
         ],
         "loadout_variant_budgets": [
+          {
+            "variant_names": [
+              "Plague Marine w/ bubotic weapons"
+            ],
+            "count": 2,
+            "per_models": 5,
+            "scope": "unit",
+            "stepped": true
+          },
+          {
+            "variant_names": [
+              "Plague Marine w/ heavy plague weapon"
+            ],
+            "count": 2,
+            "per_models": 5,
+            "scope": "unit",
+            "stepped": true
+          },
           {
             "variant_names": [
               "Plague Marine w/ blight launcher"
@@ -1330,6 +1346,15 @@
             "count": 9,
             "per_models": 0,
             "scope": "model-row"
+          },
+          {
+            "variant_names": [
+              "Blightlord Terminator w/ combi-weapon"
+            ],
+            "count": 3,
+            "per_models": 5,
+            "scope": "unit",
+            "stepped": true
           }
         ]
       }

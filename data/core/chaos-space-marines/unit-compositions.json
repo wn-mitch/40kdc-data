@@ -1161,16 +1161,14 @@
             "weapon_ids": [
               "astartes-chainsword",
               "plasma-pistol"
-            ],
-            "max_count": 4
+            ]
           },
           {
             "name": "Raptor w/ heavy melee weapon",
             "weapon_ids": [
               "heavy-melee-weapon",
               "bolt-pistol"
-            ],
-            "max_count": 4
+            ]
           },
           {
             "name": "Raptor w/ mutations",
@@ -1205,6 +1203,24 @@
           }
         ],
         "loadout_variant_budgets": [
+          {
+            "variant_names": [
+              "Raptor w/ plasma pistol"
+            ],
+            "count": 2,
+            "per_models": 5,
+            "scope": "unit",
+            "stepped": true
+          },
+          {
+            "variant_names": [
+              "Raptor w/ heavy melee weapon"
+            ],
+            "count": 2,
+            "per_models": 5,
+            "scope": "unit",
+            "stepped": true
+          },
           {
             "variant_names": [
               "Raptor w/ mutations"
@@ -1254,9 +1270,10 @@
               "Raptor w/ plasma gun",
               "Raptor w/ flamer"
             ],
-            "count": 4,
-            "per_models": 0,
-            "scope": "model-row"
+            "count": 2,
+            "per_models": 5,
+            "scope": "unit",
+            "stepped": true
           }
         ]
       }

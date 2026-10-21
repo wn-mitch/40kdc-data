@@ -65,6 +65,26 @@
     "expected": ["exceeds-max:incinerator"]
   },
   {
+    "name": "paladin-stepped-heavy-weapons-at-cap-legal",
+    "args": { "unitId": "paladin-squad", "factionId": "grey-knights", "modelCount": 10, "counts": { "psycannon": 4 } },
+    "expected": []
+  },
+  {
+    "name": "paladin-stepped-heavy-weapons-nine-models-over",
+    "args": { "unitId": "paladin-squad", "factionId": "grey-knights", "modelCount": 9, "counts": { "psycannon": 3 } },
+    "expected": ["exceeds-max:psycannon"]
+  },
+  {
+    "name": "paladin-stepped-heavy-weapons-pool-over",
+    "args": { "unitId": "paladin-squad", "factionId": "grey-knights", "modelCount": 10, "counts": { "incinerator": 1, "psycannon": 4 } },
+    "expected": ["exceeds-allowance:incinerator+psilencer+psycannon"]
+  },
+  {
+    "name": "paladin-six-psycannons-over",
+    "args": { "unitId": "paladin-squad", "factionId": "grey-knights", "modelCount": 10, "counts": { "nemesis-force-weapon-paladin-squad": 10, "psycannon": 6, "storm-bolter-paladin-squad": 4 } },
+    "expected": ["exceeds-max:psycannon"]
+  },
+  {
     "name": "terminators-reaper-at-cap-legal",
     "args": { "unitId": "chaos-terminators", "factionId": "world-eaters", "modelCount": 10, "counts": { "reaper-autocannon-chaos-terminators": 2 } },
     "expected": []
