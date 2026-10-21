@@ -456,6 +456,18 @@ function auraRoleFilter(filter: Record<string, unknown>, noun: string): string {
   return `${noun}${all}${any}${none}${notAll}${other}`;
 }
 
+/**
+ * Who an aura is measured from. A filter that names an owner is army-wide: any of that side's
+ * models with its keywords ("one or more friendly DEATH GUARD models"; owner any names no side).
+ * Without one it narrows this model.
+ */
+function auraEmitter(filter: Record<string, unknown>): string {
+  const { owner, all_of, ...rest } = filter;
+  if (typeof owner !== "string") return auraRoleFilter(filter, "this model");
+  const keywords = Array.isArray(all_of) ? all_of.map((keyword) => ` ${jstr(keyword)}`).join("") : "";
+  return auraRoleFilter(rest, `one or more${owner === "any" ? "" : ` ${owner}`}${keywords} models`);
+}
+
 function auraClause(e: Effect, m: Record<string, unknown>, ctx: Ctx): string {
   // Range-extension of a named aura (e.g. Gift of Poxes: contagion +3").
   if (m.range_bonus != null) {
@@ -469,7 +481,7 @@ function auraClause(e: Effect, m: Record<string, unknown>, ctx: Ctx): string {
   const subject = filterSubject({ owner, ...recipientFilter }, ctx).replace(/^all /, "").replace(/\bunits\b/, "unit").replace(/\bmodels\b/, "model").replace(/\bthat are\b/, "that is");
   const eligibleWho = `${/^[aeiou]/i.test(subject) ? "an" : "a"} ${subject}`;
   const recipient = m.eligible != null && m.recipient_filter != null ? auraRoleFilter(m.recipient_filter as Record<string, unknown>, eligibleWho) : eligibleWho;
-  const emitter = m.emitter_filter != null ? auraRoleFilter(m.emitter_filter as Record<string, unknown>, "this model") : "this model";
+  const emitter = m.emitter_filter != null ? auraEmitter(m.emitter_filter as Record<string, unknown>) : "this model";
   const effectText = m.effect != null ? describeEffectInline(m.effect as Effect, { ...ctx, auraRecipient: true }) : "that unit is affected";
   return `while ${recipient} is ${m.wholly === true ? "wholly " : ""}within ${rangeText}${capped} of ${emitter}, ${effectText}`;
 }

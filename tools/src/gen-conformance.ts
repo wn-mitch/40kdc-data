@@ -2748,6 +2748,50 @@ function genEffectTranslation(): void {
       scope: { duration: "permanent" },
     },
     {
+      // An army-wide emitter: the aura is measured from any friendly model with the keywords.
+      id: "aura-army-emitter-tiered-capped",
+      effect: {
+        type: "aura",
+        target: "enemy-within-aura",
+        modifier: {
+          range: { per_battle_round: [{ inches: 3 }, { inches: 6 }, { inches: 9 }] },
+          range_cap: 12,
+          emitter_filter: { owner: "friendly", all_of: ["DEATH GUARD"] },
+          eligible: { owner: "enemy" },
+          effect: { type: "designate", target: "recipient", modifier: { tag: "afflicted" } },
+        },
+      },
+      scope: { duration: "permanent" },
+    },
+    {
+      // Owner any names no side; the keywords after all_of keep their own clauses.
+      id: "aura-any-emitter-keyword-clauses",
+      effect: {
+        type: "aura",
+        target: "friendly-within-aura",
+        modifier: {
+          range: { inches: 6 },
+          emitter_filter: { owner: "any", all_of: ["PLAGUE", "SWARM"], any_of: ["MONSTER", "TITANIC"], none_of: ["VEHICLE"] },
+          effect: { type: "stat-modifier", target: "recipient", modifier: { stat: "OC", operation: "add", value: 1 } },
+        },
+      },
+      scope: { duration: "permanent" },
+    },
+    {
+      // No owner: the filter narrows this model, as before.
+      id: "aura-model-emitter-keywords",
+      effect: {
+        type: "aura",
+        target: "friendly-within-aura",
+        modifier: {
+          range: { inches: 6 },
+          emitter_filter: { all_of: ["PSYKER"] },
+          effect: { type: "stat-modifier", target: "recipient", modifier: { stat: "OC", operation: "add", value: 1 } },
+        },
+      },
+      scope: { duration: "permanent" },
+    },
+    {
       id: "aura-tiered-effect",
       effect: {
         type: "aura",

@@ -19584,7 +19584,125 @@
     }
   },
   {
-    "caseId": "aura-tiered-effect#355",
+    "caseId": "aura-army-emitter-tiered-capped#355",
+    "effect": {
+      "type": "aura",
+      "target": "enemy-within-aura",
+      "modifier": {
+        "range": {
+          "per_battle_round": [
+            {
+              "inches": 3
+            },
+            {
+              "inches": 6
+            },
+            {
+              "inches": 9
+            }
+          ]
+        },
+        "range_cap": 12,
+        "emitter_filter": {
+          "owner": "friendly",
+          "all_of": [
+            "DEATH GUARD"
+          ]
+        },
+        "eligible": {
+          "owner": "enemy"
+        },
+        "effect": {
+          "type": "designate",
+          "target": "recipient",
+          "modifier": {
+            "tag": "afflicted"
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "While an enemy unit is within 3\", 6\", 9\" in battle rounds 1, 2, 3 respectively (using the final range in later battle rounds) (to a maximum of 12\", extensions included) of one or more friendly DEATH GUARD models, that unit is Afflicted."
+    }
+  },
+  {
+    "caseId": "aura-any-emitter-keyword-clauses#356",
+    "effect": {
+      "type": "aura",
+      "target": "friendly-within-aura",
+      "modifier": {
+        "range": {
+          "inches": 6
+        },
+        "emitter_filter": {
+          "owner": "any",
+          "all_of": [
+            "PLAGUE",
+            "SWARM"
+          ],
+          "any_of": [
+            "MONSTER",
+            "TITANIC"
+          ],
+          "none_of": [
+            "VEHICLE"
+          ]
+        },
+        "effect": {
+          "type": "stat-modifier",
+          "target": "recipient",
+          "modifier": {
+            "stat": "OC",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "While a friendly unit is within 6\" of one or more PLAGUE SWARM models with at least one of MONSTER or TITANIC without VEHICLE, add 1 to that unit's Objective Control characteristic."
+    }
+  },
+  {
+    "caseId": "aura-model-emitter-keywords#357",
+    "effect": {
+      "type": "aura",
+      "target": "friendly-within-aura",
+      "modifier": {
+        "range": {
+          "inches": 6
+        },
+        "emitter_filter": {
+          "all_of": [
+            "PSYKER"
+          ]
+        },
+        "effect": {
+          "type": "stat-modifier",
+          "target": "recipient",
+          "modifier": {
+            "stat": "OC",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "While a friendly unit is within 6\" of this model with PSYKER, add 1 to that unit's Objective Control characteristic."
+    }
+  },
+  {
+    "caseId": "aura-tiered-effect#358",
     "effect": {
       "type": "aura",
       "target": "enemy-within-aura",
@@ -19621,7 +19739,7 @@
     }
   },
   {
-    "caseId": "set-up-deep-strike-min-distance#356",
+    "caseId": "set-up-deep-strike-min-distance#359",
     "effect": {
       "type": "set-up",
       "target": "this-unit",
@@ -19641,7 +19759,7 @@
     }
   },
   {
-    "caseId": "move-modifier-engagement-no-end#357",
+    "caseId": "move-modifier-engagement-no-end#360",
     "effect": {
       "type": "move-modifier",
       "target": "this-model",
@@ -19660,7 +19778,7 @@
     }
   },
   {
-    "caseId": "permission-shoot-after-fall-back#358",
+    "caseId": "permission-shoot-after-fall-back#361",
     "effect": {
       "type": "permission",
       "target": "this-unit",
@@ -19680,7 +19798,7 @@
     }
   },
   {
-    "caseId": "permission-shoot-and-charge-after-fall-back#359",
+    "caseId": "permission-shoot-and-charge-after-fall-back#362",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -19716,7 +19834,7 @@
     }
   },
   {
-    "caseId": "superlative-strategist-aeldari#360",
+    "caseId": "superlative-strategist-aeldari#363",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -19769,7 +19887,7 @@
     }
   },
   {
-    "caseId": "deceptive-feint#361",
+    "caseId": "deceptive-feint#364",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -19854,7 +19972,7 @@
     }
   },
   {
-    "caseId": "heal-selected-model#362",
+    "caseId": "heal-selected-model#365",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -19907,7 +20025,7 @@
     }
   },
   {
-    "caseId": "marker-next-to-target#363",
+    "caseId": "marker-next-to-target#366",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -19956,7 +20074,7 @@
     }
   },
   {
-    "caseId": "psychic-model-bundle#364",
+    "caseId": "psychic-model-bundle#367",
     "effect": {
       "type": "for-each-unit",
       "selector": {
@@ -20035,7 +20153,7 @@
     }
   },
   {
-    "caseId": "designate-bearer-target-with-eligibility#365",
+    "caseId": "designate-bearer-target-with-eligibility#368",
     "effect": {
       "type": "ability-part",
       "trigger": {
@@ -20116,7 +20234,7 @@
     }
   },
   {
-    "caseId": "conditional-selected-to-shoot-this-phase#366",
+    "caseId": "conditional-selected-to-shoot-this-phase#369",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20147,7 +20265,7 @@
     }
   },
   {
-    "caseId": "transport-capacity#367",
+    "caseId": "transport-capacity#370",
     "effect": {
       "type": "transport-capacity",
       "target": "this-unit",
@@ -20168,7 +20286,7 @@
     }
   },
   {
-    "caseId": "transport-grouped-single-keyword-model#368",
+    "caseId": "transport-grouped-single-keyword-model#371",
     "effect": {
       "type": "transport-capacity",
       "target": "this-model",
@@ -20189,7 +20307,7 @@
     }
   },
   {
-    "caseId": "transport-fixed-model-spaces-with-capacity-eligibility#369",
+    "caseId": "transport-fixed-model-spaces-with-capacity-eligibility#372",
     "effect": {
       "type": "transport-capacity",
       "target": "this-model",
@@ -20210,7 +20328,7 @@
     }
   },
   {
-    "caseId": "transport-fixed-model-spaces-with-embark-as#370",
+    "caseId": "transport-fixed-model-spaces-with-embark-as#373",
     "effect": {
       "type": "transport-capacity",
       "target": "this-model",
@@ -20231,7 +20349,7 @@
     }
   },
   {
-    "caseId": "transport-equivalent-model-keyword#371",
+    "caseId": "transport-equivalent-model-keyword#374",
     "effect": {
       "type": "transport-capacity",
       "target": "this-unit",
@@ -20250,7 +20368,7 @@
     }
   },
   {
-    "caseId": "transport-equivalent-model-count#372",
+    "caseId": "transport-equivalent-model-count#375",
     "effect": {
       "type": "transport-capacity",
       "target": "this-model",
@@ -20268,7 +20386,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-inline#373",
+    "caseId": "moved-through-tall-terrain-inline#376",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20297,7 +20415,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-trigger-condition#374",
+    "caseId": "moved-through-tall-terrain-trigger-condition#377",
     "effect": {
       "type": "ability-grant",
       "target": "this-model",
@@ -20329,7 +20447,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-negated-inline#375",
+    "caseId": "moved-through-tall-terrain-negated-inline#378",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20363,7 +20481,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-negated-trigger-condition#376",
+    "caseId": "moved-through-tall-terrain-negated-trigger-condition#379",
     "effect": {
       "type": "ability-grant",
       "target": "this-model",
@@ -20400,7 +20518,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-trigger-event#377",
+    "caseId": "moved-through-tall-terrain-trigger-event#380",
     "effect": {
       "type": "ability-grant",
       "target": "this-model",
@@ -20422,7 +20540,7 @@
     }
   },
   {
-    "caseId": "moved-through-terrain-generic#378",
+    "caseId": "moved-through-terrain-generic#381",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20451,7 +20569,7 @@
     }
   },
   {
-    "caseId": "aura-role-filtered-effect#379",
+    "caseId": "aura-role-filtered-effect#382",
     "effect": {
       "type": "aura",
       "target": "friendly-within-aura",
@@ -27159,7 +27277,7 @@
       "optional": true
     },
     "expected": {
-      "text": "At the start of your Command phase, you may use this ability, until the start of your next Command phase:\n  -> Select one (each may be chosen once per battle):\n    - Idol of Infinite Rage: while a friendly unit with the GOREMONGERS or JAKHALS keyword is within 6\" of this model with WORLD EATERS with at least one of MONSTER or TITANIC without TITANIC matching all friendly units, that unit gets +1 to Hit rolls; that unit gets +1 to Wound rolls; while a friendly unit with the GOREMONGERS or JAKHALS keyword is within 9\" of this model with WORLD EATERS and TITANIC with at least one of MONSTER or TITANIC matching all friendly units, that unit gets +1 to Hit rolls; that unit gets +1 to Wound rolls.\n    - Idol of Burning Wrath: while a friendly unit with the GOREMONGERS or JAKHALS keyword is within 6\" of this model with WORLD EATERS with at least one of MONSTER or TITANIC without TITANIC matching all friendly units, add 1 to that unit's Move characteristic; the unit gets +1 to Advance rolls; the unit gets +1 to Charge rolls; while a friendly unit with the GOREMONGERS or JAKHALS keyword is within 9\" of this model with WORLD EATERS and TITANIC with at least one of MONSTER or TITANIC matching all friendly units, add 1 to that unit's Move characteristic; the unit gets +1 to Advance rolls; the unit gets +1 to Charge rolls.\n    - Idol of Blessed Blood: while a friendly unit with the GOREMONGERS or JAKHALS keyword is within 6\" of this model with WORLD EATERS with at least one of MONSTER or TITANIC without TITANIC matching all friendly units, the unit has a 4+ invulnerable save; while a friendly unit with the GOREMONGERS or JAKHALS keyword is within 9\" of this model with WORLD EATERS and TITANIC with at least one of MONSTER or TITANIC matching all friendly units, the unit has a 4+ invulnerable save."
+      "text": "At the start of your Command phase, you may use this ability, until the start of your next Command phase:\n  -> Select one (each may be chosen once per battle):\n    - Idol of Infinite Rage: while a friendly unit with the GOREMONGERS or JAKHALS keyword is within 6\" of one or more friendly WORLD EATERS models with at least one of MONSTER or TITANIC without TITANIC, that unit gets +1 to Hit rolls; that unit gets +1 to Wound rolls; while a friendly unit with the GOREMONGERS or JAKHALS keyword is within 9\" of one or more friendly WORLD EATERS TITANIC models with at least one of MONSTER or TITANIC, that unit gets +1 to Hit rolls; that unit gets +1 to Wound rolls.\n    - Idol of Burning Wrath: while a friendly unit with the GOREMONGERS or JAKHALS keyword is within 6\" of one or more friendly WORLD EATERS models with at least one of MONSTER or TITANIC without TITANIC, add 1 to that unit's Move characteristic; the unit gets +1 to Advance rolls; the unit gets +1 to Charge rolls; while a friendly unit with the GOREMONGERS or JAKHALS keyword is within 9\" of one or more friendly WORLD EATERS TITANIC models with at least one of MONSTER or TITANIC, add 1 to that unit's Move characteristic; the unit gets +1 to Advance rolls; the unit gets +1 to Charge rolls.\n    - Idol of Blessed Blood: while a friendly unit with the GOREMONGERS or JAKHALS keyword is within 6\" of one or more friendly WORLD EATERS models with at least one of MONSTER or TITANIC without TITANIC, the unit has a 4+ invulnerable save; while a friendly unit with the GOREMONGERS or JAKHALS keyword is within 9\" of one or more friendly WORLD EATERS TITANIC models with at least one of MONSTER or TITANIC, the unit has a 4+ invulnerable save."
     }
   },
   {

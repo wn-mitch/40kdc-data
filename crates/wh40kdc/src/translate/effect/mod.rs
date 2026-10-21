@@ -122,6 +122,32 @@ pub(crate) fn inline(e: &Value, ctx: &Ctx) -> String {
     }
 }
 
+/// Who an aura is measured from. A filter that names an owner is army-wide: any of that side's
+/// models with its keywords ("one or more friendly DEATH GUARD models"; owner any names no side).
+/// Without one it narrows this model.
+fn aura_emitter(filter: &P, ctx: &Ctx) -> String {
+    let Some(owner) = sv(filter, "owner") else {
+        return aura_role_filter(filter, "this model", ctx);
+    };
+    let side = if owner == "any" {
+        String::new()
+    } else {
+        format!(" {owner}")
+    };
+    let keywords = map_arr(filter, "all_of", jv)
+        .map(|keywords| {
+            keywords
+                .iter()
+                .map(|keyword| format!(" {keyword}"))
+                .collect::<String>()
+        })
+        .unwrap_or_default();
+    let mut rest = filter.clone();
+    rest.remove("owner");
+    rest.remove("all_of");
+    aura_role_filter(&rest, &format!("one or more{side}{keywords} models"), ctx)
+}
+
 fn aura_role_filter(filter: &P, noun: &str, ctx: &Ctx) -> String {
     let all = map_arr(filter, "all_of", jv)
         .map(|keywords| format!(" with {}", keywords.join(" and ")))
@@ -218,7 +244,7 @@ fn aura_clause(e: &P, m: &P, ctx: &Ctx) -> String {
         eligible_who
     };
     let emitter = nn(m, "emitter_filter")
-        .map(|filter| aura_role_filter(obj(Some(filter)), "this model", ctx))
+        .map(|filter| aura_emitter(obj(Some(filter)), ctx))
         .unwrap_or_else(|| "this model".to_string());
     let effect_text = match nn(m, "effect") {
         Some(effect) => inline(

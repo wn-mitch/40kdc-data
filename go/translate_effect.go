@@ -68,6 +68,33 @@ func scalingWording(s map[string]any) string {
 	return c + maxTail
 }
 
+// auraEmitter names who an aura is measured from. A filter that names an owner is army-wide:
+// any of that side's models with its keywords ("one or more friendly DEATH GUARD models"; owner
+// any names no side). Without one it narrows this model.
+func auraEmitter(filter map[string]any) string {
+	owner, ok := filter["owner"].(string)
+	if !ok {
+		return auraRoleFilter(filter, "this model")
+	}
+	side := ""
+	if owner != "any" {
+		side = " " + owner
+	}
+	keywords := ""
+	if values, ok := asList(filter["all_of"]); ok {
+		for _, keyword := range cstrList(values) {
+			keywords += " " + keyword
+		}
+	}
+	rest := map[string]any{}
+	for key, value := range filter {
+		if key != "owner" && key != "all_of" {
+			rest[key] = value
+		}
+	}
+	return auraRoleFilter(rest, "one or more"+side+keywords+" models")
+}
+
 func auraRoleFilter(filter map[string]any, noun string) string {
 	relations := map[string]any{}
 	for key, value := range filter {
@@ -132,7 +159,7 @@ func auraClause(e, m map[string]any, ctx effCtx) string {
 	}
 	emitter := "this model"
 	if m["emitter_filter"] != nil {
-		emitter = auraRoleFilter(mapOr(m["emitter_filter"]), "this model")
+		emitter = auraEmitter(mapOr(m["emitter_filter"]))
 	}
 	effectText := "that unit is affected"
 	if m["effect"] != nil {
