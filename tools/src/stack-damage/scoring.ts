@@ -17,6 +17,7 @@ import { searchLevers, type LeverSpace } from "./lever-search.js";
 import { searchLoadout, type LoadoutScaffold, type LoadoutSpace } from "./loadout-search.js";
 import type { ProfileDamage } from "./loadout-scoring.js";
 import { attributeSelectedProfile, crunchProfileScorer, unitLoadoutDamage, type DamageAttribution } from "./unit-damage.js";
+import { loadoutWargear, unequippedRules, unitWeaponGrants, WEAPON_GRANT_REASON, type WeaponGrants } from "./weapon-grants.js";
 import type {
   DamageCellState,
   PoolLever,
@@ -57,6 +58,13 @@ function buffKey(buffs: readonly Buff[]): string {
   return buffs.map((buff) => JSON.stringify({ source: buff.source, contribution: buff.contribution, when: buff.applicableWhen ?? null })).join("|");
 }
 
+/** `buffs` without those of the unit's own printed wargear rules whose item `counts` leaves out. */
+function equippedBuffs(unit: UnitView, counts: ReadonlyMap<string, number>, buffs: Buff[]): Buff[] {
+  const unequipped = unequippedRules(unit.raw, counts);
+  if (unequipped.size === 0) return buffs;
+  return buffs.filter((buff) => buff.source.kind !== "ability" || buff.source.abilityKind !== "unit" || !unequipped.has(buff.source.abilityId));
+}
+
 function memberKeywords(members: readonly StackMember[]): string[] {
   const keywords = new Set<string>();
   for (const member of members) {
@@ -88,6 +96,7 @@ export class DamageScoringSession {
   stackEvaluations = 0;
   illegalLoadoutsRejected = 0;
   private readonly scaffoldCache = new Map<string, LoadoutScaffold>();
+  private readonly grantCache = new Map<string, WeaponGrants>();
   private readonly loadoutLegalityCache: Map<string, CandidateLoadoutLegality>;
 
   constructor(
@@ -165,7 +174,29 @@ export class DamageScoringSession {
     return legality;
   }
 
-  private scoreCounts(unit: UnitView, counts: ReadonlyMap<string, number>, buffs: Buff[], context: EngineContext): UnitLoadoutResult {
+  /** `context` with the wargear `counts` carry, so `unit-wargear` conditions read the loadout. */
+  loadoutContext(unit: UnitView, counts: ReadonlyMap<string, number>, context: EngineContext): EngineContext {
+    return { ...context, attackerWargear: loadoutWargear(this.dataset, unit.raw, counts) };
+  }
+
+  /** The weapons the wargear in `counts` equips, under `context` with that loadout. */
+  weaponGrants(unit: UnitView, counts: ReadonlyMap<string, number>, context: EngineContext): WeaponGrants {
+    const loadout = this.loadoutContext(unit, counts, context);
+    const key = `${unit.id}|${JSON.stringify(loadout)}`;
+    const cached = this.grantCache.get(key);
+    if (cached) return cached;
+    const grants = unitWeaponGrants(this.dataset, unit.raw, this.state.factionId, loadout);
+    this.grantCache.set(key, grants);
+    return grants;
+  }
+
+  /**
+   * Scores one loadout. Its wargear decides which granted weapons it fires and drops the unit's
+   * printed rules for items it leaves out; the profiles crunch under `context`, as the buffs were
+   * translated without a loadout.
+   */
+  private scoreCounts(unit: UnitView, counts: ReadonlyMap<string, number>, allBuffs: Buff[], context: EngineContext): UnitLoadoutResult {
+    const buffs = equippedBuffs(unit, counts, allBuffs);
     const scaffold = this.scaffold(unit);
     const target = { unit: this.state.target.unitRaw, modelCount: this.state.target.modelCount };
     const crunchProfile = crunchProfileScorer(this.dataset, target, buffs);
@@ -178,6 +209,7 @@ export class DamageScoringSession {
       buffs,
       context,
       groups: this.loadoutLegality(unit, scaffold, counts).groups,
+      grants: this.weaponGrants(unit, counts, context).grants,
       scoreProfile: (request) => {
         const key = `${unit.id}|${request.weapon.id}|${request.profileIndex}|${buffKey(buffs)}|${request.hitModifier ?? 0}|${JSON.stringify(request.context)}`;
         const cached = this.scoreCache.get(key);
@@ -241,12 +273,15 @@ export class DamageScoringSession {
     input: EligibilityInput,
     context: EngineContext,
     perspective: "attacker" | "target",
+    scoredGrants: ReadonlySet<string> = new Set(),
   ): StackBuffPool["warnings"] {
     const warnings: StackBuffPool["warnings"] = [];
     for (const entry of this.dataset.eligibleAbilities(input, context.phase)) {
       if (this.config.droppedArmyRules.includes(entry.ability.id)) continue;
       const translated = entry.ability.describeBuffs(sourceFor(entry), context, perspective, entry.rating);
       for (const fragment of translated.unsupported) {
+        const weaponId = (fragment.effectFragment as { modifier?: { weapon_id?: unknown } } | null)?.modifier?.weapon_id;
+        if (fragment.reason === WEAPON_GRANT_REASON && scoredGrants.has(`${entry.ability.id}|${String(weaponId)}`)) continue;
         warnings.push({
           sourceAbilityId: entry.ability.id,
           ...(entry.source.kind === "support" ? { sourceUnitId: entry.source.sourceUnitId } : {}),
@@ -356,23 +391,27 @@ export class DamageScoringSession {
     return result;
   }
 
-  /** The buffs a member attacks with under the spec's selected levers, with the target's defensive buffs. */
-  memberBuffs(spec: StackSpec, member: StackMember): Buff[] {
+  /**
+   * The buffs a member attacks with under the spec's selected levers, with the target's defensive
+   * buffs. Given its loadout, the unit's printed rules for items it leaves out are dropped.
+   */
+  memberBuffs(spec: StackSpec, member: StackMember, counts?: ReadonlyMap<string, number>): Buff[] {
     const selected = new Set(spec.selectedLeverIds);
-    return [
+    const buffs = [
       ...this.pool(spec).levers.filter((lever) => selected.has(lever.id)).flatMap((lever) => lever.perMember.get(member.unit.id) ?? []),
       ...this.defensiveBuffs,
     ];
+    return counts ? equippedBuffs(member.unit, counts, buffs) : buffs;
   }
 
-  /** Leave-one-out attribution of one of a member's selected profiles in a scored stack. */
-  attributeWeapon(spec: StackSpec, member: StackMember, weapon: SelectedWeaponResult): DamageAttribution | null {
+  /** Leave-one-out attribution of one of a member's selected profiles in a scored stack with `counts`. */
+  attributeWeapon(spec: StackSpec, member: StackMember, weapon: SelectedWeaponResult, counts: ReadonlyMap<string, number>): DamageAttribution | null {
     return attributeSelectedProfile({
       dataset: this.dataset,
       unit: member.unit.raw,
       selected: weapon,
       target: { unit: this.state.target.unitRaw, modelCount: this.state.target.modelCount },
-      buffs: this.memberBuffs(spec, member),
+      buffs: this.memberBuffs(spec, member, counts),
       context: this.state.contextFor(spec, member),
     });
   }
@@ -397,20 +436,39 @@ export class DamageScoringSession {
     return searchLevers(this.leverSpace(spec));
   }
 
+  /**
+   * The winning stack's unsupported fragments, translated against each member's chosen loadout.
+   * Weapon grants that loadout scored, and rules printed by wargear it leaves out, are left out.
+   */
   relevantWarnings(result: StackResult): StackBuffPool["warnings"] {
     const pool = this.pool(result.spec);
     const selectedLevers = pool.levers.filter((lever) => result.spec.selectedLeverIds.includes(lever.id));
     const selectedAbilityIds = new Set(
       selectedLevers.flatMap((lever) => lever.source.kind === "ability" ? [lever.source.abilityId] : []),
     );
-    const warnings = pool.warnings.filter((warning) => warning.sourceKind !== "support" || selectedAbilityIds.has(warning.sourceAbilityId));
+    const contexts = new Map<string, EngineContext>();
+    const translated: StackBuffPool["warnings"] = [];
+    for (const { member, loadout } of result.members) {
+      const base = this.state.contextFor(result.spec, member);
+      const context = this.loadoutContext(member.unit, loadout.counts, base);
+      contexts.set(member.unit.id, context);
+      const grants = this.weaponGrants(member.unit, loadout.counts, base);
+      const scored = new Set([...grants.grants, ...grants.duplicates].map((grant) => `${grant.abilityId}|${grant.weaponId}`));
+      // A rule printed by wargear the loadout leaves out does not apply.
+      const unequipped = unequippedRules(member.unit.raw, loadout.counts);
+      for (const detachmentId of result.spec.detachmentIds.length > 0 ? result.spec.detachmentIds : [undefined]) {
+        translated.push(...this.translationWarnings(this.eligibilityInput(result.spec, member, detachmentId), context, "attacker", scored)
+          .filter((warning) => warning.sourceKind !== "unit" || !unequipped.has(warning.sourceAbilityId)));
+      }
+    }
+    const warnings = translated.filter((warning) => warning.sourceKind !== "support" || selectedAbilityIds.has(warning.sourceAbilityId));
     for (const lever of selectedLevers) {
       if (lever.source.kind !== "ability") continue;
       const ability = this.dataset.abilities.getInFaction(lever.source.abilityId, result.spec.factionId)
         ?? this.dataset.abilities.getAny(lever.source.abilityId);
       if (!ability) continue;
       for (const member of result.spec.members) {
-        const translation = ability.describeBuffs(lever.source, this.state.contextFor(result.spec, member), "attacker");
+        const translation = ability.describeBuffs(lever.source, contexts.get(member.unit.id) ?? this.state.contextFor(result.spec, member), "attacker");
         for (const fragment of translation.unsupported) {
           warnings.push({
             sourceAbilityId: ability.id,

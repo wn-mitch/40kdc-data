@@ -16,6 +16,7 @@ import {
 import type { Dataset } from "../data/dataset.js";
 import { completeLoadout, type LoadoutGroup, type LoadoutModel } from "../data/loadout.js";
 import type { Unit, WargearOption, Weapon } from "../generated.js";
+import { groupsWithGrantedWeapons, withGrantedWeapons, type WeaponGrant } from "./weapon-grants.js";
 import {
   bigGunsHitModifier,
   scoreLoadoutWeapons,
@@ -46,6 +47,8 @@ export interface UnitLoadoutDamageInput {
   models?: readonly LoadoutModel[];
   /** Scores one profile; defaults to a crunch with `buffs`. */
   scoreProfile?: ProfileScorer;
+  /** Weapons the loadout's wargear equips its carriers with; see {@link unitWeaponGrants}. */
+  grants?: readonly WeaponGrant[];
 }
 
 /** The unit's own copy of a weapon, falling back to any faction's. */
@@ -138,13 +141,15 @@ export function unitLoadoutDamage(input: UnitLoadoutDamageInput): LoadoutDamageR
     : input.options && input.models
       ? completeLoadout(input.unit, input.modelCount, input.options, input.models, new Map(input.counts))?.groups ?? null
       : null;
+  const grants = input.grants ?? [];
+  const counts = withGrantedWeapons(input.counts, grants);
   const scored = scoreLoadoutWeapons({
     phase: input.context.phase === "fight" ? "fight" : "shooting",
     modelCount: input.modelCount,
     pistolsExclusive: !isMonsterOrVehicle(input.unit),
     inEngagementRange: isEngaged(input.context),
-    groups,
-    weapons: [...input.counts].flatMap(([weaponId, count]) => {
+    groups: groups && grants.length > 0 ? groupsWithGrantedWeapons(groups, grants) : groups,
+    weapons: [...counts].flatMap(([weaponId, count]) => {
       const weapon = resolveUnitWeapon(input.dataset, input.unit, weaponId);
       return weapon ? [{ weapon, count }] : [];
     }),

@@ -258,7 +258,7 @@ function winnerReport(dataset: Dataset, faction: FactionContext, session: Damage
           profileName: weapon.profileName,
           count: weapon.count,
           stages: Object.fromEntries(weapon.stages.map((stage) => [stage.name, stage.expected * weapon.count])),
-          attribution: session.attributeWeapon(result.spec, member, weapon),
+          attribution: session.attributeWeapon(result.spec, member, weapon, loadout.counts),
         };
       }),
       pistolChoice: loadout.pistolChoice,

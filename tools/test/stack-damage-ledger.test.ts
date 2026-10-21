@@ -10,24 +10,29 @@ const dataset = Dataset.embedded();
 const faction = resolveFactionContext(dataset, "tau-empire");
 const target = resolveTarget(dataset, dataset.targetProfiles.get("geq-guardsmen")!)!;
 
-function tauCell(extra: Record<string, string> = {}) {
+function cellFor(factionId: string, phase: "shooting" | "fight", extra: Record<string, string> = {}) {
   const config = parseMatrixConfig({
-    HC_FACTIONS: "tau-empire",
+    HC_FACTIONS: factionId,
     HC_TARGETS: "geq-guardsmen",
-    HC_PHASES: "shooting",
+    HC_PHASES: phase,
     HC_BODYGUARDS: "1",
     HC_TOP: "1",
     HC_DEEP: "1",
     HC_OUTPUT: "ledger.json",
     ...extra,
-  }, { factionIds: new Set(["tau-empire"]), targetIds: ["geq-guardsmen"] });
-  return runDamageCell({ dataset, config, faction, target, phase: "shooting" });
+  }, { factionIds: new Set([factionId]), targetIds: ["geq-guardsmen"] });
+  const context = factionId === "tau-empire" ? faction : resolveFactionContext(dataset, factionId);
+  return runDamageCell({ dataset, config, faction: context, target, phase });
 }
+
+const tauCell = (extra: Record<string, string> = {}) => cellFor("tau-empire", "shooting", extra);
 
 describe("stack damage ledger", () => {
   const cell = tauCell();
-  const entry = (abilityId: string, side: "attacker" | "target" = "attacker") =>
-    cell.ledger.filter((candidate) => candidate.abilityId === abilityId && candidate.side === side);
+  // Broadsides take Missile Drones, and bring Retaliation Cadre.
+  const broadside = tauCell({ HC_BODYGUARDS: "3" });
+  const entry = (abilityId: string, side: "attacker" | "target" = "attacker", from = cell) =>
+    from.ledger.filter((candidate) => candidate.abilityId === abilityId && candidate.side === side);
 
   it("marks the provider of every selected lever applied", () => {
     const providers = new Set(cell.winner!.selectedLevers.map((lever) => (lever.source as { abilityId: string }).abilityId));
@@ -39,8 +44,7 @@ describe("stack damage ledger", () => {
   });
 
   it("keeps an eligible Stratagem the optimiser did not select", () => {
-    // Broadsides bring Retaliation Cadre, whose other Stratagems the winner leaves unused.
-    const broadside = tauCell({ HC_BODYGUARDS: "3" });
+    // Retaliation Cadre's other Stratagems are left unused by the winner.
     const selected = broadside.winner!.stratagem?.id;
     const unselected = broadside.ledger.filter((candidate) =>
       candidate.sourceKind === "detachment-stratagem" && candidate.status !== "applied");
@@ -62,12 +66,48 @@ describe("stack damage ledger", () => {
   });
 
   it("classifies an unevaluable condition by what it gates", () => {
-    // Guardian Drone's gated penalty acts on incoming attacks, so only the drone weapons stay open.
-    expect(entry("drones-tau-empire")[0]).toMatchObject({
+    // For the Greater Good gates attack modifiers, so its unknown condition stays open.
+    expect(entry("for-the-greater-good-tau-empire")[0]).toMatchObject({
       status: "unresolved",
       relevant: true,
-      reasons: ['conditional: cannot evaluate condition "unit-wargear" against current context'],
+      reasons: ['conditional: cannot evaluate condition "and" against current context'],
     });
+    // Adamantine Avalanche gates only effects outside the attack, so it is rejected.
+    const fight = cellFor("world-eaters", "fight");
+    expect(fight.ledger.find((candidate) => candidate.abilityId === "adamantine-avalanche-world-eaters")).toMatchObject({
+      status: "rejected",
+      relevant: false,
+      reasons: ["no current-attack effect", 'conditional: cannot evaluate condition "matches" against current context'],
+    });
+  });
+
+  it("resolves wargear-gated rules against the winning loadout", () => {
+    const member = broadside.winner!.members.find((candidate) => candidate.unitId === "broadside-battlesuits")!;
+    const drones = member.loadout.find((item) => item.weaponId === "missile-drone")?.count ?? 0;
+    expect(drones).toBeGreaterThan(0);
+    // The Missile Drone's own rule equips its carriers, and its weapon is scored on each of them.
+    const pod = member.weapons.find((weapon) => weapon.id === "missile-pod-drone");
+    expect(pod?.count).toBe(drones);
+    expect(pod?.stages["after-fnp"]).toBeGreaterThan(0);
+    expect(entry("missile-drone-tau-empire", "attacker", broadside)[0]).toMatchObject({ status: "applied", relevant: false });
+    // The Drones army rules grant for the same drone, so the drone's own rule owns its weapons.
+    for (const abilityId of ["drones-tau-empire", "drones-sudden-dawn-cadre-tau-empire"]) {
+      const drone = entry(abilityId, "attacker", broadside)[0];
+      expect(drone).toMatchObject({ status: "rejected", relevant: false });
+      expect(drone.reasons).toContain("weapon-grant: missile-pod duplicates the missile-drone grant of missile-drone-tau-empire");
+    }
+    // A drone the loadout leaves out contributes nothing and leaves nothing open.
+    expect(entry("marker-drone-tau-empire", "attacker", broadside)[0]).toMatchObject({
+      status: "rejected",
+      relevant: false,
+      reasons: ["the chosen loadout does not include marker-drone, whose rule this is"],
+    });
+    expect(broadside.unsupported.some((warning) => warning.reason.includes('"unit-wargear"') || warning.sourceAbilityId === "marker-drone-tau-empire")).toBe(false);
+  });
+
+  it("rejects the Drones rule when the winner carries no drone", () => {
+    expect(cell.winner!.members.every((member) => member.loadout.every((item) => !item.weaponId.endsWith("-drone")))).toBe(true);
+    expect(entry("drones-tau-empire")[0]).toMatchObject({ status: "rejected", relevant: false });
   });
 
   it("treats a defensive choice the attacker cannot select as relevant", () => {
