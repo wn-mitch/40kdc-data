@@ -52,8 +52,11 @@ one rolling copy (`workbench.sqlite.pre-run`); human decisions arrive only throu
 Publication follows the same rule. `review-sheet <faction>` (read-only) compiles and gates every
 fully described source in a faction, renders each beside its published record, and drafts an
 unsigned decisions file of `approve-shape` decisions for the members that pass every gate. The
-reviewer signs it; `review-apply` records the approvals as `compiled_entries`; `publishable` lists
-the approved entries that would change tracked data; `prepare-publication` and `publish` write them.
+integrity gate projects each record alone into the dataset and runs the schema and
+referential-integrity checks `prepare-publication` runs, so a member that passes every gate is
+one publication accepts on its own. The reviewer signs the draft; `review-apply` records the
+approvals as `compiled_entries`; `publishable` lists the approved entries that would change
+tracked data; `prepare-publication` and `publish` write them.
 
 The `_private/round5c/` directory is intentionally retained as the persisted workbench and
 artifact location so existing local databases and run history remain reachable. Stored algorithm

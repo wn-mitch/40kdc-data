@@ -1,19 +1,18 @@
 import { createHash, randomUUID } from "node:crypto";
 import { readFileSync } from "node:fs";
-import { relative, sep } from "node:path";
 import type { DatabaseSync } from "node:sqlite";
 
 import { prepareWrites } from "../mfm/apply.js";
 import { hashJson } from "../round4/hash.js";
 import { sourceDigest } from "../source-digest.js";
 import { compilationInputsHash, compiledIdentity, getCompiledEntry } from "./compiled.js";
-import { abilityFilePath, canonicalDataRoot, checkEntry, entryWithMechanics, semanticAuthoringDataRoot, schemaTreeHash, type Mechanics } from "./entries.js";
+import { abilityFilePath, canonicalDataRoot, semanticAuthoringDataRoot, schemaTreeHash, type Mechanics } from "./entries.js";
 import { bumpWorkbenchRevision, withTransaction } from "./db.js";
-import { coreManifest, CorePublicationError, coreStratagemFile, observedCoreHash, projectCore, type CoreManifest, type CoreProjection } from "./publish-core.js";
+import { PublicationError, projectRecords, record, relativeAbilityPath, stagedWrites, type PublicationDiff } from "./publication-projection.js";
+import { coreManifest, coreStratagemFile, observedCoreHash, type CoreManifest, type CoreProjection } from "./publish-core.js";
 import { loadSourceRecords, type SourceRecord } from "./source.js";
 
-const OPTIONAL_MECHANICS_FIELDS = ["behavior", "trigger", "usage", "applies_to"] as const;
-const DIFF_FIELDS = ["effect", "scope", ...OPTIONAL_MECHANICS_FIELDS, "source_digest"] as const;
+export { PublicationError };
 
 type PublicationState = "prepared" | "publishing" | "published" | "failed";
 
@@ -28,12 +27,6 @@ type PublicationEntrySnapshot = {
   source_hash: string;
   source_digest: string;
   source_match_hash: string;
-};
-
-type PublicationDiff = {
-  entry_id: string;
-  ability_id: string;
-  fields: Array<{ field: string; before: unknown; after: unknown }>;
 };
 
 type PublicationReceiptData = {
@@ -109,27 +102,8 @@ export type PublicationPage = {
   total: number;
 };
 
-export class PublicationError extends Error {
-  readonly status: number;
-
-  constructor(status: number, message: string) {
-    super(message);
-    this.name = "PublicationError";
-    this.status = status;
-  }
-}
-
 function sha256Bytes(value: string | Buffer): string {
   return createHash("sha256").update(value).digest("hex");
-}
-
-function serializedEntries(entries: Array<Record<string, unknown>>): string {
-  return `${JSON.stringify(entries, null, 2)}\n`;
-}
-
-function record(value: unknown, message: string): Record<string, unknown> {
-  if (!value || typeof value !== "object" || Array.isArray(value)) throw new PublicationError(409, message);
-  return value as Record<string, unknown>;
 }
 
 function parseManifest(serialized: string): PublicationManifest {
@@ -160,12 +134,6 @@ function parseManifest(serialized: string): PublicationManifest {
     if (sha256Bytes(core.after_text as string) !== core.after_hash) throw new PublicationError(409, "Publication manifest core staged bytes do not match their hash.");
   }
   return value as PublicationManifest;
-}
-
-function relativeAbilityPath(dataRoot: string, file: string): string {
-  const path = relative(dataRoot, file).split(sep).join("/");
-  if (!path || path.startsWith("../") || path === "..") throw new PublicationError(422, "Publication destination escapes the configured data root.");
-  return path;
 }
 
 function manifestFile(manifest: PublicationManifest): string {
@@ -267,19 +235,6 @@ function approvedEntrySnapshot(db: DatabaseSync, row: EntryRow, freshSource: Sou
   };
 }
 
-/** The files one publication writes: the faction's abilities.json, and its core stratagems.json when targets change. */
-function stagedWrites(projection: PublicationProjection, abilitiesText: string, coreText: string | undefined) {
-  const writes = [{ path: projection.file, value: projection.entries as unknown, text: abilitiesText }];
-  if (projection.core && coreText !== undefined) writes.push({ path: projection.core.file, value: projection.core.records, text: coreText });
-  return writes;
-}
-
-function changedFields(before: Record<string, unknown>, after: Record<string, unknown>): Array<{ field: string; before: unknown; after: unknown }> {
-  return DIFF_FIELDS.flatMap((field) => hashJson(before[field] ?? null) === hashJson(after[field] ?? null)
-    ? []
-    : [{ field, before: before[field] ?? null, after: after[field] ?? null }]);
-}
-
 function buildProjection(
   db: DatabaseSync,
   options: { faction_id: string; entry_ids: string[] },
@@ -287,61 +242,23 @@ function buildProjection(
   const dataRoot = canonicalDataRoot(semanticAuthoringDataRoot());
   const rows = loadEntryRows(db, options.faction_id, options.entry_ids);
   const sources = freshSourceMap(rows);
-  const file = abilityFilePath(dataRoot, options.faction_id);
-  const beforeText = readFileSync(file, "utf8");
-  const parsed: unknown = JSON.parse(beforeText);
-  if (!Array.isArray(parsed)) throw new PublicationError(409, `${options.faction_id}/abilities.json is not an array.`);
-  const entries = parsed.map((value, index) => record(value, `Ability entry ${index} is malformed.`));
-  const snapshots: PublicationEntrySnapshot[] = [];
-  const diff: PublicationDiff[] = [];
-
-  for (const row of rows) {
+  const snapshots = rows.map((row) => {
     const source = sources.get(`${row.faction_id}\u0000${row.ability_id}`);
     if (!source) throw new PublicationError(409, `Fresh source is missing for ${row.faction_id}/${row.ability_id}.`);
-    const snapshot = approvedEntrySnapshot(db, row, source);
-    const matches = entries.map((entry, index) => ({ entry, index })).filter(({ entry }) => entry.ability_id === row.ability_id);
-    if (matches.length !== 1) {
-      throw new PublicationError(409, matches.length === 0
-        ? `Ability ${row.faction_id}/${row.ability_id} is missing from the destination.`
-        : `Ability ${row.faction_id}/${row.ability_id} is ambiguous in the destination.`);
-    }
-    const { entry: current, index } = matches[0]!;
-    // Approving a shape shows the authored entry beside the compiled one, so replacing an
-    // authored effect is the reviewed outcome, not an accident to guard against here.
-    const proposed = { ...entryWithMechanics(current, row.mechanics), source_digest: snapshot.source_digest };
-    const check = checkEntry(proposed);
-    if (check.errors.length > 0) {
-      throw new PublicationError(409, `Compiled entry ${row.id} fails the ability schema or canonical form: ${check.errors.join("; ")}`);
-    }
-    entries[index] = proposed;
-    snapshots.push(snapshot);
-    diff.push({ entry_id: row.id, ability_id: row.ability_id, fields: changedFields(current, proposed) });
-  }
-
-  let core: CoreProjection | null;
-  try {
-    core = projectCore(dataRoot, options.faction_id, rows);
-  } catch (error) {
-    if (error instanceof CorePublicationError) throw new PublicationError(409, error.message);
-    throw error;
-  }
-  for (const item of core?.diff ?? []) {
-    const existing = diff.find((entry) => entry.entry_id === item.entry_id);
-    if (existing) existing.fields.push(...item.fields);
-    else diff.push(item);
-  }
-  const afterText = serializedEntries(entries);
+    return approvedEntrySnapshot(db, row, source);
+  });
+  const projected = projectRecords(dataRoot, options.faction_id, rows.map((row, index) => ({ ...row, source_digest: snapshots[index]!.source_digest })));
   return {
-    core,
+    core: projected.core,
     dataRoot,
-    file,
-    relativePath: relativeAbilityPath(dataRoot, file),
-    beforeHash: sha256Bytes(beforeText),
-    afterHash: sha256Bytes(afterText),
-    afterText,
-    entries,
+    file: projected.file,
+    relativePath: projected.relativePath,
+    beforeHash: sha256Bytes(projected.beforeText),
+    afterHash: sha256Bytes(projected.afterText),
+    afterText: projected.afterText,
+    entries: projected.entries,
     snapshots,
-    diff,
+    diff: projected.diff,
   };
 }
 

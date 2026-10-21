@@ -59,10 +59,12 @@ function fixture(): DatabaseSync {
     {
       ability_id: CLOSABLE, name: "Closable Ability", authored_by: "40kdc-community",
       game_version: { edition: "11th", dataslate: "pre-launch-provisional" }, ability_type: "unit", faction_id: FACTION,
+      stub: true, effect: { type: "no-effect" }, scope: { duration: "permanent" },
     },
     {
       ability_id: CLOSABLE_BAD_SHAPE, name: "Closable Bad Shape Ability", authored_by: "40kdc-community",
       game_version: { edition: "11th", dataslate: "pre-launch-provisional" }, ability_type: "unit", faction_id: FACTION,
+      stub: true, effect: { type: "no-effect" }, scope: { duration: "permanent" },
     },
   ]));
   previousDataRoot = process.env.SEMANTIC_AUTHORING_DATA_ROOT;
@@ -115,9 +117,9 @@ describe("pipeline-8b", () => {
       expect(report.compile.failures).toEqual([
         expect.objectContaining({ ability_id: CLOSABLE_BAD_SHAPE, reason: "cruncher-unrecognized-shape" }),
       ]);
-      // Both data-root entries are mirror stubs with no `effect` field: no "before" to diff
-      // against, so the informational lever-diff column has nothing to report here.
-      expect(report.compile.lever_diffs).toEqual([]);
+      // Both data-root entries are seeded stubs whose `no-effect` placeholder yields no levers,
+      // so the informational lever-diff column reports nothing applied before.
+      expect(report.compile.lever_diffs.map((diff) => diff.old_applied)).toEqual([0, 0]);
 
       // The residue abilities share no vocabulary with anything decided, so they stay untiled.
       expect(report.residue.untiled_abilities).toBe(RESIDUE_COUNT);

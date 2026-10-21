@@ -26,7 +26,8 @@ import { createHash } from "node:crypto";
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
-import { globSync } from "glob";
+import type Ajv from "ajv";
+import { escape as globEscape, globSync } from "glob";
 import { createValidator } from "../schema-loader.js";
 import { validateFiles, type ValidationResult } from "../validate.js";
 import { checkReferentialIntegrity } from "../integrity.js";
@@ -214,6 +215,153 @@ function mergeSchema(a: ValidationResult, b: ValidationResult): ValidationResult
   };
 }
 
+/** What validating a projected dataset found; error `file`s are relative to the data root. */
+export interface ProjectionValidation {
+  /** Failed records across schema and referential integrity; zero means the projection is valid. */
+  failed: number;
+  entities: number;
+  schema: ValidationResult;
+  integrity: ValidationResult;
+}
+
+/** Copy the input bytes into a fresh throwaway `data/` tree. */
+function writeTree(inputs: ReadonlyMap<string, Buffer>): { tmpRoot: string; projRoot: string } {
+  const tmpRoot = fs.mkdtempSync(path.join(os.tmpdir(), "40kdc-ingest-"));
+  const projRoot = path.join(tmpRoot, "data");
+  try {
+    for (const [relativePath, content] of inputs) {
+      const destination = path.join(projRoot, relativePath);
+      fs.mkdirSync(path.dirname(destination), { recursive: true });
+      fs.writeFileSync(destination, content);
+    }
+  } catch (error) {
+    fs.rmSync(tmpRoot, { recursive: true, force: true });
+    throw error;
+  }
+  return { tmpRoot, projRoot };
+}
+
+function writeOverlays(projRoot: string, overlays: ReadonlyArray<{ readonly relativePath: string; readonly text: string }>): void {
+  for (const item of overlays) {
+    const destination = path.join(projRoot, item.relativePath);
+    fs.mkdirSync(path.dirname(destination), { recursive: true });
+    fs.writeFileSync(destination, item.text);
+  }
+}
+
+/** The throwaway tree is gone once validation returns; name files as the data root does. */
+function relativeFiles(result: ValidationResult, projRoot: string): ValidationResult {
+  return {
+    ...result,
+    errors: result.errors.map((error) => ({
+      ...error,
+      file: path.isAbsolute(error.file) ? path.relative(projRoot, error.file).split(path.sep).join("/") : error.file,
+    })),
+  };
+}
+
+type Validators = { ajv: Ajv; fast: Ajv };
+
+function freshValidators(): Validators {
+  return { ajv: createValidator(), fast: createValidator({ allErrors: false }) };
+}
+
+/** AJV-validate every data file under `projRoot` matching `patterns`, as `npm run validate` does. */
+async function schemaResult(projRoot: string, patterns: readonly string[], { ajv, fast }: Validators = freshValidators()): Promise<ValidationResult> {
+  let merged: ValidationResult = { totalFiles: 0, totalItems: 0, passed: 0, failed: 0, errors: [] };
+  for (const pattern of patterns) merged = mergeSchema(merged, await validateFiles(ajv, pattern, projRoot, fast));
+  return relativeFiles(merged, projRoot);
+}
+
+const ALL_DATA_FILES = ["core/**/*.json", "enrichment/**/*.json"] as const;
+
+/**
+ * Validate the input bytes with the overlays written over them, in a throwaway tree, with the
+ * exact AJV + referential integrity checks `npm run validate` runs.
+ */
+async function validateOverlay(
+  inputs: ReadonlyMap<string, Buffer>,
+  overlays: ReadonlyArray<{ readonly relativePath: string; readonly text: string }>,
+): Promise<ProjectionValidation> {
+  const { tmpRoot, projRoot } = writeTree(inputs);
+  try {
+    writeOverlays(projRoot, overlays);
+    const schema = await schemaResult(projRoot, ALL_DATA_FILES);
+    const integrity = relativeFiles(await checkReferentialIntegrity(projRoot), projRoot);
+    return { failed: schema.failed + integrity.failed, entities: schema.totalItems, schema, integrity };
+  } finally {
+    fs.rmSync(tmpRoot, { recursive: true, force: true });
+  }
+}
+
+/** Validates many alternative projections of one data-root snapshot; see {@link openProjectionChecker}. */
+export interface ProjectionChecker {
+  /**
+   * What {@link prepareWrites} would find for these staged writes over the snapshot, returned
+   * instead of thrown. Each call sees only its own writes; overlapping calls run one at a time.
+   */
+  validate(staged: StagedWrite[]): Promise<ProjectionValidation>;
+  /** Remove the throwaway tree. */
+  close(): void;
+}
+
+/**
+ * Snapshot the data root once into a throwaway tree for validating many alternative overlays,
+ * each exactly as {@link prepareWrites} would. Files an overlay leaves untouched keep the schema
+ * result of the snapshot, so a call schema-validates only its own files; referential integrity
+ * spans files and runs in full on every call. Each overlay is reverted after its call.
+ */
+export function openProjectionChecker(opts: PrepareWriteOptions): ProjectionChecker {
+  const configuredRoot = path.resolve(opts.dataRoot ?? DATA_ROOT);
+  const dataRoot = fs.realpathSync(configuredRoot);
+  const inputs = snapshotInputs(dataRoot).bytes;
+  const { tmpRoot, projRoot } = writeTree(inputs);
+  // AJV compiles each schema on first use; one pair serves every call.
+  const validators = freshValidators();
+  let baseline: Promise<ValidationResult> | undefined;
+  // Calls share one tree, so each waits for the previous one's overlay to be reverted.
+  let previous: Promise<unknown> = Promise.resolve();
+  const validateOne = async (staged: StagedWrite[]): Promise<ProjectionValidation> => {
+    const prepared = prepareStagedWrites(staged, configuredRoot, dataRoot, opts.label);
+    baseline ??= schemaResult(projRoot, ALL_DATA_FILES, validators);
+    const unchanged = await baseline;
+    const touched = new Set(prepared.map((item) => item.relativePath.split(path.sep).join("/")));
+    const patterns = [...touched].map((file) => globEscape(file));
+    const before = await schemaResult(projRoot, patterns, validators);
+    try {
+      writeOverlays(projRoot, prepared);
+      const after = await schemaResult(projRoot, patterns, validators);
+      const kept = unchanged.errors.filter((error) => !touched.has(error.file));
+      const schema: ValidationResult = {
+        totalFiles: unchanged.totalFiles - before.totalFiles + after.totalFiles,
+        totalItems: unchanged.totalItems - before.totalItems + after.totalItems,
+        passed: unchanged.passed - before.passed + after.passed,
+        failed: kept.length + after.failed,
+        errors: [...kept, ...after.errors],
+      };
+      const integrity = relativeFiles(await checkReferentialIntegrity(projRoot), projRoot);
+      return { failed: schema.failed + integrity.failed, entities: schema.totalItems, schema, integrity };
+    } finally {
+      for (const item of prepared) {
+        const original = inputs.get(item.relativePath);
+        const destination = path.join(projRoot, item.relativePath);
+        if (original) fs.writeFileSync(destination, original);
+        else fs.rmSync(destination, { force: true });
+      }
+    }
+  };
+  return {
+    validate(staged) {
+      const run = previous.then(() => validateOne(staged));
+      previous = run.catch(() => undefined);
+      return run;
+    },
+    close() {
+      fs.rmSync(tmpRoot, { recursive: true, force: true });
+    },
+  };
+}
+
 /**
  * Snapshot and validate the projected dataset (current validation inputs plus
  * staged overlays), retaining the exact staged bytes for a later synchronous
@@ -241,45 +389,22 @@ export async function prepareWrites(
   const inputSnapshot = snapshotInputs(dataRoot);
   const inputHashes = inputSnapshot.hashes;
 
-  const tmpRoot = fs.mkdtempSync(path.join(os.tmpdir(), "40kdc-ingest-"));
-  const projRoot = path.join(tmpRoot, "data");
-  try {
-    for (const [relativePath, content] of inputSnapshot.bytes) {
-      const destination = path.join(projRoot, relativePath);
-      fs.mkdirSync(path.dirname(destination), { recursive: true });
-      fs.writeFileSync(destination, content);
-    }
-    for (const item of prepared) {
-      const destination = path.join(projRoot, item.relativePath);
-      fs.mkdirSync(path.dirname(destination), { recursive: true });
-      fs.writeFileSync(destination, item.text);
-    }
-
-    const ajv = createValidator();
-    const fast = createValidator({ allErrors: false });
-    const core = await validateFiles(ajv, "core/**/*.json", projRoot, fast);
-    const enrich = await validateFiles(ajv, "enrichment/**/*.json", projRoot, fast);
-    const integrity = await checkReferentialIntegrity(projRoot);
-
-    const failed = core.failed + enrich.failed + integrity.failed;
-    if (failed > 0) {
-      const detail =
-        formatReport(mergeSchema(core, enrich), "pretty", "40kdc Data Validation Report", opts.maxDiagnosticsPerRecord) +
-        "\n" +
-        formatReport(integrity, "pretty", "40kdc Referential Integrity Report", opts.maxDiagnosticsPerRecord);
-      throw new Error(
-        `[${opts.label}] projected dataset FAILS validation (${failed} error(s)). ` +
-          `Nothing was written. This is exactly what --write would have produced.\n${detail}`,
-      );
-    }
-
-    console.log(
-      `[${opts.label}] projected dataset valid — ${prepared.length} file(s), ` +
-        `${core.totalItems + enrich.totalItems} entities checked.`,
+  const projected = await validateOverlay(inputSnapshot.bytes, prepared);
+  if (projected.failed > 0) {
+    const detail =
+      formatReport(projected.schema, "pretty", "40kdc Data Validation Report", opts.maxDiagnosticsPerRecord) +
+      "\n" +
+      formatReport(projected.integrity, "pretty", "40kdc Referential Integrity Report", opts.maxDiagnosticsPerRecord);
+    throw new Error(
+      `[${opts.label}] projected dataset FAILS validation (${projected.failed} error(s)). ` +
+        `Nothing was written. This is exactly what --write would have produced.\n${detail}`,
     );
-  } finally {
-    fs.rmSync(tmpRoot, { recursive: true, force: true });
   }
+
+  console.log(
+    `[${opts.label}] projected dataset valid — ${prepared.length} file(s), ` +
+      `${projected.entities} entities checked.`,
+  );
 
   let used = false;
   return {

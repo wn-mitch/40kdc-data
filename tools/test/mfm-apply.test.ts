@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
-import { applyWrites, prepareWrites, type StagedWrite } from "../src/mfm/apply.js";
+import { applyWrites, openProjectionChecker, prepareWrites, type StagedWrite } from "../src/mfm/apply.js";
 import { REPO_ROOT } from "../src/mfm/repo-files.js";
 
 /**
@@ -196,6 +196,47 @@ describe("prepareWrites — validated snapshot", () => {
 
       expect(() => prepared.commit()).toThrow(/destination became symlinked|escaped/i);
       expect(bytes(path.join(outsideDirectory, path.basename(target)))).toBe(outsideBefore);
+    });
+  }, FULL_VALIDATION_TIMEOUT_MS);
+});
+
+describe("openProjectionChecker — many projections of one snapshot", () => {
+  it("reports each overlay alone, keeping untouched files' schema result and reverting every overlay", async () => {
+    await withCopiedData(async (dataRoot) => {
+      const opts = path.join(dataRoot, "core", "world-eaters", "wargear-options.json");
+      const units = path.join(dataRoot, "core", "world-eaters", "units.json");
+      // A schema defect already on disk, in a file the first overlays do not touch.
+      const broken = readArr(opts);
+      delete broken[0].faction_id;
+      fs.writeFileSync(opts, `${JSON.stringify(broken, null, 2)}\n`);
+      const repaired = readArr(OPTS);
+      const foreign = readArr(units);
+      foreign[0].faction_keywords = ["Aeldari"];
+
+      const checker = openProjectionChecker({ label: "test", dataRoot });
+      try {
+        const untouched = await checker.validate([]);
+        expect(untouched.schema.errors.map((error) => error.file)).toEqual(["core/world-eaters/wargear-options.json"]);
+        expect(untouched.integrity.failed).toBe(0);
+
+        const integrity = await checker.validate([{ path: units, value: foreign }]);
+        expect(integrity.schema.failed).toBe(1);
+        expect(JSON.stringify(integrity.integrity.errors)).toMatch(/Aeldari/u);
+
+        // The touched file is validated as overlaid, so repairing it clears the snapshot's defect.
+        const fixed = await checker.validate([{ path: opts, value: repaired }]);
+        expect(fixed.failed).toBe(0);
+        expect(fixed.entities).toBe(untouched.entities);
+
+        // Neither earlier overlay survives its call.
+        const again = await checker.validate([]);
+        expect(again.schema.errors).toEqual(untouched.schema.errors);
+        expect(again.integrity.failed).toBe(0);
+        // The real data root is never written.
+        expect(readArr(units)[0].faction_keywords).not.toEqual(["Aeldari"]);
+      } finally {
+        checker.close();
+      }
     });
   }, FULL_VALIDATION_TIMEOUT_MS);
 });

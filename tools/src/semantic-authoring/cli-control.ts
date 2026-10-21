@@ -189,7 +189,7 @@ const COMMANDS: Record<string, ControlCommand> = {
   },
   gates: {
     effect: () => "read", usage: "gates --abilities id,id [--machine] [--overlay-runs id,id]",
-    summary: "Compile and gate the named abilities (trusted leaves; --machine adds machine rows, --overlay-runs pending proposals).",
+    summary: "Compile and gate the named abilities: schema, core checks, publication integrity, describer round-trip, cruncher shape (trusted leaves; --machine adds machine rows, --overlay-runs pending proposals).",
     run: async (flags) => {
       const abilities = idsFlag(flags, "abilities");
       if (!abilities) throw Object.assign(new Error("gates needs --abilities."), { code: "INVALID_ARGUMENT" });

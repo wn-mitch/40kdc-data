@@ -2,10 +2,10 @@ import type { DatabaseSync } from "node:sqlite";
 import type Ajv from "ajv";
 
 import { createValidator } from "../schema-loader.js";
-import { diceTableInvariantErrors } from "../integrity.js";
 import { effectToBuffs, POST_ATTACK_MOMENT, type EffectTranslation } from "../cruncher/from-dsl.js";
 import { assumeEventSubjectMatches } from "../cruncher/from-dsl-selection.js";
 import { grantedRecordIds } from "../data/lever-providers.js";
+import type { ProjectionChecker } from "../mfm/apply.js";
 import type { BuffSource, EngineContext } from "../cruncher/buffs.js";
 import { tiledSources, type TiledSourceOptions } from "./leaf-view.js";
 import { ownAbilityIds } from "./own-abilities.js";
@@ -14,10 +14,12 @@ import { dot } from "./leaf-knn.js";
 import { compileLeaves, type CompileLeaf, type Compiled } from "./compile.js";
 import { coreCheckErrors } from "./core-checks.js";
 import { checkEntry, entryWithMechanics, resolveCheckedEntity, semanticAuthoringDataRoot } from "./entries.js";
+import { compiledPublicationErrors, openPublicationChecker } from "./publication-projection.js";
 
 /**
  * The compile+gate half of pipeline-8b: for every ability whose source is fully tiled by leaves,
- * compile it and check schema, core-record checks, source integrity, describer round-trip
+ * compile it and check schema, core-record checks, publication integrity (the schema and
+ * referential-integrity checks publishing that record alone would run), describer round-trip
  * fidelity, and whether the cruncher can model the compiled effect. Split out of pipeline-8b.ts
  * so each file stays under the repo's file-size guideline; `pipeline-8b.ts` is the only caller.
  */
@@ -281,7 +283,7 @@ export function classifyUnsupported(
 }
 
 async function gateCompiledAbility(
-  db: DatabaseSync, embedder: Embedder, dataRoot: string, factionId: string, abilityId: string, compiled: Extract<Compiled, { ok: true }>, sourceText: string, floor: number,
+  db: DatabaseSync, embedder: Embedder, publication: () => ProjectionChecker, dataRoot: string, factionId: string, abilityId: string, compiled: Extract<Compiled, { ok: true }>, sourceText: string, floor: number,
 ): Promise<
   | { status: "no-data-entry" }
   | { status: "gated"; schema: boolean; coreChecks: boolean; integrity: boolean; describer: boolean; describerScore: number | null; crunchShapeOk: boolean; honestUnknown: number; outsideDamagePath: number; unrecognizedShape: number; leverDiff: LeverDiff | null; failures: GateFailure[] }
@@ -301,9 +303,11 @@ async function gateCompiledAbility(
   if (!schema) failures.push({ faction_id: factionId, ability_id: abilityId, reason: "schema", detail: checked.errors.join("; ").slice(0, 300) });
   if (!coreChecks) failures.push({ faction_id: factionId, ability_id: abilityId, reason: "core-checks", detail: coreErrors.join("; ").slice(0, 300) });
 
-  const diceErrors = diceTableInvariantErrors(compiled.mechanics.effect);
-  const integrity = diceErrors.length === 0;
-  if (!integrity) failures.push({ faction_id: factionId, ability_id: abilityId, reason: "integrity", detail: diceErrors.join("; ").slice(0, 300) });
+  // Publication's own checks on this record alone: the projected abilities.json (and core
+  // stratagems.json for a stratagem target) through schema and referential integrity.
+  const integrityErrors = await compiledPublicationErrors(publication(), factionId, { ability_id: abilityId, mechanics: compiled.mechanics, core: compiled.core ?? null, source_text: sourceText });
+  const integrity = integrityErrors.length === 0;
+  if (!integrity) failures.push({ faction_id: factionId, ability_id: abilityId, reason: "integrity", detail: integrityErrors.join("; ").slice(0, 600) });
 
   let describerScore: number | null = null;
   let describer = false;
@@ -372,6 +376,22 @@ export async function runCompileGates(
     gated: 0, no_data_entry: 0, schema_pass: 0, core_checks_pass: 0, integrity_pass: 0, describer_pass: 0, describer_scores: [],
     cruncher_honest_unknown: 0, cruncher_outside_damage_path: 0, cruncher_unrecognized_shape: 0, cruncher_shape_pass: 0, all_gates_pass: 0, failures: [], lever_diffs: [], abilities: [],
   };
+  // One snapshot of the data root serves every record's publication projection.
+  let checker: ProjectionChecker | undefined;
+  const publication = () => (checker ??= openPublicationChecker());
+  try {
+    await gateTiled(db, embedder, floor, view, dataRoot, tiled, own, report, publication);
+  } finally {
+    checker?.close();
+  }
+  return report;
+}
+
+async function gateTiled(
+  db: DatabaseSync, embedder: Embedder, floor: number, view: CompileGateView, dataRoot: string,
+  tiled: ReadonlyMap<number, ReturnType<typeof tiledSources>[number]>, own: ReadonlyMap<number, string>,
+  report: CompileGateReport, publication: () => ProjectionChecker,
+): Promise<void> {
   for (const [, ability] of tiled) {
     report.compile_attempted += 1;
     const entityId = view.historicalEntityIds?.get(ability.id) ?? ability.ability_id;
@@ -391,7 +411,7 @@ export async function runCompileGates(
       continue;
     }
     report.compile_ok += 1;
-    const gate = await gateCompiledAbility(db, embedder, dataRoot, ability.faction_id, entityId, compiled, ability.source_text, floor);
+    const gate = await gateCompiledAbility(db, embedder, publication, dataRoot, ability.faction_id, entityId, compiled, ability.source_text, floor);
     if (gate.status === "no-data-entry") {
       row.gates = { status: "no-data-entry", schema: false, core_checks: false, integrity: false, describer: false, describer_score: null, crunch_shape: false, all: false };
       report.no_data_entry += 1;
@@ -416,5 +436,4 @@ export async function runCompileGates(
     if (gate.schema && gate.coreChecks && gate.integrity && gate.describer && gate.crunchShapeOk) report.all_gates_pass += 1;
     report.failures.push(...gate.failures);
   }
-  return report;
 }

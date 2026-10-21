@@ -308,7 +308,9 @@ workbench `ability_version_id`s (`query "SELECT id FROM abilities WHERE ability_
    file (`confirm`/`correct`/`add`/`surface`/`gap`/…, see `review-apply.ts`), signed with the
    user's reviewer name. Apply it with `review-apply <file>`, then
    `propagate --duplicate-texts --abilities <ids>`.
-3. Compile and gate: `gates --abilities <ids>` (read-only).
+3. Compile and gate: `gates --abilities <ids>` (read-only). The gates are schema, core checks,
+   integrity (the schema and referential-integrity checks `prepare-publication` runs, on the
+   dataset with that record alone published), describer round-trip and cruncher shape.
 4. Publication review: `review-sheet <faction> --out ../_private/round5c/review` writes
    `<faction>.md` (published vs compiled renders, lever diffs, failing gates) and an unsigned
    `<faction>.decisions.json` of `approve-shape` decisions for the members that pass every gate.
