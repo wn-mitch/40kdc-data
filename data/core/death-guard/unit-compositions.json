@@ -413,8 +413,7 @@
             "weapon_ids": [
               "plague-knives-plague-marines",
               "blight-launcher"
-            ],
-            "max_count": 2
+            ]
           },
           {
             "name": "Plague Marine w/ boltgun",
@@ -429,8 +428,7 @@
             "weapon_ids": [
               "plague-knives-plague-marines",
               "plague-spewer"
-            ],
-            "max_count": 2
+            ]
           },
           {
             "name": "Plague Marine w/ icon of despair",
@@ -469,6 +467,22 @@
         "loadout_variant_budgets": [
           {
             "variant_names": [
+              "Plague Marine w/ blight launcher"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
+          },
+          {
+            "variant_names": [
+              "Plague Marine w/ plague spewer"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
+          },
+          {
+            "variant_names": [
               "Plague Marine w/ bubotic weapons",
               "Plague Marine w/ heavy plague weapon",
               "Plague Marine w/ blight launcher",
@@ -486,9 +500,9 @@
               "Plague Marine w/ plasma gun",
               "Plague Marine w/ plague belcher"
             ],
-            "count": 2,
-            "per_models": 0,
-            "scope": "model-row"
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
           }
         ]
       }
@@ -1246,35 +1260,63 @@
             "name": "Blightlord Terminator w/ flail",
             "weapon_ids": [
               "flail-of-corruption"
-            ],
-            "max_count": 2
+            ]
           },
           {
             "name": "Blightlord Terminator w/ blight launcher",
             "weapon_ids": [
               "bubotic-blade",
               "blight-launcher"
-            ],
-            "max_count": 2
+            ]
           },
           {
             "name": "Blightlord Terminator w/ reaper autocannon",
             "weapon_ids": [
               "bubotic-blade",
               "reaper-autocannon"
-            ],
-            "max_count": 2
+            ]
           },
           {
             "name": "Blightlord Terminator w/ plague spewer and bubotic blade",
             "weapon_ids": [
               "bubotic-blade",
               "plague-spewer"
-            ],
-            "max_count": 2
+            ]
           }
         ],
         "loadout_variant_budgets": [
+          {
+            "variant_names": [
+              "Blightlord Terminator w/ flail"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
+          },
+          {
+            "variant_names": [
+              "Blightlord Terminator w/ blight launcher"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
+          },
+          {
+            "variant_names": [
+              "Blightlord Terminator w/ reaper autocannon"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
+          },
+          {
+            "variant_names": [
+              "Blightlord Terminator w/ plague spewer and bubotic blade"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
+          },
           {
             "variant_names": [
               "Blightlord Terminator w/ combi-bolter",

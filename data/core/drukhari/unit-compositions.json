@@ -51,8 +51,7 @@
               "blaster",
               "splinter-pistol",
               "bladevanes"
-            ],
-            "max_count": 1
+            ]
           },
           {
             "name": "Reaver with Heat Lance",
@@ -60,11 +59,26 @@
               "splinter-pistol",
               "heat-lance",
               "bladevanes"
-            ],
-            "max_count": 1
+            ]
           }
         ],
         "loadout_variant_budgets": [
+          {
+            "variant_names": [
+              "Reaver with Blaster"
+            ],
+            "count": 1,
+            "per_models": 3,
+            "scope": "unit"
+          },
+          {
+            "variant_names": [
+              "Reaver with Heat Lance"
+            ],
+            "count": 1,
+            "per_models": 3,
+            "scope": "unit"
+          },
           {
             "variant_names": [
               "Reaver",
@@ -74,6 +88,15 @@
             "count": 5,
             "per_models": 0,
             "scope": "model-row"
+          },
+          {
+            "variant_names": [
+              "Reaver with Blaster",
+              "Reaver with Heat Lance"
+            ],
+            "count": 1,
+            "per_models": 3,
+            "scope": "unit"
           }
         ]
       }
@@ -340,7 +363,8 @@
           {
             "name": "Scourge with Special Weapon",
             "weapon_ids": [
-              "close-combat-weapon"
+              "close-combat-weapon",
+              "shardcarbine"
             ],
             "max_count": 1
           },
@@ -786,6 +810,7 @@
         "loadout_variant_budgets": [
           {
             "variant_names": [
+              "Wrack",
               "Wrack with Hexrifle",
               "Wrack with Liquifier Gun",
               "Wrack with Ossefactor",
@@ -794,6 +819,38 @@
             "count": 9,
             "per_models": 0,
             "scope": "model-row"
+          },
+          {
+            "variant_names": [
+              "Wrack with Hexrifle"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
+          },
+          {
+            "variant_names": [
+              "Wrack with Liquifier Gun"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
+          },
+          {
+            "variant_names": [
+              "Wrack with Ossefactor"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
+          },
+          {
+            "variant_names": [
+              "Wrack with Stinger Pistol"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
           }
         ]
       }

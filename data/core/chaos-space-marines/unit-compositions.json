@@ -157,18 +157,45 @@
             "max_count": 9
           },
           {
-            "name": "Legionary w/ heavy weapon",
+            "name": "Legionary w/ heavy weapon (Heavy bolter)",
             "weapon_ids": [
               "bolt-pistol",
-              "close-combat-weapon"
+              "close-combat-weapon",
+              "heavy-bolter"
+            ]
+          },
+          {
+            "name": "Legionary w/ heavy weapon (Missile launcher)",
+            "weapon_ids": [
+              "bolt-pistol",
+              "close-combat-weapon",
+              "missile-launcher"
+            ]
+          },
+          {
+            "name": "Legionary w/ special weapon (Flamer)",
+            "weapon_ids": [
+              "bolt-pistol",
+              "close-combat-weapon",
+              "flamer"
             ],
             "max_count": 1
           },
           {
-            "name": "Legionary w/ special weapon",
+            "name": "Legionary w/ special weapon (Plasma gun)",
             "weapon_ids": [
               "bolt-pistol",
-              "close-combat-weapon"
+              "close-combat-weapon",
+              "plasma-gun"
+            ],
+            "max_count": 1
+          },
+          {
+            "name": "Legionary w/ special weapon (Meltagun)",
+            "weapon_ids": [
+              "bolt-pistol",
+              "close-combat-weapon",
+              "meltagun"
             ],
             "max_count": 1
           },
@@ -212,10 +239,32 @@
         "loadout_variant_budgets": [
           {
             "variant_names": [
+              "Legionary w/ heavy weapon (Heavy bolter)",
+              "Legionary w/ heavy weapon (Missile launcher)"
+            ],
+            "count": 1,
+            "per_models": 9,
+            "scope": "unit"
+          },
+          {
+            "variant_names": [
+              "Legionary w/ special weapon (Flamer)",
+              "Legionary w/ special weapon (Plasma gun)",
+              "Legionary w/ special weapon (Meltagun)"
+            ],
+            "count": 1,
+            "per_models": 0,
+            "scope": "model-row"
+          },
+          {
+            "variant_names": [
               "Legionary w/ boltgun",
               "Legionary w/ chainsword",
-              "Legionary w/ heavy weapon",
-              "Legionary w/ special weapon",
+              "Legionary w/ heavy weapon (Heavy bolter)",
+              "Legionary w/ heavy weapon (Missile launcher)",
+              "Legionary w/ special weapon (Flamer)",
+              "Legionary w/ special weapon (Plasma gun)",
+              "Legionary w/ special weapon (Meltagun)",
               "Legionary w/ accursed weapon",
               "Legionary w/ Nostraman chainglaive",
               "Legionary w/ paired accursed weapons",
@@ -1128,8 +1177,7 @@
             "weapon_ids": [
               "bolt-pistol",
               "mutations"
-            ],
-            "max_count": 2
+            ]
           },
           {
             "name": "Raptor w/ meltagun",
@@ -1137,27 +1185,58 @@
               "close-combat-weapon",
               "bolt-pistol",
               "meltagun"
-            ],
-            "max_count": 2
+            ]
           },
           {
             "name": "Raptor w/ plasma gun",
             "weapon_ids": [
               "close-combat-weapon",
-              "bolt-pistol"
-            ],
-            "max_count": 2
+              "bolt-pistol",
+              "plasma-gun"
+            ]
           },
           {
             "name": "Raptor w/ flamer",
             "weapon_ids": [
               "close-combat-weapon",
-              "bolt-pistol"
-            ],
-            "max_count": 2
+              "bolt-pistol",
+              "flamer"
+            ]
           }
         ],
         "loadout_variant_budgets": [
+          {
+            "variant_names": [
+              "Raptor w/ mutations"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
+          },
+          {
+            "variant_names": [
+              "Raptor w/ meltagun"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
+          },
+          {
+            "variant_names": [
+              "Raptor w/ plasma gun"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
+          },
+          {
+            "variant_names": [
+              "Raptor w/ flamer"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
+          },
           {
             "variant_names": [
               "Raptor",
@@ -1683,7 +1762,7 @@
         ],
         "loadout_variants": [
           {
-            "name": "Red Corsairs Raider w/ boltgun",
+            "name": "Red Corsairs Raider",
             "weapon_ids": [
               "boltgun",
               "bolt-pistol",
@@ -1706,8 +1785,7 @@
               "boltgun",
               "bolt-pistol",
               "power-fist"
-            ],
-            "max_count": 2
+            ]
           },
           {
             "name": "Red Corsairs Raider w/ power fist and meltagun",
@@ -1720,6 +1798,24 @@
           }
         ],
         "loadout_variant_budgets": [
+          {
+            "variant_names": [
+              "Red Corsairs Raider w/ power fist"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
+          },
+          {
+            "variant_names": [
+              "Red Corsairs Raider w/ meltagun",
+              "Red Corsairs Raider w/ power fist",
+              "Red Corsairs Raider w/ power fist and meltagun"
+            ],
+            "count": 4,
+            "per_models": 0,
+            "scope": "model-row"
+          },
           {
             "variant_names": [
               "Red Corsairs Raider w/ power fist",
@@ -2389,7 +2485,8 @@
             "name": "Legionary w/ heavy melee weapon",
             "weapon_ids": [
               "bolt-pistol",
-              "close-combat-weapon"
+              "close-combat-weapon",
+              "heavy-melee-weapon"
             ],
             "max_count": 1
           },
@@ -2403,22 +2500,119 @@
             "max_count": 1
           },
           {
-            "name": "Legionary w/ other weapon",
+            "name": "Legionary w/ other weapon (Flamer)",
             "weapon_ids": [
               "bolt-pistol",
-              "close-combat-weapon"
+              "close-combat-weapon",
+              "flamer"
             ],
-            "max_count": 2
+            "max_count": 1
+          },
+          {
+            "name": "Legionary w/ other weapon (Havoc autocannon)",
+            "weapon_ids": [
+              "bolt-pistol",
+              "close-combat-weapon",
+              "havoc-autocannon-legionaries"
+            ],
+            "max_count": 1
+          },
+          {
+            "name": "Legionary w/ other weapon (Heavy bolter)",
+            "weapon_ids": [
+              "bolt-pistol",
+              "close-combat-weapon",
+              "heavy-bolter"
+            ],
+            "max_count": 1
+          },
+          {
+            "name": "Legionary w/ other weapon (Lascannon)",
+            "weapon_ids": [
+              "bolt-pistol",
+              "close-combat-weapon",
+              "lascannon-legionaries"
+            ],
+            "max_count": 1
+          },
+          {
+            "name": "Legionary w/ other weapon (Missile launcher)",
+            "weapon_ids": [
+              "bolt-pistol",
+              "close-combat-weapon",
+              "missile-launcher"
+            ],
+            "max_count": 1
+          },
+          {
+            "name": "Legionary w/ other weapon (Plasma gun)",
+            "weapon_ids": [
+              "bolt-pistol",
+              "close-combat-weapon",
+              "plasma-gun"
+            ],
+            "max_count": 1
+          },
+          {
+            "name": "Legionary w/ other weapon (Reaper chaincannon)",
+            "weapon_ids": [
+              "bolt-pistol",
+              "close-combat-weapon",
+              "reaper-chaincannon"
+            ],
+            "max_count": 1
+          },
+          {
+            "name": "Legionary w/ other weapon (Plasma pistol and Astartes chainsword)",
+            "weapon_ids": [
+              "bolt-pistol",
+              "close-combat-weapon",
+              "astartes-chainsword",
+              "plasma-pistol"
+            ],
+            "max_count": 1
+          },
+          {
+            "name": "Legionary w/ other weapon (Meltagun)",
+            "weapon_ids": [
+              "bolt-pistol",
+              "close-combat-weapon",
+              "meltagun"
+            ]
           }
         ],
         "loadout_variant_budgets": [
+          {
+            "variant_names": [
+              "Legionary w/ other weapon (Flamer)",
+              "Legionary w/ other weapon (Havoc autocannon)",
+              "Legionary w/ other weapon (Heavy bolter)",
+              "Legionary w/ other weapon (Lascannon)",
+              "Legionary w/ other weapon (Missile launcher)",
+              "Legionary w/ other weapon (Plasma gun)",
+              "Legionary w/ other weapon (Reaper chaincannon)",
+              "Legionary w/ other weapon (Plasma pistol and Astartes chainsword)",
+              "Legionary w/ other weapon (Meltagun)"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
+          },
           {
             "variant_names": [
               "Legionary w/ boltgun",
               "Legionary w/ chainsword",
               "Legionary w/ heavy melee weapon",
               "Legionary w/ balefire tome",
-              "Legionary w/ other weapon"
+              "Legionary w/ other weapon (Flamer)",
+              "Legionary w/ other weapon (Havoc autocannon)",
+              "Legionary w/ other weapon (Heavy bolter)",
+              "Legionary w/ other weapon (Lascannon)",
+              "Legionary w/ other weapon (Missile launcher)",
+              "Legionary w/ other weapon (Plasma gun)",
+              "Legionary w/ other weapon (Reaper chaincannon)",
+              "Legionary w/ other weapon (Plasma pistol and Astartes chainsword)",
+              "Legionary w/ other weapon (Meltagun)"
             ],
             "count": 9,
             "per_models": 0,

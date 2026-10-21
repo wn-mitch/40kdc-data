@@ -350,8 +350,7 @@
               "farstalker-firearm",
               "kroot-pistol",
               "close-combat-weapon"
-            ],
-            "max_count": 8
+            ]
           },
           {
             "name": "Kroot Farstalker w/ Farstalker firearm and Pech'ra",
@@ -382,7 +381,6 @@
         "loadout_variant_budgets": [
           {
             "variant_names": [
-              "Kroot Farstalker",
               "Kroot Farstalker w/ Farstalker firearm and Pech'ra"
             ],
             "count": 9,
