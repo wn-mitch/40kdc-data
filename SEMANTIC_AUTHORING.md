@@ -55,7 +55,8 @@ unsigned decisions file of `approve-shape` decisions for the members that pass e
 integrity gate projects each record alone into the dataset and runs the schema and
 referential-integrity checks `prepare-publication` runs, so a member that passes every gate is
 one publication accepts on its own. The reviewer signs the draft; `review-apply` records the
-approvals as `compiled_entries`; `publishable` lists the approved entries that would change
+approvals as `compiled_entries`, refusing an `approve-shape` decision whose members include one
+that fails that integrity check; `publishable` lists the approved entries that would change
 tracked data; `prepare-publication` and `publish` write them.
 
 The `_private/round5c/` directory is intentionally retained as the persisted workbench and

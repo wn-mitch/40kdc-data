@@ -20,7 +20,8 @@ import { exactSpan } from "./contracts.js";
  * `novel` and `ambiguous` record the refusal or the gap. `connective` confirms a connective.
  * `add` with `fragment: "NAME"` locates its wording in the record's name (a psyker level printed in the name).
  * `approve-shape` approves the compiled entries of the listed members of one shape (`signature`,
- * `ability_version_ids`) for publication; `reject-shape` refuses them until their leaves change.
+ * `ability_version_ids`) for publication, refusing any member publication would reject;
+ * `reject-shape` refuses them until their leaves change.
  */
 
 export type ChatDecision = {
@@ -252,7 +253,7 @@ function decision(db: DatabaseSync, item: ChatDecision): Record<string, unknown>
 }
 
 /** Apply Will's conversational review: one batch per decision, so one bad decision stops only itself. */
-export function applyChatReview(db: DatabaseSync, review: ChatReview): { applied: Array<{ proposal_id?: number; annotation_id?: number; ability_version_id?: number; batch_id: string }>; failed: Array<{ proposal_id?: number; annotation_id?: number; error: string }>; pilot_reviewed: number[] } {
+export async function applyChatReview(db: DatabaseSync, review: ChatReview): Promise<{ applied: Array<{ proposal_id?: number; annotation_id?: number; ability_version_id?: number; batch_id: string }>; failed: Array<{ proposal_id?: number; annotation_id?: number; error: string }>; pilot_reviewed: number[] }> {
   if (review.reviewer === UNSIGNED_REVIEWER) throw new Error("This decisions file is an unsigned draft; set reviewer to your own name before applying it.");
   const actor = humanActor(review.reviewer, "review-apply");
   const applied: Array<{ proposal_id?: number; annotation_id?: number; ability_version_id?: number; batch_id: string }> = [];
@@ -314,7 +315,7 @@ export function applyChatReview(db: DatabaseSync, review: ChatReview): { applied
       if (item.action === "approve-shape" || item.action === "reject-shape") {
         // Publication approval of compiled entries; the shape module re-compiles and checks each member.
         const body = { reviewer: actor.reviewer, signature: item.signature, ability_version_ids: item.ability_version_ids };
-        const report = item.action === "approve-shape" ? approveShape(db, body, actor) : rejectShapeMembers(db, body, actor);
+        const report = item.action === "approve-shape" ? await approveShape(db, body, actor) : rejectShapeMembers(db, body, actor);
         applied.push({ batch_id: report.batch_id, shape: { signature: item.signature, recorded: report.recorded } } as never);
         continue;
       }

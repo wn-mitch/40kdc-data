@@ -84,7 +84,7 @@ describe("Semantic authoring stratagem targets", () => {
 
     const shape = listShapes(db).shapes[0]!;
     expect(shape.first_error).toBeNull();
-    approveShape(db, { reviewer: REVIEWER, signature: shape.signature, ability_version_ids: [(db.prepare("SELECT id FROM abilities WHERE ability_id = 'hold-fast'").get() as { id: number }).id] });
+    await approveShape(db, { reviewer: REVIEWER, signature: shape.signature, ability_version_ids: [(db.prepare("SELECT id FROM abilities WHERE ability_id = 'hold-fast'").get() as { id: number }).id] });
     const entry = db.prepare("SELECT id FROM compiled_entries WHERE status = 'approved'").get() as { id: string };
     const preview = await preparePublication(db, { faction_id: "fixture", entry_ids: [entry.id] });
     expect(preview.diff[0]!.fields.map((field) => field.field)).toEqual(["effect", "source_digest", "core.target_restrictions"]);
@@ -108,7 +108,7 @@ describe("Semantic authoring stratagem targets", () => {
       ["models in your unit have the Fights First ability", "fights-first", { subject: "this-unit" }],
     ] as const) confirmSurface(db, { reviewer: REVIEWER, exact_text, family_id, parameters: parameters as Record<string, unknown> });
     const shape = listShapes(db).shapes[0]!;
-    approveShape(db, { reviewer: REVIEWER, signature: shape.signature, ability_version_ids: [(db.prepare("SELECT id FROM abilities WHERE ability_id = 'hold-fast'").get() as { id: number }).id] });
+    await approveShape(db, { reviewer: REVIEWER, signature: shape.signature, ability_version_ids: [(db.prepare("SELECT id FROM abilities WHERE ability_id = 'hold-fast'").get() as { id: number }).id] });
     const entry = db.prepare("SELECT id FROM compiled_entries WHERE status = 'approved'").get() as { id: string };
     const interrupted = async (writeCore: boolean) => {
       const preview = await preparePublication(db, { faction_id: "fixture", entry_ids: [entry.id] });

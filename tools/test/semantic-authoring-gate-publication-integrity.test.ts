@@ -9,7 +9,9 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { initializeWorkbench } from "../src/semantic-authoring/db.js";
 
 import { runGatesOnly } from "../src/semantic-authoring/pipeline-8b.js";
+import { applyChatReview } from "../src/semantic-authoring/review-apply.js";
 import { factionReviewSheet } from "../src/semantic-authoring/review-sheet.js";
+import { reviewMembers } from "../src/semantic-authoring/shapes.js";
 import { refreshSources } from "../src/semantic-authoring/source.js";
 import { confirmSurface } from "./semantic-authoring-human.js";
 
@@ -110,5 +112,28 @@ describe("compile gates run publication integrity", () => {
     const drafted = new Set(sheet.proposed_decisions.decisions.flatMap((decision) => decision.ability_version_ids ?? []));
     const ids = db.prepare("SELECT id, ability_id FROM abilities WHERE current = 1").all() as Array<{ id: number; ability_id: string }>;
     expect(ids.filter((row) => drafted.has(row.id)).map((row) => row.ability_id)).toEqual(["resolved-grant"]);
+  });
+
+  it("refuses a hand-written approve-shape decision for a member publication would reject", async () => {
+    const member = (id: string) => reviewMembers(db).find((row) => row.ability_id === id)!;
+    const dangling = member("dangling-grant");
+    const resolved = member("resolved-grant");
+    // Both compile to the same shape, so only the integrity check tells them apart.
+    expect(dangling.signature).toBe(resolved.signature);
+    expect(dangling.errors).toEqual([]);
+
+    const result = await applyChatReview(db, { reviewer: REVIEWER, decisions: [
+      { action: "approve-shape", signature: dangling.signature, ability_version_ids: [resolved.ability_version_id, dangling.ability_version_id] },
+      { action: "approve-shape", signature: resolved.signature, ability_version_ids: [resolved.ability_version_id] },
+    ] });
+    expect(result.failed).toEqual([expect.objectContaining({
+      error: expect.stringMatching(/^fixture\/dangling-grant cannot be approved: integrity: enrichment\/fixture\/abilities\.json\[1\] .*"gloaming-step" resolves to no ability entity/u),
+    })]);
+    // The refused decision records nothing, not even its passing member; the second approves.
+    const approved = db.prepare(`
+      SELECT abilities.ability_id FROM compiled_entries JOIN abilities ON abilities.id = compiled_entries.ability_version_id
+      WHERE compiled_entries.status = 'approved'
+    `).all() as Array<{ ability_id: string }>;
+    expect(approved.map((row) => row.ability_id)).toEqual(["resolved-grant"]);
   });
 });

@@ -315,7 +315,8 @@ workbench `ability_version_id`s (`query "SELECT id FROM abilities WHERE ability_
    `<faction>.md` (published vs compiled renders, lever diffs, failing gates) and an unsigned
    `<faction>.decisions.json` of `approve-shape` decisions for the members that pass every gate.
    The user reads the sheet and signs (sets `reviewer`) or edits the decisions; only then run
-   `review-apply` on it. An unsigned draft is refused.
+   `review-apply` on it. An unsigned draft is refused, and so is an `approve-shape` decision
+   with a member that fails the integrity gate.
 5. Publish: `publishable --faction <faction>` lists the approved entries that change the tracked
    record; `prepare-publication <faction> <entry-ids>` then `publish <batch-id> <preview-hash>`.
    Publication validates the whole projected dataset before writing.

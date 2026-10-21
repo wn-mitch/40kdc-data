@@ -200,12 +200,12 @@ describe("Semantic authoring authority boundary", () => {
     }
   });
 
-  it("widens a trusted leaf through a chat correction that gives new wording, replacing the old row", () => {
+  it("widens a trusted leaf through a chat correction that gives new wording, replacing the old row", async () => {
     const db = fixture([{ ability_id: "wide", raw_text: `Then ${CP} next turn.` }]);
     try {
       applyAnnotationBatch(db, { reviewer: "will", decisions: [confirmDecision(db, "wide", CP)] }, WILL);
       const old = db.prepare("SELECT id FROM annotations WHERE status = 'active'").get() as { id: number };
-      const result = applyChatReview(db, { reviewer: "will", decisions: [{ annotation_id: old.id, action: "correct", exact_text: `${CP} next turn` }] });
+      const result = await applyChatReview(db, { reviewer: "will", decisions: [{ annotation_id: old.id, action: "correct", exact_text: `${CP} next turn` }] });
       expect(result.failed).toEqual([]);
       const active = db.prepare("SELECT source_spans.exact_text, annotations.authority_kind FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id WHERE annotations.status = 'active'").all();
       expect(active).toEqual([{ exact_text: `${CP} next turn`, authority_kind: "human" }]);
@@ -214,7 +214,7 @@ describe("Semantic authoring authority boundary", () => {
     }
   });
 
-  it("corrects a leaf around an approved inner leaf of another role only with containment approval", () => {
+  it("corrects a leaf around an approved inner leaf of another role only with containment approval", async () => {
     const db = fixture([{ ability_id: "inner", raw_text: `Then ${CP} next turn.` }]);
     try {
       const wide = { ...confirmDecision(db, "inner", `${CP} next turn`) };
@@ -222,8 +222,8 @@ describe("Semantic authoring authority boundary", () => {
       applyAnnotationBatch(db, { reviewer: "will", decisions: [wide, inner] }, WILL);
       const outer = db.prepare("SELECT annotations.id FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id WHERE annotations.status = 'active' AND source_spans.exact_text = ?").get(`${CP} next turn`) as { id: number };
       const correction = { annotation_id: outer.id, action: "correct" as const, parameters: { ...cp.parameters, amount: 2 } };
-      expect(applyChatReview(db, { reviewer: "will", decisions: [correction] }).failed).toEqual([expect.objectContaining({ error: expect.stringMatching(/containment approval/u) })]);
-      expect(applyChatReview(db, { reviewer: "will", decisions: [{ ...correction, allow_overlap: true }] }).failed).toEqual([]);
+      expect((await applyChatReview(db, { reviewer: "will", decisions: [correction] })).failed).toEqual([expect.objectContaining({ error: expect.stringMatching(/containment approval/u) })]);
+      expect((await applyChatReview(db, { reviewer: "will", decisions: [{ ...correction, allow_overlap: true }] })).failed).toEqual([]);
     } finally {
       db.close();
     }

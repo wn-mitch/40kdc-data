@@ -86,16 +86,16 @@ describe("Semantic authoring shapes", () => {
     expect(shape.members[0]!.authored_text).not.toBe(shape.members[0]!.compiled_text);
   });
 
-  it("approves members at once, marks them stale when a leaf changes, and undoes approval", () => {
+  it("approves members at once, marks them stale when a leaf changes, and undoes approval", async () => {
     const decision = reroll("ones");
-    const approval = approveShape(db, { reviewer: REVIEWER, signature: SHAPE, ability_version_ids: ids() });
+    const approval = await approveShape(db, { reviewer: REVIEWER, signature: SHAPE, ability_version_ids: ids() });
     expect(approval.recorded).toBe(3);
     expect(listShapes(db).shapes[0]).toMatchObject({ approved: 3, open: 0 });
-    expect(approveShape(db, { reviewer: REVIEWER, signature: SHAPE, ability_version_ids: ids() }).recorded).toBe(0);
+    expect((await approveShape(db, { reviewer: REVIEWER, signature: SHAPE, ability_version_ids: ids() })).recorded).toBe(0);
 
     moveSurface(db, { reviewer: REVIEWER, surface_id: decision.surface_id, family_id: "reroll", parameters: { roll: "hit", subset: "all", weapon_type: "all" } });
     expect(getShape(db, SHAPE).members.every((member) => member.state === "stale")).toBe(true);
-    const second = approveShape(db, { reviewer: REVIEWER, signature: SHAPE, ability_version_ids: ids() });
+    const second = await approveShape(db, { reviewer: REVIEWER, signature: SHAPE, ability_version_ids: ids() });
     expect(db.prepare("SELECT status, count(*) AS total FROM compiled_entries GROUP BY status ORDER BY status").all())
       .toEqual([{ status: "approved", total: 3 }, { status: "retracted", total: 3 }]);
     undoBatch(db, second.batch_id, { reviewer: REVIEWER });
@@ -103,20 +103,20 @@ describe("Semantic authoring shapes", () => {
     expect(getShape(db, SHAPE).members.every((member) => member.state === "stale")).toBe(true);
   });
 
-  it("keeps a rejected member out until its leaves change, and refuses members that left the shape", () => {
+  it("keeps a rejected member out until its leaves change, and refuses members that left the shape", async () => {
     reroll("ones");
     const other = getShape(db, SHAPE).members.find((member) => member.abilities[0]!.ability_id === "other")!;
     rejectShapeMembers(db, { reviewer: REVIEWER, signature: SHAPE, ability_version_ids: other.ability_version_ids });
     expect(getShape(db, SHAPE).members.find((member) => member.abilities[0]!.ability_id === "other")!.state).toBe("rejected");
     expect(listShapes(db).shapes[0]).toMatchObject({ open: 2 });
     const partial = db.prepare("SELECT id FROM abilities WHERE ability_id = 'partial'").get() as { id: number };
-    expect(() => approveShape(db, { reviewer: REVIEWER, signature: SHAPE, ability_version_ids: [partial.id] })).toThrow(/no longer current and fully described/u);
-    expect(() => approveShape(db, { reviewer: REVIEWER, signature: "EFFECT(reroll)", ability_version_ids: other.ability_version_ids })).toThrow(/no longer has this shape/u);
+    await expect(approveShape(db, { reviewer: REVIEWER, signature: SHAPE, ability_version_ids: [partial.id] })).rejects.toThrow(/no longer current and fully described/u);
+    await expect(approveShape(db, { reviewer: REVIEWER, signature: "EFFECT(reroll)", ability_version_ids: other.ability_version_ids })).rejects.toThrow(/no longer has this shape/u);
   });
 
   it("publishes an approved shape member through the guarded publisher", async () => {
     reroll("failed");
-    approveShape(db, { reviewer: REVIEWER, signature: SHAPE, ability_version_ids: ids() });
+    await approveShape(db, { reviewer: REVIEWER, signature: SHAPE, ability_version_ids: ids() });
     const entryIds = (db.prepare(`
       SELECT compiled_entries.id FROM compiled_entries JOIN abilities ON abilities.id = compiled_entries.ability_version_id
       WHERE compiled_entries.status = 'approved' ORDER BY abilities.ability_id
@@ -137,14 +137,14 @@ describe("Semantic authoring shapes", () => {
     expect(publishableEntries(db)).toEqual({ factions: [], stale: 0, unchanged: 3 });
   }, 120_000);
 
-  it("applies approve-shape and reject-shape from a signed decisions file, and refuses an unsigned draft", () => {
+  it("applies approve-shape and reject-shape from a signed decisions file, and refuses an unsigned draft", async () => {
     reroll("ones");
     const other = getShape(db, SHAPE).members.find((member) => member.abilities[0]!.ability_id === "other")!.ability_version_ids;
     const rest = ids().filter((id) => !other.includes(id));
-    expect(() => applyChatReview(db, { reviewer: "<reviewer>", decisions: [{ action: "approve-shape", signature: SHAPE, ability_version_ids: rest }] })).toThrow(/unsigned draft/u);
+    await expect(applyChatReview(db, { reviewer: "<reviewer>", decisions: [{ action: "approve-shape", signature: SHAPE, ability_version_ids: rest }] })).rejects.toThrow(/unsigned draft/u);
     expect(db.prepare("SELECT count(*) AS n FROM compiled_entries").get()).toEqual({ n: 0 });
 
-    const result = applyChatReview(db, { reviewer: REVIEWER, decisions: [
+    const result = await applyChatReview(db, { reviewer: REVIEWER, decisions: [
       { action: "approve-shape", signature: SHAPE, ability_version_ids: rest },
       { action: "reject-shape", signature: SHAPE, ability_version_ids: other },
       { action: "approve-shape", signature: "EFFECT(reroll)", ability_version_ids: other },
@@ -155,12 +155,12 @@ describe("Semantic authoring shapes", () => {
     expect((db.prepare("SELECT DISTINCT reviewer FROM annotation_batches WHERE metadata_json LIKE '%shape-%'").all() as Array<{ reviewer: string }>).map((row) => row.reviewer)).toEqual([REVIEWER]);
   });
 
-  it("lists each fully described source once with its shape and state", () => {
+  it("lists each fully described source once with its shape and state", async () => {
     reroll("ones");
     const before = reviewMembers(db);
     expect(before.map((row) => row.ability_id).sort()).toEqual(["alpha", "copy", "other"]);
     expect(before.every((row) => row.signature === SHAPE && row.state === "open" && row.differs)).toBe(true);
-    approveShape(db, { reviewer: REVIEWER, signature: SHAPE, ability_version_ids: before.filter((row) => row.ability_id === "alpha").map((row) => row.ability_version_id) });
+    await approveShape(db, { reviewer: REVIEWER, signature: SHAPE, ability_version_ids: before.filter((row) => row.ability_id === "alpha").map((row) => row.ability_version_id) });
     expect(reviewMembers(db).find((row) => row.ability_id === "alpha")!.state).toBe("approved");
   });
 

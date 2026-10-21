@@ -266,6 +266,12 @@ function freshValidators(): Validators {
   return { ajv: createValidator(), fast: createValidator({ allErrors: false }) };
 }
 
+/**
+ * AJV compiles each schema on its first use; checkers share one pair for the life of the
+ * process (the schemas are the repository's, loaded once, as `entries.ts` caches its own).
+ */
+let checkerValidators: Validators | undefined;
+
 /** AJV-validate every data file under `projRoot` matching `patterns`, as `npm run validate` does. */
 async function schemaResult(projRoot: string, patterns: readonly string[], { ajv, fast }: Validators = freshValidators()): Promise<ValidationResult> {
   let merged: ValidationResult = { totalFiles: 0, totalItems: 0, passed: 0, failed: 0, errors: [] };
@@ -316,8 +322,7 @@ export function openProjectionChecker(opts: PrepareWriteOptions): ProjectionChec
   const dataRoot = fs.realpathSync(configuredRoot);
   const inputs = snapshotInputs(dataRoot).bytes;
   const { tmpRoot, projRoot } = writeTree(inputs);
-  // AJV compiles each schema on first use; one pair serves every call.
-  const validators = freshValidators();
+  const validators = (checkerValidators ??= freshValidators());
   let baseline: Promise<ValidationResult> | undefined;
   // Calls share one tree, so each waits for the previous one's overlay to be reverted.
   let previous: Promise<unknown> = Promise.resolve();

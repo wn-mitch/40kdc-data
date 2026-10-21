@@ -37,7 +37,7 @@ const nameBytes = (text: string, wording: string) => {
   return { start_byte: start, end_byte: start + Buffer.byteLength(wording, "utf8") };
 };
 
-function addName(value: ReturnType<typeof fixture>, extra: Partial<ChatDecision> = {}) {
+async function addName(value: ReturnType<typeof fixture>, extra: Partial<ChatDecision> = {}) {
   return applyChatReview(value.db, {
     reviewer: REVIEWER,
     decisions: [{
@@ -48,10 +48,10 @@ function addName(value: ReturnType<typeof fixture>, extra: Partial<ChatDecision>
 }
 
 describe("Semantic authoring NAME spans in the workbench", () => {
-  it("locates an added NAME wording in the name's bytes", () => {
+  it("locates an added NAME wording in the name's bytes", async () => {
     const value = fixture();
     try {
-      const report = addName(value);
+      const report = await addName(value);
       expect(report.failed).toEqual([]);
       const span = value.db.prepare("SELECT fragment, start_byte, end_byte, exact_text FROM source_spans WHERE exact_text = 'psyker level 3'").get() as
         { fragment: string; start_byte: number; end_byte: number; exact_text: string };
@@ -61,10 +61,10 @@ describe("Semantic authoring NAME spans in the workbench", () => {
     }
   });
 
-  it("refuses the same add without the NAME fragment, since the body does not contain the wording", () => {
+  it("refuses the same add without the NAME fragment, since the body does not contain the wording", async () => {
     const value = fixture();
     try {
-      const report = addName(value, { fragment: undefined });
+      const report = await addName(value, { fragment: undefined });
       expect(report.applied).toEqual([]);
       expect(report.failed[0]?.error).toMatch(/must occur exactly once in ability/);
     } finally {
@@ -92,34 +92,34 @@ describe("Semantic authoring NAME spans in the workbench", () => {
     }
   });
 
-  it("refuses a NAME span on a record with no name", () => {
+  it("refuses a NAME span on a record with no name", async () => {
     const value = fixture(null);
     try {
       const wording = nameBytes(NAME, "psyker level 3");
       expect(() => insertSpan(value.db, value.abilityId, "NAME", wording.start_byte, wording.end_byte, "psyker level 3")).toThrow(/needs a record with a name/);
-      const report = addName(value);
+      const report = await addName(value);
       expect(report.failed[0]?.error).toMatch(/no name/);
     } finally {
       value.db.close();
     }
   });
 
-  it("refuses a NAME add whose wording occurs twice in the name", () => {
+  it("refuses a NAME add whose wording occurs twice in the name", async () => {
     const value = fixture("Fabricated Captain (psyker level 3, psyker level 3)");
     try {
-      const report = addName(value);
+      const report = await addName(value);
       expect(report.failed[0]?.error).toMatch(/must occur exactly once in the name/);
     } finally {
       value.db.close();
     }
   });
 
-  it("corrects a NAME annotation inside the name, not the body", () => {
+  it("corrects a NAME annotation inside the name, not the body", async () => {
     const value = fixture();
     try {
-      addName(value);
+      await addName(value);
       const annotation = value.db.prepare("SELECT id FROM annotations WHERE status = 'active' LIMIT 1").get() as { id: number };
-      const report = applyChatReview(value.db, {
+      const report = await applyChatReview(value.db, {
         reviewer: REVIEWER,
         decisions: [{ action: "correct", annotation_id: annotation.id, exact_text: "psyker level 3", family_id: "characteristic-set", family_version: currentFamilyVersion("characteristic-set"), parameters: { ...PARAMETERS, value: 3 } }],
       });
@@ -131,11 +131,11 @@ describe("Semantic authoring NAME spans in the workbench", () => {
     }
   });
 
-  it("keeps whole-record coverage unchanged by a NAME annotation over body-offset bytes", () => {
+  it("keeps whole-record coverage unchanged by a NAME annotation over body-offset bytes", async () => {
     const value = fixture();
     try {
       const before = getAbilityCoverage(value.db, value.abilityId);
-      addName(value);
+      await addName(value);
       const after = getAbilityCoverage(value.db, value.abilityId);
       // The NAME span is 17..31 in name bytes, which are body bytes 17..31 too if read as body offsets.
       expect(after.leaf_bytes).toEqual(before.leaf_bytes);
@@ -145,7 +145,7 @@ describe("Semantic authoring NAME spans in the workbench", () => {
       value.db.close();
     }
   });
-  it("adds a repeated body occurrence by exact source span", () => {
+  it("adds a repeated body occurrence by exact source span", async () => {
     const body = "At battle start, one D6. Later, one D6.";
     const value = fixture(NAME, body);
     try {
@@ -153,7 +153,7 @@ describe("Semantic authoring NAME spans in the workbench", () => {
       const second = body.lastIndexOf("one D6");
       insertSpan(value.db, value.abilityId, "RAW_TEXT", first, first + Buffer.byteLength("one D6", "utf8"), "one D6");
       const secondSpanId = insertSpan(value.db, value.abilityId, "RAW_TEXT", second, second + Buffer.byteLength("one D6", "utf8"), "one D6");
-      const report = applyChatReview(value.db, {
+      const report = await applyChatReview(value.db, {
         reviewer: REVIEWER,
         decisions: [{
           action: "add", ability_version_id: value.abilityId, span_id: secondSpanId, exact_text: "one D6",
@@ -168,14 +168,14 @@ describe("Semantic authoring NAME spans in the workbench", () => {
     }
   });
 
-  it("adds an occurrence by paired exact UTF-8 offsets", () => {
+  it("adds an occurrence by paired exact UTF-8 offsets", async () => {
     const body = "At battle start, one D6. Later, one D6.";
     const value = fixture(NAME, body);
     try {
       const first = body.indexOf("one D6");
       const end = first + Buffer.byteLength("one D6", "utf8");
       insertSpan(value.db, value.abilityId, "RAW_TEXT", first, end, "one D6");
-      const report = applyChatReview(value.db, {
+      const report = await applyChatReview(value.db, {
         reviewer: REVIEWER,
         decisions: [{
           action: "add", ability_version_id: value.abilityId, start_byte: first, end_byte: end, exact_text: "one D6",
@@ -190,13 +190,13 @@ describe("Semantic authoring NAME spans in the workbench", () => {
     }
   });
 
-  it("rejects an explicit add occurrence whose wording does not match", () => {
+  it("rejects an explicit add occurrence whose wording does not match", async () => {
     const body = "At battle start, one D6. Later, one D6.";
     const value = fixture(NAME, body);
     try {
       const second = body.lastIndexOf("one D6");
       const spanId = insertSpan(value.db, value.abilityId, "RAW_TEXT", second, second + Buffer.byteLength("one D6", "utf8"), "one D6");
-      const report = applyChatReview(value.db, {
+      const report = await applyChatReview(value.db, {
         reviewer: REVIEWER,
         decisions: [{
           action: "add", ability_version_id: value.abilityId, span_id: spanId, exact_text: "other text",
@@ -209,12 +209,12 @@ describe("Semantic authoring NAME spans in the workbench", () => {
       value.db.close();
     }
   });
-  it("allows an explicitly hashed historical add without changing current state", () => {
+  it("allows an explicitly hashed historical add without changing current state", async () => {
     const value = fixture();
     try {
       const sourceHash = value.db.prepare("SELECT source_hash FROM abilities WHERE id = ?").get(value.abilityId) as { source_hash: string };
       value.db.prepare("UPDATE abilities SET current = 0 WHERE id = ?").run(value.abilityId);
-      const report = addName(value, { historical: true, source_hash: sourceHash.source_hash });
+      const report = await addName(value, { historical: true, source_hash: sourceHash.source_hash });
       expect(report.failed).toEqual([]);
       expect(value.db.prepare("SELECT current FROM abilities WHERE id = ?").get(value.abilityId)).toEqual({ current: 0 });
     } finally {
@@ -222,22 +222,22 @@ describe("Semantic authoring NAME spans in the workbench", () => {
     }
   });
 
-  it("rejects a historical add with a mismatched source hash", () => {
+  it("rejects a historical add with a mismatched source hash", async () => {
     const value = fixture();
     try {
       value.db.prepare("UPDATE abilities SET current = 0 WHERE id = ?").run(value.abilityId);
-      const report = addName(value, { historical: true, source_hash: "f".repeat(64) });
+      const report = await addName(value, { historical: true, source_hash: "f".repeat(64) });
       expect(report.failed[0]?.error).toMatch(/source hash does not match/u);
     } finally {
       value.db.close();
     }
   });
-  it("retires an authorized executable annotation and restores it through review undo", () => {
+  it("retires an authorized executable annotation and restores it through review undo", async () => {
     const value = fixture();
     try {
-      addName(value);
+      await addName(value);
       const annotation = value.db.prepare("SELECT id FROM annotations WHERE status = 'active' LIMIT 1").get() as { id: number };
-      const report = applyChatReview(value.db, {
+      const report = await applyChatReview(value.db, {
         reviewer: REVIEWER,
         decisions: [{ action: "retire", annotation_id: annotation.id }],
       });
@@ -250,13 +250,13 @@ describe("Semantic authoring NAME spans in the workbench", () => {
     }
   });
 
-  it("rejects retirement of a historical annotation without explicit historical authorization", () => {
+  it("rejects retirement of a historical annotation without explicit historical authorization", async () => {
     const value = fixture();
     try {
-      addName(value);
+      await addName(value);
       const annotation = value.db.prepare("SELECT id FROM annotations WHERE status = 'active' LIMIT 1").get() as { id: number };
       value.db.prepare("UPDATE abilities SET current = 0 WHERE id = ?").run(value.abilityId);
-      const report = applyChatReview(value.db, {
+      const report = await applyChatReview(value.db, {
         reviewer: REVIEWER,
         decisions: [{ action: "retire", annotation_id: annotation.id }],
       });
@@ -266,10 +266,10 @@ describe("Semantic authoring NAME spans in the workbench", () => {
       value.db.close();
     }
   });
-  it("rejects retirement when the annotation belongs to another ability version", () => {
+  it("rejects retirement when the annotation belongs to another ability version", async () => {
     const value = fixture();
     try {
-      addName(value);
+      await addName(value);
       const annotation = value.db.prepare("SELECT id FROM annotations WHERE status = 'active' LIMIT 1").get() as { id: number };
       const ability = value.db.prepare("SELECT source_hash FROM abilities WHERE id = ?").get(value.abilityId) as { source_hash: string };
       const fragments = JSON.stringify([{ fragment: "RAW_TEXT", start_byte: 0, end_byte: Buffer.byteLength(BODY, "utf8"), text: BODY }]);
@@ -291,13 +291,13 @@ describe("Semantic authoring NAME spans in the workbench", () => {
       value.db.close();
     }
   });
-  it("rejects historical retirement with a mismatched source hash", () => {
+  it("rejects historical retirement with a mismatched source hash", async () => {
     const value = fixture();
     try {
-      addName(value);
+      await addName(value);
       const annotation = value.db.prepare("SELECT id FROM annotations WHERE status = 'active' LIMIT 1").get() as { id: number };
       value.db.prepare("UPDATE abilities SET current = 0 WHERE id = ?").run(value.abilityId);
-      const report = applyChatReview(value.db, {
+      const report = await applyChatReview(value.db, {
         reviewer: REVIEWER,
         decisions: [{ action: "retire", annotation_id: annotation.id, historical: true, source_hash: "f".repeat(64) }],
       });
@@ -307,18 +307,18 @@ describe("Semantic authoring NAME spans in the workbench", () => {
       value.db.close();
     }
   });
-  it("requires explicit historical authorization for a stale source version", () => {
+  it("requires explicit historical authorization for a stale source version", async () => {
     const value = fixture();
     try {
-      addName(value);
+      await addName(value);
       const annotation = value.db.prepare("SELECT id FROM annotations WHERE status = 'active' LIMIT 1").get() as { id: number };
       value.db.prepare("UPDATE abilities SET current = 0 WHERE id = ?").run(value.abilityId);
-      const ordinary = applyChatReview(value.db, {
+      const ordinary = await applyChatReview(value.db, {
         reviewer: REVIEWER,
         decisions: [{ action: "correct", annotation_id: annotation.id, family_id: "characteristic-set", family_version: currentFamilyVersion("characteristic-set"), parameters: PARAMETERS }],
       });
       expect(ordinary.failed[0]?.error).toMatch(/source version is stale/u);
-      const historical = applyChatReview(value.db, {
+      const historical = await applyChatReview(value.db, {
         reviewer: REVIEWER,
         decisions: [{ action: "correct", annotation_id: annotation.id, historical: true, family_id: "characteristic-set", family_version: currentFamilyVersion("characteristic-set"), parameters: PARAMETERS }],
       });
@@ -329,13 +329,13 @@ describe("Semantic authoring NAME spans in the workbench", () => {
     }
   });
 
-  it("rejects historical authorization with a mismatched source hash", () => {
+  it("rejects historical authorization with a mismatched source hash", async () => {
     const value = fixture();
     try {
-      addName(value);
+      await addName(value);
       const annotation = value.db.prepare("SELECT id FROM annotations WHERE status = 'active' LIMIT 1").get() as { id: number };
       value.db.prepare("UPDATE abilities SET current = 0 WHERE id = ?").run(value.abilityId);
-      const report = applyChatReview(value.db, {
+      const report = await applyChatReview(value.db, {
         reviewer: REVIEWER,
         decisions: [{ action: "correct", annotation_id: annotation.id, historical: true, source_hash: "f".repeat(64), family_id: "characteristic-set", family_version: currentFamilyVersion("characteristic-set"), parameters: PARAMETERS }],
       });
@@ -346,13 +346,13 @@ describe("Semantic authoring NAME spans in the workbench", () => {
     }
   });
 
-  it("rejects historical authorization on a current source version", () => {
+  it("rejects historical authorization on a current source version", async () => {
     const value = fixture();
     try {
-      addName(value);
+      await addName(value);
       const annotation = value.db.prepare("SELECT id FROM annotations WHERE status = 'active' LIMIT 1").get() as { id: number };
       const sourceHash = value.db.prepare("SELECT source_hash FROM abilities WHERE id = ?").get(value.abilityId) as { source_hash: string };
-      const report = applyChatReview(value.db, {
+      const report = await applyChatReview(value.db, {
         reviewer: REVIEWER,
         decisions: [{ action: "correct", annotation_id: annotation.id, historical: true, source_hash: sourceHash.source_hash, family_id: "characteristic-set", family_version: currentFamilyVersion("characteristic-set"), parameters: PARAMETERS }],
       });

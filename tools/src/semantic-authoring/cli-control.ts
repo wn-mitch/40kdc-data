@@ -274,11 +274,11 @@ const COMMANDS: Record<string, ControlCommand> = {
   "review-apply": {
     effect: () => "human", usage: "review-apply <decisions.json>",
     summary: "Apply Will's decisions from a conversational review (confirm, correct, reject, novel, ambiguous, connective, add, gap, surface, retire-surface, approve-shape, reject-shape; pilot-reviewed marks) as his own.",
-    run: (flags) => {
+    run: async (flags) => {
       const path = flags.positional[0];
       if (!path) throw Object.assign(new Error("review-apply needs a decisions file."), { code: "INVALID_ARGUMENT" });
       const db = openWorkbench();
-      try { return applyChatReviewFile(db, path); } finally { db.close(); }
+      try { return await applyChatReviewFile(db, path); } finally { db.close(); }
     },
   },
   commands: {

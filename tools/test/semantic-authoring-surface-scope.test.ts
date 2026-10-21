@@ -86,45 +86,45 @@ describe("Semantic authoring surface scope", () => {
     }
   });
 
-  it("lets a review retire a scoped surface and decide the same wording everywhere", () => {
+  it("lets a review retire a scoped surface and decide the same wording everywhere", async () => {
     const db = fixture(["Roll one D6: on a 4+, gain 1CP.", "Roll one D6 for each model in this unit."]);
     try {
       confirmSurface(db, { reviewer: "will", exact_text: "Roll one D6", ...D6, scope: { not_followed_by: ["for"] } }, WILL);
       expect(d6Rows(db)).toEqual(["a0"]);
-      const result = applyChatReview(db, { reviewer: "will", decisions: [
+      const result = await applyChatReview(db, { reviewer: "will", decisions: [
         { action: "retire-surface", exact_text: "Roll one D6" },
         { action: "surface", exact_text: "Roll one D6", ...D6 },
       ] });
       expect(result.failed).toEqual([]);
       expect(d6Rows(db)).toEqual(["a0", "a1"]);
-      expect(applyChatReview(db, { reviewer: "will", decisions: [{ action: "retire-surface", exact_text: "Gain 1CP" }] }).failed[0]!.error).toMatch(/No active surface/u);
+      expect((await applyChatReview(db, { reviewer: "will", decisions: [{ action: "retire-surface", exact_text: "Gain 1CP" }] })).failed[0]!.error).toMatch(/No active surface/u);
     } finally {
       db.close();
     }
   });
 
-  it("accounts for a joining wording between leaves, never inside one, and undoes it with its batch", () => {
+  it("accounts for a joining wording between leaves, never inside one, and undoes it with its batch", async () => {
     const db = fixture(["Roll one D6 and roll one D6.", "Roll one D6 and stand fast.", "Stand fast and hold, then roll one D6."]);
     try {
       confirmSurface(db, { reviewer: "will", exact_text: "Roll one D6", ...D6 }, WILL);
       const id = (abilityId: string) => (db.prepare("SELECT id FROM abilities WHERE current = 1 AND ability_id = ?").get(abilityId) as { id: number }).id;
       const unaccounted = (abilityId: string) => getAbilityCoverage(db, id(abilityId)).unaccounted.map((run) => run.text);
       expect(unaccounted("a0")).toEqual(["and"]);
-      const result = applyChatReview(db, { reviewer: "will", decisions: [{ action: "connective-surface", exact_text: "and", relation: "coexists-with" } as never] });
+      const result = await applyChatReview(db, { reviewer: "will", decisions: [{ action: "connective-surface", exact_text: "and", relation: "coexists-with" } as never] });
       expect(result.failed).toEqual([]);
       expect(unaccounted("a0")).toEqual([]);
       // A joiner touching no leaf ("stand fast and hold") is left for when its neighbours are decided.
       expect((result.applied[0] as unknown as { connective: { applied: number; no_neighbour: number } }).connective).toMatchObject({ applied: 2, no_neighbour: 1 });
       // "and stand fast" is still unaccounted past the joiner; the joiner itself is not.
       expect(unaccounted("a1").join(" ")).not.toMatch(/^and\b/u);
-      expect(applyChatReview(db, { reviewer: "will", decisions: [{ action: "connective-surface", exact_text: "and", relation: "not-a-relation" } as never] }).failed[0]!.error)
+      expect((await applyChatReview(db, { reviewer: "will", decisions: [{ action: "connective-surface", exact_text: "and", relation: "not-a-relation" } as never] })).failed[0]!.error)
         .toMatch(/not a known relation/u);
     } finally {
       db.close();
     }
   });
 
-  it("takes one designer's note out of the denominator, refusing an overlap and undoing cleanly", () => {
+  it("takes one designer's note out of the denominator, refusing an overlap and undoing cleanly", async () => {
     // Fabricated fixture prose only.
     const db = fixture(["Roll one D6. Designer's Note: this only clarifies timing."]);
     try {
@@ -132,14 +132,14 @@ describe("Semantic authoring surface scope", () => {
       const id = (db.prepare("SELECT id FROM abilities WHERE current = 1").get() as { id: number }).id;
       const before = getAbilityCoverage(db, id).leaf_bytes;
       const note = "Designer's Note: this only clarifies timing";
-      const result = applyChatReview(db, { reviewer: "will", decisions: [{ action: "add-connective", ability_version_id: id, exact_text: note } as never] });
+      const result = await applyChatReview(db, { reviewer: "will", decisions: [{ action: "add-connective", ability_version_id: id, exact_text: note } as never] });
       expect(result.failed).toEqual([]);
       const after = getAbilityCoverage(db, id);
       expect(after.unaccounted).toEqual([]);
       expect(after.leaf_bytes.denominator).toBeLessThan(before.denominator);
       expect(after.leaf_bytes.numerator).toBe(before.numerator);
       // A span that overlaps a trusted leaf is not a connective.
-      expect(applyChatReview(db, { reviewer: "will", decisions: [{ action: "add-connective", ability_version_id: id, exact_text: "one D6. Designer" } as never] }).failed[0]!.error)
+      expect((await applyChatReview(db, { reviewer: "will", decisions: [{ action: "add-connective", ability_version_id: id, exact_text: "one D6. Designer" } as never] })).failed[0]!.error)
         .toMatch(/overlaps a trusted leaf/u);
       undoBatch(db, result.applied[0]!.batch_id, { reviewer: "will" }, WILL);
       expect(getAbilityCoverage(db, id).leaf_bytes).toEqual(before);
@@ -148,7 +148,7 @@ describe("Semantic authoring surface scope", () => {
     }
   });
 
-  it("picks one occurrence of a repeated joiner by its start byte, and refuses a byte where it is not", () => {
+  it("picks one occurrence of a repeated joiner by its start byte, and refuses a byte where it is not", async () => {
     // Fabricated fixture prose only.
     const text = "Roll one D6 and roll one D6 again.";
     const db = fixture([text]);
@@ -156,12 +156,12 @@ describe("Semantic authoring surface scope", () => {
       const id = (db.prepare("SELECT id FROM abilities WHERE current = 1").get() as { id: number }).id;
       const and = (at: number) => applyChatReview(db, { reviewer: "will", decisions: [{ action: "add-connective", ability_version_id: id, exact_text: " and ", start_byte: at } as never] });
       // " and " occurs once here, but "one D6" repeats: the byte form also works where text search would.
-      expect(and(text.indexOf(" and ")).failed).toEqual([]);
-      expect(applyChatReview(db, { reviewer: "will", decisions: [{ action: "add-connective", ability_version_id: id, exact_text: "one D6" } as never] }).failed[0]!.error)
+      expect((await and(text.indexOf(" and "))).failed).toEqual([]);
+      expect((await applyChatReview(db, { reviewer: "will", decisions: [{ action: "add-connective", ability_version_id: id, exact_text: "one D6" } as never] })).failed[0]!.error)
         .toMatch(/exactly once/u);
       const second = text.lastIndexOf("one D6");
-      expect(applyChatReview(db, { reviewer: "will", decisions: [{ action: "add-connective", ability_version_id: id, exact_text: "one D6", start_byte: second } as never] }).failed).toEqual([]);
-      expect(applyChatReview(db, { reviewer: "will", decisions: [{ action: "add-connective", ability_version_id: id, exact_text: "one D6", start_byte: second + 1 } as never] }).failed[0]!.error)
+      expect((await applyChatReview(db, { reviewer: "will", decisions: [{ action: "add-connective", ability_version_id: id, exact_text: "one D6", start_byte: second } as never] })).failed).toEqual([]);
+      expect((await applyChatReview(db, { reviewer: "will", decisions: [{ action: "add-connective", ability_version_id: id, exact_text: "one D6", start_byte: second + 1 } as never] })).failed[0]!.error)
         .toMatch(/is not at byte/u);
     } finally {
       db.close();
