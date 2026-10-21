@@ -12,7 +12,7 @@ import { untiledRuns } from "./leaves.js";
 import { assertReviewer, requireHuman, type Actor } from "./authority.js";
 import { tiledSources } from "./leaf-view.js";
 import { ownAbilityIds } from "./own-abilities.js";
-import { compiledPublicationErrors, openPublicationChecker } from "./publication-projection.js";
+import { approvedCompanions, compiledPublicationErrors, openPublicationChecker, type FactionRecord } from "./publication-projection.js";
 import type { ProjectionChecker } from "../mfm/apply.js";
 
 /**
@@ -239,11 +239,12 @@ function decide(db: DatabaseSync, value: unknown, status: "approved" | "rejected
 }
 
 /**
- * Why publishing each listed member's compiled entry alone would be refused, by source version,
+ * Why publishing each listed member's compiled entry would be refused, alone or together with
+ * the faction's other approved entries, by source version,
  * with the compiled identity it was checked against. A member that is missing, has another shape
  * or does not compile is left to `decide`, which refuses it with its own reason.
  */
-async function publicationChecks(db: DatabaseSync, input: { signature: string; ids: number[] }): Promise<Map<number, { identity: string; errors: string[]; label: string }>> {
+async function publicationChecks(db: DatabaseSync, input: { signature: string; ids: number[] }, coApproved: readonly FactionRecord[]): Promise<Map<number, { identity: string; errors: string[]; label: string }>> {
   const members = new Map(tiledMembers(db, null).map((member) => [member.id, member]));
   const compileOptions = ownOptions(db);
   const checks = new Map<number, { identity: string; errors: string[]; label: string }>();
@@ -257,7 +258,7 @@ async function publicationChecks(db: DatabaseSync, input: { signature: string; i
       checker ??= openPublicationChecker();
       const errors = await compiledPublicationErrors(checker, source.faction_id, {
         ability_id: source.ability_id, mechanics: compiled.mechanics, core: compiled.core ?? null, source_text: source.source_text,
-      });
+      }, [...approvedCompanions(db, source.faction_id), ...coApproved.filter((record) => record.faction_id === source.faction_id)]);
       checks.set(id, { identity: hashJson(compiledIdentity(compiled.mechanics, compiled.core ?? null)), errors, label: `${source.faction_id}/${source.ability_id}` });
     }
   } finally {
@@ -267,14 +268,33 @@ async function publicationChecks(db: DatabaseSync, input: { signature: string; i
 }
 
 /**
- * Approve the compiled entry of each listed member of one shape. A member publication would
- * refuse (the gates' integrity check, run before the approval transaction) is refused here.
+ * The current compiled records of these source versions, for approvals decided together: records
+ * that depend on each other (a stance and the rules naming its options) pass integrity only as one
+ * publication. A version that is not fully described or does not compile is left out.
  */
-export async function approveShape(db: DatabaseSync, value: unknown, actor: Actor): Promise<{ batch_id: string; recorded: number }> {
+export function compiledRecordsOf(db: DatabaseSync, ids: Iterable<number>): FactionRecord[] {
+  const wanted = new Set(ids);
+  const compileOptions = ownOptions(db);
+  const records: FactionRecord[] = [];
+  for (const source of tiledMembers(db, null)) {
+    if (!wanted.has(source.id)) continue;
+    const compiled = compileLeaves(source.leaves, source.source_text, compileOptions(source));
+    if (!compiled.ok) continue;
+    records.push({ faction_id: source.faction_id, ability_id: source.ability_id, mechanics: compiled.mechanics, core: compiled.core ?? null, source_text: source.source_text });
+  }
+  return records;
+}
+
+/**
+ * Approve the compiled entry of each listed member of one shape. A member publication would
+ * refuse (the gates' integrity check, run before the approval transaction) is refused here;
+ * `coApproved` are records approved in the same review, which publication may write alongside.
+ */
+export async function approveShape(db: DatabaseSync, value: unknown, actor: Actor, coApproved: readonly FactionRecord[] = []): Promise<{ batch_id: string; recorded: number }> {
   requireHuman(actor, "approve compiled shapes");
   const input = parse(value);
   assertReviewer(actor, input.reviewer);
-  const checks = await publicationChecks(db, input);
+  const checks = await publicationChecks(db, input, coApproved);
   for (const check of checks.values()) {
     if (check.errors.length > 0) throw new ShapeError(422, `${check.label} cannot be approved: integrity: ${check.errors.join("; ")}`);
   }

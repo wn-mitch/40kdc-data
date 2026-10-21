@@ -1,9 +1,11 @@
 import { readFileSync } from "node:fs";
+import type { DatabaseSync } from "node:sqlite";
 import { relative, sep } from "node:path";
 
 import { openProjectionChecker, type ProjectionChecker, type StagedWrite } from "../mfm/apply.js";
 import { hashJson } from "../round4/hash.js";
 import { sourceDigest } from "../source-digest.js";
+import { compilationInputsHash } from "./compiled.js";
 import type { ValidationResult } from "../validate.js";
 import { abilityFilePath, canonicalDataRoot, checkEntry, entryWithMechanics, semanticAuthoringDataRoot, type Mechanics } from "./entries.js";
 import { CorePublicationError, projectCore, type CoreProjection, type CoreRow } from "./publish-core.js";
@@ -125,27 +127,59 @@ export function openPublicationChecker(): ProjectionChecker {
   return openProjectionChecker({ label: "semantic-authoring gate", dataRoot: canonicalDataRoot(semanticAuthoringDataRoot()) });
 }
 
+export type CompiledRecord = { ability_id: string; mechanics: Mechanics; core: CoreRow["core"]; source_text: string };
+export type FactionRecord = CompiledRecord & { faction_id: string };
+
 /**
- * Why publishing this one compiled record alone would be refused: the projection's own refusal
+ * Why publishing this one compiled record would be refused: the projection's own refusal
  * (destination entry missing or ambiguous, schema or canonical form, core target), else every
  * schema and referential-integrity failure of the projected dataset, the checks
- * `prepare-publication` runs. Empty when publication would accept it.
+ * `prepare-publication` runs. Empty when publication would accept it, either alone or in one
+ * batch with `companions` (records that depend on each other, such as a stance and the rules
+ * that name its options, publish together). The errors reported are those of the record alone.
  */
 export async function compiledPublicationErrors(
   checker: ProjectionChecker,
   factionId: string,
-  compiled: { ability_id: string; mechanics: Mechanics; core: CoreRow["core"]; source_text: string },
+  compiled: CompiledRecord,
+  companions: readonly CompiledRecord[] = [],
 ): Promise<string[]> {
+  const alone = await projectedErrors(checker, factionId, [compiled]);
+  if (alone.length === 0) return [];
+  // One record per destination entry; a later companion (a fresh compile) replaces an earlier
+  // one (its approved entry).
+  const others = [...new Map(companions.filter((record) => record.ability_id !== compiled.ability_id).map((record) => [record.ability_id, record])).values()];
+  if (others.length === 0) return alone;
+  return (await projectedErrors(checker, factionId, [compiled, ...others])).length === 0 ? [] : alone;
+}
+
+async function projectedErrors(checker: ProjectionChecker, factionId: string, records: readonly CompiledRecord[]): Promise<string[]> {
   const dataRoot = canonicalDataRoot(semanticAuthoringDataRoot());
   let projection: RecordProjection;
   try {
-    projection = projectRecords(dataRoot, factionId, [{
-      id: compiled.ability_id, ability_id: compiled.ability_id, mechanics: compiled.mechanics, core: compiled.core, source_digest: sourceDigest(compiled.source_text),
-    }]);
+    projection = projectRecords(dataRoot, factionId, records.map((record) => ({
+      id: record.ability_id, ability_id: record.ability_id, mechanics: record.mechanics, core: record.core, source_digest: sourceDigest(record.source_text),
+    })));
   } catch (error) {
     if (error instanceof PublicationError) return [error.message];
     throw error;
   }
   const result = await checker.validate(stagedWrites(projection, projection.afterText, projection.core?.afterText));
   return result.failed === 0 ? [] : [...failureLines(result.schema), ...failureLines(result.integrity)];
+}
+
+/**
+ * The faction's approved entries that are still current and unchanged since approval: what
+ * publication of the faction would write alongside a newly approved member.
+ */
+export function approvedCompanions(db: DatabaseSync, factionId: string): CompiledRecord[] {
+  const rows = db.prepare(`
+    SELECT compiled_entries.ability_version_id, compiled_entries.inputs_hash, compiled_entries.mechanics_json, compiled_entries.core_json,
+      abilities.ability_id, abilities.source_text
+    FROM compiled_entries JOIN abilities ON abilities.id = compiled_entries.ability_version_id
+    WHERE compiled_entries.status = 'approved' AND abilities.current = 1 AND abilities.faction_id = ?
+  `).all(factionId) as Array<{ ability_version_id: number; inputs_hash: string; mechanics_json: string; core_json: string | null; ability_id: string; source_text: string }>;
+  return rows.filter((row) => compilationInputsHash(db, row.ability_version_id) === row.inputs_hash).map((row) => ({
+    ability_id: row.ability_id, mechanics: JSON.parse(row.mechanics_json), core: row.core_json ? JSON.parse(row.core_json) : null, source_text: row.source_text,
+  }));
 }

@@ -7,7 +7,7 @@ import { confirmSurface, leafSurface, moveSurface, retireSurface } from "./leave
 import { confirmConnectiveSpan, confirmConnectiveSurface } from "./connective-surfaces.js";
 import { confirmOperator, type OperatorSlot } from "./leaf-operators.js";
 import { NAME_FRAGMENT } from "./compile-name.js";
-import { approveShape, rejectShapeMembers } from "./shapes.js";
+import { approveShape, compiledRecordsOf, rejectShapeMembers } from "./shapes.js";
 import { exactSpan } from "./contracts.js";
 
 /**
@@ -258,6 +258,10 @@ export async function applyChatReview(db: DatabaseSync, review: ChatReview): Pro
   const actor = humanActor(review.reviewer, "review-apply");
   const applied: Array<{ proposal_id?: number; annotation_id?: number; ability_version_id?: number; batch_id: string }> = [];
   const failed: Array<{ proposal_id?: number; annotation_id?: number; error: string }> = [];
+  // Every approval in this review, compiled as it stands when each approval is checked, so
+  // records that only pass integrity as one publication can be approved together.
+  const approving = review.decisions.filter((item) => item.action === "approve-shape").flatMap((item) => item.ability_version_ids ?? []);
+  const coApproved = () => compiledRecordsOf(db, approving);
   for (const item of review.decisions) {
     try {
       if (item.action === "surface") {
@@ -315,7 +319,7 @@ export async function applyChatReview(db: DatabaseSync, review: ChatReview): Pro
       if (item.action === "approve-shape" || item.action === "reject-shape") {
         // Publication approval of compiled entries; the shape module re-compiles and checks each member.
         const body = { reviewer: actor.reviewer, signature: item.signature, ability_version_ids: item.ability_version_ids };
-        const report = item.action === "approve-shape" ? await approveShape(db, body, actor) : rejectShapeMembers(db, body, actor);
+        const report = item.action === "approve-shape" ? await approveShape(db, body, actor, coApproved()) : rejectShapeMembers(db, body, actor);
         applied.push({ batch_id: report.batch_id, shape: { signature: item.signature, recorded: report.recorded } } as never);
         continue;
       }

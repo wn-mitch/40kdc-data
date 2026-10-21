@@ -9,6 +9,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { initializeWorkbench } from "../src/semantic-authoring/db.js";
 
 import { runGatesOnly } from "../src/semantic-authoring/pipeline-8b.js";
+import { compiledPublicationErrors, openPublicationChecker, type CompiledRecord } from "../src/semantic-authoring/publication-projection.js";
 import { applyChatReview } from "../src/semantic-authoring/review-apply.js";
 import { factionReviewSheet } from "../src/semantic-authoring/review-sheet.js";
 import { reviewMembers } from "../src/semantic-authoring/shapes.js";
@@ -59,6 +60,8 @@ beforeEach(() => {
     { ability_id: "dangling-grant", name: "Dangling Grant", ability_type: "unit", ...STUB },
     { ability_id: "dangling-faction-rule", name: "Dangling Faction Rule", ability_type: "unit", ...STUB },
     { ability_id: "hold-fast", name: "Hold Fast", ability_type: "stratagem", behavior: "activated", ...STUB },
+    { ability_id: "warden-stances", name: "Warden Stances", ability_type: "faction", ...STUB },
+    { ability_id: "bulwark-drill", name: "Bulwark Drill", ability_type: "unit", ...STUB },
   ], null, 2)}\n`);
   process.env.SEMANTIC_AUTHORING_DATA_ROOT = data;
   process.env.SEMANTIC_AUTHORING_SOURCE_FIXTURE = store;
@@ -135,5 +138,38 @@ describe("compile gates run publication integrity", () => {
       WHERE compiled_entries.status = 'approved'
     `).all() as Array<{ ability_id: string }>;
     expect(approved.map((row) => row.ability_id)).toEqual(["resolved-grant"]);
+  });
+});
+
+describe("publication integrity across records that publish together", () => {
+  const reroll = { type: "re-roll", target: { owner: "friendly" }, modifier: { roll: "hit", subset: "ones" } };
+  // A rule naming one option of a stance, and the stance record that gives the option its id.
+  const drill: CompiledRecord = {
+    ability_id: "bulwark-drill", source_text: "Bulwark Drill.", core: null,
+    mechanics: { effect: { type: "conditional", condition: { type: "rule-active", parameters: { rule: { ability_id: "warden-stances", option_id: "bulwark" } } }, effect: reroll }, scope: { duration: "permanent" }, behavior: "passive" },
+  };
+  const stances: CompiledRecord = {
+    ability_id: "warden-stances", source_text: "Warden Stances.", core: null,
+    mechanics: { effect: { type: "ability-part", trigger: { event: "round-started" }, effect: { type: "stance-select", mode: "re-selectable", options: [{ id: "bulwark", name: "Bulwark", effect: reroll }, { id: "vanguard", name: "Vanguard", effect: reroll }] } }, scope: { duration: "battle-round" }, behavior: "activated" },
+  };
+
+  it("accepts a record whose reference resolves only once its companion publishes, and reports its own errors otherwise", async () => {
+    const checker = openPublicationChecker();
+    try {
+      expect(await compiledPublicationErrors(checker, "fixture", stances)).toEqual([]);
+      const alone = await compiledPublicationErrors(checker, "fixture", drill);
+      expect(alone.join("; ")).toMatch(/bulwark/u);
+      expect(await compiledPublicationErrors(checker, "fixture", drill, [stances])).toEqual([]);
+      // A companion that does not supply the option leaves the record's own errors standing.
+      const unrelated = { ...stances, mechanics: { ...stances.mechanics, effect: { type: "ability-part", trigger: { event: "round-started" }, effect: { type: "stance-select", mode: "re-selectable", options: [{ id: "vanguard", name: "Vanguard", effect: reroll }, { id: "rearguard", name: "Rearguard", effect: reroll }] } } } };
+      expect(await compiledPublicationErrors(checker, "fixture", drill, [unrelated])).toEqual(alone);
+      // A later companion for the same entry (a fresh compile) replaces an earlier one (its approved entry).
+      expect(await compiledPublicationErrors(checker, "fixture", drill, [unrelated, stances])).toEqual([]);
+      expect(await compiledPublicationErrors(checker, "fixture", drill, [stances, unrelated])).toEqual(alone);
+      // The record is not its own companion.
+      expect(await compiledPublicationErrors(checker, "fixture", drill, [drill])).toEqual(alone);
+    } finally {
+      checker.close();
+    }
   });
 });

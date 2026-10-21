@@ -14,7 +14,7 @@ import { dot } from "./leaf-knn.js";
 import { compileLeaves, type CompileLeaf, type Compiled } from "./compile.js";
 import { coreCheckErrors } from "./core-checks.js";
 import { checkEntry, entryWithMechanics, resolveCheckedEntity, semanticAuthoringDataRoot } from "./entries.js";
-import { compiledPublicationErrors, openPublicationChecker } from "./publication-projection.js";
+import { approvedCompanions, compiledPublicationErrors, openPublicationChecker, type CompiledRecord, type FactionRecord } from "./publication-projection.js";
 
 /**
  * The compile+gate half of pipeline-8b: for every ability whose source is fully tiled by leaves,
@@ -284,6 +284,7 @@ export function classifyUnsupported(
 
 async function gateCompiledAbility(
   db: DatabaseSync, embedder: Embedder, publication: () => ProjectionChecker, dataRoot: string, factionId: string, abilityId: string, compiled: Extract<Compiled, { ok: true }>, sourceText: string, floor: number,
+  companions: readonly CompiledRecord[],
 ): Promise<
   | { status: "no-data-entry" }
   | { status: "gated"; schema: boolean; coreChecks: boolean; integrity: boolean; describer: boolean; describerScore: number | null; crunchShapeOk: boolean; honestUnknown: number; outsideDamagePath: number; unrecognizedShape: number; leverDiff: LeverDiff | null; failures: GateFailure[] }
@@ -303,9 +304,10 @@ async function gateCompiledAbility(
   if (!schema) failures.push({ faction_id: factionId, ability_id: abilityId, reason: "schema", detail: checked.errors.join("; ").slice(0, 300) });
   if (!coreChecks) failures.push({ faction_id: factionId, ability_id: abilityId, reason: "core-checks", detail: coreErrors.join("; ").slice(0, 300) });
 
-  // Publication's own checks on this record alone: the projected abilities.json (and core
-  // stratagems.json for a stratagem target) through schema and referential integrity.
-  const integrityErrors = await compiledPublicationErrors(publication(), factionId, { ability_id: abilityId, mechanics: compiled.mechanics, core: compiled.core ?? null, source_text: sourceText });
+  // Publication's own checks on this record, alone or published with its companions: the
+  // projected abilities.json (and core stratagems.json for a stratagem target) through schema
+  // and referential integrity.
+  const integrityErrors = await compiledPublicationErrors(publication(), factionId, { ability_id: abilityId, mechanics: compiled.mechanics, core: compiled.core ?? null, source_text: sourceText }, companions);
   const integrity = integrityErrors.length === 0;
   if (!integrity) failures.push({ faction_id: factionId, ability_id: abilityId, reason: "integrity", detail: integrityErrors.join("; ").slice(0, 600) });
 
@@ -392,11 +394,13 @@ async function gateTiled(
   tiled: ReadonlyMap<number, ReturnType<typeof tiledSources>[number]>, own: ReadonlyMap<number, string>,
   report: CompileGateReport, publication: () => ProjectionChecker,
 ): Promise<void> {
+  const compiledById = new Map<number, Compiled>();
+  // Records gated together may only pass integrity as one publication (a stance and the rules
+  // naming its options), so each record's companions are the faction's approved entries plus the
+  // other records of this run.
+  const runRecords: FactionRecord[] = [];
   for (const [, ability] of tiled) {
-    report.compile_attempted += 1;
     const entityId = view.historicalEntityIds?.get(ability.id) ?? ability.ability_id;
-    const row: AbilityGateResult = { ability_version_id: ability.id, faction_id: ability.faction_id, ability_id: entityId, machine_leaves: ability.machine_leaves, compile_errors: [], gates: null };
-    report.abilities.push(row);
     const abilityId = own.get(ability.id) ?? (view.historicalSourceHashes?.has(ability.id) ? entityId : undefined);
     const compiled = compileLeaves(ability.leaves, ability.source_text, {
       abilityId,
@@ -404,6 +408,20 @@ async function gateTiled(
       weapons: { faction_id: ability.faction_id, source_type: ability.source_type ?? "" },
       units: { faction_id: ability.faction_id },
     });
+    compiledById.set(ability.id, compiled);
+    if (compiled.ok) runRecords.push({ faction_id: ability.faction_id, ability_id: entityId, mechanics: compiled.mechanics, core: compiled.core ?? null, source_text: ability.source_text });
+  }
+  const approved = new Map<string, CompiledRecord[]>();
+  const companionsOf = (factionId: string): CompiledRecord[] => {
+    if (!approved.has(factionId)) approved.set(factionId, approvedCompanions(db, factionId));
+    return [...approved.get(factionId)!, ...runRecords.filter((record) => record.faction_id === factionId)];
+  };
+  for (const [, ability] of tiled) {
+    report.compile_attempted += 1;
+    const entityId = view.historicalEntityIds?.get(ability.id) ?? ability.ability_id;
+    const row: AbilityGateResult = { ability_version_id: ability.id, faction_id: ability.faction_id, ability_id: entityId, machine_leaves: ability.machine_leaves, compile_errors: [], gates: null };
+    report.abilities.push(row);
+    const compiled = compiledById.get(ability.id)!;
     if (!compiled.ok) {
       const reason = compiled.errors[0] ?? "unknown";
       report.compile_errors[reason] = (report.compile_errors[reason] ?? 0) + 1;
@@ -411,7 +429,7 @@ async function gateTiled(
       continue;
     }
     report.compile_ok += 1;
-    const gate = await gateCompiledAbility(db, embedder, publication, dataRoot, ability.faction_id, entityId, compiled, ability.source_text, floor);
+    const gate = await gateCompiledAbility(db, embedder, publication, dataRoot, ability.faction_id, entityId, compiled, ability.source_text, floor, companionsOf(ability.faction_id));
     if (gate.status === "no-data-entry") {
       row.gates = { status: "no-data-entry", schema: false, core_checks: false, integrity: false, describer: false, describer_score: null, crunch_shape: false, all: false };
       report.no_data_entry += 1;
