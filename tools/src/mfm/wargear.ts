@@ -823,6 +823,25 @@ export function limitedSetBudgets(
   resolve: (name: string) => string | null,
   unitOptions: readonly WargearOptionRecord[] = [],
 ): WargearBudget[] {
+  return sourcedLimitedSetBudgets(dump, datasheetId, resolve, unitOptions).map((b) => b.budget);
+}
+
+/**
+ * A {@link limitedSetBudgets} budget paired with its source set's miniature
+ * (`null` for a datasheet-wide set). The persisted budget is unit-wide, but a
+ * consumer applying it as a per-option cap must scope it to that miniature.
+ */
+interface SourcedBudget {
+  budget: WargearBudget;
+  miniatureId: string | null;
+}
+
+function sourcedLimitedSetBudgets(
+  dump: MfmDump,
+  datasheetId: string,
+  resolve: (name: string) => string | null,
+  unitOptions: readonly WargearOptionRecord[],
+): SourcedBudget[] {
   const sets =
     dump.groupBy("limited_wargear_choice_set", "datasheetId").get(datasheetId) ?? [];
   if (sets.length === 0) return [];
@@ -918,9 +937,11 @@ export function limitedSetBudgets(
     return n;
   };
 
-  const out: WargearBudget[] = [];
+  const out: SourcedBudget[] = [];
   for (const s of [...sets].sort((a, b) => a.id.localeCompare(b.id))) {
     const setMini = s.miniatureId ? miniNameOf(s.miniatureId) : null;
+    const emit = (budget: WargearBudget) =>
+      out.push({ budget, miniatureId: s.miniatureId ?? null });
 
     // Uncapped-branch leakage: a branch that grants some of this set's items
     // WITHOUT realizing one of the set's choices is an ungoverned path (the
@@ -1010,20 +1031,20 @@ export function limitedSetBudgets(
           defaultModelCount > 0 &&
           flat / defaultModelCount > ratioCount / ratioPer;
         if (hasOffsetBaseline) {
-          out.push({
+          emit({
             items: sorted,
             count: flat! * maxTake,
             per_models: defaultModelCount,
             ...(flatDup != null ? { duplicate_limit: flatDup } : {}),
           });
-          out.push({
+          emit({
             items: sorted,
             count: maximumCount * maxTake,
             per_models: 0,
             ...(maximumDup != null ? { duplicate_limit: maximumDup } : {}),
           });
         } else {
-          out.push({
+          emit({
             items: sorted,
             count: ratioCount * maxTake,
             per_models: ratioPer,
@@ -1033,7 +1054,7 @@ export function limitedSetBudgets(
       }
     } else if (flat != null) {
       // Flat per-unit cap (shared or single) — the per-weapon bound can't express it.
-      out.push({
+      emit({
         items: sorted,
         count: flat * maxTake,
         per_models: 0,
@@ -1189,11 +1210,18 @@ export function deriveWargear(
   // Battle Sisters' TWO "1 model's boltgun can be replaced" rules collapse into
   // one dump menu — the flat budget carries the real total of 2, and a checkbox
   // cap of 1 would over-tighten the replaced weapon's floor).
-  const flatBudgetCap = new Map<string, { key: string; count: number }>();
-  limitedSetBudgets(dump, datasheetId, resolve).forEach((b, i) => {
+  // A miniature-scoped flat set (a trooper-only heavy weapon) binds only that
+  // miniature's swaps — another miniature's swap of the same weapon is outside
+  // the allowance — so each cap carries its source set's miniature.
+  const flatBudgetCap = new Map<string, { key: string; count: number; miniatureId: string | null }>();
+  sourcedLimitedSetBudgets(dump, datasheetId, resolve, []).forEach(({ budget: b, miniatureId }, i) => {
     if (b.per_models !== 0) return;
-    for (const id of b.items) flatBudgetCap.set(id, { key: `b${i}`, count: b.count });
+    for (const id of b.items) flatBudgetCap.set(id, { key: `b${i}`, count: b.count, miniatureId });
   });
+  const flatCapFor = (id: string, miniatureId: string | null) => {
+    const cap = flatBudgetCap.get(id);
+    return cap && (cap.miniatureId === null || cap.miniatureId === miniatureId) ? cap : undefined;
+  };
 
   const options: DerivedOption[] = [];
 
@@ -1404,7 +1432,7 @@ export function deriveWargear(
         const flatCovered =
           removed.length > 0 &&
           grantedIds.length > 0 &&
-          grantedIds.every((id) => flatBudgetCap.has(id));
+          grantedIds.every((id) => flatCapFor(id, set.miniatureId ?? null) !== undefined);
         if (!set.miniatureId) {
           // A unit-scoped menu is selected once for the whole unit. Its
           // loadout_choice_set.limit is therefore a flat unit-wide cap.
@@ -1414,7 +1442,7 @@ export function deriveWargear(
         } else if (flatCovered) {
           const byBudget = new Map<string, number>();
           for (const id of grantedIds) {
-            const budget = flatBudgetCap.get(id)!;
+            const budget = flatCapFor(id, set.miniatureId ?? null)!;
             byBudget.set(budget.key, budget.count);
           }
           mc.max_count = [...byBudget.values()].reduce((sum, count) => sum + count, 0);

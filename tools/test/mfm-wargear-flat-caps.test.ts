@@ -8,7 +8,7 @@ import { deriveWargear, limitedSetBudgets } from "../src/mfm/wargear.js";
  * heavy blades at one per unit (`modelCount = 0`). Because the champion may also
  * take the blade, no unit budget can carry the cap; the trooper option must.
  */
-function flatCapDump(flatLimit: number): MfmDump {
+function flatCapDump(flatLimit: number, limitedMini = "m-troop", troopSword = true): MfmDump {
   const wi = (id: string, name: string) => ({ id, wargearType: "weapon", localisations: { en: { name } } });
   const choice = (setId: string, choiceId: string, itemId: string) => ({
     choice: { id: choiceId, loadoutChoiceSetId: setId },
@@ -18,7 +18,7 @@ function flatCapDump(flatLimit: number): MfmDump {
     choice("lcs-champ", "c-bolter", "wi-bolter"),
     choice("lcs-champ", "c-blade", "wi-blade"),
     choice("lcs-troop", "t-bolter", "wi-bolter"),
-    choice("lcs-troop", "t-sword", "wi-sword"),
+    ...(troopSword ? [choice("lcs-troop", "t-sword", "wi-sword")] : []),
     choice("lcs-troop", "t-blade", "wi-blade"),
   ];
   const baseOption = (id: string, group: string, inputType: string, defaultValue: number) => ({
@@ -47,7 +47,7 @@ function flatCapDump(flatLimit: number): MfmDump {
       ],
       loadout_choice: choices.map((c) => c.choice),
       loadout_choice_wargear_item: choices.map((c) => c.item),
-      limited_wargear_choice_set: [{ id: "lim-blade", mandatory: false, datasheetId: "ds", miniatureId: "m-troop" }],
+      limited_wargear_choice_set: [{ id: "lim-blade", mandatory: false, datasheetId: "ds", miniatureId: limitedMini }],
       limited_wargear_choice: [{ id: "lwc-blade", limitedWargearChoiceSetId: "lim-blade" }],
       limited_wargear_choice_wargear_item: [{ id: "li-blade", count: 1, wargearItemId: "wi-blade", limitedWargearChoiceId: "lwc-blade" }],
       wargear_limit: [{ id: "wl-blade", modelCount: 0, choiceLimit: flatLimit, duplicateLimit: null, limitedWargearChoiceSetId: "lim-blade" }],
@@ -76,6 +76,16 @@ describe("mini-scoped flat wargear caps", () => {
     const blade = deriveWargear(flatCapDump(2), "ds", resolve).options
       .find((option) => option.model_constraint?.model_name === "Trooper" && option.replacement?.[0] === "heavy-blade");
     expect(blade?.model_constraint).toEqual({ model_name: "Trooper", max_count: 2 });
+  });
+
+  it("binds a mini-scoped flat cap only on that miniature's swap", () => {
+    // The champion-only allowance must not cap the troopers' blade swap: the
+    // flat cap is per-miniature, and the trooper row has no limited set.
+    const options = deriveWargear(flatCapDump(1, "m-champ", false), "ds", resolve).options;
+    const blade = (model: string) =>
+      options.find((o) => o.model_constraint?.model_name === model && o.replacement?.[0] === "heavy-blade");
+    expect(blade("Champion")?.model_constraint).toEqual({ model_name: "Champion", max_count: 1 });
+    expect(blade("Trooper")?.model_constraint).toEqual({ model_name: "Trooper", any_number: true });
   });
 
   it("emits no unit budget for a weapon another miniature may also take", () => {

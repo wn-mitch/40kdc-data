@@ -491,7 +491,7 @@
     ],
     "model_constraint": {
       "model_name": "Gunfighter",
-      "max_count": 2
+      "any_number": true
     }
   },
   {
