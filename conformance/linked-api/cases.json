@@ -915,6 +915,19 @@
     ]
   },
   {
+    "name": "leaders_attachable_to sanctifiers (leader shared across factions listed once)",
+    "query": "leaders_attachable_to",
+    "args": {
+      "bodyguardId": "sanctifiers"
+    },
+    "comparison": "set",
+    "expected": [
+      "inquisitor",
+      "inquisitor-greyfax",
+      "ministorum-priest"
+    ]
+  },
+  {
     "name": "base_loadout chaos-terminators @5 (legal default, no swaps)",
     "query": "base_loadout",
     "args": {

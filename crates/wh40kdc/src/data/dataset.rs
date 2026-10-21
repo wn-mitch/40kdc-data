@@ -788,10 +788,13 @@ impl Dataset {
     /// Leaders whose leader-attachment data lists `bodyguard_unit_id` among its
     /// eligible body units, sorted by name. The attachment is stored on the
     /// leader pointing down to its bodyguards, so answering "which leaders can
-    /// attach to this unit?" means scanning the attachment list. Returns an
-    /// empty vec for a unit nothing attaches to (including leader units).
+    /// attach to this unit?" means scanning the attachment list. A shared
+    /// leader chassis carries one attachment record per faction, so leaders
+    /// are deduped by id. Returns an empty vec for a unit nothing attaches to
+    /// (including leader units).
     pub fn leaders_attachable_to(&self, bodyguard_unit_id: &str) -> Vec<&Unit> {
         let bodyguard = self.units.get_any(bodyguard_unit_id);
+        let mut seen = std::collections::HashSet::new();
         let mut out: Vec<&Unit> = self
             .leader_attachments
             .iter()
@@ -807,6 +810,7 @@ impl Dataset {
             // Attachment data is faction-agnostic (no faction context here);
             // accept first-wins for a shared leader chassis via get_any.
             .filter_map(|la| self.units.get_any(la.leader_id.as_str()))
+            .filter(|unit| seen.insert(unit.id.as_str()))
             .collect();
         out.sort_by(|a, b| a.name.cmp(&b.name));
         out

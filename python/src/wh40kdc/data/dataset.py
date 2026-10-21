@@ -417,10 +417,12 @@ class Dataset:
 
         The attachment is stored on the leader pointing down to its bodyguards,
         so answering "which leaders can attach to this unit?" means scanning
-        the attachment list. Sorted by name. Empty for a unit that no leader
-        can attach to (including leader units).
+        the attachment list. A shared leader chassis carries one attachment
+        record per faction, so leaders are deduped by id. Sorted by name. Empty
+        for a unit that no leader can attach to (including leader units).
         """
         bodyguard = self.units.get_any(bodyguard_unit_id)
+        seen: set[str] = set()
         out = []
         for la in self.leader_attachments:
             # Keyword eligibility (e.g. an Inquisitor leading any Imperium
@@ -432,7 +434,8 @@ class Dataset:
             # Attachment data is faction-agnostic (no faction context
             # here); accept first-wins for a shared chassis via get_any.
             unit = self.units.get_any(la["leader_id"])
-            if unit is not None:
+            if unit is not None and unit.id not in seen:
+                seen.add(unit.id)
                 out.append(unit)
         return sorted(out, key=lambda u: u.name)
 

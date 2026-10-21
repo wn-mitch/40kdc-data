@@ -665,6 +665,16 @@ describe("leadersAttachableTo", () => {
   it("returns an empty array for an unknown unit id", () => {
     expect(dataset.leadersAttachableTo("no-such-unit")).toEqual([]);
   });
+
+  it("lists each leader once for every unit, though a shared leader has one record per faction", () => {
+    const duplicated: string[] = [];
+    for (const unit of dataset.units) {
+      const ids = dataset.leadersAttachableTo(unit.id).map((l) => l.id);
+      const repeated = ids.filter((id, i) => ids.indexOf(id) !== i);
+      if (repeated.length) duplicated.push(`${unit.id}: ${[...new Set(repeated)].join(", ")}`);
+    }
+    expect(duplicated).toEqual([]);
+  });
 });
 
 describe("bodyguardsAttachableFrom", () => {

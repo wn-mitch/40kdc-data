@@ -506,11 +506,14 @@ export class Dataset {
    * Leaders whose leader-attachment data lists `bodyguardUnitId` among its
    * eligible body units, sorted by name. The attachment is stored on the
    * leader pointing down to its bodyguards, so answering "which leaders can
-   * attach to this unit?" means scanning the attachment list. Returns an empty
-   * array for a unit that no leader can attach to (including leader units).
+   * attach to this unit?" means scanning the attachment list. A shared leader
+   * chassis carries one attachment record per faction, so leaders are deduped
+   * by id. Returns an empty array for a unit that no leader can attach to
+   * (including leader units).
    */
   leadersAttachableTo(bodyguardUnitId: string): UnitView[] {
     const bodyguard = this.units.getAny(bodyguardUnitId);
+    const seen = new Set<string>();
     return (
       this.leaderAttachments
         .filter(
@@ -524,7 +527,11 @@ export class Dataset {
         // Attachment data is faction-agnostic (no faction context here); accept
         // first-wins for a shared leader/bodyguard chassis via getAny.
         .map((la) => this.units.getAny(la.leader_id))
-        .filter((u): u is UnitView => u !== undefined)
+        .filter((u): u is UnitView => {
+          if (u === undefined || seen.has(u.id)) return false;
+          seen.add(u.id);
+          return true;
+        })
         .sort((a, b) => a.name.localeCompare(b.name))
     );
   }

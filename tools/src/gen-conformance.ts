@@ -782,6 +782,12 @@ const LINKED_API_QUERIES: LinkedApiQuery[] = [
     args: { bodyguardId: "kasrkin" },
     comparison: "set",
   },
+  {
+    name: "leaders_attachable_to sanctifiers (leader shared across factions listed once)",
+    query: "leaders_attachable_to",
+    args: { bodyguardId: "sanctifiers" },
+    comparison: "set",
+  },
   // base_loadout(unit, modelCount): the pinned legal default loadout, encoded as a
   // sorted "weaponId:count" multiset. chaos-terminators is a uniform squad (per-model
   // scaling); crusader-squad exercises leader+bulk per-figure allocation.

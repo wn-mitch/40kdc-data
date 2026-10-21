@@ -350,14 +350,16 @@ func matchesBodyguardKeywords(la, unit map[string]any) bool {
 // leadersAttachableTo returns the leaders whose leader-attachment data lists
 // bodyguardUnitID among its eligible bodyguards — by explicit id or by keyword
 // eligibility (e.g. an Inquisitor leading any Imperium Battleline Infantry
-// unit) — sorted by name. Faction-agnostic (GetAny). Go mirror of TS
-// Dataset.leadersAttachableTo.
+// unit) — sorted by name. Faction-agnostic (GetAny); a shared leader chassis
+// carries one attachment record per faction, so leaders are deduped by id. Go
+// mirror of TS Dataset.leadersAttachableTo.
 func (ds *Dataset) leadersAttachableTo(bodyguardUnitID string) []*UnitView {
 	var bodyguard map[string]any
 	if bg, ok := ds.Units.GetAny(bodyguardUnitID); ok {
 		bodyguard = bg.Raw
 	}
 	var out []*UnitView
+	seen := map[string]bool{}
 	for _, laAny := range ds.LeaderAttachments {
 		la := laAny.(map[string]any)
 		eligible := false
@@ -373,7 +375,8 @@ func (ds *Dataset) leadersAttachableTo(bodyguardUnitID string) []*UnitView {
 		if !eligible {
 			continue
 		}
-		if leader, ok := ds.Units.GetAny(getStr(la, "leader_id")); ok {
+		if leader, ok := ds.Units.GetAny(getStr(la, "leader_id")); ok && !seen[leader.ID()] {
+			seen[leader.ID()] = true
 			out = append(out, leader)
 		}
 	}
