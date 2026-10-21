@@ -17,10 +17,11 @@ var selfTargets = map[string]bool{
 	"this-unit": true, "ability-unit": true, "this-model": true, "selected-unit": true, "recipient": true,
 }
 
-// modelTargets is the subset of selfTargets naming a single *model* (the bearer)
-// rather than its unit. Core rule 19.04: a rule affecting one specified model
-// applies only to that model, even while it is part of an attached unit.
-var modelTargets = map[string]bool{"this-model": true}
+// modelTargets are the unit-refs naming a single *model* (the bearer, or one model
+// of the unit) rather than its unit. Core rule 19.04: a rule affecting one
+// specified model applies only to that model, even while it is part of an
+// attached unit.
+var modelTargets = map[string]bool{"this-model": true, "model-in-this-unit": true}
 
 // modelScopedReason is the diagnostic for a model-scoped effect pooled in from an
 // attached member.

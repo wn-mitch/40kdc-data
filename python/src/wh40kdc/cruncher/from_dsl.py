@@ -36,10 +36,10 @@ EffectTranslation = dict[str, Any]
 
 #: Targets that resolve to the buffed unit itself.
 _SELF_TARGETS = frozenset(["this-unit", "ability-unit", "this-model", "selected-unit", "recipient"])
-#: The subset of :data:`_SELF_TARGETS` naming a single *model* (the bearer) rather
+#: Unit-refs naming a single *model* (the bearer, or one model of the unit) rather
 #: than its unit. Core rule 19.04: a rule affecting one specified model applies
 #: only to that model, even while it is part of an attached unit.
-_MODEL_TARGETS = frozenset(["this-model"])
+_MODEL_TARGETS = frozenset(["this-model", "model-in-this-unit"])
 #: Unit-refs that name a unit the buff layer cannot identify with the buffed unit.
 _UNRESOLVED_TARGETS = frozenset(
     ["event-subject", "event-object", "stratagem-target", "bearer-transport"]
@@ -217,10 +217,18 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
         return
     # Core rule 19.04 gate, applied before any leaf translation and under both
     # perspectives. Safe at this level because no container node (`sequence`,
-    # `conditional`, `choice`, …) carries a `this-model` target — only leaves
+    # `conditional`, `choice`, …) carries a model-scoped target — only leaves
     # do — so this can never swallow a subtree holding unit-scoped effects too.
     if _is_model_scoped_from_attached_member(node, source):
         out["unsupported"].append({"reason": _MODEL_SCOPED_REASON, "effectFragment": node})
+        return
+    if node.get("target") == "model-in-this-unit":
+        out["unsupported"].append(
+            {
+                "reason": "model-in-this-unit: individual model identity is unresolved",
+                "effectFragment": node,
+            }
+        )
         return
     # An ability grant reports its own unresolved holders.
     if (

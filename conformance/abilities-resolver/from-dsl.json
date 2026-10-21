@@ -255,6 +255,61 @@
       }
     },
     {
+      "_comment": "A leaf aimed at one model in the unit (target model-in-this-unit) does not buff the whole unit: the buff layer cannot tell which model it reaches, so it is reported unsupported.",
+      "abilityId": "fabricated-model-in-this-unit",
+      "effect": {
+        "type": "roll-result",
+        "target": "model-in-this-unit",
+        "modifier": {
+          "roll": "hit",
+          "critical_on": 5
+        }
+      },
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-model-in-this-unit",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "model-in-this-unit: individual model identity is unresolved"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "The same leaf pooled in from an attached member is gated by core rule 19.04 first: model-in-this-unit is model-scoped like this-model.",
+      "abilityId": "fabricated-model-in-this-unit",
+      "effect": {
+        "type": "roll-result",
+        "target": "model-in-this-unit",
+        "modifier": {
+          "roll": "hit",
+          "critical_on": 5
+        }
+      },
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-model-in-this-unit",
+        "abilityKind": "attached",
+        "sourceUnitId": "fabricated-character"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "model-scoped effect from an attached model: applies to that model only (core rule 19.04)"
+        ],
+        "activatable": []
+      }
+    },
+    {
       "abilityId": "the-imperiums-sword-1st-company-task-force-adeptus-astartes",
       "effect": {
         "type": "sequence",
