@@ -73,9 +73,19 @@ interface DerivedOption {
   replacement_choice?: string[][];
   model_constraint: ModelConstraint | null;
 }
+/** One same-named composition row of a miniature whose default loadout differs by model. */
+export interface SplitDefault {
+  /** Per-model default weapon/wargear ids. */
+  ids: string[];
+  /** Models of the miniature that carry them. */
+  count: number;
+}
+
 export interface DerivedWargear {
   /** model-type display name → ordered default weapon/wargear ids (repeated by count). */
   defaultsByModel: Map<string, string[]>;
+  /** model-type display name → its default loadouts, one same-named row each. */
+  defaultsSplitByModel: Map<string, SplitDefault[]>;
   /** A name several miniatures share with different loadouts → each miniature's loadout. */
   defaultsBySharedName: Map<string, string[][]>;
   options: DerivedOption[];
@@ -557,7 +567,13 @@ function deriveDefaults(
   resolve: (name: string) => string | null,
   unresolved: { name: string; context: string }[],
   notes: string[],
-): { byName: Map<string, string[]>; byMiniId: Map<string, string[]>; bySharedName: Map<string, string[][]> } {
+): {
+  byName: Map<string, string[]>;
+  byMiniId: Map<string, string[]>;
+  bySharedName: Map<string, string[][]>;
+  splitByMiniId: Map<string, SplitDefault[]>;
+  splitByName: Map<string, SplitDefault[]>;
+} {
   const miniById = dump.byId("miniature");
   const miniName = (id: string) => dump.enName(miniById.get(id)) ?? id;
   const wiName = dump.byId("wargear_item");
@@ -578,27 +594,14 @@ function deriveDefaults(
     }
   }
 
-  const byMiniId = new Map<string, string[]>();
-  for (const [miniId, gs] of baseGroupsByMini) {
-    // A miniature split across >1 default group has a non-uniform per-figure loadout
-    // no single row can express (e.g. Aquila Kill Team's Deathwatch Veteran built from
-    // choices, Voidsmen-at-Arms) — fall back to base_miniature_loadout below.
-    if (gs.length > 1) {
-      notes.push(`${miniName(miniId)}: ${gs.length} default loadout groups — base_miniature_loadout fallback`);
-      continue;
-    }
-    const mc = modelCounts.get(miniId) ?? 0;
-    if (!mc) {
-      notes.push(`${miniName(miniId)}: no model_count — base_miniature_loadout fallback`);
-      continue;
-    }
+  // One default group's per-model ids, each option's default divided by the models the
+  // group covers (`divisor`). `null` when a base *weapon* fails to resolve (a partial default
+  // would leave it a false orphan; a non-weapon item failing is harmless and only skipped);
+  // "non-uniform" when an option's share is not a whole number per model.
+  const groupIds = (group: WargearOptionGroupRow, divisor: number, miniId: string): string[] | null | "non-uniform" => {
     const ids: string[] = [];
-    // Don't half-populate a model whose base *weapon* fails to resolve (a partial
-    // default would leave the unresolved weapon a false orphan); a non-weapon item
-    // (medikit, banner) failing is harmless — skip just the item.
     let unresolvedWeapon = false;
-    let nonUniform = false;
-    for (const o of (woByGroup.get(gs[0].id) ?? []).slice().sort((a, b) => a.displayOrder - b.displayOrder)) {
+    for (const o of (woByGroup.get(group.id) ?? []).slice().sort((a, b) => a.displayOrder - b.displayOrder)) {
       if (o.defaultValue <= 0) continue;
       const item = wiName.get(o.wargearItemId);
       const name = dump.enName(item);
@@ -609,22 +612,40 @@ function deriveDefaults(
         if (item?.wargearType === "weapon") unresolvedWeapon = true;
         continue;
       }
-      // A checkbox is per-model (every model of the type carries it); a stepper is a
-      // squad-total count spread across the model_count (Breaka Boy hammer 5/5 = 1;
-      // Megatrakk twin big shoota 2/1 = 2). A fractional stepper share (only some
-      // models carry it by default) can't be a uniform per-model row → fall back.
-      const perModel = o.inputType === "stepper" ? o.defaultValue / mc : o.defaultValue;
-      if (!Number.isInteger(perModel) || perModel < 1) {
-        nonUniform = true;
-        break;
-      }
+      // A checkbox is per-model (every model the group covers carries it); a stepper is a
+      // total spread across the covered models (Breaka Boy hammer 5/5 = 1; Megatrakk twin
+      // big shoota 2/1 = 2).
+      const perModel = o.inputType === "stepper" ? o.defaultValue / divisor : o.defaultValue;
+      if (!Number.isInteger(perModel) || perModel < 1) return "non-uniform";
       for (let i = 0; i < perModel; i++) ids.push(id);
     }
-    if (nonUniform) {
+    return unresolvedWeapon ? null : ids;
+  };
+
+  const byMiniId = new Map<string, string[]>();
+  const multiGroup = new Map<string, WargearOptionGroupRow[]>();
+  for (const [miniId, gs] of baseGroupsByMini) {
+    // A miniature split across >1 default group has a non-uniform per-figure loadout
+    // no single row can express (e.g. Voidsmen-at-Arms: 3 lasguns and 1 rotor cannon) —
+    // fall back to base_miniature_loadout below, else split it into same-named rows.
+    if (gs.length > 1) {
+      notes.push(`${miniName(miniId)}: ${gs.length} default loadout groups — base_miniature_loadout fallback`);
+      multiGroup.set(miniId, gs);
+      continue;
+    }
+    const mc = modelCounts.get(miniId) ?? 0;
+    if (!mc) {
+      notes.push(`${miniName(miniId)}: no model_count — base_miniature_loadout fallback`);
+      continue;
+    }
+    // A fractional stepper share (only some models carry it by default) can't be a
+    // uniform per-model row → fall back.
+    const ids = groupIds(gs[0], mc, miniId);
+    if (ids === "non-uniform") {
       notes.push(`${miniName(miniId)}: non-uniform default count — base_miniature_loadout fallback`);
       continue;
     }
-    if (ids.length && !unresolvedWeapon) byMiniId.set(miniId, ids);
+    if (ids?.length) byMiniId.set(miniId, ids);
   }
 
   // Fallback for every miniature the option-group path did not cleanly populate —
@@ -633,6 +654,37 @@ function deriveDefaults(
   for (const [miniId, ids] of baseFromMiniatureLoadout(dump, datasheetId, resolve, unresolved, new Set(byMiniId.keys()))) {
     if (!byMiniId.has(miniId)) byMiniId.set(miniId, ids);
   }
+
+  // A multi-group miniature with no recorded base loadout (Imperial Navy Breachers' Navis
+  // Armsman: 1 heavy shotgun, 1 las-volley, 7 navis shotguns) keeps every group as its own
+  // default: one same-named row per group, sized by the models the group covers. A stepper
+  // group covers its (shared) default count, a checkbox group one model; the groups must
+  // cover the miniature's model count exactly, or the miniature stays unpopulated.
+  const splitByMiniId = new Map<string, SplitDefault[]>();
+  for (const [miniId, gs] of multiGroup) {
+    if (byMiniId.has(miniId)) continue;
+    const mc = modelCounts.get(miniId) ?? 0;
+    const split: SplitDefault[] = [];
+    for (const g of gs) {
+      const opts = (woByGroup.get(g.id) ?? []).filter((o) => o.defaultValue > 0);
+      const steppers = new Set(opts.filter((o) => o.inputType === "stepper").map((o) => o.defaultValue));
+      const covered = steppers.size === 0 ? 1 : steppers.size === 1 && opts.every((o) => o.inputType === "stepper") ? [...steppers][0]! : 0;
+      const ids = covered > 0 ? groupIds(g, covered, miniId) : "non-uniform";
+      if (ids === null || ids === "non-uniform" || ids.length === 0) {
+        split.length = 0;
+        break;
+      }
+      split.push({ ids, count: covered });
+    }
+    const total = split.reduce((sum, row) => sum + row.count, 0);
+    if (!split.length || total !== mc) {
+      notes.push(`${miniName(miniId)}: default loadout groups cover ${total} of ${mc} models — left unpopulated`);
+      continue;
+    }
+    splitByMiniId.set(miniId, split);
+    notes.push(`${miniName(miniId)}: default loadout groups split into same-named rows (${split.map((row) => row.count).join(" + ")})`);
+  }
+  const splitByName = new Map([...splitByMiniId].map(([miniId, rows]) => [miniName(miniId), rows]));
 
   // Rows are matched to the repository by model name. Several miniatures can share a name with
   // different loadouts (a command squad's veterans: one with the standard, one with the vox);
@@ -651,7 +703,7 @@ function deriveDefaults(
     byName.delete(name);
     bySharedName.set(name, [...byMiniId].filter(([miniId]) => miniName(miniId) === name).map(([, ids]) => ids));
   }
-  return { byName, byMiniId, bySharedName };
+  return { byName, byMiniId, bySharedName, splitByMiniId, splitByName };
 }
 
 /**
@@ -867,9 +919,11 @@ function sourcedLimitedSetBudgets(
   // does); it then simply contributes no default exclusions.
   const defaultIds = new Set<string>();
   try {
-    for (const ids of deriveDefaults(dump, datasheetId, resolve, [], []).byMiniId.values()) {
+    const defaults = deriveDefaults(dump, datasheetId, resolve, [], []);
+    for (const ids of defaults.byMiniId.values()) {
       for (const id of ids) defaultIds.add(id);
     }
+    for (const rows of defaults.splitByMiniId.values()) for (const row of rows) for (const id of row.ids) defaultIds.add(id);
   } catch {
     /* fixture without default-loadout tables */
   }
@@ -1184,13 +1238,13 @@ export function deriveWargear(
 ): DerivedWargear {
   const unresolved: { name: string; context: string }[] = [];
   const notes: string[] = [];
-  const { byName: defaultsByModel, byMiniId: baseByMiniId, bySharedName: defaultsBySharedName } = deriveDefaults(
-    dump,
-    datasheetId,
-    resolve,
-    unresolved,
-    notes,
-  );
+  const {
+    byName: defaultsByModel,
+    byMiniId: baseByMiniId,
+    bySharedName: defaultsBySharedName,
+    splitByMiniId,
+    splitByName: defaultsSplitByModel,
+  } = deriveDefaults(dump, datasheetId, resolve, unresolved, notes);
 
   const miniName = (id: string) => dump.enName(dump.byId("miniature").get(id)) ?? id;
   const wiName = dump.byId("wargear_item");
@@ -1225,12 +1279,21 @@ export function deriveWargear(
 
   const options: DerivedOption[] = [];
 
-  for (const set of (sets ?? []).slice().sort((a, b) => a.id.localeCompare(b.id))) {
+  // Base = the miniature's recorded base loadout (by id — robust to a dump↔repo model-name
+  // mismatch that would otherwise misidentify the no-swap branch). A miniature split into
+  // same-named rows has one base per row, so its sets are derived once against each.
+  const setPasses = (sets ?? [])
+    .slice()
+    .sort((a, b) => a.id.localeCompare(b.id))
+    .flatMap((set) => {
+      const split = set.miniatureId ? splitByMiniId.get(set.miniatureId) : undefined;
+      if (split) return split.map((row, index) => ({ set, base: row.ids as string[] | null, first: index === 0, split: true }));
+      return [{ set, base: (set.miniatureId && baseByMiniId.get(set.miniatureId)) || null, first: true, split: false }];
+    });
+  const seenOptions = new Set<string>();
+  for (const { set, base, first, split } of setPasses) {
     const mini = set.miniatureId ? miniName(set.miniatureId) : null;
-    // Base = the miniature's recorded base loadout (by id — robust to a dump↔repo
-    // model-name mismatch that would otherwise misidentify the no-swap branch).
-    const base = (set.miniatureId && baseByMiniId.get(set.miniatureId)) || null;
-    if (set.alternate) notes.push(`alternate loadout_choice_set ${set.id.slice(0, 8)} (${mini ?? "all"}) — review`);
+    if (set.alternate && first) notes.push(`alternate loadout_choice_set ${set.id.slice(0, 8)} (${mini ?? "all"}) — review`);
 
     // Resolve each choice branch to an id multiset; drop unresolved-emptied branches.
     const branches: string[][] = [];
@@ -1242,7 +1305,7 @@ export function deriveWargear(
         if (!name) continue;
         const id = resolve(name);
         if (!id) {
-          unresolved.push({ name, context: `loadout choice (${mini ?? "all"})` });
+          if (first) unresolved.push({ name, context: `loadout choice (${mini ?? "all"})` });
           dropped = true;
           continue;
         }
@@ -1305,7 +1368,7 @@ export function deriveWargear(
       setLimit === 1 && !allowDup && set.miniatureId
         ? factorCrossProduct(branches, baseSet)
         : null;
-    if (factored) {
+    if (factored && first) {
       notes.push(
         `cross-product loadout set ${set.id.slice(0, 8)} factored into ${factored.size} independent slot swap${factored.size === 1 ? "" : "s"} (${mini ?? "all"})`,
       );
@@ -1342,6 +1405,12 @@ export function deriveWargear(
         if (removed.length > 0) opt.replaces = removed;
         if (branches_.length === 1) opt.replacement = branches_[0];
         else opt.replacement_choice = branches_;
+        // Split rows can share a swap (a slot every row carries); emit it once.
+        if (split) {
+          const key = JSON.stringify(opt);
+          if (seenOptions.has(key)) return;
+          seenOptions.add(key);
+        }
         options.push(opt);
       };
 
@@ -1456,7 +1525,7 @@ export function deriveWargear(
     }
   }
 
-  return { defaultsByModel, defaultsBySharedName, options, unresolved, notes };
+  return { defaultsByModel, defaultsSplitByModel, defaultsBySharedName, options, unresolved, notes };
 }
 
 /** One miniature row of the dump's default unit composition. */
@@ -1970,6 +2039,44 @@ export function runWargear(dump: MfmDump, write: boolean, onlyDir?: string): War
         }
       }
 
+      // ── split rows (a miniature whose default loadout differs by model): one same-named row
+      // per default group, sized by the models it covers. Whole-loadout variants on the old row
+      // described the collapsed row and are dropped with it; tiers merge onto rows by name, so a
+      // tier naming the split miniature cannot describe its rows and is dropped too ──
+      for (const [name, split] of derived.defaultsSplitByModel) {
+        for (const comp of compsByUnit.get(id) ?? []) {
+          const rows = comp.models.filter((m) => m.name === name);
+          if (rows.length !== 1 && rows.length !== split.length) {
+            res.notes.push({ id, note: `${name}: ${rows.length} row(s) for ${split.length} default loadouts — defaults left as they are` });
+            continue;
+          }
+          const template = rows[0]!;
+          const next = split.map((row, index) => {
+            const { loadout_variants: _variants, loadout_variant_budgets: _budgets, default_weapon_ids: _defaults, ...rest } =
+              rows.length === split.length ? rows[index]! : template;
+            return { ...rest, name, min: row.count, max: row.count, default_weapon_ids: [...row.ids] };
+          });
+          const changed = rows.length !== next.length || rows.some((row, index) => JSON.stringify(row) !== JSON.stringify(next[index]));
+          if (!changed) continue;
+          for (let index = 0; index < next.length; index++) {
+            const from = rows.length === next.length ? rows[index]!.default_weapon_ids ?? [] : template.default_weapon_ids ?? [];
+            if (!sameMultiset(from, next[index]!.default_weapon_ids)) {
+              res.defaultsChanged++;
+              res.defaultChanges.push({ id, model: name, from, to: next[index]!.default_weapon_ids });
+            }
+          }
+          const at = comp.models.indexOf(template);
+          comp.models = [...comp.models.slice(0, at), ...next, ...comp.models.slice(at + 1).filter((m) => m.name !== name)];
+          const tiers = comp.tiers as { models?: { name?: string }[] }[] | undefined;
+          if (tiers?.some((tier) => tier.models?.some((m) => m.name === name))) {
+            delete comp.tiers;
+            res.notes.push({ id, note: `${name}: tiers dropped — they name a miniature split into ${next.length} rows` });
+          }
+          res.notes.push({ id, note: `${name}: split into ${next.length} same-named rows (${split.map((row) => row.count).join(" + ")})` });
+          compsChanged = true;
+        }
+      }
+
       // ── synthesize per-figure rows the dump lists but the repo collapsed away ──
       // The importer is patch-only on existing rows, so a datasheet whose dump
       // composition has a distinct single-figure miniature (e.g. a Boss Nob) with
@@ -2225,6 +2332,7 @@ export function weaponInventory(dump: MfmDump): Map<string, Map<string, GoldenMo
     };
     for (const ids of dw.defaultsByModel.values()) for (const id of ids) add(id);
     for (const loadouts of dw.defaultsBySharedName.values()) for (const ids of loadouts) for (const id of ids) add(id);
+    for (const rows of dw.defaultsSplitByModel.values()) for (const row of rows) for (const id of row.ids) add(id);
     for (const o of dw.options) {
       for (const id of o.replaces ?? []) add(id);
       for (const id of o.replacement ?? []) add(id);
@@ -2613,7 +2721,7 @@ export function runCompositionNames(dump: MfmDump, onlyDir?: string): CompNamesR
       }));
       if (!view.length) continue;
       const unitResolve = unitScopedResolver(validIds, autoResolved, dir, id, resolve);
-      const { byName: defaultsByModel } = deriveDefaults(dump, ds.id!, unitResolve, [], []);
+      const { byName: defaultsByModel, splitByName } = deriveDefaults(dump, ds.id!, unitResolve, [], []);
       // Reviewed always-on additions ride on top of the dump defaults, exactly
       // as runWargear applies them (a refresh must not drop a support turret).
       const withManual = (rowName: string, ids: string[] | undefined): string[] | undefined => {
@@ -2627,10 +2735,17 @@ export function runCompositionNames(dump: MfmDump, onlyDir?: string): CompNamesR
         // counts alone: composition-tiers owns min/max (it sets the envelope,
         // which deliberately differs from the default view — comparing counts
         // here would re-flag every tiered unit as diverged on each run).
-        const mapped = matchNamesNormalized(
-          comp.models.map((m) => m.name),
-          view.map((d) => d.name),
-        );
+        const rowNames = comp.models.map((m) => m.name);
+        let mapped = matchNamesNormalized(rowNames, view.map((d) => d.name));
+        // Same-named split rows (runWargear: one row per default group of a miniature) are
+        // one dump miniature; map them by name. Their defaults stay with runWargear, since
+        // `defaultsByModel` carries no single loadout for a split name.
+        const unique = [...new Set(rowNames)];
+        const repeats = (name: string) => rowNames.filter((n) => n === name).length;
+        if (!mapped && unique.length < rowNames.length && unique.every((n) => repeats(n) === 1 || splitByName.get(n)?.length === repeats(n))) {
+          const byUnique = matchNamesNormalized(unique, view.map((d) => d.name));
+          if (byUnique) mapped = rowNames.map((n) => byUnique[unique.indexOf(n)]!);
+        }
         if (mapped) {
           for (let i = 0; i < comp.models.length; i++) {
             if (comp.models[i].name !== mapped[i]) {

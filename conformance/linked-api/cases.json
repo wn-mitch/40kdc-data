@@ -971,6 +971,22 @@
     ]
   },
   {
+    "name": "base_loadout imperial-navy-breachers @10 sums same-named split rows",
+    "query": "base_loadout",
+    "args": {
+      "unitId": "imperial-navy-breachers",
+      "modelCount": "10"
+    },
+    "comparison": "set",
+    "expected": [
+      "close-combat-weapon-imperial-navy-breachers:10",
+      "endurant-shield:1",
+      "navis-heavy-shotgun:1",
+      "navis-las-volley:1",
+      "navis-shotgun:8"
+    ]
+  },
+  {
     "name": "loadout_candidates chaos-terminators @5 matches the base allocation",
     "query": "loadout_candidates",
     "args": {

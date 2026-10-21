@@ -65,6 +65,27 @@ describe("referential integrity", () => {
     }
   });
 
+  it("checks the stock loadout of a composition whose rows record no defaults", async () => {
+    // No row records default_weapon_ids, so the stock loadout is the derived base: every model
+    // with the gun, against a flat allowance of one gun per unit.
+    const root = mkdtempSync(join(tmpdir(), "integrity-stock-"));
+    try {
+      mkdirSync(join(root, "core/alpha"), { recursive: true });
+      writeFileSync(join(root, "core/alpha/units.json"), JSON.stringify([
+        { id: "squad", weapon_ids: ["gun"], wargear_budgets: [{ items: ["gun"], count: 1, per_models: 0 }] },
+      ]));
+      writeFileSync(join(root, "core/alpha/weapons.json"), JSON.stringify([{ id: "gun" }]));
+      writeFileSync(join(root, "core/alpha/unit-compositions.json"), JSON.stringify([
+        { unit_id: "squad", faction_id: "alpha", models: [{ name: "Trooper", min: 5, max: 5 }] },
+      ]));
+      const result = await checkReferentialIntegrity(root);
+      const messages = result.errors.flatMap((e) => e.errors.map((x) => x.message));
+      expect(messages.some((m) => m.includes('unit "squad": STOCK loadout at 5 models is illegal'))).toBe(true);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  });
+
   it("passes a clean single-unit fixture", async () => {
     const result = await checkReferentialIntegrity(resolve(FIXTURES, "integrity-good"));
     expect(result.failed).toBe(0);

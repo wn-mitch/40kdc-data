@@ -1202,38 +1202,36 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
         new Set(weaponIdsByUnit.get(c.unit_id ?? "") ?? []),
         factionUnitIds,
       );
-      // Populated = every model row carries a non-empty default loadout.
+      // Populated = every model row carries a non-empty default loadout. The
+      // orphan check needs recorded defaults; an unpopulated composition falls
+      // back to the loadout layer's derived base and is out of its scope.
       const populated = models.length > 0 && models.every((m) => (m.default_weapon_ids?.length ?? 0) > 0);
-      if (!populated) {
-        if (errs.length > 0) {
-          result.failed++;
-          result.errors.push({ file, index: i, errors: errs });
-        } else {
-          result.passed++;
+      if (populated) {
+        const defaults = new Set<string>();
+        for (const m of models) for (const id of m.default_weapon_ids ?? []) defaults.add(id);
+        const reachable = reachableByUnit.get(c.unit_id ?? "") ?? new Set<string>();
+        const variantEquipment = new Set<string>();
+        for (const m of models) for (const variant of m.loadout_variants ?? []) for (const id of variant.weapon_ids ?? []) variantEquipment.add(id);
+        for (const wid of weaponIdsByUnit.get(c.unit_id ?? "") ?? []) {
+          if (defaults.has(wid) || variantEquipment.has(wid) || reachable.has(wid)) continue;
+          const key = `${faction}/${c.unit_id}/${wid}`;
+          if (KNOWN_LOADOUT_ORPHANS.has(key)) {
+            seenAllowed.add(key);
+            continue;
+          }
+          errs.push({
+            path: `/${i}`,
+            message: `unit "${c.unit_id}": weapon "${wid}" is an orphan — neither a default_weapon_ids entry nor reachable via a wargear-option`,
+          });
         }
-        continue;
-      }
-      const defaults = new Set<string>();
-      for (const m of models) for (const id of m.default_weapon_ids ?? []) defaults.add(id);
-      const reachable = reachableByUnit.get(c.unit_id ?? "") ?? new Set<string>();
-      const variantEquipment = new Set<string>();
-      for (const m of models) for (const variant of m.loadout_variants ?? []) for (const id of variant.weapon_ids ?? []) variantEquipment.add(id);
-      for (const wid of weaponIdsByUnit.get(c.unit_id ?? "") ?? []) {
-        if (defaults.has(wid) || variantEquipment.has(wid) || reachable.has(wid)) continue;
-        const key = `${faction}/${c.unit_id}/${wid}`;
-        if (KNOWN_LOADOUT_ORPHANS.has(key)) {
-          seenAllowed.add(key);
-          continue;
-        }
-        errs.push({
-          path: `/${i}`,
-          message: `unit "${c.unit_id}": weapon "${wid}" is an orphan — neither a default_weapon_ids entry nor reachable via a wargear-option`,
-        });
       }
 
       // ── Stock-loadout legality: the out-of-the-box build is legal by ──
       // ── construction — GW never prints a datasheet whose default build ──
       // ── violates its own wargear rules. ──
+      //
+      // It runs on every composition: an unpopulated one ships the base the
+      // loadout layer derives (baseLoadout), which must validate just the same.
       //
       // This is the semantic gate the ATC false-positive classes slipped past:
       // AJV checks shape, the orphan check above checks reachability, and the

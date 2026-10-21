@@ -59,6 +59,20 @@ describe("BSData loadout variant projection", () => {
     expect(rows[0].loadout_variant_budgets).toEqual([{ variant_names: ["Boy", "Boy w/ Shoota"], count: 1, per_models: 10, scope: "unit" }]);
   });
 
+  it("attaches no variants to a model name several composition rows share", () => {
+    // Same-named rows each record their own default loadout (a miniature split by default group).
+    const group = { constraints: [{ field: "selections", type: "max", value: 1 }], selectionEntries: [model("Boy", "slugga"), model("Boy w/ Shoota", "shoota")] };
+    const rows: Record<string, unknown>[] = [
+      { name: "Boy", default_weapon_ids: ["slugga"] },
+      { name: "Boy", default_weapon_ids: ["shoota"] },
+    ];
+    expect(projectUnit({ selectionEntryGroups: [group] }, rows, [
+      { id: "slugga", external_refs: [{ namespace: "bsdata", id: "slugga" }] },
+      { id: "shoota", external_refs: [{ namespace: "bsdata", id: "shoota" }] },
+    ], "boyz")).toEqual([]);
+    expect(rows.map((row) => row.loadout_variants)).toEqual([undefined, undefined]);
+  });
+
   it("keeps the current projection untouched when an incomplete source peer is found", () => {
     const existing = [{ unit_id: "boyz", models: [{ name: "Boy", loadout_variants: [{ name: "Current", weapon_ids: ["gun"] }] }] }];
     const source = new Map([

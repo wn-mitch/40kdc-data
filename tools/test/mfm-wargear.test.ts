@@ -1336,6 +1336,72 @@ describe("deriveDefaults quantity rule + heterogeneity guard (option-group model
     );
   });
 
+  // A Breachers-shaped miniature: 4 models whose defaults sit in two groups (3 with gun A, 1
+  // with gun B, each with a knife) and one per-model choice set over all three loadouts.
+  const splitDump = (opts: { firstGroupDefault?: number; recordedBase?: boolean } = {}) =>
+    mkDump({
+      miniature: [{ id: "m1", displayOrder: 0, localisations: { en: { name: "Retinue" } } }],
+      unit_composition: [{ id: "uc", datasheetId: "dsS", isDefault: true, displayOrder: 1, points: 0, referenceGroupingKeywordId: null }],
+      unit_composition_miniature: [{ id: "ucm", min: 4, max: 4, unitCompositionId: "uc", miniatureId: "m1" }],
+      wargear_item: [wi("wi-a", "Gun A"), wi("wi-b", "Gun B"), wi("wi-c", "Gun C"), wi("wi-k", "Knife")],
+      wargear_option_group: [
+        { id: "g1", displayOrder: 1, datasheetId: "dsS", miniatureId: "m1", isStaticWargear: false },
+        { id: "g2", displayOrder: 2, datasheetId: "dsS", miniatureId: "m1", isStaticWargear: false },
+      ],
+      wargear_option: [
+        { id: "o1", wargearItemId: "wi-a", wargearOptionGroupId: "g1", inputType: "stepper", defaultValue: opts.firstGroupDefault ?? 3, points: 0, displayOrder: 1 },
+        { id: "o2", wargearItemId: "wi-k", wargearOptionGroupId: "g1", inputType: "stepper", defaultValue: opts.firstGroupDefault ?? 3, points: 0, displayOrder: 2 },
+        { id: "o3", wargearItemId: "wi-b", wargearOptionGroupId: "g2", inputType: "checkbox", defaultValue: 1, points: 0, displayOrder: 1 },
+        { id: "o4", wargearItemId: "wi-k", wargearOptionGroupId: "g2", inputType: "checkbox", defaultValue: 1, points: 0, displayOrder: 2 },
+      ],
+      loadout_choice_set: [{ id: "s1", datasheetId: "dsS", miniatureId: "m1", limit: 1, alternate: false, allowDuplicates: false }],
+      loadout_choice: [{ id: "c1", loadoutChoiceSetId: "s1" }, { id: "c2", loadoutChoiceSetId: "s1" }, { id: "c3", loadoutChoiceSetId: "s1" }],
+      loadout_choice_wargear_item: [
+        { id: "x1", loadoutChoiceId: "c1", wargearItemId: "wi-a", count: 1 },
+        { id: "x2", loadoutChoiceId: "c1", wargearItemId: "wi-k", count: 1 },
+        { id: "x3", loadoutChoiceId: "c2", wargearItemId: "wi-b", count: 1 },
+        { id: "x4", loadoutChoiceId: "c2", wargearItemId: "wi-k", count: 1 },
+        { id: "x5", loadoutChoiceId: "c3", wargearItemId: "wi-c", count: 1 },
+        { id: "x6", loadoutChoiceId: "c3", wargearItemId: "wi-k", count: 1 },
+      ],
+      ...(opts.recordedBase
+        ? {
+            base_miniature_loadout: [{ id: "b1", datasheetId: "dsS", miniatureId: "m1" }],
+            base_miniature_loadout_wargear_option: [
+              { id: "bo1", baseMiniatureLoadoutId: "b1", wargearOptionId: "o1", count: 1 },
+              { id: "bo2", baseMiniatureLoadoutId: "b1", wargearOptionId: "o2", count: 1 },
+            ],
+          }
+        : {}),
+    });
+
+  it("splits a multi-group miniature with no recorded base into one default per group", () => {
+    const d = deriveWargear(splitDump(), "dsS", slug);
+    expect(d.defaultsByModel.has("Retinue")).toBe(false);
+    expect(d.defaultsSplitByModel.get("Retinue")).toEqual([
+      { ids: ["gun-a", "knife"], count: 3 },
+      { ids: ["gun-b", "knife"], count: 1 },
+    ]);
+    // Each row's base gets its own swap, so every model can reach every loadout.
+    expect(d.options.map((o) => ({ replaces: o.replaces, choice: o.replacement ?? o.replacement_choice }))).toEqual([
+      { replaces: ["gun-a"], choice: [["gun-b"], ["gun-c"]] },
+      { replaces: ["gun-b"], choice: [["gun-a"], ["gun-c"]] },
+    ]);
+  });
+
+  it("leaves the miniature unpopulated when its default groups do not cover its models", () => {
+    // The groups cover 2 + 1 of the 4 models, so the fourth model's default is unknown.
+    const d = deriveWargear(splitDump({ firstGroupDefault: 2 }), "dsS", slug);
+    expect(d.defaultsSplitByModel.has("Retinue")).toBe(false);
+    expect(d.defaultsByModel.has("Retinue")).toBe(false);
+  });
+
+  it("keeps a recorded base loadout over the split (Voidsmen-at-Arms)", () => {
+    const d = deriveWargear(splitDump({ recordedBase: true }), "dsS", slug);
+    expect(d.defaultsByModel.get("Retinue")).toEqual(["gun-a", "knife"]);
+    expect(d.defaultsSplitByModel.has("Retinue")).toBe(false);
+  });
+
   it("leaves a datasheet-wide (miniatureId null) default group to MANUAL_DEFAULTS", () => {
     const dump = mkDump({
       miniature: [

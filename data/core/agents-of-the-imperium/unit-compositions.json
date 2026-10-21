@@ -1392,105 +1392,52 @@
       },
       {
         "name": "Navis Armsman",
-        "min": 9,
-        "max": 9,
+        "min": 1,
+        "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
           "diameter": 25
         },
-        "loadout_variants": [
-          {
-            "name": "Navis Armsman w/ heavy shotgun",
-            "weapon_ids": [
-              "close-combat-weapon-imperial-navy-breachers",
-              "navis-heavy-shotgun"
-            ],
-            "max_count": 1
-          },
-          {
-            "name": "Navis Armsman w/ special weapon",
-            "weapon_ids": [
-              "close-combat-weapon-imperial-navy-breachers"
-            ],
-            "max_count": 1
-          },
-          {
-            "name": "Navis Armsman w/ power weapon",
-            "weapon_ids": [
-              "close-combat-weapon-imperial-navy-breachers",
-              "autopistol",
-              "power-weapon-imperial-navy-breachers"
-            ],
-            "max_count": 1
-          },
-          {
-            "name": "Navis Armsman",
-            "weapon_ids": [
-              "close-combat-weapon-imperial-navy-breachers"
-            ],
-            "max_count": 7
-          },
-          {
-            "name": "Navis Armsman w/ chainfist",
-            "weapon_ids": [
-              "close-combat-weapon-imperial-navy-breachers",
-              "autopistol",
-              "chainfist"
-            ],
-            "max_count": 1
-          }
-        ],
-        "loadout_variant_budgets": [
-          {
-            "variant_names": [
-              "Navis Armsman w/ heavy shotgun",
-              "Navis Armsman w/ special weapon",
-              "Navis Armsman w/ power weapon",
-              "Navis Armsman",
-              "Navis Armsman w/ chainfist"
-            ],
-            "count": 9,
-            "per_models": 0,
-            "scope": "model-row"
-          }
+        "default_weapon_ids": [
+          "navis-las-volley",
+          "close-combat-weapon-imperial-navy-breachers"
+        ]
+      },
+      {
+        "name": "Navis Armsman",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        },
+        "default_weapon_ids": [
+          "navis-heavy-shotgun",
+          "close-combat-weapon-imperial-navy-breachers",
+          "endurant-shield"
+        ]
+      },
+      {
+        "name": "Navis Armsman",
+        "min": 7,
+        "max": 7,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        },
+        "default_weapon_ids": [
+          "navis-shotgun",
+          "close-combat-weapon-imperial-navy-breachers"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    },
-    "tiers": [
-      {
-        "models": [
-          {
-            "name": "Navis Sergeant-at-Arms",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Navis Armsman",
-            "min": 9,
-            "max": 9
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Navis Sergeant-at-Arms",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Navis Armsman",
-            "min": 9,
-            "max": 9
-          }
-        ]
-      }
-    ]
+    }
   },
   {
     "unit_id": "culexus-assassin",

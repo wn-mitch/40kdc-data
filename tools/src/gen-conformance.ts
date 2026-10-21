@@ -810,6 +810,12 @@ const LINKED_API_QUERIES: LinkedApiQuery[] = [
     comparison: "set",
   },
   {
+    name: "base_loadout imperial-navy-breachers @10 sums same-named split rows",
+    query: "base_loadout",
+    args: { unitId: "imperial-navy-breachers", modelCount: "10" },
+    comparison: "set",
+  },
+  {
     name: "loadout_candidates chaos-terminators @5 matches the base allocation",
     query: "loadout_candidates",
     args: {

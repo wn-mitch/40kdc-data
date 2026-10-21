@@ -233,6 +233,9 @@ export function projectUnit(
     const row = rows.find((candidate) => str(candidate.name)?.toLocaleLowerCase("en") === projected.rowName.toLocaleLowerCase("en"))
       ?? rows.find((candidate) => normModelName(str(candidate.name) ?? "") === normModelName(projected.rowName));
     if (!row) continue;
+    // Same-named rows each record their own default loadout (a miniature the MFM pass split
+    // by default group); whole-loadout variants for the name cannot belong to one of them.
+    if (rows.filter((candidate) => str(candidate.name) === str(row.name)).length > 1) continue;
     row.loadout_variants = projected.variants;
     if (projected.budgets.length) row.loadout_variant_budgets = projected.budgets;
     else delete row.loadout_variant_budgets;

@@ -920,6 +920,86 @@
       "dataslate": "launch"
     },
     "is_free": true,
+    "replaces": [
+      "navis-heavy-shotgun",
+      "endurant-shield"
+    ],
+    "replacement_choice": [
+      [
+        "navis-las-volley"
+      ],
+      [
+        "autopistol",
+        "power-weapon-imperial-navy-breachers"
+      ],
+      [
+        "plasma-gun-imperial-navy-breachers"
+      ],
+      [
+        "autopistol",
+        "chainfist"
+      ],
+      [
+        "meltagun"
+      ],
+      [
+        "navis-shotgun"
+      ]
+    ],
+    "model_constraint": {
+      "model_name": "Navis Armsman",
+      "any_number": true
+    }
+  },
+  {
+    "id": "imperial-navy-breachers-wgo-mfm-3",
+    "unit_id": "imperial-navy-breachers",
+    "faction_id": "agents-of-the-imperium",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replaces": [
+      "navis-shotgun"
+    ],
+    "replacement_choice": [
+      [
+        "navis-las-volley"
+      ],
+      [
+        "autopistol",
+        "power-weapon-imperial-navy-breachers"
+      ],
+      [
+        "endurant-shield",
+        "navis-heavy-shotgun"
+      ],
+      [
+        "plasma-gun-imperial-navy-breachers"
+      ],
+      [
+        "autopistol",
+        "chainfist"
+      ],
+      [
+        "meltagun"
+      ]
+    ],
+    "model_constraint": {
+      "model_name": "Navis Armsman",
+      "any_number": true
+    }
+  },
+  {
+    "id": "imperial-navy-breachers-wgo-mfm-4",
+    "unit_id": "imperial-navy-breachers",
+    "faction_id": "agents-of-the-imperium",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
     "replacement": [
       "demolition-charge"
     ],
@@ -929,7 +1009,7 @@
     }
   },
   {
-    "id": "imperial-navy-breachers-wgo-mfm-3",
+    "id": "imperial-navy-breachers-wgo-mfm-5",
     "unit_id": "imperial-navy-breachers",
     "faction_id": "agents-of-the-imperium",
     "game_version": {
