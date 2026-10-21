@@ -148,6 +148,7 @@ export function projectUnit(
   sizes: readonly number[] = compositionSizes({ models: rows }),
   notes: string[] = [],
   previous: readonly JsonNode[] = [],
+  wargearBudgets: readonly JsonNode[] = [],
 ): VariantIssue[] {
   const issues: VariantIssue[] = [];
   const resolve = makeEquipmentResolver(equipment, unitId, factionUnitIds);
@@ -214,6 +215,9 @@ export function projectUnit(
         noted(`${name}: size-dependent cap kept at its ${kept ? "committed" : "static"} ${flatOf(peerCap.forms)}`);
       }
       const splitNames: string[] = [];
+      // What one alternative fields beyond what every alternative of the peer fields.
+      const resolvedIds = fixed.alternatives.map((alternative) => new Set(alternative.links.map(resolve).filter((id): id is string => !!id)));
+      const sharedIds = resolvedIds.length ? [...resolvedIds[0]].filter((id) => resolvedIds.every((ids) => ids.has(id))) : [];
       for (const alternative of fixed.alternatives) {
         const variantName = alternative.labels.length ? `${name} (${alternative.labels.join(", ")})` : name;
         const ids = alternative.links.map(resolve);
@@ -223,7 +227,13 @@ export function projectUnit(
           complete = false;
           continue;
         }
-        const choiceCaps = alternative.choices.map((choice) => projectCap(choice, sizes, rules, isWideScope)).filter((cap): cap is ProjectedCap => !!cap);
+        // A unit-scoped cap on one choice limits duplicates of that choice. The
+        // MFM wargear budgets own duplicate limits (`duplicate_limit`) for the
+        // items they cover, so such a cap stands only where no budget covers what
+        // the choice adds.
+        const added = (ids as string[]).filter((id) => !sharedIds.includes(id));
+        const budgeted = added.length > 0 && wargearBudgets.some((budget) => Array.isArray(budget.items) && budget.items.some((item) => typeof item === "string" && added.includes(item)));
+        const choiceCaps = budgeted ? [] : alternative.choices.map((choice) => projectCap(choice, sizes, rules, isWideScope)).filter((cap): cap is ProjectedCap => !!cap);
         const flats = [...choiceCaps, ...(peerCap ? [peerCap] : [])].map((cap) => flatOf(cap.forms)).filter((n): n is number => n !== undefined);
         const max = flats.length ? Math.min(...flats) : undefined;
         const variant = { name: variantName, weapon_ids: ids as string[], ...(max ? { max_count: max } : {}) };
@@ -381,7 +391,7 @@ export function prepareFactionProjection(
     if (sourceVariantCount > 0) discoveredUnits += 1;
     discoveredVariants += sourceVariantCount;
     const committed = arr(compositions.find((item) => item.unit_id === repoUnit.id)?.models);
-    issues.push(...projectUnit(source, rows, equipment, str(repoUnit.id)!, factionUnitIds, sourceNodes, compositionSizes(composition), notes, committed));
+    issues.push(...projectUnit(source, rows, equipment, str(repoUnit.id)!, factionUnitIds, sourceNodes, compositionSizes(composition), notes, committed, arr(repoUnit.wargear_budgets)));
     const variantCount = rows.reduce((sum, row) => sum + arr(row.loadout_variants).length, 0);
     if (variantCount > 0) projectedUnits += 1;
     projectedVariants += variantCount;

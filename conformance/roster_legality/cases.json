@@ -638,5 +638,20 @@
     "name": "atc-exceeds-max-wolf-guard-headtakers",
     "args": { "unitId": "wolf-guard-headtakers", "factionId": "adeptus-astartes", "modelCount": 12, "counts": { "heavy-bolt-pistol": 6, "master-crafted-power-weapon-wolf-guard-headtakers": 6, "storm-shield": 6, "teeth-and-claws-wolf-guard-headtakers": 6 } },
     "expected": []
+  },
+  {
+    "name": "legionaries-two-of-one-special-at-ten-legal",
+    "args": { "unitId": "legionaries", "factionId": "chaos-space-marines", "modelCount": 10, "counts": { "plasma-gun": 2 } },
+    "expected": []
+  },
+  {
+    "name": "legionaries-two-of-one-special-at-five-over",
+    "args": { "unitId": "legionaries", "factionId": "chaos-space-marines", "modelCount": 5, "counts": { "plasma-gun": 2 } },
+    "expected": ["exceeds-max:plasma-gun"]
+  },
+  {
+    "name": "legionaries-three-specials-at-ten-over",
+    "args": { "unitId": "legionaries", "factionId": "chaos-space-marines", "modelCount": 10, "counts": { "plasma-gun": 2, "flamer": 1 } },
+    "expected": ["exceeds-allowance:flamer+havoc-autocannon-legionaries+heavy-bolter+lascannon-legionaries+meltagun+missile-launcher+plasma-gun+reaper-chaincannon"]
   }
 ]

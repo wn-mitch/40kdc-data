@@ -2522,8 +2522,7 @@
               "bolt-pistol",
               "close-combat-weapon",
               "flamer"
-            ],
-            "max_count": 1
+            ]
           },
           {
             "name": "Legionary w/ other weapon (Havoc autocannon)",
@@ -2531,8 +2530,7 @@
               "bolt-pistol",
               "close-combat-weapon",
               "havoc-autocannon-legionaries"
-            ],
-            "max_count": 1
+            ]
           },
           {
             "name": "Legionary w/ other weapon (Heavy bolter)",
@@ -2540,8 +2538,7 @@
               "bolt-pistol",
               "close-combat-weapon",
               "heavy-bolter"
-            ],
-            "max_count": 1
+            ]
           },
           {
             "name": "Legionary w/ other weapon (Lascannon)",
@@ -2549,8 +2546,7 @@
               "bolt-pistol",
               "close-combat-weapon",
               "lascannon-legionaries"
-            ],
-            "max_count": 1
+            ]
           },
           {
             "name": "Legionary w/ other weapon (Missile launcher)",
@@ -2558,8 +2554,7 @@
               "bolt-pistol",
               "close-combat-weapon",
               "missile-launcher"
-            ],
-            "max_count": 1
+            ]
           },
           {
             "name": "Legionary w/ other weapon (Plasma gun)",
@@ -2567,8 +2562,7 @@
               "bolt-pistol",
               "close-combat-weapon",
               "plasma-gun"
-            ],
-            "max_count": 1
+            ]
           },
           {
             "name": "Legionary w/ other weapon (Reaper chaincannon)",
@@ -2576,8 +2570,7 @@
               "bolt-pistol",
               "close-combat-weapon",
               "reaper-chaincannon"
-            ],
-            "max_count": 1
+            ]
           },
           {
             "name": "Legionary w/ other weapon (Plasma pistol and Astartes chainsword)",

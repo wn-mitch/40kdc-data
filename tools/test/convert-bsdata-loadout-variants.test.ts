@@ -344,6 +344,18 @@ describe("BSData loadout variant projection: equipment choices", () => {
     ]);
   });
 
+  it("leaves a choice's unit-scoped duplicate cap to the MFM budget that covers it", () => {
+    const rows: Record<string, unknown>[] = [{ name: "Legionary" }];
+    const budgets = [{ items: ["flamer", "meltagun"], count: 2, per_models: 10 }];
+    expect(projectUnit(legionaries, rows, equipment, "legionaries", [], profiles, undefined, [], [], budgets)).toEqual([]);
+    // The Flamer upgrade's unit-scoped max of 1 is gone; the peer's own cap of 2 binds.
+    expect(rows[0].loadout_variants).toContainEqual({ name: "Legionary w/ other weapon (Flamer)", weapon_ids: ["bolt-pistol", "flamer"], max_count: 2 });
+    // A budget that covers other items leaves the BSData duplicate cap standing.
+    const uncovered: Record<string, unknown>[] = [{ name: "Legionary" }];
+    projectUnit(legionaries, uncovered, equipment, "legionaries", [], profiles, undefined, [], [], [{ items: ["meltagun"], count: 2, per_models: 10 }]);
+    expect(uncovered[0].loadout_variants).toContainEqual({ name: "Legionary w/ other weapon (Flamer)", weapon_ids: ["bolt-pistol", "flamer"], max_count: 1 });
+  });
+
   it("pools the split peer's ceiling so the splits cannot field more models than the peer", () => {
     const rows: Record<string, unknown>[] = [{ name: "Legionary", default_weapon_ids: ["bolt-pistol", "boltgun"] }];
     projectUnit(legionaries, rows, equipment, "legionaries", [], profiles);
