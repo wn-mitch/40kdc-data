@@ -1475,24 +1475,68 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-963"
     },
     "source_digest": "54b11f7ffada9e343f503017b15fbbb19cc38ee3e065650ffe469b3a54956a91",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "state": "engaged"
+                  }
+                }
+              }
+            ]
+          }
+        ]
       },
       "effect": {
-        "type": "move",
-        "target": "this-unit",
-        "modifier": {
-          "move_type": "normal"
-        }
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "move",
+            "target": "event-subject",
+            "modifier": {
+              "move_type": "normal",
+              "distance": 6,
+              "as_if": "movement-phase"
+            }
+          },
+          {
+            "type": "permission",
+            "target": "event-subject",
+            "modifier": {
+              "activity": "declare-charge",
+              "allow": false
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -1502,8 +1546,15 @@
       "jackal-alphus"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "genestealer-cults"
+    "behavior": "reactive",
+    "faction_id": "genestealer-cults",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "hulking-bodyguards-genestealer-cults",

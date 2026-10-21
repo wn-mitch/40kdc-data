@@ -6995,27 +6995,25 @@
         ]
       },
       "effect": {
-        "type": "conditional",
-        "condition": {
-          "operator": "not",
-          "operands": [
-            {
-              "type": "eligible",
-              "parameters": {
-                "subject": "event-subject",
-                "to": "declare-charge"
-              }
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "move",
+            "target": "event-subject",
+            "modifier": {
+              "move_type": "normal",
+              "distance": 6
             }
-          ]
-        },
-        "effect": {
-          "type": "move",
-          "target": "event-subject",
-          "modifier": {
-            "move_type": "normal",
-            "distance": 6
+          },
+          {
+            "type": "permission",
+            "target": "event-subject",
+            "modifier": {
+              "activity": "declare-charge",
+              "allow": false
+            }
           }
-        }
+        ]
       }
     },
     "scope": {
@@ -7026,7 +7024,8 @@
       "event": "attacks-resolved",
       "filter": {
         "kind": "shoot"
-      }
+      },
+      "optional": true
     },
     "source_digest": "d6789f8f744eeed966ef4e1a3637dd85a5dfd0e64ae32e15405631b365290cd3"
   },
