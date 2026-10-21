@@ -4356,6 +4356,7 @@
       "storm-shield"
     ],
     "model_constraint": {
+      "model_name": "Wolf Guard Headtaker",
       "any_number": true
     }
   },

@@ -1253,10 +1253,12 @@ export function deriveWargear(
   const sets = dump.groupBy("loadout_choice_set", "datasheetId")
     .get(datasheetId);
 
-  // Multi-model = the datasheet has >1 miniature type (drives whether an option is
-  // scoped with model_constraint.model_name). Read it from the dump composition, not
-  // defaultsByModel.size — a miniature the heterogeneity guard skipped still counts.
-  const multiModel = dumpComposition(dump, datasheetId).length > 1;
+  // Multi-model = the datasheet fields >1 miniature type in any buildable size (drives
+  // whether an option is scoped with model_constraint.model_name). Read it from every dump
+  // composition tier, not the default alone (Broadsides' default size is one Shas'vre, yet
+  // each miniature carries its own drone menu), nor defaultsByModel.size — a miniature the
+  // heterogeneity guard skipped still counts.
+  const multiModel = aggregateComposition(dump, datasheetId).envelope.size > 1;
   const miniCaps = miniScopedSingleCaps(dump, datasheetId, resolve);
 
   // Flat limited-set allowances: when a swap's granted weapons are all covered

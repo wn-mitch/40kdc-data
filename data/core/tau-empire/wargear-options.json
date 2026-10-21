@@ -1515,6 +1515,7 @@
       "high-yield-missile-pods"
     ],
     "model_constraint": {
+      "model_name": "Broadside Shas’vre",
       "any_number": true
     }
   },
@@ -1542,6 +1543,7 @@
       ]
     ],
     "model_constraint": {
+      "model_name": "Broadside Shas’ui",
       "any_number": true,
       "max_count": 2
     }
@@ -1562,6 +1564,7 @@
       "high-yield-missile-pods"
     ],
     "model_constraint": {
+      "model_name": "Broadside Shas’ui",
       "any_number": true
     }
   },
@@ -1589,6 +1592,7 @@
       ]
     ],
     "model_constraint": {
+      "model_name": "Broadside Shas’vre",
       "any_number": true,
       "max_count": 2
     }
@@ -1637,6 +1641,7 @@
       ]
     ],
     "model_constraint": {
+      "model_name": "Broadside Shas’vre",
       "any_number": true
     }
   },
@@ -1684,6 +1689,7 @@
       ]
     ],
     "model_constraint": {
+      "model_name": "Broadside Shas’ui",
       "any_number": true
     }
   },
