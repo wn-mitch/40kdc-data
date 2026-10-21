@@ -4,8 +4,8 @@
     "name": "Daemonic Icon",
     "category": "icon",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -18,8 +18,8 @@
     "id": "instrument-of-chaos",
     "name": "Instrument of Chaos",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -32,8 +32,8 @@
     "id": "shining-aegis",
     "name": "Shining aegis",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -47,7 +47,7 @@
     "name": "Collar of Khorne",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -61,7 +61,7 @@
     "name": "Brass Collar of Bloody Vengeance",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {

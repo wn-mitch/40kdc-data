@@ -3,6 +3,7 @@ import type { DatabaseSync } from "node:sqlite";
 import { relative, sep } from "node:path";
 
 import { openProjectionChecker, type ProjectionChecker, type StagedWrite } from "../mfm/apply.js";
+import type { GameVersion } from "../mfm/dataslate.js";
 import { hashJson } from "../round4/hash.js";
 import { sourceDigest } from "../source-digest.js";
 import { compilationInputsHash } from "./compiled.js";
@@ -18,7 +19,7 @@ import { CorePublicationError, projectCore, type CoreProjection, type CoreRow } 
  */
 
 const OPTIONAL_MECHANICS_FIELDS = ["behavior", "trigger", "usage", "applies_to"] as const;
-const DIFF_FIELDS = ["effect", "scope", ...OPTIONAL_MECHANICS_FIELDS, "source_digest"] as const;
+const DIFF_FIELDS = ["effect", "scope", ...OPTIONAL_MECHANICS_FIELDS, "source_digest", "game_version"] as const;
 
 export class PublicationError extends Error {
   readonly status: number;
@@ -38,6 +39,13 @@ export type PublicationDiff = {
 
 /** One compiled record as publication writes it. */
 export type ProjectedRecord = CoreRow & { mechanics: Mechanics; source_digest: string };
+
+/**
+ * The dataslate publication stamps: a published record whose `source_digest` is the digest of
+ * the dump prose read now (`digests`, by ability id) is verified against that dump and takes
+ * its `gameVersion`. Any other record keeps the `game_version` it had.
+ */
+export type PublicationStamp = { gameVersion: GameVersion; digests: ReadonlyMap<string, string> };
 
 export type RecordProjection = {
   dataRoot: string;
@@ -68,7 +76,7 @@ function changedFields(before: Record<string, unknown>, after: Record<string, un
 }
 
 /** Replace each record's authored entry in the faction's abilities.json, and project its core target. */
-export function projectRecords(dataRoot: string, factionId: string, records: readonly ProjectedRecord[]): RecordProjection {
+export function projectRecords(dataRoot: string, factionId: string, records: readonly ProjectedRecord[], stamp?: PublicationStamp): RecordProjection {
   const file = abilityFilePath(dataRoot, factionId);
   const beforeText = readFileSync(file, "utf8");
   const parsed: unknown = JSON.parse(beforeText);
@@ -86,7 +94,8 @@ export function projectRecords(dataRoot: string, factionId: string, records: rea
     const { entry: current, index } = matches[0]!;
     // Approving a shape shows the authored entry beside the compiled one, so replacing an
     // authored effect is the reviewed outcome, not an accident to guard against here.
-    const proposed = { ...entryWithMechanics(current, row.mechanics), source_digest: row.source_digest };
+    const proposed: Record<string, unknown> = { ...entryWithMechanics(current, row.mechanics), source_digest: row.source_digest };
+    if (stamp && stamp.digests.get(row.ability_id) === row.source_digest) proposed.game_version = { ...stamp.gameVersion };
     const check = checkEntry(proposed);
     if (check.errors.length > 0) {
       throw new PublicationError(409, `Compiled entry ${row.id} fails the ability schema or canonical form: ${check.errors.join("; ")}`);

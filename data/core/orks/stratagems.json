@@ -43,7 +43,7 @@
     "ability_id": "breakin-heads-war-horde-orks",
     "game_version": {
       "edition": "11th",
-      "dataslate": "codex-orks"
+      "dataslate": "pre-launch-provisional"
     },
     "external_refs": [
       {
@@ -71,7 +71,7 @@
     "ability_id": "close-range-dakka-war-horde-orks",
     "game_version": {
       "edition": "11th",
-      "dataslate": "codex-orks"
+      "dataslate": "pre-launch-provisional"
     },
     "external_refs": [
       {
@@ -147,7 +147,7 @@
     "ability_id": "delicious-eating-squigs-kult-of-speed-orks",
     "game_version": {
       "edition": "11th",
-      "dataslate": "codex-orks"
+      "dataslate": "pre-launch-provisional"
     },
     "external_refs": [
       {
@@ -199,7 +199,7 @@
     "ability_id": "drive-by-bustin-wreckas-orks",
     "game_version": {
       "edition": "11th",
-      "dataslate": "codex-orks"
+      "dataslate": "pre-launch-provisional"
     },
     "external_refs": [
       {
@@ -227,7 +227,7 @@
     "ability_id": "dubious-restraint-taktikal-brigade-orks",
     "game_version": {
       "edition": "11th",
-      "dataslate": "codex-orks"
+      "dataslate": "pre-launch-provisional"
     },
     "external_refs": [
       {
@@ -255,7 +255,7 @@
     "ability_id": "ere-we-go-green-tide-orks",
     "game_version": {
       "edition": "11th",
-      "dataslate": "codex-orks"
+      "dataslate": "pre-launch-provisional"
     },
     "external_refs": [
       {
@@ -287,7 +287,7 @@
     "ability_id": "flyin-headbutt-flyboyz-orks",
     "game_version": {
       "edition": "11th",
-      "dataslate": "codex-orks"
+      "dataslate": "pre-launch-provisional"
     },
     "external_refs": [
       {
@@ -315,7 +315,7 @@
     "ability_id": "fungus-fuel-injection-war-horde-orks",
     "game_version": {
       "edition": "11th",
-      "dataslate": "codex-orks"
+      "dataslate": "pre-launch-provisional"
     },
     "external_refs": [
       {
@@ -391,7 +391,7 @@
     "ability_id": "grab-it-wreckas-orks",
     "game_version": {
       "edition": "11th",
-      "dataslate": "codex-orks"
+      "dataslate": "pre-launch-provisional"
     },
     "external_refs": [
       {
@@ -419,7 +419,7 @@
     "ability_id": "grot-shields-runt-swarm-orks",
     "game_version": {
       "edition": "11th",
-      "dataslate": "codex-orks"
+      "dataslate": "pre-launch-provisional"
     },
     "external_refs": [
       {
@@ -447,7 +447,7 @@
     "ability_id": "gun-crazy-show-offs-wreckas-orks",
     "game_version": {
       "edition": "11th",
-      "dataslate": "codex-orks"
+      "dataslate": "pre-launch-provisional"
     },
     "external_refs": [
       {
@@ -475,7 +475,7 @@
     "ability_id": "hit-em-harder-war-horde-orks",
     "game_version": {
       "edition": "11th",
-      "dataslate": "codex-orks"
+      "dataslate": "pre-launch-provisional"
     },
     "external_refs": [
       {
@@ -555,7 +555,7 @@
     "ability_id": "infested-war-zone-runt-swarm-orks",
     "game_version": {
       "edition": "11th",
-      "dataslate": "codex-orks"
+      "dataslate": "pre-launch-provisional"
     },
     "external_refs": [
       {
@@ -655,7 +655,7 @@
     "ability_id": "long-uncontrolled-bursts-flyboyz-orks",
     "game_version": {
       "edition": "11th",
-      "dataslate": "codex-orks"
+      "dataslate": "pre-launch-provisional"
     },
     "external_refs": [
       {
@@ -683,7 +683,7 @@
     "ability_id": "mind-mostly-on-the-mission-taktikal-brigade-orks",
     "game_version": {
       "edition": "11th",
-      "dataslate": "codex-orks"
+      "dataslate": "pre-launch-provisional"
     },
     "external_refs": [
       {
@@ -711,7 +711,7 @@
     "ability_id": "mob-mentality-green-tide-orks",
     "game_version": {
       "edition": "11th",
-      "dataslate": "codex-orks"
+      "dataslate": "pre-launch-provisional"
     },
     "external_refs": [
       {
@@ -739,7 +739,7 @@
     "ability_id": "mow-em-down-war-horde-orks",
     "game_version": {
       "edition": "11th",
-      "dataslate": "codex-orks"
+      "dataslate": "pre-launch-provisional"
     },
     "external_refs": [
       {
@@ -767,7 +767,7 @@
     "ability_id": "never-enough-dakka-shoota-boyz-orks",
     "game_version": {
       "edition": "11th",
-      "dataslate": "codex-orks"
+      "dataslate": "pre-launch-provisional"
     },
     "external_refs": [
       {
@@ -843,7 +843,7 @@
     "ability_id": "scarper-runt-swarm-orks",
     "game_version": {
       "edition": "11th",
-      "dataslate": "codex-orks"
+      "dataslate": "pre-launch-provisional"
     },
     "external_refs": [
       {
@@ -944,7 +944,7 @@
     "ability_id": "unbridled-carnage-green-tide-orks",
     "game_version": {
       "edition": "11th",
-      "dataslate": "codex-orks"
+      "dataslate": "pre-launch-provisional"
     },
     "external_refs": [
       {
@@ -972,7 +972,7 @@
     "ability_id": "vindictive-artillerists-madcap-meks-orks",
     "game_version": {
       "edition": "11th",
-      "dataslate": "codex-orks"
+      "dataslate": "pre-launch-provisional"
     },
     "external_refs": [
       {
@@ -1024,7 +1024,7 @@
     "ability_id": "while-their-backs-are-turned-taktikal-brigade-orks",
     "game_version": {
       "edition": "11th",
-      "dataslate": "codex-orks"
+      "dataslate": "pre-launch-provisional"
     },
     "external_refs": [
       {
@@ -1052,7 +1052,7 @@
     "ability_id": "whirligig-evasion-flyboyz-orks",
     "game_version": {
       "edition": "11th",
-      "dataslate": "codex-orks"
+      "dataslate": "pre-launch-provisional"
     },
     "external_refs": [
       {

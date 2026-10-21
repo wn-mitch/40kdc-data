@@ -3,8 +3,8 @@
     "id": "resurrection-orb",
     "name": "resurrection orb",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -21,8 +21,8 @@
     "id": "dispersion-shield",
     "name": "dispersion shield",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -35,8 +35,8 @@
     "id": "shieldvanes",
     "name": "shieldvanes",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -49,8 +49,8 @@
     "id": "nebuloscope",
     "name": "nebuloscope",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -63,8 +63,8 @@
     "id": "shadowloom",
     "name": "shadowloom",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -93,8 +93,8 @@
     "id": "plasmacyte",
     "name": "Plasmacyte",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -107,8 +107,8 @@
     "id": "nanoscarab-amulet",
     "name": "nanoscarab amulet",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -121,8 +121,8 @@
     "id": "accelerator-mandible",
     "name": "accelerator mandible",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -136,7 +136,7 @@
     "name": "Nanoscarab Projector",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -150,7 +150,7 @@
     "name": "Fabricator Claw Array (Aura)",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -164,7 +164,7 @@
     "name": "Gloom Prism (Aura)",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -178,7 +178,7 @@
     "name": "Nullstone Field Generator (Aura)",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {

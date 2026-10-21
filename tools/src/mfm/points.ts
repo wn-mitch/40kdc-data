@@ -40,9 +40,7 @@ import { repoDirForFactionName, repoDirs } from "./faction-map.js";
 import { candidateDirs, homeScore } from "./wargear.js";
 import { FACTION_SIBLING_KEYWORDS } from "../integrity.js";
 import type { StagedWrite } from "./apply.js";
-
-
-const CONFIRMED = { edition: "11th", dataslate: "launch" };
+import { currentGameVersion } from "./dataslate.js";
 
 export interface Tier {
   models: number;
@@ -334,6 +332,12 @@ export interface DirPointsResult {
   /** Units whose `detachment_pricing` the dump replaced or cleared. */
   detachmentPricingChanged: string[];
   repoOnly: string[]; // repo unit absent from dump (Legends/FW → BSData)
+  /**
+   * Units matched to a live datasheet whose stored native and detachment pricing already
+   * equal the unambiguous dump derivation (before this run's reconciliation), or, for a
+   * datasheet the dump prints no price for, carry the cost-0 convention.
+   */
+  pointsVerified: { id: string; datasheetId: string }[];
 }
 export interface PointsReport {
   dirs: DirPointsResult[];
@@ -342,6 +346,7 @@ export interface PointsReport {
 }
 
 export function runPoints(dump: MfmDump, write: boolean): PointsReport {
+  const confirmed = currentGameVersion(dump);
   const dirs = new Set(repoDirs());
 
   // datasheet → candidate repo dirs (its own faction dir PLUS any shared-roster
@@ -398,6 +403,7 @@ export function runPoints(dump: MfmDump, write: boolean): PointsReport {
       ambiguousSkipped: [],
       detachmentPricingChanged: [],
       repoOnly: [],
+      pointsVerified: [],
     };
     const matchedRepoIds = new Set<string>();
 
@@ -448,7 +454,15 @@ export function runPoints(dump: MfmDump, write: boolean): PointsReport {
       matchedDatasheets.add(ds.id!);
       res.matched++;
       const { native, allied, byDetachment, ambiguous } = deriveDatasheet(dump, ds.id!);
-      if (!native.length) continue; // no dump price (e.g. data-only datasheet)
+      if (!native.length) {
+        // No dump price (a Combat Patrol or data-only datasheet). The repo convention for an
+        // unpriced datasheet is cost 0 on every tier, as for Combat Patrol enhancements; a unit
+        // that follows it agrees with the dump.
+        if ((rec.points ?? []).length > 0 && rec.points!.every((tier) => tier.cost === 0) && !rec.detachment_pricing?.length) {
+          res.pointsVerified.push({ id, datasheetId: ds.id! });
+        }
+        continue;
+      }
 
       if (ambiguous) {
         res.ambiguousSkipped.push(id);
@@ -468,8 +482,13 @@ export function runPoints(dump: MfmDump, write: boolean): PointsReport {
       const alliedClean = allied
         .map(cleanTier)
         .filter((a) => nativeRanges.has(`${a.models}:${a.models_max ?? a.models}`));
-      if (normNative(rec.points) !== normNative(nativeClean)) {
+      const detClean = byDetachment.map(cleanTier);
+      const nativeMatches = normNative(rec.points) === normNative(nativeClean);
+      if (!nativeMatches) {
         res.pointsChanged.push({ id, from: rec.points ?? [], to: nativeClean });
+      }
+      if (nativeMatches && JSON.stringify(rec.detachment_pricing ?? []) === JSON.stringify(detClean)) {
+        res.pointsVerified.push({ id, datasheetId: ds.id! });
       }
       if (alliedClean.length && normAllied(rec.allied_points) !== normAllied(alliedClean)) {
         res.alliedAdded.push({ id, allied: alliedClean });
@@ -478,7 +497,6 @@ export function runPoints(dump: MfmDump, write: boolean): PointsReport {
       rec.points = nativeClean;
       if (alliedClean.length) rec.allied_points = alliedClean;
       // Detachment-gated pricing is authoritative: replace, or clear when absent.
-      const detClean = byDetachment.map(cleanTier);
       if (JSON.stringify(rec.detachment_pricing ?? []) !== JSON.stringify(detClean)) {
         res.detachmentPricingChanged.push(id);
         if (detClean.length) rec.detachment_pricing = detClean;
@@ -486,8 +504,8 @@ export function runPoints(dump: MfmDump, write: boolean): PointsReport {
       }
       rec.points_provisional = false;
       if (rec.game_version) {
-        rec.game_version.edition = CONFIRMED.edition;
-        rec.game_version.dataslate = CONFIRMED.dataslate;
+        rec.game_version.edition = confirmed.edition;
+        rec.game_version.dataslate = confirmed.dataslate;
       }
     }
 

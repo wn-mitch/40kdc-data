@@ -18,6 +18,7 @@ import {
   reconcilePublicationBatches,
 } from "../src/semantic-authoring/publish.js";
 
+import { projectRecords } from "../src/semantic-authoring/publication-projection.js";
 import { refreshSources } from "../src/semantic-authoring/source.js";
 import { hashJson } from "../src/round4/hash.js";
 import { sourceDigest } from "../src/source-digest.js";
@@ -206,6 +207,50 @@ describe("Semantic authoring explicit publication", () => {
         total_batches: 1,
         recent_batches: [{ batch_id: preview.batch_id, state: "published", receipt: { actual_after_hash: receipt.actual_after_hash } }],
       });
+    } finally {
+      fixture.db.close();
+    }
+  }, 120_000);
+
+  it("stamps the dataslate of the dump whose prose a published record is digested from", async () => {
+    const fixture = buildFixture();
+    try {
+      // The fixture stands for prose read from dump data_version 963.
+      writeFileSync(join(fixture.rawStore, "index.json"), JSON.stringify({ data_version: 963 }));
+      const otherBefore = structuredClone(entriesAt(fixture.abilitiesFile).find((entry) => entry.ability_id === authoredAbilityId));
+      const preview = await preparePublication(fixture.db, { faction_id: factionId, entry_ids: [fixture.selectedEntryId] });
+      expect(preview.diff[0]!.fields.find((field) => field.field === "game_version")?.after).toEqual({ edition: "11th", dataslate: "mfm-963" });
+      await publishPublication(fixture.db, { batch_id: preview.batch_id, preview_hash: preview.preview_hash });
+      const after = entriesAt(fixture.abilitiesFile);
+      expect(after.find((entry) => entry.ability_id === selectedAbilityId)).toMatchObject({
+        source_digest: sourceDigest(privateSourceText),
+        game_version: { edition: "11th", dataslate: "mfm-963" },
+      });
+      expect(after.find((entry) => entry.ability_id === authoredAbilityId)).toEqual(otherBefore);
+
+      // A dump version with no dataslate refuses publication instead of stamping a guess.
+      writeFileSync(join(fixture.rawStore, "index.json"), JSON.stringify({ data_version: 1 }));
+      await expect(preparePublication(fixture.db, { faction_id: factionId, entry_ids: [fixture.authoredEntryId] })).rejects.toThrow("data_version 1 has no dataslate");
+    } finally {
+      fixture.db.close();
+    }
+  }, 120_000);
+
+  it("leaves game_version alone when the published digest is not the dump's", async () => {
+    const fixture = buildFixture();
+    try {
+      const before = entriesAt(fixture.abilitiesFile).find((entry) => entry.ability_id === selectedAbilityId)!;
+      const stamp = { gameVersion: { edition: "11th", dataslate: "mfm-963" }, digests: new Map([[selectedAbilityId, sourceDigest("other prose")]]) };
+      const projection = projectRecords(realpathSync(fixture.dataRoot), factionId, [
+        { id: "row", ability_id: selectedAbilityId, mechanics: STAT_MECHANICS as never, core: null, source_digest: sourceDigest(privateSourceText) },
+      ], stamp);
+      expect(projection.entries.find((entry) => entry.ability_id === selectedAbilityId)!.game_version).toEqual(before.game_version);
+      expect(projection.diff[0]!.fields.map((field) => field.field)).not.toContain("game_version");
+
+      // Prose from no known dump (a fixture without a data_version) stamps nothing either.
+      const preview = await preparePublication(fixture.db, { faction_id: factionId, entry_ids: [fixture.selectedEntryId] });
+      await publishPublication(fixture.db, { batch_id: preview.batch_id, preview_hash: preview.preview_hash });
+      expect(entriesAt(fixture.abilitiesFile).find((entry) => entry.ability_id === selectedAbilityId)!.game_version).toEqual(before.game_version);
     } finally {
       fixture.db.close();
     }

@@ -8,7 +8,8 @@ import { sourceDigest } from "../source-digest.js";
 import { compilationInputsHash, compiledIdentity, getCompiledEntry } from "./compiled.js";
 import { abilityFilePath, canonicalDataRoot, semanticAuthoringDataRoot, schemaTreeHash, type Mechanics } from "./entries.js";
 import { bumpWorkbenchRevision, withTransaction } from "./db.js";
-import { PublicationError, projectRecords, record, relativeAbilityPath, stagedWrites, type PublicationDiff } from "./publication-projection.js";
+import { gameVersionForDataVersion } from "../mfm/dataslate.js";
+import { PublicationError, projectRecords, record, relativeAbilityPath, stagedWrites, type PublicationDiff, type PublicationStamp } from "./publication-projection.js";
 import { coreManifest, coreStratagemFile, observedCoreHash, type CoreManifest, type CoreProjection } from "./publish-core.js";
 import { loadSourceRecords, type SourceRecord } from "./source.js";
 
@@ -153,16 +154,18 @@ function manifestFile(manifest: PublicationManifest): string {
   return expected;
 }
 
-function freshSourceMap(rows: EntryRow[]): Map<string, SourceRecord> {
+/** The fresh source records of the selected abilities, and the dump `data_version` they were read from. */
+function freshSourceMap(rows: EntryRow[]): { records: Map<string, SourceRecord>; dataVersion: number | undefined } {
   const selected = new Set(rows.map((row) => `${row.faction_id}\u0000${row.ability_id}`));
   const source = loadSourceRecords();
   const selectedConflicts = source.conflicts.filter((conflict) => selected.has(`${conflict.factionId}\u0000${conflict.abilityId}`));
   if (selectedConflicts.length > 0) {
     throw new PublicationError(409, `Publication source is ambiguous for ${selectedConflicts.map((item) => `${item.factionId}/${item.abilityId}`).join(", ")}.`);
   }
-  return new Map(source.records
+  const records = new Map(source.records
     .filter((item) => selected.has(`${item.factionId}\u0000${item.abilityId}`))
     .map((item) => [`${item.factionId}\u0000${item.abilityId}`, item]));
+  return { records, dataVersion: source.dataVersion };
 }
 
 type EntryRow = {
@@ -243,11 +246,16 @@ function buildProjection(
   const rows = loadEntryRows(db, options.faction_id, options.entry_ids);
   const sources = freshSourceMap(rows);
   const snapshots = rows.map((row) => {
-    const source = sources.get(`${row.faction_id}\u0000${row.ability_id}`);
+    const source = sources.records.get(`${row.faction_id}\u0000${row.ability_id}`);
     if (!source) throw new PublicationError(409, `Fresh source is missing for ${row.faction_id}/${row.ability_id}.`);
     return approvedEntrySnapshot(db, row, source);
   });
-  const projected = projectRecords(dataRoot, options.faction_id, rows.map((row, index) => ({ ...row, source_digest: snapshots[index]!.source_digest })));
+  // Prose read from a known dump stamps that dump's dataslate on the records digested from it.
+  const stamp: PublicationStamp | undefined = sources.dataVersion === undefined ? undefined : {
+    gameVersion: gameVersionForDataVersion(sources.dataVersion),
+    digests: new Map([...sources.records.values()].map((source) => [source.abilityId, sourceDigest(source.text)])),
+  };
+  const projected = projectRecords(dataRoot, options.faction_id, rows.map((row, index) => ({ ...row, source_digest: snapshots[index]!.source_digest })), stamp);
   return {
     core: projected.core,
     dataRoot,

@@ -19,5 +19,12 @@
     "effective_date": "2026-08-20",
     "label": "Codex: Orks rules snapshot",
     "supersedes": "launch"
+  },
+  {
+    "edition": "11th",
+    "dataslate": "mfm-963",
+    "effective_date": "2026-09-30",
+    "label": "Munitorum Field Manual data_version 963 (codex errata to 30 September 2026)",
+    "supersedes": "codex-orks"
   }
 ]

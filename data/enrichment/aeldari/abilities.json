@@ -3228,7 +3228,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-963"
     },
     "source_digest": "544cabf6828ea022a023224045ddc4f8a3f372582adfd0c118fec7699944b9db",
     "version": "2025-q3",
@@ -7742,7 +7742,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "source_digest": "c69db863c1aab1a5a171818b7efe9460a5e6dcf681caf4ddbc4e5f0a1e036e63",
     "version": "2026-q3",
@@ -7769,7 +7769,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "source_digest": "c69db863c1aab1a5a171818b7efe9460a5e6dcf681caf4ddbc4e5f0a1e036e63",
     "version": "2026-q3",
@@ -7796,7 +7796,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "source_digest": "fd24f11860556d3a624e7a182427c87747daf4b1a6e962d3ce4dcacad163306d",
     "version": "2026-q3",
@@ -7833,7 +7833,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "source_digest": "fd2f84cd7c865aa8ccf4c9097a773b8642d9ab368b681c5f66962f787b49e8b3",
     "version": "2026-q3",
@@ -7881,7 +7881,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "source_digest": "85bf97e4d481620a0020cef28aba5a5c5932b1df20655e59e85cdfbd7ed841d7",
     "version": "2026-q3",
@@ -7930,7 +7930,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "source_digest": "a0ef2394e565a70345e86283a9c32213cb935772dc26fb151bfff0641d18c193",
     "version": "2026-q3",
@@ -7978,7 +7978,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "source_digest": "9ce13e8c371dd55f10660af4566546c3a3e26ef5ec3249f175ead547e99029f8",
     "version": "2026-q3",
@@ -8043,7 +8043,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "source_digest": "257bfed1d589044865ce018a96dc073ac4167fd25bb7303d8a1c794b51c057c7",
     "version": "2026-q3",
@@ -8090,7 +8090,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "source_digest": "97501f336c63e1aa0e7d3786986a824f5b5cf5a0ba00a92ca646f1c92d60f80a",
     "version": "2026-q3",
@@ -8142,7 +8142,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "source_digest": "3cdeda1d44d6b5ac3b67ac45f0b60d6e5ce3243b78cb21d01cf627c3754d3fde",
     "version": "2026-q3",
@@ -8222,7 +8222,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -8242,7 +8242,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -8262,7 +8262,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [
@@ -8284,7 +8284,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -8304,7 +8304,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -8324,7 +8324,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -8344,7 +8344,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -8364,7 +8364,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -8384,7 +8384,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -8404,7 +8404,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -8424,7 +8424,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -8444,7 +8444,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -8464,7 +8464,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -8484,7 +8484,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [
@@ -8506,7 +8506,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -8526,7 +8526,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -8546,7 +8546,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -8566,7 +8566,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -8586,7 +8586,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -8606,7 +8606,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [
@@ -8628,7 +8628,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -8648,7 +8648,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -8668,7 +8668,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -8688,7 +8688,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -8708,7 +8708,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -8728,7 +8728,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -8748,7 +8748,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [
@@ -8771,7 +8771,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -8791,7 +8791,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [
@@ -8813,7 +8813,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -8833,7 +8833,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -8853,7 +8853,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -8873,7 +8873,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -8893,7 +8893,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -8913,7 +8913,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -8933,7 +8933,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -8953,7 +8953,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -8973,7 +8973,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -8993,7 +8993,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9013,7 +9013,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9033,7 +9033,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9053,7 +9053,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9073,7 +9073,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9093,7 +9093,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9113,7 +9113,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9133,7 +9133,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9153,7 +9153,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9173,7 +9173,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9193,7 +9193,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9213,7 +9213,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9233,7 +9233,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9253,7 +9253,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9273,7 +9273,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9293,7 +9293,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9313,7 +9313,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9333,7 +9333,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9353,7 +9353,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9373,7 +9373,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9393,7 +9393,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9413,7 +9413,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9433,7 +9433,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9453,7 +9453,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9473,7 +9473,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [
@@ -9495,7 +9495,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9515,7 +9515,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9535,7 +9535,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9555,7 +9555,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9575,7 +9575,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9595,7 +9595,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9615,7 +9615,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9635,7 +9635,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9655,7 +9655,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9675,7 +9675,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9695,7 +9695,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9715,7 +9715,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [
@@ -9737,7 +9737,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9757,7 +9757,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9777,7 +9777,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9797,7 +9797,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9817,7 +9817,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9837,7 +9837,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9857,7 +9857,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9877,7 +9877,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [
@@ -9899,7 +9899,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9919,7 +9919,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [
@@ -9942,7 +9942,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9962,7 +9962,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -9982,7 +9982,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10002,7 +10002,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10022,7 +10022,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10042,7 +10042,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10062,7 +10062,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10082,7 +10082,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10102,7 +10102,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [
@@ -10124,7 +10124,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10144,7 +10144,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10164,7 +10164,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10184,7 +10184,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10204,7 +10204,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10224,7 +10224,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10244,7 +10244,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10264,7 +10264,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10284,7 +10284,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10304,7 +10304,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10324,7 +10324,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [
@@ -10346,7 +10346,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10366,7 +10366,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10386,7 +10386,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10406,7 +10406,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10426,7 +10426,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10446,7 +10446,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10466,7 +10466,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10486,7 +10486,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10506,7 +10506,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10526,7 +10526,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [
@@ -10548,7 +10548,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10568,7 +10568,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10588,7 +10588,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10608,7 +10608,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10628,7 +10628,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [
@@ -10650,7 +10650,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10670,7 +10670,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10690,7 +10690,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10710,7 +10710,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10730,7 +10730,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10750,7 +10750,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10770,7 +10770,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10790,7 +10790,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10810,7 +10810,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10830,7 +10830,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10850,7 +10850,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10870,7 +10870,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10890,7 +10890,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10910,7 +10910,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10930,7 +10930,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10950,7 +10950,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10970,7 +10970,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -10990,7 +10990,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],
@@ -11010,7 +11010,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "stub": true,
     "unit_ids": [],

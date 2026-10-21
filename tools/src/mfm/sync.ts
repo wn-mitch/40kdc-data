@@ -43,6 +43,8 @@ export const MFM_SYNC_COMMANDS: readonly IngestMfmCommand[] = [
   "mirror",
   "coverage",
   "golden",
+  // Last: every record's stamp is decided against the dataset the passes above produced.
+  "dataslates",
 ];
 
 const productionDependencies: MfmSyncDependencies = {

@@ -244,15 +244,15 @@
       "reason": "The tier maximum is copied from the supported composition-miniature row."
     },
     "/game_version": {
-      "provenance": "repo-authored", "coverage": "implemented", "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": ["Existing unit game_version precedes the repository launch fallback."],
+      "provenance": "repo-authored", "coverage": "implemented", "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": ["Existing unit game_version precedes the current dump dataslate fallback."],
       "consumers": ["tools/src/mfm/project-loadout.ts#projectUnit"], "reason": "The projection copies repository release context and never converts dump metadata into a game version."
     },
     "/game_version/edition": {
-      "provenance": "repo-authored", "coverage": "implemented", "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": ["Existing unit game_version precedes the repository launch fallback."],
+      "provenance": "repo-authored", "coverage": "implemented", "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": ["Existing unit game_version precedes the current dump dataslate fallback."],
       "consumers": ["tools/src/mfm/project-loadout.ts#projectUnit"], "reason": "Edition is repository release context, not a dump-metadata transform."
     },
     "/game_version/dataslate": {
-      "provenance": "repo-authored", "coverage": "implemented", "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": ["Existing unit game_version precedes the repository launch fallback."],
+      "provenance": "repo-authored", "coverage": "implemented", "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": ["Existing unit game_version precedes the current dump dataslate fallback."],
       "consumers": ["tools/src/mfm/project-loadout.ts#projectUnit"], "reason": "Dataslate is repository release context, not a dump-metadata transform."
     },
     "/game_modes": {

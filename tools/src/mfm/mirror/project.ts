@@ -5,7 +5,7 @@
  */
 import type { Replacement } from "../../round6/json-spans.js";
 import { CORE_FACTION, safeSlug } from "../dump-prose-rows.js";
-import { CONFIRMED } from "../wargear.js";
+import { PROVISIONAL_DATASLATE } from "../dataslate.js";
 import { bareName, type Identity, ratingFromTail } from "./identity.js";
 import { editArray } from "./json-edit.js";
 import { recKey } from "./match.js";
@@ -153,7 +153,8 @@ export function projectData(plan: MirrorPlan, snap: RepoSnapshot): Projection {
       ability_id: s.id,
       name: s.name,
       authored_by: "40kdc-community",
-      game_version: { ...CONFIRMED },
+      // A stub carries no authored mechanics, so it never verifies against the dump.
+      game_version: { edition: "11th", dataslate: PROVISIONAL_DATASLATE },
       stub: true,
       unit_ids: s.faction === CORE_FACTION ? [] : (plan.unitsOf.get(s.id) ?? []),
       ...(s.faction === CORE_FACTION ? {} : { faction_id: s.faction }),

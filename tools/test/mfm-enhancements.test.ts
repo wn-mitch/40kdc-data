@@ -17,6 +17,7 @@ import {
  */
 function dump(): MfmDump {
   return new MfmDump({
+    metadata: { data_version: 963 },
     data: {
       faction_keyword: [{ id: "fk-ac", parentFactionKeywordId: null, localisations: { en: { name: "Adeptus Custodes" } } }],
       publication: [{ id: "p", factionKeywordId: "fk-ac", isCombatPatrol: false, isLegends: false, isCoreRules: false, localisations: { en: { name: "Codex" } } }],
@@ -90,6 +91,7 @@ describe("buildEnhCanon", () => {
  */
 function fieldsDump(): MfmDump {
   return new MfmDump({
+    metadata: { data_version: 963 },
     data: {
       publication: [{ id: "p", factionKeywordId: "fk-as", isCombatPatrol: false, isLegends: false, isCoreRules: false, localisations: { en: { name: "Codex" } } }],
       detachment: [{ id: "det", publicationId: "p", localisations: { en: { name: "Chorus of Condemnation" } } }],
@@ -154,6 +156,7 @@ describe("buildEnhFieldCanon", () => {
 
   it("names a placeholder DNU group by the bearer the printed rule names, and refuses an unmapped one", () => {
     const dump = new MfmDump({
+      metadata: { data_version: 963 },
       data: {
         publication: [{ id: "p", factionKeywordId: "fk-nec", isCombatPatrol: false, isLegends: false, isCoreRules: false, localisations: { en: { name: "Codex" } } }],
         detachment: [{ id: "det", publicationId: "p", localisations: { en: { name: "Pantheon of Woe" } } }],

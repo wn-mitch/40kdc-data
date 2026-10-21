@@ -5,7 +5,7 @@
     "category": "banner",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -19,7 +19,7 @@
     "name": "Praesidium Shield",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -37,7 +37,7 @@
     "name": "Tarsis buckler",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {

@@ -49,8 +49,8 @@ import {
 } from "./points.js";
 import type { StagedWrite } from "./apply.js";
 import { type GoldenMode, isCombatPatrolPublication } from "./game-mode.js";
+import { currentGameVersion } from "./dataslate.js";
 
-const CONFIRMED = { edition: "11th", dataslate: "launch" };
 /** Combat-Patrol-only entities carry this so the golden files them on the
  *  combat-patrol coverage dimension instead of inflating competitive gaps. */
 const COMBAT_PATROL_ONLY: readonly GoldenMode[] = ["combat-patrol"];
@@ -331,7 +331,7 @@ export function buildSeedUnit(
     ...(keywords.length ? { keywords } : {}),
     ...(faction_keywords.length ? { faction_keywords } : {}),
     model_count,
-    game_version: { ...CONFIRMED },
+    game_version: currentGameVersion(dump),
     ...(cp ? { game_modes: [...COMBAT_PATROL_ONLY] } : {}),
     is_legend: false,
     points_provisional: !priced,

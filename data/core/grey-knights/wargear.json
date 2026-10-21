@@ -35,8 +35,8 @@
     "id": "apothecarys-narthecium",
     "name": "Apothecary's narthecium",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -49,8 +49,8 @@
     "id": "ancients-banner",
     "name": "Ancient's banner",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "category": "standard",
     "external_refs": [
@@ -64,8 +64,8 @@
     "id": "thunderhawk-cluster-bombs",
     "name": "Thunderhawk cluster bombs",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {

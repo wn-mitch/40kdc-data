@@ -136,7 +136,7 @@
       "transforms": [],
       "filters": [],
       "precedence": [
-        "Use the source unit's authored game_version; fall back to the repository launch default."
+        "Use the source unit's authored game_version; fall back to the current dump dataslate."
       ],
       "consumers": ["tools/src/mfm/gear-projection.ts#mintWeapon"],
       "reason": "The minted weapon inherits repository game-version context rather than translating dump metadata."
@@ -149,7 +149,7 @@
       "transforms": [],
       "filters": [],
       "precedence": [
-        "Use the source unit's authored game_version; fall back to the repository launch default."
+        "Use the source unit's authored game_version; fall back to the current dump dataslate."
       ],
       "consumers": ["tools/src/mfm/gear-projection.ts#mintWeapon"],
       "reason": "The minted weapon inherits repository game-version context rather than translating dump metadata."
@@ -162,7 +162,7 @@
       "transforms": [],
       "filters": [],
       "precedence": [
-        "Use the source unit's authored game_version; fall back to the repository launch default."
+        "Use the source unit's authored game_version; fall back to the current dump dataslate."
       ],
       "consumers": ["tools/src/mfm/gear-projection.ts#mintWeapon"],
       "reason": "The minted weapon inherits repository game-version context rather than translating dump metadata."

@@ -110,7 +110,9 @@ describe("MFM sync", () => {
     expect(log).toHaveBeenLastCalledWith("MFM_SYNC_OK data_version=867");
     log.mockRestore();
     expect(calls.map((call) => call.command)).toEqual(MFM_SYNC_COMMANDS);
-    expect(calls).toHaveLength(28);
+    expect(calls).toHaveLength(29);
+    // The dataslate stamps are decided last, against the dataset every other pass produced.
+    expect(calls.at(-1)?.command).toBe("dataslates");
     // Reissued refs move before any pass joins on them. A mirror precedes every reconciler keyed
     // on mirrored ids, and a closing mirror follows every pass that seeds entities it must see.
     const order = calls.map((call) => call.command);

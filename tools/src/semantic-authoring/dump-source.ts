@@ -260,5 +260,5 @@ export function loadDumpSourceRecords(options: DumpSourceOptions = {}): SourceLo
     }
   }
   records.sort((left, right) => `${left.factionId}\u0000${left.abilityId}`.localeCompare(`${right.factionId}\u0000${right.abilityId}`));
-  return { origin: `dump:${dumpPath}`, records, skipped, conflicts };
+  return { origin: `dump:${dumpPath}`, records, skipped, conflicts, ...(prose.dataVersion === undefined ? {} : { dataVersion: prose.dataVersion }) };
 }

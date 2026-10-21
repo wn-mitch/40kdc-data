@@ -26,6 +26,8 @@
  *   mirror        Ability identity from the dump (`mfm:mirror`): stubs, unit ability_ids, retirement
  *   attachment-role  Dump-authoritative leader/support role + leader-attachments
  *                    (supersedes the 10e known-support-10e.ts scrape)
+ *   dataslates    Stamp dump-verified records with the dump's dataslate; demote
+ *                 records that claim dump confirmation but fail verification
  *   seed-units    Create skeleton units for dump datasheets with no repo entity
  *                 (stats/points/keywords/role/model_count). The other subcommands
  *                 only reconcile existing units; this is the one that adds new ones.
@@ -120,7 +122,9 @@ import {
   mintEnhancementWeapons,
   type WeaponMintResult,
 } from "./mfm/enhancement-weapons.js";
-import { CONFIRMED } from "./mfm/wargear.js";
+import { currentGameVersion } from "./mfm/dataslate.js";
+import { buildDataslatesReport, runDataslates } from "./mfm/dataslates/run.js";
+import { openWorkbenchReadOnly } from "./semantic-authoring/db.js";
 import type { WeaponRecord } from "./mfm/gear-projection.js";
 import { writeGolden } from "./mfm/golden.js";
 import {
@@ -1521,7 +1525,7 @@ async function runWeaponVariantsCmd(
  * weapons.json. A weapon whose id already exists with other values is refused, not replaced.
  */
 async function runWeaponsCmd(dump: MfmDump, write: boolean): Promise<void> {
-  const ctx = { dump, gv: { ...CONFIRMED }, warnings: [] as string[] };
+  const ctx = { dump, gv: currentGameVersion(dump), warnings: [] as string[] };
   const enhancements: WeaponMintResult = mintEnhancementWeapons(ctx);
   const drones: WeaponMintResult = mintDroneWeapons(ctx);
   const refusals = [...enhancements.refusals, ...drones.refusals];
@@ -1581,6 +1585,37 @@ async function runConditionalKeywordsCmd(
     console.log("DRY RUN — no files written. Re-run with --write to apply.");
 }
 
+/**
+ * Stamp each dump-verifiable record with the current dump's dataslate, demoting failures
+ * (see `mfm/dataslates/run.ts`). Abilities verify against the semantic-authoring workbench,
+ * opened read-only; a missing workbench is an error rather than a mass demotion.
+ */
+async function runDataslatesCmd(dump: MfmDump, write: boolean, dumpPath: string): Promise<void> {
+  const db = openWorkbenchReadOnly();
+  let report: ReturnType<typeof runDataslates>;
+  try {
+    report = runDataslates(dump, { dataRoot: path.join(REPO_ROOT, "data"), dumpPath, db });
+  } finally {
+    db.close();
+  }
+  fs.mkdirSync(REPORT_DIR, { recursive: true });
+  const reportPath = path.join(REPORT_DIR, "mfm-dataslates.md");
+  fs.writeFileSync(reportPath, buildDataslatesReport(report, write));
+  console.log(`Dataslate report → ${path.relative(REPO_ROOT, reportPath)}`);
+  let promote = 0;
+  let demote = 0;
+  for (const byDir of report.counts.values()) {
+    for (const counts of byDir.values()) {
+      promote += counts.promote;
+      demote += counts.demote;
+    }
+  }
+  console.log(`Dataslate ${report.current.dataslate}: promoted ${promote}, demoted ${demote}, files staged ${report.staged.length}.`);
+  await applyWrites(report.staged, { write, label: "dataslates" });
+  if (!write)
+    console.log("DRY RUN — no files written. Re-run with --write to apply.");
+}
+
 export const INGEST_MFM_COMMANDS = [
   "coverage",
   "golden",
@@ -1613,6 +1648,7 @@ export const INGEST_MFM_COMMANDS = [
   "weapon-variants",
   "weapons",
   "external-refs",
+  "dataslates",
 ] as const;
 
 export type IngestMfmCommand = (typeof INGEST_MFM_COMMANDS)[number];
@@ -1697,6 +1733,8 @@ export async function runIngestMfmCommand(
   else if (command === "weapon-variants")
     await runWeaponVariantsCmd(dump, options.write, options.onlyDir);
   else if (command === "weapons") await runWeaponsCmd(dump, options.write);
+  else if (command === "dataslates")
+    await runDataslatesCmd(dump, options.write, options.dumpPath);
   else {
     const unsupportedCommand: never = command;
     throw new Error(`Unsupported MFM ingest command: ${unsupportedCommand}`);

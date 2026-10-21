@@ -3,8 +3,8 @@
     "id": "relic-shield",
     "name": "relic shield",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -21,8 +21,8 @@
     "id": "storm-shield",
     "name": "storm shield",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -51,8 +51,8 @@
     "id": "helix-gauntlet",
     "name": "helix gauntlet",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -69,8 +69,8 @@
     "id": "thunderhawk-cluster-bombs",
     "name": "Thunderhawk cluster bombs",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -83,8 +83,8 @@
     "id": "watcher-in-the-dark",
     "name": "Watcher in the Dark",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -97,8 +97,8 @@
     "id": "auspex-array",
     "name": "auspex array",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -111,8 +111,8 @@
     "id": "shield-dome",
     "name": "shield dome",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -143,8 +143,8 @@
     "id": "blizzard-shield",
     "name": "blizzard shield",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -162,7 +162,7 @@
     "name": "death totem",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -180,7 +180,7 @@
     "name": "The Lion Helm",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -204,7 +204,7 @@
     "name": "Orbital Comms Array",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-963"
     }
   },
   {
@@ -218,7 +218,7 @@
     "name": "Grav-chutes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-963"
     }
   },
   {
@@ -232,7 +232,7 @@
     "name": "Banner of Macragge",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-963"
     }
   },
   {
@@ -246,7 +246,7 @@
     "name": "Haywire Mine (Once per battle, per unit)",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-963"
     }
   }
 ]

@@ -52,6 +52,8 @@ export type SourceLoadReport = {
   records: SourceRecord[];
   skipped: SkippedSourceRecord[];
   conflicts: SourceConflict[];
+  /** The MFM dump `data_version` the prose was read from: the dump's, or a fixture's `index.json` `data_version`. */
+  dataVersion?: number;
 };
 
 export type SourceRefreshReport = {
@@ -103,7 +105,8 @@ export function loadSourceRecords(origin: SourceOrigin = defaultOrigin()): Sourc
 /**
  * Read a fixture directory of faction-array JSON files: records with `raw_text`, or a
  * stratagem's `when`/`target`/`effect`/`restrictions`. The file name is the faction unless a
- * record names its own. `index.json` is ignored.
+ * record names its own. `index.json` holds no records; an integer `data_version` in it stands
+ * for the dump the fixture's prose was read from.
  */
 export function loadFixtureSourceRecords(storePath: string): SourceLoadReport {
   const skipped: SkippedSourceRecord[] = [];
@@ -199,7 +202,20 @@ export function loadFixtureSourceRecords(storePath: string): SourceLoadReport {
   const records = [...candidates.values()]
     .sort((left, right) => identityKey(left.factionId, left.abilityId).localeCompare(identityKey(right.factionId, right.abilityId)))
     .map(({ file: _file, row: _row, ...record }) => record);
-  return { origin: storePath, records, skipped, conflicts };
+  const dataVersion = fixtureDataVersion(storePath);
+  return { origin: storePath, records, skipped, conflicts, ...(dataVersion === undefined ? {} : { dataVersion }) };
+}
+
+/** The integer `data_version` a fixture's `index.json` declares, if any. */
+function fixtureDataVersion(storePath: string): number | undefined {
+  let index: unknown;
+  try {
+    index = JSON.parse(readFileSync(resolve(storePath, "index.json"), "utf8"));
+  } catch {
+    return undefined;
+  }
+  const value = index && typeof index === "object" && !Array.isArray(index) ? (index as Record<string, unknown>).data_version : undefined;
+  return typeof value === "number" && Number.isInteger(value) ? value : undefined;
 }
 
 function normalizeSourceText(text: string): string {

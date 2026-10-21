@@ -50,6 +50,7 @@ import { REPO_ROOT, readJsonArray, CORE_DIR } from "./repo-files.js";
 import { type GoldenMode, modeOfPublication, mergeMode } from "./game-mode.js";
 import { repoDirForFactionName, repoDirs, FACTION_ALIASES, SHARED_ROSTERS } from "./faction-map.js";
 import type { StagedWrite } from "./apply.js";
+import { currentGameVersion } from "./dataslate.js";
 import {
   mintWargear,
   mintWeapon,
@@ -58,8 +59,6 @@ import {
 
 
 const UNMATCHED_DIR = path.join(REPO_ROOT, "_private", "mfm");
-/** The game_version stamp every dump-sourced ingest writes (authoritative, launch dataslate). */
-export const CONFIRMED = { edition: "11th", dataslate: "launch" };
 
 interface ModelConstraint {
   model_name?: string;
@@ -1799,6 +1798,8 @@ export interface DirWargearResult {
   newInDump: string[];
   /** repo unit not present in the dump → keeps its BSData-derived data (fallback). */
   repoOnlyFallback: string[];
+  /** Repo units matched to a dump datasheet; their options are rebuilt from the dump. */
+  matchedUnitIds: string[];
 }
 export interface WargearReport {
   dirs: DirWargearResult[];
@@ -1807,6 +1808,7 @@ export interface WargearReport {
 }
 
 export function runWargear(dump: MfmDump, write: boolean, onlyDir?: string): WargearReport {
+  const confirmed = currentGameVersion(dump);
   const dirs = repoDirs();
   // Bucket datasheets by candidate repo dir.
   const byDir = new Map<string, DatasheetRow[]>();
@@ -1879,6 +1881,7 @@ export function runWargear(dump: MfmDump, write: boolean, onlyDir?: string): War
       notes: [],
       newInDump: [],
       repoOnlyFallback: [],
+      matchedUnitIds: [],
     };
     const matchedRepoIds = new Set<string>();
     const optionsByUnit = new Map<string, WargearOptionRecord[]>();
@@ -1943,7 +1946,8 @@ export function runWargear(dump: MfmDump, write: boolean, onlyDir?: string): War
                 ...profile,
                 name: profile.name === previousName ? itemName : profile.name,
               }));
-              existing.game_version = { ...CONFIRMED };
+              // A spelling sync checks no stats, so the weapon keeps its dataslate; the
+              // `dataslates` pass re-verifies it against the dump item.
               res.weaponNamesChanged++;
               res.notes.push({
                 id,
@@ -1954,7 +1958,7 @@ export function runWargear(dump: MfmDump, write: boolean, onlyDir?: string): War
           if (!existingId) {
             const warnings: string[] = [];
             try {
-              weapons.push(mintWeapon({ dump, gv: { ...CONFIRMED }, warnings }, item, itemId, itemName));
+              weapons.push(mintWeapon({ dump, gv: { ...confirmed }, warnings }, item, itemId, itemName));
               validIds.add(itemId);
               weaponEntityIds.add(itemId);
               weaponsById.set(itemId, weapons[weapons.length - 1]);
@@ -1969,7 +1973,7 @@ export function runWargear(dump: MfmDump, write: boolean, onlyDir?: string): War
 
         if (item.wargearType !== "wargear" || existingId) continue;
         const recorded = recordedGear.get(itemId);
-        gear.push(recorded ? structuredClone(recorded) : mintWargear({ dump, gv: { ...CONFIRMED }, warnings: [] }, item, itemId, itemName));
+        gear.push(recorded ? structuredClone(recorded) : mintWargear({ dump, gv: { ...confirmed }, warnings: [] }, item, itemId, itemName));
         validIds.add(itemId);
         res.wargearAdded++;
       }
@@ -2117,7 +2121,7 @@ export function runWargear(dump: MfmDump, write: boolean, onlyDir?: string): War
           // chaos-terminators) thus gets a WE-scoped option here and an EC-scoped
           // one when the EC dir is processed — never a merged cross-faction set.
           faction_id: dir,
-          game_version: { ...CONFIRMED },
+          game_version: { ...confirmed },
           is_free: true,
         };
         if (o.replaces) rec.replaces = o.replaces;
@@ -2219,6 +2223,7 @@ export function runWargear(dump: MfmDump, write: boolean, onlyDir?: string): War
       if (!matchedRepoIds.has(u.id)) res.repoOnlyFallback.push(u.id);
     }
     res.repoOnlyFallback.sort();
+    res.matchedUnitIds = [...matchedRepoIds].sort();
     res.newInDump.sort();
     res.unresolvedNames.sort((a, b) => a.id.localeCompare(b.id) || a.name.localeCompare(b.name));
     results.push(res);

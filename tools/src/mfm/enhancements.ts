@@ -4,7 +4,7 @@
  *
  * The repo enhancement id is the one `mfm:mirror` derives from the dump row
  * ({@link enhancementRepoId}), so matching is a direct id lookup. For each matched enhancement we set the canon `cost`, clear
- * `points_provisional`, and stamp the confirmed launch dataslate (cost is the
+ * `points_provisional`, and stamp the current dump's dataslate (cost is the
  * provisional field here, so confirming it is precisely what those flags record —
  * unlike Phase 2 dispositions, where touching game_version would over-claim).
  *
@@ -23,9 +23,9 @@ import { repoDirForFactionName, repoDirs } from "./faction-map.js";
 import { requiredKeywordsForDetachment } from "./detachment-fields.js";
 import { keywordLabel, factionKeywordLabel, keywordLabels } from "./keywords.js";
 import type { StagedWrite } from "./apply.js";
+import { currentGameVersion } from "./dataslate.js";
 
 
-const CONFIRMED = { edition: "11th", dataslate: "launch" };
 
 interface EnhRecord {
   id: string;
@@ -471,6 +471,7 @@ export function runEnhancements(
   write: boolean,
   opts: { includeCombatPatrol?: boolean } = {}
 ): EnhReport {
+  const confirmed = currentGameVersion(dump);
   const canon = buildEnhCanon(dump);
   const fieldCanon = buildEnhFieldCanon(dump);
   const matchedIds = new Set<string>();
@@ -534,15 +535,15 @@ export function runEnhancements(
       }
       const needsConfirm =
         e.points_provisional !== false ||
-        e.game_version?.dataslate !== CONFIRMED.dataslate ||
-        e.game_version?.edition !== CONFIRMED.edition;
+        e.game_version?.dataslate !== confirmed.dataslate ||
+        e.game_version?.edition !== confirmed.edition;
       if (needsConfirm) res.confirmed++;
       // Mutate in-memory in BOTH modes; the dry-run rehearsal validates the result.
       if (cost !== null) e.cost = cost;
       e.points_provisional = false;
       if (e.game_version) {
-        e.game_version.edition = CONFIRMED.edition;
-        e.game_version.dataslate = CONFIRMED.dataslate;
+        e.game_version.edition = confirmed.edition;
+        e.game_version.dataslate = confirmed.dataslate;
       }
       if (cpIds.has(e.id)) e.game_modes = ["combat-patrol"];
 
@@ -663,7 +664,7 @@ export function runEnhancements(
       cost: source.basePointsCost,
       ability_id: null,
       is_unique: true,
-      game_version: { ...CONFIRMED },
+      game_version: { ...confirmed },
       points_provisional: false,
       upgrade_tag: fields.upgrade_tag,
       max_targets: fields.max_targets,

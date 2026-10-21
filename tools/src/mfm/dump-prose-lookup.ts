@@ -102,7 +102,11 @@ export class DumpProse implements AbilityRowSet {
   private readonly byFaction = new Map<string, AbilityRow[]>();
   private readonly coreByDatasheet = new Map<string, AbilityRow[]>();
 
-  constructor(set: AbilityRowSet) {
+  /** The `data_version` of the dump the rows were enumerated from, when known. */
+  readonly dataVersion: number | undefined;
+
+  constructor(set: AbilityRowSet, dataVersion?: number) {
+    this.dataVersion = dataVersion;
     this.rows = set.rows;
     this.unowned = set.unowned;
     for (const r of set.rows) {
@@ -114,7 +118,7 @@ export class DumpProse implements AbilityRowSet {
   }
 
   static fromDump(dump: MfmDump): DumpProse {
-    return new DumpProse(enumerateAbilityRows(dump));
+    return new DumpProse(enumerateAbilityRows(dump), dump.version);
   }
 
   /** Every row the query's (faction, owner) prints, before name matching. */

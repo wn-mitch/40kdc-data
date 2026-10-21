@@ -367,7 +367,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "game_modes": [
       "combat-patrol"

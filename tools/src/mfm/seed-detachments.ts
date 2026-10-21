@@ -32,8 +32,8 @@ import { repoDirForFactionName, repoDirs } from "./faction-map.js";
 import { buildCanon, dispositionIdMap } from "./dispositions.js";
 import type { StagedWrite } from "./apply.js";
 import { acceptedGapIds } from "./accepted-gaps.js";
+import { currentGameVersion } from "./dataslate.js";
 
-const CONFIRMED = { edition: "11th", dataslate: "launch" } as const;
 /** Combat-Patrol-only entities carry this so the golden files them on the
  *  combat-patrol coverage dimension instead of inflating competitive gaps. */
 const COMBAT_PATROL_ONLY: readonly string[] = ["combat-patrol"];
@@ -112,6 +112,7 @@ export interface CandidateDet {
  * incomplete rows for supported factions fail loudly.
  */
 export function collectSeedDetachments(dump: MfmDump): CandidateDet[] {
+  const confirmed = currentGameVersion(dump);
   const { overrideBySlugDir } = buildCanon(dump);
   const dispOf = dispositionIdMap(dump);
   const detDisp = dump.groupBy("detachment_force_disposition", "detachmentId");
@@ -188,7 +189,7 @@ export function collectSeedDetachments(dump: MfmDump): CandidateDet[] {
         detachment_id: id,
         cost: 0,
         is_unique: true,
-        game_version: { ...CONFIRMED },
+        game_version: { ...confirmed },
         game_modes: [...COMBAT_PATROL_ONLY],
         points_provisional: false,
       });
@@ -222,6 +223,7 @@ export function runSeedDetachments(
   opts: SeedDetachmentsOptions = {},
 ): SeedDetachmentsReport {
   const { onlyDir, includeCombatPatrol = false } = opts;
+  const confirmed = currentGameVersion(dump);
   const candidates = collectSeedDetachments(dump);
 
   // dir → mutated detachment/enhancement arrays (loaded once, appended in place).
@@ -318,7 +320,7 @@ export function runSeedDetachments(
       name: c.name,
       faction_id: c.dir,
       enhancement_ids: enhancementIds,
-      game_version: { ...CONFIRMED },
+      game_version: { ...confirmed },
       detachment_points: c.dp,
       force_dispositions: [c.disposition],
     };

@@ -18,6 +18,7 @@ import {
 } from "./weapon-variants.js";
 import type { GameVersion } from "./gear-projection.js";
 import { findDatasheet } from "./project-loadout.js";
+import { currentGameVersion } from "./dataslate.js";
 
 export interface MfmExternalRefsReport {
   added: Record<ExternalRefEntityType, number>;
@@ -150,10 +151,7 @@ export function runMfmExternalRefs(
     const home = datasheetHomes.get(datasheet.id);
     if (!home) continue;
     const gameVersion = (store.get("unit", home.dir, home.unitId)
-      ?.game_version as GameVersion | undefined) ?? {
-      edition: "11th",
-      dataslate: "launch",
-    };
+      ?.game_version as GameVersion | undefined) ?? currentGameVersion(dump);
     for (const item of wargearItemsForDatasheet(dump, datasheet.id)) {
       if (!item.id) continue;
       if (item.wargearType === "weapon") {

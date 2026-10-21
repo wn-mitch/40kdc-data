@@ -25,7 +25,7 @@ function mkDump(tables: Record<string, unknown[]>): MfmDump {
   const data: Record<string, unknown[]> = {};
   for (const t of empty) data[t] = [];
   Object.assign(data, tables);
-  return new MfmDump({ data: data as never });
+  return new MfmDump({ metadata: { data_version: 963 }, data: data as never });
 }
 
 function mini(over: Record<string, unknown>) {

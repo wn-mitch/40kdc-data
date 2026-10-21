@@ -25,7 +25,8 @@
  *                   future dump upload introduces a mis-scoped record.
  *
  * `game_version` is left as-authored: the structural fields above are keyed off
- * the dump but `timing` is not, so stamping launch would over-claim.
+ * the dump but `timing` is not; the `dataslates` pass stamps a stratagem only once its
+ * structure and its ability both verify.
  *
  * DERIVED FOR REVIEW ONLY (reported, NOT written): `phases`, parsed from
  * `localisations.en.whenRules`. The structured `stratagem_phase` table is NOT
@@ -314,7 +315,7 @@ export function runStratagems(dump: MfmDump, write: boolean): StratReport {
         res.phasesReview.push({ id: s.id, from: s.phases ?? [], to: c.phases_review });
       }
       // game_version intentionally left as-authored: timing isn't dump-verified,
-      // so flipping provisional→launch would over-claim.
+      // so the `dataslates` pass, not this one, decides the stamp.
     }
     if (dirty) staged.push({ path: p, value: strats });
     dirs.push(res);

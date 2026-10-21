@@ -3,8 +3,8 @@
     "id": "master-vox",
     "name": "master vox",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -17,8 +17,8 @@
     "id": "command-rod",
     "name": "command rod",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -31,8 +31,8 @@
     "id": "demolition-gear",
     "name": "demolition gear",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -45,8 +45,8 @@
     "id": "brute-shield",
     "name": "brute shield",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -59,8 +59,8 @@
     "id": "slabshield",
     "name": "slabshield",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -77,8 +77,8 @@
     "id": "regimental-standard",
     "name": "regimental standard",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "category": "standard",
     "external_refs": [
@@ -92,8 +92,8 @@
     "id": "vox-caster",
     "name": "vox-caster",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -106,8 +106,8 @@
     "id": "ratling-battlemutt",
     "name": "Ratling Battlemutt",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -121,7 +121,7 @@
     "name": "Medi-pack",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -139,7 +139,7 @@
     "name": "Death Korps Medi-pack",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -153,7 +153,7 @@
     "name": "Melta Mine",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -167,7 +167,7 @@
     "name": "Aquiline Prow",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -181,7 +181,7 @@
     "name": "Vox‑relay Beacon",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -195,7 +195,7 @@
     "name": "Remote Mine",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -209,7 +209,7 @@
     "name": "Servo-scribes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -223,7 +223,7 @@
     "name": "Alchemyk Counteragents",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {

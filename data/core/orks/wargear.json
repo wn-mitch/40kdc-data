@@ -3,8 +3,8 @@
     "id": "kustom-force-field",
     "name": "kustom force field",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -53,8 +53,8 @@
     "id": "blastajet-force-field",
     "name": "blastajet force field",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -100,7 +100,7 @@
     "name": "Bomb Squig",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "external_refs": [
       {
@@ -114,7 +114,7 @@
     "name": "Grot Oiler",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "external_refs": [
       {
@@ -128,7 +128,7 @@
     "name": "Pulsa Rokkit",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -142,7 +142,7 @@
     "name": "Grot Assistant",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "external_refs": [
       {
@@ -162,7 +162,7 @@
     "name": "Paired Krumpas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-963"
     }
   },
   {
@@ -176,7 +176,7 @@
     "name": "Pulsa Rokkit (Once per battle, per unit)",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-963"
     }
   }
 ]

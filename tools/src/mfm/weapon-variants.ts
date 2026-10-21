@@ -44,6 +44,7 @@ import { nameToId } from "../converters/id-generator.js";
 import { addExternalRef } from "../external-refs.js";
 import { repoDirs } from "./faction-map.js";
 import type { StagedWrite } from "./apply.js";
+import { currentGameVersion } from "./dataslate.js";
 
 export interface CoreWeapon {
   id: string;
@@ -310,10 +311,7 @@ export function runWeaponVariants(
         );
         continue;
       }
-      const gv: GameVersion = unit.game_version ?? {
-        edition: "11th",
-        dataslate: "launch",
-      };
+      const gv: GameVersion = unit.game_version ?? currentGameVersion(dump);
       const ctx = { dump, gv, warnings: [] as string[] };
 
       // baseId -> (fingerprint -> minted record) for this datasheet's weapons.

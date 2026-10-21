@@ -27,8 +27,8 @@
     "id": "apothecarys-narthecium",
     "name": "Apothecary's narthecium",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -41,8 +41,8 @@
     "id": "ancients-banner",
     "name": "Ancient's banner",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "category": "standard",
     "external_refs": [
@@ -56,8 +56,8 @@
     "id": "null-rod",
     "name": "null rod",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -70,8 +70,8 @@
     "id": "sacred-banner",
     "name": "sacred banner",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "category": "standard",
     "external_refs": [
@@ -85,8 +85,8 @@
     "id": "anchorite-sarcophagus",
     "name": "anchorite sarcophagus",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -99,8 +99,8 @@
     "id": "simulacrum-imperialis",
     "name": "simulacrum imperialis",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -121,8 +121,8 @@
     "id": "denuncia-oratory",
     "name": "denuncia oratory",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -135,8 +135,8 @@
     "id": "rod-of-office",
     "name": "Rod of Office",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -150,7 +150,7 @@
     "name": "Salvationist Medikit",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {

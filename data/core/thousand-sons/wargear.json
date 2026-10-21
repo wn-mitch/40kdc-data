@@ -19,8 +19,8 @@
     "id": "chaos-familiar",
     "name": "Chaos familiar",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -81,8 +81,8 @@
     "id": "icon-of-flame",
     "name": "icon of flame",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "category": "icon",
     "external_refs": [
@@ -96,8 +96,8 @@
     "id": "brayhorn",
     "name": "Brayhorn",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -111,8 +111,8 @@
     "name": "Herd banner",
     "category": "standard",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -126,8 +126,8 @@
     "name": "Daemonic Icon",
     "category": "icon",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
@@ -140,8 +140,8 @@
     "id": "instrument-of-chaos",
     "name": "Instrument of Chaos",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-963"
     },
     "external_refs": [
       {
