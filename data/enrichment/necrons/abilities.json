@@ -7841,14 +7841,20 @@
     "stub": true,
     "unit_ids": [],
     "faction_id": "necrons",
-    "detachment_id": null,
+    "detachment_id": "amonhotekhs-guard",
     "ability_type": "faction",
     "effect": {
       "type": "no-effect"
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "interactions": [
+      {
+        "ability_ref": "reanimation-protocols-necrons",
+        "type": "replaces"
+      }
+    ]
   },
   {
     "ability_id": "reinforced-resilience-amonhotekhs-guard-necrons",

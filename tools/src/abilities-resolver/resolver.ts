@@ -6,7 +6,9 @@
  * Resolution order — stable for snapshot tests:
  *
  * 1. **army** — faction-scoped abilities whose `ability_type` is `"faction"`
- *    and whose `faction_id` matches the input.
+ *    and whose `faction_id` matches the input. One with a `detachment_id` (a
+ *    Combat Patrol's own army rule) applies only in that detachment, and there
+ *    drops each army rule it `replaces` (`interactions`).
  * 2. **detachment** — abilities authored against the detachment
  *    (`ability_type` is `"detachment"`, `detachment_id` matches).
  * 3. **detachment-stratagem** — stratagems on the detachment, each yielding
@@ -84,9 +86,14 @@ export function resolveEligibleAbilities(
   const seen = new Set<string>();
   const out: EligibleAbility[] = [];
 
-  // 1. Army — faction-scoped abilities (faction rule + any other faction-typed).
+  // 1. Army — faction-scoped abilities (faction rule + any other faction-typed). An army rule
+  // with a `detachment_id` is a Combat Patrol box's own army rule: it applies only in that
+  // detachment, and there it replaces each army rule it names with `interactions` `replaces`.
+  const replaced = replacedArmyRuleIds(dataset, factionId, [input.detachmentId]);
   for (const ability of dataset.abilities.byFaction(factionId)) {
     if (ability.raw.ability_type !== "faction") continue;
+    if (ability.raw.detachment_id != null && ability.raw.detachment_id !== input.detachmentId) continue;
+    if (replaced.has(ability.id)) continue;
     if (!phaseMatches(ability, phase)) continue;
     pushUnique(out, seen, { ability, source: { kind: "army" }, phases: intersect(ability.phases, phase) });
   }
@@ -195,6 +202,22 @@ export function resolveEligibleAbilities(
 // ---------------------------------------------------------------------------
 
 const rated = (rating: string | number | undefined): { rating?: string | number } => (rating === undefined ? {} : { rating });
+
+/**
+ * The army rules of `factionId` that the selected detachments' own army rules replace: a
+ * faction-typed record with a `detachment_id` among `detachmentIds` (a Combat Patrol box's army
+ * rule) drops each record its `interactions` name with type `replaces`. Callers that combine
+ * several detachments pass all of them, so a rule replaced in one is not restored by another.
+ */
+export function replacedArmyRuleIds(dataset: Dataset, factionId: string, detachmentIds: readonly (string | undefined)[]): Set<string> {
+  const out = new Set<string>();
+  for (const ability of dataset.abilities.byFaction(factionId)) {
+    if (ability.raw.ability_type !== "faction" || ability.raw.detachment_id == null) continue;
+    if (!detachmentIds.includes(ability.raw.detachment_id)) continue;
+    for (const entry of ability.raw.interactions ?? []) if (entry.type === "replaces") out.add(entry.ability_ref);
+  }
+  return out;
+}
 
 function phaseMatches(ability: AbilityView, phase: Phase): boolean {
   const phases = ability.phases;

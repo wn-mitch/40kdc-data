@@ -58,7 +58,9 @@ describe("stack damage ledger", () => {
   });
 
   it("rejects a provider whose only fragments act outside the attack", () => {
-    expect(entry("for-the-greater-good-sudden-dawn-cadre-tau-empire")[0]).toMatchObject({
+    // Pact of Blood is a seeded stub: its effect is no-effect.
+    const fight = cellFor("world-eaters", "fight");
+    expect(fight.ledger.find((candidate) => candidate.abilityId === "pact-of-blood-world-eaters")).toMatchObject({
       status: "rejected",
       relevant: false,
       reasons: ["no current-attack effect", 'effect type "no-effect" is not modelled by the buff layer'],
@@ -90,12 +92,12 @@ describe("stack damage ledger", () => {
     expect(pod?.count).toBe(drones);
     expect(pod?.stages["after-fnp"]).toBeGreaterThan(0);
     expect(entry("missile-drone-tau-empire", "attacker", broadside)[0]).toMatchObject({ status: "applied", relevant: false });
-    // The Drones army rules grant for the same drone, so the drone's own rule owns its weapons.
-    for (const abilityId of ["drones-tau-empire", "drones-sudden-dawn-cadre-tau-empire"]) {
-      const drone = entry(abilityId, "attacker", broadside)[0];
-      expect(drone).toMatchObject({ status: "rejected", relevant: false });
-      expect(drone.reasons).toContain("weapon-grant: missile-pod-drone duplicates the missile-drone grant of missile-drone-tau-empire");
-    }
+    // The Drones army rule grants for the same drone, so the drone's own rule owns its weapons.
+    const drone = entry("drones-tau-empire", "attacker", broadside)[0];
+    expect(drone).toMatchObject({ status: "rejected", relevant: false });
+    expect(drone.reasons).toContain("weapon-grant: missile-pod-drone duplicates the missile-drone grant of missile-drone-tau-empire");
+    // The Sudden Dawn Cadre patrol's copy of Drones applies only in that patrol's detachment.
+    expect(entry("drones-sudden-dawn-cadre-tau-empire", "attacker", broadside)).toEqual([]);
     // A drone the loadout leaves out contributes nothing and leaves nothing open.
     expect(entry("marker-drone-tau-empire", "attacker", broadside)[0]).toMatchObject({
       status: "rejected",

@@ -6,15 +6,16 @@ import { emptyRawData } from "../src/data/types.js";
 const ds = Dataset.embedded();
 
 describe("Dataset.eligibleAbilities", () => {
-  it("surfaces the Combat Doctrines faction rule for adeptus-astartes units", () => {
+  it("surfaces a Combat Patrol's army rule only in its own detachment", () => {
     const intercessor = ds.units.find("Intercessor Squad");
     expect(intercessor, "intercessor-squad missing").toBeDefined();
-    const result = ds.eligibleAbilities(
-      { unitId: intercessor!.id, factionId: "adeptus-astartes" },
-      "shooting",
-    );
-    const armyIds = result.filter((e) => e.source.kind === "army").map((e) => e.ability.id);
-    expect(armyIds).toContain("combat-doctrines-assault-force-adeptus-astartes");
+    const armyIds = (detachmentId?: string) => ds
+      .eligibleAbilities({ unitId: intercessor!.id, factionId: "adeptus-astartes", detachmentId }, "shooting")
+      .filter((e) => e.source.kind === "army")
+      .map((e) => e.ability.id);
+    expect(armyIds("assault-force")).toContain("combat-doctrines-assault-force-adeptus-astartes");
+    expect(armyIds()).not.toContain("combat-doctrines-assault-force-adeptus-astartes");
+    expect(armyIds("gladius-task-force")).not.toContain("combat-doctrines-assault-force-adeptus-astartes");
   });
 
   it("returns nothing for an unknown unit", () => {
@@ -27,7 +28,7 @@ describe("Dataset.eligibleAbilities", () => {
     // resolver keeps it available everywhere. This test pins that
     // "no mapping = surface in every phase" behaviour against tightening.
     const inCommand = ds.eligibleAbilities(
-      { unitId: intercessor.id, factionId: "adeptus-astartes" },
+      { unitId: intercessor.id, factionId: "adeptus-astartes", detachmentId: "assault-force" },
       "command",
     );
     const armyIds = inCommand.filter((e) => e.source.kind === "army").map((e) => e.ability.id);
@@ -93,7 +94,8 @@ describe("Dataset.buffsFor (M2 — abilities)", () => {
   it("Combat Doctrines is a stance: nothing auto-applies, Devastator surfaces as a lever", () => {
     const intercessor = ds.units.find("Intercessor Squad")!;
     const ctx = { phase: "shooting" as const };
-    const input = { unitId: intercessor.id, factionId: "adeptus-astartes" };
+    // The authored Combat Doctrines is the Assault Force patrol's copy, eligible in that detachment.
+    const input = { unitId: intercessor.id, factionId: "adeptus-astartes", detachmentId: "assault-force" };
     // The army rule is a player-selected stance, so the attacker walk applies
     // no army-sourced buff — a passive reroll here would mean the rule was
     // modelled as always-on again.

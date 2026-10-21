@@ -6,7 +6,6 @@
   "phase": "fight",
   "expected": {
     "army": [
-      "blessings-of-khorne-frenzied-reavers-world-eaters",
       "blessings-of-khorne-world-eaters",
       "pact-of-blood-world-eaters"
     ],

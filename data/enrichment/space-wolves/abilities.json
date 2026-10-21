@@ -1372,7 +1372,8 @@
     "ability_type": "faction",
     "behavior": "passive",
     "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)",
-    "unit_ids": []
+    "unit_ids": [],
+    "detachment_id": "askars-wolfpack"
   },
   {
     "ability_id": "savage-frenzy-space-wolves",
@@ -2461,7 +2462,7 @@
     "stub": true,
     "unit_ids": [],
     "faction_id": "space-wolves",
-    "detachment_id": null,
+    "detachment_id": "askars-wolfpack",
     "ability_type": "faction",
     "effect": {
       "type": "no-effect"
@@ -2735,14 +2736,20 @@
     "stub": true,
     "unit_ids": [],
     "faction_id": "space-wolves",
-    "detachment_id": null,
+    "detachment_id": "askars-wolfpack",
     "ability_type": "faction",
     "effect": {
       "type": "no-effect"
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "interactions": [
+      {
+        "ability_ref": "curse-of-the-wulfen-space-wolves",
+        "type": "replaces"
+      }
+    ]
   },
   {
     "ability_id": "high-rune-priest-space-wolves",
@@ -2799,14 +2806,20 @@
     "stub": true,
     "unit_ids": [],
     "faction_id": "space-wolves",
-    "detachment_id": null,
+    "detachment_id": "askars-wolfpack",
     "ability_type": "faction",
     "effect": {
       "type": "no-effect"
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "interactions": [
+      {
+        "ability_ref": "sons-of-russ-space-wolves",
+        "type": "replaces"
+      }
+    ]
   },
   {
     "ability_id": "transhuman-strategist-space-wolves",

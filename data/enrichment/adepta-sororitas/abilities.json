@@ -7271,14 +7271,20 @@
     "stub": true,
     "unit_ids": [],
     "faction_id": "adepta-sororitas",
-    "detachment_id": null,
+    "detachment_id": "sanctuary-guardians",
     "ability_type": "faction",
     "effect": {
       "type": "no-effect"
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "interactions": [
+      {
+        "ability_ref": "acts-of-faith-adepta-sororitas",
+        "type": "replaces"
+      }
+    ]
   },
   {
     "ability_id": "blessed-believers-adepta-sororitas",

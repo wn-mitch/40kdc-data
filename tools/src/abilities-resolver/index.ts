@@ -6,6 +6,7 @@
  * @packageDocumentation
  */
 export {
+  replacedArmyRuleIds,
   resolveEligibleAbilities,
   stratagemCanTarget,
   type EligibilityInput,

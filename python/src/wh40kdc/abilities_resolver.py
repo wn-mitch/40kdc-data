@@ -3,7 +3,9 @@ chosen phase.
 
 Resolution order — stable for snapshot tests:
 
-1. **army** — faction-scoped abilities whose ``ability_type`` is ``"faction"``.
+1. **army** — faction-scoped abilities whose ``ability_type`` is ``"faction"``. One with a
+   ``detachment_id`` (a Combat Patrol's own army rule) applies only in that detachment, and
+   there drops each army rule it ``replaces`` (``interactions``).
 2. **detachment** — abilities authored against the detachment.
 3. **detachment-stratagem** — stratagems on the detachment, each yielding the
    ability referenced by ``stratagem.ability_id`` (if any), when the combined
@@ -66,9 +68,18 @@ def resolve_eligible_abilities(
     def intersect(phases: list[str]) -> list[str]:
         return [phase] if phase in phases else phases
 
-    # 1. Army — faction-scoped abilities (faction rule + any other faction-typed).
-    for ability in dataset.abilities.by_faction(faction_id or ""):
-        if ability.raw.get("ability_type") != "faction":
+    # 1. Army — faction-scoped abilities (faction rule + any other faction-typed). An army rule
+    # with a `detachment_id` is a Combat Patrol box's own army rule: it applies only in that
+    # detachment, and there it replaces each army rule it names with `interactions` `replaces`.
+    army = [
+        ability
+        for ability in dataset.abilities.by_faction(faction_id or "")
+        if ability.raw.get("ability_type") == "faction"
+        and ability.raw.get("detachment_id") in (None, input.get("detachmentId"))
+    ]
+    replaced = {ref for ability in army for ref in _replaced_ability_ids(ability)}
+    for ability in army:
+        if ability.id in replaced:
             continue
         if not phase_matches(ability):
             continue
@@ -199,6 +210,15 @@ def resolve_eligible_abilities(
             )
 
     return out
+
+
+def _replaced_ability_ids(ability: AbilityView) -> list[str]:
+    """The ability ids ``ability`` names with an ``interactions`` entry of type ``replaces``."""
+    return [
+        entry["ability_ref"]
+        for entry in ability.raw.get("interactions") or []
+        if entry.get("type") == "replaces"
+    ]
 
 
 def _rated(rating: Any) -> dict[str, Any]:

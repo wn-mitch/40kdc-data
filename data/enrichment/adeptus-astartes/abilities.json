@@ -3363,7 +3363,14 @@
     "scope": {
       "duration": "battle-round"
     },
-    "community_notes": "[APPROX] Codex army rule. A consumable army-wide stance chosen at the start of your Command phase; each doctrine may be selected once per battle and only one is active for a unit at a time. Devastator grants [ASSAULT] to ranged weapons; Assault and Tactical are captured as opaque eligibility grants. Full rule in raw-text store."
+    "community_notes": "[APPROX] Codex army rule. A consumable army-wide stance chosen at the start of your Command phase; each doctrine may be selected once per battle and only one is active for a unit at a time. Devastator grants [ASSAULT] to ranged weapons; Assault and Tactical are captured as opaque eligibility grants. Full rule in raw-text store.",
+    "detachment_id": "assault-force",
+    "interactions": [
+      {
+        "ability_ref": "combat-doctrines-adeptus-astartes",
+        "type": "replaces"
+      }
+    ]
   },
   {
     "ability_id": "shadow-masters-adeptus-astartes",

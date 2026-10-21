@@ -216,9 +216,28 @@ impl Dataset {
             seen: HashSet::new(),
             out: Vec::new(),
         };
-        // 1. Army: faction-typed abilities of the faction.
-        for ability in self.abilities.by_faction(&faction_id) {
-            if json_str(&ability.ability_type) == "faction" {
+        // 1. Army: faction-typed abilities of the faction. One with a `detachment_id` (a Combat
+        // Patrol box's own army rule) applies only in that detachment, and there it replaces each
+        // army rule it names with an `interactions` entry of type `replaces`.
+        let detachment = input.detachment_id.as_deref();
+        let army: Vec<_> = self
+            .abilities
+            .by_faction(&faction_id)
+            .into_iter()
+            .filter(|ability| json_str(&ability.ability_type) == "faction")
+            .filter(|ability| match ability.detachment_id.as_ref() {
+                None => true,
+                Some(own) => Some(own.as_str()) == detachment,
+            })
+            .collect();
+        let replaced: HashSet<String> = army
+            .iter()
+            .flat_map(|ability| ability.interactions.iter())
+            .filter(|entry| json_str(&entry.type_) == "replaces")
+            .map(|entry| entry.ability_ref.to_string())
+            .collect();
+        for ability in army {
+            if !replaced.contains(ability.ability_id.as_str()) {
                 c.push_phased(ability, EligibleAbilitySource::Army, None);
             }
         }

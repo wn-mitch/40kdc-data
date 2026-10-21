@@ -49,9 +49,28 @@ func resolveEligibleAbilities(ds *Dataset, input map[string]any, phase string) [
 		return phases
 	}
 
-	// 1. Army.
+	// 1. Army. One with a detachment_id (a Combat Patrol box's own army rule) applies only in
+	// that detachment, and there it replaces each army rule it names with an interactions entry
+	// of type "replaces".
+	army := []*AbilityView{}
+	replaced := map[string]bool{}
 	for _, ability := range ds.Abilities.ByFaction(factionID) {
-		if getStr(ability.Raw, "ability_type") != "faction" || !phaseMatches(ability) {
+		if getStr(ability.Raw, "ability_type") != "faction" {
+			continue
+		}
+		if own := getStr(ability.Raw, "detachment_id"); own != "" && own != getStr(input, "detachmentId") {
+			continue
+		}
+		army = append(army, ability)
+		interactions, _ := ability.Raw["interactions"].([]any)
+		for _, entryAny := range interactions {
+			if entry, ok := asMap(entryAny); ok && getStr(entry, "type") == "replaces" {
+				replaced[getStr(entry, "ability_ref")] = true
+			}
+		}
+	}
+	for _, ability := range army {
+		if replaced[getStr(ability.Raw, "ability_id")] || !phaseMatches(ability) {
 			continue
 		}
 		pushUnique(map[string]any{"ability": ability, "source": map[string]any{"kind": "army"}, "phases": intersect(ability.Phases())})

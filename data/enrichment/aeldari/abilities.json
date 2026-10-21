@@ -1106,7 +1106,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-963"
     },
     "source_digest": "dbe0d401600463db1e3881f2d07a5adbd8ba3c174fb3ade38e6c9ff74d81f083",
     "version": "2025-q3",
@@ -1116,26 +1116,51 @@
         "operator": "and",
         "operands": [
           {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
             "type": "attachment",
             "parameters": {
               "subject": "this-model",
               "role": "leading"
             }
+          },
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
           }
         ]
       },
       "effect": {
-        "type": "move",
-        "target": "this-unit",
-        "modifier": {
-          "move_type": "normal"
-        }
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "move",
+            "target": "this-unit",
+            "modifier": {
+              "move_type": "normal",
+              "distance": 6
+            }
+          },
+          {
+            "type": "permission",
+            "target": "event-subject",
+            "modifier": {
+              "activity": "declare-charge",
+              "allow": false
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -1145,8 +1170,15 @@
       "asurmen"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "aeldari"
+    "behavior": "reactive",
+    "faction_id": "aeldari",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "hand-of-asuryan-aeldari",
@@ -8369,14 +8401,20 @@
     "stub": true,
     "unit_ids": [],
     "faction_id": "aeldari",
-    "detachment_id": null,
+    "detachment_id": "kygharils-protectors",
     "ability_type": "faction",
     "effect": {
       "type": "no-effect"
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "interactions": [
+      {
+        "ability_ref": "battle-focus-aeldari",
+        "type": "replaces"
+      }
+    ]
   },
   {
     "ability_id": "blades-from-beyond-spirit-conclave-aeldari",

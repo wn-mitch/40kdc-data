@@ -8744,14 +8744,20 @@
     "stub": true,
     "unit_ids": [],
     "faction_id": "world-eaters",
-    "detachment_id": null,
+    "detachment_id": "frenzied-reavers",
     "ability_type": "faction",
     "effect": {
       "type": "no-effect"
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "interactions": [
+      {
+        "ability_ref": "blessings-of-khorne-world-eaters",
+        "type": "replaces"
+      }
+    ]
   },
   {
     "ability_id": "blood-surge-frenzied-reavers-khorne-berzerkers-world-eaters",

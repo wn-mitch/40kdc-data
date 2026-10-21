@@ -4438,7 +4438,8 @@
       "event": "attacks-resolved",
       "filter": {
         "kind": "shoot"
-      }
+      },
+      "optional": true
     }
   },
   {
@@ -6307,24 +6308,28 @@
         ]
       },
       "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "move",
-            "target": "this-unit",
-            "modifier": {
-              "move_type": "normal"
+        "type": "ability-part",
+        "optional": true,
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "move",
+              "target": "this-unit",
+              "modifier": {
+                "move_type": "normal"
+              }
+            },
+            {
+              "type": "permission",
+              "target": "this-unit",
+              "modifier": {
+                "activity": "declare-charge",
+                "allow": false
+              }
             }
-          },
-          {
-            "type": "permission",
-            "target": "this-unit",
-            "modifier": {
-              "activity": "declare-charge",
-              "allow": false
-            }
-          }
-        ]
+          ]
+        }
       }
     },
     "scope": {
@@ -9991,7 +9996,7 @@
     },
     "unit_ids": [],
     "faction_id": "tau-empire",
-    "detachment_id": null,
+    "detachment_id": "sudden-dawn-cadre",
     "ability_type": "faction",
     "effect": {
       "type": "sequence",
@@ -10133,7 +10138,13 @@
       "duration": "permanent"
     },
     "behavior": "passive",
-    "source_digest": "0da83ebe422f3e9605827a2afeca7f485d262f4fe489623c31cefaa735a7e9f0"
+    "source_digest": "0da83ebe422f3e9605827a2afeca7f485d262f4fe489623c31cefaa735a7e9f0",
+    "interactions": [
+      {
+        "ability_ref": "drones-tau-empire",
+        "type": "replaces"
+      }
+    ]
   },
   {
     "ability_id": "for-the-greater-good-sudden-dawn-cadre-tau-empire",
@@ -10146,14 +10157,20 @@
     "stub": true,
     "unit_ids": [],
     "faction_id": "tau-empire",
-    "detachment_id": null,
+    "detachment_id": "sudden-dawn-cadre",
     "ability_type": "faction",
     "effect": {
       "type": "no-effect"
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "interactions": [
+      {
+        "ability_ref": "for-the-greater-good-tau-empire",
+        "type": "replaces"
+      }
+    ]
   },
   {
     "ability_id": "grav-inhibitor-drone-sudden-dawn-cadre-pathfinder-team-tau-empire",

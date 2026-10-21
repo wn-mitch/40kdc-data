@@ -8,9 +8,7 @@
   "phase": "shooting",
   "expected": {
     "army": [
-      "drones-sudden-dawn-cadre-tau-empire",
       "drones-tau-empire",
-      "for-the-greater-good-sudden-dawn-cadre-tau-empire",
       "for-the-greater-good-tau-empire"
     ],
     "detachment": [

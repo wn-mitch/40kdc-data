@@ -235,6 +235,8 @@ export function buildLedger(session: DamageScoringSession, result: StackResult):
     gathered.set(key, current);
   };
 
+  // A rule a selected detachment's Combat Patrol army rule replaces is not eligible in any pass.
+  const replaced = session.replacedArmyRules(spec);
   for (const scored of result.members) {
     const { member } = scored;
     // Conditions read the winning loadout's wargear; its weapon grants were scored with it.
@@ -244,6 +246,7 @@ export function buildLedger(session: DamageScoringSession, result: StackResult):
     for (const detachmentId of spec.detachmentIds.length > 0 ? spec.detachmentIds : [undefined]) {
       const input = session.eligibilityInput(spec, member, detachmentId);
       for (const eligible of dataset.eligibleAbilities(input, context.phase)) {
+        if (eligible.source.kind === "army" && replaced.has(eligible.ability.id)) continue;
         const source = sourceOf(eligible);
         const translation = eligible.ability.describeBuffs(source, context, "attacker", eligible.rating);
         const sourceUnitId = eligible.source.kind === "support" ? eligible.source.sourceUnitId

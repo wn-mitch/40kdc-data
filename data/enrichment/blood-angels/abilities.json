@@ -2092,7 +2092,8 @@
     "faction_id": "blood-angels",
     "ability_type": "faction",
     "behavior": "passive",
-    "unit_ids": []
+    "unit_ids": [],
+    "detachment_id": "sanguinary-spearhead"
   },
   {
     "ability_id": "transfixing-gaze-blood-angels",
@@ -2244,7 +2245,7 @@
     "stub": true,
     "unit_ids": [],
     "faction_id": "blood-angels",
-    "detachment_id": null,
+    "detachment_id": "sanguinary-spearhead",
     "ability_type": "faction",
     "effect": {
       "type": "no-effect"

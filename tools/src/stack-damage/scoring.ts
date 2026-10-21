@@ -2,7 +2,7 @@ import type { Buff, BuffSource, EngineContext } from "../cruncher/index.js";
 import type { Dataset, StackableBuffGroup } from "../data/dataset.js";
 import { isLegalLeverSelection } from "../data/lever-selection.js";
 import { baseLoadout, optionCap, type LoadoutModel, type LoadoutTier } from "../data/loadout.js";
-import { reachesOtherUnits } from "../abilities-resolver/resolver.js";
+import { reachesOtherUnits, replacedArmyRuleIds } from "../abilities-resolver/resolver.js";
 import type { EligibilityInput, EligibleAbility } from "../abilities-resolver/index.js";
 import type { UnitView } from "../data/entities.js";
 import type { MatrixConfig } from "./config.js";
@@ -274,10 +274,12 @@ export class DamageScoringSession {
     context: EngineContext,
     perspective: "attacker" | "target",
     scoredGrants: ReadonlySet<string> = new Set(),
+    replaced: ReadonlySet<string> = new Set(),
   ): StackBuffPool["warnings"] {
     const warnings: StackBuffPool["warnings"] = [];
     for (const entry of this.dataset.eligibleAbilities(input, context.phase)) {
       if (this.config.droppedArmyRules.includes(entry.ability.id)) continue;
+      if (entry.source.kind === "army" && replaced.has(entry.ability.id)) continue;
       const translated = entry.ability.describeBuffs(sourceFor(entry), context, perspective, entry.rating);
       for (const fragment of translated.unsupported) {
         const weaponId = (fragment.effectFragment as { modifier?: { weapon_id?: unknown } } | null)?.modifier?.weapon_id;
@@ -302,6 +304,14 @@ export class DamageScoringSession {
     return warnings;
   }
 
+  /**
+   * The army rules the spec's Combat Patrol detachments replace. Each detachment is resolved on
+   * its own, so a rule one detachment's patrol rule replaces is dropped from every detachment's pass.
+   */
+  replacedArmyRules(spec: StackSpec): Set<string> {
+    return replacedArmyRuleIds(this.dataset, spec.factionId, spec.detachmentIds);
+  }
+
   pool(spec: StackSpec): StackBuffPool {
     const key = `${spec.members.map((member) => `${member.unit.id}:${member.role}`).join("+")}|${spec.detachmentIds.join("+")}`;
     const cached = this.poolCache.get(key);
@@ -309,6 +319,7 @@ export class DamageScoringSession {
     const levers = new Map<string, PoolLever>();
     const groups = new Map<string, StackableBuffGroup>();
     const warnings: StackBuffPool["warnings"] = [];
+    const replaced = this.replacedArmyRules(spec);
     for (const member of spec.members) {
       const context = this.state.contextFor(spec, member);
       for (const detachmentId of spec.detachmentIds.length > 0 ? spec.detachmentIds : [undefined]) {
@@ -317,11 +328,13 @@ export class DamageScoringSession {
         for (const group of selection.groups) if (!groups.has(group.id)) groups.set(group.id, group);
         for (const lever of selection.buffs) {
           if (lever.source.kind === "ability" && this.config.droppedArmyRules.includes(lever.source.abilityId)) continue;
+          // Another selected detachment's Combat Patrol army rule replaces this army rule.
+          if (lever.source.kind === "ability" && lever.source.abilityKind === "army" && replaced.has(lever.source.abilityId)) continue;
           const current = levers.get(lever.id) ?? { ...lever, perMember: new Map<string, Buff[]>() };
           current.perMember.set(member.unit.id, lever.buffs);
           levers.set(lever.id, current);
         }
-        warnings.push(...this.translationWarnings(input, context, "attacker"));
+        warnings.push(...this.translationWarnings(input, context, "attacker", undefined, replaced));
       }
     }
     const uniqueWarnings = [...new Map(warnings.map((warning) => [JSON.stringify(warning), warning])).values()];
@@ -457,7 +470,7 @@ export class DamageScoringSession {
       // A rule printed by wargear the loadout leaves out does not apply.
       const unequipped = unequippedRules(member.unit.raw, loadout.counts);
       for (const detachmentId of result.spec.detachmentIds.length > 0 ? result.spec.detachmentIds : [undefined]) {
-        translated.push(...this.translationWarnings(this.eligibilityInput(result.spec, member, detachmentId), context, "attacker", scored)
+        translated.push(...this.translationWarnings(this.eligibilityInput(result.spec, member, detachmentId), context, "attacker", scored, this.replacedArmyRules(result.spec))
           .filter((warning) => warning.sourceKind !== "unit" || !unequipped.has(warning.sourceAbilityId)));
       }
     }

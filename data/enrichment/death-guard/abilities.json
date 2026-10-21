@@ -7331,7 +7331,7 @@
     },
     "unit_ids": [],
     "faction_id": "death-guard",
-    "detachment_id": null,
+    "detachment_id": "maggot-lords",
     "ability_type": "faction",
     "effect": {
       "type": "sequence",
@@ -7545,7 +7545,13 @@
       "duration": "permanent"
     },
     "behavior": "reactive",
-    "source_digest": "40bece100511e4da483f4112ecdf3dcfd8e3226376529429eb9ba227b23d13d3"
+    "source_digest": "40bece100511e4da483f4112ecdf3dcfd8e3226376529429eb9ba227b23d13d3",
+    "interactions": [
+      {
+        "ability_ref": "nurgles-gift-death-guard",
+        "type": "replaces"
+      }
+    ]
   },
   {
     "ability_id": "overwhelming-generosity-virulent-vectorium-death-guard",

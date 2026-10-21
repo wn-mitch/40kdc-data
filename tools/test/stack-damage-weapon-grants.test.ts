@@ -33,9 +33,10 @@ describe("unit weapon grants", () => {
     const grants = unitWeaponGrants(dataset, crisis, "tau-empire", { ...shooting, attackerWargear: { "gun-drone": 2 } });
     const carbines = grants.grants.filter((grant) => grant.wargearId === "gun-drone");
     expect(carbines).toEqual([{ abilityId: "gun-drone-tau-empire", wargearId: "gun-drone", weaponId: "twin-pulse-carbine-drone", perBearer: 1 }]);
-    // The Drones army rules also grant for the gun drone; the drone's own rule owns its weapons.
+    // The Drones army rule also grants for the gun drone; the drone's own rule owns its weapons.
+    // The Sudden Dawn Cadre patrol's copy of Drones is not an army rule outside that detachment.
     expect(grants.duplicates.filter((duplicate) => duplicate.wargearId === "gun-drone").map((duplicate) => duplicate.abilityId).sort())
-      .toEqual(["drones-sudden-dawn-cadre-tau-empire", "drones-tau-empire"]);
+      .toEqual(["drones-tau-empire"]);
     expect(grants.duplicates.every((duplicate) => duplicate.ownerAbilityId === "gun-drone-tau-empire")).toBe(true);
     expect(withGrantedWeapons(withDrones, grants.grants).get("twin-pulse-carbine-drone")).toBe(2);
   });
@@ -48,11 +49,11 @@ describe("unit weapon grants", () => {
   });
 
   it("lets an army rule own an item no printed rule grants for", () => {
-    // A unit that lists no printed drone rules: the lowest ability id owns the gated grants.
+    // A unit that lists no printed drone rules: the Drones army rule owns the gated grants.
     const bare = { ...crisis, ability_ids: (crisis.ability_ids ?? []).filter((ref) => typeof ref === "string") };
     const grants = unitWeaponGrants(dataset, bare, "tau-empire", { ...shooting, attackerWargear: { "gun-drone": 1 } });
-    expect(grants.grants.filter((grant) => grant.wargearId === "gun-drone").map((grant) => grant.abilityId)).toEqual(["drones-sudden-dawn-cadre-tau-empire"]);
-    expect(grants.duplicates.map((duplicate) => [duplicate.abilityId, duplicate.ownerAbilityId])).toEqual([["drones-tau-empire", "drones-sudden-dawn-cadre-tau-empire"]]);
+    expect(grants.grants.filter((grant) => grant.wargearId === "gun-drone").map((grant) => grant.abilityId)).toEqual(["drones-tau-empire"]);
+    expect(grants.duplicates).toEqual([]);
   });
 
   it("adds granted weapons only to the groups whose models carry the wargear", () => {

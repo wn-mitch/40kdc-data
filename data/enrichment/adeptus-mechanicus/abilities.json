@@ -7604,7 +7604,7 @@
     },
     "unit_ids": [],
     "faction_id": "adeptus-mechanicus",
-    "detachment_id": null,
+    "detachment_id": "purge-corps-deltic-9",
     "ability_type": "faction",
     "effect": {
       "type": "stance-select",
@@ -7805,7 +7805,13 @@
       "event": "round-started",
       "optional": true
     },
-    "source_digest": "282d82467e63b9864a1347b7af843849b4755d02cae6c2402e2ffd4db97c2fc5"
+    "source_digest": "282d82467e63b9864a1347b7af843849b4755d02cae6c2402e2ffd4db97c2fc5",
+    "interactions": [
+      {
+        "ability_ref": "doctrina-imperatives-adeptus-mechanicus",
+        "type": "replaces"
+      }
+    ]
   },
   {
     "ability_id": "emotionless-clarity-cohort-cybernetica-adeptus-mechanicus",

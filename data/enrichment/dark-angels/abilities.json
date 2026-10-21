@@ -2424,7 +2424,8 @@
     "faction_id": "dark-angels",
     "ability_type": "faction",
     "behavior": "passive",
-    "unit_ids": []
+    "unit_ids": [],
+    "detachment_id": "the-vengeful-brethren"
   },
   {
     "ability_id": "watcher-in-the-dark-dark-angels",
@@ -2573,7 +2574,7 @@
     "stub": true,
     "unit_ids": [],
     "faction_id": "dark-angels",
-    "detachment_id": null,
+    "detachment_id": "the-vengeful-brethren",
     "ability_type": "faction",
     "effect": {
       "type": "no-effect"
@@ -2787,14 +2788,20 @@
     "stub": true,
     "unit_ids": [],
     "faction_id": "dark-angels",
-    "detachment_id": null,
+    "detachment_id": "the-vengeful-brethren",
     "ability_type": "faction",
     "effect": {
       "type": "no-effect"
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "interactions": [
+      {
+        "ability_ref": "the-deathwing-dark-angels",
+        "type": "replaces"
+      }
+    ]
   },
   {
     "ability_id": "the-ravenwing-the-vengeful-brethren-dark-angels",
@@ -2807,14 +2814,20 @@
     "stub": true,
     "unit_ids": [],
     "faction_id": "dark-angels",
-    "detachment_id": null,
+    "detachment_id": "the-vengeful-brethren",
     "ability_type": "faction",
     "effect": {
       "type": "no-effect"
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "interactions": [
+      {
+        "ability_ref": "the-ravenwing-dark-angels",
+        "type": "replaces"
+      }
+    ]
   },
   {
     "ability_id": "the-watchers-dark-angels",

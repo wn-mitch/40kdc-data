@@ -8138,14 +8138,20 @@
     "stub": true,
     "unit_ids": [],
     "faction_id": "thousand-sons",
-    "detachment_id": null,
+    "detachment_id": "prism-of-zadophon",
     "ability_type": "faction",
     "effect": {
       "type": "no-effect"
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "interactions": [
+      {
+        "ability_ref": "cabal-of-sorcerers-thousand-sons",
+        "type": "replaces"
+      }
+    ]
   },
   {
     "ability_id": "committed-to-the-ritual-thousand-sons",

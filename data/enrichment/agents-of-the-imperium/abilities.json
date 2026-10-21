@@ -3995,14 +3995,20 @@
     "stub": true,
     "unit_ids": [],
     "faction_id": "agents-of-the-imperium",
-    "detachment_id": null,
+    "detachment_id": "inquisitors-hand",
     "ability_type": "faction",
     "effect": {
       "type": "no-effect"
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "interactions": [
+      {
+        "ability_ref": "assigned-agents-agents-of-the-imperium",
+        "type": "replaces"
+      }
+    ]
   },
   {
     "ability_id": "atttached-unit-agents-of-the-imperium",
