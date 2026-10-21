@@ -220,8 +220,10 @@ describe("Semantic authoring named-range reference: unit-position range_ref", ()
     expect(errors.join(" ")).toMatch(/fixed inch count|placement/u);
   });
 
-  it("refuses a named range on aura-range, which has no range_ref field yet (8130 stays incomplete)", () => {
-    expect(normalizeRefuses("aura-range", { side: "enemy", range_ref: "contagion", of: "this-unit" })).toBe(true);
+  it("takes a named range on aura-range from version 5 only", () => {
+    const parameters = { side: "enemy", range_ref: "contagion", of: "this-unit" };
+    expect(() => normalizeFingerprintParameters("aura-range", parameters, 4)).toThrow();
+    expect(normalizeRefuses("aura-range", parameters)).toBe(false);
   });
 });
 

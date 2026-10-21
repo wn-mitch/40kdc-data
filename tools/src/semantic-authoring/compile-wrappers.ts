@@ -82,7 +82,9 @@ function anySideRegionGrant(leaf: CompileLeaf, body: Node, modifier: Node, eligi
 }
 
 export function wrapAura(leaf: CompileLeaf, body: Node): Node {
-  const modifier: Node = { range: { inches: closed(leaf, "inches") }, effect: body };
+  // A named range (aura-range@5 range_ref) arrives as the range-ref compile-named-range.ts built.
+  const range = leaf.parameters.range_table ?? { inches: closed(leaf, "inches") };
+  const modifier: Node = { range, effect: body };
   // Version 3: a folded unit-filter (compile-unit-filters.ts) carries the keywords as `filter`.
   const filter = (leaf.parameters.filter ?? {}) as UnitFilter;
   const eligible = dslUnitFilter({ ...leaf, parameters: { ...filter, keywords: leaf.parameters.keywords ?? filter.keywords, side: closed(leaf, "side") } });

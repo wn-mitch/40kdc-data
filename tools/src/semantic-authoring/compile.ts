@@ -1,6 +1,7 @@
 import { narrowUnitIds, resolveUnitNames, type UnitNameContext } from "./compile-unit-names.js";
 import { exactSpan } from "./contracts.js";
 import { foldAuraEmitter, lowerConditionalAuras } from "./compile-aura-emitter.js";
+import { foldNamedRanges, requireNamedRangeAuras } from "./compile-named-range.js";
 import { foldAbilityUseRefresh } from "./compile-ability-use-refresh.js";
 import { foldActivationPicks, retargetMenu } from "./compile-activation.js";
 import { AURA_RECIPIENT, bindAntecedents, momentNamesUnit } from "./compile-antecedent.js";
@@ -297,13 +298,13 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   if (leaves.some((leaf) => leaf.fragment === NAME_FRAGMENT)) {
     return compileWithName(leaves, sourceText, options, compileLeaves, (list) => shapeSignature(ordered(list), sourceText));
   }
-  // Qualifiers printed apart from their host are bound first: a characteristic amount after its recipient (compile-characteristic-amount.ts), an additive option after its duration (compile-additive-option.ts), and an ignore-modifier list after its lead-in (compile-ignore-list.ts).
+  // Qualifiers printed apart from their host are bound first: a characteristic amount after its recipient (compile-characteristic-amount.ts), an additive option after its duration (compile-additive-option.ts), an ignore-modifier list after its lead-in (compile-ignore-list.ts), and a named range's defined values onto its aura (compile-named-range.ts).
   let bound: CompileLeaf[];
   try {
-    bound = foldAuraEmitter(bindIgnoreLists(
+    bound = foldNamedRanges(foldAuraEmitter(bindIgnoreLists(
       bindAdditiveOptions(bindCharacteristicAmounts(resolveUnitNames(leaves, options.units)), sourceText),
       sourceText,
-    ));
+    )), options.abilityId);
   } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature: shapeSignature(ordered(leaves), sourceText), errors: [error.message] };
@@ -315,6 +316,12 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
     (body, text) => compileLeaves(body, text), options.abilityId);
   if (compiled.ok && bound.some((leaf) => leaf.family_id === "aura-range" && leaf.parameters.conditional_range !== undefined)) {
     try { compiled.mechanics.effect = lowerConditionalAuras(compiled.mechanics.effect); } catch (error) {
+      if (!(error instanceof CompileError)) throw error;
+      return { ok: false, signature: compiled.signature, errors: [error.message] };
+    }
+  }
+  if (compiled.ok) {
+    try { requireNamedRangeAuras(bound, compiled.mechanics.effect); } catch (error) {
       if (!(error instanceof CompileError)) throw error;
       return { ok: false, signature: compiled.signature, errors: [error.message] };
     }

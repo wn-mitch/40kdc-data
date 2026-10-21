@@ -49,6 +49,7 @@ import { GRANTED_FAMILIES, normalizeGrantedParameters } from "./families/abiliti
 import { NAMED_ABILITY_STATE_FAMILIES, normalizeNamedAbilityStateParameters } from "./named-ability-state-families.js";
 import { OATH_FAMILIES, normalizeOathParameters } from "./oath-families.js";
 import { ABILITY_USE_FAMILIES, normalizeAbilityUseParameters } from "./ability-use-families.js";
+import { NAMED_RANGE_FAMILIES, normalizeNamedRangeParameters } from "./named-ranges.js";
 
 export const SEMANTIC_ROLES = ["EFFECT", "DURATION", "EVENT", "CONDITION"] as const;
 export type SemanticRole = (typeof SEMANTIC_ROLES)[number];
@@ -143,6 +144,7 @@ export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = wit
   SELECT_UNIT_V2,
   ...EMBARKED_PERMISSION_FAMILIES,
   ...MOVE_PASSTHROUGH_USED_FAMILIES,
+  ...NAMED_RANGE_FAMILIES,
 ]));
 
 /** The version new fingerprints and model requests use for a family. */
@@ -233,7 +235,8 @@ function familyParameters(family: string, input: Record<string, unknown>, versio
     ?? normalizeOtherwiseParameters(family, input)
     ?? normalizeRollProhibitionParameters(family, input)
     ?? normalizeWeaponHasAbilityParameters(family, input)
-    ?? normalizeMovePassthroughUsedParameters(family, input);
+    ?? normalizeMovePassthroughUsedParameters(family, input)
+    ?? normalizeNamedRangeParameters(family, input);
   if (normalized) return normalized;
   throw new RangeError(`Unknown reviewed semantic family ${family}@${version}.`);
 }

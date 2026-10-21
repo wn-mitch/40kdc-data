@@ -3,6 +3,7 @@ import { ANTECEDENT } from "../antecedent-families.js";
 import { type FamilyExtension, KEYWORD_ITEMS, keywordList, optional, properties, standIn, widenedEnum, withProperties } from "../family-extension-helpers.js";
 import { boundedInteger, enumValue, exactKeys } from "../family-validation.js";
 import { normalizeUnitKeywords } from "../unit-filter-family.js";
+import { NAMED_RANGE_NAMES } from "../named-ranges.js";
 import { ALTERNATIVE_SCHEMA, normalizeAlternatives } from "../unit-filter-alternatives.js";
 import { EMBARKED_IN, ENHANCEMENT_KIND, FOLLOWING_FILTER, HELD_IN, MATCHED_UNITS } from "./shared.js";
 
@@ -144,6 +145,9 @@ const ATTACHED_LEADERS: FamilyExtension = {
 
 /** unit-filter keys that name a different set of units; none combines with embarked_in. */
 const EMBARKED_IN_EXCLUDES = ["held_in", "alternatives", "among", "subject", "datasheets", "designated", "designated_by"] as const;
+
+/** An aura measured from any model with the given keywords, rather than from this unit or model. */
+export const MATCHING_MODELS = "matching-models";
 
 export const UNIT_FILTER_EXTENSIONS: readonly FamilyExtension[] = [
   {
@@ -407,6 +411,41 @@ export const UNIT_FILTER_EXTENSIONS: readonly FamilyExtension[] = [
           inches: boundedInteger(value.inches, 1, 24, "aura-range.conditional_range.inches"),
           keywords: normalizeUnitKeywords(value.keywords, "aura-range.conditional_range.keywords"),
         },
+      };
+    },
+  },
+  {
+    // "within Contagion Range of one or more DEATH GUARD models from your army".
+    family: "aura-range",
+    version: 5,
+    description: "As the previous version, plus range_ref in place of inches: the aura reaches as far as a named range (contagion, synapse). In the record that defines the range (its named-range-value and named-range-cap leaves) that is the defined per-battle-round distance and cap; anywhere else it is the named range's own aura. Plus of matching-models with of_keywords: the aura is measured from any model with all these keywords (\"of one or more DEATH GUARD models\"), friendly by of_side friendly or by a \"from your army\" right after this leaf.",
+    schema: (previous) => ({
+      ...withProperties(previous, {
+        inches: optional(properties(previous).inches!),
+        range_ref: optional({ enum: NAMED_RANGE_NAMES }),
+        of: widenedEnum(previous, "of", [MATCHING_MODELS]),
+        of_keywords: optional({ type: "array", items: KEYWORD_ITEMS, minItems: 1, uniqueItems: true, "x-only-when": { of: [MATCHING_MODELS] } }),
+        of_side: optional({ enum: ["friendly"], "x-only-when": { of: [MATCHING_MODELS] } }),
+      }),
+      required: [],
+    }),
+    normalize: (input, previous) => {
+      if (input.range_ref === undefined && input.of !== MATCHING_MODELS && input.of_keywords === undefined && input.of_side === undefined) return previous(input);
+      const { range_ref: rangeRef, of, of_keywords: ofKeywords, of_side: ofSide, ...rest } = input;
+      if (rangeRef !== undefined && "inches" in rest) throw new TypeError("aura-range takes range_ref or inches, not both.");
+      if (rangeRef === undefined && !("inches" in rest)) throw new TypeError("aura-range needs inches or range_ref.");
+      if (rangeRef !== undefined && rest.conditional_range !== undefined) throw new TypeError("aura-range.conditional_range gives an alternate radius in inches; a named range has none.");
+      if (of !== MATCHING_MODELS && (ofKeywords !== undefined || ofSide !== undefined)) throw new TypeError("aura-range.of_keywords and of_side go with of matching-models.");
+      const staged = { ...rest, ...(rangeRef !== undefined ? { inches: 1 } : {}), ...(of !== undefined && of !== MATCHING_MODELS ? { of } : {}) };
+      // A named range stands in as 1 inch for the previous version's checks, then replaces it.
+      const { inches, ...normalized } = previous(staged);
+      return {
+        ...(rangeRef === undefined ? { ...normalized, inches } : { ...normalized, range_ref: enumValue(rangeRef, NAMED_RANGE_NAMES, "aura-range.range_ref") }),
+        ...(of === MATCHING_MODELS ? {
+          of: MATCHING_MODELS,
+          of_keywords: keywordList(ofKeywords, "aura-range.of_keywords", 1),
+          ...(ofSide === undefined ? {} : { of_side: enumValue(ofSide, ["friendly"], "aura-range.of_side") }),
+        } : {}),
       };
     },
   },
