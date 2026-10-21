@@ -2236,6 +2236,7 @@ class StratagemTargetRestriction(TypedDict):
     required_keywords: NotRequired[KeywordList]
     required_keywords_any: NotRequired[KeywordList]
     excluded_keywords: NotRequired[KeywordList]
+    warlord: NotRequired[Literal[True]]
     count: NotRequired[Literal["one", "one-or-more", "up-to"]]
     count_max: NotRequired[int]
     side: NotRequired[Literal["your-army", "enemy"]]

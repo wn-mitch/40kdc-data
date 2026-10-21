@@ -33,10 +33,10 @@ import type { RosterFormat } from "../src/import/types.js";
 import { crunch, type Buff, type EngineContext, type Stage } from "../src/cruncher/index.js";
 import { compareCell, loadoutCell, type ComparePhase, type LoadoutLine } from "../src/compare.js";
 import { attributeStages } from "../src/cruncher/attribution.js";
-import type { Phase, GameEvent } from "../src/generated.js";
+import type { Phase, GameEvent, Stratagem } from "../src/generated.js";
 import { effectToBuffs } from "../src/cruncher/from-dsl.js";
 import { encodeBase } from "../src/runner.js";
-import type { EligibilityInput } from "../src/abilities-resolver/index.js";
+import { stratagemCanTarget, type EligibilityInput } from "../src/abilities-resolver/index.js";
 import {
   resolveLayout,
   type TerrainTemplate as ResolverTemplate,
@@ -414,7 +414,7 @@ describe("abilities-resolver conformance corpus", () => {
   const ds = Dataset.embedded();
   const dir = join(CONFORMANCE, "abilities-resolver");
   const files = readdirSync(dir)
-    .filter((n) => n.endsWith(".json") && !n.endsWith("from-dsl.json"))
+    .filter((n) => n.startsWith("0") && n.endsWith(".json"))
     .sort();
 
   it("the resolver corpus is non-empty", () => {
@@ -430,6 +430,15 @@ describe("abilities-resolver conformance corpus", () => {
       }
       for (const k of Object.keys(grouped)) grouped[k].sort();
       expect(grouped).toEqual(c.expected);
+    });
+  }
+
+  type TargetCase = { name: string; target_restrictions: unknown; keywords: string[]; expected: boolean };
+  const targets = readJson(join(dir, "stratagem-targets.json")) as { cases: TargetCase[] };
+  for (const c of targets.cases) {
+    it(`abilities-resolver/stratagem-targets.json: ${c.name}`, () => {
+      const stratagem = { target_restrictions: c.target_restrictions } as unknown as Stratagem;
+      expect(stratagemCanTarget(stratagem, new Set(c.keywords))).toBe(c.expected);
     });
   }
 

@@ -1,0 +1,44 @@
+{
+  "description": "stratagemCanTarget(stratagem, keywords): whether a unit with these lower-cased keywords (the combined unit's, as the resolver collects them) can be the stratagem's friendly target. A Warlord target needs a unit that could contain the Warlord: one with CHARACTER.",
+  "cases": [
+    {
+      "name": "warlord target: a CHARACTER unit with the required keyword qualifies",
+      "target_restrictions": { "count": "one", "side": "your-army", "selects": "model", "warlord": true, "required_keywords": ["Death Guard"] },
+      "keywords": ["death guard", "character", "infantry"],
+      "expected": true
+    },
+    {
+      "name": "warlord target: a unit with no CHARACTER cannot contain the Warlord",
+      "target_restrictions": { "count": "one", "side": "your-army", "selects": "model", "warlord": true, "required_keywords": ["Death Guard"] },
+      "keywords": ["death guard", "infantry"],
+      "expected": false
+    },
+    {
+      "name": "warlord target: the keyword lists still apply to the Warlord's unit",
+      "target_restrictions": { "count": "one", "side": "your-army", "selects": "model", "warlord": true, "required_keywords": ["Death Guard"] },
+      "keywords": ["heretic astartes", "character", "infantry"],
+      "expected": false
+    },
+    {
+      "name": "warlord target with no keywords: any CHARACTER unit",
+      "target_restrictions": { "count": "one", "side": "your-army", "selects": "unit", "warlord": true },
+      "keywords": ["character"],
+      "expected": true
+    },
+    {
+      "name": "several targets: the non-Warlord target admits a unit the Warlord target refuses",
+      "target_restrictions": [
+        { "name": "leader", "count": "one", "side": "your-army", "selects": "model", "warlord": true },
+        { "name": "escort", "count": "one", "side": "your-army", "selects": "unit", "required_keywords": ["Infantry"] }
+      ],
+      "keywords": ["infantry"],
+      "expected": true
+    },
+    {
+      "name": "no Warlord requirement: a unit with no CHARACTER qualifies",
+      "target_restrictions": { "count": "one", "side": "your-army", "selects": "unit", "required_keywords": ["Death Guard"] },
+      "keywords": ["death guard", "infantry"],
+      "expected": true
+    }
+  ]
+}

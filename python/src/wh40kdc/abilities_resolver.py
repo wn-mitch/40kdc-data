@@ -240,6 +240,8 @@ def stratagem_can_target(stratagem: dict[str, Any], keywords: set[str]) -> bool:
 
     A stratagem with no friendly target (none printed, or only enemy targets) does not
     restrict its user here; with several friendly targets, matching any one is enough.
+    The resolver does not know which model is the Warlord, so a Warlord target only needs
+    a unit that could contain it: one with CHARACTER, the keyword every Warlord carries.
     Mirrors TS ``stratagemCanTarget``.
     """
     raw = stratagem.get("target_restrictions")
@@ -254,7 +256,8 @@ def stratagem_can_target(stratagem: dict[str, Any], keywords: set[str]) -> bool:
         return [keyword.lower() for keyword in target.get(key) or []]
 
     return any(
-        all(k in keywords for k in lower(target, "required_keywords"))
+        (target.get("warlord") is not True or "character" in keywords)
+        and all(k in keywords for k in lower(target, "required_keywords"))
         and (
             not lower(target, "required_keywords_any")
             or any(k in keywords for k in lower(target, "required_keywords_any"))

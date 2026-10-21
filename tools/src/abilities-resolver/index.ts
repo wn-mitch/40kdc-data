@@ -7,6 +7,7 @@
  */
 export {
   resolveEligibleAbilities,
+  stratagemCanTarget,
   type EligibilityInput,
   type EligibleAbility,
   type EligibleAbilitySource,

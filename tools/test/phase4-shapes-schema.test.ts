@@ -326,4 +326,15 @@ describe("integrity: phase-4 bindings", () => {
     expect(await run(benign, [row({ label: "yp-pool", amount: 1 })])).toEqual([]);
     expect(await run(benign, [row({ label: "yp-pool", amount: 2 })])).toEqual(['mode "b" names a different mode_cost than its other targets']);
   });
+
+  it("refuses Warlord as a Stratagem target keyword and points at the warlord field", async () => {
+    const benign = leaf("designate", { subject: "selected-unit", tag: "RILED UP" });
+    const message = '"Warlord" is not a keyword; a target that must be your Warlord sets warlord: true';
+    expect(await run(benign, [{ id: "probe-warlord", target_restrictions: { count: "one", warlord: true, required_keywords: ["Death Guard"] } }])).toEqual([]);
+    expect(await run(benign, [{ id: "probe-warlord", target_restrictions: { count: "one", required_keywords: ["Death Guard", "WARLORD"] } }])).toEqual([message]);
+    expect(await run(benign, [{ id: "probe-warlord", target_restrictions: [{ name: "a", excluded_keywords: ["Warlord"] }, { name: "b" }] }])).toEqual([message]);
+    expect(await run(benign, [{ id: "probe-warlord", target_restrictions: { count: "one", side: "enemy", warlord: true } }])).toEqual(["an enemy target cannot be your Warlord"]);
+    // A real keyword that only begins with the word.
+    expect(await run(benign, [{ id: "probe-warlord", target_restrictions: { count: "one", required_keywords: ["Warlord Titan"] } }])).toEqual([]);
+  });
 });

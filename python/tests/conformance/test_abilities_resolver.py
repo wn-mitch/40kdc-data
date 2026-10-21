@@ -13,6 +13,7 @@ from typing import Any
 
 import pytest
 
+from wh40kdc.abilities_resolver import stratagem_can_target
 from wh40kdc.cruncher import effect_to_buffs
 from wh40kdc.data.ability_refs import with_rating
 
@@ -20,7 +21,7 @@ from ..conftest import CORPUS
 
 _DIR = CORPUS / "abilities-resolver"
 _RESOLVER_CASES = (
-    sorted(p.name for p in _DIR.glob("*.json") if not p.name.endswith("from-dsl.json"))
+    sorted(p.name for p in _DIR.glob("0*.json"))
     if _DIR.exists()
     else []
 )
@@ -36,6 +37,20 @@ def test_eligible_abilities(dataset: Any, case_file: str) -> None:
     for ids in grouped.values():
         ids.sort()
     assert grouped == case["expected"]
+
+
+_TARGET_CASES = (
+    json.loads((_DIR / "stratagem-targets.json").read_text(encoding="utf-8"))["cases"]
+    if (_DIR / "stratagem-targets.json").exists()
+    else []
+)
+
+
+@pytest.mark.skipif(not _TARGET_CASES, reason="conformance corpus not available")
+@pytest.mark.parametrize("case", _TARGET_CASES, ids=lambda case: case["name"])
+def test_stratagem_can_target(case: dict[str, Any]) -> None:
+    stratagem = {"target_restrictions": case["target_restrictions"]}
+    assert stratagem_can_target(stratagem, set(case["keywords"])) is case["expected"]
 
 
 def _run_dsl_corpus(dataset: Any, filename: str) -> None:

@@ -162,6 +162,29 @@ describe("Semantic authoring restrictions", () => {
     expect(result.mechanics.effect).toEqual({ type: "ability-grant", target: "this-unit", modifier: { ability: "fights-first" } });
   });
 
+  it("lowers the Warlord in a TARGET's keywords to the warlord field, keeping the keywords it carries", () => {
+    const target = (parameters: Record<string, unknown>) => compileLeaves([
+      { ...leaf("RESTRICTION", "stratagem-target", { count: "one", side: "your-army", selects: "model", match: "all", excluded_keywords: [], ...parameters }), fragment: "TARGET" },
+      { ...grant(), fragment: "EFFECT" },
+    ]);
+    const lowered = (parameters: Record<string, unknown>) => {
+      const result = target(parameters);
+      if (!result.ok) throw new Error(result.errors.join("; "));
+      return result.core?.target_restrictions;
+    };
+    // "Your WARDENS WARLORD", whether the leaf lists the Warlord apart or in the same bolded phrase.
+    const expected = { count: "one", side: "your-army", selects: "model", warlord: true, required_keywords: ["WARDENS"] };
+    expect(lowered({ keywords: ["WARDENS", "WARLORD"] })).toEqual(expected);
+    expect(lowered({ keywords: ["WARDENS WARLORD"] })).toEqual(expected);
+    expect(lowered({ keywords: ["WARLORD"] })).toEqual({ count: "one", side: "your-army", selects: "model", warlord: true });
+    // A keyword that only begins with the word is a keyword.
+    expect(lowered({ keywords: ["WARLORD TITAN"] })).toEqual({ count: "one", side: "your-army", selects: "model", required_keywords: ["WARLORD TITAN"] });
+    // The Warlord as one alternative, an exclusion or an enemy has no core form.
+    expect(target({ keywords: ["WARDENS", "WARLORD"], match: "any" }).ok).toBe(false);
+    expect(target({ keywords: ["WARDENS"], excluded_keywords: ["WARLORD"] }).ok).toBe(false);
+    expect(target({ keywords: ["WARLORD"], side: "enemy" }).ok).toBe(false);
+  });
+
   it("binds \"that X unit\" to the WHEN moment, narrowing the trigger to its keywords", () => {
     const result = compiled([
       leaf("EVENT", "event", { kind: "selected-to-shoot" }),

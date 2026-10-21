@@ -117,6 +117,31 @@ export function coreTargetKeywords(
   return out;
 }
 
+/**
+ * TARGET wording bolds the Warlord with the keywords it carries ("your DEATH GUARD WARLORD"), but
+ * the Warlord is the model chosen at mustering, not a keyword: core stores it as the target's
+ * `warlord` field. This lifts a phrase that is WARLORD, or ends in the word WARLORD, out of an
+ * all-of keyword list; "WARLORD TITAN" is a keyword and stays. Returns the remaining phrases and
+ * whether any phrase named the Warlord.
+ */
+export function liftWarlord(phrases: readonly string[]): { keywords: string[]; warlord: boolean } {
+  let warlord = false;
+  const keywords: string[] = [];
+  for (const phrase of phrases) {
+    const words = phrase.trim().split(/\s+/u);
+    if (words.length > 0 && keywordKey(words[words.length - 1]!) === "WARLORD") {
+      warlord = true;
+      if (words.length > 1) keywords.push(words.slice(0, -1).join(" "));
+    } else {
+      keywords.push(phrase);
+    }
+  }
+  return { keywords, warlord };
+}
+
+/** Keyword-list parameters whose phrases may name the Warlord ({@link liftWarlord}), by family. */
+const WARLORD_PARAMETERS: Record<string, string> = { "stratagem-target": "keywords" };
+
 /** Keyword-list parameters, by family, whose every phrase must split into keywords units carry. */
 const KEYWORD_PARAMETERS: Record<string, readonly string[]> = {
   "stratagem-target": ["keywords", "excluded_keywords"],
@@ -129,12 +154,14 @@ const KEYWORD_PARAMETERS: Record<string, readonly string[]> = {
 /**
  * Refuse a labelled keyword no unit in core carries: every keyword phrase a keyword-list
  * parameter holds must split into core keywords ("ADEPTUS ASTARTES INFANTRY" is Adeptus Astartes
- * and Infantry). Throws with the first phrase that does not.
+ * and Infantry). A Stratagem target's all-of Warlord ({@link liftWarlord}) is not a keyword and is
+ * not checked. Throws with the first phrase that does not.
  */
 export function assertKnownKeywords(familyId: string, parameters: Record<string, unknown>, index: ReadonlyMap<string, string>): void {
   for (const key of KEYWORD_PARAMETERS[familyId] ?? []) {
-    const phrases = parameters[key];
-    if (!Array.isArray(phrases)) continue;
+    const listed = parameters[key];
+    if (!Array.isArray(listed)) continue;
+    const phrases = WARLORD_PARAMETERS[familyId] === key && parameters.match !== "any" ? liftWarlord(listed.filter((item): item is string => typeof item === "string")).keywords : listed;
     for (const phrase of phrases) {
       if (typeof phrase === "string") splitKeywords(phrase, index);
     }

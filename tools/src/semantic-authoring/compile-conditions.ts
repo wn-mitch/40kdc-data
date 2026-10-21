@@ -27,6 +27,7 @@ import { checkStratagemActivity, stratagemTargetedAnyOf } from "./compile-oppone
 import { phaseEdgeDuration } from "./compile-duration-edges.js";
 import { PHASE_EDGE_ENDPOINTS } from "./families/durations-and-designations.js";
 import { canonicalDesignation } from "./compile-redesignate.js";
+import { liftWarlord } from "./core-keywords.js";
 
 type Node = Record<string, unknown>;
 
@@ -821,15 +822,22 @@ export function targetRestrictions(parts: readonly CompileLeaf[], eligibility: r
   }
   if (selectors.length !== 1) throw new CompileError(`A stratagem TARGET needs exactly one target leaf; found ${selectors.length}.`);
   const selector = selectors[0]!;
-  const keywords = selector.parameters.keywords as string[];
-  const excluded = (selector.parameters.excluded_keywords as string[] | undefined) ?? [];
+  const any = selector.parameters.match === "any";
   const triggering = selector.family_id === "triggering-target";
+  // "Your DEATH GUARD WARLORD": the Warlord is a typed field, not a keyword (core-keywords.ts liftWarlord).
+  // "That X unit" keeps its keywords as written: they also narrow the WHEN moment's own condition.
+  const { keywords, warlord } = triggering ? { keywords: selector.parameters.keywords as string[], warlord: false } : liftWarlord(selector.parameters.keywords as string[]);
+  if (warlord && any) throw new CompileError("A Stratagem TARGET names the Warlord as one of several alternatives; core has no field for \"the Warlord or another unit\".");
+  const excluded = (selector.parameters.excluded_keywords as string[] | undefined) ?? [];
+  if (liftWarlord(excluded).warlord) throw new CompileError("A Stratagem TARGET excludes the Warlord; core has no field for a target that is not the Warlord.");
+  if (warlord && selector.parameters.side === "enemy") throw new CompileError("An enemy Stratagem TARGET cannot be your Warlord.");
   const restrictions: Node = {
     count: triggering ? "one" : selector.parameters.count,
     ...(selector.parameters.count_max !== undefined ? { count_max: selector.parameters.count_max } : {}),
     ...(triggering ? {} : { side: selector.parameters.side }),
     selects: selector.parameters.selects,
-    ...(keywords.length ? { [selector.parameters.match === "any" ? "required_keywords_any" : "required_keywords"]: keywords } : {}),
+    ...(warlord ? { warlord: true } : {}),
+    ...(keywords.length ? { [any ? "required_keywords_any" : "required_keywords"]: keywords } : {}),
     ...(excluded.length ? { excluded_keywords: excluded } : {}),
   };
   // "That X unit" after an enemy unit that targeted a friendly X unit: the unit it attacked.
@@ -853,9 +861,9 @@ export function targetRestrictions(parts: readonly CompileLeaf[], eligibility: r
   // "other" on a unit-filter says the unit is not the bearer. A Stratagem target has no bearer, so the
   // exclusion must be stated in the unit-filter it belongs to, not inferred here.
   if (filter.other === true) throw new CompileError("A Stratagem target has no bearer, so \"other\" has no unit to exclude; state the exclusion in the unit-filter.");
-  const anyRequired = selector.parameters.match === "any" ? keywords : (selector.parameters.any_keywords as string[] | undefined) ?? [];
+  const anyRequired = any ? keywords : (selector.parameters.any_keywords as string[] | undefined) ?? [];
   const requiredUnitIds = (selector.parameters.unit_ids as string[] | undefined) ?? [];
-  const attackedFilter = attackedChecks(attacked, selector.parameters.match === "any" ? [] : keywords, anyRequired, requiredUnitIds);
+  const attackedFilter = attackedChecks(attacked, any ? [] : keywords, anyRequired, requiredUnitIds);
   const eligibilityCondition = allOf([...filtered, ...attackedFilter, ...eligibility]);
   if (eligibilityCondition) restrictions.eligibility = eligibilityCondition;
   return restrictions;

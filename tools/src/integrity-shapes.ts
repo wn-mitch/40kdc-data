@@ -191,7 +191,7 @@ export async function checkDslShapes(root: string, result: ValidationResult): Pr
     } catch {
       continue;
     }
-    rows.forEach((row, index) => record(file, index, [...tagIssues(row, `/${index}`), ...modeCostIssues(row, index)]));
+    rows.forEach((row, index) => record(file, index, [...tagIssues(row, `/${index}`), ...modeCostIssues(row, index), ...warlordKeywordIssues(row, index)]));
   }
 }
 
@@ -209,6 +209,33 @@ function modeCostIssues(row: unknown, index: number): Issue[] {
     const seen = costs.get(target.mode);
     if (seen === undefined) costs.set(target.mode, cost);
     else if (seen !== cost) issues.push({ path: `/${index}/target_restrictions/${at}/mode_cost`, message: `mode "${target.mode}" names a different mode_cost than its other targets` });
+  });
+  return issues;
+}
+
+/**
+ * The Warlord is the model chosen at mustering, not a keyword: a Stratagem target that must be the
+ * Warlord sets `warlord`, and no keyword list names it (WARLORD TITAN is a keyword and is allowed).
+ * Your Warlord is never an enemy target; that is checked here, not in the schema, because the Rust
+ * validator's bundled schema drops if/then.
+ */
+function warlordKeywordIssues(row: unknown, index: number): Issue[] {
+  if (!isNode(row) || row.target_restrictions === undefined || row.target_restrictions === null) return [];
+  const targets = Array.isArray(row.target_restrictions) ? row.target_restrictions : [row.target_restrictions];
+  const prefix = Array.isArray(row.target_restrictions) ? (at: number) => `/${index}/target_restrictions/${at}` : () => `/${index}/target_restrictions`;
+  const issues: Issue[] = [];
+  targets.forEach((target, at) => {
+    if (!isNode(target)) return;
+    if (target.warlord === true && target.side === "enemy") issues.push({ path: `${prefix(at)}/warlord`, message: "an enemy target cannot be your Warlord" });
+    for (const key of ["required_keywords", "required_keywords_any", "excluded_keywords"]) {
+      const list = target[key];
+      if (!Array.isArray(list)) continue;
+      list.forEach((keyword, position) => {
+        if (typeof keyword === "string" && keyword.trim().toLowerCase() === "warlord") {
+          issues.push({ path: `${prefix(at)}/${key}/${position}`, message: "\"Warlord\" is not a keyword; a target that must be your Warlord sets warlord: true" });
+        }
+      });
+    }
   });
   return issues;
 }

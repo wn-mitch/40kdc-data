@@ -10,7 +10,7 @@ import { initializeWorkbench } from "../src/semantic-authoring/db.js";
 
 import { preparePublication, publishPublication, reconcilePublicationBatches } from "../src/semantic-authoring/publish.js";
 import { canonicalTarget } from "../src/semantic-authoring/publish-core.js";
-import { keywordIndex } from "../src/semantic-authoring/core-keywords.js";
+import { assertKnownKeywords, keywordIndex } from "../src/semantic-authoring/core-keywords.js";
 import { listShapes } from "../src/semantic-authoring/shapes.js";
 import { refreshSources } from "../src/semantic-authoring/source.js";
 import { approveShape, confirmSurface } from "./semantic-authoring-human.js";
@@ -134,5 +134,17 @@ describe("Semantic authoring stratagem targets", () => {
       .toEqual({ required_keywords: ["Stellar Wardens"], required_keywords_any: ["Infantry", "Battleline"], count: "one" });
     expect(() => canonicalTarget({ required_keywords: ["STELLAR WARDENS DREADNOUGHT"] }, index)).toThrow(/"DREADNOUGHT" .* is not a unit keyword/u);
     expect(() => canonicalTarget({ required_keywords_any: ["INFANTRY BATTLELINE", "STELLAR WARDENS"] }, index)).toThrow(/one alternative keyword per option/u);
+  });
+
+  it("passes the compiled warlord field through and refuses an entry compiled with WARLORD as a keyword", () => {
+    const index = keywordIndex(process.env.SEMANTIC_AUTHORING_DATA_ROOT!);
+    expect(canonicalTarget({ count: "one", side: "your-army", selects: "model", warlord: true, required_keywords: ["STELLAR WARDENS"] }, index))
+      .toEqual({ required_keywords: ["Stellar Wardens"], count: "one", side: "your-army", selects: "model", warlord: true });
+    // Compiled before the field existed: refused, never rewritten at publication.
+    expect(() => canonicalTarget({ count: "one", side: "your-army", selects: "model", required_keywords: ["STELLAR WARDENS", "WARLORD"] }, index)).toThrow(/recompile this entry/u);
+    expect(() => canonicalTarget({ required_keywords_any: ["STELLAR WARDENS", "WARLORD"] }, index)).toThrow(/recompile this entry/u);
+    // A proposed TARGET leaf may name the Warlord; any other unknown word is still refused.
+    expect(() => assertKnownKeywords("stratagem-target", { keywords: ["STELLAR WARDENS WARLORD"], match: "all" }, index)).not.toThrow();
+    expect(() => assertKnownKeywords("stratagem-target", { keywords: ["STELLAR WARDENS WARLORD"], match: "any" }, index)).toThrow(/"WARLORD" .* is not a unit keyword/u);
   });
 });

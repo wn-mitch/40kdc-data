@@ -426,6 +426,19 @@
       "consumers": [],
       "reason": "A target bound to the WHEN moment's unit or the attacked unit is authored from TARGET leaves over the prose store; MFM has no structured relation for it."
     },
+    "/target_restrictions/warlord": {
+      "provenance": "prose-store-only",
+      "coverage": "unimplemented",
+      "sources": [
+        "data.stratagem.localisations.*.targetRules"
+      ],
+      "joins": [],
+      "transforms": [],
+      "filters": [],
+      "precedence": [],
+      "consumers": [],
+      "reason": "A target that must be your Warlord is authored from TARGET leaves over the prose store; the Warlord is chosen at mustering, and MFM has no structured relation for it."
+    },
     "/target_restrictions/count": {
       "provenance": "prose-store-only",
       "coverage": "unimplemented",
@@ -629,6 +642,19 @@
       "precedence": [],
       "consumers": [],
       "reason": "A target bound to the WHEN moment's unit or the attacked unit is authored from TARGET leaves over the prose store; MFM has no structured relation for it."
+    },
+    "/target_restrictions/*/warlord": {
+      "provenance": "prose-store-only",
+      "coverage": "unimplemented",
+      "sources": [
+        "data.stratagem.localisations.*.targetRules"
+      ],
+      "joins": [],
+      "transforms": [],
+      "filters": [],
+      "precedence": [],
+      "consumers": [],
+      "reason": "A target that must be your Warlord is authored from TARGET leaves over the prose store; the Warlord is chosen at mustering, and MFM has no structured relation for it."
     },
     "/target_restrictions/*/count": {
       "provenance": "prose-store-only",

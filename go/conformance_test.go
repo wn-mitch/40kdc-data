@@ -250,3 +250,25 @@ func TestEffectTranslationCorpus(t *testing.T) {
 		}
 	}
 }
+
+func TestStratagemTargetsCorpus(t *testing.T) {
+	var corpus map[string]any
+	if err := json.Unmarshal(loadCorpus(t, "abilities-resolver", "stratagem-targets.json"), &corpus); err != nil {
+		t.Fatal(err)
+	}
+	cases, _ := corpus["cases"].([]any)
+	if len(cases) == 0 {
+		t.Fatal("the stratagem-target corpus is empty")
+	}
+	for _, item := range cases {
+		c, _ := asMap(item)
+		keywords := map[string]bool{}
+		for _, keyword := range getStrList(c, "keywords") {
+			keywords[keyword] = true
+		}
+		got := stratagemCanTarget(map[string]any{"target_restrictions": c["target_restrictions"]}, keywords)
+		if want, _ := c["expected"].(bool); got != want {
+			t.Errorf("%s: got %v, want %v", getStr(c, "name"), got, want)
+		}
+	}
+}

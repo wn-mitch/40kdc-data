@@ -48548,6 +48548,10 @@ impl<'de> ::serde::Deserialize<'de> for StratagemName {
 ///        "your-army",
 ///        "enemy"
 ///      ]
+///    },
+///    "warlord": {
+///      "description": "The target is your Warlord: the Warlord model when `selects` is model, the unit that contains it when `selects` is unit. Warlord is the model chosen at mustering, not a keyword, so it never appears in the keyword lists; those still apply to the Warlord (\"your DEATH GUARD WARLORD\" is warlord plus required_keywords DEATH GUARD). Absent when the target need not be the Warlord. An enemy target is never your Warlord (integrity rejects warlord with side enemy).",
+///      "const": true
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -48593,6 +48597,9 @@ pub struct StratagemTargetRestriction {
     ///Whose units can be selected.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub side: ::std::option::Option<StratagemTargetRestrictionSide>,
+    ///The target is your Warlord: the Warlord model when `selects` is model, the unit that contains it when `selects` is unit. Warlord is the model chosen at mustering, not a keyword, so it never appears in the keyword lists; those still apply to the Warlord ("your DEATH GUARD WARLORD" is warlord plus required_keywords DEATH GUARD). Absent when the target need not be the Warlord. An enemy target is never your Warlord (integrity rejects warlord with side enemy).
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub warlord: ::std::option::Option<::serde_json::Value>,
 }
 impl ::std::default::Default for StratagemTargetRestriction {
     fn default() -> Self {
@@ -48610,6 +48617,7 @@ impl ::std::default::Default for StratagemTargetRestriction {
             required_keywords_any: Default::default(),
             selects: Default::default(),
             side: Default::default(),
+            warlord: Default::default(),
         }
     }
 }
@@ -49224,6 +49232,9 @@ pub struct StratagemTargetRestrictionsArrayItem {
     ///Whose units can be selected.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub side: ::std::option::Option<StratagemTargetRestrictionsArrayItemSide>,
+    ///The target is your Warlord: the Warlord model when `selects` is model, the unit that contains it when `selects` is unit. Warlord is the model chosen at mustering, not a keyword, so it never appears in the keyword lists; those still apply to the Warlord ("your DEATH GUARD WARLORD" is warlord plus required_keywords DEATH GUARD). Absent when the target need not be the Warlord. An enemy target is never your Warlord (integrity rejects warlord with side enemy).
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub warlord: ::std::option::Option<::serde_json::Value>,
 }
 ///The target is not freely chosen: it is the unit the WHEN moment names ("that unit"), or the unit the triggering enemy attacked.
 ///

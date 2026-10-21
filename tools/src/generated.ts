@@ -6072,6 +6072,10 @@ export interface StratagemTargetRestriction {
   required_keywords_any?: KeywordList10;
   excluded_keywords?: KeywordList;
   /**
+   * The target is your Warlord: the Warlord model when `selects` is model, the unit that contains it when `selects` is unit. Warlord is the model chosen at mustering, not a keyword, so it never appears in the keyword lists; those still apply to the Warlord ("your DEATH GUARD WARLORD" is warlord plus required_keywords DEATH GUARD). Absent when the target need not be the Warlord. An enemy target is never your Warlord (integrity rejects warlord with side enemy).
+   */
+  warlord?: true;
+  /**
    * How many targets are selected: one, one or more, or up to `count_max`.
    */
   count?: "one" | "one-or-more" | "up-to";

@@ -210,12 +210,14 @@ function stratagemPhaseMatches(stratagem: Stratagem, phase: Phase): boolean {
   return (stratagem.phases as Phase[]).includes(phase);
 }
 
-type TargetRestriction = { side?: string; required_keywords?: string[]; required_keywords_any?: string[]; excluded_keywords?: string[] };
+type TargetRestriction = { side?: string; warlord?: true; required_keywords?: string[]; required_keywords_any?: string[]; excluded_keywords?: string[] };
 
 /**
  * Whether a unit with `keywords` (lower-cased) can be a stratagem's friendly target. A stratagem
  * with no friendly target (none printed, or only enemy targets) does not restrict its user here;
- * with several friendly targets, matching any one is enough.
+ * with several friendly targets, matching any one is enough. The resolver does not know which
+ * model is the Warlord, so a Warlord target only needs a unit that could contain it: one with
+ * CHARACTER, the keyword every Warlord carries.
  */
 export function stratagemCanTarget(stratagem: Stratagem, keywords: ReadonlySet<string>): boolean {
   const raw = stratagem.target_restrictions as TargetRestriction | TargetRestriction[] | null | undefined;
@@ -223,7 +225,8 @@ export function stratagemCanTarget(stratagem: Stratagem, keywords: ReadonlySet<s
   const friendly = (Array.isArray(raw) ? raw : [raw]).filter((target) => target.side !== "enemy");
   if (friendly.length === 0) return true;
   const has = (keyword: string) => keywords.has(keyword.toLowerCase());
-  return friendly.some((target) => (target.required_keywords ?? []).every(has)
+  return friendly.some((target) => (target.warlord !== true || has("character"))
+    && (target.required_keywords ?? []).every(has)
     && ((target.required_keywords_any ?? []).length === 0 || target.required_keywords_any!.some(has))
     && !(target.excluded_keywords ?? []).some(has));
 }

@@ -475,6 +475,72 @@
     "expected_errors": []
   },
   {
+    "name": "stratagem: the Warlord as a typed target, with keywords it must also carry",
+    "target": "stratagem",
+    "input": {
+      "id": "fabricated-warlord-ploy",
+      "name": "Fabricated Warlord Ploy",
+      "category": "core",
+      "type": "epic-deed",
+      "cp_cost": 1,
+      "phases": [
+        "command"
+      ],
+      "player_turn": "your-turn",
+      "timing": "once-per-phase",
+      "game_version": {
+        "edition": "11th",
+        "dataslate": "pre-launch-provisional"
+      },
+      "target_restrictions": {
+        "count": "one",
+        "side": "your-army",
+        "selects": "model",
+        "warlord": true,
+        "required_keywords": [
+          "ALPHA"
+        ]
+      }
+    },
+    "expected_errors": []
+  },
+  {
+    "name": "stratagem: warlord is only ever true (absent when the target need not be the Warlord)",
+    "target": "stratagem",
+    "input": {
+      "id": "fabricated-warlord-ploy",
+      "name": "Fabricated Warlord Ploy",
+      "category": "core",
+      "type": "epic-deed",
+      "cp_cost": 1,
+      "phases": [
+        "command"
+      ],
+      "player_turn": "your-turn",
+      "timing": "once-per-phase",
+      "game_version": {
+        "edition": "11th",
+        "dataslate": "pre-launch-provisional"
+      },
+      "target_restrictions": {
+        "count": "one",
+        "side": "your-army",
+        "selects": "model",
+        "warlord": false
+      }
+    },
+    "expected_errors": [
+      {
+        "path": "/target_restrictions",
+        "code": "TYPE_MISMATCH"
+      },
+      {
+        "path": "/target_restrictions/warlord",
+        "code": "ENUM_VIOLATION"
+      }
+    ]
+  },
+  {
     "name": "stratagem: two named targets, the second optional and gated on the first",
     "target": "stratagem",
     "input": {

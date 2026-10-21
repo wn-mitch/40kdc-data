@@ -582,7 +582,9 @@ mod tests;
 
 /// Whether a unit with `keywords` (lower-cased) can be a stratagem's friendly target. A stratagem
 /// with no friendly target (none printed, or only enemy targets) does not restrict its user here;
-/// with several friendly targets, matching any one is enough. Mirrors TS `stratagemCanTarget`.
+/// with several friendly targets, matching any one is enough. The resolver does not know which
+/// model is the Warlord, so a Warlord target only needs a unit that could contain it: one with
+/// CHARACTER, the keyword every Warlord carries. Mirrors TS `stratagemCanTarget`.
 pub fn stratagem_can_target(stratagem: &crate::Stratagem, keywords: &HashSet<String>) -> bool {
     let Some(raw) = stratagem
         .target_restrictions
@@ -618,9 +620,11 @@ pub fn stratagem_can_target(stratagem: &crate::Stratagem, keywords: &HashSet<Str
     }
     friendly.iter().any(|target| {
         let any = list(target, "required_keywords_any");
-        list(target, "required_keywords")
-            .iter()
-            .all(|k| keywords.contains(k))
+        let warlord = target.get("warlord").and_then(Value::as_bool) == Some(true);
+        (!warlord || keywords.contains("character"))
+            && list(target, "required_keywords")
+                .iter()
+                .all(|k| keywords.contains(k))
             && (any.is_empty() || any.iter().any(|k| keywords.contains(k)))
             && !list(target, "excluded_keywords")
                 .iter()

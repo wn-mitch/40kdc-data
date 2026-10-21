@@ -3,7 +3,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { join, relative, sep } from "node:path";
 
 import { hashJson } from "../round4/hash.js";
-import { coreTargetKeywords, keywordIndex } from "./core-keywords.js";
+import { coreTargetKeywords, keywordIndex, liftWarlord } from "./core-keywords.js";
 
 /**
  * The core half of a publication: approved entries whose leaves set core fields (a stratagem's
@@ -34,10 +34,20 @@ export function coreStratagemFile(dataRoot: string, factionId: string): string {
   return join(dataRoot, "core", factionId, "stratagems.json");
 }
 
-/** Leaf-form target_restrictions (uppercase phrases) in the form core stores; several named targets each so. */
+/**
+ * Leaf-form target_restrictions (uppercase phrases) in the form core stores; several named targets
+ * each so. The Warlord arrives as the compiled `warlord` field and passes through. An entry compiled
+ * with WARLORD among its keywords predates that field: it is refused, not rewritten, so the
+ * published target is always the one a reviewer approved; recompile and re-approve it.
+ */
 export function canonicalTarget(target: Record<string, unknown> | Array<Record<string, unknown>>, index: ReadonlyMap<string, string>): Record<string, unknown> | Array<Record<string, unknown>> {
   if (Array.isArray(target)) return target.map((item) => canonicalTarget(item, index) as Record<string, unknown>);
   const { required_keywords, required_keywords_any, excluded_keywords, ...rest } = target;
+  for (const list of [required_keywords, required_keywords_any, excluded_keywords]) {
+    if (Array.isArray(list) && liftWarlord(list as string[]).warlord) {
+      throw new Error("WARLORD in the target's keywords is the Warlord, not a keyword; recompile this entry so its target carries warlord, and re-approve it.");
+    }
+  }
   const phrases = (required_keywords_any ?? required_keywords ?? []) as string[];
   const keywords = coreTargetKeywords(phrases, required_keywords_any ? "any" : "all", (excluded_keywords ?? []) as string[], index);
   // Keyword fields first, as the authored record lists them.

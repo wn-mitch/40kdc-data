@@ -198,3 +198,37 @@ fn from_dsl_matches_the_attacker_goldens() {
 fn defensive_from_dsl_matches_the_target_goldens() {
     run_dsl_corpus("defensive-from-dsl.json");
 }
+
+#[test]
+fn stratagem_targets_match_the_resolver_goldens() {
+    let corpus = read(&corpus_dir().join("stratagem-targets.json"));
+    let cases = corpus["cases"].as_array().expect("cases");
+    assert!(!cases.is_empty(), "the stratagem-target corpus is empty");
+    let mut failures = Vec::new();
+    for case in cases {
+        let stratagem: wh40kdc::Stratagem = serde_json::from_value(json!({
+            "id": "fabricated-ploy",
+            "name": "Fabricated Ploy",
+            "category": "core",
+            "cp_cost": 1,
+            "phases": ["command"],
+            "player_turn": "your-turn",
+            "timing": "once-per-phase",
+            "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" },
+            "target_restrictions": case["target_restrictions"],
+        }))
+        .expect("stratagem");
+        let keywords: std::collections::HashSet<String> = case["keywords"]
+            .as_array()
+            .expect("keywords")
+            .iter()
+            .filter_map(Value::as_str)
+            .map(str::to_string)
+            .collect();
+        let got = wh40kdc::data::stratagem_can_target(&stratagem, &keywords);
+        if Value::Bool(got) != case["expected"] {
+            failures.push(format!("{}: got {got}", case["name"]));
+        }
+    }
+    assert!(failures.is_empty(), "{failures:#?}");
+}

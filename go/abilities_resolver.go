@@ -213,8 +213,10 @@ func isAuraScope(rng any) bool {
 
 // stratagemCanTarget reports whether a unit with keywords (lower-cased) can be a stratagem's
 // friendly target. A stratagem with no friendly target (none printed, or only enemy targets) does
-// not restrict its user here; with several friendly targets, matching any one is enough. Mirrors
-// TS stratagemCanTarget.
+// not restrict its user here; with several friendly targets, matching any one is enough. The
+// resolver does not know which model is the Warlord, so a Warlord target only needs a unit that
+// could contain it: one with CHARACTER, the keyword every Warlord carries. Mirrors TS
+// stratagemCanTarget.
 func stratagemCanTarget(stratagem map[string]any, keywords map[string]bool) bool {
 	var targets []map[string]any
 	switch raw := stratagem["target_restrictions"].(type) {
@@ -237,6 +239,9 @@ func stratagemCanTarget(stratagem map[string]any, keywords map[string]bool) bool
 		}
 		friendly++
 		ok := true
+		if warlord, _ := target["warlord"].(bool); warlord {
+			ok = has("character")
+		}
 		for _, keyword := range getStrList(target, "required_keywords") {
 			ok = ok && has(keyword)
 		}
