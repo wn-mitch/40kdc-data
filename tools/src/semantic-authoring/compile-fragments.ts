@@ -41,6 +41,20 @@ export type CompileLeaf = {
   mode_cost?: { label: string; amount: number };
   /** The parameters a binding filled in from an earlier leaf (compile-antecedent.ts); absent when none. */
   antecedent_keys?: string[];
+  /**
+   * Reviewed connectives (connective-rows.ts) whose next leaf in the fragment is this one, set by
+   * leaf-view.ts. Absent when none.
+   */
+  connectives?: LeafConnective[];
+};
+
+/** A reviewed connective attached to the leaf it introduces (compile-connective-plan.ts reads it). */
+export type LeafConnective = {
+  relation: string; surface: string; start_byte: number; end_byte: number;
+  /** Printed inside the leaf's own span. */
+  within?: boolean;
+  /** No leaf follows it in its fragment; it sits on the fragment's last leaf. */
+  trailing?: boolean;
 };
 
 type Node = Record<string, unknown>;

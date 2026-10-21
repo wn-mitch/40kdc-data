@@ -133,6 +133,9 @@ CREATE TABLE IF NOT EXISTS proposals (
 
 CREATE INDEX IF NOT EXISTS proposals_status_origin_lookup
   ON proposals(status, origin, span_id);
+-- Per-source reads (reviewed connectives, compilation inputs) start from a version's spans.
+CREATE INDEX IF NOT EXISTS proposals_span_role_lookup
+  ON proposals(span_id, role, status);
 
 CREATE TABLE IF NOT EXISTS annotations (
   id INTEGER PRIMARY KEY,
@@ -661,6 +664,7 @@ function upgradeProposalRoles(db: DatabaseSync): void {
         DROP TABLE proposals;
         ALTER TABLE proposals_new RENAME TO proposals;
         CREATE INDEX IF NOT EXISTS proposals_status_origin_lookup ON proposals(status, origin, span_id);
+        CREATE INDEX IF NOT EXISTS proposals_span_role_lookup ON proposals(span_id, role, status);
       `);
       const violations = db.prepare("PRAGMA foreign_key_check").all();
       if (violations.length > 0) throw new Error(`Rebuilding proposals broke ${violations.length} foreign key reference(s).`);

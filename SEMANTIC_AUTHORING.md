@@ -235,6 +235,24 @@ unless it is needed to operate.
   roll kind is followed by an effect whose `roll` is that kind (`roll-result` with `roll: hit` after
   "after making a Hit roll"). `roll: any` on such an effect is accepted by the schema and changes
   other rolls, so drafters must not author it.
+- **A reviewed "if it does" makes its permission a choice.** Compilation reads accepted CONNECTIVE
+  rows whose `reviewed_relation` is `condition-of` (`connective-rows.ts`); a duplicate-text copy
+  takes the relation of the row it copies. Each connective sits on the first trusted leaf at or
+  after it in its fragment (`within` when a leaf's own span holds it), in the trusted view only,
+  and joins the compilation inputs hash only when a record has one. "If it does" / "If you do"
+  points back to the nearest leaf before it that is not a condition or duration
+  (`compile-connective-plan.ts`). An optional-use, or what one offers, is already optional and
+  only has to cover it; a unit selection already scopes its body. A permission effect (make-move,
+  ability-activate, a set-up that is neither required nor forbidden, an allowing
+  eligibility-permission) with the effects after the connective in its merged sentence is one
+  choice (`compile-connective-lower.ts`): when they are the whole of a part with its own moment
+  and nothing else in the part is optional, that part's moment (part 0) or node (a later part) is
+  optional; otherwise they become one optional ability-part under the permission's gate. A bare
+  "if"/"while" before a condition leaf, a connective inside a leaf and "when doing so" change
+  nothing. Compilation refuses an antecedent the player cannot decline, a range with no effect
+  (a consequence reviewed as a condition must be an effect), a moment among the consequents,
+  overlapping ranges, a range across parts, container options, an "instead" or pick, an unshared
+  roll band or a split window, and a bare "if" before a moment. It never flattens the gate.
 - **A placeholder is not a meaning.** A trusted leaf whose parameter still holds the import
   placeholder `"source"` does not count as resolved source (`placeholders.ts`), and no new
   decision may create one. A text holding such a leaf is not leaf-complete.
@@ -279,6 +297,9 @@ These are the next layers of work. None of them is a reason to reopen the leaf a
 
 - **Connectives and local structure:** "and" / "or" between leaves are decided per occurrence
   today; 88 near-complete texts in the Sideways-3 cohort hold a connective residual.
+- **Conditions written as moments:** a bare "if" before an EVENT leaf ("if one or more models are
+  destroyed …") is a condition on what happened, not a trigger. Compilation refuses it until a
+  `happened` lowering for such leaves exists.
 - **Segmentation throughput:** most of the corpus has not been segmented.
 - **Ontology saturation and the long tail:** rare wordings need their own decisions.
 - **True DSL gaps**, recorded as `DSL_GAP` with the source meaning kept intact.

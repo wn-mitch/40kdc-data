@@ -91,6 +91,8 @@ import { defenderBoundBefore } from "./compile-attack-frame.js";
 import { bindNearFriendlyTarget } from "./compile-near-friendly-target.js";
 import { refuseStratagemTargetActivity } from "./compile-triggering-destruction.js";
 import { groupedTargetRestrictions, optionalTargetGroup, severalTargets } from "./compile-target-groups.js";
+import { planConditionOf, type ConditionOfPlan } from "./compile-connective-plan.js";
+import { lowerConditionOf } from "./compile-connective-lower.js";
 import { checkOptionalCosts, flatLeaves, isSpendRead, optionalSpendLeaves, wrapOptionalSpends } from "./compile-optional-cost.js";
 import { foldEmbarkedPermission } from "./compile-embarked-permission.js";
 import { attackFold, isAttackMoment, triggerWindow } from "./compile-attack-window.js";
@@ -393,7 +395,10 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   const placesFromEventObject = leaves.some((leaf) => leaf.family_id === "unit-position" && leaf.parameters.of === "event-object")
     && leaves.some((leaf) => leaf.family_id === "set-up" || leaf.family_id === "add-unit");
   let list: CompileLeaf[];
+  let conditionOf: ConditionOfPlan[] = [];
   try {
+    // Reviewed "if it does" connectives are planned on the leaves as reviewed, before any fold (compile-connective-plan.ts).
+    conditionOf = planConditionOf(leaves, sourceText);
     leaves = foldAbilityUseRefresh(foldAbilityUseContext(leaves));
     refuseBlastRating(leaves, sourceText);
     refuseStratagemTargetActivity(leaves);
@@ -1299,6 +1304,15 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   // A banded effect after the loop has no DSL shape: it would resolve against the loop's roll or run once per unit.
   if (afterLoop.some((item) => item.gate.some(isRollMarker))) errors.push("A roll-result band on a later sentence's effect on the bearer's unit has no DSL shape after a for-each-unit loop.");
   if (errors.length > 0) return { ok: false, signature, errors };
+  // "It can …. If it does, …": the permission and what it gates are one choice of the player (compile-connective-lower.ts).
+  const connective = attempt(() => lowerConditionOf(conditionOf, {
+    list, planned, partOf, rawOf, optional, optionalSentence, optionalSpend, designationOptional,
+    partMoments: [triggerIndexes.filter((_, at) => !partStarts.some((part) => part.moments.includes(at))), ...partStarts.map((part) => part.moments.map((at) => triggerIndexes[at]!))],
+    stratagem: list.some((leaf) => STRATAGEM_FAMILIES.has(leaf.family_id)), aura: auraLeaf !== null, splitWindow: split && window !== null,
+    consumed: consumedByContainer, optionalTarget: (index) => optionalTargetGroup(list, index) !== null, held: new Set([...designatedSpends, ...afterLoop]),
+  }));
+  if (connective === null) return { ok: false, signature, errors };
+  if (connective.optionalSentence !== null) { optional = true; optionalSentence = Math.max(optionalSentence, connective.optionalSentence); }
   const pieceItems = planned.filter((item) => !designatedSpends.includes(item) && !afterLoop.includes(item));
   const pieces = [0, ...partStarts.map((_, position) => position + 1)].map((part) => attempt(() => resolveRolls(
     pieceItems.filter((item) => partOf(item.index) === part),
@@ -1508,6 +1522,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
       const node: Node = {
         type: "ability-part", trigger: asTrigger(part.moments.map((index) => moments[index]!)), effect: own.length === 1 ? own[0]! : { type: "sequence", steps: own },
         ...(position === usagePart ? { usage: usages[0] } : {}),
+        ...(connective.optionalParts.has(position + 1) ? { optional: true } : {}),
       };
       if (under.has(position)) nestedSteps.push({ ...node, duration: "phase" });
       else partSteps.push(node);

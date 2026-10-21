@@ -1,7 +1,9 @@
 import type { DatabaseSync } from "node:sqlite";
 
 import type { CompileLeaf } from "./compile.js";
+import type { LeafConnective } from "./compile-fragments.js";
 import { NAME_FRAGMENT } from "./compile-name.js";
+import { reviewedConnectives, type ReviewedConnective } from "./connective-rows.js";
 import { getAbilityCoverage, getCurrentCoverage, type CoverageView } from "./coverage.js";
 import { untiledRuns } from "./leaves.js";
 
@@ -79,20 +81,29 @@ export function tiledSources(
     list.push(row);
     byAbility.set(row.ability_version_id, list);
   }
+  // Reviewed connectives are trusted decisions: only the trusted view reads them.
+  const trustedView = !options.includeMachine && !(options.overlayRunIds && options.overlayRunIds.length > 0);
+  const connectives = new Map<number, ReviewedConnective[]>();
+  if (trustedView) {
+    for (const row of reviewedConnectives(db, abilities.map((ability) => ability.id))) {
+      connectives.set(row.ability_version_id, [...(connectives.get(row.ability_version_id) ?? []), row]);
+    }
+  }
   const result: TiledSource[] = [];
   for (const ability of abilities) {
     const view = coverage.get(ability.id);
     const own = shadowed(byAbility.get(ability.id) ?? []);
     if (!view || own.length === 0 || untiledRuns(view).length > 0) continue;
+    const leaves: CompileLeaf[] = own.map((row) => ({
+      role: row.role, family_id: row.family_id, family_version: row.family_version,
+      parameters: JSON.parse(row.parameters_json) as Record<string, unknown>,
+      start_byte: row.start_byte, end_byte: row.end_byte, fragment: row.fragment,
+      // A NAME leaf carries its stored wording: compileWithName re-checks it against the current name.
+      ...(row.fragment === NAME_FRAGMENT ? { exact_text: row.exact_text } : {}),
+    }));
     result.push({
       ...ability,
-      leaves: own.map((row) => ({
-        role: row.role, family_id: row.family_id, family_version: row.family_version,
-        parameters: JSON.parse(row.parameters_json) as Record<string, unknown>,
-        start_byte: row.start_byte, end_byte: row.end_byte, fragment: row.fragment,
-        // A NAME leaf carries its stored wording: compileWithName re-checks it against the current name.
-        ...(row.fragment === NAME_FRAGMENT ? { exact_text: row.exact_text } : {}),
-      })),
+      leaves: attachConnectives(leaves, connectives.get(ability.id) ?? []),
       machine_leaves: own.filter((row) => row.trusted === 0).length,
     });
   }
@@ -111,4 +122,28 @@ function shadowed(rows: LeafRow[]): LeafRow[] {
   const untrusted = rows.filter((row) => row.trusted === 0).sort((left, right) => right.run - left.run || left.start_byte - right.start_byte);
   for (const row of untrusted) if (!overlapsAny(row, kept)) kept.push(row);
   return kept.sort((left, right) => left.start_byte - right.start_byte || left.end_byte - right.end_byte);
+}
+
+/**
+ * Each connective on the leaf it introduces: the leaf whose span holds it (`within`), else the
+ * first leaf of its fragment that starts at or after it. A connective with no leaf at or after it
+ * in its fragment goes on the fragment's last leaf as `trailing`, so the compiler can refuse it
+ * rather than lose it. Leaves without a connective are returned unchanged.
+ */
+export function attachConnectives(leaves: readonly CompileLeaf[], connectives: ReadonlyArray<LeafConnective & { fragment: string }>): CompileLeaf[] {
+  const attached = new Map<number, LeafConnective[]>();
+  for (const connective of connectives) {
+    const own = leaves.map((leaf, index) => ({ leaf, index })).filter(({ leaf }) => (leaf.fragment ?? "RAW_TEXT") === connective.fragment);
+    if (own.length === 0) continue;
+    const holder = own.find(({ leaf }) => leaf.start_byte <= connective.start_byte && connective.end_byte <= (leaf.end_byte ?? leaf.start_byte));
+    const next = own.filter(({ leaf }) => leaf.start_byte >= connective.start_byte).sort((left, right) => left.leaf.start_byte - right.leaf.start_byte)[0];
+    const last = [...own].sort((left, right) => left.leaf.start_byte - right.leaf.start_byte).at(-1)!;
+    const target = holder ?? next ?? last;
+    const item: LeafConnective = {
+      relation: connective.relation, surface: connective.surface, start_byte: connective.start_byte, end_byte: connective.end_byte,
+      ...(holder ? { within: true } : {}), ...(!holder && !next ? { trailing: true } : {}),
+    };
+    attached.set(target.index, [...(attached.get(target.index) ?? []), item]);
+  }
+  return leaves.map((leaf, index) => attached.has(index) ? { ...leaf, connectives: [...(leaf.connectives ?? []), ...attached.get(index)!] } : leaf);
 }

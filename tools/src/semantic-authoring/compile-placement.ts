@@ -153,6 +153,11 @@ function signaturePart(leaf: CompileLeaf): string {
   return ATTACK_EVENTS.has(String(leaf.parameters.kind)) ? "EVENT(attack)" : `EVENT(${kindKey(leaf)})`;
 }
 
+/** A reviewed condition-of connective before a leaf that is not itself a condition is part of the shape a reviewer approves. */
+function conditionOfMark(leaf: CompileLeaf): string {
+  return leaf.role !== "CONDITION" && leaf.connectives?.some((connective) => connective.relation === "condition-of" && !connective.within) ? "IF(condition-of) · " : "";
+}
+
 /**
  * The shape of an ability: its leaves' roles and families in source order, parameters left out,
  * with ` | ` between clauses so the binding of conditions is part of what a reviewer approves.
@@ -161,7 +166,7 @@ function signaturePart(leaf: CompileLeaf): string {
 export function shapeSignature(leaves: readonly CompileLeaf[], sourceText?: string): string {
   const list = ordered(leaves);
   const places = placements(list, sourceText);
-  return list.map((leaf, index) => `${index > 0 && places[index]!.clause !== places[index - 1]!.clause ? "| " : index > 0 ? "· " : ""}${signaturePart(leaf)}`).join(" ");
+  return list.map((leaf, index) => `${index > 0 && places[index]!.clause !== places[index - 1]!.clause ? "| " : index > 0 ? "· " : ""}${conditionOfMark(leaf)}${signaturePart(leaf)}`).join(" ");
 }
 
 /** Blank line in the source between two leaves: a paragraph break ends a band run. */

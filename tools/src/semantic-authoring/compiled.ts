@@ -1,6 +1,7 @@
 import type { DatabaseSync } from "node:sqlite";
 
 import { hashJson } from "../round4/hash.js";
+import { reviewedConnectives } from "./connective-rows.js";
 import { NAME_FRAGMENT } from "./contracts.js";
 import type { Mechanics } from "./entries.js";
 
@@ -42,9 +43,10 @@ export function compiledIdentity(mechanics: Mechanics, core: unknown): unknown {
 }
 
 /**
- * Identity of everything a compilation read: the source version and its active leaves (exact
- * bytes, fingerprint and authority). Any leaf, authority or source change yields a different
- * hash, so an approval never survives a row's authority changing under it.
+ * Identity of everything a compilation read: the source version, its active leaves (exact
+ * bytes, fingerprint and authority) and the reviewed connectives it consumes. Any leaf, authority,
+ * connective or source change yields a different hash, so an approval never survives a row's
+ * authority changing under it.
  */
 export function compilationInputsHash(db: DatabaseSync, abilityVersionId: number): string {
   const ability = db.prepare("SELECT source_hash FROM abilities WHERE id = ?").get(abilityVersionId) as { source_hash: string } | undefined;
@@ -55,7 +57,11 @@ export function compilationInputsHash(db: DatabaseSync, abilityVersionId: number
     WHERE annotations.status = 'active' AND source_spans.ability_version_id = ?
     ORDER BY source_spans.fragment = '${NAME_FRAGMENT}', source_spans.start_byte, source_spans.end_byte, source_spans.fragment, annotations.fingerprint_id, annotations.authority_kind
   `).all(abilityVersionId);
-  return hashJson({ source_hash: ability.source_hash, leaves });
+  // The reviewed connectives compilation reads (connective-rows.ts) join the identity only when there
+  // are any, so a source without one keeps the hash its approvals were recorded under.
+  const connectives = reviewedConnectives(db, [abilityVersionId])
+    .map(({ fragment, start_byte, end_byte, relation }) => ({ fragment, start_byte, end_byte, relation }));
+  return hashJson({ source_hash: ability.source_hash, leaves, ...(connectives.length > 0 ? { connectives } : {}) });
 }
 
 export type CompiledEntryRow = {
