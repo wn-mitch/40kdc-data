@@ -889,6 +889,12 @@ type LoadoutAssignment = {
  * pre-sorted order, trying the largest feasible count first. Without `onSolution`
  * it returns the first solution; with it, it visits every solution until the
  * callback returns `true`, then returns that final solution.
+ *
+ * A search state is the position (row, candidate, models left) plus the remaining
+ * item bounds and cap usage. A state whose subtree reached no complete
+ * assignment is recorded and never searched again, so an infeasible bag fails in
+ * time bounded by its distinct states rather than by every way of splitting the
+ * models across candidates. Skipping such a subtree skips no callback.
  */
 function solveAssignment(
   rows: readonly SolverRow[],
@@ -911,16 +917,75 @@ function solveAssignment(
     count: p.count,
   }));
 
+  const dead = new Set<string>();
+  let reached = 0;
+  // Remaining lower bounds are fixed by remaining upper bounds: both start from
+  // fixed bags and every pick subtracts the same amount from each.
+  const stateKey = (ri: number, ci: number, left: number): string =>
+    `${ri}|${ci}|${left}|${[...remainingUpper].filter(([, c]) => c !== 0).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0)).map(([id, c]) => `${id}:${c}`).join(",")}|${usage.join(",")}|${[...variantUsage].filter(([, c]) => c !== 0).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0)).map(([id, c]) => `${id}:${c}`).join(",")}`;
+
   const assignRow = (ri: number): boolean => {
     if (ri === rows.length) {
       for (const c of remainingLower.values()) if (c > 0) return false;
+      reached += 1;
       if (onSolution) return onSolution(snapshot());
       return true;
     }
     return distribute(ri, 0, rows[ri].count);
   };
 
+  // Per-model item extremes over candidates `ci..` of row `ri`, and the totals
+  // rows `ri..` supply at full count, bound what the unplaced models can field.
+  const items = new Set<string>([...lower.keys(), ...upper.keys()]);
+  for (const row of rows) for (const cand of row.candidates) for (const id of cand.weapons.keys()) items.add(id);
+  const itemIds = [...items];
+  const suffixExtremes = rows.map((row) => {
+    const out: { min: number[]; max: number[] }[] = Array.from({ length: row.candidates.length + 1 });
+    out[row.candidates.length] = { min: itemIds.map(() => Infinity), max: itemIds.map(() => -Infinity) };
+    for (let ci = row.candidates.length - 1; ci >= 0; ci--) {
+      const next = out[ci + 1];
+      const weapons = row.candidates[ci].weapons;
+      out[ci] = {
+        min: itemIds.map((id, at) => Math.min(next.min[at], weapons.get(id) ?? 0)),
+        max: itemIds.map((id, at) => Math.max(next.max[at], weapons.get(id) ?? 0)),
+      };
+    }
+    return out;
+  });
+  const tail: { min: number[]; max: number[] }[] = Array.from({ length: rows.length + 1 });
+  tail[rows.length] = { min: itemIds.map(() => 0), max: itemIds.map(() => 0) };
+  for (let ri = rows.length - 1; ri >= 0; ri--) {
+    const full = suffixExtremes[ri][0];
+    const count = rows[ri].count;
+    tail[ri] = {
+      min: itemIds.map((_, at) => tail[ri + 1].min[at] + (count > 0 ? count * full.min[at] : 0)),
+      max: itemIds.map((_, at) => tail[ri + 1].max[at] + (count > 0 ? count * full.max[at] : 0)),
+    };
+  }
+  const reachable = (ri: number, ci: number, left: number): boolean => {
+    const here = suffixExtremes[ri][ci];
+    for (let at = 0; at < itemIds.length; at++) {
+      const id = itemIds[at];
+      const most = (left > 0 ? left * here.max[at] : 0) + tail[ri + 1].max[at];
+      const least = (left > 0 ? left * here.min[at] : 0) + tail[ri + 1].min[at];
+      if ((remainingLower.get(id) ?? 0) > most) return false;
+      if ((remainingUpper.get(id) ?? 0) < least) return false;
+    }
+    return true;
+  };
+
   const distribute = (ri: number, ci: number, left: number): boolean => {
+    if (left > 0 && ci === rows[ri].candidates.length) return false;
+    if (!reachable(ri, ci, left)) return false;
+    const key = stateKey(ri, ci, left);
+    if (dead.has(key)) return false;
+    const before = reached;
+    const found = distributeFrom(ri, ci, left);
+    if (!found && reached === before) dead.add(key);
+    return found;
+  };
+
+  const distributeFrom = (ri: number, ci: number, left: number): boolean => {
     if (left === 0) return assignRow(ri + 1);
     const row = rows[ri];
     if (ci === row.candidates.length) return false;

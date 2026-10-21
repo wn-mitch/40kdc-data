@@ -842,6 +842,36 @@ describe("groupLoadout", () => {
     ).toBeNull();
   });
 
+  describe("infeasible exact bags over many per-model candidates", () => {
+    // Ten models each swap a gun for one of six ranged picks and a knife for one
+    // of six melee picks: 49 per-model candidates. Exhausting every split of ten
+    // models across them took seconds; failed sub-states are now cut.
+    const ranged = ["r0", "r1", "r2", "r3", "r4", "r5"];
+    const melee = ["m0", "m1", "m2", "m3", "m4", "m5"];
+    const options = [
+      opt({ replaces: ["gun"], replacement_choice: ranged.map((id) => [id]), model_constraint: { any_number: true } }),
+      opt({ replaces: ["knife"], replacement_choice: melee.map((id) => [id]), model_constraint: { any_number: true } }),
+    ];
+    const models = [{ name: "Trooper", min: 10, max: 10, default_weapon_ids: ["gun", "knife"] }];
+    const bag = (meleeTwos: number) => new Map<string, number>([
+      ...ranged.map((id, i) => [id, i < 4 ? 2 : 1] as [string, number]),
+      ...melee.map((id, i) => [id, i < meleeTwos ? 2 : i < 5 ? 1 : 0] as [string, number]).filter(([, n]) => n > 0),
+    ]);
+
+    it("rejects eleven melee picks for ten models without exhausting the splits", () => {
+      // m0..m4 at 2 and m5 at 1: eleven melee weapons.
+      const counts = new Map(bag(5));
+      counts.set("m5", 1);
+      expect(groupLoadout(u(), 10, options, models, counts)).toBeNull();
+    }, 2000);
+
+    it("still groups the feasible bag of ten melee picks", () => {
+      const groups = groupLoadout(u(), 10, options, models, bag(5));
+      expect(groups?.reduce((sum, group) => sum + group.count, 0)).toBe(10);
+      expect(groups?.every((group) => group.weapons.length === 2)).toBe(true);
+    }, 2000);
+  });
+
   it("splits a leader model from the bulk even when loadouts match", () => {
     const models = [
       {

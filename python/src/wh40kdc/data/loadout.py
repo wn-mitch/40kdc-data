@@ -629,12 +629,78 @@ def _solve_assignment(
     variant_caps: dict[str, int] | None = None,
     on_solution: Any = None,
 ) -> list[dict[str, Any]] | None:
-    """Deterministically search bounded row candidates; callbacks may cancel."""
+    """Deterministically search bounded row candidates; callbacks may cancel.
+
+    A state (row, candidate, models left, remaining bounds, cap usage) whose
+    subtree reached no complete assignment is recorded and never searched again;
+    a state whose unplaced models cannot field an item's remaining bounds is cut.
+    Neither skips a callback.
+    """
     remaining_lower, remaining_upper = dict(lower), dict(upper)
     option_usage = [0] * len(option_caps)
     variant_caps = variant_caps or {}
     variant_usage: dict[str, int] = {}
     picks: list[tuple[int, int, int]] = []
+    dead: set[tuple[Any, ...]] = set()
+    reached = 0
+
+    # Per-model item extremes over candidates `ci..` of row `ri`, and the totals
+    # rows `ri..` supply at full count, bound what the unplaced models can field.
+    item_set = set(lower) | set(upper)
+    for row in rows:
+        for cand in row["candidates"]:
+            item_set.update(cand["weapons"])
+    item_ids = list(item_set)
+    inf = float("inf")
+    suffix_extremes: list[list[tuple[list[float], list[float]]]] = []
+    for row in rows:
+        cands = row["candidates"]
+        out: list[tuple[list[float], list[float]]] = [
+            ([inf] * len(item_ids), [-inf] * len(item_ids))
+        ]
+        for cand in reversed(cands):
+            nmin, nmax = out[-1]
+            weapons = cand["weapons"]
+            out.append((
+                [min(nmin[at], weapons.get(id_, 0)) for at, id_ in enumerate(item_ids)],
+                [max(nmax[at], weapons.get(id_, 0)) for at, id_ in enumerate(item_ids)],
+            ))
+        out.reverse()
+        suffix_extremes.append(out)
+    tail: list[tuple[list[float], list[float]]] = [([0] * len(item_ids), [0] * len(item_ids))]
+    for ri in range(len(rows) - 1, -1, -1):
+        fmin, fmax = suffix_extremes[ri][0]
+        tmin, tmax = tail[-1]
+        count = rows[ri]["count"]
+        tail.append((
+            [tmin[at] + (count * fmin[at] if count > 0 else 0) for at in range(len(item_ids))],
+            [tmax[at] + (count * fmax[at] if count > 0 else 0) for at in range(len(item_ids))],
+        ))
+    tail.reverse()
+
+    def reachable(ri: int, ci: int, left: int) -> bool:
+        hmin, hmax = suffix_extremes[ri][ci]
+        tmin, tmax = tail[ri + 1]
+        for at, id_ in enumerate(item_ids):
+            most = (left * hmax[at] if left > 0 else 0) + tmax[at]
+            least = (left * hmin[at] if left > 0 else 0) + tmin[at]
+            if remaining_lower.get(id_, 0) > most:
+                return False
+            if remaining_upper.get(id_, 0) < least:
+                return False
+        return True
+
+    def state_key(ri: int, ci: int, left: int) -> tuple[Any, ...]:
+        # Remaining lower bounds are fixed by remaining upper bounds: both start
+        # from fixed bags and every pick subtracts the same amount from each.
+        return (
+            ri,
+            ci,
+            left,
+            tuple(sorted((k, v) for k, v in remaining_upper.items() if v != 0)),
+            tuple(option_usage),
+            tuple(sorted((k, v) for k, v in variant_usage.items() if v != 0)),
+        )
 
     def snapshot() -> list[dict[str, Any]]:
         return [
@@ -652,12 +718,28 @@ def _solve_assignment(
         if ri == len(rows):
             if any(count > 0 for count in remaining_lower.values()):
                 return False
+            nonlocal reached
+            reached += 1
             if on_solution is not None:
                 return bool(on_solution(snapshot()))
             return True
         return distribute(ri, 0, rows[ri]["count"])
 
     def distribute(ri: int, ci: int, left: int) -> bool:
+        if left > 0 and ci == len(rows[ri]["candidates"]):
+            return False
+        if not reachable(ri, ci, left):
+            return False
+        key = state_key(ri, ci, left)
+        if key in dead:
+            return False
+        before = reached
+        found = distribute_from(ri, ci, left)
+        if not found and reached == before:
+            dead.add(key)
+        return found
+
+    def distribute_from(ri: int, ci: int, left: int) -> bool:
         row = rows[ri]
         if ci == len(row["candidates"]):
             return left == 0 and assign_row(ri + 1)

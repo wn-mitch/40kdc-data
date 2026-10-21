@@ -943,8 +943,107 @@ func solveAssignment(rows []solverRow, lower, upper map[string]int, optionCaps [
 	remainingLower, remainingUpper := cloneCounts(lower), cloneCounts(upper)
 	usage, variantUsage := make([]int, len(optionCaps)), map[string]int{}
 	picks := []pick{}
+	// A state whose subtree reached no complete assignment is recorded and never
+	// searched again; a state whose unplaced models cannot field an item's
+	// remaining bounds is cut. Neither skips a callback.
+	dead := map[string]bool{}
+	reached := 0
+	// Per-model item extremes over candidates ci.. of row ri, and the totals
+	// rows ri.. supply at full count, bound what the unplaced models can field.
+	itemSet := map[string]bool{}
+	for id := range lower {
+		itemSet[id] = true
+	}
+	for id := range upper {
+		itemSet[id] = true
+	}
+	for _, row := range rows {
+		for _, candidate := range row.candidates {
+			for id := range candidate.weapons {
+				itemSet[id] = true
+			}
+		}
+	}
+	itemIDs := sortedKeys(itemSet)
+	const unbounded = math.MaxInt32
+	type extremes struct{ min, max []int }
+	suffixExtremes := make([][]extremes, len(rows))
+	for ri, row := range rows {
+		out := make([]extremes, len(row.candidates)+1)
+		last := extremes{make([]int, len(itemIDs)), make([]int, len(itemIDs))}
+		for at := range itemIDs {
+			last.min[at], last.max[at] = unbounded, -unbounded
+		}
+		out[len(row.candidates)] = last
+		for ci := len(row.candidates) - 1; ci >= 0; ci-- {
+			next := out[ci+1]
+			here := extremes{make([]int, len(itemIDs)), make([]int, len(itemIDs))}
+			for at, id := range itemIDs {
+				here.min[at] = minInt(next.min[at], row.candidates[ci].weapons[id])
+				here.max[at] = maxInt(next.max[at], row.candidates[ci].weapons[id])
+			}
+			out[ci] = here
+		}
+		suffixExtremes[ri] = out
+	}
+	tail := make([]extremes, len(rows)+1)
+	tail[len(rows)] = extremes{make([]int, len(itemIDs)), make([]int, len(itemIDs))}
+	for ri := len(rows) - 1; ri >= 0; ri-- {
+		full, count := suffixExtremes[ri][0], rows[ri].count
+		here := extremes{make([]int, len(itemIDs)), make([]int, len(itemIDs))}
+		for at := range itemIDs {
+			here.min[at], here.max[at] = tail[ri+1].min[at], tail[ri+1].max[at]
+			if count > 0 {
+				here.min[at] = saturatingAdd(here.min[at], count, full.min[at])
+				here.max[at] = saturatingAdd(here.max[at], count, full.max[at])
+			}
+		}
+		tail[ri] = here
+	}
+	reachable := func(ri, ci, left int) bool {
+		here := suffixExtremes[ri][ci]
+		for at, id := range itemIDs {
+			most, least := tail[ri+1].max[at], tail[ri+1].min[at]
+			if left > 0 {
+				most = saturatingAdd(most, left, here.max[at])
+				least = saturatingAdd(least, left, here.min[at])
+			}
+			if remainingLower[id] > most || remainingUpper[id] < least {
+				return false
+			}
+		}
+		return true
+	}
+	// Remaining lower bounds are fixed by remaining upper bounds: both start from
+	// fixed bags and every pick subtracts the same amount from each.
+	stateKey := func(ri, ci, left int) string {
+		var b strings.Builder
+		for _, n := range []int{ri, ci, left} {
+			b.WriteString(strconv.Itoa(n))
+			b.WriteByte('|')
+		}
+		writeNonZero := func(counts map[string]int) {
+			for _, id := range sortedKeys(counts) {
+				if counts[id] != 0 {
+					b.WriteString(id)
+					b.WriteByte(':')
+					b.WriteString(strconv.Itoa(counts[id]))
+					b.WriteByte(',')
+				}
+			}
+			b.WriteByte('|')
+		}
+		writeNonZero(remainingUpper)
+		for _, n := range usage {
+			b.WriteString(strconv.Itoa(n))
+			b.WriteByte(',')
+		}
+		b.WriteByte('|')
+		writeNonZero(variantUsage)
+		return b.String()
+	}
 	var assignRow func(int) bool
-	var distribute func(int, int, int) bool
+	var distribute, distributeFrom func(int, int, int) bool
 	assignRow = func(ri int) bool {
 		if ri == len(rows) {
 			for _, count := range remainingLower {
@@ -952,6 +1051,7 @@ func solveAssignment(rows []solverRow, lower, upper map[string]int, optionCaps [
 					return false
 				}
 			}
+			reached++
 			if onSolution != nil {
 				return onSolution(append([]pick(nil), picks...))
 			}
@@ -960,6 +1060,24 @@ func solveAssignment(rows []solverRow, lower, upper map[string]int, optionCaps [
 		return distribute(ri, 0, rows[ri].count)
 	}
 	distribute = func(ri, ci, left int) bool {
+		if left > 0 && ci == len(rows[ri].candidates) {
+			return false
+		}
+		if !reachable(ri, ci, left) {
+			return false
+		}
+		key := stateKey(ri, ci, left)
+		if dead[key] {
+			return false
+		}
+		before := reached
+		found := distributeFrom(ri, ci, left)
+		if !found && reached == before {
+			dead[key] = true
+		}
+		return found
+	}
+	distributeFrom = func(ri, ci, left int) bool {
 		row := rows[ri]
 		if ci == len(row.candidates) {
 			return left == 0 && assignRow(ri+1)
@@ -1024,6 +1142,30 @@ func solveAssignment(rows []solverRow, lower, upper map[string]int, optionCaps [
 	}
 	return append([]pick(nil), picks...)
 }
+
+// sortedKeys returns a map's keys in ascending order.
+func sortedKeys[V any](m map[string]V) []string {
+	keys := make([]string, 0, len(m))
+	for key := range m {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	return keys
+}
+
+// saturatingAdd returns base + count*per, clamped to ±math.MaxInt32 so the
+// solver's unbounded extremes stay unbounded.
+func saturatingAdd(base, count, per int) int {
+	sum := base + count*per
+	if base >= math.MaxInt32 || per >= math.MaxInt32 || sum > math.MaxInt32 {
+		return math.MaxInt32
+	}
+	if base <= -math.MaxInt32 || per <= -math.MaxInt32 || sum < -math.MaxInt32 {
+		return -math.MaxInt32
+	}
+	return sum
+}
+
 func optionsWithPrintedUnitAbilities(unit map[string]any, options []any, counts map[string]int) []any {
 	reachable := map[string]bool{}
 	for _, optionAny := range options {

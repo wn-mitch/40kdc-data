@@ -1480,6 +1480,14 @@ fn solve_assignment(
         variant_usage: BTreeMap<String, i64>,
         picks: Vec<(usize, usize, u64)>,
         visitor: &'a mut F,
+        /// States whose subtree reached no complete assignment.
+        dead: HashSet<String>,
+        reached: u64,
+        item_ids: Vec<String>,
+        /// Per row, per candidate index: (min, max) per-model count of each item over candidates `ci..`.
+        suffix_extremes: Vec<Vec<(Vec<i64>, Vec<i64>)>>,
+        /// Per row: (min, max) total of each item rows `ri..` supply at full count.
+        tail: Vec<(Vec<i64>, Vec<i64>)>,
     }
     impl<F: FnMut(&[(usize, usize, u64)]) -> bool> Search<'_, F> {
         fn assign_row(&mut self, row_index: usize) -> bool {
@@ -1487,11 +1495,66 @@ fn solve_assignment(
                 if self.lower.values().any(|count| *count > 0) {
                     return false;
                 }
+                self.reached += 1;
                 return (self.visitor)(&self.picks);
             }
             self.distribute(row_index, 0, self.rows[row_index].count)
         }
+        /// Whether the unplaced models can still field every item's remaining bounds.
+        fn reachable(&self, row_index: usize, candidate_index: usize, left: u64) -> bool {
+            let (here_min, here_max) = &self.suffix_extremes[row_index][candidate_index];
+            let (tail_min, tail_max) = &self.tail[row_index + 1];
+            let left = left as i64;
+            self.item_ids.iter().enumerate().all(|(at, id)| {
+                let (mut most, mut least) = (tail_max[at], tail_min[at]);
+                if left > 0 {
+                    most = most.saturating_add(left.saturating_mul(here_max[at]));
+                    least = least.saturating_add(left.saturating_mul(here_min[at]));
+                }
+                self.lower.get(id).copied().unwrap_or(0) <= most
+                    && self.upper.get(id).copied().unwrap_or(0) >= least
+            })
+        }
+        /// Remaining lower bounds are fixed by remaining upper bounds: both start from
+        /// fixed bags and every pick subtracts the same amount from each.
+        fn state_key(&self, row_index: usize, candidate_index: usize, left: u64) -> String {
+            let mut key = format!("{row_index}|{candidate_index}|{left}|");
+            for (id, count) in &self.upper {
+                if *count != 0 {
+                    key.push_str(&format!("{id}:{count},"));
+                }
+            }
+            key.push('|');
+            for count in &self.option_usage {
+                key.push_str(&format!("{count},"));
+            }
+            key.push('|');
+            for (id, count) in &self.variant_usage {
+                if *count != 0 {
+                    key.push_str(&format!("{id}:{count},"));
+                }
+            }
+            key
+        }
         fn distribute(&mut self, row_index: usize, candidate_index: usize, left: u64) -> bool {
+            if left > 0 && candidate_index == self.rows[row_index].candidates.len() {
+                return false;
+            }
+            if !self.reachable(row_index, candidate_index, left) {
+                return false;
+            }
+            let key = self.state_key(row_index, candidate_index, left);
+            if self.dead.contains(&key) {
+                return false;
+            }
+            let before = self.reached;
+            let found = self.distribute_from(row_index, candidate_index, left);
+            if !found && self.reached == before {
+                self.dead.insert(key);
+            }
+            found
+        }
+        fn distribute_from(&mut self, row_index: usize, candidate_index: usize, left: u64) -> bool {
             if candidate_index == self.rows[row_index].candidates.len() {
                 return left == 0 && self.assign_row(row_index + 1);
             }
@@ -1557,6 +1620,65 @@ fn solve_assignment(
             false
         }
     }
+    let mut item_set: BTreeSet<String> = lower.keys().chain(upper.keys()).cloned().collect();
+    for row in rows {
+        for candidate in &row.candidates {
+            item_set.extend(candidate.weapons.keys().cloned());
+        }
+    }
+    let item_ids: Vec<String> = item_set.into_iter().collect();
+    let per_model =
+        |candidate: &RowCandidate, id: &String| candidate.weapons.get(id).copied().unwrap_or(0);
+    let suffix_extremes: Vec<Vec<(Vec<i64>, Vec<i64>)>> = rows
+        .iter()
+        .map(|row| {
+            let mut out = vec![(
+                vec![i64::MAX; item_ids.len()],
+                vec![i64::MIN; item_ids.len()],
+            )];
+            for candidate in row.candidates.iter().rev() {
+                let (next_min, next_max) = out.last().unwrap();
+                let here = (
+                    item_ids
+                        .iter()
+                        .enumerate()
+                        .map(|(at, id)| next_min[at].min(per_model(candidate, id)))
+                        .collect(),
+                    item_ids
+                        .iter()
+                        .enumerate()
+                        .map(|(at, id)| next_max[at].max(per_model(candidate, id)))
+                        .collect(),
+                );
+                out.push(here);
+            }
+            out.reverse();
+            out
+        })
+        .collect();
+    let mut tail = vec![(vec![0i64; item_ids.len()], vec![0i64; item_ids.len()])];
+    for row_index in (0..rows.len()).rev() {
+        let (full_min, full_max) = &suffix_extremes[row_index][0];
+        let (tail_min, tail_max) = tail.last().unwrap();
+        let count = rows[row_index].count as i64;
+        let scale = |base: i64, per: i64| {
+            if count > 0 {
+                base.saturating_add(count.saturating_mul(per))
+            } else {
+                base
+            }
+        };
+        let here = (
+            (0..item_ids.len())
+                .map(|at| scale(tail_min[at], full_min[at]))
+                .collect(),
+            (0..item_ids.len())
+                .map(|at| scale(tail_max[at], full_max[at]))
+                .collect(),
+        );
+        tail.push(here);
+    }
+    tail.reverse();
     let mut search = Search {
         rows,
         option_caps,
@@ -1567,6 +1689,11 @@ fn solve_assignment(
         variant_usage: BTreeMap::new(),
         picks: Vec::new(),
         visitor: &mut on_solution,
+        dead: HashSet::new(),
+        reached: 0,
+        item_ids,
+        suffix_extremes,
+        tail,
     };
     if search.assign_row(0) {
         Some(search.picks)
@@ -2580,6 +2707,65 @@ mod tests {
             j["faction_id"] = serde_json::json!("test");
         }
         serde_json::from_value(j).expect("synthetic option deserializes")
+    }
+
+    /// Ten models that each swap a gun for one of six ranged picks and a knife for
+    /// one of six melee picks: 49 per-model candidates.
+    fn many_candidate_bag(
+        melee_counts: [i64; 6],
+    ) -> (Vec<WargearOption>, Vec<LoadoutModel>, BTreeMap<String, i64>) {
+        let gv = serde_json::json!({ "edition": "10th", "dataslate": "2025-q3" });
+        let ranged: Vec<String> = (0..6).map(|i| format!("r{i}")).collect();
+        let melee: Vec<String> = (0..6).map(|i| format!("m{i}")).collect();
+        let choice = |ids: &[String]| ids.iter().map(|id| vec![id.clone()]).collect::<Vec<_>>();
+        let options = vec![
+            syn_opt(
+                serde_json::json!({ "id": "swap-gun", "unit_id": "syn-unit", "game_version": gv,
+                "replaces": ["gun"], "replacement_choice": choice(&ranged), "model_constraint": { "any_number": true } }),
+            ),
+            syn_opt(
+                serde_json::json!({ "id": "swap-knife", "unit_id": "syn-unit", "game_version": gv,
+                "replaces": ["knife"], "replacement_choice": choice(&melee), "model_constraint": { "any_number": true } }),
+            ),
+        ];
+        let models = vec![LoadoutModel {
+            name: Some("Trooper".into()),
+            min: 10,
+            max: 10,
+            default_weapon_ids: vec!["gun".into(), "knife".into()],
+            is_leader_model: false,
+            loadout_variants: Vec::new(),
+            loadout_variant_budgets: Vec::new(),
+        }];
+        let mut counts = BTreeMap::new();
+        for (i, id) in ranged.iter().enumerate() {
+            counts.insert(id.clone(), if i < 4 { 2 } else { 1 });
+        }
+        for (id, count) in melee.iter().zip(melee_counts) {
+            if count > 0 {
+                counts.insert(id.clone(), count);
+            }
+        }
+        (options, models, counts)
+    }
+
+    /// Eleven melee picks for ten models: exhausting every split of the models
+    /// across the candidates took seconds; failed sub-states are now cut. Mirror
+    /// of the TS/Python/Go tests.
+    #[test]
+    fn group_loadout_rejects_an_infeasible_bag_over_many_candidates() {
+        let unit = syn_unit(&["gun", "knife"]);
+        let (options, models, counts) = many_candidate_bag([2, 2, 2, 2, 2, 1]);
+        let refs: Vec<&WargearOption> = options.iter().collect();
+        let started = std::time::Instant::now();
+        assert!(group_loadout(&unit, 10, &refs, Some(&models), &counts).is_none());
+        assert!(started.elapsed() < std::time::Duration::from_secs(5));
+        let (options, models, counts) = many_candidate_bag([2, 2, 2, 2, 2, 0]);
+        let refs: Vec<&WargearOption> = options.iter().collect();
+        let groups =
+            group_loadout(&unit, 10, &refs, Some(&models), &counts).expect("feasible bag groups");
+        assert_eq!(groups.iter().map(|group| group.count).sum::<u64>(), 10);
+        assert!(groups.iter().all(|group| group.weapons.len() == 2));
     }
 
     #[test]

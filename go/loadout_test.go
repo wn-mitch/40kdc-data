@@ -3,6 +3,7 @@ package wh40kdc
 import (
 	"reflect"
 	"testing"
+	"time"
 )
 
 // A lone plain single-target swap (base weapon → one replacement, max 1): a
@@ -250,5 +251,52 @@ func TestLoadoutCandidatesFiveModels257VariantsLimitZeroReturnsMarker(t *testing
 	limit := 0
 	if got := LoadoutCandidates(map[string]any{"id": "candidate-limit-zero"}, 5, nil, models, nil, &limit); len(got) != 1 || got[0] != LoadoutCandidatesTruncated {
 		t.Fatalf("limit zero should return only the truncation marker, got %v", got)
+	}
+}
+
+// manyCandidateBag is ten models that each swap a gun for one of six ranged
+// picks and a knife for one of six melee picks: 49 per-model candidates.
+func manyCandidateBag(meleeCounts []int) ([]any, []any, map[string]int) {
+	ranged, melee := []any{}, []any{}
+	counts := map[string]int{}
+	for i := 0; i < 6; i++ {
+		r, m := "r"+string(rune('0'+i)), "m"+string(rune('0'+i))
+		ranged, melee = append(ranged, []any{r}), append(melee, []any{m})
+		counts[r] = 1
+		if i < 4 {
+			counts[r] = 2
+		}
+		if meleeCounts[i] > 0 {
+			counts[m] = meleeCounts[i]
+		}
+	}
+	options := []any{
+		map[string]any{"replaces": []any{"gun"}, "replacement_choice": ranged, "model_constraint": map[string]any{"any_number": true}},
+		map[string]any{"replaces": []any{"knife"}, "replacement_choice": melee, "model_constraint": map[string]any{"any_number": true}},
+	}
+	models := []any{map[string]any{"name": "Trooper", "min": float64(10), "max": float64(10), "default_weapon_ids": []any{"gun", "knife"}}}
+	return options, models, counts
+}
+
+// Eleven melee picks for ten models: exhausting every split of the models
+// across the candidates took seconds; failed sub-states are now cut. Mirror of
+// the TS/Rust/Python tests.
+func TestGroupLoadoutInfeasibleBagOverManyCandidates(t *testing.T) {
+	options, models, counts := manyCandidateBag([]int{2, 2, 2, 2, 2, 1})
+	started := time.Now()
+	if got := GroupLoadout(map[string]any{"id": "fabricated-unit"}, 10, options, models, counts); got != nil {
+		t.Fatalf("eleven melee picks for ten models should not group, got %v", got)
+	}
+	if elapsed := time.Since(started); elapsed > 5*time.Second {
+		t.Fatalf("infeasible bag took %v", elapsed)
+	}
+	options, models, counts = manyCandidateBag([]int{2, 2, 2, 2, 2, 0})
+	groups := GroupLoadout(map[string]any{"id": "fabricated-unit"}, 10, options, models, counts)
+	total := 0
+	for _, group := range groups {
+		total += asInt(group.(map[string]any)["count"])
+	}
+	if total != 10 {
+		t.Fatalf("feasible bag should group ten models, got %v", groups)
 	}
 }
