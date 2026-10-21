@@ -282,8 +282,8 @@ def test_variant_validation_reports_bounds_and_budgets_before_swap_conflict() ->
         },
         {
             "id": "scanner",
-            "code": "exceeds-allowance",
-            "message": "scanner: 2 exceeds shared allowance 1 (1 per unit)",
+            "code": "exceeds-max",
+            "message": "scanner: 2 exceeds allowance 1 (1 per unit)",
         },
     ]
 
@@ -338,3 +338,18 @@ def test_zero_candidate_limit_cancels_large_variant_search() -> None:
     ]
 
     assert loadout_candidates({"id": "u"}, 5, [], models, limit=0) == ["…truncated"]
+
+
+def test_stepped_variant_budget_grants_count_per_full_block() -> None:
+    from wh40kdc.data.loadout import _variant_budget_cap
+
+    stepped = {
+        "variant_names": ["A"],
+        "count": 2,
+        "per_models": 5,
+        "scope": "unit",
+        "stepped": True,
+    }
+    # The proportional 2-per-5 would give 1 at four models and 3 at eight.
+    assert [_variant_budget_cap(stepped, n, n) for n in (4, 5, 8, 9, 10)] == [0, 2, 2, 2, 4]
+    assert _variant_budget_cap({**stepped, "stepped": False}, 8, 8) == 3

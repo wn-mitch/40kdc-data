@@ -32,7 +32,7 @@
   {
     "name": "berzerkers-icon-flat-cap-over",
     "args": { "unitId": "khorne-berzerkers", "factionId": "world-eaters", "modelCount": 10, "counts": { "icon-of-khorne": 2 } },
-    "expected": ["exceeds-allowance:icon-of-khorne"]
+    "expected": ["exceeds-max:icon-of-khorne"]
   },
   {
     "name": "berzerkers-plasma-champion-plus-troops-legal",
@@ -50,6 +50,21 @@
     "expected": ["exceeds-max:khornate-eviscerator"]
   },
   {
+    "name": "brotherhood-terminators-variant-pool-at-cap-legal",
+    "args": { "unitId": "brotherhood-terminator-squad", "factionId": "grey-knights", "modelCount": 10, "counts": { "incinerator": 1, "psycannon-brotherhood-terminator-squad": 1 } },
+    "expected": []
+  },
+  {
+    "name": "brotherhood-terminators-variant-pool-over",
+    "args": { "unitId": "brotherhood-terminator-squad", "factionId": "grey-knights", "modelCount": 10, "counts": { "incinerator": 1, "psilencer-brotherhood-terminator-squad": 1, "psycannon-brotherhood-terminator-squad": 1 } },
+    "expected": ["exceeds-allowance:incinerator+psilencer-brotherhood-terminator-squad+psycannon-brotherhood-terminator-squad"]
+  },
+  {
+    "name": "brotherhood-terminators-variant-item-over",
+    "args": { "unitId": "brotherhood-terminator-squad", "factionId": "grey-knights", "modelCount": 10, "counts": { "incinerator": 3 } },
+    "expected": ["exceeds-max:incinerator"]
+  },
+  {
     "name": "terminators-reaper-at-cap-legal",
     "args": { "unitId": "chaos-terminators", "factionId": "world-eaters", "modelCount": 10, "counts": { "reaper-autocannon-chaos-terminators": 2 } },
     "expected": []
@@ -57,7 +72,7 @@
   {
     "name": "terminators-reaper-over-allowance",
     "args": { "unitId": "chaos-terminators", "factionId": "world-eaters", "modelCount": 10, "counts": { "reaper-autocannon-chaos-terminators": 3 } },
-    "expected": ["exceeds-allowance:heavy-flamer+reaper-autocannon-chaos-terminators"]
+    "expected": ["exceeds-max:reaper-autocannon-chaos-terminators"]
   },
   {
     "name": "terminators-reaper-heavyflamer-shared-over",
@@ -72,7 +87,7 @@
   {
     "name": "terminators-5-powerfist-over-allowance",
     "args": { "unitId": "chaos-terminators", "factionId": "world-eaters", "modelCount": 5, "counts": { "power-fist": 4 } },
-    "expected": ["exceeds-allowance:power-fist"]
+    "expected": ["exceeds-max:power-fist"]
   },
   {
     "name": "goremongers-blood-harpoon-at-cap-legal",
@@ -92,7 +107,7 @@
   {
     "name": "tzaangors-herd-banner-over",
     "args": { "unitId": "tzaangors", "factionId": "thousand-sons", "modelCount": 10, "counts": { "herd-banner": 2 } },
-    "expected": ["exceeds-allowance:herd-banner"]
+    "expected": ["exceeds-max:herd-banner"]
   },
   {
     "name": "tzaangors-banner-and-brayhorn-independent-legal",
@@ -102,7 +117,7 @@
   {
     "name": "cadian-duplicate-special-over",
     "args": { "unitId": "cadian-shock-troops", "factionId": "astra-militarum", "modelCount": 20, "counts": { "meltagun": 4 } },
-    "expected": ["exceeds-allowance:meltagun"]
+    "expected": ["exceeds-max:meltagun"]
   },
   {
     "name": "cadian-duplicate-special-legal",
@@ -117,7 +132,7 @@
   {
     "name": "kasrkin-flat-duplicate-cap-over",
     "args": { "unitId": "kasrkin", "factionId": "astra-militarum", "modelCount": 10, "counts": { "meltagun-kasrkin": 3 } },
-    "expected": ["exceeds-allowance:meltagun-kasrkin"]
+    "expected": ["exceeds-max:meltagun-kasrkin"]
   },
   {
     "name": "kasrkin-flat-duplicate-cap-legal",
@@ -202,7 +217,7 @@
   {
     "name": "atc-exceeds-allowance-khorne-berzerkers",
     "args": { "unitId": "khorne-berzerkers", "modelCount": 10, "counts": { "bolt-pistol-khorne-berzerkers": 7, "chainblade": 8, "icon-of-khorne": 2, "khornate-eviscerator": 2, "plasma-pistol-khorne-berzerkers": 3 } },
-    "expected": ["exceeds-allowance:icon-of-khorne"]
+    "expected": ["exceeds-max:icon-of-khorne"]
   },
   {
     "name": "atc-exceeds-allowance-kommandos",

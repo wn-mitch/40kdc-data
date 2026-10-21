@@ -117,11 +117,10 @@ describe("validateLoadout — shared-allowance budgets", () => {
   it("uses an exact ratio — 3 per 5 → 6 at 10 models", () => {
     const u = unit([{ items: ["a"], count: 3, per_models: 5 }]);
     expect(validateLoadout(u, 10, [], new Map([["a", 6]]))).toEqual([]);
-    expect(
-      validateLoadout(u, 10, [], new Map([["a", 7]])).some(
-        (x) => x.code === "exceeds-allowance",
-      ),
-    ).toBe(true);
+    // A budget that lists one item is that item's own cap.
+    expect(validateLoadout(u, 10, [], new Map([["a", 7]]))).toEqual([
+      { id: "a", code: "exceeds-max", message: "a: 7 exceeds allowance 6 (3 per 5 models)" },
+    ]);
   });
 });
 
@@ -139,9 +138,9 @@ describe("validateLoadout — per-item duplicate sub-cap", () => {
     const u = unit(cadian);
     const v = validateLoadout(u, 20, [], new Map([["a", 4]]));
     // Shared cap floor(20*2/10)=4 satisfied, but per-item cap floor(20*1/10)=2 is not.
-    expect(v.some((x) => x.code === "exceeds-allowance" && x.id === "a")).toBe(
-      true,
-    );
+    expect(v).toEqual([
+      { id: "a", code: "exceeds-max", message: "a: 4 exceeds allowance 2 (1 per 10 models of one item)" },
+    ]);
   });
 
   it("passes 2 of each — within both the shared cap (4) and the per-item cap (2)", () => {
@@ -210,11 +209,10 @@ describe("validateLoadout — per-item duplicate sub-cap", () => {
   it("is a no-op when duplicate_limit is absent (any one item may fill the allowance)", () => {
     const u = unit([{ items: ["a", "b"], count: 4, per_models: 10 }]);
     // Shared cap floor(20*4/10)=8; only the shared cap applies with no dup limit.
-    expect(
-      validateLoadout(u, 20, [], new Map([["a", 9]])).some(
-        (x) => x.code === "exceeds-allowance",
-      ),
-    ).toBe(true);
+    // One item alone over the shared cap is over its own cap, not a shared overdraw.
+    expect(validateLoadout(u, 20, [], new Map([["a", 9]])).map((x) => `${x.code}:${x.id}`)).toEqual([
+      "exceeds-max:a",
+    ]);
     expect(validateLoadout(u, 20, [], new Map([["a", 8]]))).toEqual([]); // 8 of one is fine w/o dup cap
   });
 });
@@ -505,7 +503,7 @@ describe("checkUnitLegality — tier selection", () => {
     expect(
       checkUnitLegality(u, 22, [], new Map([["spike", 5]]), models, tiers)[0]
         .code,
-    ).toBe("exceeds-allowance");
+    ).toBe("exceeds-max");
   });
 
   it("falls back to a plain validateLoadout (no size check) when no tiers are supplied", () => {
@@ -661,6 +659,13 @@ describe("loadoutCandidates", () => {
     expect(variantBudgetCap({ variant_names: ["A"], count: 1, per_models: 10, scope: "unit" }, 20, 5)).toBe(2);
     expect(variantBudgetCap({ variant_names: ["A"], count: 1, per_models: 5, scope: "model-row" }, 20, 5)).toBe(1);
   });
+
+  it("grants a stepped allowance per full block of models", () => {
+    const stepped = { variant_names: ["A"], count: 2, per_models: 5, scope: "unit", stepped: true };
+    // Proportional 2 per 5 would give 1 at four models and 3 at eight.
+    expect([4, 5, 8, 9, 10].map((n) => variantBudgetCap(stepped, n, n))).toEqual([0, 2, 2, 2, 4]);
+    expect(variantBudgetCap({ ...stepped, stepped: false }, 8, 8)).toBe(3);
+  });
 });
 
 describe("validateLoadout — whole-model variants", () => {
@@ -720,12 +725,12 @@ describe("validateLoadout — whole-model variants", () => {
     ]);
   });
 
-  it("rejects mutually incompatible sparse variants with a swap conflict", () => {
+  it("reports variants that overdraw their shared budget as an allowance breach", () => {
     expect(validateLoadout(unit, 2, [], new Map([["plasma", 1], ["melta", 1]]), models)).toEqual([
       {
-        id: "variant-unit",
-        code: "swap-conflict",
-        message: "variant-unit: equipment cannot be assigned to legal whole-model loadouts",
+        id: "melta+plasma",
+        code: "exceeds-allowance",
+        message: "melta+plasma: the selection overdraws the shared allowance of these whole-model alternatives",
       },
     ]);
   });
@@ -744,11 +749,12 @@ describe("validateLoadout — whole-model variants", () => {
       }));
       expect(validateLoadout(unit, 2, options, counts, models)).toEqual([]);
     }
-    expect(validateLoadout(unit, 2, options, new Map([["plasma", 2]]), models)).toContainEqual(
-      expect.objectContaining({ code: "swap-conflict" }),
-    );
+    // An option reaching a variant's equipment spends that variant's budget.
+    expect(validateLoadout(unit, 2, options, new Map([["plasma", 2]]), models)).toEqual([
+      { id: "plasma", code: "exceeds-max", message: "plasma: 2 exceeds the most any legal loadout of 2 models fields" },
+    ]);
     expect(validateLoadout(unit, 2, options, new Map([["plasma", 2], ["scanner", 1]]), models)).toContainEqual(
-      expect.objectContaining({ code: "swap-conflict" }),
+      expect.objectContaining({ code: "exceeds-max", id: "plasma" }),
     );
   });
 
@@ -757,9 +763,9 @@ describe("validateLoadout — whole-model variants", () => {
       { name: "Rifle", weapon_ids: ["rifle"] },
       { name: "Plasma", weapon_ids: ["plasma"], max_count: 1 },
     ] }];
-    expect(validateLoadout(unit, 2, [], new Map([["plasma", 2]]), capped)).toContainEqual(
-      expect.objectContaining({ code: "swap-conflict" }),
-    );
+    expect(validateLoadout(unit, 2, [], new Map([["plasma", 2]]), capped)).toEqual([
+      { id: "plasma", code: "exceeds-max", message: "plasma: 2 exceeds the most any legal loadout of 2 models fields" },
+    ]);
     expect(validateLoadout(unit, 2, [], new Map(), capped)).toContainEqual(
       expect.objectContaining({ code: "swap-conflict" }),
     );

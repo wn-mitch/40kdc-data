@@ -218,13 +218,17 @@ describe("BSData loadout variant projection", () => {
     const strike = project(peer("Trooper w/ Heavy", [{ type: "set", value: 2, conditions: atLeast(10) }]), [5, 6, 7, 8, 9, 10]);
     expect(strike.variant).toEqual({ name: "Trooper w/ Heavy", weapon_ids: ["gun"] });
     expect(strike.budgets).toContainEqual({ variant_names: ["Trooper w/ Heavy"], count: 1, per_models: 5, scope: "unit" });
-    // 2, 4 at ten, none below five: no flat or ratio form reproduces 3–10.
-    const paladin = peer("Trooper w/ Heavy", [{ type: "set", value: 4, conditions: atLeast(10) }, { type: "set", value: 0, conditions: lessThan(5) }], 2);
+    // 2, 4 at ten, none below five: two per full five models, a stepped ratio.
     const sizes = [3, 4, 5, 6, 7, 8, 9, 10];
-    expect(project(paladin, sizes).variant).toEqual({ name: "Trooper w/ Heavy", weapon_ids: ["gun"], max_count: 2 });
-    const committed = project(paladin, sizes, [{ name: "Trooper", loadout_variants: [{ name: "Trooper w/ Heavy", weapon_ids: ["gun"], max_count: 3 }] }]);
-    expect(committed.variant).toEqual({ name: "Trooper w/ Heavy", weapon_ids: ["gun"], max_count: 3 });
-    expect(committed.notes).toEqual(["troopers: Trooper w/ Heavy: size-dependent cap kept at its committed 3"]);
+    const paladin = project(peer("Trooper w/ Heavy", [{ type: "set", value: 4, conditions: atLeast(10) }, { type: "set", value: 0, conditions: lessThan(5) }], 2), sizes);
+    expect(paladin.variant).toEqual({ name: "Trooper w/ Heavy", weapon_ids: ["gun"] });
+    expect(paladin.budgets).toContainEqual({ variant_names: ["Trooper w/ Heavy"], count: 2, per_models: 5, scope: "unit", stepped: true });
+    // 1, 3 at ten: no flat, ratio or stepped form reproduces 5–10.
+    const odd = peer("Trooper w/ Heavy", [{ type: "set", value: 3, conditions: atLeast(10) }]);
+    expect(project(odd, sizes.slice(2)).variant).toEqual({ name: "Trooper w/ Heavy", weapon_ids: ["gun"], max_count: 1 });
+    const committed = project(odd, sizes.slice(2), [{ name: "Trooper", loadout_variants: [{ name: "Trooper w/ Heavy", weapon_ids: ["gun"], max_count: 2 }] }]);
+    expect(committed.variant).toEqual({ name: "Trooper w/ Heavy", weapon_ids: ["gun"], max_count: 2 });
+    expect(committed.notes).toEqual(["troopers: Trooper w/ Heavy: size-dependent cap kept at its committed 2"]);
   });
 
   it("projects an upgrade whose weapon profile is an infoLink", () => {

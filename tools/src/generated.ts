@@ -6526,7 +6526,7 @@ export interface UnitComposition {
         }[]
       ];
       /**
-       * Caps over how many variant selections this model row may make, counting SELECTED VARIANTS rather than final weapon ids (two variants sharing a weapon must not charge each other's allowance). A singleton `variant_names` is an individual cap, several names a shared pool, and intersecting budgets a ratio plus a hard ceiling. The selected count across `variant_names` must not exceed `floor(scope_model_count * count / per_models)`, or simply `count` when `per_models` is 0.
+       * Caps over how many variant selections this model row may make, counting SELECTED VARIANTS rather than final weapon ids (two variants sharing a weapon must not charge each other's allowance). A singleton `variant_names` is an individual cap, several names a shared pool, and intersecting budgets a ratio plus a hard ceiling. The selected count across `variant_names` must not exceed `floor(scope_model_count * count / per_models)`, `count * floor(scope_model_count / per_models)` when `stepped`, or simply `count` when `per_models` is 0.
        *
        * @minItems 1
        */
@@ -6547,6 +6547,10 @@ export interface UnitComposition {
            * Which model count scales the allowance: the whole unit, or just this model row.
            */
           scope: "unit" | "model-row";
+          /**
+           * When true, the allowance grows only per full block of `per_models` models: `count * floor(scope_model_count / per_models)` ("for every 5 models, up to 2" is 2 at 5-9 models and 4 at 10). Absent or false, it is the proportional `floor(scope_model_count * count / per_models)`. Meaningless when `per_models` is 0.
+           */
+          stepped?: boolean;
         },
         ...{
           /**
@@ -6564,6 +6568,10 @@ export interface UnitComposition {
            * Which model count scales the allowance: the whole unit, or just this model row.
            */
           scope: "unit" | "model-row";
+          /**
+           * When true, the allowance grows only per full block of `per_models` models: `count * floor(scope_model_count / per_models)` ("for every 5 models, up to 2" is 2 at 5-9 models and 4 at 10). Absent or false, it is the proportional `floor(scope_model_count * count / per_models)`. Meaningless when `per_models` is 0.
+           */
+          stepped?: boolean;
         }[]
       ];
     },
@@ -6626,7 +6634,7 @@ export interface UnitComposition {
         }[]
       ];
       /**
-       * Caps over how many variant selections this model row may make, counting SELECTED VARIANTS rather than final weapon ids (two variants sharing a weapon must not charge each other's allowance). A singleton `variant_names` is an individual cap, several names a shared pool, and intersecting budgets a ratio plus a hard ceiling. The selected count across `variant_names` must not exceed `floor(scope_model_count * count / per_models)`, or simply `count` when `per_models` is 0.
+       * Caps over how many variant selections this model row may make, counting SELECTED VARIANTS rather than final weapon ids (two variants sharing a weapon must not charge each other's allowance). A singleton `variant_names` is an individual cap, several names a shared pool, and intersecting budgets a ratio plus a hard ceiling. The selected count across `variant_names` must not exceed `floor(scope_model_count * count / per_models)`, `count * floor(scope_model_count / per_models)` when `stepped`, or simply `count` when `per_models` is 0.
        *
        * @minItems 1
        */
@@ -6647,6 +6655,10 @@ export interface UnitComposition {
            * Which model count scales the allowance: the whole unit, or just this model row.
            */
           scope: "unit" | "model-row";
+          /**
+           * When true, the allowance grows only per full block of `per_models` models: `count * floor(scope_model_count / per_models)` ("for every 5 models, up to 2" is 2 at 5-9 models and 4 at 10). Absent or false, it is the proportional `floor(scope_model_count * count / per_models)`. Meaningless when `per_models` is 0.
+           */
+          stepped?: boolean;
         },
         ...{
           /**
@@ -6664,6 +6676,10 @@ export interface UnitComposition {
            * Which model count scales the allowance: the whole unit, or just this model row.
            */
           scope: "unit" | "model-row";
+          /**
+           * When true, the allowance grows only per full block of `per_models` models: `count * floor(scope_model_count / per_models)` ("for every 5 models, up to 2" is 2 at 5-9 models and 4 at 10). Absent or false, it is the proportional `floor(scope_model_count * count / per_models)`. Meaningless when `per_models` is 0.
+           */
+          stepped?: boolean;
         }[]
       ];
     }[]

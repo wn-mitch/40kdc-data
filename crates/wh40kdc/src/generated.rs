@@ -54467,7 +54467,7 @@ impl ::std::convert::TryFrom<::std::string::String> for UnitAttachmentRole {
 ///            "type": "boolean"
 ///          },
 ///          "loadout_variant_budgets": {
-///            "description": "Caps over how many variant selections this model row may make, counting SELECTED VARIANTS rather than final weapon ids (two variants sharing a weapon must not charge each other's allowance). A singleton `variant_names` is an individual cap, several names a shared pool, and intersecting budgets a ratio plus a hard ceiling. The selected count across `variant_names` must not exceed `floor(scope_model_count * count / per_models)`, or simply `count` when `per_models` is 0.",
+///            "description": "Caps over how many variant selections this model row may make, counting SELECTED VARIANTS rather than final weapon ids (two variants sharing a weapon must not charge each other's allowance). A singleton `variant_names` is an individual cap, several names a shared pool, and intersecting budgets a ratio plus a hard ceiling. The selected count across `variant_names` must not exceed `floor(scope_model_count * count / per_models)`, `count * floor(scope_model_count / per_models)` when `stepped`, or simply `count` when `per_models` is 0.",
 ///            "type": "array",
 ///            "items": {
 ///              "type": "object",
@@ -54493,6 +54493,10 @@ impl ::std::convert::TryFrom<::std::string::String> for UnitAttachmentRole {
 ///                    "unit",
 ///                    "model-row"
 ///                  ]
+///                },
+///                "stepped": {
+///                  "description": "When true, the allowance grows only per full block of `per_models` models: `count * floor(scope_model_count / per_models)` (\"for every 5 models, up to 2\" is 2 at 5-9 models and 4 at 10). Absent or false, it is the proportional `floor(scope_model_count * count / per_models)`. Meaningless when `per_models` is 0.",
+///                  "type": "boolean"
 ///                },
 ///                "variant_names": {
 ///                  "description": "The `loadout_variants[].name` values sharing this allowance. Every name must exist in this same model row.",
@@ -54679,7 +54683,7 @@ pub struct UnitComposition {
 ///      "type": "boolean"
 ///    },
 ///    "loadout_variant_budgets": {
-///      "description": "Caps over how many variant selections this model row may make, counting SELECTED VARIANTS rather than final weapon ids (two variants sharing a weapon must not charge each other's allowance). A singleton `variant_names` is an individual cap, several names a shared pool, and intersecting budgets a ratio plus a hard ceiling. The selected count across `variant_names` must not exceed `floor(scope_model_count * count / per_models)`, or simply `count` when `per_models` is 0.",
+///      "description": "Caps over how many variant selections this model row may make, counting SELECTED VARIANTS rather than final weapon ids (two variants sharing a weapon must not charge each other's allowance). A singleton `variant_names` is an individual cap, several names a shared pool, and intersecting budgets a ratio plus a hard ceiling. The selected count across `variant_names` must not exceed `floor(scope_model_count * count / per_models)`, `count * floor(scope_model_count / per_models)` when `stepped`, or simply `count` when `per_models` is 0.",
 ///      "type": "array",
 ///      "items": {
 ///        "type": "object",
@@ -54705,6 +54709,10 @@ pub struct UnitComposition {
 ///              "unit",
 ///              "model-row"
 ///            ]
+///          },
+///          "stepped": {
+///            "description": "When true, the allowance grows only per full block of `per_models` models: `count * floor(scope_model_count / per_models)` (\"for every 5 models, up to 2\" is 2 at 5-9 models and 4 at 10). Absent or false, it is the proportional `floor(scope_model_count * count / per_models)`. Meaningless when `per_models` is 0.",
+///            "type": "boolean"
 ///          },
 ///          "variant_names": {
 ///            "description": "The `loadout_variants[].name` values sharing this allowance. Every name must exist in this same model row.",
@@ -54798,7 +54806,7 @@ pub struct UnitCompositionModelsItem {
     pub hull_shape_id: ::std::option::Option<EntityId>,
     #[serde(default)]
     pub is_leader_model: bool,
-    ///Caps over how many variant selections this model row may make, counting SELECTED VARIANTS rather than final weapon ids (two variants sharing a weapon must not charge each other's allowance). A singleton `variant_names` is an individual cap, several names a shared pool, and intersecting budgets a ratio plus a hard ceiling. The selected count across `variant_names` must not exceed `floor(scope_model_count * count / per_models)`, or simply `count` when `per_models` is 0.
+    ///Caps over how many variant selections this model row may make, counting SELECTED VARIANTS rather than final weapon ids (two variants sharing a weapon must not charge each other's allowance). A singleton `variant_names` is an individual cap, several names a shared pool, and intersecting budgets a ratio plus a hard ceiling. The selected count across `variant_names` must not exceed `floor(scope_model_count * count / per_models)`, `count * floor(scope_model_count / per_models)` when `stepped`, or simply `count` when `per_models` is 0.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub loadout_variant_budgets: ::std::vec::Vec<
         UnitCompositionModelsItemLoadoutVariantBudgetsItem,
@@ -54842,6 +54850,10 @@ pub struct UnitCompositionModelsItem {
 ///        "model-row"
 ///      ]
 ///    },
+///    "stepped": {
+///      "description": "When true, the allowance grows only per full block of `per_models` models: `count * floor(scope_model_count / per_models)` (\"for every 5 models, up to 2\" is 2 at 5-9 models and 4 at 10). Absent or false, it is the proportional `floor(scope_model_count * count / per_models)`. Meaningless when `per_models` is 0.",
+///      "type": "boolean"
+///    },
 ///    "variant_names": {
 ///      "description": "The `loadout_variants[].name` values sharing this allowance. Every name must exist in this same model row.",
 ///      "type": "array",
@@ -54864,6 +54876,9 @@ pub struct UnitCompositionModelsItemLoadoutVariantBudgetsItem {
     pub per_models: u64,
     ///Which model count scales the allowance: the whole unit, or just this model row.
     pub scope: UnitCompositionModelsItemLoadoutVariantBudgetsItemScope,
+    ///When true, the allowance grows only per full block of `per_models` models: `count * floor(scope_model_count / per_models)` ("for every 5 models, up to 2" is 2 at 5-9 models and 4 at 10). Absent or false, it is the proportional `floor(scope_model_count * count / per_models)`. Meaningless when `per_models` is 0.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub stepped: ::std::option::Option<bool>,
     ///The `loadout_variants[].name` values sharing this allowance. Every name must exist in this same model row.
     pub variant_names: ::std::vec::Vec<
         UnitCompositionModelsItemLoadoutVariantBudgetsItemVariantNamesItem,

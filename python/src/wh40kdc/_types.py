@@ -786,6 +786,7 @@ class LoadoutVariantBudget(TypedDict):
     count: int
     per_models: int
     scope: Literal["unit", "model-row"]
+    stepped: NotRequired[bool]
 
 
 class Model(TypedDict):

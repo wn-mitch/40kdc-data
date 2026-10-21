@@ -69,6 +69,17 @@ func TestVariantBudgetCap(t *testing.T) {
 	if got := variantBudgetCap(flat, 20, 5); got != 2 {
 		t.Fatalf("expected flat cap 2, got %d", got)
 	}
+	// Two per full five models; the proportional 2-per-5 gives 1 at four and 3 at eight.
+	stepped := map[string]any{"count": float64(2), "per_models": float64(5), "scope": "unit", "stepped": true}
+	for n, want := range map[int]int{4: 0, 5: 2, 8: 2, 9: 2, 10: 4} {
+		if got := variantBudgetCap(stepped, n, n); got != want {
+			t.Fatalf("expected stepped cap %d at %d models, got %d", want, n, got)
+		}
+	}
+	stepped["stepped"] = false
+	if got := variantBudgetCap(stepped, 8, 8); got != 3 {
+		t.Fatalf("expected proportional cap 3 at 8 models, got %d", got)
+	}
 }
 
 func TestVariantLoadoutUsesNamedCapsAndExactLegality(t *testing.T) {
@@ -88,9 +99,9 @@ func TestVariantLoadoutUsesNamedCapsAndExactLegality(t *testing.T) {
 		}
 	}
 	if got, want := validateLoadout(unit, 2, nil, map[string]int{"plasma": 2}, models), []map[string]string{
-		{"id": "variant-unit", "code": "swap-conflict", "message": "variant-unit: equipment cannot be assigned to legal whole-model loadouts"},
+		{"id": "plasma", "code": "exceeds-max", "message": "plasma: 2 exceeds the most any legal loadout of 2 models fields"},
 	}; !reflect.DeepEqual(got, want) {
-		t.Fatalf("two capped variants must fail exact legality: got %v, want %v", got, want)
+		t.Fatalf("a variant max_count breach must report exceeds-max on its item: got %v, want %v", got, want)
 	}
 	if violations := validateLoadout(unit, 2, nil, map[string]int{"plasma": 1}, models); len(violations) != 0 {
 		t.Fatalf("an explicit variant with omitted defaults should be completed legally, got %v", violations)
@@ -139,7 +150,7 @@ func TestVariantLoadoutUsesNamedCapsAndExactLegality(t *testing.T) {
 	if violations := validateLoadout(unit, 2, scannerOptions, map[string]int{"rifle": 1, "plasma": 1, "scanner": 1}, sharedModels); len(violations) != 0 {
 		t.Fatalf("rifle, plasma, and scanner should be legal, got %v", violations)
 	}
-	if violations := validateLoadout(unit, 2, scannerOptions, map[string]int{"plasma": 2, "scanner": 1}, sharedModels); len(violations) == 0 || violations[len(violations)-1]["code"] != "swap-conflict" {
+	if violations := validateLoadout(unit, 2, scannerOptions, map[string]int{"plasma": 2, "scanner": 1}, sharedModels); len(violations) != 1 || violations[0]["code"] != "exceeds-max" || violations[0]["id"] != "plasma" {
 		t.Fatalf("scanner must not bypass plasma cap, got %v", violations)
 	}
 }
@@ -167,7 +178,7 @@ func TestVariantLoadoutReportsBoundsAndBudgetsBeforeSwapConflict(t *testing.T) {
 		},
 	}
 	if got, want := validateLoadout(unit, 2, nil, map[string]int{"plasma": 2}, models), []map[string]string{
-		{"id": "plasma", "code": "exceeds-allowance", "message": "plasma: 2 exceeds shared allowance 1 (1 per unit)"},
+		{"id": "plasma", "code": "exceeds-max", "message": "plasma: 2 exceeds allowance 1 (1 per unit)"},
 	}; !reflect.DeepEqual(got, want) {
 		t.Fatalf("variant budget violations must not add swap-conflict: got %v, want %v", got, want)
 	}

@@ -1,8 +1,8 @@
 /**
  * Size-dependent selection caps read from BSData's structured modifiers and
  * conditions, and their projection onto the flat and ratio forms that
- * `loadout_variant_budgets` can state (`count`, or `floor(models * count /
- * per_models)`).
+ * `loadout_variant_budgets` can state (`count`, `floor(models * count /
+ * per_models)`, or the stepped `count * floor(models / per_models)`).
  *
  * A cap is evaluated at every legal unit size. Only conditions on the unit's
  * own model count are evaluable; anything else makes the cap unknown, and the
@@ -17,8 +17,8 @@ const str = (value: unknown): string | undefined => typeof value === "string" &&
 /** A cap by unit size; `Infinity` where the source states no bound at that size. */
 export type SizeCap = ReadonlyMap<number, number>;
 
-/** One projected allowance: `per_models` 0 is the flat `count`. */
-export interface CapForm { count: number; per_models: number }
+/** One projected allowance: `per_models` 0 is the flat `count`; `stepped` grants `count` per full block of `per_models`. */
+export interface CapForm { count: number; per_models: number; stepped?: boolean }
 
 /** Scopes whose model count is not the whole unit's. */
 const NON_UNIT_SCOPES = new Set(["parent", "self", "roster", "force", "primary-catalogue", "root-entry"]);
@@ -157,13 +157,16 @@ export function ruleCap(rules: readonly CountRule[], target: string, sizes: read
   return new Map(sizes.map((n) => [n, Math.min(Infinity, ...own.filter((rule) => rule.when(n)).map((rule) => rule.limit))]));
 }
 
-const value = (forms: readonly CapForm[], n: number): number =>
-  Math.min(Infinity, ...forms.map((form) => form.per_models === 0 ? form.count : Math.floor((n * form.count) / form.per_models)));
+const formValue = (form: CapForm, n: number): number =>
+  form.per_models === 0 ? form.count
+    : form.stepped ? form.count * Math.floor(n / form.per_models)
+    : Math.floor((n * form.count) / form.per_models);
+const value = (forms: readonly CapForm[], n: number): number => Math.min(Infinity, ...forms.map((form) => formValue(form, n)));
 
 /**
  * The simplest budget forms whose intersection reproduces `cap` exactly at
- * every size with a finite cap: one flat count, one ratio, or a ratio under a
- * flat ceiling. At sizes the source leaves unbounded the projection must keep
+ * every size with a finite cap: one flat count, one ratio, a ratio under a flat
+ * ceiling, then the same two shapes with a stepped ratio. At sizes the source leaves unbounded the projection must keep
  * growing (at least its last bounded value), so only a ratio fits there.
  * Undefined when no such form exists or the cap is unbounded everywhere.
  */
@@ -190,11 +193,14 @@ export function fitCap(cap: SizeCap): CapForm[] | undefined {
   const values = new Set(finite.map((n) => cap.get(n)!));
   if (!open && values.size === 1 && top > 0) return [{ count: top, per_models: 0 }];
   const largest = sizes[sizes.length - 1];
-  for (let count = 1; count <= Math.max(1, top); count++) {
-    for (let perModels = count; perModels <= largest; perModels++) {
-      const ratio = { count, per_models: perModels };
-      if (matches([ratio])) return [ratio];
-      if (!open && top > 0 && matches([{ count: top, per_models: 0 }, ratio])) return [{ count: top, per_models: 0 }, ratio];
+  // A stepped ratio of count 1 is the proportional one, so it is tried only above 1.
+  for (const stepped of [false, true]) {
+    for (let count = stepped ? 2 : 1; count <= Math.max(1, top); count++) {
+      for (let perModels = count; perModels <= largest; perModels++) {
+        const ratio: CapForm = stepped ? { count, per_models: perModels, stepped } : { count, per_models: perModels };
+        if (matches([ratio])) return [ratio];
+        if (!open && top > 0 && matches([{ count: top, per_models: 0 }, ratio])) return [{ count: top, per_models: 0 }, ratio];
+      }
     }
   }
   return undefined;

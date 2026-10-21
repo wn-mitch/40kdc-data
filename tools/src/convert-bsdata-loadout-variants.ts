@@ -13,7 +13,7 @@ import { compositionSizes, errorCountRules, evaluateMaxCap, fitCap, minCap, rule
 export type { JsonNode } from "./bsdata-equipment.js";
 
 export interface LoadoutVariant { name: string; weapon_ids: string[]; max_count?: number }
-export interface LoadoutVariantBudget { variant_names: string[]; count: number; per_models: number; scope: "unit" | "model-row" }
+export interface LoadoutVariantBudget { variant_names: string[]; count: number; per_models: number; scope: "unit" | "model-row"; stepped?: boolean }
 export interface VariantIssue { unit: string; model_row: string; variant: string; item: string; reason: string }
 
 /**
@@ -126,7 +126,13 @@ function projectCap(node: JsonNode, sizes: readonly number[], rules: readonly Co
 const flatOf = (forms: readonly CapForm[]): number | undefined => forms.find((form) => form.per_models === 0)?.count;
 const ratiosOf = (forms: readonly CapForm[]): CapForm[] => forms.filter((form) => form.per_models > 0);
 const budgetsFor = (names: string[], forms: readonly CapForm[]): LoadoutVariantBudget[] =>
-  forms.map((form) => ({ variant_names: names, count: form.count, per_models: form.per_models, scope: form.per_models === 0 ? "model-row" : "unit" }));
+  forms.map((form) => ({
+    variant_names: names,
+    count: form.count,
+    per_models: form.per_models,
+    scope: form.per_models === 0 ? "model-row" : "unit",
+    ...(form.stepped ? { stepped: true } : {}),
+  }));
 
 /** Copies of source entry `target` in one alternative's equipment. */
 const copiesOf = (links: readonly JsonNode[], target: string): number =>

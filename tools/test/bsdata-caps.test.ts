@@ -12,9 +12,15 @@ describe("BSData size-dependent caps", () => {
     expect(fitCap(capOf(range(3, 6, (n) => (n === 6 ? 2 : 1))))).toEqual([{ count: 1, per_models: 3 }]);
   });
 
-  it("refuses a cap no flat or ratio form reproduces", () => {
-    // Two, four at ten, none below five.
-    expect(fitCap(capOf(range(3, 10, (n) => (n < 5 ? 0 : n >= 10 ? 4 : 2))))).toBeUndefined();
+  it("fits a per-block allowance as a stepped ratio", () => {
+    // Two per full five models: none below five, two at 5–9, four at ten. The
+    // proportional 2-per-5 would allow one at four and three at eight.
+    expect(fitCap(capOf(range(3, 10, (n) => (n < 5 ? 0 : n >= 10 ? 4 : 2))))).toEqual([{ count: 2, per_models: 5, stepped: true }]);
+  });
+
+  it("refuses a cap no flat, ratio or stepped form reproduces", () => {
+    // One at 5–9, three at ten.
+    expect(fitCap(capOf(range(5, 10, (n) => (n >= 10 ? 3 : 1))))).toBeUndefined();
   });
 
   it("keeps an open-ended limit scaling instead of freezing it flat", () => {

@@ -376,7 +376,7 @@ export interface EmittedLegalityCase {
  * pins the violation instead of `[]`, proving the checker still catches it.
  * (khorne-berzerkers: two corpus lists genuinely field 2× icon of Khorne.)
  */
-const GENUINE_CLUSTERS = new Set(["exceeds-allowance:khorne-berzerkers"]);
+const GENUINE_CLUSTERS = new Set(["exceeds-max:khorne-berzerkers"]);
 
 /**
  * Violation families emitted as checker-layer cases. `below-min` is excluded —

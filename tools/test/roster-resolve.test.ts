@@ -256,8 +256,9 @@ describe("checkRosterLegality", () => {
     ]);
     const report = checkRosterLegality(roster, ds);
     expect(report).toHaveLength(1);
-    const allowance = report[0].violations.find((v) => v.code === "exceeds-allowance");
-    expect(allowance?.id).toContain("reaper-autocannon");
+    // 5 reapers alone exceed the shared 2-at-10 allowance, the most the unit can field.
+    const over = report[0].violations.find((v) => v.code === "exceeds-max");
+    expect(over?.id).toBe("reaper-autocannon-chaos-terminators");
   });
 
   it("flags 3× reaper-autocannon at 10 models (over the 2-per-squad allowance)", () => {
@@ -271,7 +272,7 @@ describe("checkRosterLegality", () => {
       ]),
     ]);
     const report = checkRosterLegality(roster, ds);
-    expect(report[0].violations.some((v) => v.code === "exceeds-allowance")).toBe(true);
+    expect(report[0].violations.some((v) => v.code === "exceeds-max" && v.id === "reaper-autocannon-chaos-terminators")).toBe(true);
   });
 
   it("passes 2× reaper-autocannon at 10 models (within the allowance)", () => {
