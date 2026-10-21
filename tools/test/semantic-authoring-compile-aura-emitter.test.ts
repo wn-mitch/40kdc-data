@@ -65,4 +65,31 @@ describe("Semantic authoring aura-emitter compiler", () => {
     expect(effect.type).toBe("aura");
     expect((effect.modifier as Node).of).toBe(expected);
   });
+
+  // "you can use this ability" on a limited or triggered ability is the ability's use, and the aura is
+  // what that use sets up; a bare "you can re-roll" inside an aura is a permission, not a use.
+  describe("behavior of an aura with an optional use", () => {
+    const aura = (fragment: string) => [
+      leaf("CONDITION", "unit-filter", { side: "friendly", any_keywords: ["JAKHALS", "GOREMONGERS"] }, 16, fragment),
+      leaf("CONDITION", "aura-range", { inches: 6, of: "this-unit" }, 3, fragment),
+      leaf("RESTRICTION", "optional-use", { who: "you" }, 2, fragment),
+      leaf("EFFECT", "fights-first", { subject: "this-unit" }, 1, fragment),
+    ];
+    function behavior(leaves: CompileLeaf[]): unknown {
+      const result = compileLeaves(leaves);
+      if (!result.ok) throw new Error(result.errors.join("; "));
+      return result.mechanics.behavior;
+    }
+
+    it("is activated when a usage limit bounds the use", () => {
+      expect(behavior([leaf("RESTRICTION", "usage-limit", { frequency: "once-per-battle", per: "army" }, 5, "A"), ...aura("A")])).toBe("activated");
+    });
+    it("is reactive when a trigger offers the use", () => {
+      expect(behavior([leaf("EVENT", "event", { kind: "phase-start", phase: "command", turn: "either" }, 33, "A"), ...aura("A")])).toBe("reactive");
+    });
+    it("stays an aura when the optional use is only a permission inside it", () => {
+      expect(behavior(aura("A"))).toBe("aura");
+    });
+  });
 });
+

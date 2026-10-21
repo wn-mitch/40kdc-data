@@ -1424,7 +1424,11 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   }
   if (rulesBundle) body = wrapRulesBundle(body);
   const stratagem = list.some((leaf) => STRATAGEM_FAMILIES.has(leaf.family_id));
-  const behavior = auraLeaf ? "aura" : triggers.length || bandTriggers.size ? "reactive" : optional || stratagem ? "activated" : "passive";
+  // "(Once per battle) … you can use this ability. If you do, … within 6\" of this unit …": the
+  // player uses the ability, and the aura is what using it sets up. A "you can" with no trigger or
+  // usage limit is a permission inside the aura ("you can re-roll …"), and the aura stays passive.
+  const usedAura = auraLeaf !== null && optional && (triggers.length > 0 || bandTriggers.size > 0 || usages.length > 0);
+  const behavior = auraLeaf && !usedAura ? "aura" : triggers.length || bandTriggers.size ? "reactive" : optional || stratagem ? "activated" : "passive";
   // A used or triggered ability with no printed duration lasts for its window's period. A passive
   // ability gated on a phase already holds only in that phase, and an aura only while in range.
   const period = durations.length === 0 && (behavior === "reactive" || behavior === "activated") && hasLastingEffect(body) ? windowPeriod(list) : null;
