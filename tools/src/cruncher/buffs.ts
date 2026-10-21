@@ -207,6 +207,14 @@ export type EngineContext = {
   /** Models in the target unit. Drives `model-count` on the defender; undefined leaves it "unknown". */
   targetModelCount?: number;
   /**
+   * The wargear the attacking models' chosen loadout includes: by wargear id, how many of those
+   * models carry it. A supplied record is complete, so an id it omits is carried by no model.
+   * Drives `unit-wargear` on the attacker; undefined leaves it "unknown".
+   */
+  attackerWargear?: Readonly<Record<string, number>>;
+  /** The target's counterpart of {@link attackerWargear}. */
+  targetWargear?: Readonly<Record<string, number>>;
+  /**
    * Lower-cased names of the attacking weapon and its profile. Drives
    * `applicableWhen.weaponName`; missing names cannot satisfy a weapon-name gate.
    */

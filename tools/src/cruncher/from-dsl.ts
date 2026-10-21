@@ -2073,6 +2073,27 @@ function evaluateCondition(
       if (typeof params.max === "number" && count > params.max) return false;
       return true;
     }
+    case "unit-wargear": {
+      // Read from the side's chosen loadout. With `models`, the bounds count the models that
+      // carry the item (state carry) or lack it (state lack, which needs the unit's model count).
+      const params = isObject(condition.parameters) ? condition.parameters : {};
+      const side = conditionSide(params.subject, perspective);
+      const wargear = side === "attacker" ? ctx.attackerWargear : side === "target" ? ctx.targetWargear : undefined;
+      if (typeof params.wargear !== "string" || wargear === undefined) return "unknown";
+      const carried = wargear[params.wargear] ?? 0;
+      if (params.models === undefined) return carried > 0;
+      const models = isObject(params.models) ? params.models : {};
+      const bounds = isObject(models.count) ? models.count : {};
+      const modelCount = side === "attacker" ? ctx.attackerModelCount : ctx.targetModelCount;
+      const counted = models.state === "carry" ? carried : models.state === "lack" && modelCount !== undefined ? modelCount - carried : undefined;
+      if (counted === undefined) return "unknown";
+      for (const key of ["min", "max"] as const) {
+        if (bounds[key] !== undefined && !Number.isInteger(bounds[key])) return "unknown";
+      }
+      if (typeof bounds.min === "number" && counted < bounds.min) return false;
+      if (typeof bounds.max === "number" && counted > bounds.max) return false;
+      return true;
+    }
     case "battle-size": {
       const size = (condition.parameters as Record<string, unknown> | undefined)?.size;
       if (typeof size !== "string" || ctx.battleSize === undefined) return "unknown";

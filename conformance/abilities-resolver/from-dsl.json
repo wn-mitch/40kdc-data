@@ -4575,6 +4575,586 @@
       }
     },
     {
+      "caseId": "unit-wargear/carried",
+      "abilityId": "fabricated-unit-wargear",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-unit-wargear",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "unit-wargear",
+          "parameters": {
+            "subject": "this-unit",
+            "wargear": "fab-gun-pod"
+          }
+        },
+        "effect": {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "subset": "ones"
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerWargear": {
+          "fab-gun-pod": 2
+        }
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "reroll",
+            "roll": "hit",
+            "subset": "ones"
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "unit-wargear/not-carried",
+      "abilityId": "fabricated-unit-wargear",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-unit-wargear",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "unit-wargear",
+          "parameters": {
+            "subject": "this-unit",
+            "wargear": "fab-gun-pod"
+          }
+        },
+        "effect": {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "subset": "ones"
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerWargear": {
+          "fab-shield-pod": 1
+        }
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "unit-wargear/empty-loadout",
+      "abilityId": "fabricated-unit-wargear",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-unit-wargear",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "unit-wargear",
+          "parameters": {
+            "subject": "this-unit",
+            "wargear": "fab-gun-pod"
+          }
+        },
+        "effect": {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "subset": "ones"
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerWargear": {}
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "unit-wargear/loadout-unknown",
+      "abilityId": "fabricated-unit-wargear",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-unit-wargear",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "unit-wargear",
+          "parameters": {
+            "subject": "this-unit",
+            "wargear": "fab-gun-pod"
+          }
+        },
+        "effect": {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "subset": "ones"
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"unit-wargear\" against current context"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "unit-wargear/target-loadout-not-attacker",
+      "abilityId": "fabricated-unit-wargear",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-unit-wargear",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "unit-wargear",
+          "parameters": {
+            "subject": "defender",
+            "wargear": "fab-gun-pod"
+          }
+        },
+        "effect": {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "subset": "ones"
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerWargear": {
+          "fab-gun-pod": 1
+        }
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"unit-wargear\" against current context"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "unit-wargear/defender-carries",
+      "abilityId": "fabricated-unit-wargear",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-unit-wargear",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "unit-wargear",
+          "parameters": {
+            "subject": "defender",
+            "wargear": "fab-gun-pod"
+          }
+        },
+        "effect": {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "subset": "ones"
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerWargear": {},
+        "targetWargear": {
+          "fab-gun-pod": 1
+        }
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "reroll",
+            "roll": "hit",
+            "subset": "ones"
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "unit-wargear/carry-count-below-min",
+      "abilityId": "fabricated-unit-wargear",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-unit-wargear",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "unit-wargear",
+          "parameters": {
+            "subject": "this-unit",
+            "wargear": "fab-gun-pod",
+            "models": {
+              "count": {
+                "min": 2
+              },
+              "state": "carry"
+            }
+          }
+        },
+        "effect": {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "subset": "ones"
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerWargear": {
+          "fab-gun-pod": 1
+        }
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "unit-wargear/carry-count-within",
+      "abilityId": "fabricated-unit-wargear",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-unit-wargear",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "unit-wargear",
+          "parameters": {
+            "subject": "this-unit",
+            "wargear": "fab-gun-pod",
+            "models": {
+              "count": {
+                "min": 1,
+                "max": 2
+              },
+              "state": "carry"
+            }
+          }
+        },
+        "effect": {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "subset": "ones"
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerWargear": {
+          "fab-gun-pod": 2
+        }
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "reroll",
+            "roll": "hit",
+            "subset": "ones"
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "unit-wargear/carry-count-above-max",
+      "abilityId": "fabricated-unit-wargear",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-unit-wargear",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "unit-wargear",
+          "parameters": {
+            "subject": "this-unit",
+            "wargear": "fab-gun-pod",
+            "models": {
+              "count": {
+                "max": 1
+              },
+              "state": "carry"
+            }
+          }
+        },
+        "effect": {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "subset": "ones"
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerWargear": {
+          "fab-gun-pod": 3
+        }
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "unit-wargear/lack-count",
+      "abilityId": "fabricated-unit-wargear",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-unit-wargear",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "unit-wargear",
+          "parameters": {
+            "subject": "this-unit",
+            "wargear": "fab-gun-pod",
+            "models": {
+              "count": {
+                "min": 3
+              },
+              "state": "lack"
+            }
+          }
+        },
+        "effect": {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "subset": "ones"
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerWargear": {
+          "fab-gun-pod": 2
+        },
+        "attackerModelCount": 5
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "reroll",
+            "roll": "hit",
+            "subset": "ones"
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "unit-wargear/lack-count-false",
+      "abilityId": "fabricated-unit-wargear",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-unit-wargear",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "unit-wargear",
+          "parameters": {
+            "subject": "this-unit",
+            "wargear": "fab-gun-pod",
+            "models": {
+              "count": {
+                "min": 4
+              },
+              "state": "lack"
+            }
+          }
+        },
+        "effect": {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "subset": "ones"
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerWargear": {
+          "fab-gun-pod": 2
+        },
+        "attackerModelCount": 5
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "unit-wargear/lack-needs-model-count",
+      "abilityId": "fabricated-unit-wargear",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-unit-wargear",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "unit-wargear",
+          "parameters": {
+            "subject": "this-unit",
+            "wargear": "fab-gun-pod",
+            "models": {
+              "count": {
+                "min": 1
+              },
+              "state": "lack"
+            }
+          }
+        },
+        "effect": {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "subset": "ones"
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerWargear": {
+          "fab-gun-pod": 2
+        }
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"unit-wargear\" against current context"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "unit-wargear/dice-bound-unknown",
+      "abilityId": "fabricated-unit-wargear",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-unit-wargear",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "unit-wargear",
+          "parameters": {
+            "subject": "this-unit",
+            "wargear": "fab-gun-pod",
+            "models": {
+              "count": {
+                "min": "D3"
+              },
+              "state": "carry"
+            }
+          }
+        },
+        "effect": {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "subset": "ones"
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerWargear": {
+          "fab-gun-pod": 2
+        }
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"unit-wargear\" against current context"
+        ],
+        "activatable": []
+      }
+    },
+    {
       "caseId": "canonical/recipient-snapshot/attested-strength-after-detachment",
       "abilityId": "snapshot-example",
       "source": {

@@ -2683,6 +2683,8 @@ func evaluateCondition(condition, ctx map[string]any, rest ...any) any {
 			return false
 		}
 		return true
+	case "unit-wargear":
+		return evaluateUnitWargear(params, ctx, perspective)
 	case "battle-size":
 		size, ok := params["size"].(string)
 		if !ok || ctx["battleSize"] == nil {
@@ -2870,4 +2872,58 @@ func contextNumber(value any) (float64, bool) {
 		return float64(number), true
 	}
 	return 0, false
+}
+
+// evaluateUnitWargear reads `unit-wargear` from the side's chosen loadout. With `models`, the
+// bounds count the models that carry the item (state carry) or lack it (state lack, which needs
+// the unit's model count). It returns bool, or nil when unknown.
+func evaluateUnitWargear(params map[string]any, ctx map[string]any, perspective string) any {
+	side := conditionSide(params["subject"], perspective)
+	wargearKey := map[string]string{"attacker": "attackerWargear", "target": "targetWargear"}[side]
+	countKey := map[string]string{"attacker": "attackerModelCount", "target": "targetModelCount"}[side]
+	id, ok := params["wargear"].(string)
+	wargear, present := asMap(ctx[wargearKey])
+	if wargearKey == "" || !ok || !present {
+		return nil
+	}
+	carried := 0.0
+	if value, ok := contextNumber(wargear[id]); ok {
+		carried = value
+	}
+	rawModels, hasModels := params["models"]
+	if !hasModels {
+		return carried > 0
+	}
+	models, _ := asMap(rawModels)
+	bounds, _ := asMap(models["count"])
+	var counted float64
+	switch models["state"] {
+	case "carry":
+		counted = carried
+	case "lack":
+		modelCount, ok := contextNumber(ctx[countKey])
+		if !ok {
+			return nil
+		}
+		counted = modelCount - carried
+	default:
+		return nil
+	}
+	for _, key := range []string{"min", "max"} {
+		raw, present := bounds[key]
+		if !present {
+			continue
+		}
+		value, ok := contextNumber(raw)
+		if !ok || value != math.Trunc(value) {
+			return nil
+		}
+	}
+	if minimum, ok := contextNumber(bounds["min"]); ok && counted < minimum {
+		return false
+	}
+	if maximum, ok := contextNumber(bounds["max"]); ok && counted > maximum {
+		return false
+	}
+	return true
 }

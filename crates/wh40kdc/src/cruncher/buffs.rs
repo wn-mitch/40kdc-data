@@ -396,6 +396,14 @@ pub struct EngineContext {
     /// Models in the target unit. Drives `model-count` on the defender; `None` leaves it unknown.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub target_model_count: Option<u32>,
+    /// The wargear the attacking models' chosen loadout includes: by wargear id, how many of
+    /// those models carry it. A supplied map is complete, so an id it omits is carried by no
+    /// model. Drives `unit-wargear` on the attacker; `None` leaves it unknown.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub attacker_wargear: Option<BTreeMap<String, u32>>,
+    /// The target's counterpart of `attacker_wargear`.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub target_wargear: Option<BTreeMap<String, u32>>,
     /// Lower-cased names of the attacking weapon and its profile. Drives
     /// `applicable_when.weapon_name`; unknown names cannot satisfy a constraint.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -451,6 +459,8 @@ impl EngineContext {
             attacker_guided: None,
             attacker_model_count: None,
             target_model_count: None,
+            attacker_wargear: None,
+            target_wargear: None,
             weapon_names: None,
             weapon_keywords: None,
             weapon_keyword_refs: None,

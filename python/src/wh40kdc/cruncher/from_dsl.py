@@ -2866,6 +2866,41 @@ def _evaluate_condition(
         if isinstance(maximum, int) and count > maximum:
             return False
         return True
+    if ctype == "unit-wargear":
+        # Read from the side's chosen loadout. With ``models``, the bounds count the models that
+        # carry the item (state carry) or lack it (state lack, which needs the unit's model count).
+        p = params or {}
+        side = _condition_side(p.get("subject"), perspective)
+        wargear = (
+            ctx.get("attackerWargear" if side == "attacker" else "targetWargear")
+            if side is not None
+            else None
+        )
+        if not isinstance(p.get("wargear"), str) or not isinstance(wargear, dict):
+            return "unknown"
+        carried = wargear.get(p["wargear"], 0)
+        if "models" not in p:
+            return carried > 0
+        raw_models = p["models"]
+        models: dict[str, Any] = raw_models if _is_object(raw_models) else {}
+        raw_bounds = models.get("count")
+        bounds: dict[str, Any] = raw_bounds if _is_object(raw_bounds) else {}
+        model_count = ctx.get("attackerModelCount" if side == "attacker" else "targetModelCount")
+        if models.get("state") == "carry":
+            counted = carried
+        elif models.get("state") == "lack" and model_count is not None:
+            counted = model_count - carried
+        else:
+            return "unknown"
+        for key in ("min", "max"):
+            bound = bounds.get(key)
+            if key in bounds and (not isinstance(bound, int) or isinstance(bound, bool)):
+                return "unknown"
+        if "min" in bounds and counted < bounds["min"]:
+            return False
+        if "max" in bounds and counted > bounds["max"]:
+            return False
+        return True
     if ctype == "battle-size":
         size = params.get("size") if params else None
         if not isinstance(size, str) or ctx.get("battleSize") is None:

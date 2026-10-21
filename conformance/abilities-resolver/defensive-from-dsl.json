@@ -748,6 +748,131 @@
       }
     },
     {
+      "caseId": "unit-wargear/defensive-carried",
+      "abilityId": "fabricated-unit-wargear",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-unit-wargear",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "unit-wargear",
+          "parameters": {
+            "subject": "this-unit",
+            "wargear": "fab-guard-pod"
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "attacker",
+          "modifier": {
+            "roll": "wound",
+            "operation": "subtract",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "targetWargear": {
+          "fab-guard-pod": 1
+        }
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [
+          {
+            "type": "wound-mod",
+            "value": -1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "unit-wargear/defensive-not-carried",
+      "abilityId": "fabricated-unit-wargear",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-unit-wargear",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "unit-wargear",
+          "parameters": {
+            "subject": "this-unit",
+            "wargear": "fab-guard-pod"
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "attacker",
+          "modifier": {
+            "roll": "wound",
+            "operation": "subtract",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "targetWargear": {}
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "unit-wargear/defensive-unknown",
+      "abilityId": "fabricated-unit-wargear",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-unit-wargear",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "unit-wargear",
+          "parameters": {
+            "subject": "this-unit",
+            "wargear": "fab-guard-pod"
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "attacker",
+          "modifier": {
+            "roll": "wound",
+            "operation": "subtract",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerWargear": {
+          "fab-guard-pod": 1
+        }
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"unit-wargear\" against current context"
+        ],
+        "activatable": []
+      }
+    },
+    {
       "caseId": "canonical/recipient-snapshot/attested-toughness-after-detachment",
       "abilityId": "snapshot-example",
       "source": {

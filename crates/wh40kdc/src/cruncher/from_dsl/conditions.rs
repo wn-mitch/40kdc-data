@@ -210,6 +210,43 @@ pub(super) fn evaluate_condition_for_source(
             }
             Some(true)
         }
+        Some("unit-wargear") => {
+            // Read from the side's chosen loadout. With `models`, the bounds count the models
+            // that carry the item (state carry) or lack it (state lack, which needs the unit's
+            // model count).
+            let side = condition_side(p.get("subject"), perspective)?;
+            let wargear_id = p.get("wargear").and_then(Value::as_str)?;
+            let (wargear, model_count) = match side {
+                TranslationPerspective::Attacker => {
+                    (ctx.attacker_wargear.as_ref(), ctx.attacker_model_count)
+                }
+                TranslationPerspective::Target => {
+                    (ctx.target_wargear.as_ref(), ctx.target_model_count)
+                }
+            };
+            let carried = i64::from(wargear?.get(wargear_id).copied().unwrap_or(0));
+            let Some(models) = p.get("models") else {
+                return Some(carried > 0);
+            };
+            let models = object(Some(models));
+            let bounds = models.and_then(|m| object(m.get("count")));
+            let counted = match models.and_then(|m| m.get("state")).and_then(Value::as_str) {
+                Some("carry") => carried,
+                Some("lack") => i64::from(model_count?) - carried,
+                _ => return None,
+            };
+            let bound = |key: &str| -> Result<Option<i64>, ()> {
+                match bounds.and_then(|b| b.get(key)) {
+                    None => Ok(None),
+                    Some(value) => value.as_i64().map(Some).ok_or(()),
+                }
+            };
+            let (min, max) = (bound("min").ok()?, bound("max").ok()?);
+            if min.is_some_and(|min| counted < min) || max.is_some_and(|max| counted > max) {
+                return Some(false);
+            }
+            Some(true)
+        }
         Some("battle-size") => {
             let size = p.get("size").and_then(Value::as_str)?;
             Some(ctx.battle_size.as_deref()? == size)
