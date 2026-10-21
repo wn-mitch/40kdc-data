@@ -510,7 +510,12 @@ function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly n
     // limit, a duration or a gate on the whole ability.
     // The same holds for any opener whose leading groups have no effect at all ("this model has
     // that ability", "until the start of your next Command phase"): no option is only a gate.
-    while (!SINGLE_BODY_CONTAINERS.has(leaf.family_id) && groups.length && groups[0]![0]!.family_id !== "named-option" && groups[0]!.every((item) => item.role !== "EFFECT")) {
+    // Under named-option markers, a leading group that grants "your chosen" option ("Until the end of
+    // the battle, …, and that unit has the effect of your chosen Plague") is about the options, not
+    // one of them, whatever effects it has of its own.
+    const aboutTheOptions = (group: readonly CompileLeaf[]) => byMarker && group.some((item) => item.family_id === "chosen-option-grant");
+    while (!SINGLE_BODY_CONTAINERS.has(leaf.family_id) && groups.length && groups[0]![0]!.family_id !== "named-option"
+      && (groups[0]!.every((item) => item.role !== "EFFECT") || aboutTheOptions(groups[0]!))) {
       for (const returned of groups.shift()!) consumed.delete(list.indexOf(returned));
     }
     let replacementTailOf: { optional: boolean } | undefined;

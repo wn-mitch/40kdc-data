@@ -4,7 +4,7 @@ import { foldAuraEmitter, lowerConditionalAuras } from "./compile-aura-emitter.j
 import { foldNamedRanges, requireNamedRangeAuras } from "./compile-named-range.js";
 import { foldAbilityUseRefresh } from "./compile-ability-use-refresh.js";
 import { foldActivationPicks, retargetMenu } from "./compile-activation.js";
-import { AURA_RECIPIENT, bindAntecedents, momentNamesUnit } from "./compile-antecedent.js";
+import { AURA_RECIPIENT, bindAntecedents, FILTERED_UNITS, momentNamesUnit } from "./compile-antecedent.js";
 import { refuseHistoryValueWithoutSource } from "./compile-history-values.js";
 import { foldHistoryWindow } from "./compile-history-window.js";
 import { checkAbilityUsedWindows, foldAuraMoments, foldByAbility, namedAbilityChecks } from "./compile-named-ability.js";
@@ -701,7 +701,10 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
         else if (leaf.family_id === "chosen-option-grant") {
           const opener = list.slice(0, index).map((other) => isContainerOpener(other.family_id)).lastIndexOf(true);
           if (opener < 0) throw new CompileError("\"Has that ability\" names the options chosen from a menu, but no menu opens before it.");
-          const holder = String(leaf.parameters.holder);
+          // Every unit a bare unit-filter names (compile-unit-filters.ts gave the grant that filter as subject_filter).
+          const filtered = leaf.parameters.holder === FILTERED_UNITS;
+          if (filtered && leaf.parameters.subject_filter === undefined) throw new CompileError("\"That unit has that ability\" points back to a unit-filter whose units it cannot name.");
+          const holder = filtered ? leaf.parameters.subject_filter : String(leaf.parameters.holder);
           if (holder !== "this-unit" && holder !== "this-model" && containerNodes.has(opener)) containerNodes.set(opener, retargetMenu(containerNodes.get(opener), holder) as Node);
         }
         else throw new CompileError(`Restriction ${leaf.family_id} has no DSL fragment yet.`);

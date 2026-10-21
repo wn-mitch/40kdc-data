@@ -63,5 +63,5 @@ export const REGISTRY_ORDER: readonly string[] = [
   "event@29", "attack@8",
   "event@30", "ability-modifier@5", "aura-range@4",
   "unit-filter@17", "triggering-target@4", "event@31", "event@32", "event@33",
-  "duration@5", "unit-keyword@6", "rule-active@2", "aura-range@5",
+  "duration@5", "unit-keyword@6", "rule-active@2", "aura-range@5", "core-ability-grant@5",
 ];

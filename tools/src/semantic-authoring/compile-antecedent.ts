@@ -77,6 +77,10 @@ export function bareFilter(leaves: readonly CompileLeaf[], index: number): boole
   return bareFilterAt(leaves, index) >= 0;
 }
 
+/** A designation check with no subject, count or Warlord tag: bindDesignationSubjects gives it the next effect's recipient. */
+const unboundDesignation = (leaf: CompileLeaf) => leaf.family_id === "designated-filter" && leaf.parameters.subject === undefined
+  && leaf.parameters.count_min === undefined && leaf.parameters.count_max === undefined && leaf.parameters.tag !== "warlord";
+
 /** The index of the unit-filter `bareFilter` finds before the leaf, or -1. */
 function bareFilterAt(leaves: readonly CompileLeaf[], index: number): number {
   const leaf = leaves[index]!;
@@ -84,9 +88,14 @@ function bareFilterAt(leaves: readonly CompileLeaf[], index: number): number {
   // Past a per-recipient condition on the same units ("is within range of an objective, that unit's …").
   while (at >= 0 && leaves[at]!.fragment === leaf.fragment
     && (leaves[at]!.family_id === "unit-owner" || (leaves[at]!.role === "CONDITION" && leaves[at]!.family_id !== "unit-filter" && hasAntecedent(leaves[at]!))
+      // "while an enemy unit is Afflicted, … that unit": a designation check naming no unit is about the
+      // unit its next effect changes (compile-conditions.ts bindDesignationSubjects), so the same units.
+      || unboundDesignation(leaves[at]!)
       // "Friendly X units have: Battleline. +1 OC.": each effect of one list takes the same filter. Only an
       // effect passes over another effect; a condition does not skip the effects that precede it.
-      || (leaf.role === "EFFECT" && leaves[at]!.role === "EFFECT" && leaves[at]!.parameters.subject === ANTECEDENT))) at -= 1;
+      || (leaf.role === "EFFECT" && leaves[at]!.role === "EFFECT" && leaves[at]!.parameters.subject === ANTECEDENT)
+      // "…, subtract 1 from … that unit, and that unit has the effect of your chosen X": the menu's holder is the same units.
+      || (leaf.family_id === "chosen-option-grant" && leaves[at]!.role === "EFFECT" && leaves[at]!.parameters.subject === ANTECEDENT))) at -= 1;
   const filter = leaves[at];
   if (filter?.family_id !== "unit-filter" || filter.fragment !== leaf.fragment) return -1;
   const before = leaves[at - 1];
@@ -536,7 +545,7 @@ const ANY_UNIT_CONDITION_KEYS: Readonly<Record<string, readonly string[]>> = {
 };
 
 /** Units a chosen-option-grant holder can bind to: the menu's own-unit effects are retargeted to it. */
-const MENU_HOLDERS = new Set(["this-unit", "this-model", "selected-unit", "event-subject", AURA_RECIPIENT]);
+const MENU_HOLDERS = new Set(["this-unit", "this-model", "selected-unit", "event-subject", AURA_RECIPIENT, FILTERED_UNITS]);
 
 /** Subject-like keys whose values say which of the record's own unit or model it talks about. */
 const SELF_KEYS = ["subject", "recipient", "target", "unit", "who", "of", "with", "to"];

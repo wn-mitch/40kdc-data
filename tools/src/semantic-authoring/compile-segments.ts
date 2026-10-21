@@ -1,5 +1,6 @@
 import { exactSpan } from "./contracts.js";
 import type { CompileLeaf } from "./compile-fragments.js";
+import { isContainerOpener } from "./compile-containers.js";
 import type { CoreCheck } from "./core-checks.js";
 import type { Mechanics } from "./entries.js";
 
@@ -24,7 +25,7 @@ type Node = Record<string, unknown>;
  * a part with a moment is a part of its own too: it holds whenever the record applies.
  */
 
-const MOMENT_OPENER = /^(?:once per (?:battle|turn|phase|battle round),\s*)?(?:each time|whenever|when|after|at the (?:start|end) of)\b/iu;
+const MOMENT_OPENER = /^(?:once per (?:battle|turn|phase|battle round),\s*)?(?:each time|whenever|when|after|at the (?:start|end) of|during the declare battle formations step)\b/iu;
 const TIED_BACK = /^(?:when doing so|(?:each time|when) (?:you|it|they) do(?:es)?)\b/iu;
 const IN_ADDITION = /^in addition\b/iu;
 // "In addition, each time a model in that unit …": the sentence's opening clause names a unit an
@@ -87,7 +88,8 @@ function sentenceWords(leaves: readonly CompileLeaf[], start: number, sentence: 
   const first = sentence[0]!;
   const last = sentence.at(-1)!;
   const gap = sentenceGap(leaves, start, sentence, sourceText);
-  const lead = gap.slice(Math.max(...[".", ";", ":"].map((mark) => gap.lastIndexOf(mark))) + 1);
+  // A bold heading line before the sentence ("**Afflicted**") titles it; its words are not the sentence's.
+  const lead = gap.slice(Math.max(...[".", ";", ":"].map((mark) => gap.lastIndexOf(mark))) + 1).replace(/^(?:\s*\*\*[^*\n]+\*\*[ \t]*\n)+/u, "");
   return `${lead}${between(sourceText, first.start_byte, last.end_byte ?? first.start_byte)}`.replace(/^[\s*#■•\-–—]+/u, "");
 }
 
@@ -169,7 +171,9 @@ export function sentenceSegments(leaves: readonly CompileLeaf[], sourceText: str
     const words = sentenceWords(leaves, starts[position]!, sentence, sourceText);
     // A standing grant after a part with a moment of its own is not that moment's: the moment cannot trigger it.
     const standing = standingGrant(sentence) && parts.at(-1)!.some((leaf) => leaf.role === "EVENT" && leaf.family_id !== "select-unit" && leaf.family_id !== "dice-roll");
-    const opensPart = position > firstEffectful && !inList[position] && parts.at(-1)!.some((leaf) => leaf.role === "EFFECT") && (
+    // A menu whose options begin at named-option markers holds every sentence after its opener: "Each time …" there is one option's moment.
+    const inMenu = parts.at(-1)!.some((leaf) => isContainerOpener(leaf.family_id)) && parts.at(-1)!.some((leaf) => leaf.family_id === "named-option");
+    const opensPart = position > firstEffectful && !inList[position] && !inMenu && parts.at(-1)!.some((leaf) => leaf.role === "EFFECT") && (
       moments[position] || labels[position] || standing) && !REFERS_BACK.test(words.replace(/^in addition,\s*/iu, "").split(",")[0]!) && !SUCH.test(words);
     // "None of these models can be your WARLORD" after a composition rule: the group it points back
     // to is that rule's (compile-army.ts), so the sentence stays in that rule's part.

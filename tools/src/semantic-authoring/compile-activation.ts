@@ -114,8 +114,14 @@ const UNIT_KEYS = new Set(["target", "member_of"]);
  * menu whose holder is another unit (chosen-option-grant holder bound to it). Everything an option
  * says about "this unit" is then about the holder.
  */
-export function retargetMenu(node: unknown, holder: string): unknown {
+export function retargetMenu(node: unknown, holder: unknown): unknown {
   if (Array.isArray(node)) return node.map((item) => retargetMenu(item, holder));
   if (node === null || typeof node !== "object") return node;
-  return Object.fromEntries(Object.entries(node).map(([key, value]) => [key, UNIT_KEYS.has(key) && value === "this-unit" ? holder : retargetMenu(value, holder)]));
+  const record = node as Record<string, unknown>;
+  // "Each time a model in this unit makes a ranged attack" lowers to a bare attack-type gate whose
+  // attacker is the record's own unit. For units a filter names, the gate names them as the attacker.
+  if (typeof holder === "object" && holder !== null && record.type === "attack-is") {
+    return { operator: "and", operands: [record, { type: "matches", parameters: { filter: holder, subject: "attacker" } }] };
+  }
+  return Object.fromEntries(Object.entries(record).map(([key, value]) => [key, UNIT_KEYS.has(key) && value === "this-unit" ? holder : retargetMenu(value, holder)]));
 }

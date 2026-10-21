@@ -697,10 +697,12 @@ export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: str
       const owners = between.filter((other) => other.family_id === "unit-owner");
       if (owners.some((owner) => owner.parameters.owner !== leaf.parameters.side)) throw new CompileError("A unit-filter and the \"from your army\" after it name different sides.");
       if (leaf.parameters.side === "any") throw new CompileError("A unit-filter whose units receive an effect must say friendly or enemy.");
+      // "while an enemy unit is Afflicted, … that unit": the designation narrows the units the filter names.
+      const named = withDesignation(leaf, between.filter((other) => filterDesignation(other, leaf)));
       // "If a friendly X unit" + "is within range of an objective" + "that unit's …": the per-recipient
       // conditions (compile-antecedent.ts) stay ahead of the effect, about its recipient.
-      out.push(...between.filter((other) => other.family_id !== "unit-owner"));
-      out.push({ ...list[at]!, parameters: { ...list[at]!.parameters, subject_filter: dslUnitFilter(leaf) } });
+      out.push(...between.filter((other) => other.family_id !== "unit-owner" && !filterDesignation(other, leaf)));
+      out.push({ ...list[at]!, parameters: { ...list[at]!.parameters, subject_filter: dslUnitFilter(named) } });
       index = at;
       // "Friendly X units' melee attacks have +1 A and +1 S": every property of one scope after the
       // filter names the same units (a weapon ability keyword carries no subject of its own).
@@ -709,7 +711,7 @@ export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: str
         if (!next || next.fragment !== leaf.fragment) break;
         if (next.family_id === "weapon-ability-keyword") { out.push(next); index += 1; continue; }
         if (!Object.values(next.parameters).includes(FILTERED_UNITS) || next.parameters.subject_filter !== undefined) break;
-        out.push({ ...next, parameters: { ...next.parameters, subject_filter: dslUnitFilter(leaf) } });
+        out.push({ ...next, parameters: { ...next.parameters, subject_filter: dslUnitFilter(named) } });
         index += 1;
       }
     } else if (isFilter(leaf)) {
@@ -909,6 +911,27 @@ function postfixRecipient(leaf: CompileLeaf | undefined): boolean {
   return leaf !== undefined && leaf.role === "EFFECT" && leaf.parameters.subject_filter === undefined && Object.values(leaf.parameters).includes(FILTERED_UNITS);
 }
 
+/**
+ * "while an enemy unit is Afflicted": a designation check right after the filter that names no unit,
+ * count or designator, which bindDesignationSubjects leaves for the units the filter names.
+ */
+function filterDesignation(leaf: CompileLeaf | undefined, filter: CompileLeaf): boolean {
+  return leaf?.family_id === "designated-filter" && leaf.fragment === filter.fragment && leaf.parameters.subject === undefined
+    && leaf.parameters.by === undefined && leaf.parameters.count_min === undefined && leaf.parameters.count_max === undefined && leaf.parameters.tag !== "warlord";
+}
+
+/** The filter narrowed to units with (or, negated, without) the designations after it; one of each at most. */
+function withDesignation(filter: CompileLeaf, designations: readonly CompileLeaf[]): CompileLeaf {
+  if (designations.length === 0) return filter;
+  const parameters: Record<string, unknown> = { ...filter.parameters };
+  for (const designation of designations) {
+    const key = designation.parameters.negated === true ? "not_designated" : "designated";
+    if (parameters[key] !== undefined && parameters[key] !== designation.parameters.tag) throw new CompileError("A unit-filter's units carry two designations; the DSL filter names one.");
+    parameters[key] = designation.parameters.tag;
+  }
+  return { ...filter, parameters };
+}
+
 /** A condition about each recipient of the filter's effect, in the filter's fragment (compile-antecedent.ts). */
 const perRecipientCondition = (leaf: CompileLeaf | undefined, filter: CompileLeaf) =>
   leaf !== undefined && leaf.role === "CONDITION" && leaf.fragment === filter.fragment && Object.values(leaf.parameters).includes(AURA_RECIPIENT);
@@ -924,7 +947,7 @@ function filteredAfter(list: readonly CompileLeaf[], index: number): number | nu
   let at = index + 1;
   // Past per-recipient conditions, and past conditions on the attack's target that a property
   // scope folded ahead of its frame ("Friendly X units' attacks that target that unit have …").
-  while (list[at]?.family_id === "unit-owner" || perRecipientCondition(list[at], list[index]!) || targetGate(list[at], list[index]!)
+  while (list[at]?.family_id === "unit-owner" || perRecipientCondition(list[at], list[index]!) || targetGate(list[at], list[index]!) || filterDesignation(list[at], list[index]!)
     || (list[at]?.role === "DURATION" && list[at]!.fragment === list[index]!.fragment)) at += 1;
   const leaf = list[at];
   return leaf && Object.values(leaf.parameters).includes(FILTERED_UNITS) ? at : null;
