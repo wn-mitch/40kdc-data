@@ -1881,8 +1881,28 @@
       "sororitas-rhino"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "adepta-sororitas"
+    "behavior": "reactive",
+    "faction_id": "adepta-sororitas",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "righteous-paragons-adepta-sororitas",

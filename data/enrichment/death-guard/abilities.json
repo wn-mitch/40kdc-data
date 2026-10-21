@@ -3862,103 +3862,213 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "source_digest": "9a0a6127b9ffa48031663cdde3e64a3ba1f41f2845c4318c021fc2c735598175",
+    "source_digest": "40bece100511e4da483f4112ecdf3dcfd8e3226376529429eb9ba227b23d13d3",
     "version": "2025-q3",
     "effect": {
       "type": "sequence",
       "steps": [
         {
-          "type": "stat-modifier",
-          "target": {
-            "owner": "enemy",
-            "within": {
+          "type": "conditional",
+          "condition": {
+            "type": "army-faction",
+            "parameters": {
+              "faction": "death-guard"
+            }
+          },
+          "effect": {
+            "type": "aura",
+            "target": "enemy-within-aura",
+            "modifier": {
               "range": {
-                "inches": 3
+                "per_battle_round": [
+                  {
+                    "inches": 3
+                  },
+                  {
+                    "inches": 6
+                  },
+                  {
+                    "inches": 9
+                  }
+                ]
               },
-              "of": {
+              "effect": {
+                "type": "designate",
+                "target": "recipient",
+                "modifier": {
+                  "tag": "afflicted"
+                }
+              },
+              "eligible": {
+                "owner": "enemy"
+              },
+              "emitter_filter": {
                 "owner": "friendly",
                 "all_of": [
                   "DEATH GUARD"
                 ]
-              }
+              },
+              "range_cap": 12
             }
-          },
-          "modifier": {
-            "stat": "T",
-            "operation": "subtract",
-            "value": 1
           }
         },
         {
-          "type": "choice",
-          "options": [
-            {
-              "type": "roll-modifier",
-              "target": {
-                "owner": "enemy",
-                "within": {
-                  "range": {
-                    "inches": 3
+          "type": "ability-part",
+          "trigger": {
+            "event": "battle-formations-declared"
+          },
+          "duration": "battle",
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "choice",
+                "options": [
+                  {
+                    "type": "sequence",
+                    "steps": [
+                      {
+                        "type": "conditional",
+                        "condition": {
+                          "operator": "and",
+                          "operands": [
+                            {
+                              "type": "attack-is",
+                              "parameters": {
+                                "attack_type": "ranged"
+                              }
+                            },
+                            {
+                              "type": "matches",
+                              "parameters": {
+                                "filter": {
+                                  "owner": "enemy",
+                                  "designated": "afflicted"
+                                },
+                                "subject": "attacker"
+                              }
+                            }
+                          ]
+                        },
+                        "effect": {
+                          "type": "ability-grant",
+                          "target": "defender",
+                          "modifier": {
+                            "ability": "benefit-of-cover"
+                          }
+                        }
+                      },
+                      {
+                        "type": "conditional",
+                        "condition": {
+                          "operator": "and",
+                          "operands": [
+                            {
+                              "type": "attack-is",
+                              "parameters": {
+                                "attack_type": "melee"
+                              }
+                            },
+                            {
+                              "type": "matches",
+                              "parameters": {
+                                "filter": {
+                                  "owner": "enemy",
+                                  "designated": "afflicted"
+                                },
+                                "subject": "attacker"
+                              }
+                            }
+                          ]
+                        },
+                        "effect": {
+                          "type": "roll-modifier",
+                          "target": {
+                            "owner": "enemy",
+                            "designated": "afflicted"
+                          },
+                          "modifier": {
+                            "roll": "hit",
+                            "operation": "subtract",
+                            "value": 1
+                          }
+                        }
+                      }
+                    ]
                   },
-                  "of": {
-                    "owner": "friendly",
-                    "all_of": [
-                      "DEATH GUARD"
+                  {
+                    "type": "stat-modifier",
+                    "target": {
+                      "owner": "enemy",
+                      "designated": "afflicted"
+                    },
+                    "modifier": {
+                      "stat": "Sv",
+                      "operation": "worsen",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "type": "sequence",
+                    "steps": [
+                      {
+                        "type": "stat-modifier",
+                        "target": {
+                          "owner": "enemy",
+                          "designated": "afflicted"
+                        },
+                        "modifier": {
+                          "stat": "M",
+                          "operation": "worsen",
+                          "value": 1
+                        }
+                      },
+                      {
+                        "type": "stat-modifier",
+                        "target": {
+                          "owner": "enemy",
+                          "designated": "afflicted"
+                        },
+                        "modifier": {
+                          "stat": "Ld",
+                          "operation": "worsen",
+                          "value": 1
+                        }
+                      },
+                      {
+                        "type": "stat-modifier",
+                        "target": {
+                          "owner": "enemy",
+                          "designated": "afflicted"
+                        },
+                        "modifier": {
+                          "stat": "OC",
+                          "operation": "worsen",
+                          "value": 1,
+                          "minimum": 1
+                        }
+                      }
                     ]
                   }
-                }
+                ],
+                "choice_label": "plague",
+                "min_choices": 1,
+                "max_choices": 1
               },
-              "modifier": {
-                "roll": "hit",
-                "operation": "subtract",
-                "value": 1
-              }
-            },
-            {
-              "type": "stat-modifier",
-              "target": {
-                "owner": "enemy",
-                "within": {
-                  "range": {
-                    "inches": 3
-                  },
-                  "of": {
-                    "owner": "friendly",
-                    "all_of": [
-                      "DEATH GUARD"
-                    ]
-                  }
+              {
+                "type": "stat-modifier",
+                "target": {
+                  "owner": "enemy",
+                  "designated": "afflicted"
+                },
+                "modifier": {
+                  "stat": "T",
+                  "operation": "subtract",
+                  "value": 1
                 }
-              },
-              "modifier": {
-                "stat": "Sv",
-                "operation": "subtract",
-                "value": 1
               }
-            },
-            {
-              "type": "stat-modifier",
-              "target": {
-                "owner": "enemy",
-                "within": {
-                  "range": {
-                    "inches": 3
-                  },
-                  "of": {
-                    "owner": "friendly",
-                    "all_of": [
-                      "DEATH GUARD"
-                    ]
-                  }
-                }
-              },
-              "modifier": {
-                "stat": "M",
-                "operation": "subtract",
-                "value": 1
-              }
-            }
-          ]
+            ]
+          }
         }
       ]
     },
@@ -3967,7 +4077,7 @@
     },
     "faction_id": "death-guard",
     "ability_type": "faction",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "-1T always active (Contagion). Plague choice: hill-climbing selects -1 Save (most offensive), equivalent to +1 AP. Other plague options are -1 to enemy Hit (defensive) and -1 M/Ld/OC (utility).",
     "unit_ids": []
   },
@@ -4678,7 +4788,7 @@
     "faction_id": "death-guard",
     "detachment_id": "contagion-engines",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -4697,18 +4807,29 @@
         "type": "designate",
         "target": "selected-unit",
         "modifier": {
-          "tag": "afflicted",
-          "clears_on": "phase"
+          "tag": "afflicted"
         }
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "attack-sequence"
     },
     "applies_to": {
       "all_of": [
         "Contagion Engine"
       ]
+    },
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "CONTAGION ENGINES"
+        ]
+      }
     }
   },
   {
@@ -7208,17 +7329,223 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": null,
     "ability_type": "faction",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "army-faction",
+            "parameters": {
+              "faction": "death-guard"
+            }
+          },
+          "effect": {
+            "type": "aura",
+            "target": "enemy-within-aura",
+            "modifier": {
+              "range": {
+                "per_battle_round": [
+                  {
+                    "inches": 3
+                  },
+                  {
+                    "inches": 6
+                  },
+                  {
+                    "inches": 9
+                  }
+                ]
+              },
+              "effect": {
+                "type": "designate",
+                "target": "recipient",
+                "modifier": {
+                  "tag": "afflicted"
+                }
+              },
+              "eligible": {
+                "owner": "enemy"
+              },
+              "emitter_filter": {
+                "owner": "friendly",
+                "all_of": [
+                  "DEATH GUARD"
+                ]
+              },
+              "range_cap": 12
+            }
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "battle-formations-declared"
+          },
+          "duration": "battle",
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "choice",
+                "options": [
+                  {
+                    "type": "sequence",
+                    "steps": [
+                      {
+                        "type": "conditional",
+                        "condition": {
+                          "operator": "and",
+                          "operands": [
+                            {
+                              "type": "attack-is",
+                              "parameters": {
+                                "attack_type": "ranged"
+                              }
+                            },
+                            {
+                              "type": "matches",
+                              "parameters": {
+                                "filter": {
+                                  "owner": "enemy",
+                                  "designated": "afflicted"
+                                },
+                                "subject": "attacker"
+                              }
+                            }
+                          ]
+                        },
+                        "effect": {
+                          "type": "ability-grant",
+                          "target": "defender",
+                          "modifier": {
+                            "ability": "benefit-of-cover"
+                          }
+                        }
+                      },
+                      {
+                        "type": "conditional",
+                        "condition": {
+                          "operator": "and",
+                          "operands": [
+                            {
+                              "type": "attack-is",
+                              "parameters": {
+                                "attack_type": "melee"
+                              }
+                            },
+                            {
+                              "type": "matches",
+                              "parameters": {
+                                "filter": {
+                                  "owner": "enemy",
+                                  "designated": "afflicted"
+                                },
+                                "subject": "attacker"
+                              }
+                            }
+                          ]
+                        },
+                        "effect": {
+                          "type": "roll-modifier",
+                          "target": {
+                            "owner": "enemy",
+                            "designated": "afflicted"
+                          },
+                          "modifier": {
+                            "roll": "hit",
+                            "operation": "subtract",
+                            "value": 1
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "stat-modifier",
+                    "target": {
+                      "owner": "enemy",
+                      "designated": "afflicted"
+                    },
+                    "modifier": {
+                      "stat": "Sv",
+                      "operation": "worsen",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "type": "sequence",
+                    "steps": [
+                      {
+                        "type": "stat-modifier",
+                        "target": {
+                          "owner": "enemy",
+                          "designated": "afflicted"
+                        },
+                        "modifier": {
+                          "stat": "M",
+                          "operation": "worsen",
+                          "value": 1
+                        }
+                      },
+                      {
+                        "type": "stat-modifier",
+                        "target": {
+                          "owner": "enemy",
+                          "designated": "afflicted"
+                        },
+                        "modifier": {
+                          "stat": "Ld",
+                          "operation": "worsen",
+                          "value": 1
+                        }
+                      },
+                      {
+                        "type": "stat-modifier",
+                        "target": {
+                          "owner": "enemy",
+                          "designated": "afflicted"
+                        },
+                        "modifier": {
+                          "stat": "OC",
+                          "operation": "worsen",
+                          "value": 1,
+                          "minimum": 1
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "choice_label": "plague",
+                "min_choices": 1,
+                "max_choices": 1
+              },
+              {
+                "type": "stat-modifier",
+                "target": {
+                  "owner": "enemy",
+                  "designated": "afflicted"
+                },
+                "modifier": {
+                  "stat": "T",
+                  "operation": "subtract",
+                  "value": 1
+                }
+              }
+            ]
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "source_digest": "40bece100511e4da483f4112ecdf3dcfd8e3226376529429eb9ba227b23d13d3"
   },
   {
     "ability_id": "overwhelming-generosity-virulent-vectorium-death-guard",
@@ -7370,17 +7697,28 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "virulent-vectorium",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-modifier",
+      "target": {
+        "owner": "friendly",
+        "level": "model"
+      },
+      "modifier": {
+        "ability": "contagion-range",
+        "aspect": "range",
+        "operation": "add",
+        "value": 3
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "until-next-command-phase"
+    },
+    "behavior": "activated",
+    "source_digest": "7a88ff68a253d10d3ac606bffc9cecb9db393f6e7fc5932c58d0c2128063493e"
   },
   {
     "ability_id": "putrid-detonation-virulent-vectorium-death-guard",

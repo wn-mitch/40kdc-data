@@ -1432,7 +1432,8 @@
         "type": "feel-no-pain",
         "target": "this-unit",
         "modifier": {
-          "threshold": 4
+          "threshold": 4,
+          "against": "psychic"
         }
       }
     },

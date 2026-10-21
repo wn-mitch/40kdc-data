@@ -995,8 +995,28 @@
       "anathema-psykana-rhino"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "adeptus-custodes"
+    "behavior": "reactive",
+    "faction_id": "adeptus-custodes",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "tactical-perception-adeptus-custodes",

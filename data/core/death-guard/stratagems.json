@@ -235,7 +235,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Contagion Engines"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "bloodrust-deluge-contagion-engines-death-guard",
     "game_version": {
       "edition": "11th",
@@ -1533,7 +1540,23 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Death Guard"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "model",
+      "warlord": true,
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "state": "on-battlefield"
+          }
+        }
+      }
+    },
     "ability_id": "plaguesurge-virulent-vectorium-death-guard",
     "game_version": {
       "edition": "11th",
