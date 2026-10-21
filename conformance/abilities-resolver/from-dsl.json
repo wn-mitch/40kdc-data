@@ -4284,6 +4284,242 @@
       }
     },
     {
+      "caseId": "designation-selector/target-excluded",
+      "abilityId": "fabricated-designation",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-designation",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "designate-target",
+        "designation": "fabricated-target",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy",
+              "all_of": [
+                "VEHICLE"
+              ],
+              "visible": {
+                "to": "this-model"
+              }
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
+          }
+        },
+        "applies": {
+          "to": "attackers-of-target",
+          "effect": {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "wound",
+              "subset": "ones"
+            }
+          }
+        },
+        "duration": "phase"
+      },
+      "context": {
+        "phase": "shooting",
+        "targetKeywords": [
+          "infantry"
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "designation-selector/target-eligible",
+      "abilityId": "fabricated-designation",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-designation",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "designate-target",
+        "designation": "fabricated-target",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy",
+              "all_of": [
+                "VEHICLE"
+              ],
+              "visible": {
+                "to": "this-model"
+              }
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
+          }
+        },
+        "applies": {
+          "to": "attackers-of-target",
+          "effect": {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "wound",
+              "subset": "ones"
+            }
+          }
+        },
+        "duration": "phase"
+      },
+      "context": {
+        "phase": "shooting",
+        "targetKeywords": [
+          "vehicle"
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [
+          {
+            "id": "fabricated-designation#fabricated-target",
+            "label": "Designated target: re-roll wound 1s",
+            "group": null,
+            "requires": [
+              {
+                "select": {
+                  "kind": "unit",
+                  "selector": {
+                    "filter": {
+                      "owner": "enemy",
+                      "all_of": [
+                        "VEHICLE"
+                      ],
+                      "visible": {
+                        "to": "this-model"
+                      }
+                    },
+                    "count": {
+                      "min": 1,
+                      "max": 1
+                    }
+                  }
+                },
+                "duration": "phase"
+              }
+            ],
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "reroll",
+                "roll": "wound",
+                "subset": "ones"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "caseId": "designation-selector/target-unknown",
+      "abilityId": "fabricated-designation",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-designation",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "designate-target",
+        "designation": "fabricated-target",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy",
+              "all_of": [
+                "VEHICLE"
+              ],
+              "visible": {
+                "to": "this-model"
+              }
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
+          }
+        },
+        "applies": {
+          "to": "attackers-of-target",
+          "effect": {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "wound",
+              "subset": "ones"
+            }
+          }
+        },
+        "duration": "phase"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [
+          {
+            "id": "fabricated-designation#fabricated-target",
+            "label": "Designated target: re-roll wound 1s",
+            "group": null,
+            "requires": [
+              {
+                "select": {
+                  "kind": "unit",
+                  "selector": {
+                    "filter": {
+                      "owner": "enemy",
+                      "all_of": [
+                        "VEHICLE"
+                      ],
+                      "visible": {
+                        "to": "this-model"
+                      }
+                    },
+                    "count": {
+                      "min": 1,
+                      "max": 1
+                    }
+                  }
+                },
+                "duration": "phase"
+              }
+            ],
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "reroll",
+                "roll": "wound",
+                "subset": "ones"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
       "caseId": "canonical/recipient-snapshot/attested-strength-after-detachment",
       "abilityId": "snapshot-example",
       "source": {

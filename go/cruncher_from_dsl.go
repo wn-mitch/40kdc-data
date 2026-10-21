@@ -410,6 +410,14 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 					return
 				}
 			}
+			// A designation restricted to units the target is not (e.g. an enemy VEHICLE) never marks it.
+			if sel, ok := getMap(n, "select"); ok && sel["kind"] == "unit" {
+				if selector, ok := getMap(sel, "selector"); ok {
+					if filter, ok := asMap(selector["filter"]); ok && filter != nil && matchesUnitFilter(filter, opts.context, "target", "enemy") == false {
+						return
+					}
+				}
+			}
 			sub := &effectTranslation{applied: []any{}, unsupported: []any{}, activatable: []any{}}
 			dslWalk(applies["effect"], source, opts, sub)
 			out.unsupported = append(out.unsupported, sub.unsupported...)

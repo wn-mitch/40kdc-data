@@ -481,6 +481,21 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
                         }
                     )
                     return
+            # A designation restricted to units the target is not (e.g. an enemy VEHICLE) never
+            # marks it.
+            select = node.get("select")
+            selector = (
+                select.get("selector")
+                if _is_object(select) and select.get("kind") == "unit"
+                else None
+            )
+            if (
+                _is_object(selector)
+                and "filter" in selector
+                and _matches_unit_filter(selector["filter"], opts["context"], "target", "enemy")
+                is False
+            ):
+                return
             sub: EffectTranslation = {"applied": [], "unsupported": [], "activatable": []}
             _walk(applies.get("effect"), source, opts, sub)
             out["unsupported"].extend(sub["unsupported"])

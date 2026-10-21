@@ -627,6 +627,17 @@ fn dispatch(node: &Obj, opts: &WalkOpts, out: &mut Out) {
                         }
                     }
                 }
+                // A designation restricted to units the target is not (e.g. an enemy VEHICLE)
+                // never marks it.
+                let selector_filter = object(node.get("select"))
+                    .filter(|select| is_str(select, "kind", "unit"))
+                    .and_then(|select| object(select.get("selector")))
+                    .and_then(|selector| selector.get("filter"));
+                if let Some(filter) = selector_filter {
+                    if conditions::matches_unit_filter(filter, opts.context, TranslationPerspective::Target, "enemy") == Some(false) {
+                        return;
+                    }
+                }
                 // Which enemy unit is designated is the player's pick, so its buffs are one opt-in
                 // lever ("this defender is the designated unit"); the player vouches for the
                 // selection's eligibility (range, visibility, "hit by those attacks").

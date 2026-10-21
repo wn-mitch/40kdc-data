@@ -447,6 +447,11 @@ function walk(
             return;
           }
         }
+        // A designation restricted to units the target is not (e.g. an enemy VEHICLE) never marks it.
+        const selector = isObject(currentNode.select) && currentNode.select.kind === "unit" && isObject(currentNode.select.selector)
+          ? currentNode.select.selector
+          : undefined;
+        if (selector?.filter !== undefined && matchesUnitFilter(selector.filter, opts.context, "target", "enemy") === false) return;
         // Which enemy unit is designated is the player's pick, so its buffs are one opt-in lever
         // ("this defender is the designated unit"); the player vouches for the selection's
         // eligibility (range, visibility, "hit by those attacks").
