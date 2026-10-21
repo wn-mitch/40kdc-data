@@ -136,6 +136,30 @@ describe("Semantic authoring stratagem targets", () => {
     expect(() => canonicalTarget({ required_keywords_any: ["INFANTRY BATTLELINE", "STELLAR WARDENS"] }, index)).toThrow(/one alternative keyword per option/u);
   });
 
+  it("reads a keyword a unit carries only in one Detachment, in the unit's own spelling", () => {
+    const root = mkdtempSync(join(tmpdir(), "semantic-authoring-conditional-keywords-"));
+    try {
+      // A grant in an earlier faction spells the keyword in capitals; the unit's spelling wins.
+      mkdirSync(join(root, "core", "alpha"), { recursive: true });
+      mkdirSync(join(root, "core", "beta"), { recursive: true });
+      mkdirSync(join(root, "enrichment", "alpha"), { recursive: true });
+      writeFileSync(join(root, "enrichment", "alpha", "abilities.json"), JSON.stringify([
+        { ability_id: "probe-grant", effect: { type: "keyword-grant", target: "this-unit", modifier: { keywords: ["GLOOM ENGINES"] } } },
+      ]));
+      writeFileSync(join(root, "core", "beta", "units.json"), JSON.stringify([
+        { id: "probe-walker", keywords: ["Vehicle"], conditional_keywords: [{ keyword: "Gloom Engines", required_detachment_id: "probe-detachment" }] },
+        { id: "probe-hauler", keywords: ["Vehicle"], conditional_keywords: [{ keyword: "Rust Haulers", required_detachment_id: "probe-detachment" }] },
+      ]));
+      const index = keywordIndex(root);
+      expect(canonicalTarget({ count: "one", selects: "unit", required_keywords: ["GLOOM ENGINES"], bound_to: "triggering-unit" }, index))
+        .toEqual({ required_keywords: ["Gloom Engines"], count: "one", selects: "unit", bound_to: "triggering-unit" });
+      // Carried only conditionally, and granted nowhere: still a keyword.
+      expect(canonicalTarget({ required_keywords: ["RUST HAULERS VEHICLE"] }, index)).toEqual({ required_keywords: ["Rust Haulers", "Vehicle"] });
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  });
+
   it("passes the compiled warlord field through and refuses an entry compiled with WARLORD as a keyword", () => {
     const index = keywordIndex(process.env.SEMANTIC_AUTHORING_DATA_ROOT!);
     expect(canonicalTarget({ count: "one", side: "your-army", selects: "model", warlord: true, required_keywords: ["STELLAR WARDENS"] }, index))

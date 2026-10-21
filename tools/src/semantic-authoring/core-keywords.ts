@@ -16,9 +16,11 @@ export function keywordKey(keyword: string): string {
 }
 
 /**
- * Every keyword a unit can carry, keyed by {@link keywordKey}: core datasheet/faction keywords,
- * detachment `granted_keywords`, and canonical keyword-grant effects in the same data projection.
- * Runtime grants contribute their complete identities, never names or recipient predicates.
+ * Every keyword a unit can carry, keyed by {@link keywordKey}: core datasheet/faction keywords and
+ * `conditional_keywords`, detachment `granted_keywords`, and canonical keyword-grant effects in the
+ * same data projection. Runtime grants contribute their complete identities, never names or
+ * recipient predicates. Units' own spellings are read first, in every faction, so they win over a
+ * grant that spells the same keyword differently.
  */
 export function keywordIndex(dataRoot: string): Map<string, string> {
   const cached = indexes.get(dataRoot);
@@ -28,27 +30,20 @@ export function keywordIndex(dataRoot: string): Map<string, string> {
     if (typeof keyword === "string" && !index.has(keywordKey(keyword))) index.set(keywordKey(keyword), keyword);
   };
   const core = join(dataRoot, "core");
-  if (existsSync(core)) {
-    for (const faction of readdirSync(core)) {
-      const path = join(core, faction, "units.json");
-      if (existsSync(path)) {
-        for (const unit of JSON.parse(readFileSync(path, "utf8")) as Array<Record<string, unknown>>) {
-          for (const keyword of [...(unit.keywords as string[] ?? []), ...(unit.faction_keywords as string[] ?? [])]) add(keyword);
-        }
-      }
-      const detachments = join(core, faction, "detachments.json");
-      if (existsSync(detachments)) {
-        for (const detachment of JSON.parse(readFileSync(detachments, "utf8")) as Array<Record<string, unknown>>) {
-          for (const grant of (detachment.granted_keywords as Array<{ keyword?: unknown }> | undefined) ?? []) add(grant.keyword);
-        }
-      }
-      const abilities = join(dataRoot, "enrichment", faction, "abilities.json");
-      if (existsSync(abilities)) {
-        for (const ability of JSON.parse(readFileSync(abilities, "utf8")) as Array<Record<string, unknown>>) {
-          addGrantedKeywords(ability.effect, add);
-        }
-      }
+  const factions = existsSync(core) ? readdirSync(core) : [];
+  const rows = (path: string): Array<Record<string, unknown>> => existsSync(path) ? JSON.parse(readFileSync(path, "utf8")) as Array<Record<string, unknown>> : [];
+  for (const faction of factions) {
+    for (const unit of rows(join(core, faction, "units.json"))) {
+      for (const keyword of [...(unit.keywords as string[] ?? []), ...(unit.faction_keywords as string[] ?? [])]) add(keyword);
+      // A keyword the unit carries only in some armies (in one Detachment, say) is still its keyword.
+      for (const conditional of (unit.conditional_keywords as Array<{ keyword?: unknown }> | undefined) ?? []) add(conditional.keyword);
     }
+  }
+  for (const faction of factions) {
+    for (const detachment of rows(join(core, faction, "detachments.json"))) {
+      for (const grant of (detachment.granted_keywords as Array<{ keyword?: unknown }> | undefined) ?? []) add(grant.keyword);
+    }
+    for (const ability of rows(join(dataRoot, "enrichment", faction, "abilities.json"))) addGrantedKeywords(ability.effect, add);
   }
   indexes.set(dataRoot, index);
   return index;
