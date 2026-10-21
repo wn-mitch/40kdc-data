@@ -47,3 +47,38 @@ export function bindCharacteristicAmounts(leaves: readonly CompileLeaf[]): Compi
     return [{ ...leaf, parameters: { ...leaf.parameters, value: valueFor.get(at) } }];
   });
 }
+
+const FLOOR = "characteristic-floor";
+const LOWERING = new Set(["subtract", "worsen"]);
+
+/**
+ * "Worsen the Move, Leadership and Objective Control characteristics … by 1 (this rule can only
+ * worsen a model's Objective Control characteristic to a minimum of 1)": a floor right after its
+ * characteristic change, in the same fragment with nothing between. A floor over every
+ * characteristic the change lowers is its `minimum`; one over some of them is
+ * `characteristic_minimums`, which lowering applies to those characteristics' steps only. A floor
+ * with no lowering change right before it, on a characteristic the change does not lower, or
+ * against a different floor the change already has, refuses.
+ */
+export function bindCharacteristicFloors(leaves: readonly CompileLeaf[]): CompileLeaf[] {
+  if (!leaves.some((leaf) => leaf.family_id === FLOOR)) return [...leaves];
+  const out: CompileLeaf[] = [];
+  for (const floor of leaves) {
+    if (floor.family_id !== FLOOR) { out.push(floor); continue; }
+    const change = out.at(-1);
+    if (change?.family_id !== CHANGE || change.fragment !== floor.fragment) throw new CompileError(`A characteristic floor at byte ${floor.start_byte} needs its characteristic change right before it.`);
+    if (!LOWERING.has(String(change.parameters.operation))) throw new CompileError(`A characteristic floor at byte ${floor.start_byte} follows a change that does not lower a characteristic.`);
+    const lowered = change.parameters.characteristics as string[];
+    const floored = floor.parameters.characteristics as string[];
+    const minimum = floor.parameters.minimum as number;
+    const missing = floored.filter((stat) => !lowered.includes(stat));
+    if (missing.length) throw new CompileError(`A characteristic floor at byte ${floor.start_byte} names ${missing.join(", ")}, which the change before it does not lower.`);
+    if (change.parameters.minimum !== undefined && change.parameters.minimum !== minimum) throw new CompileError(`A characteristic floor at byte ${floor.start_byte} disagrees with the change's own minimum.`);
+    const every = lowered.every((stat) => floored.includes(stat));
+    const existing = (change.parameters.characteristic_minimums ?? {}) as Record<string, number>;
+    out[out.length - 1] = every
+      ? { ...change, parameters: { ...change.parameters, minimum } }
+      : { ...change, parameters: { ...change.parameters, characteristic_minimums: { ...existing, ...Object.fromEntries(floored.map((stat) => [stat, minimum])) } } };
+  }
+  return out;
+}

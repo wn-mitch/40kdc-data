@@ -76,7 +76,7 @@ import { compileGranted } from "./compile-granted.js";
 import { compileNamedAbilityStates } from "./compile-named-ability-states.js";
 import { compileOathRecord } from "./compile-oath.js";
 import { foldAbilityUseContext } from "./compile-ability-use.js";
-import { bindCharacteristicAmounts } from "./compile-characteristic-amount.js";
+import { bindCharacteristicAmounts, bindCharacteristicFloors } from "./compile-characteristic-amount.js";
 import { bindAdditiveOptions } from "./compile-additive-option.js";
 import { bindIgnoreLists } from "./compile-ignore-list.js";
 import type { CoreCheck } from "./core-checks.js";
@@ -298,11 +298,11 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   if (leaves.some((leaf) => leaf.fragment === NAME_FRAGMENT)) {
     return compileWithName(leaves, sourceText, options, compileLeaves, (list) => shapeSignature(ordered(list), sourceText));
   }
-  // Qualifiers printed apart from their host are bound first: a characteristic amount after its recipient (compile-characteristic-amount.ts), an additive option after its duration (compile-additive-option.ts), an ignore-modifier list after its lead-in (compile-ignore-list.ts), and a named range's defined values onto its aura (compile-named-range.ts).
+  // Qualifiers printed apart from their host are bound first: a characteristic amount after its recipient and a floor after its change (compile-characteristic-amount.ts), an additive option after its duration (compile-additive-option.ts), an ignore-modifier list after its lead-in (compile-ignore-list.ts), and a named range's defined values onto its aura (compile-named-range.ts).
   let bound: CompileLeaf[];
   try {
     bound = foldNamedRanges(foldAuraEmitter(bindIgnoreLists(
-      bindAdditiveOptions(bindCharacteristicAmounts(resolveUnitNames(leaves, options.units)), sourceText),
+      bindAdditiveOptions(bindCharacteristicFloors(bindCharacteristicAmounts(resolveUnitNames(leaves, options.units))), sourceText),
       sourceText,
     )), options.abilityId);
   } catch (error) {

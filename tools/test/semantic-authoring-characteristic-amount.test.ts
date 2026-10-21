@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { effect } from "../src/semantic-authoring/compile-fragments.js";
-import { bindCharacteristicAmounts } from "../src/semantic-authoring/compile-characteristic-amount.js";
+import { bindCharacteristicAmounts, bindCharacteristicFloors } from "../src/semantic-authoring/compile-characteristic-amount.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { checkEntry, entryWithMechanics } from "../src/semantic-authoring/entries.js";
 
@@ -139,5 +139,45 @@ describe("Semantic authoring characteristic amounts after a recipient filter", (
     expect(bound.map((leaf) => leaf.family_id)).toEqual(["characteristic-modifier", "unit-filter", "unit-owner"]);
     expect(bound[0]!.parameters).toEqual({ subject: "antecedent", characteristics: ["OC"], operation: "improve", weapon_type: "all", value: 2 });
     expect(normalizeFingerprintParameters("characteristic-modifier", bound[0]!.parameters, 15)).toMatchObject({ value: 2 });
+  });
+});
+
+describe("a floor after a characteristic change", () => {
+  const floorText = "Worsen the Move, Leadership and Zorn characteristics of models in this unit by 1 (but never the Zorn below 1).";
+  const worsen = ["Worsen the Move, Leadership and Zorn characteristics of models in this unit by 1", "characteristic-modifier",
+    { subject: "this-unit", characteristics: ["M", "Ld", "OC"], operation: "worsen", value: 1, weapon_type: "all" }] as const;
+  const floor = (characteristics: string[], minimum = 1) => ["but never the Zorn below 1", "characteristic-floor", { characteristics, minimum }] as const;
+  const compiledSteps = (...items: Array<readonly [string, string, Record<string, unknown>]>) => {
+    const result = compileLeaves(placedIn(floorText, ...items.map((item) => [...item] as [string, string, Record<string, unknown>])), floorText);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    return (result.mechanics.effect as { steps: Array<{ modifier: Record<string, unknown> }> }).steps.map((step) => step.modifier);
+  };
+
+  it("floors only the characteristics it names", () => {
+    const steps = compiledSteps(worsen, floor(["OC"]));
+    expect(steps.map((step) => [step.stat, step.minimum])).toEqual([["M", undefined], ["Ld", undefined], ["OC", 1]]);
+  });
+
+  it("is the change's own minimum when it names every characteristic", () => {
+    const [bound] = bindCharacteristicFloors(placedIn(floorText, [...worsen] as [string, string, Record<string, unknown>], [...floor(["M", "Ld", "OC"], 2)] as [string, string, Record<string, unknown>]));
+    expect(bound!.parameters).toMatchObject({ minimum: 2 });
+    expect(bound!.parameters.characteristic_minimums).toBeUndefined();
+  });
+
+  it("refuses a floor with no lowering change right before it, or on a characteristic the change does not lower", () => {
+    const errors = (...items: Array<readonly [string, string, Record<string, unknown>]>) => {
+      const result = compileLeaves(placedIn(floorText, ...items.map((item) => [...item] as [string, string, Record<string, unknown>])), floorText);
+      return result.ok ? "" : result.errors.join("; ");
+    };
+    expect(errors(floor(["OC"]))).toMatch(/needs its characteristic change right before it/u);
+    expect(errors(worsen, floor(["T"]))).toMatch(/names T, which the change before it does not lower/u);
+    const improve = [worsen[0], worsen[1], { ...worsen[2], operation: "improve" }] as const;
+    expect(errors(improve, floor(["OC"]))).toMatch(/does not lower a characteristic/u);
+  });
+
+  it("validates its parameters", () => {
+    expect(normalizeFingerprintParameters("characteristic-floor", { characteristics: ["OC", "M"], minimum: 1 }, 1)).toEqual({ characteristics: ["M", "OC"], minimum: 1 });
+    expect(() => normalizeFingerprintParameters("characteristic-floor", { characteristics: [], minimum: 1 }, 1)).toThrow();
+    expect(() => normalizeFingerprintParameters("characteristic-floor", { characteristics: ["Zorn"], minimum: 1 }, 1)).toThrow();
   });
 });

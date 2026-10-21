@@ -78,6 +78,12 @@ export function abilityRollOf(leaf: CompileLeaf): { of_ability: string } | undef
   return { of_ability: String((roll as { ability: unknown }).ability) };
 }
 
+/** The lowest value a characteristic change leaves one characteristic at: its own floor, else the change's minimum. */
+function floorOf(leaf: CompileLeaf, stat: string): unknown {
+  const own = (leaf.parameters.characteristic_minimums as Record<string, number> | undefined)?.[stat];
+  return own ?? (leaf.parameters.minimum !== undefined ? closed(leaf, "minimum") : undefined);
+}
+
 export function closed(leaf: CompileLeaf, name: string): unknown {
   const value = leaf.parameters[name];
   if (isSource(value)) throw new CompileError(`${leaf.family_id} ${name} is quoted source text; give it a listed value before it can compile.`);
@@ -572,7 +578,8 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
             stat, operation: closed(leaf, "operation"),
             ...(leaf.parameters.value !== undefined ? { value: closed(leaf, "value") } : {}),
             ...weaponScope(scopedLeaf),
-            ...(leaf.parameters.minimum !== undefined ? { minimum: closed(leaf, "minimum") } : {}),
+            // A floor on this characteristic alone (compile-characteristic-amount.ts bindCharacteristicFloors), else the change's own.
+            ...(floorOf(leaf, stat) !== undefined ? { minimum: floorOf(leaf, stat) } : {}),
           },
         };
       }));
