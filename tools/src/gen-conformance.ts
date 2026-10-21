@@ -32,7 +32,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { Dataset } from "./data/dataset.js";
-import { baseLoadout, loadoutCandidates } from "./data/loadout.js";
+import { baseLoadout, loadoutCandidates, weaponBounds } from "./data/loadout.js";
 import { normalizeName } from "./data/normalize.js";
 import {
   describeScoringCard,
@@ -430,6 +430,12 @@ type LinkedApiQuery =
     }
   | {
       name: string;
+      query: "weapon_bounds";
+      args: { unitId: string; modelCount: string };
+      comparison: "set";
+    }
+  | {
+      name: string;
       query: "loadout_candidates";
       args: {
         unitId: string;
@@ -815,6 +821,15 @@ const LINKED_API_QUERIES: LinkedApiQuery[] = [
     args: { unitId: "imperial-navy-breachers", modelCount: "10" },
     comparison: "set",
   },
+  // weapon_bounds(unit, modelCount): each id's inclusive count range, encoded as a
+  // sorted "id:min-max" set. Breachers' Navis Armsmen are three same-named rows, so
+  // each row's swap is capped by the models carrying what it replaces.
+  {
+    name: "weapon_bounds imperial-navy-breachers @10 caps split-row swaps by their carriers",
+    query: "weapon_bounds",
+    args: { unitId: "imperial-navy-breachers", modelCount: "10" },
+    comparison: "set",
+  },
   {
     name: "loadout_candidates chaos-terminators @5 matches the base allocation",
     query: "loadout_candidates",
@@ -959,6 +974,15 @@ function runLinkedQuery(
       return (comp?.models ?? []).map(
         (m) => `${m.name}=${encodeBase(m.base_size_mm) ?? "none"}`,
       );
+    }
+    case "weapon_bounds": {
+      // Mirrors the runner's weapon_bounds op: each id's inclusive range as a sorted
+      // "id:min-max" set.
+      const u = ds.units.getAny(q.args.unitId);
+      if (!u) throw new Error(`weapon_bounds: unknown unit ${q.args.unitId}`);
+      const comp = ds.unitCompositionOf(u.raw);
+      const bounds = weaponBounds(u.raw, Number(q.args.modelCount), ds.wargearOptionsOf(u.raw), comp?.models);
+      return [...bounds].map(([id, b]) => `${id}:${b.min}-${b.max}`).sort();
     }
     case "base_loadout": {
       // Mirrors the runner's base_loadout op: the legal default loadout encoded as

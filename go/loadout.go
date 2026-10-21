@@ -1335,6 +1335,48 @@ func clampFlatBudgets(unit map[string]any, counts map[string]int) {
 
 type intRange struct{ min, max int }
 
+// sharedRowSwapCap is the most times a swap scoped to a model name several
+// composition rows share can be taken: the named rows' models carrying what it
+// replaces. Same-named rows split one miniature by default loadout (Imperial Navy
+// Breachers' Navis Armsmen), and each row's swap is scoped to the whole name, so
+// optionCap's eligible-model count would let one row's swap be taken by every model
+// of the name. (0, false) for any other option.
+func sharedRowSwapCap(option map[string]any, modelCount int, models []any) (int, bool) {
+	c, _ := getMap(option, "model_constraint")
+	name, _ := c["model_name"].(string)
+	replaces := getStrList(option, "replaces")
+	if name == "" || len(replaces) == 0 || !hasRecordedDefaults(models) {
+		return 0, false
+	}
+	rows := 0
+	for _, mAny := range models {
+		if m, ok := asMap(mAny); ok {
+			if n, _ := m["name"].(string); n == name {
+				rows++
+			}
+		}
+	}
+	if rows < 2 {
+		return 0, false
+	}
+	carried := map[string]int{}
+	for _, row := range allocateModels(models, modelCount) {
+		if rn, _ := row.model["name"].(string); rn != name {
+			continue
+		}
+		for _, id := range getStrList(row.model, "default_weapon_ids") {
+			carried[id] += row.count
+		}
+	}
+	cap := -1
+	for id, n := range toMultiset(replaces) {
+		if v := carried[id] / n; cap < 0 || v < cap {
+			cap = v
+		}
+	}
+	return cap, true
+}
+
 func weaponBounds(unit map[string]any, modelCount int, options []any, models []any) map[string]intRange {
 	bounds := map[string]intRange{}
 	for id, count := range baseCounts(unit, modelCount, options, models) {
@@ -1343,6 +1385,9 @@ func weaponBounds(unit map[string]any, modelCount int, options []any, models []a
 	for _, oAny := range options {
 		o, _ := asMap(oAny)
 		cap := optionCap(o, modelCount, models)
+		if shared, ok := sharedRowSwapCap(o, modelCount, models); ok {
+			cap = minInt(cap, shared)
+		}
 		for _, id := range getStrList(o, "replaces") {
 			b := bounds[id]
 			bounds[id] = intRange{maxInt(0, b.min-cap), b.max}

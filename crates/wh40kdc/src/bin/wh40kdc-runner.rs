@@ -775,6 +775,33 @@ fn handle_linked_query(state: &mut RunnerState, args: &Value) -> Value {
             encoded.sort_by(|a, b| a.as_str().unwrap_or("").cmp(b.as_str().unwrap_or("")));
             ok_value(Value::Array(encoded))
         }
+        "weapon_bounds" => {
+            let id = str_arg("unitId");
+            let Some(unit) = ds.units.get_any(id) else {
+                return err_value(
+                    ErrorKind::UnknownEntity,
+                    Some(json!({ "kind": "unit", "id": id })),
+                );
+            };
+            let model_count: u64 = str_arg("modelCount").parse().unwrap_or(0);
+            let models = ds
+                .unit_compositions
+                .iter()
+                .find(|c| c.unit_id.as_str() == id)
+                .map(|c| wh40kdc::loadout_models(&c.models));
+            let bounds = wh40kdc::weapon_bounds(
+                unit,
+                model_count,
+                &ds.wargear_options_of(unit),
+                models.as_deref(),
+            );
+            let mut encoded: Vec<Value> = bounds
+                .iter()
+                .map(|(k, b)| Value::String(format!("{k}:{}-{}", b.min, b.max)))
+                .collect();
+            encoded.sort_by(|a, b| a.as_str().unwrap_or("").cmp(b.as_str().unwrap_or("")));
+            ok_value(Value::Array(encoded))
+        }
         "maximal_loadout" => {
             let id = str_arg("unitId");
             let Some(unit) = ds.units.get_any(id) else {

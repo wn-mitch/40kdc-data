@@ -27,6 +27,7 @@ import {
   maximalLoadout,
   checkUnitLegality,
   loadoutCandidates,
+  weaponBounds,
 } from "./data/loadout.js";
 import { validateRosterCore, type NormRoster } from "./data/roster-resolve.js";
 import {
@@ -653,6 +654,20 @@ function handleLinkedQuery(state: RunnerState, args: unknown): RunnerResponse {
         );
         // Encode the id→count map as sorted "id:count" strings for set compare.
         return ok([...lo.counts].map(([id, n]) => `${id}:${n}`).sort());
+      }
+      case "weapon_bounds": {
+        const u = resolveUnit(input.unitId);
+        if (!u)
+          return err("UNKNOWN_ENTITY", { kind: "unit", id: input.unitId });
+        const comp = ds.unitCompositionOf(u.raw);
+        const bounds = weaponBounds(
+          u.raw,
+          Number(input.modelCount),
+          ds.wargearOptionsOf(u.raw),
+          comp?.models,
+        );
+        // Encode each id's inclusive range as sorted "id:min-max" strings for set compare.
+        return ok([...bounds].map(([id, b]) => `${id}:${b.min}-${b.max}`).sort());
       }
       case "maximal_loadout": {
         const u = resolveUnit(input.unitId);

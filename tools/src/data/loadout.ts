@@ -341,6 +341,33 @@ function clampFlatBudgets(unit: Unit, counts: Map<string, number>): void {
 }
 
 /**
+ * The most times a swap scoped to a model name several composition rows share can be
+ * taken: the named rows' models carrying what it replaces. Same-named rows split one
+ * miniature by default loadout (Imperial Navy Breachers' Navis Armsmen: 1 heavy shotgun,
+ * 1 las-volley, 7 navis shotguns), and each row's swap is scoped to the whole name, so
+ * {@link optionCap}'s eligible-model count would let the heavy-shotgun swap be taken by
+ * all 9 Armsmen. `Infinity` for any other option (no further cap).
+ */
+function sharedRowSwapCap(
+  option: WargearOption,
+  modelCount: number,
+  models?: readonly LoadoutModel[],
+): number {
+  const name = option.model_constraint?.model_name;
+  const replaces = option.replaces ?? [];
+  if (!name || replaces.length === 0 || !models || !hasRecordedDefaults(models)) return Infinity;
+  if (models.filter((model) => model.name === name).length < 2) return Infinity;
+  const carried = new Map<string, number>();
+  for (const { model, count } of allocateModels(models, modelCount)) {
+    if (model.name !== name) continue;
+    for (const id of model.default_weapon_ids ?? []) carried.set(id, (carried.get(id) ?? 0) + count);
+  }
+  let cap = Infinity;
+  for (const [id, n] of toMultiset(replaces)) cap = Math.min(cap, Math.floor((carried.get(id) ?? 0) / n));
+  return cap;
+}
+
+/**
  * Inclusive valid count range for each weapon/wargear id, used to clamp a UI's
  * per-weapon inputs so invalid loadouts are unreachable. A base weapon ranges
  * `[modelCount − maxSwapsAway, modelCount]`; an optional (replacement) id ranges
@@ -357,7 +384,7 @@ export function weaponBounds(
     bounds.set(id, { min: count, max: count });
   }
   for (const option of options) {
-    const cap = optionCap(option, modelCount, models);
+    const cap = Math.min(optionCap(option, modelCount, models), sharedRowSwapCap(option, modelCount, models));
     for (const id of option.replaces ?? []) {
       const b = bounds.get(id) ?? { min: 0, max: 0 };
       bounds.set(id, { min: Math.max(0, b.min - cap), max: b.max });

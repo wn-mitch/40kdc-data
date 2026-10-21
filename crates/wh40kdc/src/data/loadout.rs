@@ -694,6 +694,49 @@ fn clamp_flat_budgets(unit: &Unit, counts: &mut BTreeMap<String, i64>) {
     }
 }
 
+/// The most times a swap scoped to a model name several composition rows share can be
+/// taken: the named rows' models carrying what it replaces. Same-named rows split one
+/// miniature by default loadout (Imperial Navy Breachers' Navis Armsmen), and each row's
+/// swap is scoped to the whole name, so [`option_cap`]'s eligible-model count would let
+/// one row's swap be taken by every model of the name. `None` for any other option.
+fn shared_row_swap_cap(
+    option: &WargearOption,
+    model_count: u64,
+    models: Option<&[LoadoutModel]>,
+) -> Option<u64> {
+    let name = option.model_constraint.as_ref()?.model_name.as_ref()?;
+    let rows = models?;
+    if option.replaces.is_empty() || !has_recorded_defaults(models) {
+        return None;
+    }
+    if rows
+        .iter()
+        .filter(|m| m.name.as_deref() == Some(name.as_str()))
+        .count()
+        < 2
+    {
+        return None;
+    }
+    let mut carried: BTreeMap<&str, u64> = BTreeMap::new();
+    for (model, count) in allocate_models(rows, model_count) {
+        if model.name.as_deref() != Some(name.as_str()) {
+            continue;
+        }
+        for id in &model.default_weapon_ids {
+            *carried.entry(id.as_str()).or_insert(0) += count;
+        }
+    }
+    let replaces: Vec<String> = option
+        .replaces
+        .iter()
+        .map(|id| id.as_str().to_string())
+        .collect();
+    to_multiset(&replaces)
+        .iter()
+        .map(|(id, n)| carried.get(id.as_str()).copied().unwrap_or(0) / n)
+        .min()
+}
+
 /// Inclusive valid count range for each weapon/wargear id, used to clamp a UI's
 /// per-weapon inputs so invalid loadouts are unreachable.
 pub fn weapon_bounds(
@@ -708,7 +751,8 @@ pub fn weapon_bounds(
         bounds.insert(id, WeaponBound { min: n, max: n });
     }
     for option in options {
-        let cap = option_cap(option, model_count, models);
+        let cap = option_cap(option, model_count, models)
+            .min(shared_row_swap_cap(option, model_count, models).unwrap_or(u64::MAX));
         for id in &option.replaces {
             let b = bounds
                 .entry(id.to_string())

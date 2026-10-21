@@ -903,6 +903,34 @@ def _clamp_flat_budgets(unit: Unit, counts: dict[str, int]) -> None:
             counts[id_] = cap
 
 
+def _shared_row_swap_cap(
+    option: WargearOption,
+    model_count: int,
+    models: list[LoadoutModel] | None,
+) -> int | None:
+    """The most times a swap scoped to a model name several rows share can be taken.
+
+    Same-named rows split one miniature by default loadout (Imperial Navy Breachers'
+    Navis Armsmen), and each row's swap is scoped to the whole name, so
+    :func:`option_cap`'s eligible-model count would let one row's swap be taken by every
+    model of the name. The cap is the named rows' models carrying what the swap replaces.
+    ``None`` for any other option.
+    """
+    name = (option.get("model_constraint") or {}).get("model_name")
+    replaces = option.get("replaces") or []
+    if not name or not replaces or not models or not _has_recorded_defaults(models):
+        return None
+    if sum(1 for m in models if m.get("name") == name) < 2:
+        return None
+    carried: dict[str, int] = {}
+    for model, count in _allocate_models(models, model_count):
+        if model.get("name") != name:
+            continue
+        for id_ in model.get("default_weapon_ids") or []:
+            carried[id_] = carried.get(id_, 0) + count
+    return min(carried.get(id_, 0) // n for id_, n in _to_multiset(replaces).items())
+
+
 def weapon_bounds(
     unit: Unit,
     model_count: int,
@@ -919,6 +947,9 @@ def weapon_bounds(
         bounds[id_] = {"min": count, "max": count}
     for option in options:
         cap = option_cap(option, model_count, models)
+        shared = _shared_row_swap_cap(option, model_count, models)
+        if shared is not None:
+            cap = min(cap, shared)
         for id_ in option.get("replaces") or []:
             b = bounds.get(id_, {"min": 0, "max": 0})
             bounds[id_] = {"min": max(0, b["min"] - cap), "max": b["max"]}

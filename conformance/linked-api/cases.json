@@ -987,6 +987,30 @@
     ]
   },
   {
+    "name": "weapon_bounds imperial-navy-breachers @10 caps split-row swaps by their carriers",
+    "query": "weapon_bounds",
+    "args": {
+      "unitId": "imperial-navy-breachers",
+      "modelCount": "10"
+    },
+    "comparison": "set",
+    "expected": [
+      "autopistol:0-10",
+      "bolt-pistol-imperial-navy-breachers:0-1",
+      "chainfist:0-9",
+      "chainsword:0-1",
+      "close-combat-weapon-imperial-navy-breachers:10-10",
+      "demolition-charge:0-9",
+      "endurant-shield:0-9",
+      "meltagun:0-9",
+      "navis-heavy-shotgun:0-9",
+      "navis-las-volley:0-9",
+      "navis-shotgun:0-10",
+      "plasma-gun-imperial-navy-breachers:0-9",
+      "power-weapon-imperial-navy-breachers:0-10"
+    ]
+  },
+  {
     "name": "loadout_candidates chaos-terminators @5 matches the base allocation",
     "query": "loadout_candidates",
     "args": {

@@ -34,6 +34,7 @@ from wh40kdc.data.loadout import (
     check_unit_legality,
     loadout_candidates,
     maximal_loadout,
+    weapon_bounds,
 )
 from wh40kdc.data.normalize import normalize_name
 from wh40kdc.data.roster import validate_roster_core
@@ -422,6 +423,20 @@ def _handle_linked_query(state: RunnerState, args: Any) -> Response:
             )
             # Encode the id→count map as sorted "id:count" strings for set compare.
             return _ok(sorted(f"{id_}:{n}" for id_, n in lo.items()))
+        if query == "weapon_bounds":
+            u = ds.units.get_any(unit_id)
+            if u is None:
+                return _err("UNKNOWN_ENTITY", {"kind": "unit", "id": input_.get("unitId")})
+            model_count = int(input_.get("modelCount") or 0)
+            comp = next((c for c in ds.unit_compositions if c.get("unit_id") == unit_id), None)
+            bounds = weapon_bounds(
+                u.raw,
+                model_count,
+                ds.wargear_options_of(u.raw),
+                (comp or {}).get("models"),
+            )
+            # Encode each id's inclusive range as sorted "id:min-max" strings for set compare.
+            return _ok(sorted(f"{id_}:{b['min']}-{b['max']}" for id_, b in bounds.items()))
         if query == "loadout_candidates":
             faction_id = input_.get("factionId")
             u = (
