@@ -91,6 +91,8 @@ export function wrapAura(leaf: CompileLeaf, body: Node): Node {
   if (leaf.parameters.wholly === true) modifier.wholly = true;
   modifier.eligible = eligible;
   if (leaf.parameters.emitter_filter !== undefined) modifier.emitter_filter = leaf.parameters.emitter_filter;
+  // "within 6\" of this unit" measures from any model of the unit; this model is the default origin.
+  if (leaf.parameters.of === "this-unit") modifier.of = "this-unit";
   if (leaf.parameters.conditional_range !== undefined) modifier.conditional_range = leaf.parameters.conditional_range;
   // Version 2 (batch 7a): the aura's range, extensions included, never exceeds this many inches (the DSL's integer range_cap).
   if (leaf.parameters.range_cap_inches !== undefined) modifier.range_cap = closed(leaf, "range_cap_inches");

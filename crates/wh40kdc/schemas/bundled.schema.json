@@ -11963,7 +11963,7 @@
     "aura-effect": {
       "type": "object",
       "additionalProperties": false,
-      "$comment": "A persistent zone around the source applies the nested effect to matching recipients. The absolute radius uses range-ref, including named ranges and per-battle-round tiers; range_bonus is a signed adjustment to the named aura in of. emitter_filter restricts the source independently of recipient_filter and eligible. Unknown source identity does not establish emitter eligibility.",
+      "$comment": "A persistent zone around the source applies the nested effect to matching recipients. The absolute radius uses range-ref, including named ranges and per-battle-round tiers; range_bonus is a signed adjustment to the named aura in of; without range_bonus, of is this-unit when the range is measured from any model of this unit, and absent for this model. emitter_filter restricts the source independently of recipient_filter and eligible. Unknown source identity does not establish emitter eligibility.",
       "properties": {
         "type": {
           "const": "aura"

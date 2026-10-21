@@ -70,11 +70,11 @@ func scalingWording(s map[string]any) string {
 
 // auraEmitter names who an aura is measured from. A filter that names an owner is army-wide:
 // any of that side's models with its keywords ("one or more friendly DEATH GUARD models"; owner
-// any names no side). Without one it narrows this model.
-func auraEmitter(filter map[string]any) string {
+// any names no side). Without one it narrows the aura's own origin (this model, or this unit).
+func auraEmitter(filter map[string]any, origin string) string {
 	owner, ok := filter["owner"].(string)
 	if !ok {
-		return auraRoleFilter(filter, "this model")
+		return auraRoleFilter(filter, origin)
 	}
 	side := ""
 	if owner != "any" {
@@ -157,9 +157,14 @@ func auraClause(e, m map[string]any, ctx effCtx) string {
 	if m["eligible"] != nil && m["recipient_filter"] != nil {
 		recipient = auraRoleFilter(mapOr(m["recipient_filter"]), eligibleWho)
 	}
-	emitter := "this model"
+	// Without a range bonus, of names the unit the range is measured from; this model by default.
+	origin := "this model"
+	if of, _ := m["of"].(string); of == "this-unit" {
+		origin = "this unit"
+	}
+	emitter := origin
 	if m["emitter_filter"] != nil {
-		emitter = auraEmitter(mapOr(m["emitter_filter"]))
+		emitter = auraEmitter(mapOr(m["emitter_filter"]), origin)
 	}
 	effectText := "that unit is affected"
 	if m["effect"] != nil {

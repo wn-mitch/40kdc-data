@@ -2792,6 +2792,36 @@ function genEffectTranslation(): void {
       scope: { duration: "permanent" },
     },
     {
+      // of this-unit: the range is measured from any model of this unit.
+      id: "aura-unit-origin",
+      effect: {
+        type: "aura",
+        target: "enemy-within-aura",
+        modifier: {
+          range: { inches: 6 },
+          of: "this-unit",
+          eligible: { owner: "enemy" },
+          effect: { type: "stat-modifier", target: "recipient", modifier: { stat: "OC", operation: "subtract", value: 1 } },
+        },
+      },
+      scope: { duration: "permanent" },
+    },
+    {
+      // An owner-less emitter filter narrows the unit origin, not this model.
+      id: "aura-unit-origin-emitter-keywords",
+      effect: {
+        type: "aura",
+        target: "friendly-within-aura",
+        modifier: {
+          range: { inches: 6 },
+          of: "this-unit",
+          emitter_filter: { all_of: ["PSYKER"] },
+          effect: { type: "stat-modifier", target: "recipient", modifier: { stat: "OC", operation: "add", value: 1 } },
+        },
+      },
+      scope: { duration: "permanent" },
+    },
+    {
       id: "aura-tiered-effect",
       effect: {
         type: "aura",

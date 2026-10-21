@@ -19702,7 +19702,71 @@
     }
   },
   {
-    "caseId": "aura-tiered-effect#358",
+    "caseId": "aura-unit-origin#358",
+    "effect": {
+      "type": "aura",
+      "target": "enemy-within-aura",
+      "modifier": {
+        "range": {
+          "inches": 6
+        },
+        "of": "this-unit",
+        "eligible": {
+          "owner": "enemy"
+        },
+        "effect": {
+          "type": "stat-modifier",
+          "target": "recipient",
+          "modifier": {
+            "stat": "OC",
+            "operation": "subtract",
+            "value": 1
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "While an enemy unit is within 6\" of this unit, subtract 1 from that unit's Objective Control characteristic."
+    }
+  },
+  {
+    "caseId": "aura-unit-origin-emitter-keywords#359",
+    "effect": {
+      "type": "aura",
+      "target": "friendly-within-aura",
+      "modifier": {
+        "range": {
+          "inches": 6
+        },
+        "of": "this-unit",
+        "emitter_filter": {
+          "all_of": [
+            "PSYKER"
+          ]
+        },
+        "effect": {
+          "type": "stat-modifier",
+          "target": "recipient",
+          "modifier": {
+            "stat": "OC",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "While a friendly unit is within 6\" of this unit with PSYKER, add 1 to that unit's Objective Control characteristic."
+    }
+  },
+  {
+    "caseId": "aura-tiered-effect#360",
     "effect": {
       "type": "aura",
       "target": "enemy-within-aura",
@@ -19739,7 +19803,7 @@
     }
   },
   {
-    "caseId": "set-up-deep-strike-min-distance#359",
+    "caseId": "set-up-deep-strike-min-distance#361",
     "effect": {
       "type": "set-up",
       "target": "this-unit",
@@ -19759,7 +19823,7 @@
     }
   },
   {
-    "caseId": "move-modifier-engagement-no-end#360",
+    "caseId": "move-modifier-engagement-no-end#362",
     "effect": {
       "type": "move-modifier",
       "target": "this-model",
@@ -19778,7 +19842,7 @@
     }
   },
   {
-    "caseId": "permission-shoot-after-fall-back#361",
+    "caseId": "permission-shoot-after-fall-back#363",
     "effect": {
       "type": "permission",
       "target": "this-unit",
@@ -19798,7 +19862,7 @@
     }
   },
   {
-    "caseId": "permission-shoot-and-charge-after-fall-back#362",
+    "caseId": "permission-shoot-and-charge-after-fall-back#364",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -19834,7 +19898,7 @@
     }
   },
   {
-    "caseId": "superlative-strategist-aeldari#363",
+    "caseId": "superlative-strategist-aeldari#365",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -19887,7 +19951,7 @@
     }
   },
   {
-    "caseId": "deceptive-feint#364",
+    "caseId": "deceptive-feint#366",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -19972,7 +20036,7 @@
     }
   },
   {
-    "caseId": "heal-selected-model#365",
+    "caseId": "heal-selected-model#367",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -20025,7 +20089,7 @@
     }
   },
   {
-    "caseId": "marker-next-to-target#366",
+    "caseId": "marker-next-to-target#368",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -20074,7 +20138,7 @@
     }
   },
   {
-    "caseId": "psychic-model-bundle#367",
+    "caseId": "psychic-model-bundle#369",
     "effect": {
       "type": "for-each-unit",
       "selector": {
@@ -20153,7 +20217,7 @@
     }
   },
   {
-    "caseId": "designate-bearer-target-with-eligibility#368",
+    "caseId": "designate-bearer-target-with-eligibility#370",
     "effect": {
       "type": "ability-part",
       "trigger": {
@@ -20234,7 +20298,7 @@
     }
   },
   {
-    "caseId": "conditional-selected-to-shoot-this-phase#369",
+    "caseId": "conditional-selected-to-shoot-this-phase#371",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20265,7 +20329,7 @@
     }
   },
   {
-    "caseId": "transport-capacity#370",
+    "caseId": "transport-capacity#372",
     "effect": {
       "type": "transport-capacity",
       "target": "this-unit",
@@ -20286,7 +20350,7 @@
     }
   },
   {
-    "caseId": "transport-grouped-single-keyword-model#371",
+    "caseId": "transport-grouped-single-keyword-model#373",
     "effect": {
       "type": "transport-capacity",
       "target": "this-model",
@@ -20307,7 +20371,7 @@
     }
   },
   {
-    "caseId": "transport-fixed-model-spaces-with-capacity-eligibility#372",
+    "caseId": "transport-fixed-model-spaces-with-capacity-eligibility#374",
     "effect": {
       "type": "transport-capacity",
       "target": "this-model",
@@ -20328,7 +20392,7 @@
     }
   },
   {
-    "caseId": "transport-fixed-model-spaces-with-embark-as#373",
+    "caseId": "transport-fixed-model-spaces-with-embark-as#375",
     "effect": {
       "type": "transport-capacity",
       "target": "this-model",
@@ -20349,7 +20413,7 @@
     }
   },
   {
-    "caseId": "transport-equivalent-model-keyword#374",
+    "caseId": "transport-equivalent-model-keyword#376",
     "effect": {
       "type": "transport-capacity",
       "target": "this-unit",
@@ -20368,7 +20432,7 @@
     }
   },
   {
-    "caseId": "transport-equivalent-model-count#375",
+    "caseId": "transport-equivalent-model-count#377",
     "effect": {
       "type": "transport-capacity",
       "target": "this-model",
@@ -20386,7 +20450,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-inline#376",
+    "caseId": "moved-through-tall-terrain-inline#378",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20415,7 +20479,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-trigger-condition#377",
+    "caseId": "moved-through-tall-terrain-trigger-condition#379",
     "effect": {
       "type": "ability-grant",
       "target": "this-model",
@@ -20447,7 +20511,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-negated-inline#378",
+    "caseId": "moved-through-tall-terrain-negated-inline#380",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20481,7 +20545,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-negated-trigger-condition#379",
+    "caseId": "moved-through-tall-terrain-negated-trigger-condition#381",
     "effect": {
       "type": "ability-grant",
       "target": "this-model",
@@ -20518,7 +20582,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-trigger-event#380",
+    "caseId": "moved-through-tall-terrain-trigger-event#382",
     "effect": {
       "type": "ability-grant",
       "target": "this-model",
@@ -20540,7 +20604,7 @@
     }
   },
   {
-    "caseId": "moved-through-terrain-generic#381",
+    "caseId": "moved-through-terrain-generic#383",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20569,7 +20633,7 @@
     }
   },
   {
-    "caseId": "aura-role-filtered-effect#382",
+    "caseId": "aura-role-filtered-effect#384",
     "effect": {
       "type": "aura",
       "target": "friendly-within-aura",

@@ -50,4 +50,19 @@ describe("Semantic authoring aura-emitter compiler", () => {
       });
     }
   });
+
+  // "within 6\" of this unit" is measured from any model of the unit; before, the wrap lost it and
+  // the aura read as measured from this model.
+  it.each([
+    ["this-unit", "this-unit"],
+    ["this-model", undefined],
+  ])("keeps an aura measured from %s", (of, expected) => {
+    const effect = compiled([
+      leaf("CONDITION", "unit-filter", { side: "friendly", any_keywords: ["JAKHALS", "GOREMONGERS"] }, 16, "A"),
+      leaf("CONDITION", "aura-range", { inches: 6, of }, 3, "A"),
+      leaf("EFFECT", "fights-first", { subject: "this-unit" }, 1, "A"),
+    ]);
+    expect(effect.type).toBe("aura");
+    expect((effect.modifier as Node).of).toBe(expected);
+  });
 });

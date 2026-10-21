@@ -166,15 +166,15 @@ def _aura_eligible_subject(who: str, eligible: Any) -> str:
     return f"{base}{exclusion}"
 
 
-def _aura_emitter(value: Any) -> str:
+def _aura_emitter(value: Any, origin: str) -> str:
     """Who an aura is measured from.
 
     A filter that names an owner is army-wide: any of that side's models with its keywords
     ("one or more friendly DEATH GUARD models"; owner any names no side). Without one it
-    narrows this model.
+    narrows the aura's own origin (this model, or this unit).
     """
     if not isinstance(value, dict) or not isinstance(value.get("owner"), str):
-        return _keyword_filter_clause(value, "this model")
+        return _keyword_filter_clause(value, origin)
     rest = dict(value)
     owner = rest.pop("owner")
     all_of = rest.pop("all_of", None)
@@ -244,8 +244,12 @@ def _aura_clause(e: Effect, m: dict[str, Any], ctx: Ctx) -> str:
         if m.get("eligible") is not None and m.get("recipient_filter") is not None
         else eligible_who
     )
+    # Without a range bonus, of names the unit the range is measured from; this model by default.
+    origin = "this unit" if m.get("of") == "this-unit" else "this model"
     emitter = (
-        _aura_emitter(m["emitter_filter"]) if m.get("emitter_filter") is not None else "this model"
+        _aura_emitter(m["emitter_filter"], origin)
+        if m.get("emitter_filter") is not None
+        else origin
     )
     effect_text = (
         describe_effect_inline(_obj(m["effect"]), {**ctx, "aura_recipient": True})

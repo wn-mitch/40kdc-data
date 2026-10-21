@@ -124,10 +124,10 @@ pub(crate) fn inline(e: &Value, ctx: &Ctx) -> String {
 
 /// Who an aura is measured from. A filter that names an owner is army-wide: any of that side's
 /// models with its keywords ("one or more friendly DEATH GUARD models"; owner any names no side).
-/// Without one it narrows this model.
-fn aura_emitter(filter: &P, ctx: &Ctx) -> String {
+/// Without one it narrows the aura's own origin (this model, or this unit).
+fn aura_emitter(filter: &P, origin: &str, ctx: &Ctx) -> String {
     let Some(owner) = sv(filter, "owner") else {
-        return aura_role_filter(filter, "this model", ctx);
+        return aura_role_filter(filter, origin, ctx);
     };
     let side = if owner == "any" {
         String::new()
@@ -243,9 +243,15 @@ fn aura_clause(e: &P, m: &P, ctx: &Ctx) -> String {
     } else {
         eligible_who
     };
+    // Without a range bonus, of names the unit the range is measured from; this model by default.
+    let origin = if sv(m, "of") == Some("this-unit") {
+        "this unit"
+    } else {
+        "this model"
+    };
     let emitter = nn(m, "emitter_filter")
-        .map(|filter| aura_emitter(obj(Some(filter)), ctx))
-        .unwrap_or_else(|| "this model".to_string());
+        .map(|filter| aura_emitter(obj(Some(filter)), origin, ctx))
+        .unwrap_or_else(|| origin.to_string());
     let effect_text = match nn(m, "effect") {
         Some(effect) => inline(
             effect,
