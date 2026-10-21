@@ -278,9 +278,9 @@
     {
       "faction": "orks",
       "total": 206,
-      "offensive": 31,
+      "offensive": 30,
       "defensive": 10,
-      "inert": 167,
+      "inert": 168,
       "stub": 0,
       "stubStructural": 34,
       "gwTextLeak": 0,
@@ -388,9 +388,9 @@
   ],
   "totals": {
     "total": 4527,
-    "offensive": 518,
+    "offensive": 517,
     "defensive": 233,
-    "inert": 3786,
+    "inert": 3787,
     "stub": 67,
     "stubStructural": 1452,
     "gwTextLeak": 0,
@@ -36397,7 +36397,7 @@
       "name": "Pulsa Rokkit",
       "shape": "ability-part",
       "stub": false,
-      "offensive": true,
+      "offensive": false,
       "defensive": false,
       "gap": null
     },

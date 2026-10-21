@@ -31,7 +31,7 @@ abilities that translate into cruncher buffs via the real `effectToBuffs`
 | iron-hands | 11 | 2 | 2 | 8 | 4 | 0 | 0 | 0 |
 | leagues-of-votann | 155 | 16 | 5 | 134 | 82 | 0 | 0 | 0 |
 | necrons | 230 | 18 | 13 | 199 | 102 | 1 | 0 | 1 |
-| orks | 206 | 31 | 10 | 167 | 34 | 0 | 0 | 0 |
+| orks | 206 | 30 | 10 | 168 | 34 | 0 | 0 | 0 |
 | raven-guard | 11 | 0 | 0 | 11 | 10 | 0 | 0 | 0 |
 | salamanders | 11 | 3 | 0 | 8 | 5 | 0 | 0 | 0 |
 | space-wolves | 87 | 6 | 3 | 78 | 47 | 5 | 0 | 0 |
@@ -41,7 +41,7 @@ abilities that translate into cruncher buffs via the real `effectToBuffs`
 | ultramarines | 11 | 0 | 0 | 11 | 11 | 0 | 0 | 0 |
 | white-scars | 11 | 0 | 0 | 11 | 11 | 0 | 0 | 0 |
 | world-eaters | 147 | 14 | 10 | 123 | 24 | 0 | 0 | 0 |
-| **TOTAL** | **4527** | **518** | **233** | **3786** | **1452** | **67** | **0** | **47** |
+| **TOTAL** | **4527** | **517** | **233** | **3787** | **1452** | **67** | **0** | **47** |
 
 `stub*` = structural (empty-modifier placeholder node) — the authoring worklist. `notes-stub` = flagged in community_notes.
 
