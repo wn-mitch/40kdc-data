@@ -135,7 +135,8 @@ describe("Semantic authoring batch-7a behavior flags", () => {
   it("compiles aura-range@2's range_cap_inches and make-move@2's counts_as_move", () => {
     const grant = leaf("EFFECT", "fights-first", { subject: "this-model" });
     const withCap = compiled([leaf("CONDITION", "aura-range", { side: "friendly", inches: 6, range_cap_inches: 12 }, 2), grant]);
-    expect(withCap.mechanics.effect).toMatchObject({ type: "aura", modifier: { range: { inches: 6 }, range_cap: { inches: 12 } } });
+    // The DSL's range_cap is a whole number of inches (effect.schema.json aura-effect), not a range-ref.
+    expect(withCap.mechanics.effect).toMatchObject({ type: "aura", modifier: { range: { inches: 6 }, range_cap: 12 } });
 
     const move = compiled([leaf("EFFECT", "make-move", { subject: "this-unit", move_type: "normal", counts_as_move: "advance" }, 2)]);
     expect(move.mechanics.effect).toEqual({ type: "move", target: "this-unit", modifier: { move_type: "normal", counts_as_move: "advance" } });

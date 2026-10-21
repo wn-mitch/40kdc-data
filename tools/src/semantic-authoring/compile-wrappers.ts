@@ -90,8 +90,8 @@ export function wrapAura(leaf: CompileLeaf, body: Node): Node {
   modifier.eligible = eligible;
   if (leaf.parameters.emitter_filter !== undefined) modifier.emitter_filter = leaf.parameters.emitter_filter;
   if (leaf.parameters.conditional_range !== undefined) modifier.conditional_range = leaf.parameters.conditional_range;
-  // Version 2 (batch 7a): the aura's range, extensions included, never exceeds this many inches.
-  if (leaf.parameters.range_cap_inches !== undefined) modifier.range_cap = { inches: closed(leaf, "range_cap_inches") };
+  // Version 2 (batch 7a): the aura's range, extensions included, never exceeds this many inches (the DSL's integer range_cap).
+  if (leaf.parameters.range_cap_inches !== undefined) modifier.range_cap = closed(leaf, "range_cap_inches");
   if (closed(leaf, "side") === "any") return anySideRegionGrant(leaf, body, modifier, eligible);
   return { type: "aura", target: closed(leaf, "side") === "friendly" ? "friendly-within-aura" : "enemy-within-aura", modifier };
 }
