@@ -12,7 +12,7 @@ import {
   type EngineContext,
 } from "@alpaca-software/40kdc-data";
 
-import { defaultWeaponCount, lineId, memberLoadout, selectLines, weaponLines } from "./weapon-lines.js";
+import { defaultWeaponCount, lineId, memberCounts, memberLoadout, selectLines, weaponLines } from "./weapon-lines.js";
 
 const ds = Dataset.embedded();
 const target = { unit: ds.units.getAny("intercessor-squad")!.raw, modelCount: 5 };
@@ -25,7 +25,7 @@ function member(unitId: string, counts?: Record<string, number>) {
   const loadout = memberLoadout(ds, unit.raw);
   const carried = counts
     ? new Map(Object.entries(counts))
-    : new Map(unit.weapons.map((w) => [w.id, defaultWeaponCount(loadout, w.id)] as const).filter(([, n]) => n > 0));
+    : memberCounts(loadout, unit.weapons.map((w) => w.id), (weaponId) => defaultWeaponCount(loadout, weaponId));
   return { unit, loadout, counts: carried };
 }
 
@@ -84,7 +84,8 @@ describe("selectLines", () => {
   });
 
   it("gives each model one ordinary melee weapon instead of summing every melee line", () => {
-    const { loadout, counts } = member("legionaries");
+    // Five Legionaries, one with a heavy melee weapon in place of a boltgun: six melee weapons.
+    const { loadout, counts } = member("legionaries", { "bolt-pistol": 5, boltgun: 4, "close-combat-weapon": 5, "heavy-melee-weapon": 1 });
     const selection = selectLines({ ds, members: [{ memberId: "legionaries", loadout, counts }], target, buffs: [], context: { phase: "fight" } });
     const fired = [...selection.firing.values()].reduce((sum, n) => sum + n, 0);
     expect(fired).toBe(loadout.modelCount);
@@ -108,5 +109,28 @@ describe("selectLines", () => {
     const counts = new Map([["heavy-melee-weapon", 5], ["bolt-pistol", 5], ["close-combat-weapon", 5]]);
     const selection = selectLines({ ds, members: [{ memberId: "legionaries", loadout, counts }], target, buffs: [], context: { phase: "fight" } });
     expect(selection.violations.get("legionaries")?.length).toBeGreaterThan(0);
+  });
+});
+
+describe("default weapon counts", () => {
+  it("seed five Legionaries with a legal loadout", () => {
+    // Taking every option at full cap would hand out four special weapons against an allowance of one.
+    const { loadout, counts } = member("legionaries");
+    expect(loadout.modelCount).toBe(5);
+    const selection = selectLines({ ds, members: [{ memberId: "legionaries", loadout, counts }], target, buffs: [], context: { phase: "shooting" } });
+    expect(selection.violations.get("legionaries")).toBeUndefined();
+  });
+
+  it("keep wargear that has no weapon line, so the default is legal wherever the base loadout is", () => {
+    const illegal: string[] = [];
+    for (const unit of ds.units) {
+      const loadout = memberLoadout(ds, unit.raw);
+      const legal = (counts: Map<string, number>) =>
+        validateCandidateLoadout({ unit: unit.raw, modelCount: loadout.modelCount, options: loadout.options, counts, models: loadout.models }).legal;
+      if (!legal(loadout.counts)) continue;
+      const counts = memberCounts(loadout, unit.weapons.map((w) => w.id), (weaponId) => defaultWeaponCount(loadout, weaponId));
+      if (!legal(counts)) illegal.push(`${unit.raw.faction_id}/${unit.id}`);
+    }
+    expect(illegal).toEqual([]);
   });
 });

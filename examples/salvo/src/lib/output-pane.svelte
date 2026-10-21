@@ -21,6 +21,7 @@
   import WeaponCards from "./weapon-cards.svelte";
   import {
     defaultWeaponCount,
+    memberCounts,
     selectLines,
     weaponLines as buildWeaponLines,
     type LineSelection,
@@ -139,7 +140,7 @@
           members: memberUnits.map(({ memberId, unit, loadout }) => ({
             memberId,
             loadout,
-            counts: new Map(unit.weapons.map((w) => [w.id, carriedBy(memberId, w.id)] as const).filter(([, n]) => n > 0)),
+            counts: memberCounts(loadout, unit.weapons.map((w) => w.id), (weaponId) => carriedBy(memberId, weaponId)),
           })),
           target: { unit: target, modelCount: salvo.manualTarget.modelCount },
           buffs: allBuffs,

@@ -6,7 +6,7 @@
  * damage matrix uses.
  */
 import {
-  maximalLoadout,
+  baseLoadout,
   unitLoadoutDamage,
   validateCandidateLoadout,
   weaponBounds,
@@ -23,7 +23,10 @@ import {
 
 export type MemberLoadout = {
   unit: Unit;
-  /** The maximal (take-every-swap) distribution. */
+  /**
+   * The base loadout: every model in its out-of-the-box configuration, the legal default a unit
+   * ships with. It includes wargear that has no weapon line (e.g. a medikit or a totem).
+   */
   counts: Map<string, number>;
   bounds: Map<string, WeaponBound>;
   modelCount: number;
@@ -61,7 +64,7 @@ export function memberLoadout(ds: Dataset, unit: Unit): MemberLoadout {
   const models = (ds.unitCompositionOf(unit) as { models?: LoadoutModel[] } | undefined)?.models ?? [];
   return {
     unit,
-    counts: maximalLoadout(unit, modelCount, options, models).counts,
+    counts: baseLoadout(unit, modelCount, options, models).counts,
     bounds: weaponBounds(unit, modelCount, options, models),
     modelCount,
     options,
@@ -70,12 +73,31 @@ export function memberLoadout(ds: Dataset, unit: Unit): MemberLoadout {
 }
 
 /**
- * How many of a member's models carry a weapon by default: its maximal-loadout count, 0 for a
- * weapon its wargear options govern but the maximal loadout swaps away, and every model for a
- * weapon outside its wargear data.
+ * How many of a member's models carry a weapon by default: its base-loadout count, or 0 for a
+ * weapon no model carries out of the box (a wargear option's replacement or an alternative
+ * loadout's weapon).
  */
 export function defaultWeaponCount(loadout: MemberLoadout, weaponId: string): number {
-  return loadout.counts.get(weaponId) ?? (loadout.bounds.has(weaponId) ? 0 : loadout.modelCount);
+  return loadout.counts.get(weaponId) ?? 0;
+}
+
+/**
+ * The equipment counts of a member's models: `carried` for each of `weaponIds` (the weapons Salvo
+ * shows lines for), plus the base-loadout count of any other wargear, which Salvo does not edit
+ * but the legality check needs to account for every model.
+ */
+export function memberCounts(
+  loadout: MemberLoadout,
+  weaponIds: readonly string[],
+  carried: (weaponId: string) => number,
+): Map<string, number> {
+  const shown = new Set(weaponIds);
+  const counts = new Map([...loadout.counts].filter(([id]) => !shown.has(id)));
+  for (const id of shown) {
+    const n = carried(id);
+    if (n > 0) counts.set(id, n);
+  }
+  return counts;
 }
 
 /** One line per profile of every weapon of `type` across the members, labelled by unit when there are several. */
