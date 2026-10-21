@@ -204,8 +204,42 @@ export const STANCE_CAPACITY_SHARED_OPTIONS: FamilyExtension = {
   },
 };
 
+/** The id shape the condition schema's stance-option-ref takes for both of its fields. */
+const ENTITY_ID = /^[a-z0-9][a-z0-9-]*[a-z0-9]$/u;
+
+export const RULE_ACTIVE_OPTION: FamilyExtension = {
+  // "If the Protector Imperative is active for that unit": one option of Doctrina Imperatives,
+  // not an ability record of its own.
+  family: "rule-active",
+  version: 2,
+  description: "As the previous version, or rule names one option of an option-bearing rule as {ability_id, option_id}: the rule's ability record and the option's stable id within it (\"the Protector Imperative is active\" is an option of Doctrina Imperatives). A string rule still names a whole ability record. The option id is the option's id, never its display label.",
+  schema: (previous) => withProperties(previous, {
+    rule: {
+      oneOf: [
+        properties(previous).rule!,
+        {
+          type: "object", required: ["ability_id", "option_id"], additionalProperties: false,
+          properties: { ability_id: { type: "string", pattern: ENTITY_ID.source }, option_id: { type: "string", pattern: ENTITY_ID.source } },
+        },
+      ],
+    },
+  }),
+  normalize: (input, previous) => {
+    const rule = input.rule;
+    if (rule === null || typeof rule !== "object") return previous(input);
+    if (Array.isArray(rule)) throw new TypeError("rule-active.rule is an ability id or {ability_id, option_id}.");
+    const { ability_id: abilityId, option_id: optionId, ...extra } = rule as Record<string, unknown>;
+    if (Object.keys(extra).length) throw new TypeError("rule-active.rule option reference holds only ability_id and option_id.");
+    if (typeof optionId !== "string" || !ENTITY_ID.test(optionId)) throw new TypeError("rule-active.rule.option_id must be a kebab-case option id.");
+    // The previous version checks the ability id (and negated) as a whole-record rule.
+    const checked = previous({ ...input, rule: abilityId });
+    return { ...checked, rule: { ability_id: checked.rule, option_id: optionId } };
+  },
+};
+
 export const ABILITY_EXTENSIONS: readonly FamilyExtension[] = [
   ABILITY_ACTIVATE_OPTIONS,
+  RULE_ACTIVE_OPTION,
   {
     // "that Blessing is active for friendly TERMINATOR SQUAD units in addition to any other Blessings":
     // the activation's units are the recipients a unit-filter names (compile-additive-option.ts binds

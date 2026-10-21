@@ -571,8 +571,12 @@ export function condition(leaf: CompileLeaf): Node {
       return polarity(leaf, pred("moved-over", { by: closed(leaf, "by"), ...(window && window !== "event" ? { window } : {}) }, leaf.parameters.subject === undefined ? undefined : closed(leaf, "subject") as string));
     }
     // ── New predicate families (batch 6, predicate-families.ts) ─────────────────────────────
-    case "rule-active":
-      return polarity(leaf, { type: "rule-active", parameters: { rule: closed(leaf, "rule") } });
+    case "rule-active": {
+      // Version 2: one option of an option-bearing rule, as the condition schema's stance-option-ref.
+      const rule = closed(leaf, "rule");
+      const reference = rule !== null && typeof rule === "object" ? rule as Node : null;
+      return polarity(leaf, { type: "rule-active", parameters: { rule: reference ? { ability_id: reference.ability_id, option_id: reference.option_id } : rule } });
+    }
     case "unit-owner":
       return polarity(leaf, pred("owned-by", { owner: closed(leaf, "owner") }, subjectOf(leaf)));
     case "unit-has-ability":
