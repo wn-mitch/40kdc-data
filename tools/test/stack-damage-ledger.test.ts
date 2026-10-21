@@ -94,7 +94,7 @@ describe("stack damage ledger", () => {
     for (const abilityId of ["drones-tau-empire", "drones-sudden-dawn-cadre-tau-empire"]) {
       const drone = entry(abilityId, "attacker", broadside)[0];
       expect(drone).toMatchObject({ status: "rejected", relevant: false });
-      expect(drone.reasons).toContain("weapon-grant: missile-pod duplicates the missile-drone grant of missile-drone-tau-empire");
+      expect(drone.reasons).toContain("weapon-grant: missile-pod-drone duplicates the missile-drone grant of missile-drone-tau-empire");
     }
     // A drone the loadout leaves out contributes nothing and leaves nothing open.
     expect(entry("marker-drone-tau-empire", "attacker", broadside)[0]).toMatchObject({

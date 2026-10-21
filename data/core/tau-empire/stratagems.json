@@ -943,7 +943,24 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "subject": "this-unit",
+          "filter": {
+            "level": "unit",
+            "unit_ids": [
+              "pathfinder-team",
+              "stealth-battlesuits"
+            ]
+          }
+        }
+      }
+    },
     "ability_id": "microdrone-support-advanced-acquisition-cadre-tau-empire",
     "game_version": {
       "edition": "11th",

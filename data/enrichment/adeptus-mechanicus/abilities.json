@@ -3500,233 +3500,210 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "source_digest": "88b6437ccb4837392e0cd512d47cd65516c159624a2978853bf00265fc71fb6f",
+    "source_digest": "282d82467e63b9864a1347b7af843849b4755d02cae6c2402e2ffd4db97c2fc5",
     "version": "2025-q3",
     "effect": {
-      "type": "ability-part",
-      "trigger": {
-        "event": "round-started"
-      },
-      "effect": {
-        "type": "stance-select",
-        "mode": "re-selectable",
-        "options": [
-          {
-            "name": "Protector Imperative",
-            "effect": {
-              "type": "sequence",
-              "steps": [
-                {
-                  "type": "weapon-ability-grant",
-                  "target": "this-unit",
-                  "modifier": {
-                    "weapons": {
-                      "type": "ranged"
-                    },
-                    "keywords": [
-                      {
-                        "keyword_id": "heavy"
+      "type": "stance-select",
+      "mode": "re-selectable",
+      "options": [
+        {
+          "id": "protector-imperative",
+          "name": "PROTECTOR IMPERATIVE",
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "weapon-ability-grant",
+                    "target": "this-unit",
+                    "modifier": {
+                      "keywords": [
+                        {
+                          "keyword_id": "heavy"
+                        }
+                      ],
+                      "weapons": {
+                        "type": "ranged"
                       }
-                    ]
+                    }
+                  },
+                  {
+                    "type": "stat-modifier",
+                    "target": "this-unit",
+                    "modifier": {
+                      "stat": "BS",
+                      "operation": "improve",
+                      "value": 1,
+                      "weapons": {
+                        "type": "ranged"
+                      }
+                    }
                   }
-                },
-                {
-                  "type": "stat-modifier",
-                  "target": "this-unit",
-                  "modifier": {
-                    "stat": "BS",
-                    "operation": "improve",
-                    "value": 1
-                  }
-                },
-                {
-                  "type": "conditional",
-                  "condition": {
-                    "operator": "or",
-                    "operands": [
-                      {
-                        "type": "matches",
-                        "parameters": {
-                          "filter": {
-                            "all_of": [
-                              "BATTLELINE"
-                            ]
+                ]
+              },
+              {
+                "type": "conditional",
+                "condition": {
+                  "operator": "and",
+                  "operands": [
+                    {
+                      "type": "attack-is",
+                      "parameters": {
+                        "attack_type": "melee"
+                      }
+                    },
+                    {
+                      "operator": "or",
+                      "operands": [
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "filter": {
+                              "all_of": [
+                                "BATTLELINE"
+                              ]
+                            }
+                          }
+                        },
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "filter": {
+                              "within": {
+                                "of": {
+                                  "owner": "friendly",
+                                  "all_of": [
+                                    "ADEPTUS MECHANICUS",
+                                    "BATTLELINE"
+                                  ]
+                                },
+                                "range": {
+                                  "inches": 6
+                                }
+                              }
+                            }
                           }
                         }
-                      },
-                      {
-                        "operator": "and",
-                        "operands": [
-                          {
-                            "type": "matches",
-                            "parameters": {
-                              "filter": {
-                                "within": {
-                                  "range": {
-                                    "inches": 6
-                                  },
-                                  "of": {
-                                    "owner": "friendly",
-                                    "all_of": [
-                                      "ADEPTUS MECHANICUS"
-                                    ]
-                                  }
-                                }
-                              }
-                            }
-                          },
-                          {
-                            "type": "matches",
-                            "parameters": {
-                              "filter": {
-                                "within": {
-                                  "range": {
-                                    "inches": 6
-                                  },
-                                  "of": {
-                                    "owner": "friendly",
-                                    "all_of": [
-                                      "BATTLELINE"
-                                    ]
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        ]
-                      }
-                    ]
-                  },
-                  "effect": {
-                    "type": "roll-modifier",
-                    "target": "attacker",
+                      ]
+                    }
+                  ]
+                },
+                "effect": {
+                  "type": "roll-modifier",
+                  "target": "attacker",
+                  "modifier": {
+                    "roll": "hit",
+                    "operation": "subtract",
+                    "value": 1
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "conqueror-imperative",
+          "name": "CONQUEROR IMPERATIVE",
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "weapon-ability-grant",
+                    "target": "this-unit",
                     "modifier": {
-                      "roll": "hit",
-                      "operation": "subtract",
+                      "keywords": [
+                        {
+                          "keyword_id": "assault"
+                        }
+                      ],
+                      "weapons": {
+                        "type": "ranged"
+                      }
+                    }
+                  },
+                  {
+                    "type": "stat-modifier",
+                    "target": "this-unit",
+                    "modifier": {
+                      "stat": "WS",
+                      "operation": "improve",
                       "value": 1,
                       "weapons": {
                         "type": "melee"
                       }
                     }
                   }
-                }
-              ]
-            },
-            "id": "option-1"
-          },
-          {
-            "name": "Conqueror Imperative",
-            "effect": {
-              "type": "sequence",
-              "steps": [
-                {
-                  "type": "weapon-ability-grant",
-                  "target": "this-unit",
-                  "modifier": {
-                    "weapons": {
-                      "type": "ranged"
-                    },
-                    "keywords": [
-                      {
-                        "keyword_id": "assault"
+                ]
+              },
+              {
+                "type": "conditional",
+                "condition": {
+                  "operator": "or",
+                  "operands": [
+                    {
+                      "type": "matches",
+                      "parameters": {
+                        "filter": {
+                          "all_of": [
+                            "BATTLELINE"
+                          ]
+                        }
                       }
-                    ]
-                  }
+                    },
+                    {
+                      "type": "matches",
+                      "parameters": {
+                        "filter": {
+                          "within": {
+                            "of": {
+                              "owner": "friendly",
+                              "all_of": [
+                                "ADEPTUS MECHANICUS",
+                                "BATTLELINE"
+                              ]
+                            },
+                            "range": {
+                              "inches": 6
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
                 },
-                {
+                "effect": {
                   "type": "stat-modifier",
                   "target": "this-unit",
                   "modifier": {
-                    "stat": "WS",
+                    "stat": "AP",
                     "operation": "improve",
-                    "value": 1,
-                    "weapons": {
-                      "type": "melee"
-                    }
-                  }
-                },
-                {
-                  "type": "conditional",
-                  "condition": {
-                    "operator": "or",
-                    "operands": [
-                      {
-                        "type": "matches",
-                        "parameters": {
-                          "filter": {
-                            "all_of": [
-                              "BATTLELINE"
-                            ]
-                          }
-                        }
-                      },
-                      {
-                        "operator": "and",
-                        "operands": [
-                          {
-                            "type": "matches",
-                            "parameters": {
-                              "filter": {
-                                "within": {
-                                  "range": {
-                                    "inches": 6
-                                  },
-                                  "of": {
-                                    "owner": "friendly",
-                                    "all_of": [
-                                      "ADEPTUS MECHANICUS"
-                                    ]
-                                  }
-                                }
-                              }
-                            }
-                          },
-                          {
-                            "type": "matches",
-                            "parameters": {
-                              "filter": {
-                                "within": {
-                                  "range": {
-                                    "inches": 6
-                                  },
-                                  "of": {
-                                    "owner": "friendly",
-                                    "all_of": [
-                                      "BATTLELINE"
-                                    ]
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        ]
-                      }
-                    ]
-                  },
-                  "effect": {
-                    "type": "stat-modifier",
-                    "target": "this-unit",
-                    "modifier": {
-                      "stat": "AP",
-                      "operation": "improve",
-                      "value": 1
-                    }
+                    "value": 1
                   }
                 }
-              ]
-            },
-            "id": "option-2"
+              }
+            ]
           }
-        ]
-      }
+        }
+      ],
+      "min_choices": 1,
+      "max_choices": 1
     },
     "scope": {
       "duration": "battle-round"
     },
     "faction_id": "adeptus-mechanicus",
     "ability_type": "faction",
-    "behavior": "activated",
-    "unit_ids": []
+    "behavior": "reactive",
+    "unit_ids": [],
+    "trigger": {
+      "event": "round-started",
+      "optional": true
+    }
   },
   {
     "ability_id": "noospheric-recon-adeptus-mechanicus",
@@ -4834,7 +4811,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "source_digest": "48a3225b63185ea10fb559eb466ecab2bda83aba6574de844adf00d169c41ce0",
+    "source_digest": "c1d602c6d21163e9aedbe68f187f0fa4b070794fda13e2c9014cdfecbdb99e3c",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -4848,17 +4825,21 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "matches",
+            "type": "rule-active",
             "parameters": {
-              "filter": {
-                "designated": "protector-imperative-active"
+              "rule": {
+                "ability_id": "doctrina-imperatives-adeptus-mechanicus",
+                "option_id": "protector-imperative"
               }
             }
           },
           "effect": {
             "type": "re-roll",
             "target": {
-              "owner": "friendly"
+              "owner": "friendly",
+              "all_of": [
+                "SKITARII"
+              ]
             },
             "modifier": {
               "roll": "hit",
@@ -4869,17 +4850,21 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "matches",
+            "type": "rule-active",
             "parameters": {
-              "filter": {
-                "designated": "conqueror-imperative-active"
+              "rule": {
+                "ability_id": "doctrina-imperatives-adeptus-mechanicus",
+                "option_id": "conqueror-imperative"
               }
             }
           },
           "effect": {
             "type": "re-roll",
             "target": {
-              "owner": "friendly"
+              "owner": "friendly",
+              "all_of": [
+                "SKITARII"
+              ]
             },
             "modifier": {
               "roll": "wound",
@@ -4890,7 +4875,7 @@
       ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -6154,204 +6139,180 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "source_digest": "360b18ccc3db70724e46654337838269ac62c5749220c97704f1741071dd146e",
+    "source_digest": "0ef9db133e0066b3f6b09f175817ee2d7a7771526b45fb295cc3ab4b4b751f2b",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "command"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "conditional",
-        "condition": {
-          "type": "phase-is",
-          "parameters": {
-            "phase": "command"
+        "type": "choice",
+        "options": [
+          {
+            "type": "ability-part",
+            "effect": {
+              "type": "select-units",
+              "selector": {
+                "filter": {
+                  "owner": "friendly",
+                  "any_of": [
+                    "SKITARII",
+                    "THULIA GHULD"
+                  ],
+                  "within": {
+                    "range": {
+                      "inches": 6
+                    },
+                    "of": "this-model"
+                  }
+                },
+                "count": {
+                  "min": 1,
+                  "max": 1
+                }
+              },
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "weapon-ability-grant",
+                    "target": "selected-unit",
+                    "modifier": {
+                      "keywords": [
+                        {
+                          "keyword_id": "assault"
+                        }
+                      ],
+                      "weapons": {
+                        "type": "ranged"
+                      }
+                    }
+                  },
+                  {
+                    "type": "permission",
+                    "target": "selected-unit",
+                    "modifier": {
+                      "activity": "declare-charge",
+                      "allow": true,
+                      "after": [
+                        "advance"
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            "duration": "until-next-command-phase"
+          },
+          {
+            "type": "ability-part",
+            "effect": {
+              "type": "select-units",
+              "selector": {
+                "filter": {
+                  "owner": "friendly",
+                  "any_of": [
+                    "SKITARII",
+                    "THULIA GHULD"
+                  ],
+                  "within": {
+                    "range": {
+                      "inches": 6
+                    },
+                    "of": "this-model"
+                  }
+                },
+                "count": {
+                  "min": 1,
+                  "max": 1
+                }
+              },
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "permission",
+                    "target": "selected-unit",
+                    "modifier": {
+                      "activity": "shoot",
+                      "allow": true,
+                      "after": [
+                        "fall-back"
+                      ]
+                    }
+                  },
+                  {
+                    "type": "permission",
+                    "target": "selected-unit",
+                    "modifier": {
+                      "activity": "declare-charge",
+                      "allow": true,
+                      "after": [
+                        "fall-back"
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            "duration": "until-next-command-phase"
+          },
+          {
+            "type": "ability-part",
+            "effect": {
+              "type": "select-units",
+              "selector": {
+                "filter": {
+                  "owner": "friendly",
+                  "any_of": [
+                    "SKITARII",
+                    "THULIA GHULD"
+                  ],
+                  "within": {
+                    "range": {
+                      "inches": 6
+                    },
+                    "of": "this-model"
+                  }
+                },
+                "count": {
+                  "min": 1,
+                  "max": 1
+                }
+              },
+              "effect": {
+                "type": "ability-activate",
+                "target": "selected-unit",
+                "modifier": {
+                  "ability": "doctrina-imperatives-adeptus-mechanicus",
+                  "options": [
+                    "conqueror-imperative",
+                    "protector-imperative"
+                  ],
+                  "exclusive": true
+                }
+              }
+            },
+            "duration": "until-next-command-phase"
           }
-        },
-        "effect": {
-          "type": "stance-select",
-          "mode": "re-selectable",
-          "options": [
-            {
-              "name": "Fanatical Devotion",
-              "effect": {
-                "type": "select-units",
-                "selector": {
-                  "filter": {
-                    "owner": "friendly",
-                    "within": {
-                      "range": {
-                        "inches": 6
-                      },
-                      "of": "this-model"
-                    }
-                  },
-                  "count": {
-                    "min": 0,
-                    "max": 1
-                  },
-                  "eligibility": {
-                    "type": "matches",
-                    "parameters": {
-                      "filter": {
-                        "any_of": [
-                          "SKITARII",
-                          "THULIA GHULD"
-                        ]
-                      }
-                    }
-                  }
-                },
-                "effect": {
-                  "type": "sequence",
-                  "steps": [
-                    {
-                      "type": "permission",
-                      "target": "selected-unit",
-                      "modifier": {
-                        "activity": "shoot",
-                        "allow": true,
-                        "after": [
-                          "advance"
-                        ]
-                      }
-                    },
-                    {
-                      "type": "permission",
-                      "target": "selected-unit",
-                      "modifier": {
-                        "activity": "declare-charge",
-                        "allow": true,
-                        "after": [
-                          "advance"
-                        ]
-                      }
-                    }
-                  ]
-                }
-              },
-              "id": "option-1"
-            },
-            {
-              "name": "Adaptive Tactics",
-              "effect": {
-                "type": "select-units",
-                "selector": {
-                  "filter": {
-                    "owner": "friendly",
-                    "within": {
-                      "range": {
-                        "inches": 6
-                      },
-                      "of": "this-model"
-                    }
-                  },
-                  "count": {
-                    "min": 0,
-                    "max": 1
-                  },
-                  "eligibility": {
-                    "type": "matches",
-                    "parameters": {
-                      "filter": {
-                        "any_of": [
-                          "SKITARII",
-                          "THULIA GHULD"
-                        ]
-                      }
-                    }
-                  }
-                },
-                "effect": {
-                  "type": "sequence",
-                  "steps": [
-                    {
-                      "type": "permission",
-                      "target": "selected-unit",
-                      "modifier": {
-                        "activity": "shoot",
-                        "allow": true,
-                        "after": [
-                          "fall-back"
-                        ]
-                      }
-                    },
-                    {
-                      "type": "permission",
-                      "target": "selected-unit",
-                      "modifier": {
-                        "activity": "declare-charge",
-                        "allow": true,
-                        "after": [
-                          "fall-back"
-                        ]
-                      }
-                    }
-                  ]
-                }
-              },
-              "id": "option-2"
-            },
-            {
-              "name": "The Fires of Mars",
-              "effect": {
-                "type": "select-units",
-                "selector": {
-                  "filter": {
-                    "owner": "friendly",
-                    "within": {
-                      "range": {
-                        "inches": 6
-                      },
-                      "of": "this-model"
-                    }
-                  },
-                  "count": {
-                    "min": 0,
-                    "max": 1
-                  },
-                  "eligibility": {
-                    "type": "matches",
-                    "parameters": {
-                      "filter": {
-                        "any_of": [
-                          "SKITARII",
-                          "THULIA GHULD"
-                        ]
-                      }
-                    }
-                  }
-                },
-                "effect": {
-                  "type": "sequence",
-                  "steps": [
-                    {
-                      "type": "ability-activate",
-                      "target": "selected-unit",
-                      "modifier": {
-                        "ability": "doctrina-imperatives-adeptus-mechanicus",
-                        "option": "option-2"
-                      }
-                    },
-                    {
-                      "type": "ability-activate",
-                      "target": "selected-unit",
-                      "modifier": {
-                        "ability": "doctrina-imperatives-adeptus-mechanicus",
-                        "option": "option-1"
-                      }
-                    }
-                  ]
-                }
-              },
-              "id": "option-3"
-            }
-          ]
-        }
+        ],
+        "min_choices": 1,
+        "max_choices": 1
       }
     },
     "scope": {
@@ -6361,7 +6322,7 @@
       "thulia-ghuld"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
+    "behavior": "passive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "faction_id": "adeptus-mechanicus"
   },
@@ -7404,17 +7365,60 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-mechanicus",
     "detachment_id": "skitarii-hunter-cohort",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "SKITARII"
+          ]
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "subject": "selected-unit",
+            "filter": {
+              "within": {
+                "of": "this-model",
+                "range": {
+                  "inches": 12
+                }
+              }
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "ability-activate",
+        "target": "selected-unit",
+        "modifier": {
+          "ability": "doctrina-imperatives-adeptus-mechanicus",
+          "options": [
+            "conqueror-imperative",
+            "protector-imperative"
+          ],
+          "exclusive": true
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "until-next-battle-round"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "round-started",
+      "optional": true
+    },
+    "source_digest": "4727ae52c1f099dbb552c88bff942c85f9bd0d2cc25a1cbff013c2f1e5977651"
   },
   {
     "ability_id": "chant-of-the-remorseless-fist-data-psalm-conclave-adeptus-mechanicus",
@@ -7598,17 +7602,210 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-mechanicus",
     "detachment_id": null,
     "ability_type": "faction",
     "effect": {
-      "type": "no-effect"
+      "type": "stance-select",
+      "mode": "re-selectable",
+      "options": [
+        {
+          "id": "protector-imperative",
+          "name": "PROTECTOR IMPERATIVE",
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "weapon-ability-grant",
+                    "target": "this-unit",
+                    "modifier": {
+                      "keywords": [
+                        {
+                          "keyword_id": "heavy"
+                        }
+                      ],
+                      "weapons": {
+                        "type": "ranged"
+                      }
+                    }
+                  },
+                  {
+                    "type": "stat-modifier",
+                    "target": "this-unit",
+                    "modifier": {
+                      "stat": "BS",
+                      "operation": "improve",
+                      "value": 1,
+                      "weapons": {
+                        "type": "ranged"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "conditional",
+                "condition": {
+                  "operator": "and",
+                  "operands": [
+                    {
+                      "type": "attack-is",
+                      "parameters": {
+                        "attack_type": "melee"
+                      }
+                    },
+                    {
+                      "operator": "or",
+                      "operands": [
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "filter": {
+                              "all_of": [
+                                "BATTLELINE"
+                              ]
+                            }
+                          }
+                        },
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "filter": {
+                              "within": {
+                                "of": {
+                                  "owner": "friendly",
+                                  "all_of": [
+                                    "ADEPTUS MECHANICUS",
+                                    "BATTLELINE"
+                                  ]
+                                },
+                                "range": {
+                                  "inches": 6
+                                }
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "effect": {
+                  "type": "roll-modifier",
+                  "target": "attacker",
+                  "modifier": {
+                    "roll": "hit",
+                    "operation": "subtract",
+                    "value": 1
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "conqueror-imperative",
+          "name": "CONQUEROR IMPERATIVE",
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "weapon-ability-grant",
+                    "target": "this-unit",
+                    "modifier": {
+                      "keywords": [
+                        {
+                          "keyword_id": "assault"
+                        }
+                      ],
+                      "weapons": {
+                        "type": "ranged"
+                      }
+                    }
+                  },
+                  {
+                    "type": "stat-modifier",
+                    "target": "this-unit",
+                    "modifier": {
+                      "stat": "WS",
+                      "operation": "improve",
+                      "value": 1,
+                      "weapons": {
+                        "type": "melee"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "conditional",
+                "condition": {
+                  "operator": "or",
+                  "operands": [
+                    {
+                      "type": "matches",
+                      "parameters": {
+                        "filter": {
+                          "all_of": [
+                            "BATTLELINE"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "matches",
+                      "parameters": {
+                        "filter": {
+                          "within": {
+                            "of": {
+                              "owner": "friendly",
+                              "all_of": [
+                                "ADEPTUS MECHANICUS",
+                                "BATTLELINE"
+                              ]
+                            },
+                            "range": {
+                              "inches": 6
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "effect": {
+                  "type": "stat-modifier",
+                  "target": "this-unit",
+                  "modifier": {
+                    "stat": "AP",
+                    "operation": "improve",
+                    "value": 1
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "min_choices": 1,
+      "max_choices": 1
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "battle-round"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "round-started",
+      "optional": true
+    },
+    "source_digest": "282d82467e63b9864a1347b7af843849b4755d02cae6c2402e2ffd4db97c2fc5"
   },
   {
     "ability_id": "emotionless-clarity-cohort-cybernetica-adeptus-mechanicus",

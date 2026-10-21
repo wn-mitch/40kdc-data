@@ -4634,7 +4634,7 @@
             "type": "weapon-grant",
             "target": "this-model",
             "modifier": {
-              "weapon_id": "twin-pulse-carbine"
+              "weapon_id": "twin-pulse-carbine-drone"
             }
           }
         },
@@ -4691,7 +4691,7 @@
             "type": "weapon-grant",
             "target": "this-model",
             "modifier": {
-              "weapon_id": "missile-pod"
+              "weapon_id": "missile-pod-drone"
             }
           }
         },
@@ -4991,31 +4991,36 @@
     "faction_id": "tau-empire",
     "detachment_id": "advanced-acquisition-cadre",
     "ability_type": "stratagem",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "permission",
-        "target": "this-unit",
-        "modifier": {
-          "activity": "shoot",
-          "allow": true,
-          "despite": [
-            "performing-action"
-          ]
-        }
+      "type": "permission",
+      "target": "this-unit",
+      "modifier": {
+        "activity": "shoot",
+        "allow": true,
+        "despite": [
+          "performing-action"
+        ]
       }
     },
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "action"
+      },
+      "subject": {
+        "owner": "friendly",
+        "level": "unit",
+        "unit_ids": [
+          "pathfinder-team",
+          "stealth-battlesuits"
+        ]
+      }
+    }
   },
   {
     "ability_id": "autoreactive-camouflage-advanced-acquisition-cadre-tau-empire",
@@ -10042,7 +10047,7 @@
             "type": "weapon-grant",
             "target": "this-model",
             "modifier": {
-              "weapon_id": "twin-pulse-carbine"
+              "weapon_id": "twin-pulse-carbine-drone"
             }
           }
         },
@@ -10099,7 +10104,7 @@
             "type": "weapon-grant",
             "target": "this-model",
             "modifier": {
-              "weapon_id": "missile-pod"
+              "weapon_id": "missile-pod-drone"
             }
           }
         },
