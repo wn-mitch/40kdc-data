@@ -8,6 +8,7 @@ import {
   makeResolver,
   limitedSetBudgets,
   wargearItemsForDatasheet,
+  strandedByRebuild,
 } from "../src/mfm/wargear.js";
 import { mintWeapon } from "../src/mfm/gear-projection.js";
 import { resolveMfmWeaponEntityId } from "../src/mfm/weapon-variants.js";
@@ -2697,5 +2698,43 @@ describe("withinEditDistance1", () => {
     expect(withinEditDistance1("lascannon", "autocannon")).toBe(false);
     expect(withinEditDistance1("meltagun", "plasma-gun")).toBe(false);
     expect(withinEditDistance1("bolt-rifle", "bolt-pistol")).toBe(false);
+  });
+});
+
+describe("strandedByRebuild", () => {
+  const options: never[] = [];
+
+  it("strands a kept row's old defaults when the dump prints new ones", () => {
+    // A two-row squad collapses to one renamed row whose dump defaults swap a weapon.
+    const models = [
+      { name: "Fabricated Squad Leader", min: 1, max: 1, default_weapon_ids: ["old-gun", "old-blade"] },
+      { name: "Fabricated Trooper", min: 3, max: 9, default_weapon_ids: ["old-gun", "old-blade"] },
+    ];
+    const view = [{ name: "Fabricated Troopers", defaults: ["old-gun", "new-stock"] }];
+    expect(strandedByRebuild(models, view, options)).toEqual(["old-blade"]);
+  });
+
+  it("keeps a kept row's old defaults when the dump prints none for it", () => {
+    const models = [
+      { name: "Fabricated Leader", min: 1, max: 1, default_weapon_ids: ["leader-sword"] },
+      { name: "Fabricated Trooper", min: 3, max: 9, default_weapon_ids: ["trooper-gun"] },
+    ];
+    const view = [{ name: "Fabricated Trooper", defaults: undefined }];
+    expect(strandedByRebuild(models, view, options)).toEqual(["leader-sword"]);
+  });
+
+  it("counts a weapon an option still reaches, and a kept row's variants, as kept", () => {
+    const models = [
+      {
+        name: "Fabricated Trooper",
+        min: 3,
+        max: 9,
+        default_weapon_ids: ["old-gun"],
+        loadout_variants: [{ name: "Heavy", weapon_ids: ["heavy-gun"] }],
+      },
+      { name: "Fabricated Gunner", min: 0, max: 1, default_weapon_ids: ["heavy-gun", "spare-blade"] },
+    ];
+    const view = [{ name: "Fabricated Trooper", defaults: ["new-gun"] }];
+    expect(strandedByRebuild(models, view, [{ replacement: ["old-gun"] }])).toEqual(["spare-blade"]);
   });
 });

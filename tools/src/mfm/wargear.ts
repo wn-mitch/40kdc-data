@@ -2620,6 +2620,38 @@ export interface CompNamesReport {
 }
 
 /**
+ * The weapon ids a composition rebuild leaves unreached: old default (and dropped-row variant)
+ * ids that neither the rebuilt rows nor the unit's wargear options still carry. A kept row
+ * reaches the dump's defaults when the dump prints any, since they replace the row's old
+ * ones, else its old defaults; a dropped row's defaults and whole-loadout variants go with it.
+ */
+export function strandedByRebuild(
+  models: readonly CompModel[],
+  view: readonly { name: string; defaults: readonly string[] | undefined }[],
+  unitOptions: readonly Pick<WargearOptionRecord, "replaces" | "replacement" | "replacement_choice">[],
+): string[] {
+  const oldByNorm = new Map(models.map((m) => [normModelName(m.name), m]));
+  const kept = new Set<string>();
+  for (const d of view) {
+    const old = oldByNorm.get(normModelName(d.name));
+    for (const wid of d.defaults?.length ? d.defaults : old?.default_weapon_ids ?? []) kept.add(wid);
+    for (const variant of old?.loadout_variants ?? []) for (const wid of variant.weapon_ids) kept.add(wid);
+  }
+  for (const o of unitOptions) {
+    for (const wid of o.replaces ?? []) kept.add(wid);
+    for (const wid of o.replacement ?? []) kept.add(wid);
+    for (const g of o.replacement_choice ?? []) for (const wid of g) kept.add(wid);
+  }
+  const inView = (m: CompModel): boolean => view.some((d) => normModelName(d.name) === normModelName(m.name));
+  const candidates = models.flatMap((m) =>
+    inView(m)
+      ? (m.default_weapon_ids ?? [])
+      : [...(m.default_weapon_ids ?? []), ...(m.loadout_variants ?? []).flatMap((variant) => variant.weapon_ids)],
+  );
+  return [...new Set(candidates.filter((wid) => !kept.has(wid)))].sort();
+}
+
+/**
  * Align each unit's composition **model rows** to its home-faction dump view —
  * the dump is authoritative for row names, counts, and per-model defaults, and
  * the options' `model_name` (which the eligible-model clamp keys on) comes from
@@ -2809,27 +2841,11 @@ export function runCompositionNames(dump: MfmDump, onlyDir?: string): CompNamesR
         // Dropping a repo-only row must not orphan a weapon it alone reaches
         // (kill-team weapon-variant rows at min 0, the Horrors' split weapons):
         // such units model MORE than the dump's default view — skip, report.
-        const keptCoverage = new Set<string>();
-        for (const d of view) {
-          for (const wid of defaultsByModel.get(d.name) ?? []) keptCoverage.add(wid);
-          const old = oldByNorm.get(normModelName(d.name));
-          for (const wid of old?.default_weapon_ids ?? []) keptCoverage.add(wid);
-        }
-        for (const o of wopts) {
-          if (o.unit_id !== id) continue;
-          for (const wid of o.replaces ?? []) keptCoverage.add(wid);
-          for (const wid of o.replacement ?? []) keptCoverage.add(wid);
-          for (const g of o.replacement_choice ?? []) for (const wid of g) keptCoverage.add(wid);
-        }
-        const stranded = [
-          ...new Set(
-            comp.models
-              .filter((m) => !view.some((d) => normModelName(d.name) === normModelName(m.name)))
-              // A dropped row's whole-loadout variants are dropped with it.
-              .flatMap((m) => [...(m.default_weapon_ids ?? []), ...(m.loadout_variants ?? []).flatMap((variant) => variant.weapon_ids)])
-              .filter((wid) => !keptCoverage.has(wid)),
-          ),
-        ].sort();
+        const stranded = strandedByRebuild(
+          comp.models,
+          view.map((d) => ({ name: d.name, defaults: withManual(d.name, defaultsByModel.get(d.name)) })),
+          wopts.filter((o) => o.unit_id === id),
+        );
         if (stranded.length) {
           // The dump arbitrates: a stranded id the dump's datasheet KNOWS is a
           // deliberately-richer repo modeling (kill-team weapon-variant rows) —
