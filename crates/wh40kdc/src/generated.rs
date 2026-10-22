@@ -21223,14 +21223,8 @@ pub struct InvulnerableSaveEffectModifier {
 ///      "minimum": 1.0
 ///    },
 ///    "eligible": {
-///      "type": "object",
-///      "properties": {
-///        "keyword": {
-///          "type": "string",
-///          "minLength": 1
-///        }
-///      },
-///      "additionalProperties": false
+///      "description": "Which friendly units may receive an Order, by keyword.",
+///      "$ref": "#/$defs/keyword-predicate"
 ///    },
 ///    "options": {
 ///      "type": "array",
@@ -21274,118 +21268,15 @@ pub struct InvulnerableSaveEffectModifier {
 pub struct IssueOrdersEffect {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub count: ::std::option::Option<::std::num::NonZeroU64>,
+    ///Which friendly units may receive an Order, by keyword.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub eligible: ::std::option::Option<IssueOrdersEffectEligible>,
+    pub eligible: ::std::option::Option<KeywordPredicate>,
     pub options: ::std::vec::Vec<IssueOrdersEffectOptionsItem>,
     ///Orders go to eligible units within this distance of the officer.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub range: ::std::option::Option<RangeRef>,
     #[serde(rename = "type")]
     pub type_: IssueOrdersEffectType,
-}
-///`IssueOrdersEffectEligible`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "properties": {
-///    "keyword": {
-///      "type": "string",
-///      "minLength": 1
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct IssueOrdersEffectEligible {
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub keyword: ::std::option::Option<IssueOrdersEffectEligibleKeyword>,
-}
-impl ::std::default::Default for IssueOrdersEffectEligible {
-    fn default() -> Self {
-        Self {
-            keyword: Default::default(),
-        }
-    }
-}
-///`IssueOrdersEffectEligibleKeyword`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "string",
-///  "minLength": 1
-///}
-/// ```
-/// </details>
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-#[serde(transparent)]
-pub struct IssueOrdersEffectEligibleKeyword(::std::string::String);
-impl ::std::ops::Deref for IssueOrdersEffectEligibleKeyword {
-    type Target = ::std::string::String;
-    fn deref(&self) -> &::std::string::String {
-        &self.0
-    }
-}
-impl ::std::convert::From<IssueOrdersEffectEligibleKeyword> for ::std::string::String {
-    fn from(value: IssueOrdersEffectEligibleKeyword) -> Self {
-        value.0
-    }
-}
-impl ::std::str::FromStr for IssueOrdersEffectEligibleKeyword {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        if value.chars().count() < 1usize {
-            return Err("shorter than 1 characters".into());
-        }
-        Ok(Self(value.to_string()))
-    }
-}
-impl ::std::convert::TryFrom<&str> for IssueOrdersEffectEligibleKeyword {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String>
-for IssueOrdersEffectEligibleKeyword {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for IssueOrdersEffectEligibleKeyword {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl<'de> ::serde::Deserialize<'de> for IssueOrdersEffectEligibleKeyword {
-    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
-    where
-        D: ::serde::Deserializer<'de>,
-    {
-        ::std::string::String::deserialize(deserializer)?
-            .parse()
-            .map_err(|e: self::error::ConversionError| {
-                <D::Error as ::serde::de::Error>::custom(e.to_string())
-            })
-    }
 }
 ///`IssueOrdersEffectOptionsItem`
 ///
@@ -28498,12 +28389,8 @@ for PermissionEffectModifierDespiteItem {
 ///    },
 ///    "setup_keywords": {
 ///      "description": "When present, only units carrying every listed keyword may use the marker to set up; absent means any friendly unit.",
-///      "type": "array",
-///      "items": {
-///        "type": "string",
-///        "minLength": 1
-///      },
-///      "minItems": 1
+///      "minItems": 1,
+///      "$ref": "#/$defs/keyword-list"
 ///    },
 ///    "setup_within": {
 ///      "$ref": "#/$defs/range-ref"
@@ -28525,10 +28412,8 @@ pub struct PersistentBattlefieldMarkerState {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub removed_by_enemy_within: ::std::option::Option<RangeRef>,
     ///When present, only units carrying every listed keyword may use the marker to set up; absent means any friendly unit.
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub setup_keywords: ::std::vec::Vec<
-        PersistentBattlefieldMarkerStateSetupKeywordsItem,
-    >,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub setup_keywords: ::std::option::Option<Vec<Keyword>>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub setup_within: ::std::option::Option<RangeRef>,
 }
@@ -28774,83 +28659,6 @@ for PersistentBattlefieldMarkerStatePlacement {
         value: ::std::string::String,
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         value.parse()
-    }
-}
-///`PersistentBattlefieldMarkerStateSetupKeywordsItem`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "string",
-///  "minLength": 1
-///}
-/// ```
-/// </details>
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-#[serde(transparent)]
-pub struct PersistentBattlefieldMarkerStateSetupKeywordsItem(::std::string::String);
-impl ::std::ops::Deref for PersistentBattlefieldMarkerStateSetupKeywordsItem {
-    type Target = ::std::string::String;
-    fn deref(&self) -> &::std::string::String {
-        &self.0
-    }
-}
-impl ::std::convert::From<PersistentBattlefieldMarkerStateSetupKeywordsItem>
-for ::std::string::String {
-    fn from(value: PersistentBattlefieldMarkerStateSetupKeywordsItem) -> Self {
-        value.0
-    }
-}
-impl ::std::str::FromStr for PersistentBattlefieldMarkerStateSetupKeywordsItem {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        if value.chars().count() < 1usize {
-            return Err("shorter than 1 characters".into());
-        }
-        Ok(Self(value.to_string()))
-    }
-}
-impl ::std::convert::TryFrom<&str>
-for PersistentBattlefieldMarkerStateSetupKeywordsItem {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String>
-for PersistentBattlefieldMarkerStateSetupKeywordsItem {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for PersistentBattlefieldMarkerStateSetupKeywordsItem {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl<'de> ::serde::Deserialize<'de>
-for PersistentBattlefieldMarkerStateSetupKeywordsItem {
-    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
-    where
-        D: ::serde::Deserializer<'de>,
-    {
-        ::std::string::String::deserialize(deserializer)?
-            .parse()
-            .map_err(|e: self::error::ConversionError| {
-                <D::Error as ::serde::de::Error>::custom(e.to_string())
-            })
     }
 }
 ///`PersistentDesignationEffect`
@@ -45143,13 +44951,8 @@ impl ::std::convert::TryFrom<::std::string::String> for SourceType {
 ///          ],
 ///          "properties": {
 ///            "model_keyword": {
-///              "type": "array",
-///              "items": {
-///                "type": "string",
-///                "minLength": 1
-///              },
 ///              "minItems": 2,
-///              "uniqueItems": true
+///              "$ref": "#/$defs/keyword-list"
 ///            }
 ///          },
 ///          "additionalProperties": false
@@ -45363,13 +45166,8 @@ impl<'de> ::serde::Deserialize<'de> for SplitUnitEffectModifierVariant1BindAsIte
 ///      ],
 ///      "properties": {
 ///        "model_keyword": {
-///          "type": "array",
-///          "items": {
-///            "type": "string",
-///            "minLength": 1
-///          },
 ///          "minItems": 2,
-///          "uniqueItems": true
+///          "$ref": "#/$defs/keyword-list"
 ///        }
 ///      },
 ///      "additionalProperties": false
@@ -45383,89 +45181,11 @@ pub enum SplitUnitEffectModifierVariant1By {
     #[serde(rename = "model")]
     Model,
     #[serde(rename = "model_keyword")]
-    ModelKeyword(Vec<SplitUnitEffectModifierVariant1ByModelKeywordItem>),
+    ModelKeyword(Vec<Keyword>),
 }
-impl ::std::convert::From<Vec<SplitUnitEffectModifierVariant1ByModelKeywordItem>>
-for SplitUnitEffectModifierVariant1By {
-    fn from(value: Vec<SplitUnitEffectModifierVariant1ByModelKeywordItem>) -> Self {
+impl ::std::convert::From<Vec<Keyword>> for SplitUnitEffectModifierVariant1By {
+    fn from(value: Vec<Keyword>) -> Self {
         Self::ModelKeyword(value)
-    }
-}
-///`SplitUnitEffectModifierVariant1ByModelKeywordItem`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "string",
-///  "minLength": 1
-///}
-/// ```
-/// </details>
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-#[serde(transparent)]
-pub struct SplitUnitEffectModifierVariant1ByModelKeywordItem(::std::string::String);
-impl ::std::ops::Deref for SplitUnitEffectModifierVariant1ByModelKeywordItem {
-    type Target = ::std::string::String;
-    fn deref(&self) -> &::std::string::String {
-        &self.0
-    }
-}
-impl ::std::convert::From<SplitUnitEffectModifierVariant1ByModelKeywordItem>
-for ::std::string::String {
-    fn from(value: SplitUnitEffectModifierVariant1ByModelKeywordItem) -> Self {
-        value.0
-    }
-}
-impl ::std::str::FromStr for SplitUnitEffectModifierVariant1ByModelKeywordItem {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        if value.chars().count() < 1usize {
-            return Err("shorter than 1 characters".into());
-        }
-        Ok(Self(value.to_string()))
-    }
-}
-impl ::std::convert::TryFrom<&str>
-for SplitUnitEffectModifierVariant1ByModelKeywordItem {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String>
-for SplitUnitEffectModifierVariant1ByModelKeywordItem {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for SplitUnitEffectModifierVariant1ByModelKeywordItem {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl<'de> ::serde::Deserialize<'de>
-for SplitUnitEffectModifierVariant1ByModelKeywordItem {
-    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
-    where
-        D: ::serde::Deserializer<'de>,
-    {
-        ::std::string::String::deserialize(deserializer)?
-            .parse()
-            .map_err(|e: self::error::ConversionError| {
-                <D::Error as ::serde::de::Error>::custom(e.to_string())
-            })
     }
 }
 ///Stable reference to one option within its containing ability.
@@ -50515,8 +50235,7 @@ impl ::std::convert::TryFrom<::std::string::String> for TestKind {
 ///      ],
 ///      "properties": {
 ///        "model_keyword": {
-///          "type": "string",
-///          "minLength": 1
+///          "$ref": "#/$defs/keyword"
 ///        },
 ///        "models_per_group": {
 ///          "type": "integer",
@@ -50554,8 +50273,7 @@ impl ::std::convert::TryFrom<::std::string::String> for TestKind {
 ///      ],
 ///      "properties": {
 ///        "model_keyword": {
-///          "type": "string",
-///          "minLength": 1
+///          "$ref": "#/$defs/keyword"
 ///        },
 ///        "occupancy_kind": {
 ///          "const": "fixed-model-spaces"
@@ -50597,12 +50315,10 @@ impl ::std::convert::TryFrom<::std::string::String> for TestKind {
 ///          "minimum": 1.0
 ///        },
 ///        "equivalent_model_keyword": {
-///          "type": "string",
-///          "minLength": 1
+///          "$ref": "#/$defs/keyword"
 ///        },
 ///        "model_keyword": {
-///          "type": "string",
-///          "minLength": 1
+///          "$ref": "#/$defs/keyword"
 ///        },
 ///        "occupancy_kind": {
 ///          "const": "equivalent-model"
@@ -50664,9 +50380,7 @@ impl ::std::convert::TryFrom<::std::string::String> for TestKind {
 pub enum TransportCapacityEffectModifier {
     Variant0 {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-        model_keyword: ::std::option::Option<
-            TransportCapacityEffectModifierVariant0ModelKeyword,
-        >,
+        model_keyword: ::std::option::Option<Keyword>,
         models_per_group: ::std::num::NonZeroU64,
         occupancy_kind: ::serde_json::Value,
         rounding: TransportCapacityEffectModifierVariant0Rounding,
@@ -50677,9 +50391,7 @@ pub enum TransportCapacityEffectModifier {
     },
     Variant1 {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-        model_keyword: ::std::option::Option<
-            TransportCapacityEffectModifierVariant1ModelKeyword,
-        >,
+        model_keyword: ::std::option::Option<Keyword>,
         occupancy_kind: ::serde_json::Value,
         spaces_per_model: ::std::num::NonZeroU64,
         subject_kind: TransportOccupancySubjectKind,
@@ -50701,83 +50413,6 @@ impl ::std::convert::From<TransportCapacityEffectModifierVariant2>
 for TransportCapacityEffectModifier {
     fn from(value: TransportCapacityEffectModifierVariant2) -> Self {
         Self::Variant2(value)
-    }
-}
-///`TransportCapacityEffectModifierVariant0ModelKeyword`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "string",
-///  "minLength": 1
-///}
-/// ```
-/// </details>
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-#[serde(transparent)]
-pub struct TransportCapacityEffectModifierVariant0ModelKeyword(::std::string::String);
-impl ::std::ops::Deref for TransportCapacityEffectModifierVariant0ModelKeyword {
-    type Target = ::std::string::String;
-    fn deref(&self) -> &::std::string::String {
-        &self.0
-    }
-}
-impl ::std::convert::From<TransportCapacityEffectModifierVariant0ModelKeyword>
-for ::std::string::String {
-    fn from(value: TransportCapacityEffectModifierVariant0ModelKeyword) -> Self {
-        value.0
-    }
-}
-impl ::std::str::FromStr for TransportCapacityEffectModifierVariant0ModelKeyword {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        if value.chars().count() < 1usize {
-            return Err("shorter than 1 characters".into());
-        }
-        Ok(Self(value.to_string()))
-    }
-}
-impl ::std::convert::TryFrom<&str>
-for TransportCapacityEffectModifierVariant0ModelKeyword {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String>
-for TransportCapacityEffectModifierVariant0ModelKeyword {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for TransportCapacityEffectModifierVariant0ModelKeyword {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl<'de> ::serde::Deserialize<'de>
-for TransportCapacityEffectModifierVariant0ModelKeyword {
-    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
-    where
-        D: ::serde::Deserializer<'de>,
-    {
-        ::std::string::String::deserialize(deserializer)?
-            .parse()
-            .map_err(|e: self::error::ConversionError| {
-                <D::Error as ::serde::de::Error>::custom(e.to_string())
-            })
     }
 }
 ///`TransportCapacityEffectModifierVariant0Rounding`
@@ -50858,83 +50493,6 @@ for TransportCapacityEffectModifierVariant0Rounding {
         value.parse()
     }
 }
-///`TransportCapacityEffectModifierVariant1ModelKeyword`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "string",
-///  "minLength": 1
-///}
-/// ```
-/// </details>
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-#[serde(transparent)]
-pub struct TransportCapacityEffectModifierVariant1ModelKeyword(::std::string::String);
-impl ::std::ops::Deref for TransportCapacityEffectModifierVariant1ModelKeyword {
-    type Target = ::std::string::String;
-    fn deref(&self) -> &::std::string::String {
-        &self.0
-    }
-}
-impl ::std::convert::From<TransportCapacityEffectModifierVariant1ModelKeyword>
-for ::std::string::String {
-    fn from(value: TransportCapacityEffectModifierVariant1ModelKeyword) -> Self {
-        value.0
-    }
-}
-impl ::std::str::FromStr for TransportCapacityEffectModifierVariant1ModelKeyword {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        if value.chars().count() < 1usize {
-            return Err("shorter than 1 characters".into());
-        }
-        Ok(Self(value.to_string()))
-    }
-}
-impl ::std::convert::TryFrom<&str>
-for TransportCapacityEffectModifierVariant1ModelKeyword {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String>
-for TransportCapacityEffectModifierVariant1ModelKeyword {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for TransportCapacityEffectModifierVariant1ModelKeyword {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl<'de> ::serde::Deserialize<'de>
-for TransportCapacityEffectModifierVariant1ModelKeyword {
-    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
-    where
-        D: ::serde::Deserializer<'de>,
-    {
-        ::std::string::String::deserialize(deserializer)?
-            .parse()
-            .map_err(|e: self::error::ConversionError| {
-                <D::Error as ::serde::de::Error>::custom(e.to_string())
-            })
-    }
-}
 ///`TransportCapacityEffectModifierVariant2`
 ///
 /// <details><summary>JSON schema</summary>
@@ -50964,12 +50522,10 @@ for TransportCapacityEffectModifierVariant1ModelKeyword {
 ///      "minimum": 1.0
 ///    },
 ///    "equivalent_model_keyword": {
-///      "type": "string",
-///      "minLength": 1
+///      "$ref": "#/$defs/keyword"
 ///    },
 ///    "model_keyword": {
-///      "type": "string",
-///      "minLength": 1
+///      "$ref": "#/$defs/keyword"
 ///    },
 ///    "occupancy_kind": {
 ///      "const": "equivalent-model"
@@ -50989,11 +50545,9 @@ for TransportCapacityEffectModifierVariant1ModelKeyword {
 #[serde(untagged, deny_unknown_fields)]
 pub enum TransportCapacityEffectModifierVariant2 {
     Variant0 {
-        equivalent_model_keyword: TransportCapacityEffectModifierVariant2Variant0EquivalentModelKeyword,
+        equivalent_model_keyword: Keyword,
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-        model_keyword: ::std::option::Option<
-            TransportCapacityEffectModifierVariant2Variant0ModelKeyword,
-        >,
+        model_keyword: ::std::option::Option<Keyword>,
         occupancy_kind: ::serde_json::Value,
         subject_kind: TransportOccupancySubjectKind,
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -51002,258 +50556,12 @@ pub enum TransportCapacityEffectModifierVariant2 {
     Variant1 {
         equivalent_model_count: ::std::num::NonZeroU64,
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-        model_keyword: ::std::option::Option<
-            TransportCapacityEffectModifierVariant2Variant1ModelKeyword,
-        >,
+        model_keyword: ::std::option::Option<Keyword>,
         occupancy_kind: ::serde_json::Value,
         subject_kind: TransportOccupancySubjectKind,
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         transport_eligibility: ::std::option::Option<TransportEligibility>,
     },
-}
-///`TransportCapacityEffectModifierVariant2Variant0EquivalentModelKeyword`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "string",
-///  "minLength": 1
-///}
-/// ```
-/// </details>
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-#[serde(transparent)]
-pub struct TransportCapacityEffectModifierVariant2Variant0EquivalentModelKeyword(
-    ::std::string::String,
-);
-impl ::std::ops::Deref
-for TransportCapacityEffectModifierVariant2Variant0EquivalentModelKeyword {
-    type Target = ::std::string::String;
-    fn deref(&self) -> &::std::string::String {
-        &self.0
-    }
-}
-impl ::std::convert::From<
-    TransportCapacityEffectModifierVariant2Variant0EquivalentModelKeyword,
-> for ::std::string::String {
-    fn from(
-        value: TransportCapacityEffectModifierVariant2Variant0EquivalentModelKeyword,
-    ) -> Self {
-        value.0
-    }
-}
-impl ::std::str::FromStr
-for TransportCapacityEffectModifierVariant2Variant0EquivalentModelKeyword {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        if value.chars().count() < 1usize {
-            return Err("shorter than 1 characters".into());
-        }
-        Ok(Self(value.to_string()))
-    }
-}
-impl ::std::convert::TryFrom<&str>
-for TransportCapacityEffectModifierVariant2Variant0EquivalentModelKeyword {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String>
-for TransportCapacityEffectModifierVariant2Variant0EquivalentModelKeyword {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for TransportCapacityEffectModifierVariant2Variant0EquivalentModelKeyword {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl<'de> ::serde::Deserialize<'de>
-for TransportCapacityEffectModifierVariant2Variant0EquivalentModelKeyword {
-    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
-    where
-        D: ::serde::Deserializer<'de>,
-    {
-        ::std::string::String::deserialize(deserializer)?
-            .parse()
-            .map_err(|e: self::error::ConversionError| {
-                <D::Error as ::serde::de::Error>::custom(e.to_string())
-            })
-    }
-}
-///`TransportCapacityEffectModifierVariant2Variant0ModelKeyword`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "string",
-///  "minLength": 1
-///}
-/// ```
-/// </details>
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-#[serde(transparent)]
-pub struct TransportCapacityEffectModifierVariant2Variant0ModelKeyword(
-    ::std::string::String,
-);
-impl ::std::ops::Deref for TransportCapacityEffectModifierVariant2Variant0ModelKeyword {
-    type Target = ::std::string::String;
-    fn deref(&self) -> &::std::string::String {
-        &self.0
-    }
-}
-impl ::std::convert::From<TransportCapacityEffectModifierVariant2Variant0ModelKeyword>
-for ::std::string::String {
-    fn from(value: TransportCapacityEffectModifierVariant2Variant0ModelKeyword) -> Self {
-        value.0
-    }
-}
-impl ::std::str::FromStr
-for TransportCapacityEffectModifierVariant2Variant0ModelKeyword {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        if value.chars().count() < 1usize {
-            return Err("shorter than 1 characters".into());
-        }
-        Ok(Self(value.to_string()))
-    }
-}
-impl ::std::convert::TryFrom<&str>
-for TransportCapacityEffectModifierVariant2Variant0ModelKeyword {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String>
-for TransportCapacityEffectModifierVariant2Variant0ModelKeyword {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for TransportCapacityEffectModifierVariant2Variant0ModelKeyword {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl<'de> ::serde::Deserialize<'de>
-for TransportCapacityEffectModifierVariant2Variant0ModelKeyword {
-    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
-    where
-        D: ::serde::Deserializer<'de>,
-    {
-        ::std::string::String::deserialize(deserializer)?
-            .parse()
-            .map_err(|e: self::error::ConversionError| {
-                <D::Error as ::serde::de::Error>::custom(e.to_string())
-            })
-    }
-}
-///`TransportCapacityEffectModifierVariant2Variant1ModelKeyword`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "string",
-///  "minLength": 1
-///}
-/// ```
-/// </details>
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-#[serde(transparent)]
-pub struct TransportCapacityEffectModifierVariant2Variant1ModelKeyword(
-    ::std::string::String,
-);
-impl ::std::ops::Deref for TransportCapacityEffectModifierVariant2Variant1ModelKeyword {
-    type Target = ::std::string::String;
-    fn deref(&self) -> &::std::string::String {
-        &self.0
-    }
-}
-impl ::std::convert::From<TransportCapacityEffectModifierVariant2Variant1ModelKeyword>
-for ::std::string::String {
-    fn from(value: TransportCapacityEffectModifierVariant2Variant1ModelKeyword) -> Self {
-        value.0
-    }
-}
-impl ::std::str::FromStr
-for TransportCapacityEffectModifierVariant2Variant1ModelKeyword {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        if value.chars().count() < 1usize {
-            return Err("shorter than 1 characters".into());
-        }
-        Ok(Self(value.to_string()))
-    }
-}
-impl ::std::convert::TryFrom<&str>
-for TransportCapacityEffectModifierVariant2Variant1ModelKeyword {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String>
-for TransportCapacityEffectModifierVariant2Variant1ModelKeyword {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for TransportCapacityEffectModifierVariant2Variant1ModelKeyword {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl<'de> ::serde::Deserialize<'de>
-for TransportCapacityEffectModifierVariant2Variant1ModelKeyword {
-    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
-    where
-        D: ::serde::Deserializer<'de>,
-    {
-        ::std::string::String::deserialize(deserializer)?
-            .parse()
-            .map_err(|e: self::error::ConversionError| {
-                <D::Error as ::serde::de::Error>::custom(e.to_string())
-            })
-    }
 }
 ///`TransportCapacityEffectModifierVariant3SpacePerModelItem`
 ///
@@ -51312,12 +50620,10 @@ pub struct TransportCapacityEffectModifierVariant3SpacePerModelItem {
 ///  "minProperties": 1,
 ///  "properties": {
 ///    "embark_as_keyword": {
-///      "type": "string",
-///      "minLength": 1
+///      "$ref": "#/$defs/keyword"
 ///    },
 ///    "requires_capacity_keyword": {
-///      "type": "string",
-///      "minLength": 1
+///      "$ref": "#/$defs/keyword"
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -51327,162 +50633,8 @@ pub struct TransportCapacityEffectModifierVariant3SpacePerModelItem {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(untagged, deny_unknown_fields)]
 pub enum TransportEligibility {
-    Variant0 {
-        requires_capacity_keyword: TransportEligibilityVariant0RequiresCapacityKeyword,
-    },
-    Variant1 { embark_as_keyword: TransportEligibilityVariant1EmbarkAsKeyword },
-}
-///`TransportEligibilityVariant0RequiresCapacityKeyword`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "string",
-///  "minLength": 1
-///}
-/// ```
-/// </details>
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-#[serde(transparent)]
-pub struct TransportEligibilityVariant0RequiresCapacityKeyword(::std::string::String);
-impl ::std::ops::Deref for TransportEligibilityVariant0RequiresCapacityKeyword {
-    type Target = ::std::string::String;
-    fn deref(&self) -> &::std::string::String {
-        &self.0
-    }
-}
-impl ::std::convert::From<TransportEligibilityVariant0RequiresCapacityKeyword>
-for ::std::string::String {
-    fn from(value: TransportEligibilityVariant0RequiresCapacityKeyword) -> Self {
-        value.0
-    }
-}
-impl ::std::str::FromStr for TransportEligibilityVariant0RequiresCapacityKeyword {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        if value.chars().count() < 1usize {
-            return Err("shorter than 1 characters".into());
-        }
-        Ok(Self(value.to_string()))
-    }
-}
-impl ::std::convert::TryFrom<&str>
-for TransportEligibilityVariant0RequiresCapacityKeyword {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String>
-for TransportEligibilityVariant0RequiresCapacityKeyword {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for TransportEligibilityVariant0RequiresCapacityKeyword {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl<'de> ::serde::Deserialize<'de>
-for TransportEligibilityVariant0RequiresCapacityKeyword {
-    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
-    where
-        D: ::serde::Deserializer<'de>,
-    {
-        ::std::string::String::deserialize(deserializer)?
-            .parse()
-            .map_err(|e: self::error::ConversionError| {
-                <D::Error as ::serde::de::Error>::custom(e.to_string())
-            })
-    }
-}
-///`TransportEligibilityVariant1EmbarkAsKeyword`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "string",
-///  "minLength": 1
-///}
-/// ```
-/// </details>
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-#[serde(transparent)]
-pub struct TransportEligibilityVariant1EmbarkAsKeyword(::std::string::String);
-impl ::std::ops::Deref for TransportEligibilityVariant1EmbarkAsKeyword {
-    type Target = ::std::string::String;
-    fn deref(&self) -> &::std::string::String {
-        &self.0
-    }
-}
-impl ::std::convert::From<TransportEligibilityVariant1EmbarkAsKeyword>
-for ::std::string::String {
-    fn from(value: TransportEligibilityVariant1EmbarkAsKeyword) -> Self {
-        value.0
-    }
-}
-impl ::std::str::FromStr for TransportEligibilityVariant1EmbarkAsKeyword {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        if value.chars().count() < 1usize {
-            return Err("shorter than 1 characters".into());
-        }
-        Ok(Self(value.to_string()))
-    }
-}
-impl ::std::convert::TryFrom<&str> for TransportEligibilityVariant1EmbarkAsKeyword {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String>
-for TransportEligibilityVariant1EmbarkAsKeyword {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for TransportEligibilityVariant1EmbarkAsKeyword {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl<'de> ::serde::Deserialize<'de> for TransportEligibilityVariant1EmbarkAsKeyword {
-    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
-    where
-        D: ::serde::Deserializer<'de>,
-    {
-        ::std::string::String::deserialize(deserializer)?
-            .parse()
-            .map_err(|e: self::error::ConversionError| {
-                <D::Error as ::serde::de::Error>::custom(e.to_string())
-            })
-    }
+    Variant0 { requires_capacity_keyword: Keyword },
+    Variant1 { embark_as_keyword: Keyword },
 }
 ///`TransportOccupancySubjectKind`
 ///

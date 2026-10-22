@@ -20106,7 +20106,39 @@
     }
   },
   {
-    "caseId": "aura-army-emitter-tiered-capped#360",
+    "caseId": "issue-orders-eligible-keywords#360",
+    "effect": {
+      "type": "issue-orders",
+      "count": 1,
+      "range": {
+        "inches": 6
+      },
+      "eligible": {
+        "all_of": [
+          "INFANTRY"
+        ],
+        "none_of": [
+          "TITANIC"
+        ]
+      },
+      "options": [
+        {
+          "name": "Take Aim!",
+          "effect": {
+            "type": "no-effect"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Issue up to 1 Orders to eligible friendly INFANTRY units (excluding TITANIC units) within 6\", each one of:\n  - Take Aim!: nothing happens."
+    }
+  },
+  {
+    "caseId": "aura-army-emitter-tiered-capped#361",
     "effect": {
       "type": "aura",
       "target": "enemy-within-aura",
@@ -20153,7 +20185,7 @@
     }
   },
   {
-    "caseId": "aura-any-emitter-keyword-clauses#361",
+    "caseId": "aura-any-emitter-keyword-clauses#362",
     "effect": {
       "type": "aura",
       "target": "friendly-within-aura",
@@ -20194,7 +20226,7 @@
     }
   },
   {
-    "caseId": "aura-model-emitter-keywords#362",
+    "caseId": "aura-model-emitter-keywords#363",
     "effect": {
       "type": "aura",
       "target": "friendly-within-aura",
@@ -20226,7 +20258,7 @@
     }
   },
   {
-    "caseId": "aura-unit-origin#363",
+    "caseId": "aura-unit-origin#364",
     "effect": {
       "type": "aura",
       "target": "enemy-within-aura",
@@ -20257,7 +20289,7 @@
     }
   },
   {
-    "caseId": "aura-unit-origin-emitter-keywords#364",
+    "caseId": "aura-unit-origin-emitter-keywords#365",
     "effect": {
       "type": "aura",
       "target": "friendly-within-aura",
@@ -20290,7 +20322,7 @@
     }
   },
   {
-    "caseId": "aura-tiered-effect#365",
+    "caseId": "aura-tiered-effect#366",
     "effect": {
       "type": "aura",
       "target": "enemy-within-aura",
@@ -20327,7 +20359,7 @@
     }
   },
   {
-    "caseId": "set-up-deep-strike-min-distance#366",
+    "caseId": "set-up-deep-strike-min-distance#367",
     "effect": {
       "type": "set-up",
       "target": "this-unit",
@@ -20347,7 +20379,7 @@
     }
   },
   {
-    "caseId": "move-modifier-engagement-no-end#367",
+    "caseId": "move-modifier-engagement-no-end#368",
     "effect": {
       "type": "move-modifier",
       "target": "this-model",
@@ -20366,7 +20398,7 @@
     }
   },
   {
-    "caseId": "permission-shoot-after-fall-back#368",
+    "caseId": "permission-shoot-after-fall-back#369",
     "effect": {
       "type": "permission",
       "target": "this-unit",
@@ -20386,7 +20418,7 @@
     }
   },
   {
-    "caseId": "permission-shoot-and-charge-after-fall-back#369",
+    "caseId": "permission-shoot-and-charge-after-fall-back#370",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -20422,7 +20454,7 @@
     }
   },
   {
-    "caseId": "superlative-strategist-aeldari#370",
+    "caseId": "superlative-strategist-aeldari#371",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20475,7 +20507,7 @@
     }
   },
   {
-    "caseId": "deceptive-feint#371",
+    "caseId": "deceptive-feint#372",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20560,7 +20592,7 @@
     }
   },
   {
-    "caseId": "heal-selected-model#372",
+    "caseId": "heal-selected-model#373",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -20613,7 +20645,7 @@
     }
   },
   {
-    "caseId": "marker-next-to-target#373",
+    "caseId": "marker-next-to-target#374",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -20662,7 +20694,7 @@
     }
   },
   {
-    "caseId": "psychic-model-bundle#374",
+    "caseId": "psychic-model-bundle#375",
     "effect": {
       "type": "for-each-unit",
       "selector": {
@@ -20741,7 +20773,7 @@
     }
   },
   {
-    "caseId": "designate-bearer-target-with-eligibility#375",
+    "caseId": "designate-bearer-target-with-eligibility#376",
     "effect": {
       "type": "ability-part",
       "trigger": {
@@ -20822,7 +20854,7 @@
     }
   },
   {
-    "caseId": "conditional-selected-to-shoot-this-phase#376",
+    "caseId": "conditional-selected-to-shoot-this-phase#377",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20853,7 +20885,7 @@
     }
   },
   {
-    "caseId": "transport-capacity#377",
+    "caseId": "transport-capacity#378",
     "effect": {
       "type": "transport-capacity",
       "target": "this-unit",
@@ -20874,7 +20906,7 @@
     }
   },
   {
-    "caseId": "transport-grouped-single-keyword-model#378",
+    "caseId": "transport-grouped-single-keyword-model#379",
     "effect": {
       "type": "transport-capacity",
       "target": "this-model",
@@ -20895,7 +20927,7 @@
     }
   },
   {
-    "caseId": "transport-fixed-model-spaces-with-capacity-eligibility#379",
+    "caseId": "transport-fixed-model-spaces-with-capacity-eligibility#380",
     "effect": {
       "type": "transport-capacity",
       "target": "this-model",
@@ -20916,7 +20948,7 @@
     }
   },
   {
-    "caseId": "transport-fixed-model-spaces-with-embark-as#380",
+    "caseId": "transport-fixed-model-spaces-with-embark-as#381",
     "effect": {
       "type": "transport-capacity",
       "target": "this-model",
@@ -20937,7 +20969,7 @@
     }
   },
   {
-    "caseId": "transport-equivalent-model-keyword#381",
+    "caseId": "transport-equivalent-model-keyword#382",
     "effect": {
       "type": "transport-capacity",
       "target": "this-unit",
@@ -20956,7 +20988,7 @@
     }
   },
   {
-    "caseId": "transport-equivalent-model-count#382",
+    "caseId": "transport-equivalent-model-count#383",
     "effect": {
       "type": "transport-capacity",
       "target": "this-model",
@@ -20974,7 +21006,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-inline#383",
+    "caseId": "moved-through-tall-terrain-inline#384",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -21003,7 +21035,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-trigger-condition#384",
+    "caseId": "moved-through-tall-terrain-trigger-condition#385",
     "effect": {
       "type": "ability-grant",
       "target": "this-model",
@@ -21035,7 +21067,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-negated-inline#385",
+    "caseId": "moved-through-tall-terrain-negated-inline#386",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -21069,7 +21101,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-negated-trigger-condition#386",
+    "caseId": "moved-through-tall-terrain-negated-trigger-condition#387",
     "effect": {
       "type": "ability-grant",
       "target": "this-model",
@@ -21106,7 +21138,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-trigger-event#387",
+    "caseId": "moved-through-tall-terrain-trigger-event#388",
     "effect": {
       "type": "ability-grant",
       "target": "this-model",
@@ -21128,7 +21160,7 @@
     }
   },
   {
-    "caseId": "moved-through-terrain-generic#388",
+    "caseId": "moved-through-terrain-generic#389",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -21157,7 +21189,7 @@
     }
   },
   {
-    "caseId": "aura-role-filtered-effect#389",
+    "caseId": "aura-role-filtered-effect#390",
     "effect": {
       "type": "aura",
       "target": "friendly-within-aura",

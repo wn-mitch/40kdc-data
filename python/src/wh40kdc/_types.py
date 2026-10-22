@@ -1260,11 +1260,8 @@ class Modifier23(TypedDict):
 ModelCount1: TypeAlias = int
 
 
-ModelKeywordItem: TypeAlias = str
-
-
 class By(TypedDict):
-    model_keyword: list[ModelKeywordItem]
+    model_keyword: list[Keyword]
 
 
 BindA: TypeAlias = str
@@ -1277,13 +1274,9 @@ class Modifier29(TypedDict):
     starting_strength: NotRequired[int]
 
 
-class By1(TypedDict):
-    model_keyword: list[ModelKeywordItem]
-
-
 class Modifier30(TypedDict):
     model_counts: NotRequired[list[ModelCount1]]
-    by: Literal["model"] | By1
+    by: Literal["model"] | By
     bind_as: NotRequired[list[BindA]]
     starting_strength: NotRequired[int]
 
@@ -1392,21 +1385,17 @@ class StanceSelectionCapacityEffect(TypedDict):
     modifier: Modifier60
 
 
-class Eligible(TypedDict):
-    keyword: NotRequired[str]
-
-
 TransportOccupancySubjectKind: TypeAlias = Literal["unit-models", "single-model"]
 
 
 class TransportEligibility1(TypedDict):
-    requires_capacity_keyword: str
-    embark_as_keyword: NotRequired[str]
+    requires_capacity_keyword: Keyword
+    embark_as_keyword: NotRequired[Keyword]
 
 
 class TransportEligibility2(TypedDict):
-    requires_capacity_keyword: NotRequired[str]
-    embark_as_keyword: str
+    requires_capacity_keyword: NotRequired[Keyword]
+    embark_as_keyword: Keyword
 
 
 TransportEligibility: TypeAlias = TransportEligibility1 | TransportEligibility2
@@ -1444,13 +1433,10 @@ class NamedRegionMembership(TypedDict):
     relation: str
 
 
-SetupKeyword: TypeAlias = str
-
-
 class PersistentBattlefieldMarkerState(TypedDict):
     marker_label: str
     placement: Literal["bearer", "bearer-unit", "battlefield"]
-    setup_keywords: NotRequired[list[SetupKeyword]]
+    setup_keywords: NotRequired[list[Keyword]]
     consume: NotRequired[Literal["on-use", "never"]]
     setup_within: NotRequired[RangeRef]
     removed_by_enemy_within: NotRequired[RangeRef]
@@ -1644,7 +1630,7 @@ class Modifier27(TypedDict):
 class Modifier38(TypedDict):
     occupancy_kind: Literal["grouped-models"]
     subject_kind: TransportOccupancySubjectKind
-    model_keyword: NotRequired[str]
+    model_keyword: NotRequired[Keyword]
     transport_eligibility: NotRequired[TransportEligibility]
     models_per_group: int
     spaces_per_group: int
@@ -1654,7 +1640,7 @@ class Modifier38(TypedDict):
 class Modifier39(TypedDict):
     occupancy_kind: Literal["fixed-model-spaces"]
     subject_kind: TransportOccupancySubjectKind
-    model_keyword: NotRequired[str]
+    model_keyword: NotRequired[Keyword]
     transport_eligibility: NotRequired[TransportEligibility]
     spaces_per_model: int
 
@@ -1662,18 +1648,18 @@ class Modifier39(TypedDict):
 class Modifier40(TypedDict):
     occupancy_kind: Literal["equivalent-model"]
     subject_kind: TransportOccupancySubjectKind
-    model_keyword: NotRequired[str]
+    model_keyword: NotRequired[Keyword]
     transport_eligibility: NotRequired[TransportEligibility]
-    equivalent_model_keyword: str
+    equivalent_model_keyword: Keyword
     equivalent_model_count: NotRequired[int]
 
 
 class Modifier41(TypedDict):
     occupancy_kind: Literal["equivalent-model"]
     subject_kind: TransportOccupancySubjectKind
-    model_keyword: NotRequired[str]
+    model_keyword: NotRequired[Keyword]
     transport_eligibility: NotRequired[TransportEligibility]
-    equivalent_model_keyword: NotRequired[str]
+    equivalent_model_keyword: NotRequired[Keyword]
     equivalent_model_count: int
 
 
@@ -3891,7 +3877,7 @@ class IssueOrdersEffect(TypedDict):
     type: Literal["issue-orders"]
     count: NotRequired[int]
     range: NotRequired[RangeRef]
-    eligible: NotRequired[Eligible]
+    eligible: NotRequired[KeywordPredicate]
     options: list[Option5]
 
 

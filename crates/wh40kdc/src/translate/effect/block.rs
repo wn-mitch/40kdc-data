@@ -12,7 +12,7 @@ use super::{
     child, choice_prompt, inline, is_container, items, part_head, part_inline, stance_additive,
     stance_pick, ty,
 };
-use crate::translate::condition::{condition_lead_in_value, nn, obj, range_phrase, truthy};
+use crate::translate::condition::{condition_lead_in_value, nn, obj, range_phrase, truthy, P};
 
 /// Block translation of a container effect tree (multi-line, two-space indentation).
 pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
@@ -234,14 +234,13 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
             let range = nn(e, "range")
                 .map(|r| format!(" within {}", range_phrase(Some(r))))
                 .unwrap_or_default();
-            let eligible = obj(nn(e, "eligible"));
-            let keyword = if truthy_key(eligible, "keyword") {
-                format!(" {}", jstr(eligible.get("keyword")))
-            } else {
-                String::new()
-            };
+            let mut eligible = P::new();
+            eligible.insert("owner".into(), Value::from("friendly"));
+            eligible.extend(obj(nn(e, "eligible")).clone());
+            let rendered = super::subject::filter_subject(&eligible, ctx);
+            let units = rendered.strip_prefix("all ").unwrap_or(&rendered);
             let mut lines = vec![format!(
-                "{indent}{arrow}Issue up to {n} Orders to eligible friendly{keyword} units{range}, each one of:"
+                "{indent}{arrow}Issue up to {n} Orders to eligible {units}{range}, each one of:"
             )];
             for o in items(e, "options") {
                 let o = obj(Some(o));

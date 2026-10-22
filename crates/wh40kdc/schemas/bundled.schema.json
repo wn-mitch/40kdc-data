@@ -9322,13 +9322,8 @@
                       "additionalProperties": false,
                       "properties": {
                         "model_keyword": {
-                          "type": "array",
-                          "items": {
-                            "type": "string",
-                            "minLength": 1
-                          },
-                          "minItems": 2,
-                          "uniqueItems": true
+                          "$ref": "#/$defs/keyword-list",
+                          "minItems": 2
                         }
                       },
                       "required": [
@@ -10158,8 +10153,7 @@
                       "$ref": "#/$defs/transport-occupancy-subject-kind"
                     },
                     "model_keyword": {
-                      "type": "string",
-                      "minLength": 1
+                      "$ref": "#/$defs/keyword"
                     },
                     "transport_eligibility": {
                       "$ref": "#/$defs/transport-eligibility"
@@ -10199,8 +10193,7 @@
                       "$ref": "#/$defs/transport-occupancy-subject-kind"
                     },
                     "model_keyword": {
-                      "type": "string",
-                      "minLength": 1
+                      "$ref": "#/$defs/keyword"
                     },
                     "transport_eligibility": {
                       "$ref": "#/$defs/transport-eligibility"
@@ -10227,15 +10220,13 @@
                       "$ref": "#/$defs/transport-occupancy-subject-kind"
                     },
                     "model_keyword": {
-                      "type": "string",
-                      "minLength": 1
+                      "$ref": "#/$defs/keyword"
                     },
                     "transport_eligibility": {
                       "$ref": "#/$defs/transport-eligibility"
                     },
                     "equivalent_model_keyword": {
-                      "type": "string",
-                      "minLength": 1
+                      "$ref": "#/$defs/keyword"
                     },
                     "equivalent_model_count": {
                       "type": "integer",
@@ -12166,14 +12157,8 @@
           "description": "Orders go to eligible units within this distance of the officer."
         },
         "eligible": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "keyword": {
-              "type": "string",
-              "minLength": 1
-            }
-          }
+          "$ref": "#/$defs/keyword-predicate",
+          "description": "Which friendly units may receive an Order, by keyword."
         },
         "options": {
           "type": "array",
@@ -12215,12 +12200,10 @@
       "minProperties": 1,
       "properties": {
         "requires_capacity_keyword": {
-          "type": "string",
-          "minLength": 1
+          "$ref": "#/$defs/keyword"
         },
         "embark_as_keyword": {
-          "type": "string",
-          "minLength": 1
+          "$ref": "#/$defs/keyword"
         }
       },
       "oneOf": [
@@ -12705,12 +12688,8 @@
           "description": "Where the marker is placed at the moment the ability resolves."
         },
         "setup_keywords": {
-          "type": "array",
+          "$ref": "#/$defs/keyword-list",
           "minItems": 1,
-          "items": {
-            "type": "string",
-            "minLength": 1
-          },
           "description": "When present, only units carrying every listed keyword may use the marker to set up; absent means any friendly unit."
         },
         "consume": {

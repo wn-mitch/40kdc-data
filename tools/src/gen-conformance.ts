@@ -2748,6 +2748,18 @@ function genEffectTranslation(): void {
       scope: { duration: "permanent" },
     },
     {
+      // Orders reach only units matching the eligible keyword predicate.
+      id: "issue-orders-eligible-keywords",
+      effect: {
+        type: "issue-orders",
+        count: 1,
+        range: { inches: 6 },
+        eligible: { all_of: ["INFANTRY"], none_of: ["TITANIC"] },
+        options: [{ name: "Take Aim!", effect: { type: "no-effect" } }],
+      },
+      scope: { duration: "permanent" },
+    },
+    {
       // An army-wide emitter: the aura is measured from any friendly model with the keywords.
       id: "aura-army-emitter-tiered-capped",
       effect: {

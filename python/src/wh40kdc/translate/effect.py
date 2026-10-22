@@ -65,6 +65,7 @@ from wh40kdc.translate.effect_select import (
 from wh40kdc.translate.effect_words import (
     Ctx,
     capitalize,
+    filter_subject,
     is_num,
     jstr,
     or_list,
@@ -238,12 +239,9 @@ def describe_effect(e: Effect, depth: int = 0, ctx: Ctx | None = None) -> str:
     if t == "issue-orders":
         n = jstr(e["count"]) if e.get("count") is not None else "one or more"
         rng = f" within {range_phrase(e['range'])}" if e.get("range") is not None else ""
-        eligible = _obj(e.get("eligible"))
-        elig = f" {jstr(eligible['keyword'])}" if eligible.get("keyword") else ""
-        head = (
-            f"{indent}{arrow}Issue up to {n} Orders to eligible friendly{elig} units{rng}, each "
-            "one of:"
-        )
+        units = filter_subject({"owner": "friendly", **_obj(e.get("eligible"))}, ctx)
+        units = units.removeprefix("all ")
+        head = f"{indent}{arrow}Issue up to {n} Orders to eligible {units}{rng}, each one of:"
         return "\n".join([head, *_option_lines(e, indent, ctx)])
     if t == "resource-action-menu":
         su = shared_usage_clause(e.get("shared_usage"))

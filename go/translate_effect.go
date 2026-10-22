@@ -671,11 +671,12 @@ func describeEffect(e map[string]any, depth int, ctx effCtx) string {
 		if e["range"] != nil {
 			rng = " within " + rangePhrase(e["range"])
 		}
-		elig := ""
-		if kw := mapOr(e["eligible"])["keyword"]; jsTruthy(kw) {
-			elig = " " + ejstr(kw)
+		eligible := map[string]any{"owner": "friendly"}
+		for k, v := range mapOr(e["eligible"]) {
+			eligible[k] = v
 		}
-		lines := []string{indent + arrow + "Issue up to " + n + " Orders to eligible friendly" + elig + " units" + rng + ", each one of:"}
+		units := strings.TrimPrefix(filterSubject(eligible, ctx), "all ")
+		lines := []string{indent + arrow + "Issue up to " + n + " Orders to eligible " + units + rng + ", each one of:"}
 		for _, o := range getList(e, "options") {
 			om := mapOr(o)
 			lines = append(lines, indent+"  - "+ejstr(om["name"])+": "+describeEffectInline(mapOr(om["effect"]), ctx)+".")

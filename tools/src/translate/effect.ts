@@ -954,8 +954,9 @@ export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): str
     case "issue-orders": {
       const n = e.count != null ? jstr(e.count) : "one or more";
       const rng = e.range != null ? ` within ${rangePhrase(e.range)}` : "";
-      const elig = e.eligible?.keyword ? ` ${jstr(e.eligible.keyword)}` : "";
-      const lines = [`${indent}${arrow}Issue up to ${n} Orders to eligible friendly${elig} units${rng}, each one of:`];
+      // The eligible units: friendly units matching the keyword predicate ("friendly INFANTRY units").
+      const units = filterSubject({ owner: "friendly", ...(e.eligible ?? {}) }, ctx).replace(/^all /, "");
+      const lines = [`${indent}${arrow}Issue up to ${n} Orders to eligible ${units}${rng}, each one of:`];
       for (const opt of e.options ?? []) {
         lines.push(`${indent}  - ${jstr(opt.name)}: ${describeEffectInline(opt.effect ?? {}, ctx)}.`);
       }

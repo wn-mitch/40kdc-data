@@ -941,8 +941,8 @@ export type TransportOccupancySubjectKind = "unit-models" | "single-model";
  * via the `definition` "transport-eligibility".
  */
 export type TransportEligibility = {
-  requires_capacity_keyword?: string;
-  embark_as_keyword?: string;
+  requires_capacity_keyword?: Keyword;
+  embark_as_keyword?: Keyword;
 } & TransportEligibility1;
 export type TransportEligibility1 = {
   [k: string]: unknown;
@@ -1064,6 +1064,12 @@ export type RuleStateCoreRuleSlug =
   | "charge-bonus"
   | "hidden"
   | "orders-end-on-battle-shock";
+/**
+ * When present, only units carrying every listed keyword may use the marker to set up; absent means any friendly unit.
+ *
+ * @minItems 1
+ */
+export type KeywordList13 = [Keyword, ...Keyword[]];
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "effect".
@@ -3790,9 +3796,7 @@ export interface IssueOrdersEffect {
          */
         per_battle_round: [NonTieredRangeRef, ...NonTieredRangeRef[]];
       };
-  eligible?: {
-    keyword?: string;
-  };
+  eligible?: KeywordPredicate1;
   /**
    * @minItems 1
    */
@@ -3806,6 +3810,15 @@ export interface IssueOrdersEffect {
       effect: EffectNode;
     }[]
   ];
+}
+/**
+ * Which friendly units may receive an Order, by keyword.
+ */
+export interface KeywordPredicate1 {
+  all_of?: KeywordList;
+  any_of?: KeywordList;
+  none_of?: KeywordList;
+  not_all_of?: KeywordList;
 }
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
@@ -5003,7 +5016,7 @@ export interface TransportCapacityEffect {
     | {
         occupancy_kind: "grouped-models";
         subject_kind: TransportOccupancySubjectKind;
-        model_keyword?: string;
+        model_keyword?: Keyword;
         transport_eligibility?: TransportEligibility;
         models_per_group: number;
         spaces_per_group: number;
@@ -5012,7 +5025,7 @@ export interface TransportCapacityEffect {
     | {
         occupancy_kind: "fixed-model-spaces";
         subject_kind: TransportOccupancySubjectKind;
-        model_keyword?: string;
+        model_keyword?: Keyword;
         transport_eligibility?: TransportEligibility;
         spaces_per_model: number;
       }
@@ -7284,12 +7297,7 @@ export interface PersistentBattlefieldMarkerState {
    * Where the marker is placed at the moment the ability resolves.
    */
   placement: "bearer" | "bearer-unit" | "battlefield";
-  /**
-   * When present, only units carrying every listed keyword may use the marker to set up; absent means any friendly unit.
-   *
-   * @minItems 1
-   */
-  setup_keywords?: [string, ...string[]];
+  setup_keywords?: KeywordList13;
   /**
    * Whether a single set-up use spends the marker.
    */

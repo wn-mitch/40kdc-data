@@ -265,6 +265,13 @@ describe("rules, army and the adopted D18 shapes", () => {
     const orders = (range: unknown) => ({ type: "issue-orders", range, options: [{ name: "Take Aim!", effect: { type: "no-effect" } }] });
     expect(effectOk(orders(6))).toBe(false);
     expect(effectOk(orders({ inches: 6 }))).toBe(true);
+  });
+
+  it("names keywords with the shared keyword types, never a free string", () => {
+    const orders = (eligible: unknown) => ({ type: "issue-orders", eligible, options: [{ name: "Take Aim!", effect: { type: "no-effect" } }] });
+    expect(effectOk(orders({ keyword: "INFANTRY" }))).toBe(false);
+    expect(effectOk(orders({ all_of: ["INFANTRY"] }))).toBe(true);
+    expect(effectOk(orders({ all_of: ["X".repeat(65)] }))).toBe(false);
     expect(conditionOk({ type: "guided", parameters: {} })).toBe(true);
     expect(conditionOk({ type: "matches", parameters: { subject: "defender", filter: { designated: "spotted" } } })).toBe(true);
   });
