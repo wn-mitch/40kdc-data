@@ -17,7 +17,8 @@
             </profile>
             <profile name="Karnivore" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">You can re-roll a failed Charge roll.</characteristic>
+                <characteristic name="Description">You can re-roll the Charge roll.
+You can re-roll the Advance roll.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
@@ -111,7 +112,8 @@
             </profile>
             <profile name="Karnivore" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">You can re-roll a failed Charge roll.</characteristic>
+                <characteristic name="Description">You can re-roll the Charge roll.
+You can re-roll the Advance roll.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">

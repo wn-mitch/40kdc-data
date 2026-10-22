@@ -2646,7 +2646,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "b057b751288857d171c87da7f8baa026b70ac7bb26c518f01fbc8e5c3a93501b",
     "version": "2025-q3",
@@ -2654,8 +2654,8 @@
       "type": "stat-modifier",
       "target": "attacker",
       "modifier": {
-        "operation": "subtract",
         "stat": "AP",
+        "operation": "worsen",
         "value": 1
       }
     },

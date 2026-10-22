@@ -5,15 +5,26 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "8345cb8d1ba9fb3d1a909a511f4f84c0fd5b2026060b5f8f36a7ac8eb243da18",
+    "source_digest": "b38696a9bf6d3ea08eeff4400a6537c6677e2cc5439c87b0b3d69d28e7947f1d",
     "version": "2025-q3",
     "effect": {
-      "type": "damage-reduction",
-      "target": "this-unit",
-      "modifier": {
-        "reduction": 1
+      "type": "conditional",
+      "condition": {
+        "type": "attack-is",
+        "parameters": {
+          "attack_type": "ranged"
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "attacker",
+        "modifier": {
+          "stat": "D",
+          "operation": "subtract",
+          "value": 1
+        }
       }
     },
     "scope": {
@@ -732,29 +743,27 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "a530a3c49032bb04ea6dd3d921676b8b4e05845e52e4f763afcf324a945a0865",
+    "source_digest": "b057b751288857d171c87da7f8baa026b70ac7bb26c518f01fbc8e5c3a93501b",
     "version": "2025-q3",
     "effect": {
-      "type": "feel-no-pain",
-      "target": "this-unit",
+      "type": "stat-modifier",
+      "target": "attacker",
       "modifier": {
-        "threshold": 4
+        "stat": "AP",
+        "operation": "worsen",
+        "value": 1
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "unit_ids": [
       "custodian-wardens"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "usage": {
-      "frequency": "n-per-battle",
-      "count": 1
-    },
+    "behavior": "passive",
     "faction_id": "adeptus-custodes"
   },
   {
@@ -3251,9 +3260,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "shield-captain"
     ],
@@ -3261,11 +3269,21 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "damage-reduction",
+      "target": "this-model",
+      "modifier": {
+        "reduction": 1
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "damage-allocated",
+      "object": "this-model"
+    },
+    "source_digest": "5a79bd88a59dd02e7d336d4dc1d7a4c451017529ae4e5242548d236b15427fc4"
   },
   {
     "ability_id": "praesidium-shield-wargear-adeptus-custodes",

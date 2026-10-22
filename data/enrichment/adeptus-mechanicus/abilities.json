@@ -6427,11 +6427,6 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "usage": {
-      "frequency": "n-per-battle",
-      "count": 1,
-      "per": "unit"
-    },
     "faction_id": "adeptus-mechanicus",
     "trigger": {
       "event": "phase-started",

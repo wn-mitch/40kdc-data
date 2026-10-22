@@ -779,9 +779,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "emperors-champion"
     ],
@@ -789,11 +788,21 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "damage-reduction",
+      "target": "this-model",
+      "modifier": {
+        "reduction": 1
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "damage-allocated",
+      "object": "this-model"
+    },
+    "source_digest": "5a79bd88a59dd02e7d336d4dc1d7a4c451017529ae4e5242548d236b15427fc4"
   },
   {
     "ability_id": "augury-servo-host-vow-sworn-crusaders-black-templars",

@@ -7844,9 +7844,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "shalaxi-helbane"
     ],
@@ -7854,11 +7853,31 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "charge",
+            "result_scope": "any-result"
+          }
+        },
+        {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "advance",
+            "result_scope": "any-result"
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "activated",
+    "source_digest": "860e5a10a7674594698f84758c2c6878894924d1d3454829d2454875ec86f777"
   },
   {
     "ability_id": "shining-aegis-emperors-children",
@@ -7994,9 +8013,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "seekers"
     ],
@@ -8004,10 +8022,30 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "charge",
+            "result_scope": "any-result"
+          }
+        },
+        {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "advance",
+            "result_scope": "any-result"
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "activated",
+    "source_digest": "797298065f482b920541722874f1f141f9e56444dbfd88c13d7fd3d44f98d1a4"
   }
 ]

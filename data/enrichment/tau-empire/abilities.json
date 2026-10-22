@@ -3347,9 +3347,6 @@
         "owner": "enemy"
       }
     },
-    "usage": {
-      "frequency": "once-per-turn"
-    },
     "faction_id": "tau-empire"
   },
   {

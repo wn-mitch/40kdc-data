@@ -413,15 +413,15 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "160391f38686ce27c7bedb7bb41c1707b4552b04ac3cca41aaa0ecaf31126676",
+    "source_digest": "5a79bd88a59dd02e7d336d4dc1d7a4c451017529ae4e5242548d236b15427fc4",
     "version": "2025-q3",
     "effect": {
       "type": "damage-reduction",
-      "target": "this-unit",
+      "target": "this-model",
       "modifier": {
-        "reduction": "half"
+        "reduction": 1
       }
     },
     "scope": {
@@ -431,9 +431,13 @@
       "captain-in-gravis-armour"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "defensive ability (skipped for damage calc)",
-    "faction_id": "adeptus-astartes"
+    "faction_id": "adeptus-astartes",
+    "trigger": {
+      "event": "damage-allocated",
+      "object": "this-model"
+    }
   },
   {
     "ability_id": "unto-the-anvil-adeptus-astartes",
@@ -4410,7 +4414,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "679696a9b71a31f0abeadb51f3d68e2d0d8e583f8a0e9314bebd9941257aa8cf",
     "version": "2025-q3",
@@ -4418,30 +4422,26 @@
     "unit_ids": [
       "assault-force-intercessor-squad"
     ],
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "matches",
+        "type": "within",
         "parameters": {
-          "filter": {
-            "within": {
-              "range": "objective-control",
-              "of": {
-                "objective": {}
-              }
-            }
-          }
+          "of": {
+            "objective": {}
+          },
+          "range": "objective-control",
+          "models": "every"
         }
       },
       "effect": {
         "type": "stat-modifier",
-        "target": "this-unit",
+        "target": "attacker",
         "modifier": {
           "stat": "AP",
-          "operation": "add",
-          "value": 1,
-          "incoming": true
+          "operation": "worsen",
+          "value": 1
         }
       }
     },
@@ -4449,7 +4449,17 @@
       "duration": "permanent"
     },
     "community_notes": "While every model in this unit is within range of an objective marker, attacks that target this unit have -1 AP",
-    "faction_id": "adeptus-astartes"
+    "faction_id": "adeptus-astartes",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
+    }
   },
   {
     "ability_id": "empyric-insight-adeptus-astartes",

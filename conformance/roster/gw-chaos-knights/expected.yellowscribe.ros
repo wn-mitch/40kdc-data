@@ -425,7 +425,8 @@ If 1+ enemy units destroyed, enemy units within 3" of that unit must take a Batt
             </profile>
             <profile name="Karnivore" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">You can re-roll a failed Charge roll.</characteristic>
+                <characteristic name="Description">You can re-roll the Charge roll.
+You can re-roll the Advance roll.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
@@ -519,7 +520,8 @@ If 1+ enemy units destroyed, enemy units within 3" of that unit must take a Batt
             </profile>
             <profile name="Karnivore" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">You can re-roll a failed Charge roll.</characteristic>
+                <characteristic name="Description">You can re-roll the Charge roll.
+You can re-roll the Advance roll.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
@@ -613,7 +615,8 @@ If 1+ enemy units destroyed, enemy units within 3" of that unit must take a Batt
             </profile>
             <profile name="Karnivore" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">You can re-roll a failed Charge roll.</characteristic>
+                <characteristic name="Description">You can re-roll the Charge roll.
+You can re-roll the Advance roll.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
@@ -707,7 +710,8 @@ If 1+ enemy units destroyed, enemy units within 3" of that unit must take a Batt
             </profile>
             <profile name="Karnivore" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">You can re-roll a failed Charge roll.</characteristic>
+                <characteristic name="Description">You can re-roll the Charge roll.
+You can re-roll the Advance roll.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">

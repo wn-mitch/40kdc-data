@@ -2360,10 +2360,6 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "usage": {
-      "frequency": "n-per-battle",
-      "count": 1
-    },
     "community_notes": "[APPROX] On a Dark Pact this unit re-rolls Wound rolls of 1; the second step models the once-per-battle overcharge that instead grants a full Wound re-roll. The overcharge is optional and, if the Dark Pact Leadership test is then failed, the model suffers 3 mortal wounds instead of D3 — not modeled here. Full rule in raw-text store.",
     "faction_id": "chaos-space-marines",
     "trigger": {
