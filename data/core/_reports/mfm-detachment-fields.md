@@ -9,7 +9,7 @@ authored separately and is untouched.
 |---|--:|--:|--:|--:|--:|--:|--:|--:|--:|
 | adepta-sororitas | 9 | 0 | 9 | 0 | 9 | 0 | 9 | 0 | 0 |
 | adeptus-astartes | 16 | 0 | 16 | 0 | 16 | 0 | 16 | 0 | 0 |
-| adeptus-custodes | 10 | 0 | 10 | 0 | 10 | 0 | 10 | 0 | 0 |
+| adeptus-custodes | 16 | 0 | 16 | 0 | 16 | 0 | 16 | 0 | 0 |
 | adeptus-mechanicus | 11 | 0 | 11 | 0 | 11 | 0 | 10 | 0 | 0 |
 | aeldari | 16 | 0 | 16 | 0 | 16 | 0 | 16 | 0 | 0 |
 | agents-of-the-imperium | 6 | 0 | 6 | 0 | 6 | 0 | 6 | 0 | 0 |
@@ -41,5 +41,5 @@ authored separately and is untouched.
 | ultramarines | 1 | 0 | 1 | 0 | 1 | 0 | 1 | 0 | 0 |
 | white-scars | 1 | 0 | 1 | 0 | 1 | 0 | 1 | 0 | 0 |
 | world-eaters | 9 | 0 | 9 | 0 | 9 | 0 | 8 | 0 | 0 |
-| **TOTAL** | **274** | **0** | **274** | **0** | **274** | **0** | **266** | **0** | **0** |
+| **TOTAL** | **280** | **0** | **280** | **0** | **280** | **0** | **272** | **0** | **0** |
 

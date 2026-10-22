@@ -5004,8 +5004,8 @@
     }
   },
   {
-    "ability_id": "watch-that-agents-of-the-imperium",
-    "name": "Watch That (new)",
+    "ability_id": "purgatus-quarry-agents-of-the-imperium",
+    "name": "Purgatus Quarry",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",

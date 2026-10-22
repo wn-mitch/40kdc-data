@@ -3357,7 +3357,7 @@ function genEffectTranslation(): void {
   ];
   fidelityWorklists.push(
     ["adeptus-astartes", ["prescience-adeptus-astartes"]],
-    ["adeptus-custodes", ["superhuman-reserves-auric-champions-adeptus-custodes", "gilded-champion-lions-of-the-emperor-adeptus-custodes", "synchronised-inferno-silent-hunters-adeptus-custodes"]],
+    ["adeptus-custodes", ["superhuman-reserves-auric-champions-adeptus-custodes", "gilded-champion-auric-champions-adeptus-custodes", "synchronised-inferno-silent-hunters-adeptus-custodes"]],
     ["adeptus-mechanicus", ["neurostatic-interference-adeptus-mechanicus", "precision-onslaught-eradication-cohort-adeptus-mechanicus"]],
     ["aeldari", ["shepherds-of-the-dead-aeldari"]],
     ["agents-of-the-imperium", ["micromelta-rounds-veiled-blade-elimination-force-agents-of-the-imperium"]],

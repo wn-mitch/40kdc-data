@@ -11,8 +11,8 @@ never overwritten.
 | Filled (was empty) | 0 |
 | De-drafted (dump confirmed a guess) | 0 |
 | Corrected (dump fixed a draft) | 0 |
-| Confirmed (already matched) | 832 |
-| Review (authored ≠ dump, kept) | 24 |
+| Confirmed (already matched) | 855 |
+| Review (authored ≠ dump, kept) | 26 |
 
 ## Review — authored value the dump contradicts (NOT changed)
 
@@ -22,6 +22,8 @@ never overwritten.
 - adeptus-astartes/chaplain-in-terminator-armour: authored round 40 vs dump round 50
 - adeptus-astartes/captain-in-terminator-armour: authored round 50 vs dump round 40
 - adeptus-astartes/commander-dante: authored round 50 vs dump round 40
+- adeptus-custodes/caladius-grav-tank: authored oval 170x109 vs dump oval 150x95
+- adeptus-custodes/coronus-grav-carrier: authored oval 170x109 vs dump oval 150x95
 - aeldari/ynnari-archon: authored round 25 vs dump round 32
 - aeldari/yvraine: authored oval 75x42 vs dump oval 74x42
 - agents-of-the-imperium/voidsmen-at-arms: authored round 32 vs dump round 25

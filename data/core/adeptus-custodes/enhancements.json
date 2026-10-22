@@ -1,299 +1,9 @@
 [
   {
-    "id": "radiant-mantle-talons-of-the-emperor-adeptus-custodes",
-    "name": "Radiant Mantle",
-    "detachment_id": "talons-of-the-emperor",
-    "cost": 30,
-    "keyword_restrictions": [
-      "Adeptus Custodes"
-    ],
-    "ability_id": "radiant-mantle-talons-of-the-emperor-adeptus-custodes",
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-963"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1,
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "5cb00a59-ae2a-5495-874d-a06b27776ec0"
-      },
-      {
-        "namespace": "mfm",
-        "id": "831e4eb8-44f6-4aeb-a8c4-5f00087bd4ad"
-      }
-    ]
-  },
-  {
-    "id": "gift-of-terran-artifice-talons-of-the-emperor-adeptus-custodes",
-    "name": "Gift of Terran Artifice",
-    "detachment_id": "talons-of-the-emperor",
-    "cost": 15,
-    "keyword_restrictions": [
-      "Adeptus Custodes"
-    ],
-    "ability_id": "gift-of-terran-artifice-talons-of-the-emperor-adeptus-custodes",
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-963"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1,
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "8dd94065-def4-5ce1-983c-fc400637f003"
-      },
-      {
-        "namespace": "mfm",
-        "id": "60461b2c-c1ca-4046-82a2-436078ebfb10"
-      }
-    ]
-  },
-  {
-    "id": "champion-of-the-imperium-talons-of-the-emperor-adeptus-custodes",
-    "name": "Champion of the Imperium",
-    "detachment_id": "talons-of-the-emperor",
-    "cost": 25,
-    "keyword_restrictions": [
-      "Adeptus Custodes"
-    ],
-    "ability_id": "champion-of-the-imperium-talons-of-the-emperor-adeptus-custodes",
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-963"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1,
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "7b9c46ff-aacd-57fc-9a52-41b6bec07154"
-      },
-      {
-        "namespace": "mfm",
-        "id": "0b57d282-31a3-476b-bd78-f3951d1fe698"
-      }
-    ]
-  },
-  {
-    "id": "aegis-projector-talons-of-the-emperor-adeptus-custodes",
-    "name": "Aegis Projector",
-    "detachment_id": "talons-of-the-emperor",
-    "cost": 20,
-    "keyword_restrictions": [
-      "Adeptus Custodes"
-    ],
-    "ability_id": "aegis-projector-talons-of-the-emperor-adeptus-custodes",
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-963"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1,
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "f44df5b3-e3a9-5aa5-b0db-3b0a3745dc41"
-      },
-      {
-        "namespace": "mfm",
-        "id": "3a2d0fec-d3ae-4ba8-b9fc-5a5a1cbe108f"
-      }
-    ]
-  },
-  {
-    "id": "from-the-hall-of-armouries-shield-host-adeptus-custodes",
-    "name": "From the Hall of Armouries",
-    "detachment_id": "shield-host",
-    "cost": 20,
-    "keyword_restrictions": [
-      "Shield-Captain"
-    ],
-    "ability_id": "from-the-hall-of-armouries-shield-host-adeptus-custodes",
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-963"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1,
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "203387f6-a018-5ec0-bb99-9580c67beab1"
-      },
-      {
-        "namespace": "mfm",
-        "id": "a48ca031-033e-43c8-b79c-8199175c448e"
-      }
-    ]
-  },
-  {
-    "id": "castellans-mark-shield-host-adeptus-custodes",
-    "name": "Castellan’s Mark",
-    "detachment_id": "shield-host",
-    "cost": 20,
-    "keyword_restrictions": [
-      "Shield-Captain"
-    ],
-    "ability_id": "castellans-mark-shield-host-adeptus-custodes",
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-963"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1,
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "df923fa6-dd97-5d40-9150-fd22ba7ad752"
-      },
-      {
-        "namespace": "mfm",
-        "id": "327de5fd-0b06-4114-8583-8315493a7e0b"
-      }
-    ]
-  },
-  {
-    "id": "auric-mantle-shield-host-adeptus-custodes",
-    "name": "Auric Mantle",
-    "detachment_id": "shield-host",
-    "cost": 15,
-    "ability_id": "auric-mantle-shield-host-adeptus-custodes",
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-963"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1,
-    "keyword_restriction_groups": [
-      [
-        "Blade Champion"
-      ],
-      [
-        "Shield-Captain"
-      ]
-    ],
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "0bb79ab9-de62-573c-b4c3-e5898a754e49"
-      },
-      {
-        "namespace": "mfm",
-        "id": "613d5ac2-7229-4e15-8b37-959bb7f3dd64"
-      }
-    ]
-  },
-  {
-    "id": "panoptispex-shield-host-adeptus-custodes",
-    "name": "Panoptispex",
-    "detachment_id": "shield-host",
-    "cost": 5,
-    "ability_id": "panoptispex-shield-host-adeptus-custodes",
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-963"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1,
-    "keyword_restriction_groups": [
-      [
-        "Blade Champion"
-      ],
-      [
-        "Shield-Captain"
-      ]
-    ],
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "7dabdd0a-adbe-53a2-be12-92f2cc6ce2b5"
-      },
-      {
-        "namespace": "mfm",
-        "id": "2571079f-cdf9-49df-8cba-42ef31db936c"
-      }
-    ]
-  },
-  {
-    "id": "raptor-blade-null-maiden-vigil-adeptus-custodes",
-    "name": "Raptor Blade",
-    "detachment_id": "null-maiden-vigil",
-    "cost": 5,
-    "keyword_restrictions": [
-      "Anathema Psykana"
-    ],
-    "ability_id": "raptor-blade-null-maiden-vigil-adeptus-custodes",
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-963"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1,
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "5aab7b2b-e3dd-56f3-9b1d-b910c7ca5ed3"
-      },
-      {
-        "namespace": "mfm",
-        "id": "2bf0ae91-04b4-4ce5-8019-8e699d1d6093"
-      }
-    ]
-  },
-  {
-    "id": "enhanced-voidsheen-cloak-null-maiden-vigil-adeptus-custodes",
-    "name": "Enhanced Voidsheen Cloak",
-    "detachment_id": "null-maiden-vigil",
-    "cost": 10,
-    "keyword_restrictions": [
-      "Anathema Psykana"
-    ],
-    "ability_id": "enhanced-voidsheen-cloak-null-maiden-vigil-adeptus-custodes",
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-963"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1,
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "8b60bbc1-a155-5481-a6a1-d870caf744c5"
-      },
-      {
-        "namespace": "mfm",
-        "id": "69c9f474-ba9e-402d-bb49-0c8f9ecf52d4"
-      }
-    ]
-  },
-  {
     "id": "huntress-eye-null-maiden-vigil-adeptus-custodes",
     "name": "Huntress’ Eye",
     "detachment_id": "null-maiden-vigil",
-    "cost": 15,
+    "cost": 10,
     "keyword_restrictions": [
       "Anathema Psykana"
     ],
@@ -301,7 +11,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -321,7 +31,7 @@
     "id": "oblivion-knight-null-maiden-vigil-adeptus-custodes",
     "name": "Oblivion Knight",
     "detachment_id": "null-maiden-vigil",
-    "cost": 25,
+    "cost": 15,
     "keyword_restrictions": [
       "Anathema Psykana"
     ],
@@ -329,7 +39,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -346,46 +56,19 @@
     ]
   },
   {
-    "id": "blade-imperator-auric-champions-adeptus-custodes",
-    "name": "Blade Imperator",
-    "detachment_id": "auric-champions",
-    "cost": 25,
-    "keyword_restrictions": [
-      "Adeptus Custodes"
-    ],
-    "ability_id": "blade-imperator-auric-champions-adeptus-custodes",
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-963"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1,
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "07d424f8-5d64-5835-a079-eb1e3f9730a8"
-      },
-      {
-        "namespace": "mfm",
-        "id": "22731c87-c0f4-4f0a-bf8d-700329d52fef"
-      }
-    ]
-  },
-  {
     "id": "inspirational-exemplar-auric-champions-adeptus-custodes",
     "name": "Inspirational Exemplar",
     "detachment_id": "auric-champions",
     "cost": 10,
     "keyword_restrictions": [
-      "Adeptus Custodes"
+      "Adeptus Custodes",
+      "Infantry"
     ],
     "ability_id": "inspirational-exemplar-auric-champions-adeptus-custodes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -402,467 +85,6 @@
     ]
   },
   {
-    "id": "veiled-blade-auric-champions-adeptus-custodes",
-    "name": "Veiled Blade",
-    "detachment_id": "auric-champions",
-    "cost": 25,
-    "keyword_restrictions": [
-      "Adeptus Custodes"
-    ],
-    "ability_id": "veiled-blade-auric-champions-adeptus-custodes",
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-963"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1,
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "7fdcb9e4-0655-5bca-aeaa-b8da629693ef"
-      },
-      {
-        "namespace": "mfm",
-        "id": "d178eeae-2a4d-4597-af84-02bef5cb5d36"
-      }
-    ]
-  },
-  {
-    "id": "martial-philosopher-auric-champions-adeptus-custodes",
-    "name": "Martial Philosopher",
-    "detachment_id": "auric-champions",
-    "cost": 30,
-    "keyword_restrictions": [
-      "Adeptus Custodes"
-    ],
-    "ability_id": "martial-philosopher-auric-champions-adeptus-custodes",
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-963"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1,
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "a5906fc4-dad0-53cc-8d57-873f3b62382a"
-      },
-      {
-        "namespace": "mfm",
-        "id": "7e0f723a-b181-4a70-a5f7-26de7497135a"
-      }
-    ]
-  },
-  {
-    "id": "adamantine-talisman-solar-spearhead-adeptus-custodes",
-    "name": "Adamantine Talisman",
-    "detachment_id": "solar-spearhead",
-    "cost": 25,
-    "keyword_restrictions": [
-      "Adeptus Custodes"
-    ],
-    "ability_id": "adamantine-talisman-solar-spearhead-adeptus-custodes",
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-963"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1,
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "86b9af18-226e-55bc-812a-94adaf4e6bb7"
-      },
-      {
-        "namespace": "mfm",
-        "id": "d25d6f4b-3dcf-4b17-8e8e-b39a487012c9"
-      }
-    ]
-  },
-  {
-    "id": "augury-uplink-solar-spearhead-adeptus-custodes",
-    "name": "Augury Uplink",
-    "detachment_id": "solar-spearhead",
-    "cost": 35,
-    "keyword_restrictions": [
-      "Adeptus Custodes"
-    ],
-    "ability_id": "augury-uplink-solar-spearhead-adeptus-custodes",
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-963"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1,
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "dafde617-f678-5e98-a999-d95231a375f5"
-      },
-      {
-        "namespace": "mfm",
-        "id": "3f8a63b3-0196-4a79-951b-c87d463e68e3"
-      }
-    ]
-  },
-  {
-    "id": "honoured-fallen-aura-solar-spearhead-adeptus-custodes",
-    "name": "Honoured Fallen (Aura)",
-    "detachment_id": "solar-spearhead",
-    "cost": 15,
-    "keyword_restrictions": [
-      "Adeptus Custodes",
-      "Vehicle"
-    ],
-    "ability_id": "honoured-fallen-aura-solar-spearhead-adeptus-custodes",
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-963"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1,
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "3026d0fe-0fa4-51f3-ab38-e06f4dde7f7b"
-      },
-      {
-        "namespace": "mfm",
-        "id": "ff916c03-34fc-4bd7-8be8-2c2057604b19"
-      }
-    ]
-  },
-  {
-    "id": "veteran-of-the-kataphraktoi-solar-spearhead-adeptus-custodes",
-    "name": "Veteran of the Kataphraktoi",
-    "detachment_id": "solar-spearhead",
-    "cost": 10,
-    "ability_id": "veteran-of-the-kataphraktoi-solar-spearhead-adeptus-custodes",
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-963"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1,
-    "keyword_restriction_groups": [
-      [
-        "Adeptus Custodes",
-        "Infantry"
-      ],
-      [
-        "Adeptus Custodes",
-        "Mounted"
-      ]
-    ],
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "94375c4f-0b51-55d6-961a-c1fd462c3f27"
-      },
-      {
-        "namespace": "mfm",
-        "id": "5e535e96-d158-4b11-900a-f072d6d8cae7"
-      }
-    ]
-  },
-  {
-    "id": "superior-creation-lions-of-the-emperor-adeptus-custodes",
-    "name": "Superior Creation",
-    "detachment_id": "lions-of-the-emperor",
-    "cost": 25,
-    "keyword_restrictions": [
-      "Adeptus Custodes",
-      "Infantry"
-    ],
-    "ability_id": "superior-creation-lions-of-the-emperor-adeptus-custodes",
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-963"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1,
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "c745e501-f0fb-5435-832d-f094c9490a38"
-      },
-      {
-        "namespace": "mfm",
-        "id": "373e554a-2273-4820-b7fd-98b6e7541436"
-      }
-    ]
-  },
-  {
-    "id": "praesidius-lions-of-the-emperor-adeptus-custodes",
-    "name": "Praesidius",
-    "detachment_id": "lions-of-the-emperor",
-    "cost": 25,
-    "keyword_restrictions": [
-      "Adeptus Custodes"
-    ],
-    "ability_id": "praesidius-lions-of-the-emperor-adeptus-custodes",
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-963"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1,
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "2d728c47-9490-5678-b5ce-30a52e84163b"
-      },
-      {
-        "namespace": "mfm",
-        "id": "8be61c26-7307-4e5d-98a0-f8958a199c00"
-      }
-    ]
-  },
-  {
-    "id": "fierce-conqueror-lions-of-the-emperor-adeptus-custodes",
-    "name": "Fierce Conqueror",
-    "detachment_id": "lions-of-the-emperor",
-    "cost": 15,
-    "keyword_restrictions": [
-      "Shield-Captain"
-    ],
-    "ability_id": "fierce-conqueror-lions-of-the-emperor-adeptus-custodes",
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-963"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1,
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "521e3804-fae1-59ef-898a-82e6a3311823"
-      },
-      {
-        "namespace": "mfm",
-        "id": "09443c78-9599-4b1c-baa0-836142b59bb1"
-      }
-    ]
-  },
-  {
-    "id": "admonimortis-lions-of-the-emperor-adeptus-custodes",
-    "name": "Admonimortis",
-    "detachment_id": "lions-of-the-emperor",
-    "cost": 30,
-    "keyword_restrictions": [
-      "Shield-Captain"
-    ],
-    "ability_id": "admonimortis-lions-of-the-emperor-adeptus-custodes",
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-963"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1,
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "f8832772-ff0c-54f2-9561-2250eb7049f8"
-      },
-      {
-        "namespace": "mfm",
-        "id": "6bf0be50-a491-4d36-9491-929b860c64bf"
-      }
-    ]
-  },
-  {
-    "id": "interred-expertise-upgrade-might-of-the-moritoi-adeptus-custodes",
-    "name": "Interred Expertise (Upgrade)",
-    "detachment_id": "might-of-the-moritoi",
-    "cost": 25,
-    "keyword_restrictions": [
-      "Adeptus Custodes",
-      "Walker"
-    ],
-    "ability_id": "interred-expertise-upgrade-might-of-the-moritoi-adeptus-custodes",
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-963"
-    },
-    "points_provisional": false,
-    "upgrade_tag": true,
-    "max_targets": 3,
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "c7bcb884-4712-5373-aafa-9a6793ad3272"
-      },
-      {
-        "namespace": "mfm",
-        "id": "a4e003a1-9e8c-4c4b-a89f-3888cfa5996b"
-      }
-    ]
-  },
-  {
-    "id": "auramite-sarcophagus-upgrade-might-of-the-moritoi-adeptus-custodes",
-    "name": "Auramite Sarcophagus (Upgrade)",
-    "detachment_id": "might-of-the-moritoi",
-    "cost": 15,
-    "keyword_restrictions": [
-      "Adeptus Custodes",
-      "Walker"
-    ],
-    "ability_id": "auramite-sarcophagus-upgrade-might-of-the-moritoi-adeptus-custodes",
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-963"
-    },
-    "points_provisional": false,
-    "upgrade_tag": true,
-    "max_targets": 3,
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "8f36c5e3-72d9-534a-8837-f527f340b520"
-      },
-      {
-        "namespace": "mfm",
-        "id": "d4dd3841-9337-45cd-b61e-5c734a27752a"
-      }
-    ]
-  },
-  {
-    "id": "encircling-hunter-silent-hunters-adeptus-custodes",
-    "name": "Encircling Hunter",
-    "detachment_id": "silent-hunters",
-    "cost": 15,
-    "keyword_restrictions": [
-      "Anathema Psykana"
-    ],
-    "ability_id": "encircling-hunter-silent-hunters-adeptus-custodes",
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-963"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1,
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "3eccfc9c-5adf-510a-b9a7-2d4c553f1570"
-      },
-      {
-        "namespace": "mfm",
-        "id": "07ef08d8-3ea5-4d3f-b80d-abd0ba6b0115"
-      }
-    ]
-  },
-  {
-    "id": "psyk-out-grenades-upgrade-silent-hunters-adeptus-custodes",
-    "name": "Psyk-out Grenades (Upgrade)",
-    "detachment_id": "silent-hunters",
-    "cost": 10,
-    "keyword_restrictions": [
-      "Anathema Psykana"
-    ],
-    "ability_id": "psyk-out-grenades-upgrade-silent-hunters-adeptus-custodes",
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-963"
-    },
-    "points_provisional": false,
-    "upgrade_tag": true,
-    "max_targets": 3,
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "707e9e52-4358-50f0-8be9-facd4d9be75d"
-      },
-      {
-        "namespace": "mfm",
-        "id": "a6a5395d-5ffd-4573-9728-bf2f55e0585e"
-      }
-    ]
-  },
-  {
-    "id": "mnemo-locked-shrine-cipher-tharanatoi-hammerblow-adeptus-custodes",
-    "name": "Mnemo-locked Shrine Cipher",
-    "detachment_id": "tharanatoi-hammerblow",
-    "cost": 25,
-    "keyword_restrictions": [
-      "Adeptus Custodes",
-      "Terminator"
-    ],
-    "ability_id": "mnemo-locked-shrine-cipher-tharanatoi-hammerblow-adeptus-custodes",
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-963"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1,
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "953f9cab-45a7-50c9-afa5-51c69728b07e"
-      },
-      {
-        "namespace": "mfm",
-        "id": "3f4fbec7-0f75-4462-a2e8-8a40cfb92691"
-      }
-    ]
-  },
-  {
-    "id": "efficient-aggression-tharanatoi-hammerblow-adeptus-custodes",
-    "name": "Efficient Aggression",
-    "detachment_id": "tharanatoi-hammerblow",
-    "cost": 25,
-    "keyword_restrictions": [
-      "Adeptus Custodes",
-      "Terminator"
-    ],
-    "ability_id": "efficient-aggression-tharanatoi-hammerblow-adeptus-custodes",
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-963"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1,
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "e082ad4a-93de-5938-b02d-9eea54ae7add"
-      },
-      {
-        "namespace": "mfm",
-        "id": "e83e4cec-c76d-4769-9863-158c10165f91"
-      }
-    ]
-  },
-  {
     "id": "comrades-in-wrath-tristraens-gilded-blades-adeptus-custodes",
     "name": "Comrades in Wrath",
     "detachment_id": "tristraens-gilded-blades",
@@ -870,7 +92,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -897,7 +119,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -925,7 +147,7 @@
       }
     ],
     "detachment_id": "aquilan-talon",
-    "cost": 0,
+    "cost": 10,
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -934,7 +156,10 @@
     "game_modes": [
       "combat-patrol"
     ],
-    "points_provisional": false
+    "points_provisional": false,
+    "keyword_restrictions": [
+      "Aquilan Talon Shield-Captain"
+    ]
   },
   {
     "id": "goldenwrath-upgrade-aquilan-talon-adeptus-custodes",
@@ -946,7 +171,7 @@
       }
     ],
     "detachment_id": "aquilan-talon",
-    "cost": 0,
+    "cost": 10,
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -955,7 +180,12 @@
     "game_modes": [
       "combat-patrol"
     ],
-    "points_provisional": false
+    "points_provisional": false,
+    "upgrade_tag": true,
+    "max_targets": 3,
+    "keyword_restrictions": [
+      "Aquilan Talon Contemptor-Achillus Dreadnought"
+    ]
   },
   {
     "id": "eagles-pinions-upgrade-aquilan-wing-adeptus-custodes",
@@ -967,7 +197,7 @@
       }
     ],
     "detachment_id": "aquilan-wing",
-    "cost": 0,
+    "cost": 10,
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -976,7 +206,12 @@
     "game_modes": [
       "combat-patrol"
     ],
-    "points_provisional": false
+    "points_provisional": false,
+    "upgrade_tag": true,
+    "max_targets": 3,
+    "keyword_restrictions": [
+      "Aquilan Wing Venatari with Kinetic Destroyers"
+    ]
   },
   {
     "id": "will-of-auramite-aquilan-wing-adeptus-custodes",
@@ -988,7 +223,7 @@
       }
     ],
     "detachment_id": "aquilan-wing",
-    "cost": 0,
+    "cost": 10,
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -997,6 +232,657 @@
     "game_modes": [
       "combat-patrol"
     ],
-    "points_provisional": false
+    "points_provisional": false,
+    "keyword_restrictions": [
+      "Aquilan Wing Shield-Captain"
+    ]
+  },
+  {
+    "id": "unstoppable-destroyer-shadowkeepers-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "fea27a85-ab68-457c-b69f-d679be6d1ee2"
+      }
+    ],
+    "name": "Unstoppable Destroyer",
+    "detachment_id": "shadowkeepers",
+    "cost": 25,
+    "ability_id": "unstoppable-destroyer-shadowkeepers-adeptus-custodes",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Adeptus Custodes",
+      "Infantry"
+    ]
+  },
+  {
+    "id": "genalchemic-warding-shadowkeepers-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "b9ed1806-197f-42d9-bff9-f6ca83c0b473"
+      }
+    ],
+    "name": "Genalchemic Warding",
+    "detachment_id": "shadowkeepers",
+    "cost": 30,
+    "ability_id": "genalchemic-warding-shadowkeepers-adeptus-custodes",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Adeptus Custodes"
+    ]
+  },
+  {
+    "id": "from-the-hall-of-armouries-emperors-chosen-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "fc70e8a4-8790-4c03-b202-6d599439b0b1"
+      }
+    ],
+    "name": "From the Hall of Armouries",
+    "detachment_id": "emperors-chosen",
+    "cost": 15,
+    "ability_id": "from-the-hall-of-armouries-emperors-chosen-adeptus-custodes",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Adeptus Custodes"
+    ]
+  },
+  {
+    "id": "anti-gravitic-mobility-upgrade-grav-assault-force-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "f600c8d2-ddbf-4071-82dd-040df62118b3"
+      }
+    ],
+    "name": "Anti-gravitic Mobility (Upgrade)",
+    "detachment_id": "grav-assault-force",
+    "cost": 15,
+    "ability_id": "anti-gravitic-mobility-upgrade-grav-assault-force-adeptus-custodes",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "points_provisional": false,
+    "upgrade_tag": true,
+    "max_targets": 3,
+    "keyword_restrictions": [
+      "Grav-assault"
+    ]
+  },
+  {
+    "id": "flawless-bladework-dread-host-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "f5c8e89b-96ed-4afb-a921-a2767c23f562"
+      }
+    ],
+    "name": "Flawless Bladework",
+    "detachment_id": "dread-host",
+    "cost": 15,
+    "ability_id": "flawless-bladework-dread-host-adeptus-custodes",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Adeptus Custodes"
+    ]
+  },
+  {
+    "id": "sally-forth-solar-watch-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "682bf4a8-1cda-4217-a651-939204655865"
+      }
+    ],
+    "name": "Sally Forth",
+    "detachment_id": "solar-watch",
+    "cost": 30,
+    "ability_id": "sally-forth-solar-watch-adeptus-custodes",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restriction_groups": [
+      [
+        "Adeptus Custodes",
+        "Shield-Captain"
+      ],
+      [
+        "Shield‑Captain"
+      ]
+    ]
+  },
+  {
+    "id": "auric-eagle-upgrade-solar-watch-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "b94632ff-e9b8-48db-9b3e-fee9c731d056"
+      }
+    ],
+    "name": "Auric Eagle (Upgrade)",
+    "detachment_id": "solar-watch",
+    "cost": 15,
+    "ability_id": "auric-eagle-upgrade-solar-watch-adeptus-custodes",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "points_provisional": false,
+    "upgrade_tag": true,
+    "max_targets": 3,
+    "keyword_restriction_groups": [
+      [
+        "Adeptus Custodes",
+        "Infantry"
+      ],
+      [
+        "Adeptus Custodes",
+        "Mounted"
+      ]
+    ],
+    "exclusion_keywords": [
+      "Terminator"
+    ]
+  },
+  {
+    "id": "auric-exemplar-dread-host-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "c2715bef-2809-4c52-9d9a-404c220d1f06"
+      }
+    ],
+    "name": "Auric Exemplar",
+    "detachment_id": "dread-host",
+    "cost": 15,
+    "ability_id": "auric-exemplar-dread-host-adeptus-custodes",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Adeptus Custodes"
+    ]
+  },
+  {
+    "id": "not-a-shell-wasted-aquilan-shield-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "ece1600e-3c55-4899-a2c4-6ab52c44ce82"
+      }
+    ],
+    "name": "Not a Shell Wasted",
+    "detachment_id": "aquilan-shield",
+    "cost": 10,
+    "ability_id": "not-a-shell-wasted-aquilan-shield-adeptus-custodes",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Adeptus Custodes",
+      "Infantry"
+    ]
+  },
+  {
+    "id": "pareldors-caducatrix-aquilan-shield-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "741ee95a-0ae9-42ad-ab3d-b8f23f7ff9af"
+      }
+    ],
+    "name": "Pareldor’s Caducatrix",
+    "detachment_id": "aquilan-shield",
+    "cost": 30,
+    "ability_id": "pareldors-caducatrix-aquilan-shield-adeptus-custodes",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Adeptus Custodes"
+    ]
+  },
+  {
+    "id": "arae-shrike-honoured-companions-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "0aeed957-330e-4351-8c16-083d58877f56"
+      }
+    ],
+    "name": "Arae-Shrike",
+    "detachment_id": "honoured-companions",
+    "cost": 20,
+    "ability_id": "arae-shrike-honoured-companions-adeptus-custodes",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Adeptus Custodes",
+      "Infantry"
+    ]
+  },
+  {
+    "id": "celeritous-sentries-upgrade-honoured-companions-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "4c5d301c-d246-400a-b464-9039ac4ebbbf"
+      }
+    ],
+    "name": "Celeritous Sentries (Upgrade)",
+    "detachment_id": "honoured-companions",
+    "cost": 15,
+    "ability_id": "celeritous-sentries-upgrade-honoured-companions-adeptus-custodes",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "points_provisional": false,
+    "upgrade_tag": true,
+    "max_targets": 3,
+    "keyword_restrictions": [
+      "Trusted Sentinel"
+    ]
+  },
+  {
+    "id": "lightning-descent-lions-of-the-emperor-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "39fa8f1c-8d53-477e-876d-f3ac696d53dd"
+      }
+    ],
+    "name": "Lightning Descent",
+    "detachment_id": "lions-of-the-emperor",
+    "cost": 20,
+    "ability_id": "lightning-descent-lions-of-the-emperor-adeptus-custodes",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Shield‑Captain in Allarus Terminator Armour"
+    ]
+  },
+  {
+    "id": "leonine-ferocity-lions-of-the-emperor-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "e952f6ea-9b91-406f-81a0-3342fd59e84c"
+      }
+    ],
+    "name": "Leonine Ferocity",
+    "detachment_id": "lions-of-the-emperor",
+    "cost": 20,
+    "ability_id": "leonine-ferocity-lions-of-the-emperor-adeptus-custodes",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Shield‑Captain in Allarus Terminator Armour"
+    ]
+  },
+  {
+    "id": "memento-moritoi-one-per-army-upgrade-might-of-the-moritoi-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "9fa885d0-2aab-4f90-b518-059a8b8e2793"
+      }
+    ],
+    "name": "Memento Moritoi (one per army) (Upgrade)",
+    "detachment_id": "might-of-the-moritoi",
+    "cost": 30,
+    "ability_id": "memento-moritoi-one-per-army-upgrade-might-of-the-moritoi-adeptus-custodes",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "points_provisional": false,
+    "upgrade_tag": true,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Adeptus Custodes",
+      "Dreadnought"
+    ]
+  },
+  {
+    "id": "bane-of-abominations-guardians-of-the-throne-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "00ed9505-8ef9-4746-bb1e-39113d6e8a4a"
+      }
+    ],
+    "name": "Bane of Abominations",
+    "detachment_id": "guardians-of-the-throne",
+    "cost": 20,
+    "ability_id": "bane-of-abominations-guardians-of-the-throne-adeptus-custodes",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Adeptus Custodes"
+    ]
+  },
+  {
+    "id": "emperors-light-guardians-of-the-throne-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "2c9b1691-edbf-4c37-ae0f-1e53efe956b9"
+      }
+    ],
+    "name": "Emperor’s Light",
+    "detachment_id": "guardians-of-the-throne",
+    "cost": 15,
+    "ability_id": "emperors-light-guardians-of-the-throne-adeptus-custodes",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Adeptus Custodes"
+    ]
+  },
+  {
+    "id": "castellans-mark-guardians-of-the-throne-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "940800a6-805d-409c-ae88-d27bc6f5d653"
+      }
+    ],
+    "name": "Castellan’s Mark",
+    "detachment_id": "guardians-of-the-throne",
+    "cost": 25,
+    "ability_id": "castellans-mark-guardians-of-the-throne-adeptus-custodes",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Adeptus Custodes"
+    ]
+  },
+  {
+    "id": "eagles-eye-guardians-of-the-throne-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "cf08ff55-fbe1-41a0-a0c6-6d948037ed6a"
+      }
+    ],
+    "name": "Eagle’s Eye",
+    "detachment_id": "guardians-of-the-throne",
+    "cost": 30,
+    "ability_id": "eagles-eye-guardians-of-the-throne-adeptus-custodes",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Adeptus Custodes"
+    ]
+  },
+  {
+    "id": "edge-of-the-blade-emissaries-imperatus-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "91a8a2f0-27f0-45de-abb3-b32f4ed14c45"
+      }
+    ],
+    "name": "Edge of the Blade",
+    "detachment_id": "emissaries-imperatus",
+    "cost": 15,
+    "ability_id": "edge-of-the-blade-emissaries-imperatus-adeptus-custodes",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Adeptus Custodes"
+    ]
+  },
+  {
+    "id": "combat-deployment-upgrade-grav-assault-force-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "a477da0e-b4b9-4cc9-bc75-b5b0fb0dab4c"
+      }
+    ],
+    "name": "Combat Deployment (Upgrade)",
+    "detachment_id": "grav-assault-force",
+    "cost": 20,
+    "ability_id": "combat-deployment-upgrade-grav-assault-force-adeptus-custodes",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "points_provisional": false,
+    "upgrade_tag": true,
+    "max_targets": 3,
+    "keyword_restrictions": [
+      "Grav-assault",
+      "Transport"
+    ]
+  },
+  {
+    "id": "shroud-of-the-hidden-blade-auric-champions-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "48853704-6da1-4fa1-838b-83d65d9da2d4"
+      }
+    ],
+    "name": "Shroud of the Hidden Blade",
+    "detachment_id": "auric-champions",
+    "cost": 20,
+    "ability_id": "shroud-of-the-hidden-blade-auric-champions-adeptus-custodes",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Adeptus Custodes"
+    ]
+  },
+  {
+    "id": "superior-creation-auric-champions-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "f22dc446-5c54-4105-b967-191423728f1d"
+      }
+    ],
+    "name": "Superior Creation",
+    "detachment_id": "auric-champions",
+    "cost": 30,
+    "ability_id": "superior-creation-auric-champions-adeptus-custodes",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Adeptus Custodes",
+      "Infantry"
+    ]
+  },
+  {
+    "id": "augury-uplink-one-per-army-upgrade-might-of-the-moritoi-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "cd2d3308-23d6-4cd4-b9f5-0fba566566c0"
+      }
+    ],
+    "name": "Augury Uplink (one per army) (Upgrade)",
+    "detachment_id": "might-of-the-moritoi",
+    "cost": 30,
+    "ability_id": "augury-uplink-one-per-army-upgrade-might-of-the-moritoi-adeptus-custodes",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "points_provisional": false,
+    "upgrade_tag": true,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Adeptus Custodes",
+      "Dreadnought"
+    ]
+  },
+  {
+    "id": "radiant-mantle-emperors-chosen-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "b03df237-9f84-48d0-8c7a-68b3d9b27940"
+      }
+    ],
+    "name": "Radiant Mantle",
+    "detachment_id": "emperors-chosen",
+    "cost": 40,
+    "ability_id": "radiant-mantle-emperors-chosen-adeptus-custodes",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Adeptus Custodes",
+      "Infantry"
+    ]
+  },
+  {
+    "id": "auriferous-orb-emissaries-imperatus-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "54b47498-0ac0-45de-bdce-dd3f7afe8a21"
+      }
+    ],
+    "name": "Auriferous Orb",
+    "detachment_id": "emissaries-imperatus",
+    "cost": 20,
+    "ability_id": "auriferous-orb-emissaries-imperatus-adeptus-custodes",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Adeptus Custodes"
+    ]
   }
 ]

@@ -8,7 +8,7 @@ values are compared as sets and surfaced for review on mismatch, never overwritt
 |---|--:|--:|--:|--:|--:|--:|--:|
 | adepta-sororitas | 0 | 1 | 0 | 0 | 0 | 0 | 0 |
 | adeptus-astartes | 0 | 0 | 1 | 0 | 0 | 0 | 0 |
-| adeptus-custodes | 0 | 1 | 0 | 0 | 0 | 0 | 0 |
+| adeptus-custodes | 0 | 0 | 1 | 0 | 0 | 0 | 0 |
 | adeptus-mechanicus | 0 | 1 | 0 | 0 | 0 | 0 | 0 |
 | agents-of-the-imperium | 0 | 1 | 0 | 0 | 0 | 0 | 0 |
 | astra-militarum | 0 | 1 | 0 | 0 | 0 | 0 | 0 |
@@ -39,6 +39,9 @@ values are compared as sets and surfaced for review on mismatch, never overwritt
 
 ## adeptus-astartes
 - faction_rule_ids REVIEW: authored [combat-doctrines-adeptus-astartes, transhuman-strategist-adeptus-astartes, librarius-adeptus-astartes, special-move-types-adeptus-astartes] vs owned [combat-doctrines-adeptus-astartes]
+
+## adeptus-custodes
+- faction_rule_ids REVIEW: authored [aegis-of-the-emperor-adeptus-custodes, aquila-commander-adeptus-custodes, daughters-of-the-abyss-adeptus-custodes, martial-katah-adeptus-custodes, special-move-types-adeptus-custodes] vs owned [martial-katah-adeptus-custodes]
 
 ## black-templars
 - faction_rule_ids REVIEW: authored [combat-doctrines-black-templars, transhuman-strategist-black-templars, heirs-of-sigismund-black-templars] vs owned [transhuman-strategist-black-templars, combat-doctrines-black-templars]

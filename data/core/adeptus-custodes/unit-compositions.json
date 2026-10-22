@@ -4,7 +4,7 @@
     "faction_id": "adeptus-custodes",
     "models": [
       {
-        "name": "Telemon Heavy Dreadnought",
+        "name": "Telemon Dreadnought",
         "min": 1,
         "max": 1,
         "is_leader_model": false,
@@ -13,10 +13,10 @@
           "diameter": 100
         },
         "default_weapon_ids": [
-          "iliastus-accelerator-culverin",
-          "iliastus-accelerator-culverin",
-          "armoured-feet",
-          "spiculus-bolt-launcher"
+          "dual-caestus-fists",
+          "spiculus-bolt-launcher",
+          "twin-neutronium-cascade-projectors",
+          "twin-neutronium-cascade-projectors"
         ]
       }
     ],
@@ -28,7 +28,7 @@
       {
         "models": [
           {
-            "name": "Telemon Heavy Dreadnought",
+            "name": "Telemon Dreadnought",
             "min": 1,
             "max": 1
           }
@@ -50,7 +50,7 @@
           "diameter": 60
         },
         "default_weapon_ids": [
-          "achillus-dreadspear",
+          "dreadspear",
           "lastrum-storm-bolter",
           "lastrum-storm-bolter"
         ]
@@ -86,7 +86,7 @@
           "diameter": 60
         },
         "default_weapon_ids": [
-          "galatus-warblade"
+          "warblade"
         ]
       }
     ],
@@ -145,7 +145,7 @@
     "faction_id": "adeptus-custodes",
     "models": [
       {
-        "name": "Caladius Grav-tank",
+        "name": "Caladius Grav-Tank",
         "min": 1,
         "max": 1,
         "is_leader_model": false,
@@ -156,8 +156,8 @@
         },
         "default_weapon_ids": [
           "armoured-hull",
-          "twin-lastrum-bolt-cannon",
-          "twin-iliastus-accelerator-cannon"
+          "iliastus-accelerator-cannon",
+          "twin-lastrum-bolt-cannon"
         ]
       }
     ],
@@ -169,7 +169,7 @@
       {
         "models": [
           {
-            "name": "Caladius Grav-tank",
+            "name": "Caladius Grav-Tank",
             "min": 1,
             "max": 1
           }
@@ -182,9 +182,9 @@
     "faction_id": "adeptus-custodes",
     "models": [
       {
-        "name": "Allarus Custodian",
+        "name": "Allarus Custodians",
         "min": 2,
-        "max": 6,
+        "max": 3,
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
@@ -204,7 +204,7 @@
       {
         "models": [
           {
-            "name": "Allarus Custodian",
+            "name": "Allarus Custodians",
             "min": 2,
             "max": 2
           }
@@ -213,27 +213,9 @@
       {
         "models": [
           {
-            "name": "Allarus Custodian",
+            "name": "Allarus Custodians",
             "min": 3,
             "max": 3
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Allarus Custodian",
-            "min": 4,
-            "max": 5
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Allarus Custodian",
-            "min": 6,
-            "max": 6
           }
         ]
       }
@@ -280,22 +262,9 @@
     "faction_id": "adeptus-custodes",
     "models": [
       {
-        "name": "Vigilator Sister Superior",
-        "min": 1,
-        "max": 1,
-        "is_leader_model": true,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 32
-        },
-        "default_weapon_ids": [
-          "executioner-greatblade"
-        ]
-      },
-      {
-        "name": "Vigilator",
-        "min": 3,
-        "max": 9,
+        "name": "Vigilators",
+        "min": 4,
+        "max": 10,
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
@@ -314,26 +283,7 @@
       {
         "models": [
           {
-            "name": "Vigilator Sister Superior",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Vigilator",
-            "min": 3,
-            "max": 3
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Vigilator Sister Superior",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Vigilator",
+            "name": "Vigilators",
             "min": 4,
             "max": 4
           }
@@ -342,28 +292,27 @@
       {
         "models": [
           {
-            "name": "Vigilator Sister Superior",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Vigilator",
+            "name": "Vigilators",
             "min": 5,
-            "max": 8
+            "max": 5
           }
         ]
       },
       {
         "models": [
           {
-            "name": "Vigilator Sister Superior",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Vigilator",
+            "name": "Vigilators",
             "min": 9,
             "max": 9
+          }
+        ]
+      },
+      {
+        "models": [
+          {
+            "name": "Vigilators",
+            "min": 10,
+            "max": 10
           }
         ]
       }
@@ -374,31 +323,17 @@
     "faction_id": "adeptus-custodes",
     "models": [
       {
-        "name": "Witchseeker Sister Superior",
-        "min": 1,
-        "max": 1,
-        "is_leader_model": true,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 32
-        },
-        "default_weapon_ids": [
-          "witchseeker-flamer",
-          "close-combat-weapon"
-        ]
-      },
-      {
-        "name": "Witchseeker",
-        "min": 3,
-        "max": 9,
+        "name": "Witchseekers",
+        "min": 4,
+        "max": 10,
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
           "diameter": 32
         },
         "default_weapon_ids": [
-          "witchseeker-flamer",
-          "close-combat-weapon"
+          "flamer",
+          "gun-stock"
         ]
       }
     ],
@@ -410,26 +345,7 @@
       {
         "models": [
           {
-            "name": "Witchseeker Sister Superior",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Witchseeker",
-            "min": 3,
-            "max": 3
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Witchseeker Sister Superior",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Witchseeker",
+            "name": "Witchseekers",
             "min": 4,
             "max": 4
           }
@@ -438,28 +354,27 @@
       {
         "models": [
           {
-            "name": "Witchseeker Sister Superior",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Witchseeker",
+            "name": "Witchseekers",
             "min": 5,
-            "max": 8
+            "max": 5
           }
         ]
       },
       {
         "models": [
           {
-            "name": "Witchseeker Sister Superior",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Witchseeker",
+            "name": "Witchseekers",
             "min": 9,
             "max": 9
+          }
+        ]
+      },
+      {
+        "models": [
+          {
+            "name": "Witchseekers",
+            "min": 10,
+            "max": 10
           }
         ]
       }
@@ -508,8 +423,8 @@
     "models": [
       {
         "name": "Custodian Guard",
-        "min": 4,
-        "max": 5,
+        "min": 3,
+        "max": 3,
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
@@ -529,17 +444,8 @@
         "models": [
           {
             "name": "Custodian Guard",
-            "min": 4,
-            "max": 4
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Custodian Guard",
-            "min": 5,
-            "max": 5
+            "min": 3,
+            "max": 3
           }
         ]
       }
@@ -660,8 +566,8 @@
     "models": [
       {
         "name": "Agamatus Custodians",
-        "min": 3,
-        "max": 6,
+        "min": 2,
+        "max": 2,
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "oval",
@@ -670,7 +576,7 @@
         },
         "default_weapon_ids": [
           "lastrum-bolt-cannon",
-          "interceptor-lance-agamatus-custodians"
+          "solarite-power-lance"
         ]
       }
     ],
@@ -683,17 +589,8 @@
         "models": [
           {
             "name": "Agamatus Custodians",
-            "min": 3,
-            "max": 3
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Agamatus Custodians",
-            "min": 4,
-            "max": 6
+            "min": 2,
+            "max": 2
           }
         ]
       }
@@ -704,9 +601,9 @@
     "faction_id": "adeptus-custodes",
     "models": [
       {
-        "name": "Custodian Warden",
-        "min": 4,
-        "max": 5,
+        "name": "Custodian Wardens",
+        "min": 2,
+        "max": 3,
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
@@ -725,18 +622,18 @@
       {
         "models": [
           {
-            "name": "Custodian Warden",
-            "min": 4,
-            "max": 4
+            "name": "Custodian Wardens",
+            "min": 2,
+            "max": 2
           }
         ]
       },
       {
         "models": [
           {
-            "name": "Custodian Warden",
-            "min": 5,
-            "max": 5
+            "name": "Custodian Wardens",
+            "min": 3,
+            "max": 3
           }
         ]
       }
@@ -783,7 +680,7 @@
     "faction_id": "adeptus-custodes",
     "models": [
       {
-        "name": "Vertus Praetor",
+        "name": "Vertus Praetors",
         "min": 2,
         "max": 3,
         "is_leader_model": false,
@@ -806,7 +703,7 @@
       {
         "models": [
           {
-            "name": "Vertus Praetor",
+            "name": "Vertus Praetors",
             "min": 2,
             "max": 2
           }
@@ -815,7 +712,7 @@
       {
         "models": [
           {
-            "name": "Vertus Praetor",
+            "name": "Vertus Praetors",
             "min": 3,
             "max": 3
           }
@@ -828,16 +725,16 @@
     "faction_id": "adeptus-custodes",
     "models": [
       {
-        "name": "Venatari Custodian",
+        "name": "Venatari",
         "min": 3,
-        "max": 6,
+        "max": 3,
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
           "diameter": 40
         },
         "default_weapon_ids": [
-          "venatari-lance"
+          "verutum-lance"
         ]
       }
     ],
@@ -849,18 +746,9 @@
       {
         "models": [
           {
-            "name": "Venatari Custodian",
+            "name": "Venatari",
             "min": 3,
             "max": 3
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Venatari Custodian",
-            "min": 4,
-            "max": 6
           }
         ]
       }
@@ -906,17 +794,17 @@
     "faction_id": "adeptus-custodes",
     "models": [
       {
-        "name": "Aquilon Custodian",
+        "name": "Aquilon Custodians",
         "min": 3,
-        "max": 6,
+        "max": 3,
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
           "diameter": 50
         },
         "default_weapon_ids": [
-          "solerite-power-gauntlet",
-          "lastrum-storm-bolter"
+          "adrathic-combi-destructor",
+          "solerite-power-gauntlet"
         ]
       }
     ],
@@ -928,18 +816,9 @@
       {
         "models": [
           {
-            "name": "Aquilon Custodian",
+            "name": "Aquilon Custodians",
             "min": 3,
             "max": 3
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Aquilon Custodian",
-            "min": 4,
-            "max": 6
           }
         ]
       }
@@ -950,7 +829,7 @@
     "faction_id": "adeptus-custodes",
     "models": [
       {
-        "name": "Coronus Grav-carrier",
+        "name": "Coronus Grav-Carrier",
         "min": 1,
         "max": 1,
         "is_leader_model": false,
@@ -974,7 +853,7 @@
       {
         "models": [
           {
-            "name": "Coronus Grav-carrier",
+            "name": "Coronus Grav-Carrier",
             "min": 1,
             "max": 1
           }
@@ -987,23 +866,9 @@
     "faction_id": "adeptus-custodes",
     "models": [
       {
-        "name": "Prosecutor Sister Superior",
-        "min": 1,
-        "max": 1,
-        "is_leader_model": true,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 32
-        },
-        "default_weapon_ids": [
-          "boltgun",
-          "close-combat-weapon"
-        ]
-      },
-      {
-        "name": "Prosecutor",
-        "min": 3,
-        "max": 9,
+        "name": "Prosecutors",
+        "min": 4,
+        "max": 10,
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
@@ -1011,7 +876,7 @@
         },
         "default_weapon_ids": [
           "boltgun",
-          "close-combat-weapon"
+          "gun-stock"
         ]
       }
     ],
@@ -1023,26 +888,7 @@
       {
         "models": [
           {
-            "name": "Prosecutor Sister Superior",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Prosecutor",
-            "min": 3,
-            "max": 3
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Prosecutor Sister Superior",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Prosecutor",
+            "name": "Prosecutors",
             "min": 4,
             "max": 4
           }
@@ -1051,28 +897,27 @@
       {
         "models": [
           {
-            "name": "Prosecutor Sister Superior",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Prosecutor",
+            "name": "Prosecutors",
             "min": 5,
-            "max": 8
+            "max": 5
           }
         ]
       },
       {
         "models": [
           {
-            "name": "Prosecutor Sister Superior",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Prosecutor",
+            "name": "Prosecutors",
             "min": 9,
             "max": 9
+          }
+        ]
+      },
+      {
+        "models": [
+          {
+            "name": "Prosecutors",
+            "min": 10,
+            "max": 10
           }
         ]
       }
@@ -1092,7 +937,8 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "guardian-spear-shield-captain"
+          "praesidium-shield",
+          "pyrithite-spear-shield-captain"
         ]
       }
     ],

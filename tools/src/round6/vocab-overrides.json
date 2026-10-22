@@ -2160,19 +2160,6 @@
       "ability": "cabal-of-sorcerers-thousand-sons"
     }
   },
-  "data/enrichment/adeptus-custodes/abilities.json#jump-packs-adeptus-custodes#effect": {
-    "type": "permission",
-    "target": "this-unit",
-    "modifier": {
-      "activity": "embark",
-      "allow": false,
-      "into": {
-        "all_of": [
-          "VENERABLE LAND RAIDER"
-        ]
-      }
-    }
-  },
   "data/enrichment/thousand-sons/abilities.json#scouring-warpflame-hexwarp-thrallband-thousand-sons#effect/effect/steps/1/applies/effect": {
     "type": "rule-state",
     "target": "recipient",
@@ -3184,31 +3171,6 @@
       "operation": "set",
       "value": 18
     }
-  },
-  "data/enrichment/adeptus-custodes/abilities.json#champion-of-the-imperium-talons-of-the-emperor-adeptus-custodes#effect": {
-    "type": "sequence",
-    "steps": [
-      {
-        "type": "ability-modifier",
-        "target": "this-model",
-        "modifier": {
-          "ability": "null-aegis",
-          "aspect": "range",
-          "operation": "set",
-          "value": 9
-        }
-      },
-      {
-        "type": "ability-modifier",
-        "target": "this-model",
-        "modifier": {
-          "ability": "deadly-unity",
-          "aspect": "range",
-          "operation": "set",
-          "value": 9
-        }
-      }
-    ]
   },
   "data/enrichment/thousand-sons/abilities.json#lord-of-forbidden-lore-grand-coven-thousand-sons#effect": {
     "type": "ability-modifier",
@@ -6509,7 +6471,7 @@
       "rule": "composition"
     }
   },
-  "data/enrichment/adeptus-custodes/abilities.json#shield-of-honour-talons-of-the-emperor-adeptus-custodes#effect": {
+  "data/enrichment/adeptus-custodes/abilities.json#shield-of-honour-guardians-of-the-throne-adeptus-custodes#effect": {
     "type": "targeting",
     "target": "attacker",
     "modifier": {
@@ -7095,17 +7057,6 @@
         }
       }
     ]
-  },
-  "data/enrichment/adeptus-custodes/abilities.json#auramite-sarcophagus-upgrade-might-of-the-moritoi-adeptus-custodes#effect": {
-    "type": "cost-modifier",
-    "target": "this-unit",
-    "modifier": {
-      "of": "stratagem",
-      "id": "crushing-impact",
-      "operation": "decrease",
-      "amount": 1,
-      "applies_to": "targeting-this-unit"
-    }
   },
   "data/enrichment/agents-of-the-imperium/abilities.json#intraneural-biotech-veiled-blade-elimination-force-agents-of-the-imperium#effect": {
     "type": "sequence",
@@ -8359,17 +8310,6 @@
       "weapon_type": "ranged"
     }
   },
-  "data/enrichment/adeptus-custodes/abilities.json#synchronised-inferno-silent-hunters-adeptus-custodes#effect": {
-    "type": "weapon-ability-grant",
-    "target": "this-unit",
-    "modifier": {
-      "abilities": [
-        "Blast 1"
-      ],
-      "weapon_type": "ranged",
-      "weapon_keyword": "Torrent"
-    }
-  },
   "data/enrichment/chaos-space-marines/abilities.json#ruinations-bounty-devotees-of-destruction-chaos-space-marines#effect": {
     "type": "conditional",
     "condition": {
@@ -8940,39 +8880,6 @@
       ]
     }
   },
-  "data/enrichment/adeptus-custodes/abilities.json#encircling-hunter-silent-hunters-adeptus-custodes#effect": {
-    "type": "select-units",
-    "selector": {
-      "max_count": 3,
-      "owner": "friendly",
-      "keywords": [
-        "ANATHEMA PSYKANA",
-        "INFANTRY"
-      ]
-    },
-    "effect": {
-      "type": "choice",
-      "options": [
-        {
-          "type": "set-up",
-          "target": "selected-unit",
-          "modifier": {
-            "to": "battlefield",
-            "from": "battlefield"
-          }
-        },
-        {
-          "type": "set-up",
-          "target": "selected-unit",
-          "modifier": {
-            "to": "strategic-reserves",
-            "from": "battlefield",
-            "ignore_limits": true
-          }
-        }
-      ]
-    }
-  },
   "data/enrichment/space-wolves/abilities.json#bestial-rage-space-wolves#effect/effect": {
     "type": "move",
     "target": "this-unit",
@@ -9477,7 +9384,7 @@
       }
     ]
   },
-  "data/enrichment/adeptus-custodes/abilities.json#superior-creation-lions-of-the-emperor-adeptus-custodes#effect/on_success": {
+  "data/enrichment/adeptus-custodes/abilities.json#superior-creation-auric-champions-adeptus-custodes#effect/on_success": {
     "type": "return-models",
     "target": "this-model",
     "modifier": {
@@ -11297,19 +11204,7 @@
       }
     ]
   },
-  "data/enrichment/adeptus-custodes/abilities.json#gilded-champion-lions-of-the-emperor-adeptus-custodes#effect": {
-    "type": "ability-modifier",
-    "target": "this-model",
-    "modifier": {
-      "ability": {
-        "event": "used"
-      },
-      "aspect": "uses",
-      "operation": "add",
-      "value": 1
-    }
-  },
-  "data/enrichment/adeptus-custodes/abilities.json#superhuman-reserves-auric-champions-adeptus-custodes#effect": {
+  "data/enrichment/adeptus-custodes/abilities.json#gilded-champion-auric-champions-adeptus-custodes#effect": {
     "type": "ability-modifier",
     "target": "this-model",
     "modifier": {
@@ -12060,13 +11955,6 @@
           "HUNTING WOLVES"
         ]
       }
-    }
-  },
-  "data/enrichment/adeptus-custodes/abilities.json#unleash-the-lions-tharanatoi-hammerblow-adeptus-custodes#effect": {
-    "type": "split-unit",
-    "target": "this-unit",
-    "modifier": {
-      "by": "model"
     }
   },
   "data/enrichment/death-guard/abilities.json#pact-of-decay-death-guard#effect": {

@@ -26,9 +26,7 @@
     "force_dispositions": [
       "purge-the-foe"
     ],
-    "tags": [
-      "wych-cult"
-    ],
+    "tags": [],
     "external_refs": [
       {
         "namespace": "mfm",
@@ -66,9 +64,7 @@
     "force_dispositions": [
       "disruption"
     ],
-    "tags": [
-      "kabal"
-    ],
+    "tags": [],
     "external_refs": [
       {
         "namespace": "mfm",
@@ -217,9 +213,7 @@
     "force_dispositions": [
       "take-and-hold"
     ],
-    "tags": [
-      "covens"
-    ],
+    "tags": [],
     "external_refs": [
       {
         "namespace": "mfm",
@@ -252,9 +246,7 @@
     "force_dispositions": [
       "reconnaissance"
     ],
-    "tags": [
-      "wych-cult"
-    ],
+    "tags": [],
     "external_refs": [
       {
         "namespace": "mfm",
@@ -287,9 +279,7 @@
     "force_dispositions": [
       "disruption"
     ],
-    "tags": [
-      "kabal"
-    ],
+    "tags": [],
     "external_refs": [
       {
         "namespace": "mfm",
@@ -322,9 +312,7 @@
     "force_dispositions": [
       "take-and-hold"
     ],
-    "tags": [
-      "covens"
-    ],
+    "tags": [],
     "external_refs": [
       {
         "namespace": "mfm",

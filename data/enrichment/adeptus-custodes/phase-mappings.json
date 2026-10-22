@@ -26,35 +26,10 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "galatus-shield-adeptus-custodes",
-    "source_type": "ability",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
     "source_id": "deep-strike",
     "source_type": "ability",
     "phases": [
       "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "martial-inspiration-adeptus-custodes",
-    "source_type": "ability",
-    "phases": [
-      "movement",
-      "charge"
     ],
     "game_version": {
       "edition": "11th",
@@ -118,18 +93,6 @@
     "phases": [
       "movement",
       "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "strategic-mastery-adeptus-custodes",
-    "source_type": "ability",
-    "phases": [
-      "command"
     ],
     "game_version": {
       "edition": "11th",
@@ -249,56 +212,6 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "self-repair-adeptus-custodes",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-963"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "turbo-boost-adeptus-custodes",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "implacable-vanguard-adeptus-custodes",
-    "source_type": "ability",
-    "phases": [
-      "movement",
-      "shooting",
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "jetbike-outriders-adeptus-custodes",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
     "source_id": "living-fortress-adeptus-custodes",
     "source_type": "ability",
     "phases": [
@@ -306,19 +219,6 @@
       "movement",
       "shooting",
       "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "merciless-hunter-adeptus-custodes",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
       "fight"
     ],
     "game_version": {
@@ -353,100 +253,10 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "swooping-dive-adeptus-custodes",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "jump-packs-adeptus-custodes",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "auramite-and-adamantine-adeptus-custodes",
-    "source_type": "ability",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "heavy-assault-infantry-adeptus-custodes",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "lions-of-the-emperor-adeptus-custodes",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "fire-support-adeptus-custodes",
-    "source_type": "ability",
-    "phases": [
-      "movement",
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
     "source_id": "purity-of-execution-adeptus-custodes",
     "source_type": "ability",
     "phases": [
       "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "master-of-the-stances-adeptus-custodes",
-    "source_type": "ability",
-    "phases": [
       "fight"
     ],
     "game_version": {
@@ -497,34 +307,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "against-all-odds-adeptus-custodes",
-    "source_type": "detachment-rule",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
     "source_id": "assemblage-of-might-adeptus-custodes",
-    "source_type": "detachment-rule",
-    "phases": [
-      "command",
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "auric-armour-adeptus-custodes",
     "source_type": "detachment-rule",
     "phases": [
       "command",
@@ -556,57 +339,6 @@
     "phases": [
       "command",
       "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "revered-companions-adeptus-custodes",
-    "source_type": "detachment-rule",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "march-of-the-honoured-dead-adeptus-custodes",
-    "source_type": "ability",
-    "phases": [
-      "movement",
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "skin-crawling-disorientation-adeptus-custodes",
-    "source_type": "ability",
-    "phases": [
-      "movement",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "the-hammer-falls-adeptus-custodes",
-    "source_type": "ability",
-    "phases": [
-      "charge"
     ],
     "game_version": {
       "edition": "11th",

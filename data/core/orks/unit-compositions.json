@@ -1654,7 +1654,7 @@
         "models": [
           {
             "name": "Gretchin",
-            "min": 11,
+            "min": 20,
             "max": 20
           }
         ]

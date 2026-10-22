@@ -574,14 +574,14 @@ describe('builder loadout reconciliation', () => {
 		// Regression: the model-count stepper used to rebuild the loadout from the
 		// datasheet default, wiping every wargear swap the player had made (reported
 		// on Custodian Guard 4→5). withModelCount must reconcile, not reset.
-		const raw = unitRaw('custodian-guard');
+		const raw = unitRaw('custodian-guard-sodality');
 		if (!raw?.model_count) return; // dataset may not carry Custodes
 		const { min, max } = raw.model_count;
 		expect(max, 'need a real count range to exercise the change').toBeGreaterThan(min);
 
 		const bu: BuilderUnit = {
 			key: 'k',
-			datasheetId: 'custodian-guard',
+			datasheetId: 'custodian-guard-sodality',
 			modelCount: min,
 			loadout: defaultLoadout(raw, min),
 			enhancementId: null,

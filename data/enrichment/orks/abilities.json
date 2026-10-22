@@ -13936,28 +13936,6 @@
     }
   },
   {
-    "ability_id": "pulsa-rokkit-wargear-orks",
-    "name": "Pulsa Rokkit (Once per battle, per unit)",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "stub": true,
-    "unit_ids": [
-      "tankbustas"
-    ],
-    "faction_id": "orks",
-    "detachment_id": null,
-    "ability_type": "unit",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
     "ability_id": "ard-as-nails-ardmob-orks",
     "name": "’Ard As Nails",
     "authored_by": "40kdc-community",

@@ -24,7 +24,11 @@
       }
     ],
     "faction_rule_ids": [
-      "martial-katah-adeptus-custodes"
+      "aegis-of-the-emperor-adeptus-custodes",
+      "aquila-commander-adeptus-custodes",
+      "daughters-of-the-abyss-adeptus-custodes",
+      "martial-katah-adeptus-custodes",
+      "special-move-types-adeptus-custodes"
     ]
   }
 ]

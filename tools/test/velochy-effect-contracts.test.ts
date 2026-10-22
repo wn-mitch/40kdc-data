@@ -147,10 +147,10 @@ describe("Velochy effect contracts", () => {
     expectValid({
       type: "stance-selection-capacity",
       modifier: {
-        ability_id: "combat-doctrines",
+        ability_id: "combat-doctrines", // mfm:mirror keep — a fixture id
         additional_selections: 1,
         allocation: "fixed-option",
-        option: { ability_id: "combat-doctrines", option_id: "assault" },
+        option: { ability_id: "combat-doctrines", option_id: "assault" }, // mfm:mirror keep — a fixture id
       },
     });
     expectInvalid({

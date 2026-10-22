@@ -7,7 +7,7 @@ Only those two fields change; `game_version` is left for a later confirm pass.
 |---|--:|--:|--:|--:|
 | adepta-sororitas | 9 | 0 | 0 | 0 |
 | adeptus-astartes | 17 | 0 | 0 | 0 |
-| adeptus-custodes | 10 | 0 | 0 | 0 |
+| adeptus-custodes | 16 | 0 | 0 | 0 |
 | adeptus-mechanicus | 11 | 0 | 0 | 0 |
 | aeldari | 16 | 0 | 0 | 0 |
 | agents-of-the-imperium | 6 | 0 | 0 | 0 |
@@ -39,7 +39,7 @@ Only those two fields change; `game_version` is left for a later confirm pass.
 | ultramarines | 17 | 0 | 0 | 0 |
 | white-scars | 17 | 0 | 0 | 0 |
 | world-eaters | 9 | 0 | 0 | 0 |
-| **TOTAL** | **450** | **0** | **0** | **0** |
+| **TOTAL** | **456** | **0** | **0** | **0** |
 
 ## New detachments in dump (no repo entity — author in a follow-up)
 

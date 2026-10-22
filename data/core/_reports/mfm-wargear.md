@@ -6,18 +6,18 @@ dump-absent (repo-only) units. Unresolved weapon names are triaged, never guesse
 | Dir | Matched | Options | Defaults Δ | Weapon ids Δ | Weapon names Δ | Weapons + | Wargear + | Synth | Unresolved | Fuzzy | Notes | New-in-dump | Repo-only (fallback) |
 |---|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|
 | adepta-sororitas | 37 | 58 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| adeptus-astartes | 177 | 209 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 | 5 | 0 | 0 |
-| adeptus-custodes | 35 | 23 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| adeptus-astartes | 177 | 210 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 | 5 | 0 | 0 |
+| adeptus-custodes | 39 | 21 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 | 0 | 0 | 0 |
 | adeptus-mechanicus | 38 | 38 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | aeldari | 80 | 106 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 1 | 0 | 0 |
-| agents-of-the-imperium | 33 | 53 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 4 | 0 | 0 |
+| agents-of-the-imperium | 33 | 55 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 5 | 0 | 0 |
 | astra-militarum | 75 | 174 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 0 | 0 |
 | chaos-daemons | 53 | 21 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 92 | 0 |
 | chaos-knights | 20 | 20 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | chaos-space-marines | 58 | 99 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 3 | 99 | 0 |
 | death-guard | 41 | 43 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | drukhari | 27 | 43 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
-| emperors-children | 25 | 30 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 1 | 0 |
+| emperors-children | 25 | 30 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 | 1 | 0 |
 | genestealer-cults | 28 | 19 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
 | grey-knights | 30 | 44 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 |
 | imperial-knights | 23 | 31 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
@@ -28,7 +28,7 @@ dump-absent (repo-only) units. Unresolved weapon names are triaged, never guesse
 | thousand-sons | 38 | 48 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | tyranids | 57 | 20 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
 | world-eaters | 34 | 45 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| **TOTAL** | **1099** | **1345** | **0** | **0** | **0** | **0** | **0** | **0** | **0** | **19** | **20** | **192** | **0** |
+| **TOTAL** | **1103** | **1346** | **0** | **0** | **0** | **0** | **0** | **0** | **0** | **22** | **22** | **192** | **0** |
 
 ## adeptus-astartes
 
@@ -46,6 +46,13 @@ dump-absent (repo-only) units. Unresolved weapon names are triaged, never guesse
 - wolf-guard-headtakers: Hunting Wolf: no model_count — base_miniature_loadout fallback
 - decimus-kill-team: Deathwatch Veteran with Xenophase Blade and Special-issue Bolt Pistol: no model_count — base_miniature_loadout fallback
 - talonstrike-kill-team: cross-product loadout set 6b1bb053 factored into 2 independent slot swaps (Kill Team Sergeant with Jump Pack)
+
+## adeptus-custodes
+
+**Fuzzy-resolved spelling drift (GW name → repo id, edit-distance ≤1):**
+- `Solarite Power Gauntlet` → `solerite-power-gauntlet` (was `solarite-power-gauntlet`)
+- `Solarite Power Talon` → `solerite-power-talon` (was `solarite-power-talon`)
+- `Tarsus Buckler` → `tarsis-buckler` (was `tarsus-buckler`)
 
 ## aeldari
 
@@ -65,6 +72,7 @@ dump-absent (repo-only) units. Unresolved weapon names are triaged, never guesse
 - voidsmen-at-arms: Voidsman: 2 default loadout groups — base_miniature_loadout fallback
 - aquila-kill-team: Deathwatch Veteran with Xenophase Blade and Special-issue Bolt Pistol: no model_count — base_miniature_loadout fallback
 - imperial-navy-breachers: Navis Armsman: 3 default loadout groups — base_miniature_loadout fallback
+- imperial-navy-breachers: Navis Armsman: default loadout groups split into same-named rows (1 + 1 + 7)
 - deathwatch-kill-team: cross-product loadout set 2cfdee74 factored into 2 independent slot swaps (Watch Sergeant)
 
 ## astra-militarum
@@ -94,6 +102,7 @@ dump-absent (repo-only) units. Unresolved weapon names are triaged, never guesse
 **Notes (cap approximations / alternates):**
 - chaos-terminators: alternate loadout_choice_set ce82b2b8 (Chaos Terminator) — review
 - chaos-terminators: alternate loadout_choice_set dc056a28 (Terminator Champion) — review
+- noise-marines: Noise Marine: non-uniform default count — base_miniature_loadout fallback
 
 ## genestealer-cults
 

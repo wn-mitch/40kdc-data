@@ -5,7 +5,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -25,7 +25,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -50,7 +50,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -67,7 +67,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -92,7 +92,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -111,7 +111,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -135,7 +135,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -173,7 +173,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -197,7 +197,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -217,7 +217,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -247,7 +247,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -269,7 +269,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -285,7 +285,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -304,7 +304,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -329,7 +329,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -354,7 +354,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -370,7 +370,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -386,7 +386,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -402,14 +402,14 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
       "master-crafted-power-weapon-castellan"
     ],
     "replacement": [
-      "astartes-chainsword-castellan"
+      "chainsword"
     ],
     "model_constraint": {
       "any_number": true
@@ -421,7 +421,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -440,7 +440,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -459,7 +459,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -486,7 +486,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -502,7 +502,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -521,14 +521,14 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
       "twin-heavy-bolter-repulsor"
     ],
     "replacement": [
-      "las-talon-repulsor"
+      "twin-lascannon"
     ],
     "model_constraint": {
       "any_number": true
@@ -540,7 +540,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -559,7 +559,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -579,7 +579,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -598,7 +598,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -637,7 +637,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -664,7 +664,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -688,7 +688,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -719,7 +719,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -738,7 +738,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -759,7 +759,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -786,7 +786,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -810,7 +810,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -829,7 +829,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -848,7 +848,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -867,7 +867,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -883,7 +883,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -899,7 +899,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -922,7 +922,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -941,7 +941,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -960,7 +960,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -979,7 +979,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -998,7 +998,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1017,7 +1017,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1036,7 +1036,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1060,7 +1060,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1079,7 +1079,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1098,7 +1098,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1118,7 +1118,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1138,7 +1138,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1166,7 +1166,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -1183,7 +1183,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1208,7 +1208,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1228,7 +1228,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -1244,7 +1244,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1263,7 +1263,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1282,7 +1282,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -1298,7 +1298,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1318,7 +1318,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1338,7 +1338,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1358,7 +1358,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1378,7 +1378,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1398,7 +1398,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1418,7 +1418,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1438,12 +1438,11 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
-      "flamestorm-gauntlets",
-      "twin-power-fists"
+      "flamestorm-gauntlets"
     ],
     "replacement": [
       "auto-boltstorm-gauntlets",
@@ -1460,7 +1459,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1480,7 +1479,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1510,7 +1509,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1532,7 +1531,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1554,7 +1553,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1576,7 +1575,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1596,7 +1595,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1616,7 +1615,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1636,7 +1635,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1658,7 +1657,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1684,7 +1683,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1704,7 +1703,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1724,7 +1723,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1749,7 +1748,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1774,7 +1773,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1794,7 +1793,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -1810,7 +1809,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1829,7 +1828,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1850,7 +1849,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1875,7 +1874,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1902,7 +1901,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1949,7 +1948,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -1966,7 +1965,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1994,7 +1993,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2027,7 +2026,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2047,7 +2046,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2072,7 +2071,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -2089,7 +2088,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2120,7 +2119,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2167,7 +2166,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2247,7 +2246,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -2264,7 +2263,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2286,7 +2285,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2311,7 +2310,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2331,7 +2330,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2362,7 +2361,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2390,7 +2389,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2415,7 +2414,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2435,7 +2434,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2455,7 +2454,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2476,7 +2475,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2497,7 +2496,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2522,7 +2521,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2541,7 +2540,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2560,7 +2559,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2579,7 +2578,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2618,7 +2617,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2645,7 +2644,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2669,7 +2668,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2689,7 +2688,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2709,7 +2708,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2729,7 +2728,27 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "combat-knife-scout-squad"
+    ],
+    "replacement": [
+      "chainsword"
+    ],
+    "model_constraint": {
+      "model_name": "Scout Sergeant",
+      "any_number": true
+    }
+  },
+  {
+    "id": "scout-squad-wgo-mfm-3",
+    "unit_id": "scout-squad",
+    "faction_id": "adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2752,12 +2771,12 @@
     }
   },
   {
-    "id": "scout-squad-wgo-mfm-3",
+    "id": "scout-squad-wgo-mfm-4",
     "unit_id": "scout-squad",
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2777,7 +2796,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2796,7 +2815,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2816,7 +2835,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -2832,7 +2851,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -2848,7 +2867,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -2864,7 +2883,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2920,7 +2939,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2947,7 +2966,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2974,7 +2993,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3013,7 +3032,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3053,7 +3072,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3077,7 +3096,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3096,7 +3115,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3121,7 +3140,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3141,7 +3160,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3161,7 +3180,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3186,7 +3205,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3206,7 +3225,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3231,7 +3250,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3251,7 +3270,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3270,7 +3289,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3289,7 +3308,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3308,7 +3327,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -3324,7 +3343,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3343,7 +3362,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3362,7 +3381,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3387,7 +3406,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3412,7 +3431,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3432,7 +3451,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3457,7 +3476,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3482,7 +3501,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3507,7 +3526,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3528,7 +3547,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3549,7 +3568,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3574,7 +3593,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3593,7 +3612,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3621,7 +3640,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3640,7 +3659,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -3657,7 +3676,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3737,7 +3756,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3768,7 +3787,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3799,7 +3818,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -3815,7 +3834,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3834,7 +3853,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3855,7 +3874,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -3871,7 +3890,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -3887,7 +3906,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -3903,7 +3922,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3922,7 +3941,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -3938,7 +3957,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -3955,7 +3974,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -3972,7 +3991,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3991,7 +4010,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -4007,7 +4026,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -4023,7 +4042,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -4042,7 +4061,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -4081,7 +4100,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -4157,7 +4176,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -4204,7 +4223,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -4229,7 +4248,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -4248,7 +4267,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -4274,7 +4293,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -4300,7 +4319,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -4320,7 +4339,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -4345,7 +4364,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -4366,7 +4385,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -4386,7 +4405,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -4406,7 +4425,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -4432,7 +4451,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -4452,7 +4471,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -4472,7 +4491,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -4494,7 +4513,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -4513,7 +4532,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -4532,7 +4551,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -4551,7 +4570,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -4575,7 +4594,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -4594,7 +4613,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -4613,7 +4632,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -4630,7 +4649,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -4655,7 +4674,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -4678,7 +4697,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -4695,7 +4714,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -4714,7 +4733,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -4733,7 +4752,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -4752,7 +4771,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -4771,7 +4790,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -4791,7 +4810,7 @@
     "faction_id": "adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [

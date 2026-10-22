@@ -64,9 +64,7 @@
     "force_dispositions": [
       "take-and-hold"
     ],
-    "tags": [
-      "purestrain"
-    ],
+    "tags": [],
     "external_refs": [
       {
         "namespace": "mfm",
@@ -282,9 +280,7 @@
     "force_dispositions": [
       "priority-assets"
     ],
-    "tags": [
-      "purestrain"
-    ],
+    "tags": [],
     "external_refs": [
       {
         "namespace": "mfm",

@@ -9,7 +9,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "keyword_restrictions": [
       "Big Mek"
@@ -35,7 +35,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "keyword_restrictions": [
       "Boyz"
@@ -59,7 +59,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -85,7 +85,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "keyword_restrictions": [
       "Warboss"
@@ -111,7 +111,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "keyword_restrictions": [
       "Deffkilla Wartrike"
@@ -137,7 +137,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "keyword_restrictions": [
       "Orks"
@@ -163,7 +163,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -189,7 +189,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "keyword_restrictions": [
       "Orks",
@@ -216,7 +216,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "keyword_restrictions": [
       "Orks",
@@ -243,7 +243,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "keyword_restrictions": [
       "Big Mek with Shokk Attack Gun"
@@ -271,7 +271,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "keyword_restrictions": [
       "Gretchin"
@@ -299,7 +299,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "keyword_restrictions": [
       "Aircraft",
@@ -328,7 +328,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "keyword_restrictions": [
       "Aircraft",
@@ -357,7 +357,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "keyword_restrictions": [
       "Beastboss on Squigosaur"
@@ -383,7 +383,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "keyword_restriction_groups": [
       [
@@ -422,7 +422,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "keyword_restrictions": [
       "Big Mek"
@@ -448,7 +448,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "keyword_restrictions": [
       "Gretchin"
@@ -476,7 +476,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -502,7 +502,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -528,7 +528,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "upgrade_tag": true,
     "max_targets": 3,
@@ -556,7 +556,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "keyword_restrictions": [
       "Infantry",
@@ -586,7 +586,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "keyword_restrictions": [
       "Flash Gitz"
@@ -614,7 +614,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "keyword_restrictions": [
       "Infantry",
@@ -641,7 +641,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "keyword_restriction_groups": [
       [
@@ -675,7 +675,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "keyword_restrictions": [
       "Mega Armour"
@@ -701,7 +701,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "keyword_restrictions": [
       "Big Mek with Shokk Attack Gun"
@@ -729,7 +729,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "keyword_restriction_groups": [
       [
@@ -762,7 +762,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "keyword_restrictions": [
       "Orks",
@@ -789,7 +789,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "keyword_restrictions": [
       "Nobz"
@@ -822,7 +822,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -846,7 +846,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -870,7 +870,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -903,7 +903,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -928,7 +928,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": true,
@@ -952,7 +952,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -976,7 +976,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": true,
@@ -1000,7 +1000,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -1029,7 +1029,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,

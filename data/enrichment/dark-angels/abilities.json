@@ -1012,7 +1012,7 @@
     "community_notes": "Upgrade: Ravenwing Fly unit only. In your first Movement phase this unit can make an ingress move"
   },
   {
-    "ability_id": "nightforged-battery-upgarde-darkflight-pursuit-dark-angels",
+    "ability_id": "nightforged-battery-upgrade-darkflight-pursuit-dark-angels",
     "name": "Nightforged Battery (Upgrade)",
     "authored_by": "40kdc-community",
     "game_version": {

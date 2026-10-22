@@ -42,6 +42,18 @@
         "vow-sworn-crusader-squad",
         "vow-sworn-sword-brethren-squad"
       ],
+      "adeptus-custodes": [
+        "aquilan-talon-contemptor-achillus-dreadnought",
+        "aquilan-talon-sentinel-guard-sodality",
+        "aquilan-talon-shield-captain",
+        "aquilan-wing-sentinel-guard-sodality",
+        "aquilan-wing-shield-captain",
+        "aquilan-wing-venatari-with-kinetic-destroyers",
+        "aquilon-terminators-with-solarite-power-talons",
+        "caladius-annihilator-grav-tank",
+        "sentinel-guard-sodality",
+        "venatari-with-kinetic-destroyers"
+      ],
       "adeptus-mechanicus": [
         "purge-corps-serberys-sulphurhounds"
       ],
@@ -360,7 +372,7 @@
       ]
     }
   },
-  "data_version": 963,
+  "data_version": 995,
   "modes": {
     "unit_compositions": {
       "adepta-sororitas": {
@@ -390,6 +402,14 @@
         "vow-sworn-bladeguard-veteran-squad": "combat-patrol",
         "vow-sworn-crusader-squad": "combat-patrol",
         "vow-sworn-sword-brethren-squad": "combat-patrol"
+      },
+      "adeptus-custodes": {
+        "aquilan-talon-contemptor-achillus-dreadnought": "combat-patrol",
+        "aquilan-talon-sentinel-guard-sodality": "combat-patrol",
+        "aquilan-talon-shield-captain": "combat-patrol",
+        "aquilan-wing-sentinel-guard-sodality": "combat-patrol",
+        "aquilan-wing-shield-captain": "combat-patrol",
+        "aquilan-wing-venatari-with-kinetic-destroyers": "combat-patrol"
       },
       "adeptus-mechanicus": {
         "purge-corps-serberys-sulphurhounds": "combat-patrol"

@@ -50,6 +50,28 @@
     "cannot_be_warlord": true
   },
   {
+    "id": "adeptus-custodes-allies",
+    "name": "Anathema Psykana",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "label": "Anathema Psykana",
+    "army_keywords_any": [
+      "Adeptus Custodes"
+    ],
+    "source_faction_id": "adeptus-custodes",
+    "source_datasheet_ids": [
+      "anathema-psykana-rhino",
+      "knight-centura",
+      "prosecutor-squad",
+      "vigilator-squad",
+      "witchseeker-squad"
+    ],
+    "cannot_be_warlord": true,
+    "cannot_take_enhancements": true
+  },
+  {
     "id": "aeldari-harlequins",
     "name": "Harlequins",
     "game_version": {
@@ -368,6 +390,7 @@
       "stormlord",
       "stormsword",
       "taurox",
+      "valkyrie",
       "wyvern"
     ],
     "points_limits": [

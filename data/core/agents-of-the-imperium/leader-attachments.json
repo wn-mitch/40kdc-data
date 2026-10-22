@@ -19,7 +19,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -39,7 +39,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -59,7 +59,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -80,7 +80,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -96,7 +96,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -107,40 +107,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
-    }
-  },
-  {
-    "leader_id": "rogue-trader-entourage",
-    "eligible_bodyguard_ids": [
-      "imperial-navy-breachers",
-      "voidsmen-at-arms"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-963"
-    }
-  },
-  {
-    "leader_id": "watch-captain-artemis",
-    "eligible_bodyguard_ids": [
-      "aquila-kill-team",
-      "deathwatch-kill-team"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-963"
-    }
-  },
-  {
-    "leader_id": "watch-master",
-    "eligible_bodyguard_ids": [
-      "aquila-kill-team",
-      "deathwatch-kill-team"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -151,6 +118,39 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "rogue-trader-entourage",
+    "eligible_bodyguard_ids": [
+      "imperial-navy-breachers",
+      "voidsmen-at-arms"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "leader_id": "watch-captain-artemis",
+    "eligible_bodyguard_ids": [
+      "aquila-kill-team",
+      "deathwatch-kill-team"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "leader_id": "watch-master",
+    "eligible_bodyguard_ids": [
+      "aquila-kill-team",
+      "deathwatch-kill-team"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
     }
   }
 ]

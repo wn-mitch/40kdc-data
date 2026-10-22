@@ -6459,15 +6459,6 @@
         "models": [
           {
             "name": "Wolf Guard Headtaker",
-            "min": 6,
-            "max": 6
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Wolf Guard Headtaker",
             "min": 3,
             "max": 3
           },
@@ -6475,6 +6466,15 @@
             "name": "Hunting Wolf",
             "min": 3,
             "max": 3
+          }
+        ]
+      },
+      {
+        "models": [
+          {
+            "name": "Wolf Guard Headtaker",
+            "min": 6,
+            "max": 6
           }
         ]
       },

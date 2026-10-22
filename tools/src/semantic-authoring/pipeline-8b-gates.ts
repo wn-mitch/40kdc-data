@@ -141,7 +141,7 @@ const NON_DAMAGE_EFFECT_TYPES = new Set([
 // resurrection; none changes a hit, wound, save or damage roll.
 const NON_DAMAGE_ABILITIES = new Set([
   "deadly-demise", "deep-strike", "fights-first", "hover", "infiltrators", "leader", "lone-operative", "scouts",
-  "support", "super-heavy-walker", "mobile", "reanimation-protocols",
+  "support", "super-heavy-walker", "mobile", "reanimation-protocols", // mfm:mirror keep — core and named ability slugs, not record ids
 ]);
 const DAMAGE_STATS = new Set(["A", "S", "T", "Sv", "AP", "D", "WS", "BS"]);
 // Which objective an ability picks decides control, never an attack's damage.

@@ -26,9 +26,7 @@
     "force_dispositions": [
       "disruption"
     ],
-    "tags": [
-      "acrobatic"
-    ],
+    "tags": [],
     "external_refs": [
       {
         "namespace": "mfm",
@@ -128,9 +126,7 @@
     "force_dispositions": [
       "purge-the-foe"
     ],
-    "tags": [
-      "acrobatic"
-    ],
+    "tags": [],
     "external_refs": [
       {
         "namespace": "mfm",
@@ -554,9 +550,7 @@
     "force_dispositions": [
       "disruption"
     ],
-    "tags": [
-      "acrobatic"
-    ],
+    "tags": [],
     "external_refs": [
       {
         "namespace": "mfm",
@@ -589,9 +583,7 @@
     "force_dispositions": [
       "take-and-hold"
     ],
-    "tags": [
-      "acrobatic"
-    ],
+    "tags": [],
     "external_refs": [
       {
         "namespace": "mfm",

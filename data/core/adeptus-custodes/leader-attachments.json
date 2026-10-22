@@ -3,11 +3,12 @@
     "leader_id": "blade-champion",
     "eligible_bodyguard_ids": [
       "custodian-guard-sodality",
-      "custodian-wardens"
+      "custodian-wardens",
+      "sentinel-guard-sodality"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -19,29 +20,31 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     }
   },
   {
     "leader_id": "shield-captain",
     "eligible_bodyguard_ids": [
       "custodian-guard-sodality",
-      "custodian-wardens"
+      "custodian-wardens",
+      "sentinel-guard-sodality"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     }
   },
   {
     "leader_id": "shield-captain-in-allarus-terminator-armour",
     "eligible_bodyguard_ids": [
       "allarus-custodians",
-      "aquilon-terminators-with-solarite-power-gauntlets"
+      "aquilon-terminators-with-solarite-power-gauntlets",
+      "aquilon-terminators-with-solarite-power-talons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -52,18 +55,22 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     }
   },
   {
     "leader_id": "trajann-valoris",
     "eligible_bodyguard_ids": [
+      "allarus-custodians",
+      "aquilon-terminators-with-solarite-power-gauntlets",
+      "aquilon-terminators-with-solarite-power-talons",
       "custodian-guard-sodality",
-      "custodian-wardens"
+      "custodian-wardens",
+      "sentinel-guard-sodality"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     }
   }
 ]
