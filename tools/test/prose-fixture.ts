@@ -49,12 +49,19 @@ export function fixtureDump(): MfmDump {
       { id: "ar-a", publicationId: "Codex A", ...loc({ name: "Warden Oath" }) },
       { id: "ar-a-cp", publicationId: "Patrol A", ...loc({ name: "Warden Oath" }) },
     ],
-    detachment: [{ id: "det-a", publicationId: "Codex A", ...loc({ name: "Iron Vigil" }) }],
-    detachment_rule: [{ id: "dr-1", detachmentId: "det-a", displayOrder: 1, ...loc({ name: "Iron Vigil Doctrine" }) }],
+    detachment: [
+      { id: "det-a", publicationId: "Codex A", ...loc({ name: "Iron Vigil" }) },
+      { id: "det-cp", publicationId: "Patrol A", isCombatPatrol: true, ...loc({ name: "Vigil Patrol" }) },
+    ],
+    detachment_rule: [
+      { id: "dr-1", detachmentId: "det-a", displayOrder: 1, ...loc({ name: "Iron Vigil Doctrine" }) },
+      { id: "dr-cp", detachmentId: "det-cp", displayOrder: 1, ...loc({ name: "Patrol Drill" }) },
+    ],
     rule_container_component: [
       comp("c1", { armyRuleId: "ar-a" }, 1, "Codex oath text."),
       comp("p1", { armyRuleId: "ar-a-cp" }, 1, "Patrol oath text."),
       comp("d1", { detachmentRuleId: "dr-1" }, 1, "Doctrine text."),
+      comp("d2", { detachmentRuleId: "dr-cp" }, 1, "Patrol drill text."),
       comp("k1", { ruleContainerId: "rc-1" }, 1, "Core deep watch text."),
     ],
     stratagem: [
@@ -78,7 +85,11 @@ export const FIXTURE_FILES: Record<string, unknown[]> = {
     { id: "heavy-wagon", external_refs: mfm("ds-a3") },
   ],
   "data/core/ember-court/units.json": [{ id: "iron-wagon", external_refs: mfm("ds-b") }],
-  "data/core/warden-host/detachments.json": [{ id: "iron-vigil", external_refs: mfm("det-a") }],
+  "data/core/warden-host/detachments.json": [
+    { id: "iron-vigil", external_refs: mfm("det-a") },
+    { id: "vigil-patrol", external_refs: mfm("det-cp") },
+    { id: "lost-patrol" },
+  ],
   "data/core/warden-host/stratagems.json": [{ id: "hold-fast-iron-vigil", detachment_id: "iron-vigil", external_refs: mfm("st-1") }],
   "data/core/warden-host/enhancements.json": [{ id: "star-lantern-iron-vigil", detachment_id: "iron-vigil" }],
   "data/core/stratagems.json": [{ id: "counterstrike", external_refs: mfm("st-core") }],
@@ -87,6 +98,8 @@ export const FIXTURE_FILES: Record<string, unknown[]> = {
     stub("deep-watch", "core", { unit_ids: ["iron-wagon"] }),
     stub("twin-guns", "unit", { unit_ids: ["scout-wagon", "heavy-wagon"] }),
     stub("warden-oath", "faction"),
+    stub("warden-oath-vigil-patrol", "faction", { detachment_id: "vigil-patrol" }),
+    stub("warden-oath-lost-patrol", "faction", { detachment_id: "lost-patrol" }),
     stub("iron-vigil-doctrine", "detachment", { detachment_id: "iron-vigil" }),
     stub("hold-fast-iron-vigil", "stratagem", { detachment_id: "iron-vigil" }),
     stub("star-lantern-iron-vigil", "enhancement", { detachment_id: "iron-vigil" }),

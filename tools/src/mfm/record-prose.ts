@@ -8,7 +8,8 @@
  * A record is resolved by its owner, never by a global name search:
  *   - stratagems and enhancements by the `mfm` external ref on their core record (the exact dump
  *     row), else by their detachment;
- *   - detachment rules by their detachment, army (faction) rules by the faction's army rules;
+ *   - detachment rules by their detachment, army (faction) rules by the faction's army rules (a
+ *     Combat Patrol's copy, which names its patrol detachment, by that patrol box's army rules);
  *   - core abilities by the core rules;
  *   - unit abilities by the datasheets of their `unit_ids` (pinned by the units' `mfm` refs).
  * A faction dir searches its own publication first, then the supplements that file their
@@ -190,10 +191,28 @@ export class RepoProse {
       case "detachment":
         return detachment ? [[q(detachmentOwner(), DETACHMENT_RULE_KINDS)]] : [];
       case "faction":
-        return [[q({ kind: "army" }, ARMY_RULE_KINDS)]];
+        // A Combat Patrol's own copy of an army rule (it names its patrol detachment) reads the
+        // army rule its patrol box prints, never the codex text.
+        return record.detachment_id
+          ? [[{ ...q({ kind: "army" }, ARMY_RULE_KINDS), publicationIds: this.patrolPublications(dir, record.detachment_id) }]]
+          : [[q({ kind: "army" }, ARMY_RULE_KINDS)]];
       default:
         return [(record.unit_ids ?? []).map((unit) => q({ kind: "unit", id: unit, ...this.idsOf(this.units, "units", dir, unit, "datasheetIds") }))];
     }
+  }
+
+  /**
+   * The dump publications that print the detachment `detachmentId` names (a Combat Patrol box for a
+   * patrol detachment), read from the publication of its rule rows. Empty when the dump prints none,
+   * so a patrol copy whose patrol cannot be placed resolves to nothing rather than the codex text.
+   */
+  private patrolPublications(dir: string, detachmentId: string): string[] {
+    const ids = new Set(this.idsOf(this.detachments, "detachments", dir, detachmentId, "detachmentIds").detachmentIds ?? []);
+    const out = new Set<string>();
+    for (const r of this.prose.rows) {
+      if (r.owner.kind === "detachment" && ids.has(r.owner.id) && r.publication) out.add(r.publication.id);
+    }
+    return [...out].sort();
   }
 
   /** A unit's or detachment's `mfm` ids from its core record: the record's own dir first, then any dir. */

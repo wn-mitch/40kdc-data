@@ -27,6 +27,8 @@ export interface ProseQuery {
   combatPatrol?: boolean;
   /** Only rows from (true) or outside (false) Legends datasheets and publications. */
   legends?: boolean;
+  /** Only rows printed by these dump publications (e.g. one Combat Patrol box). */
+  publicationIds?: readonly string[];
 }
 
 export interface ProseVariant {
@@ -155,7 +157,8 @@ export class DumpProse implements AbilityRowSet {
       (r) =>
         (!q.kinds || q.kinds.includes(r.kind)) &&
         (q.combatPatrol === undefined || (r.publication?.combatPatrol ?? false) === q.combatPatrol) &&
-        (q.legends === undefined || r.legends === q.legends),
+        (q.legends === undefined || r.legends === q.legends) &&
+        (q.publicationIds === undefined || (r.publication !== null && q.publicationIds.includes(r.publication.id))),
     );
   }
 

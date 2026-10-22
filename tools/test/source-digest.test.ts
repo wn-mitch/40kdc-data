@@ -237,7 +237,7 @@ describe("buildSourceCorpus", () => {
     const result = buildSourceCorpus(fx.repo);
     expect(result.corpus["warden-host"]).not.toHaveProperty("twin-guns");
     expect(result.ambiguous.map((a) => `${a.faction_id}/${a.ability_id}`)).toEqual(["warden-host/twin-guns"]);
-    expect(result.unresolved.map((a) => `${a.faction_id}/${a.ability_id}`)).toEqual(["warden-host/lost-ability"]);
+    expect(result.unresolved.map((a) => `${a.faction_id}/${a.ability_id}`)).toEqual(["warden-host/warden-oath-lost-patrol", "warden-host/lost-ability"]);
     expect(result.resolved + result.ambiguous.length + result.unresolved.length).toBe(result.total);
   });
 });

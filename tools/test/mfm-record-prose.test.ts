@@ -41,6 +41,12 @@ describe("record prose: each record resolves only through its own owner", () => 
     expect(w("warden-oath")?.raw_text).toBe("Codex oath text.");
   });
 
+  it("reads a Combat Patrol's army-rule copy from its own patrol box, never the codex", () => {
+    expect(w("warden-oath-vigil-patrol")?.raw_text).toBe("Patrol oath text.");
+    // A copy whose patrol detachment the dump does not print resolves to nothing, not the codex text.
+    expect(w("warden-oath-lost-patrol")).toBeUndefined();
+  });
+
   it("resolves detachment rules, enhancements (by detachment) and stratagems (by mfm ref) in store shape", () => {
     expect(w("iron-vigil-doctrine")?.raw_text).toBe("Doctrine text.");
     expect(w("star-lantern-iron-vigil")?.raw_text).toBe("Lantern text.");
@@ -70,7 +76,7 @@ describe("prose CLI", () => {
     expect(index.schema_version).toBe(1);
     expect(index.factions["ember-court"]["grudge-engine"].raw_text).toBe("Ember wagon text.");
     const rows = JSON.parse(readFileSync(join(out, "warden-host.json"), "utf8")) as { ability_id: string }[];
-    expect(rows.map((r) => r.ability_id).sort()).toEqual(["deep-watch", "grudge-engine", "hold-fast-iron-vigil", "iron-vigil-doctrine", "star-lantern-iron-vigil", "warden-oath"]);
+    expect(rows.map((r) => r.ability_id).sort()).toEqual(["deep-watch", "grudge-engine", "hold-fast-iron-vigil", "iron-vigil-doctrine", "star-lantern-iron-vigil", "warden-oath", "warden-oath-vigil-patrol"]);
     expect(existsSync(join(out, "_core.json"))).toBe(true);
   });
 
