@@ -855,7 +855,7 @@
       "type": "marker",
       "target": "this-model",
       "modifier": {
-        "label": "cult-ambush-marker",
+        "label": "cult-ambush",
         "operation": "relocate",
         "placement": "within-12-of-this-model-more-than-8-from-enemy-units",
         "distance": {
@@ -2072,7 +2072,7 @@
                   "owner": "friendly"
                 },
                 "modifier": {
-                  "label": "cult-ambush-marker",
+                  "label": "cult-ambush",
                   "operation": "place",
                   "placement": "more-than-9-from-enemy-units",
                   "distance": {

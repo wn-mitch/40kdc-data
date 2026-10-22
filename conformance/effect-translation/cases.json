@@ -11312,7 +11312,7 @@
                   "owner": "friendly"
                 },
                 "modifier": {
-                  "label": "cult-ambush-marker",
+                  "label": "cult-ambush",
                   "operation": "place",
                   "placement": "more-than-9-from-enemy-units",
                   "distance": {
