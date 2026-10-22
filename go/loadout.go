@@ -1358,6 +1358,24 @@ func completionLowerBounds(options []any, models []any, explicitCounts map[strin
 		}
 	}
 	lowerVariants := []map[string]int{strictLower}
+	relaxedLower := cloneCounts(strictLower)
+	for id := range repeatedCoItems(options, models) {
+		delete(relaxedLower, id)
+	}
+	if len(relaxedLower) != len(strictLower) {
+		lowerVariants = append(lowerVariants, relaxedLower)
+	}
+	return lowerVariants
+}
+
+// repeatedCoItems lists the items completeLoadout's second pass leaves free.
+// Some source exporters double-count a secondary item shared by several
+// branches of one choice (the primary selections are still exact). A weapon
+// repeated in at least two multi-item branches, and never a pick on its own,
+// is mechanically determined by those primary selections, so the pass may
+// derive its count rather than requiring the duplicated aggregate. Defaults
+// are never relaxed.
+func repeatedCoItems(options []any, models []any) map[string]bool {
 	defaultIDs := map[string]bool{}
 	for _, modelAny := range models {
 		model, _ := asMap(modelAny)
@@ -1365,7 +1383,7 @@ func completionLowerBounds(options []any, models []any, explicitCounts map[strin
 			defaultIDs[id] = true
 		}
 	}
-	repeatedCoItems := map[string]bool{}
+	out := map[string]bool{}
 	for _, optionAny := range options {
 		option, _ := asMap(optionAny)
 		occurrences := map[string]int{}
@@ -1384,18 +1402,23 @@ func completionLowerBounds(options []any, models []any, explicitCounts map[strin
 		}
 		for id, count := range occurrences {
 			if count >= 2 && !defaultIDs[id] {
-				repeatedCoItems[id] = true
+				out[id] = true
 			}
 		}
 	}
-	relaxedLower := cloneCounts(strictLower)
-	for id := range repeatedCoItems {
-		delete(relaxedLower, id)
+	for _, optionAny := range options {
+		option, _ := asMap(optionAny)
+		branches := getList(option, "replacement_choice")
+		if replacement := getList(option, "replacement"); len(replacement) > 0 {
+			branches = []any{replacement}
+		}
+		for _, branchAny := range branches {
+			if branch := toStrList(branchAny); len(branch) == 1 {
+				delete(out, branch[0])
+			}
+		}
 	}
-	if len(relaxedLower) != len(strictLower) {
-		lowerVariants = append(lowerVariants, relaxedLower)
-	}
-	return lowerVariants
+	return out
 }
 
 // completeLoadoutRelaxing is completeLoadout with one variant cap token (see
@@ -1719,8 +1742,25 @@ func validateLoadout(unit map[string]any, modelCount int, options []any, counts 
 			})
 			return out
 		}
-		if completeLoadout(unit, modelCount, options, models, counts) != nil {
-			return budgets
+		if completed := completeLoadout(unit, modelCount, options, models, counts); completed != nil {
+			// A completion may field fewer copies of a relaxed co-item than the
+			// source claims (exporter tolerance); a claim no legal loadout
+			// reaches is still over its cap.
+			relaxed := repeatedCoItems(options, models)
+			var underfielded []string
+			for id, count := range counts {
+				if relaxed[id] && count > completed.counts[id] {
+					underfielded = append(underfielded, id)
+				}
+			}
+			solo := soloCapViolations(unit, modelCount, options, models, counts, underfielded)
+			sort.SliceStable(solo, func(i, j int) bool {
+				if solo[i]["id"] != solo[j]["id"] {
+					return solo[i]["id"] < solo[j]["id"]
+				}
+				return solo[i]["code"] < solo[j]["code"]
+			})
+			return append(budgets, solo...)
 		}
 		if capped := variantCapViolations(unit, modelCount, options, models, counts); len(capped) > 0 {
 			sort.SliceStable(capped, func(i, j int) bool {
@@ -1947,7 +1987,22 @@ func budgetViolations(unit map[string]any, modelCount int, counts map[string]int
 // its variants add over the row's baseline (its defaults, else what every
 // variant shares), sorted and joined by "+". Empty when no single cap explains
 // the failure. Mirror of the TS reference.
-func variantCapViolations(unit map[string]any, modelCount int, options []any, models []any, counts map[string]int) []map[string]string {
+// soloCapViolations reports exceeds-max on each of ids (in id order) whose
+// submitted count no legal build fields: every option, variant and budget cap
+// applied, other submitted items free up to their envelope.
+func soloCapViolations(unit map[string]any, modelCount int, options []any, models []any, counts map[string]int, ids []string) []map[string]string {
+	seen := map[string]bool{}
+	var wanted []string
+	for _, id := range ids {
+		if counts[id] > 0 && !seen[id] {
+			seen[id] = true
+			wanted = append(wanted, id)
+		}
+	}
+	if len(wanted) == 0 {
+		return nil
+	}
+	sort.Strings(wanted)
 	n := modelCount
 	if n < 0 {
 		n = 0
@@ -1971,17 +2026,9 @@ func variantCapViolations(unit map[string]any, modelCount int, options []any, mo
 			}
 		}
 	}
-	ids := make([]string, 0, len(counts))
-	for id := range counts {
-		ids = append(ids, id)
-	}
-	sort.Strings(ids)
 	var out []map[string]string
-	for _, id := range ids {
+	for _, id := range wanted {
 		count := counts[id]
-		if count <= 0 {
-			continue
-		}
 		upper := cloneCounts(envelope)
 		for other, explicit := range counts {
 			if _, ok := upper[other]; !ok {
@@ -1998,6 +2045,19 @@ func variantCapViolations(unit map[string]any, modelCount int, options []any, mo
 			})
 		}
 	}
+	return out
+}
+
+func variantCapViolations(unit map[string]any, modelCount int, options []any, models []any, counts map[string]int) []map[string]string {
+	n := modelCount
+	if n < 0 {
+		n = 0
+	}
+	ids := make([]string, 0, len(counts))
+	for id := range counts {
+		ids = append(ids, id)
+	}
+	out := soloCapViolations(unit, modelCount, options, models, counts, ids)
 	if len(out) > 0 {
 		return out
 	}

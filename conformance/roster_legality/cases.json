@@ -658,5 +658,25 @@
     "name": "legionaries-two-pistol-chainsword-combos-at-ten-legal",
     "args": { "unitId": "legionaries", "factionId": "chaos-space-marines", "modelCount": 10, "counts": { "plasma-pistol": 2, "astartes-chainsword": 2, "accursed-weapon": 2 } },
     "expected": []
+  },
+  {
+    "name": "legionaries-three-heavy-melee-at-ten-legal",
+    "args": { "unitId": "legionaries", "factionId": "chaos-space-marines", "modelCount": 10, "counts": { "heavy-melee-weapon": 3 } },
+    "expected": []
+  },
+  {
+    "name": "legionaries-four-heavy-melee-at-ten-over",
+    "args": { "unitId": "legionaries", "factionId": "chaos-space-marines", "modelCount": 10, "counts": { "heavy-melee-weapon": 4 } },
+    "expected": ["exceeds-max:heavy-melee-weapon"]
+  },
+  {
+    "name": "legionaries-three-heavy-melee-with-two-accursed-over",
+    "args": { "unitId": "legionaries", "factionId": "chaos-space-marines", "modelCount": 10, "counts": { "heavy-melee-weapon": 3, "accursed-weapon": 2 } },
+    "expected": ["exceeds-allowance:heavy-melee-weapon"]
+  },
+  {
+    "name": "legionaries-three-pistol-chainsword-combos-at-ten-over",
+    "args": { "unitId": "legionaries", "factionId": "chaos-space-marines", "modelCount": 10, "counts": { "plasma-pistol": 3, "astartes-chainsword": 3, "accursed-weapon": 2 } },
+    "expected": ["exceeds-allowance:astartes-chainsword+flamer+havoc-autocannon-legionaries+heavy-bolter+lascannon-legionaries+meltagun+missile-launcher+plasma-gun+plasma-pistol+reaper-chaincannon"]
   }
 ]

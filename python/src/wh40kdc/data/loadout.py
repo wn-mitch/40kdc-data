@@ -17,7 +17,7 @@ from __future__ import annotations
 
 import math
 import sys
-from collections.abc import Callable, Iterator
+from collections.abc import Callable, Iterable, Iterator
 from typing import Any
 
 from wh40kdc.data.ability_refs import printed_wargear_ids
@@ -832,8 +832,26 @@ def _completion_lower_bounds(
     branches share left free."""
     strict_lower = {id_: count for id_, count in explicit_counts.items() if count > 0}
     lower_variants = [strict_lower]
+    relaxed_lower = dict(strict_lower)
+    for id_ in _repeated_co_items(options, models):
+        relaxed_lower.pop(id_, None)
+    if len(relaxed_lower) != len(strict_lower):
+        lower_variants.append(relaxed_lower)
+    return lower_variants
+
+
+def _repeated_co_items(options: list[WargearOption], models: list[LoadoutModel]) -> set[str]:
+    """Items :func:`complete_loadout`'s second pass leaves free.
+
+    Some source exporters double-count a secondary item shared by several
+    branches of one choice (the primary selections are still exact). A weapon
+    repeated in at least two multi-item branches, and never a pick on its own,
+    is mechanically determined by those primary selections, so the pass may
+    derive its count rather than requiring the duplicated aggregate. Defaults
+    are never relaxed.
+    """
     default_ids = {id_ for model in models for id_ in (model.get("default_weapon_ids") or [])}
-    repeated_co_items: set[str] = set()
+    out: set[str] = set()
     for option in options:
         occurrences: dict[str, int] = {}
         for branch in option.get("replacement_choice") or []:
@@ -843,13 +861,14 @@ def _completion_lower_bounds(
                 occurrences[id_] = occurrences.get(id_, 0) + 1
         for id_, count in occurrences.items():
             if count >= 2 and id_ not in default_ids:
-                repeated_co_items.add(id_)
-    relaxed_lower = dict(strict_lower)
-    for id_ in repeated_co_items:
-        relaxed_lower.pop(id_, None)
-    if len(relaxed_lower) != len(strict_lower):
-        lower_variants.append(relaxed_lower)
-    return lower_variants
+                out.add(id_)
+    for option in options:
+        replacement = option.get("replacement")
+        branches = [replacement] if replacement else (option.get("replacement_choice") or [])
+        for branch in branches:
+            if len(branch) == 1:
+                out.discard(branch[0])
+    return out
 
 
 def _complete_loadout_relaxing(
@@ -1208,11 +1227,23 @@ def validate_loadout(
             out.sort(key=lambda violation: (violation["id"], violation["code"]))
             return out
         valid_counts = all(isinstance(count, int) and count >= 0 for count in counts.values())
-        if (
-            valid_counts
-            and complete_loadout(unit, model_count, options, models, counts) is not None
-        ):
-            return []
+        completed = (
+            complete_loadout(unit, model_count, options, models, counts) if valid_counts else None
+        )
+        if completed is not None:
+            # A completion may field fewer copies of a relaxed co-item than the
+            # source claims (exporter tolerance); a claim no legal loadout
+            # reaches is still over its cap.
+            assert models is not None
+            relaxed = _repeated_co_items(options, models)
+            underfielded = [
+                id_
+                for id_, count in counts.items()
+                if id_ in relaxed and count > completed["counts"].get(id_, 0)
+            ]
+            solo = _solo_cap_violations(unit, model_count, options, models, counts, underfielded)
+            solo.sort(key=lambda violation: (violation["id"], violation["code"]))
+            return solo
         if valid_counts:
             assert models is not None
             capped = _variant_cap_violations(unit, model_count, options, models, counts)
@@ -1332,24 +1363,20 @@ def _budget_violations(
     return out
 
 
-def _variant_cap_violations(
+def _solo_cap_violations(
     unit: Unit,
     model_count: int,
     options: list[WargearOption],
     models: list[LoadoutModel],
     counts: dict[str, int],
+    ids: Iterable[str],
 ) -> list[dict[str, str]]:
-    """The caps a variant-row selection with no legal whole-model completion breaks.
-
-    Each submitted item, in id order, is tried alone: when no legal build fields
-    that many copies of it (every option, variant and budget cap applied, other
-    items free up to their envelope) it is ``exceeds-max`` on that item. Otherwise,
-    per variant row in order, each variant budget and then each capped variant is
-    lifted in turn; a cap whose lifting alone makes the selection completable is
-    ``exceeds-allowance`` on the equipment its variants add over the row's baseline
-    (its defaults, else what every variant shares), sorted and joined by ``+``.
-    Empty when no single cap explains the failure. Mirror of the TS reference.
-    """
+    """``exceeds-max`` on each of ``ids`` (in id order) whose submitted count no
+    legal build fields: every option, variant and budget cap applied, other
+    submitted items free up to their envelope."""
+    wanted = sorted({id_ for id_ in ids if counts.get(id_, 0) > 0})
+    if not wanted:
+        return []
     n = max(0, int(model_count))
     effective_options = _options_with_printed_unit_abilities(unit, options, counts)
     envelope = {id_: bound["max"] for id_, bound in weapon_bounds(unit, n, options, models).items()}
@@ -1361,10 +1388,8 @@ def _variant_cap_violations(
                 cap = min(cap, _budget_cap(budget, n, dup))
             envelope[id_] = min(envelope.get(id_, cap), cap)
     out: list[dict[str, str]] = []
-    for id_ in sorted(counts):
+    for id_ in wanted:
         count = counts[id_]
-        if count <= 0:
-            continue
         upper = dict(envelope)
         for other, explicit in counts.items():
             upper.setdefault(other, explicit)
@@ -1389,6 +1414,29 @@ def _variant_cap_violations(
                     ),
                 }
             )
+    return out
+
+
+def _variant_cap_violations(
+    unit: Unit,
+    model_count: int,
+    options: list[WargearOption],
+    models: list[LoadoutModel],
+    counts: dict[str, int],
+) -> list[dict[str, str]]:
+    """The caps a variant-row selection with no legal whole-model completion breaks.
+
+    Each submitted item, in id order, is tried alone: when no legal build fields
+    that many copies of it (every option, variant and budget cap applied, other
+    items free up to their envelope) it is ``exceeds-max`` on that item. Otherwise,
+    per variant row in order, each variant budget and then each capped variant is
+    lifted in turn; a cap whose lifting alone makes the selection completable is
+    ``exceeds-allowance`` on the equipment its variants add over the row's baseline
+    (its defaults, else what every variant shares), sorted and joined by ``+``.
+    Empty when no single cap explains the failure. Mirror of the TS reference.
+    """
+    n = max(0, int(model_count))
+    out = _solo_cap_violations(unit, model_count, options, models, counts, counts)
     if out:
         return out
 

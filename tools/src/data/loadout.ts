@@ -1242,15 +1242,28 @@ function completionLowerBounds(
   }
   const lowerVariants = [strictLower];
 
-  // Some source exporters double-count a secondary item shared by several
-  // branches of one choice (the primary selections are still exact). A weapon
-  // repeated in at least two multi-item branches is mechanically determined by
-  // those primary selections, so a second pass may derive its count rather than
-  // requiring the duplicated aggregate. Defaults are never relaxed.
+  const relaxedLower = new Map(strictLower);
+  for (const id of repeatedCoItems(options, models)) relaxedLower.delete(id);
+  if (relaxedLower.size !== strictLower.size) lowerVariants.push(relaxedLower);
+  return lowerVariants;
+}
+
+/**
+ * Items {@link completeLoadout}'s second pass leaves free. Some source exporters
+ * double-count a secondary item shared by several branches of one choice (the
+ * primary selections are still exact). A weapon repeated in at least two
+ * multi-item branches, and never a pick on its own, is mechanically determined
+ * by those primary selections, so the pass may derive its count rather than
+ * requiring the duplicated aggregate. Defaults are never relaxed.
+ */
+function repeatedCoItems(
+  options: readonly WargearOption[],
+  models: readonly LoadoutModel[],
+): Set<string> {
   const defaultIds = new Set(
     models.flatMap((model) => model.default_weapon_ids ?? []),
   );
-  const repeatedCoItems = new Set<string>();
+  const out = new Set<string>();
   for (const option of options) {
     const occurrences = new Map<string, number>();
     for (const branch of option.replacement_choice ?? []) {
@@ -1260,13 +1273,14 @@ function completionLowerBounds(
       }
     }
     for (const [id, count] of occurrences) {
-      if (count >= 2 && !defaultIds.has(id)) repeatedCoItems.add(id);
+      if (count >= 2 && !defaultIds.has(id)) out.add(id);
     }
   }
-  const relaxedLower = new Map(strictLower);
-  for (const id of repeatedCoItems) relaxedLower.delete(id);
-  if (relaxedLower.size !== strictLower.size) lowerVariants.push(relaxedLower);
-  return lowerVariants;
+  for (const option of options) {
+    const branches = option.replacement ? [option.replacement] : (option.replacement_choice ?? []);
+    for (const branch of branches) if (branch.length === 1) out.delete(branch[0]);
+  }
+  return out;
 }
 
 /** {@link completeLoadout} with one variant cap token (see {@link rowCandidates}) lifted, or none. */
@@ -1440,7 +1454,17 @@ export function validateLoadout(
     // completion to determine whether omitted defaults make it legal.
     const directViolations = [...perItemBounds, ...budgets];
     if (directViolations.length > 0) return sortViolations(directViolations);
-    if (completeLoadout(unit, modelCount, options, models, counts) !== null) return [];
+    const completed = completeLoadout(unit, modelCount, options, models, counts);
+    if (completed !== null) {
+      // A completion may field fewer copies of a relaxed co-item than the
+      // source claims (exporter tolerance); a claim no legal loadout reaches
+      // is still over its cap.
+      const relaxed = repeatedCoItems(options, models);
+      const underfielded = [...counts]
+        .filter(([id, count]) => relaxed.has(id) && count > (completed.counts.get(id) ?? 0))
+        .map(([id]) => id);
+      return sortViolations(soloCapViolations(unit, modelCount, options, models, counts, underfielded));
+    }
     const capped = variantCapViolations(unit, modelCount, options, models, counts);
     if (capped.length > 0) return sortViolations(capped);
     return [{
@@ -1524,6 +1548,50 @@ function budgetCap(budget: WargearBudget, modelCount: number, count: number): nu
 }
 
 /**
+ * `exceeds-max` on each of `ids` (in id order) whose submitted count no legal
+ * build fields: every option, variant and budget cap applied, other submitted
+ * items free up to their envelope.
+ */
+function soloCapViolations(
+  unit: Unit,
+  modelCount: number,
+  options: readonly WargearOption[],
+  models: readonly LoadoutModel[],
+  counts: Map<string, number>,
+  ids: Iterable<string>,
+): Violation[] {
+  const wanted = [...ids].filter((id) => (counts.get(id) ?? 0) > 0).sort();
+  if (wanted.length === 0) return [];
+  const n = Math.max(0, Math.floor(modelCount) || 0);
+  const effectiveOptions = optionsWithPrintedUnitAbilities(unit, options, counts);
+  const envelope = new Map<string, number>();
+  for (const [id, bound] of weaponBounds(unit, n, options, models)) envelope.set(id, bound.max);
+  for (const budget of unit.wargear_budgets ?? []) {
+    for (const id of budget.items ?? []) {
+      let cap = budgetCap(budget, n, budget.count);
+      if (budget.duplicate_limit != null) cap = Math.min(cap, budgetCap(budget, n, budget.duplicate_limit));
+      envelope.set(id, Math.min(envelope.get(id) ?? cap, cap));
+    }
+  }
+  const out: Violation[] = [];
+  for (const id of wanted) {
+    const count = counts.get(id)!;
+    const upper = new Map(envelope);
+    for (const [other, explicit] of counts) if (!upper.has(other)) upper.set(other, explicit);
+    upper.set(id, Math.max(count, upper.get(id) ?? 0));
+    const lower = new Map([[id, count]]);
+    if (searchCompletion(unit, n, effectiveOptions, models, [lower], () => upper, null) === null) {
+      out.push({
+        id,
+        code: "exceeds-max",
+        message: `${id}: ${count} exceeds the most any legal loadout of ${modelCount} models fields`,
+      });
+    }
+  }
+  return out;
+}
+
+/**
  * The caps a variant-row selection with no legal whole-model completion breaks.
  * Each submitted item, in id order, is tried alone: when no legal build fields
  * that many copies of it (every option, variant and budget cap applied, other
@@ -1542,32 +1610,7 @@ function variantCapViolations(
   counts: Map<string, number>,
 ): Violation[] {
   const n = Math.max(0, Math.floor(modelCount) || 0);
-  const effectiveOptions = optionsWithPrintedUnitAbilities(unit, options, counts);
-  const envelope = new Map<string, number>();
-  for (const [id, bound] of weaponBounds(unit, n, options, models)) envelope.set(id, bound.max);
-  for (const budget of unit.wargear_budgets ?? []) {
-    for (const id of budget.items ?? []) {
-      let cap = budgetCap(budget, n, budget.count);
-      if (budget.duplicate_limit != null) cap = Math.min(cap, budgetCap(budget, n, budget.duplicate_limit));
-      envelope.set(id, Math.min(envelope.get(id) ?? cap, cap));
-    }
-  }
-  const out: Violation[] = [];
-  for (const id of [...counts.keys()].sort()) {
-    const count = counts.get(id)!;
-    if (count <= 0) continue;
-    const upper = new Map(envelope);
-    for (const [other, explicit] of counts) if (!upper.has(other)) upper.set(other, explicit);
-    upper.set(id, Math.max(count, upper.get(id) ?? 0));
-    const lower = new Map([[id, count]]);
-    if (searchCompletion(unit, n, effectiveOptions, models, [lower], () => upper, null) === null) {
-      out.push({
-        id,
-        code: "exceeds-max",
-        message: `${id}: ${count} exceeds the most any legal loadout of ${modelCount} models fields`,
-      });
-    }
-  }
+  const out = soloCapViolations(unit, modelCount, options, models, counts, counts.keys());
   if (out.length > 0) return out;
 
   const reported = new Set<string>();

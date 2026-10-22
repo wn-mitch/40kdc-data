@@ -1194,4 +1194,45 @@ describe("groupLoadout", () => {
       ]),
     );
   });
+
+  describe("validateLoadout on relaxed co-items", () => {
+    // Whole-model variants route validation through completion.
+    const rows = [
+      {
+        name: "Trooper",
+        min: 5,
+        max: 5,
+        default_weapon_ids: ["rifle", "pistol"],
+        loadout_variants: [{ name: "Trooper", weapon_ids: ["rifle", "pistol"] }],
+      },
+    ];
+    const specialSwap = opt({
+      id: "special-swap",
+      replaces: ["rifle"],
+      replacement_choice: [
+        ["heavy", "close-combat"],
+        ["melta", "close-combat"],
+        ["plasma", "close-combat"],
+      ],
+      model_constraint: { any_number: true },
+    });
+    const codes = (options: WargearOption[], counts: [string, number][]) =>
+      validateLoadout(u(), 5, options, new Map(counts), rows).map((v) => `${v.code}:${v.id}`);
+
+    it("tolerates an exporter's duplicated co-item within what a legal loadout fields", () => {
+      expect(codes([specialSwap], [["pistol", 5], ["rifle", 2], ["heavy", 2], ["melta", 1], ["close-combat", 4]])).toEqual([]);
+    });
+
+    it("reports a co-item claim no legal loadout reaches", () => {
+      expect(codes([specialSwap], [["pistol", 5], ["rifle", 2], ["heavy", 2], ["melta", 1], ["close-combat", 6]])).toEqual([
+        "exceeds-max:close-combat",
+      ]);
+    });
+
+    it("does not relax an item a model can also take on its own", () => {
+      // close-combat is a primary pick too, so its count is not derived from the others.
+      const alone = opt({ id: "knife-swap", replaces: ["pistol"], replacement: ["close-combat"], model_constraint: { max_count: 1 } });
+      expect(codes([specialSwap, alone], [["pistol", 5], ["rifle", 2], ["heavy", 2], ["melta", 1], ["close-combat", 4]])).toEqual(["swap-conflict:u"]);
+    });
+  });
 });

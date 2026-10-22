@@ -1931,11 +1931,28 @@ fn completion_lower_bounds(
         .map(|(id, count)| (id.clone(), *count))
         .collect();
     let mut lower_variants = vec![strict_lower.clone()];
+    let mut relaxed_lower = strict_lower.clone();
+    for id in repeated_co_items(options, models) {
+        relaxed_lower.remove(&id);
+    }
+    if relaxed_lower.len() != strict_lower.len() {
+        lower_variants.push(relaxed_lower);
+    }
+    lower_variants
+}
+
+/// Items [`complete_loadout`]'s second pass leaves free. Some source exporters
+/// double-count a secondary item shared by several branches of one choice (the
+/// primary selections are still exact). A weapon repeated in at least two
+/// multi-item branches, and never a pick on its own, is mechanically determined
+/// by those primary selections, so the pass may derive its count rather than
+/// requiring the duplicated aggregate. Defaults are never relaxed.
+fn repeated_co_items(options: &[&WargearOption], models: &[LoadoutModel]) -> HashSet<String> {
     let default_ids: HashSet<String> = models
         .iter()
         .flat_map(|model| model.default_weapon_ids.iter().cloned())
         .collect();
-    let mut repeated_co_items = HashSet::new();
+    let mut out = HashSet::new();
     for option in options {
         let mut occurrences: HashMap<String, u64> = HashMap::new();
         for branch in &option.replacement_choice {
@@ -1949,18 +1966,21 @@ fn completion_lower_bounds(
         }
         for (id, occurrences) in occurrences {
             if occurrences >= 2 && !default_ids.contains(&id) {
-                repeated_co_items.insert(id);
+                out.insert(id);
             }
         }
     }
-    let mut relaxed_lower = strict_lower.clone();
-    for id in repeated_co_items {
-        relaxed_lower.remove(&id);
+    for option in options {
+        if option.replacement.len() == 1 {
+            out.remove(option.replacement[0].as_str());
+        }
+        for branch in &option.replacement_choice {
+            if branch.len() == 1 {
+                out.remove(branch[0].as_str());
+            }
+        }
     }
-    if relaxed_lower.len() != strict_lower.len() {
-        lower_variants.push(relaxed_lower);
-    }
-    lower_variants
+    out
 }
 
 /// [`complete_loadout`] with one variant cap token (see `row_candidates`) lifted, or none.
@@ -2166,10 +2186,33 @@ pub fn validate_loadout(
             return out;
         }
         if counts.values().all(|count| *count >= 0) {
-            if complete_loadout(unit, model_count, options, models, &count_tree).is_some() {
-                return out;
-            }
             let rows = models.expect("recorded bases imply Some");
+            if let Some(completed) =
+                complete_loadout(unit, model_count, options, models, &count_tree)
+            {
+                // A completion may field fewer copies of a relaxed co-item than
+                // the source claims (exporter tolerance); a claim no legal
+                // loadout reaches is still over its cap.
+                let relaxed = repeated_co_items(options, rows);
+                let underfielded: Vec<String> = count_tree
+                    .iter()
+                    .filter(|(id, count)| {
+                        relaxed.contains(id.as_str())
+                            && **count > completed.counts.get(id.as_str()).copied().unwrap_or(0)
+                    })
+                    .map(|(id, _)| id.clone())
+                    .collect();
+                let mut solo = solo_cap_violations(
+                    unit,
+                    model_count,
+                    options,
+                    rows,
+                    &count_tree,
+                    &underfielded,
+                );
+                solo.sort_by(|a, b| a.id.cmp(&b.id).then(a.code.as_str().cmp(b.code.as_str())));
+                return solo;
+            }
             let mut capped = variant_cap_violations(unit, model_count, options, rows, &count_tree);
             if !capped.is_empty() {
                 capped.sort_by(|a, b| a.id.cmp(&b.id).then(a.code.as_str().cmp(b.code.as_str())));
@@ -2325,22 +2368,26 @@ fn budget_violations(
     out
 }
 
-/// The caps a variant-row selection with no legal whole-model completion breaks.
-/// Each submitted item, in id order, is tried alone: when no legal build fields
-/// that many copies of it (every option, variant and budget cap applied, other
-/// items free up to their envelope) it is `exceeds-max` on that item. Otherwise,
-/// per variant row in order, each variant budget and then each capped variant is
-/// lifted in turn; a cap whose lifting alone makes the selection completable is
-/// `exceeds-allowance` on the equipment its variants add over the row's baseline
-/// (its defaults, else what every variant shares), sorted and joined by `+`.
-/// Empty when no single cap explains the failure. Mirror of `tools/src/data/loadout.ts`.
-fn variant_cap_violations(
+/// `exceeds-max` on each of `ids` (in id order) whose submitted count no legal
+/// build fields: every option, variant and budget cap applied, other submitted
+/// items free up to their envelope.
+fn solo_cap_violations(
     unit: &Unit,
     model_count: u64,
     options: &[&WargearOption],
     models: &[LoadoutModel],
     counts: &BTreeMap<String, i64>,
+    ids: &[String],
 ) -> Vec<Violation> {
+    let mut wanted: Vec<&String> = ids
+        .iter()
+        .filter(|id| counts.get(id.as_str()).copied().unwrap_or(0) > 0)
+        .collect();
+    wanted.sort();
+    wanted.dedup();
+    if wanted.is_empty() {
+        return Vec::new();
+    }
     let effective_options = options_with_printed_unit_abilities(unit, options, counts);
     let option_refs: Vec<&WargearOption> = effective_options.iter().collect();
     let mut envelope: BTreeMap<String, i64> =
@@ -2359,15 +2406,13 @@ fn variant_cap_violations(
         }
     }
     let mut out = Vec::new();
-    for (id, &count) in counts {
-        if count <= 0 {
-            continue;
-        }
+    for &id in &wanted {
+        let count = counts[id.as_str()];
         let mut upper = envelope.clone();
         for (other, &explicit) in counts {
             upper.entry(other.clone()).or_insert(explicit);
         }
-        let current = upper.get(id).copied().unwrap_or(0);
+        let current = upper.get(id.as_str()).copied().unwrap_or(0);
         upper.insert(id.clone(), current.max(count));
         let lower = BTreeMap::from([(id.clone(), count)]);
         if search_completion(
@@ -2390,6 +2435,27 @@ fn variant_cap_violations(
             });
         }
     }
+    out
+}
+
+/// The caps a variant-row selection with no legal whole-model completion breaks.
+/// Each submitted item, in id order, is tried alone: when no legal build fields
+/// that many copies of it (every option, variant and budget cap applied, other
+/// items free up to their envelope) it is `exceeds-max` on that item. Otherwise,
+/// per variant row in order, each variant budget and then each capped variant is
+/// lifted in turn; a cap whose lifting alone makes the selection completable is
+/// `exceeds-allowance` on the equipment its variants add over the row's baseline
+/// (its defaults, else what every variant shares), sorted and joined by `+`.
+/// Empty when no single cap explains the failure. Mirror of `tools/src/data/loadout.ts`.
+fn variant_cap_violations(
+    unit: &Unit,
+    model_count: u64,
+    options: &[&WargearOption],
+    models: &[LoadoutModel],
+    counts: &BTreeMap<String, i64>,
+) -> Vec<Violation> {
+    let ids: Vec<String> = counts.keys().cloned().collect();
+    let mut out = solo_cap_violations(unit, model_count, options, models, counts, &ids);
     if !out.is_empty() {
         return out;
     }
