@@ -2579,8 +2579,7 @@
               "close-combat-weapon",
               "astartes-chainsword",
               "plasma-pistol"
-            ],
-            "max_count": 1
+            ]
           },
           {
             "name": "Legionary w/ other weapon (Meltagun)",

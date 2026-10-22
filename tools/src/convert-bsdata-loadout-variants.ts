@@ -149,6 +149,7 @@ export function projectUnit(
   notes: string[] = [],
   previous: readonly JsonNode[] = [],
   wargearBudgets: readonly JsonNode[] = [],
+  wargearOptions: readonly JsonNode[] = [],
 ): VariantIssue[] {
   const issues: VariantIssue[] = [];
   const resolve = makeEquipmentResolver(equipment, unitId, factionUnitIds);
@@ -185,6 +186,22 @@ export function projectUnit(
     arr(previousRow(rowName)?.loadout_variant_budgets)
       .filter((b) => Array.isArray(b.variant_names) && b.variant_names.length && b.variant_names.every((name) => names.includes(name)))
       .map((b) => structuredClone(b) as unknown as LoadoutVariantBudget);
+  const covered = (items: readonly string[]): boolean =>
+    wargearBudgets.some((budget) => Array.isArray(budget.items) && budget.items.some((item) => typeof item === "string" && items.includes(item)));
+  // An MFM wargear option whose branches include both this choice and a budgeted
+  // pick is one dump menu: the dump's limited set owns its duplicate limits even
+  // where the summed budget leaves the item out because another model type also
+  // takes it (the Aspiring Champion's own plasma pistol).
+  const sameItems = (left: readonly string[], right: readonly string[]): boolean =>
+    left.length === right.length && [...left].sort().every((id, index) => id === [...right].sort()[index]);
+  const menuGoverned = (rowBase: string, items: readonly string[]): boolean =>
+    wargearOptions.some((option) => {
+      const modelName = str((option.model_constraint as JsonNode | null | undefined)?.model_name);
+      if (modelName && normModelName(modelName) !== rowBase) return false;
+      const branches = (Array.isArray(option.replacement_choice) ? option.replacement_choice : [])
+        .filter((branch): branch is string[] => Array.isArray(branch) && branch.every((id) => typeof id === "string"));
+      return branches.some((branch) => sameItems(branch, items)) && branches.some((branch) => !sameItems(branch, items) && covered(branch));
+    });
   const noted = (what: string): void => { if (!notes.includes(`${unitId}: ${what}`)) notes.push(`${unitId}: ${what}`); };
   const families = collectPeerFamilies(unit);
   const peerIds = new Set(families.flatMap((family) => family.peers.map((peer) => str(peer.id)).filter((id): id is string => !!id)));
@@ -232,7 +249,7 @@ export function projectUnit(
         // items they cover, so such a cap stands only where no budget covers what
         // the choice adds.
         const added = (ids as string[]).filter((id) => !sharedIds.includes(id));
-        const budgeted = added.length > 0 && wargearBudgets.some((budget) => Array.isArray(budget.items) && budget.items.some((item) => typeof item === "string" && added.includes(item)));
+        const budgeted = added.length > 0 && (covered(added) || menuGoverned(base, added));
         const choiceCaps = budgeted ? [] : alternative.choices.map((choice) => projectCap(choice, sizes, rules, isWideScope)).filter((cap): cap is ProjectedCap => !!cap);
         const flats = [...choiceCaps, ...(peerCap ? [peerCap] : [])].map((cap) => flatOf(cap.forms)).filter((n): n is number => n !== undefined);
         const max = flats.length ? Math.min(...flats) : undefined;
@@ -358,6 +375,7 @@ export function prepareFactionProjection(
   compositions: JsonNode[],
   equipment: JsonNode[],
   sourceNodes: ReadonlyMap<string, JsonNode>,
+  wargearOptions: readonly JsonNode[] = [],
 ): { compositions: JsonNode[]; issues: VariantIssue[]; notes: string[]; discoveredUnits: number; discoveredVariants: number; projectedUnits: number; projectedVariants: number } {
   const projected = structuredClone(compositions);
   for (const composition of projected) {
@@ -391,7 +409,7 @@ export function prepareFactionProjection(
     if (sourceVariantCount > 0) discoveredUnits += 1;
     discoveredVariants += sourceVariantCount;
     const committed = arr(compositions.find((item) => item.unit_id === repoUnit.id)?.models);
-    issues.push(...projectUnit(source, rows, equipment, str(repoUnit.id)!, factionUnitIds, sourceNodes, compositionSizes(composition), notes, committed, arr(repoUnit.wargear_budgets)));
+    issues.push(...projectUnit(source, rows, equipment, str(repoUnit.id)!, factionUnitIds, sourceNodes, compositionSizes(composition), notes, committed, arr(repoUnit.wargear_budgets), wargearOptions.filter((option) => option.unit_id === repoUnit.id)));
     const variantCount = rows.reduce((sum, row) => sum + arr(row.loadout_variants).length, 0);
     if (variantCount > 0) projectedUnits += 1;
     projectedVariants += variantCount;
@@ -429,7 +447,9 @@ export async function run(argv: readonly string[]): Promise<void> {
     if (!fs.existsSync(compositionsPath)) continue;
     const compositions = readJson(compositionsPath) as JsonNode[];
     const equipment = ["weapons.json", "wargear.json"].flatMap((file) => fs.existsSync(path.join(dir, file)) ? readJson(path.join(dir, file)) as JsonNode[] : []);
-    const projection = prepareFactionProjection(units, compositions, equipment, allNodes);
+    const optionsPath = path.join(dir, "wargear-options.json");
+    const wargearOptions = fs.existsSync(optionsPath) ? readJson(optionsPath) as JsonNode[] : [];
+    const projection = prepareFactionProjection(units, compositions, equipment, allNodes, wargearOptions);
     discoveredUnits += projection.discoveredUnits;
     discoveredVariants += projection.discoveredVariants;
     projectedUnits += projection.projectedUnits;

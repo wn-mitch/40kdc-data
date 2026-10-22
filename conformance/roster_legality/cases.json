@@ -653,5 +653,10 @@
     "name": "legionaries-three-specials-at-ten-over",
     "args": { "unitId": "legionaries", "factionId": "chaos-space-marines", "modelCount": 10, "counts": { "plasma-gun": 2, "flamer": 1 } },
     "expected": ["exceeds-allowance:flamer+havoc-autocannon-legionaries+heavy-bolter+lascannon-legionaries+meltagun+missile-launcher+plasma-gun+reaper-chaincannon"]
+  },
+  {
+    "name": "legionaries-two-pistol-chainsword-combos-at-ten-legal",
+    "args": { "unitId": "legionaries", "factionId": "chaos-space-marines", "modelCount": 10, "counts": { "plasma-pistol": 2, "astartes-chainsword": 2, "accursed-weapon": 2 } },
+    "expected": []
   }
 ]

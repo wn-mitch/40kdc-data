@@ -356,6 +356,24 @@ describe("BSData loadout variant projection: equipment choices", () => {
     expect(uncovered[0].loadout_variants).toContainEqual({ name: "Legionary w/ other weapon (Flamer)", weapon_ids: ["bolt-pistol", "flamer"], max_count: 1 });
   });
 
+  it("leaves a choice's duplicate cap to the MFM menu that budgets its siblings", () => {
+    // The summed budget omits flamer (another model type also takes it), but the
+    // row's MFM option offers it in the same menu as the budgeted meltagun.
+    const budgets = [{ items: ["meltagun"], count: 2, per_models: 10 }];
+    const menu = (modelName: string) => [{ unit_id: "legionaries", model_constraint: { model_name: modelName, any_number: true }, replaces: ["boltgun"], replacement_choice: [["meltagun"], ["flamer"]] }];
+    const governed: Record<string, unknown>[] = [{ name: "Legionary" }];
+    expect(projectUnit(legionaries, governed, equipment, "legionaries", [], profiles, undefined, [], [], budgets, menu("Legionary"))).toEqual([]);
+    expect(governed[0].loadout_variants).toContainEqual({ name: "Legionary w/ other weapon (Flamer)", weapon_ids: ["bolt-pistol", "flamer"], max_count: 2 });
+    // Another model type's menu does not govern this row's choice.
+    const champion: Record<string, unknown>[] = [{ name: "Legionary" }];
+    projectUnit(legionaries, champion, equipment, "legionaries", [], profiles, undefined, [], [], budgets, menu("Aspiring Champion"));
+    expect(champion[0].loadout_variants).toContainEqual({ name: "Legionary w/ other weapon (Flamer)", weapon_ids: ["bolt-pistol", "flamer"], max_count: 1 });
+    // A menu with no budgeted pick leaves the BSData cap standing.
+    const unbudgeted: Record<string, unknown>[] = [{ name: "Legionary" }];
+    projectUnit(legionaries, unbudgeted, equipment, "legionaries", [], profiles, undefined, [], [], [], menu("Legionary"));
+    expect(unbudgeted[0].loadout_variants).toContainEqual({ name: "Legionary w/ other weapon (Flamer)", weapon_ids: ["bolt-pistol", "flamer"], max_count: 1 });
+  });
+
   it("pools the split peer's ceiling so the splits cannot field more models than the peer", () => {
     const rows: Record<string, unknown>[] = [{ name: "Legionary", default_weapon_ids: ["bolt-pistol", "boltgun"] }];
     projectUnit(legionaries, rows, equipment, "legionaries", [], profiles);
