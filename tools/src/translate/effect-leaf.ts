@@ -314,7 +314,7 @@ function permission(m: Record<string, unknown>, subj: string, ctx: Ctx): string 
       ? `be targeted with the ${abilityLabel(m.stratagem)} Stratagem`
       : ACTIVITIES[jstr(m.activity)] ?? jstr(m.activity);
   const into = m.into != null ? ` ${m.activity === "shoot" ? "at" : m.activity === "declare-charge" ? "against" : "into"} ${noneOf(effectSubject(m.into, ctx))}` : "";
-  const reach = m.reach != null ? ` from up to ${jstr(m.reach)}" away` : "";
+  const reach = m.reach != null ? ` from up to ${rangePhrase(m.reach)} away` : "";
   let s = m.allow === false ? `${noneOf(subj)} cannot ${act}${into}` : `${subj} ${v(subj, "is")} eligible to ${act}${into}${reach}`;
   if (Array.isArray(m.after)) s += ` in a turn in which ${it} ${orList((m.after as unknown[]).map((a) => AFTER[jstr(a)] ?? jstr(a)))}`;
   if (Array.isArray(m.despite)) {

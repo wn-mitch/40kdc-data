@@ -1385,7 +1385,9 @@
           "range": {
             "inches": 3
           },
-          "range_cap": 12,
+          "range_cap": {
+            "inches": 12
+          },
           "emitter_filter": {
             "all_of": [
               "DEATH GUARD"

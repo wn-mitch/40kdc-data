@@ -58,7 +58,7 @@ func permissionLeaf(m map[string]any, subj string, ctx effCtx) string {
 	}
 	reach := ""
 	if m["reach"] != nil {
-		reach = " from up to " + ejstr(m["reach"]) + "\" away"
+		reach = " from up to " + rangePhrase(m["reach"]) + " away"
 	}
 	var s string
 	if m["allow"] == false {

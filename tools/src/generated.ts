@@ -3699,16 +3699,33 @@ export interface AuraEffect {
   target: "enemy-within-aura" | "friendly-within-aura";
   modifier: {
     range?: RangeRef;
-    range_bonus?: number;
+    /**
+     * One reference for every distance. A per_battle_round table is indexed from battle round 1; each later round uses the next entry and the final entry continues for all subsequent rounds. Tier entries are non-tiered range refs, so nested tables are forbidden.
+     */
+    range_bonus?:
+      | NonTieredRangeRef
+      | {
+          /**
+           * @minItems 1
+           */
+          per_battle_round: [NonTieredRangeRef, ...NonTieredRangeRef[]];
+        };
     of?: string;
     effect?: EffectNode;
     eligible?: UnitFilter;
     emitter_filter?: UnitFilter;
     recipient_filter?: UnitFilter;
     /**
-     * The aura range, extensions included, never exceeds this.
+     * One reference for every distance. A per_battle_round table is indexed from battle round 1; each later round uses the next entry and the final entry continues for all subsequent rounds. Tier entries are non-tiered range refs, so nested tables are forbidden.
      */
-    range_cap?: number;
+    range_cap?:
+      | NonTieredRangeRef
+      | {
+          /**
+           * @minItems 1
+           */
+          per_battle_round: [NonTieredRangeRef, ...NonTieredRangeRef[]];
+        };
     /**
      * The unit must be wholly within the range (no part of it outside), not merely within it (any part inside).
      */
@@ -3762,7 +3779,17 @@ export interface RiskRewardEffect {
 export interface IssueOrdersEffect {
   type: "issue-orders";
   count?: number;
-  range?: number;
+  /**
+   * One reference for every distance. A per_battle_round table is indexed from battle round 1; each later round uses the next entry and the final entry continues for all subsequent rounds. Tier entries are non-tiered range refs, so nested tables are forbidden.
+   */
+  range?:
+    | NonTieredRangeRef
+    | {
+        /**
+         * @minItems 1
+         */
+        per_battle_round: [NonTieredRangeRef, ...NonTieredRangeRef[]];
+      };
   eligible?: {
     keyword?: string;
   };
@@ -4241,7 +4268,17 @@ export interface PermissionEffect {
     into?: UnitRef;
     as_if?: "shooting-phase" | "snap-shooting" | "fight-phase" | "movement-phase" | "charge-phase" | "command-phase";
     next?: true;
-    reach?: number;
+    /**
+     * One reference for every distance. A per_battle_round table is indexed from battle round 1; each later round uses the next entry and the final entry continues for all subsequent rounds. Tier entries are non-tiered range refs, so nested tables are forbidden.
+     */
+    reach?:
+      | NonTieredRangeRef
+      | {
+          /**
+           * @minItems 1
+           */
+          per_battle_round: [NonTieredRangeRef, ...NonTieredRangeRef[]];
+        };
     stratagem?: EntityId;
     /**
      * Doing so counts as having made this move this turn (a disembark counting as a Normal move).

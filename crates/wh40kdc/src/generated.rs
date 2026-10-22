@@ -6654,12 +6654,12 @@ impl ::std::convert::TryFrom<::std::string::String> for AttackType {
 ///          "$ref": "#/$defs/range-ref"
 ///        },
 ///        "range_bonus": {
-///          "type": "integer"
+///          "description": "How far the named aura's range is extended.",
+///          "$ref": "#/$defs/range-ref"
 ///        },
 ///        "range_cap": {
 ///          "description": "The aura range, extensions included, never exceeds this.",
-///          "type": "integer",
-///          "minimum": 1.0
+///          "$ref": "#/$defs/range-ref"
 ///        },
 ///        "recipient_filter": {
 ///          "$ref": "#/$defs/unit-filter"
@@ -6722,12 +6722,12 @@ pub struct AuraEffect {
 ///      "$ref": "#/$defs/range-ref"
 ///    },
 ///    "range_bonus": {
-///      "type": "integer"
+///      "description": "How far the named aura's range is extended.",
+///      "$ref": "#/$defs/range-ref"
 ///    },
 ///    "range_cap": {
 ///      "description": "The aura range, extensions included, never exceeds this.",
-///      "type": "integer",
-///      "minimum": 1.0
+///      "$ref": "#/$defs/range-ref"
 ///    },
 ///    "recipient_filter": {
 ///      "$ref": "#/$defs/unit-filter"
@@ -6754,11 +6754,12 @@ pub struct AuraEffectModifier {
     pub of: ::std::option::Option<::std::string::String>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub range: ::std::option::Option<RangeRef>,
+    ///How far the named aura's range is extended.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub range_bonus: ::std::option::Option<i64>,
+    pub range_bonus: ::std::option::Option<RangeRef>,
     ///The aura range, extensions included, never exceeds this.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub range_cap: ::std::option::Option<::std::num::NonZeroU64>,
+    pub range_cap: ::std::option::Option<RangeRef>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub recipient_filter: ::std::option::Option<UnitFilter>,
     ///The unit must be wholly within the range (no part of it outside), not merely within it (any part inside).
@@ -21253,8 +21254,8 @@ pub struct InvulnerableSaveEffectModifier {
 ///      "minItems": 1
 ///    },
 ///    "range": {
-///      "type": "number",
-///      "exclusiveMinimum": 0.0
+///      "description": "Orders go to eligible units within this distance of the officer.",
+///      "$ref": "#/$defs/range-ref"
 ///    },
 ///    "type": {
 ///      "type": "string",
@@ -21276,8 +21277,9 @@ pub struct IssueOrdersEffect {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub eligible: ::std::option::Option<IssueOrdersEffectEligible>,
     pub options: ::std::vec::Vec<IssueOrdersEffectOptionsItem>,
+    ///Orders go to eligible units within this distance of the officer.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub range: ::std::option::Option<f64>,
+    pub range: ::std::option::Option<RangeRef>,
     #[serde(rename = "type")]
     pub type_: IssueOrdersEffectType,
 }
@@ -27967,7 +27969,8 @@ impl ::std::convert::TryFrom<::std::string::String> for Period {
 ///      "const": true
 ///    },
 ///    "reach": {
-///      "type": "number"
+///      "description": "A fight permission's reach: models this far from an enemy unit are eligible to fight.",
+///      "$ref": "#/$defs/range-ref"
 ///    },
 ///    "stratagem": {
 ///      "$ref": "#/$defs/entity-id"
@@ -27998,8 +28001,9 @@ pub struct PermissionEffectModifier {
     pub into: ::std::option::Option<UnitRef>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub next: ::std::option::Option<::serde_json::Value>,
+    ///A fight permission's reach: models this far from an enemy unit are eligible to fight.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub reach: ::std::option::Option<f64>,
+    pub reach: ::std::option::Option<RangeRef>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub stratagem: ::std::option::Option<EntityId>,
 }

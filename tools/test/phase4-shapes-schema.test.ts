@@ -251,7 +251,20 @@ describe("rules, army and the adopted D18 shapes", () => {
   });
 
   it("caps an aura's range and adds the D14 designation predicates", () => {
-    expect(effectOk({ type: "aura", target: "enemy-within-aura", modifier: { range: { inches: 3 }, range_cap: 12, effect: { type: "no-effect" } } })).toBe(true);
+    expect(effectOk({ type: "aura", target: "enemy-within-aura", modifier: { range: { inches: 3 }, range_cap: { inches: 12 }, effect: { type: "no-effect" } } })).toBe(true);
+  });
+
+  it("measures every remaining distance as a range-ref, never a bare number", () => {
+    const aura = (modifier: Record<string, unknown>) => ({ type: "aura", target: "enemy-within-aura", modifier: { range: { inches: 3 }, effect: { type: "no-effect" }, ...modifier } });
+    expect(effectOk(aura({ range_cap: 12 }))).toBe(false);
+    expect(effectOk({ type: "aura", target: "enemy-within-aura", modifier: { of: "contagion", range_bonus: 3 } })).toBe(false);
+    expect(effectOk({ type: "aura", target: "enemy-within-aura", modifier: { of: "contagion", range_bonus: { inches: 3 } } })).toBe(true);
+    const fight = (reach: unknown) => ({ type: "permission", target: "this-unit", modifier: { activity: "fight", allow: true, reach } });
+    expect(effectOk(fight(3))).toBe(false);
+    expect(effectOk(fight({ inches: 3 }))).toBe(true);
+    const orders = (range: unknown) => ({ type: "issue-orders", range, options: [{ name: "Take Aim!", effect: { type: "no-effect" } }] });
+    expect(effectOk(orders(6))).toBe(false);
+    expect(effectOk(orders({ inches: 6 }))).toBe(true);
     expect(conditionOk({ type: "guided", parameters: {} })).toBe(true);
     expect(conditionOk({ type: "matches", parameters: { subject: "defender", filter: { designated: "spotted" } } })).toBe(true);
   });

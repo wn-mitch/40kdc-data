@@ -216,16 +216,16 @@ def _keyword_filter_clause(value: Any, noun: str) -> str:
 def _aura_clause(e: Effect, m: dict[str, Any], ctx: Ctx) -> str:
     if m.get("range_bonus") is not None:
         capped_bonus = (
-            f' (to a maximum of {jstr(m["range_cap"])}")' if m.get("range_cap") is not None else ""
+            f" (to a maximum of {range_phrase(m['range_cap'])})"
+            if m.get("range_cap") is not None
+            else ""
         )
         named = f"{title_case(jstr(m['of']))} " if m.get("of") is not None else ""
-        return (
-            f"the range of this model's {named}abilities is increased by {jstr(m['range_bonus'])}\""
-            f"{capped_bonus}"
-        )
+        bonus = range_phrase(m["range_bonus"])
+        return f"the range of this model's {named}abilities is increased by {bonus}{capped_bonus}"
     range_text = range_phrase(m["range"]) if m.get("range") is not None else "range"
     capped = (
-        f' (to a maximum of {jstr(m["range_cap"])}", extensions included)'
+        f" (to a maximum of {range_phrase(m['range_cap'])}, extensions included)"
         if m.get("range_cap") is not None
         else ""
     )

@@ -8541,7 +8541,8 @@
                   "const": true
                 },
                 "reach": {
-                  "type": "number"
+                  "$ref": "#/$defs/range-ref",
+                  "description": "A fight permission's reach: models this far from an enemy unit are eligible to fight."
                 },
                 "stratagem": {
                   "$ref": "#/$defs/entity-id"
@@ -11866,7 +11867,8 @@
               "$ref": "#/$defs/range-ref"
             },
             "range_bonus": {
-              "type": "integer"
+              "$ref": "#/$defs/range-ref",
+              "description": "How far the named aura's range is extended."
             },
             "of": {
               "type": "string"
@@ -11884,8 +11886,7 @@
               "$ref": "#/$defs/unit-filter"
             },
             "range_cap": {
-              "type": "integer",
-              "minimum": 1,
+              "$ref": "#/$defs/range-ref",
               "description": "The aura range, extensions included, never exceeds this."
             },
             "wholly": {
@@ -12161,8 +12162,8 @@
           "minimum": 1
         },
         "range": {
-          "type": "number",
-          "exclusiveMinimum": 0
+          "$ref": "#/$defs/range-ref",
+          "description": "Orders go to eligible units within this distance of the officer."
         },
         "eligible": {
           "type": "object",

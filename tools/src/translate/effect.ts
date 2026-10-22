@@ -472,10 +472,10 @@ function auraClause(e: Effect, m: Record<string, unknown>, ctx: Ctx): string {
   // Range-extension of a named aura (e.g. Gift of Poxes: contagion +3").
   if (m.range_bonus != null) {
     const named = m.of != null ? `${titleCase(jstr(m.of))} ` : "";
-    return `the range of this model's ${named}abilities is increased by ${jstr(m.range_bonus)}"${m.range_cap != null ? ` (to a maximum of ${jstr(m.range_cap)}")` : ""}`;
+    return `the range of this model's ${named}abilities is increased by ${rangePhrase(m.range_bonus)}${m.range_cap != null ? ` (to a maximum of ${rangePhrase(m.range_cap)})` : ""}`;
   }
   const rangeText = m.range != null ? rangePhrase(m.range) : "range";
-  const capped = m.range_cap != null ? ` (to a maximum of ${jstr(m.range_cap)}", extensions included)` : "";
+  const capped = m.range_cap != null ? ` (to a maximum of ${rangePhrase(m.range_cap)}, extensions included)` : "";
   const owner = e.target === "friendly-within-aura" ? "friendly" : "enemy";
   const recipientFilter = (m.eligible ?? m.recipient_filter ?? {}) as Record<string, unknown>;
   const subject = filterSubject({ owner, ...recipientFilter }, ctx).replace(/^all /, "").replace(/\bunits\b/, "unit").replace(/\bmodels\b/, "model").replace(/\bthat are\b/, "that is");
@@ -953,7 +953,7 @@ export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): str
     }
     case "issue-orders": {
       const n = e.count != null ? jstr(e.count) : "one or more";
-      const rng = e.range != null ? ` within ${jstr(e.range)}"` : "";
+      const rng = e.range != null ? ` within ${rangePhrase(e.range)}` : "";
       const elig = e.eligible?.keyword ? ` ${jstr(e.eligible.keyword)}` : "";
       const lines = [`${indent}${arrow}Issue up to ${n} Orders to eligible friendly${elig} units${rng}, each one of:`];
       for (const opt of e.options ?? []) {

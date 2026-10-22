@@ -3217,7 +3217,9 @@
     "modifier": {
       "activity": "fight",
       "allow": true,
-      "reach": 3
+      "reach": {
+        "inches": 3
+      }
     }
   },
   "data/enrichment/astra-militarum/abilities.json#master-vox-astra-militarum#effect": {
@@ -4448,7 +4450,9 @@
     "modifier": {
       "activity": "fight",
       "allow": true,
-      "reach": 3
+      "reach": {
+        "inches": 3
+      }
     }
   },
   "data/enrichment/drukhari/abilities.json#sculpting-the-stage-exhibition-of-slaughter-drukhari#effect/effect": {
@@ -8047,7 +8051,9 @@
     "modifier": {
       "activity": "fight",
       "allow": true,
-      "reach": 3
+      "reach": {
+        "inches": 3
+      }
     }
   },
   "data/enrichment/chaos-daemons/abilities.json#carnival-of-excess-lords-of-the-warp-chaos-daemons#effect": {
@@ -14398,7 +14404,9 @@
     "modifier": {
       "activity": "fight",
       "allow": true,
-      "reach": 3
+      "reach": {
+        "inches": 3
+      }
     }
   },
   "data/enrichment/chaos-knights/abilities.json#veil-of-medrengard-traitoris-lance-chaos-knights#effect/steps/0": {

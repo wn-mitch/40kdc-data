@@ -2743,7 +2743,7 @@ function genEffectTranslation(): void {
       effect: {
         type: "aura",
         target: "enemy-within-aura",
-        modifier: { of: "contagion", range_bonus: 3 },
+        modifier: { of: "contagion", range_bonus: { inches: 3 } },
       },
       scope: { duration: "permanent" },
     },
@@ -2755,7 +2755,7 @@ function genEffectTranslation(): void {
         target: "enemy-within-aura",
         modifier: {
           range: { per_battle_round: [{ inches: 3 }, { inches: 6 }, { inches: 9 }] },
-          range_cap: 12,
+          range_cap: { inches: 12 },
           emitter_filter: { owner: "friendly", all_of: ["DEATH GUARD"] },
           eligible: { owner: "enemy" },
           effect: { type: "designate", target: "recipient", modifier: { tag: "afflicted" } },

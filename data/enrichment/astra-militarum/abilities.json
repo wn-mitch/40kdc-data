@@ -4628,7 +4628,9 @@
     "version": "2025-q3",
     "effect": {
       "type": "issue-orders",
-      "range": 6,
+      "range": {
+        "inches": 6
+      },
       "options": [
         {
           "name": "Move! Move! Move!",

@@ -372,7 +372,7 @@ pub(super) fn permission(m: &P, subj: &str, ctx: &Ctx) -> String {
         })
         .unwrap_or_default();
     let reach = nn(m, "reach")
-        .map(|r| format!(" from up to {}\" away", jv(r)))
+        .map(|r| format!(" from up to {} away", range_phrase(Some(r))))
         .unwrap_or_default();
     let mut s = if is_false(m, "allow") {
         format!("{} cannot {act}{into}", none_of(subj))

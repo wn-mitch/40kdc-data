@@ -611,7 +611,7 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
           ...(asIf ? { as_if: asIf } : {}),
           ...(stratagem ? { stratagem } : {}),
           // A fight permission's reach ("models within 3" are eligible to fight") and its next-to-fight order.
-          ...(leaf.parameters.reach !== undefined ? { reach: closed(leaf, "reach") } : {}),
+          ...(leaf.parameters.reach !== undefined ? { reach: { inches: closed(leaf, "reach") } } : {}),
           ...(leaf.parameters.next === true ? { next: true } : {}),
           // An embark permission's destination (compile-permission-destination.ts).
           ...(leaf.parameters.into !== undefined ? { into: permissionDestination(leaf) } : {}),

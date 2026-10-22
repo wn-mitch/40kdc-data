@@ -12,7 +12,7 @@ use super::{
     child, choice_prompt, inline, is_container, items, part_head, part_inline, stance_additive,
     stance_pick, ty,
 };
-use crate::translate::condition::{condition_lead_in_value, nn, obj, truthy};
+use crate::translate::condition::{condition_lead_in_value, nn, obj, range_phrase, truthy};
 
 /// Block translation of a container effect tree (multi-line, two-space indentation).
 pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
@@ -232,7 +232,7 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
                 .map(jv)
                 .unwrap_or_else(|| "one or more".to_string());
             let range = nn(e, "range")
-                .map(|r| format!(" within {}\"", jv(r)))
+                .map(|r| format!(" within {}", range_phrase(Some(r))))
                 .unwrap_or_default();
             let eligible = obj(nn(e, "eligible"));
             let keyword = if truthy_key(eligible, "keyword") {

@@ -100,7 +100,7 @@ describe("eligibility-permission reach and next (fight only)", () => {
   it("lowers reach and next onto the permission modifier", () => {
     const text = "Until the end of the phase, models in your unit within reach are eligible to fight.";
     const reach = compiled(text, ["models in your unit within reach are eligible to fight", "eligibility-permission", { ...base, reach: 3 }]);
-    expect(nodes(reach, (node) => node.type === "permission")[0]!.modifier).toEqual({ activity: "fight", allow: true, reach: 3 });
+    expect(nodes(reach, (node) => node.type === "permission")[0]!.modifier).toEqual({ activity: "fight", allow: true, reach: { inches: 3 } });
     const next = compiled(text, ["models in your unit within reach are eligible to fight", "eligibility-permission", { ...base, next: true }]);
     expect(nodes(next, (node) => node.type === "permission")[0]!.modifier).toEqual({ activity: "fight", allow: true, next: true });
   });

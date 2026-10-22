@@ -2996,7 +2996,7 @@ class Modifier16(TypedDict):
         ]
     ]
     next: NotRequired[Literal[True]]
-    reach: NotRequired[float]
+    reach: NotRequired[RangeRef]
     stratagem: NotRequired[EntityId]
     counts_as_move: NotRequired[MovementKind]
     consumes_shared_use: NotRequired[Literal[False]]
@@ -3816,13 +3816,13 @@ class ForEachUnitEffect(TypedDict):
 
 class Modifier59(TypedDict):
     range: NotRequired[RangeRef]
-    range_bonus: NotRequired[int]
+    range_bonus: NotRequired[RangeRef]
     of: NotRequired[str]
     effect: NotRequired[EffectNode]
     eligible: NotRequired[UnitFilter]
     emitter_filter: NotRequired[UnitFilter]
     recipient_filter: NotRequired[UnitFilter]
-    range_cap: NotRequired[int]
+    range_cap: NotRequired[RangeRef]
     wholly: NotRequired[Literal[True]]
 
 
@@ -3890,7 +3890,7 @@ class Option5(TypedDict):
 class IssueOrdersEffect(TypedDict):
     type: Literal["issue-orders"]
     count: NotRequired[int]
-    range: NotRequired[float]
+    range: NotRequired[RangeRef]
     eligible: NotRequired[Eligible]
     options: list[Option5]
 

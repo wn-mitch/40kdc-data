@@ -3908,7 +3908,9 @@
                   "DEATH GUARD"
                 ]
               },
-              "range_cap": 12
+              "range_cap": {
+                "inches": 12
+              }
             }
           }
         },
@@ -7377,7 +7379,9 @@
                   "DEATH GUARD"
                 ]
               },
-              "range_cap": 12
+              "range_cap": {
+                "inches": 12
+              }
             }
           }
         },

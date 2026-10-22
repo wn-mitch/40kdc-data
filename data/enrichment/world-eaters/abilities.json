@@ -2705,7 +2705,9 @@
       "modifier": {
         "activity": "fight",
         "allow": true,
-        "reach": 3
+        "reach": {
+          "inches": 3
+        }
       }
     },
     "scope": {
@@ -4573,7 +4575,9 @@
       "target": "friendly-within-aura",
       "modifier": {
         "of": "aura",
-        "range_bonus": 3
+        "range_bonus": {
+          "inches": 3
+        }
       }
     },
     "scope": {
@@ -5931,7 +5935,9 @@
         "modifier": {
           "activity": "fight",
           "allow": true,
-          "reach": 3
+          "reach": {
+            "inches": 3
+          }
         }
       }
     },

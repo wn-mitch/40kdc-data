@@ -230,7 +230,7 @@ describe("describer: abilities, rules and army", () => {
     expect(render({ type: "select-objective", selector: { filter: { controlled_by: "friendly", within: { range: "objective-control", of: "this-unit" } }, count: { min: 1, max: 1 }, bind_as: "m" }, effect: leaf("designate", { subject: { objective: { selection_var: "m" } }, tag: "mutated", clears_on: "control-lost" }) })).toBe(
       "Select one objective marker you control within range of the unit, binding it as m: that objective marker is mutated until you no longer control it.",
     );
-    expect(render({ type: "aura", target: "enemy-within-aura", modifier: { range: { inches: 3 }, range_cap: 12, emitter_filter: { all_of: ["DEATH GUARD"] }, effect: leaf("designate", { subject: "recipient", tag: "afflicted" }, "recipient") } })).toBe(
+    expect(render({ type: "aura", target: "enemy-within-aura", modifier: { range: { inches: 3 }, range_cap: { inches: 12 }, emitter_filter: { all_of: ["DEATH GUARD"] }, effect: leaf("designate", { subject: "recipient", tag: "afflicted" }, "recipient") } })).toBe(
       'While an enemy unit is within 3" (to a maximum of 12", extensions included) of this model with DEATH GUARD, that unit is Afflicted.',
     );
   });

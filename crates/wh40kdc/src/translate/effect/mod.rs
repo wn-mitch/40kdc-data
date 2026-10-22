@@ -201,10 +201,10 @@ fn aura_clause(e: &P, m: &P, ctx: &Ctx) -> String {
             .map(|of| format!("{} ", title_case(&jv(of))))
             .unwrap_or_default();
         return format!(
-            "the range of this model's {named}abilities is increased by {}\"{}",
-            jv(bonus),
+            "the range of this model's {named}abilities is increased by {}{}",
+            range_phrase(Some(bonus)),
             nn(m, "range_cap")
-                .map(|c| format!(" (to a maximum of {}\")", jv(c)))
+                .map(|c| format!(" (to a maximum of {})", range_phrase(Some(c))))
                 .unwrap_or_default()
         );
     }
@@ -263,7 +263,12 @@ fn aura_clause(e: &P, m: &P, ctx: &Ctx) -> String {
         None => "that unit is affected".to_string(),
     };
     let capped = nn(m, "range_cap")
-        .map(|c| format!(" (to a maximum of {}\", extensions included)", jv(c)))
+        .map(|c| {
+            format!(
+                " (to a maximum of {}, extensions included)",
+                range_phrase(Some(c))
+            )
+        })
         .unwrap_or_default();
     let wholly = if is_true(m, "wholly") { "wholly " } else { "" };
     format!("while {recipient} is {wholly}within {range_text}{capped} of {emitter}, {effect_text}")

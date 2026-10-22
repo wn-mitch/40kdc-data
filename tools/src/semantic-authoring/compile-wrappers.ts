@@ -94,8 +94,8 @@ export function wrapAura(leaf: CompileLeaf, body: Node): Node {
   // "within 6\" of this unit" measures from any model of the unit; this model is the default origin.
   if (leaf.parameters.of === "this-unit") modifier.of = "this-unit";
   if (leaf.parameters.conditional_range !== undefined) modifier.conditional_range = leaf.parameters.conditional_range;
-  // Version 2 (batch 7a): the aura's range, extensions included, never exceeds this many inches (the DSL's integer range_cap).
-  if (leaf.parameters.range_cap_inches !== undefined) modifier.range_cap = closed(leaf, "range_cap_inches");
+  // Version 2 (batch 7a): the aura's range, extensions included, never exceeds this many inches (the DSL's range_cap distance).
+  if (leaf.parameters.range_cap_inches !== undefined) modifier.range_cap = { inches: closed(leaf, "range_cap_inches") };
   if (closed(leaf, "side") === "any") return anySideRegionGrant(leaf, body, modifier, eligible);
   return { type: "aura", target: closed(leaf, "side") === "friendly" ? "friendly-within-aura" : "enemy-within-aura", modifier };
 }

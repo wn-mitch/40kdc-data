@@ -131,9 +131,9 @@ func auraClause(e, m map[string]any, ctx effCtx) string {
 		}
 		capped := ""
 		if m["range_cap"] != nil {
-			capped = " (to a maximum of " + ejstr(m["range_cap"]) + "\")"
+			capped = " (to a maximum of " + rangePhrase(m["range_cap"]) + ")"
 		}
-		return "the range of this model's " + named + "abilities is increased by " + ejstr(m["range_bonus"]) + "\"" + capped
+		return "the range of this model's " + named + "abilities is increased by " + rangePhrase(m["range_bonus"]) + capped
 	}
 	rangeText := "range"
 	if m["range"] != nil {
@@ -174,7 +174,7 @@ func auraClause(e, m map[string]any, ctx effCtx) string {
 	}
 	capped := ""
 	if m["range_cap"] != nil {
-		capped = " (to a maximum of " + ejstr(m["range_cap"]) + "\", extensions included)"
+		capped = " (to a maximum of " + rangePhrase(m["range_cap"]) + ", extensions included)"
 	}
 	wholly := ""
 	if m["wholly"] == true {
@@ -669,7 +669,7 @@ func describeEffect(e map[string]any, depth int, ctx effCtx) string {
 		}
 		rng := ""
 		if e["range"] != nil {
-			rng = " within " + ejstr(e["range"]) + "\""
+			rng = " within " + rangePhrase(e["range"])
 		}
 		elig := ""
 		if kw := mapOr(e["eligible"])["keyword"]; jsTruthy(kw) {

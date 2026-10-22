@@ -87,7 +87,7 @@ def permission(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
             "at" if activity == "shoot" else "against" if activity == "declare-charge" else "into"
         )
         into = f" {prep} {none_of(effect_subject(m['into'], ctx))}"
-    reach = f' from up to {jstr(m["reach"])}" away' if m.get("reach") is not None else ""
+    reach = f" from up to {range_phrase(m['reach'])} away" if m.get("reach") is not None else ""
     if m.get("allow") is False:
         s = f"{none_of(subj)} cannot {act}{into}"
     else:

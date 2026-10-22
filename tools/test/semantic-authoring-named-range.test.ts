@@ -107,7 +107,7 @@ describe("a record that defines its named range", () => {
       target: "enemy-within-aura",
       modifier: {
         range: { per_battle_round: [{ inches: 2 }, { inches: 4 }, { inches: 8 }] },
-        range_cap: 10,
+        range_cap: { inches: 10 },
         emitter_filter: { owner: "friendly", all_of: ["PLAGUE"] },
         eligible: { owner: "enemy" },
         effect: { type: "designate", target: "recipient", modifier: { tag: "afflicted" } },

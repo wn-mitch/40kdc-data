@@ -6133,7 +6133,9 @@
           "modifier": {
             "activity": "fight",
             "allow": true,
-            "reach": 3
+            "reach": {
+              "inches": 3
+            }
           }
         }
       ]

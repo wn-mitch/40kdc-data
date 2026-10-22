@@ -18,6 +18,7 @@ from typing import Any
 
 from wh40kdc.translate.condition import Condition, dekebab
 from wh40kdc.translate.condition_leadin import condition_lead_in
+from wh40kdc.translate.condition_refs import range_phrase
 from wh40kdc.translate.effect_bind import roll_head, select_objective_block
 from wh40kdc.translate.effect_inline import (
     choice_prompt,
@@ -236,7 +237,7 @@ def describe_effect(e: Effect, depth: int = 0, ctx: Ctx | None = None) -> str:
         )
     if t == "issue-orders":
         n = jstr(e["count"]) if e.get("count") is not None else "one or more"
-        rng = f' within {jstr(e["range"])}"' if e.get("range") is not None else ""
+        rng = f" within {range_phrase(e['range'])}" if e.get("range") is not None else ""
         eligible = _obj(e.get("eligible"))
         elig = f" {jstr(eligible['keyword'])}" if eligible.get("keyword") else ""
         head = (
