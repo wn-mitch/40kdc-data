@@ -13,12 +13,12 @@ describe("Dataset.defensiveBuffsFor", () => {
   });
 
   it("symmetric: same unit produces distinct buff stacks under each perspective", () => {
-    // For a unit whose army rule is purely attacker-flavoured (Black Templars'
+    // For a unit whose detachment rule is purely attacker-flavoured (Black Templars'
     // Templar Vows — +1 to wound in the fight phase), the attacker walk yields
     // the buff while the defensive walk drops it.
     const crusader = ds.units.find("Crusader Squad")!;
-    // Templar Vows is the Black Templars supplement's army rule (D7), so the army is Black Templars.
-    const input = { unitId: crusader.id, factionId: "black-templars" };
+    // Templar Vows is the Vow-Sworn Crusaders detachment rule of the Black Templars army.
+    const input = { unitId: crusader.id, factionId: "black-templars", detachmentId: "vow-sworn-crusaders" };
     const atk = ds.buffsFor(input, { phase: "fight" });
     const def = ds.defensiveBuffsFor(input, { phase: "fight" });
     const atkWound = atk.filter((b) => b.contribution.type === "wound-mod");

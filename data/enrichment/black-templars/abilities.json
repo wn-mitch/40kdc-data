@@ -543,10 +543,11 @@
       "duration": "permanent"
     },
     "faction_id": "black-templars",
-    "ability_type": "faction",
+    "ability_type": "detachment",
     "behavior": "passive",
     "community_notes": "auto-generated from faction rule",
-    "unit_ids": []
+    "unit_ids": [],
+    "detachment_id": "vow-sworn-crusaders"
   },
   {
     "ability_id": "temple-relics-black-templars",

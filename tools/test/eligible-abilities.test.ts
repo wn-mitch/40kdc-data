@@ -18,6 +18,15 @@ describe("Dataset.eligibleAbilities", () => {
     expect(armyIds("gladius-task-force")).not.toContain("combat-doctrines-assault-force-adeptus-astartes");
   });
 
+  it("offers Templar Vows only as the Vow-Sworn Crusaders detachment rule", () => {
+    const sources = (detachmentId: string) => ds
+      .eligibleAbilities({ unitId: "intercessor-squad", factionId: "black-templars", detachmentId }, "fight")
+      .filter((e) => e.ability.id === "templar-vows-black-templars")
+      .map((e) => e.source.kind);
+    expect(sources("vow-sworn-crusaders")).toEqual(["detachment"]);
+    expect(sources("gladius-task-force")).toEqual([]);
+  });
+
   it("returns nothing for an unknown unit", () => {
     expect(ds.eligibleAbilities({ unitId: "no-such-unit" }, "shooting")).toEqual([]);
   });
