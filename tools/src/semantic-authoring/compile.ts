@@ -93,6 +93,7 @@ import { refuseStratagemTargetActivity } from "./compile-triggering-destruction.
 import { groupedTargetRestrictions, optionalTargetGroup, severalTargets } from "./compile-target-groups.js";
 import { planConditionOf, type ConditionOfPlan } from "./compile-connective-plan.js";
 import { lowerConditionOf } from "./compile-connective-lower.js";
+import { lowerHistoryMoments } from "./compile-connective-history.js";
 import { checkOptionalCosts, flatLeaves, isSpendRead, optionalSpendLeaves, wrapOptionalSpends } from "./compile-optional-cost.js";
 import { foldEmbarkedPermission } from "./compile-embarked-permission.js";
 import { attackFold, isAttackMoment, triggerWindow } from "./compile-attack-window.js";
@@ -414,6 +415,8 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     const scoped = bindWeaponStatAntecedents(foldWeaponScopes(foldModelState(foldReturnedModelExclusions(foldFightNext(foldCountsAsMoved(foldPassthroughUsed(foldAsIfPhases(foldHitFilters(foldLeadingHitFilters(foldDestroyFilters(bindEquippedCounts(bound), sourceText), sourceText), sourceText), sourceText)), sourceText), sourceText), sourceText)), sourceText));
     const filtered = resolveArmyGroups(foldWeaponAlreadyHas(bindScopeAttacks(foldUnitFilters(foldArmyPer(foldWeaponKeywords(foldAttackProperties(bindMatchedPools(scoped), sourceText), sourceText), sourceText), sourceText))));
     list = withDesignationExpiry([...foldSetUpLimits(foldActivationPicks(foldAlternativeConditions(foldConditionExclusions(bindTargetedTarget(filtered), sourceText), sourceText)))]);
+    // A moment a reviewed "if" makes a condition is a history condition from here on (compile-connective-history.ts).
+    list = lowerHistoryMoments(list, conditionOf.flatMap((plan) => plan.kind === "history" ? [plan] : []));
     refuseUnboundWeaponScope(list);
     refuseSelectionAcrossMoment(list);
     refuseDistanceWithoutWeapon(list);

@@ -68,6 +68,8 @@ export function lowerConditionOf(plans: readonly ConditionOfPlan[], context: Con
     return moment === -1 ? context.partOf(index) : moment;
   };
   for (const plan of plans) {
+    // A history condition (compile-connective-history.ts) was lowered onto its leaf before the parts were planned.
+    if (plan.kind === "history") continue;
     if (plan.kind === "use") {
       checkUseCovers(plan, indexOf(plan.use), indexOf(plan.antecedent), context, partHolding);
       continue;
@@ -104,7 +106,7 @@ export function lowerConditionOf(plans: readonly ConditionOfPlan[], context: Con
 }
 
 /** The permission and its consequents as one optional ability-part, in the permission's place. */
-function nest(first: PlannedItem, rest: PlannedItem[], context: ConnectiveContext, plan: ConditionOfPlan): void {
+function nest(first: PlannedItem, rest: PlannedItem[], context: ConnectiveContext, plan: Extract<ConditionOfPlan, { kind: "permission" }>): void {
   const name = describe(plan.antecedent);
   if ([first, ...rest].some((item) => item.replaces || item.node.type === "choice")) throw new CompileError(`"If it does" after ${name} gates an "instead" or a player's pick; the replacement and the optional part have no common reading yet.`);
   if (rest.some((item) => item.selected !== first.selected)) throw new CompileError(`"If it does" after ${name} gates effects that a unit selection limits differently.`);

@@ -346,6 +346,8 @@ export function condition(leaf: CompileLeaf): Node {
     if (withTransport && filter.embarked_in !== undefined && filter.embarked_in !== transport) throw new CompileError("A unit-filter embarked within one unit and a state embarked within another name different Transports; one DSL filter holds one.");
     return withFilter(condition({ ...leaf, parameters }), withTransport ? { ...filter, embarked_in: transport } : filter) as Node;
   }
+  // A moment a reviewed "if" makes a condition on what happened (compile-connective-history.ts).
+  if (leaf.family_id === "__happened") return { type: "happened", parameters: structuredClone(leaf.parameters.happened as Node) };
   // "(excluding units with X that are not Y)" folded by compile-condition-exclusions.ts: none of the units meeting all of the group.
   if (leaf.family_id === "__none-of") return negate(allOf((leaf.parameters.conditions as CompileLeaf[]).map(condition))!);
   // Alternatives folded by compile-alternative-conditions.ts: any one of them, each its own conditions together.

@@ -1,5 +1,6 @@
 import { ATTACK_EVENTS } from "./compile-conditions.js";
 import { CompileError, type CompileLeaf, type LeafConnective } from "./compile-fragments.js";
+import { planHistory, type HistoryPlan } from "./compile-connective-history.js";
 import { ordered, placements, rawSentences } from "./compile-placement.js";
 
 /**
@@ -16,7 +17,8 @@ import { ordered, placements, rawSentences } from "./compile-placement.js";
  *   antecedent with its consequents is one declinable unit (`permission`, compile-connective-lower.ts).
  * - A bare "if"/"while" before a condition leaf, a connective inside a leaf, and a "when doing so"
  *   qualifier mark wording another leaf already decides: they change nothing.
- * - A bare "if" before a moment is a condition on what happened, which has no lowering yet: refused.
+ * - A bare "if" before a moment is a condition on what happened (`history`, compile-connective-history.ts),
+ *   planned with the check point and window it needs or refused with why it has none.
  */
 
 /** Which leaf a plan names; folds may move a leaf's start back over what they absorb, never its end. */
@@ -24,7 +26,8 @@ export type LeafKey = { fragment: string; start_byte: number; end_byte: number; 
 
 export type ConditionOfPlan =
   | { kind: "permission"; antecedent: LeafKey; consequents: LeafKey[] }
-  | { kind: "use"; antecedent: LeafKey; use: LeafKey };
+  | { kind: "use"; antecedent: LeafKey; use: LeafKey }
+  | HistoryPlan;
 
 /** "If it does", "If you do", "if they do so", "When you do": a reference back to a use. */
 const USE_REFERENCE = /^(?:if|when)\s+(?:it|you|they)\s+(?:do|does|did)(?:\s+so)?$/iu;
@@ -65,7 +68,8 @@ export function isDeclinable(leaf: CompileLeaf): boolean {
  * Plan every condition-of connective on the leaves. Throws a CompileError naming the first one
  * that cannot be planned: no antecedent (R1), an antecedent the player cannot decline (R2), no
  * effect after it (R3), a moment among its consequents (R4), two permission ranges that overlap
- * (R6), or a bare "if" before a moment (class D).
+ * (R6), "if it does" after a moment (R9), or a bare connective before a moment with no history
+ * reading (class D, compile-connective-history.ts).
  */
 export function planConditionOf(leaves: readonly CompileLeaf[], sourceText: string | undefined): ConditionOfPlan[] {
   const list = ordered(leaves);
@@ -80,9 +84,7 @@ export function planConditionOf(leaves: readonly CompileLeaf[], sourceText: stri
       const word = wording(connective);
       if (!USE_REFERENCE.test(word)) {
         // A bare "if"/"while": the leaf after it says the condition. Before a moment, that is a condition on history.
-        if (!connective.trailing && isMoment(leaf)) {
-          throw new CompileError(`A condition written as a moment has no history lowering yet: "${word}" introduces the ${String(leaf.parameters.kind ?? leaf.family_id)} moment as a condition, not as when the ability fires.`);
-        }
+        if (!connective.trailing && isMoment(leaf)) plans.push(planHistory(list, at, connective, sourceText, isMoment));
         continue;
       }
       if (connective.trailing) throw new CompileError(`"${word}" has no leaf after it in its fragment, so nothing it gates is reviewed.`);
@@ -107,6 +109,10 @@ export function planConditionOf(leaves: readonly CompileLeaf[], sourceText: stri
       if (use !== -1) {
         plans.push({ kind: "use", antecedent: keyOf(before), use: keyOf(list[use]!) });
         continue;
+      }
+      // R9: a moment no optional-use offers qualifies the action before it ("can disembark after it has Advanced. If it does").
+      if (isMoment(before)) {
+        throw new CompileError(`"${word}" refers back to the ${String(before.parameters.kind ?? before.family_id)} moment, which is when something happens, not something the player does; a moment that qualifies the action before it has no lowering yet.`);
       }
       if (!declinable) {
         throw new CompileError(`"${word}" refers back to ${before.family_id}, which the player cannot decline; review an optional-use over the wording that offers it, or a declinable effect.`);

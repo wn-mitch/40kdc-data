@@ -3,38 +3,9 @@ import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { lowerConditionOf, type ConnectiveContext } from "../src/semantic-authoring/compile-connective-lower.js";
 import { planConditionOf } from "../src/semantic-authoring/compile-connective-plan.js";
-import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
-import { attachConnectives } from "../src/semantic-authoring/leaf-view.js";
+import { annotated, placed, type Item } from "./semantic-authoring-connective-fixture.js";
 
-type Item = [string, string, Record<string, unknown>, string?];
 type Node = Record<string, any>;
-
-/** Leaves on their own wording in `text`, in order (fabricated wording, not rules text). The fourth item is the fragment. */
-function placed(text: string, ...items: Item[]): CompileLeaf[] {
-  const bytes = Buffer.from(text, "utf8");
-  let from = 0;
-  return items.map(([wording, family, parameters, fragment]) => {
-    const start = bytes.indexOf(Buffer.from(wording, "utf8"), from);
-    if (start < 0) throw new Error(`"${wording}" is not in the text`);
-    from = start + Buffer.byteLength(wording, "utf8");
-    const version = currentFamilyVersion(family);
-    return {
-      role: familyRole(family, version), family_id: family, family_version: version,
-      parameters: normalizeFingerprintParameters(family, parameters, version), start_byte: start, end_byte: from, fragment: fragment ?? "RAW_TEXT",
-    };
-  });
-}
-
-/** The leaves with a reviewed connective on each listed wording (its first occurrence at or after `after`). */
-function annotated(text: string, leaves: CompileLeaf[], connectives: Array<{ surface: string; after?: string; relation?: string; fragment?: string }>): CompileLeaf[] {
-  const bytes = Buffer.from(text, "utf8");
-  return attachConnectives(leaves, connectives.map(({ surface, after, relation, fragment }) => {
-    const from = after === undefined ? 0 : bytes.indexOf(Buffer.from(after, "utf8"));
-    const start = bytes.indexOf(Buffer.from(surface, "utf8"), Math.max(0, from));
-    if (start < 0) throw new Error(`"${surface}" is not in the text`);
-    return { fragment: fragment ?? "RAW_TEXT", start_byte: start, end_byte: start + Buffer.byteLength(surface, "utf8"), surface, relation: relation ?? "condition-of" };
-  }));
-}
 
 const IF_IT_DOES = [{ surface: "If it does" }];
 const mechanicsOf = (text: string, leaves: CompileLeaf[]) => {
@@ -191,12 +162,6 @@ describe("refusals", () => {
     const leaves = placed(text, fires, relocate, rite, barred);
     const both = annotated(text, leaves, [{ surface: "If it does" }, { surface: "If it does", after: "its rite" }]);
     expect(refusal(text, both)).toMatch(/ranges overlap/u);
-  });
-
-  it("D: a bare 'if' before a moment is a condition on history, which has no lowering yet", () => {
-    const text = "After the squad fires, if an enemy squad was wiped out, the squad is shaken.";
-    const leaves = placed(text, fires, ["an enemy squad was wiped out", "event", { kind: "unit-destroyed" }], shaken);
-    expect(refusal(text, annotated(text, leaves, [{ surface: "if", after: "fires" }]))).toMatch(/a condition written as a moment has no history lowering yet/iu);
   });
 
   const context = (list: CompileLeaf[], overrides: Partial<ConnectiveContext> = {}): ConnectiveContext => ({
