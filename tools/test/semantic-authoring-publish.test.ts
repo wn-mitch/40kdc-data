@@ -256,6 +256,29 @@ describe("Semantic authoring explicit publication", () => {
     }
   }, 120_000);
 
+  it("clears a use limit the compiled record no longer has, but keeps the curated applies_to", () => {
+    const fixture = buildFixture();
+    try {
+      // A rule reprinted without its old once-per-battle limit must not keep it.
+      const entries = entriesAt(fixture.abilitiesFile);
+      const selected = entries.find((entry) => entry.ability_id === selectedAbilityId)!;
+      selected.usage = { frequency: "n-per-battle", count: 1 };
+      selected.applies_to = { all_of: ["ADEPTA SORORITAS", "VEHICLE"] };
+      writeFileSync(fixture.abilitiesFile, `${JSON.stringify(entries, null, 2)}\n`);
+      // A compile names neither field when its leaves carry no use limit and no roster predicate.
+      const { usage: _usage, applies_to: _appliesTo, ...mechanics } = STAT_MECHANICS;
+      const projection = projectRecords(realpathSync(fixture.dataRoot), factionId, [
+        { id: "row", ability_id: selectedAbilityId, mechanics: mechanics as never, core: null, source_digest: sourceDigest(privateSourceText) },
+      ]);
+      const projected = projection.entries.find((entry) => entry.ability_id === selectedAbilityId)!;
+      expect(projected).not.toHaveProperty("usage");
+      expect(projected.applies_to).toEqual(selected.applies_to);
+      expect(projection.diff[0]!.fields.map((field) => field.field)).toContain("usage");
+    } finally {
+      fixture.db.close();
+    }
+  }, 120_000);
+
   it("replaces an authored effect once its shape is approved", async () => {
     const fixture = buildFixture();
     try {

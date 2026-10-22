@@ -126,12 +126,13 @@ describe("Semantic authoring attacker filter on an incoming attack's damage", ()
     expect(mechanics.effect).toEqual({ type: "stat-modifier", target: "this-unit", modifier: { stat: "D", operation: "add", value: 1 } });
   });
 
-  it("does not widen allocation to one model into reduction for its entire unit", () => {
+  it("reduces only this model's damage when an attack is allocated to it", () => {
     const { mechanics } = compiled("Each time an attack is allocated to this model, subtract 1 from the Damage characteristic of that attack.", [
       ["Each time an attack is allocated to this model", "event", { kind: "damage-allocated", object: "this-model" }],
       ["subtract 1 from the Damage characteristic of that attack", "characteristic-modifier", { subject: "attack", characteristics: ["D"], operation: "subtract", value: 1, weapon_type: "all" }],
     ]);
-    expect(mechanics.effect).not.toMatchObject({ type: "damage-reduction", target: "this-unit" });
+    // Neither widened to the whole unit nor turned onto the unit's own weapons.
+    expect(mechanics.effect).toEqual({ type: "damage-reduction", target: "this-model", modifier: { reduction: 1 } });
   });
 
   it("lowers only an allocated attack's fixed Damage subtraction as a defensive reduction", () => {

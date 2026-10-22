@@ -567,9 +567,8 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
       // Subtracting a fixed amount from the Damage of the attack currently being allocated is a
       // defender-side reduction, not an offensive change to the attacker's weapon profile. Keep the
       // distinction narrow: other operations, moments, recipients, and non-fixed amounts remain
-      // ordinary stat modifiers.
+      // ordinary stat modifiers. Allocation to this model reduces only that model's damage.
       const allocatedDamageReduction = context.defended === true
-        && context.allocatedToModel !== true
         && leaf.parameters.subject === "attack"
         && leaf.parameters.operation === "subtract"
         && Number.isInteger(leaf.parameters.value)
@@ -582,7 +581,7 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
         const scopedLeaf = weaponName === undefined ? leaf : { ...leaf, parameters: { ...leaf.parameters, weapon_name: weaponName } };
         if (allocatedDamageReduction && stat === "D") {
           return {
-            type: "damage-reduction", target: "this-unit",
+            type: "damage-reduction", target: context.allocatedToModel === true ? "this-model" : "this-unit",
             modifier: { reduction: closed(leaf, "value"), ...weaponScope(scopedLeaf) },
           };
         }

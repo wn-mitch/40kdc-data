@@ -136,6 +136,9 @@ let previewValidityValidator: Ajv | null = null;
 export function entryWithMechanics(original: Record<string, unknown>, mechanics: Mechanics): Record<string, unknown> {
   const fields: { trigger?: unknown; usage?: unknown; applies_to?: unknown } = {};
   for (const key of ["trigger", "usage", "applies_to"] as const) if (mechanics[key] !== undefined) fields[key] = mechanics[key];
+  // The leaves decide every use limit, so a compile with none clears the record's old one;
+  // applies_to is a curated roster field and stays when the compile does not name it.
+  if (mechanics.usage === undefined) fields.usage = null;
   const entry = buildRepairedEntry(original, mechanics.effect, mechanics.scope, mechanics.behavior ?? undefined, fields as never);
   if (Object.hasOwn(original, "community_notes")) entry.community_notes = original.community_notes;
   else delete entry.community_notes;
