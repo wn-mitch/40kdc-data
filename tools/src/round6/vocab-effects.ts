@@ -96,7 +96,7 @@ function dice(v: unknown): unknown {
 /** Keys of `m` outside `allowed`. */
 const stray = (m: Node, allowed: string[]): string[] => Object.keys(m).filter((k) => !allowed.includes(k));
 
-const ROLL_ALIASES: Record<string, string> = { "battle-shock-test": "battle-shock", "saving-throw": "save", "attacks-characteristic": "attacks", "normal-move-distance": "normal-move" };
+const ROLL_ALIASES: Record<string, string> = { "battle-shock-test": "battle-shock", "saving-throw": "save", "attacks-characteristic": "attacks", "normal-move-distance": "normal" };
 
 export function migrateEffect(e: Node, ctx: EffectContext): Outcome {
   const t = String(e.type);

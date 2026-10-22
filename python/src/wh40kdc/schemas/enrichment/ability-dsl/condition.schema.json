@@ -745,10 +745,7 @@
                       "$ref": "../../defs/common.schema.json#/$defs/entity-id"
                     },
                     "owner": {
-                      "enum": [
-                        "friendly",
-                        "enemy"
-                      ]
+                      "$ref": "../../defs/common.schema.json#/$defs/definite-owner"
                     }
                   },
                   "required": [
@@ -756,10 +753,13 @@
                   ]
                 },
                 "at": {
-                  "enum": [
-                    "now",
-                    "opponent-previous-turn-end"
-                  ]
+                  "$ref": "../../defs/common.schema.json#/$defs/snapshot",
+                  "not": {
+                    "enum": [
+                      "phase-start",
+                      "turn-start"
+                    ]
+                  }
                 },
                 "transport": {
                   "$ref": "../../defs/common.schema.json#/$defs/unit-ref",
@@ -1135,10 +1135,7 @@
               "additionalProperties": false,
               "properties": {
                 "by": {
-                  "enum": [
-                    "friendly",
-                    "enemy"
-                  ]
+                  "$ref": "../../defs/common.schema.json#/$defs/definite-owner"
                 },
                 "objective": {
                   "$ref": "../../defs/common.schema.json#/$defs/objective-filter"
@@ -1155,10 +1152,7 @@
                   ],
                   "properties": {
                     "owner": {
-                      "enum": [
-                        "friendly",
-                        "enemy"
-                      ]
+                      "$ref": "../../defs/common.schema.json#/$defs/definite-owner"
                     },
                     "comparison": {
                       "$ref": "../../defs/common.schema.json#/$defs/comparison"
@@ -1516,10 +1510,7 @@
                       "$ref": "../../defs/common.schema.json#/$defs/entity-id"
                     },
                     "owner": {
-                      "enum": [
-                        "friendly",
-                        "enemy"
-                      ]
+                      "$ref": "../../defs/common.schema.json#/$defs/definite-owner"
                     }
                   },
                   "required": [
@@ -1553,10 +1544,7 @@
               "additionalProperties": false,
               "properties": {
                 "side": {
-                  "enum": [
-                    "friendly",
-                    "enemy"
-                  ]
+                  "$ref": "../../defs/common.schema.json#/$defs/definite-owner"
                 },
                 "count": {
                   "$ref": "../../defs/common.schema.json#/$defs/count-bounds"
@@ -1882,10 +1870,7 @@
               ],
               "properties": {
                 "owner": {
-                  "enum": [
-                    "friendly",
-                    "enemy"
-                  ]
+                  "$ref": "../../defs/common.schema.json#/$defs/definite-owner"
                 },
                 "state": {
                   "const": "honoured"

@@ -113,7 +113,8 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
     case "resource-die": {
       const modifier: Node = { pool: closed(leaf, "pool"), operation: closed(leaf, "operation") };
       if (leaf.parameters.value !== undefined) modifier.value = closed(leaf, "value");
-      if (leaf.parameters.rolls !== undefined) modifier.rolls = closed(leaf, "rolls");
+      // The leaf names the Normal-move roll `normal-move`; the DSL roll-kind spells it as its movement-kind, `normal`.
+      if (leaf.parameters.rolls !== undefined) modifier.rolls = (closed(leaf, "rolls") as string[]).map((roll) => roll === "normal-move" ? "normal" : roll);
       return { type: "resource-die", target: "this-model", modifier };
     }
     case "stratagem-cost": {

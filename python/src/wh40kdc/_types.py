@@ -388,6 +388,9 @@ class UnitRating(TypedDict):
     rating: Literal[True]
 
 
+DefiniteOwner: TypeAlias = Owner
+
+
 class GameVersionRef(TypedDict):
     edition: Edition
     dataslate: DataslateVersion
@@ -987,7 +990,7 @@ class Cost(TypedDict):
 
 class SourceAbility(TypedDict):
     ability_id: EntityId
-    owner: Literal["friendly", "enemy"]
+    owner: DefiniteOwner
     keywords: list[Keyword]
 
 
@@ -1051,7 +1054,7 @@ class SimpleCondition4(TypedDict):
 
 class SourceAbility1(TypedDict):
     ability_id: EntityId
-    owner: NotRequired[Literal["friendly", "enemy"]]
+    owner: NotRequired[DefiniteOwner]
 
 
 class Right1(TypedDict):
@@ -1063,7 +1066,7 @@ class Right2(TypedDict):
 
 
 class Compare(TypedDict):
-    owner: Literal["friendly", "enemy"]
+    owner: DefiniteOwner
     comparison: Comparison
 
 
@@ -1127,7 +1130,7 @@ class SimpleCondition40(TypedDict):
 
 
 class Parameters49(TypedDict):
-    owner: Literal["friendly", "enemy"]
+    owner: DefiniteOwner
     state: Literal["honoured"]
 
 
@@ -1317,7 +1320,7 @@ class SpacePerModelItem(TypedDict):
 
 
 class Modifier43(TypedDict):
-    test: Literal["battle-shock", "leadership", "hazard", "desperate-escape"]
+    test: TestKind
     modifier: NotRequired[int]
     count: NotRequired[int]
     per: NotRequired[str]
@@ -1347,7 +1350,7 @@ class Subject3(TypedDict):
 
 
 class Modifier52(TypedDict):
-    test: Literal["battle-shock", "leadership", "desperate-escape"]
+    test: TestKind
     window: Literal["phase", "turn", "battle-round"]
 
 
@@ -1356,23 +1359,7 @@ class Modifier53(TypedDict):
 
 
 class Modifier54(TypedDict):
-    stat: Literal[
-        "M",
-        "T",
-        "Sv",
-        "W",
-        "Ld",
-        "OC",
-        "A",
-        "WS",
-        "BS",
-        "S",
-        "AP",
-        "D",
-        "Range",
-        "detection-range",
-        "psyker-level",
-    ]
+    stat: Stat
     rule: Literal["majority", "highest", "lowest"]
     tie: NotRequired[Literal["highest", "lowest"]]
     applies_to: NotRequired[Literal["wound-roll", "all"]]
@@ -1578,7 +1565,7 @@ RollKind: TypeAlias = (
         "channelling",
         "deadly-demise",
         "attacks",
-        "normal-move",
+        "normal",
         "surge",
         "resource-die",
     ]
@@ -1777,7 +1764,7 @@ class Models(TypedDict):
 
 
 class Parameters30(TypedDict):
-    by: NotRequired[Literal["friendly", "enemy"]]
+    by: NotRequired[DefiniteOwner]
     objective: NotRequired[ObjectiveFilter]
     count: NotRequired[CountBounds]
     compare: NotRequired[Compare]
@@ -1849,23 +1836,7 @@ class SimpleCondition34(TypedDict):
 
 
 class Modifier(TypedDict):
-    stat: Literal[
-        "M",
-        "T",
-        "Sv",
-        "W",
-        "Ld",
-        "OC",
-        "A",
-        "WS",
-        "BS",
-        "S",
-        "AP",
-        "D",
-        "Range",
-        "detection-range",
-        "psyker-level",
-    ]
+    stat: Stat
     operation: Literal["add", "subtract", "set", "improve", "worsen", "multiply", "halve"]
     value: NotRequired[Quantity]
     incoming: NotRequired[Literal[True]]
@@ -1876,27 +1847,7 @@ class Modifier(TypedDict):
 
 class Modifier1(TypedDict):
     what: Literal["characteristics", "rolls"]
-    stats: NotRequired[
-        list[
-            Literal[
-                "M",
-                "T",
-                "Sv",
-                "W",
-                "Ld",
-                "OC",
-                "A",
-                "WS",
-                "BS",
-                "S",
-                "AP",
-                "D",
-                "Range",
-                "detection-range",
-                "psyker-level",
-            ]
-        ]
-    ]
+    stats: NotRequired[list[Stat]]
     rolls: NotRequired[list[RollSelector]]
     only: NotRequired[Literal["worsening", "improving"]]
     incoming: NotRequired[Literal[True]]
@@ -2536,7 +2487,7 @@ class Parameters22(TypedDict):
     subject: NotRequired[UnitRef]
     to: Literal["shoot", "declare-charge", "fight", "start-action", "be-selected", "embark-within"]
     source_ability: NotRequired[SourceAbility1]
-    at: NotRequired[Literal["now", "opponent-previous-turn-end"]]
+    at: NotRequired[Snapshot]
     transport: NotRequired[UnitRef]
 
 
@@ -2690,7 +2641,7 @@ class Within1(TypedDict):
 
 
 class Parameters39(TypedDict):
-    side: NotRequired[Literal["friendly", "enemy"]]
+    side: NotRequired[DefiniteOwner]
     count: NotRequired[CountBounds]
     friendly_unit_in_same_terrain_area: NotRequired[Literal[True]]
     no_enemy_in_terrain_area: NotRequired[Literal[True]]
@@ -3047,23 +2998,7 @@ class Modifier16(TypedDict):
     next: NotRequired[Literal[True]]
     reach: NotRequired[float]
     stratagem: NotRequired[EntityId]
-    counts_as_move: NotRequired[
-        Literal[
-            "normal",
-            "advance",
-            "fall-back",
-            "charge",
-            "pile-in",
-            "consolidation",
-            "surge",
-            "scout",
-            "ingress",
-            "disembark",
-            "embark",
-            "pulse-jet",
-            "remain-stationary",
-        ]
-    ]
+    counts_as_move: NotRequired[MovementKind]
     consumes_shared_use: NotRequired[Literal[False]]
 
 
@@ -3129,7 +3064,7 @@ class Roll(TypedDict):
     dice: int | DiceExpression
     threshold: int
     per_model: NotRequired[UnitRef]
-    comparison: NotRequired[Literal["gte", "lte"]]
+    comparison: NotRequired[Comparison]
     for_each: NotRequired[UnitSelector]
 
 
@@ -3379,20 +3314,7 @@ class EndsWithin(TypedDict):
 
 
 class Modifier34(TypedDict):
-    move_type: Literal[
-        "normal",
-        "advance",
-        "fall-back",
-        "charge",
-        "pile-in",
-        "consolidation",
-        "surge",
-        "scout",
-        "ingress",
-        "disembark",
-        "embark",
-        "pulse-jet",
-    ]
+    move_type: MovementKind
     distance: NotRequired[Quantity]
     as_if: NotRequired[Literal["movement-phase"]]
     passthrough: NotRequired[
@@ -3417,23 +3339,7 @@ class Modifier34(TypedDict):
     mode: NotRequired[MoveMode]
     allow_engagement: NotRequired[Literal[True]]
     engaged_with: NotRequired[Literal["nearest-move-end"]]
-    counts_as_move: NotRequired[
-        Literal[
-            "normal",
-            "advance",
-            "fall-back",
-            "charge",
-            "pile-in",
-            "consolidation",
-            "surge",
-            "scout",
-            "ingress",
-            "disembark",
-            "embark",
-            "pulse-jet",
-            "remain-stationary",
-        ]
-    ]
+    counts_as_move: NotRequired[MovementKind]
     ends_within: NotRequired[EndsWithin]
     ends_when: NotRequired[Condition]
     keeps_eligible: NotRequired[Literal[True]]
@@ -3448,24 +3354,7 @@ class SingleEffect28(TypedDict):
 
 
 class Modifier35(TypedDict):
-    applies_to_moves: NotRequired[
-        list[
-            Literal[
-                "normal",
-                "advance",
-                "fall-back",
-                "charge",
-                "pile-in",
-                "consolidation",
-                "surge",
-                "scout",
-                "ingress",
-                "disembark",
-                "embark",
-                "pulse-jet",
-            ]
-        ]
-    ]
+    applies_to_moves: NotRequired[list[MovementKind]]
     passthrough: NotRequired[
         list[
             Literal[
@@ -3559,23 +3448,7 @@ Modifier36 = TypedDict(
         "mode": NotRequired[MoveMode],
         "allow_engagement": NotRequired[Literal[True]],
         "mandatory": NotRequired[Literal[True]],
-        "counts_as_move": NotRequired[
-            Literal[
-                "normal",
-                "advance",
-                "fall-back",
-                "charge",
-                "pile-in",
-                "consolidation",
-                "surge",
-                "scout",
-                "ingress",
-                "disembark",
-                "embark",
-                "pulse-jet",
-                "remain-stationary",
-            ]
-        ],
+        "counts_as_move": NotRequired[MovementKind],
         "arrives": NotRequired[Literal["next-movement-phase"]],
         "allow_first_round": NotRequired[Literal[True]],
         "wounds_remaining": NotRequired[Quantity | Literal["full"] | Literal["half-starting"]],
@@ -3873,7 +3746,7 @@ class Modifier58(TypedDict):
 
 
 class Test(TypedDict):
-    kind: Literal["leadership", "battle-shock"]
+    kind: TestKind
     subject: UnitRef
     modifiers: NotRequired[list[Modifier58]]
 
@@ -3884,7 +3757,7 @@ DiceGatedEffect = TypedDict(
         "type": Literal["dice-gated"],
         "dice": NotRequired[DiceExpression],
         "threshold": NotRequired[int | Literal["leadership", "toughness", "save"]],
-        "comparison": NotRequired[Literal["gte", "lte", "gt", "lt", "eq"]],
+        "comparison": NotRequired[Comparison],
         "on_success": NotRequired[EffectNode | None],
         "on_fail": NotRequired[EffectNode | None],
         "rider": NotRequired[bool],

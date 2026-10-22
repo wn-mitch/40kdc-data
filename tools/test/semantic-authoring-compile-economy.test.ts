@@ -92,6 +92,11 @@ describe("Semantic authoring economy-family compiler", () => {
     expect(rendered(base(), [leaf("EFFECT", "resource-die", { pool: "miracle-dice-pool", operation: "add", value: 6 })]).length).toBeGreaterThan(0);
   });
 
+  it("lowers the leaf's normal-move roll to the DSL roll-kind normal", () => {
+    expect(compiled([leaf("EFFECT", "resource-die", { pool: "miracle-dice-pool", operation: "substitute", rolls: ["normal-move", "advance"] })]).mechanics.effect)
+      .toEqual({ type: "resource-die", target: "this-model", modifier: { pool: "miracle-dice-pool", operation: "substitute", rolls: ["normal", "advance"] } });
+  });
+
   it("extends sticky-objective to an optional subject, v1 leaves still meaning this-unit", () => {
     expect(compiled([leaf("EFFECT", "sticky-objective", {})]).mechanics.effect).toEqual({ type: "objective-sticky", target: "this-unit" });
     expect(compiled([leaf("EFFECT", "sticky-objective", {}, 2)]).mechanics.effect).toEqual({ type: "objective-sticky", target: "this-unit" });

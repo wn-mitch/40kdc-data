@@ -262,7 +262,7 @@ pub(crate) fn roll_name(roll: Option<&Value>) -> String {
         "leadership" => "Leadership",
         "battle-shock" => "Battle-shock",
         "desperate-escape" => "Desperate Escape",
-        "normal-move" => "Normal move",
+        "normal" => "Normal move",
         "deadly-demise" => "Deadly Demise",
         "dark-pact" => "Dark Pact",
         "blessings-of-khorne" => "Blessings of Khorne",

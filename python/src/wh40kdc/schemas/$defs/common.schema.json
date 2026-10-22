@@ -1029,8 +1029,7 @@
             "excluded_target_keywords": {
               "$ref": "#/$defs/keyword-list"
             }
-          },
-          "additionalProperties": false
+          }
         }
       }
     },
@@ -1425,7 +1424,7 @@
             "channelling",
             "deadly-demise",
             "attacks",
-            "normal-move",
+            "normal",
             "surge",
             "resource-die"
           ]
@@ -1783,6 +1782,13 @@
           "const": "closest-enemy-model"
         }
       }
+    },
+    "definite-owner": {
+      "$ref": "#/$defs/owner",
+      "not": {
+        "const": "any"
+      },
+      "description": "A definite player: friendly or enemy (an owner other than any)."
     }
   }
 }

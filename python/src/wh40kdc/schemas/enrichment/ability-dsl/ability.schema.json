@@ -238,11 +238,7 @@
               "$ref": "../../defs/common.schema.json#/$defs/entity-id"
             },
             "owner": {
-              "type": "string",
-              "enum": [
-                "friendly",
-                "enemy"
-              ]
+              "$ref": "../../defs/common.schema.json#/$defs/definite-owner"
             },
             "keywords": {
               "type": "array",

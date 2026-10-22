@@ -527,7 +527,7 @@ export type RollKind =
       | "channelling"
       | "deadly-demise"
       | "attacks"
-      | "normal-move"
+      | "normal"
       | "surge"
       | "resource-die"
     )
@@ -595,6 +595,13 @@ export type MoveMode =
   | "combat"
   | "emergency"
   | "assault";
+/**
+ * Which player a unit, objective or resource belongs to.
+ *
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "definite-owner".
+ */
+export type DefiniteOwner = "friendly" | "enemy" | "any";
 /**
  * Army gate: every model in the army must carry at least one of these keywords for the rule to apply (e.g. ['Chaos Knights', 'Heretic Astartes'] for Daemonic Pact). Empty = no army-level gate (the rule is then gated only by `detachment_ids`, whose detachments are themselves faction-locked).
  */
@@ -821,7 +828,7 @@ export type DiceGatedEffect = {
    * Fixed threshold or model characteristic to compare against
    */
   threshold?: number | ("leadership" | "toughness" | "save");
-  comparison?: "gte" | "lte" | "gt" | "lt" | "eq";
+  comparison?: "gt" | "gte" | "lt" | "lte" | "eq";
   on_success?: EffectNode | null;
   on_fail?: EffectNode | null;
   /**
@@ -832,7 +839,7 @@ export type DiceGatedEffect = {
    * Perform the named actual 2D6 test using the subject's current Leadership and normal applicable modifiers and reroll permissions. A Battle-shock failure inflicts Battle-shock as well as resolving on_fail; a Leadership test does not.
    */
   test?: {
-    kind: "leadership" | "battle-shock";
+    kind: "battle-shock" | "leadership" | "hazard" | "desperate-escape" | "psychic";
     subject: UnitRef;
     /**
      * @minItems 1
@@ -882,7 +889,7 @@ export type DiceGatedEffect = {
         | "channelling"
         | "deadly-demise"
         | "attacks"
-        | "normal-move"
+        | "normal"
         | "surge"
         | "resource-die"
       )
@@ -1770,9 +1777,12 @@ export interface EligibleCondition {
     to: "shoot" | "declare-charge" | "fight" | "start-action" | "be-selected" | "embark-within";
     source_ability?: {
       ability_id: EntityId;
-      owner?: "friendly" | "enemy";
+      /**
+       * A definite player: friendly or enemy (an owner other than any).
+       */
+      owner?: "friendly" | "enemy" | "any";
     };
-    at?: "now" | "opponent-previous-turn-end";
+    at?: "now" | "phase-start" | "turn-start" | "opponent-previous-turn-end";
     /**
      * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
      */
@@ -2071,11 +2081,17 @@ export interface ClosestCondition {
 export interface ControlsCondition {
   type: "controls";
   parameters?: {
-    by?: "friendly" | "enemy";
+    /**
+     * A definite player: friendly or enemy (an owner other than any).
+     */
+    by?: "friendly" | "enemy" | "any";
     objective?: ObjectiveFilter;
     count?: CountBounds;
     compare?: {
-      owner: "friendly" | "enemy";
+      /**
+       * A definite player: friendly or enemy (an owner other than any).
+       */
+      owner: "friendly" | "enemy" | "any";
       comparison: Comparison;
     };
     proportion?: {
@@ -2174,7 +2190,10 @@ export interface ResourceCondition {
     below_max?: true;
     source_ability?: {
       ability_id: EntityId;
-      owner?: "friendly" | "enemy";
+      /**
+       * A definite player: friendly or enemy (an owner other than any).
+       */
+      owner?: "friendly" | "enemy" | "any";
     };
     at?: Snapshot;
   };
@@ -2185,7 +2204,10 @@ export interface ResourceCondition {
 export interface OperationMarkersCondition {
   type: "operation-markers";
   parameters?: {
-    side?: "friendly" | "enemy";
+    /**
+     * A definite player: friendly or enemy (an owner other than any).
+     */
+    side?: "friendly" | "enemy" | "any";
     count?: CountBounds;
     friendly_unit_in_same_terrain_area?: true;
     no_enemy_in_terrain_area?: true;
@@ -2292,7 +2314,10 @@ export interface DeploymentWindowCondition {
 export interface ArmyStateCondition {
   type: "army-state";
   parameters: {
-    owner: "friendly" | "enemy";
+    /**
+     * A definite player: friendly or enemy (an owner other than any).
+     */
+    owner: "friendly" | "enemy" | "any";
     state: "honoured";
   };
 }
@@ -3135,22 +3160,7 @@ export interface StatModifierEffect {
   type: "stat-modifier";
   target: UnitRef;
   modifier: {
-    stat:
-      | "M"
-      | "T"
-      | "Sv"
-      | "W"
-      | "Ld"
-      | "OC"
-      | "A"
-      | "WS"
-      | "BS"
-      | "S"
-      | "AP"
-      | "D"
-      | "Range"
-      | "detection-range"
-      | "psyker-level";
+    stat: Stat;
     operation: "add" | "subtract" | "set" | "improve" | "worsen" | "multiply" | "halve";
     value?: Quantity;
     incoming?: true;
@@ -3200,42 +3210,7 @@ export interface IgnoreModifiersEffect {
     /**
      * @minItems 1
      */
-    stats?: [
-      (
-        | "M"
-        | "T"
-        | "Sv"
-        | "W"
-        | "Ld"
-        | "OC"
-        | "A"
-        | "WS"
-        | "BS"
-        | "S"
-        | "AP"
-        | "D"
-        | "Range"
-        | "detection-range"
-        | "psyker-level"
-      ),
-      ...(
-        | "M"
-        | "T"
-        | "Sv"
-        | "W"
-        | "Ld"
-        | "OC"
-        | "A"
-        | "WS"
-        | "BS"
-        | "S"
-        | "AP"
-        | "D"
-        | "Range"
-        | "detection-range"
-        | "psyker-level"
-      )[]
-    ];
+    stats?: [Stat, ...Stat[]];
     /**
      * @minItems 1
      */
@@ -3910,7 +3885,10 @@ export interface ResourceActionMenuTrigger {
    */
   source_ability?: {
     ability_id: EntityId;
-    owner: "friendly" | "enemy";
+    /**
+     * A definite player: friendly or enemy (an owner other than any).
+     */
+    owner: "friendly" | "enemy" | "any";
     /**
      * All keywords required on the unit using the named source ability, not on the selected target.
      *
@@ -4021,7 +3999,10 @@ export interface Trigger {
    */
   source_ability?: {
     ability_id: EntityId;
-    owner: "friendly" | "enemy";
+    /**
+     * A definite player: friendly or enemy (an owner other than any).
+     */
+    owner: "friendly" | "enemy" | "any";
     /**
      * All keywords required on the unit using the named source ability, not on the selected target.
      *
@@ -4268,17 +4249,17 @@ export interface PermissionEffect {
     counts_as_move?:
       | "normal"
       | "advance"
+      | "remain-stationary"
       | "fall-back"
       | "charge"
       | "pile-in"
       | "consolidation"
+      | "ingress"
       | "surge"
       | "scout"
-      | "ingress"
       | "disembark"
       | "embark"
-      | "pulse-jet"
-      | "remain-stationary";
+      | "pulse-jet";
     /**
      * This use of the Stratagem does not count toward its once-per-phase limit for other units.
      */
@@ -4598,13 +4579,14 @@ export interface MoveEffect {
     move_type:
       | "normal"
       | "advance"
+      | "remain-stationary"
       | "fall-back"
       | "charge"
       | "pile-in"
       | "consolidation"
+      | "ingress"
       | "surge"
       | "scout"
-      | "ingress"
       | "disembark"
       | "embark"
       | "pulse-jet";
@@ -4676,17 +4658,17 @@ export interface MoveEffect {
     counts_as_move?:
       | "normal"
       | "advance"
+      | "remain-stationary"
       | "fall-back"
       | "charge"
       | "pile-in"
       | "consolidation"
+      | "ingress"
       | "surge"
       | "scout"
-      | "ingress"
       | "disembark"
       | "embark"
-      | "pulse-jet"
-      | "remain-stationary";
+      | "pulse-jet";
     ends_within?: {
       range: RangeRef;
       of?: PlaceRef;
@@ -4725,13 +4707,14 @@ export interface MoveModifierEffect {
       (
         | "normal"
         | "advance"
+        | "remain-stationary"
         | "fall-back"
         | "charge"
         | "pile-in"
         | "consolidation"
+        | "ingress"
         | "surge"
         | "scout"
-        | "ingress"
         | "disembark"
         | "embark"
         | "pulse-jet"
@@ -4739,13 +4722,14 @@ export interface MoveModifierEffect {
       ...(
         | "normal"
         | "advance"
+        | "remain-stationary"
         | "fall-back"
         | "charge"
         | "pile-in"
         | "consolidation"
+        | "ingress"
         | "surge"
         | "scout"
-        | "ingress"
         | "disembark"
         | "embark"
         | "pulse-jet"
@@ -4922,17 +4906,17 @@ export interface SetUpEffect {
     counts_as_move?:
       | "normal"
       | "advance"
+      | "remain-stationary"
       | "fall-back"
       | "charge"
       | "pile-in"
       | "consolidation"
+      | "ingress"
       | "surge"
       | "scout"
-      | "ingress"
       | "disembark"
       | "embark"
-      | "pulse-jet"
-      | "remain-stationary";
+      | "pulse-jet";
     arrives?: "next-movement-phase";
     allow_first_round?: true;
     /**
@@ -5026,7 +5010,7 @@ export interface TestEffect {
   type: "test";
   target: UnitRef;
   modifier: {
-    test: "battle-shock" | "leadership" | "hazard" | "desperate-escape";
+    test: "battle-shock" | "leadership" | "hazard" | "desperate-escape" | "psychic";
     modifier?: number;
     count?: number;
     per?: string;
@@ -5975,7 +5959,7 @@ export interface TestExemptionEffect {
   type: "test-exemption";
   target: UnitRef;
   modifier: {
-    test: "battle-shock" | "leadership" | "desperate-escape";
+    test: "battle-shock" | "leadership" | "hazard" | "desperate-escape" | "psychic";
     window: "phase" | "turn" | "battle-round";
   };
   scaling?: Scaling;
@@ -5998,22 +5982,7 @@ export interface CharacteristicResolutionEffect {
   type: "characteristic-resolution";
   target: UnitRef;
   modifier: {
-    stat:
-      | "M"
-      | "T"
-      | "Sv"
-      | "W"
-      | "Ld"
-      | "OC"
-      | "A"
-      | "WS"
-      | "BS"
-      | "S"
-      | "AP"
-      | "D"
-      | "Range"
-      | "detection-range"
-      | "psyker-level";
+    stat: Stat;
     rule: "majority" | "highest" | "lowest";
     tie?: "highest" | "lowest";
     applies_to?: "wound-roll" | "all";
@@ -7232,7 +7201,10 @@ export interface Trigger1 {
    */
   source_ability?: {
     ability_id: EntityId;
-    owner: "friendly" | "enemy";
+    /**
+     * A definite player: friendly or enemy (an owner other than any).
+     */
+    owner: "friendly" | "enemy" | "any";
     /**
      * All keywords required on the unit using the named source ability, not on the selected target.
      *

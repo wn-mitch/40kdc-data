@@ -9786,7 +9786,7 @@
             "type": "re-roll",
             "target": "this-unit",
             "modifier": {
-              "roll": "normal-move",
+              "roll": "normal",
               "result_scope": "any-result"
             }
           }

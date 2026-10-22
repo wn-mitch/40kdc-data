@@ -5664,10 +5664,7 @@ impl<'de> ::serde::Deserialize<'de> for ArmyRuleEffectModifierTag {
 ///  ],
 ///  "properties": {
 ///    "owner": {
-///      "enum": [
-///        "friendly",
-///        "enemy"
-///      ]
+///      "$ref": "#/$defs/definite-owner"
 ///    },
 ///    "state": {
 ///      "const": "honoured"
@@ -5680,85 +5677,8 @@ impl<'de> ::serde::Deserialize<'de> for ArmyRuleEffectModifierTag {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct ArmyStateConditionParameters {
-    pub owner: ArmyStateConditionParametersOwner,
+    pub owner: DefiniteOwner,
     pub state: ::serde_json::Value,
-}
-///`ArmyStateConditionParametersOwner`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "enum": [
-///    "friendly",
-///    "enemy"
-///  ]
-///}
-/// ```
-/// </details>
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum ArmyStateConditionParametersOwner {
-    #[serde(rename = "friendly")]
-    Friendly,
-    #[serde(rename = "enemy")]
-    Enemy,
-}
-impl ::std::fmt::Display for ArmyStateConditionParametersOwner {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Friendly => f.write_str("friendly"),
-            Self::Enemy => f.write_str("enemy"),
-        }
-    }
-}
-impl ::std::str::FromStr for ArmyStateConditionParametersOwner {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "friendly" => Ok(Self::Friendly),
-            "enemy" => Ok(Self::Enemy),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for ArmyStateConditionParametersOwner {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String>
-for ArmyStateConditionParametersOwner {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for ArmyStateConditionParametersOwner {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
 }
 ///`AttachmentConditionParameters`
 ///
@@ -7572,23 +7492,7 @@ pub struct BorrowWeaponsEffectModifier {
 ///      ]
 ///    },
 ///    "stat": {
-///      "enum": [
-///        "M",
-///        "T",
-///        "Sv",
-///        "W",
-///        "Ld",
-///        "OC",
-///        "A",
-///        "WS",
-///        "BS",
-///        "S",
-///        "AP",
-///        "D",
-///        "Range",
-///        "detection-range",
-///        "psyker-level"
-///      ]
+///      "$ref": "#/$defs/stat"
 ///    },
 ///    "tie": {
 ///      "enum": [
@@ -7611,7 +7515,7 @@ pub struct CharacteristicResolutionEffectModifier {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub incoming: ::std::option::Option<::serde_json::Value>,
     pub rule: CharacteristicResolutionEffectModifierRule,
-    pub stat: CharacteristicResolutionEffectModifierStat,
+    pub stat: Stat,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub tie: ::std::option::Option<CharacteristicResolutionEffectModifierTie>,
 }
@@ -7767,139 +7671,6 @@ for CharacteristicResolutionEffectModifierRule {
 }
 impl ::std::convert::TryFrom<::std::string::String>
 for CharacteristicResolutionEffectModifierRule {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///`CharacteristicResolutionEffectModifierStat`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "enum": [
-///    "M",
-///    "T",
-///    "Sv",
-///    "W",
-///    "Ld",
-///    "OC",
-///    "A",
-///    "WS",
-///    "BS",
-///    "S",
-///    "AP",
-///    "D",
-///    "Range",
-///    "detection-range",
-///    "psyker-level"
-///  ]
-///}
-/// ```
-/// </details>
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum CharacteristicResolutionEffectModifierStat {
-    M,
-    T,
-    Sv,
-    W,
-    Ld,
-    #[serde(rename = "OC")]
-    Oc,
-    A,
-    #[serde(rename = "WS")]
-    Ws,
-    #[serde(rename = "BS")]
-    Bs,
-    S,
-    #[serde(rename = "AP")]
-    Ap,
-    D,
-    Range,
-    #[serde(rename = "detection-range")]
-    DetectionRange,
-    #[serde(rename = "psyker-level")]
-    PsykerLevel,
-}
-impl ::std::fmt::Display for CharacteristicResolutionEffectModifierStat {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::M => f.write_str("M"),
-            Self::T => f.write_str("T"),
-            Self::Sv => f.write_str("Sv"),
-            Self::W => f.write_str("W"),
-            Self::Ld => f.write_str("Ld"),
-            Self::Oc => f.write_str("OC"),
-            Self::A => f.write_str("A"),
-            Self::Ws => f.write_str("WS"),
-            Self::Bs => f.write_str("BS"),
-            Self::S => f.write_str("S"),
-            Self::Ap => f.write_str("AP"),
-            Self::D => f.write_str("D"),
-            Self::Range => f.write_str("Range"),
-            Self::DetectionRange => f.write_str("detection-range"),
-            Self::PsykerLevel => f.write_str("psyker-level"),
-        }
-    }
-}
-impl ::std::str::FromStr for CharacteristicResolutionEffectModifierStat {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "M" => Ok(Self::M),
-            "T" => Ok(Self::T),
-            "Sv" => Ok(Self::Sv),
-            "W" => Ok(Self::W),
-            "Ld" => Ok(Self::Ld),
-            "OC" => Ok(Self::Oc),
-            "A" => Ok(Self::A),
-            "WS" => Ok(Self::Ws),
-            "BS" => Ok(Self::Bs),
-            "S" => Ok(Self::S),
-            "AP" => Ok(Self::Ap),
-            "D" => Ok(Self::D),
-            "Range" => Ok(Self::Range),
-            "detection-range" => Ok(Self::DetectionRange),
-            "psyker-level" => Ok(Self::PsykerLevel),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for CharacteristicResolutionEffectModifierStat {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String>
-for CharacteristicResolutionEffectModifierStat {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for CharacteristicResolutionEffectModifierStat {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,
@@ -8892,10 +8663,7 @@ impl ::std::fmt::Display for ContributorRef {
 ///  "type": "object",
 ///  "properties": {
 ///    "by": {
-///      "enum": [
-///        "friendly",
-///        "enemy"
-///      ]
+///      "$ref": "#/$defs/definite-owner"
 ///    },
 ///    "compare": {
 ///      "type": "object",
@@ -8908,10 +8676,7 @@ impl ::std::fmt::Display for ContributorRef {
 ///          "$ref": "#/$defs/comparison"
 ///        },
 ///        "owner": {
-///          "enum": [
-///            "friendly",
-///            "enemy"
-///          ]
+///          "$ref": "#/$defs/definite-owner"
 ///        }
 ///      },
 ///      "additionalProperties": false
@@ -8949,7 +8714,7 @@ impl ::std::fmt::Display for ContributorRef {
 #[serde(deny_unknown_fields)]
 pub struct ControlsConditionParameters {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub by: ::std::option::Option<ControlsConditionParametersBy>,
+    pub by: ::std::option::Option<DefiniteOwner>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub compare: ::std::option::Option<ControlsConditionParametersCompare>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -8970,81 +8735,6 @@ impl ::std::default::Default for ControlsConditionParameters {
         }
     }
 }
-///`ControlsConditionParametersBy`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "enum": [
-///    "friendly",
-///    "enemy"
-///  ]
-///}
-/// ```
-/// </details>
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum ControlsConditionParametersBy {
-    #[serde(rename = "friendly")]
-    Friendly,
-    #[serde(rename = "enemy")]
-    Enemy,
-}
-impl ::std::fmt::Display for ControlsConditionParametersBy {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Friendly => f.write_str("friendly"),
-            Self::Enemy => f.write_str("enemy"),
-        }
-    }
-}
-impl ::std::str::FromStr for ControlsConditionParametersBy {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "friendly" => Ok(Self::Friendly),
-            "enemy" => Ok(Self::Enemy),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for ControlsConditionParametersBy {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String> for ControlsConditionParametersBy {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String> for ControlsConditionParametersBy {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
 ///`ControlsConditionParametersCompare`
 ///
 /// <details><summary>JSON schema</summary>
@@ -9061,10 +8751,7 @@ impl ::std::convert::TryFrom<::std::string::String> for ControlsConditionParamet
 ///      "$ref": "#/$defs/comparison"
 ///    },
 ///    "owner": {
-///      "enum": [
-///        "friendly",
-///        "enemy"
-///      ]
+///      "$ref": "#/$defs/definite-owner"
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -9075,84 +8762,7 @@ impl ::std::convert::TryFrom<::std::string::String> for ControlsConditionParamet
 #[serde(deny_unknown_fields)]
 pub struct ControlsConditionParametersCompare {
     pub comparison: Comparison,
-    pub owner: ControlsConditionParametersCompareOwner,
-}
-///`ControlsConditionParametersCompareOwner`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "enum": [
-///    "friendly",
-///    "enemy"
-///  ]
-///}
-/// ```
-/// </details>
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum ControlsConditionParametersCompareOwner {
-    #[serde(rename = "friendly")]
-    Friendly,
-    #[serde(rename = "enemy")]
-    Enemy,
-}
-impl ::std::fmt::Display for ControlsConditionParametersCompareOwner {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Friendly => f.write_str("friendly"),
-            Self::Enemy => f.write_str("enemy"),
-        }
-    }
-}
-impl ::std::str::FromStr for ControlsConditionParametersCompareOwner {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "friendly" => Ok(Self::Friendly),
-            "enemy" => Ok(Self::Enemy),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for ControlsConditionParametersCompareOwner {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String>
-for ControlsConditionParametersCompareOwner {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for ControlsConditionParametersCompareOwner {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
+    pub owner: DefiniteOwner,
 }
 ///`ControlsConditionParametersProportion`
 ///
@@ -10040,6 +9650,87 @@ pub struct DeathGate {
 pub struct DeathGateModifiersItem {
     pub condition: Condition,
     pub value: Quantity,
+}
+///`DefiniteOwner`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "enum": [
+///    "friendly",
+///    "enemy",
+///    "any"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum DefiniteOwner {
+    #[serde(rename = "friendly")]
+    Friendly,
+    #[serde(rename = "enemy")]
+    Enemy,
+    #[serde(rename = "any")]
+    Any,
+}
+impl ::std::fmt::Display for DefiniteOwner {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Friendly => f.write_str("friendly"),
+            Self::Enemy => f.write_str("enemy"),
+            Self::Any => f.write_str("any"),
+        }
+    }
+}
+impl ::std::str::FromStr for DefiniteOwner {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "friendly" => Ok(Self::Friendly),
+            "enemy" => Ok(Self::Enemy),
+            "any" => Ok(Self::Any),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for DefiniteOwner {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for DefiniteOwner {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for DefiniteOwner {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
 }
 ///A deployment map: per-side deployment zones, objective positions, and (11e) per-side territory polygons. Pattern geometry carries forward unchanged from 10th edition; downstream tooling (e.g. bevy-deploy-helper) consumes this as the canonical encoding.
 ///
@@ -13885,14 +13576,7 @@ impl<'de> ::serde::Deserialize<'de> for DiceExpression {
 ///  "properties": {
 ///    "comparison": {
 ///      "default": "gte",
-///      "type": "string",
-///      "enum": [
-///        "gte",
-///        "lte",
-///        "gt",
-///        "lt",
-///        "eq"
-///      ]
+///      "$ref": "#/$defs/comparison"
 ///    },
 ///    "dice": {
 ///      "$ref": "#/$defs/dice-expression"
@@ -13942,10 +13626,14 @@ impl<'de> ::serde::Deserialize<'de> for DiceExpression {
 ///      ],
 ///      "properties": {
 ///        "kind": {
-///          "enum": [
-///            "leadership",
-///            "battle-shock"
-///          ]
+///          "not": {
+///            "enum": [
+///              "hazard",
+///              "desperate-escape",
+///              "psychic"
+///            ]
+///          },
+///          "$ref": "#/$defs/test-kind"
 ///        },
 ///        "modifiers": {
 ///          "type": "array",
@@ -14004,7 +13692,7 @@ impl<'de> ::serde::Deserialize<'de> for DiceExpression {
 #[serde(deny_unknown_fields)]
 pub struct DiceGatedEffect {
     #[serde(default = "defaults::dice_gated_effect_comparison")]
-    pub comparison: DiceGatedEffectComparison,
+    pub comparison: Comparison,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub dice: ::std::option::Option<DiceExpression>,
     ///Gate the dice of a roll an enclosing `roll` step bound instead of rolling new dice.
@@ -14031,103 +13719,6 @@ pub struct DiceGatedEffect {
     #[serde(rename = "type")]
     pub type_: DiceGatedEffectType,
 }
-///`DiceGatedEffectComparison`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "default": "gte",
-///  "type": "string",
-///  "enum": [
-///    "gte",
-///    "lte",
-///    "gt",
-///    "lt",
-///    "eq"
-///  ]
-///}
-/// ```
-/// </details>
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum DiceGatedEffectComparison {
-    #[serde(rename = "gte")]
-    Gte,
-    #[serde(rename = "lte")]
-    Lte,
-    #[serde(rename = "gt")]
-    Gt,
-    #[serde(rename = "lt")]
-    Lt,
-    #[serde(rename = "eq")]
-    Eq,
-}
-impl ::std::fmt::Display for DiceGatedEffectComparison {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Gte => f.write_str("gte"),
-            Self::Lte => f.write_str("lte"),
-            Self::Gt => f.write_str("gt"),
-            Self::Lt => f.write_str("lt"),
-            Self::Eq => f.write_str("eq"),
-        }
-    }
-}
-impl ::std::str::FromStr for DiceGatedEffectComparison {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "gte" => Ok(Self::Gte),
-            "lte" => Ok(Self::Lte),
-            "gt" => Ok(Self::Gt),
-            "lt" => Ok(Self::Lt),
-            "eq" => Ok(Self::Eq),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for DiceGatedEffectComparison {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String> for DiceGatedEffectComparison {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String> for DiceGatedEffectComparison {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::default::Default for DiceGatedEffectComparison {
-    fn default() -> Self {
-        DiceGatedEffectComparison::Gte
-    }
-}
 ///Perform the named actual 2D6 test using the subject's current Leadership and normal applicable modifiers and reroll permissions. A Battle-shock failure inflicts Battle-shock as well as resolving on_fail; a Leadership test does not.
 ///
 /// <details><summary>JSON schema</summary>
@@ -14142,10 +13733,14 @@ impl ::std::default::Default for DiceGatedEffectComparison {
 ///  ],
 ///  "properties": {
 ///    "kind": {
-///      "enum": [
-///        "leadership",
-///        "battle-shock"
-///      ]
+///      "not": {
+///        "enum": [
+///          "hazard",
+///          "desperate-escape",
+///          "psychic"
+///        ]
+///      },
+///      "$ref": "#/$defs/test-kind"
 ///    },
 ///    "modifiers": {
 ///      "type": "array",
@@ -14189,9 +13784,10 @@ pub struct DiceGatedEffectTest {
 ///
 /// ```json
 ///{
+///  "type": "string",
 ///  "enum": [
-///    "leadership",
-///    "battle-shock"
+///    "battle-shock",
+///    "leadership"
 ///  ]
 ///}
 /// ```
@@ -14209,16 +13805,16 @@ pub struct DiceGatedEffectTest {
     PartialOrd
 )]
 pub enum DiceGatedEffectTestKind {
-    #[serde(rename = "leadership")]
-    Leadership,
     #[serde(rename = "battle-shock")]
     BattleShock,
+    #[serde(rename = "leadership")]
+    Leadership,
 }
 impl ::std::fmt::Display for DiceGatedEffectTestKind {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match *self {
-            Self::Leadership => f.write_str("leadership"),
             Self::BattleShock => f.write_str("battle-shock"),
+            Self::Leadership => f.write_str("leadership"),
         }
     }
 }
@@ -14228,8 +13824,8 @@ impl ::std::str::FromStr for DiceGatedEffectTestKind {
         value: &str,
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         match value {
-            "leadership" => Ok(Self::Leadership),
             "battle-shock" => Ok(Self::BattleShock),
+            "leadership" => Ok(Self::Leadership),
             _ => Err("invalid value".into()),
         }
     }
@@ -15528,10 +15124,13 @@ impl ::std::convert::From<OathModifierEffect> for EffectNode {
 ///  ],
 ///  "properties": {
 ///    "at": {
-///      "enum": [
-///        "now",
-///        "opponent-previous-turn-end"
-///      ]
+///      "not": {
+///        "enum": [
+///          "phase-start",
+///          "turn-start"
+///        ]
+///      },
+///      "$ref": "#/$defs/snapshot"
 ///    },
 ///    "source_ability": {
 ///      "type": "object",
@@ -15543,10 +15142,7 @@ impl ::std::convert::From<OathModifierEffect> for EffectNode {
 ///          "$ref": "#/$defs/entity-id"
 ///        },
 ///        "owner": {
-///          "enum": [
-///            "friendly",
-///            "enemy"
-///          ]
+///          "$ref": "#/$defs/definite-owner"
 ///        }
 ///      },
 ///      "additionalProperties": false
@@ -15593,6 +15189,7 @@ pub struct EligibleConditionParameters {
 ///
 /// ```json
 ///{
+///  "type": "string",
 ///  "enum": [
 ///    "now",
 ///    "opponent-previous-turn-end"
@@ -15677,10 +15274,7 @@ impl ::std::convert::TryFrom<::std::string::String> for EligibleConditionParamet
 ///      "$ref": "#/$defs/entity-id"
 ///    },
 ///    "owner": {
-///      "enum": [
-///        "friendly",
-///        "enemy"
-///      ]
+///      "$ref": "#/$defs/definite-owner"
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -15692,84 +15286,7 @@ impl ::std::convert::TryFrom<::std::string::String> for EligibleConditionParamet
 pub struct EligibleConditionParametersSourceAbility {
     pub ability_id: EntityId,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub owner: ::std::option::Option<EligibleConditionParametersSourceAbilityOwner>,
-}
-///`EligibleConditionParametersSourceAbilityOwner`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "enum": [
-///    "friendly",
-///    "enemy"
-///  ]
-///}
-/// ```
-/// </details>
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum EligibleConditionParametersSourceAbilityOwner {
-    #[serde(rename = "friendly")]
-    Friendly,
-    #[serde(rename = "enemy")]
-    Enemy,
-}
-impl ::std::fmt::Display for EligibleConditionParametersSourceAbilityOwner {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Friendly => f.write_str("friendly"),
-            Self::Enemy => f.write_str("enemy"),
-        }
-    }
-}
-impl ::std::str::FromStr for EligibleConditionParametersSourceAbilityOwner {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "friendly" => Ok(Self::Friendly),
-            "enemy" => Ok(Self::Enemy),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for EligibleConditionParametersSourceAbilityOwner {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String>
-for EligibleConditionParametersSourceAbilityOwner {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for EligibleConditionParametersSourceAbilityOwner {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
+    pub owner: ::std::option::Option<DefiniteOwner>,
 }
 ///`EligibleConditionParametersTo`
 ///
@@ -21187,23 +20704,7 @@ impl<'de> ::serde::Deserialize<'de> for HullShapeName {
 ///    "stats": {
 ///      "type": "array",
 ///      "items": {
-///        "enum": [
-///          "M",
-///          "T",
-///          "Sv",
-///          "W",
-///          "Ld",
-///          "OC",
-///          "A",
-///          "WS",
-///          "BS",
-///          "S",
-///          "AP",
-///          "D",
-///          "Range",
-///          "detection-range",
-///          "psyker-level"
-///        ]
+///        "$ref": "#/$defs/stat"
 ///      },
 ///      "minItems": 1,
 ///      "uniqueItems": true
@@ -21232,7 +20733,7 @@ pub struct IgnoreModifiersEffectModifier {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub rolls: ::std::option::Option<Vec<RollSelector>>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub stats: ::std::option::Option<Vec<IgnoreModifiersEffectModifierStatsItem>>,
+    pub stats: ::std::option::Option<Vec<Stat>>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub weapons: ::std::option::Option<WeaponScope>,
     pub what: IgnoreModifiersEffectModifierWhat,
@@ -21307,139 +20808,6 @@ for IgnoreModifiersEffectModifierOnly {
 }
 impl ::std::convert::TryFrom<::std::string::String>
 for IgnoreModifiersEffectModifierOnly {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///`IgnoreModifiersEffectModifierStatsItem`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "enum": [
-///    "M",
-///    "T",
-///    "Sv",
-///    "W",
-///    "Ld",
-///    "OC",
-///    "A",
-///    "WS",
-///    "BS",
-///    "S",
-///    "AP",
-///    "D",
-///    "Range",
-///    "detection-range",
-///    "psyker-level"
-///  ]
-///}
-/// ```
-/// </details>
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum IgnoreModifiersEffectModifierStatsItem {
-    M,
-    T,
-    Sv,
-    W,
-    Ld,
-    #[serde(rename = "OC")]
-    Oc,
-    A,
-    #[serde(rename = "WS")]
-    Ws,
-    #[serde(rename = "BS")]
-    Bs,
-    S,
-    #[serde(rename = "AP")]
-    Ap,
-    D,
-    Range,
-    #[serde(rename = "detection-range")]
-    DetectionRange,
-    #[serde(rename = "psyker-level")]
-    PsykerLevel,
-}
-impl ::std::fmt::Display for IgnoreModifiersEffectModifierStatsItem {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::M => f.write_str("M"),
-            Self::T => f.write_str("T"),
-            Self::Sv => f.write_str("Sv"),
-            Self::W => f.write_str("W"),
-            Self::Ld => f.write_str("Ld"),
-            Self::Oc => f.write_str("OC"),
-            Self::A => f.write_str("A"),
-            Self::Ws => f.write_str("WS"),
-            Self::Bs => f.write_str("BS"),
-            Self::S => f.write_str("S"),
-            Self::Ap => f.write_str("AP"),
-            Self::D => f.write_str("D"),
-            Self::Range => f.write_str("Range"),
-            Self::DetectionRange => f.write_str("detection-range"),
-            Self::PsykerLevel => f.write_str("psyker-level"),
-        }
-    }
-}
-impl ::std::str::FromStr for IgnoreModifiersEffectModifierStatsItem {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "M" => Ok(Self::M),
-            "T" => Ok(Self::T),
-            "Sv" => Ok(Self::Sv),
-            "W" => Ok(Self::W),
-            "Ld" => Ok(Self::Ld),
-            "OC" => Ok(Self::Oc),
-            "A" => Ok(Self::A),
-            "WS" => Ok(Self::Ws),
-            "BS" => Ok(Self::Bs),
-            "S" => Ok(Self::S),
-            "AP" => Ok(Self::Ap),
-            "D" => Ok(Self::D),
-            "Range" => Ok(Self::Range),
-            "detection-range" => Ok(Self::DetectionRange),
-            "psyker-level" => Ok(Self::PsykerLevel),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for IgnoreModifiersEffectModifierStatsItem {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String>
-for IgnoreModifiersEffectModifierStatsItem {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for IgnoreModifiersEffectModifierStatsItem {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,
@@ -23525,10 +22893,14 @@ pub struct ModelProfileConditionParameters {
 ///        "comparison": {
 ///          "description": "gte: a die at or above threshold succeeds (\"for each 5+\"); lte: a die at or below it (\"for each 1\").",
 ///          "default": "gte",
-///          "enum": [
-///            "gte",
-///            "lte"
-///          ]
+///          "not": {
+///            "enum": [
+///              "gt",
+///              "lt",
+///              "eq"
+///            ]
+///          },
+///          "$ref": "#/$defs/comparison"
 ///        },
 ///        "dice": {
 ///          "oneOf": [
@@ -23668,10 +23040,14 @@ impl ::std::convert::TryFrom<::std::string::String> for MortalWoundsEffectModifi
 ///    "comparison": {
 ///      "description": "gte: a die at or above threshold succeeds (\"for each 5+\"); lte: a die at or below it (\"for each 1\").",
 ///      "default": "gte",
-///      "enum": [
-///        "gte",
-///        "lte"
-///      ]
+///      "not": {
+///        "enum": [
+///          "gt",
+///          "lt",
+///          "eq"
+///        ]
+///      },
+///      "$ref": "#/$defs/comparison"
 ///    },
 ///    "dice": {
 ///      "oneOf": [
@@ -23717,14 +23093,13 @@ pub struct MortalWoundsEffectModifierRoll {
     ///The face a die must reach: at least this (comparison gte, the default, from 2) or at most this (comparison lte: "for each 1").
     pub threshold: ::std::num::NonZeroU64,
 }
-///gte: a die at or above threshold succeeds ("for each 5+"); lte: a die at or below it ("for each 1").
+///`MortalWoundsEffectModifierRollComparison`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "gte: a die at or above threshold succeeds (\"for each 5+\"); lte: a die at or below it (\"for each 1\").",
-///  "default": "gte",
+///  "type": "string",
 ///  "enum": [
 ///    "gte",
 ///    "lte"
@@ -23905,21 +23280,7 @@ impl ::std::convert::From<DiceExpression> for MortalWoundsEffectModifierRollDice
 ///    },
 ///    "counts_as_move": {
 ///      "description": "The move counts as this kind of move for rules that check what the unit did this turn.",
-///      "enum": [
-///        "normal",
-///        "advance",
-///        "fall-back",
-///        "charge",
-///        "pile-in",
-///        "consolidation",
-///        "surge",
-///        "scout",
-///        "ingress",
-///        "disembark",
-///        "embark",
-///        "pulse-jet",
-///        "remain-stationary"
-///      ]
+///      "$ref": "#/$defs/movement-kind"
 ///    },
 ///    "distance": {
 ///      "$ref": "#/$defs/quantity"
@@ -23963,20 +23324,10 @@ impl ::std::convert::From<DiceExpression> for MortalWoundsEffectModifierRollDice
 ///      "$ref": "#/$defs/move-mode"
 ///    },
 ///    "move_type": {
-///      "enum": [
-///        "normal",
-///        "advance",
-///        "fall-back",
-///        "charge",
-///        "pile-in",
-///        "consolidation",
-///        "surge",
-///        "scout",
-///        "ingress",
-///        "disembark",
-///        "embark",
-///        "pulse-jet"
-///      ]
+///      "not": {
+///        "const": "remain-stationary"
+///      },
+///      "$ref": "#/$defs/movement-kind"
 ///    },
 ///    "passthrough": {
 ///      "type": "array",
@@ -24050,7 +23401,7 @@ pub struct MoveEffectModifier {
     pub as_if: ::std::option::Option<MoveEffectModifierAsIf>,
     ///The move counts as this kind of move for rules that check what the unit did this turn.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub counts_as_move: ::std::option::Option<MoveEffectModifierCountsAsMove>,
+    pub counts_as_move: ::std::option::Option<MovementKind>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub distance: ::std::option::Option<Quantity>,
     ///Where the move must end: as close as possible to the closest unit matching `of` (the move's own end rule).
@@ -24136,137 +23487,6 @@ impl ::std::convert::TryFrom<&::std::string::String> for MoveEffectModifierAsIf 
     }
 }
 impl ::std::convert::TryFrom<::std::string::String> for MoveEffectModifierAsIf {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///The move counts as this kind of move for rules that check what the unit did this turn.
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "description": "The move counts as this kind of move for rules that check what the unit did this turn.",
-///  "enum": [
-///    "normal",
-///    "advance",
-///    "fall-back",
-///    "charge",
-///    "pile-in",
-///    "consolidation",
-///    "surge",
-///    "scout",
-///    "ingress",
-///    "disembark",
-///    "embark",
-///    "pulse-jet",
-///    "remain-stationary"
-///  ]
-///}
-/// ```
-/// </details>
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum MoveEffectModifierCountsAsMove {
-    #[serde(rename = "normal")]
-    Normal,
-    #[serde(rename = "advance")]
-    Advance,
-    #[serde(rename = "fall-back")]
-    FallBack,
-    #[serde(rename = "charge")]
-    Charge,
-    #[serde(rename = "pile-in")]
-    PileIn,
-    #[serde(rename = "consolidation")]
-    Consolidation,
-    #[serde(rename = "surge")]
-    Surge,
-    #[serde(rename = "scout")]
-    Scout,
-    #[serde(rename = "ingress")]
-    Ingress,
-    #[serde(rename = "disembark")]
-    Disembark,
-    #[serde(rename = "embark")]
-    Embark,
-    #[serde(rename = "pulse-jet")]
-    PulseJet,
-    #[serde(rename = "remain-stationary")]
-    RemainStationary,
-}
-impl ::std::fmt::Display for MoveEffectModifierCountsAsMove {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Normal => f.write_str("normal"),
-            Self::Advance => f.write_str("advance"),
-            Self::FallBack => f.write_str("fall-back"),
-            Self::Charge => f.write_str("charge"),
-            Self::PileIn => f.write_str("pile-in"),
-            Self::Consolidation => f.write_str("consolidation"),
-            Self::Surge => f.write_str("surge"),
-            Self::Scout => f.write_str("scout"),
-            Self::Ingress => f.write_str("ingress"),
-            Self::Disembark => f.write_str("disembark"),
-            Self::Embark => f.write_str("embark"),
-            Self::PulseJet => f.write_str("pulse-jet"),
-            Self::RemainStationary => f.write_str("remain-stationary"),
-        }
-    }
-}
-impl ::std::str::FromStr for MoveEffectModifierCountsAsMove {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "normal" => Ok(Self::Normal),
-            "advance" => Ok(Self::Advance),
-            "fall-back" => Ok(Self::FallBack),
-            "charge" => Ok(Self::Charge),
-            "pile-in" => Ok(Self::PileIn),
-            "consolidation" => Ok(Self::Consolidation),
-            "surge" => Ok(Self::Surge),
-            "scout" => Ok(Self::Scout),
-            "ingress" => Ok(Self::Ingress),
-            "disembark" => Ok(Self::Disembark),
-            "embark" => Ok(Self::Embark),
-            "pulse-jet" => Ok(Self::PulseJet),
-            "remain-stationary" => Ok(Self::RemainStationary),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for MoveEffectModifierCountsAsMove {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String> for MoveEffectModifierCountsAsMove {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String> for MoveEffectModifierCountsAsMove {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,
@@ -24385,16 +23605,18 @@ impl ::std::convert::TryFrom<::std::string::String> for MoveEffectModifierEngage
 ///
 /// ```json
 ///{
+///  "type": "string",
 ///  "enum": [
 ///    "normal",
 ///    "advance",
+///    "remain-stationary",
 ///    "fall-back",
 ///    "charge",
 ///    "pile-in",
 ///    "consolidation",
+///    "ingress",
 ///    "surge",
 ///    "scout",
-///    "ingress",
 ///    "disembark",
 ///    "embark",
 ///    "pulse-jet"
@@ -24419,6 +23641,8 @@ pub enum MoveEffectModifierMoveType {
     Normal,
     #[serde(rename = "advance")]
     Advance,
+    #[serde(rename = "remain-stationary")]
+    RemainStationary,
     #[serde(rename = "fall-back")]
     FallBack,
     #[serde(rename = "charge")]
@@ -24427,12 +23651,12 @@ pub enum MoveEffectModifierMoveType {
     PileIn,
     #[serde(rename = "consolidation")]
     Consolidation,
+    #[serde(rename = "ingress")]
+    Ingress,
     #[serde(rename = "surge")]
     Surge,
     #[serde(rename = "scout")]
     Scout,
-    #[serde(rename = "ingress")]
-    Ingress,
     #[serde(rename = "disembark")]
     Disembark,
     #[serde(rename = "embark")]
@@ -24445,13 +23669,14 @@ impl ::std::fmt::Display for MoveEffectModifierMoveType {
         match *self {
             Self::Normal => f.write_str("normal"),
             Self::Advance => f.write_str("advance"),
+            Self::RemainStationary => f.write_str("remain-stationary"),
             Self::FallBack => f.write_str("fall-back"),
             Self::Charge => f.write_str("charge"),
             Self::PileIn => f.write_str("pile-in"),
             Self::Consolidation => f.write_str("consolidation"),
+            Self::Ingress => f.write_str("ingress"),
             Self::Surge => f.write_str("surge"),
             Self::Scout => f.write_str("scout"),
-            Self::Ingress => f.write_str("ingress"),
             Self::Disembark => f.write_str("disembark"),
             Self::Embark => f.write_str("embark"),
             Self::PulseJet => f.write_str("pulse-jet"),
@@ -24466,13 +23691,14 @@ impl ::std::str::FromStr for MoveEffectModifierMoveType {
         match value {
             "normal" => Ok(Self::Normal),
             "advance" => Ok(Self::Advance),
+            "remain-stationary" => Ok(Self::RemainStationary),
             "fall-back" => Ok(Self::FallBack),
             "charge" => Ok(Self::Charge),
             "pile-in" => Ok(Self::PileIn),
             "consolidation" => Ok(Self::Consolidation),
+            "ingress" => Ok(Self::Ingress),
             "surge" => Ok(Self::Surge),
             "scout" => Ok(Self::Scout),
-            "ingress" => Ok(Self::Ingress),
             "disembark" => Ok(Self::Disembark),
             "embark" => Ok(Self::Embark),
             "pulse-jet" => Ok(Self::PulseJet),
@@ -25004,20 +24230,10 @@ impl ::std::convert::TryFrom<::std::string::String> for MoveMode {
 ///    "applies_to_moves": {
 ///      "type": "array",
 ///      "items": {
-///        "enum": [
-///          "normal",
-///          "advance",
-///          "fall-back",
-///          "charge",
-///          "pile-in",
-///          "consolidation",
-///          "surge",
-///          "scout",
-///          "ingress",
-///          "disembark",
-///          "embark",
-///          "pulse-jet"
-///        ]
+///        "not": {
+///          "const": "remain-stationary"
+///        },
+///        "$ref": "#/$defs/movement-kind"
 ///      },
 ///      "minItems": 1,
 ///      "uniqueItems": true
@@ -25171,16 +24387,18 @@ impl ::std::default::Default for MoveModifierEffectModifier {
 ///
 /// ```json
 ///{
+///  "type": "string",
 ///  "enum": [
 ///    "normal",
 ///    "advance",
+///    "remain-stationary",
 ///    "fall-back",
 ///    "charge",
 ///    "pile-in",
 ///    "consolidation",
+///    "ingress",
 ///    "surge",
 ///    "scout",
-///    "ingress",
 ///    "disembark",
 ///    "embark",
 ///    "pulse-jet"
@@ -25205,6 +24423,8 @@ pub enum MoveModifierEffectModifierAppliesToMovesItem {
     Normal,
     #[serde(rename = "advance")]
     Advance,
+    #[serde(rename = "remain-stationary")]
+    RemainStationary,
     #[serde(rename = "fall-back")]
     FallBack,
     #[serde(rename = "charge")]
@@ -25213,12 +24433,12 @@ pub enum MoveModifierEffectModifierAppliesToMovesItem {
     PileIn,
     #[serde(rename = "consolidation")]
     Consolidation,
+    #[serde(rename = "ingress")]
+    Ingress,
     #[serde(rename = "surge")]
     Surge,
     #[serde(rename = "scout")]
     Scout,
-    #[serde(rename = "ingress")]
-    Ingress,
     #[serde(rename = "disembark")]
     Disembark,
     #[serde(rename = "embark")]
@@ -25231,13 +24451,14 @@ impl ::std::fmt::Display for MoveModifierEffectModifierAppliesToMovesItem {
         match *self {
             Self::Normal => f.write_str("normal"),
             Self::Advance => f.write_str("advance"),
+            Self::RemainStationary => f.write_str("remain-stationary"),
             Self::FallBack => f.write_str("fall-back"),
             Self::Charge => f.write_str("charge"),
             Self::PileIn => f.write_str("pile-in"),
             Self::Consolidation => f.write_str("consolidation"),
+            Self::Ingress => f.write_str("ingress"),
             Self::Surge => f.write_str("surge"),
             Self::Scout => f.write_str("scout"),
-            Self::Ingress => f.write_str("ingress"),
             Self::Disembark => f.write_str("disembark"),
             Self::Embark => f.write_str("embark"),
             Self::PulseJet => f.write_str("pulse-jet"),
@@ -25252,13 +24473,14 @@ impl ::std::str::FromStr for MoveModifierEffectModifierAppliesToMovesItem {
         match value {
             "normal" => Ok(Self::Normal),
             "advance" => Ok(Self::Advance),
+            "remain-stationary" => Ok(Self::RemainStationary),
             "fall-back" => Ok(Self::FallBack),
             "charge" => Ok(Self::Charge),
             "pile-in" => Ok(Self::PileIn),
             "consolidation" => Ok(Self::Consolidation),
+            "ingress" => Ok(Self::Ingress),
             "surge" => Ok(Self::Surge),
             "scout" => Ok(Self::Scout),
-            "ingress" => Ok(Self::Ingress),
             "disembark" => Ok(Self::Disembark),
             "embark" => Ok(Self::Embark),
             "pulse-jet" => Ok(Self::PulseJet),
@@ -28407,10 +27629,7 @@ impl ::std::default::Default for ObjectiveStickyEffectModifier {
 ///      "const": true
 ///    },
 ///    "side": {
-///      "enum": [
-///        "friendly",
-///        "enemy"
-///      ]
+///      "$ref": "#/$defs/definite-owner"
 ///    },
 ///    "within": {
 ///      "type": "object",
@@ -28443,7 +27662,7 @@ pub struct OperationMarkersConditionParameters {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub no_enemy_in_terrain_area: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub side: ::std::option::Option<OperationMarkersConditionParametersSide>,
+    pub side: ::std::option::Option<DefiniteOwner>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub within: ::std::option::Option<OperationMarkersConditionParametersWithin>,
 }
@@ -28456,83 +27675,6 @@ impl ::std::default::Default for OperationMarkersConditionParameters {
             side: Default::default(),
             within: Default::default(),
         }
-    }
-}
-///`OperationMarkersConditionParametersSide`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "enum": [
-///    "friendly",
-///    "enemy"
-///  ]
-///}
-/// ```
-/// </details>
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum OperationMarkersConditionParametersSide {
-    #[serde(rename = "friendly")]
-    Friendly,
-    #[serde(rename = "enemy")]
-    Enemy,
-}
-impl ::std::fmt::Display for OperationMarkersConditionParametersSide {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Friendly => f.write_str("friendly"),
-            Self::Enemy => f.write_str("enemy"),
-        }
-    }
-}
-impl ::std::str::FromStr for OperationMarkersConditionParametersSide {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "friendly" => Ok(Self::Friendly),
-            "enemy" => Ok(Self::Enemy),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for OperationMarkersConditionParametersSide {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String>
-for OperationMarkersConditionParametersSide {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for OperationMarkersConditionParametersSide {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
     }
 }
 ///`OperationMarkersConditionParametersWithin`
@@ -28797,21 +27939,7 @@ impl ::std::convert::TryFrom<::std::string::String> for Period {
 ///    },
 ///    "counts_as_move": {
 ///      "description": "Doing so counts as having made this move this turn (a disembark counting as a Normal move).",
-///      "enum": [
-///        "normal",
-///        "advance",
-///        "fall-back",
-///        "charge",
-///        "pile-in",
-///        "consolidation",
-///        "surge",
-///        "scout",
-///        "ingress",
-///        "disembark",
-///        "embark",
-///        "pulse-jet",
-///        "remain-stationary"
-///      ]
+///      "$ref": "#/$defs/movement-kind"
 ///    },
 ///    "despite": {
 ///      "type": "array",
@@ -28863,7 +27991,7 @@ pub struct PermissionEffectModifier {
     pub consumes_shared_use: ::std::option::Option<::serde_json::Value>,
     ///Doing so counts as having made this move this turn (a disembark counting as a Normal move).
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub counts_as_move: ::std::option::Option<PermissionEffectModifierCountsAsMove>,
+    pub counts_as_move: ::std::option::Option<MovementKind>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub despite: ::std::option::Option<Vec<PermissionEffectModifierDespiteItem>>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -29202,139 +28330,6 @@ impl ::std::convert::TryFrom<&::std::string::String> for PermissionEffectModifie
     }
 }
 impl ::std::convert::TryFrom<::std::string::String> for PermissionEffectModifierAsIf {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///Doing so counts as having made this move this turn (a disembark counting as a Normal move).
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "description": "Doing so counts as having made this move this turn (a disembark counting as a Normal move).",
-///  "enum": [
-///    "normal",
-///    "advance",
-///    "fall-back",
-///    "charge",
-///    "pile-in",
-///    "consolidation",
-///    "surge",
-///    "scout",
-///    "ingress",
-///    "disembark",
-///    "embark",
-///    "pulse-jet",
-///    "remain-stationary"
-///  ]
-///}
-/// ```
-/// </details>
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum PermissionEffectModifierCountsAsMove {
-    #[serde(rename = "normal")]
-    Normal,
-    #[serde(rename = "advance")]
-    Advance,
-    #[serde(rename = "fall-back")]
-    FallBack,
-    #[serde(rename = "charge")]
-    Charge,
-    #[serde(rename = "pile-in")]
-    PileIn,
-    #[serde(rename = "consolidation")]
-    Consolidation,
-    #[serde(rename = "surge")]
-    Surge,
-    #[serde(rename = "scout")]
-    Scout,
-    #[serde(rename = "ingress")]
-    Ingress,
-    #[serde(rename = "disembark")]
-    Disembark,
-    #[serde(rename = "embark")]
-    Embark,
-    #[serde(rename = "pulse-jet")]
-    PulseJet,
-    #[serde(rename = "remain-stationary")]
-    RemainStationary,
-}
-impl ::std::fmt::Display for PermissionEffectModifierCountsAsMove {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Normal => f.write_str("normal"),
-            Self::Advance => f.write_str("advance"),
-            Self::FallBack => f.write_str("fall-back"),
-            Self::Charge => f.write_str("charge"),
-            Self::PileIn => f.write_str("pile-in"),
-            Self::Consolidation => f.write_str("consolidation"),
-            Self::Surge => f.write_str("surge"),
-            Self::Scout => f.write_str("scout"),
-            Self::Ingress => f.write_str("ingress"),
-            Self::Disembark => f.write_str("disembark"),
-            Self::Embark => f.write_str("embark"),
-            Self::PulseJet => f.write_str("pulse-jet"),
-            Self::RemainStationary => f.write_str("remain-stationary"),
-        }
-    }
-}
-impl ::std::str::FromStr for PermissionEffectModifierCountsAsMove {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "normal" => Ok(Self::Normal),
-            "advance" => Ok(Self::Advance),
-            "fall-back" => Ok(Self::FallBack),
-            "charge" => Ok(Self::Charge),
-            "pile-in" => Ok(Self::PileIn),
-            "consolidation" => Ok(Self::Consolidation),
-            "surge" => Ok(Self::Surge),
-            "scout" => Ok(Self::Scout),
-            "ingress" => Ok(Self::Ingress),
-            "disembark" => Ok(Self::Disembark),
-            "embark" => Ok(Self::Embark),
-            "pulse-jet" => Ok(Self::PulseJet),
-            "remain-stationary" => Ok(Self::RemainStationary),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for PermissionEffectModifierCountsAsMove {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String>
-for PermissionEffectModifierCountsAsMove {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for PermissionEffectModifierCountsAsMove {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,
@@ -34920,10 +33915,7 @@ impl ::std::convert::From<Trigger> for ResourceActionMenuTrigger {
 ///          "$ref": "#/$defs/entity-id"
 ///        },
 ///        "owner": {
-///          "enum": [
-///            "friendly",
-///            "enemy"
-///          ]
+///          "$ref": "#/$defs/definite-owner"
 ///        }
 ///      },
 ///      "additionalProperties": false
@@ -35034,10 +34026,7 @@ impl<'de> ::serde::Deserialize<'de> for ResourceConditionParametersPool {
 ///      "$ref": "#/$defs/entity-id"
 ///    },
 ///    "owner": {
-///      "enum": [
-///        "friendly",
-///        "enemy"
-///      ]
+///      "$ref": "#/$defs/definite-owner"
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -35049,84 +34038,7 @@ impl<'de> ::serde::Deserialize<'de> for ResourceConditionParametersPool {
 pub struct ResourceConditionParametersSourceAbility {
     pub ability_id: EntityId,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub owner: ::std::option::Option<ResourceConditionParametersSourceAbilityOwner>,
-}
-///`ResourceConditionParametersSourceAbilityOwner`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "enum": [
-///    "friendly",
-///    "enemy"
-///  ]
-///}
-/// ```
-/// </details>
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum ResourceConditionParametersSourceAbilityOwner {
-    #[serde(rename = "friendly")]
-    Friendly,
-    #[serde(rename = "enemy")]
-    Enemy,
-}
-impl ::std::fmt::Display for ResourceConditionParametersSourceAbilityOwner {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Friendly => f.write_str("friendly"),
-            Self::Enemy => f.write_str("enemy"),
-        }
-    }
-}
-impl ::std::str::FromStr for ResourceConditionParametersSourceAbilityOwner {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "friendly" => Ok(Self::Friendly),
-            "enemy" => Ok(Self::Enemy),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for ResourceConditionParametersSourceAbilityOwner {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String>
-for ResourceConditionParametersSourceAbilityOwner {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for ResourceConditionParametersSourceAbilityOwner {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
+    pub owner: ::std::option::Option<DefiniteOwner>,
 }
 ///`ResourceDieEffectModifier`
 ///
@@ -37524,7 +36436,7 @@ impl ::std::convert::TryFrom<::std::string::String> for RollEffectType {
 ///        "channelling",
 ///        "deadly-demise",
 ///        "attacks",
-///        "normal-move",
+///        "normal",
 ///        "surge",
 ///        "resource-die"
 ///      ]
@@ -37576,7 +36488,7 @@ impl ::std::convert::From<AbilityRoll> for RollKind {
 ///    "channelling",
 ///    "deadly-demise",
 ///    "attacks",
-///    "normal-move",
+///    "normal",
 ///    "surge",
 ///    "resource-die"
 ///  ]
@@ -37630,8 +36542,8 @@ pub enum RollKindVariant0 {
     DeadlyDemise,
     #[serde(rename = "attacks")]
     Attacks,
-    #[serde(rename = "normal-move")]
-    NormalMove,
+    #[serde(rename = "normal")]
+    Normal,
     #[serde(rename = "surge")]
     Surge,
     #[serde(rename = "resource-die")]
@@ -37657,7 +36569,7 @@ impl ::std::fmt::Display for RollKindVariant0 {
             Self::Channelling => f.write_str("channelling"),
             Self::DeadlyDemise => f.write_str("deadly-demise"),
             Self::Attacks => f.write_str("attacks"),
-            Self::NormalMove => f.write_str("normal-move"),
+            Self::Normal => f.write_str("normal"),
             Self::Surge => f.write_str("surge"),
             Self::ResourceDie => f.write_str("resource-die"),
         }
@@ -37686,7 +36598,7 @@ impl ::std::str::FromStr for RollKindVariant0 {
             "channelling" => Ok(Self::Channelling),
             "deadly-demise" => Ok(Self::DeadlyDemise),
             "attacks" => Ok(Self::Attacks),
-            "normal-move" => Ok(Self::NormalMove),
+            "normal" => Ok(Self::Normal),
             "surge" => Ok(Self::Surge),
             "resource-die" => Ok(Self::ResourceDie),
             _ => Err("invalid value".into()),
@@ -42351,21 +41263,7 @@ impl ::std::convert::TryFrom<::std::string::String> for SequenceEffectType {
 ///    },
 ///    "counts_as_move": {
 ///      "description": "Being set up this way counts as having made this move this turn.",
-///      "enum": [
-///        "normal",
-///        "advance",
-///        "fall-back",
-///        "charge",
-///        "pile-in",
-///        "consolidation",
-///        "surge",
-///        "scout",
-///        "ingress",
-///        "disembark",
-///        "embark",
-///        "pulse-jet",
-///        "remain-stationary"
-///      ]
+///      "$ref": "#/$defs/movement-kind"
 ///    },
 ///    "detach": {
 ///      "const": true
@@ -42549,7 +41447,7 @@ pub struct SetUpEffectModifier {
     pub away_from: ::std::vec::Vec<PlacementAway>,
     ///Being set up this way counts as having made this move this turn.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub counts_as_move: ::std::option::Option<SetUpEffectModifierCountsAsMove>,
+    pub counts_as_move: ::std::option::Option<MovementKind>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub detach: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -42591,138 +41489,6 @@ pub struct SetUpEffectModifier {
     ///Wounds the model has when it is set up: a number or dice expression, full (all of its wounds) or half-starting (half of its starting number of wounds).
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub wounds_remaining: ::std::option::Option<SetUpEffectModifierWoundsRemaining>,
-}
-///Being set up this way counts as having made this move this turn.
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "description": "Being set up this way counts as having made this move this turn.",
-///  "enum": [
-///    "normal",
-///    "advance",
-///    "fall-back",
-///    "charge",
-///    "pile-in",
-///    "consolidation",
-///    "surge",
-///    "scout",
-///    "ingress",
-///    "disembark",
-///    "embark",
-///    "pulse-jet",
-///    "remain-stationary"
-///  ]
-///}
-/// ```
-/// </details>
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum SetUpEffectModifierCountsAsMove {
-    #[serde(rename = "normal")]
-    Normal,
-    #[serde(rename = "advance")]
-    Advance,
-    #[serde(rename = "fall-back")]
-    FallBack,
-    #[serde(rename = "charge")]
-    Charge,
-    #[serde(rename = "pile-in")]
-    PileIn,
-    #[serde(rename = "consolidation")]
-    Consolidation,
-    #[serde(rename = "surge")]
-    Surge,
-    #[serde(rename = "scout")]
-    Scout,
-    #[serde(rename = "ingress")]
-    Ingress,
-    #[serde(rename = "disembark")]
-    Disembark,
-    #[serde(rename = "embark")]
-    Embark,
-    #[serde(rename = "pulse-jet")]
-    PulseJet,
-    #[serde(rename = "remain-stationary")]
-    RemainStationary,
-}
-impl ::std::fmt::Display for SetUpEffectModifierCountsAsMove {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Normal => f.write_str("normal"),
-            Self::Advance => f.write_str("advance"),
-            Self::FallBack => f.write_str("fall-back"),
-            Self::Charge => f.write_str("charge"),
-            Self::PileIn => f.write_str("pile-in"),
-            Self::Consolidation => f.write_str("consolidation"),
-            Self::Surge => f.write_str("surge"),
-            Self::Scout => f.write_str("scout"),
-            Self::Ingress => f.write_str("ingress"),
-            Self::Disembark => f.write_str("disembark"),
-            Self::Embark => f.write_str("embark"),
-            Self::PulseJet => f.write_str("pulse-jet"),
-            Self::RemainStationary => f.write_str("remain-stationary"),
-        }
-    }
-}
-impl ::std::str::FromStr for SetUpEffectModifierCountsAsMove {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "normal" => Ok(Self::Normal),
-            "advance" => Ok(Self::Advance),
-            "fall-back" => Ok(Self::FallBack),
-            "charge" => Ok(Self::Charge),
-            "pile-in" => Ok(Self::PileIn),
-            "consolidation" => Ok(Self::Consolidation),
-            "surge" => Ok(Self::Surge),
-            "scout" => Ok(Self::Scout),
-            "ingress" => Ok(Self::Ingress),
-            "disembark" => Ok(Self::Disembark),
-            "embark" => Ok(Self::Embark),
-            "pulse-jet" => Ok(Self::PulseJet),
-            "remain-stationary" => Ok(Self::RemainStationary),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for SetUpEffectModifierCountsAsMove {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String>
-for SetUpEffectModifierCountsAsMove {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String> for SetUpEffectModifierCountsAsMove {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
 }
 ///`SetUpEffectModifierFrom`
 ///
@@ -47683,23 +46449,7 @@ impl ::std::convert::TryFrom<::std::string::String> for Stat {
 ///      ]
 ///    },
 ///    "stat": {
-///      "enum": [
-///        "M",
-///        "T",
-///        "Sv",
-///        "W",
-///        "Ld",
-///        "OC",
-///        "A",
-///        "WS",
-///        "BS",
-///        "S",
-///        "AP",
-///        "D",
-///        "Range",
-///        "detection-range",
-///        "psyker-level"
-///      ]
+///      "$ref": "#/$defs/stat"
 ///    },
 ///    "value": {
 ///      "$ref": "#/$defs/quantity"
@@ -47722,7 +46472,7 @@ pub struct StatModifierEffectModifier {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub minimum: ::std::option::Option<f64>,
     pub operation: StatModifierEffectModifierOperation,
-    pub stat: StatModifierEffectModifierStat,
+    pub stat: Stat,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub value: ::std::option::Option<Quantity>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -47823,137 +46573,6 @@ for StatModifierEffectModifierOperation {
 }
 impl ::std::convert::TryFrom<::std::string::String>
 for StatModifierEffectModifierOperation {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///`StatModifierEffectModifierStat`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "enum": [
-///    "M",
-///    "T",
-///    "Sv",
-///    "W",
-///    "Ld",
-///    "OC",
-///    "A",
-///    "WS",
-///    "BS",
-///    "S",
-///    "AP",
-///    "D",
-///    "Range",
-///    "detection-range",
-///    "psyker-level"
-///  ]
-///}
-/// ```
-/// </details>
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum StatModifierEffectModifierStat {
-    M,
-    T,
-    Sv,
-    W,
-    Ld,
-    #[serde(rename = "OC")]
-    Oc,
-    A,
-    #[serde(rename = "WS")]
-    Ws,
-    #[serde(rename = "BS")]
-    Bs,
-    S,
-    #[serde(rename = "AP")]
-    Ap,
-    D,
-    Range,
-    #[serde(rename = "detection-range")]
-    DetectionRange,
-    #[serde(rename = "psyker-level")]
-    PsykerLevel,
-}
-impl ::std::fmt::Display for StatModifierEffectModifierStat {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::M => f.write_str("M"),
-            Self::T => f.write_str("T"),
-            Self::Sv => f.write_str("Sv"),
-            Self::W => f.write_str("W"),
-            Self::Ld => f.write_str("Ld"),
-            Self::Oc => f.write_str("OC"),
-            Self::A => f.write_str("A"),
-            Self::Ws => f.write_str("WS"),
-            Self::Bs => f.write_str("BS"),
-            Self::S => f.write_str("S"),
-            Self::Ap => f.write_str("AP"),
-            Self::D => f.write_str("D"),
-            Self::Range => f.write_str("Range"),
-            Self::DetectionRange => f.write_str("detection-range"),
-            Self::PsykerLevel => f.write_str("psyker-level"),
-        }
-    }
-}
-impl ::std::str::FromStr for StatModifierEffectModifierStat {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "M" => Ok(Self::M),
-            "T" => Ok(Self::T),
-            "Sv" => Ok(Self::Sv),
-            "W" => Ok(Self::W),
-            "Ld" => Ok(Self::Ld),
-            "OC" => Ok(Self::Oc),
-            "A" => Ok(Self::A),
-            "WS" => Ok(Self::Ws),
-            "BS" => Ok(Self::Bs),
-            "S" => Ok(Self::S),
-            "AP" => Ok(Self::Ap),
-            "D" => Ok(Self::D),
-            "Range" => Ok(Self::Range),
-            "detection-range" => Ok(Self::DetectionRange),
-            "psyker-level" => Ok(Self::PsykerLevel),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for StatModifierEffectModifierStat {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String> for StatModifierEffectModifierStat {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String> for StatModifierEffectModifierStat {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,
@@ -51396,12 +50015,10 @@ pub struct TerrainTemplateUpperFloor {
 ///      "minLength": 1
 ///    },
 ///    "test": {
-///      "enum": [
-///        "battle-shock",
-///        "leadership",
-///        "hazard",
-///        "desperate-escape"
-///      ]
+///      "not": {
+///        "const": "psychic"
+///      },
+///      "$ref": "#/$defs/test-kind"
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -51497,11 +50114,13 @@ impl<'de> ::serde::Deserialize<'de> for TestEffectModifierPer {
 ///
 /// ```json
 ///{
+///  "type": "string",
 ///  "enum": [
 ///    "battle-shock",
 ///    "leadership",
 ///    "hazard",
-///    "desperate-escape"
+///    "desperate-escape",
+///    "psychic"
 ///  ]
 ///}
 /// ```
@@ -51527,6 +50146,8 @@ pub enum TestEffectModifierTest {
     Hazard,
     #[serde(rename = "desperate-escape")]
     DesperateEscape,
+    #[serde(rename = "psychic")]
+    Psychic,
 }
 impl ::std::fmt::Display for TestEffectModifierTest {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
@@ -51535,6 +50156,7 @@ impl ::std::fmt::Display for TestEffectModifierTest {
             Self::Leadership => f.write_str("leadership"),
             Self::Hazard => f.write_str("hazard"),
             Self::DesperateEscape => f.write_str("desperate-escape"),
+            Self::Psychic => f.write_str("psychic"),
         }
     }
 }
@@ -51548,6 +50170,7 @@ impl ::std::str::FromStr for TestEffectModifierTest {
             "leadership" => Ok(Self::Leadership),
             "hazard" => Ok(Self::Hazard),
             "desperate-escape" => Ok(Self::DesperateEscape),
+            "psychic" => Ok(Self::Psychic),
             _ => Err("invalid value".into()),
         }
     }
@@ -51589,11 +50212,13 @@ impl ::std::convert::TryFrom<::std::string::String> for TestEffectModifierTest {
 ///  ],
 ///  "properties": {
 ///    "test": {
-///      "enum": [
-///        "battle-shock",
-///        "leadership",
-///        "desperate-escape"
-///      ]
+///      "not": {
+///        "enum": [
+///          "hazard",
+///          "psychic"
+///        ]
+///      },
+///      "$ref": "#/$defs/test-kind"
 ///    },
 ///    "window": {
 ///      "enum": [
@@ -51619,6 +50244,7 @@ pub struct TestExemptionEffectModifier {
 ///
 /// ```json
 ///{
+///  "type": "string",
 ///  "enum": [
 ///    "battle-shock",
 ///    "leadership",
@@ -53022,11 +51648,7 @@ impl ::std::convert::TryFrom<::std::string::String> for TransportOccupancySubjec
 ///          "uniqueItems": true
 ///        },
 ///        "owner": {
-///          "type": "string",
-///          "enum": [
-///            "friendly",
-///            "enemy"
-///          ]
+///          "$ref": "#/$defs/definite-owner"
 ///        }
 ///      },
 ///      "additionalProperties": false
@@ -53381,11 +52003,7 @@ pub struct TriggerProximity {
 ///      "uniqueItems": true
 ///    },
 ///    "owner": {
-///      "type": "string",
-///      "enum": [
-///        "friendly",
-///        "enemy"
-///      ]
+///      "$ref": "#/$defs/definite-owner"
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -53398,7 +52016,7 @@ pub struct TriggerSourceAbility {
     pub ability_id: EntityId,
     ///All keywords required on the unit using the named source ability, not on the selected target.
     pub keywords: Vec<TriggerSourceAbilityKeywordsItem>,
-    pub owner: TriggerSourceAbilityOwner,
+    pub owner: DefiniteOwner,
 }
 ///`TriggerSourceAbilityKeywordsItem`
 ///
@@ -53472,82 +52090,6 @@ impl<'de> ::serde::Deserialize<'de> for TriggerSourceAbilityKeywordsItem {
             .map_err(|e: self::error::ConversionError| {
                 <D::Error as ::serde::de::Error>::custom(e.to_string())
             })
-    }
-}
-///`TriggerSourceAbilityOwner`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "string",
-///  "enum": [
-///    "friendly",
-///    "enemy"
-///  ]
-///}
-/// ```
-/// </details>
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum TriggerSourceAbilityOwner {
-    #[serde(rename = "friendly")]
-    Friendly,
-    #[serde(rename = "enemy")]
-    Enemy,
-}
-impl ::std::fmt::Display for TriggerSourceAbilityOwner {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Friendly => f.write_str("friendly"),
-            Self::Enemy => f.write_str("enemy"),
-        }
-    }
-}
-impl ::std::str::FromStr for TriggerSourceAbilityOwner {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "friendly" => Ok(Self::Friendly),
-            "enemy" => Ok(Self::Enemy),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for TriggerSourceAbilityOwner {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String> for TriggerSourceAbilityOwner {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String> for TriggerSourceAbilityOwner {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
     }
 }
 ///A unit datasheet entry with stat profiles and point costs.
@@ -60598,8 +59140,8 @@ pub mod defaults {
     pub(super) fn composed_feature_mirror() -> super::ComposedFeatureMirror {
         super::ComposedFeatureMirror::None
     }
-    pub(super) fn dice_gated_effect_comparison() -> super::DiceGatedEffectComparison {
-        super::DiceGatedEffectComparison::Gte
+    pub(super) fn dice_gated_effect_comparison() -> super::Comparison {
+        super::Comparison::Gte
     }
     pub(super) fn faction_keyword_limits_item_mode() -> super::FactionKeywordLimitsItemMode {
         super::FactionKeywordLimitsItemMode::Units

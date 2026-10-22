@@ -1359,7 +1359,7 @@
             "channelling",
             "deadly-demise",
             "attacks",
-            "normal-move",
+            "normal",
             "surge",
             "resource-die"
           ]
@@ -1676,6 +1676,13 @@
           "const": "closest-enemy-model"
         }
       }
+    },
+    "definite-owner": {
+      "$ref": "#/$defs/owner",
+      "not": {
+        "const": "any"
+      },
+      "description": "A definite player: friendly or enemy (an owner other than any)."
     },
     "game-version-ref": {
       "title": "Game Version Reference",
@@ -5062,11 +5069,7 @@
               "$ref": "#/$defs/entity-id"
             },
             "owner": {
-              "type": "string",
-              "enum": [
-                "friendly",
-                "enemy"
-              ]
+              "$ref": "#/$defs/definite-owner"
             },
             "keywords": {
               "type": "array",
@@ -6017,10 +6020,7 @@
                       "$ref": "#/$defs/entity-id"
                     },
                     "owner": {
-                      "enum": [
-                        "friendly",
-                        "enemy"
-                      ]
+                      "$ref": "#/$defs/definite-owner"
                     }
                   },
                   "required": [
@@ -6028,10 +6028,13 @@
                   ]
                 },
                 "at": {
-                  "enum": [
-                    "now",
-                    "opponent-previous-turn-end"
-                  ]
+                  "$ref": "#/$defs/snapshot",
+                  "not": {
+                    "enum": [
+                      "phase-start",
+                      "turn-start"
+                    ]
+                  }
                 },
                 "transport": {
                   "$ref": "#/$defs/unit-ref",
@@ -6385,10 +6388,7 @@
               "additionalProperties": false,
               "properties": {
                 "by": {
-                  "enum": [
-                    "friendly",
-                    "enemy"
-                  ]
+                  "$ref": "#/$defs/definite-owner"
                 },
                 "objective": {
                   "$ref": "#/$defs/objective-filter"
@@ -6405,10 +6405,7 @@
                   ],
                   "properties": {
                     "owner": {
-                      "enum": [
-                        "friendly",
-                        "enemy"
-                      ]
+                      "$ref": "#/$defs/definite-owner"
                     },
                     "comparison": {
                       "$ref": "#/$defs/comparison"
@@ -6766,10 +6763,7 @@
                       "$ref": "#/$defs/entity-id"
                     },
                     "owner": {
-                      "enum": [
-                        "friendly",
-                        "enemy"
-                      ]
+                      "$ref": "#/$defs/definite-owner"
                     }
                   },
                   "required": [
@@ -6803,10 +6797,7 @@
               "additionalProperties": false,
               "properties": {
                 "side": {
-                  "enum": [
-                    "friendly",
-                    "enemy"
-                  ]
+                  "$ref": "#/$defs/definite-owner"
                 },
                 "count": {
                   "$ref": "#/$defs/count-bounds"
@@ -7132,10 +7123,7 @@
               ],
               "properties": {
                 "owner": {
-                  "enum": [
-                    "friendly",
-                    "enemy"
-                  ]
+                  "$ref": "#/$defs/definite-owner"
                 },
                 "state": {
                   "const": "honoured"
@@ -7599,23 +7587,7 @@
               "additionalProperties": false,
               "properties": {
                 "stat": {
-                  "enum": [
-                    "M",
-                    "T",
-                    "Sv",
-                    "W",
-                    "Ld",
-                    "OC",
-                    "A",
-                    "WS",
-                    "BS",
-                    "S",
-                    "AP",
-                    "D",
-                    "Range",
-                    "detection-range",
-                    "psyker-level"
-                  ]
+                  "$ref": "#/$defs/stat"
                 },
                 "operation": {
                   "enum": [
@@ -7684,23 +7656,7 @@
                 "stats": {
                   "type": "array",
                   "items": {
-                    "enum": [
-                      "M",
-                      "T",
-                      "Sv",
-                      "W",
-                      "Ld",
-                      "OC",
-                      "A",
-                      "WS",
-                      "BS",
-                      "S",
-                      "AP",
-                      "D",
-                      "Range",
-                      "detection-range",
-                      "psyker-level"
-                    ]
+                    "$ref": "#/$defs/stat"
                   },
                   "minItems": 1,
                   "uniqueItems": true
@@ -8591,21 +8547,7 @@
                   "$ref": "#/$defs/entity-id"
                 },
                 "counts_as_move": {
-                  "enum": [
-                    "normal",
-                    "advance",
-                    "fall-back",
-                    "charge",
-                    "pile-in",
-                    "consolidation",
-                    "surge",
-                    "scout",
-                    "ingress",
-                    "disembark",
-                    "embark",
-                    "pulse-jet",
-                    "remain-stationary"
-                  ],
+                  "$ref": "#/$defs/movement-kind",
                   "description": "Doing so counts as having made this move this turn (a disembark counting as a Normal move)."
                 },
                 "consumes_shared_use": {
@@ -8887,12 +8829,16 @@
                       "$ref": "#/$defs/unit-ref"
                     },
                     "comparison": {
-                      "enum": [
-                        "gte",
-                        "lte"
-                      ],
+                      "$ref": "#/$defs/comparison",
                       "default": "gte",
-                      "description": "gte: a die at or above threshold succeeds (\"for each 5+\"); lte: a die at or below it (\"for each 1\")."
+                      "description": "gte: a die at or above threshold succeeds (\"for each 5+\"); lte: a die at or below it (\"for each 1\").",
+                      "not": {
+                        "enum": [
+                          "gt",
+                          "lt",
+                          "eq"
+                        ]
+                      }
                     },
                     "for_each": {
                       "$ref": "#/$defs/unit-selector",
@@ -9652,20 +9598,10 @@
               "additionalProperties": false,
               "properties": {
                 "move_type": {
-                  "enum": [
-                    "normal",
-                    "advance",
-                    "fall-back",
-                    "charge",
-                    "pile-in",
-                    "consolidation",
-                    "surge",
-                    "scout",
-                    "ingress",
-                    "disembark",
-                    "embark",
-                    "pulse-jet"
-                  ]
+                  "$ref": "#/$defs/movement-kind",
+                  "not": {
+                    "const": "remain-stationary"
+                  }
                 },
                 "distance": {
                   "$ref": "#/$defs/quantity"
@@ -9746,21 +9682,7 @@
                   "description": "allow_engagement is bound to the enemy unit the move ends nearest (ends_nearest.of): models may end within Engagement Range of that unit. Needs ends_nearest."
                 },
                 "counts_as_move": {
-                  "enum": [
-                    "normal",
-                    "advance",
-                    "fall-back",
-                    "charge",
-                    "pile-in",
-                    "consolidation",
-                    "surge",
-                    "scout",
-                    "ingress",
-                    "disembark",
-                    "embark",
-                    "pulse-jet",
-                    "remain-stationary"
-                  ],
+                  "$ref": "#/$defs/movement-kind",
                   "description": "The move counts as this kind of move for rules that check what the unit did this turn."
                 },
                 "ends_within": {
@@ -9826,20 +9748,10 @@
                 "applies_to_moves": {
                   "type": "array",
                   "items": {
-                    "enum": [
-                      "normal",
-                      "advance",
-                      "fall-back",
-                      "charge",
-                      "pile-in",
-                      "consolidation",
-                      "surge",
-                      "scout",
-                      "ingress",
-                      "disembark",
-                      "embark",
-                      "pulse-jet"
-                    ]
+                    "$ref": "#/$defs/movement-kind",
+                    "not": {
+                      "const": "remain-stationary"
+                    }
                   },
                   "minItems": 1,
                   "uniqueItems": true
@@ -10100,21 +10012,7 @@
                   "const": true
                 },
                 "counts_as_move": {
-                  "enum": [
-                    "normal",
-                    "advance",
-                    "fall-back",
-                    "charge",
-                    "pile-in",
-                    "consolidation",
-                    "surge",
-                    "scout",
-                    "ingress",
-                    "disembark",
-                    "embark",
-                    "pulse-jet",
-                    "remain-stationary"
-                  ],
+                  "$ref": "#/$defs/movement-kind",
                   "description": "Being set up this way counts as having made this move this turn."
                 },
                 "arrives": {
@@ -10428,12 +10326,10 @@
               "additionalProperties": false,
               "properties": {
                 "test": {
-                  "enum": [
-                    "battle-shock",
-                    "leadership",
-                    "hazard",
-                    "desperate-escape"
-                  ]
+                  "$ref": "#/$defs/test-kind",
+                  "not": {
+                    "const": "psychic"
+                  }
                 },
                 "modifier": {
                   "type": "integer"
@@ -11035,11 +10931,13 @@
               "additionalProperties": false,
               "properties": {
                 "test": {
-                  "enum": [
-                    "battle-shock",
-                    "leadership",
-                    "desperate-escape"
-                  ]
+                  "$ref": "#/$defs/test-kind",
+                  "not": {
+                    "enum": [
+                      "hazard",
+                      "psychic"
+                    ]
+                  }
                 },
                 "window": {
                   "enum": [
@@ -11115,23 +11013,7 @@
               "additionalProperties": false,
               "properties": {
                 "stat": {
-                  "enum": [
-                    "M",
-                    "T",
-                    "Sv",
-                    "W",
-                    "Ld",
-                    "OC",
-                    "A",
-                    "WS",
-                    "BS",
-                    "S",
-                    "AP",
-                    "D",
-                    "Range",
-                    "detection-range",
-                    "psyker-level"
-                  ]
+                  "$ref": "#/$defs/stat"
                 },
                 "rule": {
                   "enum": [
@@ -11445,14 +11327,7 @@
           "description": "Fixed threshold or model characteristic to compare against"
         },
         "comparison": {
-          "type": "string",
-          "enum": [
-            "gte",
-            "lte",
-            "gt",
-            "lt",
-            "eq"
-          ],
+          "$ref": "#/$defs/comparison",
           "default": "gte"
         },
         "on_success": {
@@ -11483,10 +11358,14 @@
           "type": "object",
           "properties": {
             "kind": {
-              "enum": [
-                "leadership",
-                "battle-shock"
-              ]
+              "$ref": "#/$defs/test-kind",
+              "not": {
+                "enum": [
+                  "hazard",
+                  "desperate-escape",
+                  "psychic"
+                ]
+              }
             },
             "subject": {
               "$ref": "#/$defs/unit-ref"

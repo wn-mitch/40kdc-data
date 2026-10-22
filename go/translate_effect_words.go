@@ -301,7 +301,7 @@ func resourceNoun(pool, label, count any) string {
 
 var rollNames = map[string]string{
 	"hit": "Hit", "wound": "Wound", "charge": "Charge", "damage": "Damage", "advance": "Advance", "save": "saving throw",
-	"leadership": "Leadership", "battle-shock": "Battle-shock", "desperate-escape": "Desperate Escape", "normal-move": "Normal move",
+	"leadership": "Leadership", "battle-shock": "Battle-shock", "desperate-escape": "Desperate Escape", "normal": "Normal move",
 	"deadly-demise": "Deadly Demise", "dark-pact": "Dark Pact", "blessings-of-khorne": "Blessings of Khorne", "resource-die": "pool die",
 	"manoeuvre": "Agile Manoeuvre", "channelling": "Channel the Warp",
 }
