@@ -4612,8 +4612,8 @@
     "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-astartes",
-    "detachment_id": "gladius-task-force",
-    "ability_type": "detachment",
+    "detachment_id": null,
+    "ability_type": "faction",
     "effect": {
       "type": "no-effect"
     },

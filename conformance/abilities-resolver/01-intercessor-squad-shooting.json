@@ -7,6 +7,7 @@
   "phase": "shooting",
   "expected": {
     "army": [
+      "combat-doctrines-adeptus-astartes",
       "librarius-adeptus-astartes",
       "special-move-types-adeptus-astartes",
       "transhuman-strategist-adeptus-astartes"
