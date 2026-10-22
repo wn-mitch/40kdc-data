@@ -272,6 +272,16 @@ describe("rules, army and the adopted D18 shapes", () => {
     expect(effectOk(orders({ keyword: "INFANTRY" }))).toBe(false);
     expect(effectOk(orders({ all_of: ["INFANTRY"] }))).toBe(true);
     expect(effectOk(orders({ all_of: ["X".repeat(65)] }))).toBe(false);
+  });
+
+  it("times a menu action with the shared scope-duration vocabulary", () => {
+    const menu = (duration: unknown) => ({
+      type: "resource-action-menu", menu_id: "m", pool_id: "p",
+      actions: [{ id: "hold", label: "Hold", when: { event: "move-ended", filter: { move_types: ["normal"] } }, cost: { pool_id: "p", amount: 1, resource_label: "token" }, duration, effect: { type: "no-effect" } }],
+    });
+    expect(effectOk(menu("until-end-of-your-next-turn"))).toBe(true);
+    expect(effectOk(menu("resolution"))).toBe(true);
+    expect(effectOk(menu("immediate"))).toBe(false);
     expect(conditionOk({ type: "guided", parameters: {} })).toBe(true);
     expect(conditionOk({ type: "matches", parameters: { subject: "defender", filter: { designated: "spotted" } } })).toBe(true);
   });

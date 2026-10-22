@@ -24992,13 +24992,7 @@ pub struct NamedAbilityRef {
 ///    "clears": {
 ///      "description": "When the named state is removed from the objective.",
 ///      "default": "permanent",
-///      "type": "string",
-///      "enum": [
-///        "after-resolving",
-///        "phase",
-///        "turn",
-///        "permanent"
-///      ]
+///      "$ref": "#/$defs/scope-duration"
 ///    },
 ///    "resolution": {
 ///      "$ref": "#/$defs/effect-node"
@@ -25017,102 +25011,9 @@ pub struct NamedAbilityRef {
 pub struct NamedObjectiveState {
     ///When the named state is removed from the objective.
     #[serde(default = "defaults::named_objective_state_clears")]
-    pub clears: NamedObjectiveStateClears,
+    pub clears: ScopeDuration,
     pub resolution: EffectNode,
     pub state_label: NamedObjectiveStateStateLabel,
-}
-///When the named state is removed from the objective.
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "description": "When the named state is removed from the objective.",
-///  "default": "permanent",
-///  "type": "string",
-///  "enum": [
-///    "after-resolving",
-///    "phase",
-///    "turn",
-///    "permanent"
-///  ]
-///}
-/// ```
-/// </details>
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum NamedObjectiveStateClears {
-    #[serde(rename = "after-resolving")]
-    AfterResolving,
-    #[serde(rename = "phase")]
-    Phase,
-    #[serde(rename = "turn")]
-    Turn,
-    #[serde(rename = "permanent")]
-    Permanent,
-}
-impl ::std::fmt::Display for NamedObjectiveStateClears {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::AfterResolving => f.write_str("after-resolving"),
-            Self::Phase => f.write_str("phase"),
-            Self::Turn => f.write_str("turn"),
-            Self::Permanent => f.write_str("permanent"),
-        }
-    }
-}
-impl ::std::str::FromStr for NamedObjectiveStateClears {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "after-resolving" => Ok(Self::AfterResolving),
-            "phase" => Ok(Self::Phase),
-            "turn" => Ok(Self::Turn),
-            "permanent" => Ok(Self::Permanent),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for NamedObjectiveStateClears {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String> for NamedObjectiveStateClears {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String> for NamedObjectiveStateClears {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::default::Default for NamedObjectiveStateClears {
-    fn default() -> Self {
-        NamedObjectiveStateClears::Permanent
-    }
 }
 ///`NamedObjectiveStateStateLabel`
 ///
@@ -32301,13 +32202,8 @@ impl ::std::convert::TryFrom<::std::string::String> for RegionRefTerritory {
 ///            "additionalProperties": false
 ///          },
 ///          "duration": {
-///            "type": "string",
-///            "enum": [
-///              "resolution",
-///              "phase",
-///              "turn"
-///            ],
-///            "$comment": "'immediate' is a one-off action whose only lasting result is the resulting board position; the describer MUST render it with no 'until ...' clause."
+///            "description": "How long the action's result lasts. resolution is a one-off action whose only lasting result is the board position it leaves; the describer renders it with no until clause.",
+///            "$ref": "#/$defs/scope-duration"
 ///          },
 ///          "effect": {
 ///            "$ref": "#/$defs/effect-node"
@@ -32492,13 +32388,8 @@ pub struct ResourceActionMenuEffect {
 ///      "additionalProperties": false
 ///    },
 ///    "duration": {
-///      "type": "string",
-///      "enum": [
-///        "resolution",
-///        "phase",
-///        "turn"
-///      ],
-///      "$comment": "'immediate' is a one-off action whose only lasting result is the resulting board position; the describer MUST render it with no 'until ...' clause."
+///      "description": "How long the action's result lasts. resolution is a one-off action whose only lasting result is the board position it leaves; the describer renders it with no until clause.",
+///      "$ref": "#/$defs/scope-duration"
 ///    },
 ///    "effect": {
 ///      "$ref": "#/$defs/effect-node"
@@ -32564,8 +32455,9 @@ pub struct ResourceActionMenuEffect {
 #[serde(deny_unknown_fields)]
 pub struct ResourceActionMenuEffectActionsItem {
     pub cost: ResourceActionMenuEffectActionsItemCost,
+    ///How long the action's result lasts. resolution is a one-off action whose only lasting result is the board position it leaves; the describer renders it with no until clause.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub duration: ::std::option::Option<ResourceActionMenuEffectActionsItemDuration>,
+    pub duration: ::std::option::Option<ScopeDuration>,
     pub effect: EffectNode,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub eligibility: ::std::option::Option<
@@ -32768,90 +32660,6 @@ for ResourceActionMenuEffectActionsItemCostResourceLabel {
             .map_err(|e: self::error::ConversionError| {
                 <D::Error as ::serde::de::Error>::custom(e.to_string())
             })
-    }
-}
-///`ResourceActionMenuEffectActionsItemDuration`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "string",
-///  "enum": [
-///    "resolution",
-///    "phase",
-///    "turn"
-///  ],
-///  "$comment": "'immediate' is a one-off action whose only lasting result is the resulting board position; the describer MUST render it with no 'until ...' clause."
-///}
-/// ```
-/// </details>
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum ResourceActionMenuEffectActionsItemDuration {
-    #[serde(rename = "resolution")]
-    Resolution,
-    #[serde(rename = "phase")]
-    Phase,
-    #[serde(rename = "turn")]
-    Turn,
-}
-impl ::std::fmt::Display for ResourceActionMenuEffectActionsItemDuration {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Resolution => f.write_str("resolution"),
-            Self::Phase => f.write_str("phase"),
-            Self::Turn => f.write_str("turn"),
-        }
-    }
-}
-impl ::std::str::FromStr for ResourceActionMenuEffectActionsItemDuration {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "resolution" => Ok(Self::Resolution),
-            "phase" => Ok(Self::Phase),
-            "turn" => Ok(Self::Turn),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for ResourceActionMenuEffectActionsItemDuration {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String>
-for ResourceActionMenuEffectActionsItemDuration {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for ResourceActionMenuEffectActionsItemDuration {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
     }
 }
 ///`ResourceActionMenuEffectActionsItemEligibility`
@@ -58305,8 +58113,8 @@ pub mod defaults {
     pub(super) fn mortal_wounds_effect_modifier_roll_comparison() -> super::MortalWoundsEffectModifierRollComparison {
         super::MortalWoundsEffectModifierRollComparison::Gte
     }
-    pub(super) fn named_objective_state_clears() -> super::NamedObjectiveStateClears {
-        super::NamedObjectiveStateClears::Permanent
+    pub(super) fn named_objective_state_clears() -> super::ScopeDuration {
+        super::ScopeDuration::Permanent
     }
     pub(super) fn persistent_battlefield_marker_state_consume() -> super::PersistentBattlefieldMarkerStateConsume {
         super::PersistentBattlefieldMarkerStateConsume::Never

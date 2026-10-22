@@ -3900,7 +3900,7 @@ class Action1(TypedDict):
     cost: Cost1
     eligibility: NotRequired[Eligibility]
     usage: NotRequired[Usage1]
-    duration: NotRequired[Literal["resolution", "phase", "turn"]]
+    duration: NotRequired[ScopeDuration]
     effect: EffectNode
 
 
@@ -3961,7 +3961,7 @@ class NamedRegionConsumer(TypedDict):
 class NamedObjectiveState(TypedDict):
     state_label: str
     resolution: EffectNode
-    clears: NotRequired[Literal["after-resolving", "phase", "turn", "permanent"]]
+    clears: NotRequired[ScopeDuration]
 
 
 class NamedRegionState(TypedDict):

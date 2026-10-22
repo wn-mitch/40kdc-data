@@ -3862,7 +3862,34 @@ export interface ResourceActionMenuEffect {
       usage?: {
         repeatable_if_different_unit?: boolean;
       };
-      duration?: "resolution" | "phase" | "turn";
+      /**
+       * How long an effect, a part or a designation lasts; resolution lasts only while resolving this activation; while-leading ends when the bearer stops leading; after-resolving ends after this activation resolves. The remaining values are phase, turn, battle-round, battle, explicit phase edges, attack-sequence, permanent, and domain-specific expiry windows.
+       */
+      duration?:
+        | "phase"
+        | "turn"
+        | "battle-round"
+        | "battle"
+        | "until-next-command-phase"
+        | "until-next-movement-phase"
+        | "until-next-battle-round"
+        | "until-start-next-turn"
+        | "one-use"
+        | "permanent"
+        | "attack-sequence"
+        | "resolution"
+        | "while-leading"
+        | "after-resolving"
+        | "until-next-shooting-phase"
+        | "until-end-of-your-next-turn"
+        | "until-end-of-opponent-next-turn"
+        | "until-this-unit-has-shot"
+        | "control-lost"
+        | "until-end-of-your-next-fight-phase"
+        | "until-end-of-your-next-shooting-phase"
+        | "until-end-of-your-next-movement-phase"
+        | "until-end-of-opponent-next-movement-phase"
+        | "until-start-of-opponent-next-command-phase";
       effect: EffectNode;
     },
     ...{
@@ -3885,7 +3912,34 @@ export interface ResourceActionMenuEffect {
       usage?: {
         repeatable_if_different_unit?: boolean;
       };
-      duration?: "resolution" | "phase" | "turn";
+      /**
+       * How long an effect, a part or a designation lasts; resolution lasts only while resolving this activation; while-leading ends when the bearer stops leading; after-resolving ends after this activation resolves. The remaining values are phase, turn, battle-round, battle, explicit phase edges, attack-sequence, permanent, and domain-specific expiry windows.
+       */
+      duration?:
+        | "phase"
+        | "turn"
+        | "battle-round"
+        | "battle"
+        | "until-next-command-phase"
+        | "until-next-movement-phase"
+        | "until-next-battle-round"
+        | "until-start-next-turn"
+        | "one-use"
+        | "permanent"
+        | "attack-sequence"
+        | "resolution"
+        | "while-leading"
+        | "after-resolving"
+        | "until-next-shooting-phase"
+        | "until-end-of-your-next-turn"
+        | "until-end-of-opponent-next-turn"
+        | "until-this-unit-has-shot"
+        | "control-lost"
+        | "until-end-of-your-next-fight-phase"
+        | "until-end-of-your-next-shooting-phase"
+        | "until-end-of-your-next-movement-phase"
+        | "until-end-of-opponent-next-movement-phase"
+        | "until-start-of-opponent-next-command-phase";
       effect: EffectNode;
     }[]
   ];
@@ -7281,9 +7335,33 @@ export interface NamedObjectiveState {
   state_label: string;
   resolution: EffectNode;
   /**
-   * When the named state is removed from the objective.
+   * How long an effect, a part or a designation lasts; resolution lasts only while resolving this activation; while-leading ends when the bearer stops leading; after-resolving ends after this activation resolves. The remaining values are phase, turn, battle-round, battle, explicit phase edges, attack-sequence, permanent, and domain-specific expiry windows.
    */
-  clears?: "after-resolving" | "phase" | "turn" | "permanent";
+  clears?:
+    | "phase"
+    | "turn"
+    | "battle-round"
+    | "battle"
+    | "until-next-command-phase"
+    | "until-next-movement-phase"
+    | "until-next-battle-round"
+    | "until-start-next-turn"
+    | "one-use"
+    | "permanent"
+    | "attack-sequence"
+    | "resolution"
+    | "while-leading"
+    | "after-resolving"
+    | "until-next-shooting-phase"
+    | "until-end-of-your-next-turn"
+    | "until-end-of-opponent-next-turn"
+    | "until-this-unit-has-shot"
+    | "control-lost"
+    | "until-end-of-your-next-fight-phase"
+    | "until-end-of-your-next-shooting-phase"
+    | "until-end-of-your-next-movement-phase"
+    | "until-end-of-opponent-next-movement-phase"
+    | "until-start-of-opponent-next-command-phase";
 }
 /**
  * A marker placed on the battlefield that persists after placement: matching units may set up near it, using it may consume it, and enemy proximity removes it. Distinct from `tracking-token`, which is a reminder co-located with a model rather than a placed battlefield object with its own lifecycle.

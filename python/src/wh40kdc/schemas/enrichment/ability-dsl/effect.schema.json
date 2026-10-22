@@ -6510,13 +6510,8 @@
                 }
               },
               "duration": {
-                "type": "string",
-                "enum": [
-                  "resolution",
-                  "phase",
-                  "turn"
-                ],
-                "$comment": "'immediate' is a one-off action whose only lasting result is the resulting board position; the describer MUST render it with no 'until ...' clause."
+                "$ref": "scope.schema.json#/$defs/scope-duration",
+                "description": "How long the action's result lasts. resolution is a one-off action whose only lasting result is the board position it leaves; the describer renders it with no until clause."
               },
               "effect": {
                 "$ref": "#/$defs/effect-node"
@@ -6826,13 +6821,7 @@
           "$ref": "#/$defs/effect-node"
         },
         "clears": {
-          "type": "string",
-          "enum": [
-            "after-resolving",
-            "phase",
-            "turn",
-            "permanent"
-          ],
+          "$ref": "scope.schema.json#/$defs/scope-duration",
           "default": "permanent",
           "description": "When the named state is removed from the objective."
         }
