@@ -94,7 +94,7 @@ pub mod error {
 ///      "type": "string"
 ///    },
 ///    "detachment_id": {
-///      "description": "For detachment/enhancement/stratagem-type abilities, the associated detachment",
+///      "description": "The detachment a detachment-, enhancement- or stratagem-type ability belongs to. On a faction-type ability it names the Combat Patrol detachment whose box prints this copy of an army rule: the copy applies only in that detachment, where `interactions` entries of type `replaces` name the codex army rules it stands in for. Null on a codex army rule, which applies in every detachment except a Combat Patrol detachment whose `detachment_rule_ids` omit it.",
 ///      "oneOf": [
 ///        {
 ///          "$ref": "#/$defs/entity-id"
@@ -216,7 +216,7 @@ pub struct Ability {
     pub behavior: ::std::option::Option<AbilityBehavior>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub community_notes: ::std::option::Option<::std::string::String>,
-    ///For detachment/enhancement/stratagem-type abilities, the associated detachment
+    ///The detachment a detachment-, enhancement- or stratagem-type ability belongs to. On a faction-type ability it names the Combat Patrol detachment whose box prints this copy of an army rule: the copy applies only in that detachment, where `interactions` entries of type `replaces` name the codex army rules it stands in for. Null on a codex army rule, which applies in every detachment except a Combat Patrol detachment whose `detachment_rule_ids` omit it.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub detachment_id: ::std::option::Option<EntityId>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]

@@ -7161,7 +7161,7 @@ export interface AbilityDSLEntry {
    */
   faction_id?: EntityId | null;
   /**
-   * For detachment/enhancement/stratagem-type abilities, the associated detachment
+   * The detachment a detachment-, enhancement- or stratagem-type ability belongs to. On a faction-type ability it names the Combat Patrol detachment whose box prints this copy of an army rule: the copy applies only in that detachment, where `interactions` entries of type `replaces` name the codex army rules it stands in for. Null on a codex army rule, which applies in every detachment except a Combat Patrol detachment whose `detachment_rule_ids` omit it.
    */
   detachment_id?: EntityId | null;
   ability_type?: "core" | "faction" | "detachment" | "unit" | "enhancement" | "stratagem";
