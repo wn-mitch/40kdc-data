@@ -856,9 +856,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "2b88b7e6e63e12e4708615691f71c0d039a4bb578f2369b8e75fc39fac421d2c",
+    "source_digest": "61b018fbf66c01219689a6fcf4119b90245e1829e521aad347ee4a3caf896982",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -872,54 +872,76 @@
             }
           },
           {
-            "type": "matches",
+            "type": "player-turn-is",
             "parameters": {
-              "filter": {
-                "all_of": [
-                  "PSYKER"
-                ]
-              },
-              "subject": "defender"
+              "turn": "your-turn"
             }
           }
         ]
       },
       "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "weapon-ability-grant",
-            "target": "this-unit",
-            "modifier": {
-              "keywords": [
-                {
-                  "keyword_id": "devastating-wounds"
-                }
-              ]
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy",
+            "within": {
+              "range": {
+                "inches": 18
+              },
+              "of": "this-unit"
+            },
+            "visible": {
+              "to": "this-model"
             }
           },
-          {
-            "type": "weapon-ability-grant",
-            "target": "this-unit",
-            "modifier": {
-              "keywords": [
-                {
-                  "keyword_id": "precision"
-                }
-              ]
-            }
+          "count": {
+            "min": 1,
+            "max": 1
           }
-        ]
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "designate",
+              "target": "selected-unit",
+              "modifier": {
+                "tag": "detected"
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "designated": "detected"
+                  }
+                }
+              },
+              "effect": {
+                "type": "stat-modifier",
+                "target": "selected-unit",
+                "modifier": {
+                  "stat": "detection-range",
+                  "operation": "add",
+                  "value": 3
+                }
+              }
+            }
+          ]
+        }
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "unit_ids": [
       "prosecutor-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "activated",
     "community_notes": "auto-generated, partial",
     "faction_id": "adeptus-custodes"
   },
