@@ -8,7 +8,8 @@
  * 1. **army** — faction-scoped abilities whose `ability_type` is `"faction"`
  *    and whose `faction_id` matches the input. One with a `detachment_id` (a
  *    Combat Patrol's own army rule) applies only in that detachment, and there
- *    drops each army rule it `replaces` (`interactions`).
+ *    drops each army rule it `replaces` (`interactions`). In a Combat Patrol
+ *    detachment only the army rules its `detachment_rule_ids` list apply.
  * 2. **detachment** — abilities authored against the detachment
  *    (`ability_type` is `"detachment"`, `detachment_id` matches).
  * 3. **detachment-stratagem** — stratagems on the detachment, each yielding
@@ -89,6 +90,7 @@ export function resolveEligibleAbilities(
   // 1. Army — faction-scoped abilities (faction rule + any other faction-typed). An army rule
   // with a `detachment_id` is a Combat Patrol box's own army rule: it applies only in that
   // detachment, and there it replaces each army rule it names with `interactions` `replaces`.
+  // A Combat Patrol detachment's `detachment_rule_ids` are its complete army-rule set.
   const replaced = replacedArmyRuleIds(dataset, factionId, [input.detachmentId]);
   for (const ability of dataset.abilities.byFaction(factionId)) {
     if (ability.raw.ability_type !== "faction") continue;
@@ -206,17 +208,33 @@ const rated = (rating: string | number | undefined): { rating?: string | number 
 /**
  * The army rules of `factionId` that the selected detachments' own army rules replace: a
  * faction-typed record with a `detachment_id` among `detachmentIds` (a Combat Patrol box's army
- * rule) drops each record its `interactions` name with type `replaces`. Callers that combine
- * several detachments pass all of them, so a rule replaced in one is not restored by another.
+ * rule) drops each record its `interactions` name with type `replaces`. A selected Combat Patrol
+ * detachment (`game_modes` includes `combat-patrol`) lists its complete army-rule set in
+ * `detachment_rule_ids`, so it also drops every faction-typed record it does not list. Callers
+ * that combine several detachments pass all of them, so a rule replaced in one is not restored by
+ * another.
  */
 export function replacedArmyRuleIds(dataset: Dataset, factionId: string, detachmentIds: readonly (string | undefined)[]): Set<string> {
   const out = new Set<string>();
-  for (const ability of dataset.abilities.byFaction(factionId)) {
-    if (ability.raw.ability_type !== "faction" || ability.raw.detachment_id == null) continue;
+  const army = dataset.abilities.byFaction(factionId).filter((ability) => ability.raw.ability_type === "faction");
+  for (const ability of army) {
+    if (ability.raw.detachment_id == null) continue;
     if (!detachmentIds.includes(ability.raw.detachment_id)) continue;
     for (const entry of ability.raw.interactions ?? []) if (entry.type === "replaces") out.add(entry.ability_ref);
   }
+  for (const detachmentId of detachmentIds) {
+    if (detachmentId === undefined) continue;
+    const detachment = dataset.detachments.getInFaction(detachmentId, factionId) ?? dataset.detachments.getAny(detachmentId);
+    if (!detachment || !isCombatPatrolDetachment(detachment)) continue;
+    const listed = new Set(detachment.detachment_rule_ids ?? []);
+    for (const ability of army) if (!listed.has(ability.id)) out.add(ability.id);
+  }
   return out;
+}
+
+/** True when a detachment is a Combat Patrol box's (`game_modes` includes `combat-patrol`). */
+export function isCombatPatrolDetachment(detachment: { game_modes?: readonly string[] | null }): boolean {
+  return (detachment.game_modes ?? []).includes("combat-patrol");
 }
 
 function phaseMatches(ability: AbilityView, phase: Phase): boolean {

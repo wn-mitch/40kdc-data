@@ -5,7 +5,8 @@ Resolution order — stable for snapshot tests:
 
 1. **army** — faction-scoped abilities whose ``ability_type`` is ``"faction"``. One with a
    ``detachment_id`` (a Combat Patrol's own army rule) applies only in that detachment, and
-   there drops each army rule it ``replaces`` (``interactions``).
+   there drops each army rule it ``replaces`` (``interactions``). In a Combat Patrol
+   detachment only the army rules its ``detachment_rule_ids`` list apply.
 2. **detachment** — abilities authored against the detachment.
 3. **detachment-stratagem** — stratagems on the detachment, each yielding the
    ability referenced by ``stratagem.ability_id`` (if any), when the combined
@@ -78,6 +79,11 @@ def resolve_eligible_abilities(
         and ability.raw.get("detachment_id") in (None, input.get("detachmentId"))
     ]
     replaced = {ref for ability in army for ref in _replaced_ability_ids(ability)}
+    # A Combat Patrol detachment's `detachment_rule_ids` are its complete army-rule set.
+    patrol = _combat_patrol_detachment(dataset, input.get("detachmentId"), faction_id or "")
+    if patrol is not None:
+        listed = set(patrol.get("detachment_rule_ids") or [])
+        replaced |= {ability.id for ability in army if ability.id not in listed}
     for ability in army:
         if ability.id in replaced:
             continue
@@ -210,6 +216,20 @@ def resolve_eligible_abilities(
             )
 
     return out
+
+
+def _combat_patrol_detachment(
+    dataset: Dataset, detachment_id: Any, faction_id: str
+) -> dict[str, Any] | None:
+    """The detachment ``detachment_id`` names when it is a Combat Patrol box's, else ``None``."""
+    if not isinstance(detachment_id, str) or not detachment_id:
+        return None
+    detachment = dataset.detachments.get_in_faction(
+        detachment_id, faction_id
+    ) or dataset.detachments.get_any(detachment_id)
+    if detachment is None or "combat-patrol" not in (detachment.get("game_modes") or []):
+        return None
+    return detachment
 
 
 def _replaced_ability_ids(ability: AbilityView) -> list[str]:

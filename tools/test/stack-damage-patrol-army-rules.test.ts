@@ -55,6 +55,34 @@ describe("Combat Patrol army rules in the damage matrix", () => {
   });
 });
 
+describe("Combat Patrol army-rule set in the damage matrix", () => {
+  // A Combat Patrol detachment's detachment_rule_ids are its complete army-rule set, so a codex army
+  // rule the patrol does not list (World Eaters' Pact of Blood in Frenzied Reavers) never applies there.
+  const worldEaters = resolveFactionContext(dataset, "world-eaters");
+  const weConfig = parseMatrixConfig(
+    { HC_FACTIONS: "world-eaters", HC_TARGETS: "geq-guardsmen", HC_PHASES: "fight", HC_OUTPUT: "patrol.json" },
+    { factionIds: new Set(["world-eaters"]), targetIds: ["geq-guardsmen"] },
+  );
+  const weSession = damageScoringSession({ dataset, config: weConfig, faction: worldEaters, target, phase: "fight" });
+  const ledgerIds = (detachmentIds: string[]) => {
+    const unit = unitInFaction(worldEaters, "khorne-berzerkers")!;
+    expect(unit).toBeDefined();
+    const best = weSession.optimiseLevers(emptySpec(worldEaters.id, [{ unit, role: "bodyguard" }], detachmentIds));
+    return buildLedger(weSession, best).filter((entry) => entry.side === "attacker").map((entry) => entry.abilityId);
+  };
+
+  it("offers the codex army rules in a matched-play detachment", () => {
+    expect(ledgerIds(["berzerker-warband"])).toEqual(expect.arrayContaining(["pact-of-blood-world-eaters", "blessings-of-khorne-world-eaters"]));
+  });
+
+  it("drops every codex army rule the patrol does not list", () => {
+    const ids = ledgerIds(["frenzied-reavers"]);
+    expect(ids).toContain("blessings-of-khorne-frenzied-reavers-world-eaters");
+    expect(ids).not.toContain("pact-of-blood-world-eaters");
+    expect(ids).not.toContain("blessings-of-khorne-world-eaters");
+  });
+});
+
 describe("Combat Patrol army-rule records", () => {
   // Every faction-typed record scoped to a detachment is a patrol's army rule: its detachment is a
   // Combat Patrol of the same faction that lists it, and what it replaces is that faction's army rule.

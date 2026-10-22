@@ -51,7 +51,7 @@ func resolveEligibleAbilities(ds *Dataset, input map[string]any, phase string) [
 
 	// 1. Army. One with a detachment_id (a Combat Patrol box's own army rule) applies only in
 	// that detachment, and there it replaces each army rule it names with an interactions entry
-	// of type "replaces".
+	// of type "replaces". In a Combat Patrol detachment only the army rules it lists apply.
 	army := []*AbilityView{}
 	replaced := map[string]bool{}
 	for _, ability := range ds.Abilities.ByFaction(factionID) {
@@ -66,6 +66,18 @@ func resolveEligibleAbilities(ds *Dataset, input map[string]any, phase string) [
 		for _, entryAny := range interactions {
 			if entry, ok := asMap(entryAny); ok && getStr(entry, "type") == "replaces" {
 				replaced[getStr(entry, "ability_ref")] = true
+			}
+		}
+	}
+	// A Combat Patrol detachment's detachment_rule_ids are its complete army-rule set.
+	if patrol, ok := ds.combatPatrolDetachment(getStr(input, "detachmentId"), factionID); ok {
+		listed := map[string]bool{}
+		for _, id := range getStrList(patrol, "detachment_rule_ids") {
+			listed[id] = true
+		}
+		for _, ability := range army {
+			if id := getStr(ability.Raw, "ability_id"); !listed[id] {
+				replaced[id] = true
 			}
 		}
 	}
@@ -279,4 +291,24 @@ func stratagemCanTarget(stratagem map[string]any, keywords map[string]bool) bool
 		}
 	}
 	return friendly == 0
+}
+
+// combatPatrolDetachment is the detachment detachmentID names (resolved within factionID first)
+// when it is a Combat Patrol box's: its game_modes include "combat-patrol".
+func (ds *Dataset) combatPatrolDetachment(detachmentID, factionID string) (map[string]any, bool) {
+	if detachmentID == "" {
+		return nil, false
+	}
+	detAny, ok := ds.Detachments.GetInFaction(detachmentID, factionID)
+	if !ok {
+		detAny, ok = ds.Detachments.GetAny(detachmentID)
+	}
+	if !ok {
+		return nil, false
+	}
+	det, ok := detAny.(map[string]any)
+	if !ok || !contains(getStrList(det, "game_modes"), "combat-patrol") {
+		return nil, false
+	}
+	return det, true
 }

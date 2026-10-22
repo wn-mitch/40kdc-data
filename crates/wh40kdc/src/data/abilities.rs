@@ -17,7 +17,7 @@ use crate::cruncher::from_dsl::{
     effect_to_buffs_with_duration, moment_gate, strip_nulls, EffectTranslation,
     TranslationPerspective,
 };
-use crate::{Ability, Phase, Unit};
+use crate::{Ability, GameModeId, Phase, Unit};
 
 /// Where an eligible ability comes from.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -218,7 +218,8 @@ impl Dataset {
         };
         // 1. Army: faction-typed abilities of the faction. One with a `detachment_id` (a Combat
         // Patrol box's own army rule) applies only in that detachment, and there it replaces each
-        // army rule it names with an `interactions` entry of type `replaces`.
+        // army rule it names with an `interactions` entry of type `replaces`. In a Combat Patrol
+        // detachment only the army rules it lists apply.
         let detachment = input.detachment_id.as_deref();
         let army: Vec<_> = self
             .abilities
@@ -230,12 +231,38 @@ impl Dataset {
                 Some(own) => Some(own.as_str()) == detachment,
             })
             .collect();
-        let replaced: HashSet<String> = army
+        let mut replaced: HashSet<String> = army
             .iter()
             .flat_map(|ability| ability.interactions.iter())
             .filter(|entry| json_str(&entry.type_) == "replaces")
             .map(|entry| entry.ability_ref.to_string())
             .collect();
+        // A Combat Patrol detachment's `detachment_rule_ids` are its complete army-rule set: every
+        // army rule it does not list leaves the `army` kind.
+        let patrol = detachment
+            .and_then(|id| {
+                self.detachments
+                    .get_in_faction(id, &faction_id)
+                    .or_else(|| self.detachments.get_any(id))
+            })
+            .filter(|d| {
+                d.game_modes
+                    .as_ref()
+                    .is_some_and(|modes| modes.contains(&GameModeId::CombatPatrol))
+            });
+        if let Some(patrol) = patrol {
+            let listed: HashSet<&str> = patrol
+                .detachment_rule_ids
+                .iter()
+                .flatten()
+                .map(|id| id.as_str())
+                .collect();
+            for ability in &army {
+                if !listed.contains(ability.ability_id.as_str()) {
+                    replaced.insert(ability.ability_id.to_string());
+                }
+            }
+        }
         for ability in army {
             if !replaced.contains(ability.ability_id.as_str()) {
                 c.push_phased(ability, EligibleAbilitySource::Army, None);
