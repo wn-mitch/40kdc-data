@@ -4,7 +4,7 @@ import { join } from "node:path";
 
 import { afterEach, describe, expect, it } from "vitest";
 
-import { DATASLATE_BY_DATA_VERSION, gameVersionForDataVersion } from "../src/mfm/dataslate.js";
+import { DATASLATE_BY_DATA_VERSION, DUMP_CONFIRMED_DATASLATES, gameVersionForDataVersion } from "../src/mfm/dataslate.js";
 import { changedKeys, weaponReason } from "../src/mfm/dataslates/evidence.js";
 import {
   abilityVerified,
@@ -36,6 +36,17 @@ describe("dump dataslate mapping", () => {
 
   it("is registered in the real game-versions.json", () => {
     expect(gameVersionForDataVersion(963)).toEqual(NOW);
+    expect(gameVersionForDataVersion(995)).toEqual({ edition: "11th", dataslate: "mfm-995" });
+  });
+
+  it("re-verifies a record stamped by an older dump against a newer one", () => {
+    const newer = { edition: "11th", dataslate: "mfm-995" };
+    expect(DUMP_CONFIRMED_DATASLATES.has("mfm-995")).toBe(true);
+    expect(stampAction(NOW, true, newer)).toEqual({ action: "promote", next: newer });
+    expect(stampAction(NOW, false, newer)).toEqual({
+      action: "demote",
+      next: { edition: "11th", dataslate: "pre-launch-provisional" },
+    });
   });
 });
 

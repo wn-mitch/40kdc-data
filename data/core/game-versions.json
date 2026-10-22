@@ -26,5 +26,12 @@
     "effective_date": "2026-09-30",
     "label": "Munitorum Field Manual data_version 963 (codex errata to 30 September 2026)",
     "supersedes": "codex-orks"
+  },
+  {
+    "edition": "11th",
+    "dataslate": "mfm-995",
+    "effective_date": "2026-10-14",
+    "label": "Munitorum Field Manual data_version 995 (Codex: Adeptus Custodes; errata to 14 October 2026)",
+    "supersedes": "mfm-963"
   }
 ]
