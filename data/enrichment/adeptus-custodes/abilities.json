@@ -74,27 +74,30 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "d849d40a55add854a695b44ef1b760daccb3c35f431f61f17773c249a69bb750",
+    "source_digest": "2b46a839e8fc8b08acdb0a3c0a843f3520a6532b140d475fe555d08320573b35",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "advance",
+            "result_scope": "any-result"
+          }
+        },
+        {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "charge",
+            "result_scope": "any-result"
+          }
         }
-      },
-      "effect": {
-        "type": "re-roll",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "charge",
-          "subset": "all-failures"
-        }
-      }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -103,7 +106,7 @@
       "blade-champion"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "activated",
     "faction_id": "adeptus-custodes"
   },
   {
@@ -318,9 +321,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "1dddb19219ee130fd6bacc3dfed28f3d50619977f081c1cc43aad4ff65bcc209",
+    "source_digest": "4cf406cb605ca8b9988b7e73923356844652142c9fe54c34e9c83b4f6b1a3026",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -743,25 +746,50 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "622cc9cbf568ce346c79f7803d67ba00f4930fa10fcd0f25d9e199e6f130e882",
+    "source_digest": "e73f4eeff36673e385ff8f4bc7f503ec9d01fff454a4ac4d353fca76e2f06f0e",
     "version": "2025-q3",
     "effect": {
-      "type": "mortal-wounds",
-      "target": "defender",
-      "modifier": {
-        "count": 2
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "move-ended",
+          "filter": {
+            "move_types": [
+              "charge"
+            ]
+          },
+          "window": "turn"
+        }
+      },
+      "effect": {
+        "type": "weapon-ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "keywords": [
+            {
+              "keyword_id": "sustained-hits",
+              "parameters": {
+                "value": 1
+              }
+            }
+          ],
+          "weapons": {
+            "type": "melee"
+          }
+        }
       }
     },
     "scope": {
-      "duration": "one-use"
+      "duration": "permanent"
     },
     "unit_ids": [
       "vertus-praetors"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
+    "behavior": "passive",
     "faction_id": "adeptus-custodes"
   },
   {

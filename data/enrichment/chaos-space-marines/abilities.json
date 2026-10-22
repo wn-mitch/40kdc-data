@@ -10479,31 +10479,38 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [],
     "faction_id": "chaos-space-marines",
     "detachment_id": "soulforged-warpack",
     "ability_type": "stratagem",
     "effect": {
-      "type": "stat-modifier",
-      "target": "this-unit",
-      "modifier": {
-        "stat": "AP",
-        "operation": "improve",
-        "value": 1
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "used",
+          "filter": {
+            "kind": "contract"
+          },
+          "window": "phase"
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "stat": "AP",
+          "operation": "improve",
+          "value": 1
+        }
       }
     },
     "scope": {
       "duration": "phase"
     },
-    "behavior": "reactive",
-    "trigger": {
-      "event": "used",
-      "filter": {
-        "kind": "contract"
-      }
-    },
+    "behavior": "activated",
     "source_digest": "d3b5ee81b7414f3c315c295836bf40f19ecbf9817c31c4556d1485ad6eb41e2b"
   },
   {
