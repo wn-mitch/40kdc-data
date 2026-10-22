@@ -705,8 +705,8 @@
     ]
   },
   {
-    "id": "vigilators",
-    "name": "Vigilators",
+    "id": "vigilator-squad",
+    "name": "Vigilator Squad",
     "faction_id": "adeptus-custodes",
     "profiles": [
       {
@@ -854,8 +854,8 @@
     ]
   },
   {
-    "id": "witchseekers",
-    "name": "Witchseekers",
+    "id": "witchseeker-squad",
+    "name": "Witchseeker Squad",
     "faction_id": "adeptus-custodes",
     "profiles": [
       {
@@ -1024,8 +1024,8 @@
     ]
   },
   {
-    "id": "custodian-guard",
-    "name": "Custodian Guard",
+    "id": "custodian-guard-sodality",
+    "name": "Custodian Guard Sodality",
     "faction_id": "adeptus-custodes",
     "role": "battleline",
     "profiles": [
@@ -1476,8 +1476,8 @@
     ]
   },
   {
-    "id": "agamatus-custodians",
-    "name": "Agamatus Custodians",
+    "id": "gyrfalcon-jetbike-sodality",
+    "name": "Gyrfalcon Jetbike Sodality",
     "faction_id": "adeptus-custodes",
     "profiles": [
       {
@@ -1983,8 +1983,8 @@
     ]
   },
   {
-    "id": "venatari-custodians",
-    "name": "Venatari Custodians",
+    "id": "venatari-with-verutum-lances",
+    "name": "Venatari with Verutum Lances",
     "faction_id": "adeptus-custodes",
     "profiles": [
       {
@@ -2160,8 +2160,8 @@
     ]
   },
   {
-    "id": "aquilon-custodians",
-    "name": "Aquilon Custodians",
+    "id": "aquilon-terminators-with-solarite-power-gauntlets",
+    "name": "Aquilon Terminators with Solarite Power Gauntlets",
     "faction_id": "adeptus-custodes",
     "profiles": [
       {
@@ -2404,8 +2404,8 @@
     ]
   },
   {
-    "id": "prosecutors",
-    "name": "Prosecutors",
+    "id": "prosecutor-squad",
+    "name": "Prosecutor Squad",
     "faction_id": "adeptus-custodes",
     "profiles": [
       {
@@ -2900,5 +2900,552 @@
         "id": "7938debf-5a7f-4aaa-8364-5a507b382091"
       }
     ]
+  },
+  {
+    "id": "aquilan-talon-contemptor-achillus-dreadnought",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "c5750e97-71f5-40e8-8ed4-f72a22315ee1"
+      }
+    ],
+    "name": "Aquilan Talon Contemptor-Achillus Dreadnought",
+    "faction_id": "adeptus-custodes",
+    "profiles": [
+      {
+        "name": "Contemptor-Achillus Dreadnought",
+        "M": 9,
+        "T": 10,
+        "W": 12,
+        "Sv": 2,
+        "invuln_sv": null,
+        "Ld": 5,
+        "OC": 3
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 0
+      }
+    ],
+    "keywords": [
+      "Aquilan Talon",
+      "Contemptor-Achillus Dreadnought",
+      "Dreadnought",
+      "Imperium",
+      "Vehicle",
+      "Walker"
+    ],
+    "faction_keywords": [
+      "Adeptus Custodes"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "is_legend": false,
+    "points_provisional": false
+  },
+  {
+    "id": "aquilan-talon-sentinel-guard-sodality",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "6fcc8f7b-f311-4b37-a438-28999e05af53"
+      }
+    ],
+    "name": "Aquilan Talon Sentinel Guard Sodality",
+    "faction_id": "adeptus-custodes",
+    "role": "battleline",
+    "profiles": [
+      {
+        "name": "Sentinel Guard",
+        "M": 8,
+        "T": 7,
+        "W": 5,
+        "Sv": 2,
+        "invuln_sv": null,
+        "Ld": 5,
+        "OC": 3
+      }
+    ],
+    "points": [
+      {
+        "models": 3,
+        "cost": 0
+      }
+    ],
+    "keywords": [
+      "Aquilan Talon",
+      "Battleline",
+      "Imperium",
+      "Infantry",
+      "Sentinel Guard Sodality",
+      "Trusted Sentinel"
+    ],
+    "faction_keywords": [
+      "Adeptus Custodes"
+    ],
+    "model_count": {
+      "min": 3,
+      "max": 3
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "is_legend": false,
+    "points_provisional": false
+  },
+  {
+    "id": "aquilan-talon-shield-captain",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "5777eb2d-4c83-4f31-a0a8-6b6f7800e334"
+      }
+    ],
+    "name": "Aquilan Talon Shield-Captain",
+    "faction_id": "adeptus-custodes",
+    "role": "character",
+    "profiles": [
+      {
+        "name": "Shield-Captain",
+        "M": 8,
+        "T": 7,
+        "W": 8,
+        "Sv": 2,
+        "invuln_sv": null,
+        "Ld": 5,
+        "OC": 2
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 0
+      }
+    ],
+    "keywords": [
+      "Aquilan Talon",
+      "Character",
+      "Imperium",
+      "Infantry",
+      "Shield-Captain"
+    ],
+    "faction_keywords": [
+      "Adeptus Custodes"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "is_legend": false,
+    "points_provisional": false
+  },
+  {
+    "id": "aquilan-wing-sentinel-guard-sodality",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "0fc12fd1-5fc7-44cb-834d-a14ce5f4b150"
+      }
+    ],
+    "name": "Aquilan Wing Sentinel Guard Sodality",
+    "faction_id": "adeptus-custodes",
+    "role": "battleline",
+    "profiles": [
+      {
+        "name": "Sentinel Guard",
+        "M": 8,
+        "T": 7,
+        "W": 5,
+        "Sv": 2,
+        "invuln_sv": null,
+        "Ld": 5,
+        "OC": 3
+      }
+    ],
+    "points": [
+      {
+        "models": 3,
+        "cost": 0
+      }
+    ],
+    "keywords": [
+      "Aquilan Wing",
+      "Battleline",
+      "Imperium",
+      "Infantry",
+      "Sentinel Guard Sodality",
+      "Trusted Sentinel"
+    ],
+    "faction_keywords": [
+      "Adeptus Custodes"
+    ],
+    "model_count": {
+      "min": 3,
+      "max": 3
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "is_legend": false,
+    "points_provisional": false
+  },
+  {
+    "id": "aquilan-wing-shield-captain",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "e30bfcc0-91d6-4baa-b522-b4cfaa5ba0e6"
+      }
+    ],
+    "name": "Aquilan Wing Shield-Captain",
+    "faction_id": "adeptus-custodes",
+    "role": "character",
+    "profiles": [
+      {
+        "name": "Shield-Captain",
+        "M": 8,
+        "T": 7,
+        "W": 8,
+        "Sv": 2,
+        "invuln_sv": null,
+        "Ld": 5,
+        "OC": 2
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 0
+      }
+    ],
+    "keywords": [
+      "Aquilan Wing",
+      "Character",
+      "Imperium",
+      "Infantry",
+      "Shield-Captain"
+    ],
+    "faction_keywords": [
+      "Adeptus Custodes"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "is_legend": false,
+    "points_provisional": false
+  },
+  {
+    "id": "aquilan-wing-venatari-with-kinetic-destroyers",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "cfa9df88-02f8-40ae-8200-024dd9943374"
+      }
+    ],
+    "name": "Aquilan Wing Venatari with Kinetic Destroyers",
+    "faction_id": "adeptus-custodes",
+    "profiles": [
+      {
+        "name": "Venatari",
+        "M": 12,
+        "T": 7,
+        "W": 5,
+        "Sv": 2,
+        "invuln_sv": null,
+        "Ld": 5,
+        "OC": 2
+      }
+    ],
+    "points": [
+      {
+        "models": 3,
+        "cost": 0
+      }
+    ],
+    "keywords": [
+      "Aquilan Wing",
+      "Explosives",
+      "Fly",
+      "Imperium",
+      "Infantry",
+      "Jump Pack",
+      "Venatari with Kinetic Destroyers"
+    ],
+    "faction_keywords": [
+      "Adeptus Custodes"
+    ],
+    "model_count": {
+      "min": 3,
+      "max": 3
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "is_legend": false,
+    "points_provisional": false
+  },
+  {
+    "id": "aquilon-terminators-with-solarite-power-talons",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "4e845261-134c-48ad-b586-8e149f02bf51"
+      }
+    ],
+    "name": "Aquilon Terminators with Solarite Power Talons",
+    "faction_id": "adeptus-custodes",
+    "profiles": [
+      {
+        "name": "Aquilon Custodians",
+        "M": 7,
+        "T": 8,
+        "W": 6,
+        "Sv": 2,
+        "invuln_sv": null,
+        "Ld": 5,
+        "OC": 2
+      }
+    ],
+    "points": [
+      {
+        "models": 3,
+        "cost": 275,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 3,
+        "cost": 305,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Imperium",
+      "Infantry",
+      "Terminator"
+    ],
+    "faction_keywords": [
+      "Adeptus Custodes"
+    ],
+    "model_count": {
+      "min": 3,
+      "max": 3
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_legend": false,
+    "points_provisional": false
+  },
+  {
+    "id": "caladius-annihilator-grav-tank",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "686b8a4a-86d7-4c6e-9c69-d8feb96ee762"
+      }
+    ],
+    "name": "Caladius Annihilator Grav‑Tank",
+    "faction_id": "adeptus-custodes",
+    "profiles": [
+      {
+        "name": "Caladius Annihilator Grav Tank",
+        "M": 10,
+        "T": 11,
+        "W": 14,
+        "Sv": 2,
+        "invuln_sv": null,
+        "Ld": 5,
+        "OC": 4
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 250,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 1,
+        "cost": 280,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Caladius",
+      "Fly",
+      "Grav-assault",
+      "Imperium",
+      "Vehicle"
+    ],
+    "faction_keywords": [
+      "Adeptus Custodes"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_legend": false,
+    "points_provisional": false
+  },
+  {
+    "id": "sentinel-guard-sodality",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "ff63c25a-979c-4b79-961c-912c2347b4c1"
+      }
+    ],
+    "name": "Sentinel Guard Sodality",
+    "faction_id": "adeptus-custodes",
+    "role": "battleline",
+    "profiles": [
+      {
+        "name": "Custodian Guard",
+        "M": 8,
+        "T": 7,
+        "W": 5,
+        "Sv": 2,
+        "invuln_sv": null,
+        "Ld": 5,
+        "OC": 3
+      }
+    ],
+    "points": [
+      {
+        "models": 3,
+        "cost": 240,
+        "unit_count_min": 1,
+        "unit_count_max": 3
+      },
+      {
+        "models": 3,
+        "cost": 270,
+        "unit_count_min": 4,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Battleline",
+      "Imperium",
+      "Infantry",
+      "Trusted Sentinel"
+    ],
+    "faction_keywords": [
+      "Adeptus Custodes"
+    ],
+    "model_count": {
+      "min": 3,
+      "max": 3
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_legend": false,
+    "points_provisional": false
+  },
+  {
+    "id": "venatari-with-kinetic-destroyers",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "2a1c5d96-3107-413a-a9a5-70b26250450e"
+      }
+    ],
+    "name": "Venatari with Kinetic Destroyers",
+    "faction_id": "adeptus-custodes",
+    "profiles": [
+      {
+        "name": "Venatari",
+        "M": 12,
+        "T": 7,
+        "W": 5,
+        "Sv": 2,
+        "invuln_sv": null,
+        "Ld": 5,
+        "OC": 2
+      }
+    ],
+    "points": [
+      {
+        "models": 3,
+        "cost": 255,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 3,
+        "cost": 280,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Explosives",
+      "Fly",
+      "Imperium",
+      "Infantry",
+      "Jump Pack"
+    ],
+    "faction_keywords": [
+      "Adeptus Custodes"
+    ],
+    "model_count": {
+      "min": 3,
+      "max": 3
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_legend": false,
+    "points_provisional": false
   }
 ]

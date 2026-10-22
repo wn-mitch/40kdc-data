@@ -312,7 +312,7 @@
     ]
   },
   {
-    "unit_id": "vigilators",
+    "unit_id": "vigilator-squad",
     "faction_id": "adeptus-custodes",
     "models": [
       {
@@ -441,7 +441,7 @@
     ]
   },
   {
-    "unit_id": "witchseekers",
+    "unit_id": "witchseeker-squad",
     "faction_id": "adeptus-custodes",
     "models": [
       {
@@ -574,7 +574,7 @@
     ]
   },
   {
-    "unit_id": "custodian-guard",
+    "unit_id": "custodian-guard-sodality",
     "faction_id": "adeptus-custodes",
     "models": [
       {
@@ -760,7 +760,7 @@
     ]
   },
   {
-    "unit_id": "agamatus-custodians",
+    "unit_id": "gyrfalcon-jetbike-sodality",
     "faction_id": "adeptus-custodes",
     "models": [
       {
@@ -1000,7 +1000,7 @@
     ]
   },
   {
-    "unit_id": "venatari-custodians",
+    "unit_id": "venatari-with-verutum-lances",
     "faction_id": "adeptus-custodes",
     "models": [
       {
@@ -1078,7 +1078,7 @@
     ]
   },
   {
-    "unit_id": "aquilon-custodians",
+    "unit_id": "aquilon-terminators-with-solarite-power-gauntlets",
     "faction_id": "adeptus-custodes",
     "models": [
       {
@@ -1193,7 +1193,7 @@
     ]
   },
   {
-    "unit_id": "prosecutors",
+    "unit_id": "prosecutor-squad",
     "faction_id": "adeptus-custodes",
     "models": [
       {

@@ -32,7 +32,7 @@
     "external_refs": [
       {
         "namespace": "mfm",
-        "id": "16f0256d-a6ba-4d12-963f-2b8874eb17a5"
+        "id": "64ce831b-8894-4e0d-bc69-2ccb92ff37d9"
       }
     ],
     "detachment_rule_ids": [
@@ -69,7 +69,7 @@
     "external_refs": [
       {
         "namespace": "mfm",
-        "id": "2ed9481a-9f80-4e78-8931-b8070fef82e3"
+        "id": "7a1892ae-2d7b-4d1e-8f14-d64c3461be66"
       }
     ],
     "detachment_rule_ids": [
@@ -184,7 +184,7 @@
     "external_refs": [
       {
         "namespace": "mfm",
-        "id": "b70a6b14-333a-4f04-a3c3-b3341e48c08c"
+        "id": "e4176ff6-33ba-4413-8df6-f80f1f9e418b"
       }
     ],
     "detachment_rule_ids": [
@@ -256,7 +256,7 @@
     "external_refs": [
       {
         "namespace": "mfm",
-        "id": "4edac749-d510-4161-b3c3-1fd31e91cfcf"
+        "id": "628c8037-f95d-4627-9255-2088b3eb9349"
       }
     ],
     "detachment_rule_ids": [
@@ -363,6 +363,238 @@
       "gilded-spear-tristraens-gilded-blades-adeptus-custodes",
       "inevitable-wrath-tristraens-gilded-blades-adeptus-custodes",
       "never-outmatched-tristraens-gilded-blades-adeptus-custodes"
+    ]
+  },
+  {
+    "id": "aquilan-shield",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "e3458c3f-13e3-4d66-81a9-287e06320b93"
+      }
+    ],
+    "name": "Aquilan Shield",
+    "faction_id": "adeptus-custodes",
+    "enhancement_ids": [],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "take-and-hold"
+    ]
+  },
+  {
+    "id": "aquilan-talon",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "5263f09d-8a14-4a9d-b3ea-7f27e44e5f02"
+      }
+    ],
+    "name": "Aquilan Talon",
+    "faction_id": "adeptus-custodes",
+    "enhancement_ids": [
+      "coronal-plate-aquilan-talon-adeptus-custodes",
+      "goldenwrath-upgrade-aquilan-talon-adeptus-custodes"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "take-and-hold"
+    ],
+    "game_modes": [
+      "combat-patrol"
+    ]
+  },
+  {
+    "id": "aquilan-wing",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "1223e490-8ad4-42f1-a1e1-52d17f1e257e"
+      }
+    ],
+    "name": "Aquilan Wing",
+    "faction_id": "adeptus-custodes",
+    "enhancement_ids": [
+      "eagles-pinions-upgrade-aquilan-wing-adeptus-custodes",
+      "will-of-auramite-aquilan-wing-adeptus-custodes"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "take-and-hold"
+    ],
+    "game_modes": [
+      "combat-patrol"
+    ]
+  },
+  {
+    "id": "dread-host",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "70fd52da-7f4b-4979-9b52-6dfa8e5b37b0"
+      }
+    ],
+    "name": "Dread Host",
+    "faction_id": "adeptus-custodes",
+    "enhancement_ids": [],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "purge-the-foe"
+    ]
+  },
+  {
+    "id": "emissaries-imperatus",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "9324ed01-8acf-4aa4-95a9-8c40084daafc"
+      }
+    ],
+    "name": "Emissaries Imperatus",
+    "faction_id": "adeptus-custodes",
+    "enhancement_ids": [],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "priority-assets"
+    ]
+  },
+  {
+    "id": "emperors-chosen",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "3bbf927d-73fb-4a49-bc0c-3ab6dff01a9a"
+      }
+    ],
+    "name": "Emperor’s Chosen",
+    "faction_id": "adeptus-custodes",
+    "enhancement_ids": [],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "priority-assets"
+    ]
+  },
+  {
+    "id": "grav-assault-force",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "38fa6bc0-d9f0-49e6-b4a9-12d3c8ec93ac"
+      }
+    ],
+    "name": "Grav‑Assault Force",
+    "faction_id": "adeptus-custodes",
+    "enhancement_ids": [],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "reconnaissance"
+    ]
+  },
+  {
+    "id": "guardians-of-the-throne",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "dd1d4660-c602-467b-b306-f9e5e815d02d"
+      }
+    ],
+    "name": "Guardians of the Throne",
+    "faction_id": "adeptus-custodes",
+    "enhancement_ids": [],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "detachment_points": 3,
+    "force_dispositions": [
+      "priority-assets"
+    ]
+  },
+  {
+    "id": "honoured-companions",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "1b487980-1f44-497e-a39d-6479ebca992d"
+      }
+    ],
+    "name": "Honoured Companions",
+    "faction_id": "adeptus-custodes",
+    "enhancement_ids": [],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "take-and-hold"
+    ]
+  },
+  {
+    "id": "shadowkeepers",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "03357e89-c78a-4cbe-b0ea-ecb85696246a"
+      }
+    ],
+    "name": "Shadowkeepers",
+    "faction_id": "adeptus-custodes",
+    "enhancement_ids": [],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "purge-the-foe"
+    ]
+  },
+  {
+    "id": "solar-watch",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "712e2b4d-b39e-43e1-9cc9-29c2aed8aee8"
+      }
+    ],
+    "name": "Solar Watch",
+    "faction_id": "adeptus-custodes",
+    "enhancement_ids": [],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "reconnaissance"
     ]
   }
 ]

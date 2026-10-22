@@ -196,8 +196,8 @@
     }
   },
   {
-    "id": "custodian-guard-wgo-mfm-1",
-    "unit_id": "custodian-guard",
+    "id": "custodian-guard-sodality-wgo-mfm-1",
+    "unit_id": "custodian-guard-sodality",
     "faction_id": "adeptus-custodes",
     "game_version": {
       "edition": "11th",
@@ -265,8 +265,8 @@
     }
   },
   {
-    "id": "agamatus-custodians-wgo-mfm-1",
-    "unit_id": "agamatus-custodians",
+    "id": "gyrfalcon-jetbike-sodality-wgo-mfm-1",
+    "unit_id": "gyrfalcon-jetbike-sodality",
     "faction_id": "adeptus-custodes",
     "game_version": {
       "edition": "11th",
@@ -375,8 +375,8 @@
     }
   },
   {
-    "id": "venatari-custodians-wgo-mfm-1",
-    "unit_id": "venatari-custodians",
+    "id": "venatari-with-verutum-lances-wgo-mfm-1",
+    "unit_id": "venatari-with-verutum-lances",
     "faction_id": "adeptus-custodes",
     "game_version": {
       "edition": "11th",
@@ -414,8 +414,8 @@
     }
   },
   {
-    "id": "aquilon-custodians-wgo-mfm-1",
-    "unit_id": "aquilon-custodians",
+    "id": "aquilon-terminators-with-solarite-power-gauntlets-wgo-mfm-1",
+    "unit_id": "aquilon-terminators-with-solarite-power-gauntlets",
     "faction_id": "adeptus-custodes",
     "game_version": {
       "edition": "11th",
@@ -438,8 +438,8 @@
     }
   },
   {
-    "id": "aquilon-custodians-wgo-mfm-2",
-    "unit_id": "aquilon-custodians",
+    "id": "aquilon-terminators-with-solarite-power-gauntlets-wgo-mfm-2",
+    "unit_id": "aquilon-terminators-with-solarite-power-gauntlets",
     "faction_id": "adeptus-custodes",
     "game_version": {
       "edition": "11th",

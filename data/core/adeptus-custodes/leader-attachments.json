@@ -2,9 +2,9 @@
   {
     "leader_id": "aleya",
     "eligible_bodyguard_ids": [
-      "prosecutors",
-      "vigilators",
-      "witchseekers"
+      "prosecutor-squad",
+      "vigilator-squad",
+      "witchseeker-squad"
     ],
     "game_version": {
       "edition": "11th",
@@ -14,7 +14,7 @@
   {
     "leader_id": "blade-champion",
     "eligible_bodyguard_ids": [
-      "custodian-guard",
+      "custodian-guard-sodality",
       "custodian-guard-with-adrasite-and-pyrithite-spears",
       "custodian-wardens",
       "sagittarum-custodians"
@@ -27,9 +27,9 @@
   {
     "leader_id": "knight-centura",
     "eligible_bodyguard_ids": [
-      "prosecutors",
-      "vigilators",
-      "witchseekers"
+      "prosecutor-squad",
+      "vigilator-squad",
+      "witchseeker-squad"
     ],
     "game_version": {
       "edition": "11th",
@@ -39,7 +39,7 @@
   {
     "leader_id": "shield-captain",
     "eligible_bodyguard_ids": [
-      "custodian-guard",
+      "custodian-guard-sodality",
       "custodian-guard-with-adrasite-and-pyrithite-spears",
       "custodian-wardens",
       "sagittarum-custodians"
@@ -53,7 +53,7 @@
     "leader_id": "shield-captain-in-allarus-terminator-armour",
     "eligible_bodyguard_ids": [
       "allarus-custodians",
-      "aquilon-custodians"
+      "aquilon-terminators-with-solarite-power-gauntlets"
     ],
     "game_version": {
       "edition": "11th",
@@ -63,7 +63,7 @@
   {
     "leader_id": "shield-captain-on-dawneagle-jetbike",
     "eligible_bodyguard_ids": [
-      "agamatus-custodians",
+      "gyrfalcon-jetbike-sodality",
       "vertus-praetors"
     ],
     "game_version": {
@@ -74,7 +74,7 @@
   {
     "leader_id": "trajann-valoris",
     "eligible_bodyguard_ids": [
-      "custodian-guard",
+      "custodian-guard-sodality",
       "custodian-guard-with-adrasite-and-pyrithite-spears",
       "custodian-wardens",
       "sagittarum-custodians"
@@ -87,7 +87,7 @@
   {
     "leader_id": "valerian",
     "eligible_bodyguard_ids": [
-      "custodian-guard",
+      "custodian-guard-sodality",
       "custodian-guard-with-adrasite-and-pyrithite-spears",
       "custodian-wardens",
       "sagittarum-custodians"

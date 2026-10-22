@@ -313,7 +313,7 @@
       },
       {
         "namespace": "mfm",
-        "id": "a0dd4369-a684-4a28-a35e-f8412fe754e9"
+        "id": "f2cfde53-23d6-41ef-8fc1-a53f9f930378"
       }
     ]
   },
@@ -341,7 +341,7 @@
       },
       {
         "namespace": "mfm",
-        "id": "ad4c7b31-c0d1-4fdc-940e-9b82ca3d3057"
+        "id": "14fd7119-a08e-47c2-b7b7-cf727d909e42"
       }
     ]
   },
@@ -397,7 +397,7 @@
       },
       {
         "namespace": "mfm",
-        "id": "84f59743-864c-4f63-89c2-33de243b7adf"
+        "id": "7f42c412-b5de-42d3-b503-62e703522571"
       }
     ]
   },
@@ -914,5 +914,89 @@
         "id": "f832b7c7-53b8-4bd3-856d-29b837ad35ea"
       }
     ]
+  },
+  {
+    "id": "coronal-plate-aquilan-talon-adeptus-custodes",
+    "name": "Coronal Plate",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "083b154e-84ea-46c8-afb1-b9dea87bdf95"
+      }
+    ],
+    "detachment_id": "aquilan-talon",
+    "cost": 0,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "points_provisional": false
+  },
+  {
+    "id": "goldenwrath-upgrade-aquilan-talon-adeptus-custodes",
+    "name": "Goldenwrath (Upgrade)",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "f2af1bc2-5c5e-45d8-9534-599e2c9a1ce4"
+      }
+    ],
+    "detachment_id": "aquilan-talon",
+    "cost": 0,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "points_provisional": false
+  },
+  {
+    "id": "eagles-pinions-upgrade-aquilan-wing-adeptus-custodes",
+    "name": "Eagle’s Pinions (Upgrade)",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "319e3c29-25ab-4e8e-b1e5-27c88f92c0c8"
+      }
+    ],
+    "detachment_id": "aquilan-wing",
+    "cost": 0,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "points_provisional": false
+  },
+  {
+    "id": "will-of-auramite-aquilan-wing-adeptus-custodes",
+    "name": "Will of Auramite",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "81da9a4a-9c28-4d7b-8a32-238eae1dbf1f"
+      }
+    ],
+    "detachment_id": "aquilan-wing",
+    "cost": 0,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "points_provisional": false
   }
 ]

@@ -7,7 +7,7 @@ Combat Patrol parents and their cost-0 enhancements remain opt-in.
 | --- | --- | --- | --- | --- |
 | adepta-sororitas | 0 | 0 | 0 | 9 |
 | adeptus-astartes | 0 | 0 | 0 | 17 |
-| adeptus-custodes | 0 | 0 | 0 | 10 |
+| adeptus-custodes | 11 | 4 | 0 | 5 |
 | adeptus-mechanicus | 0 | 0 | 0 | 11 |
 | aeldari | 0 | 0 | 0 | 16 |
 | agents-of-the-imperium | 0 | 0 | 0 | 6 |
@@ -29,7 +29,7 @@ Combat Patrol parents and their cost-0 enhancements remain opt-in.
 | iron-hands | 0 | 0 | 0 | 17 |
 | leagues-of-votann | 0 | 0 | 0 | 11 |
 | necrons | 0 | 0 | 0 | 13 |
-| orks | 1 | 2 | 0 | 15 |
+| orks | 0 | 0 | 0 | 16 |
 | raven-guard | 0 | 0 | 0 | 17 |
 | salamanders | 0 | 0 | 0 | 17 |
 | space-wolves | 0 | 0 | 0 | 20 |
@@ -40,10 +40,22 @@ Combat Patrol parents and their cost-0 enhancements remain opt-in.
 | white-scars | 0 | 0 | 0 | 17 |
 | world-eaters | 0 | 0 | 0 | 9 |
 
-Total: 1 detachment(s), 2 enhancement(s) created; 0 held back; 449 skipped.
+Total: 11 detachment(s), 4 enhancement(s) created; 0 held back; 445 skipped.
 
-## orks
-- created detachment `ardmob` (’Ardmob)
-  - enhancement `extra-platin-ardmob-orks` (Extra Platin’)
-  - enhancement `rallying-war-cry-ardmob-orks` (Rallying War Cry)
+## adeptus-custodes
+- created detachment `aquilan-shield` (Aquilan Shield)
+- created detachment `aquilan-talon` (Aquilan Talon)
+- created detachment `aquilan-wing` (Aquilan Wing)
+- created detachment `dread-host` (Dread Host)
+- created detachment `emissaries-imperatus` (Emissaries Imperatus)
+- created detachment `emperors-chosen` (Emperor’s Chosen)
+- created detachment `grav-assault-force` (Grav‑Assault Force)
+- created detachment `guardians-of-the-throne` (Guardians of the Throne)
+- created detachment `honoured-companions` (Honoured Companions)
+- created detachment `shadowkeepers` (Shadowkeepers)
+- created detachment `solar-watch` (Solar Watch)
+  - enhancement `coronal-plate-aquilan-talon-adeptus-custodes` (Coronal Plate)
+  - enhancement `goldenwrath-upgrade-aquilan-talon-adeptus-custodes` (Goldenwrath (Upgrade))
+  - enhancement `eagles-pinions-upgrade-aquilan-wing-adeptus-custodes` (Eagle’s Pinions (Upgrade))
+  - enhancement `will-of-auramite-aquilan-wing-adeptus-custodes` (Will of Auramite)
 

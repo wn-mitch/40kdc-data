@@ -350,7 +350,7 @@
     },
     "unit_ids": [
       "allarus-custodians",
-      "aquilon-custodians"
+      "aquilon-terminators-with-solarite-power-gauntlets"
     ],
     "ability_type": "unit",
     "behavior": "activated",
@@ -380,7 +380,7 @@
     },
     "unit_ids": [
       "allarus-custodians",
-      "custodian-guard",
+      "custodian-guard-sodality",
       "custodian-wardens"
     ],
     "ability_type": "unit",
@@ -478,9 +478,9 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "prosecutors",
-      "vigilators",
-      "witchseekers"
+      "prosecutor-squad",
+      "vigilator-squad",
+      "witchseeker-squad"
     ],
     "ability_type": "unit",
     "behavior": "passive",
@@ -518,7 +518,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "vigilators"
+      "vigilator-squad"
     ],
     "ability_type": "unit",
     "behavior": "passive",
@@ -676,7 +676,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "witchseekers"
+      "witchseeker-squad"
     ],
     "ability_type": "unit",
     "behavior": "passive",
@@ -731,7 +731,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "custodian-guard",
+      "custodian-guard-sodality",
       "custodian-guard-with-adrasite-and-pyrithite-spears"
     ],
     "ability_type": "unit",
@@ -772,7 +772,7 @@
       "duration": "one-use"
     },
     "unit_ids": [
-      "custodian-guard"
+      "custodian-guard-sodality"
     ],
     "ability_type": "unit",
     "behavior": "activated",
@@ -801,7 +801,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "custodian-guard",
+      "custodian-guard-sodality",
       "gilded-blades-custodian-guard",
       "shield-captain"
     ],
@@ -1149,7 +1149,7 @@
       "duration": "phase"
     },
     "unit_ids": [
-      "agamatus-custodians",
+      "gyrfalcon-jetbike-sodality",
       "vertus-praetors"
     ],
     "ability_type": "unit",
@@ -1217,7 +1217,7 @@
       "duration": "turn"
     },
     "unit_ids": [
-      "agamatus-custodians"
+      "gyrfalcon-jetbike-sodality"
     ],
     "ability_type": "unit",
     "behavior": "activated",
@@ -1260,7 +1260,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "agamatus-custodians"
+      "gyrfalcon-jetbike-sodality"
     ],
     "ability_type": "unit",
     "behavior": "passive",
@@ -1618,7 +1618,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "venatari-custodians"
+      "venatari-with-verutum-lances"
     ],
     "ability_type": "unit",
     "behavior": "passive",
@@ -1648,7 +1648,7 @@
       "duration": "one-use"
     },
     "unit_ids": [
-      "venatari-custodians"
+      "venatari-with-verutum-lances"
     ],
     "ability_type": "unit",
     "behavior": "activated",
@@ -1677,7 +1677,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "venatari-custodians"
+      "venatari-with-verutum-lances"
     ],
     "ability_type": "unit",
     "behavior": "passive",
@@ -1710,7 +1710,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "venatari-custodians"
+      "venatari-with-verutum-lances"
     ],
     "ability_type": "unit",
     "behavior": "passive",
@@ -1779,7 +1779,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "aquilon-custodians"
+      "aquilon-terminators-with-solarite-power-gauntlets"
     ],
     "ability_type": "unit",
     "behavior": "passive",
@@ -1822,7 +1822,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "aquilon-custodians"
+      "aquilon-terminators-with-solarite-power-gauntlets"
     ],
     "ability_type": "unit",
     "behavior": "passive",
@@ -1988,7 +1988,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "prosecutors"
+      "prosecutor-squad"
     ],
     "ability_type": "unit",
     "behavior": "passive",
