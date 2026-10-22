@@ -14,63 +14,63 @@
       }
     },
     "unit": {
-      "entities": 1099,
-      "with_external_refs": 1096,
+      "entities": 1103,
+      "with_external_refs": 1100,
       "covered_entities_by_namespace": {
-        "bsdata": 961,
-        "game-datacards": 967,
-        "mfm": 1096
+        "bsdata": 955,
+        "game-datacards": 961,
+        "mfm": 1100
       },
       "references_by_namespace": {
-        "bsdata": 1024,
-        "game-datacards": 967,
-        "mfm": 1109
+        "bsdata": 1018,
+        "game-datacards": 961,
+        "mfm": 1113
       }
     },
     "detachment": {
-      "entities": 451,
-      "with_external_refs": 451,
+      "entities": 457,
+      "with_external_refs": 457,
       "covered_entities_by_namespace": {
-        "mfm": 451
+        "mfm": 457
       },
       "references_by_namespace": {
-        "mfm": 451
+        "mfm": 457
       }
     },
     "enhancement": {
-      "entities": 865,
-      "with_external_refs": 865,
+      "entities": 868,
+      "with_external_refs": 868,
       "covered_entities_by_namespace": {
-        "game-datacards": 764,
-        "mfm": 865
+        "game-datacards": 737,
+        "mfm": 868
       },
       "references_by_namespace": {
-        "game-datacards": 764,
-        "mfm": 865
+        "game-datacards": 737,
+        "mfm": 868
       }
     },
     "stratagem": {
-      "entities": 1289,
-      "with_external_refs": 1289,
+      "entities": 1291,
+      "with_external_refs": 1291,
       "covered_entities_by_namespace": {
-        "game-datacards": 1109,
-        "mfm": 1289
+        "game-datacards": 1068,
+        "mfm": 1291
       },
       "references_by_namespace": {
-        "game-datacards": 1109,
-        "mfm": 1289
+        "game-datacards": 1068,
+        "mfm": 1291
       }
     },
     "weapon": {
-      "entities": 3295,
-      "with_external_refs": 3165,
+      "entities": 3304,
+      "with_external_refs": 3174,
       "covered_entities_by_namespace": {
-        "bsdata": 2680,
-        "mfm": 3111
+        "bsdata": 2670,
+        "mfm": 3120
       },
       "references_by_namespace": {
-        "bsdata": 3175,
-        "mfm": 3515
+        "bsdata": 3165,
+        "mfm": 3540
       }
     },
     "wargear": {
@@ -80,7 +80,7 @@
         "mfm": 149
       },
       "references_by_namespace": {
-        "mfm": 177
+        "mfm": 180
       }
     }
   },
@@ -4363,11 +4363,6 @@
         },
         {
           "entity_type": "weapon",
-          "id": "storm-bolter-venerable-land-raider",
-          "faction_id": "adeptus-custodes"
-        },
-        {
-          "entity_type": "weapon",
           "id": "storm-bolter-wolf-guard-terminators",
           "faction_id": "adeptus-astartes"
         }
@@ -8428,11 +8423,6 @@
           "entity_type": "weapon",
           "id": "armoured-tracks-stormsword",
           "faction_id": "astra-militarum"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "armoured-tracks-venerable-land-raider",
-          "faction_id": "adeptus-custodes"
         }
       ]
     },

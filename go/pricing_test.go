@@ -52,15 +52,15 @@ func TestPointsTierMissing(t *testing.T) {
 	}
 }
 
-// Venatari Custodians: 3 @150 for the first two copies (160 thereafter), or 4-6
-// @300 (310 thereafter).
-func TestRangePricedTierVenatari(t *testing.T) {
+// Reavers: 3 @75 for the first two copies (85 thereafter), or 4-6 @150 (160
+// thereafter).
+func TestRangePricedTierReavers(t *testing.T) {
 	ds := EmbeddedDataset()
-	ven, ok := ds.Units.GetInFaction("venatari-custodians", "adeptus-custodes")
+	ven, ok := ds.Units.GetInFaction("reavers", "drukhari")
 	if !ok {
-		t.Fatal("venatari-custodians not in dataset")
+		t.Fatal("reavers not in dataset")
 	}
-	for _, c := range []struct{ models, want int }{{3, 150}, {4, 300}, {5, 300}, {6, 300}} {
+	for _, c := range []struct{ models, want int }{{3, 75}, {4, 150}, {5, 150}, {6, 150}} {
 		if got := baseUnitPoints(ven.Raw, c.models, 1); got != c.want {
 			t.Errorf("baseUnitPoints(%d models) = %d, want %d", c.models, got, c.want)
 		}

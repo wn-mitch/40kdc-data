@@ -17,13 +17,14 @@ const types = (buffs: Buff[]) => buffs.map((buff) => buff.contribution.type);
 
 describe("defender build", () => {
   const telemon = ds.units.getInFaction("telemon-heavy-dreadnought", "adeptus-custodes")!;
-  const strat = "arcane-genetic-alchemy-shield-host-adeptus-custodes";
+  const strat = "shield-of-faith-army-of-faith-adepta-sororitas";
 
   it("applies an opted-in Stratagem only", () => {
-    expect(defenderStratagems(ds, telemon, "shield-host", "shooting").map((s) => s.id)).toContain(strat);
-    const build = { ...none, detachmentId: "shield-host" };
-    expect(types(defenderBuffs(ds, telemon, build, context))).not.toContain("feel-no-pain");
-    expect(types(defenderBuffs(ds, telemon, { ...build, stratagemIds: [strat] }, context))).toContain("feel-no-pain");
+    const sisters = ds.units.getInFaction("battle-sisters-squad", "adepta-sororitas")!;
+    expect(defenderStratagems(ds, sisters, "army-of-faith", "shooting").map((s) => s.id)).toContain(strat);
+    const build = { ...none, detachmentId: "army-of-faith" };
+    expect(types(defenderBuffs(ds, sisters, build, context))).not.toContain("feel-no-pain");
+    expect(types(defenderBuffs(ds, sisters, { ...build, stratagemIds: [strat] }, context))).toContain("feel-no-pain");
   });
 
   it("ignores another faction's detachment", () => {

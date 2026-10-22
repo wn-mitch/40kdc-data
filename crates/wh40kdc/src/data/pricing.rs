@@ -303,21 +303,21 @@ mod tests {
         assert!(points_tier_missing(ct, 4, 1));
     }
 
-    /// Venatari Custodians: 3 models @150 for the first two copies (160
-    /// thereafter), or 4–6 @300 (310 thereafter).
+    /// Reavers: 3 models @75 for the first two copies (85 thereafter), or 4–6
+    /// @150 (160 thereafter).
     #[test]
-    fn range_priced_tier_venatari() {
+    fn range_priced_tier_reavers() {
         let ds = Dataset::embedded();
         let ven = ds
             .units
-            .by_faction("adeptus-custodes")
+            .by_faction("drukhari")
             .into_iter()
-            .find(|u| u.id.as_str() == "venatari-custodians")
-            .expect("venatari custodians in dataset");
-        assert_eq!(base_unit_points(ven, 3, 1), 150);
-        assert_eq!(base_unit_points(ven, 4, 1), 300);
-        assert_eq!(base_unit_points(ven, 5, 1), 300);
-        assert_eq!(base_unit_points(ven, 6, 1), 300);
+            .find(|u| u.id.as_str() == "reavers")
+            .expect("reavers in dataset");
+        assert_eq!(base_unit_points(ven, 3, 1), 75);
+        assert_eq!(base_unit_points(ven, 4, 1), 150);
+        assert_eq!(base_unit_points(ven, 5, 1), 150);
+        assert_eq!(base_unit_points(ven, 6, 1), 150);
         // Outside every tier range → missing (below the floor, above the ceiling).
         assert!(points_tier_missing(ven, 2, 1));
         assert!(!points_tier_missing(ven, 4, 1));

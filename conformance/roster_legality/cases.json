@@ -201,7 +201,7 @@
   },
   {
     "name": "atc-exceeds-allowance-custodian-guard",
-    "args": { "unitId": "custodian-guard", "factionId": "adeptus-custodes", "modelCount": 5, "counts": { "guardian-spear": 4, "misericordia": 1, "vexilla": 1 } },
+    "args": { "unitId": "custodian-guard-sodality", "factionId": "adeptus-custodes", "modelCount": 3, "counts": { "guardian-spear": 3, "vexilla": 1 } },
     "expected": []
   },
   {

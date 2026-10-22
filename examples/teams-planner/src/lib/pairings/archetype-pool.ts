@@ -136,9 +136,9 @@ export const ARCHETYPE_POOL: Archetype[] = [
 
   // ── Adeptus Custodes ───────────────────────────────────────────────────────
   { id: "auric-characters", name: "Auric Character Soup", factionId: "adeptus-custodes", detachmentId: "auric-champions" },
-  { id: "wardens-brick", name: "Wardens Brick", factionId: "adeptus-custodes", detachmentId: "shield-host" },
+  { id: "wardens-brick", name: "Wardens Brick", factionId: "adeptus-custodes", detachmentId: "guardians-of-the-throne" },
   { id: "null-maiden-sisters", name: "Null Maiden Sisters", factionId: "adeptus-custodes", detachmentId: "null-maiden-vigil" },
-  { id: "caladius-tank-park", name: "Caladius Tank Park", factionId: "adeptus-custodes", detachmentId: "solar-spearhead" },
+  { id: "caladius-tank-park", name: "Caladius Tank Park", factionId: "adeptus-custodes", detachmentId: "grav-assault-force" },
   { id: "moritoi-terminators", name: "Moritoi Terminators", factionId: "adeptus-custodes", detachmentId: "might-of-the-moritoi" },
 
   // ── Adepta Sororitas ───────────────────────────────────────────────────────

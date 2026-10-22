@@ -46,23 +46,23 @@ describe("pointsTierMissing — ordinal-aware", () => {
   });
 });
 
-// Venatari Custodians are GW range-priced: 3 models @150 for the first two
-// copies (160 thereafter), or 4–6 @300 (310 thereafter). The range tiers carry
+// Reavers are GW range-priced: 3 models @75 for the first two copies (85
+// thereafter), or 4–6 @150 (160 thereafter). The range tiers carry
 // models_max=6, so every size in their range prices at the matching tier cost.
-const ven = dataset.units.getInFaction("venatari-custodians", "adeptus-custodes")!.raw;
+const ven = dataset.units.getInFaction("reavers", "drukhari")!.raw;
 
 describe("range-priced tiers (models_max)", () => {
   it("prices every size in a range tier at that tier's cost", () => {
     expect(ven.points).toEqual([
-      { models: 3, cost: 150, unit_count_min: 1, unit_count_max: 2 },
-      { models: 4, models_max: 6, cost: 300, unit_count_min: 1, unit_count_max: 2 },
-      { models: 3, cost: 160, unit_count_min: 3, unit_count_max: null },
-      { models: 4, models_max: 6, cost: 310, unit_count_min: 3, unit_count_max: null },
+      { models: 3, cost: 75, unit_count_min: 1, unit_count_max: 2 },
+      { models: 4, models_max: 6, cost: 150, unit_count_min: 1, unit_count_max: 2 },
+      { models: 3, cost: 85, unit_count_min: 3, unit_count_max: null },
+      { models: 4, models_max: 6, cost: 160, unit_count_min: 3, unit_count_max: null },
     ]);
-    expect(baseUnitPoints(ven, 3)).toBe(150);
-    expect(baseUnitPoints(ven, 4)).toBe(300);
-    expect(baseUnitPoints(ven, 5)).toBe(300);
-    expect(baseUnitPoints(ven, 6)).toBe(300);
+    expect(baseUnitPoints(ven, 3)).toBe(75);
+    expect(baseUnitPoints(ven, 4)).toBe(150);
+    expect(baseUnitPoints(ven, 5)).toBe(150);
+    expect(baseUnitPoints(ven, 6)).toBe(150);
   });
 
   it("flags counts outside every tier range (below floor, above ceiling)", () => {

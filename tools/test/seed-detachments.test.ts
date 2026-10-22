@@ -19,8 +19,9 @@ describe.skipIf(!fs.existsSync(DEFAULT_DUMP_PATH))("seed-detachments over the re
 
   it("derives one CP detachment per faction with a valid DP, disposition, and dir", () => {
     const candidates = collect();
-    // 24 Combat-Patrol boxes: the 23 non-WE factions plus the World Eaters pilot.
-    expect(candidates).toHaveLength(24);
+    // 26 Combat-Patrol boxes: the 23 non-WE factions, the World Eaters pilot, and
+    // the two Adeptus Custodes boxes data_version 995 added (Aquilan Talon, Aquilan Wing).
+    expect(candidates).toHaveLength(26);
     const dirs = repoDirs();
     for (const c of candidates) {
       expect(dirs.has(c.dir), `${c.id} → unknown dir ${c.dir}`).toBe(true);
@@ -32,9 +33,9 @@ describe.skipIf(!fs.existsSync(DEFAULT_DUMP_PATH))("seed-detachments over the re
   it("authors every CP enhancement at cost 0, unique, combat-patrol, scoped to its detachment", () => {
     const candidates = collect();
     const allEnh = candidates.flatMap((c) => c.enhancements);
-    // 48 CP enhancements across the 24 boxes — two per box (data_version 895
+    // 52 CP enhancements across the 26 boxes — two per box (data_version 895
     // added the second Ork enhancement; through 867 Orks carried only one).
-    expect(allEnh).toHaveLength(48);
+    expect(allEnh).toHaveLength(52);
     for (const c of candidates) {
       for (const e of c.enhancements) {
         expect(e.cost, `${e.id} cost`).toBe(0);

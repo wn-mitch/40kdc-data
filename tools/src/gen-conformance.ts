@@ -3405,6 +3405,38 @@ function genEffectTranslation(): void {
       },
       scope: { duration: "until-next-command-phase" },
     },
+    // Auric Champions stopped printing this stratagem at MFM data version 995.
+    "adeptus-custodes/superhuman-reserves-auric-champions-adeptus-custodes": {
+      effect: {
+        type: "ability-modifier",
+        target: "this-model",
+        modifier: { ability: { event: "used", event_var: "used-ability" }, aspect: "uses", operation: "add", value: 1, not_same: "phase" },
+      },
+      scope: { duration: "battle" },
+      trigger: {
+        event: "used",
+        filter: { kind: "ability", source: ["unit", "enhancement"], usage: { frequency: "n-per-battle", count: 1 } },
+        binds_event_variable: "used-ability",
+        subject: { owner: "friendly", all_of: ["ADEPTUS CUSTODES"], level: "model", designated: "warlord" },
+      },
+      usage: { frequency: "n-per-battle", count: 1, per: "army" },
+      applies_to: { all_of: ["ADEPTUS CUSTODES", "Warlord"] },
+    },
+    // The Silent Hunters detachment left the dump at MFM data version 995.
+    "adeptus-custodes/synchronised-inferno-silent-hunters-adeptus-custodes": {
+      effect: {
+        type: "conditional",
+        condition: { type: "attack-is", parameters: { attack_type: "ranged" } },
+        effect: {
+          type: "weapon-ability-grant",
+          target: "this-unit",
+          modifier: { keywords: [{ keyword_id: "blast", parameters: { value: 1 } }], weapons: { type: "ranged", keyword: { keyword_id: "torrent" } } },
+        },
+      },
+      scope: { duration: "phase" },
+      trigger: { event: "selected", filter: { to: "shoot" }, subject: { owner: "friendly", all_of: ["WITCHSEEKERS"] } },
+      applies_to: { all_of: ["WITCHSEEKERS"] },
+    },
   };
   for (const [faction, ids] of fidelityWorklists) {
     const abilities = JSON.parse(readFileSync(join(REPO_ROOT, `data/enrichment/${faction}/abilities.json`), "utf8")) as Array<Record<string, unknown>>;

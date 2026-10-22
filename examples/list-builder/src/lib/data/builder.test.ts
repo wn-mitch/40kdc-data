@@ -97,26 +97,26 @@ describe('builder points', () => {
 		expect(pointsTierMissing(u, minModels)).toBe(false);
 	});
 
-	// Regression for the reported crash: resizing a range-priced unit (Venatari
-	// Custodians: 3 models @160, or 4–6 models @320) must price every size in the
-	// range at 320 — not fall through to the 3-model tier (160) — and a count
-	// outside the range must be flagged, never silently mispriced.
-	it('prices every size of a range-priced unit and flags oversize (Venatari resize)', () => {
-		const fac = 'adeptus-custodes';
-		const raw = unitRaw('venatari-custodians', undefined, fac)!;
-		expect(baseUnitPoints(raw, 3)).toBe(150);
-		for (const n of [4, 5, 6]) expect(baseUnitPoints(raw, n)).toBe(300);
+	// Regression for the reported crash: resizing a range-priced unit (Reavers:
+	// 3 models @75, or 4–6 models @150) must price every size in the range at
+	// 150 — not fall through to the 3-model tier (75) — and a count outside the
+	// range must be flagged, never silently mispriced.
+	it('prices every size of a range-priced unit and flags oversize (range resize)', () => {
+		const fac = 'drukhari';
+		const raw = unitRaw('reavers', undefined, fac)!;
+		expect(baseUnitPoints(raw, 3)).toBe(75);
+		for (const n of [4, 5, 6]) expect(baseUnitPoints(raw, n)).toBe(150);
 		const mk = (mc: number, key: string): BuilderUnit => ({
 			key,
-			datasheetId: 'venatari-custodians',
+			datasheetId: 'reavers',
 			modelCount: mc,
 			loadout: defaultLoadout(raw, mc),
 			enhancementId: null,
 			isWarlord: false,
 		});
-		// A 5-model squad is priced at the 4-6 tier (the regression priced it at the 3-model 150),
-		// plus its five default Venatari lances at 5 each.
-		expect(totalPoints({ ...emptyBuilderState(), factionId: fac, units: [mk(5, 'v')] })).toBe(300 + 25);
+		// A 5-model squad is priced at the 4-6 tier (the regression priced it at the 3-model 75);
+		// Reavers carry no priced wargear.
+		expect(totalPoints({ ...emptyBuilderState(), factionId: fac, units: [mk(5, 'v')] })).toBe(150);
 		// Below the floor and above the ceiling are flagged; legal sizes are not.
 		expect(pointsTierMissing(raw, 2)).toBe(true);
 		expect(pointsTierMissing(raw, 6)).toBe(false);
@@ -573,15 +573,16 @@ describe('builder loadout reconciliation', () => {
 	it('preserves wargear when the model count changes, and clamps to the datasheet range', () => {
 		// Regression: the model-count stepper used to rebuild the loadout from the
 		// datasheet default, wiping every wargear swap the player had made (reported
-		// on Custodian Guard 4→5). withModelCount must reconcile, not reset.
-		const raw = unitRaw('custodian-guard-sodality');
+		// on Custodian Guard 4→5; Custodian Wardens keep a count range and a swap
+		// since data version 995). withModelCount must reconcile, not reset.
+		const raw = unitRaw('custodian-wardens');
 		if (!raw?.model_count) return; // dataset may not carry Custodes
 		const { min, max } = raw.model_count;
 		expect(max, 'need a real count range to exercise the change').toBeGreaterThan(min);
 
 		const bu: BuilderUnit = {
 			key: 'k',
-			datasheetId: 'custodian-guard-sodality',
+			datasheetId: 'custodian-wardens',
 			modelCount: min,
 			loadout: defaultLoadout(raw, min),
 			enhancementId: null,
@@ -591,7 +592,7 @@ describe('builder loadout reconciliation', () => {
 		// Pick an optional weapon (min<max) and choose a non-default count for it.
 		const bounds = loadoutBounds(bu);
 		const swap = [...bounds.entries()].find(([, b]) => b.max > b.min && b.max >= 1);
-		expect(swap, 'custodian-guard should expose a swappable wargear option').toBeTruthy();
+		expect(swap, 'custodian-wardens should expose a swappable wargear option').toBeTruthy();
 		const [swapId, swapBound] = swap!;
 		const chosen = clampCount(bounds, swapId, swapBound.min + 1);
 		bu.loadout.set(swapId, chosen);

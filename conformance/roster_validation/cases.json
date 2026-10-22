@@ -572,7 +572,7 @@
   },
   {
     "name": "points-over-limit-from-wargear-costs",
-    "note": "5 Terminator Assault Squads at 10 models = 1870 base (legal at 2000), but each squad's six storm shields (wargear_costs 5 pts each = 30/squad, +150) push the army to 2020 \u2014 over the limit. points-over-limit here is produced ONLY by charging wargear_costs over the loadout, so every port must sum them identically (issue 75). Five copies of one datasheet also exceed the strike-force unit limit of 3.",
+    "note": "5 Terminator Assault Squads at 10 models (340/340/380/380/380) plus a 90-point Captain = 1910 base (legal at 2000), but each squad's six storm shields (wargear_costs 5 pts each = 30/squad, +150) push the army to 2060 \u2014 over the limit. points-over-limit here is produced ONLY by charging wargear_costs over the loadout, so every port must sum them identically (issue 75). Five copies of one datasheet also exceed the strike-force unit limit of 3.",
     "args": {
       "factionId": "adeptus-astartes",
       "battleSize": "strike-force",
@@ -642,6 +642,14 @@
             "storm-shield": 6,
             "twin-lightning-claws-terminator-assault-squad": 4
           }
+        },
+        {
+          "unitId": "captain",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
         }
       ]
     },
