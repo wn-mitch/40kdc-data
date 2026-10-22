@@ -4147,7 +4147,34 @@ export interface PersistentDesignationEffect {
   };
   consumer?: {
     relation: "attacks-selected-unit" | "within-selected-marker";
-    beneficiary: "this-model" | "this-unit";
+    /**
+     * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
+     */
+    beneficiary:
+      | (
+          | "this-unit"
+          | "this-model"
+          | "model-in-this-unit"
+          | "attacker"
+          | "defender"
+          | "event-subject"
+          | "event-object"
+          | "stratagem-target"
+          | "selected-unit"
+          | "recipient"
+          | "bearer-transport"
+          | "ability-unit"
+        )
+      | UnitFilter
+      | {
+          event_var: string;
+        }
+      | {
+          selection_var: string;
+        }
+      | {
+          stratagem_target: EntityId;
+        };
     reference?: SelectionReference;
     effect: EffectNode;
   };

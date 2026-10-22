@@ -6990,10 +6990,8 @@
               ]
             },
             "beneficiary": {
-              "enum": [
-                "this-model",
-                "this-unit"
-              ]
+              "$ref": "../../defs/common.schema.json#/$defs/unit-ref",
+              "description": "The unit or model that benefits while the consumer relation holds (this-model, this-unit)."
             },
             "reference": {
               "$ref": "#/$defs/selection-reference"

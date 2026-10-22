@@ -3973,7 +3973,7 @@ class NamedRegionState(TypedDict):
 
 class Consumer(TypedDict):
     relation: Literal["attacks-selected-unit", "within-selected-marker"]
-    beneficiary: Literal["this-model", "this-unit"]
+    beneficiary: UnitRef
     reference: NotRequired[SelectionReference]
     effect: EffectNode
 

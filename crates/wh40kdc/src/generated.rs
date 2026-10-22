@@ -28589,10 +28589,8 @@ for PersistentBattlefieldMarkerStatePlacement {
 ///      ],
 ///      "properties": {
 ///        "beneficiary": {
-///          "enum": [
-///            "this-model",
-///            "this-unit"
-///          ]
+///          "description": "The unit or model that benefits while the consumer relation holds (this-model, this-unit).",
+///          "$ref": "#/$defs/unit-ref"
 ///        },
 ///        "effect": {
 ///          "$ref": "#/$defs/effect-node"
@@ -28731,10 +28729,8 @@ pub struct PersistentDesignationEffect {
 ///  ],
 ///  "properties": {
 ///    "beneficiary": {
-///      "enum": [
-///        "this-model",
-///        "this-unit"
-///      ]
+///      "description": "The unit or model that benefits while the consumer relation holds (this-model, this-unit).",
+///      "$ref": "#/$defs/unit-ref"
 ///    },
 ///    "effect": {
 ///      "$ref": "#/$defs/effect-node"
@@ -28756,88 +28752,12 @@ pub struct PersistentDesignationEffect {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct PersistentDesignationEffectConsumer {
-    pub beneficiary: PersistentDesignationEffectConsumerBeneficiary,
+    ///The unit or model that benefits while the consumer relation holds (this-model, this-unit).
+    pub beneficiary: UnitRef,
     pub effect: EffectNode,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub reference: ::std::option::Option<SelectionReference>,
     pub relation: PersistentDesignationEffectConsumerRelation,
-}
-///`PersistentDesignationEffectConsumerBeneficiary`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "enum": [
-///    "this-model",
-///    "this-unit"
-///  ]
-///}
-/// ```
-/// </details>
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum PersistentDesignationEffectConsumerBeneficiary {
-    #[serde(rename = "this-model")]
-    ThisModel,
-    #[serde(rename = "this-unit")]
-    ThisUnit,
-}
-impl ::std::fmt::Display for PersistentDesignationEffectConsumerBeneficiary {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::ThisModel => f.write_str("this-model"),
-            Self::ThisUnit => f.write_str("this-unit"),
-        }
-    }
-}
-impl ::std::str::FromStr for PersistentDesignationEffectConsumerBeneficiary {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "this-model" => Ok(Self::ThisModel),
-            "this-unit" => Ok(Self::ThisUnit),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for PersistentDesignationEffectConsumerBeneficiary {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String>
-for PersistentDesignationEffectConsumerBeneficiary {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for PersistentDesignationEffectConsumerBeneficiary {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
 }
 ///`PersistentDesignationEffectConsumerRelation`
 ///

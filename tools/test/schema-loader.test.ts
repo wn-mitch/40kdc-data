@@ -725,6 +725,9 @@ describe("schema-loader", () => {
         consumer: { ...valid.consumer, beneficiary: "friendly-attackers" },
       }),
     ).toBe(false);
+    // The beneficiary is any unit-ref, as other DSL targets are.
+    expect(validate!({ ...valid, consumer: { ...valid.consumer, beneficiary: "this-model" } })).toBe(true);
+    expect(validate!({ ...valid, consumer: { ...valid.consumer, beneficiary: { owner: "friendly", all_of: ["INFANTRY"] } } })).toBe(true);
     const objective = {
       ...valid,
       select: {

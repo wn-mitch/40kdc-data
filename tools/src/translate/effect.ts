@@ -106,7 +106,7 @@ export interface Effect {
   allow_while_embarked?: boolean;
   consumer?: {
     relation?: string;
-    beneficiary?: string;
+    beneficiary?: unknown;
     effect?: Effect;
   };
   lifecycle?: {
