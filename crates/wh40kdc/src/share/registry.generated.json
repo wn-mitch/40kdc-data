@@ -1,5 +1,5 @@
 {
-  "version": 30,
+  "version": 31,
   "kinds": {
     "faction": [
       "adepta-sororitas",
@@ -8157,7 +8157,9 @@
       "venerable-champion-aura-upgrade-ironclad-champions-adeptus-astartes",
       "veteran-of-behemoth-blade-of-ultramar-ultramarines",
       "war-tempered-artifice-forgefathers-seekers-salamanders",
-      "zealous-vanguard-vow-sworn-crusaders-black-templars"
+      "zealous-vanguard-vow-sworn-crusaders-black-templars",
+      "extra-platin-ardmob-orks",
+      "rallying-war-cry-ardmob-orks"
     ],
     "ally_rule": [
       "brood-brothers",

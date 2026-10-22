@@ -28,37 +28,37 @@
       }
     },
     "detachment": {
-      "entities": 450,
-      "with_external_refs": 450,
+      "entities": 451,
+      "with_external_refs": 451,
       "covered_entities_by_namespace": {
-        "mfm": 450
+        "mfm": 451
       },
       "references_by_namespace": {
-        "mfm": 450
+        "mfm": 451
       }
     },
     "enhancement": {
-      "entities": 863,
-      "with_external_refs": 863,
+      "entities": 865,
+      "with_external_refs": 865,
       "covered_entities_by_namespace": {
         "game-datacards": 764,
-        "mfm": 863
+        "mfm": 865
       },
       "references_by_namespace": {
         "game-datacards": 764,
-        "mfm": 863
+        "mfm": 865
       }
     },
     "stratagem": {
-      "entities": 1286,
-      "with_external_refs": 1286,
+      "entities": 1289,
+      "with_external_refs": 1289,
       "covered_entities_by_namespace": {
         "game-datacards": 1109,
-        "mfm": 1286
+        "mfm": 1289
       },
       "references_by_namespace": {
         "game-datacards": 1109,
-        "mfm": 1286
+        "mfm": 1289
       }
     },
     "weapon": {

@@ -462,5 +462,40 @@
     "detachment_rule_ids": [
       "powers-of-da-waaagh-orks"
     ]
+  },
+  {
+    "id": "ardmob",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "c369b4d5-3836-464e-8aed-385307ae369f"
+      }
+    ],
+    "name": "’Ardmob",
+    "faction_id": "orks",
+    "enhancement_ids": [
+      "extra-platin-ardmob-orks",
+      "rallying-war-cry-ardmob-orks"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-963"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "purge-the-foe"
+    ],
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "detachment_rule_ids": [
+      "ard-as-nails-ardmob-orks",
+      "waaagh-ardmob-orks"
+    ],
+    "stratagem_ids": [
+      "krump-em-ardmob-orks",
+      "get-stuck-in-ardmob-orks",
+      "medi-squigs-ardmob-orks"
+    ]
   }
 ]

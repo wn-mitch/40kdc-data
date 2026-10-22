@@ -3,25 +3,11 @@
     "detachments": {
       "deathwatch": [
         "deathwatch-support"
-      ],
-      "orks": [
-        "ardmob"
       ]
     },
     "enhancements": {
       "deathwatch": [
         "beacon-angelis-deathwatch-support-deathwatch"
-      ],
-      "orks": [
-        "extra-platin-ardmob-orks",
-        "rallying-war-cry-ardmob-orks"
-      ]
-    },
-    "stratagems": {
-      "orks": [
-        "get-stuck-in-ardmob-orks",
-        "krump-em-ardmob-orks",
-        "medi-squigs-ardmob-orks"
       ]
     },
     "unit_compositions": {
@@ -376,24 +362,6 @@
   },
   "data_version": 963,
   "modes": {
-    "detachments": {
-      "orks": {
-        "ardmob": "combat-patrol"
-      }
-    },
-    "enhancements": {
-      "orks": {
-        "extra-platin-ardmob-orks": "combat-patrol",
-        "rallying-war-cry-ardmob-orks": "combat-patrol"
-      }
-    },
-    "stratagems": {
-      "orks": {
-        "get-stuck-in-ardmob-orks": "combat-patrol",
-        "krump-em-ardmob-orks": "combat-patrol",
-        "medi-squigs-ardmob-orks": "combat-patrol"
-      }
-    },
     "unit_compositions": {
       "adepta-sororitas": {
         "sanctuary-canoness-adalya": "combat-patrol",

@@ -201,8 +201,13 @@ describe.skipIf(!fs.existsSync(DEFAULT_DUMP_PATH))("seedStratagems over the real
     expect(aa.map((s) => s.id)).toContain("a-worthy-death-gladius-task-force-adeptus-astartes");
   });
 
-  it("does not re-seed entries excluded by current Codex rosters", () => {
-    expect(report.skippedOutsideRoster).toContain("krump-em-ardmob-orks");
+  it("does not re-seed the seeded 'Ardmob Combat Patrol stratagems", () => {
+    // 'Ardmob was the last accepted stratagem gap; its stratagems are repo records now, so nothing
+    // is held outside a roster and nothing is seeded again.
+    const orks = JSON.parse(fs.readFileSync(path.join(CORE_DIR, "orks", "stratagems.json"), "utf8")) as { id: string }[];
+    expect(orks.map((s) => s.id)).toEqual(expect.arrayContaining(["get-stuck-in-ardmob-orks", "krump-em-ardmob-orks", "medi-squigs-ardmob-orks"]));
+    expect(report.skippedOutsideRoster).toEqual([]);
+    expect(seedStratagems(dump, { includeCombatPatrol: true }).seeded.map((s) => s.id)).not.toContain("krump-em-ardmob-orks");
   });
   it("never seeds a duplicate of a core stratagem (the mirrored core id is the repo's id)", () => {
     // The dump's one-word "Counteroffensive" is the repo's core `counteroffensive`

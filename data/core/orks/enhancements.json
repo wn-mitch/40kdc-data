@@ -1037,5 +1037,47 @@
     "keyword_restrictions": [
       "Orks"
     ]
+  },
+  {
+    "id": "extra-platin-ardmob-orks",
+    "name": "Extra Platin’",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "88f3bc00-9f19-444c-ae3a-9c44143b06c4"
+      }
+    ],
+    "detachment_id": "ardmob",
+    "cost": 0,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-963"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "points_provisional": false
+  },
+  {
+    "id": "rallying-war-cry-ardmob-orks",
+    "name": "Rallying War Cry",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "b42c09c0-5327-49f8-aaf8-d834d555b2e4"
+      }
+    ],
+    "detachment_id": "ardmob",
+    "cost": 0,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-963"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "points_provisional": false
   }
 ]

@@ -29,7 +29,7 @@ Combat Patrol parents and their cost-0 enhancements remain opt-in.
 | iron-hands | 0 | 0 | 0 | 17 |
 | leagues-of-votann | 0 | 0 | 0 | 11 |
 | necrons | 0 | 0 | 0 | 13 |
-| orks | 0 | 0 | 0 | 16 |
+| orks | 1 | 2 | 0 | 15 |
 | raven-guard | 0 | 0 | 0 | 17 |
 | salamanders | 0 | 0 | 0 | 17 |
 | space-wolves | 0 | 0 | 0 | 20 |
@@ -40,5 +40,10 @@ Combat Patrol parents and their cost-0 enhancements remain opt-in.
 | white-scars | 0 | 0 | 0 | 17 |
 | world-eaters | 0 | 0 | 0 | 9 |
 
-Total: 0 detachment(s), 0 enhancement(s) created; 0 held back; 450 skipped.
+Total: 1 detachment(s), 2 enhancement(s) created; 0 held back; 449 skipped.
+
+## orks
+- created detachment `ardmob` (’Ardmob)
+  - enhancement `extra-platin-ardmob-orks` (Extra Platin’)
+  - enhancement `rallying-war-cry-ardmob-orks` (Rallying War Cry)
 

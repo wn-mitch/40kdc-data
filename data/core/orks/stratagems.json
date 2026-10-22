@@ -329,6 +329,30 @@
     ]
   },
   {
+    "id": "get-stuck-in-ardmob-orks",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "268cafb0-9d7a-4a47-bc8e-112cbc78b505"
+      }
+    ],
+    "name": "Get Stuck In",
+    "category": "detachment",
+    "detachment_id": "ardmob",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "get-stuck-in-ardmob-orks",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
     "id": "glowin-dakka-shoota-boyz-orks",
     "external_refs": [
       {
@@ -617,6 +641,30 @@
     }
   },
   {
+    "id": "krump-em-ardmob-orks",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "10d5e5dd-b0ba-4b15-93d6-cf57f2d8df30"
+      }
+    ],
+    "name": "Krump ’Em",
+    "category": "detachment",
+    "detachment_id": "ardmob",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "krump-em-ardmob-orks",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
     "id": "kustom-dakka-shoota-boyz-orks",
     "external_refs": [
       {
@@ -667,6 +715,30 @@
         "id": "1987df64-e131-418f-9c13-2b38011cdbc1"
       }
     ]
+  },
+  {
+    "id": "medi-squigs-ardmob-orks",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "f3c2ea35-be0f-4526-aff0-037a7291bbbf"
+      }
+    ],
+    "name": "Medi-Squigs",
+    "category": "detachment",
+    "detachment_id": "ardmob",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "medi-squigs-ardmob-orks",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "mind-mostly-on-the-mission-taktikal-brigade-orks",

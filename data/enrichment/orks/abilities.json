@@ -8106,49 +8106,17 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "source_digest": "bf61682df54dbc9aefb0552440deb5babe12feb0f55112526e7f55e7fe56af87",
-    "version": "2025-q3",
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "orks",
+    "detachment_id": "ardmob",
+    "ability_type": "stratagem",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
-            "all_of": [
-              "ORKS"
-            ]
-          }
-        }
-      },
-      "effect": {
-        "type": "weapon-ability-grant",
-        "target": {
-          "owner": "friendly"
-        },
-        "modifier": {
-          "weapons": {
-            "type": "melee"
-          },
-          "keywords": [
-            {
-              "keyword_id": "sustained-hits",
-              "parameters": {
-                "value": 1
-              }
-            }
-          ]
-        }
-      }
+      "type": "no-effect"
     },
     "scope": {
-      "duration": "battle"
-    },
-    "unit_ids": [],
-    "ability_type": "detachment",
-    "behavior": "passive",
-    "detachment_id": "war-horde",
-    "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+      "duration": "permanent"
+    }
   },
   {
     "ability_id": "glory-hog-da-big-hunt-orks",
@@ -13620,14 +13588,20 @@
     "stub": true,
     "unit_ids": [],
     "faction_id": "orks",
-    "detachment_id": null,
+    "detachment_id": "ardmob",
     "ability_type": "faction",
     "effect": {
       "type": "no-effect"
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "interactions": [
+      {
+        "ability_ref": "waaagh-orks",
+        "type": "replaces"
+      }
+    ]
   },
   {
     "ability_id": "crazed-rampage-dread-mob-orks",
@@ -13677,17 +13651,49 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "stub": true,
-    "unit_ids": [],
-    "faction_id": "orks",
-    "detachment_id": "war-horde",
-    "ability_type": "detachment",
+    "source_digest": "bf61682df54dbc9aefb0552440deb5babe12feb0f55112526e7f55e7fe56af87",
+    "version": "2025-q3",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "all_of": [
+              "ORKS"
+            ]
+          }
+        }
+      },
+      "effect": {
+        "type": "weapon-ability-grant",
+        "target": {
+          "owner": "friendly"
+        },
+        "modifier": {
+          "weapons": {
+            "type": "melee"
+          },
+          "keywords": [
+            {
+              "keyword_id": "sustained-hits",
+              "parameters": {
+                "value": 1
+              }
+            }
+          ]
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "battle"
+    },
+    "unit_ids": [],
+    "ability_type": "detachment",
+    "behavior": "passive",
+    "detachment_id": "war-horde",
+    "community_notes": "community-authored from 11e source",
+    "faction_id": "orks"
   },
   {
     "ability_id": "glowin-dakka-shoota-boyz-orks",
@@ -13944,6 +13950,106 @@
     "faction_id": "orks",
     "detachment_id": null,
     "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "ard-as-nails-ardmob-orks",
+    "name": "’Ard As Nails",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "orks",
+    "detachment_id": "ardmob",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "extra-platin-ardmob-orks",
+    "name": "Extra Platin’",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "orks",
+    "detachment_id": "ardmob",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "krump-em-ardmob-orks",
+    "name": "Krump ’Em",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "orks",
+    "detachment_id": "ardmob",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "medi-squigs-ardmob-orks",
+    "name": "Medi-Squigs",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "orks",
+    "detachment_id": "ardmob",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "rallying-war-cry-ardmob-orks",
+    "name": "Rallying War Cry",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "orks",
+    "detachment_id": "ardmob",
+    "ability_type": "enhancement",
     "effect": {
       "type": "no-effect"
     },
