@@ -20,7 +20,7 @@
     "name": "Chaos familiar",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -82,7 +82,7 @@
     "name": "icon of flame",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "category": "icon",
     "external_refs": [
@@ -97,7 +97,7 @@
     "name": "Brayhorn",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -112,7 +112,7 @@
     "category": "standard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -127,7 +127,7 @@
     "category": "icon",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -141,7 +141,7 @@
     "name": "Instrument of Chaos",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {

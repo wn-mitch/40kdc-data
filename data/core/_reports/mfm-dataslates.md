@@ -1,6 +1,6 @@
-# MFM dataslates — DRY RUN
+# MFM dataslates — APPLIED
 
-Current dataslate: `11th/mfm-963`.
+Current dataslate: `11th/mfm-995`.
 
 Promote: verified, stamped current. Demote: claimed dump confirmation, failed verification,
 stamped provisional. Kept: verified and already current. Untouched: unverified and not claiming
@@ -8,17 +8,17 @@ dump confirmation.
 
 | Entity | Promote | Demote | Kept | Untouched |
 |---|--:|--:|--:|--:|
-| units | 0 | 0 | 1094 | 5 |
-| weapons | 0 | 0 | 2928 | 367 |
-| wargear | 0 | 0 | 167 | 85 |
-| unit-compositions | 0 | 0 | 1069 | 0 |
-| wargear-options | 0 | 0 | 1347 | 0 |
-| leader-attachments | 0 | 0 | 285 | 8 |
-| enhancements | 0 | 0 | 885 | 0 |
-| detachments | 0 | 0 | 18 | 432 |
-| stratagems | 0 | 0 | 164 | 1144 |
-| abilities | 0 | 0 | 509 | 4018 |
-| phase-mappings | 0 | 0 | 189 | 1422 |
+| units | 94 | 1 | 1003 | 5 |
+| weapons | 2915 | 5 | 18 | 366 |
+| wargear | 165 | 2 | 0 | 85 |
+| unit-compositions | 1063 | 0 | 0 | 0 |
+| wargear-options | 0 | 0 | 1346 | 0 |
+| leader-attachments | 0 | 0 | 283 | 8 |
+| enhancements | 0 | 0 | 888 | 0 |
+| detachments | 18 | 11 | 0 | 427 |
+| stratagems | 162 | 2 | 0 | 1146 |
+| abilities | 507 | 3 | 0 | 4020 |
+| phase-mappings | 189 | 1 | 0 | 1391 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
 ## Abilities by faction
@@ -26,36 +26,36 @@ dump confirmation.
 | Faction | Promote | Demote | Kept | Untouched |
 |---|--:|--:|--:|--:|
 | _core | 0 | 0 | 0 | 26 |
-| adepta-sororitas | 0 | 0 | 3 | 145 |
+| adepta-sororitas | 3 | 0 | 0 | 145 |
 | adeptus-astartes | 0 | 0 | 0 | 250 |
-| adeptus-custodes | 0 | 0 | 2 | 152 |
-| adeptus-mechanicus | 0 | 0 | 106 | 61 |
-| aeldari | 0 | 0 | 1 | 299 |
-| agents-of-the-imperium | 0 | 0 | 1 | 137 |
-| astra-militarum | 0 | 0 | 1 | 250 |
+| adeptus-custodes | 0 | 0 | 0 | 158 |
+| adeptus-mechanicus | 105 | 1 | 0 | 61 |
+| aeldari | 2 | 0 | 0 | 298 |
+| agents-of-the-imperium | 1 | 0 | 0 | 137 |
+| astra-militarum | 1 | 0 | 0 | 250 |
 | black-templars | 0 | 0 | 0 | 63 |
 | blood-angels | 0 | 0 | 0 | 61 |
-| chaos-daemons | 0 | 0 | 2 | 193 |
+| chaos-daemons | 2 | 0 | 0 | 193 |
 | chaos-knights | 0 | 0 | 0 | 110 |
-| chaos-space-marines | 0 | 0 | 181 | 100 |
+| chaos-space-marines | 180 | 1 | 0 | 100 |
 | dark-angels | 0 | 0 | 0 | 77 |
-| death-guard | 0 | 0 | 94 | 66 |
+| death-guard | 94 | 0 | 0 | 66 |
 | deathwatch | 0 | 0 | 0 | 36 |
-| drukhari | 0 | 0 | 1 | 163 |
+| drukhari | 1 | 0 | 0 | 163 |
 | emperors-children | 0 | 0 | 0 | 146 |
-| genestealer-cults | 0 | 0 | 1 | 146 |
-| grey-knights | 0 | 0 | 1 | 133 |
+| genestealer-cults | 2 | 0 | 0 | 145 |
+| grey-knights | 1 | 0 | 0 | 133 |
 | imperial-fists | 0 | 0 | 0 | 11 |
 | imperial-knights | 0 | 0 | 0 | 118 |
 | iron-hands | 0 | 0 | 0 | 11 |
 | leagues-of-votann | 0 | 0 | 0 | 155 |
-| necrons | 0 | 0 | 2 | 228 |
-| orks | 0 | 0 | 0 | 206 |
+| necrons | 3 | 0 | 0 | 227 |
+| orks | 0 | 0 | 0 | 205 |
 | raven-guard | 0 | 0 | 0 | 11 |
 | salamanders | 0 | 0 | 0 | 11 |
 | space-wolves | 0 | 0 | 0 | 87 |
-| tau-empire | 0 | 0 | 112 | 54 |
-| thousand-sons | 0 | 0 | 1 | 157 |
+| tau-empire | 111 | 1 | 0 | 54 |
+| thousand-sons | 1 | 0 | 0 | 157 |
 | tyranids | 0 | 0 | 0 | 186 |
 | ultramarines | 0 | 0 | 0 | 11 |
 | white-scars | 0 | 0 | 0 | 11 |
@@ -69,9 +69,9 @@ dump confirmation.
 | _core | digest-differs | 14 |
 | _core | stub | 1 |
 | _core | unpublished | 10 |
-| adepta-sororitas | digest-differs | 15 |
+| adepta-sororitas | digest-differs | 16 |
 | adepta-sororitas | stub | 11 |
-| adepta-sororitas | unpublished | 119 |
+| adepta-sororitas | unpublished | 118 |
 | adepta-sororitas | verified | 3 |
 | adeptus-astartes | ambiguous-source | 1 |
 | adeptus-astartes | digest-differs | 84 |
@@ -79,18 +79,17 @@ dump confirmation.
 | adeptus-astartes | stub | 155 |
 | adeptus-astartes | unpublished | 5 |
 | adeptus-custodes | ambiguous-source | 1 |
-| adeptus-custodes | digest-differs | 12 |
-| adeptus-custodes | stub | 3 |
-| adeptus-custodes | unpublished | 136 |
-| adeptus-custodes | verified | 2 |
-| adeptus-mechanicus | digest-differs | 12 |
+| adeptus-custodes | digest-differs | 48 |
+| adeptus-custodes | stub | 103 |
+| adeptus-custodes | unpublished | 6 |
+| adeptus-mechanicus | digest-differs | 13 |
 | adeptus-mechanicus | stub | 25 |
 | adeptus-mechanicus | unpublished | 24 |
-| adeptus-mechanicus | verified | 106 |
+| adeptus-mechanicus | verified | 105 |
 | aeldari | digest-differs | 16 |
 | aeldari | stub | 139 |
-| aeldari | unpublished | 144 |
-| aeldari | verified | 1 |
+| aeldari | unpublished | 143 |
+| aeldari | verified | 2 |
 | agents-of-the-imperium | ambiguous-source | 1 |
 | agents-of-the-imperium | digest-differs | 22 |
 | agents-of-the-imperium | stub | 54 |
@@ -115,8 +114,8 @@ dump confirmation.
 | chaos-knights | unpublished | 99 |
 | chaos-space-marines | digest-differs | 21 |
 | chaos-space-marines | stub | 30 |
-| chaos-space-marines | unpublished | 49 |
-| chaos-space-marines | verified | 181 |
+| chaos-space-marines | unpublished | 50 |
+| chaos-space-marines | verified | 180 |
 | dark-angels | digest-differs | 48 |
 | dark-angels | no-source | 1 |
 | dark-angels | stub | 21 |
@@ -138,8 +137,8 @@ dump confirmation.
 | emperors-children | unpublished | 110 |
 | genestealer-cults | digest-differs | 16 |
 | genestealer-cults | stub | 74 |
-| genestealer-cults | unpublished | 56 |
-| genestealer-cults | verified | 1 |
+| genestealer-cults | unpublished | 55 |
+| genestealer-cults | verified | 2 |
 | grey-knights | digest-differs | 5 |
 | grey-knights | stub | 87 |
 | grey-knights | unpublished | 41 |
@@ -156,12 +155,12 @@ dump confirmation.
 | leagues-of-votann | unpublished | 58 |
 | necrons | digest-differs | 17 |
 | necrons | stub | 102 |
-| necrons | unpublished | 109 |
-| necrons | verified | 2 |
-| orks | ambiguous-source | 2 |
-| orks | digest-differs | 86 |
+| necrons | unpublished | 108 |
+| necrons | verified | 3 |
+| orks | ambiguous-source | 1 |
+| orks | digest-differs | 87 |
 | orks | no-source | 1 |
-| orks | stub | 34 |
+| orks | stub | 33 |
 | orks | unpublished | 83 |
 | raven-guard | digest-differs | 1 |
 | raven-guard | stub | 10 |
@@ -173,8 +172,8 @@ dump confirmation.
 | space-wolves | unpublished | 1 |
 | tau-empire | digest-differs | 6 |
 | tau-empire | stub | 4 |
-| tau-empire | unpublished | 44 |
-| tau-empire | verified | 112 |
+| tau-empire | unpublished | 45 |
+| tau-empire | verified | 111 |
 | thousand-sons | digest-differs | 19 |
 | thousand-sons | stub | 21 |
 | thousand-sons | unpublished | 117 |
@@ -193,7 +192,7 @@ dump confirmation.
 | Outcome | Records |
 |---|--:|
 | dangling-ref | 9 |
-| differs | 155 |
+| differs | 156 |
 | no-ref | 184 |
-| unmapped-keyword | 19 |
-| verified | 2928 |
+| unmapped-keyword | 22 |
+| verified | 2933 |

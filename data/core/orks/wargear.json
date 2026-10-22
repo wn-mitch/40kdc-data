@@ -4,7 +4,7 @@
     "name": "kustom force field",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -54,7 +54,7 @@
     "name": "blastajet force field",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -128,7 +128,7 @@
     "name": "Pulsa Rokkit",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "pre-launch-provisional"
     },
     "external_refs": [
       {
@@ -162,7 +162,7 @@
     "name": "Paired Krumpas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -176,7 +176,7 @@
     "name": "Pulsa Rokkit (Once per battle, per unit)",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     }
   }
 ]

@@ -4,7 +4,7 @@
     "name": "soul trap",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -26,7 +26,7 @@
     "name": "Kabalite icon",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "category": "icon",
     "external_refs": [
@@ -41,7 +41,7 @@
     "name": "phantasm grenade launcher",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -63,7 +63,7 @@
     "name": "Incubi Shrine token",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "category": "token",
     "external_refs": [
@@ -78,7 +78,7 @@
     "name": "cluster caltrops",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -92,7 +92,7 @@
     "name": "grav-talon",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -110,7 +110,7 @@
     "name": "Stimm-needler",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -124,7 +124,7 @@
     "name": "Shadowfield",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {

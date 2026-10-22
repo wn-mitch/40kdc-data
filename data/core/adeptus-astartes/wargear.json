@@ -4,7 +4,7 @@
     "name": "relic shield",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -22,7 +22,7 @@
     "name": "storm shield",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -52,7 +52,7 @@
     "name": "helix gauntlet",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -70,7 +70,7 @@
     "name": "Thunderhawk cluster bombs",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -84,7 +84,7 @@
     "name": "Watcher in the Dark",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -98,7 +98,7 @@
     "name": "auspex array",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -112,7 +112,7 @@
     "name": "shield dome",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -144,7 +144,7 @@
     "name": "blizzard shield",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -162,7 +162,7 @@
     "name": "death totem",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -180,7 +180,7 @@
     "name": "The Lion Helm",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -204,7 +204,7 @@
     "name": "Orbital Comms Array",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -218,7 +218,7 @@
     "name": "Grav-chutes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -232,7 +232,7 @@
     "name": "Banner of Macragge",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -246,7 +246,7 @@
     "name": "Haywire Mine (Once per battle, per unit)",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     }
   }
 ]

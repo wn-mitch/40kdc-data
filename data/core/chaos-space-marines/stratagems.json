@@ -50,7 +50,7 @@
     "ability_id": "alert-to-danger-zarkans-daemonkin-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -123,7 +123,7 @@
     "ability_id": "at-the-tyrants-command-hurons-marauders-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -168,7 +168,7 @@
     "ability_id": "autostimulants-creations-of-bile-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -197,7 +197,7 @@
     "ability_id": "balefire-boon-cult-of-the-arkifane-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "type": "battle-tactic",
     "external_refs": [
@@ -244,7 +244,7 @@
     "ability_id": "biomechanoid-regeneration-cult-of-the-arkifane-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "type": "epic-deed",
     "external_refs": [
@@ -475,7 +475,7 @@
     "ability_id": "chosen-for-glory-chaos-cult-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -511,7 +511,7 @@
     "ability_id": "coils-of-deception-deceptors-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -560,7 +560,7 @@
     "ability_id": "contemptuous-disregard-veterans-of-the-long-war-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -619,7 +619,7 @@
     "ability_id": "corrupted-munitions-renegade-warband-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -683,7 +683,7 @@
     "ability_id": "crazed-focus-chaos-cult-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -755,7 +755,7 @@
     "ability_id": "daemonic-possession-soulforged-warpack-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -849,7 +849,7 @@
     "ability_id": "depthless-cruelty-dread-talons-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -931,7 +931,7 @@
     "ability_id": "desperate-pledge-soulforged-warpack-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "pre-launch-provisional"
     },
     "external_refs": [
       {
@@ -998,7 +998,7 @@
     "ability_id": "detonator-deceptors-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1046,7 +1046,7 @@
     "ability_id": "diabolic-regeneration-creations-of-bile-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1155,7 +1155,7 @@
     "ability_id": "encircling-surge-hurons-marauders-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1207,7 +1207,7 @@
     "ability_id": "endless-ire-veterans-of-the-long-war-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1252,7 +1252,7 @@
     "ability_id": "eternal-hate-pactbound-zealots-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1290,7 +1290,7 @@
     "ability_id": "eye-of-the-gods-pactbound-zealots-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1371,7 +1371,7 @@
     "ability_id": "feeding-frenzy-soulforged-warpack-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1479,7 +1479,7 @@
     "ability_id": "forge-fire-surge-cult-of-the-arkifane-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "type": "strategic-ploy",
     "external_refs": [
@@ -1626,7 +1626,7 @@
     "ability_id": "horrific-incursion-nightmare-hunt-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1690,7 +1690,7 @@
     "ability_id": "infernal-sacrifice-chaos-cult-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1739,7 +1739,7 @@
     "ability_id": "infernal-vigour-cabal-of-chaos-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1813,7 +1813,7 @@
     "ability_id": "malicious-surge-nightmare-hunt-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1859,7 +1859,7 @@
     "ability_id": "masters-are-watching-creations-of-bile-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1922,7 +1922,7 @@
     "ability_id": "merciless-pursuit-dread-talons-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2011,7 +2011,7 @@
     "ability_id": "millennia-of-experience-veterans-of-the-long-war-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2058,7 +2058,7 @@
     "ability_id": "monstrous-visages-creations-of-bile-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2162,7 +2162,7 @@
     "ability_id": "never-outgunned-renegade-warband-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2218,7 +2218,7 @@
     "ability_id": "opportunistic-raiders-renegade-raiders-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2296,7 +2296,7 @@
     "ability_id": "persistent-assailants-fellhammer-siege-host-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2360,7 +2360,7 @@
     "ability_id": "pick-them-off-deceptors-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2424,7 +2424,7 @@
     "ability_id": "pitiless-cannonade-fellhammer-siege-host-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2489,7 +2489,7 @@
     "ability_id": "pitiless-hunters-dread-talons-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2526,7 +2526,7 @@
     "ability_id": "plunging-talons-murdertalon-raiders-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2682,7 +2682,7 @@
     "ability_id": "predatory-pursuit-soulforged-warpack-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2763,7 +2763,7 @@
     "ability_id": "prey-on-the-weak-nightmare-hunt-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2844,7 +2844,7 @@
     "ability_id": "profane-zeal-pactbound-zealots-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2881,7 +2881,7 @@
     "ability_id": "raking-pass-murdertalon-raiders-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2942,7 +2942,7 @@
     "ability_id": "reavers-flurry-hurons-marauders-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -3002,7 +3002,7 @@
     "ability_id": "reavers-haste-renegade-raiders-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -3068,7 +3068,7 @@
     "ability_id": "reavers-reaction-renegade-warband-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -3112,7 +3112,7 @@
     "ability_id": "reckless-haste-chaos-cult-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -3198,7 +3198,7 @@
     "ability_id": "relentless-pursuit-deceptors-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -3235,7 +3235,7 @@
     "ability_id": "relentless-terror-dread-talons-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -3271,7 +3271,7 @@
     "ability_id": "relentless-terror-nightmare-hunt-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -3335,7 +3335,7 @@
     "ability_id": "renegade-claim-renegade-warband-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -3371,7 +3371,7 @@
     "ability_id": "ruinations-bounty-devotees-of-destruction-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -3458,7 +3458,7 @@
     "ability_id": "ruinous-raid-renegade-raiders-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -3551,7 +3551,7 @@
     "ability_id": "scour-and-seize-renegade-raiders-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -3595,7 +3595,7 @@
     "ability_id": "scrambled-coordinates-deceptors-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -3653,7 +3653,7 @@
     "ability_id": "screaming-descent-dread-talons-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -3689,7 +3689,7 @@
     "ability_id": "seize-the-prize-hurons-marauders-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -3746,7 +3746,7 @@
     "ability_id": "siegebreaker-strike-warpstrike-champions-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "type": "strategic-ploy",
     "external_refs": [
@@ -3820,7 +3820,7 @@
     "ability_id": "skinshift-pactbound-zealots-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -3883,7 +3883,7 @@
     "ability_id": "snare-of-fire-devotees-of-destruction-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -3963,7 +3963,7 @@
     "ability_id": "soul-tally-offerings-cult-of-the-arkifane-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -4028,7 +4028,7 @@
     "ability_id": "specimens-for-the-spider-creations-of-bile-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -4076,7 +4076,7 @@
     "ability_id": "steadfast-determination-fellhammer-siege-host-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -4157,7 +4157,7 @@
     "ability_id": "talons-sunk-deep-nightmare-hunt-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -4213,7 +4213,7 @@
     "ability_id": "to-the-favoured-the-spoils-hurons-marauders-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -4257,7 +4257,7 @@
     "ability_id": "torpefying-refrain-pactbound-zealots-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -4378,7 +4378,7 @@
     "ability_id": "undying-hatred-renegade-warband-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -4427,7 +4427,7 @@
     "ability_id": "unfailingly-obdurate-renegade-raiders-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -4565,7 +4565,7 @@
     "ability_id": "unstoppable-rampage-soulforged-warpack-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -4685,7 +4685,7 @@
     "ability_id": "vengeful-destruction-renegade-warband-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -4722,7 +4722,7 @@
     "ability_id": "vindictive-strategy-zarkans-daemonkin-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -4778,7 +4778,7 @@
     "ability_id": "warp-flicker-warpstrike-champions-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "type": "strategic-ploy",
     "external_refs": [
@@ -4854,7 +4854,7 @@
     "ability_id": "warp-tainted-warpstrike-champions-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "type": "strategic-ploy",
     "external_refs": [
@@ -4890,7 +4890,7 @@
     "ability_id": "warp-twisted-terrors-murdertalon-raiders-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -4965,7 +4965,7 @@
     "ability_id": "warpcharged-engines-renegade-raiders-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -5001,7 +5001,7 @@
     "ability_id": "wreathed-in-warpflame-cabal-of-chaos-chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
