@@ -7,6 +7,7 @@ import { assessDetachmentSelection, summarizeSupportCosts, type LegalityIssue } 
 import type { MatrixConfig, Scenario } from "./config.js";
 import { preferFactionCopies, type FactionContext, unitInFaction } from "./factions.js";
 import { DamageScoringSession, type DamageScoringInvariants } from "./scoring.js";
+import { isCombatPatrolDetachment } from "../abilities-resolver/resolver.js";
 import { buildLedger } from "./ledger.js";
 import type { DamageCellState, StackMember, StackResult, StackSpec } from "./model.js";
 import { damageCellKey, type DamageCellReport, type LeverReport, type WinnerReport } from "./report.js";
@@ -82,13 +83,29 @@ function detachmentsForFaction(dataset: Dataset, faction: FactionContext): Detac
     .sort((left, right) => left.id.localeCompare(right.id));
 }
 
-function detachmentCombos(detachments: readonly Detachment[], config: MatrixConfig): Detachment[][] {
+/** The game modes a detachment is legal in; an absent `game_modes` means matched play only. */
+function gameModes(detachment: Detachment): readonly string[] {
+  return detachment.game_modes ?? ["matched-play"];
+}
+
+/**
+ * True when `next` can join `selected` in one army: every detachment shares a game mode, and a
+ * Combat Patrol detachment is the army's only detachment (an army is one patrol).
+ */
+export function combinableDetachments(selected: readonly Detachment[], next: Detachment): boolean {
+  if (selected.length === 0) return true;
+  if (isCombatPatrolDetachment(next) || selected.some(isCombatPatrolDetachment)) return false;
+  return gameModes(next).some((mode) => selected.every((detachment) => gameModes(detachment).includes(mode)));
+}
+
+export function detachmentCombos(detachments: readonly Detachment[], config: Pick<MatrixConfig, "maxDetachments" | "dpBudget">): Detachment[][] {
   const output: Detachment[][] = [[]];
   const walk = (start: number, selected: Detachment[], points: number): void => {
     if (selected.length >= config.maxDetachments) return;
     for (let index = start; index < detachments.length; index++) {
       const nextPoints = points + (detachments[index].detachment_points ?? 0);
       if (nextPoints > config.dpBudget) continue;
+      if (!combinableDetachments(selected, detachments[index])) continue;
       selected.push(detachments[index]);
       output.push([...selected]);
       walk(index + 1, selected, nextPoints);

@@ -5,7 +5,7 @@ import { Dataset } from "../src/data/dataset.js";
 import { parseMatrixConfig } from "../src/stack-damage/config.js";
 import { resolveFactionContext, unitInFaction } from "../src/stack-damage/factions.js";
 import { buildLedger } from "../src/stack-damage/ledger.js";
-import { damageScoringSession, emptySpec } from "../src/stack-damage/search.js";
+import { damageScoringSession, detachmentCombos, emptySpec } from "../src/stack-damage/search.js";
 
 // A Combat Patrol prints its own copy of an army rule. The copy applies only in the patrol's
 // detachment, and there it replaces the codex army rule, so the two never stack.
@@ -80,6 +80,26 @@ describe("Combat Patrol army-rule set in the damage matrix", () => {
     expect(ids).toContain("blessings-of-khorne-frenzied-reavers-world-eaters");
     expect(ids).not.toContain("pact-of-blood-world-eaters");
     expect(ids).not.toContain("blessings-of-khorne-world-eaters");
+  });
+});
+
+describe("detachment combinations in the damage matrix", () => {
+  // A Combat Patrol army is one patrol: its detachment never joins matched-play detachments.
+  const detachments = dataset.detachments.byFaction("adeptus-mechanicus");
+  const combos = detachmentCombos(detachments, { maxDetachments: 3, dpBudget: 3 });
+  const isPatrol = (id: string) => dataset.detachments.getInFaction(id, "adeptus-mechanicus")!.game_modes?.includes("combat-patrol") === true;
+
+  it("offers the patrol detachment alone", () => {
+    expect(combos.map((combo) => combo.map((detachment) => detachment.id))).toContainEqual(["purge-corps-deltic-9"]);
+  });
+
+  it("never combines a patrol detachment with another detachment", () => {
+    const mixed = combos.filter((combo) => combo.length > 1 && combo.some((detachment) => isPatrol(detachment.id)));
+    expect(mixed).toEqual([]);
+  });
+
+  it("still combines matched-play detachments", () => {
+    expect(combos.some((combo) => combo.length > 1)).toBe(true);
   });
 });
 
