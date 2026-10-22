@@ -116,6 +116,8 @@ describe("deriveTrigger (phases review)", () => {
     expect(deriveTrigger("Your Movement or your Charge phase, when a unit is selected to make a charge move.").phases)
       .toEqual(["movement", "charge"]);
     expect(deriveTrigger("Start of your Movement or Charge phase.").phases).toEqual(["movement", "charge"]);
+    expect(deriveTrigger("Your Movement/Charge phase, when a unit is selected to move or declares a charge.").phases)
+      .toEqual(["movement", "charge"]);
     expect(deriveTrigger("Your opponent’s Shooting phase or the Fight phase, just after a unit has selected its targets.").phases)
       .toEqual(["shooting", "fight"]);
   });

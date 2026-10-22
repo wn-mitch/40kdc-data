@@ -22,8 +22,11 @@ export type CoreCheck =
 
 type CoreRecord = Record<string, unknown>;
 
-/** A keyword as compared: upper case, with curly apostrophes as straight ones (EMPEROR’S is EMPEROR'S). */
-const upper = (value: unknown) => String(value).replace(/[‘’]/gu, "'").toUpperCase();
+/**
+ * A keyword as compared: upper case, with curly apostrophes as straight ones (EMPEROR’S is
+ * EMPEROR'S) and Unicode hyphens as ASCII ones (SHIELD‑CAPTAIN is SHIELD-CAPTAIN).
+ */
+const upper = (value: unknown) => String(value).replace(/[‘’]/gu, "'").replace(/[\u2010\u2011]/gu, "-").toUpperCase();
 
 const cache = new Map<string, Map<string, CoreRecord>>();
 /** The core faction directory each record was read from ("" for the core rules' own file). */

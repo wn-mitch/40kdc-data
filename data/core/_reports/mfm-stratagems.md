@@ -1,4 +1,4 @@
-# MFM stratagems — APPLIED
+# MFM stratagems — DRY RUN
 
 APPLIED (first-class dump columns): `cp_cost` ← cpCost, `player_turn` ← key,
 `type` ← category (fill-only), `category` ← detachmentId presence.
@@ -11,7 +11,7 @@ Avarice→command, Scriptural Prognosis→all-five), so authored phases win.
 |---|--:|--:|--:|--:|--:|--:|--:|--:|
 | (core) | 10 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | adepta-sororitas | 39 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| adeptus-astartes | 51 | 0 | 0 | 0 | 0 | 0 | 1 | 0 |
+| adeptus-astartes | 51 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | adeptus-custodes | 50 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | adeptus-mechanicus | 54 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | aeldari | 81 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -22,34 +22,29 @@ Avarice→command, Scriptural Prognosis→all-five), so authored phases win.
 | chaos-daemons | 46 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | chaos-knights | 39 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | chaos-space-marines | 96 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| dark-angels | 17 | 0 | 0 | 0 | 0 | 0 | 1 | 0 |
+| dark-angels | 17 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | death-guard | 48 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | deathwatch | 12 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | drukhari | 48 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | emperors-children | 54 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | genestealer-cults | 48 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | grey-knights | 48 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| imperial-fists | 8 | 0 | 0 | 0 | 0 | 0 | 1 | 0 |
+| imperial-fists | 8 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | imperial-knights | 39 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | iron-hands | 8 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | leagues-of-votann | 54 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | necrons | 66 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| orks | 40 | 0 | 0 | 0 | 0 | 0 | 1 | 0 |
+| orks | 43 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | raven-guard | 8 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | salamanders | 8 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| space-wolves | 17 | 0 | 0 | 0 | 0 | 0 | 1 | 0 |
+| space-wolves | 17 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | tau-empire | 34 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | thousand-sons | 48 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | tyranids | 54 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | ultramarines | 8 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| white-scars | 8 | 0 | 0 | 0 | 0 | 0 | 1 | 0 |
+| white-scars | 8 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | world-eaters | 42 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| **TOTAL** | **1310** | **0** | **0** | **0** | **0** | **0** | **6** | **0** |
-
-## adeptus-astartes
-
-**Phases — authored vs prose-derived (review only, NOT applied):**
-- upstoppable-advance-ironclad-champions-adeptus-astartes: [movement,charge] vs [charge]
+| **TOTAL** | **1313** | **0** | **0** | **0** | **0** | **0** | **0** | **0** |
 
 ## agents-of-the-imperium
 
@@ -67,35 +62,10 @@ Avarice→command, Scriptural Prognosis→all-five), so authored phases win.
 **Player-turn ← either over the key (the WHEN line names a phase in either turn):**
 - storm-of-darkness-traitoris-lance-chaos-knights: key said opponent-turn
 
-## dark-angels
-
-**Phases — authored vs prose-derived (review only, NOT applied):**
-- knights-of-iron-wrath-of-the-rock-dark-angels: [movement,charge] vs [charge]
-
 ## death-guard
 
 **Player-turn ← either over the key (the WHEN line names a phase in either turn):**
 - territorial-infection-paragons-of-putrescence-death-guard: key said your-turn
 
-## imperial-fists
-
-**Phases — authored vs prose-derived (review only, NOT applied):**
-- augmented-targeting-ceramite-sentinels-imperial-fists: [shooting] vs [shooting,fight]
-
-## orks
-
-**Phases — authored vs prose-derived (review only, NOT applied):**
-- stomping-juggernaut-dread-mob-orks: [movement,charge] vs [charge]
-
-## space-wolves
-
-**Phases — authored vs prose-derived (review only, NOT applied):**
-- fenrisian-ferocity-saga-of-the-great-wolf-space-wolves: [movement,charge] vs [charge]
-
-## white-scars
-
-**Phases — authored vs prose-derived (review only, NOT applied):**
-- flawless-riders-spearpoint-task-force-white-scars: [movement,charge] vs [charge]
-
-Stratagems in dump with no repo match (author via faction-pack flow): 3
+Stratagems in dump with no repo match (author via faction-pack flow): 0
 

@@ -171,4 +171,15 @@ describe("Semantic authoring family extensions, second round", () => {
     expect(check(["EMPEROR'S CHILDREN", "INFANTRY"])).toEqual([]);
     expect(check(["EMPEROR'S CHILDREN", "MOUNTED"])).toHaveLength(1);
   });
+
+  it("matches a keyword printed with a non-breaking hyphen against one with an ASCII hyphen", () => {
+    const root = mkdtempSync(join(tmpdir(), "semantic-authoring-extensions-2-"));
+    roots.push(root);
+    mkdirSync(join(root, "core", "alpha"), { recursive: true });
+    // Fabricated fixture record only.
+    writeFileSync(join(root, "core", "alpha", "enhancements.json"), JSON.stringify([{ id: "dashed", keyword_restriction_groups: [["Alpha\u2011Captain in Heavy Armour"]] }]));
+    const check = (keywords: string[]) => coreCheckErrors(root, "dashed", [{ kind: "bearer-eligibility", parameters: { keywords, match: "all", excluded_keywords: [] } }]);
+    expect(check(["ALPHA-CAPTAIN IN HEAVY ARMOUR"])).toEqual([]);
+    expect(check(["ALPHA-CAPTAIN"])).toHaveLength(1);
+  });
 });

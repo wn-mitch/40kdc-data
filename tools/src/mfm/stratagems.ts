@@ -107,9 +107,9 @@ function stripTags(s: string): string {
 const PHASE_NAMES: Phase[] = ["command", "movement", "shooting", "charge", "fight"];
 const PHASE_WORD = `(?:${PHASE_NAMES.join("|")})`;
 /** A run of phase names sharing one "phase(s)": "movement or your charge phase",
- * "shooting phase or the fight phase" (two runs), "command phase". */
+ * "movement/charge phase", "shooting phase or the fight phase" (two runs), "command phase". */
 const PHASE_RUN = new RegExp(
-  `(?:(excluding) (?:the )?)?(${PHASE_WORD}(?:\\s*(?:,|or|and)\\s*(?:your (?:opponent(?:'|’)s )?|the )?${PHASE_WORD})*)\\s+phases?\\b`,
+  `(?:(excluding) (?:the )?)?(${PHASE_WORD}(?:\\s*(?:,|/|or|and)\\s*(?:your (?:opponent(?:'|’)s )?|the )?${PHASE_WORD})*)\\s+phases?\\b`,
   "g",
 );
 
