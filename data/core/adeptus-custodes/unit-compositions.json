@@ -107,42 +107,6 @@
     ]
   },
   {
-    "unit_id": "venerable-contemptor-dreadnought",
-    "faction_id": "adeptus-custodes",
-    "models": [
-      {
-        "name": "Venerable Contemptor Dreadnought",
-        "min": 1,
-        "max": 1,
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 60
-        },
-        "default_weapon_ids": [
-          "multi-melta",
-          "contemptor-combat-weapon",
-          "combi-bolter"
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-963"
-    },
-    "tiers": [
-      {
-        "models": [
-          {
-            "name": "Venerable Contemptor Dreadnought",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      }
-    ]
-  },
-  {
     "unit_id": "blade-champion",
     "faction_id": "adeptus-custodes",
     "models": [
@@ -400,41 +364,6 @@
             "name": "Vigilator",
             "min": 9,
             "max": 9
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "unit_id": "sagittarum-custodians",
-    "faction_id": "adeptus-custodes",
-    "models": [
-      {
-        "name": "Sagittarum Custodian",
-        "min": 5,
-        "max": 5,
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 40
-        },
-        "default_weapon_ids": [
-          "adrastus-bolt-caliver",
-          "misericordia-sagittarum-custodians"
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-963"
-    },
-    "tiers": [
-      {
-        "models": [
-          {
-            "name": "Sagittarum Custodian",
-            "min": 5,
-            "max": 5
           }
         ]
       }
@@ -726,40 +655,6 @@
     ]
   },
   {
-    "unit_id": "aleya",
-    "faction_id": "adeptus-custodes",
-    "models": [
-      {
-        "name": "Aleya",
-        "min": 1,
-        "max": 1,
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 32
-        },
-        "default_weapon_ids": [
-          "somnus"
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-963"
-    },
-    "tiers": [
-      {
-        "models": [
-          {
-            "name": "Aleya",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      }
-    ]
-  },
-  {
     "unit_id": "gyrfalcon-jetbike-sodality",
     "faction_id": "adeptus-custodes",
     "models": [
@@ -799,43 +694,6 @@
             "name": "Agamatus Custodians",
             "min": 4,
             "max": 6
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "unit_id": "venerable-land-raider",
-    "faction_id": "adeptus-custodes",
-    "models": [
-      {
-        "name": "Venerable Land Raider",
-        "min": 1,
-        "max": 1,
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "hull",
-          "draft": true
-        },
-        "default_weapon_ids": [
-          "twin-heavy-bolter",
-          "godhammer-lascannon",
-          "godhammer-lascannon",
-          "armoured-tracks-venerable-land-raider"
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-963"
-    },
-    "tiers": [
-      {
-        "models": [
-          {
-            "name": "Venerable Land Raider",
-            "min": 1,
-            "max": 1
           }
         ]
       }
@@ -966,40 +824,6 @@
     ]
   },
   {
-    "unit_id": "valerian",
-    "faction_id": "adeptus-custodes",
-    "models": [
-      {
-        "name": "Valerian",
-        "min": 1,
-        "max": 1,
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 40
-        },
-        "default_weapon_ids": [
-          "gnosis"
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-963"
-    },
-    "tiers": [
-      {
-        "models": [
-          {
-            "name": "Valerian",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      }
-    ]
-  },
-  {
     "unit_id": "venatari-with-verutum-lances",
     "faction_id": "adeptus-custodes",
     "models": [
@@ -1116,40 +940,6 @@
             "name": "Aquilon Custodian",
             "min": 4,
             "max": 6
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "unit_id": "custodian-guard-with-adrasite-and-pyrithite-spears",
-    "faction_id": "adeptus-custodes",
-    "models": [
-      {
-        "name": "Custodian Guard with Adrasite and Pyrithite Spears",
-        "min": 5,
-        "max": 5,
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 40
-        },
-        "default_weapon_ids": [
-          "adrasite-spear"
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-963"
-    },
-    "tiers": [
-      {
-        "models": [
-          {
-            "name": "Custodian Guard with Adrasite and Pyrithite Spears",
-            "min": 5,
-            "max": 5
           }
         ]
       }

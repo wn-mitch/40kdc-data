@@ -175,8 +175,8 @@
     ]
   },
   {
-    "id": "nightforged-battery-upgarde-darkflight-pursuit-dark-angels",
-    "name": "Nightforged Battery (Upgarde)",
+    "id": "nightforged-battery-upgrade-darkflight-pursuit-dark-angels",
+    "name": "Nightforged Battery (Upgrade)",
     "detachment_id": "darkflight-pursuit",
     "cost": 10,
     "keyword_restrictions": [

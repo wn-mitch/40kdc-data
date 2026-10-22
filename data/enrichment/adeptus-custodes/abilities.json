@@ -136,55 +136,6 @@
     "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "unyielding-ancient-adeptus-custodes",
-    "name": "Unyielding Ancient",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "cfdc8d7b44a8c165dcd1f5cb6cab57f787faccbf1b678fcf29877abf6bea6785",
-    "version": "2025-q3",
-    "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "rule-state",
-          "target": "this-model",
-          "modifier": {
-            "direction": "suppressed",
-            "rule_kind": "ability",
-            "rule": "deadly-demise"
-          }
-        },
-        {
-          "type": "dice-gated",
-          "dice": "D6",
-          "threshold": 2,
-          "comparison": "gte",
-          "on_success": {
-            "type": "return-models",
-            "target": "this-model",
-            "modifier": {
-              "count": 1,
-              "wounds_remaining": "D6",
-              "placement": "closest-to-destruction"
-            }
-          }
-        }
-      ]
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "venerable-contemptor-dreadnought"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "adeptus-custodes"
-  },
-  {
     "ability_id": "swift-onslaught-adeptus-custodes",
     "name": "Swift Onslaught",
     "authored_by": "40kdc-community",
@@ -525,128 +476,6 @@
     "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "saturation-volleys-adeptus-custodes",
-    "name": "Saturation Volleys",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "cdba15c10f8b030fe60327bf5151af689f8c49d8f7aef53449de94072f640062",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "attacker",
-        "modifier": {
-          "roll": "hit",
-          "operation": "subtract",
-          "value": 1
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "sagittarum-custodians"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "adeptus-custodes"
-  },
-  {
-    "ability_id": "disintegration-beams-adeptus-custodes",
-    "name": "Disintegration Beams",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "58bfc60be6c9c3bcf3485dd235c9fba8f7ab72d09d8656f35d733260ed677188",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "weapon-ability-grant",
-        "target": "this-unit",
-        "modifier": {
-          "keywords": [
-            {
-              "keyword_id": "devastating-wounds"
-            }
-          ]
-        }
-      }
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "unit_ids": [
-      "sagittarum-custodians"
-    ],
-    "ability_type": "unit",
-    "behavior": "activated",
-    "faction_id": "adeptus-custodes"
-  },
-  {
-    "ability_id": "custodian-guard-adeptus-custodes",
-    "name": "Custodian Guard",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "511fc009f72e6f3ed1f7945b4fd5d6bade48e1cca22536c5c2e5fc9b640d88c8",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
-        }
-      },
-      "effect": {
-        "type": "army-rule",
-        "target": "this-unit",
-        "modifier": {
-          "rule": "attachment",
-          "with": {
-            "all_of": [
-              "CUSTODIAN GUARD"
-            ]
-          },
-          "led_by": "adeptus-custodes-character"
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "custodian-guard-with-adrasite-and-pyrithite-spears",
-      "sagittarum-custodians"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "adeptus-custodes"
-  },
-  {
     "ability_id": "sanctified-flames-adeptus-custodes",
     "name": "Sanctified Flames",
     "authored_by": "40kdc-community",
@@ -731,8 +560,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "custodian-guard-sodality",
-      "custodian-guard-with-adrasite-and-pyrithite-spears"
+      "custodian-guard-sodality"
     ],
     "ability_type": "unit",
     "behavior": "passive",
@@ -927,7 +755,6 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "aleya",
       "knight-centura"
     ],
     "ability_type": "unit",
@@ -1017,114 +844,6 @@
         ]
       }
     }
-  },
-  {
-    "ability_id": "tactical-perception-adeptus-custodes",
-    "name": "Tactical Perception",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-963"
-    },
-    "source_digest": "544cabf6828ea022a023224045ddc4f8a3f372582adfd0c118fec7699944b9db",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
-        }
-      },
-      "effect": {
-        "type": "ability-grant",
-        "target": "this-unit",
-        "modifier": {
-          "ability": "fights-first"
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "aleya"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "adeptus-custodes"
-  },
-  {
-    "ability_id": "tenacious-spirit-adeptus-custodes",
-    "name": "Tenacious Spirit",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "b4df4d978b469b992d1b3337a818a36f1f1eae991e25eb4d6097951cb910975c",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "strength",
-            "parameters": {
-              "below": "starting"
-            }
-          },
-          {
-            "type": "strength",
-            "parameters": {
-              "below": "half"
-            }
-          },
-          {
-            "type": "attachment",
-            "parameters": {
-              "subject": "this-model",
-              "role": "leading"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "roll-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "hit",
-              "operation": "add",
-              "value": 1
-            }
-          },
-          {
-            "type": "roll-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "wound",
-              "operation": "add",
-              "value": 1
-            }
-          }
-        ]
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "aleya"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated, partial",
-    "faction_id": "adeptus-custodes"
   },
   {
     "ability_id": "turbo-boost-adeptus-custodes",
@@ -1261,63 +980,6 @@
     },
     "unit_ids": [
       "gyrfalcon-jetbike-sodality"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "adeptus-custodes"
-  },
-  {
-    "ability_id": "assault-ramp-adeptus-custodes",
-    "name": "Assault Ramp",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "a6aac7dae3c1f1ea6d27fceef0ffb8662a177efd6901e830cd90b53fda042049",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-part",
-      "trigger": {
-        "event": "disembarked",
-        "subject": {
-          "owner": "friendly"
-        },
-        "object": "this-model"
-      },
-      "effect": {
-        "type": "conditional",
-        "condition": {
-          "type": "happened",
-          "parameters": {
-            "event": "move-ended",
-            "subject": "this-model",
-            "filter": {
-              "move_types": [
-                "normal"
-              ]
-            },
-            "window": "turn"
-          }
-        },
-        "effect": {
-          "type": "permission",
-          "target": "event-subject",
-          "modifier": {
-            "activity": "declare-charge",
-            "allow": true,
-            "after": [
-              "disembark"
-            ]
-          }
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "venerable-land-raider"
     ],
     "ability_type": "unit",
     "behavior": "passive",
@@ -1490,107 +1152,6 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "adeptus-custodes"
-  },
-  {
-    "ability_id": "golden-laurels-adeptus-custodes",
-    "name": "Golden Laurels",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "7b65076267c83f5769fd2148266e049edc12d9063905222a035c9c46fd1dfe31",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
-          },
-          {
-            "type": "attachment",
-            "parameters": {
-              "subject": "this-model",
-              "role": "leading"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "stat-modifier",
-        "target": "attacker",
-        "modifier": {
-          "stat": "AP",
-          "operation": "worsen",
-          "value": 1
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "valerian"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)",
-    "faction_id": "adeptus-custodes"
-  },
-  {
-    "ability_id": "hero-of-lions-gate-adeptus-custodes",
-    "name": "Hero of Lion’s Gate",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "6fd96c535630cdceab193057978a5a6626be332784d22c795233873574b6b9b1",
-    "version": "2025-q3",
-    "effect": {
-      "type": "choice",
-      "options": [
-        {
-          "type": "roll-result",
-          "target": "this-model",
-          "modifier": {
-            "roll": "hit",
-            "result": 6
-          }
-        },
-        {
-          "type": "roll-result",
-          "target": "this-model",
-          "modifier": {
-            "roll": "wound",
-            "result": 6
-          }
-        },
-        {
-          "type": "roll-result",
-          "target": "this-model",
-          "modifier": {
-            "roll": "save",
-            "result": 6
-          }
-        }
-      ]
-    },
-    "scope": {
-      "duration": "one-use"
-    },
-    "unit_ids": [
-      "valerian"
-    ],
-    "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "adeptus-custodes"
   },
   {
@@ -1826,63 +1387,6 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "faction_id": "adeptus-custodes"
-  },
-  {
-    "ability_id": "no-foe-shall-stand-adeptus-custodes",
-    "name": "No Foe Shall Stand",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "06f8c2a226300bd4b6e604172d0d90eafaf5ad6997b2b857c3025f4e2a5a274e",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "weapon-ability-grant",
-            "target": "this-unit",
-            "modifier": {
-              "keywords": [
-                {
-                  "keyword_id": "lethal-hits"
-                }
-              ]
-            }
-          },
-          {
-            "type": "weapon-ability-grant",
-            "target": "this-unit",
-            "modifier": {
-              "keywords": [
-                {
-                  "keyword_id": "ignores-cover"
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "unit_ids": [
-      "custodian-guard-with-adrasite-and-pyrithite-spears"
-    ],
-    "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "auto-generated, partial",
     "faction_id": "adeptus-custodes"
   },
   {

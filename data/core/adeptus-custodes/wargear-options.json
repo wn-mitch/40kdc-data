@@ -114,25 +114,6 @@
     }
   },
   {
-    "id": "venerable-contemptor-dreadnought-wgo-mfm-1",
-    "unit_id": "venerable-contemptor-dreadnought",
-    "faction_id": "adeptus-custodes",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-963"
-    },
-    "is_free": true,
-    "replaces": [
-      "multi-melta"
-    ],
-    "replacement": [
-      "kheres-pattern-assault-cannon"
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
     "id": "caladius-grav-tank-wgo-mfm-1",
     "unit_id": "caladius-grav-tank",
     "faction_id": "adeptus-custodes",
@@ -289,38 +270,6 @@
     }
   },
   {
-    "id": "venerable-land-raider-wgo-mfm-1",
-    "unit_id": "venerable-land-raider",
-    "faction_id": "adeptus-custodes",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-963"
-    },
-    "is_free": true,
-    "replacement": [
-      "storm-bolter-venerable-land-raider"
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "venerable-land-raider-wgo-mfm-2",
-    "unit_id": "venerable-land-raider",
-    "faction_id": "adeptus-custodes",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-963"
-    },
-    "is_free": true,
-    "replacement": [
-      "hunter-killer-missile"
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
     "id": "custodian-wardens-wgo-mfm-1",
     "unit_id": "custodian-wardens",
     "faction_id": "adeptus-custodes",
@@ -451,25 +400,6 @@
     ],
     "replacement": [
       "solerite-power-talon"
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "custodian-guard-with-adrasite-and-pyrithite-spears-wgo-mfm-1",
-    "unit_id": "custodian-guard-with-adrasite-and-pyrithite-spears",
-    "faction_id": "adeptus-custodes",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-963"
-    },
-    "is_free": true,
-    "replaces": [
-      "adrasite-spear"
-    ],
-    "replacement": [
-      "pyrithite-spear"
     ],
     "model_constraint": {
       "any_number": true
