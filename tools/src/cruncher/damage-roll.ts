@@ -116,3 +116,28 @@ export function damageRoll(input: DamageRollInput): DamageRoll {
   const expected = distribution.reduce((sum, { value, probability }) => sum + value * probability, 0);
   return { distribution, expected, rerollUsed };
 }
+
+/**
+ * Expected damage a "re-roll one Damage roll" adds over `rolls` Damage rolls of `distribution`
+ * (a fresh roll's final damage, ascending by value): the player re-rolls the lowest roll when it is
+ * below a fresh roll's mean. Over a whole number of rolls the lowest is `v` with probability
+ * S(v)^rolls - S(next)^rolls, where S(v) is the chance a roll is at least `v`; a count the engine
+ * carries as an expectation is read between the whole counts either side (engine.ts betweenWholePools).
+ */
+export function oneDamageRerollGain(distribution: ReadonlyArray<{ value: number; probability: number }>, rolls: number): number {
+  if (rolls <= 0) return 0;
+  const mean = distribution.reduce((sum, { value, probability }) => sum + value * probability, 0);
+  const atWhole = (count: number): number => {
+    let gain = 0;
+    let atLeast = 1;
+    for (const { value, probability } of distribution) {
+      const above = Math.max(0, atLeast - probability);
+      if (value < mean) gain += (Math.pow(atLeast, count) - Math.pow(above, count)) * (mean - value);
+      atLeast = above;
+    }
+    return gain;
+  };
+  const low = Math.floor(rolls);
+  const below = atWhole(low);
+  return rolls === low ? below : below + (rolls - low) * (atWhole(low + 1) - below);
+}

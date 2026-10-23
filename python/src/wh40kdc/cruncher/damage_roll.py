@@ -141,3 +141,34 @@ def damage_roll(
     for outcome in distribution:
         expected += outcome["value"] * outcome["probability"]
     return {"distribution": distribution, "expected": expected, "rerollUsed": reroll_used}
+
+
+def one_damage_reroll_gain(distribution: list[DamageOutcome], rolls: float) -> float:
+    """Expected damage a "re-roll one Damage roll" adds over ``rolls`` Damage
+    rolls of ``distribution`` (a fresh roll's final damage, ascending by value):
+    the player re-rolls the lowest roll when it is below a fresh roll's mean.
+    Over a whole number of rolls the lowest is ``v`` with probability
+    S(v)^rolls - S(next)^rolls, where S(v) is the chance a roll is at least
+    ``v``; a count the engine carries as an expectation is read between the
+    whole counts either side (engine.py ``between_whole_pools``).
+    """
+    if rolls <= 0:
+        return 0.0
+    mean = 0.0
+    for outcome in distribution:
+        mean += outcome["value"] * outcome["probability"]
+
+    def at_whole(count: int) -> float:
+        gain = 0.0
+        at_least = 1.0
+        for outcome in distribution:
+            value = outcome["value"]
+            above = max(0.0, at_least - outcome["probability"])
+            if value < mean:
+                gain += (math.pow(at_least, count) - math.pow(above, count)) * (mean - value)
+            at_least = above
+        return gain
+
+    low = math.floor(rolls)
+    below = at_whole(low)
+    return below if rolls == low else below + (rolls - low) * (at_whole(low + 1) - below)

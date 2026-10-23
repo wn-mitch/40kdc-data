@@ -148,7 +148,7 @@ def _applies(buff: Buff, ctx: EngineContext) -> bool:
     contribution = buff["contribution"]
     if (
         w.get("rollType")
-        and contribution.get("type") == "reroll"
+        and contribution.get("type") in ("reroll", "reroll-one")
         and contribution.get("roll") != w["rollType"]
     ):
         return False
@@ -262,6 +262,8 @@ def resolve_buffs(buffs: list[Buff], ctx: EngineContext) -> ResolvedModifiers:
         "saveMod": {"value": 0, "sources": []},
         "cover": {"active": False, "source": None},
         "rerolls": {},
+        # One re-rolled die per roll, from a `reroll-one`; several sources still give one die.
+        "rerollOne": {},
         "extraKeywords": [],
         "feelNoPain": None,
         "feelNoPainMortal": None,
@@ -312,6 +314,10 @@ def resolve_buffs(buffs: list[Buff], ctx: EngineContext) -> ResolvedModifiers:
                 )
                 if incoming_stronger:
                     out["rerolls"][c["roll"]] = {"subset": incoming, "dominantSource": source}
+        elif ctype == "reroll-one":
+            cur = out["rerollOne"].get(c["roll"])
+            if cur is None or _rank(source) < _rank(cur["dominantSource"]):
+                out["rerollOne"][c["roll"]] = {"dominantSource": source}
         elif ctype == "extra-keyword":
             key = _key_of(c["keywordRef"])
             if not any(_key_of(e["keywordRef"]) == key for e in out["extraKeywords"]):

@@ -21,6 +21,7 @@ import {
   bigGunsHitModifier,
   scoreLoadoutWeapons,
   type LoadoutDamageResult,
+  type ProfileDamage,
   type ProfileScorer,
   type SelectedWeaponProfile,
 } from "./loadout-scoring.js";
@@ -135,7 +136,33 @@ export function attributeSelectedProfile(args: {
   return damage ? { baseline: damage.baseline, lifts: damage.lifts, residual: damage.residual } : null;
 }
 
+/**
+ * "Re-roll one Hit roll" is one die for the whole unit's attacks, but the engine prices it over one
+ * profile's pool. The loadout is scored without it, and its gain is added once, to the selected
+ * profile it adds the most to; several such permissions (one Hit and one Wound roll) go to that
+ * same profile, which can understate a unit that would spend them on different weapons.
+ */
 export function unitLoadoutDamage(input: UnitLoadoutDamageInput): LoadoutDamageResult & { groups: readonly LoadoutGroup[] | null } {
+  if (!input.buffs.some((buff) => buff.contribution.type === "reroll-one")) return scoredLoadout(input);
+  const without = input.buffs.filter((buff) => buff.contribution.type !== "reroll-one");
+  const scored = scoredLoadout({ ...input, buffs: without, scoreProfile: crunchProfileScorer(input.dataset, input.target, without) });
+  const withOne = crunchProfileScorer(input.dataset, input.target, input.buffs);
+  let best: { at: number; gain: number; damage: ProfileDamage } | null = null;
+  scored.selected.forEach((selected, at) => {
+    const weapon = resolveUnitWeapon(input.dataset, input.unit, selected.weaponId);
+    if (!weapon) return;
+    const damage = withOne({ weapon, profileIndex: selected.profileIndex, modelsFiring: selected.count, context: input.context, ...(selected.hitModifier !== undefined ? { hitModifier: selected.hitModifier } : {}) });
+    if (damage && damage.damage - selected.damage > (best?.gain ?? 0)) best = { at, gain: damage.damage - selected.damage, damage };
+  });
+  if (best === null) return scored;
+  const { at, gain, damage } = best as { at: number; gain: number; damage: ProfileDamage };
+  const selected = scored.selected.map((item, index) => index === at
+    ? { ...item, damage: damage.damage, damagePerModel: damage.damage / Math.max(1, item.count), stages: damage.stages ?? item.stages }
+    : item);
+  return { ...scored, selected, total: scored.total + gain };
+}
+
+function scoredLoadout(input: UnitLoadoutDamageInput): LoadoutDamageResult & { groups: readonly LoadoutGroup[] | null } {
   const groups = input.groups !== undefined
     ? input.groups
     : input.options && input.models

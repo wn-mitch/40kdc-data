@@ -75,20 +75,20 @@ describe("effectToBuffs: leaves", () => {
     expect(result.unsupported).toEqual([]);
   });
 
-  it("rejects count-capped rerolls instead of applying them as unlimited", () => {
-    const effect = {
-      type: "re-roll",
-      target: "this-unit",
-      modifier: { roll: "hit", result_scope: "any-result", count: 1 },
-    };
-    const result = effectToBuffs(effect, armyRule, ctx);
-    expect(result.applied).toEqual([]);
-    expect(result.unsupported).toEqual([
-      {
-        reason: "re-roll: count-capped permissions are not modelled by the expected-value engine",
-        effectFragment: effect,
-      },
+  it("prices a re-roll of one die as one die, never as an unlimited re-roll", () => {
+    const one = effectToBuffs({ type: "re-roll", target: "this-unit", modifier: { roll: "hit", result_scope: "any-result", count: 1 } }, armyRule, ctx);
+    expect(one.applied.map((buff) => buff.contribution)).toEqual([{ type: "reroll-one", roll: "hit" }]);
+    expect(one.unsupported).toEqual([]);
+    const two = { type: "re-roll", target: "this-unit", modifier: { roll: "hit", result_scope: "any-result", count: 2 } };
+    const refused = effectToBuffs(two, armyRule, ctx);
+    expect(refused.applied).toEqual([]);
+    expect(refused.unsupported).toEqual([
+      { reason: "re-roll: a count-capped permission other than one die of any result is not modelled by the expected-value engine", effectFragment: two },
     ]);
+    // A roll off the damage path stays outside it, whatever its count.
+    const charge = effectToBuffs({ type: "re-roll", target: "this-unit", modifier: { roll: "charge", result_scope: "any-result", count: 1 } }, armyRule, ctx);
+    expect(charge.applied).toEqual([]);
+    expect(charge.unsupported[0]!.reason).toMatch(/outside the damage path/u);
   });
 
   it("roll-modifier add → matching mod buff", () => {

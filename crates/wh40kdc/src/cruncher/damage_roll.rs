@@ -232,6 +232,41 @@ pub(crate) fn damage_roll(input: &DamageRollInput<'_>) -> Result<DamageRoll, Cru
     })
 }
 
+/// Expected damage a "re-roll one Damage roll" adds over `rolls` Damage rolls of `distribution`
+/// (a fresh roll's final damage, ascending by value): the player re-rolls the lowest roll when it
+/// is below a fresh roll's mean. Over a whole number of rolls the lowest is `v` with probability
+/// S(v)^rolls - S(next)^rolls, where S(v) is the chance a roll is at least `v`; a count the engine
+/// carries as an expectation is read between the whole counts either side
+/// (`engine::between_whole_pools`).
+pub(crate) fn one_damage_reroll_gain(distribution: &[(f64, f64)], rolls: f64) -> f64 {
+    if rolls <= 0.0 {
+        return 0.0;
+    }
+    let mean: f64 = distribution
+        .iter()
+        .map(|(value, probability)| value * probability)
+        .sum();
+    let at_whole = |count: f64| -> f64 {
+        let mut gain = 0.0;
+        let mut at_least = 1.0_f64;
+        for &(value, probability) in distribution {
+            let above = (at_least - probability).max(0.0);
+            if value < mean {
+                gain += (at_least.powf(count) - above.powf(count)) * (mean - value);
+            }
+            at_least = above;
+        }
+        gain
+    };
+    let low = rolls.floor();
+    let below = at_whole(low);
+    if rolls == low {
+        below
+    } else {
+        below + (rolls - low) * (at_whole(low + 1.0) - below)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

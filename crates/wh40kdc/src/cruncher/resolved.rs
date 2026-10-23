@@ -12,6 +12,8 @@ pub struct ResolvedModifiers {
     pub save_mod: SummedMod,
     pub cover: CoverState,
     pub rerolls: Rerolls,
+    /// One re-rolled die per roll, from a `reroll-one`; several sources still give one die.
+    pub reroll_one: RerollOne,
     pub extra_keywords: Vec<ExtraKeywordEntry>,
     /// All-wound FNP — fires on the main and mortal damage streams alike.
     pub feel_no_pain: Option<FeelNoPainState>,
@@ -123,6 +125,39 @@ impl Rerolls {
             RollKind::Damage => self.damage.as_ref(),
         }
     }
+}
+
+#[derive(Clone, Debug, Default)]
+pub struct RerollOne {
+    pub hit: Option<RerollOneState>,
+    pub wound: Option<RerollOneState>,
+    pub save: Option<RerollOneState>,
+    pub damage: Option<RerollOneState>,
+}
+
+impl RerollOne {
+    pub fn for_roll(&self, roll: RollKind) -> Option<&RerollOneState> {
+        match roll {
+            RollKind::Hit => self.hit.as_ref(),
+            RollKind::Wound => self.wound.as_ref(),
+            RollKind::Save => self.save.as_ref(),
+            RollKind::Damage => self.damage.as_ref(),
+        }
+    }
+
+    pub(super) fn for_roll_mut(&mut self, roll: RollKind) -> &mut Option<RerollOneState> {
+        match roll {
+            RollKind::Hit => &mut self.hit,
+            RollKind::Wound => &mut self.wound,
+            RollKind::Save => &mut self.save,
+            RollKind::Damage => &mut self.damage,
+        }
+    }
+}
+
+#[derive(Clone, Debug)]
+pub struct RerollOneState {
+    pub dominant_source: BuffSource,
 }
 
 #[derive(Clone, Debug)]

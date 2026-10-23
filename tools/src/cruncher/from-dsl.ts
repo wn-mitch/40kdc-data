@@ -643,20 +643,22 @@ function translateReroll(
   const subset = modifier.value === 1 ? "ones" : modifier.subset === undefined && modifier.result_scope === "any-result" ? "all-failures" : modifier.subset;
   // Under target perspective, only "save" rerolls fire on the buffed unit.
   if (opts.perspective === "target" && roll !== "save") return;
-  // Finite permissions are non-linear over a roll pool. Until the cruncher
-  // carries the exact pool distribution, applying this as an uncapped reroll
-  // would silently overstate the effect.
-  if (modifier.count !== undefined) {
+  const damagePath = roll === "hit" || roll === "wound" || roll === "save" || roll === "damage";
+  // "Re-roll one Hit roll": one die across the pool, which the engine prices (engine.ts oneRerollDice).
+  // A larger finite permission is non-linear in a way the engine does not model; applying it as an
+  // uncapped reroll would silently overstate the effect.
+  if (modifier.count !== undefined && damagePath) {
+    if (modifier.count === 1 && subset === "all-failures") {
+      out.applied.push(withApplicability({ source, contribution: { type: "reroll-one", roll } }, combineOptional(attackTypeApplicability(modifier), weaponApplicability(modifier))));
+      return;
+    }
     out.unsupported.push({
-      reason: "re-roll: count-capped permissions are not modelled by the expected-value engine",
+      reason: "re-roll: a count-capped permission other than one die of any result is not modelled by the expected-value engine",
       effectFragment: node,
     });
     return;
   }
-  if (
-    (roll === "hit" || roll === "wound" || roll === "save" || roll === "damage") &&
-    (subset === "ones" || subset === "all-failures")
-  ) {
+  if (damagePath && (subset === "ones" || subset === "all-failures")) {
     out.applied.push(withApplicability({ source, contribution: { type: "reroll", roll, subset } }, combineOptional(attackTypeApplicability(modifier), weaponApplicability(modifier))));
     return;
   }
@@ -1921,6 +1923,8 @@ function describeContribution(c: BuffContribution): string {
       return `AP ${c.value}`;
     case "reroll":
       return `re-roll ${c.roll}${c.subset === "ones" ? " 1s" : ""}`;
+    case "reroll-one":
+      return `re-roll one ${c.roll}`;
     case "feel-no-pain":
       return c.scope === "mortal"
         ? `feel no pain ${c.threshold}+ vs mortals`

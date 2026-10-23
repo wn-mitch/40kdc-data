@@ -50,6 +50,12 @@ export type BuffContribution =
       roll: "hit" | "wound" | "save" | "damage";
       subset: "ones" | "all-failures";
     }
+  /**
+   * "Re-roll one Hit roll": one die of the roll, at the player's pick, across the attack pool —
+   * a failed die no other re-roll already took, or for Damage the lowest roll when it is below the
+   * mean of a fresh roll. The engine prices one such die per crunch (engine.ts `oneRerollDice`).
+   */
+  | { type: "reroll-one"; roll: "hit" | "wound" | "save" | "damage" }
   | { type: "extra-keyword"; keywordRef: WeaponKeywordRef }
   /**
    * Feel-no-pain: roll one D6 per unsaved wound at `threshold`+, ignoring the
@@ -317,6 +323,8 @@ export type ResolvedModifiers = {
       { subset: "ones" | "all-failures"; dominantSource: BuffSource }
     >
   >;
+  /** One re-rolled die per roll, from a `reroll-one`; several sources still give one die. */
+  rerollOne: Partial<Record<"hit" | "wound" | "save" | "damage", { dominantSource: BuffSource }>>;
   extraKeywords: { keywordRef: WeaponKeywordRef; source: BuffSource }[];
   /** All-wound FNP — fires on the main and mortal damage streams alike. */
   feelNoPain: { threshold: number; dominantSource: BuffSource } | null;
@@ -380,7 +388,7 @@ function applies(buff: Buff, ctx: ResolveContext): boolean {
   if (w.attackerFilter && matchesUnitFilter(w.attackerFilter, ctx, "attacker", "enemy") !== true) return false;
   if (w.targetFilter && matchesUnitFilter(w.targetFilter, ctx, "target", "enemy") !== true) return false;
   if (w.phases && !w.phases.includes(ctx.phase)) return false;
-  if (w.rollType && buff.contribution.type === "reroll" && buff.contribution.roll !== w.rollType) {
+  if (w.rollType && (buff.contribution.type === "reroll" || buff.contribution.type === "reroll-one") && buff.contribution.roll !== w.rollType) {
     return false;
   }
   if (w.requiresTargetKeyword) {
@@ -478,6 +486,7 @@ export function resolveBuffs(buffs: Buff[], ctx: ResolveContext): ResolvedModifi
     saveMod: { value: 0, sources: [] },
     cover: { active: false, source: null },
     rerolls: {},
+    rerollOne: {},
     extraKeywords: [],
     feelNoPain: null,
     feelNoPainMortal: null,
@@ -530,6 +539,11 @@ export function resolveBuffs(buffs: Buff[], ctx: ResolveContext): ResolvedModifi
             out.rerolls[c.roll] = { subset: incoming, dominantSource: b.source };
           }
         }
+        break;
+      }
+      case "reroll-one": {
+        const cur = out.rerollOne[c.roll];
+        if (!cur || rank(b.source) < rank(cur.dominantSource)) out.rerollOne[c.roll] = { dominantSource: b.source };
         break;
       }
       case "extra-keyword": {

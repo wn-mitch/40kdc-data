@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
+	"strings"
 	"testing"
 )
 
@@ -200,33 +201,53 @@ func TestFromDSLCorpus(t *testing.T)          { runDSLCorpus(t, "from-dsl.json")
 func TestDefensiveFromDSLCorpus(t *testing.T) { runDSLCorpus(t, "defensive-from-dsl.json") }
 
 func TestCountCappedRerollIsNotAppliedAsUnlimited(t *testing.T) {
-	effect := map[string]any{
-		"type":   "re-roll",
-		"target": "this-unit",
-		"modifier": map[string]any{
-			"roll":         "hit",
-			"result_scope": "any-result",
-			"count":        float64(1),
-		},
-	}
 	source := map[string]any{
 		"kind":        "ability",
 		"abilityId":   "count-capped-reroll",
 		"abilityKind": "unit",
 	}
-	result := effectToBuffs(effect, source, map[string]any{"phase": "shooting"}, "attacker")
-	if len(result.applied) != 0 {
-		t.Fatalf("applied = %#v, want none", result.applied)
+	translate := func(roll string, count float64) *effectTranslation {
+		effect := map[string]any{
+			"type":   "re-roll",
+			"target": "this-unit",
+			"modifier": map[string]any{
+				"roll":         roll,
+				"result_scope": "any-result",
+				"count":        count,
+			},
+		}
+		return effectToBuffs(effect, source, map[string]any{"phase": "shooting"}, "attacker")
 	}
-	if len(result.unsupported) != 1 {
-		t.Fatalf("unsupported = %#v, want one diagnostic", result.unsupported)
+
+	// One die of any result is priced as a single re-rolled die, not an unlimited re-roll.
+	one := translate("hit", 1)
+	if len(one.applied) != 1 || len(one.unsupported) != 0 {
+		t.Fatalf("count 1: applied = %#v, unsupported = %#v", one.applied, one.unsupported)
 	}
-	diagnostic, ok := asMap(result.unsupported[0])
-	if !ok {
-		t.Fatalf("unsupported diagnostic = %#v, want object", result.unsupported[0])
+	buff, _ := asMap(one.applied[0])
+	contribution, _ := getMap(buff, "contribution")
+	if getStr(contribution, "type") != "reroll-one" || getStr(contribution, "roll") != "hit" {
+		t.Fatalf("count 1 contribution = %#v, want reroll-one hit", contribution)
 	}
-	if got := getStr(diagnostic, "reason"); got != "re-roll: count-capped permissions are not modelled by the expected-value engine" {
-		t.Fatalf("reason = %q", got)
+
+	// A larger finite permission is refused.
+	two := translate("hit", 2)
+	if len(two.applied) != 0 || len(two.unsupported) != 1 {
+		t.Fatalf("count 2: applied = %#v, unsupported = %#v", two.applied, two.unsupported)
+	}
+	diagnostic, _ := asMap(two.unsupported[0])
+	if got := getStr(diagnostic, "reason"); got != "re-roll: a count-capped permission other than one die of any result is not modelled by the expected-value engine" {
+		t.Fatalf("count 2 reason = %q", got)
+	}
+
+	// A count-capped roll off the damage path is outside it, not count-capped.
+	charge := translate("charge", 1)
+	if len(charge.applied) != 0 || len(charge.unsupported) != 1 {
+		t.Fatalf("charge: applied = %#v, unsupported = %#v", charge.applied, charge.unsupported)
+	}
+	diagnostic, _ = asMap(charge.unsupported[0])
+	if got := getStr(diagnostic, "reason"); !strings.Contains(got, "outside the damage path") {
+		t.Fatalf("charge reason = %q", got)
 	}
 }
 

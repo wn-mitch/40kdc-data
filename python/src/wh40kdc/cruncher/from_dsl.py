@@ -641,33 +641,55 @@ def _translate_reroll(
     roll = modifier.get("roll")
     # A `value: 1` on a re-roll modifier unambiguously means "re-roll rolls of
     # 1". A historical migration mis-defaulted such nodes to `subset:
-    # "all-failures"`; honor the value as the source of truth.
-    subset = "ones" if modifier.get("value") == 1 else modifier.get("subset")
+    # "all-failures"`; honor the value as the source of truth. An unrestricted
+    # optional re-roll (`result_scope: "any-result"`, no `subset`) is
+    # "all-failures" to the expected-value engine: a rational player re-rolls
+    # only failures.
+    subset: Any
+    if modifier.get("value") == 1:
+        subset = "ones"
+    elif modifier.get("subset") is None and modifier.get("result_scope") == "any-result":
+        subset = "all-failures"
+    else:
+        subset = modifier.get("subset")
     # Under target perspective, only "save" rerolls fire on the buffed unit.
     if opts["perspective"] == "target" and roll != "save":
         return
-    # Finite permissions are non-linear over a roll pool. Until the cruncher
-    # carries the exact pool distribution, applying this as an uncapped reroll
-    # would silently overstate the effect.
-    if modifier.get("count") is not None:
+    damage_path = roll in ("hit", "wound", "save", "damage")
+    applicability = combine_optional(
+        _attack_type_applicability(modifier), weapon_applicability(modifier)
+    )
+    # "Re-roll one Hit roll": one die across the pool, which the engine prices
+    # (engine.py one_reroll_dice). A larger finite permission is non-linear in a
+    # way the engine does not model; applying it as an uncapped reroll would
+    # silently overstate the effect.
+    if modifier.get("count") is not None and damage_path:
+        if modifier.get("count") == 1 and subset == "all-failures":
+            out["applied"].append(
+                with_applicability(
+                    {"source": source, "contribution": {"type": "reroll-one", "roll": roll}},
+                    applicability,
+                )
+            )
+            return
         out["unsupported"].append(
             {
                 "reason": (
-                    "re-roll: count-capped permissions are not modelled "
-                    "by the expected-value engine"
+                    "re-roll: a count-capped permission other than one die of any result "
+                    "is not modelled by the expected-value engine"
                 ),
                 "effectFragment": node,
             }
         )
         return
-    if roll in ("hit", "wound", "save", "damage") and subset in ("ones", "all-failures"):
+    if damage_path and subset in ("ones", "all-failures"):
         out["applied"].append(
             with_applicability(
                 {
                     "source": source,
                     "contribution": {"type": "reroll", "roll": roll, "subset": subset},
                 },
-                weapon_applicability(modifier),
+                applicability,
             )
         )
         return
@@ -2372,6 +2394,8 @@ def _describe_contribution(c: dict[str, Any]) -> str:
     if ctype == "reroll":
         ones = " 1s" if c.get("subset") == "ones" else ""
         return f"re-roll {c['roll']}{ones}"
+    if ctype == "reroll-one":
+        return f"re-roll one {c['roll']}"
     if ctype == "feel-no-pain":
         if c.get("scope") == "mortal":
             return f"feel no pain {_num_str(c['threshold'])}+ vs mortals"

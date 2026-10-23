@@ -120,21 +120,47 @@ def test_named_region_reroll_gates_on_the_weapon_keyword_it_names() -> None:
 
 
 def test_count_capped_reroll_is_not_applied_as_unlimited() -> None:
-    effect = {
+    one = effect_to_buffs(
+        {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {"roll": "hit", "result_scope": "any-result", "count": 1},
+        },
+        _source(),
+        {"phase": "shooting"},
+    )
+    assert [buff["contribution"] for buff in one["applied"]] == [
+        {"type": "reroll-one", "roll": "hit"}
+    ]
+    assert one["unsupported"] == []
+    two = {
         "type": "re-roll",
         "target": "this-unit",
-        "modifier": {"roll": "hit", "result_scope": "any-result", "count": 1},
+        "modifier": {"roll": "hit", "result_scope": "any-result", "count": 2},
     }
-    result = effect_to_buffs(effect, _source(), {"phase": "shooting"})
-    assert result["applied"] == []
-    assert result["unsupported"] == [
+    refused = effect_to_buffs(two, _source(), {"phase": "shooting"})
+    assert refused["applied"] == []
+    assert refused["unsupported"] == [
         {
             "reason": (
-                "re-roll: count-capped permissions are not modelled by the expected-value engine"
+                "re-roll: a count-capped permission other than one die of any result "
+                "is not modelled by the expected-value engine"
             ),
-            "effectFragment": effect,
+            "effectFragment": two,
         }
     ]
+    # A roll off the damage path stays outside it, whatever its count.
+    charge = effect_to_buffs(
+        {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {"roll": "charge", "result_scope": "any-result", "count": 1},
+        },
+        _source(),
+        {"phase": "shooting"},
+    )
+    assert charge["applied"] == []
+    assert "outside the damage path" in charge["unsupported"][0]["reason"]
 
 
 def test_leader_model_ability_grant_requires_resolved_beneficiary() -> None:

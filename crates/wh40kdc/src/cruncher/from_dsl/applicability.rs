@@ -228,6 +228,7 @@ fn describe_contribution(c: &Value) -> String {
             js_string(c.get("roll")),
             if c["subset"] == "ones" { " 1s" } else { "" }
         ),
+        "reroll-one" => format!("re-roll one {}", js_string(c.get("roll"))),
         "feel-no-pain" => {
             let t = fmt_num(js_number(c.get("threshold")));
             if c["scope"] == "mortal" {

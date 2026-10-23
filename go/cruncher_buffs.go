@@ -56,7 +56,7 @@ func buffApplies(buff map[string]any, ctx map[string]any) bool {
 	}
 	contribution, _ := getMap(buff, "contribution")
 	if rt := getStr(w, "rollType"); rt != "" {
-		if getStr(contribution, "type") == "reroll" && getStr(contribution, "roll") != rt {
+		if ct := getStr(contribution, "type"); (ct == "reroll" || ct == "reroll-one") && getStr(contribution, "roll") != rt {
 			return false
 		}
 	}
@@ -403,13 +403,16 @@ type resolved struct {
 	coverActive                                 bool
 	coverRank                                   int
 	rerolls                                     map[string]rerollEntry
-	extraKeywords                               []extraKw
-	feelNoPain, feelNoPainMortal                *fnpState
-	damageReduction                             float64
-	damageReductionSet                          bool
-	damageReductionRank                         int
-	invulnerable                                *invState
-	invulnerableRank                            int
+	// rerollOne holds, per roll, the rank of the dominant "reroll-one" source;
+	// several sources still give one die.
+	rerollOne                    map[string]int
+	extraKeywords                []extraKw
+	feelNoPain, feelNoPainMortal *fnpState
+	damageReduction              float64
+	damageReductionSet           bool
+	damageReductionRank          int
+	invulnerable                 *invState
+	invulnerableRank             int
 	// critThresholds holds the lowest critical threshold per roll ("hit"/"wound").
 	critThresholds map[string]rankedValue
 	// ignoreModifiers holds the rank of the source per roll whose negative modifiers are ignored.
@@ -429,6 +432,7 @@ type contribAcc struct {
 func resolveBuffs(buffs []any, ctx map[string]any) *resolved {
 	out := &resolved{
 		rerolls:         map[string]rerollEntry{},
+		rerollOne:       map[string]int{},
 		critThresholds:  map[string]rankedValue{},
 		ignoreModifiers: map[string]int{},
 		skillMod:        map[string]float64{"WS": 0, "BS": 0},
@@ -468,6 +472,11 @@ func resolveBuffs(buffs []any, ctx map[string]any) *resolved {
 				if stronger {
 					out.rerolls[roll] = rerollEntry{incoming, rankOf(source)}
 				}
+			}
+		case "reroll-one":
+			roll := getStr(c, "roll")
+			if cur, exists := out.rerollOne[roll]; !exists || rankOf(source) < cur {
+				out.rerollOne[roll] = rankOf(source)
 			}
 		case "extra-keyword":
 			ref, _ := getMap(c, "keywordRef")

@@ -20,7 +20,7 @@ const REVIEWER = "fixture-reviewer";
 const FACTION = "fixture-faction";
 const CLOSABLE = "closable-ability";
 /** Fully tiled and compiles fine, but its effect is a shape the cruncher genuinely doesn't
- * recognize (a count-capped re-roll) — must gate out even though it isn't a "regression" against
+ * recognize (one re-roll limited to a roll of 1) — must gate out even though it isn't a "regression" against
  * anything, since there's no old record to compare it to. */
 const CLOSABLE_BAD_SHAPE = "closable-bad-shape-ability";
 /** 16 abilities, so `prepareLuna`'s 15-per-request cap forces at least two residue requests. */
@@ -107,8 +107,8 @@ describe("pipeline-8b", () => {
       // CLOSABLE's compiled effect gates a "reroll" behind a Battle-shocked state that the gate's
       // context does not declare: an honest runtime unknown,
       // not a shape gap — the gate judges the new compile on its own merits (no old-record
-      // comparison) and passes. CLOSABLE_BAD_SHAPE's count-capped re-roll is a real shape gap
-      // (`effectToBuffs` explicitly refuses to model it) and must fail the gate on its own merits
+      // comparison) and passes. CLOSABLE_BAD_SHAPE's one re-roll of a 1 is a real shape gap
+      // (`effectToBuffs` prices one die of any result, and refuses this) and must fail the gate on its own merits
       // too, even though there is no old record for it to "regress" against.
       expect(report.compile.cruncher_honest_unknown).toBeGreaterThan(0);
       expect(report.compile.cruncher_unrecognized_shape).toBeGreaterThan(0);

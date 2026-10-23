@@ -65,19 +65,29 @@ pub(super) fn reroll(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     if opts.perspective == Target && roll.and_then(Value::as_str) != Some("save") {
         return;
     }
-    // A finite permission is non-linear over a roll pool; an uncapped reroll would overstate it.
-    if m.contains_key("count") {
+    let r = roll.and_then(Value::as_str);
+    let s = subset.and_then(Value::as_str);
+    let damage_path = matches!(r, Some("hit" | "wound" | "save" | "damage"));
+    // "Re-roll one Hit roll": one die across the pool, which the engine prices (`one_reroll_dice`).
+    // A larger finite permission is non-linear in a way the engine does not model; applying it as
+    // an uncapped reroll would silently overstate the effect.
+    if m.contains_key("count") && damage_path {
+        if m.get("count").and_then(Value::as_f64) == Some(1.0) && s == Some("all-failures") {
+            emit(
+                opts,
+                out,
+                &weapon_applicability(m),
+                json!({ "type": "reroll-one", "roll": r }),
+            );
+            return;
+        }
         out.unsupported(
-            "re-roll: count-capped permissions are not modelled by the expected-value engine",
+            "re-roll: a count-capped permission other than one die of any result is not modelled by the expected-value engine",
             node,
         );
         return;
     }
-    let r = roll.and_then(Value::as_str);
-    let s = subset.and_then(Value::as_str);
-    if matches!(r, Some("hit" | "wound" | "save" | "damage"))
-        && matches!(s, Some("ones" | "all-failures"))
-    {
+    if damage_path && matches!(s, Some("ones" | "all-failures")) {
         emit(
             opts,
             out,

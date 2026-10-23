@@ -1388,19 +1388,31 @@ func translateReroll(node, source map[string]any, opts dslOpts, out *effectTrans
 	}
 	roll, _ := modifier["roll"].(string)
 	subset, _ := modifier["subset"].(string)
+	// An unnarrowed any-result re-roll is "all-failures" to the expected-value engine.
 	if jsNumberEq(modifier["value"], 1) {
 		subset = "ones"
+	} else if _, has := modifier["subset"]; !has && jsStr(modifier["result_scope"]) == "any-result" {
+		subset = "all-failures"
 	}
 	if opts.perspective == "target" && roll != "save" {
 		return
 	}
-	if _, capped := modifier["count"]; capped {
-		out.unsupported = append(out.unsupported, unsup("re-roll: count-capped permissions are not modelled by the expected-value engine", node))
+	damagePath := roll == "hit" || roll == "wound" || roll == "save" || roll == "damage"
+	applicability := combineOptional(attackTypeApplicability(modifier), weaponApplicability(modifier))
+	// "Re-roll one Hit roll": one die across the pool, which the engine prices
+	// (oneRerollDice). A larger finite permission is non-linear in a way the
+	// engine does not model; applying it as an uncapped reroll would silently
+	// overstate the effect.
+	if _, capped := modifier["count"]; capped && damagePath {
+		if jsNumberEq(modifier["count"], 1) && subset == "all-failures" {
+			out.applied = append(out.applied, withApplicability(map[string]any{"source": source, "contribution": map[string]any{"type": "reroll-one", "roll": roll}}, applicability))
+			return
+		}
+		out.unsupported = append(out.unsupported, unsup("re-roll: a count-capped permission other than one die of any result is not modelled by the expected-value engine", node))
 		return
 	}
-	if (roll == "hit" || roll == "wound" || roll == "save" || roll == "damage") &&
-		(subset == "ones" || subset == "all-failures") {
-		out.applied = append(out.applied, withApplicability(map[string]any{"source": source, "contribution": map[string]any{"type": "reroll", "roll": roll, "subset": subset}}, weaponApplicability(modifier)))
+	if damagePath && (subset == "ones" || subset == "all-failures") {
+		out.applied = append(out.applied, withApplicability(map[string]any{"source": source, "contribution": map[string]any{"type": "reroll", "roll": roll, "subset": subset}}, applicability))
 		return
 	}
 	out.unsupported = append(out.unsupported, unsup("re-roll on \""+rollLabel(modifier["roll"])+"\" (subset \""+jsStr(modifier["subset"])+"\") is outside the damage path", node))
@@ -2113,6 +2125,8 @@ func describeContribution(c map[string]any) string {
 			ones = " 1s"
 		}
 		return "re-roll " + getStr(c, "roll") + ones
+	case "reroll-one":
+		return "re-roll one " + getStr(c, "roll")
 	case "feel-no-pain":
 		if getStr(c, "scope") == "mortal" {
 			return "feel no pain " + numStr(c["threshold"]) + "+ vs mortals"

@@ -39,7 +39,11 @@ fn applies(buff: &Buff, ctx: &EngineContext) -> bool {
     {
         return false;
     }
-    if let (Some(want), BuffContribution::Reroll { roll, .. }) = (w.roll_type, &buff.contribution) {
+    if let (
+        Some(want),
+        BuffContribution::Reroll { roll, .. } | BuffContribution::RerollOne { roll },
+    ) = (w.roll_type, &buff.contribution)
+    {
         if *roll != want {
             return false;
         }

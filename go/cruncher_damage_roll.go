@@ -186,3 +186,37 @@ func damageRoll(in damageRollInput) (damageRollResult, error) {
 	}
 	return damageRollResult{distribution, expected, rerollUsed}, nil
 }
+
+// oneDamageRerollGain is the expected damage a "re-roll one Damage roll" adds
+// over `rolls` Damage rolls of `distribution` (ascending by value): the player
+// re-rolls the lowest roll when it is below a fresh roll's mean. Over a whole
+// number of rolls the lowest is v with probability S(v)^rolls - S(next)^rolls,
+// where S(v) is the chance a roll is at least v; a fractional count is read
+// between the whole counts either side.
+func oneDamageRerollGain(distribution []DamageOutcome, rolls float64) float64 {
+	if rolls <= 0 {
+		return 0
+	}
+	mean := 0.0
+	for _, o := range distribution {
+		mean += o.Value * o.Probability
+	}
+	atWhole := func(count float64) float64 {
+		gain := 0.0
+		atLeast := 1.0
+		for _, o := range distribution {
+			above := math.Max(0, atLeast-o.Probability)
+			if o.Value < mean {
+				gain += (math.Pow(atLeast, count) - math.Pow(above, count)) * (mean - o.Value)
+			}
+			atLeast = above
+		}
+		return gain
+	}
+	low := math.Floor(rolls)
+	below := atWhole(low)
+	if rolls == low {
+		return below
+	}
+	return below + (rolls-low)*(atWhole(low+1)-below)
+}

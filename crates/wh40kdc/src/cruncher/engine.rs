@@ -18,7 +18,7 @@ use serde_json::Value;
 use super::buffs::{
     resolve_buffs, Buff, EngineContext, FeelNoPainState, ResolvedModifiers, WeaponKeywordRef,
 };
-use super::damage_roll::{damage_roll, DamageRollInput};
+use super::damage_roll::{damage_roll, one_damage_reroll_gain, DamageRollInput};
 use super::from_keyword::buffs_from_keyword;
 use crate::data::Dataset;
 use crate::{KeywordList, StatValue, Unit, Weapon, WeaponProfilesItem, WeaponProfilesItemRange};
@@ -403,7 +403,7 @@ pub fn crunch_model(
             profile_index: input.attacker.profile_index,
             melee: is_melee,
         })?;
-        let probs = check_probabilities(CheckArgs {
+        let hit_check = CheckArgs {
             unmodified_needed: hit_stat,
             modifier: resolved.hit_mod.value + cover_hit_penalty,
             reroll: resolved
@@ -415,14 +415,15 @@ pub fn crunch_model(
             auto_fail_on_one: true,
             auto_pass_on_six: true,
             crit_threshold: crit_hit_threshold,
-        });
+        };
+        let probs = check_probabilities(hit_check);
         hit_probs = RollProbabilities {
             pass: probs.pass,
             crit: probs.crit,
         };
-        let hits = attacks * probs.pass;
-        let crits = attacks * probs.crit;
-        let detail = format!(
+        let mut hits = attacks * probs.pass;
+        let mut crits = attacks * probs.crit;
+        let mut detail = format!(
             "{}{}+ (mod {}{}, reroll {}{}) → P(hit)={:.4}, P(crit)={:.4}",
             if is_melee { "WS" } else { "BS" },
             hit_stat,
@@ -445,6 +446,16 @@ pub fn crunch_model(
             probs.pass,
             probs.crit,
         );
+        if resolved.reroll_one.hit.is_some() {
+            let fresh = check_probabilities(CheckArgs {
+                reroll: RerollKind::None,
+                ..hit_check
+            });
+            let dice = one_reroll_dice(attacks, probs.open);
+            hits += dice * fresh.pass;
+            crits += dice * fresh.crit;
+            detail.push_str(&format!("; re-roll one Hit roll: {dice:.4} dice"));
+        }
         (hits, crits, detail)
     };
     let mut hits = hits_raw;
@@ -508,7 +519,7 @@ pub fn crunch_model(
     let hits_for_wound_roll = if has_lethal { hits - crit_hits } else { hits };
     let lethal_auto_wounds = if has_lethal { crit_hits } else { 0.0 };
 
-    let wound_probs = check_probabilities(CheckArgs {
+    let wound_check = CheckArgs {
         unmodified_needed: std_wound_needed,
         modifier: resolved.wound_mod.value,
         reroll: resolved
@@ -520,9 +531,20 @@ pub fn crunch_model(
         auto_fail_on_one: true,
         auto_pass_on_six: true,
         crit_threshold: crit_wound_threshold,
-    });
-    let regular_wounds_from_roll = hits_for_wound_roll * (wound_probs.pass - wound_probs.crit);
-    let crit_wounds_from_roll = hits_for_wound_roll * wound_probs.crit;
+    };
+    let wound_probs = check_probabilities(wound_check);
+    let mut regular_wounds_from_roll = hits_for_wound_roll * (wound_probs.pass - wound_probs.crit);
+    let mut crit_wounds_from_roll = hits_for_wound_roll * wound_probs.crit;
+    let mut wound_reroll_one_dice = 0.0;
+    if resolved.reroll_one.wound.is_some() {
+        let fresh = check_probabilities(CheckArgs {
+            reroll: RerollKind::None,
+            ..wound_check
+        });
+        wound_reroll_one_dice = one_reroll_dice(hits_for_wound_roll, wound_probs.open);
+        regular_wounds_from_roll += wound_reroll_one_dice * (fresh.pass - fresh.crit);
+        crit_wounds_from_roll += wound_reroll_one_dice * fresh.crit;
+    }
     let total_regular_wounds = regular_wounds_from_roll + lethal_auto_wounds;
     let has_devastating = find_extra_keyword(&resolved, "devastating-wounds").is_some();
     let mortal_wounds_stream = if has_devastating {
@@ -540,7 +562,7 @@ pub fn crunch_model(
         name: StageName::Wounds,
         expected: total_wounds,
         detail: format!(
-            "S{s_val} vs T{t_val} → need {std_wound_needed}+, anti {}, P(wound)={:.4} ({:.4} crit), lethal {}, devastating {}",
+            "S{s_val} vs T{t_val} → need {std_wound_needed}+, anti {}, P(wound)={:.4} ({:.4} crit), lethal {}, devastating {}{}",
             if anti_threshold <= 6 {
                 format!("{anti_threshold}+ (active)")
             } else {
@@ -557,6 +579,11 @@ pub fn crunch_model(
                 format!("{mortal_wounds_stream:.4} MW")
             } else {
                 "—".to_string()
+            },
+            if resolved.reroll_one.wound.is_some() {
+                format!("; re-roll one Wound roll: {wound_reroll_one_dice:.4} dice")
+            } else {
+                String::new()
             },
         ),
     });
@@ -617,12 +644,30 @@ pub fn crunch_model(
     } else {
         save_probs.pass
     };
-    let unsaved = regular_wounds_for_saves * (1.0 - p_saved);
+    let mut unsaved = regular_wounds_for_saves * (1.0 - p_saved);
+    // "Re-roll one saving throw": one failed save no other permission re-rolled is rolled again.
+    let save_reroll_one_dice = if resolved.reroll_one.save.is_some() && effective_save_target < 7.0
+    {
+        one_reroll_dice(regular_wounds_for_saves, save_probs.open)
+    } else {
+        0.0
+    };
+    if save_reroll_one_dice > 0.0 {
+        let fresh = check_probabilities(CheckArgs {
+            unmodified_needed: effective_save_target as i64,
+            modifier: 0.0,
+            reroll: RerollKind::None,
+            auto_fail_on_one: true,
+            auto_pass_on_six: false,
+            crit_threshold: 7,
+        });
+        unsaved -= save_reroll_one_dice * fresh.pass;
+    }
     stages.push(Stage {
         name: StageName::Unsaved,
         expected: unsaved,
         detail: format!(
-            "Sv{}+{}, AP{}{}{}{} → effective {}+ (P(save)={:.4})",
+            "Sv{}+{}, AP{}{}{}{} → effective {}+ (P(save)={:.4}){}",
             sv,
             if sv != printed_sv { " (set)" } else { "" },
             signed(ap),
@@ -642,6 +687,11 @@ pub fn crunch_model(
             },
             effective_save_target,
             p_saved,
+            if resolved.reroll_one.save.is_some() {
+                format!("; re-roll one saving throw: {save_reroll_one_dice:.4} dice")
+            } else {
+                String::new()
+            },
         ),
     });
 
@@ -667,14 +717,28 @@ pub fn crunch_model(
         reroll: damage_reroll,
     })?;
     let damage_per_hit = per_attack.expected;
-    let damage_main = unsaved * damage_per_hit;
-    let damage_mortal = mortal_wounds_stream * damage_per_hit;
+    let mut damage_main = unsaved * damage_per_hit;
+    let mut damage_mortal = mortal_wounds_stream * damage_per_hit;
+    // "Re-roll one Damage roll" over every Damage roll, main and mortal streams alike, shared in
+    // proportion to their rolls. A roll another permission already re-rolled cannot be re-rolled,
+    // so beside one the single die is not priced.
+    let damage_rolls = unsaved + mortal_wounds_stream;
+    let damage_reroll_one =
+        if resolved.reroll_one.damage.is_some() && damage_reroll.is_none() && damage_rolls > 0.0 {
+            one_damage_reroll_gain(&per_attack.distribution, damage_rolls)
+        } else {
+            0.0
+        };
+    if damage_reroll_one > 0.0 {
+        damage_main += damage_reroll_one * (unsaved / damage_rolls);
+        damage_mortal += damage_reroll_one * (mortal_wounds_stream / damage_rolls);
+    }
     let damage = damage_main + damage_mortal;
     stages.push(Stage {
         name: StageName::Damage,
         expected: damage,
         detail: format!(
-            "D {base_d}{}{}{}{} = {damage_per_hit} per hit; main {damage_main:.4}, mortal {damage_mortal:.4}",
+            "D {base_d}{}{}{}{} = {damage_per_hit} per hit{}; main {damage_main:.4}, mortal {damage_mortal:.4}",
             if melta_bonus != 0.0 {
                 format!(" + Melta {melta_bonus} (half range)")
             } else {
@@ -700,6 +764,11 @@ pub fn crunch_model(
                     if per_attack.reroll_used { "" } else { " (no effect)" },
                 ),
                 None => String::new(),
+            },
+            if resolved.reroll_one.damage.is_some() {
+                format!("; re-roll one Damage roll: +{damage_reroll_one:.4}")
+            } else {
+                String::new()
             },
         ),
     });
@@ -1001,6 +1070,7 @@ impl RerollKind {
     }
 }
 
+#[derive(Clone, Copy)]
 struct CheckArgs {
     unmodified_needed: i64,
     modifier: f64,
@@ -1014,6 +1084,8 @@ struct CheckArgs {
 struct CheckProbs {
     pass: f64,
     crit: f64,
+    /// A failed die no permission re-rolls: what a "re-roll one" can still take.
+    open: f64,
 }
 
 /// Probability a single die check passes (and the conditional crit rate).
@@ -1038,6 +1110,7 @@ fn check_probabilities(args: CheckArgs) -> CheckProbs {
 
     let mut pass = 0.0;
     let mut crit = 0.0;
+    let mut open = 0.0;
     for face in 1..=6 {
         let (p, c) = outcome(face);
         if p == 1.0 {
@@ -1048,6 +1121,7 @@ fn check_probabilities(args: CheckArgs) -> CheckProbs {
         let eligible = matches!(args.reroll, RerollKind::AllFailures)
             || (matches!(args.reroll, RerollKind::Ones) && face == 1);
         if !eligible {
+            open += 1.0 / 6.0;
             continue;
         }
         let mut reroll_pass = 0.0;
@@ -1060,7 +1134,31 @@ fn check_probabilities(args: CheckArgs) -> CheckProbs {
         pass += reroll_pass / 6.0;
         crit += reroll_crit / 6.0;
     }
-    CheckProbs { pass, crit }
+    CheckProbs { pass, crit, open }
+}
+
+/// Expected dice a "re-roll one" re-rolls over a pool of `pool` dice that each end failed and
+/// un-rerolled with probability `open`: for a whole pool, the chance at least one does,
+/// 1 - (1 - open)^pool. A pool the engine carries as an expectation is read between the whole
+/// pools either side of it, which is exact when it is one of the two and never overstates a
+/// concave gain.
+pub(crate) fn one_reroll_dice(pool: f64, open: f64) -> f64 {
+    if pool > 0.0 && open > 0.0 {
+        between_whole_pools(pool, |dice| 1.0 - (1.0 - open).powf(dice))
+    } else {
+        0.0
+    }
+}
+
+/// `at_whole` at a fractional `pool`, read linearly between the whole pools either side.
+pub(crate) fn between_whole_pools(pool: f64, at_whole: impl Fn(f64) -> f64) -> f64 {
+    let low = pool.floor();
+    let below = at_whole(low);
+    if pool == low {
+        below
+    } else {
+        below + (pool - low) * (at_whole(low + 1.0) - below)
+    }
 }
 
 fn clamp(n: f64, lo: f64, hi: f64) -> f64 {

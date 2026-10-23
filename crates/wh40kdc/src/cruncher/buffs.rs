@@ -17,8 +17,8 @@ use crate::Phase;
 use super::gates::live_buffs;
 pub use super::resolved::{
     CappedMod, CoverState, CritThresholds, ExtraKeywordEntry, FeelNoPainState, HighestMod,
-    IgnoredRolls, InvulnerableState, RerollState, Rerolls, ResolvedModifiers, SkillMods, SummedMod,
-    ThresholdState,
+    IgnoredRolls, InvulnerableState, RerollOne, RerollOneState, RerollState, Rerolls,
+    ResolvedModifiers, SkillMods, SummedMod, ThresholdState,
 };
 use super::scenario::{ModelWounds, ScenarioObjective, UnitState, UnitStrength};
 
@@ -150,6 +150,12 @@ pub enum BuffContribution {
     Reroll {
         roll: RollKind,
         subset: RerollSubset,
+    },
+    /// "Re-roll one Hit roll": one die of the roll, at the player's pick, across the attack pool —
+    /// a failed die no other re-roll already took, or for Damage the lowest roll when it is below
+    /// the mean of a fresh roll. The engine prices one such die per crunch (`one_reroll_dice`).
+    RerollOne {
+        roll: RollKind,
     },
     ExtraKeyword {
         keyword_ref: WeaponKeywordRef,
@@ -527,6 +533,17 @@ pub fn resolve_buffs(buffs: &[Buff], ctx: &EngineContext) -> ResolvedModifiers {
             }
             BuffContribution::Reroll { roll, subset } => {
                 merge_reroll(&mut out.rerolls, *roll, *subset, &b.source);
+            }
+            BuffContribution::RerollOne { roll } => {
+                let slot = out.reroll_one.for_roll_mut(*roll);
+                if slot
+                    .as_ref()
+                    .is_none_or(|cur| rank(&b.source) < rank(&cur.dominant_source))
+                {
+                    *slot = Some(RerollOneState {
+                        dominant_source: b.source.clone(),
+                    });
+                }
             }
             BuffContribution::ExtraKeyword { keyword_ref } => {
                 let key = canonical_keyword_key(keyword_ref);

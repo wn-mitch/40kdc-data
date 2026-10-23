@@ -20,7 +20,7 @@ import {
 } from "./buffs.js";
 import { Dataset } from "../data/dataset.js";
 import { isMeleeProfile } from "../data/weapon-profile.js";
-import { damageRoll } from "./damage-roll.js";
+import { damageRoll, oneDamageRerollGain } from "./damage-roll.js";
 
 export type AttackProfileRef = { weapon: Weapon; profileIndex: number };
 export type TargetProfileRef = {
@@ -182,18 +182,25 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
         `crunch: weapon ${input.attacker.weapon.id} profile ${input.attacker.profileIndex} missing ${isMelee ? "WS" : "BS"}`,
       );
     }
-    const probs = checkProbabilities({
+    const hitCheck = {
       unmodifiedNeeded: hitStat,
       modifier: resolved.hitMod.value + coverHitPenalty,
-      reroll: resolved.rerolls.hit?.subset ?? "none",
       autoFailOnOne: true,
       autoPassOnSix: true,
       critThreshold: critHitThreshold,
-    });
+    };
+    const probs = checkProbabilities({ ...hitCheck, reroll: resolved.rerolls.hit?.subset ?? "none" });
     hitProbs = probs;
     hits = attacks * probs.pass;
     critHits = attacks * probs.crit;
     hitsDetail = `${isMelee ? "WS" : "BS"}${hitStat}+ (mod ${signed(resolved.hitMod.value)}${covered ? ", cover -1" : ""}, reroll ${resolved.rerolls.hit?.subset ?? "none"}${critHitThreshold < 6 ? `, crit ${critHitThreshold}+` : ""}) → P(hit)=${probs.pass.toFixed(4)}, P(crit)=${probs.crit.toFixed(4)}`;
+    if (resolved.rerollOne.hit) {
+      const fresh = checkProbabilities({ ...hitCheck, reroll: "none" });
+      const dice = oneRerollDice(attacks, probs.open);
+      hits += dice * fresh.pass;
+      critHits += dice * fresh.crit;
+      hitsDetail += `; re-roll one Hit roll: ${dice.toFixed(4)} dice`;
+    }
   }
   const sustained = findKeyword(resolved, "sustained-hits");
   if (sustained) {
@@ -225,16 +232,23 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
   const hitsForWoundRoll = hasLethal ? hits - critHits : hits;
   const lethalAutoWounds = hasLethal ? critHits : 0;
 
-  const woundProbs = checkProbabilities({
+  const woundCheck = {
     unmodifiedNeeded: stdWoundNeeded,
     modifier: resolved.woundMod.value,
-    reroll: resolved.rerolls.wound?.subset ?? "none",
     autoFailOnOne: true,
     autoPassOnSix: true,
     critThreshold: critWoundThreshold,
-  });
-  const regularWoundsFromRoll = hitsForWoundRoll * (woundProbs.pass - woundProbs.crit);
-  const critWoundsFromRoll = hitsForWoundRoll * woundProbs.crit;
+  };
+  const woundProbs = checkProbabilities({ ...woundCheck, reroll: resolved.rerolls.wound?.subset ?? "none" });
+  let regularWoundsFromRoll = hitsForWoundRoll * (woundProbs.pass - woundProbs.crit);
+  let critWoundsFromRoll = hitsForWoundRoll * woundProbs.crit;
+  let woundRerollOneDice = 0;
+  if (resolved.rerollOne.wound) {
+    const fresh = checkProbabilities({ ...woundCheck, reroll: "none" });
+    woundRerollOneDice = oneRerollDice(hitsForWoundRoll, woundProbs.open);
+    regularWoundsFromRoll += woundRerollOneDice * (fresh.pass - fresh.crit);
+    critWoundsFromRoll += woundRerollOneDice * fresh.crit;
+  }
   const totalRegularWounds = regularWoundsFromRoll + lethalAutoWounds;
   const hasDevastating = !!findKeyword(resolved, "devastating-wounds");
   const mortalWoundsStream = hasDevastating ? critWoundsFromRoll : 0;
@@ -243,7 +257,7 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
   stages.push({
     name: "wounds",
     expected: totalWounds,
-    detail: `S${S} vs T${T} → need ${stdWoundNeeded}+, anti ${antiThreshold <= 6 ? `${antiThreshold}+ (active)` : "n/a"}, P(wound)=${woundProbs.pass.toFixed(4)} (${critWoundsFromRoll.toFixed(4)} crit), lethal ${hasLethal ? "+" + lethalAutoWounds.toFixed(4) : "—"}, devastating ${hasDevastating ? mortalWoundsStream.toFixed(4) + " MW" : "—"}`,
+    detail: `S${S} vs T${T} → need ${stdWoundNeeded}+, anti ${antiThreshold <= 6 ? `${antiThreshold}+ (active)` : "n/a"}, P(wound)=${woundProbs.pass.toFixed(4)} (${critWoundsFromRoll.toFixed(4)} crit), lethal ${hasLethal ? "+" + lethalAutoWounds.toFixed(4) : "—"}, devastating ${hasDevastating ? mortalWoundsStream.toFixed(4) + " MW" : "—"}${resolved.rerollOne.wound ? `; re-roll one Wound roll: ${woundRerollOneDice.toFixed(4)} dice` : ""}`,
   });
 
   // 4. Saves
@@ -280,11 +294,17 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
     critThreshold: 7,
   });
   const pSaved = effectiveSaveTarget >= 7 ? 0 : saveProbs.pass;
-  const unsaved = regularWoundsForSaves * (1 - pSaved);
+  let unsaved = regularWoundsForSaves * (1 - pSaved);
+  // "Re-roll one saving throw": one failed save no other permission re-rolled is rolled again.
+  const saveRerollOneDice = resolved.rerollOne.save && effectiveSaveTarget < 7 ? oneRerollDice(regularWoundsForSaves, saveProbs.open) : 0;
+  if (saveRerollOneDice > 0) {
+    const fresh = checkProbabilities({ unmodifiedNeeded: effectiveSaveTarget, modifier: 0, reroll: "none", autoFailOnOne: true, autoPassOnSix: false, critThreshold: 7 });
+    unsaved -= saveRerollOneDice * fresh.pass;
+  }
   stages.push({
     name: "unsaved",
     expected: unsaved,
-    detail: `Sv${Sv}+${Sv !== unitProfile.Sv ? " (set)" : ""}, AP${signed(AP)}${apMod !== 0 ? ` (apmod ${signed(apMod)})` : ""}${saveMod !== 0 ? `, savemod ${signed(saveMod)}` : ""}${abilityInvuln !== null ? `, invuln ${abilityInvuln}+ (ability)` : ""} → effective ${effectiveSaveTarget}+ (P(save)=${pSaved.toFixed(4)})`,
+    detail: `Sv${Sv}+${Sv !== unitProfile.Sv ? " (set)" : ""}, AP${signed(AP)}${apMod !== 0 ? ` (apmod ${signed(apMod)})` : ""}${saveMod !== 0 ? `, savemod ${signed(saveMod)}` : ""}${abilityInvuln !== null ? `, invuln ${abilityInvuln}+ (ability)` : ""} → effective ${effectiveSaveTarget}+ (P(save)=${pSaved.toFixed(4)})${resolved.rerollOne.save ? `; re-roll one saving throw: ${saveRerollOneDice.toFixed(4)} dice` : ""}`,
   });
 
   // 5. Damage
@@ -306,13 +326,22 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
     ...(damageReroll ? { reroll: damageReroll } : {}),
   });
   const damagePerHit = perAttack.expected;
-  const damageMain = unsaved * damagePerHit;
-  const damageMortal = mortalWoundsStream * damagePerHit;
+  let damageMain = unsaved * damagePerHit;
+  let damageMortal = mortalWoundsStream * damagePerHit;
+  // "Re-roll one Damage roll" over every Damage roll, main and mortal streams alike, shared in
+  // proportion to their rolls. A roll another permission already re-rolled cannot be re-rolled, so
+  // beside one the single die is not priced.
+  const damageRolls = unsaved + mortalWoundsStream;
+  const damageRerollOne = resolved.rerollOne.damage && !damageReroll && damageRolls > 0 ? oneDamageRerollGain(perAttack.distribution, damageRolls) : 0;
+  if (damageRerollOne > 0) {
+    damageMain += damageRerollOne * (unsaved / damageRolls);
+    damageMortal += damageRerollOne * (mortalWoundsStream / damageRolls);
+  }
   const damage = damageMain + damageMortal;
   stages.push({
     name: "damage",
     expected: damage,
-    detail: `D ${baseD}${meltaBonus ? ` + Melta ${meltaBonus} (half range)` : ""}${resolved.damageMod.value !== 0 ? ` ${signed(resolved.damageMod.value)} (mod)` : ""}${damageReduction > 0 ? ` -${damageReduction} (defender, min 1)` : ""}${damageReroll ? `, reroll ${damageReroll}${perAttack.rerollUsed ? "" : " (no effect)"}` : ""} = ${damagePerHit} per hit; main ${damageMain.toFixed(4)}, mortal ${damageMortal.toFixed(4)}`,
+    detail: `D ${baseD}${meltaBonus ? ` + Melta ${meltaBonus} (half range)` : ""}${resolved.damageMod.value !== 0 ? ` ${signed(resolved.damageMod.value)} (mod)` : ""}${damageReduction > 0 ? ` -${damageReduction} (defender, min 1)` : ""}${damageReroll ? `, reroll ${damageReroll}${perAttack.rerollUsed ? "" : " (no effect)"}` : ""} = ${damagePerHit} per hit${resolved.rerollOne.damage ? `; re-roll one Damage roll: +${damageRerollOne.toFixed(4)}` : ""}; main ${damageMain.toFixed(4)}, mortal ${damageMortal.toFixed(4)}`,
   });
 
   // 6. FNP
@@ -425,7 +454,7 @@ function checkProbabilities(args: {
   autoPassOnSix: boolean;
   /** Natural roll ≥ this is a crit. Use 7 to disable crits. */
   critThreshold: number;
-}): { pass: number; crit: number } {
+}): { pass: number; crit: number; open: number } {
   function outcome(face: number): { pass: number; crit: number } {
     if (args.autoFailOnOne && face === 1) return { pass: 0, crit: 0 };
     if (face >= args.critThreshold) return { pass: 1, crit: 1 };
@@ -437,6 +466,8 @@ function checkProbabilities(args: {
 
   let pass = 0;
   let crit = 0;
+  // A failed die no permission re-rolls: what a "re-roll one" can still take.
+  let open = 0;
   for (let face = 1; face <= 6; face++) {
     const initial = outcome(face);
     if (initial.pass === 1) {
@@ -447,7 +478,10 @@ function checkProbabilities(args: {
     // Failed initial — eligible for reroll?
     const eligible =
       args.reroll === "all-failures" || (args.reroll === "ones" && face === 1);
-    if (!eligible) continue;
+    if (!eligible) {
+      open += 1 / 6;
+      continue;
+    }
     // Reroll: uniform over 1..6.
     let rerollPass = 0;
     let rerollCrit = 0;
@@ -459,7 +493,24 @@ function checkProbabilities(args: {
     pass += rerollPass / 6;
     crit += rerollCrit / 6;
   }
-  return { pass, crit };
+  return { pass, crit, open };
+}
+
+/**
+ * Expected dice a "re-roll one" re-rolls over a pool of `pool` dice that each end failed and
+ * un-rerolled with probability `open`: for a whole pool, the chance at least one does,
+ * 1 - (1 - open)^pool. A pool the engine carries as an expectation is read between the whole pools
+ * either side of it, which is exact when it is one of the two and never overstates a concave gain.
+ */
+export function oneRerollDice(pool: number, open: number): number {
+  return pool > 0 && open > 0 ? betweenWholePools(pool, (dice) => 1 - Math.pow(1 - open, dice)) : 0;
+}
+
+/** `atWhole` at a fractional `pool`, read linearly between the whole pools either side. */
+export function betweenWholePools(pool: number, atWhole: (dice: number) => number): number {
+  const low = Math.floor(pool);
+  const below = atWhole(low);
+  return pool === low ? below : below + (pool - low) * (atWhole(low + 1) - below);
 }
 
 /**

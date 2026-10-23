@@ -270,10 +270,16 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 			critHitThreshold = math.Min(6, crit.value)
 		}
 		hitModifier := res.hitMod + coverHitPenalty
-		passP, critP := checkProbabilities(hitStatN, hitModifier, rerollSubset(res, "hit"), true, true, critHitThreshold)
+		passP, critP, openP := checkProbabilities(hitStatN, hitModifier, rerollSubset(res, "hit"), true, true, critHitThreshold)
 		hitPass, hitCrit = passP, critP
 		hits = attacks * passP
 		critHits = attacks * critP
+		if _, ok := res.rerollOne["hit"]; ok {
+			freshPass, freshCrit, _ := checkProbabilities(hitStatN, hitModifier, "none", true, true, critHitThreshold)
+			dice := oneRerollDice(attacks, openP)
+			hits += dice * freshPass
+			critHits += dice * freshCrit
+		}
 	}
 	sustained := res.findKeyword("sustained-hits")
 	if sustained != nil {
@@ -305,9 +311,15 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 		hitsForWoundRoll = hits - critHits
 		lethalAutoWounds = critHits
 	}
-	woundPass, woundCrit := checkProbabilities(float64(stdWoundNeeded), res.woundMod, rerollSubset(res, "wound"), true, true, critWoundThreshold)
+	woundPass, woundCrit, woundOpen := checkProbabilities(float64(stdWoundNeeded), res.woundMod, rerollSubset(res, "wound"), true, true, critWoundThreshold)
 	regularWoundsFromRoll := hitsForWoundRoll * (woundPass - woundCrit)
 	critWoundsFromRoll := hitsForWoundRoll * woundCrit
+	if _, ok := res.rerollOne["wound"]; ok {
+		freshPass, freshCrit, _ := checkProbabilities(float64(stdWoundNeeded), res.woundMod, "none", true, true, critWoundThreshold)
+		dice := oneRerollDice(hitsForWoundRoll, woundOpen)
+		regularWoundsFromRoll += dice * (freshPass - freshCrit)
+		critWoundsFromRoll += dice * freshCrit
+	}
 	totalRegularWounds := regularWoundsFromRoll + lethalAutoWounds
 	hasDevastating := res.findKeyword("devastating-wounds") != nil
 	mortalWoundsStream := 0.0
@@ -357,12 +369,19 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 	if effectiveInvuln != nil {
 		effectiveSaveTarget = math.Min(armorFinal, *effectiveInvuln)
 	}
-	savePass, _ := checkProbabilities(effectiveSaveTarget, 0, rerollSubset(res, "save"), true, false, 7)
+	savePass, _, saveOpen := checkProbabilities(effectiveSaveTarget, 0, rerollSubset(res, "save"), true, false, 7)
 	pSaved := savePass
 	if effectiveSaveTarget >= 7 {
 		pSaved = 0
 	}
 	unsaved := regularWoundsForSaves * (1 - pSaved)
+	// "Re-roll one saving throw": one failed save no other permission re-rolled is rolled again.
+	if _, ok := res.rerollOne["save"]; ok && effectiveSaveTarget < 7 {
+		if dice := oneRerollDice(regularWoundsForSaves, saveOpen); dice > 0 {
+			freshPass, _, _ := checkProbabilities(effectiveSaveTarget, 0, "none", true, false, 7)
+			unsaved -= dice * freshPass
+		}
+	}
 	stages = append(stages, stage("unsaved", unsaved))
 
 	// 5. Damage
@@ -400,6 +419,16 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 	damagePerHit := perAttack.expected
 	damageMain := unsaved * damagePerHit
 	damageMortal := mortalWoundsStream * damagePerHit
+	// "Re-roll one Damage roll" over every Damage roll, main and mortal streams
+	// alike, shared in proportion to their rolls. A roll another permission
+	// already re-rolled cannot be re-rolled, so beside one the die is not priced.
+	damageRolls := unsaved + mortalWoundsStream
+	if _, ok := res.rerollOne["damage"]; ok && damageReroll == "" && damageRolls > 0 {
+		if gain := oneDamageRerollGain(perAttack.distribution, damageRolls); gain > 0 {
+			damageMain += gain * (unsaved / damageRolls)
+			damageMortal += gain * (mortalWoundsStream / damageRolls)
+		}
+	}
 	damage := damageMain + damageMortal
 	stages = append(stages, stage("damage", damage))
 
@@ -551,7 +580,10 @@ func woundThreshold(s, t float64) int {
 	}
 }
 
-func checkProbabilities(unmodifiedNeeded, modifier float64, reroll string, autoFailOnOne, autoPassOnSix bool, critThreshold float64) (float64, float64) {
+// checkProbabilities returns the pass and crit chances of one die, and the
+// chance it fails with no permission re-rolling it (what a "re-roll one" can
+// still take).
+func checkProbabilities(unmodifiedNeeded, modifier float64, reroll string, autoFailOnOne, autoPassOnSix bool, critThreshold float64) (float64, float64, float64) {
 	outcome := func(face int) (int, int) {
 		f := float64(face)
 		if autoFailOnOne && face == 1 {
@@ -568,7 +600,7 @@ func checkProbabilities(unmodifiedNeeded, modifier float64, reroll string, autoF
 		}
 		return 0, 0
 	}
-	passP, critP := 0.0, 0.0
+	passP, critP, openP := 0.0, 0.0, 0.0
 	for face := 1; face <= 6; face++ {
 		p, c := outcome(face)
 		if p == 1 {
@@ -578,6 +610,7 @@ func checkProbabilities(unmodifiedNeeded, modifier float64, reroll string, autoF
 		}
 		eligible := reroll == "all-failures" || (reroll == "ones" && face == 1)
 		if !eligible {
+			openP += 1.0 / 6
 			continue
 		}
 		rerollPass, rerollCrit := 0.0, 0.0
@@ -589,7 +622,29 @@ func checkProbabilities(unmodifiedNeeded, modifier float64, reroll string, autoF
 		passP += rerollPass / 6
 		critP += rerollCrit / 6
 	}
-	return passP, critP
+	return passP, critP, openP
+}
+
+// oneRerollDice is the expected dice a "re-roll one" re-rolls over a pool of
+// `pool` dice that each end failed and un-rerolled with probability `open`:
+// for a whole pool, 1 - (1 - open)^pool. A pool carried as an expectation is
+// read between the whole pools either side of it.
+func oneRerollDice(pool, open float64) float64 {
+	if pool <= 0 || open <= 0 {
+		return 0
+	}
+	return betweenWholePools(pool, func(dice float64) float64 { return 1 - math.Pow(1-open, dice) })
+}
+
+// betweenWholePools reads atWhole at a fractional pool, linearly between the
+// whole pools either side.
+func betweenWholePools(pool float64, atWhole func(float64) float64) float64 {
+	low := math.Floor(pool)
+	below := atWhole(low)
+	if pool == low {
+		return below
+	}
+	return below + (pool-low)*(atWhole(low+1)-below)
 }
 
 func jsNumber(v any) float64 {
