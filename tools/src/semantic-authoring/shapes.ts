@@ -31,17 +31,25 @@ export class ShapeError extends Error {
   }
 }
 
-type Member = { id: number; faction_id: string; ability_id: string; name: string | null; source_hash: string; source_text: string; leaves: CompileLeaf[] };
+type Member = { id: number; faction_id: string; ability_id: string; name: string | null; source_hash: string; source_text: string; source_type: string | null; leaves: CompileLeaf[] };
 
 /** Current sources fully described by trusted leaves, optionally for one faction. */
 function tiledMembers(db: DatabaseSync, factionId: string | null): Member[] {
   return tiledSources(db, { factionId });
 }
 
-/** Each member's compiler context: its own ability and owning-faction unit catalog. */
-function ownOptions(db: DatabaseSync): (member: Member) => { abilityId?: string; name?: string; units: { faction_id: string } } {
+/**
+ * Each member's compiler context: its own ability and owning-faction unit and weapon catalogs, as
+ * the compile gates pass them (pipeline-8b-gates.ts), so a named weapon resolves here too.
+ */
+function ownOptions(db: DatabaseSync): (member: Member) => { abilityId?: string; name?: string; units: { faction_id: string }; weapons: { faction_id: string; source_type: string } } {
   const own = ownAbilityIds(db, semanticAuthoringDataRoot());
-  return (member) => ({ abilityId: own.get(member.id), name: member.name ?? undefined, units: { faction_id: member.faction_id } });
+  return (member) => ({
+    abilityId: own.get(member.id),
+    name: member.name ?? undefined,
+    units: { faction_id: member.faction_id },
+    weapons: { faction_id: member.faction_id, source_type: member.source_type ?? "" },
+  });
 }
 
 type EntryState = { status: string; inputs_hash: string; mechanics_hash: string };

@@ -95,6 +95,8 @@ function sentenceWords(leaves: readonly CompileLeaf[], start: number, sentence: 
 
 /** A bullet mark in a sentence's lead-in: ■ or •, or a dash or asterisk that opens a line. */
 const BULLET = /[■•]|(?:^|\n)[ \t]*[-*–—](?=\s)/u;
+/** A line holding only a bold heading ("**Favoured ka’tah**"): what follows is a block of its own. */
+const HEADING_LINE = /(?:^|[\r\n])[ \t]*\*\*[^*\r\n]+\*\*[ \t]*[\r\n]/u;
 /** A plain label that opens its own source line: "Bestial Forms: …" (a bold granted-ability name is not one). */
 const LABEL = /^[ \t]*(?!Or:)[A-Z][A-Za-z' ]{0,40}:/u;
 
@@ -160,12 +162,23 @@ export function sentenceSegments(leaves: readonly CompileLeaf[], sourceText: str
     const words = sentenceWords(leaves, starts[position]!, sentence, sourceText);
     const bulleted = BULLET.test(sentenceGap(leaves, starts[position]!, sentence, sourceText));
     const moment = IN_ADDITION.test(words) || (MOMENT_OPENER.test(words) && !TIED_BACK.test(words));
-    const label = labelLine(leaves, starts[position]!, sentence, sourceText);
+    const label = labelLine(leaves, starts[position]!, sentence, sourceText) || HEADING_LINE.test(sentenceGap(leaves, starts[position]!, sentence, sourceText));
     const ends = !bulleted && (moment || label);
     moments.push(moment);
     labels.push(label);
     inList.push(!label && (listed[position]! || (position > 0 && inList[position - 1]! && !ends)));
   });
+  // A menu whose named options each carry their own moment ("Calistus. Your Movement phase, when …") is used at
+  // those moments, not at an earlier sentence's: the sentence that opens it starts a part of its own.
+  const selfTimedMenu = (position: number) => {
+    if (!sentences[position]!.some((leaf) => isContainerOpener(leaf.family_id))) return false;
+    const options: CompileLeaf[][] = [];
+    for (const leaf of sentences.slice(position + 1).flat()) {
+      if (leaf.family_id === "named-option") options.push([]);
+      options.at(-1)?.push(leaf);
+    }
+    return options.length > 1 && options.every((option) => option.some((leaf) => leaf.role === "EVENT" || leaf.family_id === "phase-window"));
+  };
   const parts: CompileLeaf[][] = [[]];
   sentences.forEach((sentence, position) => {
     const words = sentenceWords(leaves, starts[position]!, sentence, sourceText);
@@ -174,7 +187,7 @@ export function sentenceSegments(leaves: readonly CompileLeaf[], sourceText: str
     // A menu whose options begin at named-option markers holds every sentence after its opener: "Each time …" there is one option's moment.
     const inMenu = parts.at(-1)!.some((leaf) => isContainerOpener(leaf.family_id)) && parts.at(-1)!.some((leaf) => leaf.family_id === "named-option");
     const opensPart = position > firstEffectful && !inList[position] && !inMenu && parts.at(-1)!.some((leaf) => leaf.role === "EFFECT") && (
-      moments[position] || labels[position] || standing) && !REFERS_BACK.test(words.replace(/^in addition,\s*/iu, "").split(",")[0]!) && !SUCH.test(words);
+      moments[position] || labels[position] || standing || selfTimedMenu(position)) && !REFERS_BACK.test(words.replace(/^in addition,\s*/iu, "").split(",")[0]!) && !SUCH.test(words);
     // "None of these models can be your WARLORD" after a composition rule: the group it points back
     // to is that rule's (compile-army.ts), so the sentence stays in that rule's part.
     const pointsBack = armyOnly(sentence) && parts.at(-1)!.some((leaf) => leaf.family_id === "army-construction" && leaf.parameters.rule === "composition")

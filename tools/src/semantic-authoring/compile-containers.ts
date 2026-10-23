@@ -92,6 +92,22 @@ function effectsOf(leaves: readonly CompileLeaf[], attacker: Record<string, unkn
  */
 let nestedCompiler: ((leaves: readonly CompileLeaf[], objective?: string) => Node) | null = null;
 
+/**
+ * What choosing any option of the menu being built does, printed once before the first option
+ * ("If you do, that unit is no longer readied"); null when nothing is. Set by `planContainers`.
+ */
+let sharedOptionSteps: Node | null = null;
+
+/**
+ * An option with the shared steps added: inside an option's own part, after its moment and before
+ * its conditions, so they happen when the option is used and are no gate of its effects.
+ */
+function withSharedSteps(option: Node, shared: Node): Node {
+  const steps = (node: Node) => node.type === "sequence" ? node.steps as Node[] : [node];
+  if (option.type === "ability-part") return { ...option, effect: { type: "sequence", steps: [...steps(shared), ...steps(option.effect as Node)] } };
+  return { type: "sequence", steps: [...steps(shared), ...steps(option)] };
+}
+
 /** A named option's leading `named-option` leaf, and the plain effect leaves after it. */
 function namedOption(group: readonly CompileLeaf[], forRequirement: boolean, sourceIndex = 0): { id: string; name: unknown; effect: Node; marker: CompileLeaf } {
   const marker = group[0];
@@ -106,7 +122,8 @@ function namedOption(group: readonly CompileLeaf[], forRequirement: boolean, sou
   // this id from the display label: labels are mutable player-facing text.
   const reviewedId = marker.parameters.option_id;
   const id = typeof reviewedId === "string" && reviewedId.length > 0 ? reviewedId : `option-${sourceIndex + 1}`;
-  return { id, name: closed(marker, "label"), effect: effectsOf(group.slice(1)), marker };
+  const effect = effectsOf(group.slice(1));
+  return { id, name: closed(marker, "label"), effect: sharedOptionSteps === null ? effect : withSharedSteps(effect, sharedOptionSteps), marker };
 }
 
 function buildChoice(head: CompileLeaf, groups: CompileLeaf[][]): Node {
@@ -518,6 +535,12 @@ function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly n
       && (groups[0]!.every((item) => item.role !== "EFFECT") || aboutTheOptions(groups[0]!))) {
       for (const returned of groups.shift()!) consumed.delete(list.indexOf(returned));
     }
+    // Under named-option markers, an effect printed once before the first option is what choosing
+    // any option does ("If you do, that unit is no longer readied"): it is a step of every option.
+    let shared: CompileLeaf[] | null = null;
+    if (byMarker && groups.length > 1 && groups[0]![0]!.family_id !== "named-option" && groups.slice(1).every((group) => group[0]!.family_id === "named-option")) {
+      shared = groups.shift()!;
+    }
     let replacementTailOf: { optional: boolean } | undefined;
     let sentences = groups;
     if (replacement !== undefined) {
@@ -542,9 +565,11 @@ function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly n
     // marker, or a single body. Sentence-split options ("…; if that test is passed, gain 1CP")
     // can cut one option in two, so those keep refusing a non-effect leaf.
     const outer = nestedCompiler;
+    const outerShared = sharedOptionSteps;
     const bulletCertain = leaf.family_id === "choice-open" && bulletBoundaries > 0 && sentenceBoundaries === 0;
     if (!byMarker && !SINGLE_BODY_CONTAINERS.has(leaf.family_id) && !bulletCertain && !moveEndOption) nestedCompiler = null;
     try {
+      sharedOptionSteps = shared === null ? null : effectsOf(shared);
       let node = buildContainer(leaf, sentences, replacementTailOf, leaf.family_id === "persistent-designation-open"
         ? persistentDesignationTiming(list, sentenceOf, index) : undefined);
       // "you can select up to one …" establishes the designation only if the controlling player chooses to.
@@ -554,6 +579,7 @@ function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly n
       nodes.set(index, node);
     } finally {
       nestedCompiler = outer;
+      sharedOptionSteps = outerShared;
     }
   });
   return { nodes, consumed };

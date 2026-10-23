@@ -2,12 +2,16 @@ import type { Compiled, CompileOptions } from "./compile.js";
 import type { CompileLeaf } from "./compile-fragments.js";
 import { joinSegments } from "./compile-segments.js";
 import { exactSpan, NAME_FRAGMENT } from "./contracts.js";
+import { usageFor } from "./restriction-families.js";
+import { hashJson } from "../round4/hash.js";
 
 /**
  * Leaves over the record's name. A workbench span with fragment `NAME` indexes the name column,
  * not `source_text`: unit records print their psyker level in the name ("Chief Librarian (psyker
  * level 3)"). Such a leaf compiles against the name alone, as its own part; the body leaves compile
  * against `source_text` as they would without it. A name leaf never resolves against source_text.
+ * A use limit printed in the name ("Master of Ka'tahs (Once per battle round, per unit)") limits
+ * the whole rule, so it becomes the record's own use limit rather than a part.
  */
 
 export { NAME_FRAGMENT };
@@ -43,6 +47,17 @@ export function compileWithName(
     if (leaf.exact_text !== undefined && exactSpan(options.name, leaf.start_byte, end) !== leaf.exact_text) {
       return fail("A name span no longer matches the record's name; re-review the name's wording.");
     }
+  }
+  if (named.every((leaf) => leaf.family_id === "usage-limit")) {
+    if (named.length > 1) return fail("A record's name prints more than one use limit.");
+    if (body.length === 0) return fail("A use limit in the record's name needs the rule it limits.");
+    const bodyResult = compile(body, sourceText, options);
+    if (!bodyResult.ok) return { ok: false, signature, errors: bodyResult.errors };
+    const usage = usageFor(named[0]!.parameters);
+    const printed = bodyResult.mechanics.usage;
+    // The rule's own text may repeat the limit; a different one would be two limits for one use.
+    if (printed != null && hashJson(printed) !== hashJson(usage)) return fail("The record's name and its rule print different use limits.");
+    return { ...bodyResult, signature: `${signature} NAME RESTRICTION(usage-limit)`, mechanics: { ...bodyResult.mechanics, usage } };
   }
   // The name leaves compile as ordinary leaves over the name text; the fragment tag and the stored
   // wording are only locators for the check above.

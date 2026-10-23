@@ -222,7 +222,9 @@ function windowPeriod(list: readonly CompileLeaf[]): "phase" | "turn" | null {
   const windows = flat.filter((leaf) => leaf.family_id === "use-window" || leaf.family_id === "activation-window"
     || (leaf.family_id === "phase-window" && leaf.parameters.phase !== "any"));
   if (windows.some((leaf) => leaf.family_id !== "phase-window" || leaf.parameters.phase !== undefined)) return "phase";
-  return windows.length ? "turn" : null;
+  if (windows.length) return "turn";
+  // "At the start of the Fight phase, …" names the phase it happens in, as a window does (core rule 01.02.02).
+  return flat.some((leaf) => leaf.family_id === "event" && leaf.parameters.kind === "phase-start" && leaf.parameters.phase !== undefined && leaf.parameters.phase !== "any") ? "phase" : null;
 }
 
 /** Effects that forbid something; an "instead" after one says what happens in its place. */
@@ -1448,7 +1450,9 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   const behavior = auraLeaf && !usedAura ? "aura" : triggers.length || bandTriggers.size ? "reactive" : optional || stratagem ? "activated" : "passive";
   // A used or triggered ability with no printed duration lasts for its window's period. A passive
   // ability gated on a phase already holds only in that phase, and an aura only while in range.
-  const period = durations.length === 0 && (behavior === "reactive" || behavior === "activated") && hasLastingEffect(body) ? windowPeriod(list) : null;
+  // A menu's options hold their own windows; only the leaves outside it say how long the menu's use lasts.
+  const period = durations.length === 0 && (behavior === "reactive" || behavior === "activated") && hasLastingEffect(body)
+    ? windowPeriod(list.filter((_, index) => !consumedByContainer.has(index))) : null;
   // "That X unit": the WHEN moment's unit must have the keywords the target names.
   const bound = targetParts.find((leaf) => leaf.family_id === "triggering-target");
   const offerMoments = triggerIndexes.some((index) => rawOf[index]! <= optionalSentence);

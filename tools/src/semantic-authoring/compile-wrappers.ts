@@ -223,9 +223,13 @@ export function friendlyRecipientFrame(leaf: CompileLeaf): boolean {
  * Laid" = a-trap-well-laid) or its "<name> target" ("your Blight Bombardment target"). Each rule
  * keeps its own tag, so one rule's selection never satisfies another's test.
  */
+/** A use limit printed in a record's name: "(Once per battle, per unit)", "(one per army)". */
+const NAME_USE_LIMIT = /\s*\((?:once|twice|one|two)\b[^)]*\bper\b[^)]*\)/giu;
+
 export function designationIdFor(name: string | undefined): string {
   if (!name?.trim()) throw new CompileError("A designated target needs the record's name to name its designation.");
-  const base = slug(name);
+  // The designation is named after the rule, not after how often the rule can be used.
+  const base = slug(name.replace(NAME_USE_LIMIT, ""));
   for (const id of [base, `${base}-target`]) if (DESIGNATION_IDS.has(id)) return id;
   throw new CompileError(`Designation "${base}-target" is not registered; add it to tools/src/translate/designations.ts.`);
 }
