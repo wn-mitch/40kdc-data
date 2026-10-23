@@ -872,18 +872,28 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "61428b8b09498cfaa579a6fac894b551c91bd6a3ff6211c576605e3f851a0fdf",
+    "source_digest": "a71b74a14cf893dfef3ded0a44b371529920260d12c18a2b2a1a12b83227d9ed",
     "version": "2025-q3",
     "effect": {
-      "type": "ability-part",
-      "trigger": {
-        "event": "selected",
-        "subject": "this-unit",
-        "filter": {
-          "to": "shoot"
-        }
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       },
       "effect": {
         "type": "designate-target",
@@ -901,7 +911,7 @@
                 "range": {
                   "inches": 24
                 },
-                "of": "this-model"
+                "of": "this-unit"
               }
             },
             "count": {
@@ -911,40 +921,33 @@
           }
         },
         "applies": {
-          "to": "bearer-attacks-target",
+          "to": "attackers-of-target",
           "effect": {
             "type": "sequence",
             "steps": [
               {
-                "type": "stat-modifier",
-                "target": "this-unit",
-                "modifier": {
-                  "stat": "AP",
-                  "operation": "add",
-                  "value": 1,
-                  "weapons": {
-                    "type": "ranged"
-                  }
-                }
-              },
-              {
                 "type": "weapon-ability-grant",
                 "target": "this-unit",
                 "modifier": {
-                  "weapons": {
-                    "type": "ranged"
-                  },
                   "keywords": [
                     {
                       "keyword_id": "lethal-hits"
                     }
                   ]
                 }
+              },
+              {
+                "type": "stat-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "stat": "AP",
+                  "operation": "improve",
+                  "value": 1
+                }
               }
             ]
           }
-        },
-        "duration": "phase"
+        }
       }
     },
     "scope": {
@@ -960,23 +963,6 @@
       "event": "selected",
       "filter": {
         "to": "shoot"
-      },
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "your-turn"
-            }
-          }
-        ]
       },
       "optional": true
     },

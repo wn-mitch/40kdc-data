@@ -1425,7 +1425,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "ba2c8ab667f3b33298262b1bf471957a48c554a60789a8386f86478335b52bdf",
     "version": "2025-q3",
@@ -1538,7 +1538,8 @@
         },
         "eligible": {
           "owner": "enemy"
-        }
+        },
+        "of": "this-unit"
       }
     },
     "scope": {
@@ -1632,7 +1633,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "68e55ead3b313fa6ea3b3aa4eeb555923242c96b691b370b3ee91a2c9e226b22",
     "version": "2025-q3",
@@ -1657,7 +1658,8 @@
           "none_of": [
             "VEHICLE"
           ]
-        }
+        },
+        "of": "this-unit"
       }
     },
     "scope": {
@@ -6569,7 +6571,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "cb8690c46e323dc9446a8763a78ad669dc104ee403b950bd8da560dabc475750",
     "version": "2025-q3",
@@ -6594,7 +6596,8 @@
           "none_of": [
             "VEHICLE"
           ]
-        }
+        },
+        "of": "this-unit"
       }
     },
     "scope": {

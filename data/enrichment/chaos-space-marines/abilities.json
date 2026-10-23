@@ -1867,7 +1867,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "704b31d8b1ce5f0d7681c27c6bd2e99c09fbd8f6bc51ac082ec07cc050fc9495",
     "version": "2025-q3",
@@ -1892,7 +1892,8 @@
           "none_of": [
             "VEHICLE"
           ]
-        }
+        },
+        "of": "this-unit"
       }
     },
     "scope": {
@@ -2205,7 +2206,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "ba5b8367ff92ddd66ca41af19f3f635352b5e83cbdd4471767f51490bdda35b1",
     "version": "2025-q3",
@@ -2241,7 +2242,8 @@
         },
         "eligible": {
           "owner": "enemy"
-        }
+        },
+        "of": "this-unit"
       }
     },
     "scope": {
@@ -3842,12 +3844,10 @@
     "source_digest": "4b19112f35e85157ac580964d95c0983124bc05f5573dd530567b407558b2e6c",
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
+      "type": "heal",
       "target": "this-model",
       "modifier": {
-        "stat": "W",
-        "operation": "add",
-        "value": 1
+        "amount": 1
       }
     },
     "scope": {
@@ -9587,7 +9587,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [],
     "faction_id": "chaos-space-marines",
@@ -9624,7 +9624,8 @@
               },
               "eligible": {
                 "owner": "enemy"
-              }
+              },
+              "of": "this-unit"
             }
           }
         }

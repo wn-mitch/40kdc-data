@@ -5757,7 +5757,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "9ab9dd306dd9aecb5f5a1bc077e8496ab9f70031cdb0160346551e65343245c9",
     "version": "2025-q3",
@@ -5794,7 +5794,7 @@
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "faction_id": "death-guard",
     "trigger": {
@@ -5889,7 +5889,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [],
     "faction_id": "death-guard",
@@ -5911,7 +5911,8 @@
         },
         "eligible": {
           "owner": "enemy"
-        }
+        },
+        "of": "this-unit"
       }
     },
     "scope": {
@@ -8262,7 +8263,7 @@
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "behavior": "reactive",
     "trigger": {

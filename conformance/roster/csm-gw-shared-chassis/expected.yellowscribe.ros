@@ -22,7 +22,7 @@
             </profile>
             <profile name="Self Repair" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">At the start of your Command phase, add 1 to this model's Wounds characteristic.</characteristic>
+                <characteristic name="Description">At the start of your Command phase, this model regains up to 1 lost wound.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">

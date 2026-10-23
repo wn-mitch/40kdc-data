@@ -5683,7 +5683,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "3e2a7e9835fe73b65456a4799c1c6ac5b228347e7e4c18f1199e7461e129dc00",
     "version": "2025-q3",
@@ -5839,7 +5839,8 @@
                           "KROOT",
                           "VESPID STINGWINGS"
                         ]
-                      }
+                      },
+                      "of": "this-unit"
                     }
                   },
                   "trigger": {
@@ -7115,7 +7116,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "12d205c49a23cb1c5b13f283d25f906a3fb068507b29a40910a6ff5ca2c029cb",
     "version": "2025-q3",
@@ -7187,7 +7188,8 @@
         },
         "eligible": {
           "owner": "enemy"
-        }
+        },
+        "of": "this-unit"
       }
     },
     "scope": {

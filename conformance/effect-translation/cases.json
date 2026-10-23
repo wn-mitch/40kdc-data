@@ -632,7 +632,8 @@
               },
               "eligible": {
                 "owner": "enemy"
-              }
+              },
+              "of": "this-unit"
             }
           }
         }
@@ -642,7 +643,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "All friendly ZARKAN'S DAEMONKIN units gain the Terrifying Presence ability:\n  -> While an enemy unit is within 3\" of this model, worsen that unit's Leadership characteristic by 1."
+      "text": "All friendly ZARKAN'S DAEMONKIN units gain the Terrifying Presence ability:\n  -> While an enemy unit is within 3\" of this unit, worsen that unit's Leadership characteristic by 1."
     }
   },
   {
@@ -5744,14 +5745,15 @@
         },
         "eligible": {
           "owner": "enemy"
-        }
+        },
+        "of": "this-unit"
       }
     },
     "scope": {
       "duration": "phase"
     },
     "expected": {
-      "text": "Until the end of the phase, while an enemy unit is within 6\" of this model, that unit is Afflicted."
+      "text": "Until the end of the phase, while an enemy unit is within 6\" of this unit, that unit is Afflicted."
     }
   },
   {
@@ -25680,7 +25682,8 @@
         },
         "eligible": {
           "owner": "enemy"
-        }
+        },
+        "of": "this-unit"
       }
     },
     "scope": {
@@ -25701,7 +25704,7 @@
       }
     ],
     "expected": {
-      "text": "When the unit takes a Battle-shock test or when the unit takes a Leadership test, while an enemy unit is within 6\" of this model, while the unit is not within 6\" of a friendly ADEPTUS MECHANICUS BATTLELINE unit, the unit gets -1 to Battle-shock rolls; the unit gets -1 to Leadership rolls; while the unit is within 6\" of a friendly ADEPTUS MECHANICUS BATTLELINE unit, the unit gets -2 to Battle-shock rolls; the unit gets -2 to Leadership rolls."
+      "text": "When the unit takes a Battle-shock test or when the unit takes a Leadership test, while an enemy unit is within 6\" of this unit, while the unit is not within 6\" of a friendly ADEPTUS MECHANICUS BATTLELINE unit, the unit gets -1 to Battle-shock rolls; the unit gets -1 to Leadership rolls; while the unit is within 6\" of a friendly ADEPTUS MECHANICUS BATTLELINE unit, the unit gets -2 to Battle-shock rolls; the unit gets -2 to Leadership rolls."
     }
   },
   {
