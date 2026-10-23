@@ -1115,7 +1115,28 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-unit",
+              "filter": {
+                "designated": "readied"
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "superhuman-focus-emperors-chosen-adeptus-custodes",
     "game_version": {
       "edition": "11th",
@@ -1143,7 +1164,28 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-unit",
+              "filter": {
+                "designated": "readied"
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "superhuman-focus-guardians-of-the-throne-adeptus-custodes",
     "game_version": {
       "edition": "11th",

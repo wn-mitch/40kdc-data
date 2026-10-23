@@ -6907,19 +6907,31 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "emperors-chosen",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "designate",
+      "target": "this-unit",
+      "modifier": {
+        "tag": "readied"
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-ended"
+    },
+    "usage": {
+      "frequency": "once-per-battle-round",
+      "per": "unit"
+    },
+    "source_digest": "df93d47fdbed1108e6f38bbc7013a2349e74e2b02d75c3f96e48efc0ed15f2a1"
   },
   {
     "ability_id": "superhuman-focus-guardians-of-the-throne-adeptus-custodes",
@@ -6927,19 +6939,31 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "guardians-of-the-throne",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "designate",
+      "target": "this-unit",
+      "modifier": {
+        "tag": "readied"
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-ended"
+    },
+    "usage": {
+      "frequency": "once-per-battle-round",
+      "per": "unit"
+    },
+    "source_digest": "df93d47fdbed1108e6f38bbc7013a2349e74e2b02d75c3f96e48efc0ed15f2a1"
   },
   {
     "ability_id": "swift-as-the-eagle-honoured-companions-adeptus-custodes",

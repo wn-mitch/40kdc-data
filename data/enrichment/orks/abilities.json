@@ -13941,19 +13941,68 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "orks",
     "detachment_id": "ardmob",
     "ability_type": "detachment",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "defender",
+              "filter": {
+                "owner": "friendly",
+                "all_of": [
+                  "'ARDMOB"
+                ]
+              }
+            }
+          },
+          {
+            "type": "rule-active",
+            "parameters": {
+              "rule": "waaagh-ardmob-orks"
+            }
+          },
+          {
+            "type": "attack-compare",
+            "parameters": {
+              "left": {
+                "of": "attacker",
+                "stat": "S"
+              },
+              "comparison": "gt",
+              "right": {
+                "of": "defender",
+                "stat": "T"
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": {
+          "owner": "enemy"
+        },
+        "modifier": {
+          "roll": "wound",
+          "operation": "subtract",
+          "value": 1
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "3689a6abb4ab201bb27bb4d9dc5979e5dc80ef59e60ef81dec5142c91bf310c3"
   },
   {
     "ability_id": "extra-platin-ardmob-orks",
@@ -13981,19 +14030,41 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "orks",
     "detachment_id": "ardmob",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "stat-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "stat": "S",
+        "operation": "improve",
+        "value": 1,
+        "weapons": {
+          "type": "melee"
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "fight"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "'ARDMOB"
+        ]
+      }
+    },
+    "source_digest": "1f736ed42e9b2dc8fd77e6a590bc0f3e660c09c1d6185e6df53cfb145391bc85"
   },
   {
     "ability_id": "medi-squigs-ardmob-orks",
@@ -14001,19 +14072,39 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "orks",
     "detachment_id": "ardmob",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "invulnerable-save",
+      "target": "this-unit",
+      "modifier": {
+        "invuln_sv": 5
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "'ARDMOB"
+        ]
+      }
+    },
+    "source_digest": "6e59fd9a2240aee4297e703521a2ac98a78009e7a136c3ebf392592fc2f31e86"
   },
   {
     "ability_id": "rallying-war-cry-ardmob-orks",
