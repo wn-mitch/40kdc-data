@@ -7695,19 +7695,63 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "necrons",
     "detachment_id": "amonhotekhs-guard",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "shoot",
+            "allow": true,
+            "despite": [
+              "fell-back"
+            ]
+          }
+        },
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "declare-charge",
+            "allow": true,
+            "despite": [
+              "fell-back"
+            ]
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "move_types": [
+          "fall-back"
+        ],
+        "to": "move"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "AMONHOTEKH'S GUARD"
+        ],
+        "none_of": [
+          "MONSTER",
+          "VEHICLE"
+        ]
+      }
+    },
+    "source_digest": "1494e571ec25720a0483c5fa40085385ff39638ac748a209b78e8cabb5aa3651"
   },
   {
     "ability_id": "animus-curse-cryptek-conclave-necrons",
@@ -9508,19 +9552,39 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "necrons",
     "detachment_id": "amonhotekhs-guard",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "roll-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "roll": "hit",
+        "operation": "add",
+        "value": 1
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "AMONHOTEKH'S GUARD",
+          "NECRON WARRIORS"
+        ]
+      }
+    },
+    "source_digest": "79e881323d8c4886205855cce4ec3c9d061ba7365a588ba788e5c674ad8fda69"
   },
   {
     "ability_id": "gravitic-bolas-cryptek-conclave-necrons",
@@ -11502,19 +11566,60 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "necrons",
     "detachment_id": "amonhotekhs-guard",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "in-region",
+        "parameters": {
+          "subject": "this-unit",
+          "region": {
+            "terrain_area": {
+              "footprint": "terrain area"
+            }
+          },
+          "models": "every"
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "stat": "Sv",
+          "operation": "improve",
+          "value": 1
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "AMONHOTEKH'S GUARD"
+        ],
+        "none_of": [
+          "MONSTER",
+          "VEHICLE"
+        ]
+      }
+    },
+    "source_digest": "9962a1bed969798efdc65ed7717828f39dff488d8ef664061f819e12b5b38571"
   },
   {
     "ability_id": "reletavistic-tether-pantheon-of-woe-necrons",

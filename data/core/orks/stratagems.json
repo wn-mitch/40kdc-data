@@ -17,7 +17,15 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords_any": [
+        "Meganobz",
+        "Nobz"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "armed-to-da-teef-bully-boyz-orks",
     "game_version": {
       "edition": "11th",
@@ -300,7 +308,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords_any": [
+        "Beast Snagga Boyz",
+        "Boyz"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "ere-we-go-green-tide-orks",
     "game_version": {
       "edition": "11th",
@@ -684,7 +700,15 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords_any": [
+        "Meganobz",
+        "Nobz"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit"
+    },
     "ability_id": "hulking-brutes-bully-boyz-orks",
     "game_version": {
       "edition": "11th",
@@ -974,7 +998,16 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords_any": [
+        "Boyz",
+        "Kommandos",
+        "Stormboyz"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "mind-mostly-on-the-mission-taktikal-brigade-orks",
     "game_version": {
       "edition": "11th",
@@ -1322,7 +1355,15 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords_any": [
+        "Meganobz",
+        "Nobz"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit"
+    },
     "ability_id": "too-arrogant-to-die-bully-boyz-orks",
     "game_version": {
       "edition": "11th",
@@ -1340,7 +1381,14 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Boyz"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "unbridled-carnage-green-tide-orks",
     "game_version": {
       "edition": "11th",

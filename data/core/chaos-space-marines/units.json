@@ -27,7 +27,8 @@
       "Character",
       "Chaos",
       "Daemon",
-      "Daemon Prince"
+      "Daemon Prince",
+      "Heretic Astartes Daemon Prince"
     ],
     "faction_keywords": [
       "Heretic Astartes"
@@ -104,7 +105,8 @@
       "Character",
       "Chaos",
       "Daemon",
-      "Daemon Prince with Wings"
+      "Daemon Prince with Wings",
+      "Heretic Astartes Daemon Prince with Wings"
     ],
     "faction_keywords": [
       "Heretic Astartes"
@@ -182,8 +184,7 @@
       "Chaos",
       "Terminator",
       "Sorcerer in Terminator Armour",
-      "Tzeentch",
-      "Sorcerer"
+      "Tzeentch"
     ],
     "faction_keywords": [
       "Heretic Astartes"
@@ -528,7 +529,8 @@
       "Damned",
       "Dark Commune",
       "Character",
-      "Cult Demagogue"
+      "Cult Demagogue",
+      "Psyker"
     ],
     "faction_keywords": [
       "Heretic Astartes"
@@ -768,7 +770,8 @@
       "Character",
       "Chaos",
       "Daemon",
-      "Lord Discordant"
+      "Lord Discordant",
+      "Lord Discordant on Helstalker"
     ],
     "faction_keywords": [
       "Heretic Astartes"
@@ -1069,7 +1072,9 @@
       "Nurgle",
       "Slaanesh",
       "Tzeentch",
-      "Khorne"
+      "Khorne",
+      "Frame",
+      "Chaos Land Raider"
     ],
     "faction_keywords": [
       "Heretic Astartes"
@@ -1475,10 +1480,8 @@
       "Chaos",
       "Chaos Spawn",
       "Nurgle",
-      "Spawn",
       "Slaanesh",
       "Tzeentch",
-      "Mutant",
       "Khorne"
     ],
     "faction_keywords": [
@@ -1586,7 +1589,9 @@
       "Predator Annihilator",
       "Nurgle",
       "Tzeentch",
-      "Khorne"
+      "Khorne",
+      "Frame",
+      "Chaos Predator Annihilator"
     ],
     "faction_keywords": [
       "Heretic Astartes"
@@ -1861,7 +1866,8 @@
     "keywords": [
       "Fortification",
       "Chaos",
-      "Noctilith Crown"
+      "Noctilith Crown",
+      "Frame"
     ],
     "faction_keywords": [
       "Heretic Astartes"
@@ -2052,7 +2058,6 @@
     "keywords": [
       "Vehicle",
       "Walker",
-      "Smoke",
       "Chaos",
       "Daemon",
       "Defiler",
@@ -2179,7 +2184,9 @@
       "Predator Destructor",
       "Nurgle",
       "Tzeentch",
-      "Khorne"
+      "Khorne",
+      "Frame",
+      "Chaos Predator Destructor"
     ],
     "faction_keywords": [
       "Heretic Astartes"
@@ -2626,7 +2633,9 @@
       "Smoke",
       "Chaos",
       "Vindicator",
-      "Tzeentch"
+      "Tzeentch",
+      "Frame",
+      "Chaos Vindicator"
     ],
     "faction_keywords": [
       "Heretic Astartes"
@@ -3399,7 +3408,8 @@
       "Fly",
       "Grenades",
       "Chaos",
-      "Chaos Lord"
+      "Chaos Lord",
+      "Chaos Lord with Jump Pack"
     ],
     "faction_keywords": [
       "Heretic Astartes"
@@ -4062,7 +4072,9 @@
       "Nurgle",
       "Slaanesh",
       "Tzeentch",
-      "Khorne"
+      "Khorne",
+      "Frame",
+      "Chaos Rhino"
     ],
     "faction_keywords": [
       "Heretic Astartes"
@@ -4412,7 +4424,8 @@
       "Grenades",
       "Chaos",
       "Chaos Undivided",
-      "Masters of the Maelstrom"
+      "Masters of the Maelstrom",
+      "Psyker"
     ],
     "faction_keywords": [
       "Heretic Astartes"
@@ -4980,7 +4993,9 @@
       "Chaos",
       "Khorne",
       "Daemon",
-      "Lord of Skulls"
+      "Lord of Skulls",
+      "Frame",
+      "Khorne Lord of Skulls"
     ],
     "faction_keywords": [
       "Heretic Astartes"
@@ -5234,7 +5249,8 @@
       "Infantry",
       "Master of Possession",
       "Psyker",
-      "Zarkan's Daemonkin"
+      "Zarkan's Daemonkin",
+      "Aranis Zarkan"
     ],
     "faction_keywords": [
       "Heretic Astartes"
@@ -5302,7 +5318,8 @@
       "Damned",
       "Explosives",
       "Infantry",
-      "Zarkan's Daemonkin"
+      "Zarkan's Daemonkin",
+      "Zarkan's Daemonkin Cultist Mob"
     ],
     "faction_keywords": [
       "Heretic Astartes"
@@ -5367,7 +5384,8 @@
       "Chaos",
       "Explosives",
       "Infantry",
-      "Zarkan's Daemonkin"
+      "Zarkan's Daemonkin",
+      "Zarkan's Daemonkin Legionaries"
     ],
     "faction_keywords": [
       "Heretic Astartes"
@@ -5436,7 +5454,8 @@
       "Chaos",
       "Daemon",
       "Infantry",
-      "Zarkan's Daemonkin"
+      "Zarkan's Daemonkin",
+      "Zarkan's Daemonkin Possessed"
     ],
     "faction_keywords": [
       "Heretic Astartes"

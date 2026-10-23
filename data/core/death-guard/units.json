@@ -105,7 +105,6 @@
     "keywords": [
       "Vehicle",
       "Walker",
-      "Smoke",
       "Chaos",
       "Nurgle",
       "Daemon",
@@ -203,7 +202,8 @@
       "Beast",
       "Chaos",
       "Nurgle",
-      "Spawn"
+      "Spawn",
+      "Chaos Spawn"
     ],
     "faction_keywords": [
       "Death Guard"
@@ -522,7 +522,9 @@
       "Smoke",
       "Chaos",
       "Nurgle",
-      "Predator Annihilator"
+      "Predator Annihilator",
+      "Frame",
+      "Chaos Predator Annihilator"
     ],
     "faction_keywords": [
       "Death Guard"
@@ -611,7 +613,9 @@
       "Smoke",
       "Chaos",
       "Nurgle",
-      "Predator Destructor"
+      "Predator Destructor",
+      "Frame",
+      "Chaos Predator Destructor"
     ],
     "faction_keywords": [
       "Death Guard"
@@ -787,7 +791,8 @@
       "Chaos",
       "Nurgle",
       "Daemon",
-      "Plagueburst Crawler"
+      "Plagueburst Crawler",
+      "Frame"
     ],
     "faction_keywords": [
       "Death Guard"
@@ -1130,7 +1135,8 @@
       "Chaos",
       "Nurgle",
       "Daemon",
-      "Daemon Prince"
+      "Daemon Prince",
+      "Daemon Prince of Nurgle"
     ],
     "faction_keywords": [
       "Death Guard"
@@ -1537,7 +1543,8 @@
       "Chaos",
       "Nurgle",
       "Daemon",
-      "Daemon Prince with Wings"
+      "Daemon Prince with Wings",
+      "Daemon Prince of Nurgle with Wings"
     ],
     "faction_keywords": [
       "Death Guard"
@@ -1610,7 +1617,8 @@
       "Fortification",
       "Chaos",
       "Nurgle",
-      "Miasmic Malignifier"
+      "Miasmic Malignifier",
+      "Frame"
     ],
     "faction_keywords": [
       "Death Guard"
@@ -1777,7 +1785,8 @@
       "Chaos",
       "Nurgle",
       "Daemon",
-      "Myphitic Blight-Hauler"
+      "Myphitic Blight-Hauler",
+      "Myphitic Blight-haulers"
     ],
     "faction_keywords": [
       "Death Guard"
@@ -2029,7 +2038,9 @@
       "Nurgle",
       "Transport",
       "Dedicated Transport",
-      "Rhino"
+      "Rhino",
+      "Frame",
+      "Chaos Rhino"
     ],
     "faction_keywords": [
       "Death Guard"
@@ -2119,7 +2130,9 @@
       "Smoke",
       "Chaos",
       "Nurgle",
-      "Land Raider"
+      "Land Raider",
+      "Frame",
+      "Chaos Land Raider"
     ],
     "faction_keywords": [
       "Death Guard"
@@ -2546,7 +2559,8 @@
       "Nurgle",
       "Smoke",
       "Transport",
-      "Vehicle"
+      "Vehicle",
+      "Maggot Lords Chaos Rhino"
     ],
     "faction_keywords": [
       "Death Guard"
@@ -2606,7 +2620,8 @@
       "Infantry",
       "Maggot Lords",
       "Nurgle",
-      "Terminator"
+      "Terminator",
+      "Maggot Lords Deathshroud Terminators"
     ],
     "faction_keywords": [
       "Death Guard"
@@ -2671,7 +2686,8 @@
       "Explosives",
       "Infantry",
       "Maggot Lords",
-      "Nurgle"
+      "Nurgle",
+      "Maggot Lords Plague Marines"
     ],
     "faction_keywords": [
       "Death Guard"
@@ -2740,7 +2756,8 @@
       "Infantry",
       "Maggot Lords",
       "Nurgle",
-      "Tallyman"
+      "Tallyman",
+      "Septimol Fulg, Maggot Lords Tallyman"
     ],
     "faction_keywords": [
       "Death Guard"
@@ -2807,7 +2824,8 @@
       "Lord of Virulence",
       "Maggot Lords",
       "Nurgle",
-      "Terminator"
+      "Terminator",
+      "Sholgor the Putrid"
     ],
     "faction_keywords": [
       "Death Guard"

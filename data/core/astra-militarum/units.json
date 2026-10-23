@@ -489,7 +489,8 @@
       "Militarum Tempestus",
       "Command Squad",
       "Character",
-      "Officer"
+      "Officer",
+      "Militarum Tempestus Command Squad"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -1001,7 +1002,8 @@
       "Smoke",
       "Imperium",
       "Squadron",
-      "Leman Russ Battle Tank"
+      "Leman Russ Battle Tank",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -1200,7 +1202,8 @@
       "Squadron",
       "Transport",
       "Dedicated Transport",
-      "Taurox Prime"
+      "Taurox Prime",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -1447,7 +1450,8 @@
       "Squadron",
       "Imperium",
       "Officer",
-      "Rogal Dorn Commander"
+      "Rogal Dorn Commander",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -1541,7 +1545,8 @@
       "Smoke",
       "Imperium",
       "Squadron",
-      "Leman Russ Exterminator"
+      "Leman Russ Exterminator",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -1973,7 +1978,8 @@
       "Titanic",
       "Smoke",
       "Imperium",
-      "Hellhammer"
+      "Hellhammer",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -2057,7 +2063,8 @@
     "keywords": [
       "Fortification",
       "Imperium",
-      "Aegis Defence Line"
+      "Aegis Defence Line",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -2295,7 +2302,8 @@
       "Smoke",
       "Imperium",
       "Squadron",
-      "Deathstrike"
+      "Deathstrike",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -2541,7 +2549,8 @@
       "Smoke",
       "Imperium",
       "Squadron",
-      "Leman Russ Executioner"
+      "Leman Russ Executioner",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -2776,7 +2785,8 @@
       "Smoke",
       "Imperium",
       "Transport",
-      "Stormlord"
+      "Stormlord",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -2870,7 +2880,8 @@
       "Loyal Protector",
       "Ogryn",
       "Bodyguard",
-      "Character"
+      "Character",
+      "Ogryn Bodyguard"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -3102,7 +3113,8 @@
       "Cadian",
       "Command Squad",
       "Character",
-      "Officer"
+      "Officer",
+      "Cadian Command Squad"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -3209,7 +3221,8 @@
       "Catachan",
       "Command Squad",
       "Character",
-      "Officer"
+      "Officer",
+      "Catachan Command Squad"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -3341,7 +3354,8 @@
       "Smoke",
       "Imperium",
       "Transport",
-      "Doomhammer"
+      "Doomhammer",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -3439,7 +3453,8 @@
       "Smoke",
       "Imperium",
       "Squadron",
-      "Rogal Dorn Battle Tank"
+      "Rogal Dorn Battle Tank",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -3712,7 +3727,8 @@
       "Titanic",
       "Smoke",
       "Imperium",
-      "Banesword"
+      "Banesword",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -3804,7 +3820,8 @@
       "Smoke",
       "Imperium",
       "Squadron",
-      "Wyvern"
+      "Wyvern",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -3995,7 +4012,8 @@
       "Smoke",
       "Imperium",
       "Squadron",
-      "Hellhound"
+      "Hellhound",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -4085,7 +4103,8 @@
       "Smoke",
       "Imperium",
       "Squadron",
-      "Leman Russ Punisher"
+      "Leman Russ Punisher",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -4197,7 +4216,8 @@
       "Krieg",
       "Command Squad",
       "Character",
-      "Officer"
+      "Officer",
+      "Krieg Command Squad"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -4380,7 +4400,8 @@
       "Smoke",
       "Imperium",
       "Squadron",
-      "Leman Russ Demolisher"
+      "Leman Russ Demolisher",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -4488,7 +4509,8 @@
       "Squadron",
       "Transport",
       "Dedicated Transport",
-      "Taurox"
+      "Taurox",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -4803,7 +4825,8 @@
       "Smoke",
       "Imperium",
       "Transport",
-      "Banehammer"
+      "Banehammer",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -4989,7 +5012,8 @@
       "Squadron",
       "Imperium",
       "Officer",
-      "Leman Russ Commander"
+      "Leman Russ Commander",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -5105,7 +5129,6 @@
     "keywords": [
       "Vehicle",
       "Fly",
-      "Aircraft",
       "Imperium",
       "Transport",
       "Valkyrie"
@@ -5275,7 +5298,8 @@
       "Smoke",
       "Titanic",
       "Imperium",
-      "Shadowsword"
+      "Shadowsword",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -5367,7 +5391,8 @@
       "Smoke",
       "Imperium",
       "Squadron",
-      "Manticore"
+      "Manticore",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -5457,7 +5482,8 @@
       "Squadron",
       "Transport",
       "Dedicated Transport",
-      "Chimera"
+      "Chimera",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -5629,7 +5655,8 @@
       "Smoke",
       "Imperium",
       "Squadron",
-      "Leman Russ Vanquisher"
+      "Leman Russ Vanquisher",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -5736,7 +5763,8 @@
       "Smoke",
       "Imperium",
       "Squadron",
-      "Basilisk"
+      "Basilisk",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -5823,7 +5851,8 @@
       "Titanic",
       "Smoke",
       "Imperium",
-      "Baneblade"
+      "Baneblade",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -6042,7 +6071,8 @@
       "Smoke",
       "Imperium",
       "Squadron",
-      "Hydra"
+      "Hydra",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -6129,7 +6159,8 @@
       "Smoke",
       "Imperium",
       "Squadron",
-      "Leman Russ Eradicator"
+      "Leman Russ Eradicator",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -6342,7 +6373,8 @@
       "Squadron",
       "Transport",
       "Dedicated Transport",
-      "Centaur RSV"
+      "Centaur RSV",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -6417,7 +6449,8 @@
       "Epic Hero",
       "Imperium",
       "Officer",
-      "Commissar Graves"
+      "Commissar Graves",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -6495,7 +6528,8 @@
       "Character",
       "Epic Hero",
       "Imperium",
-      "Commissar Graves on Foot"
+      "Commissar Graves on Foot",
+      "Officer"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -6649,7 +6683,8 @@
       "Imperium",
       "Smoke",
       "Squadron",
-      "Hippogriff AFV"
+      "Hippogriff AFV",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -6726,7 +6761,8 @@
       "Explosives",
       "Imperium",
       "Mounted",
-      "Regiment"
+      "Regiment",
+      "Drayden's Lance Attilan Rough Riders"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -6805,7 +6841,10 @@
       "Explosives",
       "Imperium",
       "Infantry",
-      "Platoon"
+      "Platoon",
+      "Officer",
+      "Character",
+      "Drayden's Lance Command Squad"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -6877,7 +6916,8 @@
       "Explosives",
       "Imperium",
       "Infantry",
-      "Regiment"
+      "Regiment",
+      "Drayden's Lance Kasrkin"
     ],
     "faction_keywords": [
       "Astra Militarum"

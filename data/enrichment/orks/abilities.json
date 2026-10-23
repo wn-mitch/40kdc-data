@@ -6325,16 +6325,16 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "53b72e3ff9c14b9c7560f7a2b5a527485ec31511002903c409699ef71a54137f",
+    "source_digest": "8af731766e52f8400a072c583d8f8f2cc7834e3b2fcf31917fb549ba7bdd969d",
     "version": "2025-q3",
     "effect": {
       "type": "sequence",
       "steps": [
         {
           "type": "re-roll",
-          "target": "this-model",
+          "target": "this-unit",
           "modifier": {
             "roll": "hit",
             "subset": "ones"
@@ -6346,16 +6346,16 @@
             "type": "matches",
             "parameters": {
               "filter": {
-                "designated": "RILED UP"
+                "designated": "riled-up"
               }
             }
           },
           "effect": {
             "type": "re-roll",
-            "target": "this-model",
+            "target": "this-unit",
             "modifier": {
               "roll": "hit",
-              "subset": "all-failures"
+              "result_scope": "any-result"
             }
           }
         }
@@ -6366,10 +6366,23 @@
     },
     "unit_ids": [],
     "ability_type": "stratagem",
-    "behavior": "passive",
+    "behavior": "reactive",
     "detachment_id": "bully-boyz",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "attack"
+      },
+      "subject": {
+        "owner": "friendly",
+        "any_of": [
+          "MEGANOBZ",
+          "NOBZ"
+        ]
+      }
+    }
   },
   {
     "ability_id": "blitzboss-brute-bosses-orks",
@@ -7404,26 +7417,17 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "f04133f240090f44e76624d47e4658f2e8bb048d4311e22e6bf55bebd90e4a09",
+    "source_digest": "51fe27393210c3240b7aae62e819e3ac384e98598a4467dae810427cf439594d",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "movement"
-        }
-      },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "advance",
-          "operation": "add",
-          "value": 2
-        }
+      "type": "roll-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "roll": "advance",
+        "operation": "add",
+        "value": 2
       }
     },
     "scope": {
@@ -7431,10 +7435,23 @@
     },
     "unit_ids": [],
     "ability_type": "stratagem",
-    "behavior": "passive",
+    "behavior": "reactive",
     "detachment_id": "green-tide",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "move"
+      },
+      "subject": {
+        "owner": "friendly",
+        "any_of": [
+          "BEAST SNAGGA BOYZ",
+          "BOYZ"
+        ]
+      }
+    }
   },
   {
     "ability_id": "extra-sneaky-upgrade-runt-swarm-orks",
@@ -8296,16 +8313,22 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "28e0d037b1b93623f136f9fec40cea1cf274ea0f50977fe73ed5fb5debdbf14b",
+    "source_digest": "ac16465dc11be8d73245b718238484add6343b2b6fdaba1165a70f958c0bd106",
     "version": "2025-q3",
     "effect": {
-      "type": "choice",
-      "options": [
-        {
-          "type": "conditional",
-          "condition": {
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
+            }
+          },
+          {
             "type": "attack-compare",
             "parameters": {
               "left": {
@@ -8318,43 +8341,67 @@
                 "stat": "T"
               }
             }
-          },
-          "effect": {
+          }
+        ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
             "type": "roll-modifier",
-            "target": "this-unit",
+            "target": "attacker",
             "modifier": {
               "roll": "wound",
               "operation": "subtract",
-              "value": 1,
-              "weapons": {
-                "type": "ranged"
+              "value": 1
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "attack-is",
+              "parameters": {
+                "attack_type": "ranged"
+              }
+            },
+            "effect": {
+              "type": "roll-modifier",
+              "target": "attacker",
+              "modifier": {
+                "roll": "wound",
+                "operation": "subtract",
+                "value": 1
               }
             }
           }
-        },
-        {
-          "type": "roll-modifier",
-          "target": "this-unit",
-          "modifier": {
-            "roll": "wound",
-            "operation": "subtract",
-            "value": 1,
-            "weapons": {
-              "type": "ranged"
-            }
-          }
-        }
-      ]
+        ]
+      }
     },
     "scope": {
       "duration": "phase"
     },
     "unit_ids": [],
     "ability_type": "stratagem",
-    "behavior": "passive",
+    "behavior": "reactive",
     "detachment_id": "bully-boyz",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": {
+        "owner": "friendly",
+        "any_of": [
+          "MEGANOBZ",
+          "NOBZ"
+        ]
+      }
+    }
   },
   {
     "ability_id": "impulsive-recon-upgrade-flyboyz-orks",
@@ -8807,48 +8854,16 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "4e78a740f03390629016e6b6da56fbe134fc609148655895000f31e2e45e55af",
+    "source_digest": "a774704636fb5f6d110c83d3ca6b50974b197e53ad1f8ea500efe40058029e51",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "owner": "friendly"
-              }
-            }
-          },
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "any_of": [
-                  "BOYZ",
-                  "KOMMANDOS",
-                  "STORMBOYZ"
-                ]
-              }
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "permission",
-        "target": "this-unit",
-        "modifier": {
-          "activity": "start-action",
-          "allow": true,
-          "after": [
-            "advance",
-            "fall-back"
-          ]
-        }
+      "type": "permission",
+      "target": "this-unit",
+      "modifier": {
+        "activity": "start-action",
+        "allow": true
       }
     },
     "scope": {
@@ -8860,38 +8875,24 @@
     "detachment_id": "taktikal-brigade",
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks",
-    "trigger": [
-      {
-        "event": "selected",
-        "filter": {
-          "to": "move",
-          "move_types": [
-            "advance"
-          ]
-        },
-        "condition": {
-          "type": "phase-is",
-          "parameters": {
-            "phase": "movement"
-          }
-        }
+    "trigger": {
+      "event": "selected",
+      "subject": {
+        "owner": "friendly",
+        "any_of": [
+          "BOYZ",
+          "KOMMANDOS",
+          "STORMBOYZ"
+        ]
       },
-      {
-        "event": "selected",
-        "filter": {
-          "to": "move",
-          "move_types": [
-            "fall-back"
-          ]
-        },
-        "condition": {
-          "type": "phase-is",
-          "parameters": {
-            "phase": "movement"
-          }
-        }
+      "filter": {
+        "move_types": [
+          "advance",
+          "fall-back"
+        ],
+        "to": "move"
       }
-    ]
+    }
   },
   {
     "ability_id": "minefield-detail-upgrade-runt-swarm-orks",
@@ -10794,79 +10795,101 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "d4bad21bf54e27500ef0a33e91eeb21c5e1c6d5df34873d0ff939d9e99f9d63d",
+    "source_digest": "e3745f3b3e9e24850a7472d1de1bfed2a5d063134343d7c880d775d636e4b128",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
-          },
-          {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "happened",
-                "parameters": {
-                  "event": "selected",
-                  "filter": {
-                    "to": "fight"
-                  },
-                  "window": "phase"
-                }
-              }
-            ]
-          }
-        ]
+      "type": "ability-part",
+      "trigger": {
+        "event": "model-destroyed",
+        "object": "model-in-this-unit"
       },
       "effect": {
         "type": "sequence",
         "steps": [
           {
-            "type": "conditional",
-            "condition": {
-              "operator": "not",
-              "operands": [
-                {
-                  "type": "matches",
-                  "parameters": {
-                    "filter": {
-                      "designated": "RILED UP"
+            "type": "act-on-death",
+            "target": "event-object",
+            "modifier": {
+              "act": "fight",
+              "resolution": "when-unit-fights",
+              "removal": "after-unit-fights-or-phase-end",
+              "gate": {
+                "dice": "D6+1",
+                "threshold": 4,
+                "comparison": "gte",
+                "modifiers": []
+              },
+              "eligibility": {
+                "operator": "and",
+                "operands": [
+                  {
+                    "operator": "not",
+                    "operands": [
+                      {
+                        "type": "eligible",
+                        "parameters": {
+                          "subject": "this-unit",
+                          "to": "fight"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "filter": {
+                        "designated": "riled-up"
+                      }
                     }
                   }
-                }
-              ]
-            },
-            "effect": {
-              "type": "feel-no-pain",
-              "target": "this-model",
-              "modifier": {
-                "threshold": 4
+                ]
               }
             }
           },
           {
-            "type": "conditional",
-            "condition": {
-              "type": "matches",
-              "parameters": {
-                "filter": {
-                  "designated": "RILED UP"
-                }
-              }
-            },
-            "effect": {
-              "type": "feel-no-pain",
-              "target": "this-model",
-              "modifier": {
-                "threshold": 3
+            "type": "act-on-death",
+            "target": "event-object",
+            "modifier": {
+              "act": "fight",
+              "resolution": "when-unit-fights",
+              "removal": "after-unit-fights-or-phase-end",
+              "gate": {
+                "dice": "D6",
+                "threshold": 4,
+                "comparison": "gte",
+                "modifiers": []
+              },
+              "eligibility": {
+                "operator": "and",
+                "operands": [
+                  {
+                    "operator": "not",
+                    "operands": [
+                      {
+                        "type": "eligible",
+                        "parameters": {
+                          "subject": "this-unit",
+                          "to": "fight"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "operator": "not",
+                    "operands": [
+                      {
+                        "type": "matches",
+                        "parameters": {
+                          "filter": {
+                            "designated": "riled-up"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
               }
             }
           }
@@ -10878,10 +10901,26 @@
     },
     "unit_ids": [],
     "ability_type": "stratagem",
-    "behavior": "passive",
+    "behavior": "reactive",
     "detachment_id": "bully-boyz",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": {
+        "owner": "friendly",
+        "any_of": [
+          "MEGANOBZ",
+          "NOBZ"
+        ]
+      }
+    }
   },
   {
     "ability_id": "unbridled-carnage-green-tide-orks",
@@ -10889,41 +10928,30 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "b4df039cf0b035e9c962dabc156f0a30e114c87e2e3334bc9d1d0e7a2eaa881e",
+    "source_digest": "eda2caf0ba2a2c7924c10de6a187f085fe374b36d304025952e3712231bf5714",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
+        "type": "happened",
+        "parameters": {
+          "event": "move-ended",
+          "filter": {
+            "move_types": [
+              "charge"
+            ]
           },
-          {
-            "type": "happened",
-            "parameters": {
-              "event": "move-ended",
-              "filter": {
-                "move_types": [
-                  "charge"
-                ]
-              },
-              "window": "turn"
-            }
-          }
-        ]
+          "window": "turn"
+        }
       },
       "effect": {
         "type": "stat-modifier",
         "target": "this-unit",
         "modifier": {
           "stat": "A",
-          "operation": "add",
+          "operation": "improve",
           "value": 1,
           "weapons": {
             "type": "melee"
@@ -10936,10 +10964,22 @@
     },
     "unit_ids": [],
     "ability_type": "stratagem",
-    "behavior": "passive",
+    "behavior": "reactive",
     "detachment_id": "green-tide",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "fight"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "BOYZ"
+        ]
+      }
+    }
   },
   {
     "ability_id": "unpredictable-genius-orks",

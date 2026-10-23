@@ -44,6 +44,8 @@
             <category name="Slaanesh"/>
             <category name="Tzeentch"/>
             <category name="Khorne"/>
+            <category name="Frame"/>
+            <category name="Chaos Rhino"/>
           </categories>
           <selections>
             <selection id="unit0-m0" name="Chaos Rhino" type="model" number="1">
@@ -122,6 +124,8 @@
             <category name="Slaanesh"/>
             <category name="Tzeentch"/>
             <category name="Khorne"/>
+            <category name="Frame"/>
+            <category name="Chaos Land Raider"/>
           </categories>
           <selections>
             <selection id="unit1-m0" name="Chaos Land Raider" type="model" number="1">

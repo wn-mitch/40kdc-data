@@ -33,7 +33,8 @@
       "Vehicle",
       "Walker",
       "Imperium",
-      "Telemon Heavy Dreadnought"
+      "Telemon Heavy Dreadnought",
+      "Dreadnought"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -121,7 +122,8 @@
       "Vehicle",
       "Walker",
       "Imperium",
-      "Contemptor-Achillus Dreadnought"
+      "Dreadnought",
+      "Contemptor‑Achillus Dreadnought"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -206,7 +208,8 @@
       "Vehicle",
       "Walker",
       "Imperium",
-      "Contemptor-Galatus Dreadnought"
+      "Dreadnought",
+      "Contemptor‑Galatus Dreadnought"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -367,7 +370,10 @@
       "Vehicle",
       "Fly",
       "Imperium",
-      "Caladius Grav-tank"
+      "Caladius",
+      "Frame",
+      "Grav-assault",
+      "Caladius Grav‑Tank"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -549,8 +555,8 @@
       "Character",
       "Fly",
       "Imperium",
-      "Dawneagle Jetbike",
-      "Shield-Captain"
+      "Shield-Captain",
+      "Shield‑Captain on Dawneagle Jetbike"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -635,7 +641,7 @@
       "Infantry",
       "Imperium",
       "Anathema Psykana",
-      "Vigilators"
+      "Vigilator Squad"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -714,7 +720,7 @@
       "Infantry",
       "Imperium",
       "Anathema Psykana",
-      "Witchseekers"
+      "Witchseeker Squad"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -880,7 +886,8 @@
       "Infantry",
       "Battleline",
       "Imperium",
-      "Custodian Guard"
+      "Trusted Sentinel",
+      "Custodian Guard Sodality"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -962,7 +969,6 @@
     "keywords": [
       "Vehicle",
       "Transport",
-      "Aircraft",
       "Fly",
       "Imperium",
       "Orion Assault Dropship"
@@ -1048,7 +1054,7 @@
       "Character",
       "Imperium",
       "Anathema Psykana",
-      "Knight-Centura"
+      "Knight‑Centura"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -1136,7 +1142,8 @@
       "Smoke",
       "Imperium",
       "Anathema Psykana",
-      "Rhino"
+      "Frame",
+      "Anathema Psykana Rhino"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -1224,7 +1231,7 @@
       "Mounted",
       "Fly",
       "Imperium",
-      "Agamatus Custodians"
+      "Gyrfalcon Jetbike Sodality"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -1315,7 +1322,8 @@
     "keywords": [
       "Infantry",
       "Imperium",
-      "Custodian Wardens"
+      "Custodian Wardens",
+      "Trusted Sentinel"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -1387,7 +1395,9 @@
       "Vehicle",
       "Fly",
       "Imperium",
-      "Pallas Grav-attack"
+      "Frame",
+      "Grav-assault",
+      "Pallas Grav‑Attack"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -1560,7 +1570,8 @@
       "Fly",
       "Jump Pack",
       "Imperium",
-      "Venatari Custodians"
+      "Explosives",
+      "Venatari with Verutum Lances"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -1639,7 +1650,8 @@
       "Character",
       "Terminator",
       "Imperium",
-      "Shield-Captain"
+      "Shield-Captain",
+      "Shield‑Captain in Allarus Terminator Armour"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -1719,7 +1731,7 @@
       "Infantry",
       "Terminator",
       "Imperium",
-      "Aquilon Custodians"
+      "Aquilon Terminators with Solarite Power Gauntlets"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -1796,7 +1808,9 @@
       "Transport",
       "Fly",
       "Imperium",
-      "Coronus Grav-carrier"
+      "Frame",
+      "Grav-assault",
+      "Coronus Grav‑Carrier"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -1891,7 +1905,7 @@
       "Infantry",
       "Imperium",
       "Anathema Psykana",
-      "Prosecutors"
+      "Prosecutor Squad"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -1974,7 +1988,8 @@
       "Infantry",
       "Character",
       "Imperium",
-      "Shield-Captain"
+      "Shield-Captain",
+      "Shield‑Captain"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -2135,7 +2150,8 @@
       "Imperium",
       "Infantry",
       "Terminator",
-      "Tristraen's Gilded Blades"
+      "Tristraen's Gilded Blades",
+      "Gilded Blades Allarus Custodians"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -2199,7 +2215,8 @@
       "Battleline",
       "Imperium",
       "Infantry",
-      "Tristraen's Gilded Blades"
+      "Tristraen's Gilded Blades",
+      "Gilded Blades Custodian Guard"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -2265,7 +2282,8 @@
     "keywords": [
       "Imperium",
       "Infantry",
-      "Tristraen's Gilded Blades"
+      "Tristraen's Gilded Blades",
+      "Gilded Blades Custodian Wardens"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -2329,7 +2347,8 @@
       "Character",
       "Imperium",
       "Infantry",
-      "Tristraen's Gilded Blades"
+      "Tristraen's Gilded Blades",
+      "Tristraen of the Gilded Blades"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -2398,7 +2417,8 @@
       "Dreadnought",
       "Imperium",
       "Vehicle",
-      "Walker"
+      "Walker",
+      "Aquilan Talon Contemptor-Achillus Dreadnought"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -2467,7 +2487,8 @@
       "Imperium",
       "Infantry",
       "Sentinel Guard Sodality",
-      "Trusted Sentinel"
+      "Trusted Sentinel",
+      "Aquilan Talon Sentinel Guard Sodality"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -2528,7 +2549,8 @@
       "Character",
       "Imperium",
       "Infantry",
-      "Shield-Captain"
+      "Shield-Captain",
+      "Aquilan Talon Shield-Captain"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -2591,7 +2613,8 @@
       "Imperium",
       "Infantry",
       "Sentinel Guard Sodality",
-      "Trusted Sentinel"
+      "Trusted Sentinel",
+      "Aquilan Wing Sentinel Guard Sodality"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -2656,7 +2679,8 @@
       "Character",
       "Imperium",
       "Infantry",
-      "Shield-Captain"
+      "Shield-Captain",
+      "Aquilan Wing Shield-Captain"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -2719,7 +2743,8 @@
       "Imperium",
       "Infantry",
       "Jump Pack",
-      "Venatari with Kinetic Destroyers"
+      "Venatari with Kinetic Destroyers",
+      "Aquilan Wing Venatari with Kinetic Destroyers"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -2785,7 +2810,8 @@
     "keywords": [
       "Imperium",
       "Infantry",
-      "Terminator"
+      "Terminator",
+      "Aquilon Terminators with Solarite Power Talons"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -2854,7 +2880,9 @@
       "Fly",
       "Grav-assault",
       "Imperium",
-      "Vehicle"
+      "Vehicle",
+      "Frame",
+      "Caladius Annihilator Grav‑Tank"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -2932,7 +2960,8 @@
       "Battleline",
       "Imperium",
       "Infantry",
-      "Trusted Sentinel"
+      "Trusted Sentinel",
+      "Sentinel Guard Sodality"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -3005,7 +3034,8 @@
       "Fly",
       "Imperium",
       "Infantry",
-      "Jump Pack"
+      "Jump Pack",
+      "Venatari with Kinetic Destroyers"
     ],
     "faction_keywords": [
       "Adeptus Custodes"

@@ -43,6 +43,7 @@
             <category name="Frame"/>
             <category name="Imperium"/>
             <category name="Smoke"/>
+            <category name="Gladiator Lancer"/>
           </categories>
           <selections>
             <selection id="unit0-m0" name="Gladiator Lancer" type="model" number="1">
@@ -136,6 +137,7 @@
             <category name="Dreadnought"/>
             <category name="Imperium"/>
             <category name="Walker"/>
+            <category name="Ballistus Dreadnought"/>
           </categories>
           <selections>
             <selection id="unit1-m0" name="Ballistus Dreadnought" type="model" number="1">

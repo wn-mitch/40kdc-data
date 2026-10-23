@@ -27,7 +27,8 @@
       "Walker",
       "Chaos",
       "War Dog",
-      "Huntsman"
+      "Huntsman",
+      "War Dog Huntsman"
     ],
     "faction_keywords": [
       "Chaos Knights"
@@ -116,7 +117,8 @@
       "Walker",
       "Chaos",
       "War Dog",
-      "Brigand"
+      "Brigand",
+      "War Dog Brigand"
     ],
     "faction_keywords": [
       "Chaos Knights"
@@ -206,7 +208,8 @@
       "Walker",
       "Chaos",
       "War Dog",
-      "Executioner"
+      "Executioner",
+      "War Dog Executioner"
     ],
     "faction_keywords": [
       "Chaos Knights"
@@ -296,7 +299,8 @@
       "Walker",
       "Chaos",
       "War Dog",
-      "Stalker"
+      "Stalker",
+      "War Dog Stalker"
     ],
     "faction_keywords": [
       "Chaos Knights"
@@ -399,7 +403,8 @@
       "Walker",
       "Chaos",
       "War Dog",
-      "Moirax"
+      "Moirax",
+      "War Dog Moirax"
     ],
     "faction_keywords": [
       "Chaos Knights"
@@ -491,7 +496,8 @@
       "Walker",
       "Chaos",
       "War Dog",
-      "Karnivore"
+      "Karnivore",
+      "War Dog Karnivore"
     ],
     "faction_keywords": [
       "Chaos Knights"
@@ -707,7 +713,8 @@
       "Towering",
       "Chaos",
       "Cerastus",
-      "Knight Acheron"
+      "Knight Acheron",
+      "Chaos Cerastus Knight Acheron"
     ],
     "faction_keywords": [
       "Chaos Knights"
@@ -994,7 +1001,9 @@
       "Towering",
       "Chaos",
       "Acastus",
-      "Knight Porphyrion"
+      "Knight Porphyrion",
+      "Frame",
+      "Chaos Acastus Knight Porphyrion"
     ],
     "faction_keywords": [
       "Chaos Knights"
@@ -1090,7 +1099,8 @@
       "Towering",
       "Chaos",
       "Cerastus",
-      "Knight Atrapos"
+      "Knight Atrapos",
+      "Chaos Cerastus Knight Atrapos"
     ],
     "faction_keywords": [
       "Chaos Knights"
@@ -1183,7 +1193,9 @@
       "Towering",
       "Chaos",
       "Acastus",
-      "Knight Asterius"
+      "Knight Asterius",
+      "Frame",
+      "Chaos Acastus Knight Asterius"
     ],
     "faction_keywords": [
       "Chaos Knights"
@@ -1278,7 +1290,8 @@
       "Towering",
       "Chaos",
       "Cerastus",
-      "Knight Castigator"
+      "Knight Castigator",
+      "Chaos Cerastus Knight Castigator"
     ],
     "faction_keywords": [
       "Chaos Knights"
@@ -1372,7 +1385,8 @@
       "Towering",
       "Chaos",
       "Cerastus",
-      "Knight Lancer"
+      "Knight Lancer",
+      "Chaos Cerastus Knight Lancer"
     ],
     "faction_keywords": [
       "Chaos Knights"
@@ -1561,7 +1575,8 @@
       "Towering",
       "Chaos",
       "Abhorrent",
-      "Knight Magaera"
+      "Knight Magaera",
+      "Chaos Questoris Knight Magaera"
     ],
     "faction_keywords": [
       "Chaos Knights"
@@ -1856,7 +1871,8 @@
       "Towering",
       "Chaos",
       "Abhorrent",
-      "Knight Styrix"
+      "Knight Styrix",
+      "Chaos Questoris Knight Styrix"
     ],
     "faction_keywords": [
       "Chaos Knights"

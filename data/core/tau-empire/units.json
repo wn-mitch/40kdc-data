@@ -126,7 +126,8 @@
       "Titanic",
       "Transport",
       "Markerlight",
-      "Manta"
+      "Manta",
+      "Frame"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -220,7 +221,8 @@
       "Fly",
       "Battlesuit",
       "Crisis",
-      "Fireknife"
+      "Fireknife",
+      "Crisis Fireknife Battlesuits"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -362,7 +364,8 @@
     "keywords": [
       "Vehicle",
       "Fly",
-      "Piranhas"
+      "Piranhas",
+      "Frame"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -457,7 +460,8 @@
       "Battlesuit",
       "Grenades",
       "Markerlight",
-      "Stealth"
+      "Stealth",
+      "Stealth Battlesuits"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -646,7 +650,8 @@
       "Infantry",
       "Grenades",
       "Kroot",
-      "Farstalkers"
+      "Farstalkers",
+      "Kroot Farstalkers"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -751,7 +756,8 @@
       "Walker",
       "Titanic",
       "Towering",
-      "Ta’unar Supremacy Armour"
+      "Ta’unar Supremacy Armour",
+      "Frame"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -1171,7 +1177,8 @@
       "Fly",
       "Battlesuit",
       "Crisis",
-      "Starscythe"
+      "Starscythe",
+      "Crisis Starscythe Battlesuits"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -1573,7 +1580,8 @@
       "Vehicle",
       "Transport",
       "Fly",
-      "Tidewall Gunrig"
+      "Tidewall Gunrig",
+      "Frame"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -1655,7 +1663,8 @@
     "keywords": [
       "Beasts",
       "Kroot",
-      "Hounds"
+      "Hounds",
+      "Kroot Hounds"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -1829,7 +1838,8 @@
       "Walker",
       "Fly",
       "Battlesuit",
-      "Riptide"
+      "Riptide",
+      "Riptide Battlesuit"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -2174,7 +2184,8 @@
       "Fly",
       "Smoke",
       "Battlesuit",
-      "Ghostkeel"
+      "Ghostkeel",
+      "Ghostkeel Battlesuit"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -2354,7 +2365,8 @@
       "Vehicle",
       "Fly",
       "Markerlight",
-      "Sky Ray Gunship"
+      "Sky Ray Gunship",
+      "Frame"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -2658,7 +2670,8 @@
       "Character",
       "Kroot",
       "Shaper",
-      "Trail Shaper"
+      "Trail Shaper",
+      "Kroot Trail Shaper"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -2739,7 +2752,8 @@
       "Vehicle",
       "Transport",
       "Fly",
-      "Tidewall Shieldline"
+      "Tidewall Shieldline",
+      "Frame"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -2848,7 +2862,8 @@
       "Vehicle",
       "Walker",
       "Battlesuit",
-      "Broadside"
+      "Broadside",
+      "Broadside Battlesuits"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -3257,7 +3272,8 @@
       "Fly",
       "Transport",
       "Dedicated Transport",
-      "Devilfish"
+      "Devilfish",
+      "Frame"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -3421,7 +3437,8 @@
     "keywords": [
       "Vehicle",
       "Fly",
-      "Hammerhead Gunship"
+      "Hammerhead Gunship",
+      "Frame"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -3506,7 +3523,8 @@
       "Vehicle",
       "Transport",
       "Fly",
-      "Tidewall Droneport"
+      "Tidewall Droneport",
+      "Frame"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -3595,7 +3613,8 @@
       "Fly",
       "Battlesuit",
       "Crisis",
-      "Sunforge"
+      "Sunforge",
+      "Crisis Sunforge Battlesuits"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -3775,7 +3794,8 @@
       "Infantry",
       "Grenades",
       "Kroot",
-      "Carnivores"
+      "Carnivores",
+      "Kroot Carnivores"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -3863,7 +3883,8 @@
       "Character",
       "Kroot",
       "Shaper",
-      "War Shaper"
+      "War Shaper",
+      "Kroot War Shaper"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -3942,7 +3963,8 @@
       "Mounted",
       "Character",
       "Kroot",
-      "Lone-spear"
+      "Lone-spear",
+      "Kroot Lone-spear"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -4022,7 +4044,8 @@
       "Character",
       "Kroot",
       "Shaper",
-      "Flesh Shaper"
+      "Flesh Shaper",
+      "Kroot Flesh Shaper"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -4101,7 +4124,8 @@
       "Fly",
       "Sudden Dawn Cadre",
       "Vehicle",
-      "Walker"
+      "Walker",
+      "Commander Cloudspear"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -4168,7 +4192,8 @@
       "Fire Warrior",
       "Infantry",
       "Markerlight",
-      "Sudden Dawn Cadre"
+      "Sudden Dawn Cadre",
+      "Sudden Dawn Cadre Breacher Team"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -4233,7 +4258,8 @@
       "Fly",
       "Sudden Dawn Cadre",
       "Transport",
-      "Vehicle"
+      "Vehicle",
+      "Sudden Dawn Cadre Devilfish"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -4295,7 +4321,8 @@
       "Explosives",
       "Infantry",
       "Markerlight",
-      "Sudden Dawn Cadre"
+      "Sudden Dawn Cadre",
+      "Sudden Dawn Cadre Pathfinder Team"
     ],
     "faction_keywords": [
       "T’au Empire"

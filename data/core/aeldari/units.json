@@ -112,7 +112,8 @@
       "Infantry",
       "Aeldari",
       "Support Weapon",
-      "Shadow Weaver Platform"
+      "Shadow Weaver Platform",
+      "Frame"
     ],
     "faction_keywords": [
       "Asuryani"
@@ -452,7 +453,8 @@
       "Transport",
       "Dedicated Transport",
       "Fly",
-      "Wave Serpent"
+      "Wave Serpent",
+      "Frame"
     ],
     "faction_keywords": [
       "Asuryani"
@@ -757,7 +759,8 @@
       "Vehicle",
       "Aeldari",
       "Fly",
-      "Fire Prism"
+      "Fire Prism",
+      "Frame"
     ],
     "faction_keywords": [
       "Asuryani"
@@ -947,7 +950,8 @@
     "keywords": [
       "Infantry",
       "Aeldari",
-      "Incubi"
+      "Incubi",
+      "Ynnari Incubi"
     ],
     "faction_keywords": [
       "Ynnari"
@@ -1326,7 +1330,8 @@
       "Infantry",
       "Aeldari",
       "Support Weapon",
-      "D-cannon Platform"
+      "D-cannon Platform",
+      "Frame"
     ],
     "faction_keywords": [
       "Asuryani"
@@ -1403,7 +1408,8 @@
       "Fly",
       "Psyker",
       "Warlocks",
-      "Warlock Skyrunner Conclave"
+      "Warlock Skyrunner Conclave",
+      "Warlock Skyrunners"
     ],
     "faction_keywords": [
       "Asuryani"
@@ -2711,7 +2717,8 @@
       "Mounted",
       "Fly",
       "Aeldari",
-      "Reavers"
+      "Reavers",
+      "Ynnari Reavers"
     ],
     "faction_keywords": [
       "Ynnari"
@@ -3085,7 +3092,8 @@
       "Infantry",
       "Character",
       "Aeldari",
-      "Succubus"
+      "Succubus",
+      "Ynnari Succubus"
     ],
     "faction_keywords": [
       "Ynnari"
@@ -3429,7 +3437,8 @@
       "Infantry",
       "Aeldari",
       "Support Weapon",
-      "Vibro Cannon Platform"
+      "Vibro Cannon Platform",
+      "Frame"
     ],
     "faction_keywords": [
       "Asuryani"
@@ -3873,7 +3882,8 @@
       "Infantry",
       "Battleline",
       "Aeldari",
-      "Kabalite Warriors"
+      "Kabalite Warriors",
+      "Ynnari Kabalite Warriors"
     ],
     "faction_keywords": [
       "Ynnari"
@@ -3981,7 +3991,8 @@
       "Vehicle",
       "Aeldari",
       "Fly",
-      "Voidweaver"
+      "Voidweaver",
+      "Frame"
     ],
     "faction_keywords": [
       "Harlequins"
@@ -4315,7 +4326,8 @@
       "Battleline",
       "Aeldari",
       "Grenades",
-      "Wyches"
+      "Wyches",
+      "Ynnari Wyches"
     ],
     "faction_keywords": [
       "Ynnari"
@@ -4544,7 +4556,8 @@
       "Vehicle",
       "Aeldari",
       "Fly",
-      "Night Spinner"
+      "Night Spinner",
+      "Frame"
     ],
     "faction_keywords": [
       "Asuryani"
@@ -4908,7 +4921,8 @@
       "Aeldari",
       "Transport",
       "Fly",
-      "Falcon"
+      "Falcon",
+      "Frame"
     ],
     "faction_keywords": [
       "Asuryani"
@@ -5322,7 +5336,9 @@
       "Transport",
       "Dedicated Transport",
       "Fly",
-      "Raider"
+      "Raider",
+      "Frame",
+      "Ynnari Raider"
     ],
     "faction_keywords": [
       "Ynnari"
@@ -5412,7 +5428,8 @@
       "Fly",
       "Smoke",
       "Grenades",
-      "Starfang"
+      "Starfang",
+      "Starfangs"
     ],
     "faction_keywords": [
       "Asuryani"
@@ -5569,7 +5586,8 @@
       "Infantry",
       "Character",
       "Aeldari",
-      "Archon"
+      "Archon",
+      "Ynnari Archon"
     ],
     "faction_keywords": [
       "Ynnari"
@@ -5925,7 +5943,9 @@
       "Transport",
       "Dedicated Transport",
       "Fly",
-      "Venom"
+      "Venom",
+      "Frame",
+      "Ynnari Venom"
     ],
     "faction_keywords": [
       "Ynnari"
@@ -6013,7 +6033,8 @@
       "Vehicle",
       "Aeldari",
       "Fly",
-      "Vypers"
+      "Vypers",
+      "Vyper"
     ],
     "faction_keywords": [
       "Asuryani"
@@ -6173,7 +6194,8 @@
       "Dedicated Transport",
       "Smoke",
       "Fly",
-      "Starweaver"
+      "Starweaver",
+      "Frame"
     ],
     "faction_keywords": [
       "Harlequins"
@@ -6264,7 +6286,8 @@
       "Aeldari",
       "Aspect Warriors",
       "Infantry",
-      "Kygharil's Protectors"
+      "Kygharil's Protectors",
+      "Kygharil's Protectors Dire Avengers"
     ],
     "faction_keywords": [
       "Asuryani"
@@ -6341,7 +6364,8 @@
       "Fly",
       "Infantry",
       "Jump Pack",
-      "Kygharil's Protectors"
+      "Kygharil's Protectors",
+      "Kygharil's Protectors Warp Spiders"
     ],
     "faction_keywords": [
       "Asuryani"
@@ -6406,7 +6430,8 @@
       "Aeldari",
       "Infantry",
       "Kygharil's Protectors",
-      "Wraith Construct"
+      "Wraith Construct",
+      "Kygharil's Protectors Wraithblades"
     ],
     "faction_keywords": [
       "Asuryani"
@@ -6472,7 +6497,8 @@
       "Infantry",
       "Kygharil's Protectors",
       "Psyker",
-      "Spiritseer"
+      "Spiritseer",
+      "Spiritseer Kygharil"
     ],
     "faction_keywords": [
       "Asuryani"
@@ -6538,7 +6564,8 @@
       "Character",
       "Exodite",
       "Mobile",
-      "Mounted"
+      "Mounted",
+      "Clanblade"
     ],
     "faction_keywords": [
       "Asuryani"
@@ -6638,7 +6665,8 @@
       "Aeldari",
       "Exodite",
       "Mobile",
-      "Mounted"
+      "Mounted",
+      "Dragon Knights"
     ],
     "faction_keywords": [
       "Asuryani"
@@ -6719,7 +6747,8 @@
       "Character",
       "Exodite",
       "Mobile",
-      "Mounted"
+      "Mounted",
+      "Leystalker"
     ],
     "faction_keywords": [
       "Asuryani"
@@ -6797,7 +6826,8 @@
       "Exodite",
       "Mobile",
       "Mounted",
-      "Psyker"
+      "Psyker",
+      "Stonesinger"
     ],
     "faction_keywords": [
       "Asuryani"

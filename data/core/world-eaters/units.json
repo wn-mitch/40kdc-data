@@ -195,7 +195,6 @@
     "keywords": [
       "Infantry",
       "Character",
-      "Grenades",
       "Chaos",
       "Master of Executions",
       "Khorne"
@@ -279,7 +278,8 @@
       "Grenades",
       "Chaos",
       "Khorne",
-      "Berzerkers"
+      "Berzerkers",
+      "Khorne Berzerkers"
     ],
     "faction_keywords": [
       "World Eaters"
@@ -525,7 +525,8 @@
       "Chaos",
       "Khorne",
       "Daemon",
-      "Daemon Prince"
+      "Daemon Prince",
+      "Daemon Prince of Khorne with Wings"
     ],
     "faction_keywords": [
       "World Eaters"
@@ -608,7 +609,9 @@
       "Smoke",
       "Chaos",
       "Land Raider",
-      "Khorne"
+      "Khorne",
+      "Frame",
+      "Chaos Land Raider"
     ],
     "faction_keywords": [
       "World Eaters"
@@ -965,7 +968,8 @@
       "Chaos",
       "Khorne",
       "Daemon",
-      "Daemon Prince"
+      "Daemon Prince",
+      "Daemon Prince of Khorne"
     ],
     "faction_keywords": [
       "World Eaters"
@@ -1401,7 +1405,9 @@
       "Smoke",
       "Chaos",
       "Rhino",
-      "Khorne"
+      "Khorne",
+      "Frame",
+      "Chaos Rhino"
     ],
     "faction_keywords": [
       "World Eaters"
@@ -1573,7 +1579,9 @@
       "Smoke",
       "Chaos",
       "Predator Destructor",
-      "Khorne"
+      "Khorne",
+      "Frame",
+      "Chaos Predator Destructor"
     ],
     "faction_keywords": [
       "World Eaters"
@@ -1745,7 +1753,9 @@
       "Smoke",
       "Chaos",
       "Predator Annihilator",
-      "Khorne"
+      "Khorne",
+      "Frame",
+      "Chaos Predator Annihilator"
     ],
     "faction_keywords": [
       "World Eaters"
@@ -1848,7 +1858,8 @@
       "Chaos",
       "Terminator",
       "Terminator Squad",
-      "Khorne"
+      "Khorne",
+      "Chaos Terminators"
     ],
     "faction_keywords": [
       "World Eaters"
@@ -1964,7 +1975,9 @@
       "Chaos",
       "Khorne",
       "Daemon",
-      "Lord of Skulls"
+      "Lord of Skulls",
+      "Frame",
+      "Khorne Lord of Skulls"
     ],
     "faction_keywords": [
       "World Eaters"
@@ -2049,7 +2062,6 @@
       "Chaos",
       "Chaos Spawn",
       "Spawn",
-      "Mutant",
       "Khorne"
     ],
     "faction_keywords": [
@@ -2206,7 +2218,8 @@
       "Explosives",
       "Frenzied Reavers",
       "Infantry",
-      "Khorne"
+      "Khorne",
+      "Frenzied Reavers Jakhals"
     ],
     "faction_keywords": [
       "World Eaters"
@@ -2270,7 +2283,8 @@
       "Explosives",
       "Frenzied Reavers",
       "Infantry",
-      "Khorne"
+      "Khorne",
+      "Frenzied Reavers Khorne Berzerkers"
     ],
     "faction_keywords": [
       "World Eaters"
@@ -2337,7 +2351,8 @@
       "Character",
       "Frenzied Reavers",
       "Infantry",
-      "Khorne"
+      "Khorne",
+      "Frenzied Reavers Master of Executions"
     ],
     "faction_keywords": [
       "World Eaters"
@@ -2404,7 +2419,8 @@
       "Daemon Prince",
       "Frenzied Reavers",
       "Khorne",
-      "Monster"
+      "Monster",
+      "Vorrakh, Lord of the Frenzied Reavers"
     ],
     "faction_keywords": [
       "World Eaters"

@@ -27,7 +27,8 @@
       "Fly",
       "Transport",
       "Dedicated Transport",
-      "Ghost Ark"
+      "Ghost Ark",
+      "Frame"
     ],
     "faction_keywords": [
       "Necrons"
@@ -113,7 +114,8 @@
       "Walker",
       "Titanic",
       "Towering",
-      "Seraptek Heavy Construct"
+      "Seraptek Heavy Construct",
+      "Frame"
     ],
     "faction_keywords": [
       "Necrons"
@@ -200,7 +202,8 @@
       "Infantry",
       "Fly",
       "Triarch",
-      "Praetorians"
+      "Praetorians",
+      "Triarch Praetorians"
     ],
     "faction_keywords": [
       "Necrons"
@@ -342,7 +345,8 @@
       "Beasts",
       "Fly",
       "Canoptek",
-      "Macrocytes"
+      "Macrocytes",
+      "Canoptek Macrocytes"
     ],
     "faction_keywords": [
       "Necrons"
@@ -731,7 +735,8 @@
       "Vehicle",
       "Walker",
       "Canoptek",
-      "Doomstalker"
+      "Doomstalker",
+      "Canoptek Doomstalker"
     ],
     "faction_keywords": [
       "Necrons"
@@ -1029,7 +1034,8 @@
       "Titanic",
       "Fly",
       "Towering",
-      "Tesseract Vault"
+      "Tesseract Vault",
+      "Frame"
     ],
     "faction_keywords": [
       "Necrons"
@@ -1481,7 +1487,8 @@
     "keywords": [
       "Fortification",
       "Vehicle",
-      "Convergence of Dominion"
+      "Convergence of Dominion",
+      "Frame"
     ],
     "faction_keywords": [
       "Necrons"
@@ -1726,7 +1733,9 @@
       "Vehicle",
       "Walker",
       "Triarch",
-      "Stalker"
+      "Stalker",
+      "Frame",
+      "Triarch Stalker"
     ],
     "faction_keywords": [
       "Necrons"
@@ -1884,7 +1893,8 @@
       "Titanic",
       "Fly",
       "Towering",
-      "Obelisk"
+      "Obelisk",
+      "Frame"
     ],
     "faction_keywords": [
       "Necrons"
@@ -1965,7 +1975,8 @@
       "Vehicle",
       "Walker",
       "Canoptek",
-      "Reanimator"
+      "Reanimator",
+      "Canoptek Reanimator"
     ],
     "faction_keywords": [
       "Necrons"
@@ -2037,7 +2048,9 @@
       "Vehicle",
       "Character",
       "Fly",
-      "Catacomb Command Barge"
+      "Catacomb Command Barge",
+      "Frame",
+      "Noble"
     ],
     "faction_keywords": [
       "Necrons"
@@ -2321,7 +2334,8 @@
       "Titanic",
       "Fly",
       "Towering",
-      "Monolith"
+      "Monolith",
+      "Frame"
     ],
     "faction_keywords": [
       "Necrons"
@@ -2483,7 +2497,8 @@
       "Swarm",
       "Fly",
       "Canoptek",
-      "Scarab Swarms"
+      "Scarab Swarms",
+      "Canoptek Scarab Swarms"
     ],
     "faction_keywords": [
       "Necrons"
@@ -2572,7 +2587,8 @@
       "Beasts",
       "Fly",
       "Canoptek",
-      "Wraiths"
+      "Wraiths",
+      "Canoptek Wraiths"
     ],
     "faction_keywords": [
       "Necrons"
@@ -2953,7 +2969,8 @@
     "keywords": [
       "Vehicle",
       "Fly",
-      "Annihilation Barge"
+      "Annihilation Barge",
+      "Frame"
     ],
     "faction_keywords": [
       "Necrons"
@@ -3181,7 +3198,8 @@
     "keywords": [
       "Beasts",
       "Canoptek",
-      "Tomb Crawlers"
+      "Tomb Crawlers",
+      "Canoptek Tomb Crawlers"
     ],
     "faction_keywords": [
       "Necrons"
@@ -3419,7 +3437,8 @@
     "keywords": [
       "Vehicle",
       "Fly",
-      "Doomsday Ark"
+      "Doomsday Ark",
+      "Frame"
     ],
     "faction_keywords": [
       "Necrons"
@@ -4173,7 +4192,8 @@
       "Vehicle",
       "Fly",
       "Canoptek",
-      "Spyders"
+      "Spyders",
+      "Canoptek Spyders"
     ],
     "faction_keywords": [
       "Necrons"
@@ -4250,9 +4270,11 @@
     ],
     "keywords": [
       "Canoptek",
-      "Doomstalker",
       "Vehicle",
-      "Walker"
+      "Walker",
+      "Amonhotekh's Guard",
+      "Canoptek Doomstalker",
+      "Amonhotekh's Guard Canoptek Doomstalker"
     ],
     "faction_keywords": [
       "Necrons"
@@ -4312,8 +4334,9 @@
     "keywords": [
       "Canoptek",
       "Fly",
-      "Scarab Swarms",
-      "Swarm"
+      "Swarm",
+      "Amonhotekh's Guard",
+      "Amonhotekh's Guard Canoptek Scarab Swarms"
     ],
     "faction_keywords": [
       "Necrons"
@@ -4374,7 +4397,8 @@
     "keywords": [
       "Battleline",
       "Infantry",
-      "Necron Warriors"
+      "Amonhotekh's Guard",
+      "Amonhotekh's Guard Necron Warriors"
     ],
     "faction_keywords": [
       "Necrons"
@@ -4435,7 +4459,9 @@
     ],
     "keywords": [
       "Infantry",
-      "Skorpekh Destroyers"
+      "Amonhotekh's Guard",
+      "Destroyer Cult",
+      "Amonhotekh's Guard Skorpekh Destroyers"
     ],
     "faction_keywords": [
       "Necrons"
@@ -4495,11 +4521,12 @@
       }
     ],
     "keywords": [
-      "Amonhotekh",
       "Character",
       "Infantry",
       "Noble",
-      "Overlord"
+      "Overlord",
+      "Amonhotekh's Guard",
+      "Overlord Amonhotekh"
     ],
     "faction_keywords": [
       "Necrons"

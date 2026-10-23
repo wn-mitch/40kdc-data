@@ -34,7 +34,8 @@
       "Titanic",
       "Towering",
       "Transport",
-      "Gargantuan Squiggoth"
+      "Gargantuan Squiggoth",
+      "Frame"
     ],
     "faction_keywords": [
       "Orks"
@@ -129,7 +130,8 @@
       "'Ardmob",
       "Explosives",
       "Infantry",
-      "Mob"
+      "Mob",
+      "’Ardmob Boyz"
     ],
     "faction_keywords": [
       "Orks"
@@ -193,7 +195,8 @@
     "keywords": [
       "'Ardmob",
       "Grots",
-      "Infantry"
+      "Infantry",
+      "’Ardmob Gretchin"
     ],
     "faction_keywords": [
       "Orks"
@@ -257,7 +260,8 @@
       "'Ardmob",
       "Character",
       "Explosives",
-      "Infantry"
+      "Infantry",
+      "’Ardmob Warboss"
     ],
     "faction_keywords": [
       "Orks"
@@ -318,7 +322,8 @@
     "keywords": [
       "'Ardmob",
       "Mounted",
-      "Speed Freeks"
+      "Speed Freeks",
+      "’Ardmob Wartrakk"
     ],
     "faction_keywords": [
       "Orks"
@@ -383,7 +388,8 @@
       "'Ardmob",
       "Character",
       "Infantry",
-      "Psyker"
+      "Psyker",
+      "'Ardmob Weirdboy"
     ],
     "faction_keywords": [
       "Orks"
@@ -534,9 +540,9 @@
     ],
     "keywords": [
       "Mounted",
-      "Grenades",
       "Speed Freeks",
-      "Warbikers"
+      "Warbikers",
+      "Explosives"
     ],
     "faction_keywords": [
       "Orks"
@@ -617,11 +623,11 @@
       }
     ],
     "keywords": [
-      "Vehicle",
       "Fly",
-      "Grenades",
       "Speed Freeks",
-      "Deffkoptas"
+      "Deffkoptas",
+      "Explosives",
+      "Mounted"
     ],
     "faction_keywords": [
       "Orks"
@@ -865,9 +871,8 @@
     "keywords": [
       "Infantry",
       "Character",
-      "Grenades",
-      "Mek",
-      "Big Mek"
+      "Big Mek",
+      "Explosives"
     ],
     "faction_keywords": [
       "Orks"
@@ -969,7 +974,8 @@
       "Mounted",
       "Beast Snagga",
       "Explosives",
-      "Mobile"
+      "Mobile",
+      "Squighog Boyz"
     ],
     "faction_keywords": [
       "Orks"
@@ -1129,9 +1135,9 @@
       "Vehicle",
       "Aircraft",
       "Fly",
-      "Grenades",
       "Speed Freeks",
-      "Wazbom Blastajet"
+      "Wazbom Blastajet",
+      "Smoke"
     ],
     "faction_keywords": [
       "Orks"
@@ -1221,7 +1227,9 @@
     "keywords": [
       "Vehicle",
       "Transport",
-      "Battlewagon"
+      "Battlewagon",
+      "Frame",
+      "Wagon"
     ],
     "faction_keywords": [
       "Orks"
@@ -1313,7 +1321,8 @@
       "Character",
       "Epic Hero",
       "Explosives",
-      "Smoke"
+      "Smoke",
+      "Boss Snikrot"
     ],
     "faction_keywords": [
       "Orks"
@@ -1482,7 +1491,8 @@
       "Character",
       "Epic Hero",
       "Explosives",
-      "Warboss"
+      "Warboss",
+      "Ghazghkull Thraka"
     ],
     "faction_keywords": [
       "Orks"
@@ -1564,8 +1574,8 @@
     ],
     "keywords": [
       "Infantry",
-      "Grenades",
-      "Breaka Boyz"
+      "Breaka Boyz",
+      "Explosives"
     ],
     "faction_keywords": [
       "Orks"
@@ -1646,7 +1656,8 @@
       "Titanic",
       "Towering",
       "Walker",
-      "Stompa"
+      "Stompa",
+      "Frame"
     ],
     "faction_keywords": [
       "Orks"
@@ -1729,7 +1740,8 @@
       "Vehicle",
       "Fortification",
       "Frame",
-      "Transport"
+      "Transport",
+      "Big’Ed Bossbunka"
     ],
     "faction_keywords": [
       "Orks"
@@ -1825,8 +1837,8 @@
     ],
     "keywords": [
       "Infantry",
-      "Grenades",
-      "Tankbustas"
+      "Tankbustas",
+      "Explosives"
     ],
     "faction_keywords": [
       "Orks"
@@ -1911,9 +1923,9 @@
     ],
     "keywords": [
       "Infantry",
-      "Grenades",
       "Smoke",
-      "Kommandos"
+      "Kommandos",
+      "Explosives"
     ],
     "faction_keywords": [
       "Orks"
@@ -2031,7 +2043,8 @@
       "Infantry",
       "Battleline",
       "Explosives",
-      "Mob"
+      "Mob",
+      "Boyz"
     ],
     "faction_keywords": [
       "Orks"
@@ -2111,7 +2124,9 @@
       "Vehicle",
       "Transport",
       "Dedicated Transport",
-      "Trukk"
+      "Trukk",
+      "Frame",
+      "Speed Freeks"
     ],
     "faction_keywords": [
       "Orks"
@@ -2402,7 +2417,8 @@
     "keywords": [
       "Vehicle",
       "Grots",
-      "Mek Gunz"
+      "Mek Gunz",
+      "Frame"
     ],
     "faction_keywords": [
       "Orks"
@@ -2487,8 +2503,8 @@
       "Infantry",
       "Jump Pack",
       "Fly",
-      "Grenades",
-      "Stormboyz"
+      "Stormboyz",
+      "Explosives"
     ],
     "faction_keywords": [
       "Orks"
@@ -2584,8 +2600,8 @@
     ],
     "keywords": [
       "Infantry",
-      "Grenades",
-      "Flash Gitz"
+      "Flash Gitz",
+      "Explosives"
     ],
     "faction_keywords": [
       "Orks"
@@ -2657,7 +2673,7 @@
       "Aircraft",
       "Fly",
       "Speed Freeks",
-      "Blitza-bommer"
+      "Blitza‑bommer"
     ],
     "faction_keywords": [
       "Orks"
@@ -2970,8 +2986,9 @@
       "Infantry",
       "Character",
       "Mega Armour",
-      "Mek",
-      "Big Mek in Mega Armour"
+      "Big Mek in Mega Armour",
+      "Big Mek",
+      "Explosives"
     ],
     "faction_keywords": [
       "Orks"
@@ -3080,7 +3097,8 @@
       "Infantry",
       "Battleline",
       "Beast Snagga",
-      "Mob"
+      "Mob",
+      "Beast Snagga Boyz"
     ],
     "faction_keywords": [
       "Orks"
@@ -3219,7 +3237,8 @@
     "keywords": [
       "Infantry",
       "Character",
-      "Mek"
+      "Mek",
+      "Explosives"
     ],
     "faction_keywords": [
       "Orks"
@@ -3287,12 +3306,11 @@
       }
     ],
     "keywords": [
-      "Mounted",
       "Character",
       "Beast Snagga",
       "Epic Hero",
-      "Warboss",
-      "Mozrog Skragbad"
+      "Mozrog Skragbad",
+      "Monster"
     ],
     "faction_keywords": [
       "Orks"
@@ -3368,7 +3386,8 @@
       "Infantry",
       "Character",
       "Epic Hero",
-      "Zodgrod Wortsnagga"
+      "Zodgrod Wortsnagga",
+      "Runtherd"
     ],
     "faction_keywords": [
       "Orks"
@@ -3540,9 +3559,9 @@
     "keywords": [
       "Infantry",
       "Character",
-      "Grenades",
-      "Mek",
-      "Big Mek with Shokk Attack Gun"
+      "Big Mek with Shokk Attack Gun",
+      "Big Mek",
+      "Explosives"
     ],
     "faction_keywords": [
       "Orks"
@@ -3621,7 +3640,8 @@
       "Transport",
       "Psyker",
       "Beast Snagga",
-      "Kill Rig"
+      "Kill Rig",
+      "Wagon"
     ],
     "faction_keywords": [
       "Orks"
@@ -3736,7 +3756,8 @@
     ],
     "keywords": [
       "Infantry",
-      "Explosives"
+      "Explosives",
+      "Nobz"
     ],
     "faction_keywords": [
       "Orks"
@@ -3817,11 +3838,11 @@
       }
     ],
     "keywords": [
-      "Mounted",
       "Character",
       "Beast Snagga",
       "Warboss",
-      "Beastboss on Squigosaur"
+      "Beastboss on Squigosaur",
+      "Monster"
     ],
     "faction_keywords": [
       "Orks"
@@ -3941,9 +3962,9 @@
     ],
     "keywords": [
       "Infantry",
-      "Grenades",
       "Mega Armour",
-      "Meganobz"
+      "Meganobz",
+      "Explosives"
     ],
     "faction_keywords": [
       "Orks"
@@ -4025,7 +4046,7 @@
       "Fly",
       "Aircraft",
       "Speed Freeks",
-      "Burna-bommer"
+      "Burna‑bommer"
     ],
     "faction_keywords": [
       "Orks"
@@ -4111,7 +4132,8 @@
       "Monster",
       "Transport",
       "Beast Snagga",
-      "Hunta Rig"
+      "Hunta Rig",
+      "Wagon"
     ],
     "faction_keywords": [
       "Orks"
@@ -4208,8 +4230,8 @@
     "keywords": [
       "Infantry",
       "Character",
-      "Grenades",
-      "Warboss"
+      "Warboss",
+      "Explosives"
     ],
     "faction_keywords": [
       "Orks"
@@ -4360,7 +4382,9 @@
     "keywords": [
       "Walker",
       "Big Mek",
-      "Dakkarig"
+      "Character",
+      "Vehicle",
+      "Big Mek Dakkarig"
     ],
     "faction_keywords": [
       "Orks"
@@ -4601,7 +4625,9 @@
     "keywords": [
       "Transport",
       "Vehicle",
-      "Wagon"
+      "Wagon",
+      "Frame",
+      "Gunwagon"
     ],
     "faction_keywords": [
       "Orks"
@@ -4664,9 +4690,9 @@
       "Infantry",
       "Character",
       "Epic Hero",
-      "Explosives",
       "Mega Armour",
-      "Warboss"
+      "Warboss",
+      "Nazdreg"
     ],
     "faction_keywords": [
       "Orks"
@@ -4750,7 +4776,8 @@
     "keywords": [
       "Explosives",
       "Speed Freeks",
-      "Vehicle"
+      "Vehicle",
+      "Rukkatrukk Squigbuggies"
     ],
     "faction_keywords": [
       "Orks"
@@ -4802,7 +4829,8 @@
     ],
     "keywords": [
       "Infantry",
-      "Character"
+      "Character",
+      "Runtherd"
     ],
     "faction_keywords": [
       "Orks"
@@ -4883,7 +4911,8 @@
     "keywords": [
       "Explosives",
       "Speed Freeks",
-      "Vehicle"
+      "Vehicle",
+      "Warbuggies"
     ],
     "faction_keywords": [
       "Orks"
@@ -4952,7 +4981,8 @@
     ],
     "keywords": [
       "Mounted",
-      "Speed Freeks"
+      "Speed Freeks",
+      "Wartrakks"
     ],
     "faction_keywords": [
       "Orks"

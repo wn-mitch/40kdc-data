@@ -378,6 +378,7 @@ The unit is eligible to act as an Observer even if it Advanced this turn.</chara
             <category name="Battlesuit"/>
             <category name="Crisis"/>
             <category name="Starscythe"/>
+            <category name="Crisis Starscythe Battlesuits"/>
           </categories>
           <selections>
             <selection id="unit2-m0" name="Crisis Starscythe Shas’vre" type="model" number="1">

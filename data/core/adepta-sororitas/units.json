@@ -47,7 +47,8 @@
       "Infantry",
       "Grenades",
       "Imperium",
-      "Celestian Sacresants"
+      "Celestian Sacresants",
+      "Celestian"
     ],
     "faction_keywords": [
       "Adepta Sororitas"
@@ -220,7 +221,8 @@
       "Fly",
       "Grenades",
       "Imperium",
-      "Canoness"
+      "Canoness",
+      "Canoness with Jump Pack"
     ],
     "faction_keywords": [
       "Adepta Sororitas"
@@ -569,7 +571,8 @@
       "Infantry",
       "Grenades",
       "Imperium",
-      "Celestian Insidiants"
+      "Celestian Insidiants",
+      "Celestian"
     ],
     "faction_keywords": [
       "Adepta Sororitas"
@@ -1162,7 +1165,8 @@
       "Transport",
       "Dedicated Transport",
       "Imperium",
-      "Immolator"
+      "Immolator",
+      "Frame"
     ],
     "faction_keywords": [
       "Adepta Sororitas"
@@ -1712,7 +1716,8 @@
       "Dedicated Transport",
       "Smoke",
       "Imperium",
-      "Sororitas Rhino"
+      "Sororitas Rhino",
+      "Frame"
     ],
     "faction_keywords": [
       "Adepta Sororitas"
@@ -1890,7 +1895,8 @@
       "Vehicle",
       "Smoke",
       "Imperium",
-      "Castigator"
+      "Castigator",
+      "Frame"
     ],
     "faction_keywords": [
       "Adepta Sororitas"
@@ -1977,7 +1983,8 @@
       "Vehicle",
       "Smoke",
       "Imperium",
-      "Exorcist"
+      "Exorcist",
+      "Frame"
     ],
     "faction_keywords": [
       "Adepta Sororitas"
@@ -2807,7 +2814,8 @@
       "Epic Hero",
       "Imperium",
       "Aestred Thurga",
-      "Agathae Dolan"
+      "Agathae Dolan",
+      "Aestred Thurga and Agathae Dolan"
     ],
     "faction_keywords": [
       "Adepta Sororitas"
@@ -2965,7 +2973,8 @@
       "Explosives",
       "Imperium",
       "Infantry",
-      "Sanctuary Guardians"
+      "Sanctuary Guardians",
+      "Sanctuary Canoness Adalya"
     ],
     "faction_keywords": [
       "Adepta Sororitas"
@@ -3024,7 +3033,8 @@
       "Imperium",
       "Infantry",
       "Penitent",
-      "Sanctuary Guardians"
+      "Sanctuary Guardians",
+      "Sanctuary Guardians Arco-Flagellants"
     ],
     "faction_keywords": [
       "Adepta Sororitas"
@@ -3084,7 +3094,8 @@
       "Explosives",
       "Imperium",
       "Infantry",
-      "Sanctuary Guardians"
+      "Sanctuary Guardians",
+      "Sanctuary Guardians Battle Sisters Squad"
     ],
     "faction_keywords": [
       "Adepta Sororitas"
@@ -3148,7 +3159,8 @@
       "Explosives",
       "Imperium",
       "Infantry",
-      "Sanctuary Guardians"
+      "Sanctuary Guardians",
+      "Sanctuary Guardians Celestian Sacresants"
     ],
     "faction_keywords": [
       "Adepta Sororitas"

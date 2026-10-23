@@ -309,7 +309,8 @@
       "Grenades",
       "Fly",
       "Hernkyn",
-      "Pioneers"
+      "Pioneers",
+      "Hernkyn Pioneers"
     ],
     "faction_keywords": [
       "Leagues of Votann"
@@ -428,7 +429,8 @@
       "Infantry",
       "Artillery",
       "Cthonian",
-      "Earthshakers"
+      "Earthshakers",
+      "Cthonian Earthshakers"
     ],
     "faction_keywords": [
       "Leagues of Votann"
@@ -510,7 +512,8 @@
       "Dedicated Transport",
       "Hernkyn",
       "Kapricus",
-      "Carrier"
+      "Carrier",
+      "Kapricus Carrier"
     ],
     "faction_keywords": [
       "Leagues of Votann"
@@ -699,7 +702,8 @@
     "keywords": [
       "Vehicle",
       "Transport",
-      "Hekaton Land Fortress"
+      "Hekaton Land Fortress",
+      "Frame"
     ],
     "faction_keywords": [
       "Leagues of Votann"
@@ -879,7 +883,8 @@
       "Character",
       "Infantry",
       "Brôkhyr",
-      "Iron-master"
+      "Iron-master",
+      "Brôkhyr Iron-master"
     ],
     "faction_keywords": [
       "Leagues of Votann"
@@ -1204,7 +1209,8 @@
       "Infantry",
       "Grenades",
       "Hernkyn",
-      "Yaegirs"
+      "Yaegirs",
+      "Hernkyn Yaegirs"
     ],
     "faction_keywords": [
       "Leagues of Votann"
@@ -1378,7 +1384,8 @@
       "Infantry",
       "Exoframe",
       "Brôkhyr",
-      "Thunderkyn"
+      "Thunderkyn",
+      "Brôkhyr Thunderkyn"
     ],
     "faction_keywords": [
       "Leagues of Votann"
@@ -1544,7 +1551,8 @@
       "Fly",
       "Hernkyn",
       "Kapricus",
-      "Defenders"
+      "Defenders",
+      "Kapricus Defenders"
     ],
     "faction_keywords": [
       "Leagues of Votann"
@@ -1630,7 +1638,8 @@
     "keywords": [
       "Infantry",
       "Cthonian",
-      "Beserks"
+      "Beserks",
+      "Cthonian Beserks"
     ],
     "faction_keywords": [
       "Leagues of Votann"
@@ -1728,7 +1737,8 @@
       "Vehicle",
       "Transport",
       "Dedicated Transport",
-      "Sagitaur"
+      "Sagitaur",
+      "Frame"
     ],
     "faction_keywords": [
       "Leagues of Votann"
@@ -1994,7 +2004,8 @@
       "Bane-Slayer's Bulwark",
       "Brokhyr",
       "Exoframe",
-      "Infantry"
+      "Infantry",
+      "Bane Slayer's Bulwark Brokhyr Thunderkyn"
     ],
     "faction_keywords": [
       "Leagues of Votann"
@@ -2056,7 +2067,8 @@
       "Bane-Slayer's Bulwark",
       "Einhyr",
       "Exoarmour",
-      "Infantry"
+      "Infantry",
+      "Bane-Slayer's Bulwark Einhyr Hearthguard"
     ],
     "faction_keywords": [
       "Leagues of Votann"
@@ -2121,7 +2133,8 @@
       "Bane-Slayer's Bulwark",
       "Explosives",
       "Hearthkyn",
-      "Infantry"
+      "Infantry",
+      "Bane-Slayer's Bulwark Hearthkyn Warriors"
     ],
     "faction_keywords": [
       "Leagues of Votann"
@@ -2193,7 +2206,8 @@
       "Einhyr",
       "Einhyr Champion",
       "Exoarmour",
-      "Infantry"
+      "Infantry",
+      "Vynn Bane-Slayer"
     ],
     "faction_keywords": [
       "Leagues of Votann"

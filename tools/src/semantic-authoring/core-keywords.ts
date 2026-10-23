@@ -10,9 +10,9 @@ import { join } from "node:path";
 
 const indexes = new Map<string, Map<string, string>>();
 
-/** A keyword's index key: uppercase, with a typographic apostrophe read as the ASCII one leaves use. */
+/** A keyword's index key: uppercase, with a typographic apostrophe and non-breaking hyphen read as the ASCII ones leaves use. */
 export function keywordKey(keyword: string): string {
-  return keyword.replaceAll("’", "'").toUpperCase();
+  return keyword.replaceAll("’", "'").replaceAll("\u2011", "-").toUpperCase();
 }
 
 /**

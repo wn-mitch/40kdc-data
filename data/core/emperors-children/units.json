@@ -35,7 +35,9 @@
       "Smoke",
       "Chaos",
       "Slaanesh",
-      "Land Raider"
+      "Land Raider",
+      "Frame",
+      "Chaos Land Raider"
     ],
     "faction_keywords": [
       "Emperor’s Children"
@@ -118,7 +120,8 @@
       "Chaos",
       "Slaanesh",
       "Terminator",
-      "Terminator Squad"
+      "Terminator Squad",
+      "Chaos Terminators"
     ],
     "faction_keywords": [
       "Emperor’s Children"
@@ -545,7 +548,8 @@
       "Chaos",
       "Daemon",
       "Slaanesh",
-      "Daemon Prince"
+      "Daemon Prince",
+      "Daemon Prince of Slaanesh"
     ],
     "faction_keywords": [
       "Emperor’s Children"
@@ -812,7 +816,9 @@
       "Smoke",
       "Chaos",
       "Slaanesh",
-      "Rhino"
+      "Rhino",
+      "Frame",
+      "Chaos Rhino"
     ],
     "faction_keywords": [
       "Emperor’s Children"
@@ -904,7 +910,8 @@
       "Chaos",
       "Daemon",
       "Slaanesh",
-      "Daemon Prince with Wings"
+      "Daemon Prince with Wings",
+      "Daemon Prince of Slaanesh with Wings"
     ],
     "faction_keywords": [
       "Emperor’s Children"
@@ -983,7 +990,8 @@
       "Chaos",
       "Slaanesh",
       "Primarch",
-      "Fulgrim"
+      "Fulgrim",
+      "Mobile"
     ],
     "faction_keywords": [
       "Emperor’s Children"
@@ -1467,7 +1475,8 @@
       "Chaos",
       "Explosives",
       "Infantry",
-      "Slaanesh"
+      "Slaanesh",
+      "Callous Blades Flawless Blades"
     ],
     "faction_keywords": [
       "Emperor’s Children"
@@ -1530,7 +1539,8 @@
       "Chaos",
       "Explosives",
       "Infantry",
-      "Slaanesh"
+      "Slaanesh",
+      "Callous Blades Infractors"
     ],
     "faction_keywords": [
       "Emperor’s Children"
@@ -1598,7 +1608,8 @@
       "Explosives",
       "Infantry",
       "Lord Exultant",
-      "Slaanesh"
+      "Slaanesh",
+      "Lord Kaphrael of the Callous Blades"
     ],
     "faction_keywords": [
       "Emperor’s Children"

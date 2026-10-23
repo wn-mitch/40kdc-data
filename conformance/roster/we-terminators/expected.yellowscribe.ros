@@ -50,6 +50,7 @@
             <category name="Khorne"/>
             <category name="Daemon"/>
             <category name="Daemon Prince"/>
+            <category name="Daemon Prince of Khorne"/>
           </categories>
           <selections>
             <selection id="unit0-m0" name="Daemon Prince of Khorne" type="model" number="1">
@@ -136,6 +137,7 @@
             <category name="Terminator"/>
             <category name="Terminator Squad"/>
             <category name="Khorne"/>
+            <category name="Chaos Terminators"/>
           </categories>
           <selections>
             <selection id="unit1-m0" name="World Eaters Terminator Champion" type="model" number="1">
@@ -332,6 +334,7 @@
             <category name="Terminator"/>
             <category name="Terminator Squad"/>
             <category name="Khorne"/>
+            <category name="Chaos Terminators"/>
           </categories>
           <selections>
             <selection id="unit2-m0" name="World Eaters Terminator Champion" type="model" number="1">

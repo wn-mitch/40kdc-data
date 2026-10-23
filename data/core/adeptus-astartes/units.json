@@ -26,11 +26,11 @@
       "Infantry",
       "Character",
       "Epic Hero",
-      "Grenades",
       "Imperium",
       "Tacticus",
       "Chapter Master",
-      "High Marshal Helbrecht"
+      "High Marshal Helbrecht",
+      "Explosives"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -109,7 +109,8 @@
       "Vehicle",
       "Frame",
       "Imperium",
-      "Smoke"
+      "Smoke",
+      "Gladiator Lancer"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -229,7 +230,8 @@
     "keywords": [
       "Infantry",
       "Imperium",
-      "Terminator"
+      "Terminator",
+      "Terminator Squad"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -337,11 +339,11 @@
     "keywords": [
       "Infantry",
       "Character",
-      "Grenades",
       "Imperium",
       "Tacticus",
       "Captain",
-      "Marshal"
+      "Marshal",
+      "Explosives"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -455,10 +457,10 @@
     ],
     "keywords": [
       "Infantry",
-      "Grenades",
       "Imperium",
       "Tacticus",
-      "Sword Brethren Squad"
+      "Sword Brethren Squad",
+      "Explosives"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -545,10 +547,10 @@
     "keywords": [
       "Infantry",
       "Battleline",
-      "Grenades",
       "Imperium",
       "Tacticus",
-      "Crusader Squad"
+      "Crusader Squad",
+      "Explosives"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -637,11 +639,11 @@
     "keywords": [
       "Infantry",
       "Character",
-      "Grenades",
       "Imperium",
       "Tacticus",
       "Chaplain",
-      "Execrator"
+      "Execrator",
+      "Explosives"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -732,10 +734,10 @@
     ],
     "keywords": [
       "Infantry",
-      "Grenades",
       "Imperium",
       "Tacticus",
-      "Sternguard Veteran Squad"
+      "Sternguard Veteran Squad",
+      "Explosives"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -855,7 +857,8 @@
       "Frame",
       "Imperium",
       "Smoke",
-      "Transport"
+      "Transport",
+      "Land Raider Crusader"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -965,9 +968,8 @@
       "Tacticus",
       "Character",
       "Epic Hero",
-      "Grenades",
       "Chaplain",
-      "Grimaldus"
+      "Chaplain Grimaldus"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -1048,11 +1050,11 @@
     "keywords": [
       "Infantry",
       "Character",
-      "Grenades",
       "Imperium",
       "Tacticus",
       "Lieutenant",
-      "Castellan"
+      "Castellan",
+      "Explosives"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -1124,10 +1126,10 @@
     "keywords": [
       "Infantry",
       "Character",
-      "Grenades",
       "Imperium",
       "Tacticus",
-      "Emperor’s Champion"
+      "Explosives",
+      "Emperor's Champion"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -1210,7 +1212,8 @@
       "Dedicated Transport",
       "Frame",
       "Imperium",
-      "Transport"
+      "Transport",
+      "Impulsor"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -1335,7 +1338,8 @@
       "Smoke",
       "Transport",
       "Imperium",
-      "Repulsor Executioner"
+      "Repulsor Executioner",
+      "Frame"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -1518,7 +1522,8 @@
       "Vehicle",
       "Frame",
       "Imperium",
-      "Smoke"
+      "Smoke",
+      "Gladiator Valiant"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -1620,11 +1625,10 @@
     "keywords": [
       "Infantry",
       "Character",
-      "Grenades",
       "Imperium",
       "Tacticus",
-      "Ancient",
-      "Crusade Ancient"
+      "Crusade Ancient",
+      "Explosives"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -1704,7 +1708,8 @@
       "Frame",
       "Imperium",
       "Smoke",
-      "Transport"
+      "Transport",
+      "Repulsor"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -1810,7 +1815,8 @@
       "Vehicle",
       "Frame",
       "Imperium",
-      "Smoke"
+      "Smoke",
+      "Gladiator Reaper"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -1996,10 +2002,10 @@
     "keywords": [
       "Infantry",
       "Character",
-      "Grenades",
       "Imperium",
       "Tacticus",
-      "Sanguinary Priest"
+      "Sanguinary Priest",
+      "Explosives"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -2072,11 +2078,11 @@
       "Character",
       "Jump Pack",
       "Fly",
-      "Grenades",
-      "Imperium",
       "Tacticus",
       "Death Company",
-      "Captain"
+      "Captain",
+      "Explosives",
+      "Death Company Captain with Jump Pack"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -2179,11 +2185,11 @@
     ],
     "keywords": [
       "Infantry",
-      "Grenades",
       "Imperium",
       "Tacticus",
       "Death Company",
-      "Death Company Marines"
+      "Death Company Marines",
+      "Explosives"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -2369,10 +2375,11 @@
     "keywords": [
       "Infantry",
       "Character",
-      "Grenades",
       "Imperium",
       "Tacticus",
-      "Captain"
+      "Captain",
+      "Explosives",
+      "Blood Angels Captain"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -2448,10 +2455,10 @@
       "Character",
       "Epic Hero",
       "Psyker",
-      "Grenades",
       "Imperium",
       "Tacticus",
-      "Chief Librarian Mephiston"
+      "Chief Librarian Mephiston",
+      "Explosives"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -2531,10 +2538,11 @@
       "Epic Hero",
       "Fly",
       "Jump Pack",
-      "Grenades",
       "Imperium",
       "Tacticus",
-      "Chaplain"
+      "Chaplain",
+      "Death Company",
+      "Explosives"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -2614,10 +2622,10 @@
       "Epic Hero",
       "Fly",
       "Jump Pack",
-      "Grenades",
       "Imperium",
       "Tacticus",
-      "Chapter Master"
+      "Chapter Master",
+      "Explosives"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -2785,10 +2793,10 @@
       "Infantry",
       "Fly",
       "Jump Pack",
-      "Grenades",
       "Imperium",
       "Tacticus",
-      "Sanguinary Guard"
+      "Sanguinary Guard",
+      "Explosives"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -2871,7 +2879,8 @@
       "Vehicle",
       "Smoke",
       "Imperium",
-      "Baal Predator"
+      "Baal Predator",
+      "Frame"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -2972,11 +2981,11 @@
       "Infantry",
       "Fly",
       "Jump Pack",
-      "Grenades",
       "Imperium",
       "Tacticus",
       "Death Company",
-      "Death Company Marines"
+      "Explosives",
+      "Death Company Marines with Jump Packs"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -3056,11 +3065,12 @@
     "keywords": [
       "Infantry",
       "Character",
-      "Grenades",
       "Imperium",
       "Tacticus",
       "Death Company",
-      "Captain"
+      "Captain",
+      "Explosives",
+      "Death Company Captain"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -3140,7 +3150,9 @@
       "Fly",
       "Imperium",
       "Ravenwing",
-      "Darkshroud"
+      "Frame",
+      "Speeder",
+      "Ravenwing Darkshroud"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -3236,10 +3248,10 @@
     ],
     "keywords": [
       "Mounted",
-      "Grenades",
       "Imperium",
       "Ravenwing",
-      "Ravenwing Black Knights"
+      "Ravenwing Black Knights",
+      "Explosives"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -3321,11 +3333,12 @@
       "Character",
       "Epic Hero",
       "Psyker",
-      "Grenades",
       "Imperium",
       "Deathwing",
       "Librarian",
-      "Ezekiel"
+      "Ezekiel",
+      "Explosives",
+      "Tacticus"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -3608,12 +3621,12 @@
       "Infantry",
       "Character",
       "Epic Hero",
-      "Grenades",
       "Imperium",
       "Deathwing",
       "Tacticus",
       "Chapter Master",
-      "Azrael"
+      "Azrael",
+      "Explosives"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -3698,7 +3711,9 @@
       "Fly",
       "Imperium",
       "Ravenwing",
-      "Land Speeder Vengeance"
+      "Land Speeder Vengeance",
+      "Frame",
+      "Speeder"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -3859,12 +3874,12 @@
       "Infantry",
       "Character",
       "Epic Hero",
-      "Grenades",
       "Imperium",
       "Deathwing",
       "Chaplain",
       "Tacticus",
-      "Asmodai"
+      "Asmodai",
+      "Explosives"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -4100,7 +4115,8 @@
       "Epic Hero",
       "Imperium",
       "Primarch",
-      "Lion El’Jonson"
+      "Mobile",
+      "Lion El'Jonson"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -4182,11 +4198,11 @@
     ],
     "keywords": [
       "Mounted",
-      "Grenades",
       "Imperium",
       "Ravenwing",
       "Ravenwing Command Squad",
-      "Character"
+      "Character",
+      "Explosives"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -4272,12 +4288,12 @@
       "Infantry",
       "Character",
       "Epic Hero",
-      "Grenades",
       "Imperium",
       "Deathwing",
       "Tacticus",
       "Captain",
-      "Lazarus"
+      "Lazarus",
+      "Explosives"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -4350,7 +4366,7 @@
       "Fly",
       "Imperium",
       "Ravenwing",
-      "Dark Talon"
+      "Ravenwing Dark Talon"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -4430,11 +4446,12 @@
       "Character",
       "Epic Hero",
       "Fly",
-      "Grenades",
       "Imperium",
       "Ravenwing",
       "Captain",
-      "Sammael"
+      "Sammael",
+      "Explosives",
+      "Frame"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -4511,10 +4528,11 @@
       "Infantry",
       "Character",
       "Epic Hero",
-      "Grenades",
       "Imperium",
       "Captain",
-      "Watch Captain Artemis"
+      "Watch Captain Artemis",
+      "Explosives",
+      "Kill Team"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -4595,11 +4613,11 @@
     ],
     "keywords": [
       "Infantry",
-      "Grenades",
       "Imperium",
       "Gravis",
       "Kill Team",
-      "Indomitor Kill Team"
+      "Indomitor Kill Team",
+      "Explosives"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -4689,10 +4707,10 @@
     "keywords": [
       "Infantry",
       "Battleline",
-      "Grenades",
       "Imperium",
       "Kill Team",
-      "Deathwatch Veterans"
+      "Deathwatch Veterans",
+      "Explosives"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -4796,12 +4814,12 @@
     "keywords": [
       "Infantry",
       "Battleline",
-      "Grenades",
       "Imperium",
       "Kill Team",
       "Decimus Kill Team",
       "Tacticus",
-      "Gravis"
+      "Gravis",
+      "Explosives"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -4903,10 +4921,12 @@
       "Infantry",
       "Fly",
       "Jump Pack",
-      "Grenades",
       "Imperium",
       "Kill Team",
-      "Talonstrike Kill Team"
+      "Talonstrike Kill Team",
+      "Explosives",
+      "Tacticus",
+      "Gravis"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -4982,10 +5002,11 @@
     "keywords": [
       "Infantry",
       "Character",
-      "Grenades",
       "Imperium",
       "Captain",
-      "Watch Master"
+      "Watch Master",
+      "Explosives",
+      "Kill Team"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -5054,11 +5075,11 @@
     ],
     "keywords": [
       "Vehicle",
-      "Aircraft",
       "Fly",
       "Imperium",
       "Transport",
-      "Corvus Blackstar"
+      "Corvus Blackstar",
+      "Smoke"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -5279,11 +5300,11 @@
     ],
     "keywords": [
       "Infantry",
-      "Grenades",
       "Imperium",
       "Tacticus",
       "Kill Team",
-      "Fortis Kill Team"
+      "Fortis Kill Team",
+      "Explosives"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -5382,11 +5403,11 @@
     "keywords": [
       "Infantry",
       "Smoke",
-      "Grenades",
       "Imperium",
       "Phobos",
       "Kill Team",
-      "Spectrus Kill Team"
+      "Spectrus Kill Team",
+      "Explosives"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -5475,7 +5496,8 @@
       "Character",
       "Explosives",
       "Gravis",
-      "Imperium"
+      "Imperium",
+      "Captain in Gravis Armour"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -5553,7 +5575,8 @@
       "Epic Hero",
       "Explosives",
       "Imperium",
-      "Tacticus"
+      "Tacticus",
+      "Adrax Agatone"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -5630,7 +5653,8 @@
       "Battleline",
       "Explosives",
       "Imperium",
-      "Tacticus"
+      "Tacticus",
+      "Assault Intercessor Squad"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -5735,7 +5759,8 @@
       "Fly",
       "Gravis",
       "Imperium",
-      "Jump Pack"
+      "Jump Pack",
+      "Inceptor Squad"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -5807,7 +5832,8 @@
       "Character",
       "Imperium",
       "Terminator",
-      "Ancient"
+      "Ancient",
+      "Ancient in Terminator Armour"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -5892,7 +5918,9 @@
       "Vehicle",
       "Fly",
       "Imperium",
-      "Storm Speeder Hailstrike"
+      "Storm Speeder Hailstrike",
+      "Frame",
+      "Speeder"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -5976,10 +6004,10 @@
     "keywords": [
       "Infantry",
       "Character",
-      "Grenades",
       "Imperium",
       "Tacticus",
-      "Techmarine"
+      "Techmarine",
+      "Explosives"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -6054,7 +6082,8 @@
       "Epic Hero",
       "Explosives",
       "Imperium",
-      "Tacticus"
+      "Tacticus",
+      "Kor’sarro Khan"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -6129,7 +6158,8 @@
       "Character",
       "Epic Hero",
       "Explosives",
-      "Imperium"
+      "Imperium",
+      "Suboden Khan"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -6210,7 +6240,8 @@
       "Imperium",
       "Jump Pack",
       "Smoke",
-      "Tacticus"
+      "Tacticus",
+      "Aethon Shaan"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -6285,7 +6316,8 @@
       "Explosives",
       "Imperium",
       "Psyker",
-      "Tacticus"
+      "Tacticus",
+      "Librarian"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -6362,7 +6394,8 @@
       "Character",
       "Epic Hero",
       "Imperium",
-      "Terminator"
+      "Terminator",
+      "Darnath Lysander"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -6452,7 +6485,8 @@
     "keywords": [
       "Infantry",
       "Imperium",
-      "Terminator"
+      "Terminator",
+      "Terminator Assault Squad"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -6558,10 +6592,10 @@
     ],
     "keywords": [
       "Infantry",
-      "Grenades",
       "Imperium",
       "Tacticus",
-      "Bladeguard Veteran Squad"
+      "Bladeguard Veteran Squad",
+      "Explosives"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -6669,7 +6703,8 @@
     "keywords": [
       "Vehicle",
       "Artillery",
-      "Imperium"
+      "Imperium",
+      "Firestrike Servo-turrets"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -6745,7 +6780,9 @@
       "Vehicle",
       "Fly",
       "Imperium",
-      "Storm Speeder Hammerstrike"
+      "Storm Speeder Hammerstrike",
+      "Frame",
+      "Speeder"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -6832,7 +6869,8 @@
       "Character",
       "Epic Hero",
       "Gravis",
-      "Imperium"
+      "Imperium",
+      "Tor Garadon"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -6905,7 +6943,8 @@
       "Infantry",
       "Character",
       "Imperium",
-      "Tacticus"
+      "Tacticus",
+      "Judiciar"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -6994,7 +7033,9 @@
     "keywords": [
       "Infantry",
       "Imperium",
-      "Tacticus"
+      "Tacticus",
+      "Epic Hero",
+      "Victrix Honour Guard"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -7088,7 +7129,8 @@
       "Character",
       "Imperium",
       "Terminator",
-      "Captain"
+      "Captain",
+      "Captain in Terminator Armour"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -7170,7 +7212,8 @@
       "Epic Hero",
       "Imperium",
       "Mobile",
-      "Primarch"
+      "Primarch",
+      "Roboute Guilliman"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -7256,7 +7299,8 @@
       "Dedicated Transport",
       "Frame",
       "Imperium",
-      "Transport"
+      "Transport",
+      "Drop Pod"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -7337,7 +7381,8 @@
       "Fly",
       "Imperium",
       "Jump Pack",
-      "Tacticus"
+      "Tacticus",
+      "Captain with Jump Pack"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -7432,7 +7477,9 @@
       "Vehicle",
       "Fly",
       "Imperium",
-      "Storm Speeder Thunderstrike"
+      "Storm Speeder Thunderstrike",
+      "Frame",
+      "Speeder"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -7518,7 +7565,9 @@
       "Infantry",
       "Imperium",
       "Psyker",
-      "Terminator"
+      "Terminator",
+      "Character",
+      "Librarian in Terminator Armour"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -7602,7 +7651,8 @@
       "Epic Hero",
       "Explosives",
       "Imperium",
-      "Tacticus"
+      "Tacticus",
+      "Vulkan He’stan"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -7698,7 +7748,8 @@
       "Infantry",
       "Explosives",
       "Imperium",
-      "Tacticus"
+      "Tacticus",
+      "Hellblaster Squad"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -7773,7 +7824,8 @@
       "Battleline",
       "Explosives",
       "Gravis",
-      "Imperium"
+      "Imperium",
+      "Heavy Intercessor Squad"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -7844,7 +7896,8 @@
       "Character",
       "Epic Hero",
       "Gravis",
-      "Imperium"
+      "Imperium",
+      "Iron Father Feirros"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -7926,7 +7979,8 @@
       "Infantry",
       "Explosives",
       "Imperium",
-      "Smoke"
+      "Smoke",
+      "Scout Squad"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -8020,7 +8074,7 @@
       "Imperium",
       "Gravis",
       "Apothecary",
-      "Biologis"
+      "Apothecary Biologis"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -8100,7 +8154,8 @@
       "Vehicle",
       "Dreadnought",
       "Imperium",
-      "Walker"
+      "Walker",
+      "Brutalis Dreadnought"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -8188,7 +8243,8 @@
       "Explosives",
       "Imperium",
       "Phobos",
-      "Psyker"
+      "Psyker",
+      "Librarian in Phobos Armour"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -8270,7 +8326,6 @@
     "keywords": [
       "Infantry",
       "Character",
-      "Grenades",
       "Imperium",
       "Tacticus",
       "Apothecary"
@@ -8359,7 +8414,8 @@
       "Smoke",
       "Transport",
       "Imperium",
-      "Land Raider"
+      "Land Raider",
+      "Frame"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -8448,10 +8504,10 @@
     "keywords": [
       "Infantry",
       "Character",
-      "Grenades",
       "Imperium",
       "Tacticus",
-      "Lieutenant"
+      "Lieutenant",
+      "Explosives"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -8534,7 +8590,8 @@
       "Epic Hero",
       "Explosives",
       "Psyker",
-      "Tacticus"
+      "Tacticus",
+      "Chief Librarian Tigurius"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -8610,7 +8667,8 @@
       "Epic Hero",
       "Explosives",
       "Imperium",
-      "Tacticus"
+      "Tacticus",
+      "Captain Titus"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -8688,7 +8746,8 @@
       "Explosives",
       "Imperium",
       "Phobos",
-      "Smoke"
+      "Smoke",
+      "Eliminator Squad"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -8764,7 +8823,8 @@
     "keywords": [
       "Mounted",
       "Explosives",
-      "Imperium"
+      "Imperium",
+      "Outrider Squad"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -8875,7 +8935,8 @@
       "Infantry",
       "Explosives",
       "Imperium",
-      "Tacticus"
+      "Tacticus",
+      "Desolation Squad"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -8955,7 +9016,8 @@
       "Epic Hero",
       "Explosives",
       "Imperium",
-      "Tacticus"
+      "Tacticus",
+      "Cato Sicarius"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -9079,7 +9141,9 @@
       "Epic Hero",
       "Explosives",
       "Imperium",
-      "Tacticus"
+      "Tacticus",
+      "Psyker",
+      "Wardens of Ultramar"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -9161,7 +9225,8 @@
       "Vehicle",
       "Dreadnought",
       "Imperium",
-      "Walker"
+      "Walker",
+      "Redemptor Dreadnought"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -9256,7 +9321,8 @@
       "Character",
       "Explosives",
       "Imperium",
-      "Tacticus"
+      "Tacticus",
+      "Ancient"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -9334,7 +9400,8 @@
       "Character",
       "Imperium",
       "Terminator",
-      "Chaplain"
+      "Chaplain",
+      "Chaplain in Terminator Armour"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -9418,7 +9485,8 @@
       "Explosives",
       "Imperium",
       "Phobos",
-      "Smoke"
+      "Smoke",
+      "Lieutenant with Combi-weapon"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -9514,7 +9582,8 @@
       "Explosives",
       "Imperium",
       "Phobos",
-      "Smoke"
+      "Smoke",
+      "Incursor Squad"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -9609,7 +9678,8 @@
       "Fly",
       "Imperium",
       "Jump Pack",
-      "Tacticus"
+      "Tacticus",
+      "Assault Intercessors with Jump Packs"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -9714,7 +9784,8 @@
       "Character",
       "Epic Hero",
       "Imperium",
-      "Terminator"
+      "Terminator",
+      "Caanok Var"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -9812,7 +9883,8 @@
       "Fly",
       "Imperium",
       "Jump Pack",
-      "Tacticus"
+      "Tacticus",
+      "Vanguard Veteran Squad with Jump Packs"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -9929,7 +10001,9 @@
       "Infantry",
       "Explosives",
       "Imperium",
-      "Tacticus"
+      "Tacticus",
+      "Character",
+      "Company Heroes"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -10003,7 +10077,8 @@
     "keywords": [
       "Infantry",
       "Gravis",
-      "Imperium"
+      "Imperium",
+      "Aggressor Squad"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -10074,7 +10149,8 @@
       "Character",
       "Explosives",
       "Imperium",
-      "Tacticus"
+      "Tacticus",
+      "Captain"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -10154,7 +10230,8 @@
       "Chaplain",
       "Character",
       "Explosives",
-      "Imperium"
+      "Imperium",
+      "Chaplain on Bike"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -10235,7 +10312,8 @@
       "Character",
       "Explosives",
       "Imperium",
-      "Phobos"
+      "Phobos",
+      "Captain in Phobos Armour"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -10318,7 +10396,8 @@
       "Fly",
       "Imperium",
       "Jump Pack",
-      "Tacticus"
+      "Tacticus",
+      "Chaplain with Jump Pack"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -10402,7 +10481,8 @@
       "Battleline",
       "Explosives",
       "Imperium",
-      "Tacticus"
+      "Tacticus",
+      "Intercessor Squad"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -10487,7 +10567,8 @@
       "Vehicle",
       "Titanic",
       "Imperium",
-      "Astraeus"
+      "Astraeus",
+      "Frame"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -10578,7 +10659,8 @@
       "Frame",
       "Imperium",
       "Smoke",
-      "Transport"
+      "Transport",
+      "Land Raider Redeemer"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -10675,7 +10757,6 @@
       "Vehicle",
       "Titanic",
       "Fly",
-      "Aircraft",
       "Transport",
       "Imperium",
       "Thunderhawk Gunship"
@@ -10770,7 +10851,8 @@
       "Frame",
       "Imperium",
       "Smoke",
-      "Transport"
+      "Transport",
+      "Rhino"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -10854,11 +10936,11 @@
     ],
     "keywords": [
       "Infantry",
-      "Grenades",
       "Smoke",
       "Imperium",
       "Phobos",
-      "Infiltrator Squad"
+      "Infiltrator Squad",
+      "Explosives"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -10948,7 +11030,8 @@
       "Vehicle",
       "Dreadnought",
       "Imperium",
-      "Walker"
+      "Walker",
+      "Ballistus Dreadnought"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -11051,7 +11134,8 @@
       "Infantry",
       "Explosives",
       "Imperium",
-      "Tacticus"
+      "Tacticus",
+      "Infernus Squad"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -11124,7 +11208,10 @@
       "Imperium",
       "Jump Pack",
       "Phobos",
-      "Smoke"
+      "Smoke",
+      "Character",
+      "Epic Hero",
+      "Kayvaan Shrike"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -11200,7 +11287,8 @@
       "Explosives",
       "Imperium",
       "Phobos",
-      "Smoke"
+      "Smoke",
+      "Lieutenant in Phobos Armour"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -11282,7 +11370,8 @@
       "Explosives",
       "Imperium",
       "Phobos",
-      "Smoke"
+      "Smoke",
+      "Reiver Squad"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -11528,7 +11617,8 @@
       "Character",
       "Explosives",
       "Imperium",
-      "Tacticus"
+      "Tacticus",
+      "Bladeguard Ancient"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -11613,8 +11703,8 @@
       "Imperium",
       "Smoke",
       "Vehicle",
-      "Venerable",
-      "Walker"
+      "Walker",
+      "Venerable Dreadnought"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -11723,10 +11813,10 @@
       "Character",
       "Epic Hero",
       "Imperium",
-      "Grenades",
       "Tacticus",
       "Captain",
-      "Ragnar Blackmane"
+      "Ragnar Blackmane",
+      "Explosives"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -11815,9 +11905,9 @@
     ],
     "keywords": [
       "Mounted",
-      "Grenades",
       "Imperium",
-      "Thunderwolf Cavalry"
+      "Thunderwolf Cavalry",
+      "Explosives"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -11907,10 +11997,10 @@
     "keywords": [
       "Infantry",
       "Battleline",
-      "Grenades",
       "Imperium",
       "Tacticus",
-      "Grey Hunters"
+      "Grey Hunters",
+      "Explosives"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -12185,10 +12275,8 @@
       "Infantry",
       "Imperium",
       "Tacticus",
-      "Wolf Guard",
-      "Headtakers",
       "Beasts",
-      "Hunting Wolves"
+      "Wolf Guard Headtakers"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -12431,10 +12519,10 @@
     "keywords": [
       "Infantry",
       "Battleline",
-      "Grenades",
       "Imperium",
       "Tacticus",
-      "Blood Claws"
+      "Blood Claws",
+      "Explosives"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -12505,10 +12593,10 @@
       "Infantry",
       "Character",
       "Epic Hero",
-      "Grenades",
       "Imperium",
       "Wolf Priest",
-      "Ulrik the Slayer"
+      "Ulrik the Slayer",
+      "Explosives"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -12680,7 +12768,6 @@
       "Infantry",
       "Imperium",
       "Terminator",
-      "Wolf Guard",
       "Wolf Guard Terminators"
     ],
     "faction_keywords": [
@@ -12773,7 +12860,8 @@
       "Walker",
       "Imperium",
       "Wulfen",
-      "Dreadnought"
+      "Dreadnought",
+      "Wulfen Dreadnought"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -13109,8 +13197,7 @@
       "Character",
       "Imperium",
       "Tacticus",
-      "Wolf Guard",
-      "Battle Leader"
+      "Wolf Guard Battle Leader"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -13214,11 +13301,11 @@
     ],
     "keywords": [
       "Infantry",
-      "Grenades",
       "Smoke",
       "Imperium",
       "Phobos",
-      "Wolf Scouts"
+      "Wolf Scouts",
+      "Explosives"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -13519,7 +13606,8 @@
       "Infantry",
       "Explosives",
       "Gravis",
-      "Imperium"
+      "Imperium",
+      "Eradicator Squad with heavy bolters"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -13588,7 +13676,8 @@
       "Fly",
       "Frame",
       "Imperium",
-      "Speeder"
+      "Speeder",
+      "Land Speeder"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -13673,7 +13762,8 @@
       "Explosives",
       "Imperium",
       "Infantry",
-      "Tacticus"
+      "Tacticus",
+      "Assault Force Captain"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -13735,7 +13825,8 @@
       "Explosives",
       "Imperium",
       "Infantry",
-      "Tacticus"
+      "Tacticus",
+      "Assault Force Intercessor Squad"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -13793,7 +13884,8 @@
       "Assault Force",
       "Fly",
       "Imperium",
-      "Vehicle"
+      "Vehicle",
+      "Assault Force Land Speeder"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -13853,7 +13945,8 @@
       "Imperium",
       "Infantry",
       "Psyker",
-      "Tacticus"
+      "Tacticus",
+      "Assault Force Librarian"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -13914,7 +14007,8 @@
       "Imperium",
       "Infantry",
       "Jump Pack",
-      "Vanguard Veteran Squad"
+      "Vanguard Veteran Squad",
+      "Assault Force Vanguard Veteran Squad With Jump Packs"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -13976,7 +14070,8 @@
       "Imperium",
       "Infantry",
       "Tacticus",
-      "Vow-Sworn of Vedrenn"
+      "Vow-Sworn of Vedrenn",
+      "Emperor's Champion Vedrenn"
     ],
     "faction_keywords": [
       "Black Templars",
@@ -14036,7 +14131,8 @@
       "Imperium",
       "Infantry",
       "Tacticus",
-      "Vow-Sworn of Vedrenn"
+      "Vow-Sworn of Vedrenn",
+      "Vow-Sworn Bladeguard Veteran Squad"
     ],
     "faction_keywords": [
       "Black Templars",
@@ -14108,7 +14204,8 @@
       "Imperium",
       "Infantry",
       "Tacticus",
-      "Vow-Sworn of Vedrenn"
+      "Vow-Sworn of Vedrenn",
+      "Vow-Sworn Crusader Squad"
     ],
     "faction_keywords": [
       "Black Templars",
@@ -14164,7 +14261,8 @@
       "Imperium",
       "Infantry",
       "Tacticus",
-      "Vow-Sworn of Vedrenn"
+      "Vow-Sworn of Vedrenn",
+      "Vow-Sworn Sword Brethren Squad"
     ],
     "faction_keywords": [
       "Black Templars",
@@ -14227,7 +14325,8 @@
       "Imperium",
       "Infantry",
       "Sanguinary Spearhead",
-      "Tacticus"
+      "Tacticus",
+      "Captain Raldeo"
     ],
     "faction_keywords": [
       "Blood Angels",
@@ -14289,7 +14388,8 @@
       "Imperium",
       "Infantry",
       "Sanguinary Spearhead",
-      "Tacticus"
+      "Tacticus",
+      "Sanguinary Spearhead Assault Intercessor Squad"
     ],
     "faction_keywords": [
       "Blood Angels",
@@ -14351,7 +14451,8 @@
       "Infantry",
       "Jump Pack",
       "Sanguinary Spearhead",
-      "Tacticus"
+      "Tacticus",
+      "Sanguinary Spearhead Sanguinary Guard"
     ],
     "faction_keywords": [
       "Blood Angels",
@@ -14407,7 +14508,8 @@
       "Gravis",
       "Imperium",
       "Infantry",
-      "Vengeful Brethren"
+      "Vengeful Brethren",
+      "Master Zacharial"
     ],
     "faction_keywords": [
       "Dark Angels",
@@ -14477,7 +14579,8 @@
       "Imperium",
       "Infantry",
       "Tacticus",
-      "Vengeful Brethren"
+      "Vengeful Brethren",
+      "Vengeful Brethren Bladeguard Veteran Squad"
     ],
     "faction_keywords": [
       "Dark Angels",
@@ -14537,7 +14640,8 @@
       "Imperium",
       "Infantry",
       "Tacticus",
-      "Vengeful Brethren"
+      "Vengeful Brethren",
+      "Vengeful Brethren Hellblaster Squad"
     ],
     "faction_keywords": [
       "Dark Angels",
@@ -14599,7 +14703,8 @@
       "Imperium",
       "Infantry",
       "Tacticus",
-      "Vengeful Brethren"
+      "Vengeful Brethren",
+      "Vengeful Brethren Intercessor Squad"
     ],
     "faction_keywords": [
       "Dark Angels",
@@ -14661,7 +14766,8 @@
       "Explosives",
       "Imperium",
       "Infantry",
-      "Tacticus"
+      "Tacticus",
+      "Askar's Wolfpack Blood Claws"
     ],
     "faction_keywords": [
       "Space Wolves",
@@ -14721,7 +14827,8 @@
       "Imperium",
       "Infantry",
       "Terminator",
-      "Wolf Guard"
+      "Wolf Guard",
+      "Askar's Wolfpack Wolf Guard Terminators"
     ],
     "faction_keywords": [
       "Space Wolves",
@@ -14779,7 +14886,8 @@
     "keywords": [
       "Askar's Wolfpack",
       "Imperium",
-      "Infantry"
+      "Infantry",
+      "Askar's Wolfpack Wulfen"
     ],
     "faction_keywords": [
       "Space Wolves",
@@ -14843,7 +14951,8 @@
       "Imperium",
       "Infantry",
       "Tacticus",
-      "Wolf Guard"
+      "Wolf Guard",
+      "Fyrri Askar"
     ],
     "faction_keywords": [
       "Space Wolves",
@@ -14898,7 +15007,9 @@
       "Mounted",
       "Character",
       "Explosives",
-      "Imperium"
+      "Imperium",
+      "Captain",
+      "Captain on Bike"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -14963,7 +15074,8 @@
       "Character",
       "Epic Hero",
       "Explosives",
-      "Tacticus"
+      "Tacticus",
+      "Kaius Konorius"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -15058,7 +15170,8 @@
       "Explosives",
       "Gravis",
       "Imperium",
-      "Infantry"
+      "Infantry",
+      "Eradicator Squad with melta rifles"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -15136,7 +15249,9 @@
     "keywords": [
       "Imperium",
       "Mounted",
-      "Vehicle"
+      "Vehicle",
+      "Frame",
+      "Invader ATVs"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -15200,7 +15315,8 @@
       "Epic Hero",
       "Imperium",
       "Infantry",
-      "Terminator"
+      "Terminator",
+      "Marneus Calgar"
     ],
     "faction_keywords": [
       "Adeptus Astartes",

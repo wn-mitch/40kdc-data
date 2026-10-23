@@ -10,7 +10,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Amonhotekh's Guard"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "aggression-protocols-amonhotekhs-guard-necrons",
     "game_version": {
       "edition": "11th",
@@ -1020,7 +1027,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Amonhotekh's Guard",
+        "Necron Warriors"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "gauss-storm-amonhotekhs-guard-necrons",
     "game_version": {
       "edition": "11th",
@@ -2529,7 +2544,25 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Amonhotekh's Guard"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "none_of": [
+              "MONSTER",
+              "VEHICLE"
+            ]
+          }
+        }
+      }
+    },
     "ability_id": "reinforced-resilience-amonhotekhs-guard-necrons",
     "game_version": {
       "edition": "11th",

@@ -847,7 +847,9 @@
       "Tzeentch",
       "Horrors",
       "Pink",
-      "Brimstone"
+      "Brimstone",
+      "Blue",
+      "Pink Horrors"
     ],
     "faction_keywords": [
       "Legiones Daemonica"
@@ -1834,7 +1836,8 @@
       "Chaos",
       "Daemon",
       "Nurgle",
-      "Feculent Gnarlmaw"
+      "Feculent Gnarlmaw",
+      "Frame"
     ],
     "faction_keywords": [
       "Legiones Daemonica"
@@ -3407,7 +3410,8 @@
       "Chaos",
       "Daemon",
       "Slaanesh",
-      "Tormentbringer on Exalted Seeker Chariot"
+      "Tormentbringer on Exalted Seeker Chariot",
+      "Tormentbringer"
     ],
     "faction_keywords": [
       "Legiones Daemonica"
@@ -3648,7 +3652,8 @@
       "Chaos",
       "Daemon",
       "Khorne",
-      "Skull Altar"
+      "Skull Altar",
+      "Frame"
     ],
     "faction_keywords": [
       "Legiones Daemonica"
@@ -3882,7 +3887,9 @@
       "Daemon",
       "Tzeentch",
       "Horrors",
-      "Brimstone"
+      "Brimstone",
+      "Blue",
+      "Blue Horrors"
     ],
     "faction_keywords": [
       "Legiones Daemonica"

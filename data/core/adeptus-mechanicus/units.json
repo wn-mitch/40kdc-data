@@ -202,7 +202,8 @@
       "Imperium",
       "Cult Mechanicus",
       "Kataphron",
-      "Destroyers"
+      "Destroyers",
+      "Kataphron Destroyers"
     ],
     "faction_keywords": [
       "Adeptus Mechanicus"
@@ -270,12 +271,12 @@
       }
     ],
     "keywords": [
-      "Infantry",
       "Character",
       "Imperium",
       "Legio Cybernetica",
       "Tech-Priest",
-      "Cybernetica Datasmith"
+      "Cybernetica Datasmith",
+      "Vehicle"
     ],
     "faction_keywords": [
       "Adeptus Mechanicus"
@@ -462,7 +463,8 @@
       "Imperium",
       "Cult Mechanicus",
       "Tech-Priest",
-      "Manipulus"
+      "Manipulus",
+      "Tech-Priest Manipulus"
     ],
     "faction_keywords": [
       "Adeptus Mechanicus"
@@ -544,7 +546,8 @@
       "Imperium",
       "Skitarii",
       "Sydonian",
-      "Dragoons with Radium Jezzails"
+      "Dragoons with Radium Jezzails",
+      "Sydonian Dragoons with Radium Jezzails"
     ],
     "faction_keywords": [
       "Adeptus Mechanicus"
@@ -623,7 +626,8 @@
       "Imperium",
       "Tech-Priest",
       "Cult Mechanicus",
-      "Belisarius Cawl"
+      "Belisarius Cawl",
+      "Mobile"
     ],
     "faction_keywords": [
       "Adeptus Mechanicus"
@@ -811,7 +815,8 @@
       "Imperium",
       "Cult Mechanicus",
       "Electro-Priests",
-      "Fulgurite"
+      "Fulgurite",
+      "Fulgurite Electro-Priests"
     ],
     "faction_keywords": [
       "Adeptus Mechanicus"
@@ -886,7 +891,8 @@
       "Imperium",
       "Skitarii",
       "Smoke",
-      "Skorpius Disintegrator"
+      "Skorpius Disintegrator",
+      "Frame"
     ],
     "faction_keywords": [
       "Adeptus Mechanicus"
@@ -974,7 +980,8 @@
       "Imperium",
       "Skitarii",
       "Sydonian",
-      "Skatros"
+      "Skatros",
+      "Sydonian Skatros"
     ],
     "faction_keywords": [
       "Adeptus Mechanicus"
@@ -1070,7 +1077,8 @@
       "Imperium",
       "Skitarii",
       "Sicarian",
-      "Infiltrators"
+      "Infiltrators",
+      "Sicarian Infiltrators"
     ],
     "faction_keywords": [
       "Adeptus Mechanicus"
@@ -1140,7 +1148,6 @@
     ],
     "keywords": [
       "Vehicle",
-      "Aircraft",
       "Transport",
       "Fly",
       "Imperium",
@@ -1235,7 +1242,8 @@
       "Battleline",
       "Imperium",
       "Skitarii",
-      "Vanguard"
+      "Vanguard",
+      "Skitarii Vanguard"
     ],
     "faction_keywords": [
       "Adeptus Mechanicus"
@@ -1349,7 +1357,8 @@
       "Imperium",
       "Cult Mechanicus",
       "Tech-Priest",
-      "Dominus"
+      "Dominus",
+      "Tech-Priest Dominus"
     ],
     "faction_keywords": [
       "Adeptus Mechanicus"
@@ -1448,7 +1457,8 @@
       "Imperium",
       "Skitarii",
       "Pteraxii",
-      "Skystalkers"
+      "Skystalkers",
+      "Pteraxii Skystalkers"
     ],
     "faction_keywords": [
       "Adeptus Mechanicus"
@@ -1528,7 +1538,8 @@
       "Imperium",
       "Cult Mechanicus",
       "Kataphron",
-      "Breachers"
+      "Breachers",
+      "Kataphron Breachers"
     ],
     "faction_keywords": [
       "Adeptus Mechanicus"
@@ -1620,7 +1631,8 @@
       "Imperium",
       "Skitarii",
       "Sicarian",
-      "Ruststalkers"
+      "Ruststalkers",
+      "Sicarian Ruststalkers"
     ],
     "faction_keywords": [
       "Adeptus Mechanicus"
@@ -1768,7 +1780,8 @@
       "Imperium",
       "Cult Mechanicus",
       "Electro-Priests",
-      "Corpuscarii"
+      "Corpuscarii",
+      "Corpuscarii Electro-Priests"
     ],
     "faction_keywords": [
       "Adeptus Mechanicus"
@@ -1944,7 +1957,8 @@
       "Imperium",
       "Skitarii",
       "Sydonian",
-      "Dragoons with Taser Lances"
+      "Dragoons with Taser Lances",
+      "Sydonian Dragoons with Taser Lances"
     ],
     "faction_keywords": [
       "Adeptus Mechanicus"
@@ -2098,7 +2112,8 @@
       "Imperium",
       "Cult Mechanicus",
       "Tech-Priest",
-      "Enginseer"
+      "Enginseer",
+      "Tech-Priest Enginseer"
     ],
     "faction_keywords": [
       "Adeptus Mechanicus"
@@ -2172,7 +2187,8 @@
       "Character",
       "Imperium",
       "Skitarii",
-      "Marshal"
+      "Marshal",
+      "Skitarii Marshal"
     ],
     "faction_keywords": [
       "Adeptus Mechanicus"
@@ -2254,7 +2270,8 @@
       "Imperium",
       "Skitarii",
       "Smoke",
-      "Skorpius Dunerider"
+      "Skorpius Dunerider",
+      "Frame"
     ],
     "faction_keywords": [
       "Adeptus Mechanicus"
@@ -2461,7 +2478,8 @@
       "Imperium",
       "Skitarii",
       "Pteraxii",
-      "Sterylizors"
+      "Sterylizors",
+      "Pteraxii Sterylizors"
     ],
     "faction_keywords": [
       "Adeptus Mechanicus"
@@ -2619,7 +2637,8 @@
       "Battleline",
       "Imperium",
       "Skitarii",
-      "Rangers"
+      "Rangers",
+      "Skitarii Rangers"
     ],
     "faction_keywords": [
       "Adeptus Mechanicus"
@@ -2743,7 +2762,8 @@
       "Imperium",
       "Skitarii",
       "Hastarii",
-      "Exterminators"
+      "Exterminators",
+      "Hastarii Exterminators"
     ],
     "faction_keywords": [
       "Adeptus Mechanicus"
@@ -2821,7 +2841,8 @@
       "Imperium",
       "Skitarii",
       "Hastarii",
-      "Fusiliers"
+      "Fusiliers",
+      "Hastarii Fusiliers"
     ],
     "faction_keywords": [
       "Adeptus Mechanicus"
@@ -2894,7 +2915,8 @@
       "Imperium",
       "Cult Mechanicus",
       "Tech-Priest",
-      "Thulia Ghuld"
+      "Thulia Ghuld",
+      "Mobile"
     ],
     "faction_keywords": [
       "Adeptus Mechanicus"
@@ -2968,7 +2990,8 @@
       "Infantry",
       "Purge Corps Deltic-9",
       "Tech-Priest",
-      "Tech-Priest Manipulus"
+      "Tech-Priest Manipulus",
+      "Manipulus Skand"
     ],
     "faction_keywords": [
       "Adeptus Mechanicus"
@@ -3033,7 +3056,8 @@
       "Infantry",
       "Jump Pack",
       "Purge Corps Deltic-9",
-      "Skitarii"
+      "Skitarii",
+      "Purge Corps Pteraxii Sterylizors"
     ],
     "faction_keywords": [
       "Adeptus Mechanicus"
@@ -3097,7 +3121,8 @@
       "Imperium",
       "Mounted",
       "Purge Corps Deltic-9",
-      "Skitarii"
+      "Skitarii",
+      "Purge Corps Serberys Sulphurhounds"
     ],
     "faction_keywords": [
       "Adeptus Mechanicus"
@@ -3167,7 +3192,8 @@
       "Imperium",
       "Infantry",
       "Purge Corps Deltic-9",
-      "Skitarii"
+      "Skitarii",
+      "Purge Corps Skitarii Vanguard"
     ],
     "faction_keywords": [
       "Adeptus Mechanicus"

@@ -578,7 +578,8 @@
       "Transport",
       "Dedicated Transport",
       "Great Devourer",
-      "Goliath Truck"
+      "Goliath Truck",
+      "Frame"
     ],
     "faction_keywords": [
       "Genestealer Cults"
@@ -1784,7 +1785,8 @@
       "Vehicle",
       "Transport",
       "Great Devourer",
-      "Goliath Rockgrinder"
+      "Goliath Rockgrinder",
+      "Frame"
     ],
     "faction_keywords": [
       "Genestealer Cults"
@@ -2105,7 +2107,8 @@
     "keywords": [
       "Claw of Ascension",
       "Great Devourer",
-      "Vehicle"
+      "Vehicle",
+      "Claw of Ascension Achilles Ridgerunner"
     ],
     "faction_keywords": [
       "Genestealer Cults"
@@ -2180,7 +2183,8 @@
       "Claw of Ascension",
       "Explosives",
       "Great Devourer",
-      "Mounted"
+      "Mounted",
+      "Claw of Ascension Atalan Jackals"
     ],
     "faction_keywords": [
       "Genestealer Cults"
@@ -2240,7 +2244,8 @@
       "Claw of Ascension",
       "Explosives",
       "Great Devourer",
-      "Infantry"
+      "Infantry",
+      "Claw of Ascension Hybrid Metamorphs"
     ],
     "faction_keywords": [
       "Genestealer Cults"
@@ -2299,7 +2304,8 @@
       "Explosives",
       "Great Devourer",
       "Jackal Alphus",
-      "Mounted"
+      "Mounted",
+      "Shanus Daskovian"
     ],
     "faction_keywords": [
       "Genestealer Cults"

@@ -418,7 +418,8 @@
       "Dedicated Transport",
       "Fly",
       "Aeldari",
-      "Venom"
+      "Venom",
+      "Frame"
     ],
     "faction_keywords": [
       "Drukhari"
@@ -725,7 +726,8 @@
       "Dedicated Transport",
       "Fly",
       "Aeldari",
-      "Raider"
+      "Raider",
+      "Frame"
     ],
     "faction_keywords": [
       "Drukhari"
@@ -1537,7 +1539,8 @@
       "Kabal",
       "Fly",
       "Aeldari",
-      "Ravager"
+      "Ravager",
+      "Frame"
     ],
     "faction_keywords": [
       "Drukhari"
@@ -2187,7 +2190,8 @@
       "Coven of Agonies",
       "Fly",
       "Haemonculus Covens",
-      "Monster"
+      "Monster",
+      "Coven of Agonies Cronos"
     ],
     "faction_keywords": [
       "Drukhari"
@@ -2248,7 +2252,8 @@
       "Coven of Agonies",
       "Fly",
       "Haemonculus Covens",
-      "Monster"
+      "Monster",
+      "Coven of Agonies Talos"
     ],
     "faction_keywords": [
       "Drukhari"
@@ -2310,7 +2315,8 @@
       "Battleline",
       "Coven of Agonies",
       "Haemonculus Covens",
-      "Infantry"
+      "Infantry",
+      "Coven of Agonies Wracks"
     ],
     "faction_keywords": [
       "Drukhari"
@@ -2378,7 +2384,8 @@
       "Coven of Agonies",
       "Haemonculus",
       "Haemonculus Covens",
-      "Infantry"
+      "Infantry",
+      "Xatrophos Nuul"
     ],
     "faction_keywords": [
       "Drukhari"

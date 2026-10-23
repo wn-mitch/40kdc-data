@@ -734,6 +734,7 @@
             <category name="Grenades"/>
             <category name="Imperium"/>
             <category name="Celestian Sacresants"/>
+            <category name="Celestian"/>
           </categories>
           <selections>
             <selection id="unit5-m0" name="Sacresant Superior" type="model" number="1">

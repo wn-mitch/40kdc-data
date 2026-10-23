@@ -162,11 +162,11 @@
       "Infantry",
       "Character",
       "Epic Hero",
-      "Grenades",
       "Imperium",
       "Ordo Xenos",
-      "Deathwatch",
-      "Watch Captain Artemis"
+      "Watch Captain Artemis",
+      "Captain",
+      "Explosives"
     ],
     "faction_keywords": [
       "Agents of the Imperium"
@@ -258,7 +258,8 @@
       "Transport",
       "Dedicated Transport",
       "Imperium",
-      "Inquisitorial Chimera"
+      "Inquisitorial Chimera",
+      "Frame"
     ],
     "faction_keywords": [
       "Agents of the Imperium"
@@ -454,7 +455,8 @@
       "Imperium",
       "Ordo Hereticus",
       "Inquisitor",
-      "Greyfax"
+      "Greyfax",
+      "Inquisitor Greyfax"
     ],
     "faction_keywords": [
       "Agents of the Imperium"
@@ -545,7 +547,8 @@
       "Dedicated Transport",
       "Imperium",
       "Ordo Hereticus",
-      "Sisters of Battle Immolator"
+      "Sisters of Battle Immolator",
+      "Frame"
     ],
     "faction_keywords": [
       "Agents of the Imperium"
@@ -1053,12 +1056,12 @@
     "keywords": [
       "Infantry",
       "Battleline",
-      "Grenades",
       "Imperium",
       "Ordo Xenos",
       "Retinue",
-      "Deathwatch",
-      "Kill Team"
+      "Kill Team",
+      "Explosives",
+      "Deathwatch Kill Team"
     ],
     "faction_keywords": [
       "Agents of the Imperium"
@@ -1266,7 +1269,8 @@
       "Transport",
       "Dedicated Transport",
       "Imperium",
-      "Imperial Rhino"
+      "Imperial Rhino",
+      "Frame"
     ],
     "faction_keywords": [
       "Agents of the Imperium"
@@ -1375,14 +1379,14 @@
     "keywords": [
       "Infantry",
       "Battleline",
-      "Grenades",
       "Imperium",
       "Ordo Xenos",
       "Retinue",
-      "Deathwatch",
       "Aquila Kill Team",
       "Tacticus",
-      "Gravis"
+      "Gravis",
+      "Explosives",
+      "Kill Team"
     ],
     "faction_keywords": [
       "Agents of the Imperium"
@@ -2150,7 +2154,8 @@
       "Imperium",
       "Ordo Xenos",
       "Inquisitor",
-      "Draxus"
+      "Draxus",
+      "Inquisitor Draxus"
     ],
     "faction_keywords": [
       "Agents of the Imperium"
@@ -2229,11 +2234,10 @@
     "keywords": [
       "Infantry",
       "Character",
-      "Grenades",
       "Imperium",
       "Ordo Xenos",
-      "Deathwatch",
-      "Watch Master"
+      "Watch Master",
+      "Explosives"
     ],
     "faction_keywords": [
       "Agents of the Imperium"
@@ -2315,7 +2319,8 @@
       "Imperium",
       "Ordo Malleus",
       "Inquisitor",
-      "Coteaz"
+      "Coteaz",
+      "Inquisitor Coteaz"
     ],
     "faction_keywords": [
       "Agents of the Imperium"
@@ -2512,14 +2517,13 @@
     ],
     "keywords": [
       "Vehicle",
-      "Aircraft",
       "Fly",
       "Transport",
       "Imperium",
       "Ordo Xenos",
       "Retinue",
-      "Deathwatch",
-      "Corvus Blackstar"
+      "Corvus Blackstar",
+      "Smoke"
     ],
     "faction_keywords": [
       "Agents of the Imperium"
@@ -2806,7 +2810,8 @@
       "Grenades",
       "Ordo Xenos",
       "Inquisitor",
-      "Kroyle"
+      "Kroyle",
+      "Inquisitor Kroyle"
     ],
     "faction_keywords": [
       "Agents of the Imperium"
@@ -2886,7 +2891,8 @@
       "Imperium",
       "Infantry",
       "Inquisitor's Hand",
-      "Officio Assassinorum"
+      "Officio Assassinorum",
+      "Inquisitor's Hand Eversor Assassin"
     ],
     "faction_keywords": [
       "Agents of the Imperium"
@@ -2949,7 +2955,8 @@
       "Imperium",
       "Infantry",
       "Inquisitor's Hand",
-      "Retinue"
+      "Retinue",
+      "Inquisitor's Hand Inquisitorial Agents"
     ],
     "faction_keywords": [
       "Agents of the Imperium"
@@ -3015,7 +3022,8 @@
       "Imperium",
       "Infantry",
       "Inquisitor's Hand",
-      "Retinue"
+      "Retinue",
+      "Inquisitor's Hand Vigilant Squad"
     ],
     "faction_keywords": [
       "Agents of the Imperium"
@@ -3074,7 +3082,8 @@
       "Infantry",
       "Inquisitor's Hand",
       "Ministorum Priest",
-      "Ordo Hereticus"
+      "Ordo Hereticus",
+      "Preacher Teguen"
     ],
     "faction_keywords": [
       "Agents of the Imperium"

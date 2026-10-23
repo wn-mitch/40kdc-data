@@ -66,10 +66,12 @@ describe("buildSeedUnit", () => {
       miniature_keyword: [
         { id: "mk1", displayOrder: 1, miniatureId: "m1", keywordId: "k-veh" },
         { id: "mk2", displayOrder: 2, miniatureId: "m1", keywordId: "k-char" },
+        { id: "mk3", displayOrder: 3, miniatureId: "m1", keywordId: "k-frame" },
       ],
       keyword: [
         { id: "k-veh", localisations: { en: { name: "Vehicle" } } },
         { id: "k-char", localisations: { en: { name: "Character" } } },
+        { id: "k-frame", localisations: { en: { name: "Frame" } } },
       ],
       datasheet_faction_keyword: [{ id: "f1", displayOrder: 1, datasheetId: "ds1", factionKeywordId: "fk-ik" }],
       faction_keyword: [{ id: "fk-ik", localisations: { en: { name: "Imperial Knights" } } }],
@@ -83,7 +85,8 @@ describe("buildSeedUnit", () => {
     expect(u.faction_id).toBe("imperial-knights");
     expect(u.profiles).toHaveLength(1);
     expect(u.profiles[0]).toMatchObject({ M: 12, T: 10, W: 18, Sv: 3, invuln_sv: null, Ld: 6, OC: 8 });
-    expect(u.keywords).toEqual(["Vehicle", "Character"]);
+    // FRAME is an 11th-edition keyword; the datasheet name is an additional keyword (Core Rules).
+    expect(u.keywords).toEqual(["Vehicle", "Character", "Frame", "Knight Destrier"]);
     expect(u.faction_keywords).toEqual(["Imperial Knights"]);
     expect(u.role).toBe("character");
     expect(u.model_count).toEqual({ min: 1, max: 1 });

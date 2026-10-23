@@ -371,7 +371,6 @@
       "Monster",
       "Titanic",
       "Fly",
-      "Aircraft",
       "Transport",
       "Great Devourer",
       "Harridan"
@@ -698,7 +697,8 @@
       "Towering",
       "Transport",
       "Great Devourer",
-      "Hierophant"
+      "Hierophant",
+      "Frame"
     ],
     "faction_keywords": [
       "Tyranids"
@@ -1178,7 +1178,8 @@
       "Dedicated Transport",
       "Great Devourer",
       "Vanguard Invader",
-      "Tyrannocyte"
+      "Tyrannocyte",
+      "Frame"
     ],
     "faction_keywords": [
       "Tyranids"
@@ -1739,7 +1740,8 @@
     "keywords": [
       "Monster",
       "Great Devourer",
-      "Tyrannofex"
+      "Tyrannofex",
+      "Frame"
     ],
     "faction_keywords": [
       "Tyranids"
@@ -2687,7 +2689,8 @@
     "keywords": [
       "Monster",
       "Great Devourer",
-      "Toxicrene"
+      "Toxicrene",
+      "Frame"
     ],
     "faction_keywords": [
       "Tyranids"
@@ -4131,7 +4134,8 @@
       "Monster",
       "Burrower",
       "Vanguard Invader",
-      "The Red Terror"
+      "The Red Terror",
+      "Mobile"
     ],
     "faction_keywords": [
       "Tyranids"
@@ -4204,7 +4208,8 @@
       "Synapse",
       "Vanguard Invader",
       "Vardenghast Swarm",
-      "Winged Tyranid Prime"
+      "Winged Tyranid Prime",
+      "Terror of Vardenghast"
     ],
     "faction_keywords": [
       "Tyranids"
@@ -4266,7 +4271,8 @@
     ],
     "keywords": [
       "Infantry",
-      "Vardenghast Swarm"
+      "Vardenghast Swarm",
+      "Vardenghast Swarm Barbgaunts"
     ],
     "faction_keywords": [
       "Tyranids"
@@ -4330,7 +4336,8 @@
       "Harvester",
       "Monster",
       "Smoke",
-      "Vardenghast Swarm"
+      "Vardenghast Swarm",
+      "Vardenghast Swarm Psychophage"
     ],
     "faction_keywords": [
       "Tyranids"
@@ -4397,7 +4404,8 @@
       "Battleline",
       "Endless Multitude",
       "Infantry",
-      "Vardenghast Swarm"
+      "Vardenghast Swarm",
+      "Vardenghast Swarm Termagants"
     ],
     "faction_keywords": [
       "Tyranids"
@@ -4464,7 +4472,8 @@
     "keywords": [
       "Infantry",
       "Vanguard Invader",
-      "Vardenghast Swarm"
+      "Vardenghast Swarm",
+      "Vardenghast Swarm Von Ryan's Leapers"
     ],
     "faction_keywords": [
       "Tyranids"

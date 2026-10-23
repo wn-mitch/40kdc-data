@@ -42,6 +42,8 @@
             <category name="Chaos"/>
             <category name="Slaanesh"/>
             <category name="Rhino"/>
+            <category name="Frame"/>
+            <category name="Chaos Rhino"/>
           </categories>
           <selections>
             <selection id="unit0-m0" name="Chaos Rhino" type="model" number="1">

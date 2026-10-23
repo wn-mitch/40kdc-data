@@ -153,15 +153,10 @@ function buildProfiles(
 }
 
 /**
- * Dump `miniature_keyword` names that are model-build / kit tags, not datasheet
- * game keywords — a GW datasheet's KEYWORDS line never lists them (e.g. "Frame",
- * the sprue designation shared by the Land Raider Crusader/Redeemer builds).
- * Filtered out so they never land in a unit's `keywords`.
+ * A datasheet's keywords: the union of its miniatures' keywords in display order, then its
+ * datasheet name, which the Core Rules make an additional keyword of every unit.
  */
-const NON_GAME_KEYWORDS = new Set(["Frame"]);
-
-/** Union of keyword names across the datasheet's miniatures, deduped, in display order. */
-function buildKeywords(dump: MfmDump, datasheetId: string): string[] {
+export function buildKeywords(dump: MfmDump, datasheetId: string, datasheetName: string): string[] {
   const minis = (
     dump.groupBy("miniature", "datasheetId").get(datasheetId) ?? []
   )
@@ -177,11 +172,12 @@ function buildKeywords(dump: MfmDump, datasheetId: string): string[] {
       .sort((a, b) => a.displayOrder - b.displayOrder);
     for (const mk of mks) {
       const nm = dump.enName(kwById.get(mk.keywordId));
-      if (!nm || seen.has(nm) || NON_GAME_KEYWORDS.has(nm)) continue;
-      seen.add(nm);
+      if (!nm || seen.has(nm.toLowerCase())) continue;
+      seen.add(nm.toLowerCase());
       out.push(nm);
     }
   }
+  if (!seen.has(datasheetName.toLowerCase())) out.push(datasheetName);
   return out;
 }
 
@@ -297,7 +293,7 @@ export function buildSeedUnit(
     throw new SeedSkip(`${name}: name does not slug to a valid entity-id`);
   }
   const profiles = buildProfiles(dump, ds.id!, name);
-  const keywords = buildKeywords(dump, ds.id!);
+  const keywords = buildKeywords(dump, ds.id!, name);
   const faction_keywords = buildFactionKeywords(dump, ds.id!, dir);
   const role = deriveRole(keywords);
   const model_count = buildModelCount(dump, ds.id!);

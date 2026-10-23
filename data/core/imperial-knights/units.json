@@ -37,7 +37,9 @@
       "Towering",
       "Acastus",
       "Imperium",
-      "Knight Asterius"
+      "Knight Asterius",
+      "Frame",
+      "Acastus Knight Asterius"
     ],
     "faction_keywords": [
       "Imperial Knights"
@@ -230,7 +232,8 @@
       "Towering",
       "Imperium",
       "Cerastus",
-      "Knight Acheron"
+      "Knight Acheron",
+      "Cerastus Knight Acheron"
     ],
     "faction_keywords": [
       "Imperial Knights"
@@ -324,7 +327,9 @@
       "Towering",
       "Imperium",
       "Acastus",
-      "Knight Porphyrion"
+      "Knight Porphyrion",
+      "Frame",
+      "Acastus Knight Porphyrion"
     ],
     "faction_keywords": [
       "Imperial Knights"
@@ -421,7 +426,8 @@
       "Towering",
       "Imperium",
       "Cerastus",
-      "Knight Castigator"
+      "Knight Castigator",
+      "Cerastus Knight Castigator"
     ],
     "faction_keywords": [
       "Imperial Knights"
@@ -1030,7 +1036,8 @@
       "Towering",
       "Imperium",
       "Cerastus",
-      "Knight Lancer"
+      "Knight Lancer",
+      "Cerastus Knight Lancer"
     ],
     "faction_keywords": [
       "Imperial Knights"
@@ -1120,7 +1127,8 @@
       "Walker",
       "Imperium",
       "Armiger",
-      "Moirax"
+      "Moirax",
+      "Armiger Moirax"
     ],
     "faction_keywords": [
       "Imperial Knights"
@@ -1311,7 +1319,8 @@
       "Walker",
       "Imperium",
       "Armiger",
-      "Warglaive"
+      "Warglaive",
+      "Armiger Warglaive"
     ],
     "faction_keywords": [
       "Imperial Knights"
@@ -1757,7 +1766,8 @@
       "Walker",
       "Imperium",
       "Armiger",
-      "Helverin"
+      "Helverin",
+      "Armiger Helverin"
     ],
     "faction_keywords": [
       "Imperial Knights"
@@ -1857,7 +1867,8 @@
       "Towering",
       "Imperium",
       "Questoris",
-      "Knight Magaera"
+      "Knight Magaera",
+      "Questoris Knight Magaera"
     ],
     "faction_keywords": [
       "Imperial Knights"
@@ -1954,7 +1965,8 @@
       "Towering",
       "Imperium",
       "Questoris",
-      "Knight Styrix"
+      "Knight Styrix",
+      "Questoris Knight Styrix"
     ],
     "faction_keywords": [
       "Imperial Knights"
@@ -2051,7 +2063,8 @@
       "Towering",
       "Imperium",
       "Cerastus",
-      "Knight Atrapos"
+      "Knight Atrapos",
+      "Cerastus Knight Atrapos"
     ],
     "faction_keywords": [
       "Imperial Knights"

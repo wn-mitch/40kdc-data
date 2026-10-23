@@ -1990,19 +1990,123 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "black-templars",
     "detachment_id": "vow-sworn-crusaders",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "attack-is",
+        "parameters": {
+          "attack_type": "melee"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "subset": "ones"
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "attack-is",
+                  "parameters": {
+                    "attack_type": "melee"
+                  }
+                },
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "defender",
+                    "filter": {
+                      "any_of": [
+                        "MONSTER",
+                        "VEHICLE"
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "re-roll",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "hit",
+                "subset": "ones"
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "attack-is",
+                  "parameters": {
+                    "attack_type": "melee"
+                  }
+                },
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "defender",
+                    "filter": {
+                      "any_of": [
+                        "MONSTER",
+                        "VEHICLE"
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "re-roll",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "wound",
+                "subset": "ones",
+                "weapons": {
+                  "type": "melee"
+                }
+              }
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "fight"
+      },
+      "subject": {
+        "owner": "friendly",
+        "any_of": [
+          "CHAPLAIN",
+          "JUDICIAR"
+        ]
+      }
+    },
+    "source_digest": "fa366494c60cd9b4e28f7d647a5e1a01c58025cc637970c51463d6ed26f9ffd9"
   },
   {
     "ability_id": "priority-target-acquisition-black-templars",

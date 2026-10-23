@@ -43,6 +43,7 @@
             <category name="Chaos"/>
             <category name="Nurgle"/>
             <category name="Spawn"/>
+            <category name="Chaos Spawn"/>
           </categories>
           <selections>
             <selection id="unit0-m0" name="Chaos Spawn" type="model" number="1">
@@ -105,6 +106,8 @@
             <category name="Transport"/>
             <category name="Dedicated Transport"/>
             <category name="Rhino"/>
+            <category name="Frame"/>
+            <category name="Chaos Rhino"/>
           </categories>
           <selections>
             <selection id="unit1-m0" name="Chaos Rhino" type="model" number="1">

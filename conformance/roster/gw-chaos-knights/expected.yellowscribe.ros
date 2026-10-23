@@ -44,6 +44,7 @@
             <category name="Chaos"/>
             <category name="War Dog"/>
             <category name="Brigand"/>
+            <category name="War Dog Brigand"/>
           </categories>
           <selections>
             <selection id="unit0-m0" name="War Dog Brigand" type="model" number="1">
@@ -153,6 +154,7 @@
             <category name="Chaos"/>
             <category name="War Dog"/>
             <category name="Brigand"/>
+            <category name="War Dog Brigand"/>
           </categories>
           <selections>
             <selection id="unit1-m0" name="War Dog Brigand" type="model" number="1">
@@ -263,6 +265,7 @@ If 1+ enemy units destroyed, enemy units within 3" of that unit must take a Batt
             <category name="Chaos"/>
             <category name="War Dog"/>
             <category name="Executioner"/>
+            <category name="War Dog Executioner"/>
           </categories>
           <selections>
             <selection id="unit2-m0" name="War Dog Executioner" type="model" number="1">
@@ -358,6 +361,7 @@ If 1+ enemy units destroyed, enemy units within 3" of that unit must take a Batt
             <category name="Chaos"/>
             <category name="War Dog"/>
             <category name="Executioner"/>
+            <category name="War Dog Executioner"/>
           </categories>
           <selections>
             <selection id="unit3-m0" name="War Dog Executioner" type="model" number="1">
@@ -453,6 +457,7 @@ You can re-roll the Advance roll.</characteristic>
             <category name="Chaos"/>
             <category name="War Dog"/>
             <category name="Karnivore"/>
+            <category name="War Dog Karnivore"/>
           </categories>
           <selections>
             <selection id="unit4-m0" name="War Dog Karnivore" type="model" number="1">
@@ -548,6 +553,7 @@ You can re-roll the Advance roll.</characteristic>
             <category name="Chaos"/>
             <category name="War Dog"/>
             <category name="Karnivore"/>
+            <category name="War Dog Karnivore"/>
           </categories>
           <selections>
             <selection id="unit5-m0" name="War Dog Karnivore" type="model" number="1">
@@ -643,6 +649,7 @@ You can re-roll the Advance roll.</characteristic>
             <category name="Chaos"/>
             <category name="War Dog"/>
             <category name="Karnivore"/>
+            <category name="War Dog Karnivore"/>
           </categories>
           <selections>
             <selection id="unit6-m0" name="War Dog Karnivore" type="model" number="1">
@@ -738,6 +745,7 @@ You can re-roll the Advance roll.</characteristic>
             <category name="Chaos"/>
             <category name="War Dog"/>
             <category name="Karnivore"/>
+            <category name="War Dog Karnivore"/>
           </categories>
           <selections>
             <selection id="unit7-m0" name="War Dog Karnivore" type="model" number="1">
@@ -837,6 +845,7 @@ You can re-roll the Advance roll.</characteristic>
             <category name="Chaos"/>
             <category name="War Dog"/>
             <category name="Stalker"/>
+            <category name="War Dog Stalker"/>
           </categories>
           <selections>
             <selection id="unit8-m0" name="War Dog Stalker" type="model" number="1">
@@ -936,6 +945,7 @@ You can re-roll the Advance roll.</characteristic>
             <category name="Chaos"/>
             <category name="War Dog"/>
             <category name="Stalker"/>
+            <category name="War Dog Stalker"/>
           </categories>
           <selections>
             <selection id="unit9-m0" name="War Dog Stalker" type="model" number="1">
@@ -1035,6 +1045,7 @@ You can re-roll the Advance roll.</characteristic>
             <category name="Chaos"/>
             <category name="War Dog"/>
             <category name="Stalker"/>
+            <category name="War Dog Stalker"/>
           </categories>
           <selections>
             <selection id="unit10-m0" name="War Dog Stalker" type="model" number="1">
@@ -1134,6 +1145,7 @@ You can re-roll the Advance roll.</characteristic>
             <category name="Chaos"/>
             <category name="War Dog"/>
             <category name="Stalker"/>
+            <category name="War Dog Stalker"/>
           </categories>
           <selections>
             <selection id="unit11-m0" name="War Dog Stalker" type="model" number="1">
@@ -1233,6 +1245,7 @@ You can re-roll the Advance roll.</characteristic>
             <category name="Chaos"/>
             <category name="War Dog"/>
             <category name="Stalker"/>
+            <category name="War Dog Stalker"/>
           </categories>
           <selections>
             <selection id="unit12-m0" name="War Dog Stalker" type="model" number="1">

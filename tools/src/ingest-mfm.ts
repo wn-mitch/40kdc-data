@@ -28,6 +28,8 @@
  *                    (supersedes the 10e known-support-10e.ts scrape)
  *   dataslates    Stamp dump-verified records with the dump's dataslate; demote
  *                 records that claim dump confirmation but fail verification
+ *   unit-keywords Set unit keywords to the dump's miniature keywords plus the
+ *                 datasheet name (an additional keyword under the Core Rules)
  *   seed-units    Create skeleton units for dump datasheets with no repo entity
  *                 (stats/points/keywords/role/model_count). The other subcommands
  *                 only reconcile existing units; this is the one that adds new ones.
@@ -85,6 +87,7 @@ import {
   buildMatchupReport,
 } from "./mfm/mission-matchups.js";
 import { runBaseSizes, buildBaseSizeReport } from "./mfm/base-sizes.js";
+import { runUnitKeywords, buildUnitKeywordsReport } from "./mfm/unit-keywords.js";
 import {
   runChapterScope,
   buildChapterScopeReport,
@@ -1160,6 +1163,18 @@ async function runMissionMatchupsCmd(
     console.log("DRY RUN — no files written. Re-run with --write to apply.");
 }
 
+async function runUnitKeywordsCmd(dump: MfmDump, write: boolean): Promise<void> {
+  const report = runUnitKeywords(dump);
+  fs.mkdirSync(REPORT_DIR, { recursive: true });
+  const reportPath = path.join(REPORT_DIR, "mfm-unit-keywords.md");
+  fs.writeFileSync(reportPath, buildUnitKeywordsReport(report, write));
+  console.log(`Unit-keywords report → ${path.relative(REPO_ROOT, reportPath)}`);
+  console.log(`Changed ${report.changed.length}, confirmed ${report.confirmed}.`);
+  await applyWrites(report.staged, { write, label: "unit-keywords" });
+  if (!write)
+    console.log("DRY RUN — no files written. Re-run with --write to apply.");
+}
+
 async function runBaseSizesCmd(dump: MfmDump, write: boolean): Promise<void> {
   const report = runBaseSizes(dump);
   fs.mkdirSync(REPORT_DIR, { recursive: true });
@@ -1635,6 +1650,7 @@ export const INGEST_MFM_COMMANDS = [
   "missions",
   "mission-matchups",
   "base-sizes",
+  "unit-keywords",
   "chapter-scope",
   "wargear",
   "wargear-budgets",
@@ -1701,6 +1717,7 @@ export async function runIngestMfmCommand(
   else if (command === "mission-matchups")
     await runMissionMatchupsCmd(dump, options.write);
   else if (command === "base-sizes") await runBaseSizesCmd(dump, options.write);
+  else if (command === "unit-keywords") await runUnitKeywordsCmd(dump, options.write);
   else if (command === "chapter-scope")
     await runChapterScopeCmd(dump, options.write);
   else if (command === "wargear")

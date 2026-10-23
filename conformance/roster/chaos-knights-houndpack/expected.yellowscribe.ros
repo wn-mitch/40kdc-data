@@ -45,6 +45,7 @@ You can re-roll the Advance roll.</characteristic>
             <category name="Chaos"/>
             <category name="War Dog"/>
             <category name="Karnivore"/>
+            <category name="War Dog Karnivore"/>
           </categories>
           <selections>
             <selection id="unit0-m0" name="War Dog Karnivore" type="model" number="1">
@@ -140,6 +141,7 @@ You can re-roll the Advance roll.</characteristic>
             <category name="Chaos"/>
             <category name="War Dog"/>
             <category name="Karnivore"/>
+            <category name="War Dog Karnivore"/>
           </categories>
           <selections>
             <selection id="unit1-m0" name="War Dog Karnivore" type="model" number="1">
@@ -235,6 +237,7 @@ If 1+ enemy units destroyed, enemy units within 3" of that unit must take a Batt
             <category name="Chaos"/>
             <category name="War Dog"/>
             <category name="Executioner"/>
+            <category name="War Dog Executioner"/>
           </categories>
           <selections>
             <selection id="unit2-m0" name="War Dog Executioner" type="model" number="1">

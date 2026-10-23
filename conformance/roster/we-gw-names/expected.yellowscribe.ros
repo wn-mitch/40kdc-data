@@ -40,6 +40,7 @@ Add one rolled D6 to your Blessings of Khorne for each Bloodshed points you have
             <category name="Chaos"/>
             <category name="Khorne"/>
             <category name="Berzerkers"/>
+            <category name="Khorne Berzerkers"/>
           </categories>
           <selections>
             <selection id="unit0-m0" name="Khorne Berzerkers" type="model" number="1">
@@ -112,7 +113,6 @@ Add one rolled D6 to your Blessings of Khorne for each Bloodshed points you have
             <category name="Chaos"/>
             <category name="Chaos Spawn"/>
             <category name="Spawn"/>
-            <category name="Mutant"/>
             <category name="Khorne"/>
           </categories>
           <selections>
@@ -175,6 +175,8 @@ Add one rolled D6 to your Blessings of Khorne for each Bloodshed points you have
             <category name="Chaos"/>
             <category name="Rhino"/>
             <category name="Khorne"/>
+            <category name="Frame"/>
+            <category name="Chaos Rhino"/>
           </categories>
           <selections>
             <selection id="unit2-m0" name="Chaos Rhino" type="model" number="1">

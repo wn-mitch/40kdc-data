@@ -209,7 +209,9 @@
       "Smoke",
       "Chaos",
       "Tzeentch",
-      "Land Raider"
+      "Land Raider",
+      "Frame",
+      "Chaos Land Raider"
     ],
     "faction_keywords": [
       "Thousand Sons"
@@ -539,7 +541,9 @@
       "Smoke",
       "Chaos",
       "Tzeentch",
-      "Vindicator"
+      "Vindicator",
+      "Frame",
+      "Chaos Vindicator"
     ],
     "faction_keywords": [
       "Thousand Sons"
@@ -629,7 +633,9 @@
       "Smoke",
       "Chaos",
       "Tzeentch",
-      "Rhino"
+      "Rhino",
+      "Frame",
+      "Chaos Rhino"
     ],
     "faction_keywords": [
       "Thousand Sons"
@@ -1175,7 +1181,8 @@
       "Tzeentch",
       "Rubricae",
       "Scarab Occult",
-      "Psyker"
+      "Psyker",
+      "Scarab Occult Terminators"
     ],
     "faction_keywords": [
       "Thousand Sons"
@@ -1353,7 +1360,9 @@
       "Smoke",
       "Chaos",
       "Tzeentch",
-      "Predator Destructor"
+      "Predator Destructor",
+      "Frame",
+      "Chaos Predator Destructor"
     ],
     "faction_keywords": [
       "Thousand Sons"
@@ -1441,7 +1450,6 @@
       "Vehicle",
       "Walker",
       "Daemon",
-      "Smoke",
       "Chaos",
       "Tzeentch",
       "Defiler"
@@ -1551,7 +1559,8 @@
       "Psyker",
       "Chaos",
       "Tzeentch",
-      "Daemon Prince"
+      "Daemon Prince",
+      "Daemon Prince of Tzeentch with Wings"
     ],
     "faction_keywords": [
       "Thousand Sons"
@@ -1839,7 +1848,8 @@
       "Psyker",
       "Chaos",
       "Tzeentch",
-      "Exalted Sorcerer"
+      "Exalted Sorcerer",
+      "Exalted Sorcerer on Disc of Tzeentch"
     ],
     "faction_keywords": [
       "Thousand Sons"
@@ -2086,7 +2096,8 @@
       "Terminator",
       "Chaos",
       "Tzeentch",
-      "Sorcerer"
+      "Sorcerer",
+      "Sorcerer in Terminator Armour"
     ],
     "faction_keywords": [
       "Thousand Sons"
@@ -2168,7 +2179,9 @@
       "Smoke",
       "Chaos",
       "Tzeentch",
-      "Predator Annihilator"
+      "Predator Annihilator",
+      "Frame",
+      "Chaos Predator Annihilator"
     ],
     "faction_keywords": [
       "Thousand Sons"
@@ -2426,7 +2439,8 @@
       "Psyker",
       "Chaos",
       "Tzeentch",
-      "Daemon Prince"
+      "Daemon Prince",
+      "Daemon Prince of Tzeentch"
     ],
     "faction_keywords": [
       "Thousand Sons"
@@ -2507,7 +2521,8 @@
       "Prism of Zadophon",
       "Psyker",
       "Tzaangor Shaman",
-      "Tzeentch"
+      "Tzeentch",
+      "Kaa'skrek"
     ],
     "faction_keywords": [
       "Thousand Sons"
@@ -2604,7 +2619,8 @@
       "Prism of Zadophon",
       "Psyker",
       "Rubricae",
-      "Tzeentch"
+      "Tzeentch",
+      "Prism of Zadophon Rubric Marines"
     ],
     "faction_keywords": [
       "Thousand Sons"
@@ -2674,7 +2690,8 @@
       "Mounted",
       "Mutant",
       "Prism of Zadophon",
-      "Tzeentch"
+      "Tzeentch",
+      "Prism of Zadophon Tzaangor Enlightened"
     ],
     "faction_keywords": [
       "Thousand Sons"
@@ -2740,7 +2757,8 @@
       "Monster",
       "Prism of Zadophon",
       "Psyker",
-      "Tzeentch"
+      "Tzeentch",
+      "Zadophon the Soul Eater"
     ],
     "faction_keywords": [
       "Thousand Sons"
@@ -2815,7 +2833,8 @@
       "Summoned",
       "Horrors",
       "Blue",
-      "Brimstone"
+      "Brimstone",
+      "Blue Horrors"
     ],
     "faction_keywords": [
       "Scintillating Legions"
@@ -3130,7 +3149,8 @@
       "Summoned",
       "Pink",
       "Blue",
-      "Brimstone"
+      "Brimstone",
+      "Pink Horrors"
     ],
     "faction_keywords": [
       "Scintillating Legions"

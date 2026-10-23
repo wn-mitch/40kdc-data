@@ -395,7 +395,15 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords_any": [
+        "Chaplain",
+        "Judiciar"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "pious-enmity-vow-sworn-crusaders-black-templars",
     "game_version": {
       "edition": "11th",

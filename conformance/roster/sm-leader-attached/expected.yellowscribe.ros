@@ -49,11 +49,11 @@ Add 1 to the Strength characteristic of melee weapons equipped by models in this
             <category name="Infantry"/>
             <category name="Character"/>
             <category name="Epic Hero"/>
-            <category name="Grenades"/>
             <category name="Imperium"/>
             <category name="Tacticus"/>
             <category name="Chapter Master"/>
             <category name="High Marshal Helbrecht"/>
+            <category name="Explosives"/>
           </categories>
           <selections>
             <selection id="unit0-m0" name="High Marshal Helbrecht" type="model" number="1">
@@ -130,6 +130,7 @@ Add 1 to the Strength characteristic of melee weapons equipped by models in this
             <category name="Explosives"/>
             <category name="Imperium"/>
             <category name="Tacticus"/>
+            <category name="Assault Intercessor Squad"/>
           </categories>
           <selections>
             <selection id="unit1-m0" name="Assault Intercessor Sergeant" type="model" number="1">
