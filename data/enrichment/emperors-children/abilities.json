@@ -2444,7 +2444,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "10813114d0fbc8f00876d0259c3a7b5276332a96ba34c334fb3811e693cb3ebc",
     "version": "2025-q3",
@@ -2455,23 +2455,12 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attack-is",
-        "parameters": {
-          "shooting_type": "snap"
-        }
-      },
-      "effect": {
-        "type": "targeting",
-        "target": {
-          "owner": "enemy"
-        },
-        "modifier": {
-          "may": "cannot-target",
-          "target": "this-unit",
-          "kind": "shoot"
-        }
+      "type": "rule-state",
+      "target": "this-unit",
+      "modifier": {
+        "direction": "suppressed",
+        "rule_kind": "core-rule",
+        "rule": "overwatch-against-bearer"
       }
     },
     "scope": {

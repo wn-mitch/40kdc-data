@@ -675,15 +675,42 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "0e4216955d3ee9d0506abcfe2858b2e25966c78efb01cdd50c20f96e91ca3a49",
     "version": "2025-q3",
     "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "benefit-of-cover"
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "type": "happened",
+          "parameters": {
+            "event": "after-roll",
+            "subject": "event-subject",
+            "object": "this-unit",
+            "filter": {
+              "roll": "hit",
+              "result": "success"
+            },
+            "window": "event"
+          }
+        }
+      },
+      "effect": {
+        "type": "rule-state",
+        "target": "selected-unit",
+        "modifier": {
+          "direction": "suppressed",
+          "rule_kind": "core-rule",
+          "rule": "benefit-of-cover"
+        }
       }
     },
     "scope": {
@@ -693,8 +720,14 @@
       "sisters-of-battle-immolator"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "agents-of-the-imperium"
+    "behavior": "reactive",
+    "faction_id": "agents-of-the-imperium",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
+    }
   },
   {
     "ability_id": "loyal-henchmen-agents-of-the-imperium",
@@ -3508,7 +3541,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "2da03b7130091392a402169c74d9b0ab1b9d2b1800d6e823b89164e440bcb539",
     "version": "2025-q3",
@@ -3527,10 +3560,17 @@
     },
     "unit_ids": [],
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "detachment_id": "veiled-blade-elimination-force",
     "community_notes": "[APPROX] When this model is targeted with the Grenades Stratagem, it inflicts a mortal wound on each D6 of 3+ instead of 4+ — a modifier to another Stratagem's dice, not directly expressible. Full rule in raw-text store.",
-    "faction_id": "agents-of-the-imperium"
+    "faction_id": "agents-of-the-imperium",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "stratagem",
+        "id": "explosives"
+      }
+    }
   },
   {
     "ability_id": "intraneural-biotech-veiled-blade-elimination-force-agents-of-the-imperium",

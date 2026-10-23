@@ -5084,19 +5084,31 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "grey-knights",
     "detachment_id": "hallowed-conclave",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "roll-result",
+      "target": "this-unit",
+      "modifier": {
+        "roll": "hit",
+        "succeeds_on": 5
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "resolution"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "stratagem"
+      }
+    },
+    "source_digest": "ed374c0cd956a5573ff766f4ae845e027af97de2cf222d98234cb0c218a95f26"
   },
   {
     "ability_id": "one-foot-in-the-future-augurium-task-force-grey-knights",
@@ -6842,19 +6854,53 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "grey-knights",
     "detachment_id": "brotherhood-strike",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "or",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-model",
+              "filter": {
+                "state": "on-battlefield"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-model",
+              "filter": {
+                "state": "in-strategic-reserves"
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "ability-modifier",
+        "target": "this-model",
+        "modifier": {
+          "ability": "gate-of-infinity-grey-knights",
+          "aspect": "selections",
+          "operation": "add",
+          "value": 1
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "activated",
+    "source_digest": "a0b3775cf94b83c4c6f4a09309c992792bdc7da31b50f48b29e5c1029631ccab"
   },
   {
     "ability_id": "truesilver-aegis-argent-assault-grey-knights",

@@ -83,12 +83,14 @@ describe("Semantic authoring test-family compiler", () => {
     expect(() => normalizeFingerprintParameters("test", { target: "this-unit", test: "battle-shock", range: "engagement" }, 1)).toThrow();
   });
 
-  it("reproduces terror-made-manifest-chaos-space-marines' test node exactly (its own within.of names a friendly-keyword filter, not a fixed role)", () => {
-    const entry = authored("chaos-space-marines", "terror-made-manifest-chaos-space-marines");
-    const steps = (entry.effect as { steps: Array<{ effect: unknown }> }).steps;
+  it("names a friendly-keyword filter, not a fixed role, as its own within.of", () => {
     expect(compiled([leaf("EFFECT", "test", {
       target: "enemy", range: "inches", within_inches: 12, of_owner: "friendly", of_keywords: ["HERETIC ASTARTES"], test: "battle-shock", modifier: -1,
-    })]).mechanics.effect).toEqual(steps[0]!.effect);
+    })]).mechanics.effect).toEqual({
+      type: "test",
+      target: { owner: "enemy", within: { range: { inches: 12 }, of: { owner: "friendly", all_of: ["HERETIC ASTARTES"] } } },
+      modifier: { test: "battle-shock", modifier: -1 },
+    });
   });
 
   it("reproduces powers-of-da-waaagh-orks' test node exactly (nested under for-each-unit; target here is its own \"selected-unit\" binding, not this family's, so pinned as this-unit)", () => {

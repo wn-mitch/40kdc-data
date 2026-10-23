@@ -878,7 +878,20 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Astartes",
+        "Vehicle"
+      ],
+      "excluded_keywords": [
+        "Dedicated Transport",
+        "Fly",
+        "Walker"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit"
+    },
     "ability_id": "might-of-the-machine-spirit-ironstorm-spearhead-adeptus-astartes",
     "game_version": {
       "edition": "11th",

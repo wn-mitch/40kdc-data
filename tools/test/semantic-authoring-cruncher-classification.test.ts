@@ -24,6 +24,15 @@ describe("pipeline-8b cruncher unsupported classification", () => {
     expect(classifyUnsupported(unsupported)).toEqual({ honestUnknown: 0, outsideDamagePath: 1, unrecognizedShape: 0 });
   });
 
+  it("passes an effect marked as outside the cruncher's scope, but not an unmarked one", () => {
+    const marked = effectToBuffs({ type: "rule-state", target: "this-unit", modifier: { rule_kind: "faction-rule", rule: "example-doctrine", state: "active" } }, source, ctx).unsupported;
+    expect(marked.map((item) => item.reason)).toEqual(['effect type "rule-state" is not modelled by the buff layer']);
+    expect(classifyUnsupported(marked)).toEqual({ honestUnknown: 0, outsideDamagePath: 1, unrecognizedShape: 0 });
+    // A reroll whose subset cannot be parsed is a damage-path gap, never a marked exemption.
+    const unparsed = [{ reason: 're-roll on "hit" (subset "example") is outside the damage path', effectFragment: { type: "re-roll", target: "this-unit", modifier: { roll: "hit", subset: "example" } } }];
+    expect(classifyUnsupported(unparsed)).toEqual({ honestUnknown: 0, outsideDamagePath: 0, unrecognizedShape: 1 });
+  });
+
   it("trusts an 'outside the damage path' label only for a stat or roll off the damage path", () => {
     const label = (stat: string) => ({ reason: `stat-modifier on "${stat}" is outside the damage path`, effectFragment: { type: "stat-modifier", target: "this-unit", modifier: { stat, operation: "add", value: 1 } } });
     expect(classifyUnsupported([label("Ld")])).toEqual({ honestUnknown: 0, outsideDamagePath: 1, unrecognizedShape: 0 });
@@ -148,19 +157,21 @@ describe("pipeline-8b cruncher unsupported classification", () => {
     expect(classify({ type: "select-units", selector: { ...selector, filter: { owner: "friendly" } }, effect: { type: "re-roll", target: "selected-unit", modifier: { roll: "wound", subset: "ones" } } })).toEqual({ honestUnknown: 0, outsideDamagePath: 0, unrecognizedShape: 0 });
   });
 
-  it("counts a dice table off the damage path only when no outcome touches an attack", () => {
+  it("counts a dice table off the damage path, and one that touches an attack as marked outside the cruncher's scope", () => {
     const harm = { results: [2, 3, 4, 5, 6], effect: { type: "mortal-wounds", target: "selected-unit", modifier: { count: "D3" } } };
     const nothing = { results: [1], effect: { type: "no-effect" } };
     const hitPenalty = { results: [6], effect: { type: "roll-modifier", target: "this-unit", modifier: { roll: "hit", operation: "add", value: 1 } } };
     expect(classify({ type: "dice-table", dice: "D6", outcomes: [nothing, harm] })).toEqual(outside);
-    expect(classify({ type: "dice-table", dice: "D6", outcomes: [nothing, { ...harm, results: [2, 3, 4, 5] }, hitPenalty] })).toEqual(gap);
+    // A rolled table is not a fixed buff: OUTSIDE_CRUNCHER_SCOPE marks it, so it is not a gap.
+    expect(classify({ type: "dice-table", dice: "D6", outcomes: [nothing, { ...harm, results: [2, 3, 4, 5] }, hitPenalty] })).toEqual(outside);
   });
 
   it("separates deployment grants and non-combat roll results from damage-path ones", () => {
     expect(classify({ type: "ability-grant", target: "this-unit", modifier: { ability: "scouts", value: 6 } })).toEqual(outside);
     expect(classify({ type: "roll-result", target: "this-unit", modifier: { roll: "advance", result: 6 } })).toEqual(outside);
     expect(classify({ type: "roll-result", target: "this-unit", modifier: { roll: "hit", critical_on: 5 } })).toEqual({ honestUnknown: 0, outsideDamagePath: 0, unrecognizedShape: 0 });
-    expect(classify({ type: "roll-result", target: "this-unit", modifier: { roll: "hit", succeeds_on: 5 } })).toEqual(gap);
+    // A fixed hit outcome beyond a critical threshold is marked outside the cruncher's scope.
+    expect(classify({ type: "roll-result", target: "this-unit", modifier: { roll: "hit", succeeds_on: 5 } })).toEqual(outside);
   });
 
   it("does not count a defender Toughness lift the target perspective models", () => {
@@ -190,8 +201,8 @@ describe("pipeline-8b cruncher unsupported classification", () => {
     // stackableBuffsFor pulls a record granted to the unit onto it as levers.
     expect(classifyUnsupported(grantOf("fabricated-reroll-rule"), resolve)).toEqual({ honestUnknown: 0, outsideDamagePath: 0, unrecognizedShape: 0 });
     expect(classifyUnsupported(grantOf("fabricated-reroll-rule", { owner: "friendly", all_of: ["EXAMPLE"] }), resolve)).toEqual({ honestUnknown: 0, outsideDamagePath: 0, unrecognizedShape: 0 });
-    // What the granted record itself cannot model still counts.
-    expect(classifyUnsupported(grantOf("fabricated-half-rule"), resolve)).toEqual(gap);
+    // What the granted record itself cannot model still counts, here as a marked out-of-scope outcome.
+    expect(classifyUnsupported(grantOf("fabricated-half-rule"), resolve)).toEqual(outside);
     // A damage record granted to an enemy unit is not pulled onto the crunched unit.
     expect(classifyUnsupported(grantOf("fabricated-reroll-rule", { owner: "enemy" }), resolve)).toEqual(gap);
     expect(classifyUnsupported(grantOf("fabricated-missing-rule"), resolve)).toEqual(gap);
@@ -210,10 +221,10 @@ describe("pipeline-8b cruncher unsupported classification", () => {
     const effect = { type: "roll-modifier", target: "event-subject", modifier: { roll: "hit", operation: "add", value: 1 } };
     const filtered = { event: "used", filter: { kind: "example" }, subject: { owner: "friendly", all_of: ["EXAMPLE"] } };
 
-    it("reports an unbound event subject as an unrecognized shape", () => {
+    it("reports an unbound event subject as marked outside the cruncher's scope", () => {
       const { unsupported } = effectToBuffs(effect, source, ctx);
       expect(unsupported.map((item) => item.reason)).toEqual(['target "event-subject" is not resolved by the buff engine']);
-      expect(classifyUnsupported(unsupported).unrecognizedShape).toBe(1);
+      expect(classifyUnsupported(unsupported)).toEqual({ honestUnknown: 0, outsideDamagePath: 1, unrecognizedShape: 0 });
     });
 
     it("judges a friendly trigger subject as the matching unit sees it", () => {

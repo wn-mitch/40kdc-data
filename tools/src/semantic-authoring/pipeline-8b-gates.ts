@@ -147,6 +147,31 @@ const DAMAGE_STATS = new Set(["A", "S", "T", "Sv", "AP", "D", "WS", "BS"]);
 // Which objective an ability picks decides control, never an attack's damage.
 const OBJECTIVE_SELECTION = /^select-objective: /u;
 const UNMODELLED_EFFECT_TYPE = /^effect type "(.*)" is not modelled by the buff layer$/u;
+/**
+ * Effects marked as not damage-affecting for the cruncher. Each can change an attack in play, but the
+ * single-attack expected-value engine does not model it; it reports the effect as unsupported at
+ * runtime and the record publishes from its leaves. Marking is deliberate, one reason per entry; an
+ * unlisted shape stays a gap.
+ */
+const OUTSIDE_CRUNCHER_SCOPE: ReadonlyArray<{ reason: RegExp; why: string }> = [
+  { reason: /^effect type "rule-state" is not modelled by the buff layer$/u, why: "a named rule's state (an active doctrine) is a scenario choice, not a buff" },
+  { reason: /^effect type "ability-activate" is not modelled by the buff layer$/u, why: "activating another ability resolves that ability, not a buff of this one" },
+  { reason: /^effect type "resource-(spend|die)" is not modelled by the buff layer$/u, why: "spending a banked resource (miracle dice) is a player decision per roll" },
+  { reason: /^effect type "weapon-grant" is not modelled by the buff layer$/u, why: "a granted weapon is a loadout change, not a modifier to the crunched weapon" },
+  { reason: /^effect type "ability-modifier" is not modelled by the buff layer$/u, why: "a change to another ability's numbers resolves through that ability" },
+  { reason: /^effect type "dice-table" is not modelled by the buff layer$/u, why: "a rolled outcome table is not a fixed buff" },
+  { reason: /^effect type "test-exemption" is not modelled by the buff layer$/u, why: "a test exemption changes no attack" },
+  { reason: /^ignore-modifiers: only hit and wound rolls and WS\/BS are modelled$/u, why: "ignoring modifiers to other rolls or characteristics is not modelled" },
+  { reason: /^stat-modifier: operation "set" not supported$/u, why: "setting a characteristic has no single delta" },
+  { reason: /^roll-result on "(hit|wound|save)": only a critical threshold on hit or wound rolls is modelled$/u, why: "fixed roll outcomes beyond a critical threshold are not modelled" },
+  { reason: /^target "event-subject" is not resolved by the buff engine$/u, why: "the triggering unit is bound only at runtime" },
+  { reason: /^select-weapon: a bound weapon is not resolved by the buff engine$/u, why: "a chosen weapon is bound only at runtime" },
+];
+
+/** Whether an unsupported item is marked as outside the cruncher's scope. */
+export function isOutsideCruncherScope(item: EffectTranslation["unsupported"][number]): boolean {
+  return OUTSIDE_CRUNCHER_SCOPE.some((entry) => entry.reason.test(item.reason));
+}
 // translateStatModifier's note for a defender stat seen from the attacker; the target perspective models it.
 const DEFENDER_SIDE_STAT = /: defender-side stat; applies when the buffed unit is the target$/u;
 
@@ -275,7 +300,8 @@ export function classifyUnsupported(
     else if (isOutsideDamagePath(item)) outsideDamagePath += 1;
     else {
       const granted = recordGrantCounts(item, recordEffect, depth);
-      if (granted === undefined) unrecognizedShape += 1;
+      if (granted === undefined && isOutsideCruncherScope(item)) outsideDamagePath += 1;
+      else if (granted === undefined) unrecognizedShape += 1;
       else {
         honestUnknown += granted.honestUnknown;
         outsideDamagePath += granted.outsideDamagePath;

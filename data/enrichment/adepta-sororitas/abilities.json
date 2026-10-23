@@ -328,25 +328,48 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "31d06f446524facd1975a55d93610fde2f3baceeb3c1a436a08a0fec343fb026",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "selected",
+            "filter": {
+              "to": "fight"
+            },
+            "optional": true
+          },
+          "effect": {
+            "type": "resource-spend",
+            "target": "this-model",
+            "modifier": {
+              "pool": "miracle-dice-pool",
+              "amount": 1
+            }
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "after-roll",
+            "filter": {
+              "roll": "wound"
+            }
+          },
+          "effect": {
+            "type": "mortal-wounds",
+            "target": "defender",
+            "modifier": {
+              "count": 1
+            }
+          }
         }
-      },
-      "effect": {
-        "type": "mortal-wounds",
-        "target": "defender",
-        "modifier": {
-          "count": 1
-        }
-      }
+      ]
     },
     "scope": {
       "duration": "phase"
@@ -355,7 +378,7 @@
       "palatine"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
+    "behavior": "reactive",
     "faction_id": "adepta-sororitas"
   },
   {
@@ -672,7 +695,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "362acf3a25fcba869b910223c2ddfa7371fd481987b715562a5ab41504a5c443",
     "version": "2025-q3",
@@ -681,28 +704,30 @@
       "steps": [
         {
           "type": "stat-modifier",
-          "target": "this-model",
+          "target": "this-unit",
           "modifier": {
             "stat": "A",
             "operation": "set",
             "value": 6,
             "weapons": {
+              "type": "melee",
               "name": "arco-flails"
             }
           }
         },
         {
           "type": "weapon-ability-grant",
-          "target": "this-model",
+          "target": "this-unit",
           "modifier": {
-            "weapons": {
-              "name": "arco-flails"
-            },
             "keywords": [
               {
                 "keyword_id": "hazardous"
               }
-            ]
+            ],
+            "weapons": {
+              "type": "melee",
+              "name": "arco-flails"
+            }
           }
         }
       ]
@@ -721,12 +746,7 @@
       "filter": {
         "to": "fight"
       },
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
-        }
-      }
+      "optional": true
     },
     "faction_id": "adepta-sororitas"
   },
@@ -1322,21 +1342,33 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "df8d2d762cc8136e411f1d28601f4933bc1baf3ea2af13b7fdaef4e8a1c6fbfb",
+    "source_digest": "5cf75e4ae8ef0056a212e10c504ef8443efaa6ece9a5ccce3b04ecb4c43ee098",
     "version": "2025-q3",
     "effect": {
-      "type": "resource-die",
-      "target": "this-model",
-      "modifier": {
-        "pool": "miracle-dice-pool",
-        "operation": "add",
-        "value": 6
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "this-model",
+          "filter": {
+            "state": "on-battlefield"
+          }
+        }
+      },
+      "effect": {
+        "type": "resource-die",
+        "target": "this-model",
+        "modifier": {
+          "pool": "miracle-dice-pool",
+          "operation": "add",
+          "value": 6
+        }
       }
     },
     "scope": {
-      "duration": "battle-round"
+      "duration": "permanent"
     },
     "unit_ids": [
       "triumph-of-saint-katherine"
@@ -1344,9 +1376,23 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "community_notes": "The Triumph contributes a guaranteed value-6 Miracle die to the pool each battle round; modeled with the pooled-resource `pool-add-die` effect. Previously punted as an opaque ability-grant grant_type.",
-    "trigger": {
-      "event": "round-started"
-    },
+    "trigger": [
+      {
+        "event": "resource-gained",
+        "filter": {
+          "pool": "miracle-dice-pool"
+        }
+      },
+      {
+        "event": "turn-started",
+        "condition": {
+          "type": "player-turn-is",
+          "parameters": {
+            "turn": "your-turn"
+          }
+        }
+      }
+    ],
     "faction_id": "adepta-sororitas"
   },
   {
@@ -1929,27 +1975,103 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "7e0bcde68ad20fa8adedc20e796af870d1c3aed10a77c8b9842edbd4f230efde",
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "this-unit",
-      "modifier": {
-        "stat": "A",
-        "operation": "add",
-        "value": 3
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "trigger": [
+            {
+              "event": "selected",
+              "filter": {
+                "to": "shoot"
+              },
+              "optional": true
+            },
+            {
+              "event": "selected",
+              "filter": {
+                "to": "fight"
+              },
+              "optional": true
+            }
+          ],
+          "duration": "phase",
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "resource-spend",
+                "target": "this-model",
+                "modifier": {
+                  "pool": "miracle-dice-pool",
+                  "amount": 1
+                }
+              },
+              {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "stat-modifier",
+                    "target": "this-unit",
+                    "modifier": {
+                      "stat": "A",
+                      "operation": "add",
+                      "value": 3,
+                      "weapons": {
+                        "name": "Fidelis"
+                      }
+                    }
+                  },
+                  {
+                    "type": "stat-modifier",
+                    "target": "this-unit",
+                    "modifier": {
+                      "stat": "A",
+                      "operation": "add",
+                      "value": 3,
+                      "weapons": {
+                        "name": "Lance of Illumination"
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "destroyed",
+            "subject": "this-model",
+            "object": {
+              "owner": "enemy"
+            }
+          },
+          "effect": {
+            "type": "resource-gain",
+            "target": "this-model",
+            "modifier": {
+              "pool": "miracle-dice-pool",
+              "amount": 1
+            }
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "unit_ids": [
       "morvenn-vahl"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
+    "behavior": "reactive",
     "faction_id": "adepta-sororitas"
   },
   {
@@ -8716,7 +8838,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "14541b7b31a0fa29ba2280df21cecf0853c3567528b3fed28ddf36c20f0569e2",
     "version": "2025-q3",
@@ -8725,12 +8847,13 @@
     "faction_id": "adepta-sororitas",
     "detachment_id": "army-of-faith",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "roll-result",
-      "target": "this-model",
+      "target": "this-unit",
       "modifier": {
         "roll": "save",
+        "count": 1,
         "result": "pass"
       }
     },
@@ -8742,7 +8865,13 @@
         "ADEPTA SORORITAS"
       ]
     },
-    "community_notes": "Applies only to saving throws substituted with an Act of Faith: that saving throw is successful irrespective of the value of the Miracle dice used."
+    "community_notes": "Applies only to saving throws substituted with an Act of Faith: that saving throw is successful irrespective of the value of the Miracle dice used.",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "act-of-faith"
+      }
+    }
   },
   {
     "ability_id": "divine-miracle-sanctuary-guardians-adepta-sororitas",
@@ -9079,9 +9208,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "sanctuary-guardians-arco-flagellants"
     ],
@@ -9089,11 +9217,49 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "stat": "A",
+            "operation": "set",
+            "value": 6,
+            "weapons": {
+              "type": "melee",
+              "name": "arco-flails"
+            }
+          }
+        },
+        {
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "hazardous"
+              }
+            ],
+            "weapons": {
+              "type": "melee"
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "fight"
+      },
+      "optional": true
+    },
+    "source_digest": "0a0bbdb43906ef63204ea06aee6f2abab00f31425834e0ce4a31baeca4349e5a"
   },
   {
     "ability_id": "null-rod-sanctuary-canoness-adalya-adepta-sororitas",

@@ -290,24 +290,86 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "3facdd09f4f860335b1f2b1917fa5a199d172cb0b145ff80c8411f48b175f693",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "subject": "selected-unit",
+                "filter": {
+                  "within": {
+                    "of": "this-model",
+                    "range": {
+                      "inches": 12
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "matches",
+              "parameters": {
+                "subject": "selected-unit",
+                "filter": {
+                  "visible": {
+                    "to": "this-model"
+                  }
+                }
+              }
+            }
+          ]
         }
       },
       "effect": {
-        "type": "mortal-wounds",
-        "target": "defender",
-        "modifier": {
-          "count": "D3"
-        }
+        "type": "dice-table",
+        "dice": "D6",
+        "outcomes": [
+          {
+            "results": [
+              1
+            ],
+            "effect": {
+              "type": "mortal-wounds",
+              "target": "this-model",
+              "modifier": {
+                "count": "D3"
+              }
+            }
+          },
+          {
+            "results": [
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "effect": {
+              "type": "stat-modifier",
+              "target": "selected-unit",
+              "modifier": {
+                "stat": "A",
+                "operation": "subtract",
+                "value": 1
+              }
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -317,8 +379,18 @@
       "winged-hive-tyrant"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "tyranids"
+    "behavior": "reactive",
+    "faction_id": "tyranids",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "frenzied-metabolism-tyranids",

@@ -417,7 +417,22 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "any_of": [
+              "DEATHWING",
+              "RAVENWING"
+            ]
+          }
+        }
+      }
+    },
     "ability_id": "tactical-mastery-wrath-of-the-rock-dark-angels",
     "game_version": {
       "edition": "11th",

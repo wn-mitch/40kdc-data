@@ -1736,9 +1736,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "26c9618c790ea1167c3082e1d6dc5a33db6c0a97090ba77872b37869d23f4d83",
+    "source_digest": "5b53a7f85d021045f241136b39f838a593947615690e255f9641d89a38d4bf43",
     "version": "2025-q3",
     "effect": {
       "type": "rule-state",
@@ -1750,7 +1750,7 @@
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "unit_ids": [
       "sanctus"
@@ -5765,19 +5765,31 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "genestealer-cults",
     "detachment_id": "brood-brothers-auxilia",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "roll-result",
+      "target": "this-unit",
+      "modifier": {
+        "roll": "hit",
+        "succeeds_on": 5
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "resolution"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "stratagem"
+      }
+    },
+    "source_digest": "544b10d47a920e949466cc728d96877810fb7d3c49d52a0b40d193fb5840c02e"
   },
   {
     "ability_id": "frenzied-devotion-xenocreed-congregation-genestealer-cults",
@@ -6334,19 +6346,59 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "genestealer-cults",
     "detachment_id": "brood-brothers-auxilia",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "aura",
+      "target": "friendly-within-aura",
+      "modifier": {
+        "range": {
+          "inches": 9
+        },
+        "effect": {
+          "type": "stat-modifier",
+          "target": "event-subject",
+          "modifier": {
+            "stat": "AP",
+            "operation": "improve",
+            "value": 1,
+            "weapons": {
+              "type": "ranged"
+            }
+          }
+        },
+        "eligible": {
+          "owner": "friendly",
+          "all_of": [
+            "ASTRA MILITARUM"
+          ],
+          "any_of": [
+            "INFANTRY",
+            "MOUNTED"
+          ]
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
+      "optional": true
+    },
+    "usage": {
+      "frequency": "once-per-turn",
+      "per": "model"
+    },
+    "source_digest": "dcae61714a7468ed2174ed35378d71775962216d230623dc732490a003ee3fa9"
   },
   {
     "ability_id": "master-outrider-shanus-daskovian-genestealer-cults",

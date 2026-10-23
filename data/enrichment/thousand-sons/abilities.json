@@ -1111,17 +1111,41 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "044b8c7504c4d3f4df282301660880aacd885e7efed8ccb06d22bf9730cfe3a0",
     "version": "2025-q3",
     "effect": {
-      "type": "roll-result",
-      "target": "this-model",
-      "modifier": {
-        "roll": "any",
-        "result": 6
-      }
+      "type": "choice",
+      "options": [
+        {
+          "type": "roll-result",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "count": 1,
+            "result": 6
+          }
+        },
+        {
+          "type": "roll-result",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "wound",
+            "count": 1,
+            "result": 6
+          }
+        },
+        {
+          "type": "roll-result",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "save",
+            "count": 1,
+            "result": 6
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -1130,10 +1154,11 @@
       "infernal-master"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "activated",
     "community_notes": "defensive ability (skipped for damage calc)",
     "usage": {
-      "frequency": "once-per-turn"
+      "frequency": "once-per-turn",
+      "per": "unit"
     },
     "faction_id": "thousand-sons"
   },
@@ -2557,49 +2582,36 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "0e91e9ce75838cca115ee817dc5c0c2611e6581d99e5878031672e17a4ac626a",
     "version": "2025-q3",
     "effect": {
-      "type": "ability-part",
-      "trigger": {
-        "event": "move-ended",
-        "subject": "this-unit",
+      "type": "select-units",
+      "selector": {
         "filter": {
-          "move_types": [
-            "normal"
-          ]
+          "owner": "enemy"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "type": "moved-over",
+          "parameters": {
+            "subject": "selected-unit",
+            "by": "this-model"
+          }
         }
       },
       "effect": {
-        "type": "designate-target",
-        "designation": "flame-wreathed",
-        "select": {
-          "kind": "unit",
-          "selector": {
-            "filter": {
-              "owner": "enemy"
-            },
-            "count": {
-              "min": 1,
-              "max": 1
-            }
-          }
-        },
-        "applies": {
-          "to": "target",
-          "effect": {
-            "type": "rule-state",
-            "target": "this-unit",
-            "modifier": {
-              "direction": "suppressed",
-              "rule_kind": "core-rule",
-              "rule": "benefit-of-cover"
-            }
-          }
-        },
-        "duration": "turn"
+        "type": "rule-state",
+        "target": "selected-unit",
+        "modifier": {
+          "direction": "suppressed",
+          "rule_kind": "core-rule",
+          "rule": "benefit-of-cover"
+        }
       }
     },
     "scope": {
@@ -2609,9 +2621,18 @@
       "heldrake"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
+    "behavior": "reactive",
     "community_notes": "[APPROX] Each time this model ends a Normal move, select one enemy unit it moved over: until the end of the turn that unit cannot have the Benefit of Cover. The moved-over eligibility restriction is not encoded. Full rule in raw-text store.",
-    "faction_id": "thousand-sons"
+    "faction_id": "thousand-sons",
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "normal"
+        ]
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "servile-pawns-thousand-sons",
@@ -7552,7 +7573,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "612372e995f59335996ae4c6ba3de4a7bc7dd243634537023161628a22808063",
     "version": "2025-q3",
@@ -7566,42 +7587,37 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "sequence",
-          "steps": [
-            {
-              "type": "ignore-modifiers",
-              "target": "this-unit",
-              "modifier": {
-                "what": "characteristics",
-                "stats": [
-                  "M"
-                ]
-              }
-            },
-            {
-              "type": "ignore-modifiers",
-              "target": "this-unit",
-              "modifier": {
-                "what": "rolls",
-                "rolls": [
-                  "advance"
-                ]
-              }
-            }
-          ]
+          "type": "ignore-modifiers",
+          "target": "this-unit",
+          "modifier": {
+            "what": "characteristics",
+            "stats": [
+              "M"
+            ]
+          }
+        },
+        {
+          "type": "ignore-modifiers",
+          "target": "this-unit",
+          "modifier": {
+            "what": "rolls",
+            "rolls": [
+              "advance"
+            ]
+          }
         },
         {
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "weapons": {
-              "type": "ranged"
-            },
             "keywords": [
               {
                 "keyword_id": "assault"
               }
-            ]
+            ],
+            "weapons": {
+              "type": "ranged"
+            }
           }
         }
       ]

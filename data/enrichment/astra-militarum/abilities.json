@@ -1815,25 +1815,43 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "9e72d408efb1d13f0e033a4dc05fdb3cc8c7b108ec915f7d46d38d1865159b5d",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
+      "type": "dice-table",
+      "dice": "D6",
+      "outcomes": [
+        {
+          "results": [
+            1
+          ],
+          "effect": {
+            "type": "mortal-wounds",
+            "target": "this-unit",
+            "modifier": {
+              "count": "D3"
+            }
+          }
+        },
+        {
+          "results": [
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "effect": {
+            "type": "invulnerable-save",
+            "target": "this-unit",
+            "modifier": {
+              "invuln_sv": 4
+            }
+          }
         }
-      },
-      "effect": {
-        "type": "mortal-wounds",
-        "target": "defender",
-        "modifier": {
-          "count": "D3"
-        }
-      }
+      ]
     },
     "scope": {
       "duration": "phase"
@@ -1842,9 +1860,30 @@
       "primaris-psyker"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "defensive ability (skipped for damage calc)",
-    "faction_id": "astra-militarum"
+    "faction_id": "astra-militarum",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "covering-fire-astra-militarum",
@@ -7566,7 +7605,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "4d479104b1e93889718c8872bcec0a78702360871cd0e14db4b6507e4584bc85",
     "version": "2025-q3",
@@ -7575,16 +7614,39 @@
     "faction_id": "astra-militarum",
     "detachment_id": "steel-hammer",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "rule-state",
-      "target": {
-        "owner": "enemy"
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "type": "happened",
+          "parameters": {
+            "event": "after-roll",
+            "subject": "event-subject",
+            "object": "this-unit",
+            "filter": {
+              "roll": "hit",
+              "result": "success"
+            },
+            "window": "event"
+          }
+        }
       },
-      "modifier": {
-        "direction": "suppressed",
-        "rule_kind": "core-rule",
-        "rule": "benefit-of-cover"
+      "effect": {
+        "type": "rule-state",
+        "target": "selected-unit",
+        "modifier": {
+          "direction": "suppressed",
+          "rule_kind": "core-rule",
+          "rule": "benefit-of-cover"
+        }
       }
     },
     "scope": {
@@ -7595,6 +7657,19 @@
         "ASTRA MILITARUM",
         "TITANIC"
       ]
+    },
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ASTRA MILITARUM",
+          "TITANIC"
+        ]
+      }
     }
   },
   {
@@ -10655,19 +10730,51 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "astra-militarum",
     "detachment_id": "grizzled-company",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-modifier",
+          "target": "this-model",
+          "modifier": {
+            "ability": "voice-of-command",
+            "aspect": "recipients",
+            "operation": "add",
+            "recipients": {
+              "owner": "friendly",
+              "all_of": [
+                "OGRYN"
+              ]
+            }
+          }
+        },
+        {
+          "type": "army-rule",
+          "target": "this-model",
+          "modifier": {
+            "rule": "attachment",
+            "can_lead": {
+              "owner": "friendly",
+              "any_of": [
+                "BULLGRYN SQUAD",
+                "OGRYN SQUAD"
+              ]
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "48a3dbd76cb0966d0f2563e797efffb61023f6991f201b861e1cc0bf600c67ba"
   },
   {
     "ability_id": "ablative-plating-hammer-of-the-emperor-astra-militarum",
@@ -11847,19 +11954,33 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "astra-militarum",
     "detachment_id": "combined-arms",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "voice-of-command",
+        "aspect": "recipients",
+        "operation": "add",
+        "recipients": {
+          "owner": "friendly",
+          "any_of": [
+            "REGIMENT",
+            "SQUADRON"
+          ]
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "activated",
+    "source_digest": "ccbf532a9b47cb91abcbe3a6291143d4d1d9e93881ffdd8290233ded0dc363bf"
   },
   {
     "ability_id": "focus-attacks-draydens-lance-astra-militarum",

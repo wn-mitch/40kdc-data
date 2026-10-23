@@ -207,7 +207,11 @@
             </profile>
             <profile name="Righteous Repugnance" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Until the end of the phase, add 3 to the unit's Attacks characteristic.</characteristic>
+                <characteristic name="Description">-&gt; When the unit is selected to shoot, you may use this ability or when the unit is selected to fight, you may use this ability, until the end of the phase:
+  -&gt; Spend 1 Miracle die.
+  -&gt; Add 3 to the Attacks characteristic of Fidelis weapons equipped by models in this unit.
+  -&gt; Add 3 to the Attacks characteristic of Lance of Illumination weapons equipped by models in this unit.
+-&gt; Each time this model destroys an enemy unit: you gain 1 Miracle die.</characteristic>
               </characteristics>
             </profile>
             <profile name="Supreme Commander" typeName="Abilities">
@@ -334,7 +338,9 @@
             </profile>
             <profile name="Rapturous Blows" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">During the Fight phase, until the end of the phase, the target suffers 1 mortal wound.</characteristic>
+                <characteristic name="Description">Until the end of the phase:
+  -&gt; When the unit is selected to fight, you may use this ability: spend 1 Miracle die.
+  -&gt; After a Wound roll is made: the target suffers 1 mortal wound.</characteristic>
               </characteristics>
             </profile>
           </profiles>

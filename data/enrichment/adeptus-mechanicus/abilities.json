@@ -265,16 +265,50 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "c66e9df18c91d2ca13062d6be5fcb1615faa28a1ef6b8fa930d942005b697dd9",
     "version": "2025-q3",
     "effect": {
-      "type": "cp-gain",
-      "target": "this-model",
-      "modifier": {
-        "amount": 1
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "rule-state",
+          "target": "this-model",
+          "modifier": {
+            "direction": "suppressed",
+            "rule_kind": "keyword",
+            "rule": "SMOKE"
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "targets-selected",
+            "subject": {
+              "owner": "friendly"
+            },
+            "filter": {
+              "kind": "stratagem"
+            },
+            "object": "this-model"
+          },
+          "effect": {
+            "type": "dice-gated",
+            "dice": "D6",
+            "threshold": 5,
+            "comparison": "gte",
+            "on_success": {
+              "type": "cp-gain",
+              "target": "this-model",
+              "modifier": {
+                "amount": 1
+              }
+            },
+            "on_fail": null
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -283,7 +317,7 @@
       "onager-dunecrawler"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "faction_id": "adeptus-mechanicus"
   },
   {
@@ -292,39 +326,33 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "d04e741c5904458141a15bf79b3792176b15d968355d012912262091410de924",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attack-is",
-        "parameters": {
-          "shooting_type": "snap"
-        }
-      },
-      "effect": {
-        "type": "roll-result",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "hit",
-          "succeeds_on": 5,
-          "weapons": {
-            "type": "ranged"
-          }
-        }
+      "type": "roll-result",
+      "target": "this-unit",
+      "modifier": {
+        "roll": "hit",
+        "succeeds_on": 5
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "resolution"
     },
     "unit_ids": [
       "kataphron-destroyers"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "adeptus-mechanicus"
+    "behavior": "reactive",
+    "faction_id": "adeptus-mechanicus",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "stratagem"
+      }
+    }
   },
   {
     "ability_id": "battle-protocols-adeptus-mechanicus",
@@ -4544,9 +4572,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "efc3dade612026868ad91ce468f0ede9e19e714bf15807d8b33c6a2b56c7db1a",
+    "source_digest": "933d6792e125fb32cd84a6635c6a88336bf02535992bd857e1e36b1d2675ffe4",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -4555,23 +4583,12 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attack-is",
-        "parameters": {
-          "shooting_type": "snap"
-        }
-      },
-      "effect": {
-        "type": "targeting",
-        "target": {
-          "owner": "enemy"
-        },
-        "modifier": {
-          "may": "cannot-target",
-          "target": "this-unit",
-          "kind": "shoot"
-        }
+      "type": "rule-state",
+      "target": "this-unit",
+      "modifier": {
+        "direction": "suppressed",
+        "rule_kind": "core-rule",
+        "rule": "overwatch-against-bearer"
       }
     },
     "scope": {
@@ -4894,9 +4911,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "627d34ed72040a27c8426f3b5aad22ccc003bfe2f2ee2133c4dc990e73efe17c",
+    "source_digest": "40130239fa296ce60c6ddb26dd5957ccbde5bf456cc6690ee342a825ab51491d",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -4905,23 +4922,16 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "designate",
-          "target": "this-model",
-          "modifier": {
-            "tag": "conqueror-imperative-active"
-          }
-        },
-        {
-          "type": "designate",
-          "target": "this-model",
-          "modifier": {
-            "tag": "protector-imperative-active"
-          }
-        }
-      ]
+      "type": "ability-activate",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "doctrina-imperatives-adeptus-mechanicus",
+        "options": [
+          "conqueror-imperative",
+          "protector-imperative"
+        ],
+        "exclusive": true
+      }
     },
     "scope": {
       "duration": "permanent"
@@ -7506,19 +7516,29 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-mechanicus",
     "detachment_id": "haloscreed-battle-clade",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-activate",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "doctrina-imperatives-adeptus-mechanicus",
+        "options": [
+          "conqueror-imperative",
+          "protector-imperative"
+        ],
+        "exclusive": true
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "5f5c97c8041d7389a294b12fe0dd1148aef4f29eb32f557e335a702903bb3549"
   },
   {
     "ability_id": "data-blessed-autosermon-data-psalm-conclave-adeptus-mechanicus",
@@ -9643,19 +9663,29 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-mechanicus",
     "detachment_id": "cohort-cybernetica",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-activate",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "doctrina-imperatives-adeptus-mechanicus",
+        "options": [
+          "conqueror-imperative",
+          "protector-imperative"
+        ],
+        "exclusive": true
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "until-next-command-phase"
+    },
+    "behavior": "activated",
+    "source_digest": "df598f6cb0afdee08ac999b1b39dedb97a249d1ef2eb46bd29079d585a187fd9"
   },
   {
     "ability_id": "transoracular-dyad-wafers-haloscreed-battle-clade-adeptus-mechanicus",

@@ -2685,19 +2685,28 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "black-templars",
     "detachment_id": "fist-of-the-god-emperor",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-activate",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "combat-doctrines-black-templars",
+        "select": {
+          "by": "player"
+        },
+        "exclusive": true
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "until-next-command-phase"
+    },
+    "behavior": "activated",
+    "source_digest": "995f47207285072fbb96f419cceff223e7923e843bdc74d9d5c821098a44742c"
   },
   {
     "ability_id": "executioner-black-templars",

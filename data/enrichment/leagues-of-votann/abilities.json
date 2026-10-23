@@ -1569,7 +1569,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "cfd22aa8e2a84be34f13ea705da48e27b3419100a7554d8eb4780e610e599a20",
     "version": "2025-q3",
@@ -1586,29 +1586,31 @@
         },
         {
           "type": "choice",
-          "choice_label": "Change one roll made for this model to an unmodified 6",
           "options": [
             {
               "type": "roll-result",
-              "target": "this-model",
+              "target": "this-unit",
               "modifier": {
                 "roll": "hit",
+                "count": 1,
                 "result": 6
               }
             },
             {
               "type": "roll-result",
-              "target": "this-model",
+              "target": "this-unit",
               "modifier": {
                 "roll": "wound",
+                "count": 1,
                 "result": 6
               }
             },
             {
               "type": "roll-result",
-              "target": "this-model",
+              "target": "this-unit",
               "modifier": {
                 "roll": "save",
+                "count": 1,
                 "result": 6
               }
             }
@@ -1626,7 +1628,8 @@
     "behavior": "activated",
     "community_notes": "[APPROX] Once per turn, spend 1YP to change one Hit roll, Wound roll or saving throw made for this model to an unmodified 6; the change applies to a single roll, not all rolls of that kind. Full rule in raw-text store.",
     "usage": {
-      "frequency": "once-per-turn"
+      "frequency": "once-per-turn",
+      "per": "unit"
     },
     "faction_id": "leagues-of-votann"
   },
@@ -4569,7 +4572,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "baa6577884f8d131bff57acde59de461fb6c4751995c94070e3960f384d94e2f",
     "version": "2025-q3",
@@ -4578,7 +4581,7 @@
     "faction_id": "leagues-of-votann",
     "detachment_id": "needgaard-oathband",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -4591,24 +4594,24 @@
           }
         },
         {
-          "type": "conditional",
-          "condition": {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "phase-is",
-                "parameters": {
-                  "phase": "shooting"
-                }
+          "type": "ability-part",
+          "trigger": [
+            {
+              "event": "selected",
+              "filter": {
+                "to": "shoot"
               },
-              {
-                "type": "phase-is",
-                "parameters": {
-                  "phase": "fight"
-                }
-              }
-            ]
-          },
+              "optional": true
+            },
+            {
+              "event": "selected",
+              "filter": {
+                "to": "fight"
+              },
+              "optional": true
+            }
+          ],
+          "duration": "phase",
           "effect": {
             "type": "sequence",
             "steps": [
@@ -4939,19 +4942,51 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "needgaard-oathband",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "resource-spend",
+          "target": "this-model",
+          "modifier": {
+            "pool": "yp-pool",
+            "amount": 1
+          }
+        },
+        {
+          "type": "cost-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "of": "stratagem",
+            "operation": "decrease",
+            "amount": 1,
+            "applies_to": "the-triggering-use"
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "stratagem"
+      },
+      "optional": true
+    },
+    "usage": {
+      "frequency": "once-per-turn",
+      "per": "model"
+    },
+    "source_digest": "18b7f07f69539b46f9737b17a2719d5da5d330513c18a59d1b26af4d85d4e0bb"
   },
   {
     "ability_id": "ancestral-sentence-needgaard-oathband-leagues-of-votann",
@@ -4959,19 +4994,116 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "needgaard-oathband",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "optional": true,
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "resource-spend",
+                "target": "this-model",
+                "modifier": {
+                  "pool": "yp-pool",
+                  "amount": 3
+                }
+              },
+              {
+                "type": "designate",
+                "target": "this-unit",
+                "modifier": {
+                  "tag": "yp-spent-this-use",
+                  "clears_on": "phase"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "this-unit",
+                  "filter": {
+                    "designated": "yp-spent-this-use"
+                  }
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "weapon-ability-grant",
+            "target": "this-unit",
+            "modifier": {
+              "keywords": [
+                {
+                  "keyword_id": "sustained-hits",
+                  "parameters": {
+                    "value": 1
+                  }
+                }
+              ],
+              "weapons": {
+                "type": "ranged"
+              }
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-unit",
+              "filter": {
+                "designated": "yp-spent-this-use"
+              }
+            }
+          },
+          "effect": {
+            "type": "weapon-ability-grant",
+            "target": "this-unit",
+            "modifier": {
+              "keywords": [
+                {
+                  "keyword_id": "sustained-hits",
+                  "parameters": {
+                    "value": 2
+                  }
+                }
+              ],
+              "weapons": {
+                "type": "ranged"
+              }
+            }
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "stratagem"
+      }
+    },
+    "source_digest": "21aa8eb779488e4d5033db3c28ca3d40496306cc22ba37ab47f39daf7ce31371"
   },
   {
     "ability_id": "asset-manipulator-mercenary-oathband-leagues-of-votann",
@@ -5379,19 +5511,121 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "persecution-prospect",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "optional": true,
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "resource-spend",
+                "target": "this-model",
+                "modifier": {
+                  "pool": "yp-pool",
+                  "amount": 2
+                }
+              },
+              {
+                "type": "designate",
+                "target": "this-unit",
+                "modifier": {
+                  "tag": "yp-spent-this-use",
+                  "clears_on": "phase"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "this-unit",
+                  "filter": {
+                    "designated": "yp-spent-this-use"
+                  }
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "move",
+            "target": "this-unit",
+            "modifier": {
+              "move_type": "normal",
+              "distance": "D6"
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-unit",
+              "filter": {
+                "designated": "yp-spent-this-use"
+              }
+            }
+          },
+          "effect": {
+            "type": "move",
+            "target": "this-unit",
+            "modifier": {
+              "move_type": "normal",
+              "distance": 6
+            }
+          }
+        },
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "embark",
+            "allow": false
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": [
+      {
+        "event": "move-ended",
+        "subject": {
+          "owner": "enemy"
+        },
+        "filter": {
+          "move_types": [
+            "normal",
+            "advance",
+            "fall-back"
+          ]
+        }
+      },
+      {
+        "event": "used",
+        "filter": {
+          "kind": "stratagem"
+        }
+      }
+    ],
+    "source_digest": "20018d2ef5481b3f95e53edb586af8a6bf35edbf0de2ab9a2d6564a49d786094"
   },
   {
     "ability_id": "cogitated-need-hearthfyre-arsenal-leagues-of-votann",
@@ -5449,19 +5683,98 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "delve-assault-shift",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "optional": true,
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "resource-spend",
+                "target": "this-model",
+                "modifier": {
+                  "pool": "yp-pool",
+                  "amount": 2
+                }
+              },
+              {
+                "type": "designate",
+                "target": "this-unit",
+                "modifier": {
+                  "tag": "cyberstimm-infusion-yp-spent",
+                  "clears_on": "phase"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "attacker",
+                  "filter": {
+                    "designated": "cyberstimm-infusion-yp-spent"
+                  }
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "wound",
+              "subset": "ones"
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "attacker",
+              "filter": {
+                "designated": "cyberstimm-infusion-yp-spent"
+              }
+            }
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "wound",
+              "result_scope": "any-result"
+            }
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "stratagem"
+      }
+    },
+    "source_digest": "fecb464d09f0899a04f589217a5c716ebf0525b0a106c672b39f84c31027b82b"
   },
   {
     "ability_id": "dead-reckoning-needgaard-oathband-leagues-of-votann",
@@ -5741,19 +6054,77 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "mercenary-oathband",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "subset": "ones"
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": [
+            {
+              "event": "selected",
+              "filter": {
+                "to": "shoot"
+              },
+              "optional": true
+            },
+            {
+              "event": "selected",
+              "filter": {
+                "to": "fight"
+              },
+              "optional": true
+            }
+          ],
+          "duration": "phase",
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "resource-spend",
+                "target": "this-model",
+                "modifier": {
+                  "pool": "yp-pool",
+                  "amount": 3
+                }
+              },
+              {
+                "type": "weapon-ability-grant",
+                "target": "this-unit",
+                "modifier": {
+                  "keywords": [
+                    {
+                      "keyword_id": "sustained-hits",
+                      "parameters": {
+                        "value": 1
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "source_digest": "30b01d44eebad409c80990dd7dc0554af9c97fb84044f4a7005750a3b8fce72b"
   },
   {
     "ability_id": "exposed-flaws-persecution-prospect-leagues-of-votann",
@@ -5761,19 +6132,87 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "persecution-prospect",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "optional": true,
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "resource-spend",
+                "target": "this-model",
+                "modifier": {
+                  "pool": "yp-pool",
+                  "amount": 2
+                }
+              },
+              {
+                "type": "designate",
+                "target": "this-unit",
+                "modifier": {
+                  "tag": "exposed-flaws-yp-spent",
+                  "clears_on": "phase"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "or",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "attacker",
+                  "filter": {
+                    "designated": "exposed-flaws-yp-spent"
+                  }
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "event-object",
+                  "filter": {
+                    "designated": "assailed"
+                  }
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "wound",
+              "result_scope": "any-result"
+            }
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "stratagem"
+      }
+    },
+    "source_digest": "dc06160cc444dd43ea6e74bc471cf7ea2e291490b2af798d29236f4976f57b0c"
   },
   {
     "ability_id": "eye-for-weakness-persecution-prospect-leagues-of-votann",
@@ -5934,19 +6373,59 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "hearthband",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "stat": "S",
+            "operation": "improve",
+            "value": 1,
+            "weapons": {
+              "type": "ranged"
+            }
+          }
+        },
+        {
+          "type": "resource-spend",
+          "target": "this-model",
+          "modifier": {
+            "pool": "yp-pool",
+            "amount": 1
+          }
+        },
+        {
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "sustained-hits",
+                "parameters": {
+                  "value": 1
+                }
+              }
+            ],
+            "weapons": {
+              "type": "ranged"
+            }
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "activated",
+    "source_digest": "8f2526c3d4af17f4231c1db2a11a27e19e0feac4100625a1225acf5c1f1ad7be"
   },
   {
     "ability_id": "grand-artifice-mercenary-oathband-leagues-of-votann",
@@ -6971,19 +7450,143 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "mercenary-oathband",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "optional": true,
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "resource-spend",
+                "target": "this-model",
+                "modifier": {
+                  "pool": "yp-pool",
+                  "amount": 3
+                }
+              },
+              {
+                "type": "designate",
+                "target": "this-unit",
+                "modifier": {
+                  "tag": "optimal-expenditure-yp-spent",
+                  "clears_on": "phase"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "attacker",
+                  "filter": {
+                    "designated": "optimal-expenditure-yp-spent"
+                  }
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "subset": "ones"
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "attacker",
+                  "filter": {
+                    "designated": "optimal-expenditure-yp-spent"
+                  }
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "wound",
+              "subset": "ones"
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "attacker",
+              "filter": {
+                "designated": "optimal-expenditure-yp-spent"
+              }
+            }
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "subset": "ones"
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "attacker",
+              "filter": {
+                "designated": "optimal-expenditure-yp-spent"
+              }
+            }
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "wound",
+              "result_scope": "any-result"
+            }
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "stratagem"
+      }
+    },
+    "source_digest": "b6857b5c60a9c2726e55dc69ab6b1240254eb09b635091df71efe36d71992b2b"
   },
   {
     "ability_id": "ordered-retreat-needgaard-oathband-leagues-of-votann",
@@ -7241,19 +7844,143 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "mercenary-oathband",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "optional": true,
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "resource-spend",
+                "target": "this-model",
+                "modifier": {
+                  "pool": "yp-pool",
+                  "amount": 3
+                }
+              },
+              {
+                "type": "designate",
+                "target": "this-unit",
+                "modifier": {
+                  "tag": "privateer-arsenal-yp-spent",
+                  "clears_on": "phase"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "attacker",
+                  "filter": {
+                    "designated": "privateer-arsenal-yp-spent"
+                  }
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "subset": "ones"
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "attacker",
+                  "filter": {
+                    "designated": "privateer-arsenal-yp-spent"
+                  }
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "wound",
+              "subset": "ones"
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "attacker",
+              "filter": {
+                "designated": "privateer-arsenal-yp-spent"
+              }
+            }
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "result_scope": "any-result"
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "attacker",
+              "filter": {
+                "designated": "privateer-arsenal-yp-spent"
+              }
+            }
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "wound",
+              "subset": "ones"
+            }
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "stratagem"
+      }
+    },
+    "source_digest": "98c22e5d68081e2da363166022eed66b2e342a1921dc8b985ea3c5e5a9e9b578"
   },
   {
     "ability_id": "quake-multigenerator-hearthband-leagues-of-votann",
@@ -7771,19 +8498,134 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "delve-assault-shift",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "type": "happened",
+          "parameters": {
+            "event": "after-roll",
+            "subject": "event-subject",
+            "object": "this-unit",
+            "filter": {
+              "roll": "hit",
+              "result": "success"
+            },
+            "window": "phase"
+          }
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "ability-part",
+            "optional": true,
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "resource-spend",
+                  "target": "this-model",
+                  "modifier": {
+                    "pool": "yp-pool",
+                    "amount": 2
+                  }
+                },
+                {
+                  "type": "designate",
+                  "target": "this-unit",
+                  "modifier": {
+                    "tag": "yp-spent-this-use",
+                    "clears_on": "until-next-shooting-phase"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "type": "stat-modifier",
+            "target": "selected-unit",
+            "modifier": {
+              "stat": "M",
+              "operation": "subtract",
+              "value": 2
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "this-unit",
+                "filter": {
+                  "designated": "yp-spent-this-use"
+                }
+              }
+            },
+            "effect": {
+              "type": "roll-modifier",
+              "target": "selected-unit",
+              "modifier": {
+                "roll": "charge",
+                "operation": "subtract",
+                "value": 2
+              }
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "until-next-shooting-phase"
+    },
+    "behavior": "reactive",
+    "trigger": [
+      {
+        "event": "attacks-resolved",
+        "filter": {
+          "kind": "shoot"
+        },
+        "subject": {
+          "owner": "friendly",
+          "all_of": [
+            "CTHONIAN",
+            "EARTHSHAKERS"
+          ]
+        }
+      },
+      {
+        "event": "used",
+        "filter": {
+          "kind": "stratagem"
+        },
+        "condition": {
+          "type": "matches",
+          "parameters": {
+            "filter": {
+              "all_of": [
+                "CTHONIAN",
+                "EARTHSHAKERS"
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "source_digest": "e11c33323319eb588157b7ede3dcd020062cc77b706dd1451b8a6ae3654c7404"
   },
   {
     "ability_id": "teleport-crest-kahl-leagues-of-votann",
@@ -8008,19 +8850,44 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "hearthfyre-arsenal",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ignore-modifiers",
+          "target": "this-unit",
+          "modifier": {
+            "what": "characteristics",
+            "stats": [
+              "BS",
+              "AP"
+            ]
+          }
+        },
+        {
+          "type": "ignore-modifiers",
+          "target": "this-unit",
+          "modifier": {
+            "what": "rolls",
+            "rolls": [
+              "hit",
+              "wound"
+            ]
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "activated",
+    "source_digest": "6d228e3c7b057031b046655968449c529fb7798835ade97aeb6bd62a7de6f784"
   },
   {
     "ability_id": "unyielding-aggression-hearthband-leagues-of-votann",

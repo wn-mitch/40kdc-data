@@ -6214,19 +6214,79 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "imperial-knights",
     "detachment_id": "valourstrike-lance",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "this-model",
+          "modifier": {
+            "stat": "A",
+            "operation": "set",
+            "value": 8,
+            "weapons": {
+              "type": "melee",
+              "name": "armoured feet"
+            }
+          }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "this-model",
+          "modifier": {
+            "stat": "A",
+            "operation": "set",
+            "value": 12,
+            "weapons": {
+              "type": "melee",
+              "name": "titanic feet"
+            }
+          }
+        },
+        {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "stat-modifier",
+              "target": "this-model",
+              "modifier": {
+                "stat": "AP",
+                "operation": "improve",
+                "value": 1,
+                "weapons": {
+                  "type": "melee",
+                  "name": "Armoured feet"
+                }
+              }
+            },
+            {
+              "type": "stat-modifier",
+              "target": "this-model",
+              "modifier": {
+                "stat": "AP",
+                "operation": "improve",
+                "value": 1,
+                "weapons": {
+                  "type": "melee",
+                  "name": "Titanic feet"
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "activated",
+    "source_digest": "e71501a020f7b8c4e97e45f1e5ff6b7a80c5bc2cad28adf8f7277419e2336c53"
   },
   {
     "ability_id": "titanic-bombardment-gate-warden-lance-imperial-knights",

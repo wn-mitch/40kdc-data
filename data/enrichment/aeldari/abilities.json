@@ -1588,20 +1588,48 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "a2bab16f522984cee392582c6b3216bd7fb204d3272120eef9668770ffe2be2b",
     "version": "2025-q3",
     "effect": {
-      "type": "weapon-ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "keywords": [
-          {
-            "keyword_id": "devastating-wounds"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "this-model",
+          "modifier": {
+            "stat": "D",
+            "operation": "set",
+            "value": 3,
+            "weapons": {
+              "type": "ranged",
+              "name": "bloody twins"
+            }
           }
-        ]
-      }
+        },
+        {
+          "type": "weapon-ability-grant",
+          "target": "this-model",
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "anti",
+                "parameters": {
+                  "target_keyword": "INFANTRY",
+                  "threshold": 5
+                }
+              },
+              {
+                "keyword_id": "devastating-wounds"
+              }
+            ],
+            "weapons": {
+              "name": "Bloody Twins"
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "phase"
@@ -1610,12 +1638,20 @@
       "asurmen"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
+    "behavior": "reactive",
     "usage": {
       "frequency": "n-per-battle",
-      "count": 1
+      "count": 1,
+      "per": "unit"
     },
-    "faction_id": "aeldari"
+    "faction_id": "aeldari",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "stormblades-aeldari",
@@ -8904,7 +8940,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "36f1b6c015fe746c169befda701390fc1b278a0c566f629bfd2b049737c32953",
     "version": "2025-q3",
@@ -8913,80 +8949,46 @@
     "faction_id": "aeldari",
     "detachment_id": "serpents-brood",
     "ability_type": "detachment",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "sequence",
       "steps": [
         {
-          "type": "conditional",
-          "condition": {
-            "operator": "and",
-            "operands": [
+          "type": "weapon-ability-grant",
+          "target": {
+            "owner": "friendly",
+            "any_of": [
+              "HARLEQUINS MOUNTED",
+              "HARLEQUINS VEHICLE"
+            ],
+            "level": "model"
+          },
+          "modifier": {
+            "keywords": [
               {
-                "type": "matches",
+                "keyword_id": "sustained-hits",
                 "parameters": {
-                  "filter": {
-                    "all_of": [
-                      "HARLEQUINS"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "matches",
-                "parameters": {
-                  "filter": {
-                    "any_of": [
-                      "MOUNTED",
-                      "VEHICLE"
-                    ]
-                  }
+                  "value": 1
                 }
               }
             ]
-          },
-          "effect": {
-            "type": "weapon-ability-grant",
-            "target": "this-model",
-            "modifier": {
-              "keywords": [
-                {
-                  "keyword_id": "sustained-hits",
-                  "parameters": {
-                    "value": 1
-                  }
-                }
-              ]
-            }
           }
         },
         {
-          "type": "conditional",
-          "condition": {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "matches",
-                "parameters": {
-                  "filter": {
-                    "all_of": [
-                      "HARLEQUINS"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "happened",
-                "parameters": {
-                  "event": "disembarked",
-                  "window": "turn"
-                }
-              }
-            ]
+          "type": "ability-part",
+          "trigger": {
+            "event": "disembarked",
+            "subject": {
+              "owner": "friendly",
+              "all_of": [
+                "HARLEQUINS"
+              ]
+            }
           },
+          "duration": "turn",
           "effect": {
             "type": "weapon-ability-grant",
-            "target": "this-model",
+            "target": "event-subject",
             "modifier": {
               "keywords": [
                 {
@@ -10880,19 +10882,84 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "aeldari",
     "detachment_id": "ghosts-of-the-webway",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "declare-charge",
+            "allow": true
+          }
+        },
+        {
+          "type": "targeting",
+          "target": "this-unit",
+          "modifier": {
+            "by": "this-unit",
+            "may": "must-target",
+            "kind": "charge",
+            "target": {
+              "owner": "enemy",
+              "within": {
+                "range": {
+                  "inches": 6
+                },
+                "of": "this-unit"
+              }
+            }
+          }
+        },
+        {
+          "type": "move",
+          "target": "this-unit",
+          "modifier": {
+            "move_type": "charge"
+          }
+        },
+        {
+          "type": "rule-state",
+          "target": "this-unit",
+          "modifier": {
+            "direction": "suppressed",
+            "rule_kind": "core-rule",
+            "rule": "charge-bonus"
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "charge"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
+    },
+    "source_digest": "9c515267f6093c82c8cbda58dab18552efe3543291dddff8a20f0f99db041ee4"
   },
   {
     "ability_id": "borrowed-vigour-devoted-of-ynnead-aeldari",
@@ -11780,19 +11847,34 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "aeldari",
     "detachment_id": "serpents-brood",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-modifier",
+      "target": "this-model",
+      "modifier": {
+        "ability": "cruel-amusement",
+        "aspect": "selections",
+        "operation": "set",
+        "value": 2
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "ability"
+      },
+      "optional": true
+    },
+    "source_digest": "8a55a96ab9574342d9ee65d632be704b185566b57448b7cd57d7954ad50cdc13"
   },
   {
     "ability_id": "fangs-of-the-brood-serpents-brood-aeldari",
@@ -16441,19 +16523,46 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "aeldari",
     "detachment_id": "aspect-host",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ignore-modifiers",
+          "target": "this-unit",
+          "modifier": {
+            "what": "characteristics",
+            "stats": [
+              "WS",
+              "BS",
+              "S",
+              "AP",
+              "D"
+            ]
+          }
+        },
+        {
+          "type": "ignore-modifiers",
+          "target": "this-unit",
+          "modifier": {
+            "what": "rolls",
+            "rolls": [
+              "hit"
+            ]
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "activated",
+    "source_digest": "d6b2b71eeda8190e66c12dbdf42015acf16867d4e6dc653fbba56a129a22d733"
   },
   {
     "ability_id": "weavers-coils-serpents-brood-aeldari",

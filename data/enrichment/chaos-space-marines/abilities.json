@@ -3825,19 +3825,35 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "7c3a8ed61631f2136e8bb50a086d6500c5e3cd3604032a759b732d2717a32394",
     "version": "2025-q3",
     "effect": {
-      "type": "ignore-modifiers",
-      "target": "this-unit",
-      "modifier": {
-        "what": "rolls",
-        "rolls": [
-          "all"
-        ]
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ignore-modifiers",
+          "target": "this-model",
+          "modifier": {
+            "what": "characteristics",
+            "stats": [
+              "M"
+            ]
+          }
+        },
+        {
+          "type": "ignore-modifiers",
+          "target": "this-model",
+          "modifier": {
+            "what": "rolls",
+            "rolls": [
+              "charge",
+              "advance"
+            ]
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -3846,7 +3862,7 @@
       "maulerfiend"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "activated",
     "faction_id": "chaos-space-marines"
   },
   {
@@ -8648,7 +8664,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "a75c28fa247ffd2f455a60540928d4ef5b5a2f8d03b7b5b906dfc3692ff06ea8",
     "version": "2025-q3",
@@ -8657,39 +8673,80 @@
     "faction_id": "chaos-space-marines",
     "detachment_id": "nightmare-hunt",
     "ability_type": "detachment",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "sequence",
       "steps": [
         {
-          "type": "conditional",
-          "condition": {
-            "type": "strength",
-            "parameters": {
-              "subject": "recipient",
-              "below": "starting"
+          "type": "ability-part",
+          "trigger": {
+            "event": "step-started",
+            "filter": {
+              "step": "battle-shock"
+            },
+            "condition": {
+              "type": "player-turn-is",
+              "parameters": {
+                "turn": "opponent-turn"
+              }
             }
           },
           "effect": {
-            "type": "test",
-            "target": {
-              "owner": "enemy",
-              "within": {
-                "range": {
-                  "inches": 12
-                },
-                "of": {
-                  "owner": "friendly",
-                  "all_of": [
-                    "HERETIC ASTARTES"
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "conditional",
+                "condition": {
+                  "operator": "and",
+                  "operands": [
+                    {
+                      "type": "strength",
+                      "parameters": {
+                        "subject": "recipient",
+                        "below": "starting"
+                      }
+                    },
+                    {
+                      "type": "matches",
+                      "parameters": {
+                        "subject": "recipient",
+                        "filter": {
+                          "within": {
+                            "of": {
+                              "owner": "friendly",
+                              "all_of": [
+                                "HERETIC ASTARTES"
+                              ]
+                            },
+                            "range": {
+                              "inches": 12
+                            }
+                          }
+                        }
+                      }
+                    }
                   ]
+                },
+                "effect": {
+                  "type": "test",
+                  "target": {
+                    "owner": "enemy"
+                  },
+                  "modifier": {
+                    "test": "battle-shock",
+                    "modifier": -1
+                  }
+                }
+              },
+              {
+                "type": "test-exemption",
+                "target": "recipient",
+                "modifier": {
+                  "test": "battle-shock",
+                  "window": "phase"
                 }
               }
-            },
-            "modifier": {
-              "test": "battle-shock",
-              "modifier": -1
-            }
+            ]
           }
         },
         {
@@ -8697,14 +8754,93 @@
           "condition": {
             "type": "strength",
             "parameters": {
+              "subject": "defender",
               "below": "half"
             }
           },
           "effect": {
             "type": "roll-modifier",
-            "target": "this-unit",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "HERETIC ASTARTES"
+              ],
+              "level": "model"
+            },
             "modifier": {
               "roll": "hit",
+              "operation": "add",
+              "value": 1
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "defender",
+                  "filter": {
+                    "all_of": [
+                      "HERETIC ASTARTES"
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "owner": "friendly"
+                  }
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "attacker",
+                  "filter": {
+                    "state": "battle-shocked"
+                  }
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "roll-modifier",
+            "target": "attacker",
+            "modifier": {
+              "roll": "hit",
+              "operation": "subtract",
+              "value": 1
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "defender",
+              "filter": {
+                "state": "battle-shocked"
+              }
+            }
+          },
+          "effect": {
+            "type": "roll-modifier",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "HERETIC ASTARTES"
+              ],
+              "level": "model"
+            },
+            "modifier": {
+              "roll": "wound",
               "operation": "add",
               "value": 1
             }
@@ -10421,19 +10557,39 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "chaos-space-marines",
     "detachment_id": "creations-of-bile",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "mortal-wounds",
+          "target": "this-unit",
+          "modifier": {
+            "count": "D3"
+          }
+        },
+        {
+          "type": "ability-activate",
+          "target": "this-unit",
+          "modifier": {
+            "ability": "experimental-augmentations-chaos-space-marines",
+            "select": {
+              "by": "player"
+            }
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "until-next-command-phase"
+    },
+    "behavior": "activated",
+    "source_digest": "47c4365cf77afa1c458cd664d7db271c8933f896d5b469426ccb025fdf407887"
   },
   {
     "ability_id": "depthless-cruelty-dread-talons-chaos-space-marines",
@@ -12531,19 +12687,50 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "chaos-space-marines",
     "detachment_id": "veterans-of-the-long-war",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "ignores-cover"
+              }
+            ],
+            "weapons": {
+              "type": "ranged"
+            }
+          }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "stat": "A",
+            "operation": "set",
+            "value": 6,
+            "weapons": {
+              "keyword": {
+                "keyword_id": "torrent"
+              }
+            }
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "activated",
+    "source_digest": "c8753f90c15cb4a2ee109d9a09825dc203d603e66dc2a31863a0ae1fc8a0db53"
   },
   {
     "ability_id": "living-carapace-creations-of-bile-chaos-space-marines",
@@ -15628,19 +15815,25 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "chaos-space-marines",
     "detachment_id": "hurons-marauders",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-activate",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "tyrannical-motivation-chaos-space-marines",
+        "all_options": true
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "b6038fc0ed27b2e3bb3257b1d5864d9e1d6d468e16bcffd9535556c3ef4a26bd"
   },
   {
     "ability_id": "warmasters-gift-veterans-of-the-long-war-chaos-space-marines",

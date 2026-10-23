@@ -807,9 +807,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "f06f5b2c78d554019df3bdd68dff14795fa025bfb0413ca9f62b9806ca51e861",
+    "source_digest": "ceccfcc30318e8511eb7f515588bab8e042bf73e4a6eeeb8880176ff356b799a",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -823,7 +823,7 @@
       "modifier": {
         "direction": "suppressed",
         "rule_kind": "core-rule",
-        "rule": "fire-overwatch"
+        "rule": "overwatch-against-bearer"
       }
     },
     "scope": {
@@ -3073,18 +3073,27 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "blood-angels",
     "detachment_id": "angelic-inheritors",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-activate",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "combat-doctrines-blood-angels",
+        "select": {
+          "by": "player"
+        },
+        "exclusive": true
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "until-next-command-phase"
+    },
+    "behavior": "activated",
+    "source_digest": "149212a370560f580ff7681e6327ca2bf454f3683dc5f7a89996e95d1d0fe5fa"
   }
 ]

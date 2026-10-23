@@ -9889,9 +9889,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "ghostkeel-battlesuit"
     ],
@@ -9899,11 +9898,35 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "permission",
+          "target": "this-model",
+          "modifier": {
+            "activity": "shoot",
+            "allow": true,
+            "after": [
+              "fall-back"
+            ]
+          }
+        },
+        {
+          "type": "rule-state",
+          "target": "this-model",
+          "modifier": {
+            "direction": "suppressed",
+            "rule_kind": "keyword",
+            "rule": "SMOKE"
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "8e5fd297a09f11e72141901a4d6323e828a490e3c5430f47edb7a70ab734ec8a"
   },
   {
     "ability_id": "battlesuit-support-system-tau-empire",

@@ -376,9 +376,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "cdc8b98990d8da5943811d159a898a3fd0e262ea7ed6d6ac5fe83a2be47b27aa",
+    "source_digest": "9cb065cceb2cf07b3f5913f0965d065be7e43669eafc59fad1ddf9f05f6a71f5",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -387,37 +387,18 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "weapon-ability-grant",
-          "target": "this-unit",
-          "modifier": {
-            "weapons": {
-              "type": "ranged"
-            },
-            "keywords": [
-              {
-                "keyword_id": "assault"
-              }
-            ]
-          }
+      "type": "ability-activate",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "combat-doctrines-dark-angels",
+        "select": {
+          "by": "player"
         },
-        {
-          "type": "permission",
-          "target": "this-unit",
-          "modifier": {
-            "activity": "declare-charge",
-            "allow": true,
-            "after": [
-              "advance"
-            ]
-          }
-        }
-      ]
+        "exclusive": true
+      }
     },
     "scope": {
-      "duration": "turn"
+      "duration": "until-next-command-phase"
     },
     "community_notes": "A Ravenwing unit is additionally eligible to shoot and charge in a turn in which it Fell Back"
   },

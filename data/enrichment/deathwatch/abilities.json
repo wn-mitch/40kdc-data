@@ -737,19 +737,28 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "deathwatch",
     "detachment_id": "black-spear-task-force",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-activate",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "combat-doctrines-deathwatch",
+        "select": {
+          "by": "player"
+        },
+        "exclusive": true
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "until-next-command-phase"
+    },
+    "behavior": "activated",
+    "source_digest": "99c83a0f3d9db1fee792968e48f8da2c0d77678b3c2788f122e321761d25d21f"
   },
   {
     "ability_id": "armour-of-contempt-black-spear-task-force-deathwatch",
@@ -1891,18 +1900,23 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "deathwatch",
     "detachment_id": "black-spear-task-force",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "weapon-grant",
+      "target": "this-model",
+      "modifier": {
+        "weapon_id": "the-thief-of-secrets-black-spear-task-force"
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "d6f7e661e8e2f1970acc6214bfcd7ea2454f9be1b906124dc5bc5306e0a63e56"
   }
 ]

@@ -1976,25 +1976,33 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "5d6766bcf9e7aeecd0cdc4686682c8ebd68e2f439f3902e8b22c4fcc443b805d",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "invulnerable-save",
+          "target": "this-model",
+          "modifier": {
+            "invuln_sv": 3
+          }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "this-model",
+          "modifier": {
+            "stat": "A",
+            "operation": "set",
+            "value": 12,
+            "weapons": {
+              "type": "melee"
+            }
+          }
         }
-      },
-      "effect": {
-        "type": "invulnerable-save",
-        "target": "this-model",
-        "modifier": {
-          "invuln_sv": 3
-        }
-      }
+      ]
     },
     "scope": {
       "duration": "phase"
@@ -2003,8 +2011,23 @@
       "lelith-hesperax"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "faction_id": "drukhari"
+    "behavior": "reactive",
+    "faction_id": "drukhari",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      },
+      "optional": true
+    },
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "unit"
+    }
   },
   {
     "ability_id": "nowhere-to-run-drukhari",
@@ -3808,30 +3831,100 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "296c15e921da458fb838a2166230b3af666adf3a1fb6868171a7d6a73b9536b6",
     "version": "2025-q3",
     "effect": {
-      "type": "permission",
-      "target": "this-unit",
-      "modifier": {
-        "activity": "declare-charge",
-        "allow": true,
-        "after": [
-          "advance"
-        ]
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "resource-spend",
+          "target": "this-model",
+          "modifier": {
+            "pool": "pain-token-pool",
+            "amount": 1,
+            "label": "Pain token"
+          }
+        },
+        {
+          "type": "designate",
+          "target": "this-unit",
+          "modifier": {
+            "tag": "empowered"
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-unit",
+              "filter": {
+                "designated": "empowered"
+              }
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "permission",
+                "target": "this-unit",
+                "modifier": {
+                  "activity": "declare-charge",
+                  "allow": true,
+                  "after": [
+                    "advance"
+                  ]
+                }
+              },
+              {
+                "type": "permission",
+                "target": "this-unit",
+                "modifier": {
+                  "activity": "declare-charge",
+                  "allow": true,
+                  "after": [
+                    "fall-back"
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "unit_ids": [
       "wyches"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "drukhari"
+    "behavior": "reactive",
+    "faction_id": "drukhari",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "charge"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "no-escape-drukhari",
@@ -5166,9 +5259,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "2d015999d3fa2ac34389e0944a99f5f6a76bd9b5a595391cdb09f17fa60b6be0",
+    "source_digest": "8fdf4bf6fa614654557f97d666f078f9cbb118c9b55aa8b3522c6a92a01f0378",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -5177,36 +5270,12 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
-            "all_of": [
-              "SUCCUBUS"
-            ]
-          }
-        }
-      },
-      "effect": {
-        "type": "conditional",
-        "condition": {
-          "type": "attack-is",
-          "parameters": {
-            "shooting_type": "snap"
-          }
-        },
-        "effect": {
-          "type": "targeting",
-          "target": {
-            "owner": "enemy"
-          },
-          "modifier": {
-            "may": "cannot-target",
-            "target": "this-unit",
-            "kind": "shoot"
-          }
-        }
+      "type": "rule-state",
+      "target": "this-unit",
+      "modifier": {
+        "direction": "suppressed",
+        "rule_kind": "core-rule",
+        "rule": "overwatch-against-bearer"
       }
     },
     "scope": {
@@ -6499,7 +6568,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "d7472ffbabaab063fcffce6448fd1b253721fbb1951fb4e1c230bc2c3a2e49db",
     "version": "2026-q3",
@@ -6517,12 +6586,20 @@
           "target": "this-model",
           "modifier": {
             "pool": "pain-token-pool",
-            "amount": 1
+            "amount": 1,
+            "label": "Pain token"
+          }
+        },
+        {
+          "type": "designate",
+          "target": "this-unit",
+          "modifier": {
+            "tag": "empowered"
           }
         },
         {
           "type": "stat-modifier",
-          "target": "this-model",
+          "target": "this-unit",
           "modifier": {
             "stat": "M",
             "operation": "add",
@@ -6532,34 +6609,20 @@
       ]
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
-    "trigger": [
-      {
-        "event": "move-ended",
-        "filter": {
-          "move_types": [
-            "normal"
-          ]
-        }
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "move_types": [
+          "normal",
+          "advance",
+          "fall-back"
+        ],
+        "to": "move"
       },
-      {
-        "event": "move-ended",
-        "filter": {
-          "move_types": [
-            "advance"
-          ]
-        }
-      },
-      {
-        "event": "move-ended",
-        "filter": {
-          "move_types": [
-            "fall-back"
-          ]
-        }
-      }
-    ]
+      "optional": true
+    }
   },
   {
     "ability_id": "torture-device-coven-of-agonies-talos-drukhari",
@@ -6789,19 +6852,58 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "drukhari",
     "detachment_id": "coven-of-agonies",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "subset": "ones"
+          }
+        },
+        {
+          "type": "resource-spend",
+          "target": "this-model",
+          "modifier": {
+            "pool": "pain-token-pool",
+            "amount": 1
+          }
+        },
+        {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "result_scope": "any-result"
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "attack"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "COVEN OF AGONIES"
+        ]
+      }
+    },
+    "source_digest": "3b81bcec019f6ca74ef9cc9a3cf0789cd9df620c9c61c52f60f1dacef09ce0c2"
   },
   {
     "ability_id": "archraider-reapers-wager-drukhari",
@@ -6989,19 +7091,97 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "drukhari",
     "detachment_id": "covenite-coterie",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "targets-selected",
+            "filter": {
+              "kind": "attack"
+            },
+            "subject": {
+              "owner": "enemy"
+            },
+            "object": "this-unit"
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "resource-spend",
+                "target": "this-model",
+                "modifier": {
+                  "pool": "pain-token-pool",
+                  "amount": 1
+                }
+              },
+              {
+                "type": "stat-modifier",
+                "target": "attacker",
+                "modifier": {
+                  "stat": "AP",
+                  "operation": "worsen",
+                  "value": 1
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "phase-ended"
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "filter": {
+                      "state": "on-battlefield"
+                    }
+                  }
+                },
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "filter": {
+                      "all_of": [
+                        "HAEMONCULUS COVENS"
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "resource-gain",
+              "target": "this-model",
+              "modifier": {
+                "pool": "pain-token-pool",
+                "amount": 1
+              }
+            }
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "attack-sequence"
+    },
+    "behavior": "reactive",
+    "source_digest": "9d24c64590d36a6d1d0b614a66c54808907164c57401c69e2440d8d9f3e4ab99"
   },
   {
     "ability_id": "crucible-of-malediction-realspace-raiders-drukhari",
@@ -7957,19 +8137,91 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "drukhari",
     "detachment_id": "realspace-raiders",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "this-model",
+          "filter": {
+            "state": "on-battlefield"
+          }
+        }
+      },
+      "effect": {
+        "type": "choice",
+        "options": [
+          {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "resource-spend",
+                "target": "this-model",
+                "modifier": {
+                  "pool": "pain-token-pool",
+                  "amount": 1
+                }
+              },
+              {
+                "type": "cp-gain",
+                "target": "this-model",
+                "modifier": {
+                  "amount": 1
+                }
+              }
+            ]
+          },
+          {
+            "type": "dice-gated",
+            "dice": "D6",
+            "threshold": 4,
+            "comparison": "gte",
+            "on_success": {
+              "type": "cp-gain",
+              "target": "this-model",
+              "modifier": {
+                "amount": 1
+              }
+            },
+            "on_fail": null
+          }
+        ],
+        "min_choices": 1,
+        "max_choices": 1
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "optional": true
+    },
+    "source_digest": "44e2d5482dcf2faed37a14785c63b91e8d0163bbaebaed832db0fc7c68732151"
   },
   {
     "ability_id": "leechbite-plate-kabalite-cartel-drukhari",
@@ -9021,19 +9273,125 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "drukhari",
     "detachment_id": "spectacle-of-spite",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "duration": "phase",
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "ignore-modifiers",
+                "target": "this-unit",
+                "modifier": {
+                  "what": "characteristics",
+                  "stats": [
+                    "M"
+                  ]
+                }
+              },
+              {
+                "type": "ignore-modifiers",
+                "target": "this-unit",
+                "modifier": {
+                  "what": "rolls",
+                  "rolls": [
+                    "charge",
+                    "advance"
+                  ]
+                }
+              }
+            ]
+          },
+          "trigger": {
+            "event": "move-ended",
+            "filter": {
+              "move_types": [
+                "normal",
+                "advance",
+                "charge"
+              ]
+            },
+            "optional": true
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "move-ended",
+            "filter": {
+              "move_types": [
+                "normal",
+                "advance",
+                "charge"
+              ]
+            },
+            "optional": true
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "ability-part",
+                "duration": "turn",
+                "effect": {
+                  "type": "move-modifier",
+                  "target": "this-unit",
+                  "modifier": {
+                    "passthrough": [
+                      "models"
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "ability-part",
+                "duration": "turn",
+                "effect": {
+                  "type": "permission",
+                  "target": "this-unit",
+                  "modifier": {
+                    "activity": "move",
+                    "allow": true,
+                    "despite": [
+                      "engaged"
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "ability-part",
+                "duration": "turn",
+                "effect": {
+                  "type": "move-modifier",
+                  "target": "this-unit",
+                  "modifier": {
+                    "no_end_in_engagement": true,
+                    "applies_to_moves": [
+                      "normal",
+                      "advance"
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "source_digest": "1454e47a4f8dfac3ed80f4c13c6f9ba63689eca09518a9b70314d74536248da4"
   },
   {
     "ability_id": "raid-and-fade-realspace-raiders-drukhari",

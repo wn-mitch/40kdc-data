@@ -165,6 +165,18 @@ DESIGNATION_IDS: frozenset[str] = frozenset(
         "worthy-foes",
         "wracked-with-agonies",
         "zapped",
+        "bastion-shield-yp-spent",
+        "corrupted",
+        "cyberstimm-infusion-yp-spent",
+        "exposed-flaws-yp-spent",
+        "eye-of-spite-pain-spent",
+        "honour-of-the-hold-yp-spent",
+        "instinctive-spite-pain-spent",
+        "optimal-expenditure-yp-spent",
+        "privateer-arsenal-yp-spent",
+        "trivarg-yp-spent",
+        "warded",
+        "yp-spent-this-use",
     ]
 )
 
@@ -206,11 +218,15 @@ _DESIGNATION_TERMS: dict[str, dict[str, str]] = {
     "wobbled": {"adjective": "wobbled"},
     "wracked-with-agonies": {"adjective": "wracked with agonies"},
     "zapped": {"adjective": "zapped"},
+    "yp-spent-this-use": {"adjective": "YP-spent this use"},
     "unravelling": {"adjective": "unravelling"},
     "prey": {"noun": "prey"},
     "slayers-oath": {"noun": "Slayer's Oath"},
     "vendetta-target": {"noun": "Vendetta target"},
     "victim": {"noun": "victim"},
+    "sabotaged": {"adjective": "Sabotaged"},
+    "warded": {"adjective": "Warded"},
+    "corrupted": {"adjective": "Corrupted"},
     # The list-building designation: the model chosen as Warlord when mustering.
     "warlord": {"adjective": "the Warlord"},
 }
