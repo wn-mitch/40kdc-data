@@ -126,7 +126,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Berzerkers",
+        "Khorne"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "apoplectic-frenzy-berzerker-warband-world-eaters",
     "game_version": {
       "edition": "11th",

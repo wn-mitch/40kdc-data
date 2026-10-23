@@ -223,9 +223,9 @@ fn aura_clause(e: &P, m: &P, ctx: &Ctx) -> String {
     let subject = rendered
         .strip_prefix("all ")
         .unwrap_or(&rendered)
-        .replace(" units", " unit")
-        .replace(" models", " model")
-        .replace(" that are", " that is");
+        .replacen(" units", " unit", 1)
+        .replacen(" models", " model", 1)
+        .replacen(" that are", " that is", 1);
     let eligible_who = format!(
         "{} {subject}",
         if subject

@@ -43,29 +43,34 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "4c98bc1cb591a6f50268b2d7f34f81364724b1f565600768cc3c79bdb127a42c",
+    "source_digest": "49373fc72511790841f091fdd53153d02a02ad1714f27bcc20fc01236f28c9b7",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "happened",
+        "type": "matches",
         "parameters": {
-          "event": "move-ended",
+          "subject": "defender",
           "filter": {
-            "move_types": [
-              "charge"
+            "none_of": [
+              "MONSTER",
+              "VEHICLE"
             ]
-          },
-          "window": "turn"
+          }
         }
       },
       "effect": {
-        "type": "mortal-wounds",
-        "target": "defender",
+        "type": "stat-modifier",
+        "target": "this-unit",
         "modifier": {
-          "count": "D3"
+          "stat": "AP",
+          "operation": "improve",
+          "value": 1,
+          "weapons": {
+            "type": "melee"
+          }
         }
       }
     },
@@ -76,7 +81,7 @@
       "aquilon-terminators-with-solarite-power-gauntlets"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
+    "behavior": "passive",
     "faction_id": "adeptus-custodes"
   },
   {
@@ -126,17 +131,64 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "110c3b2f842f442262beac8460ee646e63219c61888fa5802017630354889d45",
+    "source_digest": "de2840d2d407e9ce989550b59e61938e93f7ca813aaab12d054a0b3958bb0b44",
     "version": "2025-q3",
     "effect": {
-      "type": "weapon-ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "keywords": [
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
           {
-            "keyword_id": "lethal-hits"
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "defender",
+              "filter": {
+                "any_of": [
+                  "MONSTER",
+                  "VEHICLE"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "result_scope": "any-result",
+              "count": 1
+            }
+          },
+          {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "wound",
+              "result_scope": "any-result",
+              "count": 1
+            }
+          },
+          {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "damage",
+              "result_scope": "any-result",
+              "count": 1
+            }
           }
         ]
       }
@@ -157,23 +209,23 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "b39a8f2fae0214b6d6fedc1c28ccede1726208e63b797f9e5dc2be9a99c7b176",
+    "source_digest": "3811308eda83a4d9ec8c941769b21fe1acefd6f5f490f16028d070a32d003ac6",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
         "type": "matches",
         "parameters": {
+          "subject": "defender",
           "filter": {
             "any_of": [
               "CHARACTER",
               "MONSTER",
               "VEHICLE"
             ]
-          },
-          "subject": "defender"
+          }
         }
       },
       "effect": {
@@ -181,7 +233,7 @@
         "target": "this-unit",
         "modifier": {
           "roll": "wound",
-          "subset": "all-failures"
+          "result_scope": "any-result"
         }
       }
     },
@@ -201,26 +253,57 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "c2947e1caee72588b03ac08027587cc78fa8e7dbac6657c741b5047c76a05b96",
+    "source_digest": "a066a7459594983dc12bdaec815e320c313f06e8de0d92ab5967dfa9ed52a28e",
     "version": "2025-q3",
     "effect": {
-      "type": "set-up",
-      "target": "this-unit",
-      "modifier": {
-        "to": "strategic-reserves"
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "state": "engaged"
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "set-up",
+        "target": "this-unit",
+        "modifier": {
+          "to": "strategic-reserves"
+        }
       }
     },
     "scope": {
-      "duration": "one-use"
+      "duration": "permanent"
     },
     "unit_ids": [
       "gilded-blades-allarus-custodians"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "faction_id": "adeptus-custodes"
+    "behavior": "reactive",
+    "faction_id": "adeptus-custodes",
+    "trigger": {
+      "event": "turn-ended",
+      "condition": {
+        "type": "player-turn-is",
+        "parameters": {
+          "turn": "opponent-turn"
+        }
+      },
+      "optional": true
+    },
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "unit"
+    }
   },
   {
     "ability_id": "vexilla-adeptus-custodes",
@@ -370,35 +453,124 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "56e37257c193c0f98bd0f35221e53e52f4c94cd8a1fd1c0762891b92216ffd3f",
+    "source_digest": "2d334f18e9a74c81a951e2db9daabef524f39f78f4ae0d324194d80c28010b81",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "test",
-        "target": "selected-unit",
-        "modifier": {
-          "test": "battle-shock"
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "subject": "event-subject",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success"
+              },
+              "window": "event"
+            }
+          }
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "all_of": [
+                      "PSYKER"
+                    ]
+                  }
+                }
+              },
+              "effect": {
+                "type": "test",
+                "target": "selected-unit",
+                "modifier": {
+                  "test": "battle-shock",
+                  "modifier": -1
+                }
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "selected-unit",
+                      "filter": {
+                        "all_of": [
+                          "PSYKER"
+                        ]
+                      }
+                    }
+                  }
+                ]
+              },
+              "effect": {
+                "type": "test",
+                "target": "selected-unit",
+                "modifier": {
+                  "test": "battle-shock"
+                }
+              }
+            }
+          ]
         }
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "unit_ids": [
       "witchseeker-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "adeptus-custodes"
+    "behavior": "reactive",
+    "faction_id": "adeptus-custodes",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "infernus-firebombs-adeptus-custodes",
@@ -406,26 +578,108 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "07dcbfd467d434ec8faf2dfdb6b80ee0b172afd95a6d5b750ab459190637d0d5",
+    "source_digest": "72ddcc044422b9f0d128fbaf7b2f8744bf6aef05aee1054432dada32f5cce4bd",
     "version": "2025-q3",
     "effect": {
-      "type": "mortal-wounds",
-      "target": "defender",
-      "modifier": {
-        "count": 1
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy",
+          "none_of": [
+            "AIRCRAFT"
+          ],
+          "lacks_ability": [
+            "lone-operative"
+          ],
+          "visible": {
+            "to": "this-model"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "subject": "selected-unit",
+            "filter": {
+              "within": {
+                "of": "this-unit",
+                "range": {
+                  "inches": 24
+                }
+              }
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "weapon-ability-grant",
+            "target": "selected-unit",
+            "modifier": {
+              "keywords": [
+                {
+                  "keyword_id": "ignores-cover"
+                }
+              ],
+              "weapons": {
+                "type": "ranged"
+              },
+              "incoming": true
+            }
+          },
+          {
+            "type": "mortal-wounds",
+            "target": "selected-unit",
+            "modifier": {
+              "count": 1,
+              "max": 6,
+              "per": "success",
+              "roll": {
+                "dice": 1,
+                "threshold": 6,
+                "per_model": "selected-unit"
+              }
+            }
+          }
+        ]
       }
     },
     "scope": {
-      "duration": "turn"
+      "duration": "until-end-of-your-next-turn"
     },
     "unit_ids": [
       "ares-gunship"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "adeptus-custodes"
+    "behavior": "reactive",
+    "faction_id": "adeptus-custodes",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "stand-vigil-adeptus-custodes",
@@ -433,16 +687,96 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "af79d147e1877fada54a91343745a519e9a33f99cc7894aae27e7a6e2923b7ba",
+    "source_digest": "252f8e2ebf7f0d8e95ea92a7808ecfa5f86a7d8f5b0eb840eef2e495d3d8f481",
     "version": "2025-q3",
     "effect": {
-      "type": "re-roll",
-      "target": "this-unit",
-      "modifier": {
-        "roll": "wound",
-        "subset": "ones"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "defender",
+                      "filter": {
+                        "all_of": [
+                          "MONSTER"
+                        ]
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "defender",
+                      "filter": {
+                        "all_of": [
+                          "VEHICLE"
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "operator": "or",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "within": {
+                      "of": {
+                        "objective": {}
+                      },
+                      "range": "objective-control"
+                    }
+                  }
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "defender",
+                  "filter": {
+                    "within": {
+                      "of": {
+                        "objective": {}
+                      },
+                      "range": "objective-control"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "effect": {
+        "type": "weapon-ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "keywords": [
+            {
+              "keyword_id": "lethal-hits"
+            }
+          ]
+        }
       }
     },
     "scope": {
@@ -461,17 +795,28 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "6ce74c24b850564d436742018d4f4b7dc88b2b52fb777bee2fed05ed9bf07e7e",
+    "source_digest": "cb39b349c24837caa780a64b9f9bf07419370a367c6fb0d6a667cd9479b85dcb",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       },
       "effect": {
         "type": "permission",
@@ -486,14 +831,26 @@
       }
     },
     "scope": {
-      "duration": "one-use"
+      "duration": "phase"
     },
     "unit_ids": [
       "gilded-blades-custodian-guard"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "faction_id": "adeptus-custodes"
+    "behavior": "reactive",
+    "faction_id": "adeptus-custodes",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "optional": true
+    },
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "unit"
+    }
   },
   {
     "ability_id": "praesidium-shield-adeptus-custodes",
@@ -604,28 +961,44 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "40b889939c3911b965047c6e085999a942e4b8a71d1890cf356293e6e7323e77",
+    "source_digest": "068326e6c7b9e37a8b76dc4c6c64303c93375bb61265f7043b41724f07306b4c",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "stat": "M",
+            "operation": "add",
+            "value": 2
+          }
+        },
+        {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "re-roll",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "charge",
+                "result_scope": "any-result"
+              }
+            },
+            {
+              "type": "re-roll",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "advance",
+                "result_scope": "any-result"
+              }
+            }
+          ]
         }
-      },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "charge",
-          "operation": "add",
-          "value": 2
-        }
-      }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -643,25 +1016,69 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "1756862e7df1595bbe7abb9eeebe0603e0b1fca04117f84e70b8acc69443ac44",
+    "source_digest": "2c1b5a9eb497f1393972894de89282bd469ba7cdb4c5085e9b5795c3d74d8e51",
     "version": "2025-q3",
     "effect": {
-      "type": "permission",
-      "target": {
-        "owner": "enemy",
-        "none_of": [
-          "MONSTER",
-          "VEHICLE"
-        ],
-        "within": {
-          "range": "engagement"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-subject",
+          "filter": {
+            "engaged_with": "this-unit"
+          }
         }
       },
-      "modifier": {
-        "activity": "fall-back",
-        "allow": false
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "event-subject",
+                "filter": {
+                  "state": "battle-shocked"
+                }
+              }
+            },
+            "effect": {
+              "type": "test",
+              "target": "event-subject",
+              "modifier": {
+                "test": "desperate-escape",
+                "modifier": -1
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "event-subject",
+                    "filter": {
+                      "state": "battle-shocked"
+                    }
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "test",
+              "target": "event-subject",
+              "modifier": {
+                "test": "desperate-escape"
+              }
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -671,8 +1088,24 @@
       "knight-centura"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "adeptus-custodes"
+    "behavior": "reactive",
+    "faction_id": "adeptus-custodes",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "move_types": [
+          "fall-back"
+        ],
+        "to": "move"
+      },
+      "subject": {
+        "owner": "enemy",
+        "none_of": [
+          "MONSTER",
+          "VEHICLE"
+        ]
+      }
+    }
   },
   {
     "ability_id": "resolute-will-adeptus-custodes",
@@ -680,50 +1113,19 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "96f5dc1138ac1e2d78d2f8024ab1724c88033d52589e69dc3befed5359453edb",
+    "source_digest": "654f47351267d6a6c857180a5f4ecc2d65f86a27fb14e31f8ce4408d252c8dc8",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "attachment",
-            "parameters": {
-              "role": "led",
-              "with": {
-                "all_of": [
-                  "CHARACTER"
-                ]
-              }
-            }
-          },
-          {
-            "type": "attack-compare",
-            "parameters": {
-              "left": {
-                "of": "attacker",
-                "stat": "S"
-              },
-              "comparison": "gt",
-              "right": {
-                "of": "defender",
-                "stat": "T"
-              }
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "attacker",
-        "modifier": {
-          "roll": "wound",
-          "operation": "subtract",
-          "value": 1
-        }
+      "type": "cost-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "of": "stratagem",
+        "operation": "decrease",
+        "amount": 1,
+        "applies_to": "targeting-this-unit",
+        "id": "insane-bravery"
       }
     },
     "scope": {
@@ -734,8 +1136,16 @@
       "aquilan-wing-sentinel-guard-sodality"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "adeptus-custodes"
+    "behavior": "reactive",
+    "faction_id": "adeptus-custodes",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "stratagem",
+        "id": "insane-bravery"
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "living-fortress-adeptus-custodes",
@@ -824,19 +1234,59 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "2d30f417964aaefc70ef1c9723b6e1ac7f048acfc5c10fe7e32e63ce8ee35ac5",
+    "source_digest": "349e5b5b2d8df569700c1cdfc776b32ff94ed1e3c0234aa92234d09440173de8",
     "version": "2025-q3",
     "effect": {
-      "type": "permission",
-      "target": "this-unit",
-      "modifier": {
-        "activity": "shoot",
-        "allow": true,
-        "after": [
-          "fall-back"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "move-ended",
+              "filter": {
+                "move_types": [
+                  "ingress"
+                ]
+              },
+              "window": "turn"
+            }
+          },
+          {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
+            }
+          }
         ]
+      },
+      "effect": {
+        "type": "re-roll",
+        "target": "this-unit",
+        "modifier": {
+          "roll": "hit",
+          "result_scope": "any-result"
+        }
       }
     },
     "scope": {
@@ -951,26 +1401,46 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "cea987698fe86d655569dea12fbc47ed016a8742d230de40794c981d533a3e15",
+    "source_digest": "87449e0059aa172a6aaba612709b91a722a40f1a362bdd537086ea8bb6480a6c",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
-        }
-      },
-      "effect": {
-        "type": "ignore-modifiers",
-        "target": "this-unit",
-        "modifier": {
-          "what": "rolls",
-          "rolls": [
-            "all"
+      "type": "aura",
+      "target": "friendly-within-aura",
+      "modifier": {
+        "range": {
+          "inches": 6
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "re-roll",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "hit",
+                "subset": "ones"
+              }
+            },
+            {
+              "type": "re-roll",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "wound",
+                "subset": "ones"
+              }
+            }
+          ]
+        },
+        "eligible": {
+          "owner": "friendly",
+          "all_of": [
+            "ADEPTUS CUSTODES"
+          ],
+          "none_of": [
+            "MONSTER",
+            "VEHICLE"
           ]
         }
       }
@@ -982,7 +1452,7 @@
       "trajann-valoris"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "aura",
     "faction_id": "adeptus-custodes"
   },
   {
@@ -1124,94 +1594,86 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "f2eabdca737d0c5b283538fe8256fd633982cfaec8e5feaae5057ff9fa21911a",
+    "source_digest": "0dd52593fd051bc99a9d7d79252d1bedce643e23a0a5348e5525cc3fcaf7d6d5",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "auric-champions",
     "ability_type": "detachment",
-    "behavior": "passive",
+    "behavior": "activated",
     "effect": {
-      "type": "ability-part",
-      "trigger": {
-        "event": "phase-started",
-        "condition": {
-          "operator": "and",
-          "operands": [
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
             {
-              "type": "phase-is",
-              "parameters": {
-                "phase": "command"
+              "type": "designate",
+              "target": "selected-unit",
+              "modifier": {
+                "tag": "assemblage-of-might"
               }
             },
             {
-              "type": "player-turn-is",
-              "parameters": {
-                "turn": "your-turn"
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "defender",
+                  "filter": {
+                    "designated": "assemblage-of-might"
+                  }
+                }
+              },
+              "effect": {
+                "type": "roll-modifier",
+                "target": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "ADEPTUS CUSTODES",
+                    "CHARACTER"
+                  ],
+                  "level": "model"
+                },
+                "modifier": {
+                  "roll": "wound",
+                  "operation": "add",
+                  "value": 1
+                }
               }
             }
           ]
         }
-      },
-      "effect": {
-        "type": "designate-target",
-        "designation": "assemblage-of-might",
-        "select": {
-          "kind": "unit",
-          "selector": {
-            "filter": {
-              "owner": "enemy"
-            },
-            "count": {
-              "min": 1,
-              "max": 1
-            }
-          }
-        },
-        "applies": {
-          "to": "attackers-of-target",
-          "effect": {
-            "type": "conditional",
-            "condition": {
-              "operator": "and",
-              "operands": [
-                {
-                  "type": "matches",
-                  "parameters": {
-                    "filter": {
-                      "all_of": [
-                        "ADEPTUS CUSTODES"
-                      ]
-                    }
-                  }
-                },
-                {
-                  "type": "matches",
-                  "parameters": {
-                    "filter": {
-                      "all_of": [
-                        "CHARACTER"
-                      ]
-                    }
-                  }
-                }
-              ]
-            },
-            "effect": {
-              "type": "roll-modifier",
-              "target": "this-unit",
-              "modifier": {
-                "roll": "wound",
-                "operation": "add",
-                "value": 1
-              }
-            }
-          }
-        },
-        "duration": "until-next-command-phase"
       }
     },
     "scope": {
@@ -1224,9 +1686,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "82f094138e34897d4d6ced1641242e5f745b239294180be78b51048711b59fb1",
+    "source_digest": "2a244f835ffe688cfb6cd6e7db4c84f11452bd8bcca6004c589297336208f919",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -1238,29 +1700,100 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "move",
-          "target": "this-model",
-          "modifier": {
-            "move_type": "normal",
-            "distance": 2
+          "type": "conditional",
+          "condition": {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "strength",
+                "parameters": {
+                  "subject": "recipient",
+                  "below": "starting"
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "stat-modifier",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "ADEPTUS CUSTODES",
+                "DREADNOUGHT"
+              ]
+            },
+            "modifier": {
+              "stat": "OC",
+              "operation": "add",
+              "value": 2
+            }
           }
         },
         {
-          "type": "roll-modifier",
-          "target": "this-model",
-          "modifier": {
-            "roll": "advance",
-            "operation": "add",
-            "value": 1
+          "type": "conditional",
+          "condition": {
+            "type": "strength",
+            "parameters": {
+              "subject": "recipient",
+              "below": "starting"
+            }
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "ADEPTUS CUSTODES",
+                "DREADNOUGHT"
+              ]
+            },
+            "modifier": {
+              "roll": "hit",
+              "subset": "ones"
+            }
           }
         },
         {
-          "type": "roll-modifier",
-          "target": "this-model",
-          "modifier": {
-            "roll": "charge",
-            "operation": "add",
-            "value": 1
+          "type": "conditional",
+          "condition": {
+            "type": "strength",
+            "parameters": {
+              "subject": "recipient",
+              "below": "half"
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "re-roll",
+                "target": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "ADEPTUS CUSTODES",
+                    "DREADNOUGHT"
+                  ]
+                },
+                "modifier": {
+                  "roll": "hit",
+                  "subset": "ones"
+                }
+              },
+              {
+                "type": "re-roll",
+                "target": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "ADEPTUS CUSTODES",
+                    "DREADNOUGHT"
+                  ]
+                },
+                "modifier": {
+                  "roll": "wound",
+                  "subset": "ones"
+                }
+              }
+            ]
           }
         }
       ]
@@ -1276,77 +1809,77 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "7cdd51b6b9c332662de2cc7cd54a22841423eedc1f33c14eadc88292e5d1dffb",
+    "source_digest": "05c18d150b9550ad754aa649a8f999ee040235f1962079b4cd467277b2f7c7a2",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "guardians-of-the-throne",
     "ability_type": "detachment",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "ability-part",
-      "trigger": {
-        "event": "round-started"
+      "type": "conditional",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
       },
       "effect": {
-        "type": "stance-select",
-        "mode": "re-selectable",
+        "type": "choice",
         "options": [
           {
-            "name": "Critical Hits on 5+",
-            "effect": {
-              "type": "conditional",
-              "condition": {
-                "type": "matches",
-                "parameters": {
-                  "filter": {
-                    "has_ability": [
-                      "martial-katah-adeptus-custodes"
-                    ]
-                  },
-                  "subject": "this-unit"
-                }
-              },
-              "effect": {
-                "type": "roll-result",
-                "target": "this-unit",
-                "modifier": {
-                  "roll": "hit",
-                  "critical_on": 5,
-                  "weapons": {
-                    "type": "melee"
+            "type": "weapon-ability-grant",
+            "target": "event-subject",
+            "modifier": {
+              "keywords": [
+                {
+                  "keyword_id": "sustained-hits",
+                  "parameters": {
+                    "value": 1
                   }
                 }
+              ],
+              "weapons": {
+                "type": "melee"
               }
-            },
-            "id": "option-1"
+            }
           },
           {
-            "name": "Improved Armour Penetration",
-            "effect": {
-              "type": "stat-modifier",
-              "target": "this-unit",
-              "modifier": {
-                "stat": "AP",
-                "operation": "improve",
-                "value": 1,
-                "weapons": {
-                  "type": "melee"
+            "type": "weapon-ability-grant",
+            "target": "event-subject",
+            "modifier": {
+              "keywords": [
+                {
+                  "keyword_id": "lethal-hits"
                 }
+              ],
+              "weapons": {
+                "type": "melee"
               }
-            },
-            "id": "option-2"
+            }
           }
         ]
       }
     },
     "scope": {
-      "duration": "battle-round"
+      "duration": "phase"
     },
-    "community_notes": "[APPROX] Both options apply only to ADEPTUS CUSTODES models with the Martial Ka'tah ability (this gate is not encoded). The 'unmodified melee Hit of 5+ scores a Critical Hit' option is an opaque grant, as crit-threshold changes have no dedicated encoding. Full rule in raw-text store."
+    "community_notes": "[APPROX] Both options apply only to ADEPTUS CUSTODES models with the Martial Ka'tah ability (this gate is not encoded). The 'unmodified melee Hit of 5+ scores a Critical Hit' option is an opaque grant, as crit-threshold changes have no dedicated encoding. Full rule in raw-text store.",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "fight"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS CUSTODES"
+        ]
+      }
+    }
   },
   {
     "ability_id": "gilded-champion-auric-champions-adeptus-custodes",
@@ -1422,34 +1955,65 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "7e46ea501e45a452c52ccf3c39f48c4356a1d937be6e631f3f8e96082eb2b14b",
+    "source_digest": "a1a74e070c6aa2d329404ad1687fec560c387b6b418fb9654d6b0b2930c45d57",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "aquilan-shield",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "permission",
-      "target": "this-unit",
-      "modifier": {
-        "activity": "shoot",
-        "allow": true,
-        "after": [
-          "fall-back"
-        ]
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "shoot",
+            "allow": true,
+            "after": [
+              "fall-back"
+            ]
+          }
+        },
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "declare-charge",
+            "allow": true,
+            "after": [
+              "fall-back"
+            ]
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "turn"
+      "duration": "phase"
     },
     "applies_to": {
       "all_of": [
         "ADEPTUS CUSTODES"
       ]
+    },
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "move_types": [
+          "fall-back"
+        ],
+        "to": "move"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS CUSTODES"
+        ]
+      }
     }
   },
   {
@@ -1458,9 +2022,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "46308d707eee58147c7330d1df820288aba7240e0d18694966f87d47b5063144",
+    "source_digest": "7e38ba0e0c9b21d59a9b4931ad3cb52e6de9f4a7f43058315f50557ab3b03a9f",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -1469,11 +2033,36 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "move",
-      "target": "this-unit",
-      "modifier": {
-        "move_type": "normal",
-        "distance": "D6"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-subject",
+          "filter": {
+            "within": {
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "TRUSTED SENTINEL"
+                ],
+                "not_states": [
+                  "engaged"
+                ]
+              },
+              "range": {
+                "inches": 8
+              }
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "move",
+        "target": "this-unit",
+        "modifier": {
+          "move_type": "normal",
+          "distance": "D3+3"
+        }
       }
     },
     "scope": {
@@ -1486,10 +2075,7 @@
     },
     "community_notes": "Used in your opponent's Shooting phase just after an enemy unit has shot at your unit; the unit makes a Normal move of up to D6\". Vehicle units cannot be selected.",
     "trigger": {
-      "event": "attacks-resolved",
-      "filter": {
-        "kind": "shoot"
-      },
+      "event": "move-ended",
       "subject": {
         "owner": "enemy"
       }
@@ -1501,9 +2087,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "b4d0bd94da0d6010c6822a684c7332c9253dff3b1c83ef2a67ee4f93e38f2ece",
+    "source_digest": "5c8fa5000bb0fdd236d1bd80943a5d50da0f5f172f419dd81af430623b983c89",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -1512,14 +2098,15 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "designate",
+      "type": "split-unit",
       "target": "this-unit",
       "modifier": {
-        "tag": "split-into-single-model-units"
+        "by": "model",
+        "starting_strength": 1
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -1534,9 +2121,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "87c55a6d512de24cd6e3de6ed85555374dca3d4b896888fa860bb927df8d6b33",
+    "source_digest": "f7d507fa36a5af4a226b863fb89e8ce8a67a94e4ae93ca3f4a77d1dcd2136b66",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -1545,32 +2132,16 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "permission",
-          "target": "this-unit",
-          "modifier": {
-            "activity": "use-stratagem",
-            "allow": true,
-            "despite": [
-              "destroyed"
-            ]
-          }
-        },
-        {
-          "type": "act-on-death",
-          "target": "event-object",
-          "modifier": {
-            "act": "fight",
-            "resolution": "after-attacking-unit-finishes",
-            "removal": "after-destroyed-model-fights"
-          }
-        }
-      ]
+      "type": "stat-modifier",
+      "target": "attacker",
+      "modifier": {
+        "stat": "D",
+        "operation": "subtract",
+        "value": 1
+      }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "attack-sequence"
     },
     "applies_to": {
       "all_of": [
@@ -1580,8 +2151,20 @@
     },
     "community_notes": "Used on a Character model that was just destroyed and has not fought this phase; it fights after the attacking unit finishes its attacks and is then removed from play.",
     "trigger": {
-      "event": "model-destroyed",
-      "object": "model-in-this-unit"
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS CUSTODES",
+          "TERMINATOR"
+        ]
+      }
     }
   },
   {
@@ -1590,31 +2173,38 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "ab82a4df274a6d5c437f3ccc762cb6039f7fa701f87516b0fd0dafd5987d9788",
+    "source_digest": "9c7d3594a6743e7acd6fd47cb2942df43125c530340309ddac6ab5e9088554da",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "honoured-companions",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
       "condition": {
         "type": "strength",
         "parameters": {
+          "subject": "event-subject",
           "below": "starting"
         }
       },
       "effect": {
         "type": "stat-modifier",
-        "target": "this-unit",
+        "target": {
+          "member_of": "this-unit",
+          "none_of": [
+            "CHARACTER"
+          ],
+          "level": "model"
+        },
         "modifier": {
           "stat": "A",
-          "operation": "add",
-          "value": 1,
+          "operation": "improve",
+          "value": 2,
           "weapons": {
             "type": "melee"
           }
@@ -1629,7 +2219,19 @@
         "ADEPTUS CUSTODES"
       ]
     },
-    "community_notes": "Excludes Anathema Psykana units. If the unit is Below Half-strength, add 2 to the Attacks characteristic instead (escalation not encoded)."
+    "community_notes": "Excludes Anathema Psykana units. If the unit is Below Half-strength, add 2 to the Attacks characteristic instead (escalation not encoded).",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "fight"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "TRUSTED SENTINEL"
+        ]
+      }
+    }
   },
   {
     "ability_id": "anathema-blademastery-null-maiden-vigil-adeptus-custodes",
@@ -1637,56 +2239,42 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "1f0e2ed3a40bec97e89ef3274e78af28b14023960e3b7d0108de099d38d9d1f6",
+    "source_digest": "561560fa2f8fff1ed6d31c4f9484b46d35a6060e94811b1322df4e00e378777a",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "null-maiden-vigil",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "rules-bundle",
-      "steps": [
+      "type": "choice",
+      "options": [
         {
-          "type": "conditional",
-          "condition": {
-            "type": "attack-is",
-            "parameters": {
-              "attack_type": "melee"
-            }
-          },
-          "effect": {
-            "type": "re-roll",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "hit",
-              "subset": "all-failures"
-            }
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "sustained-hits",
+                "parameters": {
+                  "value": 1
+                }
+              }
+            ]
           }
         },
         {
-          "type": "conditional",
-          "condition": {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "all_of": [
-                  "PSYKER"
-                ]
-              },
-              "subject": "defender"
-            }
-          },
-          "effect": {
-            "type": "re-roll",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "wound",
-              "subset": "all-failures"
-            }
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "lethal-hits"
+              }
+            ]
           }
         }
       ]
@@ -1699,7 +2287,20 @@
         "VIGILATORS"
       ]
     },
-    "community_notes": "Wound re-rolls also apply against Battle-shocked targets (not encoded)."
+    "community_notes": "Wound re-rolls also apply against Battle-shocked targets (not encoded).",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "fight"
+      },
+      "subject": {
+        "owner": "friendly",
+        "level": "unit",
+        "unit_ids": [
+          "vigilator-squad"
+        ]
+      }
+    }
   },
   {
     "ability_id": "psy-chaff-volley-null-maiden-vigil-adeptus-custodes",
@@ -1707,64 +2308,97 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "0a1a83212724873a7bdfee0eb42acfe76aae48806d89d268196297a495525afa",
+    "source_digest": "1bfe5393372169edb09cb87c2c0a7cbdc3a9ff5df8db290aa065661eceb1d6a1",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "null-maiden-vigil",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "ability-part",
-      "trigger": {
-        "event": "attacks-resolved",
-        "subject": "this-unit",
+      "type": "select-units",
+      "selector": {
         "filter": {
-          "kind": "shoot"
+          "owner": "enemy"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "type": "happened",
+          "parameters": {
+            "event": "after-roll",
+            "subject": "event-subject",
+            "object": "this-unit",
+            "filter": {
+              "roll": "hit",
+              "result": "success"
+            },
+            "window": "event"
+          }
         }
       },
       "effect": {
-        "type": "designate-target",
-        "designation": "prosecuted",
-        "select": {
-          "kind": "unit",
-          "selector": {
-            "filter": {
-              "owner": "enemy"
-            },
-            "count": {
-              "min": 1,
-              "max": 1
-            }
-          }
-        },
-        "applies": {
-          "to": "attackers-of-target",
-          "effect": {
-            "type": "stat-modifier",
-            "target": "this-unit",
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "designate",
+            "target": "selected-unit",
             "modifier": {
-              "stat": "AP",
-              "operation": "improve",
-              "value": 1
+              "tag": "prosecuted"
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "defender",
+                "filter": {
+                  "designated": "prosecuted"
+                }
+              }
+            },
+            "effect": {
+              "type": "stat-modifier",
+              "target": {
+                "owner": "friendly"
+              },
+              "modifier": {
+                "stat": "AP",
+                "operation": "improve",
+                "value": 1
+              }
             }
           }
-        },
-        "duration": "until-next-command-phase"
+        ]
       }
     },
     "scope": {
-      "duration": "until-next-command-phase"
+      "duration": "turn"
     },
     "applies_to": {
       "all_of": [
         "PROSECUTORS"
       ]
     },
-    "community_notes": "Only Anathema Psykana models improve their AP against the prosecuted unit. While a Psyker or Battle-shocked unit is prosecuted, its models also subtract 1 from their Hit rolls (not encoded)."
+    "community_notes": "Only Anathema Psykana models improve their AP against the prosecuted unit. While a Psyker or Battle-shocked unit is prosecuted, its models also subtract 1 from their Hit rolls (not encoded).",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "PROSECUTORS"
+        ]
+      }
+    }
   },
   {
     "ability_id": "purgation-sweep-null-maiden-vigil-adeptus-custodes",
@@ -1772,30 +2406,99 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "4f6922089c8fe03f8aa203b27f73cbb6e5629fa45aba05565a2ababe0301353f",
+    "source_digest": "1bd8cd6b52054016b770db57b970bc6e900e17da950747d4a03007f4dabcce50",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "null-maiden-vigil",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "stat-modifier",
-      "target": "this-unit",
-      "modifier": {
-        "stat": "A",
-        "operation": "add",
-        "value": 1,
-        "weapons": {
-          "type": "ranged",
-          "keyword": {
-            "keyword_id": "torrent"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "defender",
+                  "filter": {
+                    "owner": "enemy",
+                    "any_of_filters": [
+                      {
+                        "all_of": [
+                          "PSYKER"
+                        ]
+                      },
+                      {
+                        "state": "battle-shocked"
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "A",
+              "operation": "improve",
+              "value": 1,
+              "weapons": {
+                "type": "ranged",
+                "keyword": {
+                  "keyword_id": "torrent"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "defender",
+              "filter": {
+                "owner": "enemy",
+                "any_of_filters": [
+                  {
+                    "all_of": [
+                      "PSYKER"
+                    ]
+                  },
+                  {
+                    "state": "battle-shocked"
+                  }
+                ]
+              }
+            }
+          },
+          "effect": {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "A",
+              "operation": "improve",
+              "value": 2,
+              "weapons": {
+                "type": "ranged",
+                "keyword": {
+                  "keyword_id": "torrent"
+                }
+              }
+            }
           }
         }
-      }
+      ]
     },
     "scope": {
       "duration": "phase"
@@ -1805,7 +2508,19 @@
         "WITCHSEEKERS"
       ]
     },
-    "community_notes": "If a Torrent weapon targets a Psyker or Battle-shocked unit this phase, add 2 to its Attacks characteristic instead (escalation not encoded)."
+    "community_notes": "If a Torrent weapon targets a Psyker or Battle-shocked unit this phase, add 2 to its Attacks characteristic instead (escalation not encoded).",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "WITCHSEEKERS"
+        ]
+      }
+    }
   },
   {
     "ability_id": "shield-of-honour-guardians-of-the-throne-adeptus-custodes",
@@ -2033,33 +2748,38 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "8e61a99ebb16831cd76dd0c164d8eac8ffdbc28cfb1e9b00812731be75e7f813",
+    "source_digest": "3e21e54b5b5f3ad12faf005a2c2d9f9342dcde90ef4998b5cb80461afa5ef414",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "auric-champions",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "dice-gated",
       "dice": "D6",
       "threshold": 2,
       "comparison": "gte",
       "on_success": {
-        "type": "return-models",
+        "type": "set-up",
         "target": "this-model",
         "modifier": {
-          "count": 1,
-          "wounds_remaining": "full",
-          "placement": "closest-to-destruction"
+          "to": "battlefield",
+          "min_enemy_distance": {
+            "inches": 1
+          },
+          "placement": "closest-to-destruction",
+          "wounds_remaining": 3,
+          "mandatory": true
         }
-      }
+      },
+      "on_fail": null
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -2067,7 +2787,26 @@
         "INFANTRY"
       ]
     },
-    "community_notes": "The bearer is set back up as close as possible to where it was destroyed and not within Engagement Range of enemy units, with its full wounds remaining."
+    "community_notes": "The bearer is set back up as close as possible to where it was destroyed and not within Engagement Range of enemy units, with its full wounds remaining.",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "model-destroyed",
+          "object": "this-model",
+          "window": "phase",
+          "count": {
+            "min": 1
+          }
+        }
+      }
+    },
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "army"
+    }
   },
   {
     "ability_id": "inspirational-exemplar-auric-champions-adeptus-custodes",
@@ -2075,20 +2814,19 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "51963df6a4fdf80241568a9c1196807aa6225c93e9786a021ff450b3c2f8295f",
+    "source_digest": "47d26329519b585e93b8928b402469acd743089e6b1af155bd6671b7d16b9e3b",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "auric-champions",
     "ability_type": "enhancement",
-    "behavior": "activated",
+    "behavior": "reactive",
     "usage": {
-      "frequency": "n-per-battle",
-      "count": 1,
-      "per": "unit"
+      "frequency": "once-per-battle-round",
+      "per": "army"
     },
     "effect": {
       "type": "select-units",
@@ -2098,9 +2836,10 @@
           "all_of": [
             "ADEPTUS CUSTODES"
           ],
+          "state": "battle-shocked",
           "within": {
             "range": {
-              "inches": 12
+              "inches": 9
             },
             "of": "this-model"
           }
@@ -2108,14 +2847,6 @@
         "count": {
           "min": 1,
           "max": 1
-        },
-        "eligibility": {
-          "type": "matches",
-          "parameters": {
-            "filter": {
-              "state": "battle-shocked"
-            }
-          }
         }
       },
       "effect": {
@@ -2128,14 +2859,18 @@
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
         "ADEPTUS CUSTODES"
       ]
     },
-    "community_notes": "Once per battle, at the start of any phase, one friendly Adeptus Custodes unit that is Battle-shocked and within 12\" of the bearer is no longer Battle-shocked. The bearer also has a Leadership characteristic of 5+ (not encoded)."
+    "community_notes": "Once per battle, at the start of any phase, one friendly Adeptus Custodes unit that is Battle-shocked and within 12\" of the bearer is no longer Battle-shocked. The bearer also has a Leadership characteristic of 5+ (not encoded).",
+    "trigger": {
+      "event": "phase-started",
+      "optional": true
+    }
   },
   {
     "ability_id": "from-the-hall-of-armouries-emperors-chosen-adeptus-custodes",
@@ -2143,9 +2878,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "15711a5b87287b931661cd48351e2dab17a4145bd427ac9e1d446003f37c7534",
+    "source_digest": "a7c8c7e80c5d4fa62fc61f8c00ccfe3a766f6b846755b4334445375fce0317ac",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -2154,33 +2889,18 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "rules-bundle",
-      "steps": [
-        {
-          "type": "stat-modifier",
-          "target": "this-model",
-          "modifier": {
-            "stat": "S",
-            "operation": "add",
-            "value": 1,
-            "weapons": {
-              "type": "melee"
-            }
+      "type": "weapon-ability-grant",
+      "target": "this-model",
+      "modifier": {
+        "keywords": [
+          {
+            "keyword_id": "devastating-wounds"
           }
-        },
-        {
-          "type": "stat-modifier",
-          "target": "this-model",
-          "modifier": {
-            "stat": "D",
-            "operation": "add",
-            "value": 1,
-            "weapons": {
-              "type": "melee"
-            }
-          }
+        ],
+        "weapons": {
+          "type": "melee"
         }
-      ]
+      }
     },
     "scope": {
       "duration": "permanent"
@@ -2197,21 +2917,49 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "509900037cf4ec35cd5e38b4632fec8a7b41b9a430fbbe5f15d6dd6daab99368",
+    "source_digest": "39432527556ca5d4aca3ba98c6a017db02dbbfaf99b4ab0116673450bf72baa3",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "guardians-of-the-throne",
     "ability_type": "enhancement",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "set-up",
-      "target": "this-unit",
-      "modifier": {
-        "to": "strategic-reserves"
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "ADEPTUS CUSTODES"
+          ]
+        },
+        "count": {
+          "min": 0,
+          "max": 3
+        }
+      },
+      "effect": {
+        "type": "choice",
+        "options": [
+          {
+            "type": "set-up",
+            "target": "selected-unit",
+            "modifier": {
+              "to": "battlefield"
+            }
+          },
+          {
+            "type": "set-up",
+            "target": "selected-unit",
+            "modifier": {
+              "to": "strategic-reserves",
+              "ignore_limits": true
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -2222,7 +2970,11 @@
         "SHIELD-CAPTAIN"
       ]
     },
-    "community_notes": "After both players deploy, select up to two Adeptus Custodes units (excluding Anathema Psykana) and redeploy them; any of them can be placed into Strategic Reserves regardless of how many units are already there."
+    "community_notes": "After both players deploy, select up to two Adeptus Custodes units (excluding Anathema Psykana) and redeploy them; any of them can be placed into Strategic Reserves regardless of how many units are already there.",
+    "trigger": {
+      "event": "deployment-ended",
+      "optional": true
+    }
   },
   {
     "ability_id": "huntress-eye-null-maiden-vigil-adeptus-custodes",
@@ -2305,9 +3057,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "06955c047e5d50b23a2d149815e23c890e3886dd9ed78c3017dd1f9f87dbffc1",
+    "source_digest": "6a3419e92c1596b91881a1aa7bc49bd86a5d1fb5f8cfd4a39517d310aa1f3783",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -2316,18 +3068,35 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
-        }
-      },
-      "effect": {
-        "type": "rules-bundle",
-        "steps": [
-          {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "defender",
+                  "filter": {
+                    "owner": "enemy",
+                    "any_of_filters": [
+                      {
+                        "all_of": [
+                          "PSYKER"
+                        ]
+                      },
+                      {
+                        "state": "battle-shocked"
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          "effect": {
             "type": "roll-modifier",
             "target": "this-unit",
             "modifier": {
@@ -2335,32 +3104,71 @@
               "operation": "add",
               "value": 1
             }
-          },
-          {
-            "type": "conditional",
-            "condition": {
-              "type": "matches",
-              "parameters": {
-                "filter": {
-                  "all_of": [
-                    "PSYKER"
-                  ]
-                },
-                "subject": "defender"
-              }
-            },
-            "effect": {
-              "type": "roll-modifier",
-              "target": "this-unit",
-              "modifier": {
-                "roll": "wound",
-                "operation": "add",
-                "value": 1
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "defender",
+              "filter": {
+                "owner": "enemy",
+                "any_of_filters": [
+                  {
+                    "all_of": [
+                      "PSYKER"
+                    ]
+                  },
+                  {
+                    "state": "battle-shocked"
+                  }
+                ]
               }
             }
+          },
+          "effect": {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "operation": "add",
+              "value": 1
+            }
           }
-        ]
-      }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "defender",
+              "filter": {
+                "owner": "enemy",
+                "any_of_filters": [
+                  {
+                    "all_of": [
+                      "PSYKER"
+                    ]
+                  },
+                  {
+                    "state": "battle-shocked"
+                  }
+                ]
+              }
+            }
+          },
+          "effect": {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "wound",
+              "operation": "add",
+              "value": 1
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -2377,9 +3185,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "1afe0440ed981f5f5c1017b6be1c40f54288b79ff81ddb6a4e77df3035b5d3eb",
+    "source_digest": "508ebd85adb17d667019a8a83c62b8ef873cc942a00f35d9acf33efc7ca069df",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -2389,10 +3197,9 @@
     "behavior": "passive",
     "effect": {
       "type": "roll-modifier",
-      "target": "this-unit",
+      "target": "attacker",
       "modifier": {
         "roll": "hit",
-        "incoming": true,
         "operation": "subtract",
         "value": 1
       }
@@ -2671,19 +3478,30 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": null,
     "ability_type": "faction",
     "effect": {
-      "type": "no-effect"
+      "type": "feel-no-pain",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS CUSTODES"
+        ]
+      },
+      "modifier": {
+        "threshold": 5,
+        "against": "mortal"
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "bcf94ed8b21ee6ac284187647f6ebf6b567b45158e3615f06868c7e13c8bc09e"
   },
   {
     "ability_id": "aquila-commander-adeptus-custodes",
@@ -2792,19 +3610,47 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "honoured-companions",
     "ability_type": "detachment",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "attacker",
+          "filter": {
+            "within": {
+              "of": {
+                "objective": {}
+              },
+              "range": "objective-control"
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "re-roll",
+        "target": {
+          "owner": "friendly",
+          "all_of": [
+            "TRUSTED SENTINEL"
+          ]
+        },
+        "modifier": {
+          "roll": "wound",
+          "subset": "ones"
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "199c76e3eebdc8f935df76a953593c92c1e8be050e46427529577a60472af25b"
   },
   {
     "ability_id": "coronal-plate-aquilan-talon-adeptus-custodes",
@@ -2812,19 +3658,25 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "aquilan-talon",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-grant",
+      "target": "this-model",
+      "modifier": {
+        "ability": "lone-operative",
+        "value": 15
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "a999c29727853706ddc5107dfdcb4d37a566399a34d8272d81696758726f52f8"
   },
   {
     "ability_id": "death-blow-adeptus-custodes",
@@ -2879,9 +3731,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "caladius-grav-tank"
     ],
@@ -2889,11 +3740,37 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "defender",
+          "filter": {
+            "none_of": [
+              "MONSTER",
+              "VEHICLE"
+            ]
+          }
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "stat": "AP",
+          "operation": "improve",
+          "value": 1,
+          "weapons": {
+            "type": "ranged"
+          }
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "440d25a15440bad157e681ad38ddd79e50190d40236ac7150410bc350999ebeb"
   },
   {
     "ability_id": "eagles-pinions-upgrade-aquilan-wing-adeptus-custodes",
@@ -2901,19 +3778,24 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "aquilan-wing",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "hover"
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "e495aee24009e8f55571260b43ba40e95ddef0c78485fd38f6f4019a87d01c95"
   },
   {
     "ability_id": "fight-to-the-death-adeptus-custodes",
@@ -2921,9 +3803,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "aquilan-talon-shield-captain"
     ],
@@ -2931,11 +3812,58 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "act-on-death",
+      "target": "event-object",
+      "modifier": {
+        "act": "fight",
+        "resolution": "when-unit-fights",
+        "removal": "after-unit-fights-or-phase-end",
+        "gate": {
+          "dice": "D6",
+          "threshold": 4,
+          "comparison": "gte",
+          "modifiers": []
+        },
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "fight"
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "happened",
+                  "parameters": {
+                    "event": "selected",
+                    "filter": {
+                      "to": "fight"
+                    },
+                    "window": "phase"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
+    },
+    "source_digest": "6957da852c99f80439cad02d7a3080ab0f7de23189c94f32eaccd314cd13d557"
   },
   {
     "ability_id": "flare-shields-adeptus-custodes",
@@ -2943,19 +3871,38 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "grav-assault-force",
     "ability_type": "detachment",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "attack-is",
+        "parameters": {
+          "attack_type": "ranged"
+        }
+      },
+      "effect": {
+        "type": "invulnerable-save",
+        "target": {
+          "owner": "friendly",
+          "all_of": [
+            "GRAV-ASSAULT"
+          ]
+        },
+        "modifier": {
+          "invuln_sv": 4
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "3a27cf14476d35b119380ea2342157d81f71657232fe751269e74a7b7cd8d554"
   },
   {
     "ability_id": "gilded-guardians-adeptus-custodes",
@@ -2983,19 +3930,32 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "aquilan-talon",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ],
+        "weapons": {
+          "type": "ranged",
+          "name": "Lastrum storm bolter"
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "ea44c727fff0025086407aa52c8139acd03564a6875f16b8a79018da045445dd"
   },
   {
     "ability_id": "heralds-of-the-throne-adeptus-custodes",
@@ -3023,9 +3983,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "custodian-guard-sodality"
     ],
@@ -3033,11 +3992,101 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "defender",
+                      "filter": {
+                        "all_of": [
+                          "MONSTER"
+                        ]
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "defender",
+                      "filter": {
+                        "all_of": [
+                          "VEHICLE"
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "operator": "or",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "within": {
+                      "of": {
+                        "objective": {}
+                      },
+                      "range": "objective-control"
+                    }
+                  }
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "defender",
+                  "filter": {
+                    "within": {
+                      "of": {
+                        "objective": {}
+                      },
+                      "range": "objective-control"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "effect": {
+        "type": "weapon-ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "keywords": [
+            {
+              "keyword_id": "sustained-hits",
+              "parameters": {
+                "value": 1
+              }
+            }
+          ]
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "aff93f5dd2d910c2ae49885ab211fe0d509b218fba23f48f3e03287b236ef03c"
   },
   {
     "ability_id": "indomitable-avatars-adeptus-custodes",
@@ -3045,19 +4094,62 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "aquilan-wing",
     "ability_type": "detachment",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "ADEPTUS CUSTODES",
+              "AQUILAN WING"
+            ]
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        },
+        "effect": {
+          "type": "stat-modifier",
+          "target": "selected-unit",
+          "modifier": {
+            "stat": "OC",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "until-next-command-phase"
+    },
+    "behavior": "activated",
+    "source_digest": "380e8d65eaac881c10977f1df8622745fbada3ed33587ed5eb583902d744ba31"
   },
   {
     "ability_id": "instruments-of-the-emperors-wrath-adeptus-custodes",
@@ -3085,9 +4177,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "aquilan-talon-contemptor-achillus-dreadnought"
     ],
@@ -3095,11 +4186,33 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "recipient",
+          "filter": {
+            "engaged_with": "this-model"
+          }
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": {
+          "owner": "enemy"
+        },
+        "modifier": {
+          "stat": "Ld",
+          "operation": "worsen",
+          "value": 1
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "2ae339318356fb56b842e1040a4cdbe34c1aa05afc3037d5595de5429c8acf22"
   },
   {
     "ability_id": "magna-imperator-adeptus-custodes",
@@ -3262,19 +4375,74 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "lions-of-the-emperor",
     "ability_type": "detachment",
     "effect": {
-      "type": "no-effect"
+      "type": "for-each-unit",
+      "selector": {
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "ADEPTUS CUSTODES",
+            "TERMINATOR"
+          ]
+        }
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "operator": "not",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "subject": "recipient",
+                "filter": {
+                  "state": "engaged"
+                }
+              }
+            }
+          ]
+        },
+        "effect": {
+          "type": "set-up",
+          "target": "recipient",
+          "modifier": {
+            "to": "strategic-reserves"
+          }
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      },
+      "optional": true
+    },
+    "source_digest": "e9510286bf5eb060e2fc401f11691ad8f18bfb72aab9e67ca7ade1fa187773eb"
   },
   {
     "ability_id": "praesidium-shield-shield-captain-adeptus-custodes",
@@ -3335,9 +4503,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "aquilon-terminators-with-solarite-power-talons"
     ],
@@ -3345,11 +4512,45 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "defender",
+          "filter": {
+            "all_of": [
+              "INFANTRY"
+            ]
+          }
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "subset": "ones"
+            }
+          },
+          {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "wound",
+              "subset": "ones"
+            }
+          }
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "7bb2adbb90fa5b930031a4cbd61ee2dbe3a5feb04d0c58aaf746bf4a219b2bb4"
   },
   {
     "ability_id": "repulsor-suspensor-technology-adeptus-custodes",
@@ -3419,9 +4620,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "allarus-custodians"
     ],
@@ -3429,11 +4629,47 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "melee"
+            }
+          },
+          {
+            "type": "attack-compare",
+            "parameters": {
+              "left": {
+                "of": "defender",
+                "stat": "T"
+              },
+              "comparison": "gt",
+              "right": {
+                "of": "attacker",
+                "stat": "T"
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "roll": "wound",
+          "operation": "add",
+          "value": 1
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "bf6c1768758da46c7d94346f780b3eeaa13005d0623dfd0a2d4726dde4484ee7"
   },
   {
     "ability_id": "special-move-types-adeptus-custodes",
@@ -3483,9 +4719,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "blade-champion"
     ],
@@ -3493,11 +4728,80 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-part",
+      "trigger": {
+        "event": "round-started",
+        "condition": {
+          "type": "battle-round",
+          "parameters": {
+            "min": 1,
+            "max": 1
+          }
+        }
+      },
+      "effect": {
+        "type": "persistent-designation",
+        "designation": "mark",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            },
+            "bind_as": "mark-selection"
+          }
+        },
+        "selection_policy": "replace-on-destroyed",
+        "consumer": {
+          "relation": "attacks-selected-unit",
+          "beneficiary": "this-model",
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "event-object",
+                "filter": {
+                  "designated": "mark"
+                }
+              }
+            },
+            "effect": {
+              "type": "roll-modifier",
+              "target": "this-model",
+              "modifier": {
+                "roll": "wound",
+                "operation": "add",
+                "value": 1
+              }
+            }
+          },
+          "reference": {
+            "selection_var": "mark-selection"
+          }
+        },
+        "duration": "battle",
+        "lifecycle": {
+          "replace": {
+            "event": "on-unit-destroyed",
+            "reference": {
+              "selection_var": "mark-selection"
+            },
+            "optional": false
+          },
+          "exclusivity": "one-active-per-bearer-unit"
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "8249804f3dec71e548461df3cec3de085083af304fb5e16ad52c0ddc3537f958"
   },
   {
     "ability_id": "take-wing-adeptus-custodes",
@@ -3590,9 +4894,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "aquilan-wing-shield-captain"
     ],
@@ -3600,11 +4903,19 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "stat-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "stat": "Ld",
+        "operation": "improve",
+        "value": 1
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "1e3faaec9e0fc630541f873f1a0e797a7d6549999855989dd18ff4d4d4825d47"
   },
   {
     "ability_id": "unyielding-ancient-adeptus-custodes",
@@ -3723,19 +5034,65 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "aquilan-wing",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "act-on-death",
+      "target": "event-object",
+      "modifier": {
+        "act": "fight",
+        "resolution": "when-unit-fights",
+        "removal": "after-unit-fights-or-phase-end",
+        "gate": {
+          "dice": "D6",
+          "threshold": 4,
+          "comparison": "gte",
+          "modifiers": []
+        },
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "fight"
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "happened",
+                  "parameters": {
+                    "event": "selected",
+                    "filter": {
+                      "to": "fight"
+                    },
+                    "window": "phase"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
+    },
+    "source_digest": "cdc251ed3212368ac4de84ff2da28f67c6662a1897b36284b606716585ef4add"
   },
   {
     "ability_id": "advanced-stabilisers-grav-assault-force-adeptus-custodes",
@@ -3743,19 +5100,43 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "grav-assault-force",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "keywords": [
+          {
+            "keyword_id": "assault"
+          }
+        ],
+        "weapons": {
+          "type": "ranged"
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "GRAV-ASSAULT"
+        ]
+      }
+    },
+    "source_digest": "2793e7574bff2c601a0bbc407b97cb1872db0ab0191d4d4c37995479e1e73cf7"
   },
   {
     "ability_id": "anti-gravitic-mobility-upgrade-grav-assault-force-adeptus-custodes",
@@ -3763,19 +5144,36 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "grav-assault-force",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "permission",
+      "target": "this-unit",
+      "modifier": {
+        "activity": "shoot",
+        "allow": true,
+        "despite": [
+          "fell-back"
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "fall-back"
+        ]
+      }
+    },
+    "source_digest": "7987ebc0b5aef7a349863d65f1848cc51e71f051ed27a34e7e74ad37ba6822e6"
   },
   {
     "ability_id": "arae-shrike-honoured-companions-adeptus-custodes",
@@ -3783,19 +5181,45 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "honoured-companions",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "set-up",
+      "target": "event-subject",
+      "modifier": {
+        "to": "battlefield",
+        "allow": false,
+        "near": [
+          {
+            "of": "this-unit",
+            "range": {
+              "inches": 12
+            }
+          }
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "move_types": [
+          "ingress"
+        ],
+        "to": "move"
+      }
+    },
+    "source_digest": "77e19d6330dd6eee62ec80b5356ddcb9073683e0433330a7d41b0ed53ab73a62"
   },
   {
     "ability_id": "at-spears-length-solar-watch-adeptus-custodes",
@@ -3803,19 +5227,43 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "solar-watch",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "permission",
+      "target": "this-unit",
+      "modifier": {
+        "activity": "shoot",
+        "allow": true,
+        "despite": [
+          "fell-back"
+        ]
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "move_types": [
+          "fall-back"
+        ],
+        "to": "move"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS CUSTODES"
+        ]
+      }
+    },
+    "source_digest": "60371da29a3d6c29f8f6089dd469ecdd6bd5fcc5ebfd887f4cd210c0a6c26c28"
   },
   {
     "ability_id": "augury-uplink-one-per-army-upgrade-might-of-the-moritoi-adeptus-custodes",
@@ -3823,19 +5271,24 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "might-of-the-moritoi",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "feel-no-pain",
+      "target": "this-model",
+      "modifier": {
+        "threshold": 5
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "c195a544c0642f3d8713cc7b973c00ae95c20c455a4108e930e73b48d825bb2b"
   },
   {
     "ability_id": "auric-eagle-upgrade-solar-watch-adeptus-custodes",
@@ -3843,19 +5296,40 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "solar-watch",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "advance",
+            "operation": "add",
+            "value": 1
+          }
+        },
+        {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "charge",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "9b47a9fc3167b50589e31f68f3f221ee48bdfb31c6f91010ec19eb9d24eb6b49"
   },
   {
     "ability_id": "auric-exemplar-dread-host-adeptus-custodes",
@@ -3863,19 +5337,34 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "dread-host",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "weapon-ability-grant",
+      "target": "this-model",
+      "modifier": {
+        "keywords": [
+          {
+            "keyword_id": "cleave",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ],
+        "weapons": {
+          "type": "melee"
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "7a3172d6a37db4fe7a6322a075eb8a9996f2c6c46fe50f0858ef50262d2d1215"
   },
   {
     "ability_id": "auriferous-orb-emissaries-imperatus-adeptus-custodes",
@@ -3903,19 +5392,42 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "guardians-of-the-throne",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "defender",
+          "filter": {
+            "any_of": [
+              "CHARACTER",
+              "MONSTER",
+              "VEHICLE"
+            ]
+          }
+        }
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "this-model",
+        "modifier": {
+          "roll": "wound",
+          "operation": "add",
+          "value": 1
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "0618d0f15ac0c8cc0c978937721dbcd2ce8147009bfc3a0e00d46bef118e8887"
   },
   {
     "ability_id": "bearers-of-his-light-emissaries-imperatus-adeptus-custodes",
@@ -3923,19 +5435,43 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "emissaries-imperatus",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "ignore-modifiers",
+      "target": "this-unit",
+      "modifier": {
+        "what": "rolls",
+        "rolls": [
+          "hit",
+          "wound"
+        ],
+        "weapons": {
+          "type": "melee"
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "fight"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS CUSTODES"
+        ]
+      }
+    },
+    "source_digest": "78a1cb3a3e8c180c47de9b694d61aab8adab7eede2e85f1145c93d2ea6af30d0"
   },
   {
     "ability_id": "celeritous-sentries-upgrade-honoured-companions-adeptus-custodes",
@@ -3943,19 +5479,59 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "honoured-companions",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "use-stratagem",
+            "allow": true,
+            "despite": [
+              "stratagem-used-this-phase"
+            ],
+            "stratagem": "heroic-intervention"
+          }
+        },
+        {
+          "type": "cost-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "of": "stratagem",
+            "operation": "decrease",
+            "amount": 1,
+            "applies_to": "the-triggering-use"
+          }
+        },
+        {
+          "type": "ability-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "ability": "heroic-intervention",
+            "aspect": "uses",
+            "operation": "lift-limit",
+            "value": 1,
+            "consumes_shared_use": false
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "activated",
+    "usage": {
+      "frequency": "once-per-phase",
+      "per": "unit"
+    },
+    "source_digest": "81d09394043f8e6f596c08fa7967e788ab1a2227eb82dd4417a3bd71f605aa0e"
   },
   {
     "ability_id": "combat-deployment-upgrade-grav-assault-force-adeptus-custodes",
@@ -3983,19 +5559,42 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "aquilan-wing",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "roll-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "roll": "advance",
+        "operation": "add",
+        "value": 2
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "move_types": [
+          "advance"
+        ],
+        "to": "move"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS CUSTODES",
+          "AQUILAN WING"
+        ]
+      }
+    },
+    "source_digest": "cef1918664ca075454a7f66c415d3fbb7c4e365373486754a2967bb49fa5baca"
   },
   {
     "ability_id": "duty-unto-death-auric-champions-adeptus-custodes",
@@ -4023,19 +5622,51 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "guardians-of-the-throne",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "this-model",
+          "modifier": {
+            "stat": "W",
+            "operation": "add",
+            "value": 1
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "damage-allocated",
+            "object": "this-model",
+            "optional": true
+          },
+          "effect": {
+            "type": "invulnerable-save",
+            "target": "this-model",
+            "modifier": {
+              "invuln_sv": 3
+            }
+          },
+          "usage": {
+            "frequency": "n-per-battle",
+            "count": 1,
+            "per": "army"
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "source_digest": "f1dea69feec6a5b7f478a952ef267e1e8c742ae8beada43e61232b98a20e0512"
   },
   {
     "ability_id": "edge-of-the-blade-emissaries-imperatus-adeptus-custodes",
@@ -4043,19 +5674,53 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "emissaries-imperatus",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "move-ended",
+          "filter": {
+            "move_types": [
+              "charge"
+            ]
+          },
+          "window": "turn"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "re-roll",
+            "target": "this-model",
+            "modifier": {
+              "roll": "hit",
+              "subset": "ones"
+            }
+          },
+          {
+            "type": "re-roll",
+            "target": "this-model",
+            "modifier": {
+              "roll": "wound",
+              "subset": "ones"
+            }
+          }
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "4ee25cc3459655634946a19e2bf0522236621e44a1fbde947cdd095ebb47d072"
   },
   {
     "ability_id": "emperors-domain-honoured-companions-adeptus-custodes",
@@ -4103,19 +5768,34 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "dread-host",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "weapon-ability-grant",
+      "target": "this-model",
+      "modifier": {
+        "keywords": [
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ],
+        "weapons": {
+          "type": "melee"
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "5e6bf6b4e0513738e25693946ae161f4936a9245805e8c3a7c302a3e823aa6c0"
   },
   {
     "ability_id": "fury-of-the-emperor-lions-of-the-emperor-adeptus-custodes",
@@ -4123,19 +5803,55 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "lions-of-the-emperor",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "subject": "event-subject",
+          "event": "move-ended",
+          "filter": {
+            "move_types": [
+              "ingress"
+            ]
+          },
+          "window": "turn"
+        }
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "roll": "charge",
+          "operation": "add",
+          "value": 2
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "declare-charge"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS CUSTODES",
+          "TERMINATOR"
+        ]
+      }
+    },
+    "source_digest": "34bd7b9e7999cd10c4dc81d8b69043eefbcfca2ddc1d058e4ffa405e3e04e95f"
   },
   {
     "ability_id": "genalchemic-warding-shadowkeepers-adeptus-custodes",
@@ -4143,19 +5859,24 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "shadowkeepers",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "feel-no-pain",
+      "target": "this-model",
+      "modifier": {
+        "threshold": 5
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "5dbf979e190028f4f2acc4573c26cd812d28f28da2ba9100f448f935113d3b98"
   },
   {
     "ability_id": "golden-light-of-the-moiraides-dread-host-adeptus-custodes",
@@ -4203,19 +5924,59 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "shadowkeepers",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "defender",
+          "filter": {
+            "any_of": [
+              "CHARACTER",
+              "MONSTER"
+            ]
+          }
+        }
+      },
+      "effect": {
+        "type": "weapon-ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "keywords": [
+            {
+              "keyword_id": "lethal-hits"
+            }
+          ],
+          "weapons": {
+            "type": "melee"
+          }
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "fight"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS CUSTODES",
+          "INFANTRY"
+        ]
+      }
+    },
+    "source_digest": "b08bbb2808e663e76c66ea662aa394977123b4e2314b9c9b9d609e2b4b1bba06"
   },
   {
     "ability_id": "honoured-interred-might-of-the-moritoi-adeptus-custodes",
@@ -4263,19 +6024,44 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "emperors-chosen",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "stat-modifier",
+      "target": "attacker",
+      "modifier": {
+        "stat": "AP",
+        "operation": "worsen",
+        "value": 1
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "attack-sequence"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS CUSTODES"
+        ],
+        "none_of": [
+          "CUSTODIAN WARDENS"
+        ]
+      }
+    },
+    "source_digest": "97cac2d725ac64db83f5c63dbcb34ae532ae77fa38885ff6db274176c51a988d"
   },
   {
     "ability_id": "in-auramite-clad-guardians-of-the-throne-adeptus-custodes",
@@ -4283,19 +6069,44 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "guardians-of-the-throne",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "stat-modifier",
+      "target": "attacker",
+      "modifier": {
+        "stat": "AP",
+        "operation": "worsen",
+        "value": 1
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "attack-sequence"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS CUSTODES"
+        ],
+        "none_of": [
+          "CUSTODIAN WARDENS"
+        ]
+      }
+    },
+    "source_digest": "97cac2d725ac64db83f5c63dbcb34ae532ae77fa38885ff6db274176c51a988d"
   },
   {
     "ability_id": "indomitable-guardians-shadowkeepers-adeptus-custodes",
@@ -4303,19 +6114,47 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "shadowkeepers",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "ability": "fights-first"
+          }
+        },
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "fight",
+            "allow": true,
+            "next": true
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "fight"
+      },
+      "subject": {
+        "owner": "enemy"
+      }
+    },
+    "source_digest": "4a423cf4a1237de0ccc23e6f94b78f0f945c97e9d82cf853ecdc8f94ea777d21"
   },
   {
     "ability_id": "inevitable-annihilation-grav-assault-force-adeptus-custodes",
@@ -4323,19 +6162,54 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "grav-assault-force",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ignore-modifiers",
+          "target": "this-unit",
+          "modifier": {
+            "what": "characteristics",
+            "stats": [
+              "BS"
+            ]
+          }
+        },
+        {
+          "type": "ignore-modifiers",
+          "target": "this-unit",
+          "modifier": {
+            "what": "rolls",
+            "rolls": [
+              "hit"
+            ]
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "GRAV-ASSAULT"
+        ]
+      }
+    },
+    "source_digest": "9dda40d0a2028c0d100daa35f6c7f8aa96f7e251238088090d2033124d55a0a5"
   },
   {
     "ability_id": "inexorable-solar-watch-adeptus-custodes",
@@ -4363,19 +6237,59 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "lions-of-the-emperor",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "use-stratagem",
+            "allow": true,
+            "despite": [
+              "stratagem-used-this-phase"
+            ],
+            "stratagem": "rapid-ingress"
+          }
+        },
+        {
+          "type": "cost-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "of": "stratagem",
+            "operation": "decrease",
+            "amount": 1,
+            "applies_to": "the-triggering-use"
+          }
+        },
+        {
+          "type": "ability-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "ability": "rapid-ingress",
+            "aspect": "uses",
+            "operation": "lift-limit",
+            "value": 1,
+            "consumes_shared_use": false
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "activated",
+    "usage": {
+      "frequency": "once-per-phase",
+      "per": "army"
+    },
+    "source_digest": "60a5ab50ba0f51763fcf96cf45bd22cc712d25dc06e7c06bdd4195c11ffc7176"
   },
   {
     "ability_id": "lightning-descent-lions-of-the-emperor-adeptus-custodes",
@@ -4383,19 +6297,56 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "lions-of-the-emperor",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "battle-round",
+            "parameters": {
+              "min": 1,
+              "max": 1
+            }
+          },
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "movement"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "effect": {
+        "type": "move",
+        "target": "this-unit",
+        "modifier": {
+          "move_type": "ingress"
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "5111a9abc27c4571eed3458311fc1bab5a926e3985af8a5f308acf79604a98bf"
   },
   {
     "ability_id": "lightning-wrath-dread-host-adeptus-custodes",
@@ -4403,19 +6354,40 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "dread-host",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "move",
+      "target": "this-unit",
+      "modifier": {
+        "move_type": "pile-in",
+        "distance": "D3+3"
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "move_types": [
+          "pile-in"
+        ],
+        "to": "move"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS CUSTODES"
+        ]
+      }
+    },
+    "source_digest": "9b925631d2808e6a35da0e47c3e49ae574a343ec37fb39fc144b4245531e09f5"
   },
   {
     "ability_id": "memento-moritoi-one-per-army-upgrade-might-of-the-moritoi-adeptus-custodes",
@@ -4423,19 +6395,58 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "might-of-the-moritoi",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "this-model",
+          "modifier": {
+            "stat": "A",
+            "operation": "add",
+            "value": 1,
+            "weapons": {
+              "type": "melee"
+            }
+          }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "this-model",
+          "modifier": {
+            "stat": "S",
+            "operation": "add",
+            "value": 1,
+            "weapons": {
+              "type": "melee"
+            }
+          }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "this-model",
+          "modifier": {
+            "stat": "D",
+            "operation": "add",
+            "value": 1,
+            "weapons": {
+              "type": "melee"
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "0dd96810dc69829009773b56d13f8d71a4ec6d1b2eb887914d58c1893b61abea"
   },
   {
     "ability_id": "no-escape-shadowkeepers-adeptus-custodes",
@@ -4463,19 +6474,29 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "aquilan-shield",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "stat-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "stat": "A",
+        "operation": "improve",
+        "value": 1,
+        "weapons": {
+          "type": "ranged"
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "80cddc88d33f39f974ea06190e61bdfd8c424683d86b5e67703fb9374ba289b1"
   },
   {
     "ability_id": "on-gilded-wings-aquilan-wing-adeptus-custodes",
@@ -4483,19 +6504,44 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "aquilan-wing",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "set-up",
+      "target": "this-unit",
+      "modifier": {
+        "to": "strategic-reserves"
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
+    },
+    "source_digest": "989298019dbf93f2e50a015df6e4ee891097848f384e090b2c267525ceb39786"
   },
   {
     "ability_id": "pareldors-caducatrix-aquilan-shield-adeptus-custodes",
@@ -4503,19 +6549,32 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "aquilan-shield",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "heal",
+      "target": "this-model",
+      "modifier": {
+        "amount": "D3+3"
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-started"
+    },
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "army"
+    },
+    "source_digest": "3771be16de8d278683b680123222a49f178d7ede1f22ba620c121a22a18c8068"
   },
   {
     "ability_id": "preternatural-rapidity-dread-host-adeptus-custodes",
@@ -4563,19 +6622,69 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "aquilan-shield",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "attack-is",
+            "parameters": {
+              "shooting_type": "normal"
+            }
+          },
+          "effect": {
+            "type": "permission",
+            "target": "this-unit",
+            "modifier": {
+              "activity": "shoot",
+              "allow": true
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "attack-is",
+            "parameters": {
+              "shooting_type": "normal"
+            }
+          },
+          "effect": {
+            "type": "targeting",
+            "target": "this-unit",
+            "modifier": {
+              "by": "this-unit",
+              "may": "must-target",
+              "kind": "shoot",
+              "target": "event-subject"
+            }
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "move_types": [
+          "fall-back"
+        ]
+      }
+    },
+    "source_digest": "32d007f98672e2c050904d77b35c26c309873ef270f240692e5b33ee32e4fd80"
   },
   {
     "ability_id": "relentless-destroyers-aquilan-talon-adeptus-custodes",
@@ -4603,19 +6712,70 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "solar-watch",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "ADEPTUS CUSTODES",
+            "INFANTRY"
+          ],
+          "within": {
+            "range": {
+              "inches": 6
+            },
+            "of": "this-model"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "effect": {
+        "type": "permission",
+        "target": "selected-unit",
+        "modifier": {
+          "activity": "declare-charge",
+          "allow": true,
+          "despite": [
+            "advanced"
+          ]
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "charge"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    },
+    "source_digest": "dd907a6e235c0bab7fb5814122a5754da3852e211253a057fd0be3ff027c0841"
   },
   {
     "ability_id": "selfless-service-emissaries-imperatus-adeptus-custodes",
@@ -4643,19 +6803,36 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "auric-champions",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-grant",
+          "target": "this-model",
+          "modifier": {
+            "ability": "stealth"
+          }
+        },
+        {
+          "type": "ability-grant",
+          "target": "this-model",
+          "modifier": {
+            "ability": "lone-operative"
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "ced69a83bc0dbf6b9d128dff0f5e36222d777c814da8c0b82a4194727a344c21"
   },
   {
     "ability_id": "slayers-of-nightmares-emissaries-imperatus-adeptus-custodes",
@@ -4663,19 +6840,66 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "emissaries-imperatus",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "melee"
+            }
+          },
+          {
+            "type": "attack-compare",
+            "parameters": {
+              "left": {
+                "of": "defender",
+                "stat": "T"
+              },
+              "comparison": "gt",
+              "right": {
+                "of": "attacker",
+                "stat": "T"
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "roll": "wound",
+          "operation": "add",
+          "value": 1
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "fight"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS CUSTODES"
+        ]
+      }
+    },
+    "source_digest": "81ac00eb9c79794368304c446fc9620b6f5ba34c9a03de048d41ce5c35133259"
   },
   {
     "ability_id": "superhuman-focus-emperors-chosen-adeptus-custodes",
@@ -4723,19 +6947,56 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "honoured-companions",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-subject",
+          "filter": {
+            "within": {
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "TRUSTED SENTINEL"
+                ],
+                "not_states": [
+                  "engaged"
+                ]
+              },
+              "range": {
+                "inches": 8
+              }
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "move",
+        "target": "this-unit",
+        "modifier": {
+          "move_type": "normal",
+          "distance": "D3+3"
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      }
+    },
+    "source_digest": "7e38ba0e0c9b21d59a9b4931ad3cb52e6de9f4a7f43058315f50557ab3b03a9f"
   },
   {
     "ability_id": "terrible-might-aquilan-talon-adeptus-custodes",
@@ -4743,19 +7004,54 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "aquilan-talon",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "subject": "selected-unit",
+            "filter": {
+              "engaged_with": "this-unit"
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "test",
+        "target": "selected-unit",
+        "modifier": {
+          "test": "battle-shock"
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    },
+    "source_digest": "3efce547d3d39a6803c13155579c070aaac737700a1409d089bbda28971bbd5f"
   },
   {
     "ability_id": "tip-of-the-talon-aquilan-shield-adeptus-custodes",
@@ -4763,19 +7059,72 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "aquilan-shield",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "defender",
+              "filter": {
+                "owner": "enemy"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "defender",
+              "filter": {
+                "within": {
+                  "of": "this-unit",
+                  "range": {
+                    "inches": 9
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "stat": "S",
+          "operation": "improve",
+          "value": 1,
+          "weapons": {
+            "type": "ranged"
+          }
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS CUSTODES"
+        ]
+      }
+    },
+    "source_digest": "3fc1cf3d69b5cd11823366dc48c7bebda3fef5ad62101c955f050903c935dc0a"
   },
   {
     "ability_id": "unceasing-onslaught-might-of-the-moritoi-adeptus-custodes",
@@ -4783,19 +7132,62 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "might-of-the-moritoi",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "assault"
+              }
+            ],
+            "weapons": {
+              "type": "ranged"
+            }
+          }
+        },
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "declare-charge",
+            "allow": true,
+            "despite": [
+              "advanced"
+            ]
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "turn"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "advance"
+        ]
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS CUSTODES",
+          "DREADNOUGHT"
+        ]
+      }
+    },
+    "source_digest": "6b344bdc4fe65de3cbfce577cc971039f97bb070e412fb81be0875b7cc08bfe8"
   },
   {
     "ability_id": "unlimited-endurance-guardians-of-the-throne-adeptus-custodes",
@@ -4803,19 +7195,61 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "guardians-of-the-throne",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "assault"
+              }
+            ],
+            "weapons": {
+              "type": "ranged"
+            }
+          }
+        },
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "declare-charge",
+            "allow": true,
+            "despite": [
+              "advanced"
+            ]
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "turn"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "advance"
+        ]
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS CUSTODES"
+        ]
+      }
+    },
+    "source_digest": "a990f70d8a8aa4a84f7bda5a2449e7362378f26f276867523daba775f84a2c4d"
   },
   {
     "ability_id": "unstoppable-champion-aquilan-talon-adeptus-custodes",
@@ -4823,19 +7257,39 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "aquilan-talon",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "keyword-grant",
+      "target": "this-unit",
+      "modifier": {
+        "keywords": [
+          "MOBILE"
+        ]
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "move"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "AQUILAN TALON",
+          "CONTEMPTOR-ACHILLUS DREADNOUGHT"
+        ]
+      }
+    },
+    "source_digest": "9f43b397bda60a0c6272ddfff25f6c71a2ef1fd28ce63e3b5358110d931676c9"
   },
   {
     "ability_id": "unstoppable-destroyer-shadowkeepers-adeptus-custodes",
@@ -4863,19 +7317,54 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "might-of-the-moritoi",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "keyword-grant",
+      "target": "this-unit",
+      "modifier": {
+        "keywords": [
+          "MOBILE"
+        ]
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": [
+      {
+        "event": "selected",
+        "filter": {
+          "to": "move"
+        },
+        "subject": {
+          "owner": "friendly",
+          "all_of": [
+            "ADEPTUS CUSTODES",
+            "DREADNOUGHT"
+          ]
+        }
+      },
+      {
+        "event": "targets-selected",
+        "filter": {
+          "kind": "charge"
+        },
+        "subject": {
+          "owner": "friendly",
+          "all_of": [
+            "ADEPTUS CUSTODES",
+            "DREADNOUGHT"
+          ]
+        }
+      }
+    ],
+    "source_digest": "dc958d711d96be90e8f4e3db3137a276d4b47706408899ba46d1ac48a962e3a0"
   },
   {
     "ability_id": "vengeance-inescapable-aquilan-wing-adeptus-custodes",
@@ -4883,19 +7372,41 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "aquilan-wing",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "move",
+      "target": "this-unit",
+      "modifier": {
+        "move_type": "pile-in",
+        "distance": "D3+3"
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "move_types": [
+          "pile-in"
+        ],
+        "to": "move"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS CUSTODES",
+          "AQUILAN WING"
+        ]
+      }
+    },
+    "source_digest": "86e2ad7454a9997a5e2ddf906477b83f14cbc61db304bb8b841ad6cc6ed7986f"
   },
   {
     "ability_id": "victory-before-death-grav-assault-force-adeptus-custodes",

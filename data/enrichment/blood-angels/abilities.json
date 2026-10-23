@@ -2220,19 +2220,62 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "blood-angels",
     "detachment_id": "angelic-inheritors",
     "ability_type": "detachment",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "re-roll",
+              "target": {
+                "owner": "friendly",
+                "all_of": [
+                  "BLOOD ANGELS",
+                  "CHARACTER"
+                ]
+              },
+              "modifier": {
+                "roll": "hit",
+                "subset": "ones"
+              }
+            },
+            {
+              "type": "re-roll",
+              "target": {
+                "owner": "friendly",
+                "all_of": [
+                  "BLOOD ANGELS",
+                  "CHARACTER"
+                ]
+              },
+              "modifier": {
+                "roll": "wound",
+                "subset": "ones"
+              }
+            }
+          ]
+        },
+        {
+          "type": "army-rule",
+          "target": "this-unit",
+          "modifier": {
+            "rule": "single-chapter"
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "6d80d27d89cec9ec5510839fee9505250235621f29f68bc634d7d95bee058d40"
   },
   {
     "ability_id": "oath-of-moment-blood-angels",

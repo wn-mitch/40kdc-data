@@ -5791,7 +5791,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "8e907fd85fcab73ad4775e9e15d4ba95b8c260966aa08bd54ca63f98de7fc38a",
     "version": "2025-q3",
@@ -5800,10 +5800,10 @@
     "faction_id": "world-eaters",
     "detachment_id": "berzerker-warband",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "permission",
-      "target": "event-subject",
+      "target": "this-unit",
       "modifier": {
         "activity": "declare-charge",
         "allow": true,
@@ -5817,37 +5817,19 @@
     },
     "trigger": {
       "event": "selected",
+      "filter": {
+        "move_types": [
+          "advance"
+        ],
+        "to": "move"
+      },
       "subject": {
         "owner": "friendly",
         "all_of": [
-          "KHORNE",
-          "BERZERKERS"
+          "BERZERKERS",
+          "KHORNE"
         ]
-      },
-      "filter": {
-        "to": "move",
-        "move_types": [
-          "advance"
-        ]
-      },
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "your-turn"
-            }
-          }
-        ]
-      },
-      "optional": true
+      }
     }
   },
   {
@@ -9129,9 +9111,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "bloodthirster"
     ],
@@ -9139,11 +9120,43 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "attack-is",
+        "parameters": {
+          "attack_type": "melee"
+        }
+      },
+      "effect": {
+        "type": "aura",
+        "target": "friendly-within-aura",
+        "modifier": {
+          "range": {
+            "inches": 6
+          },
+          "effect": {
+            "type": "roll-modifier",
+            "target": "recipient",
+            "modifier": {
+              "roll": "hit",
+              "operation": "add",
+              "value": 1
+            }
+          },
+          "eligible": {
+            "owner": "friendly",
+            "all_of": [
+              "BLOOD LEGIONS"
+            ]
+          }
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "aura",
+    "source_digest": "c3be059b99be4e22a7221a97a2f3b77bbc3ca5ae672ed08e12a1b2faa659948b"
   },
   {
     "ability_id": "daemonic-icon-world-eaters",
@@ -9181,9 +9194,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "skarbrand"
     ],
@@ -9191,11 +9203,33 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "wounds",
+        "parameters": {
+          "subject": "this-model",
+          "remaining_max": 7
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "A",
+          "operation": "add",
+          "value": 2,
+          "weapons": {
+            "type": "melee",
+            "name": "slaughter and carnage"
+          }
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "504fc9c1369f1b69f8f3bfdc2f91d06488286139dfd59c37b7e278825df659bf"
   },
   {
     "ability_id": "hunters-from-the-warp-world-eaters",
@@ -9318,9 +9352,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "skarbrand"
     ],
@@ -9328,11 +9361,37 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "aura",
+      "target": "friendly-within-aura",
+      "modifier": {
+        "range": {
+          "inches": 6
+        },
+        "effect": {
+          "type": "stat-modifier",
+          "target": "recipient",
+          "modifier": {
+            "stat": "A",
+            "operation": "add",
+            "value": 1,
+            "weapons": {
+              "type": "melee"
+            }
+          }
+        },
+        "eligible": {
+          "owner": "friendly",
+          "all_of": [
+            "BLOOD LEGIONS"
+          ]
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "aura",
+    "source_digest": "4d97871c821ade285cfbf7e7b8e6b0c1b3e79aa2477e579b6bed4a7f3a699e59"
   },
   {
     "ability_id": "relentless-carnage-world-eaters",

@@ -5009,9 +5009,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "watch-master"
     ],
@@ -5019,10 +5018,78 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-part",
+      "trigger": {
+        "event": "round-started",
+        "condition": {
+          "type": "battle-round",
+          "parameters": {
+            "min": 1,
+            "max": 1
+          }
+        }
+      },
+      "effect": {
+        "type": "persistent-designation",
+        "designation": "hunted",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 0,
+              "max": 1
+            },
+            "bind_as": "hunted-selection"
+          }
+        },
+        "selection_policy": "replace-on-destroyed",
+        "consumer": {
+          "relation": "attacks-selected-unit",
+          "beneficiary": "this-unit",
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "designated": "hunted"
+                }
+              }
+            },
+            "effect": {
+              "type": "re-roll",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "wound",
+                "subset": "ones"
+              }
+            }
+          },
+          "reference": {
+            "selection_var": "hunted-selection"
+          }
+        },
+        "duration": "battle",
+        "lifecycle": {
+          "replace": {
+            "event": "on-unit-destroyed",
+            "reference": {
+              "selection_var": "hunted-selection"
+            },
+            "optional": true
+          },
+          "exclusivity": "one-active-per-bearer-unit"
+        }
+      },
+      "optional": true
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "e538b4def968c942a7ba5b674c6b9941161bf9fbf9543e4d71f848e29cf70e17"
   }
 ]

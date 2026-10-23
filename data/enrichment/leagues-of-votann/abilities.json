@@ -2946,7 +2946,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "5f843c62bd17378bd4594841ea8c79ec17970b55674002c43f30bbcbb09a05f7",
     "version": "2025-q3",
@@ -2968,13 +2968,9 @@
             }
           },
           {
-            "type": "matches",
+            "type": "player-turn-is",
             "parameters": {
-              "filter": {
-                "all_of": [
-                  "PIONEERS"
-                ]
-              }
+              "turn": "your-turn"
             }
           }
         ]
@@ -2991,7 +2987,7 @@
               "of": "this-unit"
             },
             "visible": {
-              "to": "this-unit"
+              "to": "this-model"
             }
           },
           "count": {
@@ -3006,17 +3002,28 @@
               "type": "designate",
               "target": "selected-unit",
               "modifier": {
-                "subject": "selected-unit",
-                "tag": "SPOTTED"
+                "tag": "spotted"
               }
             },
             {
-              "type": "stat-modifier",
-              "target": "selected-unit",
-              "modifier": {
-                "stat": "detection-range",
-                "operation": "add",
-                "value": 3
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "designated": "spotted"
+                  }
+                }
+              },
+              "effect": {
+                "type": "stat-modifier",
+                "target": "selected-unit",
+                "modifier": {
+                  "stat": "detection-range",
+                  "operation": "add",
+                  "value": 3
+                }
               }
             }
           ]
@@ -3024,7 +3031,7 @@
       }
     },
     "scope": {
-      "duration": "turn"
+      "duration": "phase"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },

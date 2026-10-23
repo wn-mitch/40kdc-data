@@ -2916,35 +2916,92 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "f05ae89bb5d771d620be139f0d3b3336d410d9aa8e49ed928f66935509c2823a",
+    "source_digest": "61b018fbf66c01219689a6fcf4119b90245e1829e521aad347ee4a3caf896982",
     "version": "2025-q3",
     "effect": {
-      "type": "set-up",
-      "target": {
-        "owner": "enemy"
-      },
-      "modifier": {
-        "allow": false,
-        "to": "battlefield",
-        "from": "strategic-reserves",
-        "min_distance_from": {
-          "of": "this-unit",
-          "range": {
-            "inches": 12
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
           }
+        ]
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy",
+            "within": {
+              "range": {
+                "inches": 18
+              },
+              "of": "this-unit"
+            },
+            "visible": {
+              "to": "this-model"
+            }
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "designate",
+              "target": "selected-unit",
+              "modifier": {
+                "tag": "detected"
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "designated": "detected"
+                  }
+                }
+              },
+              "effect": {
+                "type": "stat-modifier",
+                "target": "selected-unit",
+                "modifier": {
+                  "stat": "detection-range",
+                  "operation": "add",
+                  "value": 3
+                }
+              }
+            }
+          ]
         }
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "phase"
     },
     "unit_ids": [
       "infiltrator-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "activated",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "faction_id": "adeptus-astartes"
   },
@@ -3559,16 +3616,16 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "c217eaa7b7c467a4cd9c55ba4ce4e110230faafbea262c43b5a873d65f704289",
+    "source_digest": "a327d3bb0132f7089eae05acc9f6d704797086cbcff153f563af9d18a420ca2f",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "adeptus-astartes",
     "detachment_id": "devastator-brethren",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -3576,14 +3633,14 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "weapons": {
-              "type": "ranged"
-            },
             "keywords": [
               {
                 "keyword_id": "ignores-cover"
               }
-            ]
+            ],
+            "weapons": {
+              "type": "ranged"
+            }
           }
         },
         {
@@ -3592,8 +3649,8 @@
             "type": "rule-active",
             "parameters": {
               "rule": {
-                "ability_id": "combat-doctrines-assault-force-adeptus-astartes",
-                "option_id": "option-1"
+                "ability_id": "combat-doctrines-adeptus-astartes",
+                "option_id": "devastator-doctrine"
               }
             }
           },
@@ -3615,7 +3672,19 @@
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "Target must not have been selected to shoot this phase"
+    "community_notes": "Target must not have been selected to shoot this phase",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS ASTARTES"
+        ]
+      }
+    }
   },
   {
     "ability_id": "strike-from-the-shadows-phobos-shadow-force-adeptus-astartes",
@@ -4617,19 +4686,134 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-astartes",
     "detachment_id": null,
     "ability_type": "faction",
     "effect": {
-      "type": "no-effect"
+      "type": "stance-select",
+      "mode": "consumable",
+      "options": [
+        {
+          "id": "assault-doctrine",
+          "name": "Assault Doctrine",
+          "effect": {
+            "type": "ability-part",
+            "effect": {
+              "type": "permission",
+              "target": "this-unit",
+              "modifier": {
+                "activity": "declare-charge",
+                "allow": true,
+                "despite": [
+                  "advanced"
+                ]
+              }
+            },
+            "trigger": {
+              "event": "selected",
+              "filter": {
+                "move_types": [
+                  "advance"
+                ],
+                "to": "move"
+              }
+            }
+          }
+        },
+        {
+          "id": "devastator-doctrine",
+          "name": "Devastator Doctrine",
+          "effect": {
+            "type": "weapon-ability-grant",
+            "target": "this-unit",
+            "modifier": {
+              "keywords": [
+                {
+                  "keyword_id": "assault"
+                }
+              ],
+              "weapons": {
+                "type": "ranged"
+              }
+            }
+          }
+        },
+        {
+          "id": "tactical-doctrine",
+          "name": "Tactical Doctrine",
+          "effect": {
+            "type": "ability-part",
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "permission",
+                  "target": "this-unit",
+                  "modifier": {
+                    "activity": "shoot",
+                    "allow": true,
+                    "despite": [
+                      "fell-back"
+                    ]
+                  }
+                },
+                {
+                  "type": "permission",
+                  "target": "this-unit",
+                  "modifier": {
+                    "activity": "declare-charge",
+                    "allow": true,
+                    "despite": [
+                      "fell-back"
+                    ]
+                  }
+                }
+              ]
+            },
+            "trigger": {
+              "event": "selected",
+              "filter": {
+                "move_types": [
+                  "fall-back"
+                ],
+                "to": "move"
+              }
+            }
+          }
+        }
+      ],
+      "min_choices": 1,
+      "max_choices": 1
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "until-next-command-phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "optional": true
+    },
+    "source_digest": "27784b8df061d7215e01f5d5c005c1448d89a0dbbf908d61565fff6785359e81"
   },
   {
     "ability_id": "decapitating-strike-assault-force-adeptus-astartes",

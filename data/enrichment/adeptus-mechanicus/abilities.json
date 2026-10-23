@@ -4694,9 +4694,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "77c9d3bd810cd78c72b892c8212bc8248a3828a6317a5e63cd266d6520ba8a4b",
+    "source_digest": "20ce52ab800196eac6c74162ecdd50d3ae265816ac95084b1e85208b6b528b9c",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -4709,7 +4709,10 @@
       "target": "this-unit",
       "modifier": {
         "activity": "declare-charge",
-        "allow": true
+        "allow": true,
+        "despite": [
+          "advanced"
+        ]
       }
     },
     "scope": {

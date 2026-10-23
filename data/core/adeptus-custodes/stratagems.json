@@ -16,7 +16,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Grav-assault"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "advanced-stabilisers-grav-assault-force-adeptus-custodes",
     "game_version": {
       "edition": "11th",
@@ -35,7 +42,23 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "subject": "this-unit",
+          "filter": {
+            "level": "unit",
+            "unit_ids": [
+              "vigilator-squad"
+            ]
+          }
+        }
+      }
+    },
     "ability_id": "anathema-blademastery-null-maiden-vigil-adeptus-custodes",
     "game_version": {
       "edition": "11th",
@@ -69,7 +92,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "at-spears-length-solar-watch-adeptus-custodes",
     "game_version": {
       "edition": "11th",
@@ -93,7 +123,14 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Trusted Sentinel"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "avenge-the-fallen-honoured-companions-adeptus-custodes",
     "game_version": {
       "edition": "11th",
@@ -117,7 +154,14 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "bearers-of-his-light-emissaries-imperatus-adeptus-custodes",
     "game_version": {
       "edition": "11th",
@@ -141,7 +185,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes",
+        "Aquilan Wing"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "driven-by-duty-aquilan-wing-adeptus-custodes",
     "game_version": {
       "edition": "11th",
@@ -213,7 +265,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes",
+        "Terminator"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "fury-of-the-emperor-lions-of-the-emperor-adeptus-custodes",
     "game_version": {
       "edition": "11th",
@@ -337,7 +397,14 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "grim-responsibility-shadowkeepers-adeptus-custodes",
     "game_version": {
       "edition": "11th",
@@ -411,7 +478,24 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "none_of": [
+              "CUSTODIAN WARDENS"
+            ]
+          }
+        }
+      }
+    },
     "ability_id": "in-auramite-clad-emperors-chosen-adeptus-custodes",
     "game_version": {
       "edition": "11th",
@@ -436,7 +520,24 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "none_of": [
+              "CUSTODIAN WARDENS"
+            ]
+          }
+        }
+      }
+    },
     "ability_id": "in-auramite-clad-guardians-of-the-throne-adeptus-custodes",
     "game_version": {
       "edition": "11th",
@@ -460,7 +561,39 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": {
+                    "objective": {}
+                  },
+                  "range": "objective-control"
+                }
+              }
+            }
+          },
+          {
+            "type": "eligible",
+            "parameters": {
+              "subject": "this-unit",
+              "to": "fight"
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "indomitable-guardians-shadowkeepers-adeptus-custodes",
     "game_version": {
       "edition": "11th",
@@ -484,7 +617,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Grav-assault"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "inevitable-annihilation-grav-assault-force-adeptus-custodes",
     "game_version": {
       "edition": "11th",
@@ -556,7 +696,14 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "lightning-wrath-dread-host-adeptus-custodes",
     "game_version": {
       "edition": "11th",
@@ -580,7 +727,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "manoeuvre-and-fire-aquilan-shield-adeptus-custodes",
     "game_version": {
       "edition": "11th",
@@ -652,7 +806,25 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Aquilan Wing",
+        "Venatari with Kinetic Destroyers"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "not_states": [
+              "engaged"
+            ]
+          }
+        }
+      }
+    },
     "ability_id": "on-gilded-wings-aquilan-wing-adeptus-custodes",
     "game_version": {
       "edition": "11th",
@@ -719,7 +891,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Prosecutors"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "psy-chaff-volley-null-maiden-vigil-adeptus-custodes",
     "game_version": {
       "edition": "11th",
@@ -748,7 +927,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Witchseekers"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "purgation-sweep-null-maiden-vigil-adeptus-custodes",
     "game_version": {
       "edition": "11th",
@@ -782,7 +968,23 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes",
+        "Infantry"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "unit-state",
+        "parameters": {
+          "state": "engaged",
+          "with": "event-subject",
+          "at": "phase-start"
+        }
+      }
+    },
     "ability_id": "rapid-reactions-aquilan-shield-adeptus-custodes",
     "game_version": {
       "edition": "11th",
@@ -878,7 +1080,14 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "slayers-of-nightmares-emissaries-imperatus-adeptus-custodes",
     "game_version": {
       "edition": "11th",
@@ -958,7 +1167,42 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Trusted Sentinel"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "not_states": [
+                  "engaged"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": "event-subject",
+                  "range": {
+                    "inches": 8
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "swift-as-the-eagle-guardians-of-the-throne-adeptus-custodes",
     "game_version": {
       "edition": "11th",
@@ -982,7 +1226,42 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Trusted Sentinel"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "not_states": [
+                  "engaged"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": "event-subject",
+                  "range": {
+                    "inches": 8
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "swift-as-the-eagle-honoured-companions-adeptus-custodes",
     "game_version": {
       "edition": "11th",
@@ -1006,7 +1285,23 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Aquilan Talon",
+        "Contemptor-Achillus Dreadnought"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "state": "engaged"
+          }
+        }
+      }
+    },
     "ability_id": "terrible-might-aquilan-talon-adeptus-custodes",
     "game_version": {
       "edition": "11th",
@@ -1030,7 +1325,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "tip-of-the-talon-aquilan-shield-adeptus-custodes",
     "game_version": {
       "edition": "11th",
@@ -1054,7 +1356,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes",
+        "Dreadnought"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "unceasing-onslaught-might-of-the-moritoi-adeptus-custodes",
     "game_version": {
       "edition": "11th",
@@ -1073,7 +1383,21 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes",
+        "Terminator"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "model-count",
+        "parameters": {
+          "min": 2
+        }
+      }
+    },
     "ability_id": "unleash-the-lions-lions-of-the-emperor-adeptus-custodes",
     "game_version": {
       "edition": "11th",
@@ -1107,7 +1431,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "unlimited-endurance-guardians-of-the-throne-adeptus-custodes",
     "game_version": {
       "edition": "11th",
@@ -1131,7 +1462,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Aquilan Talon",
+        "Contemptor-Achillus Dreadnought"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "unstoppable-champion-aquilan-talon-adeptus-custodes",
     "game_version": {
       "edition": "11th",
@@ -1151,11 +1490,20 @@
     "detachment_id": "might-of-the-moritoi",
     "cp_cost": 1,
     "phases": [
+      "movement",
       "charge"
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes",
+        "Dreadnought"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "unstoppable-momentum-might-of-the-moritoi-adeptus-custodes",
     "game_version": {
       "edition": "11th",
@@ -1179,7 +1527,15 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes",
+        "Aquilan Wing"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "vengeance-inescapable-aquilan-wing-adeptus-custodes",
     "game_version": {
       "edition": "11th",
@@ -1232,7 +1588,15 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes",
+        "Terminator"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit"
+    },
     "ability_id": "vigil-unending-lions-of-the-emperor-adeptus-custodes",
     "game_version": {
       "edition": "11th",

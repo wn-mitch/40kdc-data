@@ -1017,9 +1017,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "376c2adc2b4de6077e947d4a7f7687790d618d89884a3ba47c0ffcc8cbbf9f7f",
+    "source_digest": "f519208ea4324c35fff2e05de8a2bc578464deb95283f019755016ba39bdca92",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],

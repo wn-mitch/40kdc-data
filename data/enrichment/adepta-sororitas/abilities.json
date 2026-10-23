@@ -3776,9 +3776,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "7951fb435bfd4e6d394343befb397bd36ef8748bf2b16c9099b13407dcdff4fe",
+    "source_digest": "702734bcdde5fc89e3e82149efac4321720ceec39cd90673b87fe1ee59cdda5d",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -3787,11 +3787,11 @@
     "ability_type": "detachment",
     "behavior": "reactive",
     "effect": {
-      "type": "choice",
-      "choice_label": "vow-of-atonement",
+      "type": "stance-select",
+      "mode": "consumable",
       "options": [
         {
-          "type": "ability-part",
+          "id": "the-path-of-the-penitent",
           "name": "The Path of the Penitent",
           "effect": {
             "type": "stat-modifier",
@@ -3810,119 +3810,166 @@
           }
         },
         {
-          "type": "ability-part",
+          "id": "absolution-in-battle",
           "name": "Absolution in Battle",
-          "trigger": {
-            "event": "selected",
-            "subject": {
-              "owner": "friendly"
-            },
-            "filter": {
-              "to": "fight"
-            },
-            "condition": {
-              "type": "happened",
-              "parameters": {
-                "event": "move-ended",
-                "subject": "event-subject",
-                "filter": {
-                  "move_types": [
-                    "charge"
-                  ]
-                },
-                "window": "turn"
-              }
-            }
-          },
-          "duration": "phase",
           "effect": {
-            "type": "sequence",
-            "steps": [
-              {
-                "type": "stat-modifier",
-                "target": "event-subject",
-                "modifier": {
-                  "stat": "A",
-                  "operation": "add",
-                  "value": 1,
-                  "weapons": {
-                    "type": "melee"
-                  }
+            "type": "ability-part",
+            "effect": {
+              "type": "conditional",
+              "condition": {
+                "type": "happened",
+                "parameters": {
+                  "subject": "event-subject",
+                  "event": "move-ended",
+                  "filter": {
+                    "move_types": [
+                      "charge"
+                    ]
+                  },
+                  "window": "turn"
                 }
               },
-              {
-                "type": "stat-modifier",
-                "target": "event-subject",
-                "modifier": {
-                  "stat": "S",
-                  "operation": "add",
-                  "value": 1,
-                  "weapons": {
-                    "type": "melee"
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "stat-modifier",
+                    "target": {
+                      "level": "model",
+                      "member_of": "event-subject",
+                      "all_of": [
+                        "PENITENT"
+                      ]
+                    },
+                    "modifier": {
+                      "stat": "A",
+                      "operation": "add",
+                      "value": 1,
+                      "weapons": {
+                        "type": "melee"
+                      }
+                    }
+                  },
+                  {
+                    "type": "stat-modifier",
+                    "target": {
+                      "level": "model",
+                      "member_of": "event-subject",
+                      "all_of": [
+                        "PENITENT"
+                      ]
+                    },
+                    "modifier": {
+                      "stat": "S",
+                      "operation": "add",
+                      "value": 1,
+                      "weapons": {
+                        "type": "melee"
+                      }
+                    }
                   }
-                }
+                ]
               }
-            ]
+            },
+            "trigger": {
+              "event": "selected",
+              "filter": {
+                "to": "fight"
+              },
+              "subject": {
+                "owner": "friendly"
+              }
+            },
+            "duration": "phase"
           }
         },
         {
-          "type": "ability-part",
+          "id": "death-before-disgrace",
           "name": "Death Before Disgrace",
-          "trigger": {
-            "event": "model-destroyed",
-            "object": {
-              "owner": "friendly",
-              "all_of": [
-                "PENITENT"
-              ],
-              "level": "model"
-            },
-            "filter": {
-              "attack_type": "melee",
-              "timing": "before-removal"
-            },
-            "condition": {
-              "operator": "not",
-              "operands": [
-                {
-                  "type": "happened",
-                  "parameters": {
-                    "event": "selected",
-                    "subject": "event-object",
-                    "filter": {
-                      "to": "fight"
-                    },
-                    "window": "phase"
-                  }
-                }
-              ]
-            }
-          },
           "effect": {
-            "type": "dice-gated",
-            "dice": "D6",
-            "threshold": 2,
-            "comparison": "gte",
-            "on_success": {
+            "type": "ability-part",
+            "effect": {
               "type": "act-on-death",
               "target": "event-object",
               "modifier": {
                 "act": "fight",
-                "resolution": "after-attacking-unit-finishes-attacks",
-                "removal": "after-fighting"
+                "resolution": "after-attacking-unit-finishes",
+                "removal": "after-destroyed-model-fights",
+                "gate": {
+                  "dice": "D6",
+                  "threshold": 2,
+                  "comparison": "gte",
+                  "modifiers": []
+                },
+                "eligibility": {
+                  "operator": "and",
+                  "operands": [
+                    {
+                      "type": "attack-is",
+                      "parameters": {
+                        "attack_type": "melee"
+                      }
+                    },
+                    {
+                      "operator": "not",
+                      "operands": [
+                        {
+                          "type": "happened",
+                          "parameters": {
+                            "subject": "event-object",
+                            "event": "selected",
+                            "filter": {
+                              "to": "fight"
+                            },
+                            "window": "phase"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
               }
             },
-            "on_fail": null
+            "trigger": {
+              "event": "model-destroyed",
+              "object": {
+                "owner": "friendly",
+                "all_of": [
+                  "PENITENT"
+                ],
+                "level": "model"
+              }
+            }
           }
         }
-      ]
+      ],
+      "min_choices": 1,
+      "max_choices": 1
     },
     "scope": {
-      "duration": "battle-round"
+      "duration": "until-next-command-phase"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "round-started"
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "optional": true
     }
   },
   {

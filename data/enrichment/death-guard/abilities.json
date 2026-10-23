@@ -8777,9 +8777,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "great-unclean-one"
     ],
@@ -8787,11 +8786,34 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "aura",
+      "target": "friendly-within-aura",
+      "modifier": {
+        "range": {
+          "inches": 6
+        },
+        "effect": {
+          "type": "stat-modifier",
+          "target": "recipient",
+          "modifier": {
+            "stat": "T",
+            "operation": "add",
+            "value": 1
+          }
+        },
+        "eligible": {
+          "owner": "friendly",
+          "all_of": [
+            "PLAGUE LEGIONS"
+          ]
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "aura",
+    "source_digest": "cc5611cce3d2c6539f93c7706f1d88b5f45da02f3040b23dab01c2930f67f05a"
   },
   {
     "ability_id": "daemonic-icon-death-guard",

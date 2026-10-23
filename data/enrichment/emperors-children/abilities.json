@@ -7517,9 +7517,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "keeper-of-secrets"
     ],
@@ -7527,11 +7526,37 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "aura",
+      "target": "friendly-within-aura",
+      "modifier": {
+        "range": {
+          "inches": 6
+        },
+        "effect": {
+          "type": "stat-modifier",
+          "target": "recipient",
+          "modifier": {
+            "stat": "AP",
+            "operation": "improve",
+            "value": 1,
+            "weapons": {
+              "type": "melee"
+            }
+          }
+        },
+        "eligible": {
+          "owner": "friendly",
+          "all_of": [
+            "LEGIONS OF EXCESS"
+          ]
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "aura",
+    "source_digest": "443a1d5b1801198414239cbe240889e7afce7fd8accd287fd4184c2e8de914ef"
   },
   {
     "ability_id": "daemonic-icon-emperors-children",
