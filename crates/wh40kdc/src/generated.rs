@@ -36989,6 +36989,9 @@ impl ::std::convert::TryFrom<::std::string::String> for RollSelectorVariant0 {
 ///        },
 ///        {
 ///          "$ref": "#/$defs/stance-option-ref"
+///        },
+///        {
+///          "$ref": "#/$defs/named-ability-ref"
 ///        }
 ///      ]
 ///    }
@@ -37014,6 +37017,9 @@ pub struct RuleActiveConditionParameters {
 ///    },
 ///    {
 ///      "$ref": "#/$defs/stance-option-ref"
+///    },
+///    {
+///      "$ref": "#/$defs/named-ability-ref"
 ///    }
 ///  ]
 ///}
@@ -37024,6 +37030,7 @@ pub struct RuleActiveConditionParameters {
 pub enum RuleActiveConditionParametersRule {
     EntityId(EntityId),
     StanceOptionRef(StanceOptionRef),
+    NamedAbilityRef(NamedAbilityRef),
 }
 impl ::std::convert::From<EntityId> for RuleActiveConditionParametersRule {
     fn from(value: EntityId) -> Self {
@@ -37033,6 +37040,11 @@ impl ::std::convert::From<EntityId> for RuleActiveConditionParametersRule {
 impl ::std::convert::From<StanceOptionRef> for RuleActiveConditionParametersRule {
     fn from(value: StanceOptionRef) -> Self {
         Self::StanceOptionRef(value)
+    }
+}
+impl ::std::convert::From<NamedAbilityRef> for RuleActiveConditionParametersRule {
+    fn from(value: NamedAbilityRef) -> Self {
+        Self::NamedAbilityRef(value)
     }
 }
 ///`RuleStateCoreRuleSlug`
@@ -37212,6 +37224,9 @@ impl ::std::convert::TryFrom<::std::string::String> for RuleStateCoreRuleSlug {
 ///        },
 ///        {
 ///          "$ref": "#/$defs/named-ability-ref"
+///        },
+///        {
+///          "$ref": "#/$defs/stance-option-ref"
 ///        }
 ///      ]
 ///    },
@@ -37337,6 +37352,9 @@ for RuleStateEffectModifierDirection {
 ///    },
 ///    {
 ///      "$ref": "#/$defs/named-ability-ref"
+///    },
+///    {
+///      "$ref": "#/$defs/stance-option-ref"
 ///    }
 ///  ]
 ///}
@@ -37347,6 +37365,7 @@ for RuleStateEffectModifierDirection {
 pub enum RuleStateEffectModifierRule {
     String(RuleStateEffectModifierRuleString),
     NamedAbilityRef(NamedAbilityRef),
+    StanceOptionRef(StanceOptionRef),
 }
 impl ::std::convert::From<RuleStateEffectModifierRuleString>
 for RuleStateEffectModifierRule {
@@ -37357,6 +37376,11 @@ for RuleStateEffectModifierRule {
 impl ::std::convert::From<NamedAbilityRef> for RuleStateEffectModifierRule {
     fn from(value: NamedAbilityRef) -> Self {
         Self::NamedAbilityRef(value)
+    }
+}
+impl ::std::convert::From<StanceOptionRef> for RuleStateEffectModifierRule {
+    fn from(value: StanceOptionRef) -> Self {
+        Self::StanceOptionRef(value)
     }
 }
 ///`RuleStateEffectModifierRuleKind`

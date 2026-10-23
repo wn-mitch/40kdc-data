@@ -1044,7 +1044,7 @@ class SimpleCondition3(TypedDict):
 
 
 class Parameters4(TypedDict):
-    rule: EntityId | StanceOptionRef
+    rule: EntityId | StanceOptionRef | NamedAbilityRef
 
 
 class SimpleCondition4(TypedDict):
@@ -1246,7 +1246,7 @@ Select = TypedDict(
 class Modifier20(TypedDict):
     direction: Literal["granted", "suppressed", "exchanged"]
     rule_kind: Literal["core-rule", "keyword", "ability", "faction-rule"]
-    rule: str | NamedAbilityRef
+    rule: str | NamedAbilityRef | StanceOptionRef
     exchange_with: NotRequired[NamedAbilityRef]
     except_from: NotRequired[Literal["this-ability"]]
     attacks: NotRequired[EventBoundReference]

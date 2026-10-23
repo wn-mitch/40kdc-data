@@ -29,9 +29,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "068904c069e519788e9fc4c7cbf5d7e7fbea2f50fed4ad97776bf37b8820c3bf",
+    "source_digest": "de9fae355f3dbb255d28e22ccd413d01f4091693827a427a94378b725764b97c",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -39,10 +39,21 @@
         "operator": "and",
         "operands": [
           {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "movement"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
           },
           {
             "operator": "not",
@@ -63,29 +74,51 @@
         "type": "sequence",
         "steps": [
           {
-            "type": "dice-gated",
+            "type": "roll",
             "dice": "D6",
-            "threshold": 1,
-            "comparison": "eq",
-            "on_success": {
-              "type": "state-change",
-              "target": "this-model",
-              "modifier": {
-                "state": "battle-shocked",
-                "set": true
-              }
+            "roll_var": "psychic",
+            "effect": {
+              "type": "dice-table",
+              "dice": "D6",
+              "outcomes": [
+                {
+                  "results": [
+                    1
+                  ],
+                  "effect": {
+                    "type": "state-change",
+                    "target": "this-unit",
+                    "modifier": {
+                      "state": "battle-shocked",
+                      "set": true
+                    }
+                  }
+                },
+                {
+                  "results": [
+                    2,
+                    3,
+                    4,
+                    5,
+                    6
+                  ],
+                  "effect": {
+                    "type": "no-effect"
+                  }
+                }
+              ]
             }
           },
           {
             "type": "set-up",
-            "target": "this-model",
+            "target": "this-unit",
             "modifier": {
               "to": "strategic-reserves"
             }
           },
           {
             "type": "ability-grant",
-            "target": "this-model",
+            "target": "this-unit",
             "modifier": {
               "ability": "deep-strike"
             }
@@ -94,7 +127,7 @@
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "phase"
     },
     "unit_ids": [
       "weirdboy"
@@ -102,11 +135,7 @@
     "ability_type": "unit",
     "behavior": "activated",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks",
-    "usage": {
-      "frequency": "once-per-battle-round",
-      "per": "army"
-    }
+    "faction_id": "orks"
   },
   {
     "ability_id": "deff-from-above-orks",
@@ -13814,19 +13843,54 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "orks",
     "detachment_id": "dread-mob",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "keyword-grant",
+      "target": "this-unit",
+      "modifier": {
+        "keywords": [
+          "MOBILE"
+        ]
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": [
+      {
+        "event": "selected",
+        "filter": {
+          "to": "move"
+        },
+        "subject": {
+          "owner": "friendly",
+          "all_of": [
+            "ORKS",
+            "WALKER"
+          ]
+        }
+      },
+      {
+        "event": "targets-selected",
+        "filter": {
+          "kind": "charge"
+        },
+        "subject": {
+          "owner": "friendly",
+          "all_of": [
+            "ORKS",
+            "WALKER"
+          ]
+        }
+      }
+    ],
+    "source_digest": "23126998078a921cb00d251a48bc8609ad6dcaf6334cc24c4aaa0f811e031c30"
   },
   {
     "ability_id": "unstoppable-momentum-orks",

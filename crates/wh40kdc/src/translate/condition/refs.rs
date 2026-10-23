@@ -86,6 +86,16 @@ pub(crate) fn id_label(id: Option<&Value>) -> String {
 /// A named rule or one immutable option of a named ability.
 pub(crate) fn rule_ref_phrase(value: Option<&Value>) -> String {
     if let Some(reference) = value.and_then(Value::as_object) {
+        if reference
+            .get("definition_id")
+            .is_some_and(|id| !id.is_null())
+        {
+            return format!(
+                "{} ability of {}",
+                id_label(reference.get("definition_id")),
+                id_label(reference.get("ability_id"))
+            );
+        }
         return format!(
             "{} option of {}",
             id_label(reference.get("option_id")),

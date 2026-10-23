@@ -179,19 +179,32 @@ function identities(dataRoot: string): Identity[] {
   };
   const dirs = (root: string): string[] => (existsSync(root) ? readdirSync(root, { withFileTypes: true }).filter((entry) => entry.isDirectory() && (!entry.name.startsWith("_") || entry.name === CORE_FACTION)).map((entry) => entry.name).sort() : []);
   const enrichmentRoot = join(dataRoot, "enrichment");
+  // Which factions' enrichment holds each ability id: a core row replicated into another faction's
+  // directory (a shared codex's Stratagems in each chapter) is that record's, not a source of its own.
+  const owners = new Map<string, Set<string>>();
   for (const faction of dirs(enrichmentRoot)) {
-    readArray<EnrichmentAbility>(join(enrichmentRoot, faction, "abilities.json")).forEach((ability, index) => add(faction, `enrichment/${faction}/abilities.json`, index + 1, ability));
+    readArray<EnrichmentAbility>(join(enrichmentRoot, faction, "abilities.json")).forEach((ability, index) => {
+      const id = text(ability.ability_id);
+      if (id) owners.set(id, (owners.get(id) ?? new Set()).add(faction));
+      add(faction, `enrichment/${faction}/abilities.json`, index + 1, ability);
+    });
   }
+  const addCore = (faction: string, file: string, row: number, ability: EnrichmentAbility): void => {
+    const id = text(ability.ability_id);
+    const held = id ? owners.get(id) : undefined;
+    if (held && !held.has(faction)) return;
+    add(faction, file, row, ability);
+  };
   type CoreRule = { id?: unknown; name?: unknown; ability_id?: unknown; detachment_id?: unknown; detachment_rule_id?: unknown; detachment_rule_ids?: unknown; game_version?: unknown };
   const coreRoot = join(dataRoot, "core");
-  readArray<CoreRule>(join(coreRoot, "stratagems.json")).forEach((item, index) => add(CORE_FACTION, "core/stratagems.json", index + 1, { ability_id: item.ability_id ?? item.id, name: item.name, ability_type: "stratagem", game_version: item.game_version }));
+  readArray<CoreRule>(join(coreRoot, "stratagems.json")).forEach((item, index) => addCore(CORE_FACTION, "core/stratagems.json", index + 1, { ability_id: item.ability_id ?? item.id, name: item.name, ability_type: "stratagem", game_version: item.game_version }));
   for (const faction of dirs(coreRoot)) {
     for (const [file, type] of [["stratagems.json", "stratagem"], ["enhancements.json", "enhancement"]] as const) {
-      readArray<CoreRule>(join(coreRoot, faction, file)).forEach((item, index) => add(faction, `core/${faction}/${file}`, index + 1, { ability_id: item.ability_id ?? item.id, name: item.name, ability_type: type, detachment_id: item.detachment_id, game_version: item.game_version }));
+      readArray<CoreRule>(join(coreRoot, faction, file)).forEach((item, index) => addCore(faction, `core/${faction}/${file}`, index + 1, { ability_id: item.ability_id ?? item.id, name: item.name, ability_type: type, detachment_id: item.detachment_id, game_version: item.game_version }));
     }
     readArray<CoreRule>(join(coreRoot, faction, "detachments.json")).forEach((detachment, index) => {
       for (const rule of new Set([...strings([detachment.detachment_rule_id]), ...strings(detachment.detachment_rule_ids)])) {
-        add(faction, `core/${faction}/detachments.json`, index + 1, { ability_id: rule, ability_type: "detachment", detachment_id: detachment.id, game_version: detachment.game_version });
+        addCore(faction, `core/${faction}/detachments.json`, index + 1, { ability_id: rule, ability_type: "detachment", detachment_id: detachment.id, game_version: detachment.game_version });
       }
     });
   }

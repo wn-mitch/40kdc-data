@@ -165,7 +165,9 @@ pub(crate) fn object_phrase(r: Option<&Value>) -> String {
             "model-in-this-unit" => "a model in this unit".to_string(),
             other => dekebab(other),
         },
-        Some(Value::Object(f)) => unit_filter_phrase(f),
+        Some(Value::Object(f)) => {
+            super::unit_ref_phrase(Some(&Value::Object(f.clone())), "the unit")
+        }
         Some(other) => dekebab(&st(Some(other))),
     }
 }

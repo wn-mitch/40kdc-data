@@ -344,6 +344,9 @@ def ability_label(id: Any) -> str:
         ability_id = id.get("ability_id")
         if definition_id is not None and ability_id is not None:
             return f"{id_label(jstr(definition_id))} ({ability_label(ability_id)})"
+        option_id = id.get("option_id")
+        if option_id is not None and ability_id is not None:
+            return f"{id_label(jstr(option_id))} ({ability_label(ability_id)})"
     return _ABILITY_LABELS.get(jstr(id), id_label(jstr(id)))
 
 

@@ -9371,7 +9371,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "8b335976c4eee1b4be99f10acaec6db5d896e1c90520341a8952f0cddaac3fe4",
     "version": "2025-q3",
@@ -9403,10 +9403,7 @@
         "type": "ability-grant",
         "target": "selected-unit",
         "modifier": {
-          "ability": "deep-strike",
-          "value": {
-            "rating": true
-          }
+          "ability": "deep-strike"
         }
       }
     },

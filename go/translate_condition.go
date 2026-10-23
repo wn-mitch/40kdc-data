@@ -381,6 +381,9 @@ func subjectOf(p map[string]any, fallback string) string {
 
 func ruleRefPhrase(value any) string {
 	if ref, ok := asMap(value); ok && ref != nil {
+		if ref["definition_id"] != nil {
+			return idLabel(ref["definition_id"]) + " ability of " + idLabel(ref["ability_id"])
+		}
 		return idLabel(ref["option_id"]) + " option of " + idLabel(ref["ability_id"])
 	}
 	return idLabel(value)

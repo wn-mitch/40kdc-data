@@ -833,10 +833,7 @@
             "type": "ability-grant",
             "target": "this-unit",
             "modifier": {
-              "ability": "deep-strike",
-              "value": {
-                "rating": true
-              }
+              "ability": "deep-strike"
             }
           }
         },
@@ -1150,10 +1147,7 @@
             "type": "ability-grant",
             "target": "this-unit",
             "modifier": {
-              "ability": "deep-strike",
-              "value": {
-                "rating": true
-              }
+              "ability": "deep-strike"
             }
           }
         }
@@ -1375,19 +1369,83 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "deathwatch",
     "detachment_id": "black-spear-task-force",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "rule-state",
+            "target": "this-unit",
+            "modifier": {
+              "direction": "granted",
+              "rule_kind": "faction-rule",
+              "rule": {
+                "ability_id": "combat-doctrines-adeptus-astartes",
+                "option_id": "assault-doctrine"
+              }
+            }
+          },
+          {
+            "type": "rule-state",
+            "target": "this-unit",
+            "modifier": {
+              "direction": "granted",
+              "rule_kind": "faction-rule",
+              "rule": {
+                "ability_id": "combat-doctrines-adeptus-astartes",
+                "option_id": "devastator-doctrine"
+              }
+            }
+          },
+          {
+            "type": "rule-state",
+            "target": "this-unit",
+            "modifier": {
+              "direction": "granted",
+              "rule_kind": "faction-rule",
+              "rule": {
+                "ability_id": "combat-doctrines-adeptus-astartes",
+                "option_id": "tactical-doctrine"
+              }
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "until-next-command-phase"
+    },
+    "behavior": "activated",
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "army"
+    },
+    "source_digest": "c2a051745ffff866c91bc3f3475547ebdb80535288a16188e116913acfa86e89"
   },
   {
     "ability_id": "blackstar-extraction-deathwatch-support-deathwatch",

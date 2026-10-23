@@ -494,40 +494,74 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "f23c743c94b91c10ad125ac25596a1c8abf3b45df9c2be815f0968c56c66663d",
     "version": "2025-q3",
     "effect": {
-      "type": "select-units",
-      "selector": {
-        "filter": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 18
-            },
-            "of": "this-model"
+      "type": "designate-target",
+      "designation": "doom-target",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
           },
-          "visible": {
-            "to": "this-model"
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "within": {
+                      "of": "this-model",
+                      "range": {
+                        "inches": 18
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "visible": {
+                      "to": "this-model"
+                    }
+                  }
+                }
+              }
+            ]
           }
-        },
-        "count": {
-          "min": 1,
-          "max": 1
         }
       },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "selected-unit",
-        "modifier": {
-          "roll": "wound",
-          "operation": "add",
-          "value": 1,
-          "incoming": true
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "roll-modifier",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "AELDARI"
+            ],
+            "level": "model"
+          },
+          "modifier": {
+            "roll": "wound",
+            "operation": "add",
+            "value": 1
+          }
         }
-      }
+      },
+      "duration": "until-next-command-phase"
     },
     "scope": {
       "duration": "until-next-command-phase"
@@ -536,8 +570,28 @@
       "eldrad-ulthran"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "aeldari"
+    "behavior": "reactive",
+    "faction_id": "aeldari",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "psychic-guidance-wraithlord-aeldari",
@@ -806,26 +860,52 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "27b3bc744001d6fa267915561c9275c3ac2948bb6809c5bcfeacf91fb6dfd157",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
+      "type": "designate-target",
+      "designation": "herald-of-ynnead-target",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "matches",
+            "parameters": {
+              "subject": "selected-unit",
+              "filter": {
+                "engaged_with": "this-model"
+              }
+            }
+          }
         }
       },
-      "effect": {
-        "type": "re-roll",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "wound",
-          "subset": "ones"
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "re-roll",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "AELDARI"
+            ],
+            "level": "model"
+          },
+          "modifier": {
+            "roll": "wound",
+            "subset": "ones"
+          }
         }
-      }
+      },
+      "duration": "phase"
     },
     "scope": {
       "duration": "phase"
@@ -834,9 +914,19 @@
       "yvraine"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "defensive ability (skipped for damage calc)",
-    "faction_id": "aeldari"
+    "faction_id": "aeldari",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "servant-of-the-whispering-god-yvraine-aeldari",
@@ -918,36 +1008,42 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "2126cbd2e1815d89b75cd32a75053b6d6622576ef803d91b05529367a31c28d6",
     "version": "2025-q3",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
+      "type": "designate-target",
+      "designation": "piratical-raiders-target",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        }
+      },
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
             "keywords": [
               {
                 "keyword_id": "lethal-hits"
-              }
-            ]
-          }
-        },
-        {
-          "type": "weapon-ability-grant",
-          "target": "this-unit",
-          "modifier": {
-            "keywords": [
+              },
               {
                 "keyword_id": "precision"
               }
             ]
           }
         }
-      ]
+      }
     },
     "scope": {
       "duration": "permanent"
@@ -956,9 +1052,12 @@
       "corsair-voidscarred"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "auto-generated, partial",
-    "faction_id": "aeldari"
+    "faction_id": "aeldari",
+    "trigger": {
+      "event": "battle-started"
+    }
   },
   {
     "ability_id": "mistshield-aeldari",
@@ -3464,26 +3563,75 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "d79ee9163f583c73498c8df15074474d70b66f8e4c2f26dc19aee519adfa8ac5",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "attacker",
+              "filter": {
+                "all_of": [
+                  "AELDARI"
+                ]
+              }
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "stat-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "stat": "AP",
-          "operation": "improve",
-          "value": 1
-        }
+        "type": "designate-target",
+        "designation": "crystalline-targeting-target",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
+          }
+        },
+        "applies": {
+          "to": "attackers-of-target",
+          "effect": {
+            "type": "stat-modifier",
+            "target": {
+              "owner": "friendly"
+            },
+            "modifier": {
+              "stat": "AP",
+              "operation": "improve",
+              "value": 1
+            }
+          }
+        },
+        "duration": "phase"
       }
     },
     "scope": {
@@ -3493,8 +3641,18 @@
       "war-walkers"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "aeldari"
+    "behavior": "reactive",
+    "faction_id": "aeldari",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
+    },
+    "usage": {
+      "frequency": "once-per-turn",
+      "per": "unit"
+    }
   },
   {
     "ability_id": "aethersense-aeldari",
@@ -5429,44 +5587,74 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "5212ddd73aa33a727e8200c685ca7aff3ec1b5c15701532c0c19e556292ebbe3",
     "version": "2025-q3",
     "effect": {
-      "type": "select-units",
-      "selector": {
-        "filter": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 18
-            },
-            "of": "this-model"
+      "type": "designate-target",
+      "designation": "guide-target",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
           },
-          "visible": {
-            "to": "this-model"
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "within": {
+                      "of": "this-model",
+                      "range": {
+                        "inches": 18
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "visible": {
+                      "to": "this-model"
+                    }
+                  }
+                }
+              }
+            ]
           }
-        },
-        "count": {
-          "min": 1,
-          "max": 1
-        },
-        "limit": {
-          "count": 1,
-          "period": "turn"
         }
       },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "selected-unit",
-        "modifier": {
-          "roll": "hit",
-          "operation": "add",
-          "value": 1,
-          "incoming": true
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "roll-modifier",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "AELDARI"
+            ],
+            "level": "model"
+          },
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
         }
-      }
+      },
+      "duration": "until-next-command-phase"
     },
     "scope": {
       "duration": "until-next-command-phase"
@@ -5475,8 +5663,32 @@
       "farseer"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "aeldari"
+    "behavior": "reactive",
+    "faction_id": "aeldari",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    },
+    "usage": {
+      "frequency": "once-per-turn",
+      "per": "unit"
+    }
   },
   {
     "ability_id": "monofilament-web-aeldari",
@@ -12167,19 +12379,73 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "aeldari",
     "detachment_id": "kygharils-protectors",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "designate-target",
+      "designation": "focused-strikes-target",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        }
+      },
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "conditional",
+          "condition": {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
+            }
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "wound",
+              "subset": "ones"
+            }
+          }
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    },
+    "source_digest": "baf14a674423b98c3764633fee06acd97a2cba0f60b15696be38719a9a532869"
   },
   {
     "ability_id": "forewarned-seer-council-aeldari",
@@ -16243,10 +16509,7 @@
           "type": "ability-grant",
           "target": "this-unit",
           "modifier": {
-            "ability": "deep-strike",
-            "value": {
-              "rating": true
-            }
+            "ability": "deep-strike"
           }
         },
         {
@@ -16754,10 +17017,7 @@
           "type": "ability-grant",
           "target": "this-unit",
           "modifier": {
-            "ability": "deep-strike",
-            "value": {
-              "rating": true
-            }
+            "ability": "deep-strike"
           }
         },
         {

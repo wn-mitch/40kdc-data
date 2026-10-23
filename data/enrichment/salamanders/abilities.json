@@ -395,18 +395,31 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "salamanders",
     "detachment_id": "forgefathers-seekers",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-activate",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "combat-doctrines-adeptus-astartes",
+        "select": {
+          "by": "player",
+          "from": [
+            "assault-doctrine",
+            "tactical-doctrine"
+          ]
+        },
+        "exclusive": true
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "until-next-command-phase"
+    },
+    "behavior": "activated",
+    "source_digest": "39e8786c156ec873bfbee39ad14e3ff3113e891684ad45739678a9b46b8580b8"
   }
 ]

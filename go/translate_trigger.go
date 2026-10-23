@@ -151,7 +151,7 @@ func triggerObjectPhrase(ref any) string {
 		}
 		return dekebab(r)
 	case map[string]any:
-		return unitFilterPhrase(r)
+		return unitRefPhrase(r, "the unit")
 	case []any:
 		return unitFilterPhrase(map[string]any{})
 	}

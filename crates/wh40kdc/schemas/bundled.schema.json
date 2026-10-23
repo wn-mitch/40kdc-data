@@ -5440,6 +5440,9 @@
                     },
                     {
                       "$ref": "#/$defs/stance-option-ref"
+                    },
+                    {
+                      "$ref": "#/$defs/named-ability-ref"
                     }
                   ]
                 }
@@ -8745,6 +8748,9 @@
                     },
                     {
                       "$ref": "#/$defs/named-ability-ref"
+                    },
+                    {
+                      "$ref": "#/$defs/stance-option-ref"
                     }
                   ]
                 },

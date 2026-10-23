@@ -574,37 +574,50 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "c163d5260450890243c42de92105880d5a999bb00a420ddf5056abc0425a21ff",
+    "source_digest": "e6ab2d18d563409b43d5f39343bd9dee01cc241cbbc2db3ed11df3da085c505f",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
+        "type": "attack-is",
+        "parameters": {
+          "attack_type": "melee"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
           {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "wound",
+              "subset": "ones"
             }
           },
           {
-            "type": "attachment",
-            "parameters": {
-              "subject": "this-model",
-              "role": "leading"
+            "type": "conditional",
+            "condition": {
+              "type": "rule-active",
+              "parameters": {
+                "rule": {
+                  "ability_id": "combat-doctrines-adeptus-astartes",
+                  "option_id": "assault-doctrine"
+                }
+              }
+            },
+            "effect": {
+              "type": "re-roll",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "wound",
+                "result_scope": "any-result"
+              }
             }
           }
         ]
-      },
-      "effect": {
-        "type": "re-roll",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "wound",
-          "subset": "all-failures"
-        }
       }
     },
     "scope": {
@@ -722,25 +735,78 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "011fb30734ef7554acee9ecf3f1e18cee34b3fcc3ab890ef171e55bad637b91a",
+    "source_digest": "f3f28d5b663ed0762f7a5c5ae8f6219f97c28e5542909dcf69f16ce829bdf652",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "stat-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "stat": "AP",
-          "operation": "improve",
-          "value": 1
+        "type": "designate-target",
+        "designation": "hailstrike-target",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            },
+            "eligibility": {
+              "type": "happened",
+              "parameters": {
+                "event": "after-roll",
+                "subject": "event-subject",
+                "object": "this-unit",
+                "filter": {
+                  "roll": "hit",
+                  "result": "success"
+                },
+                "window": "event"
+              }
+            }
+          }
+        },
+        "applies": {
+          "to": "attackers-of-target",
+          "effect": {
+            "type": "weapon-ability-grant",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "ADEPTUS ASTARTES"
+              ]
+            },
+            "modifier": {
+              "keywords": [
+                {
+                  "keyword_id": "ignores-cover"
+                }
+              ],
+              "weapons": {
+                "type": "ranged"
+              }
+            }
+          }
         }
       }
     },
@@ -751,8 +817,14 @@
       "storm-speeder-hailstrike"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "adeptus-astartes"
+    "behavior": "reactive",
+    "faction_id": "adeptus-astartes",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
+    }
   },
   {
     "ability_id": "techmarine-adeptus-astartes",
@@ -810,18 +882,118 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "c8be6806856797526ba3b44489d8b2c83debf3c0e0f4ef00df1bef564f2860ed",
+    "source_digest": "dab0e18af2b03a15c6432181c0fc7c48d8c19f486c8f035ff4ccf23beb91158c",
     "version": "2025-q3",
     "effect": {
-      "type": "permission",
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "assault"
+              }
+            ],
+            "weapons": {
+              "type": "ranged"
+            }
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "selected",
+            "filter": {
+              "move_types": [
+                "advance"
+              ],
+              "to": "move"
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "permission",
+                "target": "this-unit",
+                "modifier": {
+                  "activity": "declare-charge",
+                  "allow": true,
+                  "despite": [
+                    "advanced"
+                  ]
+                }
+              },
+              {
+                "type": "conditional",
+                "condition": {
+                  "type": "rule-active",
+                  "parameters": {
+                    "rule": {
+                      "ability_id": "combat-doctrines-adeptus-astartes",
+                      "option_id": "assault-doctrine"
+                    }
+                  }
+                },
+                "effect": {
+                  "type": "sequence",
+                  "steps": [
+                    {
+                      "type": "roll-modifier",
+                      "target": "this-unit",
+                      "modifier": {
+                        "roll": "advance",
+                        "operation": "add",
+                        "value": 1
+                      }
+                    },
+                    {
+                      "type": "roll-modifier",
+                      "target": "this-unit",
+                      "modifier": {
+                        "roll": "charge",
+                        "operation": "add",
+                        "value": 1
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "suboden-khan"
+    ],
+    "ability_type": "unit",
+    "behavior": "reactive",
+    "faction_id": "adeptus-astartes"
+  },
+  {
+    "ability_id": "skilled-riders-adeptus-astartes",
+    "name": "Skilled Riders",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "source_digest": "c65498f16da950fe91fcbdcd407017bcf2372cc2f34f6ab1db1d171513c2da3d",
+    "version": "2025-q3",
+    "effect": {
+      "type": "keyword-grant",
       "target": "this-unit",
       "modifier": {
-        "activity": "shoot",
-        "allow": true,
-        "after": [
-          "fall-back"
+        "keywords": [
+          "MOBILE"
         ]
       }
     },
@@ -833,70 +1005,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "faction_id": "adeptus-astartes"
-  },
-  {
-    "ability_id": "skilled-riders-adeptus-astartes",
-    "name": "Skilled Riders",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "8be5c0015a720cef03115074905ba89832bd8b2406e36deb87b41dc26620c9ea",
-    "version": "2025-q3",
-    "effect": {
-      "type": "move-modifier",
-      "target": "this-unit",
-      "modifier": {
-        "passthrough": [
-          "all-terrain"
-        ]
-      }
-    },
-    "scope": {
-      "duration": "battle"
-    },
-    "unit_ids": [
-      "suboden-khan"
-    ],
-    "ability_type": "unit",
-    "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "trigger": [
-      {
-        "event": "move-ended",
-        "filter": {
-          "move_types": [
-            "normal"
-          ]
-        }
-      },
-      {
-        "event": "move-ended",
-        "filter": {
-          "move_types": [
-            "advance"
-          ]
-        }
-      },
-      {
-        "event": "move-ended",
-        "filter": {
-          "move_types": [
-            "fall-back"
-          ]
-        }
-      },
-      {
-        "event": "move-ended",
-        "filter": {
-          "move_types": [
-            "charge"
-          ]
-        }
-      }
-    ],
     "faction_id": "adeptus-astartes"
   },
   {
@@ -2489,23 +2598,92 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "5f57c8f4efd003afeaac58aab5da52f6799307004f2aa1bb1346a429d19015c5",
+    "source_digest": "7f5248e9daaaa6a719fcf18323885fc3ccd6c9a738a68207e5b700056ab72df5",
     "version": "2025-q3",
     "effect": {
-      "type": "weapon-ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "keywords": [
-          {
-            "keyword_id": "sustained-hits",
-            "parameters": {
-              "value": 1
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "rule-active",
+                "parameters": {
+                  "rule": {
+                    "ability_id": "combat-doctrines-adeptus-astartes",
+                    "option_id": "assault-doctrine"
+                  }
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "defender",
+                "filter": {
+                  "none_of": [
+                    "MONSTER",
+                    "VEHICLE"
+                  ]
+                }
+              }
+            },
+            "effect": {
+              "type": "weapon-ability-grant",
+              "target": "this-unit",
+              "modifier": {
+                "keywords": [
+                  {
+                    "keyword_id": "sustained-hits",
+                    "parameters": {
+                      "value": 1
+                    }
+                  }
+                ],
+                "weapons": {
+                  "type": "melee"
+                }
+              }
             }
           }
-        ]
-      }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "rule-active",
+            "parameters": {
+              "rule": {
+                "ability_id": "combat-doctrines-adeptus-astartes",
+                "option_id": "assault-doctrine"
+              }
+            }
+          },
+          "effect": {
+            "type": "weapon-ability-grant",
+            "target": "this-unit",
+            "modifier": {
+              "keywords": [
+                {
+                  "keyword_id": "sustained-hits",
+                  "parameters": {
+                    "value": 1
+                  }
+                }
+              ],
+              "weapons": {
+                "type": "melee"
+              }
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -3157,50 +3335,241 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "fe17475c26c5d11c3042c7d0de9e7964bcba56ae233e6166bf41e26e2d63a662",
+    "source_digest": "537ba53ea97c7d240bb56849b569f0577dca0d92b490b32d672a1c20717d334b",
     "version": "2025-q3",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "weapon-ability-grant",
-          "target": "this-unit",
-          "modifier": {
-            "keywords": [
+      "type": "conditional",
+      "condition": {
+        "operator": "or",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
               {
-                "keyword_id": "lethal-hits"
-              }
-            ]
-          }
-        },
-        {
-          "type": "weapon-ability-grant",
-          "target": "this-unit",
-          "modifier": {
-            "keywords": [
-              {
-                "keyword_id": "sustained-hits",
+                "type": "phase-is",
                 "parameters": {
-                  "value": 1
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
                 }
               }
             ]
+          },
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
           }
-        }
-      ]
+        ]
+      },
+      "effect": {
+        "type": "choice",
+        "options": [
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "defender",
+                "filter": {
+                  "any_of": [
+                    "MONSTER",
+                    "VEHICLE"
+                  ]
+                }
+              }
+            },
+            "effect": {
+              "type": "weapon-ability-grant",
+              "target": "this-unit",
+              "modifier": {
+                "keywords": [
+                  {
+                    "keyword_id": "lethal-hits"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "operator": "not",
+                  "operands": [
+                    {
+                      "type": "matches",
+                      "parameters": {
+                        "subject": "defender",
+                        "filter": {
+                          "all_of": [
+                            "MONSTER"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "operator": "not",
+                  "operands": [
+                    {
+                      "type": "matches",
+                      "parameters": {
+                        "subject": "defender",
+                        "filter": {
+                          "all_of": [
+                            "VEHICLE"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            "effect": {
+              "type": "weapon-ability-grant",
+              "target": "this-unit",
+              "modifier": {
+                "keywords": [
+                  {
+                    "keyword_id": "sustained-hits",
+                    "parameters": {
+                      "value": 1
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "rule-active",
+              "parameters": {
+                "rule": {
+                  "ability_id": "combat-doctrines-adeptus-astartes",
+                  "option_id": "tactical-doctrine"
+                }
+              }
+            },
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "conditional",
+                  "condition": {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "defender",
+                      "filter": {
+                        "any_of": [
+                          "MONSTER",
+                          "VEHICLE"
+                        ]
+                      }
+                    }
+                  },
+                  "effect": {
+                    "type": "weapon-ability-grant",
+                    "target": "this-unit",
+                    "modifier": {
+                      "keywords": [
+                        {
+                          "keyword_id": "lethal-hits"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "type": "conditional",
+                  "condition": {
+                    "operator": "and",
+                    "operands": [
+                      {
+                        "operator": "not",
+                        "operands": [
+                          {
+                            "type": "matches",
+                            "parameters": {
+                              "subject": "defender",
+                              "filter": {
+                                "all_of": [
+                                  "MONSTER"
+                                ]
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "operator": "not",
+                        "operands": [
+                          {
+                            "type": "matches",
+                            "parameters": {
+                              "subject": "defender",
+                              "filter": {
+                                "all_of": [
+                                  "VEHICLE"
+                                ]
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "effect": {
+                    "type": "weapon-ability-grant",
+                    "target": "this-unit",
+                    "modifier": {
+                      "keywords": [
+                        {
+                          "keyword_id": "sustained-hits",
+                          "parameters": {
+                            "value": 1
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "choice_label": "attacks ability"
+      }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "unit_ids": [
       "caanok-var"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "auto-generated, partial",
-    "faction_id": "adeptus-astartes"
+    "faction_id": "adeptus-astartes",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "attack"
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "cerebrex-logic-engine-adeptus-astartes",
@@ -3333,51 +3702,62 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "69b05328e63dcdb985789e545122c37d62f568da31cbf421ef26ed0c88a9eeea",
+    "source_digest": "975339109b675bbb79dcae9b91d23049aa05057224b15eadb90c75a0307f3871",
     "version": "2025-q3",
     "effect": {
-      "type": "select-units",
-      "selector": {
-        "filter": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 12
-            },
-            "of": "this-model"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
           },
-          "visible": {
-            "to": "this-model"
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
           }
-        },
-        "count": {
-          "min": 0,
-          "max": 1
-        }
+        ]
       },
       "effect": {
-        "type": "conditional",
-        "condition": {
-          "type": "same-unit",
-          "parameters": {
-            "subject": "defender",
-            "as": "selected-unit"
+        "type": "designate-target",
+        "designation": "catechism-of-fire-target",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy",
+              "visible": {
+                "to": "this-model"
+              }
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
           }
         },
-        "effect": {
-          "type": "weapon-ability-grant",
-          "target": "this-unit",
-          "modifier": {
-            "weapons": {
-              "type": "ranged"
-            },
-            "keywords": [
-              {
-                "keyword_id": "devastating-wounds"
+        "applies": {
+          "to": "attackers-of-target",
+          "effect": {
+            "type": "weapon-ability-grant",
+            "target": "this-unit",
+            "modifier": {
+              "keywords": [
+                {
+                  "keyword_id": "devastating-wounds"
+                }
+              ],
+              "weapons": {
+                "type": "ranged"
               }
-            ]
+            }
           }
         }
       }
@@ -3389,8 +3769,15 @@
       "chaplain-on-bike"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "faction_id": "adeptus-astartes"
+    "behavior": "reactive",
+    "faction_id": "adeptus-astartes",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "exhortation-of-rage-adeptus-astartes",
@@ -8255,9 +8642,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "infernus-squad"
     ],
@@ -8265,11 +8651,87 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "designate-target",
+        "designation": "driven-from-cover-target",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            },
+            "eligibility": {
+              "type": "happened",
+              "parameters": {
+                "event": "after-roll",
+                "subject": "event-subject",
+                "object": "this-unit",
+                "filter": {
+                  "roll": "hit",
+                  "result": "success"
+                },
+                "window": "event"
+              }
+            }
+          }
+        },
+        "applies": {
+          "to": "attackers-of-target",
+          "effect": {
+            "type": "weapon-ability-grant",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "ADEPTUS ASTARTES"
+              ]
+            },
+            "modifier": {
+              "keywords": [
+                {
+                  "keyword_id": "ignores-cover"
+                }
+              ],
+              "weapons": {
+                "type": "ranged"
+              }
+            }
+          }
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
+    },
+    "source_digest": "f3f28d5b663ed0762f7a5c5ae8f6219f97c28e5542909dcf69f16ce829bdf652"
   },
   {
     "ability_id": "duty-in-death-assault-brethren-adeptus-astartes",
@@ -8277,19 +8739,131 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-astartes",
     "detachment_id": "assault-brethren",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-part",
+      "trigger": {
+        "event": "model-destroyed",
+        "object": "model-in-this-unit"
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "act-on-death",
+            "target": "event-object",
+            "modifier": {
+              "act": "fight",
+              "resolution": "when-unit-fights",
+              "removal": "after-unit-fights-or-phase-end",
+              "gate": {
+                "dice": "D6+1",
+                "threshold": 4,
+                "comparison": "gte",
+                "modifiers": []
+              },
+              "eligibility": {
+                "operator": "and",
+                "operands": [
+                  {
+                    "operator": "not",
+                    "operands": [
+                      {
+                        "type": "eligible",
+                        "parameters": {
+                          "subject": "this-unit",
+                          "to": "fight"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "rule-active",
+                    "parameters": {
+                      "rule": {
+                        "ability_id": "combat-doctrines-adeptus-astartes",
+                        "option_id": "assault-doctrine"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "type": "act-on-death",
+            "target": "event-object",
+            "modifier": {
+              "act": "fight",
+              "resolution": "when-unit-fights",
+              "removal": "after-unit-fights-or-phase-end",
+              "gate": {
+                "dice": "D6",
+                "threshold": 4,
+                "comparison": "gte",
+                "modifiers": []
+              },
+              "eligibility": {
+                "operator": "and",
+                "operands": [
+                  {
+                    "operator": "not",
+                    "operands": [
+                      {
+                        "type": "eligible",
+                        "parameters": {
+                          "subject": "this-unit",
+                          "to": "fight"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "operator": "not",
+                    "operands": [
+                      {
+                        "type": "rule-active",
+                        "parameters": {
+                          "rule": {
+                            "ability_id": "combat-doctrines-adeptus-astartes",
+                            "option_id": "assault-doctrine"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS ASTARTES"
+        ]
+      }
+    },
+    "source_digest": "a3b560b864c9a4cb6048614aebb4c477e6ee7e05c5fb3f48e1f3eba365130d3b"
   },
   {
     "ability_id": "duty-is-never-done-gauntlet-task-force-adeptus-astartes",
@@ -8660,9 +9234,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "reiver-squad"
     ],
@@ -8670,11 +9243,17 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "deep-strike"
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "7a6614128be7dfb2dfe6a27ce27f48736e523af3b2fbb9149767148329a19e00"
   },
   {
     "ability_id": "gunship-extraction-terminator-storm-force-adeptus-astartes",
@@ -9608,19 +10187,85 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-astartes",
     "detachment_id": "tactical-brethren",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-subject",
+          "filter": {
+            "within": {
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "ADEPTUS ASTARTES"
+                ],
+                "any_of": [
+                  "INFANTRY",
+                  "MOUNTED"
+                ],
+                "not_states": [
+                  "engaged"
+                ]
+              },
+              "range": {
+                "inches": 8
+              }
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "choice",
+        "options": [
+          {
+            "type": "move",
+            "target": "this-unit",
+            "modifier": {
+              "move_type": "normal",
+              "distance": "D6"
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "rule-active",
+              "parameters": {
+                "rule": {
+                  "ability_id": "combat-doctrines-adeptus-astartes",
+                  "option_id": "tactical-doctrine"
+                }
+              }
+            },
+            "effect": {
+              "type": "move",
+              "target": "this-unit",
+              "modifier": {
+                "move_type": "normal",
+                "distance": 6
+              }
+            }
+          }
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      }
+    },
+    "source_digest": "6703f226f36bc7a4fbf109e236a0fa6bf08dce3455fe4bc6533bdbe847d23465"
   },
   {
     "ability_id": "merciless-veterans-terminator-storm-force-adeptus-astartes",
@@ -10297,9 +10942,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "storm-speeder-thunderstrike"
     ],
@@ -10307,11 +10951,89 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "designate-target",
+        "designation": "shattered-defences-target",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy",
+              "any_of": [
+                "MONSTER",
+                "VEHICLE"
+              ]
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            },
+            "eligibility": {
+              "type": "happened",
+              "parameters": {
+                "event": "after-roll",
+                "subject": "event-subject",
+                "object": "this-unit",
+                "filter": {
+                  "roll": "hit",
+                  "result": "success"
+                },
+                "window": "event"
+              }
+            }
+          }
+        },
+        "applies": {
+          "to": "attackers-of-target",
+          "effect": {
+            "type": "stat-modifier",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "ADEPTUS ASTARTES"
+              ]
+            },
+            "modifier": {
+              "stat": "AP",
+              "operation": "improve",
+              "value": 1,
+              "weapons": {
+                "type": "ranged"
+              }
+            }
+          }
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
+    },
+    "source_digest": "b26b7b6a6e0aa6ca389aef01a3f1ca64617500882fb3e30dc11cee19f27df40a"
   },
   {
     "ability_id": "special-issue-optics-and-ammunition-adeptus-astartes",
@@ -10984,9 +11706,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "marneus-calgar"
     ],
@@ -10994,11 +11715,38 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "friendly",
+          "any_of": [
+            "GRAVIS",
+            "PHOBOS",
+            "TACTICUS"
+          ]
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "selected-unit",
+        "modifier": {
+          "ability": "deep-strike"
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "battle-formations-declared",
+      "optional": true
+    },
+    "source_digest": "afe491abf8d2d904192602a5d06d966b468ed62ae5305bfc35259b167d317f2e"
   },
   {
     "ability_id": "total-obliteration-adeptus-astartes",
@@ -11043,19 +11791,81 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-astartes",
     "detachment_id": "phobos-shock-force",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-subject",
+          "filter": {
+            "within": {
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "PHOBOS"
+                ],
+                "not_states": [
+                  "engaged"
+                ]
+              },
+              "range": {
+                "inches": 8
+              }
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "choice",
+        "options": [
+          {
+            "type": "move",
+            "target": "this-unit",
+            "modifier": {
+              "move_type": "normal",
+              "distance": "D6"
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "rule-active",
+              "parameters": {
+                "rule": {
+                  "ability_id": "combat-doctrines-adeptus-astartes",
+                  "option_id": "tactical-doctrine"
+                }
+              }
+            },
+            "effect": {
+              "type": "move",
+              "target": "this-unit",
+              "modifier": {
+                "move_type": "normal",
+                "distance": 6
+              }
+            }
+          }
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      }
+    },
+    "source_digest": "7db05054dda6464c3181c69a301a6c71805e222b1905735ac20cddbbef14835b"
   },
   {
     "ability_id": "transhuman-strategist-adeptus-astartes",
@@ -11215,19 +12025,52 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-astartes",
     "detachment_id": "ironclad-champions",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "keyword-grant",
+      "target": "this-unit",
+      "modifier": {
+        "keywords": [
+          "MOBILE"
+        ]
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": [
+      {
+        "event": "selected",
+        "filter": {
+          "to": "move"
+        },
+        "subject": {
+          "owner": "friendly",
+          "all_of": [
+            "DREADNOUGHT"
+          ]
+        }
+      },
+      {
+        "event": "targets-selected",
+        "filter": {
+          "kind": "charge"
+        },
+        "subject": {
+          "owner": "friendly",
+          "all_of": [
+            "DREADNOUGHT"
+          ]
+        }
+      }
+    ],
+    "source_digest": "c7348db8c25c459614c7615a12b35374505ffd158f862778baaee172fe6ecea3"
   },
   {
     "ability_id": "vanguard-ambushers-adeptus-astartes",
@@ -12098,19 +12941,56 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-astartes",
     "detachment_id": "devastator-brethren",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "lethal-hits"
+              }
+            ],
+            "weapons": {
+              "type": "ranged"
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "rule-active",
+            "parameters": {
+              "rule": {
+                "ability_id": "combat-doctrines-adeptus-astartes",
+                "option_id": "devastator-doctrine"
+              }
+            }
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "advance",
+              "result_scope": "any-result"
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "64e72e9b7ab893ca1cfe83a03604d6b56393c316d5ddc1814011d82de688c03f"
   },
   {
     "ability_id": "immovable-conquerors-upgrade-gravis-siege-force-adeptus-astartes",
@@ -12214,19 +13094,92 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-astartes",
     "detachment_id": "gladius-task-force",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "stat-modifier",
+              "target": "this-model",
+              "modifier": {
+                "stat": "S",
+                "operation": "add",
+                "value": 1,
+                "weapons": {
+                  "type": "melee"
+                }
+              }
+            },
+            {
+              "type": "stat-modifier",
+              "target": "this-model",
+              "modifier": {
+                "stat": "AP",
+                "operation": "add",
+                "value": 1,
+                "weapons": {
+                  "type": "melee"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "rule-active",
+            "parameters": {
+              "rule": {
+                "ability_id": "combat-doctrines-adeptus-astartes",
+                "option_id": "assault-doctrine"
+              }
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "stat-modifier",
+                "target": "this-model",
+                "modifier": {
+                  "stat": "S",
+                  "operation": "add",
+                  "value": 2,
+                  "weapons": {
+                    "type": "melee"
+                  }
+                }
+              },
+              {
+                "type": "stat-modifier",
+                "target": "this-model",
+                "modifier": {
+                  "stat": "AP",
+                  "operation": "add",
+                  "value": 2,
+                  "weapons": {
+                    "type": "melee"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "2c2cba7ccc1907dc849967a2b20ca1d98eb028de28738fc25ea79e6ac56ea64d"
   },
   {
     "ability_id": "laurels-of-vigilance-tactical-brethren-adeptus-astartes",

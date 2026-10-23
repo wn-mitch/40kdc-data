@@ -70,19 +70,25 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "raven-guard",
     "detachment_id": "shadowmark-talon",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-activate",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "combat-doctrines-adeptus-astartes",
+        "option": "tactical-doctrine"
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "until-next-command-phase"
+    },
+    "behavior": "activated",
+    "source_digest": "5bf7a6027926a9ff6626d4d66bea49a4407f4e3c32a75c4398e1c765451b774f"
   },
   {
     "ability_id": "hunters-instincts-shadowmark-talon-raven-guard",

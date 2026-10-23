@@ -248,6 +248,9 @@ export function abilityLabel(id: unknown): string {
   if (id !== null && typeof id === "object" && "ability_id" in id && "definition_id" in id) {
     return `${idLabel(jstr(id.definition_id))} (${abilityLabel(id.ability_id)})`;
   }
+  if (id !== null && typeof id === "object" && "ability_id" in id && "option_id" in id) {
+    return `${idLabel(jstr(id.option_id))} (${abilityLabel(id.ability_id)})`;
+  }
   return ABILITY_LABELS[jstr(id)] ?? idLabel(jstr(id));
 }
 

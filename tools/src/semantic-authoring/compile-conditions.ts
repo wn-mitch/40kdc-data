@@ -575,10 +575,14 @@ export function condition(leaf: CompileLeaf): Node {
     }
     // ── New predicate families (batch 6, predicate-families.ts) ─────────────────────────────
     case "rule-active": {
-      // Version 2: one option of an option-bearing rule, as the condition schema's stance-option-ref.
+      // Version 2: one option of an option-bearing rule (stance-option-ref), or an ability a record
+      // defines inside itself (named-ability-ref).
       const rule = closed(leaf, "rule");
       const reference = rule !== null && typeof rule === "object" ? rule as Node : null;
-      return polarity(leaf, { type: "rule-active", parameters: { rule: reference ? { ability_id: reference.ability_id, option_id: reference.option_id } : rule } });
+      const ref = reference && (reference.definition_id !== undefined
+        ? { ability_id: reference.ability_id, definition_id: reference.definition_id }
+        : { ability_id: reference.ability_id, option_id: reference.option_id });
+      return polarity(leaf, { type: "rule-active", parameters: { rule: ref ?? rule } });
     }
     case "unit-owner":
       return polarity(leaf, pred("owned-by", { owner: closed(leaf, "owner") }, subjectOf(leaf)));

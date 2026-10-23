@@ -351,10 +351,12 @@ func referencedID(value any) string {
 
 func abilityReferenceLabel(value any) string {
 	if ref, ok := value.(map[string]any); ok {
-		abilityID := referencedID(ref["ability_id"])
-		definitionID := referencedID(ref["definition_id"])
-		if abilityID != "" && definitionID != "" {
-			return idLabel(definitionID) + " (" + abilityLabel(abilityID) + ")"
+		abilityID, hasAbility := ref["ability_id"].(string)
+		// A definition or a stance option, each named inside its owning ability.
+		for _, key := range []string{"definition_id", "option_id"} {
+			if inner, ok := ref[key].(string); ok && hasAbility {
+				return idLabel(inner) + " (" + abilityLabel(abilityID) + ")"
+			}
 		}
 	}
 	return abilityLabel(referencedID(value))

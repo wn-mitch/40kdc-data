@@ -579,9 +579,9 @@ def _rule_state(m: dict[str, Any], subj: str) -> str:
     rule = jstr(rule)
     if m.get("rule_kind") == "faction-rule":
         return (
-            f"{subj} {v(subj, 'gains')} {ability_label(rule)}"
+            f"{subj} {v(subj, 'gains')} {ability_label(m.get('rule'))}"
             if granted
-            else f"{subj} cannot use {ability_label(rule)}"
+            else f"{subj} cannot use {ability_label(m.get('rule'))}"
         )
     if rule == "overwatch-against-bearer":
         return f"your opponent {'can' if granted else 'cannot'} target {subj} with Overwatch"

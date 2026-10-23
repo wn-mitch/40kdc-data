@@ -94,6 +94,7 @@ export function countPhrase(value: unknown, defaultMin = 1): string {
 export function ruleRefPhrase(value: unknown): string {
   if (value != null && typeof value === "object") {
     const ref = value as P;
+    if (ref.definition_id != null) return `${idLabel(ref.definition_id)} ability of ${idLabel(ref.ability_id)}`;
     return `${idLabel(ref.option_id)} option of ${idLabel(ref.ability_id)}`;
   }
   return idLabel(value);

@@ -463,4 +463,16 @@ export const CHARACTERISTIC_EXTENSIONS: readonly FamilyExtension[] = [
   CORE_ABILITY_GRANT_BEARER,
   // "each time a model in this unit makes a ranged attack, enemy units have the benefit of cover against the attack".
   targetSubject("core-ability-grant", 5, "the attack's target unit gains the ability, such as the Benefit of Cover against that attack"),
+  {
+    // "this unit has the Deep Strike ability": Deep Strike prints no rating.
+    family: "core-ability-grant",
+    version: 6,
+    description: "As the previous version, and Deep Strike is granted without a value; it carries no rating.",
+    schema: (previous) => previous,
+    normalize: (input, previous) => {
+      if (input.ability !== "deep-strike" || "value" in input) return previous(input);
+      const { value: _stand, ...normalized } = previous({ ...input, value: 1 });
+      return normalized;
+    },
+  },
 ];

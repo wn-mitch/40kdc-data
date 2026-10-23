@@ -22,9 +22,8 @@
             </profile>
             <profile name="Sorcerous Support" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">During the Shooting phase, until the end of the phase:
-  -&gt; The unit gets +1 to Hit rolls.
-  -&gt; The unit gets +1 to Wound rolls.</characteristic>
+                <characteristic name="Description">After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of the phase:
+  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Sorcerous Support Target). Until the end of the phase, each time a friendly unit makes an attack against it, if the attacking unit disembarked from this Transport this turn, while making psychic attacks, all friendly models get +1 to Hit rolls; all friendly models get +1 to Wound rolls.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">

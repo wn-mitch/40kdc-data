@@ -675,28 +675,31 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "f6daeab5ad01106b8c4ae8164a16dad7c13ab3464a5e2537edc98bbcc9d76c3d",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-activate",
+          "target": "this-model",
+          "modifier": {
+            "ability": "psychic-familiar-genestealer-cults"
+          }
+        },
+        {
+          "type": "ability-modifier",
+          "target": "this-model",
+          "modifier": {
+            "ability": "cosmic-horror",
+            "aspect": "range",
+            "operation": "add",
+            "value": 6
+          }
         }
-      },
-      "effect": {
-        "type": "ability-modifier",
-        "target": "this-model",
-        "modifier": {
-          "ability": "cosmic-horror-genestealer-cults",
-          "aspect": "range",
-          "operation": "add",
-          "value": 6
-        }
-      }
+      ]
     },
     "scope": {
       "duration": "phase"
@@ -705,8 +708,23 @@
       "patriarch"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "faction_id": "genestealer-cults"
+    "behavior": "reactive",
+    "faction_id": "genestealer-cults",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      },
+      "optional": true
+    },
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "unit"
+    }
   },
   {
     "ability_id": "supreme-commander-genestealer-cults",
@@ -1151,26 +1169,75 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "c83ffdd49925c1e0af9c19b18dc7fc0a21ffdb2e302ad434e4735e17d741cf06",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "stat-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "stat": "AP",
-          "operation": "improve",
-          "value": 1
-        }
+        "type": "designate-target",
+        "designation": "crossfire-target",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            },
+            "eligibility": {
+              "type": "happened",
+              "parameters": {
+                "event": "after-roll",
+                "subject": "event-subject",
+                "object": "this-unit",
+                "filter": {
+                  "roll": "hit",
+                  "result": "success"
+                },
+                "window": "event"
+              }
+            }
+          }
+        },
+        "applies": {
+          "to": "attackers-of-target",
+          "effect": {
+            "type": "stat-modifier",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "GENESTEALER CULTS"
+              ]
+            },
+            "modifier": {
+              "stat": "AP",
+              "operation": "improve",
+              "value": 1
+            }
+          }
+        },
+        "duration": "turn"
       }
     },
     "scope": {
@@ -1180,8 +1247,18 @@
       "achilles-ridgerunners"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "genestealer-cults"
+    "behavior": "reactive",
+    "faction_id": "genestealer-cults",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
+    },
+    "usage": {
+      "frequency": "once-per-turn",
+      "per": "unit"
+    }
   },
   {
     "ability_id": "flare-launcher-genestealer-cults",
@@ -1268,20 +1345,59 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "0c18a87a2c04247adcbd309ef2afe78054802fe37ebc76424739a260c8e76225",
     "version": "2025-q3",
     "effect": {
-      "type": "weapon-ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "keywords": [
-          {
-            "keyword_id": "ignores-cover"
+      "type": "designate-target",
+      "designation": "survey-augur-target",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "subject": "event-subject",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success"
+              },
+              "window": "event"
+            }
           }
-        ]
-      }
+        }
+      },
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "weapon-ability-grant",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "GENESTEALER CULTS"
+            ],
+            "level": "model"
+          },
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "ignores-cover"
+              }
+            ]
+          }
+        }
+      },
+      "duration": "phase"
     },
     "scope": {
       "duration": "phase"
@@ -1290,8 +1406,14 @@
       "achilles-ridgerunners"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "genestealer-cults"
+    "behavior": "reactive",
+    "faction_id": "genestealer-cults",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
+    }
   },
   {
     "ability_id": "cult-demagogue-genestealer-cults",
@@ -3712,37 +3834,68 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "add518835cbf19716026dcd3bceb5cf08082ae4528d8c37a346fce8770b2c8b8",
+    "source_digest": "176bb6ecbaa636b603797b3919de5b3edc8e2b81274167a1861e71e12a207ef1",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "genestealer-cults",
     "detachment_id": "xenocult-masses",
     "ability_type": "stratagem",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
+      "type": "designate-target",
+      "designation": "fanatical-hail-target",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
         }
       },
-      "effect": {
-        "type": "re-roll",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "hit",
-          "subset": "all-failures"
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "conditional",
+          "condition": {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
+            }
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "result_scope": "any-result"
+            }
+          }
         }
       }
     },
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "[APPROX] When a NEOPHYTE HYBRIDS unit is selected to shoot, its ranged attacks may re-roll hit rolls against one selected enemy unit; modeled as a re-roll of failed hits, not restricted to the single chosen target. Full rule in raw-text store."
+    "community_notes": "[APPROX] When a NEOPHYTE HYBRIDS unit is selected to shoot, its ranged attacks may re-roll hit rolls against one selected enemy unit; modeled as a re-roll of failed hits, not restricted to the single chosen target. Full rule in raw-text store.",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "NEOPHYTE HYBRIDS"
+        ]
+      }
+    }
   },
   {
     "ability_id": "slunk-from-the-underbelly-xenocult-masses-genestealer-cults",
@@ -5259,9 +5412,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "claw-of-ascension-achilles-ridgerunner"
     ],
@@ -5269,11 +5421,88 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "designate-target",
+        "designation": "crossfire-target",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            },
+            "eligibility": {
+              "type": "happened",
+              "parameters": {
+                "event": "after-roll",
+                "subject": "event-subject",
+                "object": "this-unit",
+                "filter": {
+                  "roll": "hit",
+                  "result": "success"
+                },
+                "window": "event"
+              }
+            },
+            "limit": {
+              "count": 1,
+              "period": "turn"
+            }
+          }
+        },
+        "applies": {
+          "to": "attackers-of-target",
+          "effect": {
+            "type": "stat-modifier",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "GENESTEALER CULTS"
+              ]
+            },
+            "modifier": {
+              "stat": "AP",
+              "operation": "improve",
+              "value": 1
+            }
+          }
+        },
+        "duration": "turn"
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "turn"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "optional": true
+    },
+    "source_digest": "a9ede5af1b8464244ab6f91a47ad291c1f4bfdf06401eaf3767bd689bc8d0901"
   },
   {
     "ability_id": "cult-ambush-claw-of-ascension-genestealer-cults",
@@ -6555,19 +6784,71 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "genestealer-cults",
     "detachment_id": "claw-of-ascension",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "designate-target",
+      "designation": "practiced-eye-target",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        }
+      },
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "roll-modifier",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "CLAW OF ASCENSION"
+            ]
+          },
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "optional": true
+    },
+    "source_digest": "5900d419a7478f2b002a93890a06004943d3fb480cb06544b1b3328fd12c2fbb"
   },
   {
     "ability_id": "predatory-instincts-biosanctic-broodsurge-genestealer-cults",
@@ -6863,9 +7144,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "magus"
     ],
@@ -6873,11 +7153,58 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-activate",
+          "target": "this-model",
+          "modifier": {
+            "ability": "psychic-familiar-genestealer-cults"
+          }
+        },
+        {
+          "type": "ability-modifier",
+          "target": "this-model",
+          "modifier": {
+            "ability": "mind-control",
+            "aspect": "range",
+            "operation": "add",
+            "value": 6
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      },
+      "optional": true
+    },
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "unit"
+    },
+    "source_digest": "b9eb5cab2d7119767e74fb130fffb635bf4b020d881a211a477befbbbb07f537"
   },
   {
     "ability_id": "rapid-feint-outlander-claw-genestealer-cults",
@@ -7354,9 +7681,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "claw-of-ascension-achilles-ridgerunner"
     ],
@@ -7364,11 +7690,85 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "designate-target",
+        "designation": "survey-augur-target",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            },
+            "eligibility": {
+              "type": "happened",
+              "parameters": {
+                "event": "after-roll",
+                "subject": "event-subject",
+                "object": "this-unit",
+                "filter": {
+                  "roll": "hit",
+                  "result": "success"
+                },
+                "window": "event"
+              }
+            }
+          }
+        },
+        "applies": {
+          "to": "attackers-of-target",
+          "effect": {
+            "type": "weapon-ability-grant",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "GENESTEALER CULTS"
+              ]
+            },
+            "modifier": {
+              "keywords": [
+                {
+                  "keyword_id": "ignores-cover"
+                }
+              ]
+            }
+          }
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "optional": true
+    },
+    "source_digest": "73b1b812ae30d9920ad89c7b91e7d741ae05b0a32b32d6136152ddbaaaec2586"
   },
   {
     "ability_id": "symbiotic-destruction-brood-brothers-auxilia-genestealer-cults",

@@ -988,28 +988,44 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "5ae5cb1b348b9bddbbd735cf4bdd06099cd5de1b87255a84d0b714a4f9ce7a91",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "movement"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       },
       "effect": {
         "type": "sequence",
         "steps": [
           {
+            "type": "ability-activate",
+            "target": "this-unit",
+            "modifier": {
+              "ability": "precision-drop-astra-militarum"
+            }
+          },
+          {
             "type": "set-up",
             "target": "this-unit",
             "modifier": {
               "to": "battlefield",
-              "from": "strategic-reserves",
-              "via": "deep-strike",
               "min_enemy_distance": {
                 "inches": 6
               }
@@ -1017,7 +1033,7 @@
           },
           {
             "type": "permission",
-            "target": "this-model",
+            "target": "event-subject",
             "modifier": {
               "activity": "declare-charge",
               "allow": false
@@ -1033,9 +1049,13 @@
       "tempestus-aquilons"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
+    "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "astra-militarum"
+    "faction_id": "astra-militarum",
+    "trigger": {
+      "event": "set-up",
+      "optional": true
+    }
   },
   {
     "ability_id": "servo-sentry-astra-militarum",
@@ -1361,25 +1381,86 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "8283a46882ab92f67f88f353f86a8a3fcdb916a36b3e0341b1b3001732eb69ce",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "re-roll",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "hit",
-          "subset": "all-failures"
-        }
+        "type": "designate-target",
+        "designation": "transport-support-target",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            },
+            "eligibility": {
+              "type": "happened",
+              "parameters": {
+                "event": "after-roll",
+                "subject": "event-subject",
+                "object": "this-unit",
+                "filter": {
+                  "roll": "hit",
+                  "result": "success"
+                },
+                "window": "event"
+              }
+            }
+          }
+        },
+        "applies": {
+          "to": "attackers-of-target",
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "happened",
+              "parameters": {
+                "subject": "attacker",
+                "event": "disembarked",
+                "filter": {
+                  "transport": "this-unit"
+                },
+                "window": "turn"
+              }
+            },
+            "effect": {
+              "type": "re-roll",
+              "target": {
+                "owner": "friendly",
+                "level": "model"
+              },
+              "modifier": {
+                "roll": "hit",
+                "result_scope": "any-result"
+              }
+            }
+          }
+        },
+        "duration": "phase"
       }
     },
     "scope": {
@@ -1389,8 +1470,14 @@
       "taurox-prime"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "astra-militarum"
+    "behavior": "reactive",
+    "faction_id": "astra-militarum",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
+    }
   },
   {
     "ability_id": "rearm-reload-fire-astra-militarum",
@@ -1398,23 +1485,34 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "fc68cc0e9fae5f47417b7db47ffd5383e27067ca5ea08afbef550d8db7cdd9b4",
+    "source_digest": "15ba99c25248a43eb80932f79f17a10da088526fc3f034841518e1e437fd54c3",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "happened",
-        "parameters": {
-          "event": "move-ended",
-          "filter": {
-            "move_types": [
-              "remain-stationary"
-            ]
+        "operator": "and",
+        "operands": [
+          {
+            "type": "rule-active",
+            "parameters": {
+              "rule": "order-astra-militarum"
+            }
           },
-          "window": "turn"
-        }
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "move-ended",
+              "filter": {
+                "move_types": [
+                  "remain-stationary"
+                ]
+              },
+              "window": "turn"
+            }
+          }
+        ]
       },
       "effect": {
         "type": "weapon-ability-grant",
@@ -1427,7 +1525,12 @@
                 "value": 1
               }
             }
-          ]
+          ],
+          "weapons": {
+            "keyword": {
+              "keyword_id": "heavy"
+            }
+          }
         }
       }
     },
@@ -1653,26 +1756,78 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "7da21941186f93c072404ee3775cabb46abdf26a8aa27cda57fa11b41897766d",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "stat-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "stat": "AP",
-          "operation": "improve",
-          "value": 1
-        }
+        "type": "designate-target",
+        "designation": "withering-hail-target",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            },
+            "eligibility": {
+              "type": "happened",
+              "parameters": {
+                "event": "after-roll",
+                "subject": "event-subject",
+                "object": "this-unit",
+                "filter": {
+                  "roll": "hit",
+                  "result": "success",
+                  "weapons": {
+                    "name": "exterminator autocannon"
+                  }
+                },
+                "window": "event"
+              }
+            }
+          }
+        },
+        "applies": {
+          "to": "attackers-of-target",
+          "effect": {
+            "type": "stat-modifier",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "ASTRA MILITARUM"
+              ]
+            },
+            "modifier": {
+              "stat": "AP",
+              "operation": "improve",
+              "value": 1
+            }
+          }
+        },
+        "duration": "phase"
       }
     },
     "scope": {
@@ -1682,8 +1837,18 @@
       "leman-russ-exterminator"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "astra-militarum"
+    "behavior": "reactive",
+    "faction_id": "astra-militarum",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
+    },
+    "usage": {
+      "frequency": "once-per-phase",
+      "per": "unit"
+    }
   },
   {
     "ability_id": "wall-of-muscle-astra-militarum",
@@ -6407,9 +6572,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "8b2df796df2cc716a3a13ca9e47c9e1856deb050705e95a6a88d395ece6a4f38",
+    "source_digest": "4c69664a28a2edf0def7264d8647a063c1fb06258ff87405ca85293a48e5d13d",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -6427,15 +6592,34 @@
         ]
       },
       "effect": {
-        "type": "ability-grant",
-        "target": "this-unit",
-        "modifier": {
-          "ability": "deep-strike"
-        }
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "set-up",
+            "target": "this-unit",
+            "modifier": {
+              "to": "strategic-reserves"
+            }
+          },
+          {
+            "type": "ability-grant",
+            "target": "this-unit",
+            "modifier": {
+              "ability": "deep-strike"
+            }
+          },
+          {
+            "type": "move",
+            "target": "this-unit",
+            "modifier": {
+              "move_type": "ingress"
+            }
+          }
+        ]
       }
     },
     "scope": {
-      "duration": "turn"
+      "duration": "until-next-shooting-phase"
     },
     "unit_ids": [
       "gaunts-ghosts"
@@ -6450,7 +6634,8 @@
         "parameters": {
           "turn": "opponent-turn"
         }
-      }
+      },
+      "optional": true
     },
     "faction_id": "astra-militarum"
   },
@@ -9066,7 +9251,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "d0597398f72509c25431220621f340f6485d26badbd70792d50f59190c4512eb",
     "version": "2025-q3",
@@ -9075,10 +9260,10 @@
     "faction_id": "astra-militarum",
     "detachment_id": "bridgehead-strike",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "designate-target",
-      "designation": "servo-designated",
+      "designation": "servo-designators-target",
       "select": {
         "kind": "unit",
         "selector": {
@@ -9093,13 +9278,14 @@
             "type": "happened",
             "parameters": {
               "event": "after-roll",
-              "subject": "stratagem-target",
+              "subject": "event-subject",
               "object": "this-unit",
               "filter": {
                 "roll": "hit",
-                "result": "success"
+                "result": "success",
+                "attack_type": "ranged"
               },
-              "window": "phase"
+              "window": "event"
             }
           }
         }
@@ -9108,25 +9294,24 @@
         "to": "attackers-of-target",
         "effect": {
           "type": "weapon-ability-grant",
-          "target": "attacker",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "MILITARUM TEMPESTUS"
+            ]
+          },
           "modifier": {
-            "weapons": {
-              "type": "ranged"
-            },
             "keywords": [
               {
                 "keyword_id": "ignores-cover"
               }
-            ]
+            ],
+            "weapons": {
+              "type": "ranged"
+            }
           }
-        },
-        "attacker_unit_filter": {
-          "all_of": [
-            "MILITARUM TEMPESTUS"
-          ]
         }
-      },
-      "duration": "phase"
+      }
     },
     "scope": {
       "duration": "phase"
@@ -9136,6 +9321,18 @@
         "ASTRA MILITARUM",
         "MILITARUM TEMPESTUS"
       ]
+    },
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "MILITARUM TEMPESTUS"
+        ]
+      }
     }
   },
   {
@@ -11783,19 +11980,64 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "astra-militarum",
     "detachment_id": "combined-arms",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "designate-target",
+      "designation": "fields-of-fire-target",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        }
+      },
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "stat-modifier",
+              "target": {
+                "stratagem_target": "first"
+              },
+              "modifier": {
+                "stat": "AP",
+                "operation": "improve",
+                "value": 1
+              }
+            },
+            {
+              "type": "stat-modifier",
+              "target": {
+                "stratagem_target": "second"
+              },
+              "modifier": {
+                "stat": "AP",
+                "operation": "improve",
+                "value": 1
+              }
+            }
+          ]
+        }
+      },
+      "duration": "phase"
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "activated",
+    "source_digest": "afd713cf1228e7db9f0f35e5cd605a8a20215b9619265b0f4850d43e947f39c4"
   },
   {
     "ability_id": "final-hour-hammer-of-the-emperor-astra-militarum",

@@ -194,19 +194,92 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "ultramarines",
     "detachment_id": "blade-of-ultramar",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "stat-modifier",
+              "target": "this-model",
+              "modifier": {
+                "stat": "S",
+                "operation": "add",
+                "value": 1,
+                "weapons": {
+                  "type": "melee"
+                }
+              }
+            },
+            {
+              "type": "stat-modifier",
+              "target": "this-model",
+              "modifier": {
+                "stat": "AP",
+                "operation": "add",
+                "value": 1,
+                "weapons": {
+                  "type": "melee"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "rule-active",
+            "parameters": {
+              "rule": {
+                "ability_id": "combat-doctrines-adeptus-astartes",
+                "option_id": "assault-doctrine"
+              }
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "stat-modifier",
+                "target": "this-model",
+                "modifier": {
+                  "stat": "S",
+                  "operation": "add",
+                  "value": 2,
+                  "weapons": {
+                    "type": "melee"
+                  }
+                }
+              },
+              {
+                "type": "stat-modifier",
+                "target": "this-model",
+                "modifier": {
+                  "stat": "AP",
+                  "operation": "add",
+                  "value": 2,
+                  "weapons": {
+                    "type": "melee"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "2c2cba7ccc1907dc849967a2b20ca1d98eb028de28738fc25ea79e6ac56ea64d"
   },
   {
     "ability_id": "practical-tactics-blade-of-ultramar-ultramarines",
@@ -354,19 +427,28 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "ultramarines",
     "detachment_id": "blade-of-ultramar",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-activate",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "combat-doctrines-adeptus-astartes",
+        "select": {
+          "by": "player"
+        },
+        "exclusive": true
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "until-next-command-phase"
+    },
+    "behavior": "activated",
+    "source_digest": "99c83a0f3d9db1fee792968e48f8da2c0d77678b3c2788f122e321761d25d21f"
   },
   {
     "ability_id": "veteran-of-behemoth-blade-of-ultramar-ultramarines",

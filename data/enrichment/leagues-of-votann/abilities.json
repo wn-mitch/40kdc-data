@@ -197,13 +197,13 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "890d708143c259a234fc72b9a3fb0e769f6c45c25efba020e47530bcb231aeb8",
     "version": "2025-q3",
     "effect": {
       "type": "ability-grant",
-      "target": "this-model",
+      "target": "this-unit",
       "modifier": {
         "ability": "deep-strike"
       }
@@ -838,92 +838,75 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "28ecd467da0b60cc953f19dd73d8b4b781da539edb5e26ea3f96d866f694af80",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attack-is",
-        "parameters": {
-          "shooting_type": "snap"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "conditional",
-            "condition": {
-              "type": "matches",
-              "parameters": {
-                "filter": {
-                  "has_ability": [
-                    "fortify-takeover"
-                  ]
-                },
-                "subject": {
-                  "owner": "friendly"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "rule-active",
+                "parameters": {
+                  "rule": {
+                    "ability_id": "prioritised-efficiency-leagues-of-votann",
+                    "definition_id": "fortify-takeover"
+                  }
                 }
               }
-            },
-            "effect": {
-              "type": "roll-result",
-              "target": "this-unit",
-              "modifier": {
-                "roll": "hit",
-                "succeeds_on": 4,
-                "weapons": {
-                  "type": "ranged"
-                }
+            ]
+          },
+          "effect": {
+            "type": "roll-result",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "succeeds_on": 5
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "rule-active",
+            "parameters": {
+              "rule": {
+                "ability_id": "prioritised-efficiency-leagues-of-votann",
+                "definition_id": "fortify-takeover"
               }
             }
           },
-          {
-            "type": "conditional",
-            "condition": {
-              "operator": "not",
-              "operands": [
-                {
-                  "type": "matches",
-                  "parameters": {
-                    "filter": {
-                      "has_ability": [
-                        "fortify-takeover"
-                      ]
-                    },
-                    "subject": {
-                      "owner": "friendly"
-                    }
-                  }
-                }
-              ]
-            },
-            "effect": {
-              "type": "roll-result",
-              "target": "this-unit",
-              "modifier": {
-                "roll": "hit",
-                "succeeds_on": 5,
-                "weapons": {
-                  "type": "ranged"
-                }
-              }
+          "effect": {
+            "type": "roll-result",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "succeeds_on": 4
             }
           }
-        ]
-      }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "resolution"
     },
     "unit_ids": [
       "ironkin-steeljacks-with-heavy-volkanite-disintegrators"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "leagues-of-votann"
+    "behavior": "reactive",
+    "faction_id": "leagues-of-votann",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "stratagem"
+      }
+    }
   },
   {
     "ability_id": "preymark-crest-leagues-of-votann",
@@ -2210,25 +2193,109 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "2026cc4c66204ece4ce0b9c898e9f799e139c4f499022daf08d9cd97a2dc6f44",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "act-on-death",
+          "target": "event-object",
+          "modifier": {
+            "act": "fight",
+            "resolution": "after-attacking-unit-finishes",
+            "removal": "after-destroyed-model-fights",
+            "gate": {
+              "dice": "D6+1",
+              "threshold": 4,
+              "comparison": "gte",
+              "modifiers": []
+            },
+            "eligibility": {
+              "operator": "and",
+              "operands": [
+                {
+                  "operator": "not",
+                  "operands": [
+                    {
+                      "type": "happened",
+                      "parameters": {
+                        "subject": "event-subject",
+                        "event": "selected",
+                        "filter": {
+                          "to": "fight"
+                        },
+                        "window": "phase"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "rule-active",
+                  "parameters": {
+                    "rule": {
+                      "ability_id": "prioritised-efficiency-leagues-of-votann",
+                      "definition_id": "fortify-takeover"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "act-on-death",
+          "target": "event-object",
+          "modifier": {
+            "act": "fight",
+            "resolution": "after-attacking-unit-finishes",
+            "removal": "after-destroyed-model-fights",
+            "gate": {
+              "dice": "D6",
+              "threshold": 4,
+              "comparison": "gte",
+              "modifiers": []
+            },
+            "eligibility": {
+              "operator": "and",
+              "operands": [
+                {
+                  "operator": "not",
+                  "operands": [
+                    {
+                      "type": "happened",
+                      "parameters": {
+                        "subject": "event-subject",
+                        "event": "selected",
+                        "filter": {
+                          "to": "fight"
+                        },
+                        "window": "phase"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "operator": "not",
+                  "operands": [
+                    {
+                      "type": "rule-active",
+                      "parameters": {
+                        "rule": {
+                          "ability_id": "prioritised-efficiency-leagues-of-votann",
+                          "definition_id": "fortify-takeover"
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          }
         }
-      },
-      "effect": {
-        "type": "act-on-death",
-        "target": "this-model",
-        "modifier": {
-          "act": "fight"
-        }
-      }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -2237,8 +2304,12 @@
       "cthonian-beserks"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "leagues-of-votann"
+    "behavior": "reactive",
+    "faction_id": "leagues-of-votann",
+    "trigger": {
+      "event": "model-destroyed",
+      "object": "model-in-this-unit"
+    }
   },
   {
     "ability_id": "subterranean-explosives-leagues-of-votann",
@@ -3105,9 +3176,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "155c6295bff8ab2fcb146c09e6f9a929d0dfa907bc293f9869997f50141271f7",
+    "source_digest": "b28b5475032ca0bb8f26c2641b5e80a55db0e3484a33d4b31aeaf16af83358ea",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -3116,31 +3187,53 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "re-roll",
-          "target": "this-unit",
-          "modifier": {
-            "roll": "hit",
-            "subset": "ones",
-            "weapons": {
-              "type": "ranged"
-            }
-          }
-        },
-        {
-          "type": "re-roll",
-          "target": "this-unit",
-          "modifier": {
-            "roll": "wound",
-            "subset": "ones",
-            "weapons": {
-              "type": "ranged"
-            }
+      "type": "designate-target",
+      "designation": "coordinated-crossfire-target",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
           }
         }
-      ]
+      },
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "conditional",
+          "condition": {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "re-roll",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "hit",
+                  "subset": "ones"
+                }
+              },
+              {
+                "type": "re-roll",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "wound",
+                  "subset": "ones"
+                }
+              }
+            ]
+          }
+        }
+      }
     },
     "scope": {
       "duration": "phase"
@@ -3149,10 +3242,21 @@
     "trigger": {
       "event": "phase-started",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       }
     }
   },
@@ -3327,7 +3431,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "107c827b65d23bd99e2b169b2519e6a02d9172e0343f1637a7b3d14f0a7f9a11",
     "version": "2025-q3",
@@ -3339,7 +3443,7 @@
     "behavior": "passive",
     "effect": {
       "type": "keyword-grant",
-      "target": "this-model",
+      "target": "this-unit",
       "modifier": {
         "keywords": [
           "MOBILE"
@@ -3459,7 +3563,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "9a1f2cec5315ea6a30eb0e50cfd3151b5d8a42c2cba6d90184989b5687ce046e",
     "version": "2025-q3",
@@ -3470,67 +3574,56 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "select-units",
-          "selector": {
-            "filter": {
-              "owner": "enemy",
-              "within": {
-                "range": {
-                  "inches": 12
-                },
-                "of": "this-model"
-              },
-              "visible": {
-                "to": "this-model"
-              }
-            },
-            "count": {
-              "min": 1,
-              "max": 1
+      "type": "designate-target",
+      "designation": "scornful-analysis-target",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy",
+            "visible": {
+              "to": "this-model"
             }
           },
-          "effect": {
-            "type": "designate",
-            "target": "this-unit",
-            "modifier": {
-              "subject": "selected-unit",
-              "tag": "scornful-analysis-designated",
-              "clears_on": "phase"
-            }
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
             "type": "matches",
             "parameters": {
+              "subject": "selected-unit",
               "filter": {
-                "designated": "scornful-analysis-designated"
-              },
-              "subject": "defender"
-            }
-          },
-          "effect": {
-            "type": "weapon-ability-grant",
-            "target": {
-              "owner": "friendly"
-            },
-            "modifier": {
-              "weapons": {
-                "type": "ranged"
-              },
-              "keywords": [
-                {
-                  "keyword_id": "ignores-cover"
+                "within": {
+                  "of": "this-unit",
+                  "range": {
+                    "inches": 12
+                  }
                 }
-              ]
+              }
             }
           }
         }
-      ]
+      },
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "weapon-ability-grant",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "LEAGUES OF VOTANN"
+            ]
+          },
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "ignores-cover"
+              }
+            ]
+          }
+        }
+      }
     },
     "scope": {
       "duration": "phase"
@@ -3539,10 +3632,21 @@
     "trigger": {
       "event": "phase-started",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       }
     }
   },
@@ -4228,10 +4332,7 @@
         ]
       },
       "modifier": {
-        "ability": "deep-strike",
-        "value": {
-          "rating": true
-        }
+        "ability": "deep-strike"
       }
     },
     "scope": {
@@ -6268,10 +6369,7 @@
       "type": "ability-grant",
       "target": "this-unit",
       "modifier": {
-        "ability": "deep-strike",
-        "value": {
-          "rating": true
-        }
+        "ability": "deep-strike"
       }
     },
     "scope": {
@@ -6783,19 +6881,156 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "needgaard-oathband",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "optional": true,
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "resource-spend",
+                "target": "this-model",
+                "modifier": {
+                  "pool": "yp-pool",
+                  "amount": 3
+                }
+              },
+              {
+                "type": "designate",
+                "target": "this-unit",
+                "modifier": {
+                  "tag": "honour-of-the-hold-yp-spent",
+                  "clears_on": "phase"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "designate-target",
+          "designation": "honour-of-the-hold-target",
+          "select": {
+            "kind": "unit",
+            "selector": {
+              "filter": {
+                "owner": "enemy"
+              },
+              "count": {
+                "min": 1,
+                "max": 1
+              },
+              "eligibility": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "engaged_with": "this-unit"
+                  }
+                }
+              }
+            }
+          },
+          "applies": {
+            "to": "attackers-of-target",
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "conditional",
+                  "condition": {
+                    "operator": "and",
+                    "operands": [
+                      {
+                        "type": "attack-is",
+                        "parameters": {
+                          "attack_type": "melee"
+                        }
+                      },
+                      {
+                        "operator": "not",
+                        "operands": [
+                          {
+                            "type": "matches",
+                            "parameters": {
+                              "subject": "attacker",
+                              "filter": {
+                                "designated": "honour-of-the-hold-yp-spent"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "effect": {
+                    "type": "stat-modifier",
+                    "target": "this-unit",
+                    "modifier": {
+                      "stat": "AP",
+                      "operation": "improve",
+                      "value": 1
+                    }
+                  }
+                },
+                {
+                  "type": "conditional",
+                  "condition": {
+                    "operator": "and",
+                    "operands": [
+                      {
+                        "type": "attack-is",
+                        "parameters": {
+                          "attack_type": "melee"
+                        }
+                      },
+                      {
+                        "type": "matches",
+                        "parameters": {
+                          "subject": "attacker",
+                          "filter": {
+                            "designated": "honour-of-the-hold-yp-spent"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "effect": {
+                    "type": "stat-modifier",
+                    "target": "this-unit",
+                    "modifier": {
+                      "stat": "AP",
+                      "operation": "improve",
+                      "value": 2
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "duration": "phase"
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "stratagem"
+      }
+    },
+    "source_digest": "587c82c9f3298f10872d4cb87e58bde845868b9a39ae73e0b987a1947beeb962"
   },
   {
     "ability_id": "huntrs-mark-needgaard-oathband-leagues-of-votann",
@@ -6842,19 +7077,78 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "brandfast-oathband",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "designate-target",
+      "designation": "illuminated-priority-target",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "subject": "event-subject",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success"
+              },
+              "window": "event"
+            }
+          }
+        }
+      },
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "re-roll",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "INFANTRY",
+              "LEAGUES OF VOTANN"
+            ],
+            "level": "model"
+          },
+          "modifier": {
+            "roll": "hit",
+            "subset": "ones"
+          }
+        }
+      },
+      "duration": "phase"
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "LEAGUES OF VOTANN",
+          "VEHICLE"
+        ]
+      }
+    },
+    "source_digest": "299f113eb80fa171a0cf70f199c29c90abc2b4486bdc1929f99678109b1a1549"
   },
   {
     "ability_id": "indomitable-exemplar-bane-slayers-bulwark-leagues-of-votann",
@@ -7430,19 +7724,46 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "brandfast-oathband",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "rule-active",
+        "parameters": {
+          "rule": {
+            "ability_id": "prioritised-efficiency-leagues-of-votann",
+            "definition_id": "hostile-acquisition"
+          }
+        }
+      },
+      "effect": {
+        "type": "move",
+        "target": "this-unit",
+        "modifier": {
+          "move_type": "normal",
+          "distance": "D6"
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "subject": {
+        "owner": "enemy"
+      }
+    },
+    "source_digest": "be12af7e4d9e52f337b6d2c2ebef0215e3de062fc44eeac6d972bdbc46ba701f"
   },
   {
     "ability_id": "optimal-expenditure-mercenary-oathband-leagues-of-votann",
@@ -8220,19 +8541,83 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "needgaard-oathband",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "rule-active",
+        "parameters": {
+          "rule": {
+            "ability_id": "prioritised-efficiency-leagues-of-votann",
+            "definition_id": "fortify-takeover"
+          }
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "eligible",
+              "parameters": {
+                "to": "shoot"
+              }
+            },
+            "effect": {
+              "type": "permission",
+              "target": "this-unit",
+              "modifier": {
+                "activity": "shoot",
+                "allow": true,
+                "as_if": "shooting-phase"
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "eligible",
+              "parameters": {
+                "to": "shoot"
+              }
+            },
+            "effect": {
+              "type": "targeting",
+              "target": "this-unit",
+              "modifier": {
+                "by": "this-unit",
+                "may": "must-target",
+                "kind": "shoot",
+                "weapons": {
+                  "type": "ranged"
+                },
+                "target": "event-subject"
+              }
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "subject": {
+        "owner": "enemy"
+      }
+    },
+    "source_digest": "29acb912d6bf187745a0369df6161081382874bf99f8c761f5f14120fcecbdfa"
   },
   {
     "ability_id": "secure-positions-brandfast-oathband-leagues-of-votann",
@@ -8633,9 +9018,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "kahl"
     ],
@@ -8643,11 +9027,27 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "ability": "deep-strike"
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "bea7576a237f62e657697b7d430f9ba9f6e5c5ee2ee2b5f54160f4f50c3e6109"
   },
   {
     "ability_id": "teleport-crest-leagues-of-votann",
@@ -8655,9 +9055,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "einhyr-champion"
     ],
@@ -8665,11 +9064,27 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "ability": "deep-strike"
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "572bde9481e096cd3b6e0be2c91ec83193e248ab0522a0cc30f73f6834b6d4ee"
   },
   {
     "ability_id": "trivarg-cyber-implant-brandfast-oathband-leagues-of-votann",
@@ -8975,19 +9390,48 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "needgaard-oathband",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "rule-active",
+        "parameters": {
+          "rule": {
+            "ability_id": "prioritised-efficiency-leagues-of-votann",
+            "definition_id": "fortify-takeover"
+          }
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "attacker",
+        "modifier": {
+          "stat": "AP",
+          "operation": "worsen",
+          "value": 1
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "attack-sequence"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
+    },
+    "source_digest": "8150737fee91d232ea6fec2701ef14b2552abb7022a2e6c7cb941630cc860631"
   },
   {
     "ability_id": "wall-of-steel-hearthfyre-arsenal-leagues-of-votann",
@@ -9042,19 +9486,48 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "delve-assault-shift",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "rule-active",
+        "parameters": {
+          "rule": {
+            "ability_id": "prioritised-efficiency-leagues-of-votann",
+            "definition_id": "hostile-acquisition"
+          }
+        }
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "attacker",
+        "modifier": {
+          "roll": "wound",
+          "operation": "subtract",
+          "value": 1
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
+    },
+    "source_digest": "c73668c953774e60a33ad93fe381c1ee8d3b68ef8fac1e7b10239e833a887ad6"
   },
   {
     "ability_id": "writ-of-acquisition-persecution-prospect-leagues-of-votann",

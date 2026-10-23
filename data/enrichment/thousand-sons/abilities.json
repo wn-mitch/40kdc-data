@@ -847,40 +847,115 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "6bfa24229471175538d8cb20994aefcadea93ca4dfb38ee384bfc7dbfea9c61f",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
+        "operator": "and",
+        "operands": [
           {
-            "type": "roll-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "hit",
-              "operation": "add",
-              "value": 1
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
             }
           },
           {
-            "type": "roll-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "wound",
-              "operation": "add",
-              "value": 1
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
             }
           }
         ]
+      },
+      "effect": {
+        "type": "designate-target",
+        "designation": "sorcerous-support-target",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            },
+            "eligibility": {
+              "type": "happened",
+              "parameters": {
+                "event": "after-roll",
+                "subject": "event-subject",
+                "object": "this-unit",
+                "filter": {
+                  "roll": "hit",
+                  "result": "success"
+                },
+                "window": "event"
+              }
+            }
+          }
+        },
+        "applies": {
+          "to": "attackers-of-target",
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "happened",
+                  "parameters": {
+                    "subject": "attacker",
+                    "event": "disembarked",
+                    "filter": {
+                      "transport": "this-unit"
+                    },
+                    "window": "turn"
+                  }
+                },
+                {
+                  "type": "attack-is",
+                  "parameters": {
+                    "attack_type": "psychic"
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "roll-modifier",
+                  "target": {
+                    "owner": "friendly",
+                    "level": "model"
+                  },
+                  "modifier": {
+                    "roll": "hit",
+                    "operation": "add",
+                    "value": 1
+                  }
+                },
+                {
+                  "type": "roll-modifier",
+                  "target": {
+                    "owner": "friendly",
+                    "level": "model"
+                  },
+                  "modifier": {
+                    "roll": "wound",
+                    "operation": "add",
+                    "value": 1
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "duration": "phase"
       }
     },
     "scope": {
@@ -890,9 +965,15 @@
       "chaos-rhino"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "auto-generated, partial",
-    "faction_id": "thousand-sons"
+    "faction_id": "thousand-sons",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
+    }
   },
   {
     "ability_id": "scryer-of-fates-thousand-sons",
@@ -1831,46 +1912,92 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "ce3441f7652d5a20ca8bdf534f9f5318fa96e5b4c143d608fd7ac1b9f0257535",
     "version": "2025-q3",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "ability-grant",
-          "target": "this-model",
-          "modifier": {
-            "ability": "deep-strike"
-          }
-        },
-        {
-          "type": "weapon-ability-grant",
-          "target": "this-model",
-          "modifier": {
-            "weapons": {
-              "name": "Dark Blessing"
-            },
-            "keywords": [
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
               {
-                "keyword_id": "sustained-hits",
+                "type": "phase-is",
                 "parameters": {
-                  "value": "D3"
+                  "phase": "movement"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
                 }
               }
             ]
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "subject": "event-subject",
+              "event": "set-up",
+              "filter": {
+                "from": "deep-strike"
+              },
+              "window": "phase"
+            }
           }
-        },
-        {
-          "type": "permission",
-          "target": "this-model",
-          "modifier": {
-            "activity": "declare-charge",
-            "allow": false
+        ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "ability-activate",
+            "target": "this-model",
+            "modifier": {
+              "ability": "aetherstride-thousand-sons"
+            }
+          },
+          {
+            "type": "set-up",
+            "target": "this-unit",
+            "modifier": {
+              "to": "battlefield",
+              "min_enemy_distance": {
+                "inches": 6
+              }
+            }
+          },
+          {
+            "type": "weapon-ability-grant",
+            "target": "this-model",
+            "modifier": {
+              "keywords": [
+                {
+                  "keyword_id": "sustained-hits",
+                  "parameters": {
+                    "value": "D3"
+                  }
+                }
+              ],
+              "weapons": {
+                "name": "Dark Blessing"
+              }
+            }
+          },
+          {
+            "type": "permission",
+            "target": "event-subject",
+            "modifier": {
+              "activity": "declare-charge",
+              "allow": false
+            }
           }
-        }
-      ]
+        ]
+      }
     },
     "scope": {
       "duration": "turn"
@@ -1883,15 +2010,8 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
       "event": "set-up",
-      "filter": {
-        "from": "strategic-reserves"
-      },
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "movement"
-        }
-      }
+      "subject": "this-model",
+      "optional": true
     },
     "faction_id": "thousand-sons"
   },
@@ -2390,27 +2510,49 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "b270c1572a775040b83520e7aaf866c41d99a844f262a0d46ae984b8cb37b3d0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
+      "type": "designate-target",
+      "designation": "marked-by-fate-target",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "matches",
+            "parameters": {
+              "subject": "selected-unit",
+              "filter": {
+                "visible": {
+                  "to": "this-model"
+                }
+              }
+            }
+          }
         }
       },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "hit",
-          "operation": "add",
-          "value": 1
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
         }
-      }
+      },
+      "duration": "phase"
     },
     "scope": {
       "duration": "phase"
@@ -2419,8 +2561,28 @@
       "sorcerer-in-terminator-armour"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "thousand-sons"
+    "behavior": "reactive",
+    "faction_id": "thousand-sons",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "ensorcelled-annihilation-thousand-sons",

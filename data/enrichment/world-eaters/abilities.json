@@ -2851,7 +2851,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "619399d807833b1f393923ca377c65334c6063e197936a4188a8ef83686ea27f",
     "version": "2025-q3",
@@ -2862,38 +2862,122 @@
     "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "ability-grant",
-            "target": "this-unit",
-            "modifier": {
-              "ability": "deep-strike"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
             }
           },
-          {
-            "type": "move-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "passthrough": [
-                "non-titanic-models",
-                "all-terrain"
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "ability-grant",
+                "target": "this-unit",
+                "modifier": {
+                  "ability": "deep-strike"
+                }
+              },
+              {
+                "type": "ability-part",
+                "trigger": {
+                  "event": "move-ended",
+                  "filter": {
+                    "move_types": [
+                      "normal",
+                      "advance",
+                      "fall-back",
+                      "charge"
+                    ]
+                  }
+                },
+                "effect": {
+                  "type": "move-modifier",
+                  "target": "event-subject",
+                  "modifier": {
+                    "passthrough": [
+                      "all-terrain",
+                      "models"
+                    ],
+                    "applies_to_moves": [
+                      "normal",
+                      "advance",
+                      "fall-back",
+                      "charge"
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "move-ended",
+            "filter": {
+              "move_types": [
+                "normal",
+                "advance",
+                "fall-back"
+              ]
+            }
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "attachment",
+              "parameters": {
+                "subject": "this-model",
+                "role": "leading"
+              }
+            },
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "permission",
+                  "target": "this-unit",
+                  "modifier": {
+                    "activity": "move",
+                    "allow": true,
+                    "despite": [
+                      "engaged"
+                    ]
+                  }
+                },
+                {
+                  "type": "move-modifier",
+                  "target": "this-unit",
+                  "modifier": {
+                    "no_end_in_engagement": true,
+                    "applies_to_moves": [
+                      "normal",
+                      "advance",
+                      "fall-back"
+                    ]
+                  }
+                },
+                {
+                  "type": "roll-result",
+                  "target": "this-unit",
+                  "modifier": {
+                    "roll": "desperate-escape",
+                    "result": "pass"
+                  }
+                }
               ]
             }
           }
-        ]
-      }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -3451,7 +3535,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "956b48756949e71bb14a08609bfd88d6e1927e3a5e00dfa01e575f3cd0f2d26a",
     "version": "2025-q3",
@@ -3469,10 +3553,11 @@
         "type": "attachment",
         "parameters": {
           "subject": "this-model",
-          "role": "leading",
+          "role": "attached",
           "with": {
             "all_of": [
-              "POSSESSED"
+              "POSSESSED",
+              "WORLD EATERS"
             ]
           }
         }
@@ -3482,14 +3567,14 @@
         "steps": [
           {
             "type": "ability-grant",
-            "target": "this-model",
+            "target": "this-unit",
             "modifier": {
               "ability": "deep-strike"
             }
           },
           {
             "type": "ability-grant",
-            "target": "this-model",
+            "target": "this-unit",
             "modifier": {
               "ability": "scouts",
               "value": 6
@@ -5304,10 +5389,7 @@
           "type": "ability-grant",
           "target": "this-model",
           "modifier": {
-            "ability": "deep-strike",
-            "value": {
-              "rating": true
-            }
+            "ability": "deep-strike"
           }
         },
         {
@@ -5657,9 +5739,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "1361565c36cafcb61f015c86a8a5f442d1e73a1c045067282d67c5bb1465b6a9",
+    "source_digest": "a1179775bca61a0cf134906b2fd349aa440cad77c5363bcde0a4966aed2273b8",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -5681,7 +5763,7 @@
         },
         {
           "type": "roll-modifier",
-          "target": "this-model",
+          "target": "this-unit",
           "modifier": {
             "roll": "charge",
             "operation": "add",
@@ -7061,7 +7143,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "83a7db75271d6b17ca0229ae68cd20a1b4c21f869ad1adfaf0d2a03a20eba521",
     "version": "2025-q3",
@@ -7070,13 +7152,15 @@
     "faction_id": "world-eaters",
     "detachment_id": "khorne-daemonkin",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "sequence",
       "steps": [
         {
           "type": "invulnerable-save",
-          "target": "this-unit",
+          "target": {
+            "stratagem_target": "second"
+          },
           "modifier": {
             "invuln_sv": 5
           }
@@ -7091,7 +7175,9 @@
           },
           "effect": {
             "type": "invulnerable-save",
-            "target": "this-unit",
+            "target": {
+              "stratagem_target": "second"
+            },
             "modifier": {
               "invuln_sv": 4
             }
@@ -7102,53 +7188,18 @@
     "scope": {
       "duration": "phase"
     },
-    "trigger": [
-      {
-        "event": "targets-selected",
-        "subject": {
-          "owner": "enemy"
-        },
-        "object": "this-unit",
-        "filter": {
-          "kind": "attack"
-        },
-        "condition": {
-          "operator": "and",
-          "operands": [
-            {
-              "type": "phase-is",
-              "parameters": {
-                "phase": "shooting"
-              }
-            },
-            {
-              "type": "player-turn-is",
-              "parameters": {
-                "turn": "opponent-turn"
-              }
-            }
-          ]
-        },
-        "optional": true
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
       },
-      {
-        "event": "targets-selected",
-        "subject": {
-          "owner": "enemy"
-        },
-        "object": "this-unit",
-        "filter": {
-          "kind": "attack"
-        },
-        "condition": {
-          "type": "phase-is",
-          "parameters": {
-            "phase": "fight"
-          }
-        },
-        "optional": true
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": {
+        "stratagem_target": "second"
       }
-    ],
+    },
     "community_notes": "5+ invulnerable save until end of phase, improving to 4+ while the Boon of Blood ability (Blood Tithe, Khorne Daemonkin) is active. The source targets a Blood Legions unit within 6\" of the attacked World Eaters unit but buffs that World Eaters unit; the DSL target vocabulary can't express that relay, so target is the unit the ability resolves on."
   },
   {

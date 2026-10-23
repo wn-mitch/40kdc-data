@@ -1587,7 +1587,7 @@ export interface BattleRoundCondition {
 export interface RuleActiveCondition {
   type: "rule-active";
   parameters: {
-    rule: EntityId | StanceOptionRef;
+    rule: EntityId | StanceOptionRef | NamedAbilityRef;
   };
 }
 /**
@@ -4472,7 +4472,7 @@ export interface RuleStateEffect {
   modifier: {
     direction: "granted" | "suppressed" | "exchanged";
     rule_kind: "core-rule" | "keyword" | "ability" | "faction-rule";
-    rule: string | NamedAbilityRef;
+    rule: string | NamedAbilityRef | StanceOptionRef;
     exchange_with?: NamedAbilityRef;
     except_from?: "this-ability";
     attacks?: EventBoundReference3;

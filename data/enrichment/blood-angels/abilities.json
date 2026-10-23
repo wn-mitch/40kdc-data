@@ -604,7 +604,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "76a4f158cabb163cdab7a4910115f0679da43a4c6be69b56b195e4ad0f596801",
     "version": "2025-q3",
@@ -613,7 +613,7 @@
     "faction_id": "blood-angels",
     "detachment_id": "wrath-of-the-doomed",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "keyword-grant",
       "target": "this-unit",
@@ -626,7 +626,24 @@
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "Death Company Dreadnought unit selected to make a Normal, Advance or Charge move gains Mobile for that move"
+    "community_notes": "Death Company Dreadnought unit selected to make a Normal, Advance or Charge move gains Mobile for that move",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "move_types": [
+          "normal",
+          "advance",
+          "charge"
+        ],
+        "to": "move"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "DEATH COMPANY DREADNOUGHT"
+        ]
+      }
+    }
   },
   {
     "ability_id": "rage-fuelled-response-wrath-of-the-doomed-blood-angels",
@@ -2558,19 +2575,36 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "blood-angels",
     "detachment_id": "encarmine-speartip",
     "ability_type": "detachment",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "rule-active",
+        "parameters": {
+          "rule": {
+            "ability_id": "combat-doctrines-adeptus-astartes",
+            "option_id": "tactical-doctrine"
+          }
+        }
+      },
+      "effect": {
+        "type": "army-rule",
+        "target": "this-unit",
+        "modifier": {
+          "rule": "single-chapter"
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "ab073b47e5bc97560ea2ee710a01e3ce98d4289ca4575c3aa411de56efeeaeb2"
   },
   {
     "ability_id": "black-rage-death-company-marines-blood-angels",
@@ -2741,9 +2775,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "chief-librarian-mephiston"
     ],
@@ -2751,11 +2784,287 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "this-model",
+          "modifier": {
+            "stat": "psyker-level",
+            "operation": "set",
+            "value": 3
+          }
+        },
+        {
+          "type": "ability-part",
+          "optional": true,
+          "effect": {
+            "type": "ability-part",
+            "duration": "until-next-command-phase",
+            "cost": {
+              "type": "resource-spend",
+              "target": "this-unit",
+              "modifier": {
+                "pool": "psychic-level",
+                "amount": 1,
+                "label": "Psychic Level"
+              }
+            },
+            "effect": {
+              "type": "conditional",
+              "condition": {
+                "operator": "and",
+                "operands": [
+                  {
+                    "operator": "and",
+                    "operands": [
+                      {
+                        "type": "phase-is",
+                        "parameters": {
+                          "phase": "command"
+                        }
+                      },
+                      {
+                        "type": "player-turn-is",
+                        "parameters": {
+                          "turn": "your-turn"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "operator": "not",
+                    "operands": [
+                      {
+                        "type": "matches",
+                        "parameters": {
+                          "filter": {
+                            "state": "battle-shocked"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "roll",
+                    "dice": "D6",
+                    "roll_var": "psychic",
+                    "effect": {
+                      "type": "dice-table",
+                      "dice": "D6",
+                      "outcomes": [
+                        {
+                          "results": [
+                            1
+                          ],
+                          "effect": {
+                            "type": "state-change",
+                            "target": "this-unit",
+                            "modifier": {
+                              "state": "battle-shocked",
+                              "set": true
+                            }
+                          }
+                        },
+                        {
+                          "results": [
+                            2,
+                            3,
+                            4,
+                            5,
+                            6
+                          ],
+                          "effect": {
+                            "type": "no-effect"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "rule-state",
+                    "target": "this-unit",
+                    "modifier": {
+                      "direction": "granted",
+                      "rule_kind": "faction-rule",
+                      "rule": {
+                        "ability_id": "combat-doctrines-adeptus-astartes",
+                        "option_id": "assault-doctrine"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "type": "ability-part",
+          "cost": {
+            "type": "resource-spend",
+            "target": "this-unit",
+            "modifier": {
+              "pool": "psychic-level",
+              "amount": 2,
+              "label": "Psychic Level"
+            }
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "filter": {
+                      "state": "battle-shocked"
+                    }
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "ability-part",
+              "trigger": {
+                "event": "phase-started",
+                "condition": {
+                  "operator": "and",
+                  "operands": [
+                    {
+                      "type": "phase-is",
+                      "parameters": {
+                        "phase": "movement"
+                      }
+                    },
+                    {
+                      "type": "player-turn-is",
+                      "parameters": {
+                        "turn": "opponent-turn"
+                      }
+                    }
+                  ]
+                },
+                "optional": true
+              },
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "roll",
+                    "dice": "D6",
+                    "roll_var": "psychic",
+                    "effect": {
+                      "type": "dice-table",
+                      "dice": "D6",
+                      "outcomes": [
+                        {
+                          "results": [
+                            1
+                          ],
+                          "effect": {
+                            "type": "state-change",
+                            "target": "this-unit",
+                            "modifier": {
+                              "state": "battle-shocked",
+                              "set": true
+                            }
+                          }
+                        },
+                        {
+                          "results": [
+                            2,
+                            3,
+                            4,
+                            5,
+                            6
+                          ],
+                          "effect": {
+                            "type": "no-effect"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "ability-part",
+                    "trigger": {
+                      "event": "move-ended",
+                      "filter": {
+                        "move_types": [
+                          "fall-back"
+                        ]
+                      },
+                      "subject": {
+                        "owner": "enemy"
+                      }
+                    },
+                    "effect": {
+                      "type": "sequence",
+                      "steps": [
+                        {
+                          "type": "conditional",
+                          "condition": {
+                            "type": "matches",
+                            "parameters": {
+                              "subject": "event-subject",
+                              "filter": {
+                                "within": {
+                                  "of": "this-unit",
+                                  "range": {
+                                    "inches": 6
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "effect": {
+                            "type": "test",
+                            "target": "event-subject",
+                            "modifier": {
+                              "test": "leadership"
+                            }
+                          }
+                        },
+                        {
+                          "type": "conditional",
+                          "condition": {
+                            "type": "roll-result",
+                            "parameters": {
+                              "roll": "leadership",
+                              "result": "failure"
+                            }
+                          },
+                          "effect": {
+                            "type": "permission",
+                            "target": "event-subject",
+                            "modifier": {
+                              "activity": "move",
+                              "allow": false
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "duration": "phase"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "source_digest": "2d1199b18e570b9beb174294e57a1bec0a796ec81cc86d53a5683b1ba71dd2f0"
   },
   {
     "ability_id": "combat-doctrines-blood-angels",

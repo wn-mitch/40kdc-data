@@ -1893,7 +1893,14 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Vanguard Invader"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "surprise-assault-vanguard-onslaught-tyranids",
     "game_version": {
       "edition": "11th",

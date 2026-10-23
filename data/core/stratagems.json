@@ -68,7 +68,10 @@
     "target_restrictions": {
       "required_keywords": [
         "Character"
-      ]
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
     },
     "ability_id": "epic-challenge",
     "game_version": {
@@ -94,7 +97,11 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-battle",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "insane-bravery",
     "game_version": {
       "edition": "11th",
@@ -179,7 +186,22 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "excluded_keywords": [
+        "Aircraft"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "state": "in-strategic-reserves"
+          }
+        }
+      }
+    },
     "ability_id": "rapid-ingress",
     "game_version": {
       "edition": "11th",
@@ -204,7 +226,24 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-turn",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "excluded_keywords": [
+        "Titanic"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "not_states": [
+              "engaged"
+            ]
+          }
+        }
+      }
+    },
     "ability_id": "fire-overwatch",
     "game_version": {
       "edition": "11th",

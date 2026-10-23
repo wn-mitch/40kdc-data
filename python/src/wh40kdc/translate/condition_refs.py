@@ -143,6 +143,9 @@ def count_phrase(value: Any, default_min: Any = 1) -> str:
 
 def rule_ref_phrase(value: Any) -> str:
     if isinstance(value, dict):
+        if value.get("definition_id") is not None:
+            definition = id_label(value.get("definition_id"))
+            return f"{definition} ability of {id_label(value.get('ability_id'))}"
         return f"{id_label(value.get('option_id'))} option of {id_label(value.get('ability_id'))}"
     return id_label(value)
 

@@ -264,7 +264,16 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adepta Sororitas",
+        "Fly",
+        "Infantry"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit"
+    },
     "ability_id": "devastating-reprise-chorus-of-condemnation-adepta-sororitas",
     "game_version": {
       "edition": "11th",

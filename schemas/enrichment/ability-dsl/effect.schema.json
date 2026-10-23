@@ -2010,6 +2010,9 @@
                     },
                     {
                       "$ref": "../../defs/common.schema.json#/$defs/named-ability-ref"
+                    },
+                    {
+                      "$ref": "../../defs/common.schema.json#/$defs/stance-option-ref"
                     }
                   ]
                 },

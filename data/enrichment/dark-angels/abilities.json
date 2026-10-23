@@ -341,34 +341,55 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "5d10e6546d6c2ec65d6728181570543140f87ebd25cd8eba1566d4aa710ed673",
+    "source_digest": "baa246bdbb27c1d680412eb63dce79514614a506e67bb7fc8b227caf5b9322f6",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "dark-angels",
     "detachment_id": "wrath-of-the-rock",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "move-modifier",
+      "type": "keyword-grant",
       "target": "this-unit",
       "modifier": {
-        "applies_to_moves": [
-          "normal",
-          "advance",
-          "charge"
-        ],
-        "passthrough": [
-          "all-terrain"
+        "keywords": [
+          "MOBILE"
         ]
       }
     },
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "One Ravenwing unit: models can move horizontally through terrain features during Normal, Advance and Charge moves this phase"
+    "community_notes": "One Ravenwing unit: models can move horizontally through terrain features during Normal, Advance and Charge moves this phase",
+    "trigger": [
+      {
+        "event": "selected",
+        "filter": {
+          "to": "move"
+        },
+        "subject": {
+          "owner": "friendly",
+          "all_of": [
+            "RAVENWING"
+          ]
+        }
+      },
+      {
+        "event": "targets-selected",
+        "filter": {
+          "kind": "charge"
+        },
+        "subject": {
+          "owner": "friendly",
+          "all_of": [
+            "RAVENWING"
+          ]
+        }
+      }
+    ]
   },
   {
     "ability_id": "tactical-mastery-wrath-of-the-rock-dark-angels",
@@ -2041,19 +2062,67 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "c854a368d449138189de6f6b20d2837404d478196ecd791f1bba0844dcabf804",
+    "source_digest": "57e85d8ffd7c9090af06cb46b85a841f9c53dffeb9deb8e716cb2f57da424ddb",
     "version": "2025-q3",
     "effect": {
-      "type": "cp-gain",
-      "target": "this-model",
-      "modifier": {
-        "amount": 1
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "ADEPTUS ASTARTES"
+            ],
+            "within": {
+              "range": {
+                "inches": 9
+              },
+              "of": "this-model"
+            },
+            "visible": {
+              "to": "this-model"
+            }
+          },
+          "count": {
+            "min": 0,
+            "max": 1
+          }
+        },
+        "effect": {
+          "type": "ability-activate",
+          "target": "selected-unit",
+          "modifier": {
+            "ability": "combat-doctrines-adeptus-astartes",
+            "select": {
+              "by": "player"
+            },
+            "exclusive": true
+          }
+        }
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "until-next-command-phase"
     },
     "unit_ids": [
       "azrael"

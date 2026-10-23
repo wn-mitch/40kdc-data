@@ -1850,7 +1850,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Legiones Daemonica",
+        "Mounted"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "warp-riders-cavalcade-of-chaos-chaos-daemons",
     "game_version": {
       "edition": "11th",

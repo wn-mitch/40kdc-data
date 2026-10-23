@@ -1,5 +1,5 @@
 import { readFileSync } from "node:fs";
-import { basename, dirname, resolve } from "node:path";
+import { basename, dirname, join, resolve } from "node:path";
 import { glob } from "glob";
 import type { ValidationResult } from "./validate.js";
 
@@ -109,6 +109,21 @@ export async function checkDslContract(root: string, result: ValidationResult): 
     for (const value of values) if (node(value) && typeof value.ability_id === "string") indexed.set(value.ability_id, value);
     abilities.set(faction, indexed);
   }
+  const parents = new Map<string, string | null>();
+  const parentOf = (faction: string): string | null => {
+    if (!parents.has(faction)) {
+      let parent: string | null = null;
+      try {
+        const rows = JSON.parse(readFileSync(join(root, "core", faction, "factions.json"), "utf8")) as Array<{ id?: unknown; parent_faction_id?: unknown }>;
+        const own = rows.find((row) => row.id === faction)?.parent_faction_id;
+        parent = typeof own === "string" ? own : null;
+      } catch {
+        parent = null;
+      }
+      parents.set(faction, parent);
+    }
+    return parents.get(faction)!;
+  };
   const catalog = new Map<string, CatalogEntry>();
   for (const file of await glob("core/weapon-keywords.json", { cwd: root, absolute: true })) {
     for (const entry of rows(file)) if (node(entry) && typeof entry.id === "string") {
@@ -120,7 +135,9 @@ export async function checkDslContract(root: string, result: ValidationResult): 
     if (!node(ability)) return;
     const issues: Issue[] = [];
     const base = `/${index}`;
-    const resolveAbility = (id: string) => abilities.get(faction)?.get(id) ?? abilities.get("_core")?.get(id);
+    // A shared-roster child (a Space Marine chapter) uses its parent's rules as well as its own.
+    const parent = parentOf(faction);
+    const resolveAbility = (id: string) => abilities.get(faction)?.get(id) ?? (parent ? abilities.get(parent)?.get(id) : undefined) ?? abilities.get("_core")?.get(id);
     const checkOption = (abilityId: string, optionId: string, path: string): void => {
       const parent = resolveAbility(abilityId);
       if (!parent) issues.push({ path, message: `stance parent "${abilityId}" is absent from this faction and shared core` });

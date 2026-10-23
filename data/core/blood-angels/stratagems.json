@@ -358,7 +358,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Death Company Dreadnought"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "no-barrier-to-retribution-wrath-of-the-doomed-blood-angels",
     "game_version": {
       "edition": "11th",

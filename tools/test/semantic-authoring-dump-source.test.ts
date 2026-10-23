@@ -115,6 +115,28 @@ describe("Semantic authoring source prose from the dump", () => {
     expect(loaded.records.find((record) => record.abilityId === "second-wind")).toMatchObject({ factionId: "_core", text: "Any phase.\nBreathe." });
   });
 
+  it("reads a core row replicated into another faction's directory as its record's faction only", () => {
+    const strat = { id: "hold-fast-iron-host", ability_id: "hold-fast-iron-host", detachment_id: "iron-host" };
+    const root = dataRoot({
+      "enrichment/alpha/abilities.json": [{ ability_id: "hold-fast-iron-host", name: "Hold Fast", ability_type: "stratagem", detachment_id: "iron-host" }],
+      "core/alpha/detachments.json": [{ id: "iron-host", external_refs: mfm("det-iron") }],
+      "core/alpha/stratagems.json": [strat],
+      // A chapter of the shared codex replicates its Stratagems; the record lives once, in alpha.
+      "core/alpha-chapter/detachments.json": [{ id: "iron-host", external_refs: mfm("det-iron") }],
+      "core/alpha-chapter/stratagems.json": [strat, { id: "chapter-only", ability_id: "chapter-only", detachment_id: "iron-host" }],
+    });
+    const prose = new DumpProse({ rows: [
+      row("alpha", detachment("det-iron", "iron-host"), "Hold Fast", { kind: "stratagem", stratagem: { when: "Your turn.", target: "One unit.", effect: "It holds." } }),
+      row("alpha", detachment("det-iron", "iron-host"), "Chapter Only", { kind: "stratagem", stratagem: { when: "Your turn.", effect: "It rallies." } }),
+    ], unowned: [] });
+
+    const loaded = loadDumpSourceRecords({ dataRoot: root, prose, dumpPath: "fixture" });
+    expect(loaded.records.map((record) => `${record.factionId}/${record.abilityId}`).sort()).toEqual([
+      "alpha-chapter/chapter-only",
+      "alpha/hold-fast-iron-host",
+    ]);
+  });
+
   it("refreshes the workbench from the dump by default and from a fixture directory when one is named", () => {
     const root = dataRoot({
       "enrichment/alpha/abilities.json": [{ ability_id: "war-cry", name: "War Cry", ability_type: "faction" }],

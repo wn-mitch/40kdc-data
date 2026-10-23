@@ -1247,7 +1247,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Kygharil's Protectors"
+      ],
+      "count": "one-or-more",
+      "side": "your-army",
+      "selects": "unit"
+    },
     "ability_id": "focused-strikes-kygharils-protectors-aeldari",
     "game_version": {
       "edition": "11th",

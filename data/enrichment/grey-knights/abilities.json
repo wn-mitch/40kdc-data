@@ -254,26 +254,91 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "8ac4882ca764d009cfaff924cdc40d8c9faccadcaf430950ee877d36819c0350",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "stat-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "stat": "AP",
-          "operation": "improve",
-          "value": 1
-        }
+        "type": "designate-target",
+        "designation": "fire-focus-target",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            },
+            "eligibility": {
+              "type": "happened",
+              "parameters": {
+                "event": "after-roll",
+                "subject": "event-subject",
+                "object": "this-unit",
+                "filter": {
+                  "roll": "hit",
+                  "result": "success"
+                },
+                "window": "event"
+              }
+            },
+            "limit": {
+              "count": 1,
+              "period": "turn"
+            }
+          }
+        },
+        "applies": {
+          "to": "attackers-of-target",
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "happened",
+              "parameters": {
+                "subject": "attacker",
+                "event": "disembarked",
+                "filter": {
+                  "transport": "this-unit"
+                },
+                "window": "turn"
+              }
+            },
+            "effect": {
+              "type": "stat-modifier",
+              "target": {
+                "owner": "friendly",
+                "level": "model"
+              },
+              "modifier": {
+                "stat": "AP",
+                "operation": "improve",
+                "value": 1
+              }
+            }
+          }
+        },
+        "duration": "turn"
       }
     },
     "scope": {
@@ -283,8 +348,14 @@
       "razorback"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "grey-knights"
+    "behavior": "reactive",
+    "faction_id": "grey-knights",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
+    }
   },
   {
     "ability_id": "sanctity-of-purpose-grey-knights",
@@ -774,74 +845,12 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "0df670431bf5506839be6fe574fc589066a9e4b048e363722afbd02dd9fd5492",
     "version": "2025-q3",
     "effect": {
-      "type": "designate-target",
-      "designation": "guidance-of-the-ancients-crowes-sanctifiers",
-      "select": {
-        "kind": "unit",
-        "selector": {
-          "filter": {
-            "owner": "enemy"
-          },
-          "count": {
-            "min": 1,
-            "max": 1
-          },
-          "eligibility": {
-            "type": "happened",
-            "parameters": {
-              "event": "after-roll",
-              "object": "this-unit",
-              "filter": {
-                "roll": "hit",
-                "result": "success",
-                "attack_type": "ranged",
-                "by": {
-                  "event_var": "guidance-of-the-ancients-crowes-sanctifiers-shooting"
-                }
-              },
-              "window": "event"
-            }
-          }
-        }
-      },
-      "applies": {
-        "to": "attackers-of-target",
-        "effect": {
-          "type": "roll-modifier",
-          "target": "attacker",
-          "modifier": {
-            "roll": "hit",
-            "operation": "add",
-            "value": 1,
-            "weapons": {
-              "type": "ranged"
-            }
-          }
-        },
-        "attacker_filter": {
-          "level": "model",
-          "all_of": [
-            "GREY KNIGHTS"
-          ]
-        }
-      },
-      "duration": "phase"
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "unit_ids": [
-      "crowes-sanctifiers-venerable-dreadnought"
-    ],
-    "ability_type": "unit",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "attacks-resolved",
+      "type": "conditional",
       "condition": {
         "operator": "and",
         "operands": [
@@ -859,8 +868,78 @@
           }
         ]
       },
-      "optional": true,
-      "binds_event_variable": "guidance-of-the-ancients-crowes-sanctifiers-shooting"
+      "effect": {
+        "type": "designate-target",
+        "designation": "guidance-of-the-ancients-psychic-target",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            },
+            "eligibility": {
+              "type": "happened",
+              "parameters": {
+                "event": "after-roll",
+                "subject": "event-subject",
+                "object": "this-unit",
+                "filter": {
+                  "roll": "hit",
+                  "result": "success",
+                  "attack_type": "ranged"
+                },
+                "window": "event"
+              }
+            }
+          }
+        },
+        "applies": {
+          "to": "attackers-of-target",
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "attack-is",
+              "parameters": {
+                "attack_type": "ranged"
+              }
+            },
+            "effect": {
+              "type": "roll-modifier",
+              "target": {
+                "owner": "friendly",
+                "all_of": [
+                  "GREY KNIGHTS"
+                ],
+                "level": "model"
+              },
+              "modifier": {
+                "roll": "hit",
+                "operation": "add",
+                "value": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "unit_ids": [
+      "crowes-sanctifiers-venerable-dreadnought"
+    ],
+    "ability_type": "unit",
+    "behavior": "reactive",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "optional": true
     },
     "faction_id": "grey-knights"
   },
@@ -3142,9 +3221,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "ff2db55309d08893e6c2cd5c319fff71997bcb01d4ebff1c5b66f9916a01f996",
+    "source_digest": "0948500bcda97b8750528b92ca53c1bab8d89432903772578f85ea0a84c0e4a1",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -3158,31 +3237,16 @@
         "operator": "and",
         "operands": [
           {
-            "type": "matches",
+            "type": "phase-is",
             "parameters": {
-              "filter": {
-                "all_of": [
-                  "INTERCEPTOR SQUAD"
-                ]
-              }
+              "phase": "shooting"
             }
           },
           {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "happened",
-                "parameters": {
-                  "event": "move-ended",
-                  "filter": {
-                    "move_types": [
-                      "ingress"
-                    ]
-                  },
-                  "window": "turn"
-                }
-              }
-            ]
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
           }
         ]
       },
@@ -3191,7 +3255,7 @@
         "steps": [
           {
             "type": "rule-state",
-            "target": "this-unit",
+            "target": "event-subject",
             "modifier": {
               "direction": "suppressed",
               "rule_kind": "ability",
@@ -3200,7 +3264,7 @@
           },
           {
             "type": "move",
-            "target": "this-model",
+            "target": "event-subject",
             "modifier": {
               "move_type": "surge",
               "distance": "D6+1"
@@ -3210,17 +3274,21 @@
       }
     },
     "scope": {
-      "duration": "turn"
+      "duration": "phase"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
       "event": "attacks-resolved",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      }
+      "filter": {
+        "kind": "shoot"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "INTERCEPTOR SQUAD"
+        ]
+      },
+      "optional": true
     }
   },
   {
@@ -4494,19 +4562,68 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "grey-knights",
     "detachment_id": "fires-of-purgation",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "designate-target",
+      "designation": "focused-immolation-target",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        }
+      },
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "devastating-wounds"
+              },
+              {
+                "keyword_id": "sustained-hits",
+                "parameters": {
+                  "value": 1
+                }
+              }
+            ],
+            "weapons": {
+              "type": "ranged"
+            }
+          }
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "PURGATION SQUAD"
+        ]
+      }
+    },
+    "source_digest": "5125c430567d8877ff7d26b076a615a2d328c253fee507763ce4e525ecf355dc"
   },
   {
     "ability_id": "foesight-sanctifiers-castellan-crowe-grey-knights",

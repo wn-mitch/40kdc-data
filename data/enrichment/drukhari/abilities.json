@@ -1200,27 +1200,65 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "c051f7ace235da33ecfbd633037b0b717fc56dc0cc6c25b78fdeec874ed81be2",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
+      "type": "designate-target",
+      "designation": "murderous-crossfire-target",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "subject": "event-subject",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success"
+              },
+              "window": "event"
+            }
+          }
         }
       },
-      "effect": {
-        "type": "stat-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "stat": "AP",
-          "operation": "improve",
-          "value": 1
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "conditional",
+          "condition": {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
+            }
+          },
+          "effect": {
+            "type": "stat-modifier",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "DRUKHARI"
+              ]
+            },
+            "modifier": {
+              "stat": "AP",
+              "operation": "improve",
+              "value": 1
+            }
+          }
         }
-      }
+      },
+      "duration": "phase"
     },
     "scope": {
       "duration": "phase"
@@ -1229,8 +1267,18 @@
       "scourges-with-shardcarbines"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "drukhari"
+    "behavior": "reactive",
+    "faction_id": "drukhari",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
+    },
+    "usage": {
+      "frequency": "once-per-turn",
+      "per": "unit"
+    }
   },
   {
     "ability_id": "sadistic-raiders-drukhari",
@@ -10311,10 +10359,7 @@
           "type": "ability-grant",
           "target": "this-unit",
           "modifier": {
-            "ability": "deep-strike",
-            "value": {
-              "rating": true
-            }
+            "ability": "deep-strike"
           }
         },
         {
@@ -10355,10 +10400,7 @@
           "type": "ability-grant",
           "target": "this-unit",
           "modifier": {
-            "ability": "deep-strike",
-            "value": {
-              "rating": true
-            }
+            "ability": "deep-strike"
           }
         },
         {

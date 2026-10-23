@@ -7003,7 +7003,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [],
     "faction_id": "death-guard",
@@ -7013,10 +7013,7 @@
       "type": "ability-grant",
       "target": "this-unit",
       "modifier": {
-        "ability": "deep-strike",
-        "value": {
-          "rating": true
-        }
+        "ability": "deep-strike"
       }
     },
     "scope": {
@@ -8852,9 +8849,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "plague-drones"
     ],
@@ -8862,11 +8858,95 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "attacker",
+              "filter": {
+                "all_of": [
+                  "PLAGUE LEGIONS"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "designate-target",
+        "designation": "deaths-heads-target",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            },
+            "eligibility": {
+              "type": "happened",
+              "parameters": {
+                "event": "after-roll",
+                "subject": "event-subject",
+                "object": "this-unit",
+                "filter": {
+                  "roll": "hit",
+                  "result": "success"
+                },
+                "window": "event"
+              }
+            }
+          }
+        },
+        "applies": {
+          "to": "attackers-of-target",
+          "effect": {
+            "type": "re-roll",
+            "target": {
+              "owner": "friendly"
+            },
+            "modifier": {
+              "roll": "wound",
+              "result_scope": "any-result"
+            }
+          }
+        },
+        "duration": "turn"
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "turn"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
+    },
+    "source_digest": "182716eeaacc45d4eaaf827930c81029bfc9e66865019ae2a7d2d462b638ca81"
   },
   {
     "ability_id": "deluge-of-nurgle-death-guard",
@@ -9134,9 +9214,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "rotigus"
     ],
@@ -9144,10 +9223,94 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "attacker",
+          "filter": {
+            "all_of": [
+              "PLAGUE LEGIONS"
+            ]
+          }
+        }
+      },
+      "effect": {
+        "type": "designate-target",
+        "designation": "virulent-blessing-target",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            },
+            "eligibility": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "selected-unit",
+                    "filter": {
+                      "within": {
+                        "of": "this-model",
+                        "range": {
+                          "inches": 24
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "selected-unit",
+                    "filter": {
+                      "visible": {
+                        "to": "this-model"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "applies": {
+          "to": "attackers-of-target",
+          "effect": {
+            "type": "stat-modifier",
+            "target": {
+              "owner": "friendly"
+            },
+            "modifier": {
+              "stat": "D",
+              "operation": "add",
+              "value": 1
+            }
+          }
+        },
+        "duration": "phase"
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      },
+      "optional": true
+    },
+    "source_digest": "ee7bd3e4162238ff481760797acac6bf4b20eaca3c6091defe4927bac83643a5"
   }
 ]

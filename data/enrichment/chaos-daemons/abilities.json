@@ -646,20 +646,15 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "e9d2627bb71cb21c7a44d73a54e7d603d2a7bd4dd6ade35870e190a33bfcfb14",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
-        }
-      },
-      "effect": {
-        "type": "select-units",
+      "type": "designate-target",
+      "designation": "the-eternal-dance-target",
+      "select": {
+        "kind": "unit",
         "selector": {
           "filter": {
             "owner": "enemy",
@@ -674,67 +669,60 @@
             "min": 1,
             "max": 1
           }
-        },
+        }
+      },
+      "applies": {
+        "to": "attackers-of-target",
         "effect": {
-          "type": "sequence",
-          "steps": [
-            {
-              "type": "conditional",
-              "condition": {
-                "operator": "and",
-                "operands": [
-                  {
-                    "type": "same-unit",
-                    "parameters": {
-                      "subject": "defender",
-                      "as": "selected-unit"
-                    }
-                  },
-                  {
-                    "type": "attack-is",
-                    "parameters": {
-                      "attack_type": "melee"
-                    }
-                  }
-                ]
-              },
-              "effect": {
+          "type": "conditional",
+          "condition": {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "melee"
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
                 "type": "roll-modifier",
                 "target": {
                   "owner": "friendly",
                   "all_of": [
-                    "SLAANESH",
-                    "LEGIONES DAEMONICA"
-                  ]
+                    "LEGIONES DAEMONICA",
+                    "SLAANESH"
+                  ],
+                  "level": "model"
                 },
                 "modifier": {
                   "roll": "wound",
                   "operation": "add",
                   "value": 1
                 }
-              }
-            },
-            {
-              "type": "conditional",
-              "condition": {
-                "type": "attack-is",
-                "parameters": {
-                  "attack_type": "melee"
-                }
               },
-              "effect": {
-                "type": "roll-modifier",
-                "target": "selected-unit",
-                "modifier": {
-                  "roll": "wound",
-                  "operation": "subtract",
-                  "value": 1
+              {
+                "type": "conditional",
+                "condition": {
+                  "type": "attack-is",
+                  "parameters": {
+                    "attack_type": "melee"
+                  }
+                },
+                "effect": {
+                  "type": "roll-modifier",
+                  "target": "selected-unit",
+                  "modifier": {
+                    "roll": "wound",
+                    "operation": "subtract",
+                    "value": 1
+                  }
                 }
               }
-            }
-          ]
+            ]
+          }
         }
-      }
+      },
+      "duration": "phase"
     },
     "scope": {
       "duration": "phase"
@@ -743,9 +731,18 @@
       "the-masque-of-slaanesh"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "auto-generated, partial",
-    "faction_id": "chaos-daemons"
+    "faction_id": "chaos-daemons",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    }
   },
   {
     "ability_id": "dazzling-acrobatics-chaos-daemons",
@@ -1198,12 +1195,105 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "5af50cef876870b27e8f3a4cbb681000c59a399ac99f444e2564c5b7eecc230b",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
+      "type": "designate-target",
+      "designation": "symphony-of-pain-target",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "state": "battle-shocked"
+                  }
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "within": {
+                      "of": "this-model",
+                      "range": {
+                        "inches": 12
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "re-roll",
+              "target": {
+                "owner": "friendly",
+                "all_of": [
+                  "LEGIONES DAEMONICA",
+                  "SLAANESH"
+                ],
+                "level": "model"
+              },
+              "modifier": {
+                "roll": "hit",
+                "result_scope": "any-result"
+              }
+            },
+            {
+              "type": "re-roll",
+              "target": {
+                "owner": "friendly",
+                "all_of": [
+                  "LEGIONES DAEMONICA",
+                  "SLAANESH"
+                ],
+                "level": "model"
+              },
+              "modifier": {
+                "roll": "wound",
+                "result_scope": "any-result"
+              }
+            }
+          ]
+        }
+      },
+      "duration": "turn"
+    },
+    "scope": {
+      "duration": "turn"
+    },
+    "unit_ids": [
+      "tranceweaver"
+    ],
+    "ability_type": "unit",
+    "behavior": "reactive",
+    "community_notes": "auto-generated, partial",
+    "faction_id": "chaos-daemons",
+    "trigger": {
+      "event": "phase-ended",
       "condition": {
         "operator": "and",
         "operands": [
@@ -1221,86 +1311,8 @@
           }
         ]
       },
-      "effect": {
-        "type": "select-units",
-        "selector": {
-          "filter": {
-            "owner": "enemy",
-            "within": {
-              "range": {
-                "inches": 12
-              },
-              "of": "this-model"
-            }
-          },
-          "count": {
-            "min": 0,
-            "max": 1
-          },
-          "eligibility": {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "state": "battle-shocked"
-              }
-            }
-          }
-        },
-        "effect": {
-          "type": "conditional",
-          "condition": {
-            "type": "same-unit",
-            "parameters": {
-              "subject": "defender",
-              "as": "selected-unit"
-            }
-          },
-          "effect": {
-            "type": "sequence",
-            "steps": [
-              {
-                "type": "re-roll",
-                "target": {
-                  "owner": "friendly",
-                  "all_of": [
-                    "SLAANESH",
-                    "LEGIONES DAEMONICA"
-                  ]
-                },
-                "modifier": {
-                  "roll": "hit",
-                  "subset": "all-failures"
-                }
-              },
-              {
-                "type": "re-roll",
-                "target": {
-                  "owner": "friendly",
-                  "all_of": [
-                    "SLAANESH",
-                    "LEGIONES DAEMONICA"
-                  ]
-                },
-                "modifier": {
-                  "roll": "wound",
-                  "subset": "all-failures"
-                }
-              }
-            ]
-          }
-        }
-      }
-    },
-    "scope": {
-      "duration": "turn"
-    },
-    "unit_ids": [
-      "tranceweaver"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated, partial",
-    "faction_id": "chaos-daemons"
+      "optional": true
+    }
   },
   {
     "ability_id": "eldritch-flames-chaos-daemons",
@@ -3563,25 +3575,75 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "f29297577bd5e41d98357547faf7f79614201859d3bd5a2fa6105710ff243370",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "re-roll",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "wound",
-          "subset": "all-failures"
-        }
+        "type": "designate-target",
+        "designation": "deaths-heads-target",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            },
+            "eligibility": {
+              "type": "happened",
+              "parameters": {
+                "event": "after-roll",
+                "subject": "event-subject",
+                "object": "this-unit",
+                "filter": {
+                  "roll": "hit",
+                  "result": "success"
+                },
+                "window": "event"
+              }
+            }
+          }
+        },
+        "applies": {
+          "to": "attackers-of-target",
+          "effect": {
+            "type": "re-roll",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "LEGIONES DAEMONICA",
+                "NURGLE"
+              ]
+            },
+            "modifier": {
+              "roll": "wound",
+              "result_scope": "any-result"
+            }
+          }
+        },
+        "duration": "turn"
       }
     },
     "scope": {
@@ -3591,9 +3653,15 @@
       "plague-drones"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "defensive ability (skipped for damage calc)",
-    "faction_id": "chaos-daemons"
+    "faction_id": "chaos-daemons",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
+    }
   },
   {
     "ability_id": "daemon-lord-of-khorne-chaos-daemons",
@@ -4644,99 +4712,109 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "fd88fb16a5010699ee21904fbac7c86198fea9ad75fb6e919b2499b7d71fc5cf",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
-        }
-      },
-      "effect": {
-        "type": "select-units",
+      "type": "designate-target",
+      "designation": "blood-throne-target",
+      "select": {
+        "kind": "unit",
         "selector": {
           "filter": {
-            "owner": "enemy",
-            "within": {
-              "range": {
-                "inches": 18
-              },
-              "of": "this-model"
-            },
-            "visible": {
-              "to": "this-model"
-            }
+            "owner": "enemy"
           },
           "count": {
             "min": 1,
             "max": 1
-          }
-        },
-        "effect": {
-          "type": "conditional",
-          "condition": {
-            "type": "same-unit",
-            "parameters": {
-              "subject": "defender",
-              "as": "selected-unit"
-            }
           },
-          "effect": {
-            "type": "sequence",
-            "steps": [
+          "eligibility": {
+            "operator": "and",
+            "operands": [
               {
-                "type": "stat-modifier",
-                "target": {
-                  "owner": "friendly",
-                  "all_of": [
-                    "KHORNE",
-                    "LEGIONES DAEMONICA"
-                  ]
-                },
-                "modifier": {
-                  "stat": "S",
-                  "operation": "add",
-                  "value": 1
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "within": {
+                      "of": "this-model",
+                      "range": {
+                        "inches": 18
+                      }
+                    }
+                  }
                 }
               },
               {
-                "type": "stat-modifier",
-                "target": {
-                  "owner": "friendly",
-                  "all_of": [
-                    "KHORNE",
-                    "LEGIONES DAEMONICA"
-                  ]
-                },
-                "modifier": {
-                  "stat": "AP",
-                  "operation": "improve",
-                  "value": 1
-                }
-              },
-              {
-                "type": "stat-modifier",
-                "target": {
-                  "owner": "friendly",
-                  "all_of": [
-                    "KHORNE",
-                    "LEGIONES DAEMONICA"
-                  ]
-                },
-                "modifier": {
-                  "stat": "D",
-                  "operation": "add",
-                  "value": 1
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "visible": {
+                      "to": "this-model"
+                    }
+                  }
                 }
               }
             ]
           }
         }
-      }
+      },
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "stat-modifier",
+              "target": {
+                "owner": "friendly",
+                "all_of": [
+                  "KHORNE",
+                  "LEGIONES DAEMONICA"
+                ]
+              },
+              "modifier": {
+                "stat": "S",
+                "operation": "improve",
+                "value": 1
+              }
+            },
+            {
+              "type": "stat-modifier",
+              "target": {
+                "owner": "friendly",
+                "all_of": [
+                  "KHORNE",
+                  "LEGIONES DAEMONICA"
+                ]
+              },
+              "modifier": {
+                "stat": "AP",
+                "operation": "improve",
+                "value": 1
+              }
+            },
+            {
+              "type": "stat-modifier",
+              "target": {
+                "owner": "friendly",
+                "all_of": [
+                  "KHORNE",
+                  "LEGIONES DAEMONICA"
+                ]
+              },
+              "modifier": {
+                "stat": "D",
+                "operation": "improve",
+                "value": 1
+              }
+            }
+          ]
+        }
+      },
+      "duration": "phase"
     },
     "scope": {
       "duration": "phase"
@@ -4745,9 +4823,18 @@
       "rendmaster-on-blood-throne"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "defensive ability (skipped for damage calc)",
-    "faction_id": "chaos-daemons"
+    "faction_id": "chaos-daemons",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    }
   },
   {
     "ability_id": "champion-slayer-chaos-daemons",
@@ -6577,7 +6664,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "88e0674645d6be6783d6567df19c61cf14a3eed214986cb8a8333867a0f2baec",
     "version": "2025-q3",
@@ -6586,7 +6673,7 @@
     "faction_id": "chaos-daemons",
     "detachment_id": "cavalcade-of-chaos",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "keyword-grant",
       "target": "this-unit",
@@ -6604,6 +6691,19 @@
         "LEGIONES DAEMONICA",
         "MOUNTED"
       ]
+    },
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "move"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "LEGIONES DAEMONICA",
+          "MOUNTED"
+        ]
+      }
     }
   },
   {
@@ -8072,19 +8172,103 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "chaos-daemons",
     "detachment_id": "daemonic-incursion",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "rule-active",
+                "parameters": {
+                  "rule": "the-shadow-of-chaos-chaos-daemons"
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "stat-modifier",
+                "target": "this-model",
+                "modifier": {
+                  "stat": "A",
+                  "operation": "add",
+                  "value": 1,
+                  "weapons": {
+                    "type": "melee"
+                  }
+                }
+              },
+              {
+                "type": "stat-modifier",
+                "target": "this-model",
+                "modifier": {
+                  "stat": "S",
+                  "operation": "add",
+                  "value": 1,
+                  "weapons": {
+                    "type": "melee"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "rule-active",
+            "parameters": {
+              "rule": "the-shadow-of-chaos-chaos-daemons"
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "stat-modifier",
+                "target": "this-model",
+                "modifier": {
+                  "stat": "A",
+                  "operation": "add",
+                  "value": 2,
+                  "weapons": {
+                    "type": "melee"
+                  }
+                }
+              },
+              {
+                "type": "stat-modifier",
+                "target": "this-model",
+                "modifier": {
+                  "stat": "S",
+                  "operation": "add",
+                  "value": 2,
+                  "weapons": {
+                    "type": "melee"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "34e70642e2a8a094ac2ac699c627d6651dd800f61a78c40a7aa2185b493a0784"
   },
   {
     "ability_id": "avatar-of-perfection-legion-of-excess-chaos-daemons",
@@ -10512,19 +10696,90 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "chaos-daemons",
     "detachment_id": "daemonic-incursion",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "attack-is",
+        "parameters": {
+          "attack_type": "melee"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "rule-active",
+              "parameters": {
+                "rule": "the-shadow-of-chaos-chaos-daemons"
+              }
+            },
+            "effect": {
+              "type": "dice-gated",
+              "dice": "D6+1",
+              "threshold": 4,
+              "comparison": "gte",
+              "on_success": {
+                "type": "heal",
+                "target": "this-model",
+                "modifier": {
+                  "amount": 1
+                }
+              },
+              "on_fail": null
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "rule-active",
+                  "parameters": {
+                    "rule": "the-shadow-of-chaos-chaos-daemons"
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "dice-gated",
+              "dice": "D6",
+              "threshold": 4,
+              "comparison": "gte",
+              "on_success": {
+                "type": "heal",
+                "target": "this-model",
+                "modifier": {
+                  "amount": 1
+                }
+              },
+              "on_fail": null
+            }
+          }
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "model-destroyed",
+      "object": {
+        "owner": "enemy",
+        "level": "model"
+      },
+      "subject": "this-model"
+    },
+    "source_digest": "91cf55206d54411bd3cb4193f19992b122b98adad8d17c6034b072bb56180de8"
   },
   {
     "ability_id": "spiteful-demise-shadow-legion-chaos-daemons",
@@ -10643,19 +10898,116 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "chaos-daemons",
     "detachment_id": "daemonic-incursion",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "rule-active",
+                "parameters": {
+                  "rule": "the-shadow-of-chaos-chaos-daemons"
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "stat-modifier",
+            "target": "this-model",
+            "modifier": {
+              "stat": "S",
+              "operation": "add",
+              "value": 1,
+              "weapons": {
+                "type": "ranged"
+              }
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "rule-active",
+                "parameters": {
+                  "rule": "the-shadow-of-chaos-chaos-daemons"
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "stat-modifier",
+            "target": "this-model",
+            "modifier": {
+              "stat": "Range",
+              "operation": "add",
+              "value": 3,
+              "weapons": {
+                "type": "ranged"
+              }
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "rule-active",
+            "parameters": {
+              "rule": "the-shadow-of-chaos-chaos-daemons"
+            }
+          },
+          "effect": {
+            "type": "stat-modifier",
+            "target": "this-model",
+            "modifier": {
+              "stat": "S",
+              "operation": "add",
+              "value": 2,
+              "weapons": {
+                "type": "ranged"
+              }
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "rule-active",
+            "parameters": {
+              "rule": "the-shadow-of-chaos-chaos-daemons"
+            }
+          },
+          "effect": {
+            "type": "stat-modifier",
+            "target": "this-model",
+            "modifier": {
+              "stat": "Range",
+              "operation": "add",
+              "value": 6,
+              "weapons": {
+                "type": "ranged"
+              }
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "3b928a0947e569659a5c1ead71374236076deb5d5b9801e782f3227c8b7c7ae9"
   },
   {
     "ability_id": "the-realm-of-chaos-daemonic-incursion-chaos-daemons",

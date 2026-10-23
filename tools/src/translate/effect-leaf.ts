@@ -391,7 +391,7 @@ function ruleState(m: Record<string, unknown>, subj: string): string {
   }
   const granted = m.direction === "granted";
   const rule = jstr(m.rule);
-  if (m.rule_kind === "faction-rule") return granted ? `${subj} ${v(subj, "gains")} ${abilityLabel(rule)}` : `${subj} cannot use ${abilityLabel(rule)}`;
+  if (m.rule_kind === "faction-rule") return granted ? `${subj} ${v(subj, "gains")} ${abilityLabel(m.rule)}` : `${subj} cannot use ${abilityLabel(m.rule)}`;
   if (rule === "overwatch-against-bearer") return `your opponent ${granted ? "can" : "cannot"} target ${subj} with Overwatch`;
   // The attacks of a bound shooting event never count against Hidden (schema: suppressed only).
   if (m.attacks != null && rule === "attacking-ends-hidden") return `those attacks do not stop ${subj} from being hidden`;

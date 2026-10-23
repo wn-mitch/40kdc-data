@@ -455,6 +455,8 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
     }
     case "core-ability-grant": {
       const value = leaf.parameters.value;
+      // Deep Strike prints no rating, so no unit has one for a grant to read.
+      if (leaf.parameters.ability === "deep-strike" && value !== undefined) throw new CompileError("core-ability-grant: Deep Strike carries no rating; grant it without a value.");
       return { type: "ability-grant", target: target(leaf.parameters.subject), modifier: { ability: closed(leaf, "ability"), ...(value !== undefined ? { value } : {}) } };
     }
     case "ability-record-grant": {

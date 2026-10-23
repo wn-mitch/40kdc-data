@@ -202,7 +202,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Ravenwing"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "knights-of-iron-wrath-of-the-rock-dark-angels",
     "game_version": {
       "edition": "11th",

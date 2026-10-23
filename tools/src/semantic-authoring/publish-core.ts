@@ -30,8 +30,9 @@ export class CorePublicationError extends Error {}
 
 const sha256 = (value: string | Buffer) => createHash("sha256").update(value).digest("hex");
 
+/** A faction's core stratagems.json; shared core's (`_core`) sits at the top of data/core. */
 export function coreStratagemFile(dataRoot: string, factionId: string): string {
-  return join(dataRoot, "core", factionId, "stratagems.json");
+  return factionId === "_core" ? join(dataRoot, "core", "stratagems.json") : join(dataRoot, "core", factionId, "stratagems.json");
 }
 
 /**

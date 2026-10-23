@@ -1558,7 +1558,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "3cfd0c9e7f755023e3c3a7060fc7f77ad8c66194933ba7cfddf05df20295eb8d",
     "version": "2025-q3",
@@ -1568,52 +1568,97 @@
         "operator": "and",
         "operands": [
           {
-            "type": "matches",
+            "type": "phase-is",
             "parameters": {
-              "filter": {
-                "all_of": [
-                  "INFANTRY"
-                ]
-              },
-              "subject": "defender"
+              "phase": "shooting"
             }
           },
           {
-            "type": "attack-is",
+            "type": "player-turn-is",
             "parameters": {
-              "weapons": {
-                "name": "Graviton crusher"
-              }
+              "turn": "your-turn"
             }
           }
         ]
       },
       "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "stat-modifier",
-            "target": "defender",
-            "modifier": {
-              "stat": "M",
-              "operation": "subtract",
-              "value": 2
-            }
+        "type": "for-each-unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy",
+            "all_of": [
+              "INFANTRY"
+            ]
           },
-          {
-            "type": "roll-modifier",
-            "target": "defender",
-            "modifier": {
-              "roll": "charge",
-              "operation": "subtract",
-              "value": 2
+          "eligibility": {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "subject": "event-subject",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success",
+                "weapons": {
+                  "name": "graviton crusher"
+                }
+              },
+              "window": "event"
             }
           }
-        ]
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "designate",
+              "target": "recipient",
+              "modifier": {
+                "tag": "grav-pinned"
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "rule-active",
+                "parameters": {
+                  "rule": "grav-pinned-imperial-knights"
+                }
+              },
+              "effect": {
+                "type": "stat-modifier",
+                "target": "recipient",
+                "modifier": {
+                  "stat": "M",
+                  "operation": "subtract",
+                  "value": 2
+                }
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "rule-active",
+                "parameters": {
+                  "rule": "grav-pinned-imperial-knights"
+                }
+              },
+              "effect": {
+                "type": "roll-modifier",
+                "target": "recipient",
+                "modifier": {
+                  "roll": "charge",
+                  "operation": "subtract",
+                  "value": 2
+                }
+              }
+            }
+          ]
+        }
       }
     },
     "scope": {
-      "duration": "battle-round"
+      "duration": "until-end-of-opponent-next-turn"
     },
     "unit_ids": [
       "questoris-knight-styrix"
@@ -1622,19 +1667,9 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "after-roll",
-      "subject": {
-        "owner": "any"
-      },
+      "event": "attacks-resolved",
       "filter": {
-        "roll": "hit",
-        "result": "success"
-      },
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "kind": "shoot"
       }
     },
     "faction_id": "imperial-knights"
@@ -2247,7 +2282,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "dbb25612fc6fca3b943773c7c882f9e22bf9dce0f276ebb3a26a068608f693bb",
     "version": "2025-q3",
@@ -2259,7 +2294,7 @@
     "behavior": "passive",
     "effect": {
       "type": "keyword-grant",
-      "target": "this-model",
+      "target": "this-unit",
       "modifier": {
         "keywords": [
           "MOBILE"
@@ -2604,10 +2639,7 @@
             "type": "ability-grant",
             "target": "this-unit",
             "modifier": {
-              "ability": "deep-strike",
-              "value": {
-                "rating": true
-              }
+              "ability": "deep-strike"
             }
           },
           {

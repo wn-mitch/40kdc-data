@@ -355,6 +355,15 @@ pub(crate) fn ability_label(id: Option<&Value>) -> String {
             ability_label(reference.get("ability_id"))
         );
     }
+    if let Some(reference) =
+        id.filter(|id| id.get("option_id").is_some() && id.get("ability_id").is_some())
+    {
+        return format!(
+            "{} ({})",
+            id_label(reference.get("option_id")),
+            ability_label(reference.get("ability_id"))
+        );
+    }
     let id = jstr(id);
     match id.as_str() {
         "nurgles-gift-death-guard" => "Nurgle's Gift (Aura)".to_string(),

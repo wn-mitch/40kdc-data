@@ -1014,22 +1014,32 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "b99c65e2cab920c57f9ccbf111411b1f5885d291ecbedb9ad3926c1e4f85549b",
     "version": "2025-q3",
     "effect": {
-      "type": "ability-part",
-      "trigger": {
-        "event": "attacks-resolved",
-        "subject": "this-unit",
-        "filter": {
-          "kind": "shoot"
-        }
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       },
       "effect": {
         "type": "designate-target",
-        "designation": "symbiotic-target",
+        "designation": "symbiotic-targeting-target",
         "select": {
           "kind": "unit",
           "selector": {
@@ -1039,30 +1049,36 @@
             "count": {
               "min": 1,
               "max": 1
+            },
+            "eligibility": {
+              "type": "happened",
+              "parameters": {
+                "event": "after-roll",
+                "subject": "event-subject",
+                "object": "this-unit",
+                "filter": {
+                  "roll": "hit",
+                  "result": "success"
+                },
+                "window": "event"
+              }
             }
           }
         },
         "applies": {
           "to": "attackers-of-target",
           "effect": {
-            "type": "conditional",
-            "condition": {
-              "type": "matches",
-              "parameters": {
-                "filter": {
-                  "all_of": [
-                    "TYRANIDS"
-                  ]
-                }
-              }
+            "type": "re-roll",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "TYRANIDS"
+              ],
+              "level": "model"
             },
-            "effect": {
-              "type": "re-roll",
-              "target": "this-unit",
-              "modifier": {
-                "roll": "hit",
-                "subset": "ones"
-              }
+            "modifier": {
+              "roll": "hit",
+              "subset": "ones"
             }
           }
         },
@@ -1076,9 +1092,15 @@
       "exocrine"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
+    "behavior": "reactive",
     "community_notes": "[APPROX] After this model shoots, select one enemy unit hit by those attacks: until the end of the phase, friendly TYRANIDS models re-roll Hit rolls of 1 against it. The hit-by-this-model eligibility restriction is not encoded. Full rule in raw-text store.",
-    "faction_id": "tyranids"
+    "faction_id": "tyranids",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
+    }
   },
   {
     "ability_id": "foul-spores-tyranids",
@@ -4690,10 +4712,7 @@
             ]
           },
           "modifier": {
-            "ability": "deep-strike",
-            "value": {
-              "rating": true
-            }
+            "ability": "deep-strike"
           }
         },
         {
@@ -9637,19 +9656,62 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "tyranids",
     "detachment_id": "vanguard-onslaught",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "designate-target",
+      "designation": "stalker-target",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        }
+      },
+      "applies": {
+        "to": "bearer-attacks-target",
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "roll-modifier",
+              "target": "this-model",
+              "modifier": {
+                "roll": "hit",
+                "operation": "add",
+                "value": 1
+              }
+            },
+            {
+              "type": "roll-modifier",
+              "target": "this-model",
+              "modifier": {
+                "roll": "wound",
+                "operation": "add",
+                "value": 1
+              }
+            }
+          ]
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "battle-started"
+    },
+    "source_digest": "fe7569c0bf2afe55fb24762547ced8f3f7bdce8ff273ceadf387098385382a7f"
   },
   {
     "ability_id": "surprise-assault-vanguard-onslaught-tyranids",
@@ -9657,19 +9719,86 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "tyranids",
     "detachment_id": "vanguard-onslaught",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "designate-target",
+      "designation": "surprise-assault-target",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        }
+      },
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "test",
+              "target": "selected-unit",
+              "modifier": {
+                "test": "battle-shock"
+              }
+            },
+            {
+              "type": "roll-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "hit",
+                "operation": "add",
+                "value": 1
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "roll-result",
+                "parameters": {
+                  "roll": "battle-shock",
+                  "result": "failure"
+                }
+              },
+              "effect": {
+                "type": "roll-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "wound",
+                  "operation": "add",
+                  "value": 1
+                }
+              }
+            }
+          ]
+        }
+      },
+      "duration": "phase"
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "targets-selected",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "VANGUARD INVADER"
+        ]
+      }
+    },
+    "source_digest": "40beb8b11eee31d366049b12e742251e471ddac4b432bb389b21f0efd1155694"
   },
   {
     "ability_id": "swarm-guided-salvoes-crusher-stampede-tyranids",

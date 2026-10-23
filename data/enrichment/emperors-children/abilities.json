@@ -1965,7 +1965,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "2303422a890b2d9fca739fbc13c4fe1a92d39718a5223a87a9d55629bfabc7ce",
     "version": "2025-q3",
@@ -1973,11 +1973,34 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "roll-result",
-          "target": "this-unit",
-          "modifier": {
-            "roll": "wound",
-            "critical_on": 3
+          "type": "ability-part",
+          "trigger": {
+            "event": "selected",
+            "filter": {
+              "to": "fight"
+            },
+            "optional": true
+          },
+          "duration": "phase",
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "ability-activate",
+                "target": "this-unit",
+                "modifier": {
+                  "ability": "daemonic-patrons-emperors-children"
+                }
+              },
+              {
+                "type": "roll-result",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "wound",
+                  "critical_on": 3
+                }
+              }
+            ]
           }
         },
         {
@@ -1994,17 +2017,37 @@
           "effect": {
             "type": "conditional",
             "condition": {
-              "operator": "not",
+              "operator": "and",
               "operands": [
                 {
                   "type": "happened",
                   "parameters": {
-                    "event": "destroyed",
-                    "object": {
-                      "owner": "enemy"
+                    "event": "used",
+                    "filter": {
+                      "kind": "ability",
+                      "id": "daemonic-patrons-emperors-children"
                     },
                     "window": "phase"
                   }
+                },
+                {
+                  "operator": "not",
+                  "operands": [
+                    {
+                      "type": "happened",
+                      "parameters": {
+                        "event": "model-destroyed",
+                        "object": {
+                          "owner": "enemy",
+                          "level": "model"
+                        },
+                        "filter": {
+                          "by": "this-unit"
+                        },
+                        "window": "phase"
+                      }
+                    }
+                  ]
                 }
               ]
             },
@@ -2020,13 +2063,13 @@
       ]
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "unit_ids": [
       "flawless-blades"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
+    "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21. Crit-Wound grant applies to all attacks (no weapon-type restriction); the end-of-phase self-destruction cannot encode the by-this-unit kill attribution, so it gates on any enemy destroyed that phase.",
     "faction_id": "emperors-children"
   },
@@ -2255,10 +2298,7 @@
           "type": "ability-grant",
           "target": "this-model",
           "modifier": {
-            "ability": "deep-strike",
-            "value": {
-              "rating": true
-            }
+            "ability": "deep-strike"
           }
         },
         {
@@ -3755,7 +3795,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "23aac9a99cc8887dc1cbbe55de976feb08dfb17975f55e8fccd59772db339106",
     "version": "2025-q3",
@@ -3766,21 +3806,41 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "weapon-ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "weapons": {
-          "type": "melee"
-        },
-        "keywords": [
-          {
-            "keyword_id": "sustained-hits",
-            "parameters": {
-              "value": 1
+      "type": "designate-target",
+      "designation": "devoted-duellists-target",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        }
+      },
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "sustained-hits",
+                "parameters": {
+                  "value": 1
+                }
+              }
+            ],
+            "weapons": {
+              "type": "melee"
             }
           }
-        ]
-      }
+        }
+      },
+      "duration": "phase"
     },
     "scope": {
       "duration": "phase"

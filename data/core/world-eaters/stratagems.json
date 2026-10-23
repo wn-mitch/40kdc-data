@@ -285,7 +285,68 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": [
+      {
+        "required_keywords": [
+          "Blood Legions"
+        ],
+        "name": "first",
+        "count": "one",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "owner": "friendly"
+                }
+              }
+            },
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "within": {
+                    "of": {
+                      "stratagem_target": "second"
+                    },
+                    "range": {
+                      "inches": 6
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "required_keywords": [
+          "World Eaters"
+        ],
+        "name": "second",
+        "count": "one",
+        "side": "your-army",
+        "selects": "unit",
+        "bound_to": "attacked-unit",
+        "eligibility": {
+          "operator": "not",
+          "operands": [
+            {
+              "type": "same-unit",
+              "parameters": {
+                "as": {
+                  "stratagem_target": "first"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
     "ability_id": "blessing-of-burning-blood-khorne-daemonkin-world-eaters",
     "game_version": {
       "edition": "11th",

@@ -904,39 +904,33 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "78318589ec8dfbfb9faaa19678ec777d3da21bc880d26d21b5d00e2ea3a705e8",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attack-is",
-        "parameters": {
-          "shooting_type": "snap"
-        }
-      },
-      "effect": {
-        "type": "roll-result",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "hit",
-          "succeeds_on": 5,
-          "weapons": {
-            "type": "ranged"
-          }
-        }
+      "type": "roll-result",
+      "target": "this-unit",
+      "modifier": {
+        "roll": "hit",
+        "succeeds_on": 5
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "resolution"
     },
     "unit_ids": [
       "canoptek-doomstalker"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "necrons"
+    "behavior": "reactive",
+    "faction_id": "necrons",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "stratagem"
+      }
+    }
   },
   {
     "ability_id": "implacable-eradication-necrons",
@@ -4284,33 +4278,90 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "c50681b07211e08a7b09c54c22f8649d36bed803736735cf02d862e6bd0e38da",
     "version": "2025-q3",
     "effect": {
-      "type": "choice",
-      "options": [
+      "type": "sequence",
+      "steps": [
         {
-          "type": "cost-modifier",
-          "target": "this-model",
-          "modifier": {
-            "of": "stratagem",
-            "id": "fire-overwatch",
-            "operation": "set",
-            "amount": 0,
-            "applies_to": "targeting-this-unit"
+          "type": "ability-part",
+          "usage": {
+            "frequency": "once-per-turn",
+            "per": "army"
+          },
+          "duration": "resolution",
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "targeting",
+                "target": {
+                  "owner": "friendly",
+                  "has_ability": [
+                    "inescapable-death-necrons"
+                  ]
+                },
+                "modifier": {
+                  "may": "target",
+                  "kind": "stratagem",
+                  "target": {
+                    "owner": "friendly",
+                    "has_ability": [
+                      "inescapable-death-necrons"
+                    ]
+                  },
+                  "stratagem": "fire-overwatch"
+                }
+              },
+              {
+                "type": "cost-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "of": "stratagem",
+                  "operation": "set",
+                  "amount": 0,
+                  "applies_to": "targeting-this-unit",
+                  "id": "fire-overwatch"
+                }
+              },
+              {
+                "type": "permission",
+                "target": "this-unit",
+                "modifier": {
+                  "activity": "use-stratagem",
+                  "allow": true,
+                  "despite": [
+                    "stratagem-used-this-phase"
+                  ],
+                  "stratagem": "fire-overwatch"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "cost-modifier",
-          "target": "this-model",
-          "modifier": {
-            "of": "stratagem",
-            "id": "heroic-intervention",
-            "operation": "set",
-            "amount": 0,
-            "applies_to": "targeting-this-unit"
+          "type": "ability-part",
+          "trigger": {
+            "event": "targets-selected",
+            "subject": {
+              "owner": "friendly"
+            },
+            "filter": {
+              "kind": "stratagem",
+              "id": "fire-overwatch"
+            },
+            "object": "this-unit"
+          },
+          "duration": "resolution",
+          "effect": {
+            "type": "roll-result",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "succeeds_on": 2
+            }
           }
         }
       ]
@@ -4322,10 +4373,7 @@
       "hexmark-destroyer"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "usage": {
-      "frequency": "once-per-turn"
-    },
+    "behavior": "reactive",
     "faction_id": "necrons"
   },
   {
@@ -5763,10 +5811,7 @@
             ]
           },
           "modifier": {
-            "ability": "deep-strike",
-            "value": {
-              "rating": true
-            }
+            "ability": "deep-strike"
           }
         },
         {
@@ -8834,19 +8879,64 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "necrons",
     "detachment_id": "hypercrypt-legion",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "or",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-model",
+              "filter": {
+                "state": "on-battlefield"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-model",
+              "filter": {
+                "state": "in-strategic-reserves"
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "matches",
+          "parameters": {
+            "filter": {
+              "owner": "friendly"
+            }
+          }
+        },
+        "effect": {
+          "type": "ability-modifier",
+          "target": "this-model",
+          "modifier": {
+            "ability": "hyperphasing-necrons",
+            "aspect": "selections",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "4338fc764486c792fd5ff154ba45d61aab0bd68a3d733e44aa0f096c892f3e43"
   },
   {
     "ability_id": "dimensional-sanctum-canoptek-court-necrons",
@@ -9120,19 +9210,44 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "necrons",
     "detachment_id": "starshatter-arsenal",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-activate",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "reanimation-protocols-necrons"
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    },
+    "source_digest": "085a2c05322c2cbd62bfb88585b903fc3904cdac955483a4f55265eb73208f60"
   },
   {
     "ability_id": "enslaved-artifice-obeisance-phalanx-necrons",
@@ -10525,10 +10640,7 @@
       "type": "ability-grant",
       "target": "this-unit",
       "modifier": {
-        "ability": "deep-strike",
-        "value": {
-          "rating": true
-        }
+        "ability": "deep-strike"
       }
     },
     "scope": {
@@ -10637,19 +10749,49 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "necrons",
     "detachment_id": "cryptek-conclave",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-activate",
+          "target": "this-unit",
+          "modifier": {
+            "ability": "reanimation-protocols-necrons"
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "all_of": [
+                  "CRYPTEK"
+                ]
+              }
+            }
+          },
+          "effect": {
+            "type": "heal",
+            "target": "this-unit",
+            "modifier": {
+              "amount": 1
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "activated",
+    "source_digest": "27a2b7a9df021224d29dd8fc614af21227f71ebc7d200a78da6e9a4b83a9b383"
   },
   {
     "ability_id": "protocol-of-the-conquering-tyrant-awakened-dynasty-necrons",
@@ -10904,19 +11046,86 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "necrons",
     "detachment_id": "awakened-dynasty",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-activate",
+          "target": "this-unit",
+          "modifier": {
+            "ability": "reanimation-protocols-necrons"
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "attachment",
+                "parameters": {
+                  "role": "led",
+                  "with": {
+                    "all_of": [
+                      "CHARACTER",
+                      "NECRONS"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "heal",
+            "target": "this-unit",
+            "modifier": {
+              "amount": "D3",
+              "per": "unit"
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "attachment",
+            "parameters": {
+              "role": "led",
+              "with": {
+                "all_of": [
+                  "CHARACTER",
+                  "NECRONS"
+                ]
+              }
+            }
+          },
+          "effect": {
+            "type": "heal",
+            "target": "this-unit",
+            "modifier": {
+              "amount": "D3+1",
+              "per": "unit"
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "attacks-resolved",
+      "subject": {
+        "owner": "enemy"
+      }
+    },
+    "source_digest": "6f080d503e0d50766214675215c72a647abef861846a6331bc1afec18743f2f4"
   },
   {
     "ability_id": "protocol-of-the-vengeful-stars-awakened-dynasty-necrons",
@@ -11231,19 +11440,35 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "necrons",
     "detachment_id": "hypercrypt-legion",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "for-each-unit",
+      "selector": {
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "NECRONS"
+          ]
+        }
+      },
+      "effect": {
+        "type": "ability-activate",
+        "target": "recipient",
+        "modifier": {
+          "ability": "reanimation-protocols-necrons"
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "activated",
+    "source_digest": "c1db25ada55f92167d4b0a0c948b1cac822f9c3cc307cd4f12faa64b8d7c0734"
   },
   {
     "ability_id": "reanimation-protocols-amonhotekhs-guard-necrons",
@@ -11593,19 +11818,33 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "necrons",
     "detachment_id": "canoptek-court",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-activate",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "reanimation-protocols-necrons"
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "charge"
+      },
+      "subject": {
+        "owner": "enemy"
+      }
+    },
+    "source_digest": "a91afd36bb65bbd723f8f5acf90872d932180d0e00548a1244f4d9393c978f02"
   },
   {
     "ability_id": "suffer-no-rival-obeisance-phalanx-necrons",
@@ -12085,19 +12324,34 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "necrons",
     "detachment_id": "cryptek-conclave",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "techno-sorcerous-augmentations",
+        "aspect": "selections",
+        "operation": "add",
+        "value": 1
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
+      "optional": true
+    },
+    "source_digest": "92df12bc31520dad5d9b698c9254d7d57fae70c15eacd6d1862efd216e141e75"
   },
   {
     "ability_id": "unyielding-forms-starshatter-arsenal-necrons",
@@ -12194,10 +12448,7 @@
             "type": "ability-grant",
             "target": "this-unit",
             "modifier": {
-              "ability": "deep-strike",
-              "value": {
-                "rating": true
-              }
+              "ability": "deep-strike"
             }
           },
           {

@@ -556,7 +556,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Sagitaur"
+      ],
+      "count": "up-to",
+      "count_max": 2,
+      "side": "your-army",
+      "selects": "unit"
+    },
     "ability_id": "coordinated-crossfire-armoured-trailblazers-leagues-of-votann",
     "game_version": {
       "edition": "11th",
@@ -1197,7 +1205,42 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Leagues of Votann"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "fight"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "honour-of-the-hold-needgaard-oathband-leagues-of-votann",
     "game_version": {
       "edition": "11th",
@@ -1290,7 +1333,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Leagues of Votann",
+        "Vehicle"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "illuminated-priority-brandfast-oathband-leagues-of-votann",
     "game_version": {
       "edition": "11th",
@@ -1714,7 +1765,31 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Leagues of Votann",
+        "Vehicle"
+      ],
+      "excluded_keywords": [
+        "Hekaton Land Fortress"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "happened",
+        "parameters": {
+          "event": "after-roll",
+          "subject": "event-subject",
+          "object": "this-unit",
+          "filter": {
+            "roll": "hit",
+            "result": "success"
+          },
+          "window": "event"
+        }
+      }
+    },
     "ability_id": "opportunistic-escalation-brandfast-oathband-leagues-of-votann",
     "game_version": {
       "edition": "11th",
@@ -2120,7 +2195,23 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Leagues of Votann"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "reactive-reprisal-needgaard-oathband-leagues-of-votann",
     "game_version": {
       "edition": "11th",
@@ -2148,7 +2239,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Hernkyn"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit"
+    },
     "ability_id": "scornful-analysis-farseekers-leagues-of-votann",
     "game_version": {
       "edition": "11th",
@@ -2536,7 +2634,23 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Leagues of Votann"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "void-hardened-needgaard-oathband-leagues-of-votann",
     "game_version": {
       "edition": "11th",
@@ -2594,7 +2708,24 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Infantry",
+        "Leagues of Votann"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "weavewerke-buttress-delve-assault-shift-leagues-of-votann",
     "game_version": {
       "edition": "11th",

@@ -821,7 +821,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Neophyte Hybrids"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "fanatical-hail-xenocult-masses-genestealer-cults",
     "game_version": {
       "edition": "11th",

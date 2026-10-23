@@ -1,4 +1,5 @@
 import { narrowUnitIds, resolveUnitNames, type UnitNameContext } from "./compile-unit-names.js";
+import { resolveRuleReferences } from "./compile-rule-refs.js";
 import { exactSpan } from "./contracts.js";
 import { foldAuraEmitter, lowerConditionalAuras } from "./compile-aura-emitter.js";
 import { foldNamedRanges, requireNamedRangeAuras } from "./compile-named-range.js";
@@ -303,11 +304,11 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   if (leaves.some((leaf) => leaf.fragment === NAME_FRAGMENT)) {
     return compileWithName(leaves, sourceText, options, compileLeaves, (list) => shapeSignature(ordered(list), sourceText));
   }
-  // Qualifiers printed apart from their host are bound first: a characteristic amount after its recipient and a floor after its change (compile-characteristic-amount.ts), an additive option after its duration (compile-additive-option.ts), an ignore-modifier list after its lead-in (compile-ignore-list.ts), and a named range's defined values onto its aura (compile-named-range.ts).
+  // Printed rule and ability names resolve to their records first (compile-rule-refs.ts). Qualifiers printed apart from their host are bound first: a characteristic amount after its recipient and a floor after its change (compile-characteristic-amount.ts), an additive option after its duration (compile-additive-option.ts), an ignore-modifier list after its lead-in (compile-ignore-list.ts), and a named range's defined values onto its aura (compile-named-range.ts).
   let bound: CompileLeaf[];
   try {
     bound = foldNamedRanges(foldAuraEmitter(bindIgnoreLists(
-      bindAdditiveOptions(bindCharacteristicFloors(bindCharacteristicAmounts(resolveUnitNames(leaves, options.units))), sourceText),
+      bindAdditiveOptions(bindCharacteristicFloors(bindCharacteristicAmounts(resolveRuleReferences(resolveUnitNames(leaves, options.units), options.units))), sourceText),
       sourceText,
     )), options.abilityId);
   } catch (error) {

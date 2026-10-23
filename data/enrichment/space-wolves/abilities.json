@@ -3273,19 +3273,60 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "space-wolves",
     "detachment_id": "saga-of-the-great-wolf",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "keyword-grant",
+      "target": "this-unit",
+      "modifier": {
+        "keywords": [
+          "MOBILE"
+        ]
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": [
+      {
+        "event": "selected",
+        "filter": {
+          "to": "move"
+        },
+        "subject": {
+          "owner": "friendly",
+          "all_of": [
+            "ADEPTUS ASTARTES"
+          ],
+          "any_of": [
+            "MOUNTED",
+            "WALKER"
+          ]
+        }
+      },
+      {
+        "event": "targets-selected",
+        "filter": {
+          "kind": "charge"
+        },
+        "subject": {
+          "owner": "friendly",
+          "all_of": [
+            "ADEPTUS ASTARTES"
+          ],
+          "any_of": [
+            "MOUNTED",
+            "WALKER"
+          ]
+        }
+      }
+    ],
+    "source_digest": "977d74a5ff027b30f7476b26536dfa22a536f1e7b65cf133cba103381c725bf5"
   },
   {
     "ability_id": "grimnars-command-saga-of-the-great-wolf-space-wolves",
@@ -3293,19 +3334,28 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "space-wolves",
     "detachment_id": "saga-of-the-great-wolf",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-activate",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "combat-doctrines-adeptus-astartes",
+        "select": {
+          "by": "player"
+        },
+        "exclusive": true
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "until-next-command-phase"
+    },
+    "behavior": "activated",
+    "source_digest": "ff76ee4e10d2398e581dc617b20023b4f5729074704339ab888e30407cea2039"
   },
   {
     "ability_id": "grimnars-mark-saga-of-the-great-wolf-space-wolves",

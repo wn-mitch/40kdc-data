@@ -1612,36 +1612,42 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "79bf156bc85af6ad683b88d591b676ea9841e0d61cf96b6621e9593535012d8f",
     "version": "2025-q3",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
+      "type": "designate-target",
+      "designation": "imperial-law-target",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        }
+      },
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
             "keywords": [
               {
                 "keyword_id": "lethal-hits"
-              }
-            ]
-          }
-        },
-        {
-          "type": "weapon-ability-grant",
-          "target": "this-unit",
-          "modifier": {
-            "keywords": [
+              },
               {
                 "keyword_id": "precision"
               }
             ]
           }
         }
-      ]
+      }
     },
     "scope": {
       "duration": "permanent"
@@ -1650,9 +1656,12 @@
       "exaction-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "defensive ability (skipped for damage calc)",
-    "faction_id": "agents-of-the-imperium"
+    "faction_id": "agents-of-the-imperium",
+    "trigger": {
+      "event": "battle-started"
+    }
   },
   {
     "ability_id": "nuncio-acquila-agents-of-the-imperium",
@@ -1989,7 +1998,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "28c77f8304418005fa55f46eb137a0af00cea8d70c9c6dad9bf5ad0408041958",
     "version": "2025-q3",
@@ -2005,51 +2014,39 @@
             }
           },
           {
-            "type": "matches",
+            "type": "player-turn-is",
             "parameters": {
-              "filter": {
-                "has_ability": [
-                  "deep-strike"
-                ]
-              }
+              "turn": "your-turn"
             }
           }
         ]
       },
       "effect": {
-        "type": "choice",
-        "choice_label": "etheric-emergence",
-        "options": [
+        "type": "sequence",
+        "steps": [
           {
-            "type": "sequence",
-            "steps": [
-              {
-                "type": "set-up",
-                "target": "this-model",
-                "modifier": {
-                  "to": "battlefield",
-                  "from": "strategic-reserves",
-                  "via": "deep-strike",
-                  "min_enemy_distance": {
-                    "inches": 6
-                  }
-                }
-              },
-              {
-                "type": "permission",
-                "target": "this-model",
-                "modifier": {
-                  "activity": "declare-charge",
-                  "allow": false
-                }
-              }
-            ]
-          },
-          {
-            "type": "ability-grant",
+            "type": "ability-activate",
             "target": "this-model",
             "modifier": {
-              "ability": "deep-strike"
+              "ability": "etheric-emergence-agents-of-the-imperium"
+            }
+          },
+          {
+            "type": "set-up",
+            "target": "this-model",
+            "modifier": {
+              "to": "battlefield",
+              "min_enemy_distance": {
+                "inches": 6
+              }
+            }
+          },
+          {
+            "type": "permission",
+            "target": "event-subject",
+            "modifier": {
+              "activity": "declare-charge",
+              "allow": false
             }
           }
         ]
@@ -2062,9 +2059,13 @@
       "culexus-assassin"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
+    "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "agents-of-the-imperium"
+    "faction_id": "agents-of-the-imperium",
+    "trigger": {
+      "event": "set-up",
+      "optional": true
+    }
   },
   {
     "ability_id": "abomination-agents-of-the-imperium",
@@ -4174,47 +4175,67 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "19583d764bedf9040abcc98f136ab51aeb9de06a2b118d2efdb10a65adec358d",
     "version": "2025-q3",
     "effect": {
-      "type": "ability-part",
-      "trigger": {
-        "event": "attacks-resolved",
-        "subject": "this-unit",
-        "filter": {
-          "kind": "shoot"
+      "type": "designate-target",
+      "designation": "on-my-signal-fire-target",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "subject": "event-subject",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success"
+              },
+              "window": "event"
+            }
+          }
         }
       },
-      "effect": {
-        "type": "designate-target",
-        "designation": "signal-fire-target",
-        "select": {
-          "kind": "unit",
-          "selector": {
-            "filter": {
-              "owner": "enemy"
-            },
-            "count": {
-              "min": 1,
-              "max": 1
-            }
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "re-roll",
+          "target": {
+            "owner": "friendly",
+            "any_of_filters": [
+              {
+                "all_of": [
+                  "AGENTS OF THE IMPERIUM"
+                ]
+              },
+              {
+                "all_of": [
+                  "BATTLELINE",
+                  "IMPERIUM",
+                  "INFANTRY"
+                ]
+              }
+            ],
+            "level": "model"
+          },
+          "modifier": {
+            "roll": "hit",
+            "result_scope": "any-result"
           }
-        },
-        "applies": {
-          "to": "attackers-of-target",
-          "effect": {
-            "type": "re-roll",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "hit",
-              "subset": "all-failures"
-            }
-          }
-        },
-        "duration": "phase"
-      }
+        }
+      },
+      "duration": "phase"
     },
     "scope": {
       "duration": "phase"
@@ -4223,9 +4244,16 @@
       "inquisitor-kroyle"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
+    "behavior": "reactive",
     "community_notes": "[APPROX] After this unit shoots, marks one enemy unit it hit so attacks against it re-roll Hit rolls; the restriction that only AGENTS OF THE IMPERIUM or IMPERIUM INFANTRY BATTLELINE models benefit is not modeled. Full rule in raw-text store.",
-    "faction_id": "agents-of-the-imperium"
+    "faction_id": "agents-of-the-imperium",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "tox-cycler-agents-of-the-imperium",
@@ -5340,10 +5368,7 @@
           "type": "ability-grant",
           "target": "this-unit",
           "modifier": {
-            "ability": "deep-strike",
-            "value": {
-              "rating": true
-            }
+            "ability": "deep-strike"
           }
         },
         {
@@ -5537,10 +5562,7 @@
         "type": "ability-grant",
         "target": "selected-unit",
         "modifier": {
-          "ability": "deep-strike",
-          "value": {
-            "rating": true
-          }
+          "ability": "deep-strike"
         }
       }
     },

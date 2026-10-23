@@ -277,7 +277,7 @@ describe("a While-led leading frame gates a later sentence that says that unit (
   const text = "While this model is leading a unit, models in that unit have the KEYA ability. When making a Normal move, models in that unit can move through models.";
   const pieces: Piece[] = [
     ["While this model is leading a unit", "leading-unit", { subject: "this-model", attachment: "leading" }],
-    ["models in that unit have the KEYA ability", "core-ability-grant", { subject: "this-unit", ability: "deep-strike", value: { rating: true } }],
+    ["models in that unit have the KEYA ability", "core-ability-grant", { subject: "this-unit", ability: "deep-strike" }],
     ["When making a Normal move", "event", { kind: "move-ended", move_types: ["normal"], subject: "antecedent" }],
     ["models in that unit can move through models", "move-through", { subject: "antecedent", passthrough: ["models"], applies_to_moves: ["normal"] }],
   ];
@@ -301,7 +301,7 @@ describe("a printed duration inside an eligibility ban is its own leaf (BRIEF: b
   const base: Piece[] = [
     ["At the start of the phase", "event", { kind: "phase-start", phase: "any", turn: "either" }],
     ["until the end of the phase", "duration", { endpoint: "end-of-phase" }],
-    ["this unit has the KEYA ability", "core-ability-grant", { subject: "this-unit", ability: "deep-strike", value: { rating: true } }],
+    ["this unit has the KEYA ability", "core-ability-grant", { subject: "this-unit", ability: "deep-strike" }],
   ];
 
   it("lasts the turn when the wording is split from the ban", () => {

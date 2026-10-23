@@ -127,6 +127,9 @@
                     },
                     {
                       "$ref": "../../defs/common.schema.json#/$defs/stance-option-ref"
+                    },
+                    {
+                      "$ref": "../../defs/common.schema.json#/$defs/named-ability-ref"
                     }
                   ]
                 }
