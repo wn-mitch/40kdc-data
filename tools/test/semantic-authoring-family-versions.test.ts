@@ -102,7 +102,7 @@ describe("Semantic authoring family version registry", () => {
     expect(mapToLatest("attack", 1, { direction: "makes", unit: "bearers-unit", attack_type: "melee" })?.parameters).toEqual({ direction: "makes", unit: "bearers-unit", attack_type: "melee" });
     expect(mapToLatest("optional-use", 1, { who: "you" })?.parameters).toEqual({ who: "you" });
     expect(mapToLatest("characteristic-modifier", 2, { subject: "attack", characteristics: ["S"], operation: "add", value: 1, weapon_type: "all" })?.parameters.subject).toBe("attack");
-    expect(mapToLatest("feel-no-pain", 1, { subject: "this-unit", threshold: 6, against: "all" })).toEqual({ family: "feel-no-pain", version: 4, parameters: { subject: "this-unit", threshold: 6, against: "all" } });
+    expect(mapToLatest("feel-no-pain", 1, { subject: "this-unit", threshold: 6, against: "all" })).toEqual({ family: "feel-no-pain", version: currentFamilyVersion("feel-no-pain"), parameters: { subject: "this-unit", threshold: 6, against: "all" } });
   });
 
   it("moves every event kind to version 6, and an old attack event through attack to its current version", () => {

@@ -172,6 +172,26 @@ describe("Semantic authoring family extensions, second round", () => {
     expect(check(["EMPEROR'S CHILDREN", "MOUNTED"])).toHaveLength(1);
   });
 
+  it("accepts a keyword that starts with an apostrophe in every keyword-bearing family", () => {
+    expect(normalize("unit-filter", { side: "friendly", keywords: ["'ALPHAMOB"] })).toMatchObject({ keywords: ["'ALPHAMOB"] });
+    expect(normalize("bearer-eligibility", { keywords: ["'ALPHAMOB"], match: "all", excluded_keywords: [] })).toMatchObject({ keywords: ["'ALPHAMOB"] });
+    expect(normalize("unit-keyword", { keywords: ["'ALPHAMOB"], subject: "target", negated: false })).toMatchObject({ keywords: ["'ALPHAMOB"] });
+    expect(() => normalize("unit-filter", { side: "friendly", keywords: ["''ALPHAMOB"] })).toThrow();
+    expect(() => normalize("unit-filter", { side: "friendly", keywords: ["ALPHAMOB'"] })).toThrow();
+    expect(() => normalize("unit-filter", { side: "friendly", keywords: ["'ALPHAMOB", "ALPHAMOB"] })).toThrow(/both with and without/u);
+  });
+
+  it("matches a leading-apostrophe keyword against a core record printed with a curly apostrophe", () => {
+    const root = mkdtempSync(join(tmpdir(), "semantic-authoring-extensions-2-"));
+    roots.push(root);
+    mkdirSync(join(root, "core", "alpha"), { recursive: true });
+    // Fabricated fixture record only.
+    writeFileSync(join(root, "core", "alpha", "enhancements.json"), JSON.stringify([{ id: "leading", keyword_restriction_groups: [["’Alphamob", "Infantry"]] }]));
+    const check = (keywords: string[]) => coreCheckErrors(root, "leading", [{ kind: "bearer-eligibility", parameters: { keywords, match: "all", excluded_keywords: [] } }]);
+    expect(check(["'ALPHAMOB", "INFANTRY"])).toEqual([]);
+    expect(check(["ALPHAMOB", "INFANTRY"])).toHaveLength(1);
+  });
+
   it("matches a keyword printed with a non-breaking hyphen against one with an ASCII hyphen", () => {
     const root = mkdtempSync(join(tmpdir(), "semantic-authoring-extensions-2-"));
     roots.push(root);

@@ -447,7 +447,7 @@ describe("Semantic authoring source-bound review ledger", () => {
           ...span,
           role: "CONDITION",
           family_id: "leading-unit",
-          family_version: 6,
+          family_version: 7,
           parameters: { subject: { source: span.exact_text }, attachment: "leading" },
         }],
       });

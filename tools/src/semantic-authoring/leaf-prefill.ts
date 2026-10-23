@@ -357,7 +357,7 @@ export function prefillFromSource(family: PrefillFamily | undefined, sourceText:
   }
   if (family.id === "use-window") Object.assign(prefill, windowFromSource(exactText));
   if (family.id === "bearer-eligibility") {
-    const words = exactText.replace(/\bmodel only\b.*$/iu, "").split(/,|\bor\b/u).map((item) => item.replaceAll("*", "").trim().toUpperCase()).filter((item) => /^[A-Z][A-Z0-9' -]*[A-Z0-9]$/u.test(item));
+    const words = exactText.replace(/\bmodel only\b.*$/iu, "").split(/,|\bor\b/u).map((item) => item.replaceAll("*", "").trim().toUpperCase()).filter((item) => /^'?[A-Z][A-Z0-9' -]*[A-Z0-9]$/u.test(item));
     if (words.length) {
       prefill.keywords = words;
       prefill.match = words.length > 1 ? "any" : "all";

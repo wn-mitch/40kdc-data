@@ -23,6 +23,7 @@ var designationTerms = map[string]struct{ adjective, noun string }{
 	"blessed":                    {adjective: "blessed"},
 	"bondsman-affected":          {adjective: "Bondsman-affected"},
 	"detected":                   {adjective: "detected"},
+	"readied":                    {adjective: "readied"},
 	"disrupted":                  {adjective: "disrupted"},
 	"enfeebled":                  {adjective: "enfeebled"},
 	"ensnared":                   {adjective: "ensnared"},

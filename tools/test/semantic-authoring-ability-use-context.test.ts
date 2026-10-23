@@ -70,7 +70,8 @@ describe("context-bound ability selection replacement", () => {
     const version = currentFamilyVersion("event");
     const active = { kind: "used", activity: "ability", ability_keyword: "TEST-LINK", bind_as: "test-use" };
     expect(normalizeFingerprintParameters("event", active, version)).toEqual(active);
-    expect(() => normalizeFingerprintParameters("event", active, version - 1)).toThrow();
+    // event@33 added ability_keyword; event@32 is the version before it.
+    expect(() => normalizeFingerprintParameters("event", active, 32)).toThrow();
   });
 
   it("keeps ability identity and actor identity independent in the history guard", () => {

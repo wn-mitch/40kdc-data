@@ -64,4 +64,9 @@ export const REGISTRY_ORDER: readonly string[] = [
   "event@30", "ability-modifier@5", "aura-range@4",
   "unit-filter@17", "triggering-target@4", "event@31", "event@32", "event@33",
   "duration@5", "unit-keyword@6", "rule-active@2", "aura-range@5", "core-ability-grant@5",
+  "ability-modifier@6", "add-unit@4", "aura-emitter@2", "aura-range@6", "bearer-eligibility@5",
+  "characteristic-modifier@19", "destroy-models@4", "event@34", "feel-no-pain@5", "keyword-grant@5",
+  "leading-unit@7", "loadout@3", "model-count@3", "move-through@5", "return-models@5",
+  "returned-model-exclusion@2", "rule-state@3", "split-unit@3", "stratagem-target@5",
+  "triggering-target@5", "unit-activity@23", "unit-filter@18", "unit-keyword@7", "unit-position@26",
 ];

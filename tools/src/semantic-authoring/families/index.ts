@@ -1,6 +1,7 @@
 import type { SemanticFamilyDefinition } from "../contracts.js";
 import type { FamilyExtension } from "../family-extension-helpers.js";
 import { ABILITY_EXTENSIONS } from "./abilities.js";
+import { APOSTROPHE_KEYWORD_EXTENSIONS } from "./apostrophe-keywords.js";
 import { ARMY_EXTENSIONS } from "./army.js";
 import { ATTACK_EXTENSIONS } from "./attacks.js";
 import { CHARACTERISTIC_EXTENSIONS } from "./characteristics.js";
@@ -54,6 +55,7 @@ export const FAMILY_EXTENSIONS: readonly FamilyExtension[] = [
   ...ABILITY_EXTENSIONS,
   ...DURATION_AND_DESIGNATION_EXTENSIONS,
   ...LEAF_STRUCTURE_EXTENSIONS,
+  ...APOSTROPHE_KEYWORD_EXTENSIONS,
 ];
 
 const extensionVersions = new Map<string, FamilyExtension>();

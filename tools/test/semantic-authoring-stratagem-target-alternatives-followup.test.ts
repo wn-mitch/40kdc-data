@@ -54,7 +54,8 @@ const MOVE_TYPES = ["normal", "advance", "fall-back"];
 const BEFORE = "After a friendly unit makes a Normal move, ";
 
 describe("move-through version: the triggering unit and a pair of passthrough tokens", () => {
-  const V = currentFamilyVersion("move-through");
+  // move-through@4 added the triggering unit and passthrough pairs.
+  const V = 4;
   const PREVIOUS = V - 1;
 
   it("widens the previous version: every value it accepted still normalizes the same", () => {

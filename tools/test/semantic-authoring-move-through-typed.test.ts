@@ -82,11 +82,11 @@ describe("move-through typed passthrough (version 2)", () => {
     expect(separate.ok).toBe(false);
   });
 
-  // The typed item came with version 3 of move-through; the version before that is two below the current one.
+  // The typed item came with version 3 of move-through; version 2 is the one before it.
   it("refuses the typed item on the version before it, which only takes string tokens", () => {
     expect(() => normalizeFingerprintParameters("move-through", {
       subject: "this-unit", passthrough: { kind: "models", owner: "enemy" },
-    }, TYPED - 2)).toThrow();
+    }, 2)).toThrow();
   });
 
   it("refuses a typed item of kind terrain, which this version does not widen", () => {
