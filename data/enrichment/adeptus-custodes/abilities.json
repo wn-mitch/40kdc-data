@@ -1603,407 +1603,411 @@
           }
         },
         {
-          "type": "conditional",
-          "condition": {
-            "type": "matches",
-            "parameters": {
-              "subject": "this-unit",
-              "filter": {
-                "designated": "readied"
-              }
-            }
-          },
+          "type": "ability-part",
+          "optional": true,
           "effect": {
-            "type": "stance-select",
-            "mode": "re-selectable",
-            "options": [
-              {
-                "id": "conversai",
-                "name": "Conversai",
-                "effect": {
-                  "type": "ability-part",
-                  "effect": {
-                    "type": "sequence",
-                    "steps": [
-                      {
-                        "type": "designate",
-                        "target": "this-unit",
-                        "modifier": {
-                          "tag": "readied",
-                          "clear": true
-                        }
-                      },
-                      {
-                        "type": "conditional",
-                        "condition": {
-                          "operator": "and",
-                          "operands": [
-                            {
-                              "type": "phase-is",
-                              "parameters": {
-                                "phase": "command"
-                              }
-                            },
-                            {
-                              "type": "player-turn-is",
-                              "parameters": {
-                                "turn": "your-turn"
-                              }
-                            }
-                          ]
-                        },
-                        "effect": {
-                          "type": "sequence",
-                          "steps": [
-                            {
-                              "type": "permission",
-                              "target": "this-unit",
-                              "modifier": {
-                                "activity": "start-action",
-                                "allow": true,
-                                "despite": [
-                                  "engaged",
-                                  "battle-shocked"
-                                ]
-                              }
-                            },
-                            {
-                              "type": "permission",
-                              "target": "this-unit",
-                              "modifier": {
-                                "activity": "shoot",
-                                "allow": true,
-                                "despite": [
-                                  "performing-action"
-                                ]
-                              }
-                            }
-                          ]
-                        }
-                      }
-                    ]
-                  },
-                  "duration": "turn"
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "this-unit",
+                "filter": {
+                  "designated": "readied"
                 }
-              },
-              {
-                "id": "calistus",
-                "name": "Calistus",
-                "effect": {
-                  "type": "ability-part",
+              }
+            },
+            "effect": {
+              "type": "stance-select",
+              "mode": "re-selectable",
+              "options": [
+                {
+                  "id": "conversai",
+                  "name": "Conversai",
                   "effect": {
-                    "type": "sequence",
-                    "steps": [
-                      {
-                        "type": "designate",
-                        "target": "this-unit",
-                        "modifier": {
-                          "tag": "readied",
-                          "clear": true
-                        }
-                      },
-                      {
-                        "type": "conditional",
-                        "condition": {
-                          "operator": "and",
-                          "operands": [
-                            {
-                              "type": "phase-is",
-                              "parameters": {
-                                "phase": "movement"
-                              }
-                            },
-                            {
-                              "type": "player-turn-is",
-                              "parameters": {
-                                "turn": "your-turn"
-                              }
-                            }
-                          ]
-                        },
-                        "effect": {
-                          "type": "move-modifier",
+                    "type": "ability-part",
+                    "effect": {
+                      "type": "sequence",
+                      "steps": [
+                        {
+                          "type": "designate",
                           "target": "this-unit",
                           "modifier": {
-                            "passthrough": [
-                              "models"
-                            ],
-                            "applies_to_moves": [
-                              "normal",
-                              "advance",
-                              "fall-back"
-                            ]
+                            "tag": "readied",
+                            "clear": true
                           }
-                        }
-                      }
-                    ]
-                  },
-                  "trigger": {
-                    "event": "selected",
-                    "filter": {
-                      "to": "move"
-                    }
-                  },
-                  "duration": "phase"
-                }
-              },
-              {
-                "id": "salvus",
-                "name": "Salvus",
-                "effect": {
-                  "type": "ability-part",
-                  "effect": {
-                    "type": "sequence",
-                    "steps": [
-                      {
-                        "type": "designate",
-                        "target": "this-unit",
-                        "modifier": {
-                          "tag": "readied",
-                          "clear": true
-                        }
-                      },
-                      {
-                        "type": "conditional",
-                        "condition": {
-                          "operator": "and",
-                          "operands": [
-                            {
-                              "type": "phase-is",
-                              "parameters": {
-                                "phase": "shooting"
-                              }
-                            },
-                            {
-                              "type": "player-turn-is",
-                              "parameters": {
-                                "turn": "your-turn"
-                              }
-                            }
-                          ]
                         },
-                        "effect": {
-                          "type": "sequence",
-                          "steps": [
-                            {
-                              "type": "ignore-modifiers",
-                              "target": "this-unit",
-                              "modifier": {
-                                "what": "characteristics",
-                                "stats": [
-                                  "BS"
-                                ]
+                        {
+                          "type": "conditional",
+                          "condition": {
+                            "operator": "and",
+                            "operands": [
+                              {
+                                "type": "phase-is",
+                                "parameters": {
+                                  "phase": "command"
+                                }
+                              },
+                              {
+                                "type": "player-turn-is",
+                                "parameters": {
+                                  "turn": "your-turn"
+                                }
                               }
-                            },
-                            {
-                              "type": "ignore-modifiers",
-                              "target": "this-unit",
-                              "modifier": {
-                                "what": "rolls",
-                                "rolls": [
-                                  "hit",
-                                  "wound"
-                                ]
-                              }
-                            }
-                          ]
-                        }
-                      }
-                    ]
-                  },
-                  "trigger": {
-                    "event": "selected",
-                    "filter": {
-                      "to": "shoot"
-                    }
-                  },
-                  "duration": "phase"
-                }
-              },
-              {
-                "id": "dacatarai",
-                "name": "Dacatarai",
-                "effect": {
-                  "type": "ability-part",
-                  "effect": {
-                    "type": "sequence",
-                    "steps": [
-                      {
-                        "type": "designate",
-                        "target": "this-unit",
-                        "modifier": {
-                          "tag": "readied",
-                          "clear": true
-                        }
-                      },
-                      {
-                        "type": "conditional",
-                        "condition": {
-                          "operator": "and",
-                          "operands": [
-                            {
-                              "type": "attack-is",
-                              "parameters": {
-                                "attack_type": "melee"
-                              }
-                            },
-                            {
-                              "type": "matches",
-                              "parameters": {
-                                "subject": "defender",
-                                "filter": {
-                                  "owner": "enemy",
-                                  "none_of": [
-                                    "MONSTER",
-                                    "VEHICLE"
+                            ]
+                          },
+                          "effect": {
+                            "type": "sequence",
+                            "steps": [
+                              {
+                                "type": "permission",
+                                "target": "this-unit",
+                                "modifier": {
+                                  "activity": "start-action",
+                                  "allow": true,
+                                  "despite": [
+                                    "engaged",
+                                    "battle-shocked"
+                                  ]
+                                }
+                              },
+                              {
+                                "type": "permission",
+                                "target": "this-unit",
+                                "modifier": {
+                                  "activity": "shoot",
+                                  "allow": true,
+                                  "despite": [
+                                    "performing-action"
                                   ]
                                 }
                               }
-                            }
-                          ]
-                        },
-                        "effect": {
-                          "type": "re-roll",
+                            ]
+                          }
+                        }
+                      ]
+                    },
+                    "duration": "turn"
+                  }
+                },
+                {
+                  "id": "calistus",
+                  "name": "Calistus",
+                  "effect": {
+                    "type": "ability-part",
+                    "effect": {
+                      "type": "sequence",
+                      "steps": [
+                        {
+                          "type": "designate",
                           "target": "this-unit",
                           "modifier": {
-                            "roll": "hit",
-                            "subset": "ones",
-                            "weapons": {
-                              "type": "melee"
-                            }
-                          }
-                        }
-                      }
-                    ]
-                  },
-                  "trigger": {
-                    "event": "phase-started",
-                    "condition": {
-                      "type": "phase-is",
-                      "parameters": {
-                        "phase": "fight"
-                      }
-                    }
-                  },
-                  "duration": "phase"
-                }
-              },
-              {
-                "id": "kaptaris",
-                "name": "Kaptaris",
-                "effect": {
-                  "type": "ability-part",
-                  "effect": {
-                    "type": "sequence",
-                    "steps": [
-                      {
-                        "type": "designate",
-                        "target": "this-unit",
-                        "modifier": {
-                          "tag": "readied",
-                          "clear": true
-                        }
-                      },
-                      {
-                        "type": "conditional",
-                        "condition": {
-                          "type": "attack-is",
-                          "parameters": {
-                            "attack_type": "melee"
+                            "tag": "readied",
+                            "clear": true
                           }
                         },
-                        "effect": {
-                          "type": "roll-modifier",
-                          "target": "attacker",
-                          "modifier": {
-                            "roll": "hit",
-                            "operation": "subtract",
-                            "value": 1
-                          }
-                        }
-                      }
-                    ]
-                  },
-                  "trigger": {
-                    "event": "phase-started",
-                    "condition": {
-                      "type": "phase-is",
-                      "parameters": {
-                        "phase": "fight"
-                      }
-                    }
-                  },
-                  "duration": "phase"
-                }
-              },
-              {
-                "id": "rendax",
-                "name": "Rendax",
-                "effect": {
-                  "type": "ability-part",
-                  "effect": {
-                    "type": "sequence",
-                    "steps": [
-                      {
-                        "type": "designate",
-                        "target": "this-unit",
-                        "modifier": {
-                          "tag": "readied",
-                          "clear": true
-                        }
-                      },
-                      {
-                        "type": "conditional",
-                        "condition": {
-                          "type": "phase-is",
-                          "parameters": {
-                            "phase": "fight"
-                          }
-                        },
-                        "effect": {
+                        {
                           "type": "conditional",
                           "condition": {
-                            "type": "matches",
-                            "parameters": {
-                              "subject": "defender",
-                              "filter": {
-                                "any_of": [
-                                  "MONSTER",
-                                  "VEHICLE"
-                                ]
+                            "operator": "and",
+                            "operands": [
+                              {
+                                "type": "phase-is",
+                                "parameters": {
+                                  "phase": "movement"
+                                }
+                              },
+                              {
+                                "type": "player-turn-is",
+                                "parameters": {
+                                  "turn": "your-turn"
+                                }
                               }
-                            }
+                            ]
                           },
                           "effect": {
-                            "type": "weapon-ability-grant",
+                            "type": "move-modifier",
                             "target": "this-unit",
                             "modifier": {
-                              "keywords": [
-                                {
-                                  "keyword_id": "lethal-hits"
-                                }
+                              "passthrough": [
+                                "models"
                               ],
+                              "applies_to_moves": [
+                                "normal",
+                                "advance",
+                                "fall-back"
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "trigger": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "move"
+                      }
+                    },
+                    "duration": "phase"
+                  }
+                },
+                {
+                  "id": "salvus",
+                  "name": "Salvus",
+                  "effect": {
+                    "type": "ability-part",
+                    "effect": {
+                      "type": "sequence",
+                      "steps": [
+                        {
+                          "type": "designate",
+                          "target": "this-unit",
+                          "modifier": {
+                            "tag": "readied",
+                            "clear": true
+                          }
+                        },
+                        {
+                          "type": "conditional",
+                          "condition": {
+                            "operator": "and",
+                            "operands": [
+                              {
+                                "type": "phase-is",
+                                "parameters": {
+                                  "phase": "shooting"
+                                }
+                              },
+                              {
+                                "type": "player-turn-is",
+                                "parameters": {
+                                  "turn": "your-turn"
+                                }
+                              }
+                            ]
+                          },
+                          "effect": {
+                            "type": "sequence",
+                            "steps": [
+                              {
+                                "type": "ignore-modifiers",
+                                "target": "this-unit",
+                                "modifier": {
+                                  "what": "characteristics",
+                                  "stats": [
+                                    "BS"
+                                  ]
+                                }
+                              },
+                              {
+                                "type": "ignore-modifiers",
+                                "target": "this-unit",
+                                "modifier": {
+                                  "what": "rolls",
+                                  "rolls": [
+                                    "hit",
+                                    "wound"
+                                  ]
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    },
+                    "trigger": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "shoot"
+                      }
+                    },
+                    "duration": "phase"
+                  }
+                },
+                {
+                  "id": "dacatarai",
+                  "name": "Dacatarai",
+                  "effect": {
+                    "type": "ability-part",
+                    "effect": {
+                      "type": "sequence",
+                      "steps": [
+                        {
+                          "type": "designate",
+                          "target": "this-unit",
+                          "modifier": {
+                            "tag": "readied",
+                            "clear": true
+                          }
+                        },
+                        {
+                          "type": "conditional",
+                          "condition": {
+                            "operator": "and",
+                            "operands": [
+                              {
+                                "type": "attack-is",
+                                "parameters": {
+                                  "attack_type": "melee"
+                                }
+                              },
+                              {
+                                "type": "matches",
+                                "parameters": {
+                                  "subject": "defender",
+                                  "filter": {
+                                    "owner": "enemy",
+                                    "none_of": [
+                                      "MONSTER",
+                                      "VEHICLE"
+                                    ]
+                                  }
+                                }
+                              }
+                            ]
+                          },
+                          "effect": {
+                            "type": "re-roll",
+                            "target": "this-unit",
+                            "modifier": {
+                              "roll": "hit",
+                              "subset": "ones",
                               "weapons": {
                                 "type": "melee"
                               }
                             }
                           }
                         }
+                      ]
+                    },
+                    "trigger": {
+                      "event": "phase-started",
+                      "condition": {
+                        "type": "phase-is",
+                        "parameters": {
+                          "phase": "fight"
+                        }
                       }
-                    ]
-                  },
-                  "trigger": {
-                    "event": "selected",
-                    "filter": {
-                      "to": "fight"
-                    }
-                  },
-                  "duration": "phase"
+                    },
+                    "duration": "phase"
+                  }
+                },
+                {
+                  "id": "kaptaris",
+                  "name": "Kaptaris",
+                  "effect": {
+                    "type": "ability-part",
+                    "effect": {
+                      "type": "sequence",
+                      "steps": [
+                        {
+                          "type": "designate",
+                          "target": "this-unit",
+                          "modifier": {
+                            "tag": "readied",
+                            "clear": true
+                          }
+                        },
+                        {
+                          "type": "conditional",
+                          "condition": {
+                            "type": "attack-is",
+                            "parameters": {
+                              "attack_type": "melee"
+                            }
+                          },
+                          "effect": {
+                            "type": "roll-modifier",
+                            "target": "attacker",
+                            "modifier": {
+                              "roll": "hit",
+                              "operation": "subtract",
+                              "value": 1
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "trigger": {
+                      "event": "phase-started",
+                      "condition": {
+                        "type": "phase-is",
+                        "parameters": {
+                          "phase": "fight"
+                        }
+                      }
+                    },
+                    "duration": "phase"
+                  }
+                },
+                {
+                  "id": "rendax",
+                  "name": "Rendax",
+                  "effect": {
+                    "type": "ability-part",
+                    "effect": {
+                      "type": "sequence",
+                      "steps": [
+                        {
+                          "type": "designate",
+                          "target": "this-unit",
+                          "modifier": {
+                            "tag": "readied",
+                            "clear": true
+                          }
+                        },
+                        {
+                          "type": "conditional",
+                          "condition": {
+                            "type": "phase-is",
+                            "parameters": {
+                              "phase": "fight"
+                            }
+                          },
+                          "effect": {
+                            "type": "conditional",
+                            "condition": {
+                              "type": "matches",
+                              "parameters": {
+                                "subject": "defender",
+                                "filter": {
+                                  "any_of": [
+                                    "MONSTER",
+                                    "VEHICLE"
+                                  ]
+                                }
+                              }
+                            },
+                            "effect": {
+                              "type": "weapon-ability-grant",
+                              "target": "this-unit",
+                              "modifier": {
+                                "keywords": [
+                                  {
+                                    "keyword_id": "lethal-hits"
+                                  }
+                                ],
+                                "weapons": {
+                                  "type": "melee"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "trigger": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "fight"
+                      }
+                    },
+                    "duration": "phase"
+                  }
                 }
-              }
-            ],
-            "min_choices": 1,
-            "max_choices": 1
+              ],
+              "min_choices": 1,
+              "max_choices": 1
+            }
           }
         }
       ]
@@ -4722,19 +4726,72 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "dread-host",
     "ability_type": "detachment",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "re-roll",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "ADEPTUS CUSTODES"
+            ]
+          },
+          "modifier": {
+            "roll": "charge",
+            "result_scope": "any-result"
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "rule-active",
+            "parameters": {
+              "rule": {
+                "ability_id": "martial-katah-adeptus-custodes",
+                "option_id": "dacatarai"
+              }
+            }
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "recipient",
+                "filter": {
+                  "engaged_with": "this-unit"
+                }
+              }
+            },
+            "effect": {
+              "type": "move-modifier",
+              "target": {
+                "owner": "enemy"
+              },
+              "modifier": {
+                "applies_to_moves": [
+                  "pile-in",
+                  "consolidation"
+                ],
+                "distance_bonus": -2
+              }
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "8acfb00e0231f658e5ce9d2d2cae1574eed3b3a13510fefa1f52070d734c362d"
   },
   {
     "ability_id": "intimidating-presence-adeptus-custodes",
@@ -4853,407 +4910,411 @@
           }
         },
         {
-          "type": "conditional",
-          "condition": {
-            "type": "matches",
-            "parameters": {
-              "subject": "this-unit",
-              "filter": {
-                "designated": "readied"
-              }
-            }
-          },
+          "type": "ability-part",
+          "optional": true,
           "effect": {
-            "type": "stance-select",
-            "mode": "re-selectable",
-            "options": [
-              {
-                "id": "conversai",
-                "name": "Conversai",
-                "effect": {
-                  "type": "ability-part",
-                  "effect": {
-                    "type": "sequence",
-                    "steps": [
-                      {
-                        "type": "designate",
-                        "target": "this-unit",
-                        "modifier": {
-                          "tag": "readied",
-                          "clear": true
-                        }
-                      },
-                      {
-                        "type": "conditional",
-                        "condition": {
-                          "operator": "and",
-                          "operands": [
-                            {
-                              "type": "phase-is",
-                              "parameters": {
-                                "phase": "command"
-                              }
-                            },
-                            {
-                              "type": "player-turn-is",
-                              "parameters": {
-                                "turn": "your-turn"
-                              }
-                            }
-                          ]
-                        },
-                        "effect": {
-                          "type": "sequence",
-                          "steps": [
-                            {
-                              "type": "permission",
-                              "target": "this-unit",
-                              "modifier": {
-                                "activity": "start-action",
-                                "allow": true,
-                                "despite": [
-                                  "engaged",
-                                  "battle-shocked"
-                                ]
-                              }
-                            },
-                            {
-                              "type": "permission",
-                              "target": "this-unit",
-                              "modifier": {
-                                "activity": "shoot",
-                                "allow": true,
-                                "despite": [
-                                  "performing-action"
-                                ]
-                              }
-                            }
-                          ]
-                        }
-                      }
-                    ]
-                  },
-                  "duration": "turn"
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "this-unit",
+                "filter": {
+                  "designated": "readied"
                 }
-              },
-              {
-                "id": "calistus",
-                "name": "Calistus",
-                "effect": {
-                  "type": "ability-part",
+              }
+            },
+            "effect": {
+              "type": "stance-select",
+              "mode": "re-selectable",
+              "options": [
+                {
+                  "id": "conversai",
+                  "name": "Conversai",
                   "effect": {
-                    "type": "sequence",
-                    "steps": [
-                      {
-                        "type": "designate",
-                        "target": "this-unit",
-                        "modifier": {
-                          "tag": "readied",
-                          "clear": true
-                        }
-                      },
-                      {
-                        "type": "conditional",
-                        "condition": {
-                          "operator": "and",
-                          "operands": [
-                            {
-                              "type": "phase-is",
-                              "parameters": {
-                                "phase": "movement"
-                              }
-                            },
-                            {
-                              "type": "player-turn-is",
-                              "parameters": {
-                                "turn": "your-turn"
-                              }
-                            }
-                          ]
-                        },
-                        "effect": {
-                          "type": "move-modifier",
+                    "type": "ability-part",
+                    "effect": {
+                      "type": "sequence",
+                      "steps": [
+                        {
+                          "type": "designate",
                           "target": "this-unit",
                           "modifier": {
-                            "passthrough": [
-                              "models"
-                            ],
-                            "applies_to_moves": [
-                              "normal",
-                              "advance",
-                              "fall-back"
-                            ]
+                            "tag": "readied",
+                            "clear": true
                           }
-                        }
-                      }
-                    ]
-                  },
-                  "trigger": {
-                    "event": "selected",
-                    "filter": {
-                      "to": "move"
-                    }
-                  },
-                  "duration": "phase"
-                }
-              },
-              {
-                "id": "salvus",
-                "name": "Salvus",
-                "effect": {
-                  "type": "ability-part",
-                  "effect": {
-                    "type": "sequence",
-                    "steps": [
-                      {
-                        "type": "designate",
-                        "target": "this-unit",
-                        "modifier": {
-                          "tag": "readied",
-                          "clear": true
-                        }
-                      },
-                      {
-                        "type": "conditional",
-                        "condition": {
-                          "operator": "and",
-                          "operands": [
-                            {
-                              "type": "phase-is",
-                              "parameters": {
-                                "phase": "shooting"
-                              }
-                            },
-                            {
-                              "type": "player-turn-is",
-                              "parameters": {
-                                "turn": "your-turn"
-                              }
-                            }
-                          ]
                         },
-                        "effect": {
-                          "type": "sequence",
-                          "steps": [
-                            {
-                              "type": "ignore-modifiers",
-                              "target": "this-unit",
-                              "modifier": {
-                                "what": "characteristics",
-                                "stats": [
-                                  "BS"
-                                ]
+                        {
+                          "type": "conditional",
+                          "condition": {
+                            "operator": "and",
+                            "operands": [
+                              {
+                                "type": "phase-is",
+                                "parameters": {
+                                  "phase": "command"
+                                }
+                              },
+                              {
+                                "type": "player-turn-is",
+                                "parameters": {
+                                  "turn": "your-turn"
+                                }
                               }
-                            },
-                            {
-                              "type": "ignore-modifiers",
-                              "target": "this-unit",
-                              "modifier": {
-                                "what": "rolls",
-                                "rolls": [
-                                  "hit",
-                                  "wound"
-                                ]
-                              }
-                            }
-                          ]
-                        }
-                      }
-                    ]
-                  },
-                  "trigger": {
-                    "event": "selected",
-                    "filter": {
-                      "to": "shoot"
-                    }
-                  },
-                  "duration": "phase"
-                }
-              },
-              {
-                "id": "dacatarai",
-                "name": "Dacatarai",
-                "effect": {
-                  "type": "ability-part",
-                  "effect": {
-                    "type": "sequence",
-                    "steps": [
-                      {
-                        "type": "designate",
-                        "target": "this-unit",
-                        "modifier": {
-                          "tag": "readied",
-                          "clear": true
-                        }
-                      },
-                      {
-                        "type": "conditional",
-                        "condition": {
-                          "operator": "and",
-                          "operands": [
-                            {
-                              "type": "attack-is",
-                              "parameters": {
-                                "attack_type": "melee"
-                              }
-                            },
-                            {
-                              "type": "matches",
-                              "parameters": {
-                                "subject": "defender",
-                                "filter": {
-                                  "owner": "enemy",
-                                  "none_of": [
-                                    "MONSTER",
-                                    "VEHICLE"
+                            ]
+                          },
+                          "effect": {
+                            "type": "sequence",
+                            "steps": [
+                              {
+                                "type": "permission",
+                                "target": "this-unit",
+                                "modifier": {
+                                  "activity": "start-action",
+                                  "allow": true,
+                                  "despite": [
+                                    "engaged",
+                                    "battle-shocked"
+                                  ]
+                                }
+                              },
+                              {
+                                "type": "permission",
+                                "target": "this-unit",
+                                "modifier": {
+                                  "activity": "shoot",
+                                  "allow": true,
+                                  "despite": [
+                                    "performing-action"
                                   ]
                                 }
                               }
-                            }
-                          ]
-                        },
-                        "effect": {
-                          "type": "re-roll",
+                            ]
+                          }
+                        }
+                      ]
+                    },
+                    "duration": "turn"
+                  }
+                },
+                {
+                  "id": "calistus",
+                  "name": "Calistus",
+                  "effect": {
+                    "type": "ability-part",
+                    "effect": {
+                      "type": "sequence",
+                      "steps": [
+                        {
+                          "type": "designate",
                           "target": "this-unit",
                           "modifier": {
-                            "roll": "hit",
-                            "subset": "ones",
-                            "weapons": {
-                              "type": "melee"
-                            }
-                          }
-                        }
-                      }
-                    ]
-                  },
-                  "trigger": {
-                    "event": "phase-started",
-                    "condition": {
-                      "type": "phase-is",
-                      "parameters": {
-                        "phase": "fight"
-                      }
-                    }
-                  },
-                  "duration": "phase"
-                }
-              },
-              {
-                "id": "kaptaris",
-                "name": "Kaptaris",
-                "effect": {
-                  "type": "ability-part",
-                  "effect": {
-                    "type": "sequence",
-                    "steps": [
-                      {
-                        "type": "designate",
-                        "target": "this-unit",
-                        "modifier": {
-                          "tag": "readied",
-                          "clear": true
-                        }
-                      },
-                      {
-                        "type": "conditional",
-                        "condition": {
-                          "type": "attack-is",
-                          "parameters": {
-                            "attack_type": "melee"
+                            "tag": "readied",
+                            "clear": true
                           }
                         },
-                        "effect": {
-                          "type": "roll-modifier",
-                          "target": "attacker",
-                          "modifier": {
-                            "roll": "hit",
-                            "operation": "subtract",
-                            "value": 1
-                          }
-                        }
-                      }
-                    ]
-                  },
-                  "trigger": {
-                    "event": "phase-started",
-                    "condition": {
-                      "type": "phase-is",
-                      "parameters": {
-                        "phase": "fight"
-                      }
-                    }
-                  },
-                  "duration": "phase"
-                }
-              },
-              {
-                "id": "rendax",
-                "name": "Rendax",
-                "effect": {
-                  "type": "ability-part",
-                  "effect": {
-                    "type": "sequence",
-                    "steps": [
-                      {
-                        "type": "designate",
-                        "target": "this-unit",
-                        "modifier": {
-                          "tag": "readied",
-                          "clear": true
-                        }
-                      },
-                      {
-                        "type": "conditional",
-                        "condition": {
-                          "type": "phase-is",
-                          "parameters": {
-                            "phase": "fight"
-                          }
-                        },
-                        "effect": {
+                        {
                           "type": "conditional",
                           "condition": {
-                            "type": "matches",
-                            "parameters": {
-                              "subject": "defender",
-                              "filter": {
-                                "any_of": [
-                                  "MONSTER",
-                                  "VEHICLE"
-                                ]
+                            "operator": "and",
+                            "operands": [
+                              {
+                                "type": "phase-is",
+                                "parameters": {
+                                  "phase": "movement"
+                                }
+                              },
+                              {
+                                "type": "player-turn-is",
+                                "parameters": {
+                                  "turn": "your-turn"
+                                }
                               }
-                            }
+                            ]
                           },
                           "effect": {
-                            "type": "weapon-ability-grant",
+                            "type": "move-modifier",
                             "target": "this-unit",
                             "modifier": {
-                              "keywords": [
-                                {
-                                  "keyword_id": "lethal-hits"
-                                }
+                              "passthrough": [
+                                "models"
                               ],
+                              "applies_to_moves": [
+                                "normal",
+                                "advance",
+                                "fall-back"
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "trigger": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "move"
+                      }
+                    },
+                    "duration": "phase"
+                  }
+                },
+                {
+                  "id": "salvus",
+                  "name": "Salvus",
+                  "effect": {
+                    "type": "ability-part",
+                    "effect": {
+                      "type": "sequence",
+                      "steps": [
+                        {
+                          "type": "designate",
+                          "target": "this-unit",
+                          "modifier": {
+                            "tag": "readied",
+                            "clear": true
+                          }
+                        },
+                        {
+                          "type": "conditional",
+                          "condition": {
+                            "operator": "and",
+                            "operands": [
+                              {
+                                "type": "phase-is",
+                                "parameters": {
+                                  "phase": "shooting"
+                                }
+                              },
+                              {
+                                "type": "player-turn-is",
+                                "parameters": {
+                                  "turn": "your-turn"
+                                }
+                              }
+                            ]
+                          },
+                          "effect": {
+                            "type": "sequence",
+                            "steps": [
+                              {
+                                "type": "ignore-modifiers",
+                                "target": "this-unit",
+                                "modifier": {
+                                  "what": "characteristics",
+                                  "stats": [
+                                    "BS"
+                                  ]
+                                }
+                              },
+                              {
+                                "type": "ignore-modifiers",
+                                "target": "this-unit",
+                                "modifier": {
+                                  "what": "rolls",
+                                  "rolls": [
+                                    "hit",
+                                    "wound"
+                                  ]
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    },
+                    "trigger": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "shoot"
+                      }
+                    },
+                    "duration": "phase"
+                  }
+                },
+                {
+                  "id": "dacatarai",
+                  "name": "Dacatarai",
+                  "effect": {
+                    "type": "ability-part",
+                    "effect": {
+                      "type": "sequence",
+                      "steps": [
+                        {
+                          "type": "designate",
+                          "target": "this-unit",
+                          "modifier": {
+                            "tag": "readied",
+                            "clear": true
+                          }
+                        },
+                        {
+                          "type": "conditional",
+                          "condition": {
+                            "operator": "and",
+                            "operands": [
+                              {
+                                "type": "attack-is",
+                                "parameters": {
+                                  "attack_type": "melee"
+                                }
+                              },
+                              {
+                                "type": "matches",
+                                "parameters": {
+                                  "subject": "defender",
+                                  "filter": {
+                                    "owner": "enemy",
+                                    "none_of": [
+                                      "MONSTER",
+                                      "VEHICLE"
+                                    ]
+                                  }
+                                }
+                              }
+                            ]
+                          },
+                          "effect": {
+                            "type": "re-roll",
+                            "target": "this-unit",
+                            "modifier": {
+                              "roll": "hit",
+                              "subset": "ones",
                               "weapons": {
                                 "type": "melee"
                               }
                             }
                           }
                         }
+                      ]
+                    },
+                    "trigger": {
+                      "event": "phase-started",
+                      "condition": {
+                        "type": "phase-is",
+                        "parameters": {
+                          "phase": "fight"
+                        }
                       }
-                    ]
-                  },
-                  "trigger": {
-                    "event": "selected",
-                    "filter": {
-                      "to": "fight"
-                    }
-                  },
-                  "duration": "phase"
+                    },
+                    "duration": "phase"
+                  }
+                },
+                {
+                  "id": "kaptaris",
+                  "name": "Kaptaris",
+                  "effect": {
+                    "type": "ability-part",
+                    "effect": {
+                      "type": "sequence",
+                      "steps": [
+                        {
+                          "type": "designate",
+                          "target": "this-unit",
+                          "modifier": {
+                            "tag": "readied",
+                            "clear": true
+                          }
+                        },
+                        {
+                          "type": "conditional",
+                          "condition": {
+                            "type": "attack-is",
+                            "parameters": {
+                              "attack_type": "melee"
+                            }
+                          },
+                          "effect": {
+                            "type": "roll-modifier",
+                            "target": "attacker",
+                            "modifier": {
+                              "roll": "hit",
+                              "operation": "subtract",
+                              "value": 1
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "trigger": {
+                      "event": "phase-started",
+                      "condition": {
+                        "type": "phase-is",
+                        "parameters": {
+                          "phase": "fight"
+                        }
+                      }
+                    },
+                    "duration": "phase"
+                  }
+                },
+                {
+                  "id": "rendax",
+                  "name": "Rendax",
+                  "effect": {
+                    "type": "ability-part",
+                    "effect": {
+                      "type": "sequence",
+                      "steps": [
+                        {
+                          "type": "designate",
+                          "target": "this-unit",
+                          "modifier": {
+                            "tag": "readied",
+                            "clear": true
+                          }
+                        },
+                        {
+                          "type": "conditional",
+                          "condition": {
+                            "type": "phase-is",
+                            "parameters": {
+                              "phase": "fight"
+                            }
+                          },
+                          "effect": {
+                            "type": "conditional",
+                            "condition": {
+                              "type": "matches",
+                              "parameters": {
+                                "subject": "defender",
+                                "filter": {
+                                  "any_of": [
+                                    "MONSTER",
+                                    "VEHICLE"
+                                  ]
+                                }
+                              }
+                            },
+                            "effect": {
+                              "type": "weapon-ability-grant",
+                              "target": "this-unit",
+                              "modifier": {
+                                "keywords": [
+                                  {
+                                    "keyword_id": "lethal-hits"
+                                  }
+                                ],
+                                "weapons": {
+                                  "type": "melee"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "trigger": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "fight"
+                      }
+                    },
+                    "duration": "phase"
+                  }
                 }
-              }
-            ],
-            "min_choices": 1,
-            "max_choices": 1
+              ],
+              "min_choices": 1,
+              "max_choices": 1
+            }
           }
         }
       ]
