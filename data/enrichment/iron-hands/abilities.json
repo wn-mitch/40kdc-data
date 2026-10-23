@@ -67,9 +67,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "df881baff6859923a7ec14c0aaea6c59a68932e7091d556a90240707eeb0a979",
+    "source_digest": "12d5b6cb9c67e103e43b04208b9beaf8c62ae3d566a9576957fbcbcc4a01481f",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -82,7 +82,7 @@
       "steps": [
         {
           "type": "stat-modifier",
-          "target": "this-model",
+          "target": "this-unit",
           "modifier": {
             "stat": "M",
             "operation": "add",
@@ -91,34 +91,34 @@
         },
         {
           "type": "stat-modifier",
-          "target": "this-model",
+          "target": "this-unit",
           "modifier": {
             "stat": "T",
-            "operation": "add",
+            "operation": "improve",
             "value": 1
           }
         },
         {
           "type": "stat-modifier",
-          "target": "this-model",
+          "target": "this-unit",
           "modifier": {
             "stat": "Ld",
-            "operation": "subtract",
+            "operation": "improve",
             "value": 1
           }
         },
         {
           "type": "stat-modifier",
-          "target": "this-model",
+          "target": "this-unit",
           "modifier": {
             "stat": "OC",
-            "operation": "add",
+            "operation": "improve",
             "value": 1
           }
         },
         {
           "type": "roll-modifier",
-          "target": "this-model",
+          "target": "this-unit",
           "modifier": {
             "roll": "hit",
             "operation": "add",
@@ -192,59 +192,75 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "70b600c38edbfe5cd9a15860cb42062f4d70b35e59df564d92b243970b306dc9",
+    "source_digest": "2c96ff0862cc6ceb68aa93a17fe50a6727a5f2b1b6244181429ca6034d13a662",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "iron-hands",
     "detachment_id": "medusas-wrath",
     "ability_type": "enhancement",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
       "condition": {
         "operator": "and",
         "operands": [
           {
-            "type": "matches",
+            "type": "phase-is",
             "parameters": {
-              "filter": {
-                "all_of": [
-                  "ADEPTUS ASTARTES"
-                ]
-              }
+              "phase": "movement"
             }
           },
           {
-            "type": "matches",
+            "type": "player-turn-is",
             "parameters": {
-              "filter": {
-                "all_of": [
-                  "VEHICLE"
-                ]
-              }
+              "turn": "your-turn"
             }
           }
         ]
       },
       "effect": {
-        "type": "weapon-ability-grant",
-        "target": {
-          "owner": "friendly",
-          "within": {
-            "range": {
-              "inches": 6
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "ADEPTUS ASTARTES",
+              "VEHICLE"
+            ],
+            "level": "model"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "matches",
+            "parameters": {
+              "subject": "selected-unit",
+              "filter": {
+                "within": {
+                  "of": "this-unit",
+                  "range": {
+                    "inches": 3
+                  }
+                }
+              }
             }
           }
         },
-        "modifier": {
-          "keywords": [
-            {
-              "keyword_id": "lethal-hits"
-            }
-          ]
+        "effect": {
+          "type": "weapon-ability-grant",
+          "target": "selected-unit",
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "lethal-hits"
+              }
+            ]
+          }
         }
       }
     },
@@ -256,7 +272,17 @@
         "TECHMARINE"
       ]
     },
-    "community_notes": "In your Command phase, select one Vehicle model within 6\" of the bearer"
+    "community_notes": "In your Command phase, select one Vehicle model within 6\" of the bearer",
+    "trigger": [
+      {
+        "event": "move-started",
+        "optional": true
+      },
+      {
+        "event": "move-ended",
+        "optional": true
+      }
+    ]
   },
   {
     "ability_id": "the-flesh-is-weak-medusas-wrath-iron-hands",
@@ -264,9 +290,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "3724b8c44c930f1bc5cfc2aaeea219d1974277745cc3bf28eb396e27cb88c798",
+    "source_digest": "13009d42eb80a80b9e9a5cb57ab27e67562ff3dc88aaa6c7bf13923eca1cf909",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -275,11 +301,25 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "feel-no-pain",
-      "target": "this-model",
-      "modifier": {
-        "threshold": 4
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "this-model",
+          "modifier": {
+            "stat": "T",
+            "operation": "add",
+            "value": 1
+          }
+        },
+        {
+          "type": "feel-no-pain",
+          "target": "this-model",
+          "modifier": {
+            "threshold": 5
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -296,9 +336,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "2f06ba5be95c944ea4abb6c009658203510791a1ba06b6def315e9b2096dbb6c",
+    "source_digest": "25edfcfbb7a310196b34654bde9529c717ccbae9bcd482a6836d6dbe79739c02",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -313,7 +353,11 @@
           "type": "ignore-modifiers",
           "target": "this-unit",
           "modifier": {
-            "what": "characteristics"
+            "what": "characteristics",
+            "stats": [
+              "WS",
+              "BS"
+            ]
           }
         },
         {
@@ -322,14 +366,15 @@
           "modifier": {
             "what": "rolls",
             "rolls": [
-              "any"
+              "hit",
+              "wound"
             ]
           }
         }
       ]
     },
     "scope": {
-      "duration": "turn"
+      "duration": "until-next-command-phase"
     },
     "community_notes": "Unit below Starting Strength; may ignore any or all modifiers to characteristics and rolls/tests, excluding saving throws"
   },
@@ -339,9 +384,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "4b9c05003345d4bdea7b29e06bb80bc37b4994a3fe0c0bcb65aff9e660d57de1",
+    "source_digest": "a60e1d167a6fb1ead0ceb5859b184ba7db84623ac13a6ba01bd77a5ba47ab98d",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -349,20 +394,45 @@
     "detachment_id": "medusas-wrath",
     "ability_type": "stratagem",
     "behavior": "reactive",
-    "trigger": {
-      "event": "destroyed",
-      "object": "this-unit"
-    },
+    "trigger": [
+      {
+        "event": "destroyed",
+        "object": {
+          "owner": "friendly",
+          "all_of": [
+            "ADEPTUS ASTARTES",
+            "VEHICLE"
+          ]
+        }
+      },
+      {
+        "event": "before-roll",
+        "filter": {
+          "roll": "deadly-demise"
+        },
+        "condition": {
+          "type": "matches",
+          "parameters": {
+            "filter": {
+              "all_of": [
+                "ADEPTUS ASTARTES",
+                "VEHICLE"
+              ]
+            }
+          }
+        }
+      }
+    ],
     "effect": {
       "type": "roll-result",
-      "target": "this-model",
+      "target": "this-unit",
       "modifier": {
         "roll": "deadly-demise",
-        "result": "pass"
+        "result": 6
       }
     },
     "scope": {
-      "duration": "one-use"
+      "duration": "phase"
     },
     "community_notes": "Vehicle model with Deadly Demise, used as it is destroyed: mortal wounds are inflicted automatically instead of rolling the D6"
   },
@@ -372,19 +442,70 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "iron-hands",
     "detachment_id": "medusas-wrath",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "sustained-hits",
+                "parameters": {
+                  "value": 1
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "all_of": [
+                  "VEHICLE"
+                ]
+              }
+            }
+          },
+          "effect": {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "wound",
+              "operation": "add",
+              "value": 1
+            }
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "attack"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS ASTARTES"
+        ]
+      }
+    },
+    "source_digest": "6e86fe1375956f11d8363fb894293844772c7fa070701c32e0ff6670f925cd31"
   },
   {
     "ability_id": "power-of-the-machine-spirit-medusas-wrath-iron-hands",
@@ -412,19 +533,34 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "iron-hands",
     "detachment_id": "medusas-wrath",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 5,
+        "against": "mortal"
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "damage-allocated",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS ASTARTES"
+        ]
+      }
+    },
+    "source_digest": "e9330ebf0ed9054e0664a9442745ff8cd4a194f5f13895a7fe4c9eb3bb0267f7"
   },
   {
     "ability_id": "master-of-the-machine-war-medusas-wrath-iron-hands",

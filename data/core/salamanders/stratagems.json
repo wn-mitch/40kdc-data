@@ -152,7 +152,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Astartes",
+        "Infantry"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "immolation-protocols-forgefathers-seekers-salamanders",
     "game_version": {
       "edition": "11th",

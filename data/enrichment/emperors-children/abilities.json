@@ -5,43 +5,33 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "version": "2025-q3",
     "effect": {
-      "type": "ability-part",
-      "trigger": {
-        "event": "disembarked",
-        "subject": {
-          "owner": "friendly"
-        },
-        "object": "this-model"
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "subject": "this-model",
+          "event": "move-ended",
+          "filter": {
+            "move_types": [
+              "normal"
+            ]
+          },
+          "window": "turn"
+        }
       },
       "effect": {
-        "type": "conditional",
-        "condition": {
-          "type": "happened",
-          "parameters": {
-            "event": "move-ended",
-            "subject": "this-model",
-            "filter": {
-              "move_types": [
-                "normal"
-              ]
-            },
-            "window": "turn"
-          }
-        },
-        "effect": {
-          "type": "permission",
-          "target": "event-subject",
-          "modifier": {
-            "activity": "declare-charge",
-            "allow": true,
-            "after": [
-              "disembark"
-            ]
-          }
+        "type": "permission",
+        "target": "event-subject",
+        "modifier": {
+          "activity": "declare-charge",
+          "allow": true,
+          "despite": [
+            "disembarked-this-turn"
+          ]
         }
       }
     },
@@ -52,8 +42,18 @@
       "chaos-land-raider"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "emperors-children"
+    "behavior": "reactive",
+    "faction_id": "emperors-children",
+    "trigger": {
+      "event": "disembarked",
+      "subject": {
+        "owner": "any"
+      },
+      "filter": {
+        "transport": "this-unit"
+      }
+    },
+    "source_digest": "a6aac7dae3c1f1ea6d27fceef0ffb8662a177efd6901e830cd90b53fda042049"
   },
   {
     "ability_id": "lethal-obsession-emperors-children",
@@ -61,46 +61,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "e6d7d46a3aaa9b9e5315b5ce5560e6e2b0b665ce84b7613ab9cb889d3ad7a8fc",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "re-roll",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "charge",
-          "subset": "all-failures"
-        }
-      }
-    },
-    "scope": {
-      "duration": "turn"
-    },
-    "unit_ids": [
-      "chaos-terminators"
-    ],
-    "ability_type": "unit",
-    "behavior": "activated",
-    "faction_id": "emperors-children"
-  },
-  {
-    "ability_id": "warped-interference-emperors-children",
-    "name": "Warped Interference (Psychic)",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "b58e4408dfbbed10b6174c7a1f0c32d4a7e12216d0a2c3152fdf19faf3803e75",
+    "source_digest": "b01b8c1ce741280bf5cba230b429a044f046475f57bd404196f8e212be707115",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -114,10 +77,122 @@
             }
           },
           {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "subject": "event-subject",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success",
+                "attack_type": "ranged"
+              },
+              "window": "event"
+            }
+          }
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "re-roll",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "charge",
+                "result_scope": "any-result"
+              }
+            },
+            {
+              "type": "move-modifier",
+              "target": "event-subject",
+              "modifier": {
+                "applies_to_moves": [
+                  "charge"
+                ],
+                "ends_when": {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "event-subject",
+                    "filter": {
+                      "engaged_with": "selected-unit"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "scope": {
+      "duration": "turn"
+    },
+    "unit_ids": [
+      "chaos-terminators"
+    ],
+    "ability_type": "unit",
+    "behavior": "reactive",
+    "faction_id": "emperors-children",
+    "trigger": [
+      {
+        "event": "attacks-resolved",
+        "filter": {
+          "kind": "shoot"
+        },
+        "optional": true
+      },
+      {
+        "event": "targets-selected",
+        "filter": {
+          "kind": "charge"
+        }
+      }
+    ]
+  },
+  {
+    "ability_id": "warped-interference-emperors-children",
+    "name": "Warped Interference (Psychic)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "source_digest": "b58e4408dfbbed10b6174c7a1f0c32d4a7e12216d0a2c3152fdf19faf3803e75",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
             "type": "attachment",
             "parameters": {
               "subject": "this-model",
               "role": "leading"
+            }
+          },
+          {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
             }
           }
         ]
@@ -147,49 +222,117 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "619d906f6bbe630cb1dff40255b67f324628ca55c3fd0cbccbcebefcb697ee44",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "matches",
-        "parameters": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
           "filter": {
+            "owner": "enemy",
             "all_of": [
               "INFANTRY"
             ]
           },
-          "subject": "defender"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "stat-modifier",
-            "target": "defender",
-            "modifier": {
-              "stat": "M",
-              "operation": "subtract",
-              "value": 2
-            }
+          "count": {
+            "min": 1,
+            "max": 1
           },
-          {
-            "type": "roll-modifier",
-            "target": "defender",
-            "modifier": {
-              "roll": "charge",
-              "operation": "subtract",
-              "value": 2
+          "eligibility": {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "subject": "event-subject",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success",
+                "weapons": {
+                  "name": "Agonising Energies"
+                }
+              },
+              "window": "event"
             }
           }
-        ]
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "designate",
+              "target": "selected-unit",
+              "modifier": {
+                "tag": "wracked-with-agonies"
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "designated": "wracked-with-agonies"
+                  }
+                }
+              },
+              "effect": {
+                "type": "stat-modifier",
+                "target": "selected-unit",
+                "modifier": {
+                  "stat": "M",
+                  "operation": "subtract",
+                  "value": 2
+                }
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "designated": "wracked-with-agonies"
+                  }
+                }
+              },
+              "effect": {
+                "type": "roll-modifier",
+                "target": "selected-unit",
+                "modifier": {
+                  "roll": "charge",
+                  "operation": "subtract",
+                  "value": 2
+                }
+              }
+            }
+          ]
+        }
       }
     },
     "scope": {
-      "duration": "turn"
+      "duration": "until-start-next-turn"
     },
     "unit_ids": [
       "sorcerer"
@@ -198,7 +341,10 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "attacks-resolved"
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
     },
     "faction_id": "emperors-children"
   },
@@ -249,41 +395,38 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "9dd57e1e9c61e98ed96594bd5b1d80ab2d74e923d758fb4355ba90addb392858",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "stat-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "stat": "A",
-              "operation": "add",
-              "value": 3
-            }
-          },
-          {
-            "type": "stat-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "stat": "AP",
-              "operation": "improve",
-              "value": 1
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "this-model",
+          "modifier": {
+            "stat": "A",
+            "operation": "add",
+            "value": 3,
+            "weapons": {
+              "type": "melee"
             }
           }
-        ]
-      }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "this-model",
+          "modifier": {
+            "stat": "AP",
+            "operation": "improve",
+            "value": 1,
+            "weapons": {
+              "type": "melee"
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "phase"
@@ -292,9 +435,24 @@
       "lord-exultant"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
+    "behavior": "reactive",
     "community_notes": "auto-generated, partial",
-    "faction_id": "emperors-children"
+    "faction_id": "emperors-children",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      },
+      "optional": true
+    },
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "unit"
+    }
   },
   {
     "ability_id": "lord-of-the-host-emperors-children",
@@ -302,7 +460,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "132e5c1f1af5985c2369bc38d512e6848859eb1e848743a0b8412e2399f18338",
     "version": "2025-q3",
@@ -312,11 +470,11 @@
         "type": "attachment",
         "parameters": {
           "subject": "this-model",
-          "role": "leading",
+          "role": "attached",
           "with": {
             "all_of": [
-              "EMPEROR’S CHILDREN",
-              "BATTLELINE"
+              "BATTLELINE",
+              "EMPEROR'S CHILDREN"
             ]
           }
         }
@@ -326,30 +484,34 @@
         "steps": [
           {
             "type": "ability-grant",
-            "target": "this-model",
+            "target": "this-unit",
             "modifier": {
               "ability": "infiltrators"
             }
           },
           {
             "type": "ability-grant",
-            "target": "this-model",
+            "target": "this-unit",
             "modifier": {
-              "ability": "scouts"
+              "ability": "scouts",
+              "value": 6
             }
           }
         ]
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "unit_ids": [
       "lord-exultant"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "emperors-children"
+    "behavior": "reactive",
+    "faction_id": "emperors-children",
+    "trigger": {
+      "event": "battle-formations-declared"
+    }
   },
   {
     "ability_id": "obsessive-annunciation-emperors-children",
@@ -357,7 +519,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "c7ebc48198b82f8a198a3187628bd793ac98e87749e6ff5c3399b3cc5b44641e",
     "version": "2025-q3",
@@ -381,7 +543,10 @@
                 "value": 1
               }
             }
-          ]
+          ],
+          "weapons": {
+            "type": "ranged"
+          }
         }
       }
     },
@@ -401,23 +566,93 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "c9356b56df7548613e65543c8ee5e047a3ad4c59650b6d8d05ce655bf30808b9",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "mortal-wounds",
-        "target": "defender",
-        "modifier": {
-          "count": 1
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy",
+            "all_of": [
+              "INFANTRY"
+            ]
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "subject": "event-subject",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success"
+              },
+              "window": "event"
+            }
+          }
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "mortal-wounds",
+              "target": "selected-unit",
+              "modifier": {
+                "count": 1,
+                "per": "success",
+                "roll": {
+                  "dice": 3,
+                  "threshold": 4
+                }
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "happened",
+                "parameters": {
+                  "event": "damage-allocated",
+                  "object": "selected-unit",
+                  "filter": {
+                    "attack_type": "mortal"
+                  },
+                  "window": "event"
+                }
+              },
+              "effect": {
+                "type": "test",
+                "target": "selected-unit",
+                "modifier": {
+                  "test": "battle-shock"
+                }
+              }
+            }
+          ]
         }
       }
     },
@@ -428,8 +663,14 @@
       "lord-kakophonist"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "emperors-children"
+    "behavior": "reactive",
+    "faction_id": "emperors-children",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
+    }
   },
   {
     "ability_id": "scuttling-horrors-emperors-children",
@@ -437,9 +678,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "b3160ef74a75c78968542edad0aaa49fe07afc0cdb94aecfa79cec18eb7b1c6b",
+    "source_digest": "d74226911a1121a417afcd59f2174b1078a6f4daa86592c8fc419407f931650d",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -447,17 +688,34 @@
         "operator": "and",
         "operands": [
           {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "within": {
-                  "range": {
-                    "inches": 8
-                  },
-                  "of": "this-unit"
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "movement"
                 }
               },
-              "subject": "event-subject"
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "opponent-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "event-subject",
+              "filter": {
+                "within": {
+                  "of": "this-unit",
+                  "range": {
+                    "inches": 8
+                  }
+                }
+              }
             }
           },
           {
@@ -499,9 +757,6 @@
       },
       "optional": true
     },
-    "usage": {
-      "frequency": "once-per-turn"
-    },
     "faction_id": "emperors-children"
   },
   {
@@ -510,7 +765,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "83abf2ee236f817d32c2e8172c80e442853e2f08accc14195d69597fa3b48b63",
     "version": "2025-q3",
@@ -519,21 +774,21 @@
       "condition": {
         "type": "matches",
         "parameters": {
+          "subject": "this-model",
           "filter": {
             "within": {
-              "range": {
-                "inches": 3
-              },
               "of": {
                 "owner": "friendly",
                 "all_of": [
-                  "SLAANESH",
-                  "INFANTRY"
+                  "INFANTRY",
+                  "SLAANESH"
                 ]
+              },
+              "range": {
+                "inches": 3
               }
             }
-          },
-          "subject": "this-model"
+          }
         }
       },
       "effect": {
@@ -560,7 +815,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "1d668494c58806bfaa51743b0a6c0901232039626b61daa07ed88ebba0cd6cbf",
     "version": "2025-q3",
@@ -571,16 +826,12 @@
         "range": {
           "inches": 6
         },
-        "recipient_filter": {
-          "all_of": [
-            "SLAANESH"
-          ]
-        },
         "effect": {
           "type": "conditional",
           "condition": {
             "type": "happened",
             "parameters": {
+              "subject": "recipient",
               "event": "move-ended",
               "filter": {
                 "move_types": [
@@ -591,23 +842,23 @@
             }
           },
           "effect": {
-            "type": "conditional",
-            "condition": {
-              "type": "attack-is",
-              "parameters": {
-                "attack_type": "melee"
-              }
-            },
-            "effect": {
-              "type": "stat-modifier",
-              "target": "recipient",
-              "modifier": {
-                "stat": "AP",
-                "operation": "improve",
-                "value": 1
+            "type": "stat-modifier",
+            "target": "recipient",
+            "modifier": {
+              "stat": "AP",
+              "operation": "improve",
+              "value": 1,
+              "weapons": {
+                "type": "melee"
               }
             }
           }
+        },
+        "eligible": {
+          "owner": "friendly",
+          "all_of": [
+            "SLAANESH"
+          ]
         }
       }
     },
@@ -618,7 +869,7 @@
       "daemon-prince-of-slaanesh"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "aura",
     "faction_id": "emperors-children"
   },
   {
@@ -627,25 +878,83 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "78d5e21e0c45f110d42f99df627c17d14b95f42301f237f3fd9d994abc3b2e7c",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "attack-is",
+                "parameters": {
+                  "attack_type": "melee"
+                }
+              },
+              {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "subject": "this-model",
+                      "event": "selected",
+                      "filter": {
+                        "to": "fight"
+                      },
+                      "window": "phase"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "effect": {
+            "type": "destroy-models",
+            "target": "this-model",
+            "modifier": {
+              "count": 1
+            }
+          }
+        },
+        {
+          "type": "act-on-death",
+          "target": "event-object",
+          "modifier": {
+            "act": "fight",
+            "resolution": "after-attacking-unit-finishes",
+            "removal": "after-destroyed-model-fights",
+            "gate": {
+              "dice": "D6",
+              "threshold": 2,
+              "comparison": "gte",
+              "modifiers": []
+            }
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "attacks-resolved",
+            "subject": {
+              "owner": "enemy"
+            }
+          },
+          "effect": {
+            "type": "destroy-models",
+            "target": "this-model",
+            "modifier": {
+              "count": 1,
+              "remove_from_play": true
+            }
+          }
         }
-      },
-      "effect": {
-        "type": "act-on-death",
-        "target": "this-model",
-        "modifier": {
-          "act": "fight"
-        }
-      }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -654,7 +963,7 @@
       "daemon-prince-of-slaanesh"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "faction_id": "emperors-children"
   },
   {
@@ -663,17 +972,28 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "301e2c39d696b526a8bb1140e2fba2b67c928d97c717060fee827b0a771c7fb8",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       },
       "effect": {
         "type": "select-units",
@@ -689,11 +1009,11 @@
             "type": "happened",
             "parameters": {
               "event": "after-roll",
+              "subject": "event-subject",
               "object": "this-unit",
               "filter": {
                 "roll": "hit",
-                "result": "success",
-                "attack_type": "ranged"
+                "result": "success"
               },
               "window": "event"
             }
@@ -725,14 +1045,20 @@
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "until-next-shooting-phase"
     },
     "unit_ids": [
       "noise-marines"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "emperors-children"
+    "behavior": "reactive",
+    "faction_id": "emperors-children",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
+    }
   },
   {
     "ability_id": "objective-defiled-emperors-children",
@@ -740,13 +1066,31 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "b7839c91742ce711a4223df21826be04e6f781c4b938441d5e232b1abcecd9b2",
     "version": "2025-q3",
     "effect": {
-      "type": "objective-sticky",
-      "target": "this-unit"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "within": {
+              "of": {
+                "objective": {
+                  "controlled_by": "friendly"
+                }
+              },
+              "range": "objective-control"
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "objective-sticky",
+        "target": "this-unit"
+      }
     },
     "scope": {
       "duration": "permanent"
@@ -755,8 +1099,28 @@
       "tormentors"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "emperors-children"
+    "behavior": "reactive",
+    "faction_id": "emperors-children",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "icon-of-excess-emperors-children",
@@ -764,24 +1128,53 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "78da4ad957f92424b1787ea78f54b4954e522372370846befa317b31fdeb674a",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
+        "type": "happened",
         "parameters": {
-          "phase": "fight"
+          "event": "destroyed",
+          "object": {
+            "owner": "enemy"
+          },
+          "filter": {
+            "by": "this-unit"
+          },
+          "window": "phase"
         }
       },
       "effect": {
-        "type": "cp-gain",
-        "target": "this-model",
-        "modifier": {
-          "amount": 1
-        }
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "test",
+            "target": "this-unit",
+            "modifier": {
+              "test": "leadership"
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "roll-result",
+              "parameters": {
+                "roll": "leadership",
+                "result": "success"
+              }
+            },
+            "effect": {
+              "type": "cp-gain",
+              "target": "this-model",
+              "modifier": {
+                "amount": 1
+              }
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -792,8 +1185,39 @@
       "tormentors"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "emperors-children"
+    "behavior": "reactive",
+    "faction_id": "emperors-children",
+    "trigger": [
+      {
+        "event": "phase-ended",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "shooting"
+              }
+            },
+            {
+              "type": "player-turn-is",
+              "parameters": {
+                "turn": "your-turn"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "event": "phase-ended",
+        "condition": {
+          "type": "phase-is",
+          "parameters": {
+            "phase": "fight"
+          }
+        }
+      }
+    ]
   },
   {
     "ability_id": "assault-vehicle-emperors-children",
@@ -871,15 +1295,51 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "47e39acc44d4a4fceee0a669ff4ce02ee035b050b4aed57473ec8ce0c8d02c46",
     "version": "2025-q3",
     "effect": {
-      "type": "mortal-wounds",
-      "target": "defender",
-      "modifier": {
-        "count": 1
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "subject": "selected-unit",
+            "filter": {
+              "engaged_with": "this-model"
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "roll",
+        "dice": "D6",
+        "roll_var": "this model’s remaining wounds",
+        "effect": {
+          "type": "dice-gated",
+          "from": {
+            "roll_var": "this model’s remaining wounds"
+          },
+          "threshold": 4,
+          "comparison": "gte",
+          "on_success": {
+            "type": "mortal-wounds",
+            "target": "selected-unit",
+            "modifier": {
+              "count": 1,
+              "max": 6
+            }
+          },
+          "on_fail": null
+        }
       }
     },
     "scope": {
@@ -889,8 +1349,16 @@
       "daemon-prince-of-slaanesh-with-wings"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "emperors-children"
+    "behavior": "reactive",
+    "faction_id": "emperors-children",
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "charge"
+        ]
+      }
+    }
   },
   {
     "ability_id": "stimulated-by-pain-emperors-children",
@@ -898,15 +1366,17 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "8345cb8d1ba9fb3d1a909a511f4f84c0fd5b2026060b5f8f36a7ac8eb243da18",
     "version": "2025-q3",
     "effect": {
-      "type": "damage-reduction",
-      "target": "this-unit",
+      "type": "stat-modifier",
+      "target": "attacker",
       "modifier": {
-        "reduction": 1
+        "stat": "D",
+        "operation": "subtract",
+        "value": 1
       }
     },
     "scope": {
@@ -1086,15 +1556,27 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "db5f2bae245a8eb3cca1df9d81a364c92d2b3958c0471ebd7f0f15e2bd8a0f90",
     "version": "2025-q3",
     "effect": {
-      "type": "army-rule",
-      "target": "this-model",
-      "modifier": {
-        "rule": "warlord-required"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "this-model",
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      },
+      "effect": {
+        "type": "army-rule",
+        "target": "this-unit",
+        "modifier": {
+          "rule": "warlord-required"
+        }
       }
     },
     "scope": {
@@ -1113,7 +1595,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "0b50ba29d14fa74c6037d2ac1cf34d62c0e10b365d2215c4713c8ab3757b89c1",
     "version": "2025-q3",
@@ -1122,14 +1604,14 @@
       "condition": {
         "type": "matches",
         "parameters": {
+          "subject": "defender",
           "filter": {
             "any_of": [
               "CHARACTER",
               "MONSTER",
               "WALKER"
             ]
-          },
-          "subject": "defender"
+          }
         }
       },
       "effect": {
@@ -1137,18 +1619,18 @@
         "steps": [
           {
             "type": "re-roll",
-            "target": "this-unit",
+            "target": "this-model",
             "modifier": {
               "roll": "hit",
-              "subset": "all-failures"
+              "result_scope": "any-result"
             }
           },
           {
             "type": "re-roll",
-            "target": "this-unit",
+            "target": "this-model",
             "modifier": {
               "roll": "wound",
-              "subset": "all-failures"
+              "result_scope": "any-result"
             }
           }
         ]
@@ -1171,17 +1653,23 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "6e2b044b985ff84d57ea7f953078ccb151fd7e8dcf4a1f8d883b9bdd24a0e5f3",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
-        }
+        "operator": "not",
+        "operands": [
+          {
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
+          }
+        ]
       },
       "effect": {
         "type": "ability-grant",
@@ -1198,8 +1686,17 @@
       "lucius-the-eternal"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "emperors-children"
+    "behavior": "reactive",
+    "faction_id": "emperors-children",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    }
   },
   {
     "ability_id": "airborne-predator-emperors-children",
@@ -1207,30 +1704,88 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
-            "all_of": [
-              "FLY"
-            ]
-          },
-          "subject": "defender"
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "type": "moved-over",
+          "parameters": {
+            "subject": "selected-unit",
+            "by": "this-model"
+          }
         }
       },
       "effect": {
-        "type": "roll-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "hit",
-          "operation": "add",
-          "value": 1
-        }
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "selected-unit",
+                "filter": {
+                  "all_of": [
+                    "FLY"
+                  ]
+                }
+              }
+            },
+            "effect": {
+              "type": "mortal-wounds",
+              "target": "selected-unit",
+              "modifier": {
+                "count": "D3",
+                "per": "success",
+                "roll": {
+                  "dice": 2,
+                  "threshold": 3
+                }
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "selected-unit",
+                    "filter": {
+                      "all_of": [
+                        "FLY"
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "mortal-wounds",
+              "target": "selected-unit",
+              "modifier": {
+                "count": "D3",
+                "per": "success",
+                "roll": {
+                  "dice": 2,
+                  "threshold": 4
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -1240,8 +1795,18 @@
       "heldrake"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "emperors-children"
+    "behavior": "reactive",
+    "faction_id": "emperors-children",
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "normal"
+        ]
+      },
+      "optional": true
+    },
+    "source_digest": "4d14afec7f0b579c80bd798583de4a2b0cba5afc5408c81c58fdd96441d9f189"
   },
   {
     "ability_id": "excessive-assault-emperors-children",
@@ -1249,25 +1814,77 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "41926ea8f48dfc01146dfe39e777d8b65276a6757c374c49f18842250618ad7c",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
+        "type": "attack-is",
         "parameters": {
-          "phase": "fight"
+          "attack_type": "melee"
         }
       },
       "effect": {
-        "type": "re-roll",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "wound",
-          "subset": "ones"
-        }
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "defender",
+                    "filter": {
+                      "within": {
+                        "of": {
+                          "objective": {}
+                        },
+                        "range": "objective-control"
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "re-roll",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "wound",
+                "subset": "ones"
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "defender",
+                "filter": {
+                  "within": {
+                    "of": {
+                      "objective": {}
+                    },
+                    "range": "objective-control"
+                  }
+                }
+              }
+            },
+            "effect": {
+              "type": "re-roll",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "wound",
+                "result_scope": "any-result"
+              }
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -1286,35 +1903,24 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "45110617bf448a0e94f4da6041a744f80fd11b6cdebc80cea1e4d7ee46fd8bac",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "strength",
-            "parameters": {
-              "below": "starting"
-            }
-          },
-          {
-            "type": "strength",
-            "parameters": {
-              "below": "half"
-            }
-          }
-        ]
+        "type": "strength",
+        "parameters": {
+          "below": "starting"
+        }
       },
       "effect": {
         "type": "sequence",
         "steps": [
           {
             "type": "roll-modifier",
-            "target": "this-unit",
+            "target": "this-model",
             "modifier": {
               "roll": "hit",
               "operation": "add",
@@ -1322,12 +1928,21 @@
             }
           },
           {
-            "type": "roll-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "wound",
-              "operation": "add",
-              "value": 1
+            "type": "conditional",
+            "condition": {
+              "type": "strength",
+              "parameters": {
+                "below": "half"
+              }
+            },
+            "effect": {
+              "type": "roll-modifier",
+              "target": "this-model",
+              "modifier": {
+                "roll": "wound",
+                "operation": "add",
+                "value": 1
+              }
             }
           }
         ]
@@ -1476,7 +2091,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "c0c5f1c101410b70920a126c9ea756524246209682a771cb5d807bec5a4d14f2",
     "version": "2025-q3",
@@ -1505,7 +2120,14 @@
       ]
     },
     "trigger": {
-      "event": "set-up"
+      "event": "set-up",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "EMPEROR'S CHILDREN",
+          "TERMINATOR"
+        ]
+      }
     }
   },
   {
@@ -1514,41 +2136,35 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "6664743ad819f33989a937bf6f2c9119fb1c401501d36c58e3760c608b00bd50",
+    "source_digest": "b7db617a81837dd401b442492b837c5465007428b950c6bb5c4a396857246171",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "emperors-children",
     "detachment_id": "frenzied-host",
     "ability_type": "detachment",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "happened",
-        "parameters": {
-          "event": "move-ended",
-          "filter": {
-            "move_types": [
-              "advance",
-              "fall-back"
-            ]
-          },
-          "window": "turn"
-        }
+      "type": "weapon-ability-grant",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "BATTLELINE"
+        ],
+        "level": "model",
+        "member_of": "event-subject"
       },
-      "effect": {
-        "type": "stat-modifier",
-        "target": {
-          "owner": "friendly"
-        },
-        "modifier": {
-          "stat": "S",
-          "operation": "add",
-          "value": 1
-        }
+      "modifier": {
+        "keywords": [
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -1559,6 +2175,23 @@
         "EMPEROR’S CHILDREN",
         "BATTLELINE"
       ]
+    },
+    "trigger": {
+      "event": "selected",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "BATTLELINE",
+          "EMPEROR'S CHILDREN"
+        ]
+      },
+      "filter": {
+        "move_types": [
+          "advance",
+          "fall-back"
+        ],
+        "to": "move"
+      }
     }
   },
   {
@@ -1567,7 +2200,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "cf6090004f86e0471792e169edc13441f9a3ab8e15be0afa78660d80702a6456",
     "version": "2025-q3",
@@ -1580,14 +2213,17 @@
     "effect": {
       "type": "ability-grant",
       "target": {
-        "owner": "friendly"
+        "owner": "friendly",
+        "all_of": [
+          "FLAWLESS BLADES"
+        ]
       },
       "modifier": {
         "ability": "fights-first"
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -1602,9 +2238,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "3b063e10ee7709f6e09289782eb0fa4355cc229649ebf2fe3e48edf205ea059a",
+    "source_digest": "83c123019da93c423e33428cc4c91bf963a9bbdd0a8d548605ef46c541f37ec3",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -1619,21 +2255,24 @@
           "type": "ability-grant",
           "target": "this-model",
           "modifier": {
-            "ability": "deep-strike"
+            "ability": "deep-strike",
+            "value": {
+              "rating": true
+            }
           }
         },
         {
           "type": "weapon-ability-grant",
-          "target": "this-model",
+          "target": "this-unit",
           "modifier": {
-            "weapons": {
-              "type": "ranged"
-            },
             "keywords": [
               {
                 "keyword_id": "ignores-cover"
               }
-            ]
+            ],
+            "weapons": {
+              "type": "ranged"
+            }
           }
         }
       ]
@@ -1654,7 +2293,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "14d2f4405b788f503a2e022e8793941d6cd8976a1919536ac67988442e55be0e",
     "version": "2025-q3",
@@ -1666,7 +2305,7 @@
     "behavior": "passive",
     "effect": {
       "type": "weapon-ability-grant",
-      "target": "this-model",
+      "target": "this-unit",
       "modifier": {
         "keywords": [
           {
@@ -1694,7 +2333,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "cc10084b2fdbacab2ea01bd13b06fa8eb8ffca6799fd3be9549c70baa2c3237f",
     "version": "2025-q3",
@@ -1709,7 +2348,7 @@
       "target": "this-model",
       "modifier": {
         "stat": "S",
-        "operation": "add",
+        "operation": "improve",
         "value": 1,
         "weapons": {
           "type": "melee"
@@ -1919,7 +2558,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "893d2fde541e37e083f7e219c1ed30cc1de659202d385de869f7e55ddd565f2f",
     "version": "2025-q3",
@@ -1928,13 +2567,13 @@
     "faction_id": "emperors-children",
     "detachment_id": "elegant-brutes",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "stat-modifier",
       "target": "this-unit",
       "modifier": {
         "stat": "S",
-        "operation": "add",
+        "operation": "improve",
         "value": 2
       }
     },
@@ -1946,6 +2585,19 @@
         "EMPEROR’S CHILDREN",
         "TERMINATOR"
       ]
+    },
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "attack"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "EMPEROR'S CHILDREN",
+          "TERMINATOR"
+        ]
+      }
     }
   },
   {
@@ -1954,32 +2606,51 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "d15657dd92cea7d0ac03975691415c567ef3648d5da7a75c4fc0e2a9fadf0e50",
+    "source_digest": "8d0feae115c55096d52dbd6fc931088b7933d7c70c1629a4fd6ef4ce342ac764",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "emperors-children",
     "detachment_id": "elegant-brutes",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "set-up",
       "target": "this-unit",
       "modifier": {
-        "to": "strategic-reserves",
-        "from": "battlefield"
+        "to": "strategic-reserves"
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
         "EMPEROR’S CHILDREN",
         "TERMINATOR"
       ]
+    },
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
     }
   },
   {
@@ -2056,7 +2727,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "044c78a7ba86936d05d85ffc408be34e933ddf4b0672142b9641a0ee36e3f80a",
     "version": "2025-q3",
@@ -2065,18 +2736,12 @@
     "faction_id": "emperors-children",
     "detachment_id": "frenzied-host",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "select-units",
       "selector": {
         "filter": {
           "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 12
-            },
-            "of": "this-model"
-          },
           "visible": {
             "to": "this-model"
           }
@@ -2084,6 +2749,20 @@
         "count": {
           "min": 1,
           "max": 1
+        },
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "subject": "selected-unit",
+            "filter": {
+              "within": {
+                "of": "this-unit",
+                "range": {
+                  "inches": 12
+                }
+              }
+            }
+          }
         }
       },
       "effect": {
@@ -2097,13 +2776,33 @@
       }
     },
     "scope": {
-      "duration": "turn"
+      "duration": "phase"
     },
     "applies_to": {
       "all_of": [
         "EMPEROR’S CHILDREN",
         "BATTLELINE"
       ]
+    },
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
     }
   },
   {
@@ -2112,7 +2811,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "4e51b171f760889c95814f06343bc93b3aca4bf987541f16c22b17927d668699",
     "version": "2025-q3",
@@ -2121,22 +2820,16 @@
     "faction_id": "emperors-children",
     "detachment_id": "frenzied-host",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attack-is",
-        "parameters": {
-          "attack_type": "ranged"
-        }
-      },
-      "effect": {
-        "type": "rule-state",
-        "target": "this-unit",
-        "modifier": {
-          "direction": "suppressed",
-          "rule_kind": "core-rule",
-          "rule": "attacking-ends-hidden"
+      "type": "rule-state",
+      "target": "this-unit",
+      "modifier": {
+        "direction": "suppressed",
+        "rule_kind": "core-rule",
+        "rule": "attacking-ends-hidden",
+        "attacks": {
+          "event_var": "those-attacks"
         }
       }
     },
@@ -2148,6 +2841,20 @@
         "EMPEROR’S CHILDREN",
         "BATTLELINE"
       ]
+    },
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
+      "binds_event_variable": "those-attacks",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "BATTLELINE",
+          "EMPEROR'S CHILDREN"
+        ]
+      }
     }
   },
   {
@@ -2156,7 +2863,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "4741ea3cfe41ed72bbc05ef0822340bb4335d0655332ed0b15e0d7f577112925",
     "version": "2025-q3",
@@ -2165,17 +2872,69 @@
     "faction_id": "emperors-children",
     "detachment_id": "spectacle-of-slaughter",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "weapons": {
-          "type": "melee"
-        },
         "keywords": [
           {
             "keyword_id": "precision"
+          }
+        ],
+        "weapons": {
+          "type": "melee"
+        }
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "applies_to": {
+      "all_of": [
+        "FLAWLESS BLADES"
+      ]
+    },
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "fight"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "FLAWLESS BLADES"
+        ]
+      }
+    }
+  },
+  {
+    "ability_id": "single-minded-strike-spectacle-of-slaughter-emperors-children",
+    "name": "Single-Minded Strike",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "source_digest": "bd6a4e052d0b3ad2b4911290241dceb1011c68463a0a93c5150b1ed2af325ad8",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "emperors-children",
+    "detachment_id": "spectacle-of-slaughter",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "move-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "passthrough": [
+          {
+            "kind": "models",
+            "excluding": [
+              "MONSTER",
+              "VEHICLE"
+            ]
           }
         ]
       }
@@ -2187,43 +2946,20 @@
       "all_of": [
         "FLAWLESS BLADES"
       ]
-    }
-  },
-  {
-    "ability_id": "single-minded-strike-spectacle-of-slaughter-emperors-children",
-    "name": "Single-Minded Strike",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
     },
-    "source_digest": "bd6a4e052d0b3ad2b4911290241dceb1011c68463a0a93c5150b1ed2af325ad8",
-    "version": "2025-q3",
-    "supersedes": null,
-    "unit_ids": [],
-    "faction_id": "emperors-children",
-    "detachment_id": "spectacle-of-slaughter",
-    "ability_type": "stratagem",
-    "behavior": "activated",
-    "effect": {
-      "type": "move-modifier",
-      "target": "this-unit",
-      "modifier": {
-        "applies_to_moves": [
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
           "charge"
-        ],
-        "passthrough": [
-          "models-excluding-monster-vehicle"
+        ]
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "FLAWLESS BLADES"
         ]
       }
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "applies_to": {
-      "all_of": [
-        "FLAWLESS BLADES"
-      ]
     }
   },
   {
@@ -2508,7 +3244,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "1338e8838e9ac3131c2015bfa5bbb1aa4ac323c6f4e955f1ee7d4ead6606b2f2",
     "version": "2025-q3",
@@ -2521,61 +3257,61 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "matches",
-        "parameters": {
-          "subject": "this-unit",
-          "filter": {
-            "all_of": [
-              "EMPEROR'S CHILDREN"
-            ]
+        "operator": "or",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "attacker",
+              "filter": {
+                "all_of": [
+                  "TRANSPORT"
+                ]
+              }
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "subject": "attacker",
+              "event": "disembarked",
+              "window": "turn"
+            }
           }
-        }
+        ]
       },
       "effect": {
-        "type": "conditional",
-        "condition": {
-          "operator": "or",
-          "operands": [
-            {
-              "type": "matches",
-              "parameters": {
-                "filter": {
-                  "all_of": [
-                    "TRANSPORT"
-                  ]
-                }
-              }
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "re-roll",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "EMPEROR'S CHILDREN"
+              ],
+              "level": "model"
             },
-            {
-              "type": "happened",
-              "parameters": {
-                "event": "disembarked",
-                "window": "turn"
-              }
+            "modifier": {
+              "roll": "hit",
+              "subset": "ones"
             }
-          ]
-        },
-        "effect": {
-          "type": "sequence",
-          "steps": [
-            {
-              "type": "re-roll",
-              "target": "this-unit",
-              "modifier": {
-                "roll": "hit",
-                "subset": "ones"
-              }
+          },
+          {
+            "type": "re-roll",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "EMPEROR'S CHILDREN"
+              ],
+              "level": "model"
             },
-            {
-              "type": "re-roll",
-              "target": "this-unit",
-              "modifier": {
-                "roll": "wound",
-                "subset": "ones"
-              }
+            "modifier": {
+              "roll": "wound",
+              "subset": "ones"
             }
-          ]
-        }
+          }
+        ]
       }
     },
     "scope": {
@@ -2589,7 +3325,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "b9300efc810122dcb7411f63721b4c8a6a1879de8080dc4233ab31bc4950582f",
     "version": "2025-q3",
@@ -2598,17 +3334,22 @@
     "faction_id": "emperors-children",
     "detachment_id": "mercurial-host",
     "ability_type": "detachment",
-    "behavior": "passive",
+    "behavior": "activated",
     "effect": {
       "type": "re-roll",
-      "target": "this-model",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "EMPEROR'S CHILDREN"
+        ]
+      },
       "modifier": {
         "roll": "advance",
         "result_scope": "any-result"
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
@@ -2618,7 +3359,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "388843bfefc0132db984850cc3bc13438853ee1cb68beca68f1d748bc6e5e412",
     "version": "2025-q3",
@@ -2627,99 +3368,98 @@
     "faction_id": "emperors-children",
     "detachment_id": "court-of-the-phoenician",
     "ability_type": "detachment",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "happened",
-        "parameters": {
-          "event": "move-ended",
-          "filter": {
-            "move_types": [
-              "charge"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-grant",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "EMPEROR'S CHILDREN"
             ]
           },
-          "window": "turn"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "conditional",
-            "condition": {
-              "type": "unit-state",
-              "parameters": {
-                "subject": "defender",
-                "state": "engaged",
-                "with": "this-unit",
-                "at": "turn-start"
-              }
-            },
-            "effect": {
-              "type": "targeting",
-              "target": "this-unit",
-              "modifier": {
-                "by": "this-unit",
-                "may": "cannot-target",
-                "target": "defender",
-                "kind": "fight"
-              }
-            }
-          },
-          {
-            "type": "conditional",
-            "condition": {
-              "type": "happened",
-              "parameters": {
-                "event": "targets-selected",
-                "subject": {
-                  "excluding": "this-unit"
-                },
-                "object": "defender",
-                "filter": {
-                  "kind": "attack"
-                },
-                "window": "phase"
-              }
-            },
-            "effect": {
-              "type": "targeting",
-              "target": "this-unit",
-              "modifier": {
-                "by": "this-unit",
-                "may": "cannot-target",
-                "target": "defender",
-                "kind": "fight"
-              }
-            }
-          },
-          {
-            "type": "stat-modifier",
-            "target": "this-model",
-            "modifier": {
-              "stat": "S",
-              "operation": "add",
-              "value": 1,
-              "weapons": {
-                "type": "melee"
-              }
-            }
-          },
-          {
-            "type": "stat-modifier",
-            "target": "this-model",
-            "modifier": {
-              "stat": "AP",
-              "operation": "add",
-              "value": 1,
-              "weapons": {
-                "type": "melee"
-              }
-            }
+          "modifier": {
+            "ability": "sensational-performance-emperors-children"
           }
-        ]
-      }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "selected",
+            "filter": {
+              "to": "fight"
+            },
+            "optional": true
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "conditional",
+                "condition": {
+                  "type": "happened",
+                  "parameters": {
+                    "event": "move-ended",
+                    "filter": {
+                      "move_types": [
+                        "charge"
+                      ]
+                    },
+                    "window": "turn"
+                  }
+                },
+                "effect": {
+                  "type": "targeting",
+                  "target": "this-unit",
+                  "modifier": {
+                    "may": "cannot-target",
+                    "kind": "attack"
+                  }
+                }
+              },
+              {
+                "type": "targeting",
+                "target": "this-unit",
+                "modifier": {
+                  "may": "cannot-target",
+                  "kind": "attack"
+                }
+              },
+              {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "stat-modifier",
+                    "target": "this-unit",
+                    "modifier": {
+                      "stat": "S",
+                      "operation": "improve",
+                      "value": 1,
+                      "weapons": {
+                        "type": "melee"
+                      }
+                    }
+                  },
+                  {
+                    "type": "stat-modifier",
+                    "target": "this-unit",
+                    "modifier": {
+                      "stat": "AP",
+                      "operation": "improve",
+                      "value": 1,
+                      "weapons": {
+                        "type": "melee"
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "phase"
@@ -3070,7 +3810,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "1f8161309cdc2cbc7b752dd4e6bba3f7c2c369744c180413ea54aceffba935fd",
     "version": "2025-q3",
@@ -3079,54 +3819,54 @@
     "faction_id": "emperors-children",
     "detachment_id": "slaaneshs-chosen",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "aura",
     "usage": {
-      "frequency": "once-per-battle-round"
+      "frequency": "once-per-battle-round",
+      "per": "army"
     },
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
+      "type": "aura",
+      "target": "enemy-within-aura",
+      "modifier": {
+        "range": {
+          "inches": 6
+        },
+        "effect": {
           "type": "test",
-          "target": {
-            "owner": "enemy",
-            "within": {
-              "range": {
-                "inches": 6
-              }
-            }
-          },
+          "target": "recipient",
           "modifier": {
-            "test": "battle-shock"
+            "test": "battle-shock",
+            "modifier": -1
           }
         },
-        {
-          "type": "stat-modifier",
-          "target": {
-            "owner": "enemy",
-            "within": {
-              "range": {
-                "inches": 6
-              }
-            }
-          },
-          "modifier": {
-            "stat": "BS",
-            "operation": "subtract",
-            "value": 1
-          }
-        }
-      ]
+        "eligible": {
+          "owner": "enemy"
+        },
+        "of": "this-unit"
+      }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     },
-    "community_notes": "Used just after a Character unit becomes your army's Favoured Champions; each enemy unit within 6\" takes a Battle-shock test with -1 to the result."
+    "community_notes": "Used just after a Character unit becomes your army's Favoured Champions; each enemy unit within 6\" takes a Battle-shock test with -1 to the result.",
+    "trigger": {
+      "event": "designation-changed",
+      "filter": {
+        "tag": "favoured-champions"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "CHARACTER",
+          "EMPEROR'S CHILDREN"
+        ]
+      }
+    }
   },
   {
     "ability_id": "heightened-jealousy-slaaneshs-chosen-emperors-children",
@@ -3441,7 +4181,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "af378d8f1bc7f04250594d20fb9d41171aeb8c01fdd0f54870575b5dc94c2b83",
     "version": "2025-q3",
@@ -3452,45 +4192,49 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "permission",
-          "target": {
-            "stratagem_target": "second"
-          },
-          "modifier": {
-            "activity": "declare-charge",
-            "allow": true
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "happened",
-            "parameters": {
-              "subject": {
-                "stratagem_target": "second"
-              },
-              "event": "selected",
-              "filter": {
-                "to": "fight"
-              },
-              "window": "phase"
-            }
-          },
-          "effect": {
+      "type": "ability-part",
+      "optional": true,
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
             "type": "permission",
             "target": {
               "stratagem_target": "second"
             },
             "modifier": {
-              "activity": "fight",
-              "allow": false
+              "activity": "declare-charge",
+              "allow": true
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "happened",
+              "parameters": {
+                "subject": {
+                  "stratagem_target": "second"
+                },
+                "event": "selected",
+                "filter": {
+                  "to": "fight"
+                },
+                "window": "phase"
+              }
+            },
+            "effect": {
+              "type": "permission",
+              "target": {
+                "stratagem_target": "second"
+              },
+              "modifier": {
+                "activity": "fight",
+                "allow": false
+              }
             }
           }
-        }
-      ]
+        ]
+      }
     },
     "scope": {
       "duration": "phase"
@@ -3737,7 +4481,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "1261dce646d91e5f49836a7bd8b408f640afe13f633edf32f486c1cdb5bf9fec",
     "version": "2025-q3",
@@ -3746,24 +4490,35 @@
     "faction_id": "emperors-children",
     "detachment_id": "carnival-of-excess",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "sequence",
       "steps": [
         {
-          "type": "move",
+          "type": "move-modifier",
           "target": "this-unit",
           "modifier": {
-            "move_type": "pile-in",
-            "distance": 6
+            "applies_to_moves": [
+              "pile-in",
+              "consolidation"
+            ],
+            "distance_bonus": 3
           }
         },
         {
-          "type": "move",
+          "type": "move-modifier",
           "target": "this-unit",
           "modifier": {
-            "move_type": "consolidation",
-            "distance": 6
+            "applies_to_moves": [
+              "pile-in",
+              "consolidation"
+            ],
+            "ends_nearest": {
+              "of": {
+                "owner": "enemy"
+              },
+              "waives": "closest-enemy-model"
+            }
           }
         }
       ]
@@ -3776,7 +4531,16 @@
         "SLAANESH"
       ]
     },
-    "community_notes": "Pile-in and Consolidation moves need not end closer to the closest enemy model, provided they end as close as possible to the closest enemy unit."
+    "community_notes": "Pile-in and Consolidation moves need not end closer to the closest enemy model, provided they end as close as possible to the closest enemy unit.",
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "pile-in",
+          "consolidation"
+        ]
+      }
+    }
   },
   {
     "ability_id": "cruel-bladesman-peerless-bladesmen-emperors-children",
@@ -4072,7 +4836,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "01337e66a317574748b18dbdf1dd009c5491090f43005cbe56a6eb21380482d6",
     "version": "2025-q3",
@@ -4083,11 +4847,24 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "objective-sticky",
-      "target": "this-unit"
+      "type": "select-objective",
+      "selector": {
+        "filter": {
+          "controlled_by": "friendly"
+        },
+        "bind_as": "objective-marker",
+        "count": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "effect": {
+        "type": "objective-sticky",
+        "target": "this-unit"
+      }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -4140,7 +4917,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "c49bb31469727c406e3cde6bf093867619ec7de572b2ba7cb2736214d96378e7",
     "version": "2025-q3",
@@ -4149,15 +4926,59 @@
     "faction_id": "emperors-children",
     "detachment_id": "rapid-evisceration",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "move-modifier",
-      "target": "this-unit",
-      "modifier": {
-        "passthrough": [
-          "models"
-        ]
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "move-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "passthrough": [
+              {
+                "kind": "models",
+                "owner": "enemy",
+                "excluding": [
+                  "MONSTER",
+                  "VEHICLE"
+                ]
+              }
+            ],
+            "applies_to_moves": [
+              "normal",
+              "advance",
+              "fall-back",
+              "charge"
+            ]
+          }
+        },
+        {
+          "type": "permission",
+          "target": "this-model",
+          "modifier": {
+            "activity": "move",
+            "allow": true,
+            "despite": [
+              "engaged"
+            ]
+          }
+        },
+        {
+          "type": "move-modifier",
+          "target": "this-model",
+          "modifier": {
+            "no_end_in_engagement": true
+          }
+        },
+        {
+          "type": "roll-result",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "desperate-escape",
+            "result": "pass"
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "phase"
@@ -4168,7 +4989,10 @@
         "VEHICLE"
       ]
     },
-    "community_notes": "Models can move through enemy models (excluding Monsters and Vehicles) without ending in Engagement Range; Desperate Escape tests are automatically passed."
+    "community_notes": "Models can move through enemy models (excluding Monsters and Vehicles) without ending in Engagement Range; Desperate Escape tests are automatically passed.",
+    "trigger": {
+      "event": "move-ended"
+    }
   },
   {
     "ability_id": "on-to-the-next-rapid-evisceration-emperors-children",
@@ -4604,7 +5428,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "6fb404e2ae9cdb52716b83d64c752bb8e2e3afaf8691f7dc914b76005ddc127d",
     "version": "2025-q3",
@@ -4613,7 +5437,7 @@
     "faction_id": "emperors-children",
     "detachment_id": "mercurial-host",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "move-modifier",
       "target": "this-unit",
@@ -4630,7 +5454,15 @@
         "INFANTRY"
       ]
     },
-    "community_notes": "If the unit Advances, no Advance roll is made; instead add 6\" to the Move characteristic of its models until the end of the phase."
+    "community_notes": "If the unit Advances, no Advance roll is made; instead add 6\" to the Move characteristic of its models until the end of the phase.",
+    "trigger": {
+      "event": "move-started",
+      "filter": {
+        "move_types": [
+          "advance"
+        ]
+      }
+    }
   },
   {
     "ability_id": "violent-excess-mercurial-host-emperors-children",
@@ -4723,7 +5555,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "c961279bd028b75ba6e1923ede684b443edf0697196f45034203248189d5eb35",
     "version": "2025-q3",
@@ -4734,27 +5566,56 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "stat-modifier",
-          "target": "this-unit",
-          "modifier": {
-            "stat": "S",
-            "operation": "add",
-            "value": 1
-          }
-        },
-        {
-          "type": "stat-modifier",
-          "target": "this-unit",
-          "modifier": {
-            "stat": "AP",
-            "operation": "improve",
-            "value": 1
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "defender",
+          "filter": {
+            "within": {
+              "of": "attacker",
+              "range": {
+                "inches": 12
+              }
+            }
           }
         }
-      ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "stat-modifier",
+            "target": {
+              "member_of": "this-unit",
+              "all_of": [
+                "EMPEROR'S CHILDREN"
+              ],
+              "level": "model"
+            },
+            "modifier": {
+              "stat": "S",
+              "operation": "improve",
+              "value": 1
+            }
+          },
+          {
+            "type": "stat-modifier",
+            "target": {
+              "member_of": "this-unit",
+              "all_of": [
+                "EMPEROR'S CHILDREN"
+              ],
+              "level": "model"
+            },
+            "modifier": {
+              "stat": "AP",
+              "operation": "improve",
+              "value": 1
+            }
+          }
+        ]
+      }
     },
     "scope": {
       "duration": "phase"
@@ -4823,7 +5684,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "95dd450374a205b2fa7bf8555b7aa095a5f0b7c65e6b7cd37376b5356cbe6fde",
     "version": "2025-q3",
@@ -4832,7 +5693,7 @@
     "faction_id": "emperors-children",
     "detachment_id": "court-of-the-phoenician",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "aura",
     "effect": {
       "type": "aura",
       "target": "friendly-within-aura",
@@ -4842,12 +5703,19 @@
         },
         "effect": {
           "type": "re-roll",
-          "target": "recipient",
+          "target": "this-unit",
           "modifier": {
             "roll": "charge",
             "result_scope": "any-result"
           }
-        }
+        },
+        "eligible": {
+          "owner": "friendly",
+          "all_of": [
+            "EMPEROR'S CHILDREN"
+          ]
+        },
+        "of": "this-unit"
       }
     },
     "scope": {
@@ -4926,7 +5794,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "2ddea468129bb4d9918118aa7b2a61426f84feed7137e65cb8ab202eeecff039",
     "version": "2025-q3",
@@ -4935,19 +5803,15 @@
     "faction_id": "emperors-children",
     "detachment_id": "court-of-the-phoenician",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "move-modifier",
       "target": "this-unit",
       "modifier": {
-        "applies_to_moves": [
-          "normal",
-          "advance",
-          "charge"
-        ],
         "passthrough": [
           "all-terrain"
-        ]
+        ],
+        "ignore_vertical": true
       }
     },
     "scope": {
@@ -4958,6 +5822,16 @@
         "EMPEROR’S CHILDREN",
         "DAEMON"
       ]
+    },
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "normal",
+          "advance",
+          "charge"
+        ]
+      }
     }
   },
   {
@@ -5011,7 +5885,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "e9b6b3bb4f6ed477f0906e20d5f64f3a4cf3800332159a5ff842ca896f902c01",
     "version": "2025-q3",
@@ -5020,21 +5894,40 @@
     "faction_id": "emperors-children",
     "detachment_id": "coterie-of-the-conceited",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "targeting",
-      "target": {
-        "owner": "enemy",
-        "level": "model",
-        "within": {
-          "range": "engagement",
-          "of": "this-unit"
+      "type": "ability-part",
+      "trigger": {
+        "event": "targets-selected",
+        "subject": {
+          "owner": "enemy",
+          "level": "model"
+        },
+        "filter": {
+          "kind": "attack"
         }
       },
-      "modifier": {
-        "may": "must-target",
-        "target": "this-unit",
-        "kind": "fight"
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "matches",
+          "parameters": {
+            "subject": "event-subject",
+            "filter": {
+              "engaged_with": "this-unit"
+            }
+          }
+        },
+        "effect": {
+          "type": "targeting",
+          "target": "event-subject",
+          "modifier": {
+            "by": "event-subject",
+            "may": "must-target",
+            "kind": "attack",
+            "target": "this-unit"
+          }
+        }
       }
     },
     "scope": {
@@ -5046,7 +5939,16 @@
         "INFANTRY"
       ]
     },
-    "community_notes": "[APPROX] Each enemy model within Engagement Range of this unit must select it as the target of its attacks; encoded as an opaque grant."
+    "community_notes": "[APPROX] Each enemy model within Engagement Range of this unit must select it as the target of its attacks; encoded as an opaque grant.",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    }
   },
   {
     "ability_id": "martial-perfection-coterie-of-the-conceited-emperors-children",
@@ -5235,7 +6137,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "51b3039c338d2112322df5951aaaeebfdb50348fbe891d08a231a781266fc232",
     "version": "2025-q3",
@@ -5252,9 +6154,10 @@
           "type": "ignore-modifiers",
           "target": "this-unit",
           "modifier": {
-            "what": "rolls",
-            "rolls": [
-              "hit"
+            "what": "characteristics",
+            "stats": [
+              "WS",
+              "BS"
             ]
           }
         },
@@ -5264,6 +6167,7 @@
           "modifier": {
             "what": "rolls",
             "rolls": [
+              "hit",
               "wound"
             ]
           }
@@ -5428,7 +6332,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "f6a86172eef949882723493765631adc9f2567adb5d1c3c345afae8d69a8f0f9",
     "version": "2025-q3",
@@ -5437,20 +6341,53 @@
     "faction_id": "emperors-children",
     "detachment_id": "callous-blades",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "objective-sticky",
-      "target": "this-unit"
+      "type": "select-objective",
+      "selector": {
+        "filter": {
+          "controlled_by": "friendly"
+        },
+        "bind_as": "objective",
+        "count": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "effect": {
+        "type": "objective-sticky",
+        "target": "this-unit"
+      }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
         "CALLOUS BLADES"
       ]
     },
-    "community_notes": "At the end of your Movement phase, one objective the unit controls becomes secured."
+    "community_notes": "At the end of your Movement phase, one objective the unit controls becomes secured.",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "shatter-strike-callous-blades-emperors-children",
@@ -5458,7 +6395,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "eb6c0c465c3f2746a0b9b7755f74db7b480269efeec840fae6f764e52860da97",
     "version": "2025-q3",
@@ -5467,13 +6404,13 @@
     "faction_id": "emperors-children",
     "detachment_id": "callous-blades",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "stat-modifier",
       "target": "this-unit",
       "modifier": {
         "stat": "D",
-        "operation": "add",
+        "operation": "improve",
         "value": 1,
         "weapons": {
           "type": "melee"
@@ -5488,6 +6425,19 @@
         "CALLOUS BLADES",
         "FLAWLESS BLADES"
       ]
+    },
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "fight"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "CALLOUS BLADES",
+          "FLAWLESS BLADES"
+        ]
+      }
     }
   },
   {
@@ -5496,7 +6446,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "0d2c293aa3ee64d04c9033f918546d9be47445157dfbafe689f172552212e299",
     "version": "2025-q3",
@@ -5505,17 +6455,43 @@
     "faction_id": "emperors-children",
     "detachment_id": "slaaneshs-chosen",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "activated",
     "effect": {
-      "type": "re-roll",
-      "target": "this-unit",
-      "modifier": {
-        "roll": "charge",
-        "result_scope": "any-result"
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "charge",
+            "result_scope": "any-result"
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-unit",
+              "filter": {
+                "designated": "favoured-champions"
+              }
+            }
+          },
+          "effect": {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "M",
+              "operation": "add",
+              "value": 2
+            }
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -5530,7 +6506,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "133ed1665e32e5d787ae5bd8909f529f89c586401c422dcff4b8c84cbeb637b4",
     "version": "2025-q3",
@@ -5539,85 +6515,92 @@
     "faction_id": "emperors-children",
     "detachment_id": "slaaneshs-chosen",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "conditional",
-          "condition": {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "matches",
-                "parameters": {
-                  "filter": {
-                    "designated": "favoured-champions"
-                  },
-                  "subject": "this-unit"
-                }
-              }
-            ]
-          },
-          "effect": {
-            "type": "test",
-            "target": {
-              "owner": "enemy",
-              "none_of": [
-                "MONSTER",
-                "VEHICLE"
-              ],
-              "within": {
-                "range": "engagement"
-              }
-            },
-            "modifier": {
-              "test": "desperate-escape",
-              "per": "model"
-            }
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "designated": "favoured-champions"
-              },
-              "subject": "this-unit"
-            }
-          },
-          "effect": {
-            "type": "test",
-            "target": {
-              "owner": "enemy",
-              "none_of": [
-                "MONSTER",
-                "VEHICLE"
-              ],
-              "within": {
-                "range": "engagement"
-              }
-            },
-            "modifier": {
-              "test": "desperate-escape",
-              "per": "model",
-              "modifier": -1
-            }
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-subject",
+          "filter": {
+            "engaged_with": "this-unit"
           }
         }
-      ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "this-unit",
+                "filter": {
+                  "designated": "favoured-champions"
+                }
+              }
+            },
+            "effect": {
+              "type": "test",
+              "target": "event-subject",
+              "modifier": {
+                "test": "desperate-escape",
+                "modifier": -1
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "this-unit",
+                    "filter": {
+                      "designated": "favoured-champions"
+                    }
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "test",
+              "target": "event-subject",
+              "modifier": {
+                "test": "desperate-escape"
+              }
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     },
-    "community_notes": "[APPROX] Enemy units (excluding Monsters and Vehicles) Falling Back from within Engagement Range of the bearer's unit take Desperate Escape tests, at -1 while the bearer's unit is your army's Favoured Champions. Encoded as an opaque grant."
+    "community_notes": "[APPROX] Enemy units (excluding Monsters and Vehicles) Falling Back from within Engagement Range of the bearer's unit take Desperate Escape tests, at -1 while the bearer's unit is your army's Favoured Champions. Encoded as an opaque grant.",
+    "trigger": {
+      "event": "move-started",
+      "filter": {
+        "move_types": [
+          "fall-back"
+        ]
+      },
+      "subject": {
+        "owner": "enemy",
+        "none_of": [
+          "MONSTER",
+          "VEHICLE"
+        ]
+      }
+    }
   },
   {
     "ability_id": "proud-and-vainglorious-slaaneshs-chosen-emperors-children",
@@ -5625,7 +6608,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "58ba81c9a3aa9a92a2eea95c921cd050042dbec929e45a3c8eee32cc6d5ac4cf",
     "version": "2025-q3",
@@ -5634,30 +6617,56 @@
     "faction_id": "emperors-children",
     "detachment_id": "slaaneshs-chosen",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "activated",
     "effect": {
       "type": "sequence",
       "steps": [
         {
-          "type": "re-roll",
-          "target": "this-unit",
-          "modifier": {
-            "roll": "battle-shock",
-            "result_scope": "any-result"
-          }
+          "type": "choice",
+          "options": [
+            {
+              "type": "re-roll",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "leadership",
+                "result_scope": "any-result"
+              }
+            },
+            {
+              "type": "re-roll",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "battle-shock",
+                "result_scope": "any-result"
+              }
+            }
+          ]
         },
         {
-          "type": "re-roll",
-          "target": "this-unit",
-          "modifier": {
-            "roll": "leadership",
-            "result_scope": "any-result"
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-unit",
+              "filter": {
+                "designated": "favoured-champions"
+              }
+            }
+          },
+          "effect": {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "OC",
+              "operation": "add",
+              "value": 1
+            }
           }
         }
       ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -5672,7 +6681,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "be37949f6a26799ac09c062c37bd96dfeca8a195c4705a3533cc5cb8c4175318",
     "version": "2025-q3",
@@ -5689,28 +6698,39 @@
           "type": "weapon-ability-grant",
           "target": "this-model",
           "modifier": {
-            "weapons": {
-              "type": "melee"
-            },
             "keywords": [
               {
                 "keyword_id": "precision"
               }
-            ]
+            ],
+            "weapons": {
+              "type": "melee"
+            }
           }
         },
         {
           "type": "conditional",
           "condition": {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "all_of": [
-                  "CHARACTER"
-                ]
+            "operator": "and",
+            "operands": [
+              {
+                "type": "attack-is",
+                "parameters": {
+                  "attack_type": "melee"
+                }
               },
-              "subject": "defender"
-            }
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "defender",
+                  "filter": {
+                    "all_of": [
+                      "CHARACTER"
+                    ]
+                  }
+                }
+              }
+            ]
           },
           "effect": {
             "type": "sequence",
@@ -5720,11 +6740,8 @@
                 "target": "this-model",
                 "modifier": {
                   "stat": "S",
-                  "operation": "add",
-                  "value": 1,
-                  "weapons": {
-                    "type": "melee"
-                  }
+                  "operation": "improve",
+                  "value": 1
                 }
               },
               {
@@ -5733,10 +6750,7 @@
                 "modifier": {
                   "stat": "AP",
                   "operation": "improve",
-                  "value": 1,
-                  "weapons": {
-                    "type": "melee"
-                  }
+                  "value": 1
                 }
               }
             ]
@@ -5745,7 +6759,7 @@
       ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -5759,32 +6773,41 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "783d5bfd31f118dc822d9dec5d12b478a416496bd640f318187ab6ee385e23b3",
+    "source_digest": "7c1a8300000b0bc7563212cb2cdaebdf2e79927380328092a3e12521c19daf10",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "emperors-children",
     "detachment_id": "carnival-of-excess",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "cp-gain",
+      "type": "cost-modifier",
       "target": "this-unit",
       "modifier": {
-        "amount": 1
+        "of": "stratagem",
+        "operation": "decrease",
+        "amount": 1,
+        "applies_to": "the-triggering-use"
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     },
-    "community_notes": "The Heroic Intervention stratagem costs 1 CP less when targeting the bearer's unit."
+    "community_notes": "The Heroic Intervention stratagem costs 1 CP less when targeting the bearer's unit.",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "stratagem"
+      }
+    }
   },
   {
     "ability_id": "dark-blessings-carnival-of-excess-emperors-children",
@@ -5928,7 +6951,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "816716d8dc8642d1c487e5956c09cc53e197d8d610002c2ad4c9e679c5cb608d",
     "version": "2025-q3",
@@ -5937,30 +6960,94 @@
     "faction_id": "emperors-children",
     "detachment_id": "carnival-of-excess",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "sequence",
       "steps": [
         {
-          "type": "move-modifier",
-          "target": "this-unit",
-          "modifier": {
-            "advance": "fixed-6"
+          "type": "ability-part",
+          "trigger": {
+            "event": "move-ended",
+            "filter": {
+              "move_types": [
+                "advance"
+              ]
+            }
+          },
+          "duration": "phase",
+          "effect": {
+            "type": "move-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "advance": "fixed-6"
+            }
           }
         },
         {
-          "type": "move-modifier",
-          "target": "this-unit",
-          "modifier": {
-            "passthrough": [
-              "models"
+          "type": "ability-part",
+          "trigger": {
+            "event": "move-ended",
+            "filter": {
+              "move_types": [
+                "normal",
+                "advance",
+                "fall-back"
+              ]
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "move-modifier",
+                "target": "event-subject",
+                "modifier": {
+                  "passthrough": [
+                    {
+                      "kind": "models",
+                      "owner": "enemy"
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "permission",
+                "target": "this-model",
+                "modifier": {
+                  "activity": "move",
+                  "allow": true,
+                  "despite": [
+                    "engaged"
+                  ]
+                }
+              },
+              {
+                "type": "move-modifier",
+                "target": "this-model",
+                "modifier": {
+                  "no_end_in_engagement": true,
+                  "applies_to_moves": [
+                    "normal",
+                    "advance",
+                    "fall-back"
+                  ]
+                }
+              },
+              {
+                "type": "roll-result",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "desperate-escape",
+                  "result": "pass"
+                }
+              }
             ]
           }
         }
       ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "community_notes": "Emperor's Children or Keeper of Secrets model only. Models in the unit can move through enemy models on Normal, Advance and Fall Back moves (not ending in Engagement Range) and automatically pass Desperate Escape tests."
   },
@@ -5970,26 +7057,19 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "cb9f8c3b51027f8c01baed6a26d088db431851e860b1ba2fea5c303618ea8185",
+    "source_digest": "e44d48f512582e9ede11cf399f96fdc4cf021239c70dcb2d9f3583a6c9a0c266",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "emperors-children",
     "detachment_id": "peerless-bladesmen",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "activated",
     "effect": {
       "type": "sequence",
       "steps": [
-        {
-          "type": "cp-gain",
-          "target": "this-unit",
-          "modifier": {
-            "amount": 1
-          }
-        },
         {
           "type": "permission",
           "target": "this-unit",
@@ -6001,11 +7081,32 @@
             ],
             "stratagem": "heroic-intervention"
           }
+        },
+        {
+          "type": "cost-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "of": "stratagem",
+            "operation": "decrease",
+            "amount": 1,
+            "applies_to": "the-triggering-use"
+          }
+        },
+        {
+          "type": "ability-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "ability": "heroic-intervention",
+            "aspect": "uses",
+            "operation": "lift-limit",
+            "value": 1,
+            "consumes_shared_use": false
+          }
         }
       ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -6020,7 +7121,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "91210c18e4cc6199bfd7a52ee3dd3a1adee9c397c58947d2bfb529cdd2935556",
     "version": "2025-q3",
@@ -6029,11 +7130,11 @@
     "faction_id": "emperors-children",
     "detachment_id": "peerless-bladesmen",
     "ability_type": "enhancement",
-    "behavior": "activated",
+    "behavior": "reactive",
     "usage": {
       "frequency": "n-per-battle",
       "count": 1,
-      "per": "unit"
+      "per": "model"
     },
     "effect": {
       "type": "ability-grant",
@@ -6049,6 +7150,16 @@
       "all_of": [
         "EMPEROR’S CHILDREN"
       ]
+    },
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      },
+      "optional": true
     }
   },
   {
@@ -6057,7 +7168,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "64a5e5844f049bcbd85e3ab4d0710aca6c00fa1455f6090e024af11a75c8aa98",
     "version": "2025-q3",
@@ -6097,7 +7208,7 @@
       ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -6189,7 +7300,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "9ced429d1393aa54ac542fee9d7e64c0d15048d76e15b772e911ab863829db0a",
     "version": "2025-q3",
@@ -6201,38 +7312,49 @@
     "behavior": "activated",
     "usage": {
       "frequency": "once-per-turn",
-      "per": "unit"
+      "per": "model"
     },
     "effect": {
-      "type": "select-units",
-      "selector": {
-        "filter": {
-          "owner": "friendly",
-          "all_of": [
-            "EMPEROR'S CHILDREN",
-            "TRANSPORT"
-          ]
-        },
-        "count": {
-          "min": 1,
-          "max": 1
-        },
-        "eligibility": {
-          "type": "matches",
-          "parameters": {
-            "filter": {
-              "state": "in-strategic-reserves"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
             }
           }
-        }
+        ]
       },
       "effect": {
-        "type": "set-up",
-        "target": "selected-unit",
-        "modifier": {
-          "to": "battlefield",
-          "from": "strategic-reserves",
-          "round_offset": 1
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "EMPEROR'S CHILDREN",
+              "TRANSPORT"
+            ]
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        },
+        "effect": {
+          "type": "set-up",
+          "target": "selected-unit",
+          "modifier": {
+            "to": "battlefield",
+            "round_offset": 1
+          }
         }
       }
     },
@@ -6253,7 +7375,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "688d6a6ec04140e8247995402973430f9e0c6f763460d588bea753eae9fdaa6a",
     "version": "2025-q3",
@@ -6262,38 +7384,34 @@
     "faction_id": "emperors-children",
     "detachment_id": "rapid-evisceration",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "happened",
-        "parameters": {
-          "event": "disembarked",
-          "window": "turn"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "re-roll",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "charge",
-              "result_scope": "any-result"
-            }
-          },
-          {
-            "type": "rule-state",
-            "target": "this-unit",
-            "modifier": {
-              "direction": "suppressed",
-              "rule_kind": "core-rule",
-              "rule": "overwatch-against-bearer"
-            }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "charge",
+            "result_scope": "any-result"
           }
-        ]
-      }
+        },
+        {
+          "type": "targeting",
+          "target": {
+            "owner": "enemy"
+          },
+          "modifier": {
+            "by": {
+              "owner": "enemy"
+            },
+            "may": "cannot-target",
+            "kind": "stratagem",
+            "target": "this-unit",
+            "stratagem": "fire-overwatch"
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "turn"
@@ -6303,6 +7421,10 @@
         "EMPEROR’S CHILDREN",
         "INFANTRY"
       ]
+    },
+    "trigger": {
+      "event": "disembarked",
+      "optional": true
     }
   },
   {
@@ -6539,7 +7661,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "72042a3f03c9d78368b1ed6be15cf8e243fedb305019d3da62f529cef42c9248",
     "version": "2025-q3",
@@ -6550,18 +7672,18 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "strength",
-            "parameters": {
-              "subject": "defender",
-              "below": "starting"
-            }
-          },
-          "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "strength",
+        "parameters": {
+          "subject": "defender",
+          "below": "starting"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
             "type": "roll-modifier",
             "target": "this-unit",
             "modifier": {
@@ -6569,31 +7691,31 @@
               "operation": "add",
               "value": 1
             }
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "strength",
-            "parameters": {
-              "subject": "defender",
-              "below": "half"
-            }
           },
-          "effect": {
-            "type": "roll-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "wound",
-              "operation": "add",
-              "value": 1
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "strength",
+              "parameters": {
+                "subject": "defender",
+                "below": "half"
+              }
+            },
+            "effect": {
+              "type": "roll-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "wound",
+                "operation": "add",
+                "value": 1
+              }
             }
           }
-        }
-      ]
+        ]
+      }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -6607,7 +7729,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "d0ec42584f21f8010821b52be378174c28a0c318a6ec1a77e509e0c0b90640cf",
     "version": "2025-q3",
@@ -6620,35 +7742,42 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "attack-compare",
-        "parameters": {
-          "left": {
-            "of": "attacker",
-            "stat": "S"
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "melee"
+            }
           },
-          "comparison": "gt",
-          "right": {
-            "of": "defender",
-            "stat": "T"
+          {
+            "type": "attack-compare",
+            "parameters": {
+              "left": {
+                "of": "attacker",
+                "stat": "S"
+              },
+              "comparison": "gt",
+              "right": {
+                "of": "defender",
+                "stat": "T"
+              }
+            }
           }
-        }
+        ]
       },
       "effect": {
         "type": "roll-modifier",
-        "target": "this-unit",
+        "target": "attacker",
         "modifier": {
           "roll": "wound",
-          "incoming": true,
           "operation": "subtract",
-          "value": 1,
-          "weapons": {
-            "type": "melee"
-          }
+          "value": 1
         }
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -6662,7 +7791,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "d0e0063190fd30943fea5dc2b8f7a0de51f631ec9aec48c05a56f6e0b9a67f50",
     "version": "2025-q3",
@@ -6671,36 +7800,55 @@
     "faction_id": "emperors-children",
     "detachment_id": "mercurial-host",
     "ability_type": "enhancement",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "set-up",
-          "target": "this-unit",
-          "modifier": {
-            "to": "strategic-reserves"
-          }
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "EMPEROR'S CHILDREN"
+          ]
         },
-        {
-          "type": "set-up",
-          "target": "this-unit",
-          "modifier": {
-            "to": "strategic-reserves",
-            "ignore_limits": true
-          }
+        "count": {
+          "min": 1,
+          "max": 1
         }
-      ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "set-up",
+            "target": "selected-unit",
+            "modifier": {
+              "to": "battlefield"
+            }
+          },
+          {
+            "type": "set-up",
+            "target": "selected-unit",
+            "modifier": {
+              "to": "strategic-reserves",
+              "ignore_limits": true
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     },
-    "community_notes": "After deployment, redeploy up to two Emperor's Children units, optionally into Strategic Reserves regardless of the usual limits."
+    "community_notes": "After deployment, redeploy up to two Emperor's Children units, optionally into Strategic Reserves regardless of the usual limits.",
+    "trigger": {
+      "event": "deployment-ended",
+      "optional": true
+    }
   },
   {
     "ability_id": "loathsome-dexterity-mercurial-host-emperors-children",
@@ -6708,7 +7856,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "4c6481e9956ecea1a0e6a67fd1a8decc3e34e42a849a1e711485336e1e7cbb60",
     "version": "2025-q3",
@@ -6717,25 +7865,74 @@
     "faction_id": "emperors-children",
     "detachment_id": "mercurial-host",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "move-modifier",
-      "target": "this-unit",
-      "modifier": {
-        "passthrough": [
-          "models"
-        ]
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "move-modifier",
+          "target": "event-subject",
+          "modifier": {
+            "passthrough": [
+              {
+                "kind": "models",
+                "owner": "enemy"
+              }
+            ]
+          }
+        },
+        {
+          "type": "permission",
+          "target": "this-model",
+          "modifier": {
+            "activity": "move",
+            "allow": true,
+            "despite": [
+              "engaged"
+            ]
+          }
+        },
+        {
+          "type": "move-modifier",
+          "target": "this-model",
+          "modifier": {
+            "no_end_in_engagement": true,
+            "applies_to_moves": [
+              "normal",
+              "advance",
+              "fall-back"
+            ]
+          }
+        },
+        {
+          "type": "roll-result",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "desperate-escape",
+            "result": "pass"
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     },
-    "community_notes": "Models in the bearer's unit can move through enemy models on Normal, Advance and Fall Back moves (not ending in Engagement Range); Desperate Escape tests are automatically passed."
+    "community_notes": "Models in the bearer's unit can move through enemy models on Normal, Advance and Fall Back moves (not ending in Engagement Range); Desperate Escape tests are automatically passed.",
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "normal",
+          "advance",
+          "fall-back"
+        ]
+      }
+    }
   },
   {
     "ability_id": "tears-of-the-phoenix-court-of-the-phoenician-emperors-children",
@@ -6743,49 +7940,59 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "4e113b0b4185f45c5fb84fbff810fa6013f55c847e62d8a4789871ada143e762",
+    "source_digest": "75d6b1719ac192aeb88031ca81c40051d8ebeb32bebd2fa1f4971f1bdd445de1",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "emperors-children",
     "detachment_id": "court-of-the-phoenician",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "activated",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "ignore-modifiers",
-          "target": "this-unit",
-          "modifier": {
-            "what": "rolls",
-            "rolls": [
-              "hit"
-            ],
-            "weapons": {
-              "type": "melee"
-            }
-          }
-        },
-        {
-          "type": "ignore-modifiers",
-          "target": "this-unit",
-          "modifier": {
-            "what": "rolls",
-            "rolls": [
-              "wound"
-            ],
-            "weapons": {
-              "type": "melee"
-            }
-          }
+      "type": "conditional",
+      "condition": {
+        "type": "attack-is",
+        "parameters": {
+          "attack_type": "melee"
         }
-      ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "ignore-modifiers",
+            "target": "this-unit",
+            "modifier": {
+              "what": "characteristics",
+              "stats": [
+                "WS"
+              ],
+              "weapons": {
+                "type": "melee"
+              }
+            }
+          },
+          {
+            "type": "ignore-modifiers",
+            "target": "this-unit",
+            "modifier": {
+              "what": "rolls",
+              "rolls": [
+                "hit",
+                "wound"
+              ],
+              "weapons": {
+                "type": "melee"
+              }
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -6800,9 +8007,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "59328ae469ba3c675d9da5a31473aae6cfc9339c7b537dc8b082cde4a766fa94",
+    "source_digest": "9a06f8789bb6cf9e66303ea1eccf508a2836826970a0d1fd854491d53be22104",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -6820,7 +8027,7 @@
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -6834,56 +8041,64 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "484cc69585f83ad262035eb4161dab21822e96f4d108500c9691d7063138e2b0",
+    "source_digest": "2e31d07815d6b9c0fe0218a3c0272199e3d6711fe47bf99875b0b20697a740a2",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "emperors-children",
     "detachment_id": "court-of-the-phoenician",
     "ability_type": "enhancement",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "test",
-          "target": {
-            "owner": "enemy",
-            "within": {
-              "range": "engagement"
-            }
-          },
-          "modifier": {
-            "test": "battle-shock"
-          }
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
         },
-        {
-          "type": "stat-modifier",
-          "target": {
-            "owner": "enemy",
-            "within": {
-              "range": "engagement"
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "subject": "selected-unit",
+            "filter": {
+              "engaged_with": "this-model"
             }
-          },
-          "modifier": {
-            "stat": "BS",
-            "operation": "subtract",
-            "value": 1
           }
         }
-      ]
+      },
+      "effect": {
+        "type": "test",
+        "target": "selected-unit",
+        "modifier": {
+          "test": "battle-shock",
+          "modifier": -1
+        }
+      }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
         "EMPEROR’S CHILDREN"
       ]
     },
-    "community_notes": "At the start of the Fight phase, one enemy unit within Engagement Range of the bearer takes a Battle-shock test with -1 to the result."
+    "community_notes": "At the start of the Fight phase, one enemy unit within Engagement Range of the bearer takes a Battle-shock test with -1 to the result.",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "spiritsliver-court-of-the-phoenician-emperors-children",
@@ -6891,9 +8106,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "9541e5c2226f992eef4cd15a6db8e84a87a375986294503e640119389d1ad25d",
+    "source_digest": "bd3e9561e9b1bf1d12a391e12da5ae44e6e54dbd79aad1bf85b4b6a4d0338460",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -6908,7 +8123,7 @@
           "type": "stat-modifier",
           "target": "this-model",
           "modifier": {
-            "stat": "S",
+            "stat": "A",
             "operation": "add",
             "value": 1,
             "weapons": {
@@ -6920,7 +8135,7 @@
           "type": "stat-modifier",
           "target": "this-model",
           "modifier": {
-            "stat": "A",
+            "stat": "S",
             "operation": "add",
             "value": 1,
             "weapons": {
@@ -6931,7 +8146,7 @@
       ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -6946,7 +8161,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "fe85908dae4d2b58fb8db3b7fe165f9e6748b652ef784a302ade56eb4bd9a68d",
     "version": "2025-q3",
@@ -6973,7 +8188,7 @@
             "target": "this-unit",
             "modifier": {
               "stat": "Ld",
-              "operation": "subtract",
+              "operation": "improve",
               "value": 1
             }
           },
@@ -6982,7 +8197,7 @@
             "target": "this-unit",
             "modifier": {
               "stat": "OC",
-              "operation": "add",
+              "operation": "improve",
               "value": 1
             }
           }
@@ -6990,7 +8205,7 @@
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -7005,7 +8220,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "5453e7c3d7b622465172d436deac4861cead18db5853e4228f55a235607bb975",
     "version": "2025-q3",
@@ -7014,135 +8229,86 @@
     "faction_id": "emperors-children",
     "detachment_id": "coterie-of-the-conceited",
     "ability_type": "enhancement",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "designate-target",
-      "designation": "pledge-of-mortal-pain",
-      "select": {
-        "kind": "unit",
-        "selector": {
-          "filter": {
-            "owner": "enemy",
-            "within": {
-              "range": {
-                "inches": 12
-              },
-              "of": "this-model"
-            }
-          },
-          "count": {
-            "min": 1,
-            "max": 1
-          }
-        }
-      },
-      "applies": {
-        "to": "target",
-        "effect": {
-          "type": "dice-gated",
-          "dice": "2D6",
-          "threshold": "leadership",
-          "comparison": "gte",
-          "test": {
-            "kind": "leadership",
-            "subject": "selected-unit",
-            "modifiers": [
-              {
-                "condition": {
-                  "type": "matches",
-                  "parameters": {
-                    "filter": {
-                      "state": "battle-shocked"
-                    },
-                    "subject": "selected-unit"
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "subject": "selected-unit",
+                "filter": {
+                  "within": {
+                    "of": "this-model",
+                    "range": {
+                      "inches": 12
+                    }
                   }
-                },
-                "value": -2
+                }
               }
-            ]
-          },
-          "on_fail": {
-            "type": "mortal-wounds",
-            "target": "selected-unit",
-            "modifier": {
-              "count": 3
+            },
+            {
+              "type": "matches",
+              "parameters": {
+                "subject": "selected-unit",
+                "filter": {
+                  "visible": {
+                    "to": "this-model"
+                  }
+                }
+              }
             }
-          }
+          ]
         }
-      },
-      "duration": "phase"
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "applies_to": {
-      "all_of": [
-        "EMPEROR’S CHILDREN"
-      ]
-    },
-    "community_notes": "[APPROX] At the start of your Shooting phase, one visible enemy unit within 12\" takes a Leadership test (-2 if Battle-shocked); if failed, it suffers 3 mortal wounds. The test-then-damage is encoded as an opaque grant."
-  },
-  {
-    "ability_id": "pledge-of-unholy-fortune-coterie-of-the-conceited-emperors-children",
-    "name": "Pledge of Unholy Fortune",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "baa7718ddf760a0ee4572b19c912fbe5a782f688d1625a3a29e1eb77578091fa",
-    "version": "2025-q3",
-    "supersedes": null,
-    "unit_ids": [],
-    "faction_id": "emperors-children",
-    "detachment_id": "coterie-of-the-conceited",
-    "ability_type": "enhancement",
-    "behavior": "activated",
-    "usage": {
-      "frequency": "once-per-turn",
-      "per": "unit"
-    },
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "not",
-        "operands": [
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "state": "battle-shocked"
-              },
-              "subject": "this-model"
-            }
-          }
-        ]
       },
       "effect": {
-        "type": "choice",
-        "options": [
+        "type": "sequence",
+        "steps": [
           {
-            "type": "roll-result",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "hit",
-              "result": 6
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "selected-unit",
+                "filter": {
+                  "state": "battle-shocked"
+                }
+              }
+            },
+            "effect": {
+              "type": "test",
+              "target": "selected-unit",
+              "modifier": {
+                "test": "leadership",
+                "modifier": -2
+              }
             }
           },
           {
-            "type": "roll-result",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "wound",
-              "result": 6
-            }
-          },
-          {
-            "type": "roll-result",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "save",
-              "result": 6
+            "type": "conditional",
+            "condition": {
+              "type": "roll-result",
+              "parameters": {
+                "roll": "leadership",
+                "result": "failure"
+              }
+            },
+            "effect": {
+              "type": "mortal-wounds",
+              "target": "selected-unit",
+              "modifier": {
+                "count": 3
+              }
             }
           }
         ]
@@ -7156,7 +8322,128 @@
         "EMPEROR’S CHILDREN"
       ]
     },
-    "community_notes": "Once per turn, just after making a Hit roll, Wound roll or saving throw for a model in the bearer's unit, if the bearer is not Battle-shocked, treat the result as an unmodified 6."
+    "community_notes": "[APPROX] At the start of your Shooting phase, one visible enemy unit within 12\" takes a Leadership test (-2 if Battle-shocked); if failed, it suffers 3 mortal wounds. The test-then-damage is encoded as an opaque grant.",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "ability_id": "pledge-of-unholy-fortune-coterie-of-the-conceited-emperors-children",
+    "name": "Pledge of Unholy Fortune",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "source_digest": "baa7718ddf760a0ee4572b19c912fbe5a782f688d1625a3a29e1eb77578091fa",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "emperors-children",
+    "detachment_id": "coterie-of-the-conceited",
+    "ability_type": "enhancement",
+    "behavior": "reactive",
+    "usage": {
+      "frequency": "once-per-turn",
+      "per": "model"
+    },
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "state": "battle-shocked"
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "choice",
+        "options": [
+          {
+            "type": "roll-result",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "count": 1,
+              "result": 6
+            }
+          },
+          {
+            "type": "roll-result",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "wound",
+              "count": 1,
+              "result": 6
+            }
+          },
+          {
+            "type": "roll-result",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "save",
+              "count": 1,
+              "result": 6
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "all_of": [
+        "EMPEROR’S CHILDREN"
+      ]
+    },
+    "community_notes": "Once per turn, just after making a Hit roll, Wound roll or saving throw for a model in the bearer's unit, if the bearer is not Battle-shocked, treat the result as an unmodified 6.",
+    "trigger": [
+      {
+        "event": "after-roll",
+        "filter": {
+          "roll": "hit"
+        },
+        "optional": true
+      },
+      {
+        "event": "after-roll",
+        "filter": {
+          "roll": "wound"
+        },
+        "optional": true
+      },
+      {
+        "event": "after-roll",
+        "filter": {
+          "roll": "save"
+        },
+        "optional": true
+      }
+    ]
   },
   {
     "ability_id": "pledge-of-eternal-servitude-coterie-of-the-conceited-emperors-children",
@@ -7358,9 +8645,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "71a446dd91af1c0bb5f73b83b61e9be302a90de0ff223f717433b9bd4c4ff1dc",
+    "source_digest": "046813562afd8e4d51f8c052528a29357ba18708ef1afc257bf227df58926226",
     "version": "2025-q3",
     "unit_ids": [
       "callous-blades-infractors"
@@ -7369,48 +8656,54 @@
     "ability_type": "unit",
     "behavior": "passive",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "re-roll",
-          "target": "this-unit",
-          "modifier": {
-            "roll": "wound",
-            "subset": "ones",
-            "weapons": {
-              "type": "melee"
-            }
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "within": {
-                  "range": "objective-control",
-                  "of": {
-                    "objective": {}
-                  }
-                }
-              },
-              "subject": "defender"
-            }
-          },
-          "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "attack-is",
+        "parameters": {
+          "attack_type": "melee"
+        }
+      },
+      "effect": {
+        "type": "choice",
+        "options": [
+          {
             "type": "re-roll",
             "target": "this-unit",
             "modifier": {
               "roll": "wound",
-              "subset": "all-failures",
-              "weapons": {
-                "type": "melee"
+              "subset": "ones"
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "defender",
+                "filter": {
+                  "within": {
+                    "of": {
+                      "objective": {}
+                    },
+                    "range": "objective-control"
+                  }
+                }
+              }
+            },
+            "effect": {
+              "type": "re-roll",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "wound",
+                "result_scope": "any-result",
+                "weapons": {
+                  "type": "melee"
+                }
               }
             }
           }
-        }
-      ]
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
@@ -7453,9 +8746,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "callous-blades-flawless-blades"
     ],
@@ -7463,11 +8755,84 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "used",
+          "filter": {
+            "kind": "ability"
+          },
+          "window": "phase"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "ability-part",
+            "trigger": {
+              "event": "selected",
+              "filter": {
+                "to": "fight"
+              },
+              "optional": true
+            },
+            "effect": {
+              "type": "roll-result",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "wound",
+                "critical_on": 3
+              }
+            }
+          },
+          {
+            "type": "ability-part",
+            "trigger": {
+              "event": "attacks-resolved",
+              "filter": {
+                "kind": "fight"
+              }
+            },
+            "effect": {
+              "type": "conditional",
+              "condition": {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "model-destroyed",
+                      "object": {
+                        "owner": "enemy",
+                        "level": "model"
+                      },
+                      "filter": {
+                        "by": "this-unit"
+                      },
+                      "window": "event"
+                    }
+                  }
+                ]
+              },
+              "effect": {
+                "type": "destroy-models",
+                "target": "this-unit",
+                "modifier": {
+                  "count": 1
+                }
+              }
+            }
+          }
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "source_digest": "b0637941512eb142efa577d4ebf5694d59c2d99b33b8ee8a90e5df26f55e48a1"
   },
   {
     "ability_id": "icon-of-excess-callous-blades-infractors-emperors-children",
@@ -7475,9 +8840,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "callous-blades-infractors"
     ],
@@ -7485,11 +8849,86 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "destroyed",
+              "object": {
+                "owner": "enemy"
+              },
+              "filter": {
+                "by": "this-unit"
+              },
+              "window": "phase"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "test",
+            "target": "this-unit",
+            "modifier": {
+              "test": "leadership"
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "roll-result",
+              "parameters": {
+                "roll": "leadership",
+                "result": "success"
+              }
+            },
+            "effect": {
+              "type": "cp-gain",
+              "target": "this-model",
+              "modifier": {
+                "amount": 1
+              }
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    },
+    "source_digest": "7a8325e10e7f55ea30c738fb70502db9caa2531b7eb8035d95e4687ccf28d460"
   },
   {
     "ability_id": "nimble-strikes-emperors-children",
@@ -7497,19 +8936,48 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "emperors-children",
     "detachment_id": "callous-blades",
     "ability_type": "detachment",
     "effect": {
-      "type": "no-effect"
+      "type": "move-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "passthrough": [
+          {
+            "kind": "models",
+            "excluding": [
+              "MONSTER",
+              "VEHICLE"
+            ]
+          }
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "move-started",
+      "filter": {
+        "move_types": [
+          "normal",
+          "advance",
+          "charge"
+        ]
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "CALLOUS BLADES"
+        ]
+      }
+    },
+    "source_digest": "d90776c426507c95671effcbd2227ee9ee3577f6a17ffcc3e71fad4fcd1d9672"
   },
   {
     "ability_id": "daemon-lord-of-slaanesh-emperors-children",

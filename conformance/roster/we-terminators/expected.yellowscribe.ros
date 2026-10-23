@@ -28,17 +28,17 @@
             </profile>
             <profile name="Devastating Assault" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Before a Hit roll is made, if the unit charged this turn, until the end of the turn, melee hellforged weapons equipped by this model gain [DEVASTATING WOUNDS].</characteristic>
+                <characteristic name="Description">When the unit ends a Charge move, until the end of the turn, hellforged weapons equipped by this model gain [DEVASTATING WOUNDS].</characteristic>
               </characteristics>
             </profile>
             <profile name="Direct the Slaughter" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When a friendly WORLD EATERS unit is targeted with a Stratagem within 12" of this model, you may use this ability, while the unit is within 12" of a friendly WORLD EATERS unit, until the end of the battle round, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).</characteristic>
+                <characteristic name="Description">Each time you use a Stratagem (the triggering unit must have WORLD EATERS), you may use this ability, once per battle round per army, while the unit is friendly, while the triggering unit is within 12" of this model, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).</characteristic>
               </characteristics>
             </profile>
             <profile name="Lord of Murder" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">While the unit is within 3" of a friendly WORLD EATERS INFANTRY unit, this model gains the Lone Operative ability.</characteristic>
+                <characteristic name="Description">While this model is within 3" of a friendly INFANTRY WORLD EATERS unit, this model gains the Lone Operative ability.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -125,7 +125,7 @@
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the Deep Strike ability.</characteristic>
+                <characteristic name="Description">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -321,7 +321,7 @@
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the Deep Strike ability.</characteristic>
+                <characteristic name="Description">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
               </characteristics>
             </profile>
           </profiles>

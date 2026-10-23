@@ -12,7 +12,23 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Harvester"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "ablative-carapace-assimilation-swarm-tyranids",
     "game_version": {
       "edition": "11th",
@@ -41,7 +57,35 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "MAWLOC",
+                  "TRYGON"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "adaptive-optimisation-subterranean-assault-tyranids",
     "game_version": {
       "edition": "11th",
@@ -99,7 +143,14 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "TYRANID WARRIORS"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit"
+    },
     "ability_id": "alien-physiology-warrior-bioform-onslaught-tyranids",
     "game_version": {
       "edition": "11th",
@@ -128,7 +179,43 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Infantry",
+        "Vanguard Invader"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "fight"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "assassin-beasts-vanguard-onslaught-tyranids",
     "game_version": {
       "edition": "11th",
@@ -157,7 +244,22 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Endless Multitude"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "bounding-advance-unending-swarm-tyranids",
     "game_version": {
       "edition": "11th",
@@ -190,7 +292,22 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Harvester"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "broodguard-impulse-assimilation-swarm-tyranids",
     "game_version": {
       "edition": "11th",
@@ -218,7 +335,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Vardenghast Swarm"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "brute-speed-the-vardenghast-swarm-tyranids",
     "game_version": {
       "edition": "11th",
@@ -283,7 +407,15 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Monster",
+        "Tyranids"
+      ],
+      "count": "one",
+      "selects": "model",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "corrosive-viscera-crusher-stampede-tyranids",
     "game_version": {
       "edition": "11th",
@@ -350,7 +482,23 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Tyranids"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "death-frenzy-invasion-fleet-tyranids",
     "game_version": {
       "edition": "11th",
@@ -379,7 +527,65 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": [
+      {
+        "required_keywords": [
+          "Endless Multitude"
+        ],
+        "name": "first",
+        "count": "up-to",
+        "count_max": 2,
+        "mode": "a",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "owner": "friendly"
+                }
+              }
+            },
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "within": {
+                    "of": {
+                      "owner": "friendly"
+                    },
+                    "range": {
+                      "aura_of": "synapse-tyranids"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "required_keywords": [
+          "Endless Multitude"
+        ],
+        "name": "second",
+        "count": "one",
+        "mode": "b",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "filter": {
+              "owner": "friendly"
+            }
+          }
+        }
+      }
+    ],
     "ability_id": "endless-swarm-invasion-fleet-tyranids",
     "game_version": {
       "edition": "11th",
@@ -408,7 +614,34 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Tyranids"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "set-up",
+              "window": "turn"
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "enfilading-emergence-subterranean-assault-tyranids",
     "game_version": {
       "edition": "11th",
@@ -436,7 +669,24 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "any_of": [
+              "DEATHLEAPER",
+              "LICTOR",
+              "NEUROLICTOR",
+              "VON RYAN'S LEAPERS"
+            ]
+          }
+        }
+      }
+    },
     "ability_id": "hypersensory-adaptations-ambush-predators-tyranids",
     "game_version": {
       "edition": "11th",
@@ -465,7 +715,100 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": [
+      {
+        "required_keywords": [
+          "Vanguard Invader"
+        ],
+        "name": "first",
+        "count": "up-to",
+        "count_max": 2,
+        "mode": "a",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "within": {
+                    "of": "event-subject",
+                    "range": {
+                      "inches": 8
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "filter": {
+                      "state": "engaged"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "required_keywords": [
+          "Infantry",
+          "Tyranids"
+        ],
+        "name": "second",
+        "count": "one",
+        "mode": "b",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "owner": "friendly"
+                }
+              }
+            },
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "within": {
+                    "of": "event-subject",
+                    "range": {
+                      "inches": 8
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "filter": {
+                      "state": "engaged"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
     "ability_id": "hypersensory-scillia-vanguard-onslaught-tyranids",
     "game_version": {
       "edition": "11th",
@@ -523,7 +866,83 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": [
+      {
+        "required_keywords": [
+          "Vanguard Invader"
+        ],
+        "name": "first",
+        "count": "up-to",
+        "count_max": 2,
+        "mode": "a",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "not",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "within": {
+                    "of": {
+                      "owner": "enemy"
+                    },
+                    "range": {
+                      "inches": 3
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "required_keywords": [
+          "Infantry",
+          "Tyranids"
+        ],
+        "name": "second",
+        "count": "one",
+        "mode": "b",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "owner": "friendly"
+                }
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "filter": {
+                      "within": {
+                        "of": {
+                          "owner": "enemy"
+                        },
+                        "range": {
+                          "inches": 3
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
     "ability_id": "invisible-hunter-vanguard-onslaught-tyranids",
     "game_version": {
       "edition": "11th",
@@ -581,7 +1000,15 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords_any": [
+        "Norn Assimilator",
+        "Norn Emissary"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "lesser-prey-talons-of-the-norn-queen-tyranids",
     "game_version": {
       "edition": "11th",
@@ -610,7 +1037,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Monster",
+        "Tyranids"
+      ],
+      "count": "one",
+      "selects": "model",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "massive-impact-crusher-stampede-tyranids",
     "game_version": {
       "edition": "11th",
@@ -639,7 +1074,54 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Tyranids"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": {
+                    "owner": "friendly"
+                  },
+                  "range": {
+                    "aura_of": "synapse-tyranids"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "move-ended",
+              "filter": {
+                "move_types": [
+                  "fall-back"
+                ]
+              },
+              "window": "phase"
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "override-instincts-synaptic-nexus-tyranids",
     "game_version": {
       "edition": "11th",
@@ -668,7 +1150,14 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Tyranids"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "overrun-invasion-fleet-tyranids",
     "game_version": {
       "edition": "11th",
@@ -784,7 +1273,43 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Monster",
+        "Tyranids"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "fight"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "rampaging-monstrosities-crusher-stampede-tyranids",
     "game_version": {
       "edition": "11th",
@@ -843,7 +1368,23 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Tyranids"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "rapid-regeneration-invasion-fleet-tyranids",
     "game_version": {
       "edition": "11th",
@@ -906,7 +1447,23 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Synapse"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "reinforced-hive-node-synaptic-nexus-tyranids",
     "game_version": {
       "edition": "11th",
@@ -964,7 +1521,68 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": [
+      {
+        "required_keywords": [
+          "Tyranids"
+        ],
+        "name": "first",
+        "count": "one",
+        "mode": "a",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "not",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "state": "engaged"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "required_keywords": [
+          "Burrower"
+        ],
+        "name": "second",
+        "count": "up-to",
+        "count_max": 2,
+        "mode": "b",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "owner": "friendly"
+                }
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "filter": {
+                      "state": "engaged"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
     "ability_id": "retreat-below-subterranean-assault-tyranids",
     "game_version": {
       "edition": "11th",
@@ -993,7 +1611,24 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Monster",
+        "Tyranids"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "savage-roar-crusher-stampede-tyranids",
     "game_version": {
       "edition": "11th",
@@ -1021,7 +1656,38 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "DEATHLEAPER",
+                  "LICTOR",
+                  "NEUROLICTOR"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "not_states": [
+                  "engaged"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "scanner-gheist-ambush-predators-tyranids",
     "game_version": {
       "edition": "11th",
@@ -1050,7 +1716,42 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Tyranids"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "fight"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "secure-biomass-assimilation-swarm-tyranids",
     "game_version": {
       "edition": "11th",
@@ -1079,7 +1780,58 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": [
+      {
+        "required_keywords": [
+          "Tyranids"
+        ],
+        "name": "first",
+        "count": "one",
+        "mode": "a",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "state": "in-strategic-reserves"
+                }
+              }
+            },
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "owner": "friendly"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "required_keywords": [
+          "Vanguard Invader"
+        ],
+        "name": "second",
+        "count": "up-to",
+        "count_max": 2,
+        "mode": "b",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "filter": {
+              "state": "in-strategic-reserves"
+            }
+          }
+        }
+      }
+    ],
     "ability_id": "seeded-broods-vanguard-onslaught-tyranids",
     "game_version": {
       "edition": "11th",
@@ -1107,7 +1859,15 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Infantry",
+        "Vardenghast Swarm"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit"
+    },
     "ability_id": "skulking-hunters-the-vardenghast-swarm-tyranids",
     "game_version": {
       "edition": "11th",
@@ -1162,7 +1922,43 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Monster",
+        "Tyranids"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "swarm-guided-salvoes-crusher-stampede-tyranids",
     "game_version": {
       "edition": "11th",
@@ -1190,7 +1986,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Termagants",
+        "Vardenghast Swarm"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit"
+    },
     "ability_id": "swarm-marked-the-vardenghast-swarm-tyranids",
     "game_version": {
       "edition": "11th",
@@ -1215,7 +2019,35 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Monster",
+        "Tyranids"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "set-up",
+              "window": "turn"
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "swarming-assault-subterranean-assault-tyranids",
     "game_version": {
       "edition": "11th",
@@ -1245,7 +2077,57 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Endless Multitude"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "operator": "or",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "fight"
+                      },
+                      "window": "phase"
+                    }
+                  },
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "shoot"
+                      },
+                      "window": "phase"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "swarming-masses-unending-swarm-tyranids",
     "game_version": {
       "edition": "11th",
@@ -1274,7 +2156,22 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Synapse"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "synaptic-channelling-synaptic-nexus-tyranids",
     "game_version": {
       "edition": "11th",
@@ -1336,7 +2233,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "TYRANID WARRIORS"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit"
+    },
     "ability_id": "synaptic-micronodes-warrior-bioform-onslaught-tyranids",
     "game_version": {
       "edition": "11th",
@@ -1364,7 +2268,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Norn Assimilator"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "tanglestrike-rounds-talons-of-the-norn-queen-tyranids",
     "game_version": {
       "edition": "11th",
@@ -1394,7 +2305,23 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Endless Multitude"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "teeming-masses-unending-swarm-tyranids",
     "game_version": {
       "edition": "11th",
@@ -1427,7 +2354,40 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Synapse"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": "event-subject",
+                  "range": {
+                    "inches": 12
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "the-smothering-shadow-synaptic-nexus-tyranids",
     "game_version": {
       "edition": "11th",
@@ -1485,7 +2445,42 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Harvester"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": {
+                    "objective": {
+                      "controlled_by": "friendly"
+                    }
+                  },
+                  "range": "objective-control"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "tyrannoformed-assimilation-swarm-tyranids",
     "game_version": {
       "edition": "11th",

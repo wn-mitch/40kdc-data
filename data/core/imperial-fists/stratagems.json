@@ -124,7 +124,25 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Astartes"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "any_of": [
+              "INFANTRY",
+              "MOUNTED"
+            ]
+          }
+        }
+      }
+    },
     "ability_id": "priority-strike-ceramite-sentinels-imperial-fists",
     "game_version": {
       "edition": "11th",
@@ -183,7 +201,27 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Astartes"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "within": {
+              "of": {
+                "objective": {}
+              },
+              "range": "objective-control"
+            }
+          }
+        }
+      }
+    },
     "ability_id": "unyielding-might-ceramite-sentinels-imperial-fists",
     "game_version": {
       "edition": "11th",

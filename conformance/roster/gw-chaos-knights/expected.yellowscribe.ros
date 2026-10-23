@@ -17,7 +17,7 @@
             </profile>
             <profile name="Brigand" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">During the Shooting phase, while the target is within range of an objective marker, the unit's weapons gain [IGNORES COVER].</characteristic>
+                <characteristic name="Description">While making ranged attacks, while the target is within range of an objective marker, ranged weapons equipped by this model gain [IGNORES COVER].</characteristic>
               </characteristics>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
@@ -126,7 +126,7 @@
             </profile>
             <profile name="Brigand" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">During the Shooting phase, while the target is within range of an objective marker, the unit's weapons gain [IGNORES COVER].</characteristic>
+                <characteristic name="Description">While making ranged attacks, while the target is within range of an objective marker, ranged weapons equipped by this model gain [IGNORES COVER].</characteristic>
               </characteristics>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
@@ -810,7 +810,7 @@ You can re-roll the Advance roll.</characteristic>
             </profile>
             <profile name="Stalker" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">While an enemy unit other than the target unit is not within 6" of the target unit, the unit gets +1 to Wound rolls.</characteristic>
+                <characteristic name="Description">While the target is not within 6" of an enemy unit other than the target unit, this model gets +1 to Wound rolls.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
@@ -909,7 +909,7 @@ You can re-roll the Advance roll.</characteristic>
             </profile>
             <profile name="Stalker" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">While an enemy unit other than the target unit is not within 6" of the target unit, the unit gets +1 to Wound rolls.</characteristic>
+                <characteristic name="Description">While the target is not within 6" of an enemy unit other than the target unit, this model gets +1 to Wound rolls.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
@@ -1008,7 +1008,7 @@ You can re-roll the Advance roll.</characteristic>
             </profile>
             <profile name="Stalker" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">While an enemy unit other than the target unit is not within 6" of the target unit, the unit gets +1 to Wound rolls.</characteristic>
+                <characteristic name="Description">While the target is not within 6" of an enemy unit other than the target unit, this model gets +1 to Wound rolls.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
@@ -1107,7 +1107,7 @@ You can re-roll the Advance roll.</characteristic>
             </profile>
             <profile name="Stalker" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">While an enemy unit other than the target unit is not within 6" of the target unit, the unit gets +1 to Wound rolls.</characteristic>
+                <characteristic name="Description">While the target is not within 6" of an enemy unit other than the target unit, this model gets +1 to Wound rolls.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
@@ -1206,7 +1206,7 @@ You can re-roll the Advance roll.</characteristic>
             </profile>
             <profile name="Stalker" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">While an enemy unit other than the target unit is not within 6" of the target unit, the unit gets +1 to Wound rolls.</characteristic>
+                <characteristic name="Description">While the target is not within 6" of an enemy unit other than the target unit, this model gets +1 to Wound rolls.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
@@ -1321,7 +1321,7 @@ You can re-roll the Advance roll.</characteristic>
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the Deep Strike ability.</characteristic>
+                <characteristic name="Description">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -1379,12 +1379,12 @@ You can re-roll the Advance roll.</characteristic>
             </profile>
             <profile name="Mischief Makers" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">During the Fight phase, until the end of the phase, the attacking unit gets -1 to Hit rolls.</characteristic>
+                <characteristic name="Description">When an enemy unit is selected to fight (the triggering unit must not have TITANIC), while the triggering unit is a unit within Engagement Range of a friendly unit with the Mischief Makers ability, while making melee attacks, until the end of the phase, the triggering unit gets -1 to Hit rolls.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the Deep Strike ability.</characteristic>
+                <characteristic name="Description">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -1443,12 +1443,12 @@ You can re-roll the Advance roll.</characteristic>
             </profile>
             <profile name="Mischief Makers" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">During the Fight phase, until the end of the phase, the attacking unit gets -1 to Hit rolls.</characteristic>
+                <characteristic name="Description">When an enemy unit is selected to fight (the triggering unit must not have TITANIC), while the triggering unit is a unit within Engagement Range of a friendly unit with the Mischief Makers ability, while making melee attacks, until the end of the phase, the triggering unit gets -1 to Hit rolls.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the Deep Strike ability.</characteristic>
+                <characteristic name="Description">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
               </characteristics>
             </profile>
           </profiles>

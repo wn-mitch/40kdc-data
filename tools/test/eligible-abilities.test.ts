@@ -114,7 +114,7 @@ describe("Dataset.buffsFor (M2 — abilities)", () => {
     expect(armyBuffs).toEqual([]);
     // Its one buff-bearing option is offered as a mutually-exclusive lever.
     const { buffs: levers } = ds.stackableBuffsFor(input, ctx);
-    const devastator = levers.find((l) => l.id === "combat-doctrines-assault-force-adeptus-astartes#option-1");
+    const devastator = levers.find((l) => l.id === "combat-doctrines-assault-force-adeptus-astartes#devastator-doctrine");
     expect(devastator, "Devastator Doctrine lever missing").toBeDefined();
     expect(devastator!.group).toBe("combat-doctrines-assault-force-adeptus-astartes?stance");
   });

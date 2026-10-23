@@ -5,17 +5,51 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "35a0742f18f5a090fa40c27731e9f9626abee68fbbe2afe7bf8811ac5415dd8e",
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "this-unit",
-      "modifier": {
-        "stat": "A",
-        "operation": "add",
-        "value": 2
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "named-weapon",
+            "parameters": {
+              "subject": "this-model",
+              "name": "Close combat weapon",
+              "count": 1
+            }
+          },
+          {
+            "type": "equipped-weapon-count",
+            "parameters": {
+              "subject": "this-model",
+              "weapons": {
+                "type": "melee",
+                "exclude_name": "Close combat weapon"
+              },
+              "count": {
+                "min": 2,
+                "max": 2
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "A",
+          "operation": "improve",
+          "value": 2,
+          "weapons": {
+            "type": "melee",
+            "exclude_name": "Close combat weapon"
+          }
+        }
       }
     },
     "scope": {
@@ -34,42 +68,160 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "042a271ea08fb83a45e2256201028632cb7c63441161803a27b23eac3d7fffcd",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
-        }
+        "operator": "or",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "test",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 9
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "subject": "event-subject",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success"
+              },
+              "window": "event"
             }
           }
         },
-        "modifier": {
-          "test": "battle-shock"
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "within": {
+                      "of": {
+                        "owner": "friendly",
+                        "all_of": [
+                          "PSYKER",
+                          "THOUSAND SONS"
+                        ]
+                      },
+                      "range": {
+                        "inches": 9
+                      }
+                    }
+                  }
+                }
+              },
+              "effect": {
+                "type": "test",
+                "target": "selected-unit",
+                "modifier": {
+                  "test": "battle-shock",
+                  "modifier": -1
+                }
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "selected-unit",
+                      "filter": {
+                        "within": {
+                          "of": {
+                            "owner": "friendly",
+                            "all_of": [
+                              "PSYKER",
+                              "THOUSAND SONS"
+                            ]
+                          },
+                          "range": {
+                            "inches": 9
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              "effect": {
+                "type": "test",
+                "target": "selected-unit",
+                "modifier": {
+                  "test": "battle-shock"
+                }
+              }
+            }
+          ]
         }
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "unit_ids": [
       "helbrute"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "thousand-sons"
+    "behavior": "reactive",
+    "faction_id": "thousand-sons",
+    "trigger": [
+      {
+        "event": "attacks-resolved",
+        "filter": {
+          "kind": "shoot"
+        }
+      },
+      {
+        "event": "attacks-resolved",
+        "filter": {
+          "kind": "attack"
+        }
+      }
+    ]
   },
   {
     "ability_id": "mutating-vortex-thousand-sons",
@@ -77,15 +229,98 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "4a26a9a66f1558d6d8dd6df449775fca42f6e819677b213bdb44ec61ecd4c1b5",
     "version": "2025-q3",
     "effect": {
-      "type": "mortal-wounds",
-      "target": "defender",
+      "type": "aura",
+      "target": "enemy-within-aura",
       "modifier": {
-        "count": 1
+        "range": {
+          "inches": 6
+        },
+        "effect": {
+          "type": "for-each-unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy",
+              "within": {
+                "range": {
+                  "inches": 6
+                },
+                "of": "this-model"
+              }
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "dice-table",
+                "dice": "D6",
+                "outcomes": [
+                  {
+                    "results": [
+                      1
+                    ],
+                    "effect": {
+                      "type": "no-effect"
+                    }
+                  },
+                  {
+                    "results": [
+                      2,
+                      3
+                    ],
+                    "effect": {
+                      "type": "mortal-wounds",
+                      "target": "recipient",
+                      "modifier": {
+                        "count": 1
+                      }
+                    }
+                  },
+                  {
+                    "results": [
+                      4,
+                      5
+                    ],
+                    "effect": {
+                      "type": "mortal-wounds",
+                      "target": "recipient",
+                      "modifier": {
+                        "count": "D3"
+                      }
+                    }
+                  },
+                  {
+                    "results": [
+                      6
+                    ],
+                    "effect": {
+                      "type": "mortal-wounds",
+                      "target": "recipient",
+                      "modifier": {
+                        "count": "D6"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "test",
+                "target": "recipient",
+                "modifier": {
+                  "test": "battle-shock"
+                }
+              }
+            ]
+          }
+        },
+        "eligible": {
+          "owner": "enemy"
+        }
       }
     },
     "scope": {
@@ -95,8 +330,28 @@
       "mutalith-vortex-beast"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "thousand-sons"
+    "behavior": "aura",
+    "faction_id": "thousand-sons",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "immaterial-flare-thousand-sons",
@@ -156,43 +411,33 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "version": "2025-q3",
     "effect": {
-      "type": "ability-part",
-      "trigger": {
-        "event": "disembarked",
-        "subject": {
-          "owner": "friendly"
-        },
-        "object": "this-model"
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "subject": "this-model",
+          "event": "move-ended",
+          "filter": {
+            "move_types": [
+              "normal"
+            ]
+          },
+          "window": "turn"
+        }
       },
       "effect": {
-        "type": "conditional",
-        "condition": {
-          "type": "happened",
-          "parameters": {
-            "event": "move-ended",
-            "subject": "this-model",
-            "filter": {
-              "move_types": [
-                "normal"
-              ]
-            },
-            "window": "turn"
-          }
-        },
-        "effect": {
-          "type": "permission",
-          "target": "event-subject",
-          "modifier": {
-            "activity": "declare-charge",
-            "allow": true,
-            "after": [
-              "disembark"
-            ]
-          }
+        "type": "permission",
+        "target": "event-subject",
+        "modifier": {
+          "activity": "declare-charge",
+          "allow": true,
+          "despite": [
+            "disembarked-this-turn"
+          ]
         }
       }
     },
@@ -203,8 +448,18 @@
       "chaos-land-raider"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "thousand-sons"
+    "behavior": "reactive",
+    "faction_id": "thousand-sons",
+    "trigger": {
+      "event": "disembarked",
+      "subject": {
+        "owner": "any"
+      },
+      "filter": {
+        "transport": "this-unit"
+      }
+    },
+    "source_digest": "99973ce914a8b95aa6915f7d6a415980f92ccee52600af744b067cdd446f39f8"
   },
   {
     "ability_id": "bestial-prophet-thousand-sons",
@@ -326,15 +581,16 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "ea8b35e9195d72de1e5e998718a812cf294fe82c7398534177114bb29e890784",
     "version": "2025-q3",
     "effect": {
       "type": "heal",
-      "target": "this-model",
+      "target": "this-unit",
       "modifier": {
-        "amount": 3
+        "amount": 3,
+        "per": "model"
       }
     },
     "scope": {
@@ -344,8 +600,17 @@
       "chaos-spawn"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "thousand-sons"
+    "behavior": "reactive",
+    "faction_id": "thousand-sons",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "command"
+        }
+      }
+    }
   },
   {
     "ability_id": "empyric-guidance-thousand-sons",
@@ -395,26 +660,72 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "95cceaef0aad073ddbf53539e98fa8a4c5f415f368a531950342e6facef72910",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
-        }
+        "operator": "or",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "stat-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "stat": "S",
-          "operation": "add",
-          "value": 1
-        }
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "stat-modifier",
+            "target": "this-model",
+            "modifier": {
+              "stat": "A",
+              "operation": "improve",
+              "value": 3,
+              "weapons": {
+                "keyword": {
+                  "keyword_id": "psychic"
+                }
+              }
+            }
+          },
+          {
+            "type": "stat-modifier",
+            "target": "this-model",
+            "modifier": {
+              "stat": "S",
+              "operation": "improve",
+              "value": 3,
+              "weapons": {
+                "keyword": {
+                  "keyword_id": "psychic"
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -425,7 +736,12 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "thousand-sons"
+    "faction_id": "thousand-sons",
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "unit"
+    }
   },
   {
     "ability_id": "siege-shield-thousand-sons",
@@ -433,41 +749,75 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "1a322586910b5135dc4691ea8f02954644c63bc5be6b528a8c83d7d5437e699d",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "targeting",
-            "target": "this-model",
-            "modifier": {
-              "by": "this-model",
-              "may": "target",
-              "target": {
-                "owner": "enemy",
-                "within": {
-                  "range": "engagement",
-                  "of": "this-model"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "attack-is",
+                "parameters": {
+                  "attack_type": "ranged"
                 }
               },
-              "kind": "shoot",
-              "weapons": {
-                "name": "demolisher cannon"
+              {
+                "type": "attack-is",
+                "parameters": {
+                  "weapons": {
+                    "name": "demolisher cannon"
+                  }
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": {
+                      "owner": "friendly",
+                      "excluding": "this-unit"
+                    },
+                    "filter": {
+                      "engaged_with": "defender"
+                    }
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "targeting",
+              "target": "this-model",
+              "modifier": {
+                "may": "target",
+                "kind": "shoot",
+                "weapons": {
+                  "type": "ranged"
+                }
               }
             }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
+            }
           },
-          {
+          "effect": {
             "type": "ignore-modifiers",
             "target": "this-model",
             "modifier": {
@@ -475,14 +825,11 @@
               "rolls": [
                 "hit"
               ],
-              "only": "worsening",
-              "weapons": {
-                "type": "ranged"
-              }
+              "only": "worsening"
             }
           }
-        ]
-      }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -553,7 +900,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "840e08472d10648237fe03818f4bb41f48fe2d4e88a8fdb3842924b740eb2fcc",
     "version": "2025-q3",
@@ -578,9 +925,7 @@
             "type": "set-up",
             "target": "selected-unit",
             "modifier": {
-              "to": "battlefield",
-              "from": "battlefield",
-              "placement": "deployment-zone"
+              "to": "battlefield"
             }
           },
           {
@@ -588,7 +933,6 @@
             "target": "selected-unit",
             "modifier": {
               "to": "strategic-reserves",
-              "from": "battlefield",
               "ignore_limits": true
             }
           }
@@ -596,15 +940,19 @@
       }
     },
     "scope": {
-      "duration": "one-use"
+      "duration": "permanent"
     },
     "unit_ids": [
       "ahriman"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "thousand-sons"
+    "faction_id": "thousand-sons",
+    "trigger": {
+      "event": "deployment-ended",
+      "optional": true
+    }
   },
   {
     "ability_id": "arch-sorcerer-of-tzeentch-thousand-sons",
@@ -612,29 +960,35 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "3aa056cfe148185015a80ef484549231e4a2dfcdb3c3d2ec38020b0bd6b37d1c",
     "version": "2025-q3",
     "effect": {
       "type": "roll-modifier",
-      "target": "this-model",
+      "target": "this-unit",
       "modifier": {
-        "roll": "battle-shock",
+        "roll": "psychic",
         "operation": "add",
         "value": 1
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "unit_ids": [
       "ahriman"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "thousand-sons"
+    "faction_id": "thousand-sons",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "ritual"
+      }
+    }
   },
   {
     "ability_id": "bringers-of-change-thousand-sons",
@@ -679,7 +1033,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "450435d90dfc045f8fc1ef2d827183500c1788666683752c5c29aed61aff4112",
     "version": "2025-q3",
@@ -691,7 +1045,10 @@
           {
             "keyword_id": "ignores-cover"
           }
-        ]
+        ],
+        "weapons": {
+          "type": "ranged"
+        }
       }
     },
     "scope": {
@@ -813,9 +1170,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "d5b951127448be3757ff8c313f9d361dd180c03d3659ef2fcea93a23b329ff0e",
+    "source_digest": "da8622a83b232ecd435fdb4d705be0d0125f937fb09f52dfc016496865960d00",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -823,17 +1180,34 @@
         "operator": "and",
         "operands": [
           {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "within": {
-                  "range": {
-                    "inches": 8
-                  },
-                  "of": "this-unit"
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "movement"
                 }
               },
-              "subject": "event-subject"
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "opponent-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "event-subject",
+              "filter": {
+                "within": {
+                  "of": "this-unit",
+                  "range": {
+                    "inches": 8
+                  }
+                }
+              }
             }
           },
           {
@@ -872,11 +1246,7 @@
       "event": "move-ended",
       "subject": {
         "owner": "enemy"
-      },
-      "optional": true
-    },
-    "usage": {
-      "frequency": "once-per-turn"
+      }
     },
     "faction_id": "thousand-sons"
   },
@@ -1081,7 +1451,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "d83162616f0b36c055177af4612a21426a360f62a52cdbce42ab7f4e864275a6",
     "version": "2025-q3",
@@ -1092,31 +1462,44 @@
           "type": "ability-modifier",
           "target": "this-model",
           "modifier": {
-            "ability": "cabal-of-sorcerers-thousand-sons",
+            "ability": "ritual",
             "aspect": "uses",
             "operation": "set",
-            "value": 2
+            "value": 2,
+            "cap_per": {
+              "count": 2,
+              "period": "turn"
+            }
           }
         },
         {
-          "type": "roll-modifier",
-          "target": "this-model",
-          "modifier": {
-            "roll": "battle-shock",
-            "operation": "add",
-            "value": 2
+          "type": "ability-part",
+          "trigger": {
+            "event": "used",
+            "filter": {
+              "kind": "ritual"
+            }
+          },
+          "effect": {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "psychic",
+              "operation": "add",
+              "value": 2
+            }
           }
         }
       ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "unit_ids": [
       "magnus-the-red"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "faction_id": "thousand-sons"
   },
@@ -1126,15 +1509,27 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "db5f2bae245a8eb3cca1df9d81a364c92d2b3958c0471ebd7f0f15e2bd8a0f90",
     "version": "2025-q3",
     "effect": {
-      "type": "army-rule",
-      "target": "this-model",
-      "modifier": {
-        "rule": "warlord-required"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "this-model",
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      },
+      "effect": {
+        "type": "army-rule",
+        "target": "this-unit",
+        "modifier": {
+          "rule": "warlord-required"
+        }
       }
     },
     "scope": {
@@ -1213,18 +1608,63 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "f45098adfa15d78d190b764e864e32657d0935ef4df9b50bf877d3560cc21a4c",
     "version": "2025-q3",
     "effect": {
-      "type": "move-modifier",
-      "target": "this-model",
-      "modifier": {
-        "passthrough": [
-          "all-terrain"
-        ]
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "move-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "passthrough": [
+              "non-titanic-models"
+            ]
+          }
+        },
+        {
+          "type": "move-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "passthrough": [
+              "all-terrain"
+            ]
+          }
+        },
+        {
+          "type": "permission",
+          "target": "event-subject",
+          "modifier": {
+            "activity": "move",
+            "allow": true,
+            "despite": [
+              "engaged"
+            ]
+          }
+        },
+        {
+          "type": "move-modifier",
+          "target": "event-subject",
+          "modifier": {
+            "no_end_in_engagement": true,
+            "applies_to_moves": [
+              "normal",
+              "advance",
+              "fall-back"
+            ]
+          }
+        },
+        {
+          "type": "roll-result",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "desperate-escape",
+            "result": "pass"
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -1233,8 +1673,18 @@
       "defiler"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "thousand-sons"
+    "behavior": "reactive",
+    "faction_id": "thousand-sons",
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "normal",
+          "advance",
+          "fall-back"
+        ]
+      }
+    }
   },
   {
     "ability_id": "destroyer-of-futures-thousand-sons",
@@ -1242,9 +1692,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "1590c8c4e1c846d57522f4d486e54d5bcd444a32a42757adc9efbacfef5de324",
+    "source_digest": "5d47c99e7260e0f1081782263169754dbf0c5fe21256ac2022631c497d03a5eb",
     "version": "2025-q3",
     "effect": {
       "type": "sequence",
@@ -1266,10 +1716,20 @@
           "target": "this-unit",
           "modifier": {
             "of": "stratagem",
-            "id": "counter-offensive",
             "operation": "decrease",
             "amount": 1,
-            "applies_to": "targeting-this-unit"
+            "applies_to": "the-triggering-use"
+          }
+        },
+        {
+          "type": "ability-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "ability": "counteroffensive",
+            "aspect": "uses",
+            "operation": "lift-limit",
+            "value": 1,
+            "consumes_shared_use": false
           }
         }
       ]
@@ -1281,7 +1741,7 @@
       "defiler"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "activated",
     "faction_id": "thousand-sons"
   },
   {
@@ -1416,15 +1876,39 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "1dd5507e798f7267d0d7002eadd7b05ca2706d2b5911c5e68e7041f2e20fb200",
     "version": "2025-q3",
     "effect": {
-      "type": "set-up",
-      "target": "this-unit",
-      "modifier": {
-        "to": "strategic-reserves"
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": {
+                    "owner": "enemy"
+                  },
+                  "range": {
+                    "inches": 6
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "set-up",
+        "target": "this-unit",
+        "modifier": {
+          "to": "strategic-reserves",
+          "from": "battlefield"
+        }
       }
     },
     "scope": {
@@ -1434,8 +1918,18 @@
       "tzaangors"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "thousand-sons"
+    "behavior": "reactive",
+    "faction_id": "thousand-sons",
+    "trigger": {
+      "event": "turn-ended",
+      "condition": {
+        "type": "player-turn-is",
+        "parameters": {
+          "turn": "opponent-turn"
+        }
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "brayhorn-thousand-sons",
@@ -1443,17 +1937,30 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "4602dc7a8b6287c375cd0aebfba1914c9f22c93f20797716a1006551a5ef7d5a",
     "version": "2025-q3",
     "effect": {
-      "type": "re-roll",
-      "target": "this-unit",
-      "modifier": {
-        "roll": "charge",
-        "subset": "all-failures"
-      }
+      "type": "choice",
+      "options": [
+        {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "charge",
+            "result_scope": "any-result"
+          }
+        },
+        {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "advance",
+            "result_scope": "any-result"
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -1462,7 +1969,7 @@
       "tzaangors"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "activated",
     "faction_id": "thousand-sons"
   },
   {
@@ -1471,45 +1978,39 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "6fb5a8617b6a29b45acd6c08d037bbcda48a579b43edfc19d4d39f9faca3dea3",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "within": {
-                  "range": "objective-control",
-                  "of": {
-                    "objective": {}
-                  }
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "within": {
+              "of": {
+                "objective": {
+                  "controlled_by": "friendly"
                 }
-              }
+              },
+              "range": "objective-control"
             }
-          },
-          {
-            "type": "controls"
           }
-        ]
+        }
       },
       "effect": {
         "type": "stat-modifier",
         "target": "this-unit",
         "modifier": {
           "stat": "Ld",
-          "operation": "add",
+          "operation": "improve",
           "value": 1
         }
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "unit_ids": [
       "tzaangors"
@@ -1525,46 +2026,39 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "bd0a4fa02e94b076e3b347007f2995fd179e31d0790862fcc7b65418600a103f",
+    "source_digest": "872e87e8a899eef7c8368106ef55d0044235a4d0651750ad333b7273ca8afee5",
     "version": "2025-q3",
     "effect": {
-      "type": "choice",
-      "options": [
-        {
-          "type": "cost-modifier",
-          "target": "this-model",
-          "modifier": {
-            "of": "stratagem",
-            "id": "fire-overwatch",
-            "operation": "set",
-            "amount": 0,
-            "applies_to": "targeting-this-unit"
-          }
-        },
-        {
-          "type": "cost-modifier",
-          "target": "this-model",
-          "modifier": {
-            "of": "stratagem",
-            "id": "heroic-intervention",
-            "operation": "set",
-            "amount": 0,
-            "applies_to": "targeting-this-unit"
-          }
-        }
-      ]
+      "type": "cost-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "of": "stratagem",
+        "operation": "decrease",
+        "amount": 1,
+        "applies_to": "the-triggering-use"
+      }
     },
     "scope": {
-      "duration": "one-use"
+      "duration": "permanent"
     },
     "unit_ids": [
       "sekhetar-robots"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "faction_id": "thousand-sons"
+    "behavior": "reactive",
+    "faction_id": "thousand-sons",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "stratagem"
+      }
+    },
+    "usage": {
+      "frequency": "once-per-turn",
+      "per": "unit"
+    }
   },
   {
     "ability_id": "illusions-of-tzeentch-thousand-sons",
@@ -1572,7 +2066,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "7eaa4915087e07c823ce3dcf607952a786d03c898a8c907fd6b40fc98656a42a",
     "version": "2025-q3",
@@ -1586,25 +2080,42 @@
         }
       },
       "effect": {
-        "type": "targeting",
-        "target": {
-          "owner": "enemy"
+        "type": "conditional",
+        "condition": {
+          "type": "matches",
+          "parameters": {
+            "subject": "attacker",
+            "filter": {
+              "within": {
+                "of": "this-unit",
+                "range": {
+                  "inches": 18
+                }
+              }
+            }
+          }
         },
-        "modifier": {
-          "may": "cannot-target",
-          "target": "this-unit",
-          "kind": "shoot",
-          "range": {
-            "inches": 18
+        "effect": {
+          "type": "targeting",
+          "target": {
+            "owner": "enemy"
           },
-          "weapons": {
-            "type": "ranged"
+          "modifier": {
+            "by": {
+              "owner": "enemy"
+            },
+            "may": "target",
+            "kind": "attack",
+            "weapons": {
+              "type": "ranged"
+            },
+            "target": "this-unit"
           }
         }
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "unit_ids": [
       "exalted-sorcerer-on-disc-of-tzeentch"
@@ -1620,7 +2131,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "2e131bd6dc4c8e413054c9a65050cdb2540f1cf51972f95d69c533154b2331f3",
     "version": "2025-q3",
@@ -1630,29 +2141,38 @@
         "operator": "and",
         "operands": [
           {
-            "type": "matches",
+            "type": "phase-is",
             "parameters": {
-              "filter": {
-                "owner": "enemy"
-              }
+              "phase": "shooting"
             }
           },
           {
-            "type": "matches",
+            "type": "player-turn-is",
             "parameters": {
-              "filter": {
-                "all_of": [
-                  "INFANTRY"
-                ]
-              },
-              "subject": "defender"
+              "turn": "your-turn"
             }
+          }
+        ]
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy",
+            "all_of": [
+              "INFANTRY"
+            ]
           },
-          {
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
             "type": "happened",
             "parameters": {
               "event": "after-roll",
-              "object": "defender",
+              "subject": "event-subject",
+              "object": "this-unit",
               "filter": {
                 "roll": "hit",
                 "result": "success",
@@ -1663,34 +2183,65 @@
               "window": "event"
             }
           }
-        ]
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "stat-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "stat": "M",
-              "operation": "subtract",
-              "value": 2
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "designate",
+              "target": "selected-unit",
+              "modifier": {
+                "tag": "ensnared"
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "designated": "ensnared"
+                  }
+                }
+              },
+              "effect": {
+                "type": "stat-modifier",
+                "target": "selected-unit",
+                "modifier": {
+                  "stat": "M",
+                  "operation": "subtract",
+                  "value": 2
+                }
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "designated": "ensnared"
+                  }
+                }
+              },
+              "effect": {
+                "type": "roll-modifier",
+                "target": "selected-unit",
+                "modifier": {
+                  "roll": "charge",
+                  "operation": "subtract",
+                  "value": 2
+                }
+              }
             }
-          },
-          {
-            "type": "roll-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "charge",
-              "operation": "subtract",
-              "value": 2
-            }
-          }
-        ]
+          ]
+        }
       }
     },
     "scope": {
-      "duration": "battle-round"
+      "duration": "until-start-next-turn"
     },
     "unit_ids": [
       "exalted-sorcerer-on-disc-of-tzeentch"
@@ -1700,11 +2251,8 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
       "event": "attacks-resolved",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+      "filter": {
+        "kind": "shoot"
       }
     },
     "faction_id": "thousand-sons"
@@ -1906,37 +2454,102 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "e6d650d614c122d71d2f776af3cc2474f7d692acc17203944fc046db5f219cd1",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "roll-modifier",
-        "target": "attacker",
-        "modifier": {
-          "roll": "hit",
-          "operation": "subtract",
-          "value": 1
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "subject": "event-subject",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success"
+              },
+              "window": "event"
+            }
+          }
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "designate",
+              "target": "selected-unit",
+              "modifier": {
+                "tag": "suppressed"
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "designated": "suppressed"
+                  }
+                }
+              },
+              "effect": {
+                "type": "roll-modifier",
+                "target": "selected-unit",
+                "modifier": {
+                  "roll": "hit",
+                  "operation": "subtract",
+                  "value": 1
+                }
+              }
+            }
+          ]
         }
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "until-start-next-turn"
     },
     "unit_ids": [
       "forgefiend"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "thousand-sons"
+    "behavior": "reactive",
+    "faction_id": "thousand-sons",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
+    }
   },
   {
     "ability_id": "flame-wreathed-thousand-sons",
@@ -2006,7 +2619,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "85790506baad19ad06e102d648addd8a4dcdb06054ae0726378fd47bb7086029",
     "version": "2025-q3",
@@ -2015,21 +2628,21 @@
       "condition": {
         "type": "matches",
         "parameters": {
+          "subject": "this-model",
           "filter": {
             "within": {
-              "range": {
-                "inches": 3
-              },
               "of": {
                 "owner": "friendly",
                 "all_of": [
-                  "THOUSAND SONS",
-                  "INFANTRY"
+                  "INFANTRY",
+                  "THOUSAND SONS"
                 ]
+              },
+              "range": {
+                "inches": 3
               }
             }
-          },
-          "subject": "this-model"
+          }
         }
       },
       "effect": {
@@ -2143,50 +2756,29 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "e9fd1b6349576d6cc255bc25020597b247b5ce6d3b776335627d29c3bc870be7",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "all_of": [
-                  "THOUSAND SONS"
-                ]
-              }
-            }
-          },
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "all_of": [
-                  "INFANTRY"
-                ]
-              }
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "keyword-grant",
-        "target": {
-          "owner": "friendly",
-          "within": {
-            "range": {
-              "inches": 6
-            }
+      "type": "aura",
+      "target": "friendly-within-aura",
+      "modifier": {
+        "range": {
+          "inches": 6
+        },
+        "effect": {
+          "type": "ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "ability": "stealth"
           }
         },
-        "modifier": {
-          "keywords": [
-            "STEALTH"
+        "eligible": {
+          "owner": "friendly",
+          "all_of": [
+            "INFANTRY",
+            "THOUSAND SONS"
           ]
         }
       }
@@ -2291,7 +2883,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "6b9b3413e95c09a1dc18f7f4daf47795eadf84c5a781be13f1cda376d93bdb8b",
     "version": "2025-q3",
@@ -2303,13 +2895,13 @@
     "behavior": "reactive",
     "effect": {
       "type": "heal",
-      "target": "this-unit",
+      "target": "event-subject",
       "modifier": {
         "amount": "D3"
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -2323,9 +2915,22 @@
     "trigger": {
       "event": "used",
       "filter": {
-        "kind": "ritual",
-        "result": "success"
+        "kind": "ritual"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "PSYKER",
+          "THOUSAND SONS"
+        ],
+        "none_of": [
+          "MONSTER"
+        ]
       }
+    },
+    "usage": {
+      "frequency": "once-per-turn",
+      "per": "unit"
     }
   },
   {
@@ -2334,16 +2939,16 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "ca38558089dd27fae865f4b7ce14289de15e9f547e9fe518ef3cb16eaa1d31a0",
+    "source_digest": "068a096199bbd1dae09342212f7fafd94bfb123c706dda2031ee0dab27f04be3",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "thousand-sons",
     "detachment_id": "sekhetar-cohort",
     "ability_type": "detachment",
-    "behavior": "aura",
+    "behavior": "passive",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -2364,38 +2969,54 @@
           }
         },
         {
-          "type": "stat-modifier",
+          "type": "ability-grant",
           "target": {
             "owner": "friendly",
             "all_of": [
-              "SEKHETAR ROBOTS"
-            ],
-            "within": {
-              "range": {
-                "inches": 12
-              },
-              "of": {
-                "owner": "friendly",
-                "all_of": [
-                  "THOUSAND SONS",
-                  "PSYKER"
-                ]
-              }
-            }
+              "PSYKER",
+              "THOUSAND SONS"
+            ]
           },
           "modifier": {
-            "stat": "WS",
-            "operation": "improve",
-            "value": 1,
-            "weapons": {
-              "type": "melee"
+            "ability": "infusion",
+            "definition": {
+              "type": "ability-part",
+              "name": "Infusion",
+              "effect": {
+                "type": "aura",
+                "target": "friendly-within-aura",
+                "modifier": {
+                  "range": {
+                    "inches": 12
+                  },
+                  "effect": {
+                    "type": "stat-modifier",
+                    "target": "recipient",
+                    "modifier": {
+                      "stat": "WS",
+                      "operation": "improve",
+                      "value": 1,
+                      "weapons": {
+                        "type": "melee"
+                      }
+                    }
+                  },
+                  "eligible": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "SEKHETAR ROBOTS"
+                    ]
+                  },
+                  "of": "this-unit"
+                }
+              }
             }
           }
         }
       ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -2498,33 +3119,39 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "60d3c5e2e3b8797d153c9efcde85188bf11525280d449fd6f99ccbda5707848e",
+    "source_digest": "07b19c70add693bc85ddc09385ced30da823f55972ecc5aaef3f23507d0740dc",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "thousand-sons",
     "detachment_id": "ritual-of-regeneration",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "dice-gated",
       "dice": "D6",
       "threshold": 2,
       "comparison": "gte",
       "on_success": {
-        "type": "return-models",
+        "type": "set-up",
         "target": "this-model",
         "modifier": {
-          "count": 1,
+          "to": "battlefield",
+          "min_enemy_distance": {
+            "inches": 1
+          },
+          "placement": "closest-to-destruction",
           "wounds_remaining": 3,
-          "placement": "closest-to-destruction"
+          "detach": true,
+          "starting_strength": 1
         }
-      }
+      },
+      "on_fail": null
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -2534,6 +3161,25 @@
       "none_of": [
         "MONSTER"
       ]
+    },
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "model-destroyed",
+          "object": "this-model",
+          "window": "phase",
+          "count": {
+            "min": 1
+          }
+        }
+      }
+    },
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "army"
     }
   },
   {
@@ -2584,89 +3230,129 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "da856210023fc9013f38eb28168bd3e4f0af9833baefa459f48928a6c75333f1",
+    "source_digest": "79815441a4c5ef9c948c5db060434bfe396dc2a299567a5bb58b2d0609d1672b",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "thousand-sons",
     "detachment_id": "sekhetar-cohort",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "sequence",
       "steps": [
         {
-          "type": "conditional",
-          "condition": {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
-          },
+          "type": "ability-part",
+          "name": "Soul Bound",
           "effect": {
-            "type": "select-units",
-            "selector": {
-              "filter": {
-                "owner": "friendly",
-                "all_of": [
-                  "SEKHETAR ROBOTS"
-                ],
-                "within": {
-                  "range": {
-                    "inches": 3
-                  },
-                  "of": "this-model"
+            "type": "conditional",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "phase-is",
+                  "parameters": {
+                    "phase": "movement"
+                  }
+                },
+                {
+                  "type": "player-turn-is",
+                  "parameters": {
+                    "turn": "your-turn"
+                  }
                 }
-              },
-              "count": {
-                "min": 0,
-                "max": 1
-              }
+              ]
             },
             "effect": {
-              "type": "heal",
-              "target": "selected-unit",
-              "modifier": {
-                "amount": "D3+1"
-              }
-            }
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "within": {
-                  "range": {
-                    "inches": 3
-                  },
-                  "of": {
-                    "owner": "friendly",
-                    "all_of": [
-                      "SEKHETAR ROBOTS"
-                    ]
+              "type": "select-units",
+              "selector": {
+                "filter": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "SEKHETAR ROBOTS"
+                  ],
+                  "within": {
+                    "range": {
+                      "inches": 3
+                    },
+                    "of": "this-model"
+                  }
+                },
+                "count": {
+                  "min": 1,
+                  "max": 1
+                },
+                "eligibility": {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "selected-unit",
+                    "filter": {
+                      "all_of": [
+                        "SEKHETAR ROBOTS"
+                      ]
+                    }
                   }
                 }
               },
-              "subject": "this-model"
+              "effect": {
+                "type": "heal",
+                "target": "selected-unit",
+                "modifier": {
+                  "amount": "D3+1"
+                }
+              }
             }
           },
+          "trigger": [
+            {
+              "event": "move-started",
+              "optional": true
+            },
+            {
+              "event": "move-ended",
+              "optional": true
+            }
+          ]
+        },
+        {
+          "type": "ability-part",
+          "name": "Kine‑shielded Guardians",
           "effect": {
-            "type": "ability-grant",
-            "target": "this-model",
-            "modifier": {
-              "ability": "lone-operative"
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "this-model",
+                "filter": {
+                  "within": {
+                    "of": {
+                      "owner": "friendly",
+                      "all_of": [
+                        "SEKHETAR ROBOTS"
+                      ]
+                    },
+                    "range": {
+                      "inches": 3
+                    }
+                  }
+                }
+              }
+            },
+            "effect": {
+              "type": "ability-grant",
+              "target": "this-model",
+              "modifier": {
+                "ability": "lone-operative"
+              }
             }
           }
         }
       ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -2681,7 +3367,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "341355045c6a6a6b618dac6432ba6bf245524876a9c7b9820868f06069ca4ade",
     "version": "2025-q3",
@@ -2690,14 +3376,25 @@
     "faction_id": "thousand-sons",
     "detachment_id": "sekhetar-cohort",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "movement"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       },
       "effect": {
         "type": "select-units",
@@ -2711,7 +3408,7 @@
               "range": {
                 "inches": 6
               },
-              "of": "this-model"
+              "of": "this-unit"
             }
           },
           "count": {
@@ -2734,14 +3431,24 @@
       }
     },
     "scope": {
-      "duration": "turn"
+      "duration": "until-start-next-turn"
     },
     "applies_to": {
       "all_of": [
         "THOUSAND SONS",
         "SORCERER"
       ]
-    }
+    },
+    "trigger": [
+      {
+        "event": "move-started",
+        "optional": true
+      },
+      {
+        "event": "move-ended",
+        "optional": true
+      }
+    ]
   },
   {
     "ability_id": "unravelled-fates-servants-of-change-thousand-sons",
@@ -2749,7 +3456,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "684d51224383194a91441c2911c2b404fae15f57a89d93b289a7eff2fb9302ed",
     "version": "2025-q3",
@@ -2758,14 +3465,25 @@
     "faction_id": "thousand-sons",
     "detachment_id": "servants-of-change",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "movement"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       },
       "effect": {
         "type": "select-units",
@@ -2775,6 +3493,7 @@
             "all_of": [
               "MUTANT"
             ],
+            "state": "battle-shocked",
             "within": {
               "range": {
                 "inches": 6
@@ -2785,14 +3504,6 @@
           "count": {
             "min": 1,
             "max": 1
-          },
-          "eligibility": {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "state": "battle-shocked"
-              }
-            }
           }
         },
         "effect": {
@@ -2806,14 +3517,24 @@
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
         "THOUSAND SONS",
         "TZAANGOR SHAMAN"
       ]
-    }
+    },
+    "trigger": [
+      {
+        "event": "move-started",
+        "optional": true
+      },
+      {
+        "event": "move-ended",
+        "optional": true
+      }
+    ]
   },
   {
     "ability_id": "thicket-of-bladed-bone-upgrade-servants-of-change-thousand-sons",
@@ -2821,7 +3542,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "ba45eca850214254a956c5326f9ef705657452803dc0707c56b85071b18a56e6",
     "version": "2025-q3",
@@ -2836,7 +3557,7 @@
       "steps": [
         {
           "type": "stat-modifier",
-          "target": "this-model",
+          "target": "this-unit",
           "modifier": {
             "stat": "AP",
             "operation": "improve",
@@ -2848,11 +3569,8 @@
         },
         {
           "type": "weapon-ability-grant",
-          "target": "this-model",
+          "target": "this-unit",
           "modifier": {
-            "weapons": {
-              "type": "melee"
-            },
             "keywords": [
               {
                 "keyword_id": "cleave",
@@ -2860,7 +3578,10 @@
                   "value": 1
                 }
               }
-            ]
+            ],
+            "weapons": {
+              "type": "melee"
+            }
           }
         }
       ]
@@ -2928,7 +3649,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "8fe4f1e6a658598a74dec9e73b9fc6e9944cf2d02ae971afdbf992e2e1265380",
     "version": "2025-q3",
@@ -2937,17 +3658,25 @@
     "faction_id": "thousand-sons",
     "detachment_id": "ritual-of-regeneration",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "select-units",
       "selector": {
         "filter": {
-          "owner": "enemy",
-          "engaged_with": "this-unit"
+          "owner": "enemy"
         },
         "count": {
           "min": 1,
           "max": 1
+        },
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "subject": "selected-unit",
+            "filter": {
+              "engaged_with": "this-unit"
+            }
+          }
         }
       },
       "effect": {
@@ -2964,7 +3693,16 @@
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
     }
   },
   {
@@ -2973,7 +3711,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "9d63aefe5f1d55951d719c669e32acfe9c0717aa818c83108613d23e578b0f95",
     "version": "2025-q3",
@@ -2982,17 +3720,13 @@
     "faction_id": "thousand-sons",
     "detachment_id": "ritual-of-regeneration",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "permission",
       "target": "this-unit",
       "modifier": {
         "activity": "start-action",
-        "allow": true,
-        "after": [
-          "advance",
-          "fall-back"
-        ]
+        "allow": true
       }
     },
     "scope": {
@@ -3003,6 +3737,27 @@
         "THOUSAND SONS",
         "PSYKER"
       ]
+    },
+    "trigger": {
+      "event": "selected",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "PSYKER",
+          "THOUSAND SONS"
+        ],
+        "any_of": [
+          "INFANTRY",
+          "MOUNTED"
+        ]
+      },
+      "filter": {
+        "move_types": [
+          "advance",
+          "fall-back"
+        ],
+        "to": "move"
+      }
     }
   },
   {
@@ -3011,7 +3766,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "b1ff579a520650a1db5258458c40c00856e7d56c11ed65d129a3f43d90109ca7",
     "version": "2025-q3",
@@ -3020,24 +3775,51 @@
     "faction_id": "thousand-sons",
     "detachment_id": "sekhetar-cohort",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "designate",
-      "target": "this-unit",
-      "modifier": {
-        "subject": {
-          "objective": {}
+      "type": "select-objective",
+      "selector": {
+        "filter": {
+          "controlled_by": "friendly"
         },
-        "tag": "secured"
+        "bind_as": "objective",
+        "count": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "effect": {
+        "type": "objective-sticky",
+        "target": "this-unit"
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
         "SEKHETAR ROBOTS"
       ]
+    },
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
     }
   },
   {
@@ -3046,7 +3828,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "befab49dc3da75792a3546f2e8d92465d3d0afcf7dd7680337d0c4a81bc80424",
     "version": "2025-q3",
@@ -3055,16 +3837,39 @@
     "faction_id": "thousand-sons",
     "detachment_id": "sekhetar-cohort",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "permission",
-      "target": "this-unit",
-      "modifier": {
-        "activity": "shoot",
-        "allow": true,
-        "despite": [
-          "performing-action"
-        ]
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-subject",
+          "filter": {
+            "within": {
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "PSYKER",
+                  "THOUSAND SONS"
+                ]
+              },
+              "range": {
+                "inches": 12
+              }
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "permission",
+        "target": "this-unit",
+        "modifier": {
+          "activity": "shoot",
+          "allow": true,
+          "despite": [
+            "performing-action"
+          ]
+        }
       }
     },
     "scope": {
@@ -3074,6 +3879,18 @@
       "all_of": [
         "SEKHETAR ROBOTS"
       ]
+    },
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "action"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "SEKHETAR ROBOTS"
+        ]
+      }
     }
   },
   {
@@ -3179,7 +3996,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "3104dbef2205291a6e7fd950d7cd2f1c748c17a51dc052d4d7183470cb957e66",
     "version": "2025-q3",
@@ -3188,7 +4005,7 @@
     "faction_id": "thousand-sons",
     "detachment_id": "servants-of-change",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -3196,44 +4013,31 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "weapons": {
-              "type": "ranged"
-            },
             "keywords": [
               {
                 "keyword_id": "assault"
               }
-            ]
+            ],
+            "weapons": {
+              "type": "ranged"
+            }
           }
         },
         {
-          "type": "sequence",
-          "steps": [
-            {
-              "type": "permission",
-              "target": "this-unit",
-              "modifier": {
-                "activity": "shoot",
-                "allow": true,
-                "after": [
-                  "advance",
-                  "fall-back"
-                ]
-              }
-            },
-            {
-              "type": "permission",
-              "target": "this-unit",
-              "modifier": {
-                "activity": "declare-charge",
-                "allow": true,
-                "after": [
-                  "advance",
-                  "fall-back"
-                ]
-              }
-            }
-          ]
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "shoot",
+            "allow": true
+          }
+        },
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "declare-charge",
+            "allow": true
+          }
         }
       ]
     },
@@ -3244,6 +4048,26 @@
       "all_of": [
         "MUTANT"
       ]
+    },
+    "trigger": {
+      "event": "selected",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "MUTANT"
+        ],
+        "any_of": [
+          "INFANTRY",
+          "MOUNTED"
+        ]
+      },
+      "filter": {
+        "move_types": [
+          "advance",
+          "fall-back"
+        ],
+        "to": "move"
+      }
     }
   },
   {
@@ -3252,7 +4076,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "0890d9af5238ac530f653abf9325fb41e997497b29a80f639d272df403e401ba",
     "version": "2025-q3",
@@ -3261,26 +4085,46 @@
     "faction_id": "thousand-sons",
     "detachment_id": "servants-of-change",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "permission",
       "target": "this-unit",
       "modifier": {
         "activity": "start-action",
         "allow": true,
-        "after": [
-          "advance",
-          "fall-back"
+        "despite": [
+          "advanced",
+          "fell-back"
         ]
       }
     },
     "scope": {
-      "duration": "turn"
+      "duration": "phase"
     },
     "applies_to": {
       "all_of": [
         "MUTANT"
       ]
+    },
+    "trigger": {
+      "event": "selected",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "MUTANT"
+        ],
+        "any_of": [
+          "INFANTRY",
+          "MOUNTED"
+        ]
+      },
+      "filter": {
+        "move_types": [
+          "advance",
+          "fall-back"
+        ],
+        "to": "move"
+      }
     }
   },
   {
@@ -3289,7 +4133,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "608f9b2ecf6932c9a0a380383ecf611bc2b2dc86fcc72ec594bdc8a669dd41b2",
     "version": "2025-q3",
@@ -3298,7 +4142,7 @@
     "faction_id": "thousand-sons",
     "detachment_id": "servants-of-change",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "keyword-grant",
       "target": "this-unit",
@@ -3316,6 +4160,19 @@
         "MONSTER",
         "MUTANT"
       ]
+    },
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "move"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "MONSTER",
+          "MUTANT"
+        ]
+      }
     }
   },
   {
@@ -3489,7 +4346,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "13bd84168b1c79d5c2a58b6526ce32eb5ea1d1de6b692352ee437b7a403a144d",
     "version": "2025-q3",
@@ -3504,12 +4361,14 @@
               {
                 "type": "in-region",
                 "parameters": {
+                  "subject": "this-unit",
                   "region": {
                     "rule_region": {
                       "region_id": "flow-of-magic",
                       "owner_faction": "thousand-sons"
                     }
-                  }
+                  },
+                  "wholly": true
                 }
               }
             ]
@@ -3534,12 +4393,14 @@
           "condition": {
             "type": "in-region",
             "parameters": {
+              "subject": "this-unit",
               "region": {
                 "rule_region": {
                   "region_id": "flow-of-magic",
                   "owner_faction": "thousand-sons"
                 }
-              }
+              },
+              "wholly": true
             }
           },
           "effect": {
@@ -3560,7 +4421,7 @@
       ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "unit_ids": [],
     "ability_type": "enhancement",
@@ -3639,19 +4500,35 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "2c0559bb5ec3b51a13ade6c9e68cd977431ea87eb9b749137c5c5f4ce052e57f",
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "this-unit",
-      "modifier": {
-        "stat": "A",
-        "operation": "add",
-        "value": 3,
-        "weapons": {
-          "type": "ranged"
+      "type": "conditional",
+      "condition": {
+        "type": "in-region",
+        "parameters": {
+          "subject": "this-unit",
+          "region": {
+            "rule_region": {
+              "region_id": "flow-of-magic",
+              "owner_faction": "thousand-sons"
+            }
+          },
+          "wholly": true
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "A",
+          "operation": "add",
+          "value": 3,
+          "weapons": {
+            "type": "ranged"
+          }
         }
       }
     },
@@ -3671,34 +4548,40 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "7ebe3a427ce8a1ada2446abd6d47d22617cfd22ee43e94aac2b81d79061ed614",
     "version": "2025-q3",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "counts-as",
-          "target": "this-unit",
-          "modifier": {
-            "in_region": {
-              "rule_region": {
-                "region_id": "flow-of-magic",
-                "owner_faction": "thousand-sons"
-              }
-            }
-          }
-        },
-        {
-          "type": "permission",
-          "target": "this-unit",
-          "modifier": {
-            "activity": "attempt-ritual",
-            "allow": false
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "state": "on-battlefield"
           }
         }
-      ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "designate",
+            "target": "this-unit",
+            "modifier": {
+              "tag": "wholly-within-flow-of-magic"
+            }
+          },
+          {
+            "type": "permission",
+            "target": "this-unit",
+            "modifier": {
+              "activity": "attempt-ritual",
+              "allow": false
+            }
+          }
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
@@ -3894,30 +4777,101 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "b3c7a10558010d209d2addd7c51a1c078636c063900ac823b3b2e80cc1655752",
     "version": "2025-q3",
     "effect": {
-      "type": "permission",
-      "target": "this-unit",
-      "modifier": {
-        "activity": "shoot",
-        "allow": true,
-        "after": [
-          "fall-back"
-        ]
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "shoot",
+            "allow": true
+          }
+        },
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "declare-charge",
+            "allow": true,
+            "despite": [
+              "fell-back"
+            ]
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "in-region",
+            "parameters": {
+              "subject": "this-unit",
+              "region": {
+                "rule_region": {
+                  "region_id": "flow-of-magic",
+                  "owner_faction": "thousand-sons"
+                }
+              },
+              "wholly": true
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "permission",
+                "target": "this-unit",
+                "modifier": {
+                  "activity": "shoot",
+                  "allow": true,
+                  "after": [
+                    "fall-back"
+                  ]
+                }
+              },
+              {
+                "type": "permission",
+                "target": "this-unit",
+                "modifier": {
+                  "activity": "declare-charge",
+                  "allow": true,
+                  "after": [
+                    "fall-back"
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "turn"
     },
     "unit_ids": [],
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "detachment_id": "hexwarp-thrallband",
     "community_notes": "[APPROX] Encoded as the strongest case (shoot AND charge after Falling Back, the wholly-within-Flow-of-Magic outcome); the base case grants only one of the two, chosen when used. Full rule in raw-text store.",
-    "faction_id": "thousand-sons"
+    "faction_id": "thousand-sons",
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "PSYKER",
+          "THOUSAND SONS"
+        ]
+      },
+      "filter": {
+        "move_types": [
+          "fall-back"
+        ]
+      }
+    }
   },
   {
     "ability_id": "through-the-veil-hexwarp-thrallband-thousand-sons",
@@ -4008,89 +4962,83 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "25b847140574ef6e6c9ec726b9b05ff5e5dc0282b3dab02d2ba320052ba31364",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "in-region",
-        "parameters": {
-          "region": {
-            "rule_region": {
-              "region_id": "flow-of-magic",
-              "owner_faction": "thousand-sons"
-            }
-          },
-          "wholly": true
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "duration": "phase",
+          "effect": {
             "type": "weapon-ability-grant",
             "target": "this-unit",
             "modifier": {
-              "weapons": {
-                "type": "ranged"
-              },
               "keywords": [
                 {
                   "keyword_id": "ignores-cover"
                 }
-              ]
+              ],
+              "weapons": {
+                "type": "ranged"
+              }
+            }
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "attacks-resolved",
+            "filter": {
+              "kind": "shoot"
             }
           },
-          {
-            "type": "ability-part",
-            "trigger": {
-              "event": "attacks-resolved",
-              "subject": "this-unit",
+          "duration": "phase",
+          "effect": {
+            "type": "select-units",
+            "selector": {
               "filter": {
-                "kind": "shoot"
+                "owner": "enemy"
+              },
+              "count": {
+                "min": 1,
+                "max": 1
+              },
+              "eligibility": {
+                "type": "happened",
+                "parameters": {
+                  "event": "after-roll",
+                  "subject": "event-subject",
+                  "object": "this-unit",
+                  "filter": {
+                    "roll": "hit",
+                    "result": "success"
+                  },
+                  "window": "event"
+                }
               }
             },
             "effect": {
-              "type": "designate-target",
-              "designation": "no-benefit-of-cover",
-              "select": {
-                "kind": "unit",
-                "selector": {
-                  "filter": {
-                    "owner": "enemy"
-                  },
-                  "count": {
-                    "min": 1,
-                    "max": 1
-                  }
-                }
-              },
-              "applies": {
-                "to": "target",
-                "effect": {
-                  "type": "rule-state",
-                  "target": "recipient",
-                  "modifier": {
-                    "direction": "suppressed",
-                    "rule_kind": "core-rule",
-                    "rule": "benefit-of-cover"
-                  }
-                }
-              },
-              "duration": "phase"
+              "type": "rule-state",
+              "target": "selected-unit",
+              "modifier": {
+                "direction": "suppressed",
+                "rule_kind": "core-rule",
+                "rule": "benefit-of-cover"
+              }
             }
           }
-        ]
-      }
+        }
+      ]
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "unit_ids": [],
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "detachment_id": "hexwarp-thrallband",
     "community_notes": "community-authored from 11e faction pack; targeting requires the unit be wholly within the Flow of Magic (modeled as a gating condition).",
     "faction_id": "thousand-sons"
@@ -4184,7 +5132,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "483d17359b6ffe5b232ab0d81d7cf3cb8a87b1dc7c93f87f9054f77ac1ea4269",
     "version": "2025-q3",
@@ -4193,156 +5141,137 @@
     "faction_id": "thousand-sons",
     "detachment_id": "changehost-of-deceit",
     "ability_type": "detachment",
-    "behavior": "aura",
+    "behavior": "passive",
     "effect": {
       "type": "sequence",
       "steps": [
         {
-          "type": "conditional",
-          "condition": {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "matches",
-                "parameters": {
-                  "filter": {
-                    "all_of": [
-                      "SCINTILLATING LEGIONS"
-                    ]
-                  }
-                }
-              },
-              {
-                "operator": "and",
-                "operands": [
-                  {
-                    "type": "matches",
-                    "parameters": {
-                      "filter": {
-                        "within": {
-                          "range": {
-                            "inches": 6
-                          },
-                          "of": {
-                            "owner": "friendly",
-                            "all_of": [
-                              "THOUSAND SONS"
-                            ],
-                            "visible": {
-                              "to": "this-unit"
-                            }
-                          }
-                        }
-                      }
-                    }
-                  },
-                  {
-                    "type": "matches",
-                    "parameters": {
-                      "filter": {
-                        "within": {
-                          "range": {
-                            "inches": 6
-                          },
-                          "of": {
-                            "owner": "friendly",
-                            "all_of": [
-                              "PSYKER"
-                            ],
-                            "visible": {
-                              "to": "this-unit"
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                ]
-              }
+          "type": "ability-grant",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "SCINTILLATING LEGIONS"
             ]
           },
-          "effect": {
-            "type": "conditional",
-            "condition": {
-              "type": "attack-is",
-              "parameters": {
-                "attack_type": "ranged"
-              }
-            },
-            "effect": {
-              "type": "invulnerable-save",
-              "target": {
-                "owner": "friendly",
-                "within": {
-                  "range": {
-                    "inches": 6
+          "modifier": {
+            "ability": "daemonic-illusions",
+            "definition": {
+              "type": "ability-part",
+              "name": "Daemonic Illusions",
+              "effect": {
+                "type": "conditional",
+                "condition": {
+                  "operator": "and",
+                  "operands": [
+                    {
+                      "type": "matches",
+                      "parameters": {
+                        "subject": "recipient",
+                        "filter": {
+                          "within": {
+                            "of": "this-unit",
+                            "range": {
+                              "inches": 6
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "type": "matches",
+                      "parameters": {
+                        "subject": "recipient",
+                        "filter": {
+                          "visible": {
+                            "to": "this-unit"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "type": "attack-is",
+                      "parameters": {
+                        "attack_type": "ranged"
+                      }
+                    }
+                  ]
+                },
+                "effect": {
+                  "type": "invulnerable-save",
+                  "target": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "PSYKER",
+                      "THOUSAND SONS"
+                    ]
+                  },
+                  "modifier": {
+                    "invuln_sv": 4
                   }
                 }
-              },
-              "modifier": {
-                "invuln_sv": 4
               }
             }
           }
         },
         {
-          "type": "conditional",
-          "condition": {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "matches",
-                "parameters": {
-                  "filter": {
-                    "all_of": [
-                      "THOUSAND SONS"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "matches",
-                "parameters": {
-                  "filter": {
-                    "within": {
-                      "range": {
-                        "inches": 6
-                      },
-                      "of": {
-                        "owner": "friendly",
-                        "all_of": [
-                          "SCINTILLATING LEGIONS",
-                          "PSYKER"
-                        ],
-                        "visible": {
-                          "to": "this-unit"
+          "type": "ability-grant",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "THOUSAND SONS"
+            ]
+          },
+          "modifier": {
+            "ability": "mortal-sorcery",
+            "definition": {
+              "type": "ability-part",
+              "name": "Mortal Sorcery",
+              "effect": {
+                "type": "conditional",
+                "condition": {
+                  "operator": "and",
+                  "operands": [
+                    {
+                      "type": "matches",
+                      "parameters": {
+                        "subject": "recipient",
+                        "filter": {
+                          "within": {
+                            "of": "this-unit",
+                            "range": {
+                              "inches": 6
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "type": "matches",
+                      "parameters": {
+                        "subject": "recipient",
+                        "filter": {
+                          "visible": {
+                            "to": "this-unit"
+                          }
                         }
                       }
                     }
+                  ]
+                },
+                "effect": {
+                  "type": "ability-grant",
+                  "target": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "PSYKER",
+                      "SCINTILLATING LEGIONS"
+                    ]
+                  },
+                  "modifier": {
+                    "ability": "cabal-of-sorcerers-thousand-sons"
                   }
                 }
               }
-            ]
-          },
-          "effect": {
-            "type": "ability-grant",
-            "target": {
-              "owner": "friendly",
-              "all_of": [
-                "SCINTILLATING LEGIONS",
-                "PSYKER"
-              ],
-              "within": {
-                "range": {
-                  "inches": 6
-                }
-              },
-              "visible": {
-                "to": "this-unit"
-              }
-            },
-            "modifier": {
-              "ability": "cabal-of-sorcerers-thousand-sons"
             }
           }
         }
@@ -4868,7 +5797,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "fde6ba9d1bf6246cb4534d31b3a7f419a4f912caab7892058f6d2bcd46949d7e",
     "version": "2025-q3",
@@ -4877,52 +5806,30 @@
     "faction_id": "thousand-sons",
     "detachment_id": "rubricae-phalanx",
     "ability_type": "detachment",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "attack-compare",
-            "parameters": {
-              "left": {
-                "of": "attacker",
-                "stat": "D"
-              },
-              "comparison": "eq",
-              "right": {
-                "value": 1
-              }
-            }
-          },
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "all_of": [
-                  "RUBRICAE"
-                ]
-              },
-              "subject": "defender"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "save",
-          "operation": "add",
-          "value": 1
-        }
+      "type": "roll-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "roll": "save",
+        "operation": "add",
+        "value": 1
       }
     },
     "scope": {
       "duration": "permanent"
     },
-    "community_notes": "[APPROX] Drops the \"unmodified\" qualifier on the Damage 1 gate, and \"any armour saving throw\" is modeled as a generic save modifier (invulnerable saves are not distinguished). Full rule in raw-text store."
+    "community_notes": "[APPROX] Drops the \"unmodified\" qualifier on the Damage 1 gate, and \"any armour saving throw\" is modeled as a generic save modifier (invulnerable saves are not distinguished). Full rule in raw-text store.",
+    "trigger": {
+      "event": "damage-allocated",
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "RUBRICAE"
+        ],
+        "level": "model"
+      }
+    }
   },
   {
     "ability_id": "chronosorcerous-bleed-changehost-of-deceit-thousand-sons",
@@ -4930,7 +5837,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "e660e215198c6287c72995331997b7cd79a02e719aec818501e49967b4abfe03",
     "version": "2025-q3",
@@ -4989,7 +5896,7 @@
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "community_notes": "Used at the start of the opponent's Charge phase by an unengaged Thousand Sons Psyker or Scintillating Legions unit; the selected enemy unit must be visible and within 12\".",
     "trigger": {
@@ -5355,7 +6262,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "23e3d1861dd1f23d623278009a37f52f7e950d052a334a8356902e4a8cb65d20",
     "version": "2025-q3",
@@ -5364,17 +6271,37 @@
     "faction_id": "thousand-sons",
     "detachment_id": "warpforged-cabal",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "permission",
-      "target": "this-unit",
-      "modifier": {
-        "activity": "shoot",
-        "allow": true,
-        "after": [
-          "fall-back"
-        ]
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "permission",
+          "target": {
+            "stratagem_target": "first"
+          },
+          "modifier": {
+            "activity": "shoot",
+            "allow": true,
+            "after": [
+              "fall-back"
+            ]
+          }
+        },
+        {
+          "type": "permission",
+          "target": {
+            "stratagem_target": "first"
+          },
+          "modifier": {
+            "activity": "declare-charge",
+            "allow": true,
+            "after": [
+              "fall-back"
+            ]
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "turn"
@@ -5385,7 +6312,22 @@
         "VEHICLE"
       ]
     },
-    "community_notes": "Requires a friendly Thousand Sons Psyker unit within 6\" of the Vehicle when used."
+    "community_notes": "Requires a friendly Thousand Sons Psyker unit within 6\" of the Vehicle when used.",
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "THOUSAND SONS",
+          "VEHICLE"
+        ]
+      },
+      "filter": {
+        "move_types": [
+          "fall-back"
+        ]
+      }
+    }
   },
   {
     "ability_id": "ensorcelled-infusion-warpforged-cabal-thousand-sons",
@@ -5393,7 +6335,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "7f7dc8ae6eca27cf916fe778af17a561d874a9bcb0584a9a8e5f98f9ca86ee02",
     "version": "2025-q3",
@@ -5410,25 +6352,36 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "weapons": {
-              "type": "ranged"
-            },
             "keywords": [
               {
                 "keyword_id": "psychic"
               }
-            ]
+            ],
+            "weapons": {
+              "type": "ranged"
+            }
           }
         },
         {
-          "type": "roll-modifier",
-          "target": "this-unit",
-          "modifier": {
-            "roll": "wound",
-            "operation": "add",
-            "value": 1,
-            "weapons": {
-              "type": "ranged"
+          "type": "conditional",
+          "condition": {
+            "type": "attack-is",
+            "parameters": {
+              "weapons": {
+                "keyword": {
+                  "keyword_id": "psychic"
+                }
+              },
+              "attack_type": "ranged"
+            }
+          },
+          "effect": {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "wound",
+              "operation": "add",
+              "value": 1
             }
           }
         }
@@ -5811,7 +6764,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "bc6d81c00031564bfc9d2f3cf7d3fa66de3f9235bbb435b060db26d4f8ebdc89",
     "version": "2025-q3",
@@ -5826,7 +6779,7 @@
       "target": "this-unit"
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -5891,7 +6844,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "b467a95a2e04b9c25f98c8b342595c4a2eb8402b5aba03ac6386b7ce673faabb",
     "version": "2025-q3",
@@ -5912,7 +6865,6 @@
             "operation": "add",
             "value": 9,
             "weapons": {
-              "type": "ranged",
               "keyword": {
                 "keyword_id": "psychic"
               }
@@ -5920,15 +6872,19 @@
           }
         },
         {
-          "type": "re-roll",
-          "target": "this-unit",
-          "modifier": {
-            "roll": "hit",
-            "result_scope": "any-result",
-            "weapons": {
-              "keyword": {
-                "keyword_id": "psychic"
-              }
+          "type": "conditional",
+          "condition": {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "psychic"
+            }
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "result_scope": "any-result"
             }
           }
         },
@@ -5937,12 +6893,7 @@
           "target": "this-unit",
           "modifier": {
             "roll": "wound",
-            "result_scope": "any-result",
-            "weapons": {
-              "keyword": {
-                "keyword_id": "psychic"
-              }
-            }
+            "result_scope": "any-result"
           }
         }
       ]
@@ -6130,7 +7081,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "a2e59f553a802f547d3cae40c09710e52dc3c9f435068401fff17b6a5e52b31c",
     "version": "2025-q3",
@@ -6142,13 +7093,21 @@
     "behavior": "activated",
     "effect": {
       "type": "return-models",
-      "target": "this-unit",
+      "target": {
+        "level": "model",
+        "member_of": {
+          "stratagem_target": "second"
+        },
+        "none_of": [
+          "CHARACTER"
+        ]
+      },
       "modifier": {
         "count": "D3+1"
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -6255,7 +7214,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "e3314d704ed0115844a3f3f42431d2aa9709453b08571eb8524b2a52aa70326a",
     "version": "2025-q3",
@@ -6264,19 +7223,22 @@
     "faction_id": "thousand-sons",
     "detachment_id": "warpmeld-pact",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "sequence",
       "steps": [
         {
-          "type": "permission",
+          "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "activity": "shoot",
-            "allow": true,
-            "after": [
-              "advance"
-            ]
+            "keywords": [
+              {
+                "keyword_id": "assault"
+              }
+            ],
+            "weapons": {
+              "type": "ranged"
+            }
           }
         },
         {
@@ -6301,7 +7263,27 @@
         "MUTANT"
       ]
     },
-    "community_notes": "The unit is eligible to shoot or declare a charge in a turn in which it Advanced (one of the two, chosen when acting)."
+    "community_notes": "The unit is eligible to shoot or declare a charge in a turn in which it Advanced (one of the two, chosen when acting).",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "twisted-mirage-warpmeld-pact-thousand-sons",
@@ -6309,9 +7291,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "915a96d4b98e5c06d44d31782288bbd270829663f4d0e8370bfca4d3c5c31316",
+    "source_digest": "c88397dc12ad7b13ca90e052aa1e417db99bf7593dc8ed4403bcb6aa6781bb15",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -6323,13 +7305,53 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "set-up",
-          "target": "this-unit",
-          "modifier": {
-            "to": "battlefield",
-            "from": "strategic-reserves",
-            "min_enemy_distance": {
-              "inches": 6
+          "type": "conditional",
+          "condition": {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "all_of": [
+                      "MONSTER"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "set-up",
+            "target": "this-unit",
+            "modifier": {
+              "to": "battlefield",
+              "min_enemy_distance": {
+                "inches": 6
+              }
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "all_of": [
+                  "MONSTER"
+                ]
+              }
+            }
+          },
+          "effect": {
+            "type": "set-up",
+            "target": "this-unit",
+            "modifier": {
+              "to": "battlefield",
+              "min_enemy_distance": {
+                "inches": 8
+              }
             }
           }
         },
@@ -6402,7 +7424,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "3421eaa8105f4812ba9c7c8eb434b66291ccf0792fb2a354a3ba40851cedaed1",
     "version": "2025-q3",
@@ -6411,17 +7433,33 @@
     "faction_id": "thousand-sons",
     "detachment_id": "rubricae-phalanx",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "permission",
-      "target": "this-unit",
-      "modifier": {
-        "activity": "shoot",
-        "allow": true,
-        "after": [
-          "fall-back"
-        ]
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "shoot",
+            "allow": true,
+            "after": [
+              "fall-back"
+            ]
+          }
+        },
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "declare-charge",
+            "allow": true,
+            "after": [
+              "fall-back"
+            ]
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "turn"
@@ -6430,6 +7468,20 @@
       "all_of": [
         "RUBRICAE"
       ]
+    },
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "RUBRICAE"
+        ]
+      },
+      "filter": {
+        "move_types": [
+          "fall-back"
+        ]
+      }
     }
   },
   {
@@ -6569,9 +7621,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "9ba3f2fde86b2b0e6e4ef176b65dbd5762f30ae1e70570db5e7927d48ca34ac5",
+    "source_digest": "99e07e03c74a91ff31058952a960f9e9b1e068aaaf557d9b26861641ceff8395",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -6586,25 +7638,59 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "weapons": {
-              "type": "ranged"
-            },
             "keywords": [
               {
                 "keyword_id": "psychic"
               }
-            ]
+            ],
+            "weapons": {
+              "type": "ranged",
+              "name": "Inferno bolt pistol"
+            }
           }
         },
         {
-          "type": "stat-modifier",
+          "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "stat": "S",
-            "operation": "set",
-            "value": 5,
+            "keywords": [
+              {
+                "keyword_id": "psychic"
+              }
+            ],
             "weapons": {
-              "type": "ranged"
+              "type": "ranged",
+              "name": "Inferno boltgun"
+            }
+          }
+        },
+        {
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "psychic"
+              }
+            ],
+            "weapons": {
+              "type": "ranged",
+              "name": "Inferno combi-bolter"
+            }
+          }
+        },
+        {
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "psychic"
+              }
+            ],
+            "weapons": {
+              "type": "ranged",
+              "name": "Inferno combi-weapon"
             }
           }
         }
@@ -6947,7 +8033,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "4a13a15cd1210456ff1729caaed34857c2f14600ce96afb8e60eca5e091cb945",
     "version": "2025-q3",
@@ -6956,67 +8042,102 @@
     "faction_id": "thousand-sons",
     "detachment_id": "changehost-of-deceit",
     "ability_type": "enhancement",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "designate-target",
-      "designation": "nethershriek-mind-eater",
-      "select": {
-        "kind": "unit",
-        "selector": {
-          "filter": {
-            "owner": "enemy",
-            "within": {
-              "range": {
-                "inches": 12
-              },
-              "of": "this-model"
-            }
-          },
-          "count": {
-            "min": 1,
-            "max": 1
-          }
-        }
-      },
-      "applies": {
-        "to": "target",
-        "effect": {
-          "type": "sequence",
-          "steps": [
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "operator": "and",
+          "operands": [
             {
-              "type": "test",
-              "target": "this-unit",
-              "modifier": {
-                "test": "battle-shock"
+              "type": "matches",
+              "parameters": {
+                "subject": "selected-unit",
+                "filter": {
+                  "within": {
+                    "of": "this-model",
+                    "range": {
+                      "inches": 12
+                    }
+                  }
+                }
               }
             },
             {
-              "type": "conditional",
-              "condition": {
-                "type": "matches",
-                "parameters": {
-                  "filter": {
-                    "state": "battle-shocked"
+              "type": "matches",
+              "parameters": {
+                "subject": "selected-unit",
+                "filter": {
+                  "visible": {
+                    "to": "this-model"
                   }
-                }
-              },
-              "effect": {
-                "type": "mortal-wounds",
-                "target": "this-unit",
-                "modifier": {
-                  "count": 3
                 }
               }
             }
           ]
         }
       },
-      "duration": "phase"
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "test",
+            "target": "selected-unit",
+            "modifier": {
+              "test": "battle-shock"
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "roll-result",
+              "parameters": {
+                "roll": "battle-shock",
+                "result": "failure"
+              }
+            },
+            "effect": {
+              "type": "mortal-wounds",
+              "target": "selected-unit",
+              "modifier": {
+                "count": 3
+              }
+            }
+          }
+        ]
+      }
     },
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "Thousand Sons or Lord of Change model only. At the start of your Shooting phase, one visible enemy unit within 12\" takes a Battle-shock test; if failed, it suffers 3 mortal wounds."
+    "community_notes": "Thousand Sons or Lord of Change model only. At the start of your Shooting phase, one visible enemy unit within 12\" takes a Battle-shock test; if failed, it suffers 3 mortal wounds.",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "diabolic-savant-changehost-of-deceit-thousand-sons",
@@ -7024,7 +8145,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "250a600aba19e6042c6fb1f18d0864c57ccd629ee79633d05e4902485dfee251",
     "version": "2025-q3",
@@ -7033,18 +8154,40 @@
     "faction_id": "thousand-sons",
     "detachment_id": "changehost-of-deceit",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "roll-modifier",
-      "target": "this-model",
-      "modifier": {
-        "roll": "psychic",
-        "operation": "add",
-        "value": 1
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "this-model",
+          "filter": {
+            "within": {
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "SCINTILLATING LEGIONS"
+                ]
+              },
+              "range": {
+                "inches": 6
+              }
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "roll": "psychic",
+          "operation": "add",
+          "value": 1
+        }
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -7052,7 +8195,13 @@
         "INFANTRY"
       ]
     },
-    "community_notes": "Applies while the bearer is within 6\" of one or more friendly Scintillating Legions units, each time the bearer Channels the Warp; the proximity gate is not encoded."
+    "community_notes": "Applies while the bearer is within 6\" of one or more friendly Scintillating Legions units, each time the bearer Channels the Warp; the proximity gate is not encoded.",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "ability"
+      }
+    }
   },
   {
     "ability_id": "duplicitous-malediction-changehost-of-deceit-thousand-sons",
@@ -7060,7 +8209,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "c0b13eac3a9977e018d0b6a6dacd5cf9c292013698dd7f17906dc8808a275b05",
     "version": "2025-q3",
@@ -7069,31 +8218,50 @@
     "faction_id": "thousand-sons",
     "detachment_id": "changehost-of-deceit",
     "ability_type": "enhancement",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "set-up",
-          "target": "this-unit",
-          "modifier": {
-            "to": "strategic-reserves"
-          }
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "THOUSAND SONS"
+          ]
         },
-        {
-          "type": "set-up",
-          "target": "this-unit",
-          "modifier": {
-            "to": "strategic-reserves",
-            "ignore_limits": true
-          }
+        "count": {
+          "min": 1,
+          "max": 1
         }
-      ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "set-up",
+            "target": "selected-unit",
+            "modifier": {
+              "to": "battlefield"
+            }
+          },
+          {
+            "type": "set-up",
+            "target": "selected-unit",
+            "modifier": {
+              "to": "strategic-reserves",
+              "ignore_limits": true
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
-    "community_notes": "Thousand Sons or Lord of Change model only. After deployment, redeploy up to three Thousand Sons units; they can be placed into Strategic Reserves regardless of how many units are already there."
+    "community_notes": "Thousand Sons or Lord of Change model only. After deployment, redeploy up to three Thousand Sons units; they can be placed into Strategic Reserves regardless of how many units are already there.",
+    "trigger": {
+      "event": "deployment-ended",
+      "optional": true
+    }
   },
   {
     "ability_id": "tome-of-true-names-changehost-of-deceit-thousand-sons",
@@ -7101,7 +8269,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "767839b768c484de2509cbe4ce5a260910ce96ea5b99ae4b005c53802193448b",
     "version": "2025-q3",
@@ -7110,11 +8278,11 @@
     "faction_id": "thousand-sons",
     "detachment_id": "changehost-of-deceit",
     "ability_type": "enhancement",
-    "behavior": "activated",
+    "behavior": "reactive",
     "usage": {
       "frequency": "n-per-battle",
       "count": 1,
-      "per": "unit"
+      "per": "model"
     },
     "effect": {
       "type": "invulnerable-save",
@@ -7131,6 +8299,10 @@
         "THOUSAND SONS",
         "INFANTRY"
       ]
+    },
+    "trigger": {
+      "event": "phase-started",
+      "optional": true
     }
   },
   {
@@ -7208,7 +8380,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "09eafb28d5db24adc463e90b2ef25276b2a0a051510e7d6b18cb3697e7a40330",
     "version": "2025-q3",
@@ -7219,14 +8391,37 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "ability-grant",
-      "target": "this-model",
-      "modifier": {
-        "ability": "lone-operative"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "this-model",
+          "filter": {
+            "within": {
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "THOUSAND SONS",
+                  "VEHICLE"
+                ]
+              },
+              "range": {
+                "inches": 3
+              }
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "this-model",
+        "modifier": {
+          "ability": "lone-operative"
+        }
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -7242,7 +8437,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "23a7fa0079fcfa35fe017dd1ead96365c99284e2fde87e65aa6d509e8b1af3d2",
     "version": "2025-q3",
@@ -7272,22 +8467,46 @@
         ]
       },
       "effect": {
-        "type": "heal",
-        "target": {
-          "owner": "friendly",
-          "within": {
-            "range": {
-              "inches": 6
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "THOUSAND SONS",
+              "VEHICLE"
+            ],
+            "level": "model"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "matches",
+            "parameters": {
+              "subject": "selected-unit",
+              "filter": {
+                "within": {
+                  "of": "this-model",
+                  "range": {
+                    "inches": 6
+                  }
+                }
+              }
             }
           }
         },
-        "modifier": {
-          "amount": "D3"
+        "effect": {
+          "type": "heal",
+          "target": "selected-unit",
+          "modifier": {
+            "amount": "D3"
+          }
         }
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -7302,7 +8521,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "19b59e454e6d3ea5ea805a249ea8eef0a4a2457a672b90d779042d76f13b8a1d",
     "version": "2025-q3",
@@ -7311,34 +8530,36 @@
     "faction_id": "thousand-sons",
     "detachment_id": "warpforged-cabal",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
       "condition": {
         "type": "matches",
         "parameters": {
+          "subject": "this-model",
           "filter": {
             "within": {
-              "range": {
-                "inches": 6
-              },
               "of": {
                 "owner": "friendly",
                 "all_of": [
                   "THOUSAND SONS",
                   "VEHICLE"
                 ]
+              },
+              "range": {
+                "inches": 6
               }
             }
-          },
-          "subject": "this-model"
+          }
         }
       },
       "effect": {
         "type": "ability-modifier",
         "target": "this-model",
         "modifier": {
-          "ability": "ritual",
+          "ability": {
+            "keyword": "RITUAL"
+          },
           "aspect": "range",
           "operation": "add",
           "value": 6
@@ -7346,14 +8567,20 @@
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "resolution"
     },
     "applies_to": {
       "all_of": [
         "THOUSAND SONS"
       ]
     },
-    "community_notes": "Applies while the bearer is within 6\" of one or more friendly Thousand Sons Vehicle units; the proximity gate is not encoded."
+    "community_notes": "Applies while the bearer is within 6\" of one or more friendly Thousand Sons Vehicle units; the proximity gate is not encoded.",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "ritual"
+      }
+    }
   },
   {
     "ability_id": "lord-of-forbidden-lore-grand-coven-thousand-sons",
@@ -7361,7 +8588,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "5134bf87a979a8108ef9dfd2489fff73d35b9a7fc31511add31b6370b0f69547",
     "version": "2025-q3",
@@ -7370,7 +8597,7 @@
     "faction_id": "thousand-sons",
     "detachment_id": "grand-coven",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "ability-modifier",
       "target": "this-model",
@@ -7382,12 +8609,18 @@
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "resolution"
     },
     "applies_to": {
       "all_of": [
         "THOUSAND SONS"
       ]
+    },
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "ritual"
+      }
     }
   },
   {
@@ -7492,7 +8725,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "463edd0ba23844c5416253b82f929dd9c4e07d03181f89fcc883f38a233ba93e",
     "version": "2025-q3",
@@ -7536,7 +8769,7 @@
       ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -7597,7 +8830,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "75f34eeb8ecd161f50be77a7d2d55afebc196a86cd24df825190e376e03ac6fa",
     "version": "2025-q3",
@@ -7618,17 +8851,16 @@
       },
       "effect": {
         "type": "roll-modifier",
-        "target": "this-unit",
+        "target": "attacker",
         "modifier": {
           "roll": "hit",
-          "incoming": true,
           "operation": "subtract",
           "value": 1
         }
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -7643,9 +8875,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "719e52f9c2b1e9bbb71bebd8a9de6e1d222d833b7662787f2b50e9a9b30cf83d",
+    "source_digest": "e18321571e04d130e35d8bdb62599986ee25e1768c53350c3169ab8a9be172d9",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -7662,7 +8894,7 @@
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "community_notes": "Sorcerer or Infernal Master model only; the bearer has the Scouts 6\" ability."
   },
@@ -7672,7 +8904,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "862c6a95634ba5be8e7e25bfae3ac0f4ae16e210f5920dc943685bf9b7477ce7",
     "version": "2025-q3",
@@ -7704,7 +8936,7 @@
       ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -7810,7 +9042,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "d34e6e9bcc8f47775fd40c2c0da26853a255eb1a410b8da3894253854d85cec6",
     "version": "2025-q3",
@@ -7828,30 +9060,23 @@
           "inches": 9
         },
         "effect": {
-          "type": "conditional",
-          "condition": {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "all_of": [
-                  "RUBRICAE"
-                ]
-              }
-            }
-          },
-          "effect": {
-            "type": "re-roll",
-            "target": "recipient",
-            "modifier": {
-              "roll": "battle-shock",
-              "result_scope": "any-result"
-            }
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "battle-shock",
+            "result_scope": "any-result"
           }
+        },
+        "eligible": {
+          "owner": "friendly",
+          "all_of": [
+            "RUBRICAE"
+          ]
         }
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -7865,7 +9090,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "0bc9339bae7f520bc05e80abd5f5c19ce37d137d4a20306eddb8942d383af66d",
     "version": "2025-q3",
@@ -7886,7 +9111,13 @@
       },
       "effect": {
         "type": "roll-modifier",
-        "target": "this-unit",
+        "target": {
+          "member_of": "this-unit",
+          "all_of": [
+            "RUBRICAE"
+          ],
+          "level": "model"
+        },
         "modifier": {
           "roll": "hit",
           "operation": "add",
@@ -7895,7 +9126,7 @@
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -7910,7 +9141,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "d7e587b130b2e487b1ab21b29f5ba2683d38e8d9cc6ddadbc1fcf087aa9eaea3",
     "version": "2025-q3",
@@ -7924,9 +9155,6 @@
       "type": "weapon-ability-grant",
       "target": "this-model",
       "modifier": {
-        "weapons": {
-          "type": "melee"
-        },
         "keywords": [
           {
             "keyword_id": "sustained-hits",
@@ -7937,11 +9165,14 @@
           {
             "keyword_id": "devastating-wounds"
           }
-        ]
+        ],
+        "weapons": {
+          "type": "melee"
+        }
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -8052,7 +9283,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "b5f5ab26c4da9e0ca341722f4411612cafc2f163fa220b6ad95c9b94d6122f75",
     "version": "2025-q3",
@@ -8066,18 +9297,19 @@
       "type": "weapon-ability-grant",
       "target": "this-model",
       "modifier": {
-        "weapons": {
-          "type": "ranged"
-        },
         "keywords": [
           {
             "keyword_id": "psychic"
           }
-        ]
+        ],
+        "weapons": {
+          "type": "ranged",
+          "name": "infernal cannon"
+        }
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -8092,9 +9324,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "aafd2cc81f6ccc65d37dfffb2f5259a6b06799a02aa8ea2d38046e4b6a7f1765",
+    "source_digest": "d803c0dc170b63648232053a875bd15a1c0309a63e0f1112e7adf046b1312531",
     "version": "2026-q3",
     "unit_ids": [
       "prism-of-zadophon-rubric-marines"
@@ -8102,70 +9334,54 @@
     "ability_type": "unit",
     "behavior": "passive",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "within": {
-                  "range": "objective-control",
-                  "of": {
-                    "objective": {}
+      "type": "conditional",
+      "condition": {
+        "type": "attack-is",
+        "parameters": {
+          "attack_type": "ranged"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "wound",
+              "subset": "ones"
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "defender",
+                "filter": {
+                  "within": {
+                    "of": {
+                      "objective": {}
+                    },
+                    "range": "objective-control"
                   }
                 }
-              },
-              "subject": "defender"
-            }
-          },
-          "effect": {
-            "type": "re-roll",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "wound",
-              "subset": "all-failures",
-              "weapons": {
-                "type": "ranged"
               }
-            }
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "matches",
-                "parameters": {
-                  "filter": {
-                    "within": {
-                      "range": "objective-control",
-                      "of": {
-                        "objective": {}
-                      }
-                    }
-                  },
-                  "subject": "defender"
+            },
+            "effect": {
+              "type": "re-roll",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "wound",
+                "result_scope": "any-result",
+                "weapons": {
+                  "type": "ranged"
                 }
               }
-            ]
-          },
-          "effect": {
-            "type": "re-roll",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "wound",
-              "subset": "ones",
-              "weapons": {
-                "type": "ranged"
-              }
             }
           }
-        }
-      ]
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
@@ -8178,9 +9394,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "kaaskrek"
     ],
@@ -8188,11 +9403,29 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-unit",
+          "role": "attached"
+        }
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "roll": "hit",
+          "operation": "add",
+          "value": 1
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "6a60dd1b040ab607da58831ba83119552e2395446f1f82e759cd0acda92fd8e1"
   },
   {
     "ability_id": "cabal-of-sorcerers-prism-of-zadophon-thousand-sons",
@@ -8246,9 +9479,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "zadophon-the-soul-eater"
     ],
@@ -8256,11 +9488,33 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "aura",
+      "target": "friendly-within-aura",
+      "modifier": {
+        "range": {
+          "inches": 6
+        },
+        "effect": {
+          "type": "ability-grant",
+          "target": "recipient",
+          "modifier": {
+            "ability": "stealth"
+          }
+        },
+        "eligible": {
+          "owner": "friendly",
+          "all_of": [
+            "INFANTRY",
+            "THOUSAND SONS"
+          ]
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "aura",
+    "source_digest": "dc114ed02e6f2f171930f0caf862da67e8a44c5a14135f133a857a2b950c8439"
   },
   {
     "ability_id": "icon-of-flame-prism-of-zadophon-rubric-marines-thousand-sons",
@@ -8268,9 +9522,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "prism-of-zadophon-rubric-marines"
     ],
@@ -8278,11 +9531,30 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "weapon-ability-grant",
+      "target": {
+        "member_of": "this-unit",
+        "none_of": [
+          "CHARACTER"
+        ],
+        "level": "model"
+      },
+      "modifier": {
+        "keywords": [
+          {
+            "keyword_id": "ignores-cover"
+          }
+        ],
+        "weapons": {
+          "type": "ranged"
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "2f58a0744ffb614ae336f1960ba86fa9df1f264ead956807f06adf3682d14f4b"
   },
   {
     "ability_id": "prophesied-doom-prism-of-zadophon-tzaangor-enlightened-thousand-sons",
@@ -8312,9 +9584,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "kaaskrek"
     ],
@@ -8322,11 +9593,102 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "or",
+            "operands": [
+              {
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "phase-is",
+                    "parameters": {
+                      "phase": "shooting"
+                    }
+                  },
+                  {
+                    "type": "player-turn-is",
+                    "parameters": {
+                      "turn": "your-turn"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "fight"
+                }
+              }
+            ]
+          },
+          {
+            "type": "model-count",
+            "parameters": {
+              "subject": "this-unit",
+              "keyword": "BODYGUARD",
+              "min": 1
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "destroy-models",
+            "target": {
+              "level": "model",
+              "member_of": "this-unit",
+              "all_of": [
+                "BODYGUARD"
+              ]
+            },
+            "modifier": {
+              "count": 1
+            }
+          },
+          {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "stat-modifier",
+                "target": "this-model",
+                "modifier": {
+                  "stat": "A",
+                  "operation": "add",
+                  "value": "D3"
+                }
+              },
+              {
+                "type": "stat-modifier",
+                "target": "this-model",
+                "modifier": {
+                  "stat": "S",
+                  "operation": "add",
+                  "value": "D3"
+                }
+              }
+            ]
+          }
+        ]
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "attack"
+      },
+      "optional": true
+    },
+    "source_digest": "a975129766d7770846baa631495d8401c80afe32c95b6b596446cacdff75e8da"
   },
   {
     "ability_id": "spirit-snare-zadophon-the-soul-eater-thousand-sons",
@@ -8491,9 +9853,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "pink-horrors"
     ],
@@ -8501,11 +9862,73 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "model-count",
+        "parameters": {
+          "subject": "this-unit",
+          "keyword": "PINK HORROR",
+          "max": 0
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "datasheet-swap",
+            "target": "this-unit",
+            "modifier": {
+              "datasheet": "blue-horrors"
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "model-count",
+              "parameters": {
+                "subject": "this-unit",
+                "keyword": "PINK HORROR",
+                "min": 1
+              }
+            },
+            "effect": {
+              "type": "rule-state",
+              "target": "this-unit",
+              "modifier": {
+                "direction": "suppressed",
+                "rule_kind": "ability",
+                "rule": "sullen-malevolence-thousand-sons"
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "model-count",
+              "parameters": {
+                "subject": "this-unit",
+                "keyword": "PINK HORROR",
+                "min": 1
+              }
+            },
+            "effect": {
+              "type": "rule-state",
+              "target": "this-unit",
+              "modifier": {
+                "direction": "suppressed",
+                "rule_kind": "ability",
+                "rule": "exploding-horrors-thousand-sons"
+              }
+            }
+          }
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "517657805d76c0b4223234a5e9f118e32dff3b8d933a63442fdd19e2b4251acc"
   },
   {
     "ability_id": "instrument-of-chaos-thousand-sons",
@@ -8875,9 +10298,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "blue-horrors"
     ],
@@ -8885,11 +10307,56 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "state": "on-battlefield"
+          }
+        }
+      },
+      "effect": {
+        "type": "dice-gated",
+        "dice": "D6",
+        "threshold": 4,
+        "comparison": "gte",
+        "on_success": {
+          "type": "add-unit",
+          "target": "this-unit",
+          "modifier": {
+            "datasheet": "brimstone-horrors",
+            "model_count": 1,
+            "join": "this-unit"
+          }
+        },
+        "on_fail": null
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": [
+      {
+        "event": "model-destroyed",
+        "object": {
+          "owner": "friendly",
+          "all_of": [
+            "BLUE HORROR"
+          ],
+          "level": "model",
+          "member_of": "this-unit"
+        }
+      },
+      {
+        "event": "attacks-resolved",
+        "subject": {
+          "owner": "enemy"
+        }
+      }
+    ],
+    "source_digest": "91e0898a7a1ca3e9aa3dc2866fa00a7da9fb031c0e020354ad6163efe9535d8f"
   },
   {
     "ability_id": "sullen-malevolence-thousand-sons",

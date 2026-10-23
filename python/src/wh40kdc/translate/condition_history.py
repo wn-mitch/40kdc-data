@@ -31,6 +31,7 @@ from wh40kdc.translate.condition_refs import (
     range_phrase,
     roll_word,
     title_case,
+    unit_filter_phrase,
     unit_ref_phrase,
     used_ability_phrase,
 )
@@ -202,6 +203,15 @@ def _describe_happened_core(p: P, negated: bool) -> str:
             else ""
         )
         owner = f"{_str(victim['owner'])} " if victim.get("owner") is not None else ""
+        # A filter beyond keywords and owner ("with the X or Y keyword") reads through
+        # the unit-filter phrase.
+        extended = any(k not in ("all_of", "owner", "level", "designated") for k in victim)
+        objects = f"{owner}{kws}{noun}s"
+        if extended:
+            phrase = unit_filter_phrase(
+                {**victim, "level": "model" if event == "model-destroyed" else "unit"}
+            )
+            objects = re.sub(r"\b(unit|model)\b", r"\1s", re.sub(r"^an? ", "", phrase), count=1)
         if f.get("by") is not None:
             # A destruction by one attack type says it: "with its just-resolved melee attacks".
             atk = f"{_str(f['attack_type'])} " if _truthy(f.get("attack_type")) else ""
@@ -210,13 +220,13 @@ def _describe_happened_core(p: P, negated: bool) -> str:
             else:
                 when = (f"with {atk}attacks " if atk else "") + _window_phrase(window)
             killer = unit_ref_phrase(f["by"])
-            return f"{neg}{killer} has destroyed {_str(n)}+ {owner}{kws}{noun}s {when}".rstrip()
+            return f"{neg}{killer} has destroyed {_str(n)}+ {objects} {when}".rstrip()
         tagged = (
             f" {_designation_phrase(_str(victim['designated']))}"
-            if victim.get("designated") is not None
+            if not extended and victim.get("designated") is not None
             else ""
         )
-        return f"{neg}{_with_window(f'{_str(n)}+ {owner}{kws}{noun}s{tagged} destroyed', window)}"
+        return f"{neg}{_with_window(f'{_str(n)}+ {objects}{tagged} destroyed', window)}"
     if event == "used":
         # The use being resolved now: "the unit is performing the Swift as the Wind Agile
         # Manoeuvre".
@@ -254,17 +264,24 @@ def _describe_happened_core(p: P, negated: bool) -> str:
         return f"{neg}{_with_window(f'{_str(n)}+ {units} became {became}', window)}"
     return f"{neg}{_with_window(f'{dekebab(event)} happened', window)}"
 
+
 def _describe_happened(p: P, negated: bool) -> str:
     phrase = _describe_happened_core(p, negated)
     event = _str(p.get("event"))
     filt = _obj(p.get("filter"))
-    if event in ("destroyed", "model-destroyed") and filt.get("weapons") is not None and not (
-        p.get("object") == "event-object" and p.get("window") == "event"
+    if (
+        event in ("destroyed", "model-destroyed")
+        and filt.get("weapons") is not None
+        and not (p.get("object") == "event-object" and p.get("window") == "event")
     ):
         phrase += f" made with {weapon_noun({'weapons': filt['weapons']})}"
-    if p.get("count") is not None and event in ("destroyed", "model-destroyed") and (
-        p.get("object") == "this-model"
-        or (p.get("object") == "event-object" and p.get("window") == "event")
+    if (
+        p.get("count") is not None
+        and event in ("destroyed", "model-destroyed")
+        and (
+            p.get("object") == "this-model"
+            or (p.get("object") == "event-object" and p.get("window") == "event")
+        )
     ):
         phrase += f" ({count_phrase(p['count'])} times)"
     phrase += event_relation_phrase(filt)
@@ -273,15 +290,21 @@ def _describe_happened(p: P, negated: bool) -> str:
         distance = range_phrase(proximity.get("range"))
         origin = place_ref_phrase(proximity.get("of"))
         phrase += f" within {distance} of {origin}"
-    if p.get("count") is not None and event not in (
-        "after-roll",
-        "destroyed",
-        "model-destroyed",
-        "objective-gained",
-        "designation-changed",
-    ) and not (event == "used" and filt.get("kind") == "action"):
+    if (
+        p.get("count") is not None
+        and event
+        not in (
+            "after-roll",
+            "destroyed",
+            "model-destroyed",
+            "objective-gained",
+            "designation-changed",
+        )
+        and not (event == "used" and filt.get("kind") == "action")
+    ):
         phrase += f" ({count_phrase(p['count'])} times)"
     return phrase
+
 
 def _destroyed_count(side: P) -> str:
     o = _obj(side.get("object"))

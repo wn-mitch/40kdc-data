@@ -11,7 +11,51 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "WRAITHBLADES",
+                  "WRAITHKNIGHT",
+                  "WRAITHLORD"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "fight"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "blades-from-beyond-spirit-conclave-aeldari",
     "game_version": {
       "edition": "11th",
@@ -40,7 +84,50 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "DIRE AVENGERS",
+                  "GUARDIANS"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "blades-of-asuryan-guardian-battlehost-aeldari",
     "game_version": {
       "edition": "11th",
@@ -126,7 +213,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Troupe"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit"
+    },
     "ability_id": "captivating-performance-twilight-flickers-aeldari",
     "game_version": {
       "edition": "11th",
@@ -154,7 +248,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords_any": [
+        "Rangers",
+        "Shroud Runners"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "casting-back-the-veil-path-of-the-outcast-aeldari",
     "game_version": {
       "edition": "11th",
@@ -183,7 +285,44 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Aeldari",
+        "Infantry"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": {
+                    "objective": {
+                      "controlled_by": "friendly"
+                    }
+                  },
+                  "range": "objective-control"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "cloak-and-shadow-corsair-coterie-aeldari",
     "game_version": {
       "edition": "11th",
@@ -212,7 +351,22 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Guardians"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "cost-of-victory-guardian-battlehost-aeldari",
     "game_version": {
       "edition": "11th",
@@ -241,7 +395,16 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords_any": [
+        "Wraithblades",
+        "Wraithknight",
+        "Wraithlord"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "crushing-strides-spirit-conclave-aeldari",
     "game_version": {
       "edition": "11th",
@@ -299,7 +462,38 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Ynnari"
+      ],
+      "excluded_keywords": [
+        "Wraith Construct"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "model-destroyed",
+              "object": "model-in-this-unit",
+              "window": "phase"
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "death-answers-death-devoted-of-ynnead-aeldari",
     "game_version": {
       "edition": "11th",
@@ -329,7 +523,75 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "ASURYANI MOUNTED",
+                  "VYPER"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "set-up",
+              "filter": {
+                "from": "strategic-reserves"
+              },
+              "window": "turn"
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "fight"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "death-from-on-high-windrider-host-aeldari",
     "game_version": {
       "edition": "11th",
@@ -357,7 +619,43 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Harlequins",
+        "Infantry"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "not_states": [
+                  "engaged"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": "event-subject",
+                  "range": {
+                    "inches": 8
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "deceptive-feint-fateful-performance-aeldari",
     "game_version": {
       "edition": "11th",
@@ -451,7 +749,11 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "emissaries-of-ynnead-devoted-of-ynnead-aeldari",
     "game_version": {
       "edition": "11th",
@@ -525,7 +827,40 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Harlequins"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "state": "engaged"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "exit-the-stage-ghosts-of-the-webway-aeldari",
     "game_version": {
       "edition": "11th",
@@ -553,7 +888,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Kygharil's Protectors"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "fading-fusillade-kygharils-protectors-aeldari",
     "game_version": {
       "edition": "11th",
@@ -578,7 +920,22 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Troupe"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "fangs-of-the-brood-serpents-brood-aeldari",
     "game_version": {
       "edition": "11th",
@@ -607,7 +964,65 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Asuryani",
+        "Infantry"
+      ],
+      "excluded_keywords": [
+        "Wraith Construct"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "ASURYANI",
+                      "PSYKER"
+                    ]
+                  },
+                  "range": {
+                    "inches": 9
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "fate-inescapable-seer-council-aeldari",
     "game_version": {
       "edition": "11th",
@@ -636,7 +1051,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Asuryani"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "feigned-retreat-warhost-aeldari",
     "game_version": {
       "edition": "11th",
@@ -665,7 +1087,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Asuryani"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "fire-and-fade-warhost-aeldari",
     "game_version": {
       "edition": "11th",
@@ -694,7 +1123,50 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "ASURYANI MOUNTED",
+                  "VYPER"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "focused-firepower-windrider-host-aeldari",
     "game_version": {
       "edition": "11th",
@@ -747,7 +1219,51 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Asuryani",
+        "Infantry"
+      ],
+      "excluded_keywords": [
+        "Wraith Construct"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "ASURYANI",
+                      "PSYKER"
+                    ]
+                  },
+                  "range": {
+                    "inches": 9
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "forewarned-seer-council-aeldari",
     "game_version": {
       "edition": "11th",
@@ -811,7 +1327,23 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Harlequins"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "heroes-fall-ghosts-of-the-webway-aeldari",
     "game_version": {
       "edition": "11th",
@@ -869,7 +1401,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Anhrathe"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "into-the-breach-corsair-coterie-aeldari",
     "game_version": {
       "edition": "11th",
@@ -898,7 +1437,41 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Asuryani",
+        "Psyker"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "model",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": "event-subject",
+                  "range": {
+                    "inches": 9
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "ishas-fury-seer-council-aeldari",
     "game_version": {
       "edition": "11th",
@@ -927,7 +1500,43 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "ASPECT WARRIORS",
+                  "AVATAR OF KHAINE"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "engaged_with": "event-subject"
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "khaines-vengeance-aspect-host-aeldari",
     "game_version": {
       "edition": "11th",
@@ -960,7 +1569,15 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Aeldari",
+        "Vehicle"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "layered-wards-armoured-warhost-aeldari",
     "game_version": {
       "edition": "11th",
@@ -989,7 +1606,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Aeldari"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "lethal-ruse-corsair-coterie-aeldari",
     "game_version": {
       "edition": "11th",
@@ -1019,7 +1643,26 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Asuryani"
+      ],
+      "excluded_keywords": [
+        "Wraith Construct"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "lightning-fast-reactions-warhost-aeldari",
     "game_version": {
       "edition": "11th",
@@ -1049,7 +1692,42 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Ynnari"
+      ],
+      "excluded_keywords": [
+        "Wraith Construct"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "INFANTRY",
+                  "MOUNTED"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "macabre-resilience-devoted-of-ynnead-aeldari",
     "game_version": {
       "edition": "11th",
@@ -1078,7 +1756,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Harlequins"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "mocking-flight-ghosts-of-the-webway-aeldari",
     "game_version": {
       "edition": "11th",
@@ -1107,7 +1792,51 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "ANHRATHE",
+                  "RANGERS",
+                  "SHROUD RUNNERS"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "no-prey-too-big-eldritch-raiders-aeldari",
     "game_version": {
       "edition": "11th",
@@ -1135,7 +1864,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords_any": [
+        "Rangers",
+        "Shroud Runners"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "nomads-of-the-hidden-way-path-of-the-outcast-aeldari",
     "game_version": {
       "edition": "11th",
@@ -1164,7 +1901,50 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "RANGERS",
+                  "SHROUD RUNNERS"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "outcast-ambush-corsair-coterie-aeldari",
     "game_version": {
       "edition": "11th",
@@ -1194,7 +1974,41 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Asuryani",
+        "Mounted"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "destroyed",
+              "object": {
+                "owner": "enemy"
+              },
+              "filter": {
+                "by": "this-unit"
+              },
+              "window": "phase"
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "overflight-windrider-host-aeldari",
     "game_version": {
       "edition": "11th",
@@ -1256,7 +2070,23 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Ynnari"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "parting-the-veil-devoted-of-ynnead-aeldari",
     "game_version": {
       "edition": "11th",
@@ -1284,7 +2114,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Harlequins",
+        "Vehicle"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "phantasmal-mirage-twilight-flickers-aeldari",
     "game_version": {
       "edition": "11th",
@@ -1313,7 +2151,42 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Aeldari"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "fight"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "pirates-due-corsair-coterie-aeldari",
     "game_version": {
       "edition": "11th",
@@ -1341,7 +2214,14 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Troupe"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "presaged-rehearsal-twilight-flickers-aeldari",
     "game_version": {
       "edition": "11th",
@@ -1370,7 +2250,23 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Asuryani",
+        "Psyker"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "model",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "presentiment-of-dread-seer-council-aeldari",
     "game_version": {
       "edition": "11th",
@@ -1428,7 +2324,51 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Asuryani",
+        "Infantry"
+      ],
+      "excluded_keywords": [
+        "Wraith Construct"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "ASURYANI",
+                      "PSYKER"
+                    ]
+                  },
+                  "range": {
+                    "inches": 9
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "psychic-shield-seer-council-aeldari",
     "game_version": {
       "edition": "11th",
@@ -1457,7 +2397,35 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Anhrathe"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "state": "engaged"
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "raiders-spoils-eldritch-raiders-aeldari",
     "game_version": {
       "edition": "11th",
@@ -1487,7 +2455,57 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Corsair Voidscarred"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "operator": "or",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "fight"
+                      },
+                      "window": "phase"
+                    }
+                  },
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "shoot"
+                      },
+                      "window": "phase"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "ruthless-killers-eldritch-raiders-aeldari",
     "game_version": {
       "edition": "11th",
@@ -1547,7 +2565,36 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "DIRE AVENGERS",
+                  "GUARDIANS"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "shield-nodes-guardian-battlehost-aeldari",
     "game_version": {
       "edition": "11th",
@@ -1576,7 +2623,84 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": [
+      {
+        "required_keywords": [
+          "Asuryani"
+        ],
+        "name": "first",
+        "count": "one",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "not_states": [
+                    "engaged"
+                  ]
+                }
+              }
+            },
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "owner": "friendly"
+                }
+              }
+            },
+            {
+              "type": "eligible",
+              "parameters": {
+                "subject": "this-unit",
+                "to": "fight"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "required_keywords": [
+          "Transport"
+        ],
+        "name": "second",
+        "count": "one",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "eligible",
+              "parameters": {
+                "subject": {
+                  "stratagem_target": "first"
+                },
+                "to": "embark-within",
+                "transport": "this-unit"
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "same-unit",
+                  "parameters": {
+                    "as": {
+                      "stratagem_target": "first"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
     "ability_id": "skyborne-sanctuary-aspect-host-aeldari",
     "game_version": {
       "edition": "11th",
@@ -1605,7 +2729,84 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": [
+      {
+        "required_keywords": [
+          "Asuryani"
+        ],
+        "name": "first",
+        "count": "one",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "not_states": [
+                    "engaged"
+                  ]
+                }
+              }
+            },
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "owner": "friendly"
+                }
+              }
+            },
+            {
+              "type": "eligible",
+              "parameters": {
+                "subject": "this-unit",
+                "to": "fight"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "required_keywords": [
+          "Transport"
+        ],
+        "name": "second",
+        "count": "one",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "eligible",
+              "parameters": {
+                "subject": {
+                  "stratagem_target": "first"
+                },
+                "to": "embark-within",
+                "transport": "this-unit"
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "same-unit",
+                  "parameters": {
+                    "as": {
+                      "stratagem_target": "first"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
     "ability_id": "skyborne-sanctuary-warhost-aeldari",
     "game_version": {
       "edition": "11th",
@@ -1634,7 +2835,38 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Harlequins"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "MOUNTED",
+                  "VEHICLE"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "skyward-lunge-serpents-brood-aeldari",
     "game_version": {
       "edition": "11th",
@@ -1729,7 +2961,42 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Ynnari"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "soulsight-devoted-of-ynnead-aeldari",
     "game_version": {
       "edition": "11th",
@@ -1758,7 +3025,36 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "ASURYANI MOUNTED",
+                  "VYPER"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "spiralling-evasion-windrider-host-aeldari",
     "game_version": {
       "edition": "11th",
@@ -1787,7 +3083,35 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "WRAITHBLADES",
+                  "WRAITHGUARD"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "spirit-token-spirit-conclave-aeldari",
     "game_version": {
       "edition": "11th",
@@ -1820,7 +3144,23 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Character",
+        "Harlequins"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "model",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "staged-death-ghosts-of-the-webway-aeldari",
     "game_version": {
       "edition": "11th",
@@ -1849,7 +3189,22 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Harlequins"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "striking-stride-serpents-brood-aeldari",
     "game_version": {
       "edition": "11th",
@@ -1877,7 +3232,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Kygharil's Protectors"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "suppressing-storm-kygharils-protectors-aeldari",
     "game_version": {
       "edition": "11th",
@@ -1902,7 +3264,42 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Storm Guardians"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "move"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "time-to-strike-guardian-battlehost-aeldari",
     "game_version": {
       "edition": "11th",
@@ -1960,7 +3357,40 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Troupe"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": "event-subject",
+                  "range": {
+                    "inches": 8
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "tricksters-retort-ghosts-of-the-webway-aeldari",
     "game_version": {
       "edition": "11th",
@@ -1989,7 +3419,77 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Asuryani",
+        "Infantry"
+      ],
+      "excluded_keywords": [
+        "Wraith Construct"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "move"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "set-up",
+                  "window": "phase"
+                }
+              }
+            ]
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "ASURYANI",
+                      "PSYKER"
+                    ]
+                  },
+                  "range": {
+                    "inches": 9
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "unshrouded-truth-seer-council-aeldari",
     "game_version": {
       "edition": "11th",
@@ -2048,7 +3548,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Aeldari",
+        "Vehicle"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "vectored-engines-armoured-warhost-aeldari",
     "game_version": {
       "edition": "11th",
@@ -2077,7 +3585,65 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Aeldari",
+        "Infantry"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "model-destroyed",
+              "object": "model-in-this-unit",
+              "filter": {
+                "by": "event-subject"
+              },
+              "window": "event"
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "state": "battle-shocked"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "state": "engaged"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "vengeful-sorrow-corsair-coterie-aeldari",
     "game_version": {
       "edition": "11th",
@@ -2106,7 +3672,43 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Harlequins",
+        "Vehicle"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "venomous-wrath-serpents-brood-aeldari",
     "game_version": {
       "edition": "11th",
@@ -2136,7 +3738,65 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "DIRE AVENGERS",
+                  "GUARDIANS"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "operator": "or",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "fight"
+                      },
+                      "window": "phase"
+                    }
+                  },
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "shoot"
+                      },
+                      "window": "phase"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "warding-salvoes-guardian-battlehost-aeldari",
     "game_version": {
       "edition": "11th",
@@ -2195,7 +3855,35 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Harlequins",
+        "Mounted"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "eligible",
+            "parameters": {
+              "subject": "this-unit",
+              "to": "fight"
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "weavers-coils-serpents-brood-aeldari",
     "game_version": {
       "edition": "11th",
@@ -2224,7 +3912,41 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Harlequins",
+        "Infantry"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": "event-subject",
+                  "range": {
+                    "inches": 8
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "weaving-stride-serpents-brood-aeldari",
     "game_version": {
       "edition": "11th",
@@ -2253,7 +3975,42 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Asuryani",
+        "Infantry"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": "battlefield-edge",
+                  "range": {
+                    "inches": 9
+                  },
+                  "wholly": true
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "webway-tunnel-warhost-aeldari",
     "game_version": {
       "edition": "11th",
@@ -2282,7 +4039,50 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "ASURYANI MOUNTED",
+                  "VYPER"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "move"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "wind-of-blades-windrider-host-aeldari",
     "game_version": {
       "edition": "11th",
@@ -2311,7 +4111,40 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Anhrathe"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "state": "engaged"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "withdraw-and-reinforce-eldritch-raiders-aeldari",
     "game_version": {
       "edition": "11th",
@@ -2341,7 +4174,26 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Wraith Construct"
+      ],
+      "excluded_keywords": [
+        "Titanic"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "wraithbone-armour-spirit-conclave-aeldari",
     "game_version": {
       "edition": "11th",
@@ -2370,7 +4222,27 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Aeldari",
+        "Infantry"
+      ],
+      "excluded_keywords": [
+        "Wraith Construct"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "yriels-example-eldritch-raiders-aeldari",
     "game_version": {
       "edition": "11th",

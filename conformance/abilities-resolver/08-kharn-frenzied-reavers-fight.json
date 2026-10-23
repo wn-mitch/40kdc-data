@@ -1,5 +1,5 @@
 {
-  "name": "Khârn the Betrayer (world-eaters) in Frenzied Reavers, fight: a Combat Patrol detachment's detachment_rule_ids are its complete army-rule set, so the codex Pact of Blood it does not list leaves the army kind",
+  "name": "Khârn the Betrayer (world-eaters) in Frenzied Reavers, fight: a Combat Patrol detachment's detachment_rule_ids are its complete army-rule set, so the codex Pact of Blood it does not list leaves the army kind; Horrifying Butchery needs a Khorne Berzerkers unit, which Khârn alone is not",
   "input": {
     "unitId": "kharn-the-betrayer",
     "factionId": "world-eaters",
@@ -12,9 +12,6 @@
     ],
     "detachment": [
       "berzerker-charge-world-eaters"
-    ],
-    "detachment-stratagem": [
-      "horrifying-butchery-frenzied-reavers-world-eaters"
     ],
     "unit": [
       "berzerker-frenzy-world-eaters",

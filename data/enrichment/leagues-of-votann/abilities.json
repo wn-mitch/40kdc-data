@@ -78,46 +78,40 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "9f1122dc84b6c089cda16e5205c740b6d8d02ff60d96b869966f9db3e2658ce0",
+    "source_digest": "4d5949b27edc24edf9e6446187ae8ee2d340fcd5fcf392b301072562ef0e9650",
     "version": "2025-q3",
     "effect": {
-      "type": "choice",
-      "options": [
-        {
-          "type": "cost-modifier",
-          "target": "this-model",
-          "modifier": {
-            "of": "stratagem",
-            "id": "fire-overwatch",
-            "operation": "set",
-            "amount": 0,
-            "applies_to": "targeting-this-unit"
-          }
-        },
-        {
-          "type": "cost-modifier",
-          "target": "this-model",
-          "modifier": {
-            "of": "stratagem",
-            "id": "heroic-intervention",
-            "operation": "set",
-            "amount": 0,
-            "applies_to": "targeting-this-unit"
-          }
-        }
-      ]
+      "type": "cost-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "of": "stratagem",
+        "operation": "decrease",
+        "amount": 1,
+        "applies_to": "the-triggering-use"
+      }
     },
     "scope": {
-      "duration": "one-use"
+      "duration": "permanent"
     },
     "unit_ids": [
       "memnyr-strategist"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "faction_id": "leagues-of-votann"
+    "behavior": "reactive",
+    "faction_id": "leagues-of-votann",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "stratagem"
+      },
+      "optional": true
+    },
+    "usage": {
+      "frequency": "once-per-battle-round",
+      "per": "unit"
+    }
   },
   {
     "ability_id": "decisive-destruction-leagues-of-votann",
@@ -125,17 +119,30 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "7ff23d324420e438c8afd20dca0ee159467dd0c201331925b9a371af43e3e47e",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
+            }
+          },
+          {
+            "type": "closest",
+            "parameters": {
+              "subject": "defender",
+              "among": "eligible-targets",
+              "to": "attacker"
+            }
+          }
+        ]
       },
       "effect": {
         "type": "re-roll",
@@ -162,13 +169,13 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "6e11e6d83318d69bfeb6fd85d4d9c2a4684ff325bab19a26ead219743e720531",
     "version": "2025-q3",
     "effect": {
       "type": "invulnerable-save",
-      "target": "this-model",
+      "target": "this-unit",
       "modifier": {
         "invuln_sv": 5
       }
@@ -311,7 +318,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "6f54d8c479caba5d33d3e04e658b70c61da911a80c22aaf21fdf7517788c392d",
     "version": "2025-q3",
@@ -325,14 +332,13 @@
             "parameters": {
               "filter": {
                 "within": {
+                  "of": "battlefield-edge",
                   "range": {
                     "inches": 9
                   },
-                  "of": "battlefield-edge",
                   "wholly": true
                 }
-              },
-              "subject": "this-unit"
+              }
             }
           },
           {
@@ -343,8 +349,7 @@
                 "parameters": {
                   "filter": {
                     "state": "engaged"
-                  },
-                  "subject": "this-unit"
+                  }
                 }
               }
             ]
@@ -355,7 +360,8 @@
         "type": "set-up",
         "target": "this-unit",
         "modifier": {
-          "to": "strategic-reserves"
+          "to": "strategic-reserves",
+          "from": "battlefield"
         }
       }
     },
@@ -366,8 +372,18 @@
       "hernkyn-pioneers"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "leagues-of-votann"
+    "behavior": "reactive",
+    "faction_id": "leagues-of-votann",
+    "trigger": {
+      "event": "turn-ended",
+      "condition": {
+        "type": "player-turn-is",
+        "parameters": {
+          "turn": "opponent-turn"
+        }
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "multiwave-comms-array-leagues-of-votann",
@@ -375,16 +391,23 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "58fbcb829e38e968ccd5a3a462c7626738cebe80e9cfa53f54fa3e96bbed4888",
     "version": "2025-q3",
     "effect": {
-      "type": "cp-gain",
-      "target": "this-model",
-      "modifier": {
-        "amount": 1
-      }
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 5,
+      "comparison": "gte",
+      "on_success": {
+        "type": "cp-gain",
+        "target": "this-model",
+        "modifier": {
+          "amount": 1
+        }
+      },
+      "on_fail": null
     },
     "scope": {
       "duration": "permanent"
@@ -393,8 +416,14 @@
       "hernkyn-pioneers"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "leagues-of-votann"
+    "behavior": "reactive",
+    "faction_id": "leagues-of-votann",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "stratagem"
+      }
+    }
   },
   {
     "ability_id": "panspectral-scanner-leagues-of-votann",
@@ -402,16 +431,16 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "ba9b6092586bd6cc1b738ff8efbfef53ccea4ae7eee922e46ac214f0a43aa7c5",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
+        "type": "attack-is",
         "parameters": {
-          "phase": "shooting"
+          "attack_type": "ranged"
         }
       },
       "effect": {
@@ -440,16 +469,16 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "dcd65774421e43d7de9454da815ac1c530642db423bd630b1669286f270dd5ee",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
+        "type": "attack-is",
         "parameters": {
-          "phase": "shooting"
+          "attack_type": "ranged"
         }
       },
       "effect": {
@@ -458,7 +487,7 @@
         "modifier": {
           "what": "rolls",
           "rolls": [
-            "all"
+            "hit"
           ]
         }
       }
@@ -470,7 +499,7 @@
       "hernkyn-pioneers"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "activated",
     "faction_id": "leagues-of-votann"
   },
   {
@@ -479,23 +508,63 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "d80a2c877cdff36ff6ab1776371bce0770779216dd92f25cf53eaa3875e6e099",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "test",
-        "target": "selected-unit",
-        "modifier": {
-          "test": "battle-shock"
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "subject": "event-subject",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success",
+                "weapons": {
+                  "name": "tremor shells"
+                }
+              },
+              "window": "event"
+            }
+          }
+        },
+        "effect": {
+          "type": "test",
+          "target": "selected-unit",
+          "modifier": {
+            "test": "battle-shock",
+            "modifier": -1
+          }
         }
       }
     },
@@ -506,8 +575,14 @@
       "cthonian-earthshakers"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "leagues-of-votann"
+    "behavior": "reactive",
+    "faction_id": "leagues-of-votann",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
+    }
   },
   {
     "ability_id": "geomantic-hunters-leagues-of-votann",
@@ -515,24 +590,48 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "915ad5da83a2f190d1a354248c2615c37bc224070d4522237ac86d443a7b96b3",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "attack-is",
+            "parameters": {
+              "weapons": {
+                "name": "breacher ordnance"
+              }
+            }
+          }
+        ]
       },
       "effect": {
         "type": "re-roll",
         "target": "this-unit",
         "modifier": {
           "roll": "wound",
-          "subset": "all-failures"
+          "result_scope": "any-result"
         }
       }
     },
@@ -543,8 +642,20 @@
       "cthonian-earthshakers"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "faction_id": "leagues-of-votann"
+    "behavior": "reactive",
+    "faction_id": "leagues-of-votann",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
+      "optional": true
+    },
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 2,
+      "per": "unit"
+    }
   },
   {
     "ability_id": "scanner-uplinks-leagues-of-votann",
@@ -552,37 +663,144 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "6c8a762acd76cbefd91f0d4b373779824fd041af757a4ca74082e3f1b1c829b4",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "roll-modifier",
-        "target": "attacker",
-        "modifier": {
-          "roll": "hit",
-          "operation": "subtract",
-          "value": 1
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "operator": "and",
+            "operands": [
+              {
+                "operator": "and",
+                "operands": [
+                  {
+                    "operator": "not",
+                    "operands": [
+                      {
+                        "type": "matches",
+                        "parameters": {
+                          "subject": "selected-unit",
+                          "filter": {
+                            "all_of": [
+                              "MONSTER"
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "operator": "not",
+                    "operands": [
+                      {
+                        "type": "matches",
+                        "parameters": {
+                          "subject": "selected-unit",
+                          "filter": {
+                            "all_of": [
+                              "VEHICLE"
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "after-roll",
+                  "subject": "event-subject",
+                  "object": "this-unit",
+                  "filter": {
+                    "roll": "hit",
+                    "result": "success"
+                  },
+                  "window": "event"
+                }
+              }
+            ]
+          }
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "designate",
+              "target": "selected-unit",
+              "modifier": {
+                "tag": "suppressed"
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "designated": "suppressed"
+                  }
+                }
+              },
+              "effect": {
+                "type": "roll-modifier",
+                "target": "selected-unit",
+                "modifier": {
+                  "roll": "hit",
+                  "operation": "subtract",
+                  "value": 1
+                }
+              }
+            }
+          ]
         }
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "until-start-next-turn"
     },
     "unit_ids": [
       "kapricus-carrier"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "leagues-of-votann"
+    "behavior": "reactive",
+    "faction_id": "leagues-of-votann",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
+    }
   },
   {
     "ability_id": "smoke-launcher-leagues-of-votann",
@@ -713,19 +931,48 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "bb7e15b7a5af1db5c895c31048a820b8b81de11db334e5d69cc3dbf04a795f1e",
     "version": "2025-q3",
     "effect": {
-      "type": "weapon-ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "keywords": [
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
           {
-            "keyword_id": "precision"
+            "type": "matches",
+            "parameters": {
+              "subject": "defender",
+              "filter": {
+                "within": {
+                  "of": {
+                    "objective": {}
+                  },
+                  "range": "objective-control"
+                }
+              }
+            }
+          },
+          {
+            "type": "roll-result",
+            "parameters": {
+              "roll": "wound",
+              "result": "critical"
+            }
           }
         ]
+      },
+      "effect": {
+        "type": "weapon-ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "keywords": [
+            {
+              "keyword_id": "precision"
+            }
+          ]
+        }
       }
     },
     "scope": {
@@ -745,27 +992,42 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "634432019d31b342876a22c29d1be4b365f540c1ba31b864f341d93fc6d14d47",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
+        "type": "attack-is",
         "parameters": {
-          "phase": "shooting"
+          "attack_type": "ranged"
         }
       },
       "effect": {
-        "type": "ignore-modifiers",
-        "target": "this-unit",
-        "modifier": {
-          "what": "rolls",
-          "rolls": [
-            "all"
-          ]
-        }
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "ignore-modifiers",
+            "target": "this-model",
+            "modifier": {
+              "what": "characteristics",
+              "stats": [
+                "BS"
+              ]
+            }
+          },
+          {
+            "type": "ignore-modifiers",
+            "target": "this-model",
+            "modifier": {
+              "what": "rolls",
+              "rolls": [
+                "hit"
+              ]
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -775,7 +1037,7 @@
       "hekaton-land-fortress"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "activated",
     "faction_id": "leagues-of-votann"
   },
   {
@@ -784,7 +1046,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "d7f1f4d25784d1eb8d7d81934f8902b7bcba0404a7754afb8a1232a876fb77c5",
     "version": "2025-q3",
@@ -794,14 +1056,18 @@
       "threshold": 2,
       "comparison": "gte",
       "on_success": {
-        "type": "return-models",
+        "type": "set-up",
         "target": "this-model",
         "modifier": {
-          "count": 1,
-          "wounds_remaining": "full",
-          "placement": "closest-to-destruction"
+          "to": "battlefield",
+          "min_enemy_distance": {
+            "inches": 1
+          },
+          "placement": "closest-to-destruction",
+          "wounds_remaining": "full"
         }
-      }
+      },
+      "on_fail": null
     },
     "scope": {
       "duration": "permanent"
@@ -810,8 +1076,26 @@
       "buri-aegnirssen"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "leagues-of-votann"
+    "behavior": "reactive",
+    "faction_id": "leagues-of-votann",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "model-destroyed",
+          "object": "this-model",
+          "window": "phase",
+          "count": {
+            "min": 1
+          }
+        }
+      }
+    },
+    "usage": {
+      "frequency": "first-this-battle",
+      "per": "model"
+    }
   },
   {
     "ability_id": "unhinged-vengeance-leagues-of-votann",
@@ -819,9 +1103,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "f22233a4c7914b6a861d5a1385c7ced0289e0aabdb73682ac5aa68030b646d8f",
+    "source_digest": "fa1d1d07e373180f0fce75a4cae572f6cb14baf0bae18fa84f9c8ff004b39e1b",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -829,67 +1113,53 @@
         "operator": "and",
         "operands": [
           {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "opponent-turn"
+                }
+              }
+            ]
           },
           {
-            "type": "player-turn-is",
+            "type": "wounds",
             "parameters": {
-              "turn": "opponent-turn"
+              "subject": "this-model",
+              "lost": true
             }
           }
         ]
       },
       "effect": {
-        "type": "conditional",
-        "condition": {
-          "operator": "and",
-          "operands": [
-            {
-              "type": "wounds",
-              "parameters": {
-                "subject": "this-model",
-                "lost": true
-              }
-            },
-            {
-              "operator": "not",
-              "operands": [
-                {
-                  "type": "matches",
-                  "parameters": {
-                    "filter": {
-                      "state": "battle-shocked"
-                    }
-                  }
-                }
-              ]
-            },
-            {
-              "operator": "not",
-              "operands": [
-                {
-                  "type": "matches",
-                  "parameters": {
-                    "filter": {
-                      "state": "engaged"
-                    }
-                  }
-                }
-              ]
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "move",
+            "target": "this-unit",
+            "modifier": {
+              "move_type": "surge",
+              "distance": "D6"
             }
-          ]
-        },
-        "effect": {
-          "type": "move",
-          "target": "this-unit",
-          "modifier": {
-            "move_type": "surge",
-            "distance": "D6+2"
+          },
+          {
+            "type": "move-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "applies_to_moves": [
+                "surge"
+              ],
+              "distance_bonus": 2
+            }
           }
-        }
+        ]
       }
     },
     "scope": {
@@ -901,16 +1171,13 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "usage": {
-      "frequency": "first-time-this-phase"
-    },
     "trigger": {
       "event": "attacks-resolved",
-      "subject": {
-        "owner": "enemy"
-      },
       "filter": {
         "kind": "shoot"
+      },
+      "subject": {
+        "owner": "enemy"
       }
     },
     "faction_id": "leagues-of-votann"
@@ -921,59 +1188,60 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "5f3bb3740390acc542b85db901a08590d12c9e2bc9a8dfa5a352b80215bdc70f",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "or",
+        "operator": "and",
         "operands": [
           {
             "type": "matches",
             "parameters": {
               "filter": {
                 "within": {
-                  "range": {
-                    "inches": 3
-                  },
                   "of": {
                     "owner": "friendly",
-                    "all_of": [
-                      "LEAGUES OF VOTANN",
-                      "VEHICLE"
+                    "any_of_filters": [
+                      {
+                        "all_of": [
+                          "IRONKIN STEELJACKS"
+                        ]
+                      },
+                      {
+                        "all_of": [
+                          "LEAGUES OF VOTANN",
+                          "VEHICLE"
+                        ]
+                      }
                     ]
+                  },
+                  "range": {
+                    "inches": 3
                   }
                 }
-              },
-              "subject": "this-unit"
+              }
             }
           },
           {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "within": {
-                  "range": {
-                    "inches": 3
-                  },
-                  "of": {
-                    "owner": "friendly",
-                    "all_of": [
-                      "IRONKIN STEELJACKS"
-                    ]
-                  }
+            "operator": "not",
+            "operands": [
+              {
+                "type": "attachment",
+                "parameters": {
+                  "subject": "this-unit",
+                  "role": "attached"
                 }
-              },
-              "subject": "this-unit"
-            }
+              }
+            ]
           }
         ]
       },
       "effect": {
         "type": "ability-grant",
-        "target": "this-model",
+        "target": "this-unit",
         "modifier": {
           "ability": "lone-operative"
         }
@@ -995,16 +1263,16 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "f8a17c0b3aa3ad6e002a8cdfeacf24be416ccc8aa2d39b9aa43fad77b910c1a6",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
+        "type": "attack-is",
         "parameters": {
-          "phase": "shooting"
+          "attack_type": "ranged"
         }
       },
       "effect": {
@@ -1110,30 +1378,24 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "065b77b2b3b33a27b5067956323b88b2475f6d44c3d51bdf018168d79eed0bef",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attack-is",
-        "parameters": {
-          "attack_type": "melee"
-        }
-      },
-      "effect": {
-        "type": "weapon-ability-grant",
-        "target": "this-unit",
-        "modifier": {
-          "keywords": [
-            {
-              "keyword_id": "sustained-hits",
-              "parameters": {
-                "value": 1
-              }
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "keywords": [
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 1
             }
-          ]
+          }
+        ],
+        "weapons": {
+          "type": "melee"
         }
       }
     },
@@ -1153,33 +1415,44 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "8d1d2843fcd7dde1d78a7c63ba0ff0e6e929102b1c3d0e347c354b787c980c4c",
+    "source_digest": "50abfa531feeebeda388d39ecae4272c43a09d5c2477e04197a91458b9522d04",
     "version": "2025-q3",
     "effect": {
-      "type": "choice",
-      "options": [
+      "type": "sequence",
+      "steps": [
         {
-          "type": "cost-modifier",
-          "target": "this-model",
+          "type": "permission",
+          "target": "this-unit",
           "modifier": {
-            "of": "stratagem",
-            "id": "fire-overwatch",
-            "operation": "set",
-            "amount": 0,
-            "applies_to": "targeting-this-unit"
+            "activity": "use-stratagem",
+            "allow": true,
+            "despite": [
+              "stratagem-used-this-phase"
+            ],
+            "stratagem": "heroic-intervention"
           }
         },
         {
           "type": "cost-modifier",
-          "target": "this-model",
+          "target": "this-unit",
           "modifier": {
             "of": "stratagem",
-            "id": "heroic-intervention",
-            "operation": "set",
-            "amount": 0,
-            "applies_to": "targeting-this-unit"
+            "operation": "decrease",
+            "amount": 1,
+            "applies_to": "the-triggering-use"
+          }
+        },
+        {
+          "type": "ability-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "ability": "heroic-intervention",
+            "aspect": "uses",
+            "operation": "lift-limit",
+            "value": 1,
+            "consumes_shared_use": false
           }
         }
       ]
@@ -1191,7 +1464,7 @@
       "berehk-stornbrow"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "activated",
     "faction_id": "leagues-of-votann"
   },
   {
@@ -1200,25 +1473,69 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "9b6e8c88fe7cd3acdc36e1d0525b49dd2dd2a359527dd70681b5082f769e3aaa",
     "version": "2025-q3",
     "effect": {
-      "type": "permission",
-      "target": {
-        "owner": "enemy",
-        "none_of": [
-          "MONSTER",
-          "VEHICLE"
-        ],
-        "within": {
-          "range": "engagement"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-subject",
+          "filter": {
+            "engaged_with": "this-unit"
+          }
         }
       },
-      "modifier": {
-        "activity": "fall-back",
-        "allow": false
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "event-subject",
+                "filter": {
+                  "state": "battle-shocked"
+                }
+              }
+            },
+            "effect": {
+              "type": "test",
+              "target": "event-subject",
+              "modifier": {
+                "test": "desperate-escape",
+                "modifier": -1
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "event-subject",
+                    "filter": {
+                      "state": "battle-shocked"
+                    }
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "test",
+              "target": "event-subject",
+              "modifier": {
+                "test": "desperate-escape"
+              }
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -1228,8 +1545,23 @@
       "ironkin-steeljacks-with-melee-weapons"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "leagues-of-votann"
+    "behavior": "reactive",
+    "faction_id": "leagues-of-votann",
+    "trigger": {
+      "event": "move-started",
+      "filter": {
+        "move_types": [
+          "fall-back"
+        ]
+      },
+      "subject": {
+        "owner": "enemy",
+        "none_of": [
+          "MONSTER",
+          "VEHICLE"
+        ]
+      }
+    }
   },
   {
     "ability_id": "ancestral-fortune-leagues-of-votann",
@@ -1304,26 +1636,55 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "f33045445c6b808c29623d79952181f90d115ad099542cbb73b6b7335d596e3e",
     "version": "2025-q3",
     "effect": {
-      "type": "cp-gain",
-      "target": "this-model",
+      "type": "cost-modifier",
+      "target": "this-unit",
       "modifier": {
-        "amount": 1
+        "of": "stratagem",
+        "operation": "decrease",
+        "amount": 1,
+        "applies_to": "the-triggering-use"
       }
     },
     "scope": {
-      "duration": "one-use"
+      "duration": "permanent"
     },
     "unit_ids": [
       "uthar-the-destined"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "faction_id": "leagues-of-votann"
+    "behavior": "reactive",
+    "faction_id": "leagues-of-votann",
+    "trigger": {
+      "event": "targets-selected",
+      "subject": {
+        "owner": "any"
+      },
+      "filter": {
+        "kind": "stratagem"
+      },
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "LEAGUES OF VOTANN"
+        ],
+        "within": {
+          "of": "this-model",
+          "range": {
+            "inches": 12
+          }
+        }
+      },
+      "optional": true
+    },
+    "usage": {
+      "frequency": "once-per-battle-round",
+      "per": "model"
+    }
   },
   {
     "ability_id": "rampart-crest-uthar-the-destined-leagues-of-votann",
@@ -1368,9 +1729,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "cf47b12c72515c83468b22fb79a7cd4e455abbd7e0ba97317c9b442d56a6369c",
+    "source_digest": "da8622a83b232ecd435fdb4d705be0d0125f937fb09f52dfc016496865960d00",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -1378,17 +1739,34 @@
         "operator": "and",
         "operands": [
           {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "within": {
-                  "range": {
-                    "inches": 8
-                  },
-                  "of": "this-unit"
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "movement"
                 }
               },
-              "subject": "event-subject"
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "opponent-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "event-subject",
+              "filter": {
+                "within": {
+                  "of": "this-unit",
+                  "range": {
+                    "inches": 8
+                  }
+                }
+              }
             }
           },
           {
@@ -1399,8 +1777,7 @@
                 "parameters": {
                   "filter": {
                     "state": "engaged"
-                  },
-                  "subject": "this-unit"
+                  }
                 }
               }
             ]
@@ -1411,7 +1788,8 @@
         "type": "move",
         "target": "this-unit",
         "modifier": {
-          "move_type": "normal"
+          "move_type": "normal",
+          "distance": "D6"
         }
       }
     },
@@ -1427,11 +1805,7 @@
       "event": "move-ended",
       "subject": {
         "owner": "enemy"
-      },
-      "optional": true
-    },
-    "usage": {
-      "frequency": "once-per-turn"
+      }
     },
     "faction_id": "leagues-of-votann"
   },
@@ -1441,7 +1815,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "3c316974bf9193024d31dbfef24f148ae298e49111204d54a1c8ef7e26ddc8d3",
     "version": "2025-q3",
@@ -1455,13 +1829,27 @@
         }
       },
       "effect": {
-        "type": "roll-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "charge",
-          "operation": "add",
-          "value": 1
-        }
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "advance",
+              "operation": "add",
+              "value": 1
+            }
+          },
+          {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "charge",
+              "operation": "add",
+              "value": 1
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -1480,15 +1868,70 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "4c97bfef090e9648db01a3bc73413ef43454758da51862661750a89531ae8222",
     "version": "2025-q3",
     "effect": {
-      "type": "mortal-wounds",
-      "target": "defender",
-      "modifier": {
-        "count": "D3"
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "subject": "selected-unit",
+            "filter": {
+              "engaged_with": "this-model"
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "dice-table",
+        "dice": "D6",
+        "outcomes": [
+          {
+            "results": [
+              1
+            ],
+            "effect": {
+              "type": "no-effect"
+            }
+          },
+          {
+            "results": [
+              2,
+              3,
+              4,
+              5
+            ],
+            "effect": {
+              "type": "mortal-wounds",
+              "target": "selected-unit",
+              "modifier": {
+                "count": "D3"
+              }
+            }
+          },
+          {
+            "results": [
+              6
+            ],
+            "effect": {
+              "type": "mortal-wounds",
+              "target": "selected-unit",
+              "modifier": {
+                "count": "D3+3"
+              }
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -1498,8 +1941,17 @@
       "einhyr-champion"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "leagues-of-votann"
+    "behavior": "reactive",
+    "faction_id": "leagues-of-votann",
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "charge"
+        ]
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "breaching-fire-leagues-of-votann",
@@ -1507,35 +1959,79 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "9e90644759e6e2a15bb92dfadf24c0b3e42f1a695917d7c4736029277a26f07d",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "ability-grant",
-        "target": "this-unit",
-        "modifier": {
-          "ability": "benefit-of-cover"
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "subject": "event-subject",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success"
+              },
+              "window": "event"
+            }
+          }
+        },
+        "effect": {
+          "type": "rule-state",
+          "target": "selected-unit",
+          "modifier": {
+            "direction": "suppressed",
+            "rule_kind": "core-rule",
+            "rule": "benefit-of-cover"
+          }
         }
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "until-next-shooting-phase"
     },
     "unit_ids": [
       "brokhyr-thunderkyn"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "leagues-of-votann"
+    "behavior": "reactive",
+    "faction_id": "leagues-of-votann",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
+    }
   },
   {
     "ability_id": "science-guild-support-leagues-of-votann",
@@ -1543,7 +2039,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "4078a2de3b4297c4653046c20ed67b1d4a1f292d087ac27913887d7da27c5987",
     "version": "2025-q3",
@@ -1552,22 +2048,25 @@
       "condition": {
         "type": "matches",
         "parameters": {
+          "subject": "this-model",
           "filter": {
             "within": {
-              "range": {
-                "inches": 3
-              },
               "of": {
                 "owner": "friendly",
                 "all_of": [
-                  "LEAGUES OF VOTANN",
-                  "INFANTRY"
+                  "INFANTRY",
+                  "LEAGUES OF VOTANN"
                 ],
-                "excluding": "this-unit"
+                "excluding": "this-unit",
+                "lacks_ability": [
+                  "lone-operative"
+                ]
+              },
+              "range": {
+                "inches": 3
               }
             }
-          },
-          "subject": "this-model"
+          }
         }
       },
       "effect": {
@@ -1640,24 +2139,49 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "947520669f6e773f3b852d9c831f54c1ad0dae182615097a7d1da3c074a97a63",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "move",
-        "target": "this-unit",
-        "modifier": {
-          "move_type": "normal"
-        }
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "move",
+            "target": "event-subject",
+            "modifier": {
+              "move_type": "normal",
+              "distance": "D6"
+            }
+          },
+          {
+            "type": "permission",
+            "target": "this-unit",
+            "modifier": {
+              "activity": "declare-charge",
+              "allow": false
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -1667,8 +2191,15 @@
       "kapricus-defenders"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "leagues-of-votann"
+    "behavior": "reactive",
+    "faction_id": "leagues-of-votann",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "cyberstimms-leagues-of-votann",
@@ -1712,46 +2243,96 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "ec4595a13d56a7788862a6c81a9010ebd6ed663402df98e83a2d44036ade8f47",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       },
       "effect": {
         "type": "select-units",
         "selector": {
           "filter": {
-            "owner": "enemy",
-            "none_of": [
-              "MONSTER",
-              "VEHICLE"
-            ]
+            "owner": "enemy"
           },
           "count": {
             "min": 1,
             "max": 1
           },
           "eligibility": {
-            "type": "happened",
-            "parameters": {
-              "event": "after-roll",
-              "object": "this-unit",
-              "filter": {
-                "roll": "hit",
-                "result": "success",
-                "weapons": {
-                  "name": "mole grenade launcher"
-                }
+            "operator": "and",
+            "operands": [
+              {
+                "operator": "and",
+                "operands": [
+                  {
+                    "operator": "not",
+                    "operands": [
+                      {
+                        "type": "matches",
+                        "parameters": {
+                          "subject": "selected-unit",
+                          "filter": {
+                            "all_of": [
+                              "MONSTER"
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "operator": "not",
+                    "operands": [
+                      {
+                        "type": "matches",
+                        "parameters": {
+                          "subject": "selected-unit",
+                          "filter": {
+                            "all_of": [
+                              "VEHICLE"
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
               },
-              "window": "event"
-            }
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "after-roll",
+                  "subject": "event-subject",
+                  "object": "this-unit",
+                  "filter": {
+                    "roll": "hit",
+                    "result": "success",
+                    "weapons": {
+                      "name": "mole grenade launcher"
+                    }
+                  },
+                  "window": "event"
+                }
+              }
+            ]
           }
         },
         "effect": {
@@ -1759,22 +2340,28 @@
           "target": "selected-unit",
           "modifier": {
             "may": "cannot-target",
-            "target": "selected-unit",
             "kind": "stratagem",
+            "target": "selected-unit",
             "stratagem": "fire-overwatch"
           }
         }
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "until-next-shooting-phase"
     },
     "unit_ids": [
       "cthonian-beserks"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "leagues-of-votann"
+    "behavior": "reactive",
+    "faction_id": "leagues-of-votann",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
+    }
   },
   {
     "ability_id": "blistering-advance-leagues-of-votann",
@@ -1945,13 +2532,31 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "b7839c91742ce711a4223df21826be04e6f781c4b938441d5e232b1abcecd9b2",
     "version": "2025-q3",
     "effect": {
-      "type": "objective-sticky",
-      "target": "this-unit"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "within": {
+              "of": {
+                "objective": {
+                  "controlled_by": "friendly"
+                }
+              },
+              "range": "objective-control"
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "objective-sticky",
+        "target": "this-unit"
+      }
     },
     "scope": {
       "duration": "permanent"
@@ -1960,8 +2565,28 @@
       "hearthkyn-warriors"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "leagues-of-votann"
+    "behavior": "reactive",
+    "faction_id": "leagues-of-votann",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "panspectral-scanning-leagues-of-votann",
@@ -1969,16 +2594,16 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "1fca8833ed3ff6976add0c1b818ebd6f4802cc1a0efee8714da832d52d40b1e1",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
+        "type": "attack-is",
         "parameters": {
-          "phase": "shooting"
+          "attack_type": "ranged"
         }
       },
       "effect": {
@@ -2443,7 +3068,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "e5401340d1bc8817a5eb11a57e131c0e68c0bdda5850ad26a60f19a84c322c87",
     "version": "2025-q3",
@@ -2455,9 +3080,15 @@
     "behavior": "passive",
     "effect": {
       "type": "ability-grant",
-      "target": "this-model",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "SAGITAUR"
+        ]
+      },
       "modifier": {
-        "ability": "scouts"
+        "ability": "scouts",
+        "value": 6
       }
     },
     "scope": {
@@ -2528,7 +3159,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "c0b17b83b76c63fe881ff734c79fde611f50c7cc54371dd46d19c9151916d405",
     "version": "2025-q3",
@@ -2537,33 +3168,47 @@
     "faction_id": "leagues-of-votann",
     "detachment_id": "armoured-trailblazers",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "select-units",
-      "selector": {
-        "filter": {
-          "owner": "friendly",
-          "all_of": [
-            "SAGITAUR"
-          ]
-        },
-        "count": {
-          "min": 0,
-          "max": 2
+      "type": "conditional",
+      "condition": {
+        "type": "battle-round",
+        "parameters": {
+          "min": 2
         }
       },
       "effect": {
         "type": "move",
-        "target": "selected-unit",
+        "target": "this-unit",
         "modifier": {
           "move_type": "ingress"
         }
       }
     },
     "scope": {
-      "duration": "turn"
+      "duration": "permanent"
     },
-    "community_notes": "[APPROX] Selects up to two friendly SAGITAUR units to make an ingress move; the requirements that they be in Strategic Reserves and that this be used at the end of the opponent's Movement phase from the second battle round onwards are not encoded. Full rule in raw-text store."
+    "community_notes": "[APPROX] Selects up to two friendly SAGITAUR units to make an ingress move; the requirements that they be in Strategic Reserves and that this be used at the end of the opponent's Movement phase from the second battle round onwards are not encoded. Full rule in raw-text store.",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "built-to-last-armoured-trailblazers-leagues-of-votann",
@@ -2644,7 +3289,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "d351393e83b3fb4275bc2a4c54c61aafef11b628e84da133e986d1885d56158c",
     "version": "2025-q3",
@@ -2656,13 +3301,16 @@
     "behavior": "passive",
     "effect": {
       "type": "weapon-ability-grant",
-      "target": "this-model",
+      "target": "this-unit",
       "modifier": {
         "keywords": [
           {
             "keyword_id": "ignores-cover"
           }
-        ]
+        ],
+        "weapons": {
+          "type": "ranged"
+        }
       }
     },
     "scope": {
@@ -2706,7 +3354,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "6d07accc110a6d70ea982084651d79f3bf1edba229dc08d31d322db6a071ead0",
     "version": "2025-q3",
@@ -2717,21 +3365,36 @@
     "ability_type": "detachment",
     "behavior": "passive",
     "effect": {
-      "type": "roll-modifier",
-      "target": {
-        "owner": "friendly",
-        "within": {
-          "range": {
-            "inches": 12
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "defender",
+          "filter": {
+            "within": {
+              "of": "this-unit",
+              "range": {
+                "inches": 12
+              }
+            }
           }
         }
       },
-      "modifier": {
-        "roll": "hit",
-        "operation": "add",
-        "value": 1,
-        "weapons": {
-          "type": "ranged"
+      "effect": {
+        "type": "roll-modifier",
+        "target": {
+          "owner": "friendly",
+          "all_of": [
+            "HERNKYN"
+          ]
+        },
+        "modifier": {
+          "roll": "hit",
+          "operation": "add",
+          "value": 1,
+          "weapons": {
+            "type": "ranged"
+          }
         }
       }
     },
@@ -2746,7 +3409,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "9abf0100304fa20629c4cddd9ca714fe78cc32d44a8a2f292f610fbe8aa0ed15",
     "version": "2025-q3",
@@ -2758,16 +3421,16 @@
     "behavior": "reactive",
     "effect": {
       "type": "weapon-ability-grant",
-      "target": "this-model",
+      "target": "this-unit",
       "modifier": {
-        "weapons": {
-          "type": "ranged"
-        },
         "keywords": [
           {
             "keyword_id": "lethal-hits"
           }
-        ]
+        ],
+        "weapons": {
+          "type": "ranged"
+        }
       }
     },
     "scope": {
@@ -2779,11 +3442,11 @@
       "filter": {
         "to": "shoot"
       },
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "HERNKYN"
+        ]
       }
     }
   },
@@ -3041,7 +3704,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "f1f5a2bf52a6d96331024028a6dfd1a5a98651b7e2abf9ca04394bc408433e1d",
     "version": "2025-q3",
@@ -3052,22 +3715,74 @@
     "ability_type": "detachment",
     "behavior": "passive",
     "effect": {
-      "type": "re-roll",
-      "target": {
-        "owner": "friendly",
-        "within": {
-          "range": {
-            "inches": 9
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "attack-is",
+                "parameters": {
+                  "attack_type": "ranged"
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "defender",
+                  "filter": {
+                    "within": {
+                      "of": "attacker",
+                      "range": {
+                        "inches": 9
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": {
+              "owner": "friendly",
+              "any_of": [
+                "EINHYR CHAMPION",
+                "EINHYR HEARTHGUARD",
+                "KÂHL",
+                "ÛTHAR THE DESTINED"
+              ]
+            },
+            "modifier": {
+              "roll": "wound",
+              "subset": "ones"
+            }
           }
+        },
+        {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "army-rule",
+              "target": "this-unit",
+              "modifier": {
+                "rule": "detachment-tag-exclusive",
+                "tag": "HEARTHGUARD"
+              }
+            },
+            {
+              "type": "army-rule",
+              "target": "this-unit",
+              "modifier": {
+                "rule": "detachment-tag-exclusive",
+                "tag": "HEARTHGUARD"
+              }
+            }
+          ]
         }
-      },
-      "modifier": {
-        "roll": "wound",
-        "subset": "ones",
-        "weapons": {
-          "type": "ranged"
-        }
-      }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -3143,54 +3858,59 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "08db0291759a511983f42dd35b728d0be01432ffadc6e342a37011bcdb3aa114",
+    "source_digest": "ff1b281359ca230e652da39968bb0e4d9b2fbecf809d3b8d9184952e83083dfb",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "hearthguard-covenant",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "move",
-          "target": "event-subject",
-          "modifier": {
-            "move_type": "ingress"
-          }
-        },
-        {
-          "type": "set-up",
-          "target": "event-subject",
-          "modifier": {
-            "to": "battlefield",
-            "from": "strategic-reserves",
-            "min_enemy_distance": {
-              "inches": 6
-            },
-            "placement": "anywhere"
-          }
-        },
-        {
-          "type": "permission",
-          "target": "event-subject",
-          "modifier": {
-            "activity": "declare-charge",
-            "allow": false
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-subject",
+          "filter": {
+            "has_ability": [
+              "deep-strike"
+            ]
           }
         }
-      ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "set-up",
+            "target": "this-unit",
+            "modifier": {
+              "to": "battlefield",
+              "min_enemy_distance": {
+                "inches": 6
+              }
+            }
+          },
+          {
+            "type": "permission",
+            "target": "this-unit",
+            "modifier": {
+              "activity": "declare-charge",
+              "allow": false
+            }
+          }
+        ]
+      }
     },
     "scope": {
       "duration": "turn"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "set-up",
+      "event": "selected",
       "subject": {
         "owner": "friendly",
         "all_of": [
@@ -3198,34 +3918,10 @@
         ]
       },
       "filter": {
-        "from": "strategic-reserves"
-      },
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "your-turn"
-            }
-          },
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "all_of": [
-                  "DEEP STRIKE"
-                ]
-              }
-            }
-          }
-        ]
+        "move_types": [
+          "ingress"
+        ],
+        "to": "move"
       }
     }
   },
@@ -3509,7 +4205,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "ed264399f91ae0425266e24754d601393b975e94fc170ba162f332275eab575a",
     "version": "2025-q3",
@@ -3520,42 +4216,23 @@
     "ability_type": "detachment",
     "behavior": "passive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "all_of": [
-                  "CTHONIAN"
-                ]
-              }
-            }
-          },
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "all_of": [
-                  "BESERKS"
-                ]
-              }
-            }
-          }
+      "type": "ability-grant",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "BESERKS",
+          "CTHONIAN"
         ]
       },
-      "effect": {
-        "type": "ability-grant",
-        "target": "this-unit",
-        "modifier": {
-          "ability": "deep-strike"
+      "modifier": {
+        "ability": "deep-strike",
+        "value": {
+          "rating": true
         }
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
@@ -3565,7 +4242,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "28a4114b38d47f061d06134b490d0d0dadcd84c24178f67c7ebd1e6dfbe90f01",
     "version": "2025-q3",
@@ -3581,18 +4258,20 @@
         "operator": "or",
         "operands": [
           {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "state": "engaged"
-              }
-            }
-          },
-          {
             "type": "closest",
             "parameters": {
               "subject": "defender",
-              "among": "eligible-targets"
+              "among": "eligible-targets",
+              "to": "attacker"
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "defender",
+              "filter": {
+                "engaged_with": "attacker"
+              }
             }
           }
         ]
@@ -3602,7 +4281,13 @@
         "steps": [
           {
             "type": "re-roll",
-            "target": "this-model",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "LEAGUES OF VOTANN"
+              ],
+              "level": "model"
+            },
             "modifier": {
               "roll": "wound",
               "subset": "ones"
@@ -3613,10 +4298,11 @@
             "condition": {
               "type": "matches",
               "parameters": {
+                "subject": "attacker",
                 "filter": {
                   "any_of": [
-                    "KÂHL",
                     "EINHYR HEARTHGUARD",
+                    "KÂHL",
                     "ÛTHAR THE DESTINED"
                   ]
                 }
@@ -3624,10 +4310,16 @@
             },
             "effect": {
               "type": "stat-modifier",
-              "target": "this-model",
+              "target": {
+                "owner": "friendly",
+                "all_of": [
+                  "LEAGUES OF VOTANN"
+                ],
+                "level": "model"
+              },
               "modifier": {
                 "stat": "AP",
-                "operation": "subtract",
+                "operation": "improve",
                 "value": 1
               }
             }
@@ -3636,7 +4328,7 @@
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
@@ -3804,9 +4496,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "0d59aac8c5a66f1b9c321cdc25b52e4e6e233cde912f79313dce5c615b1437cd",
+    "source_digest": "e0e077f3fa7ab9ef3d35e4723de782928373bf8b14262666ef99fdc4c2089489",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -3815,28 +4507,59 @@
     "ability_type": "detachment",
     "behavior": "passive",
     "effect": {
-      "type": "weapon-ability-grant",
+      "type": "ability-grant",
       "target": {
         "owner": "friendly",
-        "within": {
-          "range": {
-            "inches": 6
-          }
-        }
+        "all_of": [
+          "LEAGUES OF VOTANN",
+          "TRANSPORT"
+        ]
       },
       "modifier": {
-        "keywords": [
-          {
-            "keyword_id": "sustained-hits",
-            "parameters": {
-              "value": 1
+        "ability": "firebase-control",
+        "definition": {
+          "type": "ability-part",
+          "name": "Firebase Control",
+          "effect": {
+            "type": "aura",
+            "target": "friendly-within-aura",
+            "modifier": {
+              "range": {
+                "inches": 6
+              },
+              "effect": {
+                "type": "weapon-ability-grant",
+                "target": "recipient",
+                "modifier": {
+                  "keywords": [
+                    {
+                      "keyword_id": "sustained-hits",
+                      "parameters": {
+                        "value": 1
+                      }
+                    }
+                  ],
+                  "weapons": {
+                    "type": "ranged"
+                  }
+                }
+              },
+              "wholly": true,
+              "eligible": {
+                "owner": "friendly",
+                "all_of": [
+                  "INFANTRY",
+                  "LEAGUES OF VOTANN"
+                ]
+              },
+              "of": "this-unit"
             }
           }
-        ]
+        }
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
@@ -3922,28 +4645,37 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "28124b1d5300b8d6a3d3fe5e8a96a3323c44c348d05b56d9f84b692a4a9dc980",
+    "source_digest": "364a9b952a8a6248b158b480caf4a6cbd61d577e43a3609cafda05fc793bc3d0",
     "version": "2026-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "closest",
-        "parameters": {
-          "subject": "defender",
-          "among": "eligible-targets"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
+            }
+          },
+          {
+            "type": "closest",
+            "parameters": {
+              "subject": "defender",
+              "among": "eligible-targets",
+              "to": "attacker"
+            }
+          }
+        ]
       },
       "effect": {
         "type": "re-roll",
-        "target": "this-model",
+        "target": "this-unit",
         "modifier": {
           "roll": "hit",
-          "subset": "ones",
-          "weapons": {
-            "type": "ranged"
-          }
+          "subset": "ones"
         }
       }
     },
@@ -3963,9 +4695,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "fef718169e2b545fafa5954a85dc6531f74f62237df2871b8ef05d747ea1625a",
+    "source_digest": "824bd6a0c9c0c07b4cf62d57ade71d31fca07a9a23d010af7d8b0ce08d7dd46e",
     "version": "2026-q3",
     "effect": {
       "type": "weapon-ability-grant",
@@ -3975,7 +4707,10 @@
           {
             "keyword_id": "assault"
           }
-        ]
+        ],
+        "weapons": {
+          "type": "ranged"
+        }
       }
     },
     "scope": {
@@ -4021,13 +4756,13 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "690fe2c22bf18401f64e1ebdf24d34e9e95f82ebcd35f3051bf9f6b41f97694b",
+    "source_digest": "e6c1ad10b997f6bf42947c8d1f6573ad3944a37224b599e22ba1deadbb83301b",
     "version": "2026-q3",
     "effect": {
       "type": "invulnerable-save",
-      "target": "this-model",
+      "target": "this-unit",
       "modifier": {
         "invuln_sv": 5
       }
@@ -4049,18 +4784,24 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "0cbfdf0f29dd5b8b80d04e1095b22044b9508d5383923b08fe1c9dbd15a465ff",
+    "source_digest": "3db0defcd7611291c09f350477111ae33efa3e35317933a6e91dd9199c543eda",
     "version": "2026-q3",
     "effect": {
-      "type": "re-roll",
-      "target": "this-unit",
-      "modifier": {
-        "roll": "hit",
-        "subset": "ones",
-        "weapons": {
-          "type": "ranged"
+      "type": "conditional",
+      "condition": {
+        "type": "attack-is",
+        "parameters": {
+          "attack_type": "ranged"
+        }
+      },
+      "effect": {
+        "type": "re-roll",
+        "target": "this-unit",
+        "modifier": {
+          "roll": "hit",
+          "subset": "ones"
         }
       }
     },
@@ -4080,18 +4821,28 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "e48f70be9da992e60d688bffb753d14b64c74110e45f4ff4a7bb4e13be65f2f7",
+    "source_digest": "65c1e51a795e49543b41ba874995a764468005bd4624e18d502d0a7ed79ffa80",
     "version": "2026-q3",
     "effect": {
-      "type": "ability-part",
-      "trigger": {
-        "event": "attacks-resolved",
-        "subject": "this-unit",
-        "filter": {
-          "kind": "shoot"
-        }
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       },
       "effect": {
         "type": "designate-target",
@@ -4110,14 +4861,11 @@
               "type": "happened",
               "parameters": {
                 "event": "after-roll",
+                "subject": "event-subject",
                 "object": "this-unit",
                 "filter": {
                   "roll": "hit",
-                  "result": "success",
-                  "attack_type": "ranged",
-                  "by": {
-                    "event_var": "breaching-fire-shooting"
-                  }
+                  "result": "success"
                 },
                 "window": "event"
               }
@@ -4128,23 +4876,24 @@
           "to": "attackers-of-target",
           "effect": {
             "type": "weapon-ability-grant",
-            "target": "this-unit",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "LEAGUES OF VOTANN"
+              ]
+            },
             "modifier": {
               "keywords": [
                 {
                   "keyword_id": "ignores-cover"
                 }
-              ]
+              ],
+              "weapons": {
+                "type": "ranged"
+              }
             }
-          },
-          "attacker_filter": {
-            "level": "model",
-            "all_of": [
-              "LEAGUES OF VOTANN"
-            ]
           }
-        },
-        "duration": "phase"
+        }
       }
     },
     "scope": {
@@ -4157,24 +4906,10 @@
     "behavior": "reactive",
     "trigger": {
       "event": "attacks-resolved",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "your-turn"
-            }
-          }
-        ]
+      "filter": {
+        "kind": "shoot"
       },
-      "binds_event_variable": "breaching-fire-shooting"
+      "optional": true
     },
     "faction_id": "leagues-of-votann"
   },
@@ -4244,19 +4979,61 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "mercenary-oathband",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "aura",
+      "target": "enemy-within-aura",
+      "modifier": {
+        "range": {
+          "inches": 3
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "resource-spend",
+              "target": "this-model",
+              "modifier": {
+                "pool": "yp-pool",
+                "amount": 3
+              }
+            },
+            {
+              "type": "stat-modifier",
+              "target": "recipient",
+              "modifier": {
+                "stat": "OC",
+                "operation": "subtract",
+                "value": 1
+              }
+            }
+          ]
+        },
+        "eligible": {
+          "owner": "enemy"
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "turn"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "command"
+        }
+      },
+      "optional": true
+    },
+    "source_digest": "d3dcf41c8f95b99e52dd8cdd661d2b09f1ef824ed300a3a4bd1805725a4451c3"
   },
   {
     "ability_id": "augmented-assault-delve-assault-shift-leagues-of-votann",
@@ -4284,19 +5061,28 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "mercenary-oathband",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "keywords": [
+          {
+            "keyword_id": "precision"
+          }
+        ]
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "activated",
+    "source_digest": "b197d3c0547a76fc1e6cfc00545169870760d85bbbb8b471dd85797a8b9b1b44"
   },
   {
     "ability_id": "bastion-running-brandfast-oathband-leagues-of-votann",
@@ -4304,19 +5090,36 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "brandfast-oathband",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "move-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "passthrough": [
+          "all-terrain"
+        ],
+        "ignore_vertical": true
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "normal",
+          "advance"
+        ]
+      }
+    },
+    "source_digest": "ff2f0c73946cd314a1f73cbe421355b9eabf94a624212118833bec4e57bda78f"
   },
   {
     "ability_id": "bastion-shield-hearthband-leagues-of-votann",
@@ -4344,19 +5147,34 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "hearthband",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "invulnerable-save",
+      "target": "this-unit",
+      "modifier": {
+        "invuln_sv": 4
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
+    },
+    "source_digest": "dececa14e3a02add9620f8cefe1db8aba49c14600343f3ad8aa9a8b8b5df2c21"
   },
   {
     "ability_id": "brekkeknots-hearthguard-covenant-leagues-of-votann",
@@ -4364,19 +5182,39 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "hearthguard-covenant",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "invulnerable-save",
+      "target": "this-unit",
+      "modifier": {
+        "invuln_sv": 4
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "EINHYR HEARTHGUARD"
+        ]
+      }
+    },
+    "source_digest": "b6851958648194166fc99781dcd01188330e5107666934a80badc0d35badf98a"
   },
   {
     "ability_id": "brokhyr-barrage-bane-slayers-bulwark-leagues-of-votann",
@@ -4384,19 +5222,99 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "bane-slayers-bulwark",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "ignores-cover"
+              }
+            ],
+            "weapons": {
+              "type": "ranged"
+            }
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "attacks-resolved",
+            "filter": {
+              "kind": "shoot"
+            },
+            "optional": true
+          },
+          "effect": {
+            "type": "select-units",
+            "selector": {
+              "filter": {
+                "owner": "enemy"
+              },
+              "count": {
+                "min": 1,
+                "max": 1
+              },
+              "eligibility": {
+                "type": "happened",
+                "parameters": {
+                  "event": "after-roll",
+                  "subject": "event-subject",
+                  "object": "this-unit",
+                  "filter": {
+                    "roll": "hit",
+                    "result": "success",
+                    "attack_type": "ranged"
+                  },
+                  "window": "event"
+                }
+              }
+            },
+            "effect": {
+              "type": "conditional",
+              "condition": {
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "phase-is",
+                    "parameters": {
+                      "phase": "shooting"
+                    }
+                  },
+                  {
+                    "type": "player-turn-is",
+                    "parameters": {
+                      "turn": "your-turn"
+                    }
+                  }
+                ]
+              },
+              "effect": {
+                "type": "test",
+                "target": "selected-unit",
+                "modifier": {
+                  "test": "battle-shock"
+                }
+              }
+            }
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "source_digest": "acab20ee54a9f52954e180e8c8d3cc8759b689a550adf044f2de8a5d90d28a80"
   },
   {
     "ability_id": "calculated-tenacity-hearthfyre-arsenal-leagues-of-votann",
@@ -4404,19 +5322,36 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "hearthfyre-arsenal",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "stat": "OC",
+          "operation": "add",
+          "value": 1
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "b2894e0dd4185b9d0040d0eefefc3749c11459759a87980a413fd46df0a564c1"
   },
   {
     "ability_id": "claimed-for-the-kindred-bane-slayers-bulwark-leagues-of-votann",
@@ -4464,19 +5399,49 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "hearthfyre-arsenal",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "move",
+      "target": "this-unit",
+      "modifier": {
+        "move_type": "normal",
+        "ends_nearest": {
+          "of": {
+            "objective": {}
+          }
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
+    },
+    "source_digest": "4e7bd2a7aa3072f38fa07cc4c8dc96490ab2c28a120266fe24ad51c7c4418d51"
   },
   {
     "ability_id": "cyberstimm-infusion-delve-assault-shift-leagues-of-votann",
@@ -4504,19 +5469,61 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "needgaard-oathband",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-model",
+              "filter": {
+                "state": "on-battlefield"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "resource-spent",
+                  "filter": {
+                    "pool": "yp-pool"
+                  },
+                  "window": "turn"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "effect": {
+        "type": "resource-gain",
+        "target": "this-model",
+        "modifier": {
+          "pool": "yp-pool",
+          "amount": 1
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "turn-ended",
+      "optional": true
+    },
+    "source_digest": "ea69aebe6d75a386d739d72dfceab5099f259216d1558739b8e6339cb305d9a9"
   },
   {
     "ability_id": "delayed-fire-rounds-hearthfyre-arsenal-leagues-of-votann",
@@ -4524,19 +5531,127 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "hearthfyre-arsenal",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "operator": "and",
+              "operands": [
+                {
+                  "operator": "not",
+                  "operands": [
+                    {
+                      "type": "matches",
+                      "parameters": {
+                        "subject": "selected-unit",
+                        "filter": {
+                          "all_of": [
+                            "MONSTER"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "operator": "not",
+                  "operands": [
+                    {
+                      "type": "matches",
+                      "parameters": {
+                        "subject": "selected-unit",
+                        "filter": {
+                          "all_of": [
+                            "VEHICLE"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "happened",
+              "parameters": {
+                "event": "after-roll",
+                "subject": "event-subject",
+                "object": "this-unit",
+                "filter": {
+                  "roll": "hit",
+                  "result": "success"
+                },
+                "window": "event"
+              }
+            }
+          ]
+        }
+      },
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "move-ended",
+          "subject": "selected-unit",
+          "filter": {
+            "move_types": [
+              "normal",
+              "advance",
+              "fall-back"
+            ]
+          }
+        },
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "selected-unit",
+          "modifier": {
+            "count": 1,
+            "max": 6,
+            "per": "success",
+            "roll": {
+              "dice": 1,
+              "threshold": 1,
+              "comparison": "lte",
+              "per_model": "selected-unit"
+            }
+          }
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "until-next-shooting-phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "subject": {
+        "owner": "friendly",
+        "any_of": [
+          "ARKANYST EVALUATOR",
+          "BRÔKHYR",
+          "IRONKIN STEELJACKS"
+        ]
+      }
+    },
+    "source_digest": "1e96bb87abd8002bf5ddc0c43ecd9b803a783a6a828264678a0a713f236802dd"
   },
   {
     "ability_id": "delvewerke-navigator-delve-assault-shift-leagues-of-votann",
@@ -4564,19 +5679,61 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "persecution-prospect",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "targets-selected",
+            "filter": {
+              "kind": "attack"
+            },
+            "subject": {
+              "owner": "enemy"
+            },
+            "object": "this-unit"
+          },
+          "effect": {
+            "type": "ability-grant",
+            "target": "this-unit",
+            "modifier": {
+              "ability": "stealth"
+            }
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "targets-selected",
+            "subject": {
+              "owner": "enemy"
+            },
+            "filter": {
+              "kind": "attack"
+            }
+          },
+          "effect": {
+            "type": "ability-grant",
+            "target": "this-unit",
+            "modifier": {
+              "ability": "benefit-of-cover"
+            }
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "source_digest": "e73403b62df2150886a6688646c45ba21ae1c42e83a6077c547a93ff78723461"
   },
   {
     "ability_id": "etacarn-sb9-targeting-implant-mercenary-oathband-leagues-of-votann",
@@ -4624,19 +5781,37 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "persecution-prospect",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "designated": "assailed"
+          }
+        }
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "roll": "wound",
+          "operation": "add",
+          "value": 1
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "aa15459a2179c44253b519f6751d03ec653298334b79a57dd12cae07c88bccbd"
   },
   {
     "ability_id": "farstrydr-node-hearthfyre-arsenal-leagues-of-votann",
@@ -4644,19 +5819,27 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "hearthfyre-arsenal",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "deep-strike",
+        "value": {
+          "rating": true
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "4b217773da071a403005e5ff5c140be32bc357817c4be7b619115c4eb3d8e27f"
   },
   {
     "ability_id": "first-concern-hearthfyre-arsenal-leagues-of-votann",
@@ -4664,19 +5847,53 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "hearthfyre-arsenal",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "move-ended",
+          "filter": {
+            "move_types": [
+              "remain-stationary"
+            ]
+          },
+          "window": "turn"
+        }
+      },
+      "effect": {
+        "type": "move",
+        "target": "this-unit",
+        "modifier": {
+          "move_type": "normal"
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "subject": {
+        "owner": "friendly",
+        "any_of": [
+          "ARKANYST EVALUATOR",
+          "BRÔKHYR",
+          "IRONKIN STEELJACKS"
+        ]
+      }
+    },
+    "source_digest": "add80f7960f4bbe76a290a18447733802b6c945a82c6b2c86fc84503baa5687b"
   },
   {
     "ability_id": "frontier-momentum-persecution-prospect-leagues-of-votann",
@@ -4684,19 +5901,32 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "persecution-prospect",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "move-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "advance": "fixed-6"
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "move-started",
+      "filter": {
+        "move_types": [
+          "advance"
+        ]
+      }
+    },
+    "source_digest": "e883aca930bf8d89105ab0019d56f5269c1073616992e4dd6ebd5635e6745b37"
   },
   {
     "ability_id": "fury-of-the-hearth-hearthband-leagues-of-votann",
@@ -4724,19 +5954,58 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "mercenary-oathband",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "shoot",
+            "allow": true,
+            "after": [
+              "fall-back"
+            ]
+          }
+        },
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "declare-charge",
+            "allow": true,
+            "after": [
+              "fall-back"
+            ]
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "turn"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "LEAGUES OF VOTANN"
+        ]
+      },
+      "filter": {
+        "move_types": [
+          "fall-back"
+        ]
+      }
+    },
+    "source_digest": "c35a43d1a8d6910ac28bfccdafc834908874b1cb78afa0e36f609b62a7ed5709"
   },
   {
     "ability_id": "graviton-vault-hearthfyre-arsenal-leagues-of-votann",
@@ -4744,19 +6013,120 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "hearthfyre-arsenal",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy",
+            "any_of": [
+              "MONSTER",
+              "VEHICLE"
+            ]
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "subject": "event-subject",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success"
+              },
+              "window": "event"
+            }
+          }
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "designate",
+              "target": "selected-unit",
+              "modifier": {
+                "tag": "suppressed"
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "designated": "suppressed"
+                  }
+                }
+              },
+              "effect": {
+                "type": "roll-modifier",
+                "target": "selected-unit",
+                "modifier": {
+                  "roll": "hit",
+                  "operation": "subtract",
+                  "value": 1
+                }
+              }
+            }
+          ]
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "until-start-next-turn"
+    },
+    "behavior": "reactive",
+    "trigger": [
+      {
+        "event": "attacks-resolved",
+        "filter": {
+          "kind": "shoot"
+        }
+      },
+      {
+        "event": "attacks-resolved"
+      }
+    ],
+    "source_digest": "93cb0afc78fd9a9fe9a51e797fa54ace72d214130c1f3e22632d1eae6715695c"
   },
   {
     "ability_id": "hidden-accessways-delve-assault-shift-leagues-of-votann",
@@ -4764,19 +6134,45 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "delve-assault-shift",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "set-up",
+      "target": "this-unit",
+      "modifier": {
+        "to": "strategic-reserves",
+        "from": "battlefield"
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
+    },
+    "source_digest": "4f7a9e39b00d8d2c373605ce98aab54c3d3e5fc9ecb34b7f722b2f5e6736e53c"
   },
   {
     "ability_id": "high-kahl-hearthband-leagues-of-votann",
@@ -4784,19 +6180,63 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "hearthband",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "act-on-death",
+      "target": "event-object",
+      "modifier": {
+        "act": "fight",
+        "resolution": "after-attacking-unit-finishes",
+        "removal": "after-destroyed-model-fights",
+        "gate": {
+          "dice": "D6",
+          "threshold": 4,
+          "comparison": "gte",
+          "modifiers": []
+        },
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "attack-is",
+              "parameters": {
+                "attack_type": "melee"
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "happened",
+                  "parameters": {
+                    "subject": "event-subject",
+                    "event": "selected",
+                    "filter": {
+                      "to": "fight"
+                    },
+                    "window": "phase"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "model-destroyed",
+      "object": "model-in-this-unit"
+    },
+    "source_digest": "325100ce050effdac3e1ba4b84f03b501c95a6cd7c06c2c63f329bd9952e7eeb"
   },
   {
     "ability_id": "high-kahl-hearthguard-covenant-leagues-of-votann",
@@ -4804,19 +6244,59 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "hearthguard-covenant",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "act-on-death",
+      "target": "event-object",
+      "modifier": {
+        "act": "fight",
+        "resolution": "when-unit-fights",
+        "removal": "after-unit-fights-or-phase-end",
+        "gate": {
+          "dice": "D6",
+          "threshold": 4,
+          "comparison": "gte",
+          "modifiers": []
+        },
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "fight"
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "eligible",
+                  "parameters": {
+                    "subject": "this-unit",
+                    "to": "fight"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "model-destroyed",
+      "object": "model-in-this-unit"
+    },
+    "source_digest": "fcfba32733605e2b02c1cc520880fc3721765764028082d4719b3966c7cc512b"
   },
   {
     "ability_id": "honour-of-the-hold-needgaard-oathband-leagues-of-votann",
@@ -4844,19 +6324,38 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "needgaard-oathband",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "subset": "ones"
+          }
+        },
+        {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "wound",
+            "subset": "ones"
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "activated",
+    "source_digest": "f6e2cf996438f92b39ec8903ec7479b5b91151f7d0b6a6e8cc8aa47d3bbeda51"
   },
   {
     "ability_id": "illuminated-priority-brandfast-oathband-leagues-of-votann",
@@ -4884,19 +6383,68 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "bane-slayers-bulwark",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "eligible",
+                  "parameters": {
+                    "subject": "this-unit",
+                    "to": "fight"
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "destroy-models",
+              "target": "this-model",
+              "modifier": {
+                "count": 1
+              }
+            }
+          },
+          {
+            "type": "act-on-death",
+            "target": "event-object",
+            "modifier": {
+              "act": "fight",
+              "resolution": "when-unit-fights",
+              "removal": "after-unit-fights-or-phase-end",
+              "gate": {
+                "dice": "D6",
+                "threshold": 2,
+                "comparison": "gte",
+                "modifiers": []
+              }
+            }
+          }
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "8d4b55efa0fb0d297c2fa63c40c23e381473970eb87efc7ce78e57fda9d699d1"
   },
   {
     "ability_id": "inexorable-efficiency-brandfast-oathband-leagues-of-votann",
@@ -4904,19 +6452,28 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "brandfast-oathband",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "permission",
+      "target": "this-unit",
+      "modifier": {
+        "activity": "shoot",
+        "allow": true,
+        "after": [
+          "fall-back"
+        ]
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "activated",
+    "source_digest": "83a9287fe154684f68e2d469938222c4e96ad6cd118ee210b5c332af9dc4f346"
   },
   {
     "ability_id": "iron-ambassador-needgaard-oathband-leagues-of-votann",
@@ -4944,19 +6501,26 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "hearthband",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "stat-modifier",
+      "target": "this-model",
+      "modifier": {
+        "stat": "W",
+        "operation": "add",
+        "value": 2
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "e9edec5edd7f87d1fa84dc48b7fb53d28e01d6c6399bd9c45682217e34e106cf"
   },
   {
     "ability_id": "mantle-of-elders-hearthfyre-arsenal-leagues-of-votann",
@@ -4964,19 +6528,53 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "hearthfyre-arsenal",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "used",
+          "filter": {
+            "kind": "ability",
+            "id": "optimal-application-leagues-of-votann"
+          },
+          "window": "event"
+        }
+      },
+      "effect": {
+        "type": "dice-gated",
+        "dice": "D6",
+        "threshold": 2,
+        "comparison": "gte",
+        "on_success": {
+          "type": "resource-gain",
+          "target": "this-model",
+          "modifier": {
+            "pool": "yp-pool",
+            "amount": 1
+          }
+        },
+        "on_fail": null
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
+      "optional": true
+    },
+    "source_digest": "1d7cd115f5ea1c5a6dd6131258fd54c2652d000da6927119059de23569dd23b9"
   },
   {
     "ability_id": "materialisation-matrices-hearthband-leagues-of-votann",
@@ -5004,19 +6602,31 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "mercenary-oathband",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "resource-gain",
+      "target": "this-model",
+      "modifier": {
+        "pool": "yp-pool",
+        "amount": 2
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "destroyed",
+      "object": {
+        "owner": "enemy"
+      }
+    },
+    "source_digest": "b56e3feddeb4a8d27e7e1836017c8e727dc44a5568f3f0c99bc42b552a2799ab"
   },
   {
     "ability_id": "metaphysical-brokerage-mercenary-oathband-leagues-of-votann",
@@ -5044,19 +6654,62 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "mercenary-oathband",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "set-up",
+          "target": {
+            "stratagem_target": "first"
+          },
+          "modifier": {
+            "to": "strategic-reserves",
+            "from": "battlefield"
+          }
+        },
+        {
+          "type": "set-up",
+          "target": {
+            "stratagem_target": "second"
+          },
+          "modifier": {
+            "to": "strategic-reserves",
+            "from": "battlefield"
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
+    },
+    "source_digest": "5806e307ad6384da98572fe83086ac11329ce6aae149aab02b63b46f9f16fd8d"
   },
   {
     "ability_id": "multiwave-system-jammer-delve-assault-shift-leagues-of-votann",
@@ -5064,19 +6717,79 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "delve-assault-shift",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "movement"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-model",
+              "filter": {
+                "state": "on-battlefield"
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "CTHONIAN"
+            ]
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        },
+        "effect": {
+          "type": "set-up",
+          "target": "selected-unit",
+          "modifier": {
+            "to": "battlefield",
+            "round_offset": 1
+          }
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "activated",
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "model"
+    },
+    "source_digest": "a0ca6cd31a8913fa0f178a47552eedcc734fd0d95f461222e886020184a83e73"
   },
   {
     "ability_id": "new-horizons-mercenary-oathband-leagues-of-votann",
@@ -5084,19 +6797,72 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "mercenary-oathband",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": {
+            "stratagem_target": "first"
+          },
+          "filter": {
+            "within": {
+              "of": {
+                "stratagem_target": "second"
+              },
+              "range": {
+                "inches": 6
+              },
+              "wholly": true
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "permission",
+        "target": {
+          "stratagem_target": "first"
+        },
+        "modifier": {
+          "activity": "embark",
+          "allow": true,
+          "into": {
+            "stratagem_target": "second"
+          }
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
+    },
+    "source_digest": "2ae0bfd79e9d79a3f1901827cbb09eab5e18313b8af2286798cc18e5fe0f207c"
   },
   {
     "ability_id": "nomad-strategist-persecution-prospect-leagues-of-votann",
@@ -5124,19 +6890,60 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "bane-slayers-bulwark",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "targets-selected",
+          "subject": "event-subject",
+          "object": "this-unit",
+          "filter": {
+            "kind": "attack"
+          },
+          "window": "event"
+        }
+      },
+      "effect": {
+        "type": "move",
+        "target": "this-unit",
+        "modifier": {
+          "move_type": "surge",
+          "distance": "D6+1"
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "all_of": [
+              "BANE-SLAYER'S BULWARK",
+              "EINHYR HEARTHGUARD"
+            ]
+          }
+        }
+      }
+    },
+    "source_digest": "413975c713688d38dec044a0a911d26a79213069580e5654430cd2ef6d8840d5"
   },
   {
     "ability_id": "opportunistic-escalation-brandfast-oathband-leagues-of-votann",
@@ -5184,19 +6991,58 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "needgaard-oathband",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "shoot",
+            "allow": true,
+            "after": [
+              "fall-back"
+            ]
+          }
+        },
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "declare-charge",
+            "allow": true,
+            "after": [
+              "fall-back"
+            ]
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "turn"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "LEAGUES OF VOTANN"
+        ]
+      },
+      "filter": {
+        "move_types": [
+          "fall-back"
+        ]
+      }
+    },
+    "source_digest": "c35a43d1a8d6910ac28bfccdafc834908874b1cb78afa0e36f609b62a7ed5709"
   },
   {
     "ability_id": "piledriver-delve-assault-shift-leagues-of-votann",
@@ -5224,19 +7070,43 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "bane-slayers-bulwark",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ],
+        "weapons": {
+          "type": "ranged"
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "BANE-SLAYER'S BULWARK"
+        ]
+      }
+    },
+    "source_digest": "57ce6e10d3d0b1903dc04c208082d5f96fdf2f14dcbfe753e6dec32ed1622d1c"
   },
   {
     "ability_id": "precursive-judgement-brandfast-oathband-leagues-of-votann",
@@ -5244,19 +7114,64 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "brandfast-oathband",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "within": {
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "LEAGUES OF VOTANN",
+                  "TRANSPORT"
+                ]
+              },
+              "range": {
+                "inches": 6
+              },
+              "wholly": true
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "cost-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "of": "stratagem",
+              "operation": "set",
+              "amount": 0,
+              "applies_to": "targeting-this-unit",
+              "id": "fire-overwatch"
+            }
+          },
+          {
+            "type": "roll-result",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "succeeds_on": 5
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "resolution"
+    },
+    "behavior": "activated",
+    "source_digest": "dd1a09bff7ba323f031fec6d54a1b812773f98009caefdb632d9c13134e9f1a9"
   },
   {
     "ability_id": "preventative-purge-hearthfyre-arsenal-leagues-of-votann",
@@ -5264,19 +7179,61 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "hearthfyre-arsenal",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "shoot",
+            "allow": true,
+            "as_if": "shooting-phase"
+          }
+        },
+        {
+          "type": "targeting",
+          "target": "this-unit",
+          "modifier": {
+            "by": "this-unit",
+            "may": "must-target",
+            "kind": "shoot",
+            "target": "event-subject"
+          }
+        },
+        {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "subtract",
+            "value": 1
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "fall-back"
+        ]
+      },
+      "subject": {
+        "owner": "enemy"
+      }
+    },
+    "source_digest": "672ea0cef090bd43a70929c2cc39158f75bc5ca6ce93fc223e20f93ee8719593"
   },
   {
     "ability_id": "privateer-arsenal-mercenary-oathband-leagues-of-votann",
@@ -5304,19 +7261,121 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "hearthband",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "operator": "and",
+            "operands": [
+              {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "selected-unit",
+                      "filter": {
+                        "all_of": [
+                          "TITANIC"
+                        ]
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "after-roll",
+                  "subject": "event-subject",
+                  "object": "this-unit",
+                  "filter": {
+                    "roll": "hit",
+                    "result": "success"
+                  },
+                  "window": "event"
+                }
+              }
+            ]
+          }
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "designate",
+              "target": "selected-unit",
+              "modifier": {
+                "tag": "suppressed"
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "designated": "suppressed"
+                  }
+                }
+              },
+              "effect": {
+                "type": "roll-modifier",
+                "target": "selected-unit",
+                "modifier": {
+                  "roll": "hit",
+                  "operation": "subtract",
+                  "value": 1
+                }
+              }
+            }
+          ]
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "until-start-next-turn"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
+    },
+    "source_digest": "929bdf10272e703a3dd5b37df48e73cbbc859a801b47466bed3b074c05f755b0"
   },
   {
     "ability_id": "quake-supervisor-delve-assault-shift-leagues-of-votann",
@@ -5344,9 +7403,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "kahl"
     ],
@@ -5354,11 +7412,27 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
+      },
+      "effect": {
+        "type": "invulnerable-save",
+        "target": "this-unit",
+        "modifier": {
+          "invuln_sv": 5
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "741ff178dfcaee78cad2f64325dc6beb058094d4ec759f92756254defebaabf9"
   },
   {
     "ability_id": "ranger-tactics-persecution-prospect-leagues-of-votann",
@@ -5366,19 +7440,52 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "persecution-prospect",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "or",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "event-object",
+              "filter": {
+                "designated": "assailed"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "all_of": [
+                  "HERNKYN"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "re-roll",
+        "target": "this-unit",
+        "modifier": {
+          "roll": "hit",
+          "result_scope": "any-result"
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "activated",
+    "source_digest": "9e20b70bb029b6d84f2b1ae1a91dd055837e125b7fc29bedc60a951a56af2a42"
   },
   {
     "ability_id": "reactive-reprisal-needgaard-oathband-leagues-of-votann",
@@ -5446,19 +7553,26 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "farseekers",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "stat-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "stat": "detection-range",
+        "operation": "subtract",
+        "value": 3
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "c0a04e7fbaa28c7211d8b34db84e6d7118ef1592f7b5c2eb1c71ffe708a84c4c"
   },
   {
     "ability_id": "signature-restoration-brandfast-oathband-leagues-of-votann",
@@ -5486,19 +7600,41 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "hearthband",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "defender",
+          "filter": {
+            "any_of": [
+              "MONSTER",
+              "VEHICLE"
+            ]
+          }
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "stat": "D",
+          "operation": "add",
+          "value": 1
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "activated",
+    "source_digest": "d2389b5f4c6865c106e0eb1a62f76a157ffedd71a265caf5d9a99d48257ad519"
   },
   {
     "ability_id": "sure-of-purpose-hearthband-leagues-of-votann",
@@ -5506,19 +7642,28 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "hearthband",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "move-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "applies_to_moves": [
+          "pile-in",
+          "consolidation"
+        ],
+        "distance_bonus": 3
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "activated",
+    "source_digest": "8c47020fc300fc578d4e7dfa8ffef5419231d1cb1cd21bbde6b736a4e26c7a79"
   },
   {
     "ability_id": "surgical-saboteur-persecution-prospect-leagues-of-votann",
@@ -5526,19 +7671,79 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "persecution-prospect",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy",
+            "any_of": [
+              "MONSTER",
+              "VEHICLE"
+            ]
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "subject": "event-subject",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success"
+              },
+              "window": "event"
+            }
+          }
+        },
+        "effect": {
+          "type": "designate",
+          "target": "selected-unit",
+          "modifier": {
+            "tag": "pinned"
+          }
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "until-next-shooting-phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
+    },
+    "source_digest": "cb90199cf21a93b62bbd5b04a31a75bc83f11b18da37e13acc55e249bc30f118"
   },
   {
     "ability_id": "tactical-alchemy-brandfast-oathband-leagues-of-votann",
@@ -5630,19 +7835,152 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "brandfast-oathband",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          },
+          {
+            "operator": "or",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "subject": "event-subject",
+                  "event": "disembarked",
+                  "window": "turn"
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "this-unit",
+                  "filter": {
+                    "designated": "trivarg-yp-spent"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "ability-part",
+            "optional": true,
+            "effect": {
+              "type": "conditional",
+              "condition": {
+                "operator": "and",
+                "operands": [
+                  {
+                    "operator": "not",
+                    "operands": [
+                      {
+                        "type": "matches",
+                        "parameters": {
+                          "subject": "this-unit",
+                          "filter": {
+                            "designated": "trivarg-yp-spent"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "operator": "not",
+                    "operands": [
+                      {
+                        "type": "happened",
+                        "parameters": {
+                          "subject": "event-subject",
+                          "event": "disembarked",
+                          "window": "turn"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "resource-spend",
+                    "target": "this-model",
+                    "modifier": {
+                      "pool": "yp-pool",
+                      "amount": 2
+                    }
+                  },
+                  {
+                    "type": "designate",
+                    "target": "this-unit",
+                    "modifier": {
+                      "tag": "trivarg-yp-spent",
+                      "clears_on": "phase"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "type": "weapon-ability-grant",
+            "target": "this-unit",
+            "modifier": {
+              "keywords": [
+                {
+                  "keyword_id": "sustained-hits",
+                  "parameters": {
+                    "value": 2
+                  }
+                }
+              ],
+              "weapons": {
+                "type": "ranged"
+              }
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      }
+    },
+    "source_digest": "d78fba91ca3136906102dcd4cc7d9e581cd2dd8601720415f4276b85cd284ff3"
   },
   {
     "ability_id": "unstoppable-force-delve-assault-shift-leagues-of-votann",
@@ -5690,19 +8028,59 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "hearthband",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "shoot",
+            "allow": true,
+            "after": [
+              "fall-back"
+            ]
+          }
+        },
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "declare-charge",
+            "allow": true,
+            "after": [
+              "fall-back"
+            ]
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "turn"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "INFANTRY",
+          "LEAGUES OF VOTANN"
+        ]
+      },
+      "filter": {
+        "move_types": [
+          "fall-back"
+        ]
+      }
+    },
+    "source_digest": "81f66430fce1bbcec75d622145f89536e8a1e43f5008265f542b3186d13ad758"
   },
   {
     "ability_id": "vengeance-flare-brandfast-oathband-leagues-of-votann",
@@ -5770,9 +8148,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "einhyr-champion"
     ],
@@ -5780,11 +8157,17 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "invulnerable-save",
+      "target": "this-model",
+      "modifier": {
+        "invuln_sv": 4
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "1932a9069a89679fec8c06bb0995adab086eddeb56e983cbdfab4519f04a5538"
   },
   {
     "ability_id": "weavewerke-buttress-delve-assault-shift-leagues-of-votann",

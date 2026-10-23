@@ -46,7 +46,14 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Crusader Squad"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit"
+    },
     "ability_id": "angels-defiant-fist-of-the-god-emperor-black-templars",
     "game_version": {
       "edition": "11th",
@@ -70,7 +77,14 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Crusader Squad"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "avowed-destruction-fist-of-the-god-emperor-black-templars",
     "game_version": {
       "edition": "11th",
@@ -116,7 +130,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Vow-Sworn of Vedrenn"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "blessed-aura-vow-sworn-of-vedrenn-black-templars",
     "game_version": {
       "edition": "11th",
@@ -140,7 +161,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Vow-Sworn of Vedrenn"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "come-to-their-aid-vow-sworn-of-vedrenn-black-templars",
     "game_version": {
       "edition": "11th",
@@ -218,7 +246,24 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Astartes",
+        "Infantry"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "happened",
+        "parameters": {
+          "event": "targets-selected",
+          "subject": "event-subject",
+          "object": "this-unit",
+          "window": "event"
+        }
+      }
+    },
     "ability_id": "dread-crusaders-vow-sworn-crusaders-black-templars",
     "game_version": {
       "edition": "11th",
@@ -242,7 +287,15 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Astartes",
+        "Infantry"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "for-the-emperors-honour-vow-sworn-crusaders-black-templars",
     "game_version": {
       "edition": "11th",
@@ -290,7 +343,28 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Astartes",
+        "Infantry"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "within": {
+              "of": "event-subject",
+              "range": {
+                "inches": 8
+              }
+            }
+          }
+        }
+      }
+    },
     "ability_id": "heresy-begets-retribution-vow-sworn-crusaders-black-templars",
     "game_version": {
       "edition": "11th",
@@ -332,7 +406,14 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Sword Brethren Squad"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "slayers-of-abominations-marshals-household-black-templars",
     "game_version": {
       "edition": "11th",
@@ -367,7 +448,14 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Astartes"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "spoor-of-the-unholy-vow-sworn-crusaders-black-templars",
     "game_version": {
       "edition": "11th",

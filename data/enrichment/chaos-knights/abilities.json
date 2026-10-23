@@ -5,7 +5,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "214c261ce0fe18aaa8b822a409452af48f2caab9da2f47455553605af0c3d310",
     "version": "2025-q3",
@@ -14,21 +14,21 @@
       "condition": {
         "type": "matches",
         "parameters": {
+          "subject": "defender",
           "filter": {
             "any_of": [
               "MONSTER",
               "VEHICLE"
             ]
-          },
-          "subject": "defender"
+          }
         }
       },
       "effect": {
         "type": "re-roll",
-        "target": "this-unit",
+        "target": "this-model",
         "modifier": {
           "roll": "wound",
-          "subset": "all-failures"
+          "result_scope": "any-result"
         }
       }
     },
@@ -48,7 +48,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "101f9ced36a023067ae95f27ff8ecc85fe86a769ae88bcf86567202e1da4905d",
     "version": "2025-q3",
@@ -58,36 +58,39 @@
         "operator": "and",
         "operands": [
           {
-            "type": "phase-is",
+            "type": "attack-is",
             "parameters": {
-              "phase": "shooting"
+              "attack_type": "ranged"
             }
           },
           {
             "type": "matches",
             "parameters": {
+              "subject": "defender",
               "filter": {
                 "within": {
-                  "range": "objective-control",
                   "of": {
                     "objective": {}
-                  }
+                  },
+                  "range": "objective-control"
                 }
-              },
-              "subject": "defender"
+              }
             }
           }
         ]
       },
       "effect": {
         "type": "weapon-ability-grant",
-        "target": "this-unit",
+        "target": "this-model",
         "modifier": {
           "keywords": [
             {
               "keyword_id": "ignores-cover"
             }
-          ]
+          ],
+          "weapons": {
+            "type": "ranged"
+          }
         }
       }
     },
@@ -180,7 +183,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "182c3148f07ca40c4faad8729d04a7cc002a0f884e362e370b9cf1d0241a7806",
     "version": "2025-q3",
@@ -192,17 +195,17 @@
           {
             "type": "matches",
             "parameters": {
+              "subject": "defender",
               "filter": {
                 "within": {
+                  "of": {
+                    "owner": "enemy",
+                    "excluding": "defender"
+                  },
                   "range": {
                     "inches": 6
-                  },
-                  "of": "defender"
+                  }
                 }
-              },
-              "subject": {
-                "owner": "enemy",
-                "excluding": "defender"
               }
             }
           }
@@ -210,7 +213,7 @@
       },
       "effect": {
         "type": "roll-modifier",
-        "target": "this-unit",
+        "target": "this-model",
         "modifier": {
           "roll": "wound",
           "operation": "add",
@@ -234,33 +237,44 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "50abfa531feeebeda388d39ecae4272c43a09d5c2477e04197a91458b9522d04",
     "version": "2025-q3",
     "effect": {
-      "type": "choice",
-      "options": [
+      "type": "sequence",
+      "steps": [
         {
-          "type": "cost-modifier",
-          "target": "this-model",
+          "type": "permission",
+          "target": "this-unit",
           "modifier": {
-            "of": "stratagem",
-            "id": "fire-overwatch",
-            "operation": "set",
-            "amount": 0,
-            "applies_to": "targeting-this-unit"
+            "activity": "use-stratagem",
+            "allow": true,
+            "despite": [
+              "stratagem-used-this-phase"
+            ],
+            "stratagem": "heroic-intervention"
           }
         },
         {
           "type": "cost-modifier",
-          "target": "this-model",
+          "target": "this-unit",
           "modifier": {
             "of": "stratagem",
-            "id": "heroic-intervention",
-            "operation": "set",
-            "amount": 0,
-            "applies_to": "targeting-this-unit"
+            "operation": "decrease",
+            "amount": 1,
+            "applies_to": "the-triggering-use"
+          }
+        },
+        {
+          "type": "ability-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "ability": "heroic-intervention",
+            "aspect": "uses",
+            "operation": "lift-limit",
+            "value": 1,
+            "consumes_shared_use": false
           }
         }
       ]
@@ -272,7 +286,7 @@
       "war-dog-moirax"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "activated",
     "faction_id": "chaos-knights"
   },
   {
@@ -322,59 +336,56 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "bae6c5ddc55f011cf46256af63429a674c0efb8d1845e022e1273d1c4bbc7af2",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": {
+            "owner": "friendly",
             "all_of": [
               "WAR DOG"
-            ]
-          }
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "stat-modifier",
-            "target": {
-              "owner": "friendly",
-              "within": {
-                "range": {
-                  "inches": 9
-                }
-              }
-            },
-            "modifier": {
-              "stat": "Ld",
-              "operation": "add",
-              "value": 1
+            ],
+            "level": "model",
+            "within": {
+              "range": {
+                "inches": 9
+              },
+              "of": "this-model"
             }
           },
-          {
-            "type": "stat-modifier",
-            "target": {
-              "owner": "friendly",
-              "within": {
-                "range": {
-                  "inches": 9
-                }
-              }
-            },
-            "modifier": {
-              "stat": "OC",
-              "operation": "add",
-              "value": 1
-            }
+          "modifier": {
+            "stat": "Ld",
+            "operation": "improve",
+            "value": 1
           }
-        ]
-      }
+        },
+        {
+          "type": "stat-modifier",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "WAR DOG"
+            ],
+            "level": "model",
+            "within": {
+              "range": {
+                "inches": 9
+              },
+              "of": "this-model"
+            }
+          },
+          "modifier": {
+            "stat": "OC",
+            "operation": "improve",
+            "value": 1
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -452,23 +463,64 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "5b72f15d8d3ea9d44567a04d5416d5dd916811d880aca14be0e13d3096169558",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "ability-grant",
-        "target": "this-unit",
-        "modifier": {
-          "ability": "benefit-of-cover"
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "subject": "event-subject",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success",
+                "weapons": {
+                  "name": "Acheron flame cannon"
+                }
+              },
+              "window": "event"
+            }
+          }
+        },
+        "effect": {
+          "type": "rule-state",
+          "target": "selected-unit",
+          "modifier": {
+            "direction": "suppressed",
+            "rule_kind": "core-rule",
+            "rule": "benefit-of-cover"
+          }
         }
       }
     },
@@ -479,8 +531,14 @@
       "chaos-cerastus-knight-acheron"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "chaos-knights"
+    "behavior": "reactive",
+    "faction_id": "chaos-knights",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
+    }
   },
   {
     "ability_id": "unrestrained-terror-chaos-knights",
@@ -531,16 +589,76 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "f8a6b54d2627e6f07a4d87df45e1313644dc02f070477c3588d513565331bc9c",
     "version": "2025-q3",
     "effect": {
-      "type": "re-roll",
-      "target": "this-unit",
-      "modifier": {
-        "roll": "wound",
-        "subset": "all-failures"
+      "type": "ability-part",
+      "trigger": {
+        "event": "round-started",
+        "condition": {
+          "type": "battle-round",
+          "parameters": {
+            "min": 1,
+            "max": 1
+          }
+        }
+      },
+      "effect": {
+        "type": "persistent-designation",
+        "designation": "victim",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            },
+            "bind_as": "victim-selection"
+          }
+        },
+        "selection_policy": "replace-on-destroyed",
+        "consumer": {
+          "relation": "attacks-selected-unit",
+          "beneficiary": "this-model",
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "designated": "victim"
+                }
+              }
+            },
+            "effect": {
+              "type": "re-roll",
+              "target": "this-model",
+              "modifier": {
+                "roll": "wound",
+                "result_scope": "any-result"
+              }
+            }
+          },
+          "reference": {
+            "selection_var": "victim-selection"
+          }
+        },
+        "duration": "battle",
+        "lifecycle": {
+          "replace": {
+            "event": "on-unit-destroyed",
+            "reference": {
+              "selection_var": "victim-selection"
+            },
+            "optional": false
+          },
+          "exclusivity": "one-active-per-bearer-unit"
+        }
       }
     },
     "scope": {
@@ -559,7 +677,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "b1414e0449868c263e074d5a1655ff41032472f7adab27316009ba9b1f6cc0f0",
     "version": "2025-q3",
@@ -569,7 +687,8 @@
         "type": "closest",
         "parameters": {
           "subject": "defender",
-          "among": "eligible-targets"
+          "among": "eligible-targets",
+          "to": "attacker"
         }
       },
       "effect": {
@@ -583,7 +702,8 @@
           "within": {
             "range": {
               "inches": 9
-            }
+            },
+            "of": "this-model"
           }
         },
         "modifier": {
@@ -600,7 +720,7 @@
       "knight-ruinator"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "aura",
     "faction_id": "chaos-knights"
   },
   {
@@ -609,28 +729,60 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "877ad151af77e6cc6a812a2bc7730c4c524513231f41b2e9b08095169d223808",
+    "source_digest": "62137ad918e3821cf5b07c573c7b8e59ae9af42a160c449129ea0b4c80c856e3",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "defender",
+              "filter": {
+                "any_of": [
+                  "MONSTER",
+                  "VEHICLE"
+                ]
+              }
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "weapon-ability-grant",
-        "target": "this-unit",
-        "modifier": {
-          "keywords": [
-            {
-              "keyword_id": "devastating-wounds"
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "ignore-modifiers",
+            "target": "this-unit",
+            "modifier": {
+              "what": "characteristics",
+              "stats": [
+                "BS"
+              ]
             }
-          ]
-        }
+          },
+          {
+            "type": "ignore-modifiers",
+            "target": "this-unit",
+            "modifier": {
+              "what": "rolls",
+              "rolls": [
+                "hit",
+                "wound"
+              ]
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -649,38 +801,36 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "49cf46345c2959d68f9a52883d541a476012967d84b36f1db1b2b04f483255bb",
     "version": "2025-q3",
     "effect": {
-      "type": "aura",
-      "target": "friendly-within-aura",
-      "modifier": {
-        "range": {
-          "inches": 9
-        },
-        "recipient_filter": {
+      "type": "conditional",
+      "condition": {
+        "type": "attack-is",
+        "parameters": {
+          "attack_type": "ranged"
+        }
+      },
+      "effect": {
+        "type": "re-roll",
+        "target": {
+          "owner": "friendly",
           "all_of": [
             "WAR DOG"
-          ]
-        },
-        "effect": {
-          "type": "conditional",
-          "condition": {
-            "type": "attack-is",
-            "parameters": {
-              "attack_type": "ranged"
-            }
-          },
-          "effect": {
-            "type": "re-roll",
-            "target": "recipient",
-            "modifier": {
-              "roll": "hit",
-              "subset": "ones"
-            }
+          ],
+          "level": "model",
+          "within": {
+            "range": {
+              "inches": 9
+            },
+            "of": "this-model"
           }
+        },
+        "modifier": {
+          "roll": "hit",
+          "subset": "ones"
         }
       }
     },
@@ -700,19 +850,38 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "9ab54d98f88ca67958f5c35649ddbadcff5aa650482d9d5b92bce15e82dc9dcd",
     "version": "2025-q3",
     "effect": {
-      "type": "weapon-ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "keywords": [
-          {
-            "keyword_id": "lethal-hits"
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "subject": "this-model",
+          "event": "move-ended",
+          "filter": {
+            "move_types": [
+              "remain-stationary"
+            ]
+          },
+          "window": "turn"
+        }
+      },
+      "effect": {
+        "type": "weapon-ability-grant",
+        "target": "this-model",
+        "modifier": {
+          "keywords": [
+            {
+              "keyword_id": "lethal-hits"
+            }
+          ],
+          "weapons": {
+            "type": "ranged"
           }
-        ]
+        }
       }
     },
     "scope": {
@@ -731,32 +900,62 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "7c0a977ea36c8bbb2b3b3f2968d9063a38df631d6e9b4b4c2587dcda817448bb",
     "version": "2025-q3",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "roll-modifier",
-          "target": "this-unit",
-          "modifier": {
-            "roll": "hit",
-            "operation": "add",
-            "value": 1
-          }
-        },
-        {
-          "type": "roll-modifier",
-          "target": "this-unit",
-          "modifier": {
-            "roll": "wound",
-            "operation": "add",
-            "value": 1
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "defender",
+          "filter": {
+            "any_of": [
+              "MONSTER",
+              "VEHICLE"
+            ]
           }
         }
-      ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "roll-modifier",
+            "target": "this-model",
+            "modifier": {
+              "roll": "hit",
+              "operation": "add",
+              "value": 1
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "defender",
+                "filter": {
+                  "any_of": [
+                    "TITANIC",
+                    "TOWERING"
+                  ]
+                }
+              }
+            },
+            "effect": {
+              "type": "roll-modifier",
+              "target": "this-model",
+              "modifier": {
+                "roll": "wound",
+                "operation": "add",
+                "value": 1
+              }
+            }
+          }
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
@@ -775,7 +974,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "8d7ebfbf95a8787ff06a0194d4c9b8b784fd800bd6a5f08dcc0167719026384d",
     "version": "2025-q3",
@@ -784,13 +983,13 @@
       "condition": {
         "type": "matches",
         "parameters": {
+          "subject": "defender",
           "filter": {
             "any_of": [
               "TITANIC",
               "TOWERING"
             ]
-          },
-          "subject": "defender"
+          }
         }
       },
       "effect": {
@@ -804,12 +1003,13 @@
           "within": {
             "range": {
               "inches": 6
-            }
+            },
+            "of": "this-model"
           }
         },
         "modifier": {
           "roll": "hit",
-          "subset": "all-failures"
+          "result_scope": "any-result"
         }
       }
     },
@@ -834,32 +1034,107 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "41b977d19959322bf7eab1d38ccf6d2336cfa993663e1257d3283367fcca197d",
     "version": "2025-q3",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "stat-modifier",
-          "target": "this-unit",
-          "modifier": {
-            "stat": "S",
-            "operation": "add",
-            "value": 2
-          }
-        },
-        {
-          "type": "stat-modifier",
-          "target": "this-unit",
-          "modifier": {
-            "stat": "D",
-            "operation": "add",
-            "value": 2
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "defender",
+          "filter": {
+            "all_of": [
+              "VEHICLE"
+            ]
           }
         }
-      ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "defender",
+                    "filter": {
+                      "all_of": [
+                        "FORTIFICATION"
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "stat-modifier",
+                  "target": "this-model",
+                  "modifier": {
+                    "stat": "S",
+                    "operation": "improve",
+                    "value": 1
+                  }
+                },
+                {
+                  "type": "stat-modifier",
+                  "target": "this-model",
+                  "modifier": {
+                    "stat": "D",
+                    "operation": "improve",
+                    "value": 1
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "defender",
+                "filter": {
+                  "all_of": [
+                    "FORTIFICATION"
+                  ]
+                }
+              }
+            },
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "stat-modifier",
+                  "target": "this-model",
+                  "modifier": {
+                    "stat": "S",
+                    "operation": "improve",
+                    "value": 2
+                  }
+                },
+                {
+                  "type": "stat-modifier",
+                  "target": "this-model",
+                  "modifier": {
+                    "stat": "D",
+                    "operation": "improve",
+                    "value": 2
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
@@ -878,37 +1153,120 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "284e6a1138698ebda48265190aa096dcb1b647e7d0b43b1051c02e3384ff4454",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-model",
+              "filter": {
+                "state": "on-battlefield"
+              }
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "roll-modifier",
-        "target": "attacker",
-        "modifier": {
-          "roll": "hit",
-          "operation": "subtract",
-          "value": 1
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy",
+            "none_of": [
+              "MONSTER",
+              "VEHICLE"
+            ]
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "subject": "event-subject",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success"
+              },
+              "window": "event"
+            }
+          }
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "designate",
+              "target": "selected-unit",
+              "modifier": {
+                "tag": "suppressed"
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "designated": "suppressed"
+                  }
+                }
+              },
+              "effect": {
+                "type": "roll-modifier",
+                "target": "selected-unit",
+                "modifier": {
+                  "roll": "hit",
+                  "operation": "subtract",
+                  "value": 1
+                }
+              }
+            }
+          ]
         }
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "until-start-next-turn"
     },
     "unit_ids": [
       "chaos-cerastus-knight-castigator"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "chaos-knights"
+    "behavior": "reactive",
+    "faction_id": "chaos-knights",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
+    }
   },
   {
     "ability_id": "offerings-for-the-dark-gods-chaos-knights",
@@ -916,7 +1274,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "559d3ae6dcc0c601d06be4c89c83969ce873298504de494aa690c13ec27c6014",
     "version": "2025-q3",
@@ -931,13 +1289,11 @@
         "within": {
           "range": {
             "inches": 6
-          }
+          },
+          "of": "this-model"
         }
       },
       "modifier": {
-        "weapons": {
-          "type": "ranged"
-        },
         "keywords": [
           {
             "keyword_id": "sustained-hits",
@@ -945,7 +1301,10 @@
               "value": 1
             }
           }
-        ]
+        ],
+        "weapons": {
+          "type": "ranged"
+        }
       }
     },
     "scope": {
@@ -955,7 +1314,7 @@
       "chaos-cerastus-knight-castigator"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "aura",
     "faction_id": "chaos-knights"
   },
   {
@@ -964,7 +1323,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "d6eff6823cc70058191a690ec5910915a6d27345f25972ccfb5e2f830a43dc16",
     "version": "2025-q3",
@@ -973,25 +1332,24 @@
       "steps": [
         {
           "type": "cost-modifier",
-          "target": "this-model",
+          "target": "this-unit",
           "modifier": {
             "of": "stratagem",
-            "id": "crushing-impact",
             "operation": "set",
             "amount": 0,
-            "applies_to": "targeting-this-unit"
+            "applies_to": "targeting-this-unit",
+            "id": "tank-shock"
           }
         },
         {
-          "type": "permission",
+          "type": "ability-modifier",
           "target": "this-model",
           "modifier": {
-            "activity": "use-stratagem",
-            "allow": true,
-            "despite": [
-              "stratagem-used-this-phase"
-            ],
-            "stratagem": "crushing-impact"
+            "ability": "tank-shock",
+            "aspect": "uses",
+            "operation": "lift-limit",
+            "value": 1,
+            "consumes_shared_use": false
           }
         }
       ]
@@ -1003,7 +1361,7 @@
       "chaos-cerastus-knight-lancer"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "activated",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "faction_id": "chaos-knights"
   },
@@ -1013,7 +1371,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "1d40894578091570983803741d13c2bb453d9807f878ac6269fe61417cc89fff",
     "version": "2025-q3",
@@ -1028,18 +1386,19 @@
         "within": {
           "range": {
             "inches": 6
-          }
+          },
+          "of": "this-model"
         }
       },
       "modifier": {
-        "weapons": {
-          "type": "ranged"
-        },
         "keywords": [
           {
             "keyword_id": "assault"
           }
-        ]
+        ],
+        "weapons": {
+          "type": "ranged"
+        }
       }
     },
     "scope": {
@@ -1049,7 +1408,7 @@
       "chaos-cerastus-knight-lancer"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "aura",
     "faction_id": "chaos-knights"
   },
   {
@@ -1058,19 +1417,22 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "58d176c7e8aa5aa265df2c53b20848612f87b500c5b69b444f5483d430879daa",
     "version": "2025-q3",
     "effect": {
       "type": "weapon-ability-grant",
-      "target": "this-unit",
+      "target": "this-model",
       "modifier": {
         "keywords": [
           {
             "keyword_id": "devastating-wounds"
           }
-        ]
+        ],
+        "weapons": {
+          "type": "melee"
+        }
       }
     },
     "scope": {
@@ -1080,8 +1442,16 @@
       "knight-rampager"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "chaos-knights"
+    "behavior": "reactive",
+    "faction_id": "chaos-knights",
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "charge"
+        ]
+      }
+    }
   },
   {
     "ability_id": "frenzied-rampage-chaos-knights",
@@ -1089,29 +1459,36 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "6e221c1e2b83629d8cbc959aa552373af0f22553b82fae8674d432e762652006",
     "version": "2025-q3",
     "effect": {
-      "type": "re-roll",
-      "target": {
-        "owner": "friendly",
-        "all_of": [
-          "WAR DOG"
-        ],
-        "level": "model",
-        "within": {
-          "range": {
-            "inches": 9
-          }
+      "type": "conditional",
+      "condition": {
+        "type": "attack-is",
+        "parameters": {
+          "attack_type": "melee"
         }
       },
-      "modifier": {
-        "roll": "hit",
-        "subset": "ones",
-        "weapons": {
-          "type": "melee"
+      "effect": {
+        "type": "re-roll",
+        "target": {
+          "owner": "friendly",
+          "all_of": [
+            "WAR DOG"
+          ],
+          "level": "model",
+          "within": {
+            "range": {
+              "inches": 9
+            },
+            "of": "this-model"
+          }
+        },
+        "modifier": {
+          "roll": "hit",
+          "subset": "ones"
         }
       }
     },
@@ -1122,7 +1499,7 @@
       "knight-rampager"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "aura",
     "faction_id": "chaos-knights"
   },
   {
@@ -1131,7 +1508,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "1d40894578091570983803741d13c2bb453d9807f878ac6269fe61417cc89fff",
     "version": "2025-q3",
@@ -1146,18 +1523,19 @@
         "within": {
           "range": {
             "inches": 6
-          }
+          },
+          "of": "this-model"
         }
       },
       "modifier": {
-        "weapons": {
-          "type": "ranged"
-        },
         "keywords": [
           {
             "keyword_id": "assault"
           }
-        ]
+        ],
+        "weapons": {
+          "type": "ranged"
+        }
       }
     },
     "scope": {
@@ -1167,7 +1545,7 @@
       "chaos-questoris-knight-magaera"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "aura",
     "faction_id": "chaos-knights"
   },
   {
@@ -1176,7 +1554,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "c34e6d240a168267337e54f3835d260c6fd22a2bca37349add3568635085f081",
     "version": "2025-q3",
@@ -1194,8 +1572,28 @@
       "chaos-questoris-knight-magaera"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "chaos-knights"
+    "behavior": "reactive",
+    "faction_id": "chaos-knights",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "infernal-aegis-chaos-knights",
@@ -1203,25 +1601,30 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "f8af84daabb2f82b02d0061b430af8e7f4be79695ac72acab0680ed816775693",
     "version": "2025-q3",
     "effect": {
-      "type": "ability-grant",
-      "target": {
-        "owner": "friendly",
-        "all_of": [
-          "WAR DOG"
-        ],
-        "within": {
-          "range": {
-            "inches": 6
-          }
-        }
-      },
+      "type": "aura",
+      "target": "friendly-within-aura",
       "modifier": {
-        "ability": "benefit-of-cover"
+        "range": {
+          "inches": 6
+        },
+        "effect": {
+          "type": "ability-grant",
+          "target": "recipient",
+          "modifier": {
+            "ability": "benefit-of-cover"
+          }
+        },
+        "eligible": {
+          "owner": "friendly",
+          "all_of": [
+            "WAR DOG"
+          ]
+        }
       }
     },
     "scope": {
@@ -1231,8 +1634,14 @@
       "knight-tyrant"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "chaos-knights"
+    "behavior": "aura",
+    "faction_id": "chaos-knights",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      }
+    }
   },
   {
     "ability_id": "bastion-of-corruption-chaos-knights",
@@ -1240,7 +1649,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "e2bb9a35db17e2500d9b57fd40eb74fd4db4d2c7dca0f8f9b72f4845efbd45b2",
     "version": "2025-q3",
@@ -1250,15 +1659,17 @@
         "owner": "enemy"
       },
       "modifier": {
-        "allow": false,
         "to": "battlefield",
         "from": "strategic-reserves",
-        "min_distance_from": {
-          "of": "this-model",
-          "range": {
-            "inches": 12
+        "allow": false,
+        "near": [
+          {
+            "of": "this-model",
+            "range": {
+              "inches": 12
+            }
           }
-        }
+        ]
       }
     },
     "scope": {
@@ -1277,28 +1688,54 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "5c0d0d3b846de1cef06f98abd2a8bc5d56253c9ca03cb0fce34eb6b82d77e09f",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "subject": "selected-unit",
+                "filter": {
+                  "within": {
+                    "of": "this-model",
+                    "range": {
+                      "inches": 24
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "matches",
+              "parameters": {
+                "subject": "selected-unit",
+                "filter": {
+                  "visible": {
+                    "to": "this-model"
+                  }
+                }
+              }
+            }
+          ]
         }
       },
       "effect": {
         "type": "test",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 24
-            }
-          }
-        },
+        "target": "selected-unit",
         "modifier": {
           "test": "battle-shock"
         }
@@ -1311,8 +1748,28 @@
       "knight-abominant"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "chaos-knights"
+    "behavior": "reactive",
+    "faction_id": "chaos-knights",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "warp-storms-chaos-knights",
@@ -1410,7 +1867,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "df73cb6b7e35f1e67c954d78f9e7ef415ceb335dfc7da6e1c4d757d18cd3170b",
     "version": "2025-q3",
@@ -1425,18 +1882,19 @@
         "within": {
           "range": {
             "inches": 6
-          }
+          },
+          "of": "this-model"
         }
       },
       "modifier": {
-        "weapons": {
-          "type": "ranged"
-        },
         "keywords": [
           {
             "keyword_id": "ignores-cover"
           }
-        ]
+        ],
+        "weapons": {
+          "type": "ranged"
+        }
       }
     },
     "scope": {
@@ -1446,7 +1904,7 @@
       "chaos-questoris-knight-styrix"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "aura",
     "faction_id": "chaos-knights"
   },
   {
@@ -1542,98 +2000,133 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "movement"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "move-modifier",
-            "target": "this-model",
-            "modifier": {
-              "applies_to_moves": [
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "move-ended",
+            "subject": "this-model",
+            "filter": {
+              "move_types": [
                 "normal",
                 "advance",
                 "fall-back"
-              ],
-              "passthrough": [
-                "non-titanic-models",
-                "terrain-le-4"
               ]
             }
           },
-          {
-            "type": "move-modifier",
-            "target": "this-model",
-            "modifier": {
-              "applies_to_moves": [
-                "normal",
-                "advance",
-                "fall-back"
-              ],
-              "passthrough": [
-                "models"
-              ],
-              "no_end_in_engagement": true
-            }
-          },
-          {
-            "type": "move-modifier",
-            "target": "this-model",
-            "modifier": {
-              "applies_to_moves": [
-                "normal",
-                "advance",
-                "fall-back"
-              ],
-              "passthrough": [
-                "tall-terrain"
-              ]
-            }
-          },
-          {
-            "type": "ability-part",
-            "trigger": {
-              "event": "move-ended",
-              "filter": {
-                "through": "tall-terrain"
-              }
-            },
-            "effect": {
-              "type": "dice-gated",
-              "dice": "D6",
-              "threshold": 1,
-              "comparison": "eq",
-              "on_success": {
-                "type": "state-change",
-                "target": "this-model",
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "move-modifier",
+                "target": "event-subject",
                 "modifier": {
-                  "state": "battle-shocked",
-                  "set": true
+                  "passthrough": [
+                    "non-titanic-models"
+                  ]
+                }
+              },
+              {
+                "type": "move-modifier",
+                "target": "event-subject",
+                "modifier": {
+                  "passthrough": [
+                    "terrain-le-4"
+                  ]
+                }
+              },
+              {
+                "type": "permission",
+                "target": "event-subject",
+                "modifier": {
+                  "activity": "move",
+                  "allow": true,
+                  "despite": [
+                    "engaged"
+                  ]
+                }
+              },
+              {
+                "type": "move-modifier",
+                "target": "event-subject",
+                "modifier": {
+                  "no_end_in_engagement": true,
+                  "applies_to_moves": [
+                    "normal",
+                    "advance",
+                    "fall-back"
+                  ]
+                }
+              },
+              {
+                "type": "move-modifier",
+                "target": "event-subject",
+                "modifier": {
+                  "passthrough": [
+                    "tall-terrain"
+                  ]
                 }
               }
-            }
+            ]
           }
-        ]
-      }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "move-ended",
+            "subject": "this-model",
+            "filter": {
+              "through": "tall-terrain"
+            }
+          },
+          "effect": {
+            "type": "dice-table",
+            "dice": "D6",
+            "outcomes": [
+              {
+                "results": [
+                  1
+                ],
+                "effect": {
+                  "type": "state-change",
+                  "target": "this-unit",
+                  "modifier": {
+                    "state": "battle-shocked",
+                    "set": true
+                  }
+                }
+              },
+              {
+                "results": [
+                  2,
+                  3,
+                  4,
+                  5,
+                  6
+                ],
+                "effect": {
+                  "type": "no-effect"
+                }
+              }
+            ]
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "faction_id": "chaos-knights",
     "ability_type": "faction",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "unit_ids": []
+    "unit_ids": [],
+    "source_digest": "68c5153b55c80b5a04b53c8c071fa532fb59856d6c23aa9ddb86326bd05b9484"
   },
   {
     "ability_id": "annihilate-the-unworthy-chaos-knights",
@@ -1641,7 +2134,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "28dde22bf70512289e7ff49dbba791c54676b490495ffcdead747e5ad639fb57",
     "version": "2025-q3",
@@ -1656,15 +2149,20 @@
       "condition": {
         "type": "matches",
         "parameters": {
+          "subject": "defender",
           "filter": {
             "state": "battle-shocked"
-          },
-          "subject": "defender"
+          }
         }
       },
       "effect": {
         "type": "roll-modifier",
-        "target": "this-unit",
+        "target": {
+          "owner": "friendly",
+          "all_of": [
+            "KNIGHT TYRANT"
+          ]
+        },
         "modifier": {
           "roll": "hit",
           "operation": "add",
@@ -1688,7 +2186,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "441c1fb4810fa79b75a30a7eb79a1052b2f2721111b2ad7cad3b2271fd0c2a5d",
     "version": "2025-q3",
@@ -1697,47 +2195,52 @@
     "faction_id": "chaos-knights",
     "detachment_id": "bastions-of-tyranny",
     "ability_type": "enhancement",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "subject": "selected-unit",
+            "filter": {
+              "within": {
+                "of": "this-unit",
+                "range": {
+                  "inches": 24
+                }
+              }
+            }
+          }
         }
       },
       "effect": {
-        "type": "select-units",
-        "selector": {
-          "filter": {
-            "owner": "enemy",
-            "within": {
-              "range": {
-                "inches": 24
-              },
-              "of": "this-model"
-            }
-          },
-          "count": {
-            "min": 1,
-            "max": 1
-          }
-        },
-        "effect": {
-          "type": "stat-modifier",
-          "target": "selected-unit",
-          "modifier": {
-            "stat": "detection-range",
-            "operation": "add",
-            "value": 6
-          }
+        "type": "stat-modifier",
+        "target": "selected-unit",
+        "modifier": {
+          "stat": "detection-range",
+          "operation": "add",
+          "value": 6
         }
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "until-this-unit-has-shot"
     },
-    "community_notes": "KNIGHT TYRANT only. When selected to shoot, one enemy unit within 24\" gains +6\" detection range until this unit has shot."
+    "community_notes": "KNIGHT TYRANT only. When selected to shoot, one enemy unit within 24\" gains +6\" detection range until this unit has shot.",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      }
+    }
   },
   {
     "ability_id": "hate-filled-dominion-bastions-of-tyranny-chaos-knights",
@@ -1745,7 +2248,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "0d1510498934d1f3748286967f881c4fd92052e41d07b803e4741f56f2b957ee",
     "version": "2025-q3",
@@ -1757,10 +2260,10 @@
     "behavior": "passive",
     "effect": {
       "type": "re-roll",
-      "target": "this-model",
+      "target": "this-unit",
       "modifier": {
         "roll": "attacks",
-        "subset": "all-failures"
+        "result_scope": "any-result"
       }
     },
     "scope": {
@@ -1811,7 +2314,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "613ef42ad7a54bd3994b52337f1dfe7c7cdfa1f8cd2c800750dacbdd96bc15a5",
     "version": "2025-q3",
@@ -1820,22 +2323,34 @@
     "faction_id": "chaos-knights",
     "detachment_id": "bastions-of-tyranny",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "permission",
       "target": "this-unit",
       "modifier": {
         "activity": "shoot",
-        "allow": true,
-        "after": [
-          "fall-back"
-        ]
+        "allow": true
       }
     },
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "A fall-back move does not prevent the KNIGHT TYRANT from being eligible to shoot."
+    "community_notes": "A fall-back move does not prevent the KNIGHT TYRANT from being eligible to shoot.",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "move_types": [
+          "fall-back"
+        ],
+        "to": "move"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "KNIGHT TYRANT"
+        ]
+      }
+    }
   },
   {
     "ability_id": "intimidating-reminder-bastions-of-tyranny-chaos-knights",
@@ -1843,45 +2358,89 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "0b8ea83f7c42522c25d987d42670f4958360ec051641f219a1d74d181c199c4d",
+    "source_digest": "1dfe99787ca409e43684978a408af9fb139dcf5fdd29f6d726aa0dbcb48c9a5c",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "chaos-knights",
     "detachment_id": "bastions-of-tyranny",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "designate",
-          "target": "selected-unit",
-          "modifier": {
-            "subject": "selected-unit",
-            "tag": "suppressed"
-          }
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
         },
-        {
-          "type": "roll-modifier",
-          "target": {
-            "owner": "enemy",
-            "designated": "suppressed"
-          },
-          "modifier": {
-            "roll": "hit",
-            "operation": "subtract",
-            "value": 1
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "type": "happened",
+          "parameters": {
+            "event": "after-roll",
+            "subject": "event-subject",
+            "object": "this-unit",
+            "filter": {
+              "roll": "hit",
+              "result": "success"
+            },
+            "window": "event"
           }
         }
-      ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "designate",
+            "target": "selected-unit",
+            "modifier": {
+              "tag": "suppressed"
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "designated": "suppressed"
+                }
+              }
+            },
+            "effect": {
+              "type": "roll-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "hit",
+                "operation": "subtract",
+                "value": 1
+              }
+            }
+          }
+        ]
+      }
     },
     "scope": {
       "duration": "until-next-command-phase"
     },
-    "community_notes": "One enemy unit hit by the KNIGHT TYRANT's attacks is suppressed until your next Command phase: while suppressed, its attacks have -1 to Hit rolls."
+    "community_notes": "One enemy unit hit by the KNIGHT TYRANT's attacks is suppressed until your next Command phase: while suppressed, its attacks have -1 to Hit rolls.",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "KNIGHT TYRANT"
+        ]
+      }
+    }
   },
   {
     "ability_id": "scenting-fear-chaos-knights",
@@ -1889,7 +2448,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "011ee4c6c92b3256d084b15b9ca4e8bc1efe092e1fd8e2be8e5eafd32c4ab50f",
     "version": "2025-q3",
@@ -1902,10 +2461,21 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       },
       "effect": {
         "type": "select-units",
@@ -1923,38 +2493,55 @@
           "eligibility": {
             "type": "matches",
             "parameters": {
+              "subject": "selected-unit",
               "filter": {
                 "within": {
-                  "range": {
-                    "inches": 12
-                  },
                   "of": {
                     "owner": "friendly",
                     "all_of": [
                       "WAR DOG"
                     ]
+                  },
+                  "range": {
+                    "inches": 12
                   }
                 }
-              },
-              "subject": "this-unit"
+              }
             }
           }
         },
         "effect": {
-          "type": "stat-modifier",
-          "target": "selected-unit",
-          "modifier": {
-            "stat": "detection-range",
-            "operation": "add",
-            "value": 6
-          }
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "stat-modifier",
+              "target": "selected-unit",
+              "modifier": {
+                "stat": "detection-range",
+                "operation": "add",
+                "value": 6
+              }
+            },
+            {
+              "type": "army-rule",
+              "target": "this-unit",
+              "modifier": {
+                "rule": "detachment-tag-exclusive",
+                "tag": "WAR DOGS"
+              }
+            }
+          ]
         }
       }
     },
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "Once per battle round, per army. In your Shooting phase, one visible enemy unit within 12\" of a friendly WAR DOG gains +6\" detection range. WAR DOGS detachment."
+    "community_notes": "Once per battle round, per army. In your Shooting phase, one visible enemy unit within 12\" of a friendly WAR DOG gains +6\" detection range. WAR DOGS detachment.",
+    "usage": {
+      "frequency": "once-per-battle-round",
+      "per": "army"
+    }
   },
   {
     "ability_id": "soul-spoor-auspicator-upgrade-hunting-warpack-chaos-knights",
@@ -1962,7 +2549,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "e31138ca2d396e01b384e6b05a258f56ff5596c921e891d14a43246c0bfdfcf4",
     "version": "2025-q3",
@@ -1974,7 +2561,7 @@
     "behavior": "passive",
     "effect": {
       "type": "stat-modifier",
-      "target": "this-model",
+      "target": "this-unit",
       "modifier": {
         "stat": "Range",
         "operation": "add",
@@ -1995,7 +2582,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "822640bc1a93e88601e6c47d0003ab0f07f18aa0a2557b074455cc79eca5529b",
     "version": "2025-q3",
@@ -2007,16 +2594,16 @@
     "behavior": "passive",
     "effect": {
       "type": "weapon-ability-grant",
-      "target": "this-model",
+      "target": "this-unit",
       "modifier": {
-        "weapons": {
-          "type": "ranged"
-        },
         "keywords": [
           {
             "keyword_id": "ignores-cover"
           }
-        ]
+        ],
+        "weapons": {
+          "type": "ranged"
+        }
       }
     },
     "scope": {
@@ -2072,7 +2659,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "c20a376d1edbcb4c30276565e83546593502e938f9c9026a234d457bb3aeb14c",
     "version": "2025-q3",
@@ -2081,7 +2668,7 @@
     "faction_id": "chaos-knights",
     "detachment_id": "hunting-warpack",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "permission",
       "target": "this-unit",
@@ -2096,7 +2683,19 @@
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "Shooting does not prevent the WAR DOG unit from being eligible to start an Action."
+    "community_notes": "Shooting does not prevent the WAR DOG unit from being eligible to start an Action.",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "WAR DOG"
+        ]
+      }
+    }
   },
   {
     "ability_id": "stalking-focus-hunting-warpack-chaos-knights",
@@ -2176,7 +2775,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "1f07d07fc95ddab3bab89d6a06b19ab98e3299513148fdb2ba8dda5b74136fef",
     "version": "2025-q3",
@@ -2185,16 +2784,38 @@
     "faction_id": "chaos-knights",
     "detachment_id": "iconoclast-fiefdom",
     "ability_type": "detachment",
-    "behavior": "passive",
+    "behavior": "activated",
     "effect": {
-      "type": "re-roll",
-      "target": {
-        "owner": "friendly"
-      },
-      "modifier": {
-        "roll": "leadership",
-        "subset": "all-failures"
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "army-rule",
+          "target": "this-unit",
+          "modifier": {
+            "rule": "composition",
+            "with": {
+              "all_of": [
+                "Damned"
+              ]
+            },
+            "max": 500,
+            "measure": "points"
+          }
+        },
+        {
+          "type": "re-roll",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "DAMNED"
+            ]
+          },
+          "modifier": {
+            "roll": "leadership",
+            "result_scope": "any-result"
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -2212,7 +2833,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "fe571a504b418a177a682c1b7301f1379c4bd961e92f0d0ec76633d90482f36c",
     "version": "2025-q3",
@@ -2223,24 +2844,45 @@
     "ability_type": "enhancement",
     "behavior": "aura",
     "effect": {
-      "type": "move",
-      "target": {
-        "owner": "friendly",
-        "within": {
-          "range": {
-            "inches": 6
-          }
-        }
-      },
+      "type": "aura",
+      "target": "friendly-within-aura",
       "modifier": {
-        "move_type": "normal",
-        "distance": 2
+        "range": {
+          "inches": 6
+        },
+        "effect": {
+          "type": "stat-modifier",
+          "target": "recipient",
+          "modifier": {
+            "stat": "M",
+            "operation": "add",
+            "value": 2
+          }
+        },
+        "eligible": {
+          "owner": "friendly",
+          "all_of": [
+            "DAMNED"
+          ]
+        }
       }
     },
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "CHAOS KNIGHTS model only. While a friendly DAMNED unit is within 6\", that unit gets +2\" M when it makes a Normal/Advance/Fall Back move (until end of phase)."
+    "community_notes": "CHAOS KNIGHTS model only. While a friendly DAMNED unit is within 6\", that unit gets +2\" M when it makes a Normal/Advance/Fall Back move (until end of phase).",
+    "trigger": {
+      "event": "selected",
+      "subject": "recipient",
+      "filter": {
+        "move_types": [
+          "normal",
+          "advance",
+          "fall-back"
+        ],
+        "to": "move"
+      }
+    }
   },
   {
     "ability_id": "iconoclast-idol-aura-iconoclast-fiefdom-chaos-knights",
@@ -2248,7 +2890,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "01ac9f1d204aeec0b2133e3e0400126ea9f69752ee6696c1b3071ec60ae0df5a",
     "version": "2025-q3",
@@ -2259,31 +2901,41 @@
     "ability_type": "enhancement",
     "behavior": "aura",
     "effect": {
-      "type": "cost-modifier",
-      "target": {
-        "owner": "friendly",
-        "all_of": [
-          "DAMNED"
-        ],
-        "within": {
-          "range": {
-            "inches": 6
-          },
-          "of": "this-model"
-        }
-      },
+      "type": "aura",
+      "target": "friendly-within-aura",
       "modifier": {
-        "of": "stratagem",
-        "id": "heroic-intervention",
-        "operation": "decrease",
-        "amount": 1,
-        "applies_to": "targeting-this-unit"
+        "range": {
+          "inches": 6
+        },
+        "effect": {
+          "type": "cost-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "of": "stratagem",
+            "operation": "decrease",
+            "amount": 1,
+            "applies_to": "the-triggering-use",
+            "id": "heroic-intervention"
+          }
+        },
+        "eligible": {
+          "owner": "friendly",
+          "all_of": [
+            "DAMNED"
+          ]
+        }
       }
     },
     "scope": {
       "duration": "permanent"
     },
-    "community_notes": "CHAOS KNIGHTS model only. While a friendly DAMNED unit is within 6\", the Heroic Intervention stratagem targeting that unit costs -1 CP."
+    "community_notes": "CHAOS KNIGHTS model only. While a friendly DAMNED unit is within 6\", the Heroic Intervention stratagem targeting that unit costs -1 CP.",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "stratagem"
+      }
+    }
   },
   {
     "ability_id": "avenge-the-masters-iconoclast-fiefdom-chaos-knights",
@@ -2404,7 +3056,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "39c0f5c94d24c9c4ea2a9b2bb1568929815cf5b4f9c82bb91c952723fa1e12a2",
     "version": "2025-q3",
@@ -2413,47 +3065,57 @@
     "faction_id": "chaos-knights",
     "detachment_id": "iconoclast-fiefdom",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy",
+          "visible": {
+            "to": "this-model"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "subject": "selected-unit",
+            "filter": {
+              "within": {
+                "of": "this-unit",
+                "range": {
+                  "inches": 12
+                }
+              }
+            }
+          }
         }
       },
       "effect": {
-        "type": "select-units",
-        "selector": {
-          "filter": {
-            "owner": "enemy",
-            "within": {
-              "range": {
-                "inches": 12
-              },
-              "of": "this-model"
-            },
-            "visible": {
-              "to": "this-model"
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "designate",
+            "target": "selected-unit",
+            "modifier": {
+              "tag": "hunted"
             }
           },
-          "count": {
-            "min": 1,
-            "max": 1
-          }
-        },
-        "effect": {
-          "type": "sequence",
-          "steps": [
-            {
-              "type": "designate",
-              "target": "this-unit",
-              "modifier": {
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
                 "subject": "selected-unit",
-                "tag": "hunted"
+                "filter": {
+                  "designated": "hunted"
+                }
               }
             },
-            {
+            "effect": {
               "type": "stat-modifier",
               "target": "selected-unit",
               "modifier": {
@@ -2462,14 +3124,34 @@
                 "value": 6
               }
             }
-          ]
-        }
+          }
+        ]
       }
     },
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "Start of your Shooting phase: a friendly DAMNED unit marks one visible enemy unit within 12\" as Hunted (+6\" detection range)."
+    "community_notes": "Start of your Shooting phase: a friendly DAMNED unit marks one visible enemy unit within 12\" as Hunted (+6\" detection range).",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "masters-of-the-pack-chaos-knights",
@@ -2526,33 +3208,33 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "497fa6c74f10fbb26db44dc22914480091b60a735c36901e82f7aa82c8a585be",
+    "source_digest": "a98002479a1ea512990b8b56e6a958c90b447f4b984394c91fc275e77ca180f4",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "chaos-knights",
     "detachment_id": "helhunt-lance",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "activated",
     "effect": {
-      "type": "sequence",
-      "steps": [
+      "type": "choice",
+      "options": [
         {
           "type": "re-roll",
-          "target": "this-model",
+          "target": "this-unit",
           "modifier": {
-            "roll": "advance",
-            "subset": "all-failures"
+            "roll": "charge",
+            "result_scope": "any-result"
           }
         },
         {
           "type": "re-roll",
-          "target": "this-model",
+          "target": "this-unit",
           "modifier": {
-            "roll": "charge",
-            "subset": "all-failures"
+            "roll": "advance",
+            "result_scope": "any-result"
           }
         }
       ]
@@ -2568,88 +3250,81 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "016ff8bd0de9ad28794ea46ef288d8a7b4cf8e7282c2c131f8a1124126964c79",
+    "source_digest": "7377e91feb1b5ba13680a30a28d0adfd56229e37ce9796a1d0d9705c1effcb0e",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "chaos-knights",
     "detachment_id": "helhunt-lance",
     "ability_type": "enhancement",
-    "behavior": "aura",
+    "behavior": "reactive",
     "effect": {
-      "type": "ability-part",
-      "trigger": {
-        "event": "attacks-resolved",
-        "subject": {
-          "owner": "friendly",
-          "all_of": [
-            "WAR DOG"
-          ]
-        },
-        "filter": {
-          "kind": "shoot"
-        },
-        "proximity": {
-          "range": {
-            "inches": 9
-          },
-          "of": "this-model"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-subject",
+          "filter": {
+            "within": {
+              "of": "this-model",
+              "range": {
+                "inches": 9
+              }
+            }
+          }
         }
       },
       "effect": {
-        "type": "designate-target",
-        "designation": "octagram-battle-shock",
-        "select": {
-          "kind": "unit",
-          "selector": {
-            "filter": {
-              "owner": "enemy"
-            },
-            "count": {
-              "min": 1,
-              "max": 1
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "subject": "event-subject",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success"
+              },
+              "window": "event"
             }
           }
         },
-        "applies": {
-          "to": "target",
-          "effect": {
-            "type": "test",
-            "target": "defender",
-            "modifier": {
-              "test": "battle-shock"
-            }
+        "effect": {
+          "type": "test",
+          "target": "selected-unit",
+          "modifier": {
+            "test": "battle-shock"
           }
         }
       }
     },
     "trigger": {
       "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
       "subject": {
-        "owner": "friendly"
-      },
-      "proximity": {
-        "of": "this-model",
-        "range": {
-          "inches": 9
-        }
-      },
-      "condition": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
-            "all_of": [
-              "WAR DOG"
-            ]
-          }
-        }
+        "owner": "friendly",
+        "all_of": [
+          "WAR DOG"
+        ],
+        "level": "model"
       },
       "optional": true
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -2903,7 +3578,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "03ccde63de637ccc78820fe0ed6a1c501103813fd062c8578acbac0c30e3de68",
     "version": "2025-q3",
@@ -2912,13 +3587,20 @@
     "faction_id": "chaos-knights",
     "detachment_id": "helhunt-lance",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "movement"
+      "type": "ability-part",
+      "trigger": {
+        "event": "move-ended",
+        "filter": {
+          "move_types": [
+            "normal",
+            "advance",
+            "fall-back"
+          ]
+        },
+        "subject": {
+          "stratagem_target": "second"
         }
       },
       "effect": {
@@ -2926,63 +3608,45 @@
         "steps": [
           {
             "type": "move-modifier",
-            "target": {
-              "owner": "friendly",
-              "within": {
-                "range": {
-                  "inches": 6
-                }
-              }
-            },
+            "target": "event-subject",
             "modifier": {
               "passthrough": [
-                "non-titanic-models"
-              ]
-            }
-          },
-          {
-            "type": "move-modifier",
-            "target": {
-              "owner": "friendly",
-              "within": {
-                "range": {
-                  "inches": 6
-                }
-              }
-            },
-            "modifier": {
-              "passthrough": [
-                "terrain-le-4",
-                "tall-terrain"
-              ]
-            }
-          },
-          {
-            "type": "move-modifier",
-            "target": {
-              "owner": "friendly",
-              "within": {
-                "range": {
-                  "inches": 6
-                }
-              }
-            },
-            "modifier": {
-              "passthrough": [
+                "all-terrain",
                 "models"
+              ],
+              "applies_to_moves": [
+                "normal",
+                "advance",
+                "fall-back"
+              ]
+            }
+          },
+          {
+            "type": "permission",
+            "target": "event-subject",
+            "modifier": {
+              "activity": "move",
+              "allow": true,
+              "despite": [
+                "engaged"
+              ]
+            }
+          },
+          {
+            "type": "move-modifier",
+            "target": "event-subject",
+            "modifier": {
+              "no_end_in_engagement": true,
+              "applies_to_moves": [
+                "normal",
+                "advance",
+                "fall-back"
               ]
             }
           },
           {
             "type": "roll-result",
-            "target": {
-              "owner": "friendly",
-              "within": {
-                "range": {
-                  "inches": 6
-                }
-              }
-            },
+            "target": "event-subject",
             "modifier": {
               "roll": "desperate-escape",
               "result": "pass"
@@ -2994,7 +3658,27 @@
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "contemptuous-volleys-helhunt-lance-chaos-knights",
@@ -3002,7 +3686,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "a1402f43aa7a0b14427270f96510dea24714569f4e5da268ce8d74fdef7cfdf8",
     "version": "2025-q3",
@@ -3011,7 +3695,7 @@
     "faction_id": "chaos-knights",
     "detachment_id": "helhunt-lance",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -3042,7 +3726,21 @@
     "scope": {
       "duration": "turn"
     },
-    "community_notes": "After a Chaos Knights unit Falls Back, it is eligible to shoot and declare a charge this turn."
+    "community_notes": "After a Chaos Knights unit Falls Back, it is eligible to shoot and declare a charge this turn.",
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "CHAOS KNIGHTS"
+        ]
+      },
+      "filter": {
+        "move_types": [
+          "fall-back"
+        ]
+      }
+    }
   },
   {
     "ability_id": "goaded-beast-helhunt-lance-chaos-knights",
@@ -3566,7 +4264,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "fdf9572eab8dbcf0f151c21675720eaf1c8a141991eb4eacd3834c25965c324e",
     "version": "2025-q3",
@@ -3575,19 +4273,55 @@
     "faction_id": "chaos-knights",
     "detachment_id": "lords-of-dread",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "move",
-      "target": "this-unit",
-      "modifier": {
-        "move_type": "consolidation",
-        "distance": 3
+      "type": "ability-part",
+      "trigger": {
+        "event": "move-ended",
+        "filter": {
+          "move_types": [
+            "consolidation"
+          ]
+        }
+      },
+      "effect": {
+        "type": "move-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "applies_to_moves": [
+            "consolidation"
+          ],
+          "distance_bonus": 3,
+          "ends_when": {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "state": "engaged"
+              }
+            }
+          }
+        }
       }
     },
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "1CP. Before a CHAOS KNIGHTS CHARACTER consolidates: it can Consolidate up to an extra 3\", provided it ends within Engagement Range of an enemy unit."
+    "community_notes": "1CP. Before a CHAOS KNIGHTS CHARACTER consolidates: it can Consolidate up to an extra 3\", provided it ends within Engagement Range of an enemy unit.",
+    "trigger": {
+      "event": "move-started",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "CHAOS KNIGHTS",
+          "CHARACTER"
+        ]
+      },
+      "filter": {
+        "move_types": [
+          "consolidation"
+        ]
+      }
+    }
   },
   {
     "ability_id": "crushed-like-vermin-lords-of-dread-chaos-knights",
@@ -3595,7 +4329,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "4b3b14855eacb13d21afac3cc2fff28798252aee81d73eea6b3b3a69052cc392",
     "version": "2025-q3",
@@ -3604,62 +4338,121 @@
     "faction_id": "chaos-knights",
     "detachment_id": "lords-of-dread",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "select-units",
-      "selector": {
-        "filter": {
-          "owner": "enemy",
-          "none_of": [
-            "MONSTER",
-            "VEHICLE"
-          ]
-        },
-        "count": {
-          "min": 1,
-          "max": 1
+      "type": "conditional",
+      "condition": {
+        "type": "moved-over",
+        "parameters": {
+          "subject": "this-unit",
+          "by": "this-unit",
+          "window": "phase"
         }
       },
       "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "mortal-wounds",
-            "target": "selected-unit",
-            "modifier": {
-              "count": 1,
-              "per": "success",
-              "roll": {
-                "dice": 6,
-                "threshold": 4
-              }
-            }
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
           },
-          {
-            "type": "conditional",
-            "condition": {
-              "type": "happened",
-              "parameters": {
-                "event": "model-destroyed",
-                "object": "selected-unit",
-                "window": "event"
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "operator": "and",
+            "operands": [
+              {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "selected-unit",
+                      "filter": {
+                        "all_of": [
+                          "MONSTER"
+                        ]
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "selected-unit",
+                      "filter": {
+                        "all_of": [
+                          "VEHICLE"
+                        ]
+                      }
+                    }
+                  }
+                ]
               }
-            },
-            "effect": {
-              "type": "test",
+            ]
+          }
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "mortal-wounds",
               "target": "selected-unit",
               "modifier": {
-                "test": "battle-shock"
+                "count": 1,
+                "per": "success",
+                "roll": {
+                  "dice": 6,
+                  "threshold": 4
+                }
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "happened",
+                "parameters": {
+                  "event": "model-destroyed",
+                  "object": "model-in-this-unit",
+                  "window": "event"
+                }
+              },
+              "effect": {
+                "type": "test",
+                "target": "selected-unit",
+                "modifier": {
+                  "test": "battle-shock"
+                }
               }
             }
-          }
-        ]
+          ]
+        }
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
-    "community_notes": "1CP. After a CHAOS KNIGHTS CHARACTER ends a Normal move: pick a non-MONSTER/VEHICLE enemy it moved over and roll 6D6 — each 4+ deals 1 mortal wound; if any model dies, that unit takes a Battle-shock test."
+    "community_notes": "1CP. After a CHAOS KNIGHTS CHARACTER ends a Normal move: pick a non-MONSTER/VEHICLE enemy it moved over and roll 6D6 — each 4+ deals 1 mortal wound; if any model dies, that unit takes a Battle-shock test.",
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "normal"
+        ]
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "CHAOS KNIGHTS",
+          "CHARACTER"
+        ]
+      }
+    }
   },
   {
     "ability_id": "runes-of-disdain-lords-of-dread-chaos-knights",
@@ -3711,7 +4504,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "ac0edcf9aca32caf9f15c8e6f66ea5ccb8b44b01f82d90499868a44ca415d67e",
     "version": "2025-q3",
@@ -3720,7 +4513,7 @@
     "faction_id": "chaos-knights",
     "detachment_id": "lords-of-dread",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "activated",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -3729,18 +4522,47 @@
           "target": "this-unit",
           "modifier": {
             "roll": "charge",
-            "subset": "all-failures"
+            "result_scope": "any-result"
           }
         },
         {
-          "type": "permission",
-          "target": "this-unit",
-          "modifier": {
-            "activity": "declare-charge",
-            "allow": true,
-            "after": [
-              "advance"
-            ]
+          "type": "ability-part",
+          "usage": {
+            "frequency": "n-per-battle",
+            "count": 1,
+            "per": "model"
+          },
+          "duration": "phase",
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "phase-is",
+                  "parameters": {
+                    "phase": "charge"
+                  }
+                },
+                {
+                  "type": "player-turn-is",
+                  "parameters": {
+                    "turn": "your-turn"
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "permission",
+              "target": "this-unit",
+              "modifier": {
+                "activity": "declare-charge",
+                "allow": true,
+                "after": [
+                  "advance"
+                ]
+              }
+            }
           }
         }
       ]
@@ -3756,7 +4578,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "b63c779c3d1e46e1eec3851664429ad185dfdc976d2aa9646b51fde3623e97aa",
     "version": "2025-q3",
@@ -3765,29 +4587,47 @@
     "faction_id": "chaos-knights",
     "detachment_id": "lords-of-dread",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "activated",
     "effect": {
       "type": "sequence",
       "steps": [
         {
           "type": "weapon-ability-grant",
-          "target": "this-unit",
+          "target": "this-model",
           "modifier": {
-            "weapons": {
-              "type": "ranged"
-            },
             "keywords": [
               {
                 "keyword_id": "assault"
               }
-            ]
+            ],
+            "weapons": {
+              "type": "ranged"
+            }
           }
         },
         {
-          "type": "ability-grant",
-          "target": "this-unit",
-          "modifier": {
-            "ability": "fights-first"
+          "type": "ability-part",
+          "usage": {
+            "frequency": "n-per-battle",
+            "count": 1,
+            "per": "model"
+          },
+          "duration": "phase",
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "fight"
+              }
+            },
+            "effect": {
+              "type": "ability-grant",
+              "target": "this-unit",
+              "modifier": {
+                "ability": "fights-first"
+              }
+            }
           }
         }
       ]
@@ -3803,7 +4643,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "2921e9fa3a09803987ea46fce1f9f07d1be34181902763dc73d08cdca7100456",
     "version": "2025-q3",
@@ -3812,13 +4652,63 @@
     "faction_id": "chaos-knights",
     "detachment_id": "lords-of-dread",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "ability-grant",
-      "target": "this-model",
-      "modifier": {
-        "ability": "deep-strike"
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-grant",
+          "target": "this-model",
+          "modifier": {
+            "ability": "deep-strike",
+            "value": {
+              "rating": true
+            }
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "turn-ended",
+            "condition": {
+              "type": "player-turn-is",
+              "parameters": {
+                "turn": "opponent-turn"
+              }
+            },
+            "optional": true
+          },
+          "usage": {
+            "frequency": "n-per-battle",
+            "count": 1,
+            "per": "model"
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "filter": {
+                      "state": "engaged"
+                    }
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "set-up",
+              "target": "this-unit",
+              "modifier": {
+                "to": "strategic-reserves",
+                "from": "battlefield"
+              }
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -3831,7 +4721,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "a19189dc7481bce20ef5b79cfda43a0161b2bdd4c2f9041b8c737a2ef7dc3703",
     "version": "2025-q3",
@@ -3840,15 +4730,45 @@
     "faction_id": "chaos-knights",
     "detachment_id": "lords-of-dread",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "stat-modifier",
-      "target": "this-model",
-      "modifier": {
-        "stat": "Sv",
-        "operation": "set",
-        "value": 2
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "this-model",
+          "modifier": {
+            "stat": "Sv",
+            "operation": "set",
+            "value": 2
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "phase-started",
+            "condition": {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "command"
+              }
+            },
+            "optional": true
+          },
+          "usage": {
+            "frequency": "n-per-battle",
+            "count": 1,
+            "per": "model"
+          },
+          "effect": {
+            "type": "heal",
+            "target": "this-model",
+            "modifier": {
+              "amount": "D6"
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -3915,7 +4835,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "27c339a63b518be55a78fbdc829cbb6f0a9a7c431598290ce1d6cc48a319a8ca",
     "version": "2025-q3",
@@ -3924,13 +4844,40 @@
     "faction_id": "chaos-knights",
     "detachment_id": "lords-of-dread",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "ability-grant",
-      "target": "this-model",
-      "modifier": {
-        "ability": "stealth"
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-grant",
+          "target": "this-model",
+          "modifier": {
+            "ability": "stealth"
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "after-roll",
+            "filter": {
+              "roll": "save"
+            },
+            "optional": true
+          },
+          "usage": {
+            "frequency": "n-per-battle",
+            "count": 1,
+            "per": "model"
+          },
+          "effect": {
+            "type": "damage-reduction",
+            "target": "this-unit",
+            "modifier": {
+              "reduction": "to-zero"
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -4101,7 +5048,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "d72252f25b01fa9b7ea59135daa244036730169d7af9b119e60ce302359016ad",
     "version": "2025-q3",
@@ -4110,15 +5057,41 @@
     "faction_id": "chaos-knights",
     "detachment_id": "infernal-lance",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "objective-sticky",
-      "target": "this-unit"
+      "type": "select-objective",
+      "selector": {
+        "filter": {
+          "controlled_by": "friendly"
+        },
+        "bind_as": "selected-objective",
+        "count": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "effect": {
+        "type": "objective-sticky",
+        "target": "this-unit"
+      }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
-    "community_notes": "1CP. After a CHAOS KNIGHTS CHARACTER makes a Malefic Surge: an objective it controls stays yours until the opponent's control exceeds yours at the end of a phase."
+    "community_notes": "1CP. After a CHAOS KNIGHTS CHARACTER makes a Malefic Surge: an objective it controls stays yours until the opponent's control exceeds yours at the end of a phase.",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "ability"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "CHAOS KNIGHTS",
+          "CHARACTER"
+        ]
+      }
+    }
   },
   {
     "ability_id": "unleash-balefire-infernal-lance-chaos-knights",
@@ -4126,7 +5099,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "b1fe16ca4f8ce7573318a9606e1279375a45af2948c636187f2379fcc831a452",
     "version": "2025-q3",
@@ -4135,47 +5108,113 @@
     "faction_id": "chaos-knights",
     "detachment_id": "infernal-lance",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "test",
-          "target": {
-            "owner": "enemy"
-          },
-          "modifier": {
-            "test": "battle-shock"
-          }
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
         },
-        {
-          "type": "stat-modifier",
-          "target": {
-            "owner": "enemy"
-          },
-          "modifier": {
-            "stat": "M",
-            "operation": "subtract",
-            "value": 2
-          }
+        "count": {
+          "min": 1,
+          "max": 1
         },
-        {
-          "type": "roll-modifier",
-          "target": {
-            "owner": "enemy"
-          },
-          "modifier": {
-            "roll": "charge",
-            "operation": "subtract",
-            "value": 2
+        "eligibility": {
+          "type": "happened",
+          "parameters": {
+            "event": "after-roll",
+            "subject": "event-subject",
+            "object": "this-unit",
+            "filter": {
+              "roll": "hit",
+              "result": "success"
+            },
+            "window": "event"
           }
         }
-      ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "test",
+            "target": "selected-unit",
+            "modifier": {
+              "test": "battle-shock"
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "roll-result",
+              "parameters": {
+                "roll": "battle-shock",
+                "result": "failure"
+              }
+            },
+            "effect": {
+              "type": "designate",
+              "target": "selected-unit",
+              "modifier": {
+                "tag": "aflame"
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "selected-unit",
+                "filter": {
+                  "designated": "aflame"
+                }
+              }
+            },
+            "effect": {
+              "type": "stat-modifier",
+              "target": "selected-unit",
+              "modifier": {
+                "stat": "M",
+                "operation": "subtract",
+                "value": 2
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "selected-unit",
+                "filter": {
+                  "designated": "aflame"
+                }
+              }
+            },
+            "effect": {
+              "type": "roll-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "charge",
+                "operation": "subtract",
+                "value": 2
+              }
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "duration": "turn"
+      "duration": "until-end-of-opponent-next-turn"
     },
-    "community_notes": "1CP. After your unit shoots, a unit it hit takes a Battle-shock test; if failed it is aflame until the end of the opponent's next turn (-2\" Move and -2 to Charge rolls)."
+    "community_notes": "1CP. After your unit shoots, a unit it hit takes a Battle-shock test; if failed it is aflame until the end of the opponent's next turn (-2\" Move and -2 to Charge rolls).",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
+    }
   },
   {
     "ability_id": "warp-vision-infernal-lance-chaos-knights",
@@ -4256,7 +5295,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "d44becbcf3ab62533cbb42551976cbb557b68e73dd04839eb1fc42f76f56364f",
     "version": "2025-q3",
@@ -4282,17 +5321,31 @@
           }
         },
         {
-          "type": "weapon-ability-grant",
-          "target": "this-model",
-          "modifier": {
-            "weapons": {
-              "type": "melee"
-            },
-            "keywords": [
-              {
-                "keyword_id": "lance"
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-model",
+              "filter": {
+                "has_ability": [
+                  "diabolic-power"
+                ]
               }
-            ]
+            }
+          },
+          "effect": {
+            "type": "weapon-ability-grant",
+            "target": "this-model",
+            "modifier": {
+              "keywords": [
+                {
+                  "keyword_id": "lance"
+                }
+              ],
+              "weapons": {
+                "type": "melee"
+              }
+            }
           }
         }
       ]
@@ -4308,7 +5361,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "cc16050d85fa34c1d5badb33fd283b56d337336c4bdb2ebfdfedadba3c9eded4",
     "version": "2025-q3",
@@ -4317,15 +5370,38 @@
     "faction_id": "chaos-knights",
     "detachment_id": "infernal-lance",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "stat-modifier",
-      "target": "this-model",
-      "modifier": {
-        "stat": "W",
-        "operation": "add",
-        "value": 2
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "this-model",
+          "modifier": {
+            "stat": "W",
+            "operation": "add",
+            "value": 2
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "used",
+            "filter": {
+              "kind": "ability"
+            },
+            "optional": true
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "leadership",
+              "result_scope": "any-result"
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -4368,7 +5444,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "d2dfbd6dbf9a84e494280f75ace6252c127e8e74a21241f3a1aef8e672f484f4",
     "version": "2025-q3",
@@ -4379,18 +5455,71 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "weapon-ability-grant",
-      "target": "this-model",
-      "modifier": {
-        "weapons": {
-          "type": "ranged"
-        },
-        "keywords": [
-          {
-            "keyword_id": "assault"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "weapon-ability-grant",
+          "target": "this-model",
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "assault"
+              }
+            ],
+            "weapons": {
+              "type": "ranged"
+            }
           }
-        ]
-      }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-model",
+              "filter": {
+                "has_ability": [
+                  "unholy-hunger"
+                ]
+              }
+            }
+          },
+          "effect": {
+            "type": "ignore-modifiers",
+            "target": "this-model",
+            "modifier": {
+              "what": "characteristics",
+              "stats": [
+                "M"
+              ]
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-model",
+              "filter": {
+                "has_ability": [
+                  "unholy-hunger"
+                ]
+              }
+            }
+          },
+          "effect": {
+            "type": "ignore-modifiers",
+            "target": "this-model",
+            "modifier": {
+              "what": "rolls",
+              "rolls": [
+                "advance"
+              ]
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -4403,7 +5532,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "8c4ddb4daa0edf76f47c4e2450bd9e6f75ff021d7262ee620557f9dd38ff291b",
     "version": "2025-q3",
@@ -4412,82 +5541,82 @@
     "faction_id": "chaos-knights",
     "detachment_id": "houndpack-lance",
     "ability_type": "detachment",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "ability-part",
-      "trigger": {
-        "event": "phase-started",
-        "condition": {
-          "operator": "and",
-          "operands": [
-            {
-              "type": "phase-is",
-              "parameters": {
-                "phase": "command"
-              }
-            },
-            {
-              "type": "player-turn-is",
-              "parameters": {
-                "turn": "your-turn"
+      "type": "designate-target",
+      "designation": "marked-prey",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "matches",
+            "parameters": {
+              "subject": "selected-unit",
+              "filter": {
+                "visible": {
+                  "to": "attacker"
+                }
               }
             }
-          ]
+          }
         }
       },
-      "effect": {
-        "type": "designate-target",
-        "designation": "marked-prey",
-        "select": {
-          "kind": "unit",
-          "selector": {
-            "filter": {
-              "owner": "enemy"
-            },
-            "count": {
-              "min": 1,
-              "max": 1
-            }
-          }
-        },
-        "applies": {
-          "to": "attackers-of-target",
-          "effect": {
-            "type": "conditional",
-            "condition": {
-              "type": "matches",
-              "parameters": {
-                "filter": {
-                  "visible": {
-                    "to": "attacker"
-                  }
-                },
-                "subject": "defender"
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "weapon-ability-grant",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "WAR DOG"
+            ],
+            "level": "model"
+          },
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "sustained-hits",
+                "parameters": {
+                  "value": 1
+                }
               }
-            },
-            "effect": {
-              "type": "weapon-ability-grant",
-              "target": "this-unit",
-              "modifier": {
-                "keywords": [
-                  {
-                    "keyword_id": "sustained-hits",
-                    "parameters": {
-                      "value": 1
-                    }
-                  }
-                ]
-              }
-            }
+            ]
           }
-        },
-        "duration": "until-next-command-phase"
-      }
+        }
+      },
+      "duration": "until-next-command-phase"
     },
     "scope": {
       "duration": "until-next-command-phase"
     },
-    "community_notes": "Only WAR DOG models' attacks benefit, and only while the marked unit is visible to the attacker."
+    "community_notes": "Only WAR DOG models' attacks benefit, and only while the marked unit is visible to the attacker.",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "hungry-for-combat-houndpack-lance-chaos-knights",
@@ -4675,7 +5804,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "315b4f37d696fbe011b60141f2e76eded1353194cd764fe4728a8be326052477",
     "version": "2025-q3",
@@ -4684,22 +5813,52 @@
     "faction_id": "chaos-knights",
     "detachment_id": "houndpack-lance",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "permission",
-      "target": "this-unit",
-      "modifier": {
-        "activity": "shoot",
-        "allow": true,
-        "after": [
-          "fall-back"
-        ]
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "shoot",
+            "allow": true,
+            "after": [
+              "fall-back"
+            ]
+          }
+        },
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "declare-charge",
+            "allow": true,
+            "after": [
+              "fall-back"
+            ]
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "turn"
     },
-    "community_notes": "1CP. After a WAR DOG unit Falls Back: it is eligible to shoot and to declare a charge this turn."
+    "community_notes": "1CP. After a WAR DOG unit Falls Back: it is eligible to shoot and to declare a charge this turn.",
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "WAR DOG"
+        ]
+      },
+      "filter": {
+        "move_types": [
+          "fall-back"
+        ]
+      }
+    }
   },
   {
     "ability_id": "harrying-hounds-houndpack-lance-chaos-knights",
@@ -4749,7 +5908,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "db3b8a9602a7e089c0f33528612437e91998a60603d54dd45eb09a9e4cf108fd",
     "version": "2025-q3",
@@ -4758,18 +5917,39 @@
     "faction_id": "chaos-knights",
     "detachment_id": "houndpack-lance",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "set-up",
       "target": "this-unit",
       "modifier": {
-        "to": "strategic-reserves"
+        "to": "strategic-reserves",
+        "from": "battlefield"
       }
     },
     "scope": {
-      "duration": "turn"
+      "duration": "permanent"
     },
-    "community_notes": "1CP. End of the opponent's Fight phase: a WAR DOG unit wholly within 12\" of a battlefield edge and not in Engagement Range is placed into Strategic Reserves."
+    "community_notes": "1CP. End of the opponent's Fight phase: a WAR DOG unit wholly within 12\" of a battlefield edge and not in Engagement Range is placed into Strategic Reserves.",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "preyslayers-mantle-houndpack-lance-chaos-knights",
@@ -4777,7 +5957,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "9f416f4679e8a31274db8cdfa46f6d8cc89d53b7b344664a64837d88f936a54e",
     "version": "2025-q3",
@@ -4791,7 +5971,7 @@
       "type": "ability-grant",
       "target": "this-model",
       "modifier": {
-        "ability": "super-heavy-walker-chaos-knights"
+        "ability": "super-heavy-walker"
       }
     },
     "scope": {
@@ -4805,7 +5985,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "3e9b7b90f90b0f905d2611d4339662defa8dc207eb3e7531d21bd6de6eb5fdfb",
     "version": "2025-q3",
@@ -4819,10 +5999,15 @@
       "type": "re-roll",
       "target": {
         "owner": "friendly",
+        "all_of": [
+          "WAR DOG"
+        ],
+        "level": "model",
         "within": {
           "range": {
             "inches": 6
-          }
+          },
+          "of": "this-model"
         }
       },
       "modifier": {
@@ -4876,7 +6061,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "d3bccc7ad9fc26e75a60252a87fab7818b0526a18f8f72764fb8b713eea7b603",
     "version": "2025-q3",
@@ -4888,12 +6073,11 @@
     "behavior": "passive",
     "effect": {
       "type": "stat-modifier",
-      "target": "this-model",
+      "target": "attacker",
       "modifier": {
         "stat": "AP",
         "operation": "worsen",
-        "value": 1,
-        "incoming": true
+        "value": 1
       }
     },
     "scope": {
@@ -5342,7 +6526,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "7ea5f58598a4e53421f891bbe0f5b1bce1727967c5166a74375fdef9268dfafc",
     "version": "2025-q3",
@@ -5351,23 +6535,36 @@
     "faction_id": "chaos-knights",
     "detachment_id": "traitoris-lance",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "test",
-      "target": {
-        "owner": "enemy",
-        "within": {
-          "range": "engagement"
+      "type": "for-each-unit",
+      "selector": {
+        "filter": {
+          "owner": "enemy",
+          "engaged_with": "this-model"
         }
       },
-      "modifier": {
-        "test": "battle-shock"
+      "effect": {
+        "type": "test",
+        "target": "recipient",
+        "modifier": {
+          "test": "battle-shock"
+        }
       }
     },
     "scope": {
       "duration": "permanent"
     },
-    "community_notes": "20pts. At the start of the Fight phase, each enemy unit in Engagement Range of the bearer takes a Battle-shock test."
+    "community_notes": "20pts. At the start of the Fight phase, each enemy unit in Engagement Range of the bearer takes a Battle-shock test.",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    }
   },
   {
     "ability_id": "tyrants-shadow-traitoris-lance-chaos-knights",

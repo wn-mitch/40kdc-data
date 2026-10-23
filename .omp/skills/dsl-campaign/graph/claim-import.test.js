@@ -9,9 +9,9 @@ import { importAbilityDslCandidates, importLegacyClaimCandidates } from './claim
 import { queryClaims } from './retrieval.js'
 import { GraphStore } from './store.js'
 const repoRoot = new URL('../../../..', import.meta.url).pathname.replace(/\/$/, '')
-const abilityFile = 'data/enrichment/deathwatch/abilities.json'
+const abilityFile = 'data/enrichment/tau-empire/abilities.json'
 // A Feel No Pain 6+ on the unit, located by id so a reordered data file keeps the test on it.
-const fnpId = 'helix-gauntlet-deathwatch'
+const fnpId = 'stimm-injectors-retaliation-cadre-tau-empire'
 const abilities = () => JSON.parse(readFileSync(join(repoRoot, abilityFile), 'utf8'))
 const fnpIndex = () => abilities().findIndex(a => a.ability_id === fnpId)
 const legacyFixture = JSON.parse(readFileSync(new URL('./fixtures/legacy-claim-candidates-v1.json', import.meta.url), 'utf8'))
@@ -30,7 +30,7 @@ function counts(store) {
 test('Ability DSL import maps Feel No Pain as an origin-bound non-authoritative candidate', () => {
   const { store, repository } = setup()
   const ability = abilities()[fnpIndex()]
-  const input = { repo_root: repoRoot, repository_version_node_id: repository.node_id, faction_id: 'deathwatch', file_path: abilityFile, record_index: fnpIndex(), ability }
+  const input = { repo_root: repoRoot, repository_version_node_id: repository.node_id, faction_id: 'tau-empire', file_path: abilityFile, record_index: fnpIndex(), ability }
   const first = importAbilityDslCandidates(store, input)
   assert.equal(first.idempotent, false)
   const claims = queryClaims(store, { origin_id: first.origin_id })
@@ -107,7 +107,7 @@ test('legacy certificate and workflow claims remain historical candidates with r
 test('candidate import CLI writes once and reports an idempotent replay', () => {
   const root = mkdtempSync(join(tmpdir(), 'claim-import-cli-'))
   const graphRoot = join(root, 'graph')
-  const factionRoot = join(root, 'data', 'enrichment', 'deathwatch')
+  const factionRoot = join(root, 'data', 'enrichment', 'tau-empire')
   mkdirSync(factionRoot, { recursive: true })
   const ability = abilities()[fnpIndex()]
   writeFileSync(join(factionRoot, 'abilities.json'), `${JSON.stringify([ability], null, 2)}\n`)

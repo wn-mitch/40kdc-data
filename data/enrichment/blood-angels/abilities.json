@@ -5,31 +5,31 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "4e914fa4c704a2071b3c699f3293a3b7501dfc2e5692d64c8beeae1ec6bf5e91",
+    "source_digest": "b87d916e20a93c4fe520641ddf1c17f7956b94d59f8a8557d0344b437f2767d4",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "blood-angels",
     "detachment_id": "angelic-inheritors",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "sequence",
-      "steps": [
+      "type": "choice",
+      "options": [
         {
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "weapons": {
-              "type": "melee"
-            },
             "keywords": [
               {
                 "keyword_id": "lethal-hits"
               }
-            ]
+            ],
+            "weapons": {
+              "type": "melee"
+            }
           }
         },
         {
@@ -48,14 +48,17 @@
             "type": "weapon-ability-grant",
             "target": "this-unit",
             "modifier": {
-              "weapons": {
-                "type": "melee"
-              },
               "keywords": [
+                {
+                  "keyword_id": "lethal-hits"
+                },
                 {
                   "keyword_id": "lance"
                 }
-              ]
+              ],
+              "weapons": {
+                "type": "melee"
+              }
             }
           }
         }
@@ -64,7 +67,19 @@
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "Target must not have been selected to fight this phase"
+    "community_notes": "Target must not have been selected to fight this phase",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "fight"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS ASTARTES"
+        ]
+      }
+    }
   },
   {
     "ability_id": "in-the-shadow-of-great-wings-angelic-inheritors-blood-angels",
@@ -72,9 +87,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "cd3447313c0f79bac13e6939b65c9b15229053fb260d117282601debcc4c227e",
+    "source_digest": "698839bb4f3c6d491ff4d18b3f52659e84a5f22fe09b8f3c802269af575e9b65",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -84,30 +99,40 @@
     "behavior": "reactive",
     "trigger": {
       "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
       "subject": {
         "owner": "enemy"
       },
-      "object": "this-unit",
-      "filter": {
-        "kind": "attack"
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS ASTARTES",
+          "CHARACTER"
+        ]
       }
     },
     "effect": {
-      "type": "targeting",
-      "target": {
-        "owner": "enemy"
-      },
-      "modifier": {
-        "may": "cannot-target",
-        "target": "this-unit",
-        "kind": "shoot",
-        "range": {
-          "inches": 18
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "ability": "stealth"
+          }
         },
-        "weapons": {
-          "type": "ranged"
+        {
+          "type": "stat-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "stat": "detection-range",
+            "operation": "subtract",
+            "value": 3
+          }
         }
-      }
+      ]
     },
     "scope": {
       "duration": "phase"
@@ -150,23 +175,20 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "880e752ee739b9378089963267e40afac5398591c80cf8ef419ea9ca487d2adf",
+    "source_digest": "2047713087cb7be3d0aa4ff6f18f3ca8b3aef09a8368f71ca3d8856a2cf56e43",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "blood-angels",
     "detachment_id": "angelic-inheritors",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "weapons": {
-          "type": "ranged"
-        },
         "keywords": [
           {
             "keyword_id": "sustained-hits",
@@ -174,13 +196,28 @@
               "value": 1
             }
           }
-        ]
+        ],
+        "weapons": {
+          "type": "ranged"
+        }
       }
     },
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "Target must not have been selected to shoot this phase"
+    "community_notes": "Target must not have been selected to shoot this phase",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "attack"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS ASTARTES"
+        ]
+      }
+    }
   },
   {
     "ability_id": "unto-the-burning-skies-angelic-inheritors-blood-angels",
@@ -188,16 +225,16 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "f155753290d45deb359d6f0f630fe4f57fec050008546dc2080c27dd3a7c8897",
+    "source_digest": "f4146c71485617e006d649cd62018c9ea604f8981a90cd161d1cbf64396adfd9",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "blood-angels",
     "detachment_id": "angelic-inheritors",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "set-up",
       "target": "this-unit",
@@ -206,9 +243,29 @@
       }
     },
     "scope": {
-      "duration": "one-use"
+      "duration": "permanent"
     },
-    "community_notes": "Jump Pack unit at the end of the opponent's Fight phase; cannot target a unit in Engagement Range unless it is The Sanguinor"
+    "community_notes": "Jump Pack unit at the end of the opponent's Fight phase; cannot target a unit in Engagement Range unless it is The Sanguinor",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "angelic-terror-sanguinary-spearhead-blood-angels",
@@ -216,7 +273,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "5bc3e456ba414fec00aed35c5fce4872b912ad0524c685081e33a04eac5355dc",
     "version": "2025-q3",
@@ -227,28 +284,41 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "test",
-          "target": "stratagem-target",
-          "modifier": {
-            "test": "battle-shock"
-          }
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
         },
-        {
-          "type": "roll-modifier",
-          "target": "stratagem-target",
-          "modifier": {
-            "roll": "battle-shock",
-            "operation": "subtract",
-            "value": 1
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "subject": "selected-unit",
+            "filter": {
+              "within": {
+                "of": "this-unit",
+                "range": {
+                  "inches": 3
+                }
+              }
+            }
           }
         }
-      ]
+      },
+      "effect": {
+        "type": "test",
+        "target": "selected-unit",
+        "modifier": {
+          "test": "battle-shock",
+          "modifier": -1
+        }
+      }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "community_notes": "One enemy unit within 3\" of the Sanguinary Spearhead Sanguinary Guard unit makes a Battle-shock roll at -1"
   },
@@ -258,9 +328,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "34a67710613b849087ec0883da07d5f1096b6f9fb56ae63e4eedd83f2a1cae32",
+    "source_digest": "44826630c50d625fe0c48f9172d59a48b9025ace47a9164b2882754292f16a3a",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -270,22 +340,39 @@
     "behavior": "reactive",
     "trigger": {
       "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
       "subject": {
         "owner": "enemy"
       },
-      "object": "this-unit",
-      "filter": {
-        "kind": "attack"
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "SANGUINARY GUARD"
+        ]
       }
     },
     "effect": {
-      "type": "keyword-grant",
-      "target": "this-unit",
-      "modifier": {
-        "keywords": [
-          "STEALTH"
-        ]
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "ability": "stealth"
+          }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "stat": "detection-range",
+            "operation": "subtract",
+            "value": 3
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "phase"
@@ -355,9 +442,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "f306a973680a7ebd7b92611945d2a207cc34915005b0e7d3c8bcd91969a44085",
+    "source_digest": "cb6f08e56ff7dfe7458055574bcf2bb8fbfebf126679032311fba11f21ad08b9",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -367,44 +454,60 @@
     "behavior": "reactive",
     "trigger": {
       "event": "destroyed",
-      "object": "this-unit"
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "DEATH COMPANY"
+        ]
+      }
     },
     "effect": {
-      "type": "ability-part",
-      "trigger": {
-        "event": "destroyed",
-        "object": "this-unit"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "enemy"
+          }
+        }
       },
       "effect": {
-        "type": "persistent-designation",
-        "designation": "death-begets-vengeance-hated",
-        "duration": "battle",
-        "select": {
-          "kind": "unit",
-          "selector": {
-            "filter": {
-              "owner": "enemy"
-            },
-            "count": {
-              "min": 1,
-              "max": 1
-            }
-          }
-        },
-        "consumer": {
-          "beneficiary": "this-model",
-          "relation": "attacks-selected-unit",
-          "effect": {
-            "type": "roll-modifier",
-            "target": "this-model",
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "designate",
+            "target": "this-unit",
             "modifier": {
-              "roll": "wound",
-              "operation": "add",
-              "value": 1
+              "tag": "death-begets-vengeance-hated"
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "defender",
+                "filter": {
+                  "designated": "death-begets-vengeance-hated"
+                }
+              }
+            },
+            "effect": {
+              "type": "roll-modifier",
+              "target": {
+                "owner": "friendly",
+                "all_of": [
+                  "DEATH COMPANY"
+                ]
+              },
+              "modifier": {
+                "roll": "wound",
+                "operation": "add",
+                "value": 1
+              }
             }
           }
-        },
-        "selection_policy": "one-time"
+        ]
       }
     },
     "scope": {
@@ -531,7 +634,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "e64281eb709330c069da83fff0beca1fc032b3481f892bfb751c48dfc7e4aa0b",
     "version": "2025-q3",
@@ -543,23 +646,48 @@
     "behavior": "reactive",
     "trigger": {
       "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
       "subject": {
         "owner": "enemy"
       },
-      "filter": {
-        "kind": "shoot"
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "all_of": [
+              "DEATH COMPANY"
+            ]
+          }
+        }
       }
     },
     "effect": {
-      "type": "move",
-      "target": "this-unit",
-      "modifier": {
-        "move_type": "surge",
-        "distance": "D6"
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "targets-selected",
+          "subject": "event-subject",
+          "object": "this-unit",
+          "filter": {
+            "kind": "attack"
+          },
+          "window": "event"
+        }
+      },
+      "effect": {
+        "type": "move",
+        "target": "this-unit",
+        "modifier": {
+          "move_type": "surge",
+          "distance": "D6"
+        }
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "community_notes": "Unengaged Death Company unit that was targeted by the enemy unit that just shot"
   },
@@ -715,41 +843,60 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "aac8a92fc32f187a7d0f5ff233e31b8589d8211cc4ec23768c01dcb1223782e5",
+    "source_digest": "c0763ec26309b89be1a681de1cf80ec5c1989f8e20e9d9d6b284df4bcd29bac2",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "blood-angels",
     "detachment_id": "angelic-inheritors",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "dice-gated",
       "dice": "D6",
       "threshold": 2,
       "comparison": "gte",
       "on_success": {
-        "type": "return-models",
+        "type": "set-up",
         "target": "this-model",
         "modifier": {
-          "count": 1,
-          "wounds_remaining": 3,
-          "placement": "closest-to-destruction"
+          "to": "battlefield",
+          "placement": "closest-to-destruction",
+          "wounds_remaining": 3
         }
       },
       "on_fail": null
     },
     "scope": {
-      "duration": "one-use"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
         "ADEPTUS ASTARTES"
       ]
     },
-    "community_notes": "The first time the bearer is destroyed, roll at the end of the phase: on a 2+ set it back up unengaged as close as possible to where it was destroyed, with 3 wounds, as its own unit of starting strength 1"
+    "community_notes": "The first time the bearer is destroyed, roll at the end of the phase: on a 2+ set it back up unengaged as close as possible to where it was destroyed, with 3 wounds, as its own unit of starting strength 1",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "model-destroyed",
+          "object": "this-model",
+          "window": "phase",
+          "count": {
+            "min": 1
+          }
+        }
+      }
+    },
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "army"
+    }
   },
   {
     "ability_id": "angelic-executioner-encarmine-speartip-blood-angels",
@@ -757,7 +904,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "9cb2696a2164bb29e2fccae823ee3b10b40cd58ca7a8682fe33997642814cbe7",
     "version": "2025-q3",
@@ -766,32 +913,28 @@
     "faction_id": "blood-angels",
     "detachment_id": "encarmine-speartip",
     "ability_type": "enhancement",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "choice",
-      "choice_label": "Weapon ability",
       "options": [
         {
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "weapons": {
-              "type": "melee"
-            },
             "keywords": [
               {
                 "keyword_id": "lethal-hits"
               }
-            ]
+            ],
+            "weapons": {
+              "type": "melee"
+            }
           }
         },
         {
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "weapons": {
-              "type": "melee"
-            },
             "keywords": [
               {
                 "keyword_id": "sustained-hits",
@@ -799,13 +942,16 @@
                   "value": 1
                 }
               }
-            ]
+            ],
+            "weapons": {
+              "type": "melee"
+            }
           }
         }
       ]
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -813,7 +959,13 @@
         "JUMP PACK"
       ]
     },
-    "community_notes": "Chosen when the unit is selected to fight"
+    "community_notes": "Chosen when the unit is selected to fight",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "fight"
+      }
+    }
   },
   {
     "ability_id": "shadow-of-abomination-encarmine-speartip-blood-angels",
@@ -821,7 +973,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "28b1cbcda0f468c5625369f2ad4bebff0ea92529bdb17f384ff1bf68cf4d011f",
     "version": "2025-q3",
@@ -830,7 +982,7 @@
     "faction_id": "blood-angels",
     "detachment_id": "encarmine-speartip",
     "ability_type": "enhancement",
-    "behavior": "activated",
+    "behavior": "reactive",
     "usage": {
       "frequency": "n-per-battle",
       "count": 1,
@@ -841,7 +993,7 @@
       "target": "this-model",
       "modifier": {
         "stat": "D",
-        "operation": "add",
+        "operation": "improve",
         "value": 1,
         "weapons": {
           "type": "melee"
@@ -849,7 +1001,7 @@
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -857,7 +1009,14 @@
         "JUMP PACK"
       ]
     },
-    "community_notes": "Once per battle, when the unit is selected to fight: the bearer's melee attacks get +1 Damage"
+    "community_notes": "Once per battle, when the unit is selected to fight: the bearer's melee attacks get +1 Damage",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "fight"
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "instinctive-interception-wrath-of-the-doomed-blood-angels",
@@ -865,25 +1024,24 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "67bfd6944ea3839737142de3c596be8223a0b52dd62327989428acc9a63ef271",
+    "source_digest": "7518883c05ca0f007ab076e9f263e654617e999a0a535994bb3aa4fb4286a96f",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "blood-angels",
     "detachment_id": "wrath-of-the-doomed",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "cost-modifier",
       "target": "this-unit",
       "modifier": {
         "of": "stratagem",
-        "id": "heroic-intervention",
-        "operation": "set",
-        "amount": 0,
-        "applies_to": "targeting-this-unit"
+        "operation": "decrease",
+        "amount": 1,
+        "applies_to": "the-triggering-use"
       }
     },
     "scope": {
@@ -894,7 +1052,13 @@
         "DEATH COMPANY"
       ]
     },
-    "community_notes": "The Heroic Intervention Stratagem costs 1CP less when targeting this unit (modeled as a CP refund on that stratagem)"
+    "community_notes": "The Heroic Intervention Stratagem costs 1CP less when targeting this unit (modeled as a CP refund on that stratagem)",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "stratagem"
+      }
+    }
   },
   {
     "ability_id": "masterful-fighter-sanguinary-spearhead-blood-angels",
@@ -902,7 +1066,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "5d3ce1c3280e39b540f2eb65dce23f3b634c73f4cb0b0608ba700a868d9051cf",
     "version": "2025-q3",
@@ -920,7 +1084,7 @@
           "target": "this-model",
           "modifier": {
             "stat": "S",
-            "operation": "add",
+            "operation": "improve",
             "value": 2,
             "weapons": {
               "type": "melee"
@@ -956,7 +1120,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "faca068f5f692cfb44588277c262295fd4477e867b78f657614171e0ff413ea0",
     "version": "2025-q3",
@@ -965,7 +1129,7 @@
     "faction_id": "blood-angels",
     "detachment_id": "sanguinary-spearhead",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "move",
       "target": "this-unit",
@@ -982,7 +1146,17 @@
         "Assault Intercessor Squad"
       ]
     },
-    "community_notes": "Upgrade for the Sanguinary Spearhead Assault Intercessor Squad"
+    "community_notes": "Upgrade for the Sanguinary Spearhead Assault Intercessor Squad",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "move_types": [
+          "pile-in"
+        ],
+        "to": "move"
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "on-the-archtraitors-bridge-wrath-of-the-doomed-blood-angels",
@@ -990,7 +1164,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "c239ee87aea814728a836143c92e2bf6fd4077a0d7f196bdf383a7ce6b1dec52",
     "version": "2025-q3",
@@ -1005,7 +1179,7 @@
       "target": "this-model",
       "modifier": {
         "stat": "A",
-        "operation": "add",
+        "operation": "improve",
         "value": 2,
         "weapons": {
           "type": "melee"
@@ -1027,43 +1201,60 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "c3e81c60068fc6b00f1128080ca9f69e6805ad75b016789892b8636d119ab7bd",
+    "source_digest": "46a2cf9f07d74e586b9689a82df1435373250000c0a57fa9a338df03c983ae29",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
+      "type": "choice",
+      "options": [
+        {
+          "type": "conditional",
+          "condition": {
             "type": "strength",
             "parameters": {
               "below": "starting"
             }
           },
-          {
+          "effect": {
+            "type": "weapon-ability-grant",
+            "target": "this-unit",
+            "modifier": {
+              "keywords": [
+                {
+                  "keyword_id": "sustained-hits",
+                  "parameters": {
+                    "value": 1
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
             "type": "strength",
             "parameters": {
               "below": "half"
             }
-          }
-        ]
-      },
-      "effect": {
-        "type": "weapon-ability-grant",
-        "target": "this-unit",
-        "modifier": {
-          "keywords": [
-            {
-              "keyword_id": "sustained-hits",
-              "parameters": {
-                "value": 1
-              }
+          },
+          "effect": {
+            "type": "weapon-ability-grant",
+            "target": "this-unit",
+            "modifier": {
+              "keywords": [
+                {
+                  "keyword_id": "sustained-hits",
+                  "parameters": {
+                    "value": 2
+                  }
+                }
+              ]
             }
-          ]
+          }
         }
-      }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -1119,66 +1310,35 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "2b184fe7ec4e644163667d2200104a9bad1b0b62f80381971bd0c96dba27d854",
+    "source_digest": "0eb3a404e9c091e66af7dc788b35c8e9e8e49a215a0350cd26f7e6049d139c1f",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
-            "all_of": [
-              "ADEPTUS ASTARTES"
-            ]
+      "type": "aura",
+      "target": "friendly-within-aura",
+      "modifier": {
+        "range": {
+          "inches": 12
+        },
+        "effect": {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "leadership",
+            "result_scope": "any-result"
           }
+        },
+        "eligible": {
+          "owner": "friendly",
+          "all_of": [
+            "ADEPTUS ASTARTES"
+          ]
         }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "re-roll",
-            "target": {
-              "owner": "friendly",
-              "all_of": [
-                "ADEPTUS ASTARTES"
-              ],
-              "within": {
-                "range": {
-                  "inches": 6
-                }
-              }
-            },
-            "modifier": {
-              "roll": "battle-shock",
-              "result_scope": "any-result"
-            }
-          },
-          {
-            "type": "re-roll",
-            "target": {
-              "owner": "friendly",
-              "all_of": [
-                "ADEPTUS ASTARTES"
-              ],
-              "within": {
-                "range": {
-                  "inches": 6
-                }
-              }
-            },
-            "modifier": {
-              "roll": "leadership",
-              "result_scope": "any-result"
-            }
-          }
-        ]
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "unit_ids": [
       "the-sanguinor"
@@ -1194,9 +1354,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "f0b08552c046ca1314886d97a6472a40cb06763cdb8d54ddd223347312d23970",
+    "source_digest": "a298270659124fe13def5d020e880550099cb5d236aec3447105042052acb425",
     "version": "2025-q3",
     "effect": {
       "type": "sequence",
@@ -1206,7 +1366,7 @@
           "target": "this-unit",
           "modifier": {
             "roll": "hit",
-            "subset": "all-failures",
+            "subset": "ones",
             "weapons": {
               "type": "melee"
             }
@@ -1221,45 +1381,23 @@
                 "operator": "not",
                 "operands": [
                   {
-                    "operator": "and",
-                    "operands": [
-                      {
-                        "type": "matches",
-                        "parameters": {
-                          "filter": {
-                            "within": {
-                              "range": {
-                                "inches": 6
-                              },
-                              "of": {
-                                "owner": "friendly",
-                                "all_of": [
-                                  "BLOOD ANGELS"
-                                ]
-                              }
-                            }
-                          }
-                        }
-                      },
-                      {
-                        "type": "matches",
-                        "parameters": {
-                          "filter": {
-                            "within": {
-                              "range": {
-                                "inches": 6
-                              },
-                              "of": {
-                                "owner": "friendly",
-                                "all_of": [
-                                  "CHARACTER"
-                                ]
-                              }
-                            }
+                    "type": "matches",
+                    "parameters": {
+                      "filter": {
+                        "within": {
+                          "of": {
+                            "owner": "friendly",
+                            "all_of": [
+                              "BLOOD ANGELS",
+                              "CHARACTER"
+                            ]
+                          },
+                          "range": {
+                            "inches": 6
                           }
                         }
                       }
-                    ]
+                    }
                   }
                 ]
               },
@@ -1271,14 +1409,14 @@
                     "parameters": {
                       "filter": {
                         "within": {
-                          "range": {
-                            "inches": 12
-                          },
                           "of": {
                             "owner": "friendly",
                             "all_of": [
                               "CHAPLAIN"
                             ]
+                          },
+                          "range": {
+                            "inches": 12
                           }
                         }
                       }
@@ -1289,26 +1427,76 @@
             ]
           },
           "effect": {
-            "type": "sequence",
-            "steps": [
+            "type": "permission",
+            "target": "this-unit",
+            "modifier": {
+              "activity": "fall-back",
+              "allow": false
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
               {
-                "type": "permission",
-                "target": "this-unit",
-                "modifier": {
-                  "activity": "fall-back",
-                  "allow": false
-                }
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "filter": {
+                        "within": {
+                          "of": {
+                            "owner": "friendly",
+                            "all_of": [
+                              "BLOOD ANGELS",
+                              "CHARACTER"
+                            ]
+                          },
+                          "range": {
+                            "inches": 6
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
               },
               {
-                "type": "stat-modifier",
-                "target": "this-unit",
-                "modifier": {
-                  "stat": "OC",
-                  "operation": "set",
-                  "value": 0
-                }
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "filter": {
+                        "within": {
+                          "of": {
+                            "owner": "friendly",
+                            "all_of": [
+                              "CHAPLAIN"
+                            ]
+                          },
+                          "range": {
+                            "inches": 12
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
               }
             ]
+          },
+          "effect": {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "OC",
+              "operation": "set",
+              "value": 0
+            }
           }
         }
       ]
@@ -1333,27 +1521,17 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "088a952bd6ff0ae3a31ff072a2d2f1bc0e5797d6a7dc49bdf5a16a5a294823c1",
+    "source_digest": "2781920408ea64134d285c38d0a133e3a6a47aefcc87b137bef2d7c6eff7163e",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
-        }
-      },
-      "effect": {
-        "type": "stat-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "stat": "AP",
-          "operation": "improve",
-          "value": 1
-        }
+      "type": "stat-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "stat": "T",
+        "operation": "add",
+        "value": 1
       }
     },
     "scope": {
@@ -1413,30 +1591,29 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "cfcad3ef62276e7002a3bf96c4e61f21b78c8832ed9e57acb45fb71c672bae56",
+    "source_digest": "8c77c9bcf6d9d9a80fbf4fcd11fc586b167ba3e5bb4811e8ee4b52ca0858c788",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
-        }
-      },
-      "effect": {
-        "type": "test",
-        "target": {
+      "type": "for-each-unit",
+      "selector": {
+        "filter": {
           "owner": "enemy",
           "within": {
             "range": {
               "inches": 6
-            }
+            },
+            "of": "this-model"
           }
-        },
+        }
+      },
+      "effect": {
+        "type": "test",
+        "target": "recipient",
         "modifier": {
-          "test": "battle-shock"
+          "test": "battle-shock",
+          "modifier": -1
         }
       }
     },
@@ -1447,8 +1624,17 @@
       "commander-dante"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "blood-angels"
+    "behavior": "reactive",
+    "faction_id": "blood-angels",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    }
   },
   {
     "ability_id": "driven-by-fury-blood-angels",
@@ -1456,9 +1642,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "d498c62b9a0ce157f03d033214af00cdec0bb3cd65351893df74c782fcaeed30",
+    "source_digest": "b5acac6a961c73e170a096771342e5f821b6515768b7ec86cfed60abd55638f7",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -1514,9 +1700,6 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "usage": {
-      "frequency": "once-per-phase"
-    },
     "community_notes": "After being hit by one or more of an enemy unit's ranged attacks in your opponent's Shooting phase, this model makes a D6+2\" reactive move toward the nearest enemy unit; it cannot do so while Battle-shocked or within Engagement Range of an enemy unit.",
     "faction_id": "blood-angels",
     "trigger": {
@@ -1535,9 +1718,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "f9bde73efd0a714dcd7de4cc30859c409e0535d9dfd87fc10c4a8034837ec282",
+    "source_digest": "37064c534b8663b622b4c41c602ac62804ba5cd5561ab14139e163e750f668a3",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -1552,22 +1735,28 @@
         "steps": [
           {
             "type": "stat-modifier",
-            "target": "this-unit",
+            "target": "this-model",
             "modifier": {
               "stat": "A",
-              "operation": "add",
-              "value": 3
+              "operation": "improve",
+              "value": 3,
+              "weapons": {
+                "type": "melee"
+              }
             }
           },
           {
             "type": "weapon-ability-grant",
-            "target": "this-unit",
+            "target": "this-model",
             "modifier": {
               "keywords": [
                 {
                   "keyword_id": "devastating-wounds"
                 }
-              ]
+              ],
+              "weapons": {
+                "type": "melee"
+              }
             }
           }
         ]
@@ -1580,9 +1769,16 @@
       "blood-angels-captain"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
+    "behavior": "reactive",
     "community_notes": "auto-generated, partial",
-    "faction_id": "blood-angels"
+    "faction_id": "blood-angels",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "fight"
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "forlorn-hero-blood-angels",
@@ -1590,43 +1786,16 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "958a1ca4261adc986f3ea38a67be68b3eae088dd996f55bbccf68d10e4941d6c",
+    "source_digest": "fade7da1d16c5025f14b80a4ba6a3a48b36582be82aaea6595e8d7aefe5d911a",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
-        }
-      },
-      "effect": {
-        "type": "conditional",
-        "condition": {
-          "operator": "not",
-          "operands": [
-            {
-              "type": "matches",
-              "parameters": {
-                "filter": {
-                  "state": "embarked"
-                },
-                "subject": "this-unit"
-              }
-            }
-          ]
-        },
-        "effect": {
-          "type": "ability-grant",
-          "target": "this-unit",
-          "modifier": {
-            "ability": "scouts",
-            "value": 6
-          }
-        }
+      "type": "ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "scouts",
+        "value": 6
       }
     },
     "scope": {
@@ -1645,28 +1814,21 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "ab5b3f884390193d31259d607c0d00ef7de50bdb8a7c52651757257fb30bd35b",
+    "source_digest": "27de8c3a6b639f6c0d9ba1eec9e7d386a2fc0b4d46b81608384bb1408ba328c2",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
-        }
-      },
-      "effect": {
-        "type": "weapon-ability-grant",
-        "target": "this-unit",
-        "modifier": {
-          "keywords": [
-            {
-              "keyword_id": "lethal-hits"
-            }
-          ]
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "keywords": [
+          {
+            "keyword_id": "lethal-hits"
+          }
+        ],
+        "weapons": {
+          "type": "melee"
         }
       }
     },
@@ -1686,25 +1848,17 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "99b5027d83a08ebfc9188c464388d483bb6c67905f0dc3f9b608819de67e50cc",
+    "source_digest": "2e15643bc9a11ad1943ae27e101c0707d944661f88e6d8a45cf39e708ed0458f",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
-        }
-      },
-      "effect": {
-        "type": "damage-reduction",
-        "target": "this-unit",
-        "modifier": {
-          "reduction": 1
-        }
+      "type": "stat-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "stat": "D",
+        "operation": "subtract",
+        "value": 1
       }
     },
     "scope": {
@@ -1769,31 +1923,24 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "62076bb0a3c6d5d3200f25ba9badf1a70e18607ed29341ad54eef65dbc382b38",
+    "source_digest": "fd24f11860556d3a624e7a182427c87747daf4b1a6e962d3ce4dcacad163306d",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
-        }
-      },
-      "effect": {
-        "type": "weapon-ability-grant",
-        "target": "this-unit",
-        "modifier": {
-          "keywords": [
-            {
-              "keyword_id": "sustained-hits",
-              "parameters": {
-                "value": 1
-              }
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "keywords": [
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 1
             }
-          ]
+          }
+        ],
+        "weapons": {
+          "type": "melee"
         }
       }
     },
@@ -1813,9 +1960,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "1d8bfa7c9a573b6699f2b24e24b4046b0d2bf7f9264d55b1f93de1e43ccca3f9",
+    "source_digest": "5993ef95707e834dae8ca27e17b8b539c17d724752f906ef95e12c02be4f322d",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -1832,19 +1979,62 @@
         }
       },
       "effect": {
-        "type": "weapon-ability-grant",
-        "target": "this-unit",
-        "modifier": {
-          "keywords": [
+        "type": "conditional",
+        "condition": {
+          "operator": "and",
+          "operands": [
             {
-              "keyword_id": "devastating-wounds"
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "defender",
+                    "filter": {
+                      "all_of": [
+                        "MONSTER"
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "defender",
+                    "filter": {
+                      "all_of": [
+                        "VEHICLE"
+                      ]
+                    }
+                  }
+                }
+              ]
             }
           ]
+        },
+        "effect": {
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "devastating-wounds"
+              }
+            ],
+            "weapons": {
+              "type": "melee"
+            }
+          }
         }
       }
     },
     "scope": {
-      "duration": "turn"
+      "duration": "permanent"
     },
     "unit_ids": [
       "astorath"
@@ -1930,20 +2120,20 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "b68f3f29e368b8faaee8b06b817fea096499d36967f87953841ec5d367a1d45a",
+    "source_digest": "aa4463a2764cf5f0430920d12ea6c2014d30b8e986f14329ad38c15c0d8e73b5",
     "version": "2025-q3",
     "effect": {
       "type": "re-roll",
-      "target": "this-model",
+      "target": "this-unit",
       "modifier": {
         "roll": "advance",
         "result_scope": "any-result"
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "unit_ids": [
       "baal-predator"
@@ -2007,16 +2197,17 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "286f7c39f8303879bcc2669397a8929fa310223fe0fbca68a0b75e62b0d3e35c",
+    "source_digest": "021c079b6383a287f5d84917095d00271c7bc2057400c915a286a95b56e8fa9d",
     "version": "2025-q3",
     "effect": {
-      "type": "re-roll",
+      "type": "roll-modifier",
       "target": "this-unit",
       "modifier": {
         "roll": "charge",
-        "subset": "all-failures"
+        "operation": "add",
+        "value": 1
       }
     },
     "scope": {
@@ -2035,25 +2226,58 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "41926ea8f48dfc01146dfe39e777d8b65276a6757c374c49f18842250618ad7c",
+    "source_digest": "046813562afd8e4d51f8c052528a29357ba18708ef1afc257bf227df58926226",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
+        "type": "attack-is",
         "parameters": {
-          "phase": "fight"
+          "attack_type": "melee"
         }
       },
       "effect": {
-        "type": "re-roll",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "wound",
-          "subset": "ones"
-        }
+        "type": "choice",
+        "options": [
+          {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "wound",
+              "subset": "ones"
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "defender",
+                "filter": {
+                  "within": {
+                    "of": {
+                      "objective": {}
+                    },
+                    "range": "objective-control"
+                  }
+                }
+              }
+            },
+            "effect": {
+              "type": "re-roll",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "wound",
+                "result_scope": "any-result",
+                "weapons": {
+                  "type": "melee"
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -2303,19 +2527,30 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "blood-angels",
     "detachment_id": "sanguinary-spearhead",
     "ability_type": "detachment",
     "effect": {
-      "type": "no-effect"
+      "type": "re-roll",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "SANGUINARY SPEARHEAD"
+        ]
+      },
+      "modifier": {
+        "roll": "advance",
+        "result_scope": "any-result"
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "cc141a21879b645f5996d03b77c3fc3588a5b89490987233180b1ca05b214be6"
   },
   {
     "ability_id": "wrath-of-angels-blood-angels",
@@ -2343,9 +2578,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "death-company-marines"
     ],
@@ -2353,11 +2587,153 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "subset": "ones",
+            "weapons": {
+              "type": "melee"
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "filter": {
+                        "within": {
+                          "of": {
+                            "owner": "friendly",
+                            "all_of": [
+                              "BLOOD ANGELS",
+                              "CHARACTER"
+                            ]
+                          },
+                          "range": {
+                            "inches": 6
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "filter": {
+                        "within": {
+                          "of": {
+                            "owner": "friendly",
+                            "all_of": [
+                              "CHAPLAIN"
+                            ]
+                          },
+                          "range": {
+                            "inches": 12
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "effect": {
+            "type": "permission",
+            "target": "this-unit",
+            "modifier": {
+              "activity": "fall-back",
+              "allow": false
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "filter": {
+                        "within": {
+                          "of": {
+                            "owner": "friendly",
+                            "all_of": [
+                              "BLOOD ANGELS",
+                              "CHARACTER"
+                            ]
+                          },
+                          "range": {
+                            "inches": 6
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "filter": {
+                        "within": {
+                          "of": {
+                            "owner": "friendly",
+                            "all_of": [
+                              "CHAPLAIN"
+                            ]
+                          },
+                          "range": {
+                            "inches": 12
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "effect": {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "OC",
+              "operation": "set",
+              "value": 0
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "a298270659124fe13def5d020e880550099cb5d236aec3447105042052acb425"
   },
   {
     "ability_id": "chief-librarian-blood-angels",
@@ -2430,9 +2806,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "sanguinary-priest"
     ],
@@ -2440,11 +2815,37 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "heal",
+        "target": "this-unit",
+        "modifier": {
+          "amount": "D3+1"
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "79bfaa6529dcbcb7e0813896ea5744df68cafa0283ece96f808ff78fc3ffe194"
   },
   {
     "ability_id": "relic-shield-blood-angels",
@@ -2452,9 +2853,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "death-company-captain-with-jump-pack"
     ],
@@ -2462,11 +2862,19 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "stat-modifier",
+      "target": "this-model",
+      "modifier": {
+        "stat": "W",
+        "operation": "add",
+        "value": 1
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "98200d5013a5827402a7e5222fdc79f7e97802dad0dd135577a4967ecae0e72f"
   },
   {
     "ability_id": "sanguinius-fury-blood-angels",
@@ -2494,9 +2902,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "blood-angels-captain"
     ],
@@ -2504,11 +2911,41 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "ability-activate",
+        "target": "this-unit",
+        "modifier": {
+          "ability": "combat-doctrines-blood-angels",
+          "select": {
+            "by": "player"
+          },
+          "exclusive": true
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "until-next-command-phase"
+    },
+    "behavior": "activated",
+    "source_digest": "b27b2d96e2fb92921b592884e312ad4676b242cd26108eb367c4cdf060c09c6d"
   },
   {
     "ability_id": "transhuman-strategist-blood-angels",
@@ -2516,19 +2953,55 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "blood-angels",
     "detachment_id": null,
     "ability_type": "faction",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-model",
+              "filter": {
+                "has_ability": [
+                  "transhuman-strategist-blood-angels"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-model",
+              "filter": {
+                "designated": "warlord"
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "cp-gain",
+        "target": "this-model",
+        "modifier": {
+          "amount": 1
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "round-started"
+    },
+    "source_digest": "99589a52c5872930482b87274037662f76b8d70d571964304de818c57094ad25"
   },
   {
     "ability_id": "unto-death-angelic-inheritors-blood-angels",
@@ -2536,19 +3009,63 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "blood-angels",
     "detachment_id": "angelic-inheritors",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "advance",
+              "result_scope": "any-result"
+            }
+          },
+          {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "charge",
+              "result_scope": "any-result"
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "turn"
+    },
+    "behavior": "activated",
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "army"
+    },
+    "source_digest": "9f1983a6f8bcf3d6ec7d21ce7c37d630f5311edcbdc59f6e033d54949fe5afbd"
   },
   {
     "ability_id": "measured-strategist-angelic-inheritors-blood-angels",

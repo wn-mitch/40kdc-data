@@ -707,6 +707,8 @@ export class Dataset {
       attackerKeywords: context.attackerKeywords ?? (combined.length > 0 ? combinedKeywordsLower(combined) : undefined),
       attackerModelKeywords: context.attackerModelKeywords ?? (combined.length > 0 ? sharedKeywordsLower(combined) : undefined),
       attackerUnitId: context.attackerUnitId ?? input.unitId,
+      // The input's faction is the army whose rules the resolver walks, so it is the Army Faction.
+      armyFaction: context.armyFaction ?? factionId,
       attackerAttachmentRole: context.attackerAttachmentRole ?? input.attachmentRoles?.[input.unitId],
       attachmentRoles: context.attachmentRoles ?? input.attachmentRoles,
     };
@@ -796,6 +798,8 @@ export class Dataset {
       ...context,
       attackerAttached: context.attackerAttached ?? attached,
       attackerUnitId: context.attackerUnitId ?? input.unitId,
+      // The input's faction is the army whose rules the resolver walks, so it is the Army Faction.
+      armyFaction: context.armyFaction ?? factionId,
       attackerAttachmentRole: context.attackerAttachmentRole ?? input.attachmentRoles?.[input.unitId],
       attackerKeywords: context.attackerKeywords ?? keywords,
       attackerModelKeywords: context.attackerModelKeywords ?? modelKeywords,

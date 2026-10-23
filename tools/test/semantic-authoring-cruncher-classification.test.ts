@@ -24,6 +24,15 @@ describe("pipeline-8b cruncher unsupported classification", () => {
     expect(classifyUnsupported(unsupported)).toEqual({ honestUnknown: 0, outsideDamagePath: 1, unrecognizedShape: 0 });
   });
 
+  it("trusts an 'outside the damage path' label only for a stat or roll off the damage path", () => {
+    const label = (stat: string) => ({ reason: `stat-modifier on "${stat}" is outside the damage path`, effectFragment: { type: "stat-modifier", target: "this-unit", modifier: { stat, operation: "add", value: 1 } } });
+    expect(classifyUnsupported([label("Ld")])).toEqual({ honestUnknown: 0, outsideDamagePath: 1, unrecognizedShape: 0 });
+    // A damage stat the translator cannot place is a gap, whatever its own label says.
+    expect(classifyUnsupported([label("D")])).toEqual({ honestUnknown: 0, outsideDamagePath: 0, unrecognizedShape: 1 });
+    const roll = { reason: 'roll-modifier on "wound" is outside the damage path', effectFragment: { type: "roll-modifier", target: "this-unit", modifier: { roll: "wound", operation: "add", value: 1 } } };
+    expect(classifyUnsupported([roll])).toEqual({ honestUnknown: 0, outsideDamagePath: 0, unrecognizedShape: 1 });
+  });
+
   it("models a stance selection allowance as an activatable lever, but an unlisted unmodelled type stays a gap", () => {
     const allowance = effectToBuffs({ type: "stance-selection-capacity", modifier: { ability_id: "doctrine", additional_selections: 1, allocation: "choose-one-option" } }, source, ctx);
     const unlisted = effectToBuffs({ type: "example-unmodelled", target: "this-unit", modifier: {} }, source, ctx).unsupported;

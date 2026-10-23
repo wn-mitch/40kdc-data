@@ -45,7 +45,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Astartes",
+        "Dreadnought"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit"
+    },
     "ability_id": "ancient-fury-medusas-wrath-iron-hands",
     "game_version": {
       "edition": "11th",
@@ -70,7 +78,14 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Astartes"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "methodical-brutality-medusas-wrath-iron-hands",
     "game_version": {
       "edition": "11th",
@@ -122,7 +137,14 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Astartes"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "spirits-of-iron-medusas-wrath-iron-hands",
     "game_version": {
       "edition": "11th",
@@ -146,7 +168,20 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Astartes"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "strength",
+        "parameters": {
+          "below": "starting"
+        }
+      }
+    },
     "ability_id": "unbowed-conviction-medusas-wrath-iron-hands",
     "game_version": {
       "edition": "11th",
@@ -174,7 +209,15 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Astartes",
+        "Vehicle"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "vengeful-animus-medusas-wrath-iron-hands",
     "game_version": {
       "edition": "11th",

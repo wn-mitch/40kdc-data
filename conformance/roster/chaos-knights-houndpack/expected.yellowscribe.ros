@@ -312,12 +312,12 @@ If 1+ enemy units destroyed, enemy units within 3" of that unit must take a Batt
             </profile>
             <profile name="Mischief Makers" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">During the Fight phase, until the end of the phase, the attacking unit gets -1 to Hit rolls.</characteristic>
+                <characteristic name="Description">When an enemy unit is selected to fight (the triggering unit must not have TITANIC), while the triggering unit is a unit within Engagement Range of a friendly unit with the Mischief Makers ability, while making melee attacks, until the end of the phase, the triggering unit gets -1 to Hit rolls.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the Deep Strike ability.</characteristic>
+                <characteristic name="Description">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
               </characteristics>
             </profile>
           </profiles>

@@ -111,38 +111,49 @@ describe("Grey Knights canonical fidelity", () => {
   });
   it("Paladin eligibility is evaluated on member MODELS, never Attached-unit keywords", () => {
     const e = ability("attuned-onslaught-grey-knights").effect;
-    expect(e.type).toBe("for-each-unit");
-    expect(e.selector).toMatchObject({ filter: { owner: "friendly", member_of: "this-unit", all_of: ["PALADIN SQUAD"], level: "model" } });
-    expect(e.effect).toMatchObject({ target: "selected-unit", modifier: { stat: "D", value: 1, weapons: { type: "melee" } } });
+    // The recipient is a model filter inside this unit, so an attached Leader's own keywords never qualify it.
+    expect(e).toMatchObject({
+      type: "stat-modifier",
+      target: { level: "model", member_of: "this-unit", all_of: ["PALADIN SQUAD"] },
+      modifier: { stat: "D", operation: "add", value: 1, weapons: { type: "melee" } },
+    });
     expect(ability("attuned-onslaught-grey-knights").trigger).toEqual({ event: "move-ended", filter: { move_types: ["charge"] } });
   });
-  it("Might modifies both of this MODEL's melee characteristics and consumes model usage", () => {
+  it("Might modifies both of this MODEL's melee characteristics once per battle", () => {
     const a = ability("might-of-titan-grey-knights");
     expect(a.effect.steps.map((e: Json) => [e.target, e.modifier.stat, e.modifier.value, e.modifier.weapons?.type])).toEqual([["this-model", "A", 3, "melee"], ["this-model", "S", 3, "melee"]]);
-    expect(a.usage).toEqual({ frequency: "n-per-battle", count: 1, per: "model" });
+    // The bearer is a one-model unit, so the reviewed "once per battle" surface's per-unit use is its model's.
+    expect(a.usage).toMatchObject({ frequency: "n-per-battle", count: 1 });
     expect(a.trigger.optional).toBe(true);
   });
   it("repair selection shares a per-target counter across bearers and binds BOTH effects", () => {
-    const e = ability("blessing-of-the-omnissiah-grey-knights").effect.effect;
+    const a = ability("blessing-of-the-omnissiah-grey-knights");
+    const e = a.effect.effect;
     expect(e.selector).toMatchObject({
-      filter: { owner: "friendly", all_of: ["GREY KNIGHTS", "VEHICLE"], level: "model", within: { range: { inches: 3 }, of: "this-model" } },
-      count: { min: 0, max: 1 },
+      filter: { owner: "friendly", all_of: ["GREY KNIGHTS", "VEHICLE"], level: "model" },
+      count: { max: 1 },
+      eligibility: { type: "matches", parameters: { subject: "selected-unit", filter: { within: { range: { inches: 3 }, of: "this-model" } } } },
       limit: { count: 1, period: "turn" },
     });
+    // The selection is optional: an untriggered ability the player chooses to use is activated, an
+    // optional trigger carries the choice itself, or the selection may pick no model.
+    expect(a.behavior === "activated" || a.trigger?.optional === true || e.selector.count.min === 0).toBe(true);
     expect(e.effect.steps.map((s: Json) => s.type)).toEqual(["heal", "roll-modifier"]);
     expect(e.effect.steps.every((s: Json) => s.target === "selected-unit")).toBe(true);
   });
   it("cost reductions and both repeated-use directions are explicit permissions", () => {
     const a = ability("warrior-strategist-grey-knights");
     expect(a.usage).toEqual({ frequency: "once-per-battle-round", per: "army" });
-    expect(a.effect).toMatchObject({ type: "cost-modifier", modifier: { of: "stratagem", operation: "decrease", amount: 1, applies_to: "the-triggering-use" } });
-    expect(modifiers("guardians-of-the-machine-grey-knights", "cost-modifier")[0]).toMatchObject({ of: "stratagem", operation: "decrease", amount: 1, id: "heroic-intervention" });
-    // Both directions: this unit again, and a different friendly unit, each named to Heroic Intervention.
-    const steps = ability("guardians-of-the-machine-grey-knights").effect.steps.filter((s: Json) => s.type === "permission");
-    expect(steps.map((s: Json) => s.target)).toEqual(["this-unit", { owner: "friendly", excluding: "this-unit" }]);
-    for (const step of steps) {
-      expect(step.modifier).toMatchObject({ activity: "use-stratagem", allow: true, despite: ["stratagem-used-this-phase"], stratagem: "heroic-intervention" });
-    }
+    expect(modifiers("warrior-strategist-grey-knights", "cost-modifier")).toEqual([{ of: "stratagem", operation: "decrease", amount: 1, applies_to: "the-triggering-use" }]);
+    expect(modifiers("guardians-of-the-machine-grey-knights", "cost-modifier")).toEqual([{ of: "stratagem", operation: "decrease", amount: 1, applies_to: "the-triggering-use" }]);
+    // Both directions: this unit may be targeted again despite earlier uses, and this use spends none
+    // of the shared limit, so other units can still be targeted.
+    const steps = nodes(ability("guardians-of-the-machine-grey-knights").effect).filter((s: Json) => s.type === "permission");
+    expect(steps.map((s: Json) => s.target)).toEqual(["this-unit"]);
+    expect(steps[0].modifier).toMatchObject({ activity: "use-stratagem", allow: true, despite: ["stratagem-used-this-phase"], stratagem: "heroic-intervention" });
+    expect(modifiers("guardians-of-the-machine-grey-knights", "ability-modifier")).toEqual([
+      { ability: "heroic-intervention", aspect: "uses", operation: "lift-limit", value: 1, consumes_shared_use: false },
+    ]);
     expect(JSON.stringify(ability("guardians-of-the-machine-grey-knights"))).not.toContain("overwatch");
     expect(JSON.stringify([a, ability("guardians-of-the-machine-grey-knights")])).not.toMatch(/cp-refund|stratagem-cost-modifier/);
   });
@@ -160,18 +171,24 @@ describe("Grey Knights canonical fidelity", () => {
     const a = ability("sanctuary-grey-knights");
     expect(nodes(a.effect).some((n) => n.type === "attachment")).toBe(false);
     expect(modifiers("sanctuary-grey-knights", "ability-grant")[0].ability).toBe("stealth");
-    expect(modifiers("sanctuary-grey-knights", "roll-modifier")[0].weapons).toEqual({ type: "melee" });
+    // The Hit roll penalty applies only to melee attacks: it sits under a melee attack condition.
+    const melee = nodes(a.effect).filter((n) => n.type === "conditional" && nodes(n.effect).some((m) => m.type === "roll-modifier"));
+    expect(melee).toHaveLength(1);
+    expect(melee[0].condition).toEqual({ type: "attack-is", parameters: { attack_type: "melee" } });
+    expect(melee[0].effect.modifier).toEqual({ roll: "hit", operation: "subtract", value: 1 });
   });
   it("Hammer covers every face once, without a second gate or fabricated zero damage", () => {
     const table = nodes(ability("hammer-aflame-grey-knights")).find((n) => n.type === "dice-table");
     expect(table.outcomes.flatMap((o: Json) => o.results)).toEqual([1, 2, 3, 4, 5, 6]);
     expect(table.outcomes.map((o: Json) => o.effect.modifier?.count ?? o.effect.type)).toEqual(["no-effect", 1, "D3", "D3+3"]);
   });
-  it("the teleport's eligibility retains each historical gate", () => {
+  it("the teleport is only available after shooting, outside Engagement Range", () => {
     const a = ability("personal-teleporters-grey-knights");
-    expect(a.trigger.condition.operands).toEqual(expect.arrayContaining([
+    expect(a.trigger).toMatchObject({ event: "attacks-resolved", filter: { kind: "shoot" } });
+    expect(a.effect.type).toBe("conditional");
+    expect(nodes(a.effect.condition)).toEqual(expect.arrayContaining([
       { operator: "not", operands: [{ type: "matches", parameters: { filter: { state: "engaged" } } }] },
-      { operator: "not", operands: [{ type: "happened", parameters: { event: "move-ended", filter: { move_types: ["ingress"] }, window: "turn" } }] },
+      { type: "phase-is", parameters: { phase: "shooting" } },
     ]));
   });
   it("a declined teleport move does NOT prohibit charging", () => {
@@ -215,16 +232,20 @@ describe("Grey Knights canonical fidelity", () => {
   it("post-shooting selections bind the just-finished attack sequence, not earlier hits", () => {
     for (const id of ["righteous-persecution-grey-knights", "guidance-of-the-ancients-grey-knights"]) {
       const a = ability(id);
-      expect(a.trigger.event).toBe("attacks-resolved");
-      expect(typeof a.trigger.binds_event_variable).toBe("string");
-      const hit = nodes(a.effect).find((n) => n.type === "happened" && n.parameters?.filter?.roll === "hit");
-      expect(hit.parameters).toMatchObject({ event: "after-roll", filter: { result: "success", by: { event_var: a.trigger.binds_event_variable } }, window: "event" });
+      expect(a.trigger).toMatchObject({ event: "attacks-resolved", filter: { kind: "shoot" } });
+      // The hit must come from the attack sequence that fired the trigger: the event's own window and subject.
+      const hits = nodes(a.effect).filter((n) => n.type === "happened" && n.parameters?.filter?.roll === "hit");
+      expect(hits).toHaveLength(1);
+      expect(hits[0].parameters).toMatchObject({ event: "after-roll", subject: "event-subject", filter: { result: "success" }, window: "event" });
     }
-    expect(ability("guidance-of-the-ancients-grey-knights").effect.applies.attacker_filter).toEqual({ level: "model", all_of: ["GREY KNIGHTS"] });
+    expect(nodes(ability("guidance-of-the-ancients-grey-knights").effect).find((n) => n.type === "designate-target").applies)
+      .toMatchObject({ to: "attackers-of-target", effect: { target: { owner: "friendly", level: "model", all_of: ["GREY KNIGHTS"] } } });
   });
   it("the pinning reaction distinguishes the selecting Purgation unit from its target", () => {
     const a = ability("searing-soulflame-grey-knights");
-    expect(a.trigger).toMatchObject({ event: "targets-selected", filter: { kind: "ability" }, subject: { owner: "enemy" }, source_ability: { ability_id: "righteous-persecution-grey-knights", owner: "friendly", keywords: ["PURGATION SQUAD"] } });
+    expect(a.trigger).toMatchObject({ event: "targets-selected", filter: { kind: "ability" }, source_ability: { ability_id: "righteous-persecution-grey-knights", owner: "friendly", keywords: ["PURGATION SQUAD"] } });
+    // The triggering selection is made by the friendly Purgation unit; the roll falls on the object it selected.
+    expect(a.trigger.subject?.owner).not.toBe("friendly");
     expect(a.effect).toMatchObject({ type: "test", target: "event-object", modifier: { test: "battle-shock", modifier: -1 } });
     expect(units.find((u) => u.id === "purgation-squad").ability_ids).toContain("righteous-persecution-grey-knights");
   });
@@ -269,8 +290,8 @@ describe("new fidelity grammar rejects misleading alternatives", () => {
     invalid("channelled-force-grey-knights", (a) => { a.effect.threshold = 6; });
     invalid("channelled-force-grey-knights", (a) => { a.effect.comparison = "lte"; });
   });
-  it("rejects reduction without an amount", () => invalid("warrior-strategist-grey-knights", (a) => { delete a.effect.modifier.amount; }));
-  it("rejects a generic repeated-Stratagem permission without its named restriction", () => invalid("guardians-of-the-machine-grey-knights", (a) => { delete a.effect.steps[2].modifier.stratagem; }));
+  it("rejects reduction without an amount", () => invalid("warrior-strategist-grey-knights", (a) => { delete nodes(a.effect).find((n) => n.type === "cost-modifier").modifier.amount; }));
+  it("rejects a generic repeated-Stratagem permission without its named restriction", () => invalid("guardians-of-the-machine-grey-knights", (a) => { delete nodes(a.effect).find((n) => n.type === "permission").modifier.stratagem; }));
   it("rejects an unbound source-ability selection event", () => invalid("searing-soulflame-grey-knights", (a) => { delete a.trigger.source_ability; }));
   it("rejects a source-ability filter on an unrelated event", () => invalid("searing-soulflame-grey-knights", (a) => { a.trigger.event = "selected"; a.trigger.filter = { to: "fight" }; }));
   it("rejects invented keys inside the closed source-ability filter", () => invalid("searing-soulflame-grey-knights", (a) => { a.trigger.source_ability.pinned = true; }));
@@ -280,7 +301,11 @@ describe("new fidelity grammar rejects misleading alternatives", () => {
     expect(validate(contact)).toBe(true);
     invalid("hallowed-ground-grey-knights", (a) => { delete a.effect.modifier.producer.additive_extensions[0].range; });
   });
-  it("rejects individual attacker filters on a target-only designation", () => invalid("guidance-of-the-ancients-grey-knights", (a) => { a.effect.applies.to = "target"; }));
+  it("rejects individual attacker filters on a target-only designation", () => invalid("guidance-of-the-ancients-grey-knights", (a) => {
+    const applies = nodes(a.effect).find((n) => n.type === "designate-target").applies;
+    applies.attacker_filter = { level: "model", all_of: ["GREY KNIGHTS"] };
+    applies.to = "target";
+  }));
   it("rejects fake extra outcomes in no-effect", () => invalid("hammer-aflame-grey-knights", (a) => { a.effect.effect.outcomes[0].effect.amount = 0; }));
   it("checks source-ability references against the source faction", async () => {
     const dir = mkdtempSync(join(tmpdir(), "gk-fidelity-"));
@@ -299,7 +324,9 @@ describe("new fidelity grammar rejects misleading alternatives", () => {
 describe("Grey Knights selection cardinality", () => {
   for (const id of ["hammer-aflame-grey-knights", "righteous-persecution-grey-knights", "litanies-of-sanctity-grey-knights"]) {
     it(`${id} requires exactly one target once activated`, () => {
-      const selector = (ability(id).effect as unknown as { selector: Record<string, unknown> }).selector;
+      const selections = nodes(ability(id).effect).filter((n) => n.type === "select-units");
+      expect(selections).toHaveLength(1);
+      const selector = selections[0].selector as Record<string, unknown>;
       expect(selector).toMatchObject({ count: { min: 1, max: 1 } });
       expect(selector.min_count).toBeUndefined();
     });

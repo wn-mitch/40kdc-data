@@ -70,7 +70,14 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Astartes"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit"
+    },
     "ability_id": "armour-of-contempt-black-spear-task-force-deathwatch",
     "game_version": {
       "edition": "11th",
@@ -104,7 +111,24 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Kill Team"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "not_states": [
+              "engaged"
+            ]
+          }
+        }
+      }
+    },
     "ability_id": "blackstar-extraction-deathwatch-support-deathwatch",
     "game_version": {
       "edition": "11th",
@@ -123,7 +147,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Kill Team"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "dragonfire-rounds-black-spear-task-force-deathwatch",
     "game_version": {
       "edition": "11th",
@@ -157,7 +188,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Kill Team"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "dragonfire-rounds-deathwatch-support-deathwatch",
     "game_version": {
       "edition": "11th",
@@ -176,7 +214,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Kill Team"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "hellfire-rounds-black-spear-task-force-deathwatch",
     "game_version": {
       "edition": "11th",
@@ -210,7 +255,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Kill Team"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "hellfire-rounds-deathwatch-support-deathwatch",
     "game_version": {
       "edition": "11th",
@@ -229,7 +281,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Kill Team"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "kraken-rounds-black-spear-task-force-deathwatch",
     "game_version": {
       "edition": "11th",
@@ -282,7 +341,25 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Astartes",
+        "Infantry"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "not_states": [
+              "engaged"
+            ]
+          }
+        }
+      }
+    },
     "ability_id": "site-to-site-teleportation-black-spear-task-force-deathwatch",
     "game_version": {
       "edition": "11th",

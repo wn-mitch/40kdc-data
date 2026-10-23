@@ -115,7 +115,7 @@
             </profile>
             <profile name="Ballistus Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">During the Shooting phase, while the unit is below half strength, you can re-roll a failed Hit roll.</characteristic>
+                <characteristic name="Description">While the target is within 24" of the unit, ranged weapons equipped by models in this unit gain [SUSTAINED HITS 1].</characteristic>
               </characteristics>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">

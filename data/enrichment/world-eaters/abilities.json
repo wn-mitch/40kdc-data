@@ -5,9 +5,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "40802a91b36f83cacaa63fd34b15c35dbdb108bbcaa720ed32c252371f3421a9",
+    "source_digest": "e0b800278eea72db3bc41109ccc278e17b97b691a4350a658821cf037fd9ca57",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -16,227 +16,220 @@
     "ability_type": "faction",
     "behavior": "reactive",
     "effect": {
-      "type": "dice-pool-allocation",
-      "pool": {
-        "count": 8,
-        "die": "D6"
+      "type": "conditional",
+      "condition": {
+        "type": "army-faction",
+        "parameters": {
+          "faction": "world-eaters"
+        }
       },
-      "max_activations": 2,
-      "options": [
-        {
-          "name": "Unbridled Bloodlust",
-          "requirement": {
-            "type": "pair",
-            "min_value": 1
-          },
-          "effect": {
-            "type": "roll-modifier",
-            "target": {
-              "owner": "friendly"
-            },
-            "modifier": {
-              "roll": "charge",
-              "operation": "add",
-              "value": 1
-            }
-          },
-          "id": "option-1"
+      "effect": {
+        "type": "dice-pool-allocation",
+        "pool": {
+          "count": 8,
+          "die": "D6"
         },
-        {
-          "name": "Rage-Fuelled Invigoration",
-          "requirement": {
-            "type": "pair",
-            "min_value": 2
-          },
-          "effect": {
-            "type": "move",
-            "target": {
-              "owner": "friendly"
-            },
-            "modifier": {
-              "move_type": "consolidation",
-              "distance": 6
-            }
-          },
-          "id": "option-2"
-        },
-        {
-          "name": "Total Carnage",
-          "requirement": {
-            "type": "pair",
-            "min_value": 3
-          },
-          "effect": {
-            "type": "conditional",
-            "condition": {
-              "operator": "and",
-              "operands": [
-                {
-                  "type": "happened",
-                  "parameters": {
-                    "event": "destroyed",
-                    "object": "event-object",
-                    "filter": {
-                      "attack_type": "melee"
-                    },
-                    "window": "event"
-                  }
-                },
-                {
-                  "operator": "not",
-                  "operands": [
-                    {
-                      "type": "happened",
-                      "parameters": {
-                        "event": "selected",
-                        "filter": {
-                          "to": "fight"
-                        },
-                        "window": "phase"
-                      }
-                    }
-                  ]
-                }
-              ]
+        "max_activations": 2,
+        "options": [
+          {
+            "id": "option-1",
+            "name": "Unbridled Bloodlust",
+            "requirement": {
+              "type": "pair",
+              "min_value": 1
             },
             "effect": {
-              "type": "dice-gated",
-              "dice": "D6",
-              "threshold": 4,
-              "on_success": {
+              "type": "roll-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "charge",
+                "operation": "add",
+                "value": 1
+              }
+            }
+          },
+          {
+            "id": "option-2",
+            "name": "Rage-Fuelled Invigoration",
+            "requirement": {
+              "type": "pair",
+              "min_value": 2
+            },
+            "effect": {
+              "type": "move-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "applies_to_moves": [
+                  "pile-in",
+                  "consolidation"
+                ],
+                "distance_bonus": 3
+              }
+            }
+          },
+          {
+            "id": "option-3",
+            "name": "Total Carnage",
+            "requirement": {
+              "type": "pair",
+              "min_value": 3
+            },
+            "effect": {
+              "type": "ability-part",
+              "effect": {
                 "type": "act-on-death",
-                "target": "this-model",
+                "target": "event-object",
                 "modifier": {
-                  "act": "fight"
-                }
-              },
-              "on_fail": null
-            }
-          },
-          "id": "option-3"
-        },
-        {
-          "name": "Martial Excellence",
-          "requirement": {
-            "any_of": [
-              {
-                "type": "pair",
-                "min_value": 4
-              },
-              {
-                "type": "triple",
-                "min_value": 1
-              }
-            ]
-          },
-          "effect": {
-            "type": "weapon-ability-grant",
-            "target": {
-              "owner": "friendly"
-            },
-            "modifier": {
-              "weapons": {
-                "type": "melee"
-              },
-              "keywords": [
-                {
-                  "keyword_id": "sustained-hits",
-                  "parameters": {
-                    "value": 1
+                  "act": "fight",
+                  "resolution": "after-attacking-unit-finishes",
+                  "removal": "after-destroyed-model-fights",
+                  "gate": {
+                    "dice": "D6",
+                    "threshold": 4,
+                    "comparison": "gte",
+                    "modifiers": []
+                  },
+                  "eligibility": {
+                    "operator": "not",
+                    "operands": [
+                      {
+                        "type": "happened",
+                        "parameters": {
+                          "subject": "event-subject",
+                          "event": "selected",
+                          "filter": {
+                            "to": "fight"
+                          },
+                          "window": "phase"
+                        }
+                      }
+                    ]
                   }
                 }
-              ]
+              },
+              "trigger": {
+                "event": "model-destroyed",
+                "object": "model-in-this-unit"
+              }
             }
           },
-          "id": "option-4"
-        },
-        {
-          "name": "Warp Blades",
-          "requirement": {
-            "any_of": [
-              {
-                "type": "pair",
-                "min_value": 5
-              },
-              {
-                "type": "triple",
-                "min_value": 2
-              }
-            ]
-          },
-          "effect": {
-            "type": "weapon-ability-grant",
-            "target": {
-              "owner": "friendly"
-            },
-            "modifier": {
-              "weapons": {
-                "type": "melee"
-              },
-              "keywords": [
+          {
+            "id": "option-4",
+            "name": "Martial Excellence",
+            "requirement": {
+              "any_of": [
                 {
-                  "keyword_id": "lethal-hits"
-                }
-              ]
-            }
-          },
-          "id": "option-5"
-        },
-        {
-          "name": "Decapitating Strikes",
-          "requirement": {
-            "any_of": [
-              {
-                "type": "pair",
-                "min_value": 6
-              },
-              {
-                "type": "triple",
-                "min_value": 3
-              }
-            ]
-          },
-          "effect": {
-            "type": "conditional",
-            "condition": {
-              "operator": "and",
-              "operands": [
-                {
-                  "type": "matches",
-                  "parameters": {
-                    "filter": {
-                      "all_of": [
-                        "INFANTRY"
-                      ]
-                    },
-                    "subject": "defender"
-                  }
+                  "type": "pair",
+                  "min_value": 4
                 },
                 {
-                  "type": "attack-is",
-                  "parameters": {
-                    "attack_type": "melee"
-                  }
+                  "type": "triple",
+                  "min_value": 1
                 }
               ]
             },
             "effect": {
               "type": "weapon-ability-grant",
-              "target": {
-                "owner": "friendly"
-              },
+              "target": "this-unit",
               "modifier": {
                 "keywords": [
                   {
-                    "keyword_id": "devastating-wounds"
+                    "keyword_id": "sustained-hits",
+                    "parameters": {
+                      "value": 1
+                    }
                   }
-                ]
+                ],
+                "weapons": {
+                  "type": "melee"
+                }
               }
             }
           },
-          "id": "option-6"
-        }
-      ]
+          {
+            "id": "option-5",
+            "name": "Warp Blades",
+            "requirement": {
+              "any_of": [
+                {
+                  "type": "pair",
+                  "min_value": 5
+                },
+                {
+                  "type": "triple",
+                  "min_value": 2
+                }
+              ]
+            },
+            "effect": {
+              "type": "weapon-ability-grant",
+              "target": "this-unit",
+              "modifier": {
+                "keywords": [
+                  {
+                    "keyword_id": "lethal-hits"
+                  }
+                ],
+                "weapons": {
+                  "type": "melee"
+                }
+              }
+            }
+          },
+          {
+            "id": "option-6",
+            "name": "Decapitating Strikes",
+            "requirement": {
+              "any_of": [
+                {
+                  "type": "pair",
+                  "min_value": 6
+                },
+                {
+                  "type": "triple",
+                  "min_value": 3
+                }
+              ]
+            },
+            "effect": {
+              "type": "conditional",
+              "condition": {
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "attack-is",
+                    "parameters": {
+                      "attack_type": "melee"
+                    }
+                  },
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "defender",
+                      "filter": {
+                        "all_of": [
+                          "INFANTRY"
+                        ]
+                      }
+                    }
+                  }
+                ]
+              },
+              "effect": {
+                "type": "weapon-ability-grant",
+                "target": "this-unit",
+                "modifier": {
+                  "keywords": [
+                    {
+                      "keyword_id": "devastating-wounds"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      }
     },
     "scope": {
       "duration": "battle-round"
@@ -244,6 +237,10 @@
     "trigger": {
       "event": "round-started",
       "optional": true
+    },
+    "usage": {
+      "frequency": "once-per-battle-round",
+      "per": "army"
     }
   },
   {
@@ -252,7 +249,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "5b411f51cf785396bc399ea57d53b56c26b915cfc1a8bc512acf22da628b74a9",
     "version": "2025-q3",
@@ -263,62 +260,51 @@
     "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
-    "behavior": "reactive",
+    "behavior": "passive",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
+          },
+          {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "melee"
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "conditional",
-        "condition": {
-          "type": "attachment",
-          "parameters": {
-            "subject": "this-model",
-            "role": "leading"
-          }
-        },
-        "effect": {
-          "type": "sequence",
-          "steps": [
-            {
-              "type": "re-roll",
-              "target": "this-unit",
-              "modifier": {
-                "roll": "hit",
-                "subset": "ones",
-                "weapons": {
-                  "type": "melee"
-                }
-              }
-            },
-            {
-              "type": "re-roll",
-              "target": "this-unit",
-              "modifier": {
-                "roll": "wound",
-                "subset": "ones",
-                "weapons": {
-                  "type": "melee"
-                }
-              }
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "subset": "ones"
             }
-          ]
-        }
+          },
+          {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "wound",
+              "subset": "ones"
+            }
+          }
+        ]
       }
     },
     "scope": {
       "duration": "permanent"
-    },
-    "trigger": {
-      "event": "before-roll",
-      "subject": "model-in-this-unit",
-      "filter": {
-        "roll": "hit"
-      }
     }
   },
   {
@@ -327,9 +313,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "229608d5f9c5956e1d302c28e103acda37a6182472ba8550c3212fa1b3787661",
+    "source_digest": "aa37e11045b28a4e9e0e2174392ba0a06ca6661c1973d84512b6034bc0579da7",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [
@@ -342,54 +328,77 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
-        }
-      },
-      "effect": {
-        "type": "conditional",
-        "condition": {
-          "operator": "not",
-          "operands": [
-            {
-              "type": "matches",
-              "parameters": {
-                "filter": {
-                  "within": {
-                    "range": "engagement",
-                    "of": {
-                      "owner": "enemy"
-                    }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "state": "on-battlefield"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "state": "engaged"
                   }
                 }
               }
-            }
-          ]
-        },
-        "effect": {
-          "type": "dice-gated",
-          "dice": "2D6",
-          "threshold": "leadership",
-          "comparison": "gte",
-          "on_success": null,
-          "on_fail": {
-            "type": "destroy-models",
-            "target": {
-              "member_of": "this-unit",
-              "level": "model",
-              "attachment_role": "bodyguard"
-            },
-            "modifier": {
-              "count": 1
+            ]
+          },
+          {
+            "type": "model-count",
+            "parameters": {
+              "subject": "this-unit",
+              "keyword": "BODYGUARD",
+              "min": 1
             }
           }
-        }
+        ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "test",
+            "target": "this-unit",
+            "modifier": {
+              "test": "leadership"
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "roll-result",
+              "parameters": {
+                "roll": "leadership",
+                "result": "failure"
+              }
+            },
+            "effect": {
+              "type": "destroy-models",
+              "target": {
+                "level": "model",
+                "member_of": "this-unit",
+                "all_of": [
+                  "BODYGUARD"
+                ]
+              },
+              "modifier": {
+                "count": 1
+              }
+            }
+          }
+        ]
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "trigger": {
       "event": "phase-ended",
@@ -418,7 +427,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "6beb83a9df7f673ad9e8ef2ea88ec6b8f5cc205e26472ba22d11d21c4436a0d3",
     "version": "2025-q3",
@@ -436,22 +445,39 @@
       "threshold": 2,
       "comparison": "gte",
       "on_success": {
-        "type": "return-models",
+        "type": "set-up",
         "target": "this-model",
         "modifier": {
-          "count": 1,
-          "wounds_remaining": 3,
-          "placement": "closest-to-destruction"
+          "to": "battlefield",
+          "min_enemy_distance": {
+            "inches": 1
+          },
+          "placement": "closest-to-destruction",
+          "wounds_remaining": 3
         }
       },
       "on_fail": null
     },
     "scope": {
-      "duration": "one-use"
+      "duration": "permanent"
     },
     "trigger": {
-      "event": "destroyed",
-      "object": "this-unit"
+      "event": "phase-ended",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "model-destroyed",
+          "object": "this-model",
+          "window": "phase",
+          "count": {
+            "min": 1
+          }
+        }
+      }
+    },
+    "usage": {
+      "frequency": "first-this-battle",
+      "per": "model"
     }
   },
   {
@@ -550,7 +576,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "a6aac7dae3c1f1ea6d27fceef0ffb8662a177efd6901e830cd90b53fda042049",
     "version": "2025-q3",
@@ -561,7 +587,7 @@
     "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -583,14 +609,23 @@
         "modifier": {
           "activity": "declare-charge",
           "allow": true,
-          "after": [
-            "disembark"
+          "despite": [
+            "disembarked-this-turn"
           ]
         }
       }
     },
     "scope": {
       "duration": "permanent"
+    },
+    "trigger": {
+      "event": "disembarked",
+      "subject": {
+        "owner": "any"
+      },
+      "filter": {
+        "transport": "this-unit"
+      }
     }
   },
   {
@@ -599,7 +634,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "a59f6c91377a85462c7f84badc960be882d9408facaebbfd9f0dc2c761766e3a",
     "version": "2025-q3",
@@ -610,18 +645,18 @@
     "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
-    "behavior": "reactive",
+    "behavior": "passive",
     "effect": {
       "type": "conditional",
       "condition": {
         "type": "matches",
         "parameters": {
+          "subject": "defender",
           "filter": {
             "all_of": [
               "FLY"
             ]
-          },
-          "subject": "defender"
+          }
         }
       },
       "effect": {
@@ -636,13 +671,6 @@
     },
     "scope": {
       "duration": "permanent"
-    },
-    "trigger": {
-      "event": "before-roll",
-      "subject": "this-model",
-      "filter": {
-        "roll": "hit"
-      }
     }
   },
   {
@@ -651,7 +679,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "b7839c91742ce711a4223df21826be04e6f781c4b938441d5e232b1abcecd9b2",
     "version": "2025-q3",
@@ -670,10 +698,12 @@
         "parameters": {
           "filter": {
             "within": {
-              "range": "objective-control",
               "of": {
-                "objective": {}
-              }
+                "objective": {
+                  "controlled_by": "friendly"
+                }
+              },
+              "range": "objective-control"
             }
           }
         }
@@ -713,7 +743,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "f45098adfa15d78d190b764e864e32657d0935ef4df9b50bf877d3560cc21a4c",
     "version": "2025-q3",
@@ -724,38 +754,54 @@
     "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "sequence",
       "steps": [
         {
           "type": "move-modifier",
-          "target": "this-model",
+          "target": "this-unit",
           "modifier": {
-            "applies_to_moves": [
-              "normal",
-              "advance",
-              "fall-back"
-            ],
             "passthrough": [
-              "non-titanic-models",
-              "all-terrain"
+              "non-titanic-models"
             ]
           }
         },
         {
           "type": "move-modifier",
-          "target": "this-model",
+          "target": "this-unit",
           "modifier": {
             "passthrough": [
-              "models"
-            ],
-            "no_end_in_engagement": true
+              "all-terrain"
+            ]
+          }
+        },
+        {
+          "type": "permission",
+          "target": "event-subject",
+          "modifier": {
+            "activity": "move",
+            "allow": true,
+            "despite": [
+              "engaged"
+            ]
+          }
+        },
+        {
+          "type": "move-modifier",
+          "target": "event-subject",
+          "modifier": {
+            "no_end_in_engagement": true,
+            "applies_to_moves": [
+              "normal",
+              "advance",
+              "fall-back"
+            ]
           }
         },
         {
           "type": "roll-result",
-          "target": "this-model",
+          "target": "this-unit",
           "modifier": {
             "roll": "desperate-escape",
             "result": "pass"
@@ -765,6 +811,16 @@
     },
     "scope": {
       "duration": "permanent"
+    },
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "normal",
+          "advance",
+          "fall-back"
+        ]
+      }
     }
   },
   {
@@ -773,7 +829,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "b8d15ac45c629461c4eec18384c1cdf99fcd2abccd81b3f850cfa8901e49f4a7",
     "version": "2025-q3",
@@ -784,42 +840,44 @@
     "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
-    "behavior": "reactive",
+    "behavior": "passive",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
-            "any_of": [
-              "MONSTER",
-              "VEHICLE"
-            ]
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "melee"
+            }
           },
-          "subject": "defender"
-        }
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "defender",
+              "filter": {
+                "any_of": [
+                  "MONSTER",
+                  "VEHICLE"
+                ]
+              }
+            }
+          }
+        ]
       },
       "effect": {
         "type": "stat-modifier",
-        "target": "this-model",
+        "target": "this-unit",
         "modifier": {
           "stat": "D",
-          "operation": "add",
-          "value": 1,
-          "weapons": {
-            "type": "melee"
-          }
+          "operation": "improve",
+          "value": 1
         }
       }
     },
     "scope": {
       "duration": "phase"
-    },
-    "trigger": {
-      "event": "before-roll",
-      "filter": {
-        "roll": "damage"
-      }
     }
   },
   {
@@ -828,7 +886,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "6bd89d694fa4ca863e2f0f066fb5656357045733c3ab6a2ca75f42bf22da9fdc",
     "version": "2025-q3",
@@ -839,40 +897,42 @@
     "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
-    "behavior": "reactive",
+    "behavior": "passive",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "closest",
-        "parameters": {
-          "subject": "defender",
-          "among": "eligible-targets",
-          "range": {
-            "inches": 18
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
+            }
+          },
+          {
+            "type": "closest",
+            "parameters": {
+              "subject": "defender",
+              "among": "eligible-targets",
+              "to": "attacker",
+              "range": {
+                "inches": 18
+              }
+            }
           }
-        }
+        ]
       },
       "effect": {
         "type": "re-roll",
         "target": "this-model",
         "modifier": {
           "roll": "hit",
-          "subset": "all-failures",
-          "weapons": {
-            "type": "ranged"
-          }
+          "result_scope": "any-result"
         }
       }
     },
     "scope": {
       "duration": "permanent"
-    },
-    "trigger": {
-      "event": "before-roll",
-      "filter": {
-        "roll": "hit"
-      },
-      "optional": true
     }
   },
   {
@@ -881,9 +941,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "d5b951127448be3757ff8c313f9d361dd180c03d3659ef2fcea93a23b329ff0e",
+    "source_digest": "da8622a83b232ecd435fdb4d705be0d0125f937fb09f52dfc016496865960d00",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [
@@ -899,15 +959,34 @@
         "operator": "and",
         "operands": [
           {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "movement"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "opponent-turn"
+                }
+              }
+            ]
           },
           {
-            "type": "player-turn-is",
+            "type": "matches",
             "parameters": {
-              "turn": "opponent-turn"
+              "subject": "event-subject",
+              "filter": {
+                "within": {
+                  "of": "this-unit",
+                  "range": {
+                    "inches": 8
+                  }
+                }
+              }
             }
           },
           {
@@ -917,12 +996,7 @@
                 "type": "matches",
                 "parameters": {
                   "filter": {
-                    "within": {
-                      "range": "engagement",
-                      "of": {
-                        "owner": "enemy"
-                      }
-                    }
+                    "state": "engaged"
                   }
                 }
               }
@@ -940,30 +1014,13 @@
       }
     },
     "scope": {
-      "duration": "phase"
-    },
-    "usage": {
-      "frequency": "once-per-turn"
+      "duration": "permanent"
     },
     "trigger": {
       "event": "move-ended",
       "subject": {
         "owner": "enemy"
-      },
-      "filter": {
-        "move_types": [
-          "normal",
-          "advance",
-          "fall-back"
-        ]
-      },
-      "proximity": {
-        "of": "this-model",
-        "range": {
-          "inches": 9
-        }
-      },
-      "optional": true
+      }
     }
   },
   {
@@ -972,7 +1029,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "35a0742f18f5a090fa40c27731e9f9626abee68fbbe2afe7bf8811ac5415dd8e",
     "version": "2025-q3",
@@ -983,41 +1040,52 @@
     "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
-    "behavior": "reactive",
+    "behavior": "passive",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
-            "designated": "dual-melee"
+        "operator": "and",
+        "operands": [
+          {
+            "type": "named-weapon",
+            "parameters": {
+              "subject": "this-model",
+              "name": "Close combat weapon",
+              "count": 1
+            }
+          },
+          {
+            "type": "equipped-weapon-count",
+            "parameters": {
+              "subject": "this-model",
+              "weapons": {
+                "type": "melee",
+                "exclude_name": "Close combat weapon"
+              },
+              "count": {
+                "min": 2,
+                "max": 2
+              }
+            }
           }
-        }
+        ]
       },
       "effect": {
         "type": "stat-modifier",
         "target": "this-model",
         "modifier": {
           "stat": "A",
-          "operation": "add",
+          "operation": "improve",
           "value": 2,
           "weapons": {
-            "type": "melee"
+            "type": "melee",
+            "exclude_name": "Close combat weapon"
           }
         }
       }
     },
     "scope": {
       "duration": "permanent"
-    },
-    "trigger": {
-      "event": "before-roll",
-      "subject": {
-        "owner": "any"
-      },
-      "filter": {
-        "roll": "hit"
-      }
     }
   },
   {
@@ -1026,7 +1094,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "d88354fc606e86d7bc606a5d12f889dcd3cb7facbbd8b27c9091a3d21d015329",
     "version": "2025-q3",
@@ -1043,17 +1111,18 @@
       "condition": {
         "type": "matches",
         "parameters": {
+          "subject": "this-model",
           "filter": {
             "within": {
-              "range": {
-                "inches": 3
-              },
               "of": {
                 "owner": "friendly",
                 "all_of": [
-                  "WORLD EATERS",
-                  "INFANTRY"
+                  "INFANTRY",
+                  "WORLD EATERS"
                 ]
+              },
+              "range": {
+                "inches": 3
               }
             }
           }
@@ -1077,7 +1146,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "b24d4bf660565157616d60ade93b14a957f901a8645f8bc86ef1c9a8c609b27d",
     "version": "2025-q3",
@@ -1090,32 +1159,16 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "happened",
-        "parameters": {
-          "event": "move-ended",
-          "filter": {
-            "move_types": [
-              "charge"
-            ]
-          },
-          "window": "turn"
-        }
-      },
-      "effect": {
-        "type": "weapon-ability-grant",
-        "target": "this-model",
-        "modifier": {
-          "weapons": {
-            "type": "melee",
-            "name": "hellforged weapons"
-          },
-          "keywords": [
-            {
-              "keyword_id": "devastating-wounds"
-            }
-          ]
+      "type": "weapon-ability-grant",
+      "target": "this-model",
+      "modifier": {
+        "keywords": [
+          {
+            "keyword_id": "devastating-wounds"
+          }
+        ],
+        "weapons": {
+          "name": "hellforged weapons"
         }
       }
     },
@@ -1123,12 +1176,11 @@
       "duration": "turn"
     },
     "trigger": {
-      "event": "before-roll",
-      "subject": {
-        "owner": "any"
-      },
+      "event": "move-ended",
       "filter": {
-        "roll": "hit"
+        "move_types": [
+          "charge"
+        ]
       }
     }
   },
@@ -1138,7 +1190,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "db5f2bae245a8eb3cca1df9d81a364c92d2b3958c0471ebd7f0f15e2bd8a0f90",
     "version": "2025-q3",
@@ -1151,10 +1203,22 @@
     "ability_type": "unit",
     "behavior": "passive",
     "effect": {
-      "type": "army-rule",
-      "target": "this-model",
-      "modifier": {
-        "rule": "warlord-required"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "this-model",
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      },
+      "effect": {
+        "type": "army-rule",
+        "target": "this-unit",
+        "modifier": {
+          "rule": "warlord-required"
+        }
       }
     },
     "scope": {
@@ -1289,75 +1353,13 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "ef495731fd4c03408c108954f5d230577b72ffe049f6fbbc5792d35ea2748675",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [
       "chaos-predator-destructor"
-    ],
-    "faction_id": "world-eaters",
-    "detachment_id": null,
-    "ability_type": "unit",
-    "behavior": "activated",
-    "effect": {
-      "type": "ability-part",
-      "trigger": {
-        "event": "attacks-resolved",
-        "subject": "this-unit",
-        "filter": {
-          "kind": "shoot"
-        }
-      },
-      "effect": {
-        "type": "designate-target",
-        "designation": "suppressed",
-        "select": {
-          "kind": "unit",
-          "selector": {
-            "filter": {
-              "owner": "enemy"
-            },
-            "count": {
-              "min": 1,
-              "max": 1
-            }
-          }
-        },
-        "applies": {
-          "to": "target",
-          "effect": {
-            "type": "roll-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "hit",
-              "operation": "subtract",
-              "value": 1
-            }
-          }
-        },
-        "duration": "until-next-command-phase"
-      }
-    },
-    "scope": {
-      "duration": "until-next-command-phase"
-    },
-    "community_notes": "MONSTER and VEHICLE units cannot be suppressed."
-  },
-  {
-    "ability_id": "blood-surge-world-eaters",
-    "name": "Blood Surge",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "74824b48c956da5229f173bcd41a58c5c3d7780fe3215c92275270b78cd85446",
-    "version": "2025-q3",
-    "supersedes": null,
-    "unit_ids": [
-      "khorne-berzerkers"
     ],
     "faction_id": "world-eaters",
     "detachment_id": null,
@@ -1377,14 +1379,171 @@
           {
             "type": "player-turn-is",
             "parameters": {
-              "turn": "opponent-turn"
+              "turn": "your-turn"
             }
+          }
+        ]
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "after-roll",
+                  "subject": "event-subject",
+                  "object": "this-unit",
+                  "filter": {
+                    "roll": "hit",
+                    "result": "success"
+                  },
+                  "window": "event"
+                }
+              },
+              {
+                "operator": "and",
+                "operands": [
+                  {
+                    "operator": "not",
+                    "operands": [
+                      {
+                        "type": "matches",
+                        "parameters": {
+                          "subject": "selected-unit",
+                          "filter": {
+                            "all_of": [
+                              "MONSTER"
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "operator": "not",
+                    "operands": [
+                      {
+                        "type": "matches",
+                        "parameters": {
+                          "subject": "selected-unit",
+                          "filter": {
+                            "all_of": [
+                              "VEHICLE"
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "designate",
+              "target": "selected-unit",
+              "modifier": {
+                "tag": "suppressed"
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "designated": "suppressed"
+                  }
+                }
+              },
+              "effect": {
+                "type": "roll-modifier",
+                "target": "selected-unit",
+                "modifier": {
+                  "roll": "hit",
+                  "operation": "subtract",
+                  "value": 1
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "scope": {
+      "duration": "until-start-next-turn"
+    },
+    "community_notes": "MONSTER and VEHICLE units cannot be suppressed.",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
+    }
+  },
+  {
+    "ability_id": "blood-surge-world-eaters",
+    "name": "Blood Surge",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "source_digest": "b0abfe60b7d28fe88f6a53ff8652c7de3531a6e3d8412caa4026b853cb1b16f9",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [
+      "khorne-berzerkers"
+    ],
+    "faction_id": "world-eaters",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "behavior": "reactive",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "opponent-turn"
+                }
+              }
+            ]
           },
           {
-            "type": "wounds",
+            "type": "happened",
             "parameters": {
-              "subject": "this-model",
-              "lost": true
+              "event": "model-destroyed",
+              "object": "model-in-this-unit",
+              "filter": {
+                "by": "event-subject"
+              },
+              "window": "event"
             }
           }
         ]
@@ -1399,14 +1558,16 @@
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "trigger": {
-      "event": "damage-allocated",
-      "object": {
-        "owner": "enemy"
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
       },
-      "optional": true
+      "subject": {
+        "owner": "enemy"
+      }
     }
   },
   {
@@ -1500,7 +1661,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "bbdc1ce91fc8485bfa6e8dcaeef8781b695cedea6ba292019fce4612aa86337d",
     "version": "2025-q3",
@@ -1513,19 +1674,61 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "effect": {
-      "type": "test",
-      "target": {
-        "owner": "enemy",
-        "within": {
-          "range": "engagement"
+      "type": "for-each-unit",
+      "selector": {
+        "filter": {
+          "owner": "enemy",
+          "engaged_with": "this-model"
         }
       },
-      "modifier": {
-        "test": "battle-shock"
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "strength",
+              "parameters": {
+                "subject": "recipient",
+                "below": "half"
+              }
+            },
+            "effect": {
+              "type": "test",
+              "target": "recipient",
+              "modifier": {
+                "test": "battle-shock",
+                "modifier": -1
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "strength",
+                  "parameters": {
+                    "subject": "recipient",
+                    "below": "half"
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "test",
+              "target": "recipient",
+              "modifier": {
+                "test": "battle-shock"
+              }
+            }
+          }
+        ]
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "community_notes": "[APPROX] the test subtracts 1 if the enemy unit is Below Half-strength",
     "trigger": {
@@ -1544,7 +1747,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "654d74f89b14f9e0fe34674ad31e79a76ac76c9f946aa6768bdcdff8196b4392",
     "version": "2025-q3",
@@ -1555,7 +1758,7 @@
     "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -1565,6 +1768,13 @@
         "count": {
           "min": 1,
           "max": 1
+        },
+        "eligibility": {
+          "type": "moved-over",
+          "parameters": {
+            "subject": "selected-unit",
+            "by": "this-model"
+          }
         }
       },
       "effect": {
@@ -1581,7 +1791,16 @@
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "normal"
+        ]
+      },
+      "optional": true
     }
   },
   {
@@ -1590,7 +1809,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "ced08b2eb1d70d1be38a3f161c5091d5a15e118bed3450fda0570200c652c8e6",
     "version": "2025-q3",
@@ -1614,104 +1833,88 @@
             }
           },
           {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "matches",
-                "parameters": {
-                  "filter": {
-                    "all_of": [
-                      "MONSTER"
-                    ]
-                  },
-                  "subject": "defender"
-                }
+            "type": "matches",
+            "parameters": {
+              "subject": "defender",
+              "filter": {
+                "none_of": [
+                  "MONSTER",
+                  "VEHICLE"
+                ]
               }
-            ]
-          },
-          {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "matches",
-                "parameters": {
-                  "filter": {
-                    "all_of": [
-                      "VEHICLE"
-                    ]
-                  },
-                  "subject": "defender"
-                }
-              }
-            ]
+            }
           }
         ]
       },
       "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "roll-modifier",
-            "target": {
-              "owner": "friendly",
-              "within": {
-                "range": {
-                  "inches": 6
-                }
-              }
-            },
-            "modifier": {
-              "roll": "hit",
-              "operation": "add",
-              "value": 1
-            }
+        "type": "aura",
+        "target": "friendly-within-aura",
+        "modifier": {
+          "range": {
+            "inches": 6
           },
-          {
-            "type": "conditional",
-            "condition": {
-              "type": "strength",
-              "parameters": {
-                "subject": "defender",
-                "below": "half"
-              }
-            },
-            "effect": {
-              "type": "roll-modifier",
-              "target": {
-                "owner": "friendly",
-                "within": {
-                  "range": {
-                    "inches": 6
-                  }
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "roll-modifier",
+                "target": "recipient",
+                "modifier": {
+                  "roll": "hit",
+                  "operation": "add",
+                  "value": 1
                 }
               },
-              "modifier": {
-                "roll": "wound",
-                "operation": "add",
-                "value": 1
+              {
+                "type": "conditional",
+                "condition": {
+                  "operator": "and",
+                  "operands": [
+                    {
+                      "type": "matches",
+                      "parameters": {
+                        "subject": "defender",
+                        "filter": {
+                          "none_of": [
+                            "MONSTER",
+                            "VEHICLE"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "strength",
+                      "parameters": {
+                        "subject": "defender",
+                        "below": "half"
+                      }
+                    }
+                  ]
+                },
+                "effect": {
+                  "type": "roll-modifier",
+                  "target": "recipient",
+                  "modifier": {
+                    "roll": "wound",
+                    "operation": "add",
+                    "value": 1
+                  }
+                }
               }
-            }
-          }
-        ]
+            ]
+          },
+          "eligible": {
+            "owner": "friendly",
+            "all_of": [
+              "WORLD EATERS"
+            ]
+          },
+          "of": "this-unit"
+        }
       }
     },
     "scope": {
       "duration": "permanent"
-    },
-    "trigger": {
-      "event": "before-roll",
-      "subject": {
-        "owner": "friendly"
-      },
-      "filter": {
-        "roll": "hit"
-      },
-      "proximity": {
-        "of": "this-model",
-        "range": {
-          "inches": 6
-        }
-      }
     }
   },
   {
@@ -1720,9 +1923,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "7aaea81fe4fb61565d84bba79fadc1d9732747bf46adbf9cdd087ed4ac00f41d",
+    "source_digest": "d61d9ce5cba4d0695840b8ee8f860cd779b1e61d4811daa84374f074d9343688",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [
@@ -1741,28 +1944,16 @@
         }
       },
       "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "permission",
-            "target": "this-unit",
-            "modifier": {
-              "activity": "fight",
-              "allow": true,
-              "despite": [
-                "fought-this-phase"
-              ],
-              "next": true
-            }
-          },
-          {
-            "type": "ability-grant",
-            "target": "this-model",
-            "modifier": {
-              "ability": "fights-first"
-            }
-          }
-        ]
+        "type": "permission",
+        "target": "this-unit",
+        "modifier": {
+          "activity": "fight",
+          "allow": true,
+          "despite": [
+            "fought-this-phase"
+          ],
+          "next": true
+        }
       }
     },
     "scope": {
@@ -1771,47 +1962,26 @@
     "community_notes": "Once per turn, per unit. In the Fight phase, after an enemy unit that targeted this unit resolves its attacks, this unit is eligible to fight again and must be selected to fight next.",
     "trigger": [
       {
-        "event": "attacks-resolved",
+        "event": "targets-selected",
+        "filter": {
+          "kind": "attack"
+        },
         "subject": {
           "owner": "enemy"
         },
         "object": "this-unit",
-        "filter": {
-          "kind": "shoot"
-        },
-        "condition": {
-          "operator": "and",
-          "operands": [
-            {
-              "type": "phase-is",
-              "parameters": {
-                "phase": "shooting"
-              }
-            },
-            {
-              "type": "player-turn-is",
-              "parameters": {
-                "turn": "opponent-turn"
-              }
-            }
-          ]
-        },
         "optional": true
       },
       {
         "event": "attacks-resolved",
-        "subject": {
-          "owner": "enemy"
-        },
-        "condition": {
-          "type": "phase-is",
-          "parameters": {
-            "phase": "fight"
-          }
-        },
+        "subject": "event-subject",
         "optional": true
       }
-    ]
+    ],
+    "usage": {
+      "frequency": "once-per-turn",
+      "per": "unit"
+    }
   },
   {
     "ability_id": "super-heavy-war-engine-world-eaters",
@@ -1819,7 +1989,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "3f83d9490cdbf1acef828c5a81f4c355680f8828c9fb767f81755a49dbf012ee",
     "version": "2025-q3",
@@ -1830,88 +2000,116 @@
     "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "movement"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "move-modifier",
-            "target": "this-model",
-            "modifier": {
-              "applies_to_moves": [
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "move-ended",
+            "filter": {
+              "move_types": [
                 "normal",
                 "advance",
                 "fall-back"
-              ],
-              "passthrough": [
-                "non-titanic-models",
-                "terrain-le-4"
               ]
             }
           },
-          {
-            "type": "move-modifier",
-            "target": "this-model",
-            "modifier": {
-              "applies_to_moves": [
-                "normal",
-                "advance",
-                "fall-back"
-              ],
-              "passthrough": [
-                "models"
-              ],
-              "no_end_in_engagement": true
-            }
-          },
-          {
-            "type": "move-modifier",
-            "target": "this-model",
-            "modifier": {
-              "applies_to_moves": [
-                "normal",
-                "advance",
-                "fall-back"
-              ],
-              "passthrough": [
-                "tall-terrain"
-              ]
-            }
-          },
-          {
-            "type": "ability-part",
-            "trigger": {
-              "event": "move-ended",
-              "filter": {
-                "through": "tall-terrain"
-              }
-            },
-            "effect": {
-              "type": "dice-gated",
-              "dice": "D6",
-              "threshold": 1,
-              "comparison": "eq",
-              "on_success": {
-                "type": "state-change",
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "move-modifier",
                 "target": "this-model",
                 "modifier": {
-                  "state": "battle-shocked",
-                  "set": true
+                  "passthrough": [
+                    "non-titanic-models",
+                    "terrain-le-4"
+                  ],
+                  "applies_to_moves": [
+                    "normal",
+                    "advance",
+                    "fall-back"
+                  ]
                 }
               },
-              "on_fail": null
-            }
+              {
+                "type": "permission",
+                "target": "event-subject",
+                "modifier": {
+                  "activity": "move",
+                  "allow": true,
+                  "despite": [
+                    "engaged"
+                  ]
+                }
+              },
+              {
+                "type": "move-modifier",
+                "target": "event-subject",
+                "modifier": {
+                  "no_end_in_engagement": true,
+                  "applies_to_moves": [
+                    "normal",
+                    "advance",
+                    "fall-back"
+                  ]
+                }
+              },
+              {
+                "type": "move-modifier",
+                "target": "event-subject",
+                "modifier": {
+                  "passthrough": [
+                    "tall-terrain"
+                  ]
+                }
+              }
+            ]
           }
-        ]
-      }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "move-ended",
+            "filter": {
+              "through": "tall-terrain"
+            }
+          },
+          "effect": {
+            "type": "dice-table",
+            "dice": "D6",
+            "outcomes": [
+              {
+                "results": [
+                  1
+                ],
+                "effect": {
+                  "type": "state-change",
+                  "target": "this-unit",
+                  "modifier": {
+                    "state": "battle-shocked",
+                    "set": true
+                  }
+                }
+              },
+              {
+                "results": [
+                  2,
+                  3,
+                  4,
+                  5,
+                  6
+                ],
+                "effect": {
+                  "type": "no-effect"
+                }
+              }
+            ]
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -2040,7 +2238,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "bba9e9e607b09b6f5bbd3b3f6a0bb493ef363a80bfbe95802333280e1d376ed0",
     "version": "2025-q3",
@@ -2051,7 +2249,7 @@
     "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
-    "behavior": "reactive",
+    "behavior": "passive",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -2066,6 +2264,7 @@
           {
             "type": "strength",
             "parameters": {
+              "subject": "defender",
               "below": "starting"
             }
           }
@@ -2088,6 +2287,7 @@
             "condition": {
               "type": "strength",
               "parameters": {
+                "subject": "defender",
                 "below": "half"
               }
             },
@@ -2106,12 +2306,6 @@
     },
     "scope": {
       "duration": "permanent"
-    },
-    "trigger": {
-      "event": "before-roll",
-      "filter": {
-        "roll": "hit"
-      }
     }
   },
   {
@@ -2120,7 +2314,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "c314ad97a700d7928fef16f95d69320a008a247c5d250ae0e1882acb58a5fc26",
     "version": "2025-q3",
@@ -2131,7 +2325,7 @@
     "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -2154,12 +2348,27 @@
             }
           },
           {
-            "type": "move-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "passthrough": [
-                "all-terrain"
-              ]
+            "type": "ability-part",
+            "trigger": {
+              "event": "move-ended",
+              "filter": {
+                "move_types": [
+                  "normal",
+                  "advance",
+                  "fall-back",
+                  "charge"
+                ]
+              }
+            },
+            "effect": {
+              "type": "move-modifier",
+              "target": "event-subject",
+              "modifier": {
+                "passthrough": [
+                  "all-terrain"
+                ],
+                "ignore_vertical": true
+              }
             }
           }
         ]
@@ -2175,7 +2384,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "5ffdd8e33c57c0285d51225e0b73418b82bbcf9464e37b4aa96fb969421f8caf",
     "version": "2025-q3",
@@ -2204,15 +2413,27 @@
             "target": "this-unit",
             "modifier": {
               "roll": "advance",
-              "subset": "all-failures"
+              "result_scope": "any-result"
             }
           },
           {
-            "type": "re-roll",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "surge",
-              "subset": "all-failures"
+            "type": "ability-part",
+            "trigger": {
+              "event": "move-started",
+              "filter": {
+                "move_types": [
+                  "surge"
+                ]
+              },
+              "optional": true
+            },
+            "effect": {
+              "type": "re-roll",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "surge",
+                "result_scope": "any-result"
+              }
             }
           }
         ]
@@ -2220,14 +2441,6 @@
     },
     "scope": {
       "duration": "permanent"
-    },
-    "trigger": {
-      "event": "before-roll",
-      "subject": "this-model",
-      "filter": {
-        "roll": "advance"
-      },
-      "optional": true
     }
   },
   {
@@ -2236,7 +2449,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "e9296df876d1b927b4c120f13d0770d3fd58deb3d2dda29eaa105fa73e3b1b7b",
     "version": "2025-q3",
@@ -2247,9 +2460,9 @@
     "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "rules-bundle",
+      "type": "sequence",
       "steps": [
         {
           "type": "conditional",
@@ -2265,12 +2478,12 @@
               {
                 "type": "matches",
                 "parameters": {
+                  "subject": "defender",
                   "filter": {
                     "all_of": [
                       "CHARACTER"
                     ]
-                  },
-                  "subject": "defender"
+                  }
                 }
               }
             ]
@@ -2283,10 +2496,7 @@
                 "target": "this-model",
                 "modifier": {
                   "roll": "hit",
-                  "subset": "all-failures",
-                  "weapons": {
-                    "type": "melee"
-                  }
+                  "result_scope": "any-result"
                 }
               },
               {
@@ -2294,10 +2504,7 @@
                 "target": "this-model",
                 "modifier": {
                   "roll": "wound",
-                  "subset": "all-failures",
-                  "weapons": {
-                    "type": "melee"
-                  }
+                  "result_scope": "any-result"
                 }
               }
             ]
@@ -2314,13 +2521,11 @@
               ],
               "level": "model"
             },
-            "filter": {
-              "by": "this-unit"
-            }
+            "subject": "this-unit"
           },
           "effect": {
             "type": "cp-gain",
-            "target": "this-unit",
+            "target": "this-model",
             "modifier": {
               "amount": 1
             }
@@ -2338,9 +2543,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "492d617963fadec7a53ee03fa168030a5cdd4a1ee6db6983446a2b464fa01951",
+    "source_digest": "d31e6bedebb92536fa04f0bf839e552a1bf3bbe9bf287d1910954ad9516213dd",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [
@@ -2356,22 +2561,41 @@
         "operator": "and",
         "operands": [
           {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "movement"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "opponent-turn"
+                }
+              }
+            ]
           },
           {
-            "type": "player-turn-is",
+            "type": "matches",
             "parameters": {
-              "turn": "opponent-turn"
+              "subject": "event-subject",
+              "filter": {
+                "within": {
+                  "of": "this-model",
+                  "range": {
+                    "inches": 8
+                  }
+                }
+              }
             }
           }
         ]
       },
       "effect": {
         "type": "permission",
-        "target": "this-model",
+        "target": "this-unit",
         "modifier": {
           "activity": "disembark",
           "allow": true
@@ -2386,20 +2610,10 @@
         "event": "set-up",
         "subject": {
           "owner": "enemy"
-        },
-        "proximity": {
-          "of": "this-model",
-          "range": {
-            "inches": 9
-          }
-        },
-        "optional": true
+        }
       },
       {
         "event": "move-ended",
-        "subject": {
-          "owner": "enemy"
-        },
         "filter": {
           "move_types": [
             "normal",
@@ -2407,13 +2621,9 @@
             "fall-back"
           ]
         },
-        "proximity": {
-          "of": "this-model",
-          "range": {
-            "inches": 9
-          }
-        },
-        "optional": true
+        "subject": {
+          "owner": "enemy"
+        }
       }
     ]
   },
@@ -2537,7 +2747,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "d79a98cdd2bc69050d17374ae744497fe83252aeb7601d4352a08fa443048bdf",
     "version": "2025-q3",
@@ -2553,12 +2763,20 @@
       "type": "select-units",
       "selector": {
         "filter": {
-          "owner": "enemy",
-          "engaged_with": "this-model"
+          "owner": "enemy"
         },
         "count": {
           "min": 1,
           "max": 1
+        },
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "subject": "selected-unit",
+            "filter": {
+              "engaged_with": "this-model"
+            }
+          }
         }
       },
       "effect": {
@@ -2726,7 +2944,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "c2d62596750ea6106a7f7700c2f77722be0b65667df4c94d3f345ffac51f587e",
     "version": "2025-q3",
@@ -2741,26 +2959,35 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
-            "within": {
-              "range": {
-                "inches": 12
-              },
-              "of": {
-                "owner": "friendly",
-                "all_of": [
-                  "WORLD EATERS"
-                ]
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "event-subject",
+              "filter": {
+                "within": {
+                  "of": "this-model",
+                  "range": {
+                    "inches": 12
+                  }
+                }
               }
             }
           }
-        }
+        ]
       },
       "effect": {
         "type": "cost-modifier",
-        "target": "event-object",
+        "target": "this-unit",
         "modifier": {
           "of": "stratagem",
           "operation": "decrease",
@@ -2770,29 +2997,24 @@
       }
     },
     "scope": {
-      "duration": "battle-round"
+      "duration": "permanent"
     },
     "trigger": {
-      "event": "targets-selected",
-      "subject": {
-        "owner": "friendly"
+      "event": "used",
+      "filter": {
+        "kind": "stratagem"
       },
-      "object": {
+      "subject": {
         "owner": "friendly",
         "all_of": [
           "WORLD EATERS"
         ]
       },
-      "filter": {
-        "kind": "stratagem"
-      },
-      "proximity": {
-        "of": "this-model",
-        "range": {
-          "inches": 12
-        }
-      },
       "optional": true
+    },
+    "usage": {
+      "frequency": "once-per-battle-round",
+      "per": "army"
     }
   },
   {
@@ -3161,7 +3383,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "f9bde73efd0a714dcd7de4cc30859c409e0535d9dfd87fc10c4a8034837ec282",
     "version": "2025-q3",
@@ -3192,14 +3414,14 @@
           "type": "weapon-ability-grant",
           "target": "this-model",
           "modifier": {
-            "weapons": {
-              "type": "melee"
-            },
             "keywords": [
               {
                 "keyword_id": "devastating-wounds"
               }
-            ]
+            ],
+            "weapons": {
+              "type": "melee"
+            }
           }
         }
       ]
@@ -3216,6 +3438,11 @@
         }
       },
       "optional": true
+    },
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "unit"
     }
   },
   {
@@ -3284,70 +3511,35 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "d52aae4b757dac0937de0dd8f0220f16b6aac000075fbec9f3deb0422c9a15c3",
+    "source_digest": "4f1190ef24c1fa426a48a70cf14a5fc92607f59ffe3a720709d5083036805c60",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "world-eaters",
     "detachment_id": "berzerker-warband",
     "ability_type": "detachment",
-    "behavior": "reactive",
+    "behavior": "passive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "happened",
-        "parameters": {
-          "event": "move-ended",
-          "filter": {
-            "move_types": [
-              "charge"
-            ]
-          },
-          "window": "turn"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "stat-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "stat": "A",
-              "operation": "add",
-              "value": 1,
-              "weapons": {
-                "type": "melee"
-              }
-            }
-          },
-          {
-            "type": "stat-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "stat": "S",
-              "operation": "add",
-              "value": 2,
-              "weapons": {
-                "type": "melee"
-              }
-            }
-          }
+      "type": "stat-modifier",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "WORLD EATERS"
         ]
+      },
+      "modifier": {
+        "stat": "A",
+        "operation": "improve",
+        "value": 1,
+        "weapons": {
+          "type": "melee"
+        }
       }
     },
     "scope": {
-      "duration": "turn"
-    },
-    "trigger": {
-      "event": "move-ended",
-      "filter": {
-        "move_types": [
-          "charge"
-        ]
-      }
+      "duration": "permanent"
     }
   },
   {
@@ -3707,7 +3899,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "0366d97bbe14dac0727c0dcf4500974ce036c599be2aa15e4237c7a5730e5952",
     "version": "2025-q3",
@@ -3716,42 +3908,24 @@
     "faction_id": "world-eaters",
     "detachment_id": "khorne-daemonkin",
     "ability_type": "detachment",
-    "behavior": "reactive",
+    "behavior": "passive",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "resource-spend",
-          "target": "this-model",
-          "modifier": {
-            "pool": "blood-tithe-pool",
-            "amount": 2
-          }
-        },
-        {
-          "type": "feel-no-pain",
-          "target": {
-            "owner": "friendly"
-          },
-          "modifier": {
-            "threshold": 5,
-            "against": "psychic-and-mortal"
-          }
-        }
-      ]
+      "type": "feel-no-pain",
+      "target": {
+        "owner": "friendly",
+        "any_of": [
+          "BLOOD LEGIONS",
+          "WORLD EATERS"
+        ],
+        "level": "model"
+      },
+      "modifier": {
+        "threshold": 5,
+        "against": "psychic-and-mortal"
+      }
     },
     "scope": {
-      "duration": "battle"
-    },
-    "trigger": {
-      "event": "phase-started",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "command"
-        }
-      },
-      "optional": true
+      "duration": "permanent"
     },
     "community_notes": "[APPROX] Applies to BLOOD LEGIONS and WORLD EATERS models only; modeled as all friendly units (keyword-OR gate not expressible). Blood Tithe spend (2 BTP): the start-of-Command-phase activation timing and until-end-of-battle duration come from the parent Blood Tithe rule ('At the start of the Command phase, you can spend... to activate one of the following abilities until the end of the battle'), not from this option's own text."
   },
@@ -3761,7 +3935,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "07bf686158a235168d4b7f3e569e87344fd72088c299aad51daad295343d8d75",
     "version": "2025-q3",
@@ -3770,48 +3944,28 @@
     "faction_id": "world-eaters",
     "detachment_id": "khorne-daemonkin",
     "ability_type": "detachment",
-    "behavior": "reactive",
+    "behavior": "passive",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "resource-spend",
-          "target": "this-model",
-          "modifier": {
-            "pool": "blood-tithe-pool",
-            "amount": 3
+      "type": "weapon-ability-grant",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "BLOOD LEGIONS"
+        ]
+      },
+      "modifier": {
+        "keywords": [
+          {
+            "keyword_id": "lance"
           }
-        },
-        {
-          "type": "weapon-ability-grant",
-          "target": {
-            "owner": "friendly"
-          },
-          "modifier": {
-            "weapons": {
-              "type": "melee"
-            },
-            "keywords": [
-              {
-                "keyword_id": "lance"
-              }
-            ]
-          }
+        ],
+        "weapons": {
+          "type": "melee"
         }
-      ]
+      }
     },
     "scope": {
-      "duration": "battle"
-    },
-    "trigger": {
-      "event": "phase-started",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "command"
-        }
-      },
-      "optional": true
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -3826,7 +3980,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "dced2d3cc5756bb7b7ade58ead202dd14973947cb07351b17223e71113a5d064",
     "version": "2025-q3",
@@ -3835,41 +3989,21 @@
     "faction_id": "world-eaters",
     "detachment_id": "khorne-daemonkin",
     "ability_type": "detachment",
-    "behavior": "reactive",
+    "behavior": "passive",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "resource-spend",
-          "target": "this-model",
-          "modifier": {
-            "pool": "blood-tithe-pool",
-            "amount": 4
-          }
-        },
-        {
-          "type": "invulnerable-save",
-          "target": {
-            "owner": "friendly"
-          },
-          "modifier": {
-            "invuln_sv": 4
-          }
-        }
-      ]
+      "type": "invulnerable-save",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "BLOOD LEGIONS"
+        ]
+      },
+      "modifier": {
+        "invuln_sv": 4
+      }
     },
     "scope": {
-      "duration": "battle"
-    },
-    "trigger": {
-      "event": "phase-started",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "command"
-        }
-      },
-      "optional": true
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -3884,7 +4018,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "85b819ef55d5a01fa4e295c28866700e94d2c684bbc0a8cd02ebe460ac5e4712",
     "version": "2025-q3",
@@ -3893,43 +4027,21 @@
     "faction_id": "world-eaters",
     "detachment_id": "khorne-daemonkin",
     "ability_type": "detachment",
-    "behavior": "reactive",
+    "behavior": "passive",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "resource-spend",
-          "target": "this-model",
-          "modifier": {
-            "pool": "blood-tithe-pool",
-            "amount": 5
-          }
-        },
-        {
-          "type": "rule-state",
-          "target": {
-            "owner": "friendly"
-          },
-          "modifier": {
-            "direction": "granted",
-            "rule_kind": "faction-rule",
-            "rule": "blessings-of-khorne-world-eaters"
-          }
-        }
-      ]
+      "type": "ability-grant",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "BLOOD LEGIONS"
+        ]
+      },
+      "modifier": {
+        "ability": "blessings-of-khorne-world-eaters"
+      }
     },
     "scope": {
-      "duration": "battle"
-    },
-    "trigger": {
-      "event": "phase-started",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "command"
-        }
-      },
-      "optional": true
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -4435,7 +4547,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "8573fecad6632f61a22ae2887f97edb7bd139b1d7e3fb0510605727477aa3b66",
     "version": "2025-q3",
@@ -4446,10 +4558,12 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "damage-reduction",
-      "target": "this-model",
+      "type": "stat-modifier",
+      "target": "attacker",
       "modifier": {
-        "reduction": 1
+        "stat": "D",
+        "operation": "subtract",
+        "value": 1
       }
     },
     "scope": {
@@ -4580,7 +4694,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "6e135e51019cbb63fa6fa1e7d23ae5b4ca4612af12e47a271c1e1fbf00247468",
     "version": "2025-q3",
@@ -4591,17 +4705,19 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "aura",
-      "target": "friendly-within-aura",
+      "type": "ability-modifier",
+      "target": "this-model",
       "modifier": {
-        "of": "aura",
-        "range_bonus": {
-          "inches": 3
-        }
+        "ability": {
+          "keyword": "AURA"
+        },
+        "aspect": "range",
+        "operation": "add",
+        "value": 3
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -4616,9 +4732,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "8d61618b81ba8c88bfaec50f501c5feb483c0124a8b7becfb5d0e210d88a1fbf",
+    "source_digest": "f8d4c8c081bb8f285484c9262dbf1f1ffec58af2f721e1f79929151b10dd626e",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -4627,41 +4743,14 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "army-rule",
-          "target": "this-model",
-          "modifier": {
-            "rule": "attachment"
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "attachment",
-            "parameters": {
-              "subject": "this-model",
-              "role": "leading",
-              "with": {
-                "all_of": [
-                  "GOREMONGERS"
-                ]
-              }
-            }
-          },
-          "effect": {
-            "type": "ability-grant",
-            "target": "this-model",
-            "modifier": {
-              "ability": "infiltrators"
-            }
-          }
-        }
-      ]
+      "type": "ability-grant",
+      "target": "this-model",
+      "modifier": {
+        "ability": "infiltrators"
+      }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -4724,7 +4813,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "23630d265a0a294f259bb903e5113e1c28cd5c75c8c7fa30c252eab8b331f237",
     "version": "2025-q3",
@@ -4735,29 +4824,54 @@
     "ability_type": "enhancement",
     "behavior": "reactive",
     "effect": {
-      "type": "select-units",
-      "selector": {
-        "filter": {
-          "owner": "friendly",
-          "all_of": [
-            "Jakhals or Goremongers"
-          ]
-        },
-        "count": {
-          "min": 0,
-          "max": 3
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
         }
       },
       "effect": {
-        "type": "set-up",
-        "target": "selected-unit",
-        "modifier": {
-          "to": "strategic-reserves"
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "friendly",
+            "any_of": [
+              "GOREMONGERS",
+              "JAKHALS"
+            ]
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "set-up",
+              "target": "selected-unit",
+              "modifier": {
+                "to": "battlefield"
+              }
+            },
+            {
+              "type": "set-up",
+              "target": "selected-unit",
+              "modifier": {
+                "to": "strategic-reserves",
+                "ignore_limits": true
+              }
+            }
+          ]
         }
       }
     },
     "scope": {
-      "duration": "one-use"
+      "duration": "permanent"
     },
     "community_notes": "After both players deploy, redeploy up to three JAKHALS and/or GOREMONGERS units; they may be set up in Strategic Reserves regardless of Reserves limits.",
     "applies_to": {
@@ -4766,7 +4880,8 @@
       ]
     },
     "trigger": {
-      "event": "deployment-ended"
+      "event": "deployment-ended",
+      "optional": true
     }
   },
   {
@@ -4775,7 +4890,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "0d8205db7b11b7730fca67bc3197abb0fc869ea72e3577ed99a761680b31a05b",
     "version": "2025-q3",
@@ -4795,12 +4910,18 @@
         }
       },
       "effect": {
-        "type": "rule-state",
-        "target": "this-unit",
+        "type": "targeting",
+        "target": {
+          "owner": "enemy"
+        },
         "modifier": {
-          "direction": "suppressed",
-          "rule_kind": "core-rule",
-          "rule": "overwatch-against-bearer"
+          "by": {
+            "owner": "enemy"
+          },
+          "may": "cannot-target",
+          "kind": "stratagem",
+          "target": "this-unit",
+          "stratagem": "fire-overwatch"
         }
       }
     },
@@ -4814,7 +4935,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "d7974d52385373bed397b3c667d3513a0a531e0c916ae8785d16ff85e1d8e318",
     "version": "2025-q3",
@@ -4827,22 +4948,33 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
-            "state": "embarked"
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-model",
+              "filter": {
+                "state": "embarked"
+              }
+            }
           },
-          "subject": "this-model"
-        }
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "bearer-transport",
+              "filter": {
+                "all_of": [
+                  "DEDICATED TRANSPORT"
+                ]
+              }
+            }
+          }
+        ]
       },
       "effect": {
         "type": "ability-grant",
-        "target": {
-          "owner": "friendly",
-          "all_of": [
-            "DEDICATED TRANSPORT"
-          ]
-        },
+        "target": "bearer-transport",
         "modifier": {
           "ability": "scouts",
           "value": 9
@@ -4850,7 +4982,7 @@
       }
     },
     "scope": {
-      "duration": "one-use"
+      "duration": "permanent"
     },
     "trigger": {
       "event": "battle-formations-declared"
@@ -4969,7 +5101,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "b032958585c35b516ce999149cab90f44e84770df3cfd0d81b504348a6bf060a",
     "version": "2025-q3",
@@ -4991,7 +5123,8 @@
     },
     "usage": {
       "frequency": "n-per-battle",
-      "count": 1
+      "count": 1,
+      "per": "model"
     },
     "applies_to": {
       "all_of": [
@@ -5005,7 +5138,8 @@
         "parameters": {
           "phase": "fight"
         }
-      }
+      },
+      "optional": true
     }
   },
   {
@@ -5153,9 +5287,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "fe6df8fbc0f7893e2e3c387a3fe90c9b72284e9fe6d11e0bbf6fb9f95d0152e4",
+    "source_digest": "517b7927426a4d88d15f181952847602ab48da13f9a71ac15492d1bbd3a2384b",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -5167,47 +5301,31 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "army-rule",
+          "type": "ability-grant",
           "target": "this-model",
           "modifier": {
-            "rule": "attachment"
+            "ability": "deep-strike",
+            "value": {
+              "rating": true
+            }
           }
         },
         {
-          "type": "conditional",
-          "condition": {
-            "type": "attachment",
-            "parameters": {
-              "subject": "this-model",
-              "role": "leading"
-            }
-          },
-          "effect": {
-            "type": "sequence",
-            "steps": [
-              {
-                "type": "ability-grant",
-                "target": "this-model",
-                "modifier": {
-                  "ability": "deep-strike"
-                }
-              },
-              {
-                "type": "keyword-grant",
-                "target": "this-model",
-                "modifier": {
-                  "keywords": [
-                    "BLOOD LEGIONS"
-                  ]
-                }
-              }
+          "type": "keyword-grant",
+          "target": "this-model",
+          "modifier": {
+            "keywords": [
+              "BLOOD LEGIONS"
+            ],
+            "replaces": [
+              "WORLD EATERS"
             ]
           }
         }
       ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -5222,7 +5340,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "76ffaf5d5e171dde263bc2a2bddf46eff824c029dd8ceea84ba49e858094ee0d",
     "version": "2025-q3",
@@ -5231,63 +5349,77 @@
     "faction_id": "world-eaters",
     "detachment_id": "khorne-daemonkin",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "sequence",
       "steps": [
         {
-          "type": "stat-modifier",
-          "target": "this-model",
-          "modifier": {
-            "stat": "A",
-            "operation": "add",
-            "value": 1,
-            "weapons": {
-              "type": "melee"
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "stat-modifier",
+              "target": "this-model",
+              "modifier": {
+                "stat": "A",
+                "operation": "add",
+                "value": 1,
+                "weapons": {
+                  "type": "melee"
+                }
+              }
+            },
+            {
+              "type": "stat-modifier",
+              "target": "this-model",
+              "modifier": {
+                "stat": "S",
+                "operation": "add",
+                "value": 1,
+                "weapons": {
+                  "type": "melee"
+                }
+              }
+            },
+            {
+              "type": "stat-modifier",
+              "target": "this-model",
+              "modifier": {
+                "stat": "D",
+                "operation": "add",
+                "value": 1,
+                "weapons": {
+                  "type": "melee"
+                }
+              }
             }
-          }
-        },
-        {
-          "type": "stat-modifier",
-          "target": "this-model",
-          "modifier": {
-            "stat": "S",
-            "operation": "add",
-            "value": 1,
-            "weapons": {
-              "type": "melee"
-            }
-          }
-        },
-        {
-          "type": "stat-modifier",
-          "target": "this-model",
-          "modifier": {
-            "stat": "D",
-            "operation": "add",
-            "value": 1,
-            "weapons": {
-              "type": "melee"
-            }
-          }
+          ]
         },
         {
           "type": "ability-part",
           "trigger": {
             "event": "destroyed",
+            "subject": "this-unit",
             "object": {
               "owner": "enemy"
-            },
-            "filter": {
-              "attack_type": "melee"
             }
           },
           "effect": {
-            "type": "resource-gain",
-            "target": "this-model",
-            "modifier": {
-              "pool": "blood-tithe-pool",
-              "amount": 1
+            "type": "conditional",
+            "condition": {
+              "type": "attack-is",
+              "parameters": {
+                "attack_type": "melee"
+              }
+            },
+            "effect": {
+              "type": "roll-result",
+              "target": "this-unit",
+              "modifier": {
+                "roll": {
+                  "of_ability": "blood-tithe-world-eaters"
+                },
+                "result": "pass"
+              }
             }
           }
         }
@@ -5309,7 +5441,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "4a3aa69c0747ce25d81fbaf1a95431363d54167aae0e1ca894edd057ad95233c",
     "version": "2025-q3",
@@ -5318,28 +5450,13 @@
     "faction_id": "world-eaters",
     "detachment_id": "possessed-slaughterband",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "happened",
-        "parameters": {
-          "event": "used",
-          "subject": "this-unit",
-          "filter": {
-            "kind": "ability",
-            "id": "brazen-fury-world-eaters"
-          },
-          "window": "event"
-        }
-      },
-      "effect": {
-        "type": "roll-result",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "surge",
-          "result": 6
-        }
+      "type": "roll-result",
+      "target": "this-unit",
+      "modifier": {
+        "roll": "surge",
+        "result": 6
       }
     },
     "scope": {
@@ -5350,7 +5467,14 @@
         "SLAUGHTERBOUND"
       ]
     },
-    "community_notes": "Each Brazen Fury move made by the bearer's unit counts as having rolled a 6 for its distance."
+    "community_notes": "Each Brazen Fury move made by the bearer's unit counts as having rolled a 6 for its distance.",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "ability",
+        "id": "brazen-fury-world-eaters"
+      }
+    }
   },
   {
     "ability_id": "killing-clarity-possessed-slaughterband-world-eaters",
@@ -5358,7 +5482,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "64b0c212bb4dce99d71485f5287799458c22c794b40719f88fb1a13c4dfd318f",
     "version": "2025-q3",
@@ -5387,7 +5511,10 @@
     },
     "trigger": {
       "event": "destroyed",
-      "object": "this-model"
+      "subject": "this-unit",
+      "object": {
+        "owner": "enemy"
+      }
     }
   },
   {
@@ -5476,7 +5603,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "11a50a011edfe800bef95786831da8f8a9d28414fa61f250baeca9e2c332bdc2",
     "version": "2025-q3",
@@ -5506,63 +5633,23 @@
         ]
       },
       "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "ability-activate",
-            "target": "this-unit",
-            "modifier": {
-              "ability": "blessings-of-khorne-world-eaters",
-              "option": "option-1"
-            }
-          },
-          {
-            "type": "ability-activate",
-            "target": "this-unit",
-            "modifier": {
-              "ability": "blessings-of-khorne-world-eaters",
-              "option": "option-2"
-            }
-          },
-          {
-            "type": "ability-activate",
-            "target": "this-unit",
-            "modifier": {
-              "ability": "blessings-of-khorne-world-eaters",
-              "option": "option-3"
-            }
-          },
-          {
-            "type": "ability-activate",
-            "target": "this-unit",
-            "modifier": {
-              "ability": "blessings-of-khorne-world-eaters",
-              "option": "option-4"
-            }
-          },
-          {
-            "type": "ability-activate",
-            "target": "this-unit",
-            "modifier": {
-              "ability": "blessings-of-khorne-world-eaters",
-              "option": "option-5"
-            }
-          },
-          {
-            "type": "ability-activate",
-            "target": "this-unit",
-            "modifier": {
-              "ability": "blessings-of-khorne-world-eaters",
-              "option": "option-6"
-            }
-          }
-        ]
+        "type": "ability-activate",
+        "target": "this-unit",
+        "modifier": {
+          "ability": "blessings-of-khorne-world-eaters",
+          "all_options": true
+        }
       }
     },
     "scope": {
-      "duration": "until-next-command-phase"
+      "duration": "until-start-next-turn"
     },
-    "community_notes": "WORLD EATERS model only. Once per battle, per army, in your Command phase: every Blessing of Khorne is active for this unit until the start of your next turn."
+    "community_notes": "WORLD EATERS model only. Once per battle, per army, in your Command phase: every Blessing of Khorne is active for this unit until the start of your next turn.",
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "army"
+    }
   },
   {
     "ability_id": "gateways-to-glory-vessels-of-wrath-world-eaters",
@@ -5620,7 +5707,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "aaad5e5d910aa4538fed5cc391f895d643787dd4c33c30da419717a66ef97be9",
     "version": "2025-q3",
@@ -5631,23 +5718,14 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
-        }
-      },
-      "effect": {
-        "type": "stat-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "stat": "AP",
-          "operation": "improve",
-          "value": 1,
-          "weapons": {
-            "type": "melee"
-          }
+      "type": "stat-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "stat": "AP",
+        "operation": "improve",
+        "value": 1,
+        "weapons": {
+          "type": "melee"
         }
       }
     },
@@ -5667,7 +5745,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "00df2449c4f196447db1f15e5787bac86474994cbb043c85cf6b6c337145a92e",
     "version": "2025-q3",
@@ -5676,14 +5754,11 @@
     "faction_id": "world-eaters",
     "detachment_id": "berzerker-warband",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
-        }
+      "type": "ability-part",
+      "trigger": {
+        "event": "damage-allocated"
       },
       "effect": {
         "type": "damage-reduction",
@@ -5696,7 +5771,17 @@
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "reactive: used just after an enemy unit selects your unit as a target in the Fight phase"
+    "community_notes": "reactive: used just after an enemy unit selects your unit as a target in the Fight phase",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
+    }
   },
   {
     "ability_id": "blood-offering-berzerker-warband-world-eaters",
@@ -5954,7 +6039,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "0882bf1e8feb7bdcffc7e33136d6bac973fbf7339f7eec5504f8f62339e2af66",
     "version": "2025-q3",
@@ -5965,67 +6050,58 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
-            "any_of": [
-              "MONSTER",
-              "TITANIC"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "use-stratagem",
+            "allow": true,
+            "despite": [
+              "destroyed"
             ]
           }
-        }
-      },
-      "effect": {
-        "type": "designate-target",
-        "designation": "bloody-vengeance",
-        "select": {
-          "kind": "unit",
-          "selector": {
-            "filter": {
-              "owner": "enemy"
-            },
-            "count": {
-              "min": 1,
-              "max": 1
-            }
-          }
         },
-        "applies": {
-          "to": "attackers-of-target",
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "happened",
+            "parameters": {
+              "event": "destroyed",
+              "object": "stratagem-target",
+              "filter": {
+                "by": "defender"
+              },
+              "window": "battle"
+            }
+          },
           "effect": {
-            "type": "conditional",
-            "condition": {
-              "type": "matches",
-              "parameters": {
-                "filter": {
-                  "any_of": [
-                    "JAKHALS",
-                    "GOREMONGERS"
-                  ]
-                }
-              }
+            "type": "re-roll",
+            "target": {
+              "owner": "friendly",
+              "any_of": [
+                "GOREMONGERS",
+                "JAKHALS"
+              ]
             },
-            "effect": {
-              "type": "re-roll",
-              "target": "this-unit",
-              "modifier": {
-                "roll": "hit",
-                "subset": "all-failures"
-              }
+            "modifier": {
+              "roll": "hit",
+              "result_scope": "any-result"
             }
           }
-        },
-        "duration": "battle"
-      }
+        }
+      ]
     },
     "scope": {
       "duration": "battle"
     },
     "community_notes": "[APPROX] The marked unit must be the enemy unit that just destroyed your MONSTER/TITANIC (modeled as selecting one enemy unit).",
     "trigger": {
-      "event": "destroyed"
+      "event": "destroyed",
+      "subject": {
+        "owner": "enemy"
+      }
     }
   },
   {
@@ -6128,7 +6204,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "bf3f8dd6d7cc217b115f0a67b40f96d3f4a35826842fe3ad2dcb9ee2eadf8ae2",
     "version": "2025-q3",
@@ -6137,35 +6213,87 @@
     "faction_id": "world-eaters",
     "detachment_id": "cult-of-blood",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "sequence",
       "steps": [
         {
-          "type": "feel-no-pain",
-          "target": "this-unit",
-          "modifier": {
-            "threshold": 6
+          "type": "conditional",
+          "condition": {
+            "operator": "not",
+            "operands": [
+              {
+                "operator": "or",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "filter": {
+                        "within": {
+                          "of": {
+                            "owner": "friendly",
+                            "all_of": [
+                              "MONSTER",
+                              "WORLD EATERS"
+                            ]
+                          },
+                          "range": {
+                            "inches": 6
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "filter": {
+                        "within": {
+                          "of": {
+                            "owner": "friendly",
+                            "all_of": [
+                              "TITANIC",
+                              "WORLD EATERS"
+                            ]
+                          },
+                          "range": {
+                            "inches": 9
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "effect": {
+            "type": "feel-no-pain",
+            "target": "this-unit",
+            "modifier": {
+              "threshold": 6
+            }
           }
         },
         {
           "type": "conditional",
           "condition": {
-            "operator": "and",
+            "operator": "or",
             "operands": [
               {
                 "type": "matches",
                 "parameters": {
                   "filter": {
                     "within": {
-                      "range": {
-                        "inches": 6
-                      },
                       "of": {
                         "owner": "friendly",
                         "all_of": [
+                          "MONSTER",
                           "WORLD EATERS"
                         ]
+                      },
+                      "range": {
+                        "inches": 6
                       }
                     }
                   }
@@ -6176,14 +6304,15 @@
                 "parameters": {
                   "filter": {
                     "within": {
-                      "range": {
-                        "inches": 6
-                      },
                       "of": {
                         "owner": "friendly",
                         "all_of": [
-                          "MONSTER"
+                          "TITANIC",
+                          "WORLD EATERS"
                         ]
+                      },
+                      "range": {
+                        "inches": 9
                       }
                     }
                   }
@@ -6209,7 +6338,17 @@
         "JAKHALS"
       ]
     },
-    "community_notes": "[APPROX] the 5+ also applies within 9\" of a friendly WORLD EATERS TITANIC unit; usable in your opponent's Shooting phase or the Fight phase, just after an enemy unit selects your JAKHALS or GOREMONGERS unit as a target"
+    "community_notes": "[APPROX] the 5+ also applies within 9\" of a friendly WORLD EATERS TITANIC unit; usable in your opponent's Shooting phase or the Fight phase, just after an enemy unit selects your JAKHALS or GOREMONGERS unit as a target",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
+    }
   },
   {
     "ability_id": "fail-not-the-blood-god-cult-of-blood-world-eaters",
@@ -6217,7 +6356,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "037a9e60ebc56c262b3358d866d1c3fae6333106c96344ef33f70cdb0ce3962d",
     "version": "2025-q3",
@@ -6228,61 +6367,122 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "not",
+            "operands": [
+              {
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "filter": {
+                        "within": {
+                          "of": {
+                            "owner": "friendly",
+                            "all_of": [
+                              "MONSTER",
+                              "WORLD EATERS"
+                            ]
+                          },
+                          "range": {
+                            "inches": 6
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "filter": {
+                        "within": {
+                          "of": {
+                            "owner": "friendly",
+                            "all_of": [
+                              "TITANIC",
+                              "WORLD EATERS"
+                            ]
+                          },
+                          "range": {
+                            "inches": 9
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "effect": {
             "type": "re-roll",
             "target": "this-unit",
             "modifier": {
               "roll": "hit",
-              "subset": "ones",
-              "weapons": {
-                "type": "melee"
-              }
+              "subset": "ones"
             }
-          },
-          {
-            "type": "conditional",
-            "condition": {
-              "type": "matches",
-              "parameters": {
-                "filter": {
-                  "within": {
-                    "range": {
-                      "inches": 6
-                    },
-                    "of": {
-                      "owner": "friendly",
-                      "all_of": [
-                        "MONSTER"
-                      ]
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "within": {
+                      "of": {
+                        "owner": "friendly",
+                        "all_of": [
+                          "MONSTER",
+                          "WORLD EATERS"
+                        ]
+                      },
+                      "range": {
+                        "inches": 6
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "within": {
+                      "of": {
+                        "owner": "friendly",
+                        "all_of": [
+                          "TITANIC",
+                          "WORLD EATERS"
+                        ]
+                      },
+                      "range": {
+                        "inches": 9
+                      }
                     }
                   }
                 }
               }
-            },
-            "effect": {
-              "type": "re-roll",
-              "target": "this-unit",
-              "modifier": {
-                "roll": "wound",
-                "subset": "ones",
-                "weapons": {
-                  "type": "melee"
-                }
-              }
+            ]
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "result_scope": "any-result"
             }
           }
-        ]
-      }
+        }
+      ]
     },
     "scope": {
       "duration": "phase"
@@ -6332,7 +6532,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "cb224314a7911a86da6c2d7f9e3ecbd0dd31c76c67801045ab7b38ed99feffa3",
     "version": "2025-q3",
@@ -6341,37 +6541,44 @@
     "faction_id": "world-eaters",
     "detachment_id": "goretrack-onslaught",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
       "condition": {
         "type": "matches",
         "parameters": {
+          "subject": {
+            "stratagem_target": "first"
+          },
           "filter": {
             "within": {
+              "of": {
+                "stratagem_target": "second"
+              },
               "range": {
                 "inches": 6
               },
-              "of": {
-                "owner": "friendly",
-                "all_of": [
-                  "TRANSPORT"
-                ]
-              }
+              "wholly": true
             }
           }
         }
       },
       "effect": {
-        "type": "move",
-        "target": "this-unit",
+        "type": "permission",
+        "target": {
+          "stratagem_target": "first"
+        },
         "modifier": {
-          "move_type": "embark"
+          "activity": "embark",
+          "allow": true,
+          "into": {
+            "stratagem_target": "second"
+          }
         }
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "trigger": {
       "event": "phase-ended",
@@ -6380,8 +6587,7 @@
         "parameters": {
           "phase": "fight"
         }
-      },
-      "optional": true
+      }
     },
     "applies_to": {
       "all_of": [
@@ -6397,7 +6603,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "49af7cc9b6aaf665576359a073245892468c823c4e6557b461f5eaf5ce393b0b",
     "version": "2025-q3",
@@ -6406,38 +6612,15 @@
     "faction_id": "world-eaters",
     "detachment_id": "goretrack-onslaught",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "your-turn"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "move-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "applies_to_moves": [
-            "normal",
-            "advance"
-          ],
-          "passthrough": [
-            "all-terrain"
-          ]
-        }
+      "type": "move-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "passthrough": [
+          "all-terrain"
+        ],
+        "ignore_vertical": true
       }
     },
     "scope": {
@@ -6448,6 +6631,15 @@
         "WORLD EATERS",
         "VEHICLE"
       ]
+    },
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "normal",
+          "advance"
+        ]
+      }
     }
   },
   {
@@ -6606,7 +6798,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "02f67791b543626adc4298fc5c9eac7d5c2d3192ea3fdba6f00fd73e6cbc79f5",
     "version": "2025-q3",
@@ -6615,37 +6807,23 @@
     "faction_id": "world-eaters",
     "detachment_id": "goretrack-onslaught",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
+        "operator": "not",
         "operands": [
-          {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "phase-is",
-                "parameters": {
-                  "phase": "shooting"
-                }
-              },
-              {
-                "type": "player-turn-is",
-                "parameters": {
-                  "turn": "opponent-turn"
-                }
-              }
-            ]
-          },
           {
             "type": "happened",
             "parameters": {
-              "event": "after-roll",
+              "event": "targets-selected",
+              "subject": {
+                "owner": "any"
+              },
               "object": "this-unit",
               "filter": {
-                "roll": "hit",
-                "result": "success"
+                "kind": "stratagem",
+                "id": "fury-unleashed-goretrack-onslaught-world-eaters"
               },
               "window": "phase"
             }
@@ -6654,7 +6832,7 @@
       },
       "effect": {
         "type": "move",
-        "target": "this-model",
+        "target": "this-unit",
         "modifier": {
           "move_type": "normal",
           "distance": 6
@@ -6662,7 +6840,7 @@
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -6670,7 +6848,16 @@
         "VEHICLE"
       ]
     },
-    "community_notes": "cannot be combined with the Fury Unleashed Stratagem in the same phase"
+    "community_notes": "cannot be combined with the Fury Unleashed Stratagem in the same phase",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "subject": {
+        "owner": "enemy"
+      }
+    }
   },
   {
     "ability_id": "fury-unleashed-goretrack-onslaught-world-eaters",
@@ -6970,56 +7157,35 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "4b8d28420297f372917542c119ce6da6e8b8932108ca94adc57b77e4ea98714d",
+    "source_digest": "159631399f19b0d796c79b1c5e942e9ceb67002596201477df290b8e10813683",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "world-eaters",
     "detachment_id": "khorne-daemonkin",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "or",
-        "operands": [
-          {
-            "type": "happened",
-            "parameters": {
-              "event": "model-destroyed",
-              "object": {
-                "owner": "enemy",
-                "all_of": [
-                  "CHARACTER"
-                ],
-                "level": "model"
-              },
-              "filter": {
-                "by": "this-unit"
-              },
-              "window": "event"
-            }
+        "type": "happened",
+        "parameters": {
+          "event": "model-destroyed",
+          "object": {
+            "owner": "enemy",
+            "any_of": [
+              "CHARACTER",
+              "MONSTER"
+            ],
+            "level": "model"
           },
-          {
-            "type": "happened",
-            "parameters": {
-              "event": "model-destroyed",
-              "object": {
-                "owner": "enemy",
-                "all_of": [
-                  "MONSTER"
-                ],
-                "level": "model"
-              },
-              "filter": {
-                "by": "this-unit"
-              },
-              "window": "event"
-            }
-          }
-        ]
+          "filter": {
+            "by": "this-unit"
+          },
+          "window": "event"
+        }
       },
       "effect": {
         "type": "sequence",
@@ -7039,6 +7205,16 @@
               "pool": "blood-tithe-pool",
               "amount": "one-or-more"
             }
+          },
+          {
+            "type": "ability-activate",
+            "target": "this-unit",
+            "modifier": {
+              "ability": "blood-tithe-world-eaters",
+              "select": {
+                "by": "player"
+              }
+            }
           }
         ]
       }
@@ -7049,13 +7225,11 @@
     "trigger": {
       "event": "attacks-resolved",
       "subject": {
-        "owner": "friendly"
-      },
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
-        }
+        "owner": "friendly",
+        "any_of": [
+          "BLOOD LEGIONS",
+          "WORLD EATERS"
+        ]
       },
       "optional": true
     },
@@ -7067,7 +7241,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "4073fc224010ab92d0359b3ec65ba8fa6cf9a0f4a9c57ffcb488bf5a0152b7cf",
     "version": "2025-q3",
@@ -7076,28 +7250,38 @@
     "faction_id": "world-eaters",
     "detachment_id": "khorne-daemonkin",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "set-up",
-      "target": "stratagem-target",
+      "target": "this-unit",
       "modifier": {
         "to": "battlefield",
-        "from": "strategic-reserves",
-        "subject": "stratagem-target",
         "min_enemy_distance": {
           "inches": 6
         },
-        "placement": "anywhere"
+        "near": [
+          {
+            "of": "event-object",
+            "range": {
+              "inches": 9
+            },
+            "wholly": true
+          }
+        ]
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "trigger": {
       "event": "destroyed",
-      "optional": true
+      "object": "event-object"
     },
-    "community_notes": "Set up a Bloodletters unit from Reserves wholly within 9\" of the destroyed model and more than 6\" from enemy units, once per battle round. Modeled with resurrection — the local blood-legions summon pattern (cf. daemontide); the Reserves origin, 9\"/>6\" placement, and once-per-battle-round limit are recorded here rather than in the effect shape."
+    "community_notes": "Set up a Bloodletters unit from Reserves wholly within 9\" of the destroyed model and more than 6\" from enemy units, once per battle round. Modeled with resurrection — the local blood-legions summon pattern (cf. daemontide); the Reserves origin, 9\"/>6\" placement, and once-per-battle-round limit are recorded here rather than in the effect shape.",
+    "usage": {
+      "frequency": "once-per-battle-round",
+      "per": "army"
+    }
   },
   {
     "ability_id": "daemontide-khorne-daemonkin-world-eaters",
@@ -7237,7 +7421,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "2a6c04eabc720eead25f7aae1d179e1849fd32c50cf4ca63919f05fab5340343",
     "version": "2025-q3",
@@ -7251,11 +7435,12 @@
       "type": "set-up",
       "target": "this-unit",
       "modifier": {
-        "to": "strategic-reserves"
+        "to": "strategic-reserves",
+        "from": "battlefield"
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -7290,7 +7475,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "21684ceede1a17975813013ed5355682c9baf145fbe708b643d5569eee5a46c0",
     "version": "2025-q3",
@@ -7301,68 +7486,122 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "conditional",
-            "condition": {
-              "type": "matches",
-              "parameters": {
-                "filter": {
-                  "all_of": [
-                    "EIGHTBOUND"
-                  ]
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "all_of": [
+                      "EIGHTBOUND"
+                    ]
+                  }
                 }
-              }
-            },
-            "effect": {
-              "type": "stat-modifier",
-              "target": "this-unit",
-              "modifier": {
-                "stat": "D",
-                "operation": "add",
-                "value": 1,
-                "weapons": {
-                  "type": "melee"
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "defender",
+                  "filter": {
+                    "none_of": [
+                      "MONSTER",
+                      "VEHICLE"
+                    ],
+                    "level": "model"
+                  }
                 }
+              },
+              {
+                "operator": "not",
+                "operands": [
+                  {
+                    "operator": "and",
+                    "operands": [
+                      {
+                        "type": "matches",
+                        "parameters": {
+                          "filter": {
+                            "all_of": [
+                              "EXALTED EIGHTBOUND"
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "type": "matches",
+                        "parameters": {
+                          "subject": "defender",
+                          "filter": {
+                            "any_of": [
+                              "MONSTER",
+                              "VEHICLE"
+                            ],
+                            "level": "model"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
               }
-            }
+            ]
           },
-          {
-            "type": "conditional",
-            "condition": {
-              "type": "matches",
-              "parameters": {
-                "filter": {
-                  "all_of": [
-                    "EXALTED EIGHTBOUND"
-                  ]
-                }
-              }
-            },
-            "effect": {
-              "type": "stat-modifier",
-              "target": "this-unit",
-              "modifier": {
-                "stat": "D",
-                "operation": "add",
-                "value": 1,
-                "weapons": {
-                  "type": "melee"
-                }
-              }
+          "effect": {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "D",
+              "operation": "add",
+              "value": 1
             }
           }
-        ]
-      }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "all_of": [
+                      "EXALTED EIGHTBOUND"
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "defender",
+                  "filter": {
+                    "any_of": [
+                      "MONSTER",
+                      "VEHICLE"
+                    ],
+                    "level": "model"
+                  }
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "D",
+              "operation": "add",
+              "value": 1
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "phase"
@@ -7421,7 +7660,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "675da62ae96f8c41a4b2b3e0c354fa577389c3eb55602277b31a3c143ed60b4c",
     "version": "2025-q3",
@@ -7430,20 +7669,39 @@
     "faction_id": "world-eaters",
     "detachment_id": "possessed-slaughterband",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
-        }
+      "type": "ability-part",
+      "trigger": {
+        "event": "model-destroyed",
+        "object": "model-in-this-unit"
       },
       "effect": {
-        "type": "act-on-death",
-        "target": "this-unit",
-        "modifier": {
-          "act": "fight"
+        "type": "conditional",
+        "condition": {
+          "operator": "not",
+          "operands": [
+            {
+              "type": "happened",
+              "parameters": {
+                "subject": "event-subject",
+                "event": "selected",
+                "filter": {
+                  "to": "fight"
+                },
+                "window": "phase"
+              }
+            }
+          ]
+        },
+        "effect": {
+          "type": "act-on-death",
+          "target": "event-object",
+          "modifier": {
+            "act": "fight",
+            "resolution": "after-attacking-unit-finishes",
+            "removal": "after-destroyed-model-fights"
+          }
         }
       }
     },
@@ -7456,7 +7714,17 @@
         "POSSESSED"
       ]
     },
-    "community_notes": "used just after an enemy unit selects your unit as a target; only models that have not fought this phase fight after the attacking unit finishes its attacks"
+    "community_notes": "used just after an enemy unit selects your unit as a target; only models that have not fought this phase fight after the attacking unit finishes its attacks",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
+    }
   },
   {
     "ability_id": "rapid-manifestation-possessed-slaughterband-world-eaters",
@@ -7464,7 +7732,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "677406c0f856764dbb424fa61ed51b4e3e5cd118eff61b287e24fe0c7f906e08",
     "version": "2025-q3",
@@ -7475,38 +7743,30 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "your-turn"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "set-up",
+          "target": "this-unit",
+          "modifier": {
+            "to": "battlefield",
+            "min_enemy_distance": {
+              "inches": 6
             }
           }
-        ]
-      },
-      "effect": {
-        "type": "set-up",
-        "target": "this-unit",
-        "modifier": {
-          "to": "battlefield",
-          "via": "deep-strike",
-          "min_enemy_distance": {
-            "inches": 6
+        },
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "declare-charge",
+            "allow": false
           }
         }
-      }
+      ]
     },
     "scope": {
-      "duration": "phase"
+      "duration": "turn"
     }
   },
   {
@@ -7515,7 +7775,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "45b17f9f5447fb28d5a1796f031c2829164ed90f1ffe6fec1def864ca1c050d2",
     "version": "2025-q3",
@@ -7524,49 +7784,64 @@
     "faction_id": "world-eaters",
     "detachment_id": "possessed-slaughterband",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "or",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
-          },
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "charge"
-            }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "move-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "passthrough": [
+              {
+                "kind": "models",
+                "owner": "enemy",
+                "excluding": [
+                  "MONSTER",
+                  "VEHICLE"
+                ]
+              }
+            ],
+            "applies_to_moves": [
+              "normal",
+              "advance",
+              "fall-back",
+              "charge"
+            ]
           }
-        ]
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "move-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "passthrough": [
-                "models"
-              ],
-              "no_end_in_engagement": true
-            }
-          },
-          {
-            "type": "roll-result",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "desperate-escape",
-              "result": "pass"
-            }
+        },
+        {
+          "type": "permission",
+          "target": "this-model",
+          "modifier": {
+            "activity": "move",
+            "allow": true,
+            "despite": [
+              "engaged"
+            ]
           }
-        ]
-      }
+        },
+        {
+          "type": "move-modifier",
+          "target": "this-model",
+          "modifier": {
+            "no_end_in_engagement": true,
+            "applies_to_moves": [
+              "normal",
+              "advance",
+              "fall-back"
+            ]
+          }
+        },
+        {
+          "type": "roll-result",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "desperate-escape",
+            "result": "pass"
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "phase"
@@ -7577,7 +7852,18 @@
         "POSSESSED"
       ]
     },
-    "community_notes": "[APPROX] Move-through excludes enemy MONSTER and VEHICLE models, and a Charge move may end within Engagement Range (both nuances not modeled). Applies to Normal, Advance, Fall Back and Charge moves; the unit must not have been selected to move or declare a charge this phase."
+    "community_notes": "[APPROX] Move-through excludes enemy MONSTER and VEHICLE models, and a Charge move may end within Engagement Range (both nuances not modeled). Applies to Normal, Advance, Fall Back and Charge moves; the unit must not have been selected to move or declare a charge this phase.",
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "normal",
+          "advance",
+          "fall-back",
+          "charge"
+        ]
+      }
+    }
   },
   {
     "ability_id": "horrifying-violence-possessed-slaughterband-world-eaters",
@@ -7585,7 +7871,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "3f9f902d4560d8c094d43dd2a3fc8e7181f61f630d66d7ff4cfa125968c58fd1",
     "version": "2025-q3",
@@ -7596,58 +7882,24 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "command"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent-turn"
-            }
-          }
-        ]
+      "type": "for-each-unit",
+      "selector": {
+        "filter": {
+          "owner": "enemy",
+          "engaged_with": "this-unit"
+        }
       },
       "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "test",
-            "target": {
-              "owner": "enemy",
-              "within": {
-                "range": "engagement"
-              }
-            },
-            "modifier": {
-              "test": "battle-shock"
-            }
-          },
-          {
-            "type": "roll-modifier",
-            "target": {
-              "owner": "enemy",
-              "within": {
-                "range": "engagement"
-              }
-            },
-            "modifier": {
-              "roll": "battle-shock",
-              "operation": "subtract",
-              "value": 1
-            }
-          }
-        ]
+        "type": "test",
+        "target": "recipient",
+        "modifier": {
+          "test": "battle-shock",
+          "modifier": -1
+        }
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -7662,7 +7914,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "728408ed9f83af1ff201452f89f3492c2d01199462ae4dc46040a6d149069abb",
     "version": "2025-q3",
@@ -7671,16 +7923,23 @@
     "faction_id": "world-eaters",
     "detachment_id": "vessels-of-wrath",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "sequence",
       "steps": [
         {
           "type": "stat-modifier",
-          "target": "event-subject",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "CHARACTER"
+            ],
+            "level": "model",
+            "member_of": "event-subject"
+          },
           "modifier": {
             "stat": "A",
-            "operation": "add",
+            "operation": "improve",
             "value": 1,
             "weapons": {
               "type": "melee"
@@ -7689,10 +7948,17 @@
         },
         {
           "type": "stat-modifier",
-          "target": "event-subject",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "CHARACTER"
+            ],
+            "level": "model",
+            "member_of": "event-subject"
+          },
           "modifier": {
             "stat": "S",
-            "operation": "add",
+            "operation": "improve",
             "value": 2,
             "weapons": {
               "type": "melee"
@@ -7706,26 +7972,19 @@
     },
     "trigger": {
       "event": "selected",
+      "filter": {
+        "to": "fight"
+      },
       "subject": {
         "owner": "friendly",
         "all_of": [
-          "WORLD EATERS",
-          "CHARACTER"
+          "CHARACTER",
+          "WORLD EATERS"
         ],
         "none_of": [
           "EPIC HERO"
         ]
-      },
-      "filter": {
-        "to": "fight"
-      },
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
-        }
-      },
-      "optional": true
+      }
     },
     "applies_to": {
       "all_of": [
@@ -7933,7 +8192,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "27dbb15062c544f746bb1038ff5e70ca0b7d5dc95b12094b9438c8361145e35d",
     "version": "2025-q3",
@@ -7945,11 +8204,8 @@
     "behavior": "passive",
     "effect": {
       "type": "weapon-ability-grant",
-      "target": "this-model",
+      "target": "this-unit",
       "modifier": {
-        "weapons": {
-          "name": "Maulerfiend Fists"
-        },
         "keywords": [
           {
             "keyword_id": "cleave",
@@ -7957,7 +8213,10 @@
               "value": 2
             }
           }
-        ]
+        ],
+        "weapons": {
+          "name": "Maulerfiend Fists"
+        }
       }
     },
     "scope": {
@@ -7971,7 +8230,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "1bf4cbee797e29a2c58d4e4763a74b9ad9fbcb2925f4853846b899982aec3563",
     "version": "2025-q3",
@@ -7991,7 +8250,7 @@
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "community_notes": "WORLD EATERS VEHICLE model only: the unit gains the DAEMON keyword.",
     "applies_to": {
@@ -8007,7 +8266,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "afaff862b6570c8c286ab7956ddb892890f43a4174b84ef034175792fa1556cb",
     "version": "2025-q3",
@@ -8016,53 +8275,33 @@
     "faction_id": "world-eaters",
     "detachment_id": "brazen-engines",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "or",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ignore-modifiers",
+          "target": "this-unit",
+          "modifier": {
+            "what": "characteristics",
+            "stats": [
+              "WS",
+              "BS"
+            ]
           }
-        ]
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "ignore-modifiers",
-            "target": "this-unit",
-            "modifier": {
-              "what": "characteristics",
-              "stats": [
-                "BS",
-                "WS"
-              ]
-            }
-          },
-          {
-            "type": "ignore-modifiers",
-            "target": "this-unit",
-            "modifier": {
-              "what": "rolls",
-              "rolls": [
-                "hit",
-                "wound"
-              ]
-            }
+        },
+        {
+          "type": "ignore-modifiers",
+          "target": "this-unit",
+          "modifier": {
+            "what": "rolls",
+            "rolls": [
+              "hit",
+              "wound"
+            ]
           }
-        ]
-      }
+        }
+      ]
     },
     "scope": {
       "duration": "phase"
@@ -8072,6 +8311,19 @@
         "DAEMON",
         "VEHICLE"
       ]
+    },
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "attack"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "DAEMON",
+          "VEHICLE"
+        ]
+      }
     }
   },
   {
@@ -8080,7 +8332,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "49354235ba2c25da23a8ef1e5b9226a2b677a0606efd8021e0c26f9dd20c8c94",
     "version": "2025-q3",
@@ -8089,34 +8341,14 @@
     "faction_id": "world-eaters",
     "detachment_id": "brazen-engines",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "your-turn"
-            }
-          }
+      "type": "keyword-grant",
+      "target": "this-unit",
+      "modifier": {
+        "keywords": [
+          "MOBILE"
         ]
-      },
-      "effect": {
-        "type": "keyword-grant",
-        "target": "this-unit",
-        "modifier": {
-          "keywords": [
-            "MOBILE"
-          ]
-        }
       }
     },
     "scope": {
@@ -8127,6 +8359,19 @@
         "DAEMON",
         "VEHICLE"
       ]
+    },
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "move"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "DAEMON",
+          "VEHICLE"
+        ]
+      }
     }
   },
   {
@@ -8199,7 +8444,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "1e7110eb04acea2fd165159a8a5bffeff22d36ad7ba5c55f2444ad352bbfae71",
     "version": "2025-q3",
@@ -8214,14 +8459,14 @@
       "condition": {
         "type": "matches",
         "parameters": {
-          "filter": {
-            "state": "engaged"
-          },
           "subject": {
             "owner": "friendly",
             "all_of": [
               "TERMINATOR SQUAD"
             ]
+          },
+          "filter": {
+            "state": "engaged"
           }
         }
       },
@@ -8234,7 +8479,10 @@
           ]
         },
         "modifier": {
-          "ability": "blessings-of-khorne-world-eaters"
+          "ability": "blessings-of-khorne-world-eaters",
+          "select": {
+            "by": "roll"
+          }
         }
       }
     },
@@ -8297,7 +8545,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "6453902ea42fc96c0797ed07c37f413cb27d7c62601b9a34ecadc3d82f000b63",
     "version": "2025-q3",
@@ -8309,10 +8557,10 @@
     "behavior": "passive",
     "effect": {
       "type": "stat-modifier",
-      "target": "this-model",
+      "target": "this-unit",
       "modifier": {
         "stat": "WS",
-        "operation": "add",
+        "operation": "improve",
         "value": 1,
         "weapons": {
           "type": "melee"
@@ -8335,7 +8583,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "c731117af9022c8ae28d106df17996c2910e1fb328a9e56c7b8f21dbcabd2b01",
     "version": "2025-q3",
@@ -8344,13 +8592,13 @@
     "faction_id": "world-eaters",
     "detachment_id": "butchers-of-khorne",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "stat-modifier",
       "target": "this-unit",
       "modifier": {
         "stat": "A",
-        "operation": "add",
+        "operation": "improve",
         "value": 1,
         "weapons": {
           "type": "melee"
@@ -8359,6 +8607,18 @@
     },
     "scope": {
       "duration": "phase"
+    },
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "fight"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "TERMINATOR SQUAD"
+        ]
+      }
     }
   },
   {
@@ -8367,7 +8627,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "5e9fa6b1368a5e2ba525cc0df376f1644a8a5e7c1d2257d8cdd519b3be7cea91",
     "version": "2025-q3",
@@ -8376,19 +8636,19 @@
     "faction_id": "world-eaters",
     "detachment_id": "butchers-of-khorne",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
       "condition": {
         "type": "matches",
         "parameters": {
+          "subject": "defender",
           "filter": {
             "any_of": [
               "MONSTER",
               "VEHICLE"
             ]
-          },
-          "subject": "defender"
+          }
         }
       },
       "effect": {
@@ -8403,6 +8663,18 @@
     },
     "scope": {
       "duration": "phase"
+    },
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "fight"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "TERMINATOR SQUAD"
+        ]
+      }
     }
   },
   {
@@ -8411,7 +8683,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "2d24541434c85bca76be10a5198903f850b41693c60ce5608bacdfbba3144cab",
     "version": "2025-q3",
@@ -8434,7 +8706,7 @@
         "target": "attacker",
         "modifier": {
           "stat": "D",
-          "operation": "worsen",
+          "operation": "subtract",
           "value": 1
         }
       }
@@ -8512,9 +8784,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "c99e6a83c2b20355bb06a3dcf9ccabc52b9931da067897afc917164cf2f0717d",
+    "source_digest": "dc6072407c07b72802d5e6cc538f0df05f1e62aba11a2e2edac7b714c81bed64",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [
@@ -8529,17 +8801,18 @@
       "condition": {
         "type": "matches",
         "parameters": {
+          "subject": "this-model",
           "filter": {
             "within": {
-              "range": {
-                "inches": 3
-              },
               "of": {
                 "owner": "friendly",
                 "all_of": [
                   "FRENZIED REAVERS",
                   "INFANTRY"
                 ]
+              },
+              "range": {
+                "inches": 3
               }
             }
           }
@@ -8547,7 +8820,7 @@
       },
       "effect": {
         "type": "ability-grant",
-        "target": "this-model",
+        "target": "this-unit",
         "modifier": {
           "ability": "lone-operative"
         }
@@ -8563,9 +8836,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "194ef8a6fdaaf98ee8531462c572df36a63fc82ee7303707273a9b066ab55c48",
+    "source_digest": "346521a1b779dc183b9c113532206ae8f4e5e8651c75aa68f811303ad91d52c9",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [
@@ -8574,7 +8847,7 @@
     "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
-    "behavior": "reactive",
+    "behavior": "passive",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -8593,25 +8866,19 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "weapons": {
-            "type": "melee"
-          },
           "keywords": [
             {
               "keyword_id": "devastating-wounds"
             }
-          ]
+          ],
+          "weapons": {
+            "type": "melee"
+          }
         }
       }
     },
     "scope": {
-      "duration": "turn"
-    },
-    "trigger": {
-      "event": "before-roll",
-      "filter": {
-        "roll": "hit"
-      }
+      "duration": "permanent"
     }
   },
   {
@@ -8620,9 +8887,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "cd0be48e71b0fcd5398243ca80f6f01a8a7b9921b434a97a72ffb4909f391795",
+    "source_digest": "0114280292c07c1aa925b1a0cd87b4e7407ad14420280f29ad1bd515b387e622",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [
@@ -8631,40 +8898,43 @@
     "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "cost-modifier",
-      "target": "event-object",
+      "type": "aura",
+      "target": "friendly-within-aura",
       "modifier": {
-        "of": "stratagem",
-        "operation": "decrease",
-        "amount": 1,
-        "applies_to": "the-triggering-use"
+        "range": {
+          "inches": 12
+        },
+        "effect": {
+          "type": "cost-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "of": "stratagem",
+            "operation": "decrease",
+            "amount": 1,
+            "applies_to": "the-triggering-use"
+          }
+        },
+        "eligible": {
+          "owner": "friendly",
+          "all_of": [
+            "FRENZIED REAVERS"
+          ]
+        }
       }
     },
     "scope": {
-      "duration": "resolution"
+      "duration": "permanent"
     },
     "usage": {
       "frequency": "once-per-battle-round",
       "per": "army"
     },
     "trigger": {
-      "event": "targets-selected",
-      "subject": {
-        "owner": "friendly"
-      },
-      "object": {
-        "owner": "friendly"
-      },
+      "event": "used",
       "filter": {
         "kind": "stratagem"
-      },
-      "proximity": {
-        "of": "this-model",
-        "range": {
-          "inches": 12
-        }
       },
       "optional": true
     },
@@ -8680,9 +8950,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "frenzied-reavers-master-of-executions"
     ],
@@ -8690,11 +8959,88 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "attack-is",
+                "parameters": {
+                  "attack_type": "melee"
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "defender",
+                  "filter": {
+                    "all_of": [
+                      "CHARACTER"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "re-roll",
+                "target": "this-model",
+                "modifier": {
+                  "roll": "hit",
+                  "result_scope": "any-result",
+                  "weapons": {
+                    "type": "melee"
+                  }
+                }
+              },
+              {
+                "type": "re-roll",
+                "target": "this-model",
+                "modifier": {
+                  "roll": "wound",
+                  "result_scope": "any-result",
+                  "weapons": {
+                    "type": "melee"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "model-destroyed",
+            "object": {
+              "owner": "enemy",
+              "all_of": [
+                "CHARACTER"
+              ],
+              "level": "model"
+            },
+            "subject": "this-unit"
+          },
+          "effect": {
+            "type": "cp-gain",
+            "target": "this-model",
+            "modifier": {
+              "amount": 1
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "source_digest": "b8bfec82a4f85ea4750006a8613c90e8b347f23b65afd2835787eebc23d6aa38"
   },
   {
     "ability_id": "bane-of-the-craven-frenzied-reavers-world-eaters",
@@ -8702,19 +9048,90 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "world-eaters",
     "detachment_id": "frenzied-reavers",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-subject",
+          "filter": {
+            "engaged_with": "this-unit"
+          }
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "event-subject",
+                "filter": {
+                  "state": "battle-shocked"
+                }
+              }
+            },
+            "effect": {
+              "type": "test",
+              "target": "event-subject",
+              "modifier": {
+                "test": "desperate-escape",
+                "modifier": -1
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "event-subject",
+                    "filter": {
+                      "state": "battle-shocked"
+                    }
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "test",
+              "target": "event-subject",
+              "modifier": {
+                "test": "desperate-escape"
+              }
+            }
+          }
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "move_types": [
+          "fall-back"
+        ],
+        "to": "move"
+      },
+      "subject": {
+        "owner": "enemy"
+      }
+    },
+    "source_digest": "c6c9e8842f2ef9588da1634de2120cccbaa0ec7162b8814b3d47ad775ef13704"
   },
   {
     "ability_id": "berserk-resilience-frenzied-reavers-world-eaters",
@@ -8722,19 +9139,70 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "world-eaters",
     "detachment_id": "frenzied-reavers",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
+            }
+          },
+          {
+            "type": "attack-compare",
+            "parameters": {
+              "left": {
+                "of": "attacker",
+                "stat": "S"
+              },
+              "comparison": "gt",
+              "right": {
+                "of": "defender",
+                "stat": "T"
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "attacker",
+        "modifier": {
+          "roll": "wound",
+          "operation": "subtract",
+          "value": 1
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "FRENZIED REAVERS",
+          "INFANTRY"
+        ]
+      }
+    },
+    "source_digest": "cbcb60133dc7461d211e1cc08d4b91673d4223e1dc0bb610ed5e91309a01877b"
   },
   {
     "ability_id": "berzerker-charge-world-eaters",
@@ -8762,25 +9230,247 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "world-eaters",
     "detachment_id": "frenzied-reavers",
     "ability_type": "faction",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "army-faction",
+        "parameters": {
+          "faction": "world-eaters"
+        }
+      },
+      "effect": {
+        "type": "dice-pool-allocation",
+        "pool": {
+          "count": 8,
+          "die": "D6"
+        },
+        "max_activations": 2,
+        "options": [
+          {
+            "id": "option-1",
+            "name": "Unbridled Bloodlust",
+            "requirement": {
+              "type": "pair",
+              "min_value": 1
+            },
+            "effect": {
+              "type": "roll-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "charge",
+                "operation": "add",
+                "value": 1
+              }
+            }
+          },
+          {
+            "id": "option-2",
+            "name": "Rage-Fuelled Invigoration",
+            "requirement": {
+              "type": "pair",
+              "min_value": 2
+            },
+            "effect": {
+              "type": "move-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "applies_to_moves": [
+                  "pile-in",
+                  "consolidation"
+                ],
+                "distance_bonus": 3
+              }
+            }
+          },
+          {
+            "id": "option-3",
+            "name": "Total Carnage",
+            "requirement": {
+              "type": "pair",
+              "min_value": 3
+            },
+            "effect": {
+              "type": "ability-part",
+              "effect": {
+                "type": "act-on-death",
+                "target": "event-object",
+                "modifier": {
+                  "act": "fight",
+                  "resolution": "after-attacking-unit-finishes",
+                  "removal": "after-destroyed-model-fights",
+                  "gate": {
+                    "dice": "D6",
+                    "threshold": 4,
+                    "comparison": "gte",
+                    "modifiers": []
+                  },
+                  "eligibility": {
+                    "operator": "not",
+                    "operands": [
+                      {
+                        "type": "happened",
+                        "parameters": {
+                          "subject": "event-subject",
+                          "event": "selected",
+                          "filter": {
+                            "to": "fight"
+                          },
+                          "window": "phase"
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              "trigger": {
+                "event": "model-destroyed",
+                "object": "model-in-this-unit"
+              }
+            }
+          },
+          {
+            "id": "option-4",
+            "name": "Martial Excellence",
+            "requirement": {
+              "any_of": [
+                {
+                  "type": "pair",
+                  "min_value": 4
+                },
+                {
+                  "type": "triple",
+                  "min_value": 1
+                }
+              ]
+            },
+            "effect": {
+              "type": "weapon-ability-grant",
+              "target": "this-unit",
+              "modifier": {
+                "keywords": [
+                  {
+                    "keyword_id": "sustained-hits",
+                    "parameters": {
+                      "value": 1
+                    }
+                  }
+                ],
+                "weapons": {
+                  "type": "melee"
+                }
+              }
+            }
+          },
+          {
+            "id": "option-5",
+            "name": "Warp Blades",
+            "requirement": {
+              "any_of": [
+                {
+                  "type": "pair",
+                  "min_value": 5
+                },
+                {
+                  "type": "triple",
+                  "min_value": 2
+                }
+              ]
+            },
+            "effect": {
+              "type": "weapon-ability-grant",
+              "target": "this-unit",
+              "modifier": {
+                "keywords": [
+                  {
+                    "keyword_id": "lethal-hits"
+                  }
+                ],
+                "weapons": {
+                  "type": "melee"
+                }
+              }
+            }
+          },
+          {
+            "id": "option-6",
+            "name": "Decapitating Strikes",
+            "requirement": {
+              "any_of": [
+                {
+                  "type": "pair",
+                  "min_value": 6
+                },
+                {
+                  "type": "triple",
+                  "min_value": 3
+                }
+              ]
+            },
+            "effect": {
+              "type": "conditional",
+              "condition": {
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "attack-is",
+                    "parameters": {
+                      "attack_type": "melee"
+                    }
+                  },
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "defender",
+                      "filter": {
+                        "all_of": [
+                          "INFANTRY"
+                        ]
+                      }
+                    }
+                  }
+                ]
+              },
+              "effect": {
+                "type": "weapon-ability-grant",
+                "target": "this-unit",
+                "modifier": {
+                  "keywords": [
+                    {
+                      "keyword_id": "devastating-wounds"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "battle-round"
     },
     "interactions": [
       {
         "ability_ref": "blessings-of-khorne-world-eaters",
         "type": "replaces"
       }
-    ]
+    ],
+    "behavior": "reactive",
+    "trigger": {
+      "event": "round-started",
+      "optional": true
+    },
+    "usage": {
+      "frequency": "once-per-battle-round",
+      "per": "army"
+    },
+    "source_digest": "e0b800278eea72db3bc41109ccc278e17b97b691a4350a658821cf037fd9ca57"
   },
   {
     "ability_id": "blood-surge-frenzied-reavers-khorne-berzerkers-world-eaters",
@@ -8788,9 +9478,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "frenzied-reavers-khorne-berzerkers"
     ],
@@ -8798,11 +9487,91 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "opponent-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "model-destroyed",
+              "object": "model-in-this-unit",
+              "filter": {
+                "by": "event-subject"
+              },
+              "window": "event"
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "state": "engaged"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "move",
+            "target": "this-unit",
+            "modifier": {
+              "move_type": "surge",
+              "distance": "D6"
+            }
+          },
+          {
+            "type": "move-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "applies_to_moves": [
+                "surge"
+              ],
+              "distance_bonus": 2
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "subject": {
+        "owner": "enemy"
+      }
+    },
+    "source_digest": "ad3dec5b144932b9b22f1dcca321cbb27e19a99277ba5f4c841cd12bcda83f6c"
   },
   {
     "ability_id": "fearsome-presence-frenzied-reavers-world-eaters",
@@ -8810,19 +9579,26 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "world-eaters",
     "detachment_id": "frenzied-reavers",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "stat-modifier",
+      "target": "this-model",
+      "modifier": {
+        "stat": "OC",
+        "operation": "set",
+        "value": 5
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "e2ccecd7f836807363db4614711049e9c05048a1da1fa4796de8b7548e599a48"
   },
   {
     "ability_id": "horrifying-butchery-frenzied-reavers-world-eaters",
@@ -8830,19 +9606,55 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "world-eaters",
     "detachment_id": "frenzied-reavers",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "subject": "selected-unit",
+            "filter": {
+              "engaged_with": "this-unit"
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "test",
+        "target": "selected-unit",
+        "modifier": {
+          "test": "battle-shock",
+          "modifier": -1
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    },
+    "source_digest": "9653ea8f33e14c6c3aa052c9ccdd062ac6cbd15527fb5e7d9110e0b690ff0c80"
   },
   {
     "ability_id": "icon-of-khorne-frenzied-reavers-jakhals-world-eaters",
@@ -8873,9 +9685,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "frenzied-reavers-jakhals"
     ],
@@ -8883,11 +9694,45 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "controls",
+        "parameters": {
+          "count": {
+            "min": 1
+          }
+        }
+      },
+      "effect": {
+        "type": "objective-sticky",
+        "target": "this-unit"
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    },
+    "source_digest": "244ee60595f9c8faed2cb7e6d9b27a3a1649e6a06810b7835864a0f81a91309c"
   },
   {
     "ability_id": "pact-of-blood-world-eaters",
@@ -8915,19 +9760,60 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "world-eaters",
     "detachment_id": "frenzied-reavers",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "targets-selected",
+          "subject": "event-subject",
+          "object": "this-unit",
+          "filter": {
+            "kind": "attack"
+          },
+          "window": "event"
+        }
+      },
+      "effect": {
+        "type": "move",
+        "target": "this-unit",
+        "modifier": {
+          "move_type": "normal",
+          "distance": "D6"
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "all_of": [
+              "FRENZIED REAVERS",
+              "JAKHALS"
+            ]
+          }
+        }
+      }
+    },
+    "source_digest": "124dd42f5a3b1a873ef38707048dc6bf44f14df285698c973bf00c0b33f78533"
   },
   {
     "ability_id": "murderous-charge-world-eaters",
@@ -8935,9 +9821,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "khorne-berzerkers"
     ],
@@ -8945,11 +9830,37 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "move-ended",
+          "filter": {
+            "move_types": [
+              "charge"
+            ]
+          },
+          "window": "turn"
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "stat": "S",
+          "operation": "improve",
+          "value": 1,
+          "weapons": {
+            "type": "melee"
+          }
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "2ed16c508eedfa074a96204dada46c56786cce455f12b61b3ac54ca806705732"
   },
   {
     "ability_id": "bane-of-cowards-world-eaters",

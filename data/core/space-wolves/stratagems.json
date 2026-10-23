@@ -39,7 +39,40 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Astartes"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "INFANTRY",
+                  "MOUNTED"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "not_states": [
+                  "engaged"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "battle-instincts-saga-of-the-great-wolf-space-wolves",
     "game_version": {
       "edition": "11th",
@@ -69,7 +102,11 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "bestial-dominance-askars-wolfpack-space-wolves",
     "game_version": {
       "edition": "11th",
@@ -99,7 +136,18 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Astartes"
+      ],
+      "excluded_keywords": [
+        "Monster",
+        "Vehicle"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit"
+    },
     "ability_id": "birth-of-a-saga-champions-of-fenris-space-wolves",
     "game_version": {
       "edition": "11th",
@@ -141,7 +189,14 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Askar's Wolfpack"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "bring-it-down-askars-wolfpack-space-wolves",
     "game_version": {
       "edition": "11th",
@@ -171,7 +226,15 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Astartes",
+        "Character"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "champions-guidance-champions-of-fenris-space-wolves",
     "game_version": {
       "edition": "11th",
@@ -195,7 +258,51 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "BLOOD CLAWS",
+                  "THUNDERWOLF CAVALRY",
+                  "WULFEN"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "not_states": [
+                  "engaged"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": "battlefield-edge",
+                  "range": {
+                    "inches": 9
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "co-ordinated-strike-saga-of-the-beastslayer-space-wolves",
     "game_version": {
       "edition": "11th",
@@ -214,7 +321,15 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Astartes",
+        "Infantry"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "eye-of-the-pack-saga-of-the-great-wolf-space-wolves",
     "game_version": {
       "edition": "11th",
@@ -249,7 +364,25 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Astartes"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "any_of": [
+              "INFANTRY",
+              "MOUNTED"
+            ]
+          }
+        }
+      }
+    },
     "ability_id": "fangs-of-the-pack-saga-of-the-great-wolf-space-wolves",
     "game_version": {
       "edition": "11th",
@@ -333,7 +466,15 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Astartes",
+        "Character"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit"
+    },
     "ability_id": "heroic-resolve-champions-of-fenris-space-wolves",
     "game_version": {
       "edition": "11th",
@@ -352,7 +493,26 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords_any": [
+        "Blood Claws",
+        "Thunderwolf Cavalry",
+        "Wulfen"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "not_states": [
+              "engaged"
+            ]
+          }
+        }
+      }
+    },
     "ability_id": "impetuosity-saga-of-the-beastslayer-space-wolves",
     "game_version": {
       "edition": "11th",
@@ -386,7 +546,16 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords_any": [
+        "Blood Claws",
+        "Thunderwolf Cavalry",
+        "Wulfen"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "unbridled-feroicity-saga-of-the-beastslayer-space-wolves",
     "game_version": {
       "edition": "11th",
@@ -443,7 +612,25 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Astartes"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "any_of": [
+              "INFANTRY",
+              "MOUNTED"
+            ]
+          }
+        }
+      }
+    },
     "ability_id": "wolf-totems-saga-of-the-great-wolf-space-wolves",
     "game_version": {
       "edition": "11th",

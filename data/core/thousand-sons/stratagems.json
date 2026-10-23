@@ -39,7 +39,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Sekhetar Robots"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit"
+    },
     "ability_id": "arcane-venting-sekhetar-cohort-thousand-sons",
     "game_version": {
       "edition": "11th",
@@ -68,7 +75,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Rubricae"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "ardent-automata-rubricae-phalanx-thousand-sons",
     "game_version": {
       "edition": "11th",
@@ -97,7 +111,77 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": [
+      {
+        "required_keywords": [
+          "Psyker",
+          "Thousand Sons"
+        ],
+        "name": "first",
+        "count": "one",
+        "side": "your-army",
+        "selects": "model",
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "filter": {
+              "owner": "friendly"
+            }
+          }
+        }
+      },
+      {
+        "required_keywords": [
+          "Tzaangors"
+        ],
+        "name": "second",
+        "count": "one",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "strength",
+              "parameters": {
+                "subject": {
+                  "stratagem_target": "first"
+                },
+                "below": "starting"
+              }
+            },
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "within": {
+                    "of": {
+                      "stratagem_target": "first"
+                    },
+                    "range": {
+                      "inches": 12
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "same-unit",
+                  "parameters": {
+                    "as": {
+                      "stratagem_target": "first"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
     "ability_id": "blessed-transmutations-warpmeld-pact-thousand-sons",
     "game_version": {
       "edition": "11th",
@@ -188,7 +272,60 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": [
+      {
+        "required_keywords": [
+          "Vehicle"
+        ],
+        "name": "first",
+        "count": "one",
+        "selects": "unit",
+        "bound_to": "triggering-unit"
+      },
+      {
+        "required_keywords": [
+          "Psyker",
+          "Thousand Sons"
+        ],
+        "name": "second",
+        "count": "one",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "within": {
+                    "of": {
+                      "stratagem_target": "first"
+                    },
+                    "range": {
+                      "inches": 6
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "same-unit",
+                  "parameters": {
+                    "as": {
+                      "stratagem_target": "first"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
     "ability_id": "cyberspirit-machinations-warpforged-cabal-thousand-sons",
     "game_version": {
       "edition": "11th",
@@ -275,7 +412,43 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Psyker",
+        "Thousand Sons"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": {
+                    "objective": {
+                      "controlled_by": "friendly"
+                    }
+                  },
+                  "range": "objective-control"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "desecration-of-worlds-grand-coven-thousand-sons",
     "game_version": {
       "edition": "11th",
@@ -344,7 +517,43 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Psyker",
+        "Thousand Sons"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "devastating-sorcery-grand-coven-thousand-sons",
     "game_version": {
       "edition": "11th",
@@ -372,7 +581,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Sekhetar Robots"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "ectoplasmic-extrusion-sekhetar-cohort-thousand-sons",
     "game_version": {
       "edition": "11th",
@@ -459,7 +675,56 @@
         "Thousand Sons",
         "Vehicle"
       ],
-      "notes": "Has not been selected to shoot this phase; within 6\" of one or more friendly THOUSAND SONS PSYKER units."
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "PSYKER",
+                      "THOUSAND SONS"
+                    ]
+                  },
+                  "range": {
+                    "inches": 6
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
     },
     "ability_id": "ensorcelled-infusion-warpforged-cabal-thousand-sons",
     "game_version": {
@@ -858,7 +1123,43 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Psyker",
+        "Thousand Sons"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "infernal-fusillade-rubricae-phalanx-thousand-sons",
     "game_version": {
       "edition": "11th",
@@ -961,7 +1262,26 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Psyker",
+        "Thousand Sons"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "any_of": [
+              "INFANTRY",
+              "MOUNTED"
+            ]
+          }
+        }
+      }
+    },
     "ability_id": "multitudinous-limbs-ritual-of-regeneration-thousand-sons",
     "game_version": {
       "edition": "11th",
@@ -989,7 +1309,23 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Psyker",
+        "Thousand Sons"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "state": "engaged"
+          }
+        }
+      }
+    },
     "ability_id": "mutagenic-magicks-ritual-of-regeneration-thousand-sons",
     "game_version": {
       "edition": "11th",
@@ -1046,7 +1382,25 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Mutant"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "any_of": [
+              "INFANTRY",
+              "MOUNTED"
+            ]
+          }
+        }
+      }
+    },
     "ability_id": "prismatic-displacement-servants-of-change-thousand-sons",
     "game_version": {
       "edition": "11th",
@@ -1221,7 +1575,56 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Psyker",
+        "Thousand Sons"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          },
+          {
+            "type": "in-region",
+            "parameters": {
+              "subject": "this-unit",
+              "region": {
+                "rule_region": {
+                  "region_id": "flow-of-magic",
+                  "owner_faction": "thousand-sons"
+                }
+              },
+              "wholly": true
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "scouring-warpflame-hexwarp-thrallband-thousand-sons",
     "game_version": {
       "edition": "11th",
@@ -1289,7 +1692,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Psyker",
+        "Thousand Sons"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "strands-of-time-hexwarp-thrallband-thousand-sons",
     "game_version": {
       "edition": "11th",
@@ -1376,7 +1787,11 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "temporal-instability-servants-of-change-thousand-sons",
     "game_version": {
       "edition": "11th",
@@ -1404,7 +1819,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Monster",
+        "Mutant"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "the-land-writhes-servants-of-change-thousand-sons",
     "game_version": {
       "edition": "11th",
@@ -1462,7 +1885,23 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Mutant",
+        "Tzeentch"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "touched-by-tzeentch-warpmeld-pact-thousand-sons",
     "game_version": {
       "edition": "11th",
@@ -1524,7 +1963,38 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Mutant",
+        "Tzeentch"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "set-up",
+              "filter": {
+                "from": "strategic-reserves"
+              },
+              "window": "phase"
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "twisted-mirage-warpmeld-pact-thousand-sons",
     "game_version": {
       "edition": "11th",

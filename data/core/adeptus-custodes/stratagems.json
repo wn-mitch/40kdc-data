@@ -373,7 +373,24 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "not_states": [
+              "engaged"
+            ]
+          }
+        }
+      }
+    },
     "ability_id": "gravimetric-grenade-solar-watch-adeptus-custodes",
     "game_version": {
       "edition": "11th",
@@ -429,7 +446,15 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes",
+        "Dreadnought"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit"
+    },
     "ability_id": "honoured-interred-might-of-the-moritoi-adeptus-custodes",
     "game_version": {
       "edition": "11th",
@@ -453,7 +478,18 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes"
+      ],
+      "excluded_keywords": [
+        "Monster",
+        "Vehicle"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit"
+    },
     "ability_id": "impenetrable-bastion-emperors-chosen-adeptus-custodes",
     "game_version": {
       "edition": "11th",
@@ -752,7 +788,14 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Tristraen's Gilded Blades"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "never-outmatched-tristraens-gilded-blades-adeptus-custodes",
     "game_version": {
       "edition": "11th",
@@ -848,7 +891,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "preternatural-rapidity-dread-host-adeptus-custodes",
     "game_version": {
       "edition": "11th",
@@ -1015,7 +1065,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes",
+        "Aquilan Talon"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "relentless-destroyers-aquilan-talon-adeptus-custodes",
     "game_version": {
       "edition": "11th",

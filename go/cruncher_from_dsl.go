@@ -1542,6 +1542,24 @@ func translateStatModifier(node, source map[string]any, opts dslOpts, out *effec
 			return
 		}
 		emit(map[string]any{"type": "toughness-mod", "value": value})
+	case "D":
+		// The Damage of attacks against the buffed unit is defender-side: a reduction (Necrodermis)
+		// under target perspective. On the buffed unit it changes the Damage of its own attacks.
+		if classifyTarget(node) == "attacker" {
+			if opts.perspective != "target" {
+				return
+			}
+			if value < 0 {
+				emit(map[string]any{"type": "damage-reduction", "value": -value})
+			} else {
+				out.unsupported = append(out.unsupported, unsup("stat-modifier D: raising the Damage of incoming attacks is not modelled", node))
+			}
+			return
+		}
+		if opts.perspective != "attacker" || !isOnBuffedUnit {
+			return
+		}
+		emit(map[string]any{"type": "damage-mod", "value": value})
 	case "Sv":
 		if opts.perspective != "target" {
 			out.unsupported = append(out.unsupported, unsup("stat-modifier Sv: defender-side stat; applies when the buffed unit is the target", node))

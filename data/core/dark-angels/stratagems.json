@@ -39,7 +39,15 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Bladeguard Veteran Squad",
+        "Vengeful Brethren"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit"
+    },
     "ability_id": "determined-to-the-last-the-vengeful-brethren-dark-angels",
     "game_version": {
       "edition": "11th",
@@ -92,7 +100,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Vengeful Brethren"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit"
+    },
     "ability_id": "for-the-lion-the-vengeful-brethren-dark-angels",
     "game_version": {
       "edition": "11th",
@@ -145,7 +160,14 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Astartes"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "inescapable-justice-wrath-of-the-rock-dark-angels",
     "game_version": {
       "edition": "11th",
@@ -199,7 +221,27 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Astartes"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "within": {
+              "of": {
+                "objective": {}
+              },
+              "range": "objective-control"
+            }
+          }
+        }
+      }
+    },
     "ability_id": "lions-will-wrath-of-the-rock-dark-angels",
     "game_version": {
       "edition": "11th",
@@ -228,7 +270,14 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Vengeful Brethren"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "mission-focus-the-vengeful-brethren-dark-angels",
     "game_version": {
       "edition": "11th",
@@ -253,7 +302,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Deathwing"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "relic-teleportarium-inner-circle-task-force-dark-angels",
     "game_version": {
       "edition": "11th",
@@ -282,7 +338,25 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Astartes"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "any_of": [
+              "INFANTRY",
+              "MOUNTED"
+            ]
+          }
+        }
+      }
+    },
     "ability_id": "relics-of-the-dark-age-wrath-of-the-rock-dark-angels",
     "game_version": {
       "edition": "11th",
@@ -310,7 +384,11 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "skyborne-surveillance-darkflight-pursuit-dark-angels",
     "game_version": {
       "edition": "11th",
@@ -367,7 +445,25 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Fly",
+        "Ravenwing"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "not_states": [
+              "engaged"
+            ]
+          }
+        }
+      }
+    },
     "ability_id": "we-are-vengeance-darkflight-pursuit-dark-angels",
     "game_version": {
       "edition": "11th",
@@ -424,7 +520,25 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Ravenwing"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "any_of": [
+              "FLY",
+              "MOUNTED"
+            ]
+          }
+        }
+      }
+    },
     "ability_id": "wings-of-shadow-darkflight-pursuit-dark-angels",
     "game_version": {
       "edition": "11th",

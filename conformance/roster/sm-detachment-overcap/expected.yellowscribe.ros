@@ -115,7 +115,7 @@
             </profile>
             <profile name="Duty Eternal" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Each time an attack is allocated to the unit, subtract 1 from the Damage characteristic of that attack.</characteristic>
+                <characteristic name="Description">When the attack's S is more than the target's T, the attacking unit gets -1 to Wound rolls.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">

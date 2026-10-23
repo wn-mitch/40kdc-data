@@ -144,6 +144,23 @@ describe("effectToBuffs: leaves", () => {
     expect(result.applied[0].contribution).toEqual({ type: "attacks-mod", value: 1 });
   });
 
+  it("stat-modifier D on the buffed unit → damage-mod; on attacks against it → damage-reduction", () => {
+    const own = effectToBuffs({ type: "stat-modifier", target: "this-unit", modifier: { stat: "D", operation: "add", value: 1 } }, unitRule, ctx);
+    expect(own.applied.map((buff) => buff.contribution)).toEqual([{ type: "damage-mod", value: 1 }]);
+    // Each time an attack is allocated to this model, subtract 1 from its Damage.
+    const incoming = { type: "stat-modifier", target: "attacker", modifier: { stat: "D", operation: "subtract", value: 1 } };
+    const asTarget = effectToBuffs(incoming, unitRule, ctx, "target");
+    expect(asTarget.applied.map((buff) => buff.contribution)).toEqual([{ type: "damage-reduction", value: 1 }]);
+    expect(asTarget.unsupported).toEqual([]);
+    // Never a penalty on the buffed unit's own attacks, and never silently dropped as off the damage path.
+    const asAttacker = effectToBuffs(incoming, unitRule, ctx);
+    expect(asAttacker.applied).toEqual([]);
+    expect(asAttacker.unsupported).toEqual([]);
+    const raised = effectToBuffs({ ...incoming, modifier: { stat: "D", operation: "add", value: 1 } }, unitRule, ctx, "target");
+    expect(raised.applied).toEqual([]);
+    expect(raised.unsupported.map((item) => item.reason)).toEqual(["stat-modifier D: raising the Damage of incoming attacks is not modelled"]);
+  });
+
   it("feel-no-pain → FNP buff under target perspective", () => {
     const result = effectToBuffs(
       { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 5 } },

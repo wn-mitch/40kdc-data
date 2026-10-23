@@ -39,7 +39,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Sanguinary Guard",
+        "Sanguinary Spearhead"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit"
+    },
     "ability_id": "angelic-terror-sanguinary-spearhead-blood-angels",
     "game_version": {
       "edition": "11th",
@@ -63,7 +71,14 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Sanguinary Guard"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit"
+    },
     "ability_id": "blinding-blurs-of-vengeance-encarmine-speartip-blood-angels",
     "game_version": {
       "edition": "11th",
@@ -120,7 +135,11 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "death-begets-vengeance-wrath-of-the-doomed-blood-angels",
     "game_version": {
       "edition": "11th",
@@ -149,7 +168,14 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Astartes"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "focused-fury-angelic-inheritors-blood-angels",
     "game_version": {
       "edition": "11th",
@@ -178,7 +204,15 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Astartes",
+        "Character"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit"
+    },
     "ability_id": "in-the-shadow-of-great-wings-angelic-inheritors-blood-angels",
     "game_version": {
       "edition": "11th",
@@ -344,7 +378,24 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Death Company"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "not_states": [
+              "engaged"
+            ]
+          }
+        }
+      }
+    },
     "ability_id": "rage-fuelled-response-wrath-of-the-doomed-blood-angels",
     "game_version": {
       "edition": "11th",
@@ -397,7 +448,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Astartes"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "strike-now-for-glory-angelic-inheritors-blood-angels",
     "game_version": {
       "edition": "11th",
@@ -426,7 +484,52 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "or",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "all_of": [
+                      "ADEPTUS ASTARTES",
+                      "JUMP PACK"
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "not_states": [
+                      "engaged"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "all_of": [
+                  "THE SANGUINOR"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "unto-the-burning-skies-angelic-inheritors-blood-angels",
     "game_version": {
       "edition": "11th",

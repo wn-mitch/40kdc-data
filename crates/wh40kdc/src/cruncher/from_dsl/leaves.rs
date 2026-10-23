@@ -296,6 +296,35 @@ pub(super) fn stat_modifier(node: &Obj, opts: &WalkOpts, out: &mut Out) {
                 );
             }
         }
+        // The Damage of attacks against the buffed unit is defender-side: a reduction (Necrodermis)
+        // under target perspective. On the buffed unit it changes the Damage of its own attacks.
+        Some("D") => {
+            if classify_target(node) == Side::Attacker {
+                if opts.perspective != Target {
+                    return;
+                }
+                if value < 0.0 {
+                    emit(
+                        opts,
+                        out,
+                        &gate,
+                        json!({ "type": "damage-reduction", "value": -value }),
+                    );
+                } else {
+                    out.unsupported(
+                        "stat-modifier D: raising the Damage of incoming attacks is not modelled",
+                        node,
+                    );
+                }
+            } else if opts.perspective == Attacker && on_buffed {
+                emit(
+                    opts,
+                    out,
+                    &gate,
+                    json!({ "type": "damage-mod", "value": value }),
+                );
+            }
+        }
         // Improvement is a save-roll bonus; literal characteristic addition worsens the Save.
         Some("Sv") => {
             if opts.perspective != Target {

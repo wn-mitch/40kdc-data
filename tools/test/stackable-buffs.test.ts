@@ -162,19 +162,19 @@ describe("Berzerker Warband detachment buffs", () => {
     expect(resolveBuffs(strat!.buffs, { phase: "shooting" }).apMod.value).toBe(0);
   });
 
-  it("applies Relentless Rage's +1 A / +2 S only when the unit charged this turn", () => {
-    // Not charged → the conditional drops, no lever.
-    const notCharged = ds.stackableBuffsFor(WARBAND, { phase: "fight", attackerCharged: false });
-    expect(notCharged.buffs.some((b) => b.id === "detachment:relentless-rage-world-eaters")).toBe(false);
-
-    // Charged → the detachment rule surfaces (on by default — it's not a strat).
-    const charged = ds.stackableBuffsFor(WARBAND, { phase: "fight", attackerCharged: true });
-    const rage = charged.buffs.find((b) => b.id === "detachment:relentless-rage-world-eaters");
-    expect(rage, "relentless-rage lever").toBeDefined();
-    expect(rage!.enabled).toBe(true);
-    expect(rage!.source).toMatchObject({ abilityKind: "detachment" });
-    const resolved = resolveBuffs(rage!.buffs, { phase: "fight" });
-    expect(resolved.attacksMod.value).toBe(1);
-    expect(resolved.strengthMod.value).toBe(2);
+  it("applies Relentless Rage's +1 A to melee attacks whether or not the unit charged", () => {
+    for (const attackerCharged of [false, true]) {
+      // The detachment rule surfaces on by default — it's not a strat.
+      const { buffs } = ds.stackableBuffsFor(WARBAND, { phase: "fight", attackerCharged });
+      const rage = buffs.find((b) => b.id === "detachment:relentless-rage-world-eaters");
+      expect(rage, "relentless-rage lever").toBeDefined();
+      expect(rage!.enabled).toBe(true);
+      expect(rage!.source).toMatchObject({ abilityKind: "detachment" });
+      const resolved = resolveBuffs(rage!.buffs, { phase: "fight" });
+      expect(resolved.attacksMod.value).toBe(1);
+      expect(resolved.strengthMod.value).toBe(0);
+      // Melee only: nothing reaches a shooting attack.
+      expect(resolveBuffs(rage!.buffs, { phase: "shooting" }).attacksMod.value).toBe(0);
+    }
   });
 });

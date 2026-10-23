@@ -74,9 +74,9 @@ describe("stack damage ledger", () => {
       relevant: true,
       reasons: ['conditional: cannot evaluate condition "and" against current context'],
     });
-    // Adamantine Avalanche gates only effects outside the attack, so it is rejected.
-    const fight = cellFor("world-eaters", "fight");
-    expect(fight.ledger.find((candidate) => candidate.abilityId === "adamantine-avalanche-world-eaters")).toMatchObject({
+    // Grab Dat Scrap gates only effects outside the attack, so it is rejected.
+    const fight = cellFor("orks", "fight");
+    expect(fight.ledger.find((candidate) => candidate.abilityId === "grab-dat-scrap-orks")).toMatchObject({
       status: "rejected",
       relevant: false,
       reasons: ["no current-attack effect", 'conditional: cannot evaluate condition "matches" against current context'],

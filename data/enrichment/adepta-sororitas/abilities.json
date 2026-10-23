@@ -49,23 +49,38 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "499e7ca90779f97aa7cdd28fbfb3a420e09ec0dca9353de723807f633b1e36a7",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
-        }
-      },
-      "effect": {
-        "type": "act-on-death",
-        "target": "this-model",
-        "modifier": {
-          "act": "fight"
+      "type": "act-on-death",
+      "target": "event-object",
+      "modifier": {
+        "act": "fight",
+        "resolution": "after-attacking-unit-finishes",
+        "removal": "after-destroyed-model-fights",
+        "gate": {
+          "dice": "D6",
+          "threshold": 2,
+          "comparison": "gte",
+          "modifiers": []
+        },
+        "eligibility": {
+          "operator": "not",
+          "operands": [
+            {
+              "type": "happened",
+              "parameters": {
+                "subject": "event-subject",
+                "event": "selected",
+                "filter": {
+                  "to": "fight"
+                },
+                "window": "phase"
+              }
+            }
+          ]
         }
       }
     },
@@ -76,8 +91,12 @@
       "mortifiers"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "adepta-sororitas"
+    "behavior": "reactive",
+    "faction_id": "adepta-sororitas",
+    "trigger": {
+      "event": "model-destroyed",
+      "object": "model-in-this-unit"
+    }
   },
   {
     "ability_id": "anchorite-sarcophagus-adepta-sororitas",
@@ -85,18 +104,32 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "2afa67a0868278f3756199ebb0172bd4d678efa31de7119f8389757827d4b21e",
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "this-model",
-      "modifier": {
-        "stat": "M",
-        "operation": "set",
-        "value": 7
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "this-model",
+          "modifier": {
+            "stat": "M",
+            "operation": "set",
+            "value": 7
+          }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "this-model",
+          "modifier": {
+            "stat": "Sv",
+            "operation": "set",
+            "value": 3
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -114,27 +147,72 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "98fc5d0ec136db92dbaf4239c7ea51df203850797714bd06c55387dada576772",
     "version": "2025-q3",
     "effect": {
-      "type": "cp-gain",
-      "target": "this-model",
-      "modifier": {
-        "amount": 1
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-unit",
+              "filter": {
+                "has_ability": [
+                  "sacred-command-adepta-sororitas"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "cost-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "of": "stratagem",
+          "operation": "decrease",
+          "amount": 1,
+          "applies_to": "the-triggering-use"
+        }
       }
     },
     "scope": {
-      "duration": "one-use"
+      "duration": "permanent"
     },
     "unit_ids": [
       "canoness",
       "canoness-with-jump-pack"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "faction_id": "adepta-sororitas"
+    "behavior": "reactive",
+    "faction_id": "adepta-sororitas",
+    "trigger": {
+      "event": "targets-selected",
+      "subject": {
+        "owner": "friendly"
+      },
+      "filter": {
+        "kind": "stratagem"
+      },
+      "object": "this-unit",
+      "optional": true
+    },
+    "usage": {
+      "frequency": "once-per-battle-round",
+      "per": "army"
+    }
   },
   {
     "ability_id": "divine-deliverance-adepta-sororitas",
@@ -142,43 +220,40 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "f9bde73efd0a714dcd7de4cc30859c409e0535d9dfd87fc10c4a8034837ec282",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "stat-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "stat": "A",
-              "operation": "add",
-              "value": 3
-            }
-          },
-          {
-            "type": "weapon-ability-grant",
-            "target": "this-unit",
-            "modifier": {
-              "keywords": [
-                {
-                  "keyword_id": "devastating-wounds"
-                }
-              ]
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "this-model",
+          "modifier": {
+            "stat": "A",
+            "operation": "add",
+            "value": 3,
+            "weapons": {
+              "type": "melee"
             }
           }
-        ]
-      }
+        },
+        {
+          "type": "weapon-ability-grant",
+          "target": "this-model",
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "devastating-wounds"
+              }
+            ],
+            "weapons": {
+              "type": "melee"
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "phase"
@@ -187,9 +262,24 @@
       "canoness-with-jump-pack"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
+    "behavior": "reactive",
     "community_notes": "auto-generated, partial",
-    "faction_id": "adepta-sororitas"
+    "faction_id": "adepta-sororitas",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      },
+      "optional": true
+    },
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "unit"
+    }
   },
   {
     "ability_id": "fury-of-the-righteous-adepta-sororitas",
@@ -274,21 +364,37 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "version": "2025-q3",
     "effect": {
-      "type": "weapon-ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "keywords": [
-          {
-            "keyword_id": "sustained-hits",
-            "parameters": {
-              "value": 1
-            }
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "all_of": [
+              "MINISTORUM PRIEST"
+            ]
           }
-        ]
+        }
+      },
+      "effect": {
+        "type": "weapon-ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "keywords": [
+            {
+              "keyword_id": "sustained-hits",
+              "parameters": {
+                "value": 1
+              }
+            }
+          ],
+          "weapons": {
+            "type": "melee"
+          }
+        }
       }
     },
     "scope": {
@@ -299,7 +405,8 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "faction_id": "adepta-sororitas"
+    "faction_id": "adepta-sororitas",
+    "source_digest": "daea363d1fbb5e7a95462b33d69b0f1ea7259b9d8f7ec60f0da32d4ca810261b"
   },
   {
     "ability_id": "cherub-adepta-sororitas",
@@ -307,7 +414,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "version": "2025-q3",
     "effect": {
@@ -319,7 +426,7 @@
       }
     },
     "scope": {
-      "duration": "one-use"
+      "duration": "permanent"
     },
     "unit_ids": [
       "battle-sisters-squad",
@@ -327,9 +434,21 @@
       "sanctifiers"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
+    "behavior": "reactive",
     "community_notes": "[APPROX] Once per battle, after the unit performs an Act of Faith, gain 1 Miracle dice; the after-Act-of-Faith trigger is not gated. Full rule in raw-text store.",
-    "faction_id": "adepta-sororitas"
+    "faction_id": "adepta-sororitas",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "act-of-faith"
+      }
+    },
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "unit"
+    },
+    "source_digest": "482446c53e1bea8d1264d21466c92a9b2461bc5d923d80461ed10018048ffc01"
   },
   {
     "ability_id": "salvationist-medikit-adepta-sororitas",
@@ -337,15 +456,55 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "392dd836fe1a5c269be6cb61a9368372458348a6487b2435a7b0ae80c875cf23",
     "version": "2025-q3",
     "effect": {
-      "type": "return-models",
-      "target": "this-unit",
-      "modifier": {
-        "count": "D3"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "command"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-model",
+              "filter": {
+                "state": "on-battlefield"
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "return-models",
+        "target": {
+          "level": "model",
+          "member_of": "this-unit",
+          "none_of": [
+            "CHARACTER"
+          ]
+        },
+        "modifier": {
+          "count": "D3"
+        }
       }
     },
     "scope": {
@@ -355,7 +514,7 @@
       "sanctifiers"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "activated",
     "faction_id": "adepta-sororitas"
   },
   {
@@ -435,36 +594,41 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "9216ab16de6014f5b93d492d7ddde76e2352e1161d48f9d868f4ba107517f23a",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "army-rule",
-            "target": "this-unit",
-            "modifier": {
-              "rule": "attachment",
-              "with": {
-                "all_of": [
-                  "BATTLE SISTERS SQUAD"
-                ]
-              },
-              "led_by": "ministorum-priest"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "army-rule",
+          "target": "this-unit",
+          "modifier": {
+            "rule": "attachment",
+            "with": {
+              "owner": "friendly",
+              "all_of": [
+                "MINISTORUM PRIEST"
+              ],
+              "has_ability": [
+                "leader"
+              ]
+            },
+            "attach_as": {
+              "owner": "friendly",
+              "all_of": [
+                "BATTLE SISTERS SQUAD"
+              ]
             }
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "battle-formations-declared"
           },
-          {
+          "effect": {
             "type": "ability-grant",
             "target": {
               "level": "model",
@@ -477,20 +641,20 @@
             "modifier": {
               "definition": {
                 "type": "ability-part",
+                "duration": "while-leading",
                 "effect": {
                   "type": "ability-grant",
+                  "target": "this-model",
                   "modifier": {
                     "ability": "scouts",
                     "value": 6
-                  },
-                  "target": "this-model"
-                },
-                "duration": "while-leading"
+                  }
+                }
               }
             }
           }
-        ]
-      }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -499,7 +663,7 @@
       "sanctifiers"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "faction_id": "adepta-sororitas"
   },
   {
@@ -572,7 +736,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "d0ade2ca50807d083cf321ca030d52a1c4544ec4ca739ec1a4890a63f3ac1aa2",
     "version": "2025-q3",
@@ -581,7 +745,7 @@
       "target": "this-unit",
       "modifier": {
         "threshold": 4,
-        "against": "psychic"
+        "against": "psychic-and-mortal"
       }
     },
     "scope": {
@@ -600,33 +764,75 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "2bb6174fbe23e34798b4b44f06231c2cf2ffd7921dd4dc4713f0f9589868ec70",
     "version": "2025-q3",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "re-roll",
-          "target": "this-unit",
-          "modifier": {
-            "roll": "hit",
-            "subset": "all-failures"
+      "type": "ability-part",
+      "trigger": {
+        "event": "battle-started"
+      },
+      "effect": {
+        "type": "persistent-designation",
+        "designation": "quarry",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            },
+            "bind_as": "quarry-selection"
           }
         },
-        {
-          "type": "weapon-ability-grant",
-          "target": "this-unit",
-          "modifier": {
-            "keywords": [
-              {
-                "keyword_id": "precision"
+        "selection_policy": "one-time",
+        "allow_while_embarked": true,
+        "consumer": {
+          "relation": "attacks-selected-unit",
+          "beneficiary": "this-unit",
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "defender",
+                "filter": {
+                  "designated": "quarry"
+                }
               }
-            ]
+            },
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "weapon-ability-grant",
+                  "target": "this-unit",
+                  "modifier": {
+                    "keywords": [
+                      {
+                        "keyword_id": "precision"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "type": "re-roll",
+                  "target": "this-unit",
+                  "modifier": {
+                    "roll": "hit",
+                    "result_scope": "any-result"
+                  }
+                }
+              ]
+            }
           }
-        }
-      ]
+        },
+        "duration": "battle"
+      }
     },
     "scope": {
       "duration": "permanent"
@@ -834,7 +1040,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "600c430b0fc12c163da5176869bf84be1443016f39d8ef0011d06028811c7d00",
     "version": "2025-q3",
@@ -848,13 +1054,25 @@
         }
       },
       "effect": {
-        "type": "stat-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "stat": "Sv",
-          "operation": "set",
-          "value": 2
-        }
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "Sv",
+              "operation": "set",
+              "value": 2
+            }
+          },
+          {
+            "type": "invulnerable-save",
+            "target": "this-unit",
+            "modifier": {
+              "invuln_sv": 4
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -1137,24 +1355,67 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "acf0130816b58d9f65765a32e969283513e64a05329c351a73d237a8a173ea92",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "state": "engaged"
+                  }
+                }
+              }
+            ]
+          }
+        ]
       },
       "effect": {
-        "type": "move",
-        "target": "this-unit",
-        "modifier": {
-          "move_type": "normal"
-        }
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "move",
+            "target": "this-unit",
+            "modifier": {
+              "move_type": "normal",
+              "distance": 6
+            }
+          },
+          {
+            "type": "permission",
+            "target": "this-unit",
+            "modifier": {
+              "activity": "declare-charge",
+              "allow": false
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -1164,8 +1425,15 @@
       "seraphim-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "adepta-sororitas"
+    "behavior": "reactive",
+    "faction_id": "adepta-sororitas",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "overseer-of-redemption-adepta-sororitas",
@@ -1173,35 +1441,60 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "027c169ff9149c1bf42bf47a1fff0f4a0e66bcf6bcf5ddd0f48c8ddaa44e69fa",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "model-count",
+            "parameters": {
+              "subject": "this-unit",
+              "keyword": "REPENTIA SUPERIOR",
+              "min": 1
+            }
+          },
+          {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "melee"
+            }
+          }
+        ]
       },
       "effect": {
         "type": "sequence",
         "steps": [
           {
             "type": "re-roll",
-            "target": "this-unit",
+            "target": {
+              "member_of": "this-unit",
+              "all_of": [
+                "SISTERS REPENTIA"
+              ],
+              "level": "model"
+            },
             "modifier": {
               "roll": "hit",
-              "subset": "all-failures"
+              "result_scope": "any-result"
             }
           },
           {
             "type": "re-roll",
-            "target": "this-unit",
+            "target": {
+              "member_of": "this-unit",
+              "all_of": [
+                "SISTERS REPENTIA"
+              ],
+              "level": "model"
+            },
             "modifier": {
               "roll": "wound",
-              "subset": "all-failures"
+              "result_scope": "any-result"
             }
           }
         ]
@@ -1224,7 +1517,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "49cd58670b7ca0cdd9dad6f27cfae3ac233fc26f6535c0aea8c674ec41dc8326",
     "version": "2025-q3",
@@ -1235,25 +1528,39 @@
           "owner": "friendly",
           "all_of": [
             "ADEPTA SORORITAS"
-          ],
-          "within": {
-            "range": {
-              "inches": 12
-            },
-            "of": "this-model"
-          }
+          ]
         },
         "count": {
           "min": 1,
           "max": 1
         },
         "eligibility": {
-          "type": "matches",
-          "parameters": {
-            "filter": {
-              "state": "battle-shocked"
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "subject": "selected-unit",
+                "filter": {
+                  "state": "battle-shocked"
+                }
+              }
+            },
+            {
+              "type": "matches",
+              "parameters": {
+                "subject": "selected-unit",
+                "filter": {
+                  "within": {
+                    "of": "this-model",
+                    "range": {
+                      "inches": 12
+                    }
+                  }
+                }
+              }
             }
-          }
+          ]
         }
       },
       "effect": {
@@ -1266,14 +1573,23 @@
       }
     },
     "scope": {
-      "duration": "one-use"
+      "duration": "permanent"
     },
     "unit_ids": [
       "dialogus"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "faction_id": "adepta-sororitas"
+    "behavior": "reactive",
+    "faction_id": "adepta-sororitas",
+    "trigger": {
+      "event": "phase-started",
+      "optional": true
+    },
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "unit"
+    }
   },
   {
     "ability_id": "stirring-rhetoric-adepta-sororitas",
@@ -1281,7 +1597,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "152ab6121dce539fe4e3a3760a9edf0b0b163e1bcc10d9447e1e0c9f61262a37",
     "version": "2025-q3",
@@ -1296,17 +1612,16 @@
       },
       "effect": {
         "type": "resource-die",
-        "target": "this-unit",
+        "target": "this-model",
         "modifier": {
-          "pool": "miracle-dice",
+          "pool": "miracle-dice-pool",
           "operation": "substitute",
-          "value": 6,
-          "count": 1
+          "value": 6
         }
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "unit_ids": [
       "dialogus"
@@ -1328,24 +1643,29 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "f7b8c8798e183f868b209dadccbeea108a62bd46a742595074439ed1cee5675b",
     "version": "2025-q3",
     "effect": {
-      "type": "roll-modifier",
-      "target": {
-        "owner": "enemy",
-        "within": {
-          "range": {
-            "inches": 6
-          }
-        }
-      },
+      "type": "aura",
+      "target": "enemy-within-aura",
       "modifier": {
-        "roll": "battle-shock",
-        "operation": "subtract",
-        "value": 1
+        "range": {
+          "inches": 6
+        },
+        "effect": {
+          "type": "stat-modifier",
+          "target": "recipient",
+          "modifier": {
+            "stat": "Ld",
+            "operation": "worsen",
+            "value": 1
+          }
+        },
+        "eligible": {
+          "owner": "enemy"
+        }
       }
     },
     "scope": {
@@ -1355,7 +1675,7 @@
       "dogmata"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "aura",
     "faction_id": "adepta-sororitas"
   },
   {
@@ -1403,23 +1723,61 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "16010a62cee922f83fc5ad092cb3d1bf066d98273bd49b344b3e0dab6733826d",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "ability-grant",
-        "target": "this-unit",
-        "modifier": {
-          "ability": "benefit-of-cover"
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "subject": "event-subject",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success"
+              },
+              "window": "event"
+            }
+          }
+        },
+        "effect": {
+          "type": "rule-state",
+          "target": "selected-unit",
+          "modifier": {
+            "direction": "suppressed",
+            "rule_kind": "core-rule",
+            "rule": "benefit-of-cover"
+          }
         }
       }
     },
@@ -1430,8 +1788,14 @@
       "immolator"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "adepta-sororitas"
+    "behavior": "reactive",
+    "faction_id": "adepta-sororitas",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
+    }
   },
   {
     "ability_id": "medicus-ministorum-adepta-sororitas",
@@ -1513,7 +1877,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "a5d515a8e43790d9dfe2997f34d181fe5edd5f78a37f3d563367a377d6722a14",
     "version": "2025-q3",
@@ -1534,7 +1898,7 @@
             "target": "this-unit",
             "modifier": {
               "roll": "hit",
-              "subset": "all-failures"
+              "result_scope": "any-result"
             }
           },
           {
@@ -1542,7 +1906,7 @@
             "target": "this-unit",
             "modifier": {
               "roll": "wound",
-              "subset": "all-failures"
+              "result_scope": "any-result"
             }
           }
         ]
@@ -1594,15 +1958,27 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "db5f2bae245a8eb3cca1df9d81a364c92d2b3958c0471ebd7f0f15e2bd8a0f90",
     "version": "2025-q3",
     "effect": {
-      "type": "army-rule",
-      "target": "this-model",
-      "modifier": {
-        "rule": "warlord-required"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "this-model",
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      },
+      "effect": {
+        "type": "army-rule",
+        "target": "this-unit",
+        "modifier": {
+          "rule": "warlord-required"
+        }
       }
     },
     "scope": {
@@ -1621,7 +1997,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "a2de412f3c95c44725479d5934a5e04042a32f4d37af9b8959dccd8641fe143b",
     "version": "2025-q3",
@@ -1634,19 +2010,26 @@
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "unit_ids": [
       "retributor-squad"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
+    "behavior": "reactive",
     "usage": {
       "frequency": "n-per-battle",
-      "count": 2
+      "count": 2,
+      "per": "unit"
     },
     "community_notes": "[APPROX] Twice per battle, after the unit performs an Act of Faith, gain 1 Miracle dice; the after-Act-of-Faith trigger is not gated. Full rule in raw-text store.",
-    "faction_id": "adepta-sororitas"
+    "faction_id": "adepta-sororitas",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "act-of-faith"
+      }
+    }
   },
   {
     "ability_id": "storm-of-retribution-adepta-sororitas",
@@ -1654,16 +2037,16 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "50158d0651f9a51133c8e4f64611863e8378aae739812a58eec2ac0155095170",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
+        "type": "attack-is",
         "parameters": {
-          "phase": "shooting"
+          "attack_type": "ranged"
         }
       },
       "effect": {
@@ -1686,21 +2069,59 @@
             }
           },
           {
-            "type": "roll-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "hit",
-              "operation": "add",
-              "value": 1
+            "type": "conditional",
+            "condition": {
+              "type": "happened",
+              "parameters": {
+                "event": "destroyed",
+                "object": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "ADEPTA SORORITAS"
+                  ]
+                },
+                "filter": {
+                  "by": "defender"
+                },
+                "window": "battle"
+              }
+            },
+            "effect": {
+              "type": "roll-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "hit",
+                "operation": "add",
+                "value": 1
+              }
             }
           },
           {
-            "type": "roll-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "wound",
-              "operation": "add",
-              "value": 1
+            "type": "conditional",
+            "condition": {
+              "type": "happened",
+              "parameters": {
+                "event": "destroyed",
+                "object": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "ADEPTA SORORITAS"
+                  ]
+                },
+                "filter": {
+                  "by": "defender"
+                },
+                "window": "battle"
+              }
+            },
+            "effect": {
+              "type": "roll-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "wound",
+                "operation": "add",
+                "value": 1
+              }
             }
           }
         ]
@@ -1713,7 +2134,7 @@
       "retributor-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "activated",
     "community_notes": "auto-generated, partial",
     "faction_id": "adepta-sororitas"
   },
@@ -1723,17 +2144,97 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "696e85410d1504e334e39448b79cf3e7142cb1bea30a6cda4877394900a46f8c",
     "version": "2025-q3",
     "effect": {
-      "type": "re-roll",
-      "target": "this-unit",
-      "modifier": {
-        "roll": "hit",
-        "subset": "ones"
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "not",
+            "operands": [
+              {
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "defender",
+                      "filter": {
+                        "owner": "enemy"
+                      }
+                    }
+                  },
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "defender",
+                      "filter": {
+                        "within": {
+                          "of": {
+                            "objective": {}
+                          },
+                          "range": "objective-control"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "subset": "ones"
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "defender",
+                  "filter": {
+                    "owner": "enemy"
+                  }
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "defender",
+                  "filter": {
+                    "within": {
+                      "of": {
+                        "objective": {}
+                      },
+                      "range": "objective-control"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "result_scope": "any-result"
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -1751,17 +2252,30 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "4602dc7a8b6287c375cd0aebfba1914c9f22c93f20797716a1006551a5ef7d5a",
     "version": "2025-q3",
     "effect": {
-      "type": "re-roll",
-      "target": "this-unit",
-      "modifier": {
-        "roll": "charge",
-        "subset": "all-failures"
-      }
+      "type": "choice",
+      "options": [
+        {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "charge",
+            "result_scope": "any-result"
+          }
+        },
+        {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "advance",
+            "result_scope": "any-result"
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -1771,7 +2285,7 @@
       "zephyrim-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "activated",
     "faction_id": "adepta-sororitas"
   },
   {
@@ -1780,35 +2294,151 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "af68b5d3ed4dc59dee7ae13f46d42733a335979b997741e4ba2c866d2381e419",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "subject": "selected-unit",
+                "filter": {
+                  "within": {
+                    "of": "this-model",
+                    "range": {
+                      "inches": 12
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "matches",
+              "parameters": {
+                "subject": "selected-unit",
+                "filter": {
+                  "visible": {
+                    "to": "this-model"
+                  }
+                }
+              }
+            }
+          ]
         }
       },
       "effect": {
-        "type": "mortal-wounds",
-        "target": "defender",
-        "modifier": {
-          "count": 3
-        }
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "selected-unit",
+                "filter": {
+                  "all_of": [
+                    "CHAOS"
+                  ]
+                }
+              }
+            },
+            "effect": {
+              "type": "test",
+              "target": "selected-unit",
+              "modifier": {
+                "test": "battle-shock",
+                "modifier": -2
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "selected-unit",
+                    "filter": {
+                      "all_of": [
+                        "CHAOS"
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "test",
+              "target": "selected-unit",
+              "modifier": {
+                "test": "battle-shock"
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "roll-result",
+              "parameters": {
+                "roll": "battle-shock",
+                "result": "failure"
+              }
+            },
+            "effect": {
+              "type": "mortal-wounds",
+              "target": "selected-unit",
+              "modifier": {
+                "count": 3
+              }
+            }
+          }
+        ]
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "unit_ids": [
       "daemonifuge"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "adepta-sororitas"
+    "behavior": "reactive",
+    "faction_id": "adepta-sororitas",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "mysterious-saviours-adepta-sororitas",
@@ -1816,33 +2446,44 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "50abfa531feeebeda388d39ecae4272c43a09d5c2477e04197a91458b9522d04",
     "version": "2025-q3",
     "effect": {
-      "type": "choice",
-      "options": [
+      "type": "sequence",
+      "steps": [
         {
-          "type": "cost-modifier",
-          "target": "this-model",
+          "type": "permission",
+          "target": "this-unit",
           "modifier": {
-            "of": "stratagem",
-            "id": "fire-overwatch",
-            "operation": "set",
-            "amount": 0,
-            "applies_to": "targeting-this-unit"
+            "activity": "use-stratagem",
+            "allow": true,
+            "despite": [
+              "stratagem-used-this-phase"
+            ],
+            "stratagem": "heroic-intervention"
           }
         },
         {
           "type": "cost-modifier",
-          "target": "this-model",
+          "target": "this-unit",
           "modifier": {
             "of": "stratagem",
-            "id": "heroic-intervention",
-            "operation": "set",
-            "amount": 0,
-            "applies_to": "targeting-this-unit"
+            "operation": "decrease",
+            "amount": 1,
+            "applies_to": "the-triggering-use"
+          }
+        },
+        {
+          "type": "ability-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "ability": "heroic-intervention",
+            "aspect": "uses",
+            "operation": "lift-limit",
+            "value": 1,
+            "consumes_shared_use": false
           }
         }
       ]
@@ -1854,7 +2495,7 @@
       "daemonifuge"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "activated",
     "faction_id": "adepta-sororitas"
   },
   {
@@ -1910,32 +2551,47 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "05ee6f5a96280213cfcbd53c1a4cf1dca8ac07ceab87b753cb1e8b4cc873526d",
     "version": "2025-q3",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "roll-modifier",
-          "target": "this-unit",
-          "modifier": {
-            "roll": "hit",
-            "operation": "add",
-            "value": 1
-          }
-        },
-        {
-          "type": "roll-modifier",
-          "target": "this-unit",
-          "modifier": {
-            "roll": "wound",
-            "operation": "add",
-            "value": 1
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "defender",
+          "filter": {
+            "any_of": [
+              "MONSTER",
+              "VEHICLE"
+            ]
           }
         }
-      ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "operation": "add",
+              "value": 1
+            }
+          },
+          {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "wound",
+              "operation": "add",
+              "value": 1
+            }
+          }
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
@@ -2059,28 +2715,48 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "6c1a73f0bbabc3b9f641b93d8842c0578831ff2a12cd643f2a5023d2a8751987",
+    "source_digest": "8e61bea5350ee78992a61f9cb9c069fe2893588c5d38049231fb9f86c1392bfe",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "melee"
+            }
+          },
+          "effect": {
+            "type": "ability-grant",
+            "target": "this-unit",
+            "modifier": {
+              "ability": "stealth"
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "melee"
+            }
+          },
+          "effect": {
+            "type": "roll-modifier",
+            "target": "attacker",
+            "modifier": {
+              "roll": "hit",
+              "operation": "subtract",
+              "value": 1
+            }
+          }
         }
-      },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "attacker",
-        "modifier": {
-          "roll": "hit",
-          "operation": "subtract",
-          "value": 1
-        }
-      }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -2125,7 +2801,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "f9996ab2d7695592b072c2025bf75cd9c71696144512fb0c054611ab11dfe887",
     "version": "2025-q3",
@@ -2135,16 +2811,16 @@
         "operator": "and",
         "operands": [
           {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
-          },
-          {
             "type": "attachment",
             "parameters": {
               "subject": "this-model",
               "role": "leading"
+            }
+          },
+          {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "melee"
             }
           }
         ]
@@ -2175,7 +2851,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "96bb8f7cb3cf6dd2c7e81d2fa1c782d90b2be6ea2925a98f2476673478ce377c",
     "version": "2025-q3",
@@ -2192,20 +2868,26 @@
         "steps": [
           {
             "type": "stat-modifier",
-            "target": "this-unit",
+            "target": "this-model",
             "modifier": {
               "stat": "A",
-              "operation": "add",
-              "value": 3
+              "operation": "improve",
+              "value": 3,
+              "weapons": {
+                "type": "melee"
+              }
             }
           },
           {
             "type": "stat-modifier",
-            "target": "this-unit",
+            "target": "this-model",
             "modifier": {
               "stat": "S",
-              "operation": "add",
-              "value": 3
+              "operation": "improve",
+              "value": 3,
+              "weapons": {
+                "type": "melee"
+              }
             }
           }
         ]
@@ -2219,7 +2901,12 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "adepta-sororitas"
+    "faction_id": "adepta-sororitas",
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "unit"
+    }
   },
   {
     "ability_id": "holy-mission-adepta-sororitas",
@@ -2227,29 +2914,25 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "51abd9145f5aa949fd9ae789ef3e66c7dec8bdf2567726a932b56e9e5594795c",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "battle-formations-declared"
+          },
+          "effect": {
             "type": "conditional",
             "condition": {
               "type": "attachment",
               "parameters": {
                 "subject": "this-model",
-                "role": "leading",
+                "role": "attached",
                 "with": {
                   "all_of": [
                     "DOMINION SQUAD"
@@ -2259,20 +2942,26 @@
             },
             "effect": {
               "type": "ability-grant",
-              "target": "this-model",
+              "target": "this-unit",
               "modifier": {
                 "ability": "scouts",
                 "value": 6
               }
             }
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "battle-formations-declared"
           },
-          {
+          "effect": {
             "type": "conditional",
             "condition": {
               "type": "attachment",
               "parameters": {
                 "subject": "this-model",
-                "role": "leading",
+                "role": "attached",
                 "with": {
                   "all_of": [
                     "SISTERS NOVITIATE SQUAD"
@@ -2282,14 +2971,14 @@
             },
             "effect": {
               "type": "ability-grant",
-              "target": "this-model",
+              "target": "this-unit",
               "modifier": {
                 "ability": "infiltrators"
               }
             }
           }
-        ]
-      }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -2298,7 +2987,7 @@
       "ministorum-priest"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "faction_id": "adepta-sororitas"
   },
   {
@@ -2373,7 +3062,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "7050aa347cc35c0a851d54ecfa29e6c54011a49d2532ddf7657fc700505c6914",
     "version": "2025-q3",
@@ -2383,17 +3072,34 @@
         "operator": "and",
         "operands": [
           {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "within": {
-                  "range": {
-                    "inches": 8
-                  },
-                  "of": "this-unit"
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "movement"
                 }
               },
-              "subject": "event-subject"
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "opponent-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "event-subject",
+              "filter": {
+                "within": {
+                  "of": "this-unit",
+                  "range": {
+                    "inches": 8
+                  }
+                }
+              }
             }
           },
           {
@@ -2404,8 +3110,7 @@
                 "parameters": {
                   "filter": {
                     "state": "engaged"
-                  },
-                  "subject": "this-unit"
+                  }
                 }
               }
             ]
@@ -2414,9 +3119,10 @@
       },
       "effect": {
         "type": "move",
-        "target": "this-unit",
+        "target": "event-subject",
         "modifier": {
-          "move_type": "normal"
+          "move_type": "normal",
+          "distance": "D6"
         }
       }
     },
@@ -2432,8 +3138,7 @@
       "event": "move-ended",
       "subject": {
         "owner": "enemy"
-      },
-      "optional": true
+      }
     },
     "faction_id": "adepta-sororitas"
   },
@@ -2443,51 +3148,53 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "e4d42a8b34c98977943ecf465ea17b4ef3d162b6ca7d287f69cc9637fff4f07e",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
-        }
-      },
-      "effect": {
-        "type": "conditional",
-        "condition": {
-          "type": "matches",
-          "parameters": {
-            "filter": {
-              "state": "embarked"
-            },
-            "subject": "this-unit"
-          }
-        },
-        "effect": {
-          "type": "ability-grant",
-          "target": {
-            "level": "model",
-            "member_of": "this-unit",
-            "attachment_role": "leader"
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attachment",
+            "parameters": {
+              "role": "led"
+            }
           },
-          "modifier": {
-            "definition": {
-              "type": "ability-part",
-              "effect": {
-                "type": "ability-grant",
-                "modifier": {
-                  "ability": "scouts",
-                  "value": 6
-                },
-                "target": "this-model"
-              },
-              "duration": "while-leading"
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "state": "embarked"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "bearer-transport",
+              "filter": {
+                "all_of": [
+                  "TRANSPORT"
+                ]
+              }
             }
           }
+        ]
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": {
+          "owner": "friendly",
+          "level": "model",
+          "member_of": "this-unit",
+          "attachment_role": "leader"
+        },
+        "modifier": {
+          "ability": "scouts",
+          "value": 6
         }
       }
     },
@@ -2498,8 +3205,11 @@
       "dominion-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "adepta-sororitas"
+    "behavior": "reactive",
+    "faction_id": "adepta-sororitas",
+    "trigger": {
+      "event": "battle-formations-declared"
+    }
   },
   {
     "ability_id": "healing-tears-adepta-sororitas",
@@ -2507,9 +3217,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "517ab09bf410896f7c5b5460047297ca76db5c329cf721a647327da4c1ff61f2",
+    "source_digest": "334b9745191554aadd4c268100e6c306d34d580baa7ce54508bd09fda54620c2",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -2517,108 +3227,48 @@
         "operator": "and",
         "operands": [
           {
-            "type": "matches",
+            "type": "model-profile",
             "parameters": {
-              "filter": {
-                "all_of": [
-                  "CELESTINE"
-                ]
-              }
+              "subject": "this-unit",
+              "profile": "celestine"
             }
           },
           {
-            "type": "strength",
-            "parameters": {
-              "below": "starting"
-            }
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "command"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
           }
         ]
       },
       "effect": {
-        "type": "choice",
-        "choice_label": "resurrect-allies",
-        "options": [
-          {
-            "type": "conditional",
-            "condition": {
-              "type": "matches",
-              "parameters": {
-                "filter": {
-                  "all_of": [
-                    "GEMINAE SUPERIA"
-                  ]
-                }
-              }
-            },
-            "effect": {
-              "type": "return-models",
-              "target": "this-unit",
-              "modifier": {
-                "count": 1
-              }
-            }
-          },
-          {
-            "type": "conditional",
-            "condition": {
-              "operator": "and",
-              "operands": [
-                {
-                  "type": "matches",
-                  "parameters": {
-                    "filter": {
-                      "all_of": [
-                        "BODYGUARD"
-                      ]
-                    }
-                  }
-                },
-                {
-                  "operator": "not",
-                  "operands": [
-                    {
-                      "type": "matches",
-                      "parameters": {
-                        "filter": {
-                          "all_of": [
-                            "GEMINAE SUPERIA"
-                          ]
-                        }
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
-            "effect": {
-              "type": "return-models",
-              "target": "this-unit",
-              "modifier": {
-                "count": "D3"
-              }
-            }
-          }
-        ]
+        "type": "return-models",
+        "target": "this-unit",
+        "modifier": {
+          "count": 1
+        }
       }
     },
     "scope": {
-      "duration": "turn"
+      "duration": "permanent"
     },
     "unit_ids": [
       "saint-celestine"
     ],
     "ability_type": "unit",
-    "behavior": "reactive",
+    "behavior": "activated",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "trigger": {
-      "event": "phase-started",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "command"
-        }
-      }
-    },
     "faction_id": "adepta-sororitas"
   },
   {
@@ -2627,15 +3277,26 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "8a1e483edd968274a3ffa9dba8dfba1c1ec76b22fb83896dca198ff841d23352",
     "version": "2025-q3",
     "effect": {
-      "type": "feel-no-pain",
-      "target": "this-unit",
-      "modifier": {
-        "threshold": 4
+      "type": "conditional",
+      "condition": {
+        "type": "model-count",
+        "parameters": {
+          "subject": "this-unit",
+          "keyword": "GEMINAE SUPERIA",
+          "min": 1
+        }
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "this-model",
+        "modifier": {
+          "threshold": 4
+        }
       }
     },
     "scope": {
@@ -2716,13 +3377,31 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "b7839c91742ce711a4223df21826be04e6f781c4b938441d5e232b1abcecd9b2",
     "version": "2025-q3",
     "effect": {
-      "type": "objective-sticky",
-      "target": "this-unit"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "within": {
+              "of": {
+                "objective": {
+                  "controlled_by": "friendly"
+                }
+              },
+              "range": "objective-control"
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "objective-sticky",
+        "target": "this-unit"
+      }
     },
     "scope": {
       "duration": "permanent"
@@ -2731,8 +3410,28 @@
       "battle-sisters-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "adepta-sororitas"
+    "behavior": "reactive",
+    "faction_id": "adepta-sororitas",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "the-emperors-grace-adepta-sororitas",
@@ -2740,7 +3439,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "b972e1d4220303ab2968b6a3f80a8707a20809450085f8fd99ef82f7fc60e3d3",
     "version": "2025-q3",
@@ -2758,12 +3457,17 @@
       "canoness"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
+    "behavior": "reactive",
     "usage": {
       "frequency": "n-per-battle",
-      "count": 1
+      "count": 1,
+      "per": "unit"
     },
-    "faction_id": "adepta-sororitas"
+    "faction_id": "adepta-sororitas",
+    "trigger": {
+      "event": "phase-started",
+      "optional": true
+    }
   },
   {
     "ability_id": "null-rod-adepta-sororitas",
@@ -2771,7 +3475,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "8d4ecaf4bc5376859c907837d331200a09bc9becd80c12beffaee456ec145f74",
     "version": "2025-q3",
@@ -2780,7 +3484,7 @@
       "target": "this-unit",
       "modifier": {
         "threshold": 4,
-        "against": "psychic"
+        "against": "psychic-and-mortal"
       }
     },
     "scope": {
@@ -2827,18 +3531,30 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "d29f8a9b12868eecfcb139cea7cfd28dad7c4576452cc1a62fd14c9c51b6c492",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
+          },
+          {
+            "type": "model-profile",
+            "parameters": {
+              "subject": "this-unit",
+              "profile": "aestred-thurga"
+            }
+          }
+        ]
       },
       "effect": {
         "type": "weapon-ability-grant",
@@ -3013,7 +3729,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "06f441deeb201392e43f4b27b075f372bd3eb317bd56579d1ef4e608b63a953a",
     "version": "2025-q3",
@@ -3024,73 +3740,109 @@
     "ability_type": "detachment",
     "behavior": "passive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+      "type": "ability-grant",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTA SORORITAS",
+          "FLY",
+          "INFANTRY"
+        ]
       },
-      "effect": {
-        "type": "conditional",
-        "condition": {
-          "operator": "and",
-          "operands": [
-            {
-              "type": "phase-is",
-              "parameters": {
-                "phase": "shooting"
-              }
-            },
-            {
-              "type": "player-turn-is",
-              "parameters": {
-                "turn": "your-turn"
-              }
-            }
-          ]
-        },
-        "effect": {
-          "type": "designate-target",
-          "designation": "condemned",
-          "select": {
-            "kind": "unit",
-            "selector": {
-              "filter": {
-                "owner": "enemy",
-                "within": {
-                  "range": {
-                    "inches": 12
-                  },
-                  "of": "this-model"
+      "modifier": {
+        "ability": "condemnatory-psalms",
+        "definition": {
+          "type": "ability-part",
+          "name": "Condemnatory Psalms",
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "phase-is",
+                  "parameters": {
+                    "phase": "shooting"
+                  }
                 },
-                "visible": {
-                  "to": "this-model"
+                {
+                  "type": "player-turn-is",
+                  "parameters": {
+                    "turn": "your-turn"
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "select-units",
+              "selector": {
+                "filter": {
+                  "owner": "enemy",
+                  "visible": {
+                    "to": "this-model"
+                  }
+                },
+                "count": {
+                  "min": 1,
+                  "max": 1
+                },
+                "eligibility": {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "selected-unit",
+                    "filter": {
+                      "within": {
+                        "of": "this-unit",
+                        "range": {
+                          "inches": 12
+                        }
+                      }
+                    }
+                  }
                 }
               },
-              "count": {
-                "min": 1,
-                "max": 1
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "designate",
+                    "target": "selected-unit",
+                    "modifier": {
+                      "tag": "condemned"
+                    }
+                  },
+                  {
+                    "type": "conditional",
+                    "condition": {
+                      "type": "matches",
+                      "parameters": {
+                        "subject": "selected-unit",
+                        "filter": {
+                          "designated": "condemned"
+                        }
+                      }
+                    },
+                    "effect": {
+                      "type": "stat-modifier",
+                      "target": "selected-unit",
+                      "modifier": {
+                        "stat": "detection-range",
+                        "operation": "add",
+                        "value": 3
+                      }
+                    }
+                  }
+                ]
               }
             }
           },
-          "applies": {
-            "to": "target",
-            "effect": {
-              "type": "stat-modifier",
-              "target": "recipient",
-              "modifier": {
-                "stat": "detection-range",
-                "operation": "add",
-                "value": 3
-              }
-            }
-          }
+          "optional": true,
+          "duration": "phase"
         }
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -3106,7 +3858,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "d3a3aaed5cb3a609087ef761623a0174f3127416b837c28a2e227502a4e25b75",
     "version": "2025-q3",
@@ -3115,9 +3867,40 @@
     "faction_id": "adepta-sororitas",
     "detachment_id": "chorus-of-condemnation",
     "ability_type": "enhancement",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "state": "engaged"
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "set-up",
+        "target": "this-unit",
+        "modifier": {
+          "to": "strategic-reserves"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "all_of": [
+        "Canoness with Jump Pack"
+      ]
+    },
+    "trigger": {
+      "event": "phase-ended",
       "condition": {
         "operator": "and",
         "operands": [
@@ -3135,38 +3918,7 @@
           }
         ]
       },
-      "effect": {
-        "type": "conditional",
-        "condition": {
-          "operator": "not",
-          "operands": [
-            {
-              "type": "matches",
-              "parameters": {
-                "filter": {
-                  "state": "engaged"
-                }
-              }
-            }
-          ]
-        },
-        "effect": {
-          "type": "set-up",
-          "target": "this-unit",
-          "modifier": {
-            "to": "strategic-reserves",
-            "from": "battlefield"
-          }
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "applies_to": {
-      "all_of": [
-        "Canoness with Jump Pack"
-      ]
+      "optional": true
     }
   },
   {
@@ -3175,7 +3927,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "087b44ed38695d1de9ae3bdfbe125db62cab2628202d091b0f06bd0eed629fcc",
     "version": "2025-q3",
@@ -3187,10 +3939,10 @@
     "behavior": "passive",
     "effect": {
       "type": "re-roll",
-      "target": "this-model",
+      "target": "this-unit",
       "modifier": {
         "roll": "attacks",
-        "subset": "all-failures"
+        "result_scope": "any-result"
       }
     },
     "scope": {
@@ -3209,16 +3961,16 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "a8177eab90f97a8dc6face5b78adcbbce28c6c4b3f99473ec393b09eb3e5536e",
+    "source_digest": "ba44e500eb0d15dc409cffaca7733069d19510c5df800cdd23de2dc222c5a811",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "adepta-sororitas",
     "detachment_id": "chorus-of-condemnation",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -3227,24 +3979,48 @@
           "all_of": [
             "ADEPTA SORORITAS"
           ],
-          "within": {
-            "range": {
-              "inches": 6
-            },
-            "of": "this-unit"
-          }
+          "state": "battle-shocked"
         },
         "count": {
           "min": 1,
           "max": 1
         },
         "eligibility": {
-          "type": "matches",
-          "parameters": {
-            "filter": {
-              "state": "battle-shocked"
+          "operator": "or",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "subject": "selected-unit",
+                "filter": {
+                  "within": {
+                    "of": {
+                      "stratagem_target": "first"
+                    },
+                    "range": {
+                      "inches": 6
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "matches",
+              "parameters": {
+                "subject": "selected-unit",
+                "filter": {
+                  "within": {
+                    "of": {
+                      "stratagem_target": "second"
+                    },
+                    "range": {
+                      "inches": 6
+                    }
+                  }
+                }
+              }
             }
-          }
+          ]
         }
       },
       "effect": {
@@ -3263,6 +4039,15 @@
       "all_of": [
         "ADEPTA SORORITAS"
       ]
+    },
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "command"
+        }
+      }
     }
   },
   {
@@ -3349,9 +4134,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "6b9af5be0d626f0057de70ff6cf3e754bb1171753fb586310e6058f8105fc836",
+    "source_digest": "c586fc64d8f10ee7e8f23f50555d0964d72b96593568bac99351dad05c61b394",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -3360,18 +4145,55 @@
     "ability_type": "detachment",
     "behavior": "passive",
     "effect": {
-      "type": "roll-modifier",
-      "target": {
-        "owner": "friendly"
-      },
-      "modifier": {
-        "roll": "hit",
-        "operation": "add",
-        "value": 1
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "stat-modifier",
+              "target": {
+                "owner": "friendly",
+                "any_of": [
+                  "CELESTIAN INSIDIANTS",
+                  "CELESTIAN SACRESANTS"
+                ]
+              },
+              "modifier": {
+                "stat": "WS",
+                "operation": "improve",
+                "value": 1
+              }
+            },
+            {
+              "type": "stat-modifier",
+              "target": {
+                "owner": "friendly",
+                "any_of": [
+                  "CELESTIAN INSIDIANTS",
+                  "CELESTIAN SACRESANTS"
+                ]
+              },
+              "modifier": {
+                "stat": "BS",
+                "operation": "improve",
+                "value": 1
+              }
+            }
+          ]
+        },
+        {
+          "type": "army-rule",
+          "target": "this-unit",
+          "modifier": {
+            "rule": "detachment-tag-exclusive",
+            "tag": "REVEREND"
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -3453,7 +4275,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "18034fe556fc191228968da74bbce46f281ed5ac563ad2c28043b623b20c0072",
     "version": "2025-q3",
@@ -3462,7 +4284,7 @@
     "faction_id": "adepta-sororitas",
     "detachment_id": "sacred-champions",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -3471,7 +4293,7 @@
           "target": "this-unit",
           "modifier": {
             "stat": "A",
-            "operation": "add",
+            "operation": "improve",
             "value": 1,
             "weapons": {
               "type": "melee"
@@ -3483,7 +4305,7 @@
           "target": "this-unit",
           "modifier": {
             "stat": "S",
-            "operation": "add",
+            "operation": "improve",
             "value": 1,
             "weapons": {
               "type": "melee"
@@ -3499,6 +4321,18 @@
       "all_of": [
         "CELESTIAN SACRESANTS"
       ]
+    },
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "fight"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "CELESTIAN SACRESANTS"
+        ]
+      }
     }
   },
   {
@@ -3549,7 +4383,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "5d0d6264a09f161d4dc7dce3b6ee269a048cc9d4d7ce041e45452dfc5e3b2c79",
     "version": "2025-q3",
@@ -3558,7 +4392,7 @@
     "faction_id": "adepta-sororitas",
     "detachment_id": "sacred-champions",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -3566,44 +4400,31 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "weapons": {
-              "type": "ranged"
-            },
             "keywords": [
               {
                 "keyword_id": "assault"
               }
-            ]
+            ],
+            "weapons": {
+              "type": "ranged"
+            }
           }
         },
         {
-          "type": "sequence",
-          "steps": [
-            {
-              "type": "permission",
-              "target": "this-unit",
-              "modifier": {
-                "activity": "shoot",
-                "allow": true,
-                "after": [
-                  "advance",
-                  "fall-back"
-                ]
-              }
-            },
-            {
-              "type": "permission",
-              "target": "this-unit",
-              "modifier": {
-                "activity": "declare-charge",
-                "allow": true,
-                "after": [
-                  "advance",
-                  "fall-back"
-                ]
-              }
-            }
-          ]
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "shoot",
+            "allow": true
+          }
+        },
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "declare-charge",
+            "allow": true
+          }
         }
       ]
     },
@@ -3614,6 +4435,22 @@
       "all_of": [
         "CELESTIAN SACRESANTS"
       ]
+    },
+    "trigger": {
+      "event": "selected",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "CELESTIAN SACRESANTS"
+        ]
+      },
+      "filter": {
+        "move_types": [
+          "advance",
+          "fall-back"
+        ],
+        "to": "move"
+      }
     }
   },
   {
@@ -3622,7 +4459,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "5776a454c0b6dfcbc297bda522764bf5fdc4fbe2bab45bb04bbf93de85fb5c3b",
     "version": "2025-q3",
@@ -3633,18 +4470,37 @@
     "ability_type": "detachment",
     "behavior": "passive",
     "effect": {
-      "type": "roll-modifier",
-      "target": {
-        "owner": "friendly"
-      },
-      "modifier": {
-        "roll": "battle-shock",
-        "operation": "add",
-        "value": 1
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "army-rule",
+          "target": "this-unit",
+          "modifier": {
+            "rule": "limit-exemption",
+            "exempt_from": [
+              "enhancement-limit"
+            ]
+          }
+        },
+        {
+          "type": "stat-modifier",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "ADEPTA SORORITAS",
+              "CHARACTER"
+            ]
+          },
+          "modifier": {
+            "stat": "Ld",
+            "operation": "improve",
+            "value": 1
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -3978,7 +4834,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "e04a75f7c9cdbdbfdeaccaf55fc6c9ef67d638045705d0fe6c3603ba185f78ab",
     "version": "2025-q3",
@@ -3996,12 +4852,19 @@
           "condition": {
             "type": "strength",
             "parameters": {
+              "subject": "event-subject",
               "below": "starting"
             }
           },
           "effect": {
             "type": "roll-modifier",
-            "target": "this-model",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "ADEPTA SORORITAS"
+              ],
+              "level": "model"
+            },
             "modifier": {
               "roll": "hit",
               "operation": "add",
@@ -4014,12 +4877,19 @@
           "condition": {
             "type": "strength",
             "parameters": {
+              "subject": "event-subject",
               "below": "half"
             }
           },
           "effect": {
             "type": "roll-modifier",
-            "target": "this-model",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "ADEPTA SORORITAS"
+              ],
+              "level": "model"
+            },
             "modifier": {
               "roll": "wound",
               "operation": "add",
@@ -4030,7 +4900,7 @@
       ]
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
@@ -4040,7 +4910,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "918da98709e15af2290198b545a464c876ff81fa6565ee1e26847a4549c071d7",
     "version": "2025-q3",
@@ -4055,45 +4925,69 @@
       "steps": [
         {
           "type": "weapon-ability-grant",
-          "target": "this-unit",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "ADEPTA SORORITAS"
+            ],
+            "level": "model"
+          },
           "modifier": {
-            "weapons": {
-              "type": "ranged"
-            },
             "keywords": [
               {
                 "keyword_id": "assault"
               }
-            ]
+            ],
+            "weapons": {
+              "type": "ranged"
+            }
           }
         },
         {
           "type": "conditional",
           "condition": {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "within": {
-                  "range": {
-                    "inches": 6
+            "operator": "and",
+            "operands": [
+              {
+                "type": "attack-is",
+                "parameters": {
+                  "weapons": {
+                    "keyword": {
+                      "keyword_id": "assault"
+                    }
                   },
-                  "of": {
-                    "owner": "enemy"
+                  "attack_type": "ranged"
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "defender",
+                  "filter": {
+                    "within": {
+                      "of": "attacker",
+                      "range": {
+                        "inches": 6
+                      }
+                    }
                   }
                 }
               }
-            }
+            ]
           },
           "effect": {
             "type": "stat-modifier",
-            "target": "this-unit",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "ADEPTA SORORITAS"
+              ],
+              "level": "model"
+            },
             "modifier": {
               "stat": "S",
               "operation": "add",
-              "value": 1,
-              "weapons": {
-                "type": "ranged"
-              }
+              "value": 1
             }
           }
         }
@@ -4169,7 +5063,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "595d567ec4907b4ffb007884f68f4247f7c91b382b837f2b2da182d68849e732",
     "version": "2025-q3",
@@ -4180,11 +5074,35 @@
     "ability_type": "detachment",
     "behavior": "passive",
     "effect": {
-      "type": "resource-gain",
-      "target": "this-unit",
-      "modifier": {
-        "pool": "acts-of-faith-pool",
-        "amount": 1
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      },
+      "effect": {
+        "type": "for-each-unit",
+        "selector": {
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "ADEPTA SORORITAS"
+            ]
+          }
+        },
+        "effect": {
+          "type": "ability-modifier",
+          "target": "recipient",
+          "modifier": {
+            "ability": "acts-of-faith",
+            "aspect": "uses",
+            "operation": "set",
+            "value": 2
+          }
+        }
       }
     },
     "scope": {
@@ -4198,54 +5116,38 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "7666e45e7bfb23fc68c5b4ac7ca1f5cd74b7cb42a1f9f81aaba95a6802e4c70d",
     "version": "2025-q3",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
+      "type": "aura",
+      "target": "enemy-within-aura",
+      "modifier": {
+        "range": {
+          "inches": 6
+        },
+        "effect": {
           "type": "test",
-          "target": {
-            "owner": "enemy",
-            "within": {
-              "range": {
-                "inches": 6
-              }
-            }
-          },
+          "target": "recipient",
           "modifier": {
             "test": "battle-shock",
             "modifier": -1
           }
         },
-        {
-          "type": "roll-modifier",
-          "target": {
-            "owner": "enemy",
-            "within": {
-              "range": {
-                "inches": 6
-              }
-            }
-          },
-          "modifier": {
-            "roll": "battle-shock",
-            "operation": "subtract",
-            "value": 1
-          }
+        "eligible": {
+          "owner": "enemy"
         }
-      ]
+      }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "unit_ids": [
       "intranzia-fraye"
     ],
     "ability_type": "unit",
-    "behavior": "reactive",
+    "behavior": "aura",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
       "event": "phase-started",
@@ -4341,7 +5243,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "4c31041586746ac5d2ae74257919b0fbfc2081cdc97b6e4fa747bc3db9fda984",
     "version": "2025-q3",
@@ -4350,17 +5252,111 @@
     "faction_id": "adepta-sororitas",
     "detachment_id": "penitent-host",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "permission",
-      "target": "this-unit",
-      "modifier": {
-        "activity": "shoot",
-        "allow": true,
-        "after": [
-          "fall-back"
-        ]
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "all_of": [
+                      "PENITENT"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "permission",
+            "target": "this-unit",
+            "modifier": {
+              "activity": "shoot",
+              "allow": true
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "all_of": [
+                      "PENITENT"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "permission",
+            "target": "this-unit",
+            "modifier": {
+              "activity": "declare-charge",
+              "allow": true,
+              "despite": [
+                "fell-back"
+              ]
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "all_of": [
+                  "PENITENT"
+                ]
+              }
+            }
+          },
+          "effect": {
+            "type": "permission",
+            "target": "this-unit",
+            "modifier": {
+              "activity": "shoot",
+              "allow": true
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "all_of": [
+                  "PENITENT"
+                ]
+              }
+            }
+          },
+          "effect": {
+            "type": "permission",
+            "target": "this-unit",
+            "modifier": {
+              "activity": "declare-charge",
+              "allow": true,
+              "despite": [
+                "fell-back"
+              ]
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "turn"
@@ -4370,7 +5366,21 @@
         "ADEPTA SORORITAS"
       ]
     },
-    "community_notes": "The unit is eligible to shoot or declare a charge in a turn in which it Fell Back; Penitent units are eligible to shoot and declare a charge instead."
+    "community_notes": "The unit is eligible to shoot or declare a charge in a turn in which it Fell Back; Penitent units are eligible to shoot and declare a charge instead.",
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTA SORORITAS"
+        ]
+      },
+      "filter": {
+        "move_types": [
+          "fall-back"
+        ]
+      }
+    }
   },
   {
     "ability_id": "devout-fanaticism-penitent-host-adepta-sororitas",
@@ -4470,7 +5480,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "1ccd62b47e24c583459421f764cdbd0cb132adc90d226c78ad1941d93aa59c07",
     "version": "2025-q3",
@@ -4479,19 +5489,23 @@
     "faction_id": "adepta-sororitas",
     "detachment_id": "penitent-host",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "rules-bundle",
+      "type": "sequence",
       "steps": [
         {
-          "type": "permission",
-          "target": "this-unit",
-          "modifier": {
-            "activity": "declare-charge",
-            "allow": true,
-            "after": [
-              "advance"
-            ]
+          "type": "ability-part",
+          "duration": "turn",
+          "effect": {
+            "type": "permission",
+            "target": "this-unit",
+            "modifier": {
+              "activity": "declare-charge",
+              "allow": true,
+              "after": [
+                "advance"
+              ]
+            }
           }
         },
         {
@@ -4507,24 +5521,42 @@
             }
           },
           "effect": {
-            "type": "move-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "advance": "fixed-6"
+            "type": "ability-part",
+            "duration": "phase",
+            "effect": {
+              "type": "move-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "advance": "fixed-6"
+              }
             }
           }
         }
       ]
     },
     "scope": {
-      "duration": "turn"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
         "PENITENT"
       ]
     },
-    "community_notes": "Used just before the unit Advances. Penitent Engines units do not make an Advance roll; instead add 6\" to their Move characteristic until the end of the phase."
+    "community_notes": "Used just before the unit Advances. Penitent Engines units do not make an Advance roll; instead add 6\" to their Move characteristic until the end of the phase.",
+    "trigger": {
+      "event": "move-started",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "PENITENT"
+        ]
+      },
+      "filter": {
+        "move_types": [
+          "advance"
+        ]
+      }
+    }
   },
   {
     "ability_id": "passion-of-the-penitent-penitent-host-adepta-sororitas",
@@ -4532,7 +5564,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "18f21240a3172c76a2782018844994603880183cef947a51b59bab0a7c16b28f",
     "version": "2025-q3",
@@ -4552,7 +5584,13 @@
       },
       "effect": {
         "type": "roll-result",
-        "target": "this-unit",
+        "target": {
+          "member_of": "this-unit",
+          "all_of": [
+            "PENITENT"
+          ],
+          "level": "model"
+        },
         "modifier": {
           "roll": "hit",
           "critical_on": 5
@@ -4756,7 +5794,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "92faedfc37aa198c9f24c53d5f33c52572033e00ec38a339bc80669498ee9317",
     "version": "2025-q3",
@@ -4767,43 +5805,43 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "rules-bundle",
-      "steps": [
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "attack-is",
-            "parameters": {
-              "attack_type": "melee"
-            }
-          },
-          "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "attack-is",
+        "parameters": {
+          "attack_type": "melee"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
             "type": "re-roll",
             "target": "this-unit",
             "modifier": {
               "roll": "hit",
-              "subset": "all-failures"
-            }
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "strength",
-            "parameters": {
-              "below": "half"
+              "result_scope": "any-result"
             }
           },
-          "effect": {
-            "type": "re-roll",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "wound",
-              "subset": "all-failures"
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "strength",
+              "parameters": {
+                "below": "half"
+              }
+            },
+            "effect": {
+              "type": "re-roll",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "wound",
+                "result_scope": "any-result"
+              }
             }
           }
-        }
-      ]
+        ]
+      }
     },
     "scope": {
       "duration": "phase"
@@ -4946,7 +5984,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "c2020e60d7244e3dcdbbf16742a36f2f71d005f63146d8232d17a3a5577a8c90",
     "version": "2025-q3",
@@ -4955,21 +5993,40 @@
     "faction_id": "adepta-sororitas",
     "detachment_id": "hallowed-martyrs",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "targeting",
-      "target": {
-        "owner": "enemy",
-        "level": "model",
-        "within": {
-          "range": "engagement",
-          "of": "this-unit"
+      "type": "ability-part",
+      "trigger": {
+        "event": "targets-selected",
+        "subject": {
+          "owner": "enemy",
+          "level": "model"
+        },
+        "filter": {
+          "kind": "attack"
         }
       },
-      "modifier": {
-        "may": "must-target",
-        "target": "this-unit",
-        "kind": "fight"
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "matches",
+          "parameters": {
+            "subject": "event-subject",
+            "filter": {
+              "engaged_with": "this-unit"
+            }
+          }
+        },
+        "effect": {
+          "type": "targeting",
+          "target": "event-subject",
+          "modifier": {
+            "by": "event-subject",
+            "may": "must-target",
+            "kind": "attack",
+            "target": "this-unit"
+          }
+        }
       }
     },
     "scope": {
@@ -4980,7 +6037,16 @@
         "ADEPTA SORORITAS"
       ]
     },
-    "community_notes": "Used at the start of the Fight phase on one Infantry or Walker unit: until the end of the phase, each enemy model within Engagement Range of your unit must select your unit as the target of its attacks."
+    "community_notes": "Used at the start of the Fight phase on one Infantry or Walker unit: until the end of the phase, each enemy model within Engagement Range of your unit must select your unit as the target of its attacks.",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    }
   },
   {
     "ability_id": "blazing-ire-bringers-of-flame-adepta-sororitas",
@@ -5159,7 +6225,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "cac647670511c2de2706b3e507d08e578f599fbcb6536c0c7e3f67217a17f1ce",
     "version": "2025-q3",
@@ -5173,17 +6239,16 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "weapons": {
-          "type": "ranged",
-          "keyword": {
-            "keyword_id": "torrent"
-          }
-        },
         "keywords": [
           {
             "keyword_id": "devastating-wounds"
           }
-        ]
+        ],
+        "weapons": {
+          "keyword": {
+            "keyword_id": "torrent"
+          }
+        }
       }
     },
     "scope": {
@@ -5466,7 +6531,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "a6cba8df14853a40ef114933646f61fcba410a305a742941c7a8e120a2a35b90",
     "version": "2025-q3",
@@ -5475,61 +6540,75 @@
     "faction_id": "adepta-sororitas",
     "detachment_id": "champions-of-faith",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "permission",
-      "target": "this-unit",
-      "modifier": {
-        "activity": "shoot",
-        "allow": true,
-        "after": [
-          "fall-back"
-        ]
-      }
-    },
-    "scope": {
-      "duration": "turn"
-    },
-    "applies_to": {
-      "all_of": [
-        "ADEPTA SORORITAS"
-      ]
-    },
-    "community_notes": "Used just after the unit Falls Back. If the unit is Righteous, it is eligible to shoot and declare a charge in a turn in which it Fell Back instead (escalation not encoded)."
-  },
-  {
-    "ability_id": "path-of-the-righteous-champions-of-faith-adepta-sororitas",
-    "name": "Path of the Righteous",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "783bdecfe46c980d608bb4f71026059fc0a64ff78f4a39906c960f913470740f",
-    "version": "2025-q3",
-    "supersedes": null,
-    "unit_ids": [],
-    "faction_id": "adepta-sororitas",
-    "detachment_id": "champions-of-faith",
-    "ability_type": "stratagem",
-    "behavior": "activated",
-    "effect": {
-      "type": "rules-bundle",
+      "type": "sequence",
       "steps": [
         {
-          "type": "move",
-          "target": "this-unit",
-          "modifier": {
-            "move_type": "pile-in",
-            "distance": 6
+          "type": "conditional",
+          "condition": {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "this-unit",
+                  "filter": {
+                    "designated": "righteous"
+                  }
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "permission",
+            "target": "this-unit",
+            "modifier": {
+              "activity": "shoot",
+              "allow": true,
+              "after": [
+                "fall-back"
+              ]
+            }
           }
         },
         {
-          "type": "move",
-          "target": "this-unit",
-          "modifier": {
-            "move_type": "consolidation",
-            "distance": 6
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-unit",
+              "filter": {
+                "designated": "righteous"
+              }
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "permission",
+                "target": "this-unit",
+                "modifier": {
+                  "activity": "shoot",
+                  "allow": true,
+                  "after": [
+                    "fall-back"
+                  ]
+                }
+              },
+              {
+                "type": "permission",
+                "target": "this-unit",
+                "modifier": {
+                  "activity": "declare-charge",
+                  "allow": true,
+                  "after": [
+                    "fall-back"
+                  ]
+                }
+              }
+            ]
           }
         }
       ]
@@ -5542,7 +6621,100 @@
         "ADEPTA SORORITAS"
       ]
     },
-    "community_notes": "If the unit is Righteous, those moves do not need to end closer to the closest enemy model, provided they end as close as possible to the closest enemy unit (relaxation not encoded)."
+    "community_notes": "Used just after the unit Falls Back. If the unit is Righteous, it is eligible to shoot and declare a charge in a turn in which it Fell Back instead (escalation not encoded).",
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTA SORORITAS"
+        ]
+      },
+      "filter": {
+        "move_types": [
+          "fall-back"
+        ]
+      }
+    }
+  },
+  {
+    "ability_id": "path-of-the-righteous-champions-of-faith-adepta-sororitas",
+    "name": "Path of the Righteous",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "source_digest": "783bdecfe46c980d608bb4f71026059fc0a64ff78f4a39906c960f913470740f",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "champions-of-faith",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "move-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "applies_to_moves": [
+              "pile-in",
+              "consolidation"
+            ],
+            "distance_bonus": 3
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-unit",
+              "filter": {
+                "designated": "righteous"
+              }
+            }
+          },
+          "effect": {
+            "type": "move-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "applies_to_moves": [
+                "pile-in",
+                "consolidation"
+              ],
+              "ends_nearest": {
+                "of": {
+                  "owner": "enemy"
+                },
+                "waives": "closest-enemy-model"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "turn"
+    },
+    "applies_to": {
+      "all_of": [
+        "ADEPTA SORORITAS"
+      ]
+    },
+    "community_notes": "If the unit is Righteous, those moves do not need to end closer to the closest enemy model, provided they end as close as possible to the closest enemy unit (relaxation not encoded).",
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "pile-in",
+          "consolidation"
+        ]
+      }
+    }
   },
   {
     "ability_id": "shield-of-denial-champions-of-faith-adepta-sororitas",
@@ -5645,7 +6817,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "535550f59a03485f01832f3e46d719e5a457e31a14ab55c2f5343829924fa23f",
     "version": "2025-q3",
@@ -5657,7 +6829,6 @@
     "behavior": "activated",
     "effect": {
       "type": "choice",
-      "choice_label": "Select one ability",
       "options": [
         {
           "type": "weapon-ability-grant",
@@ -5702,7 +6873,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "df2469d30d9fb3fe92d3600bcd727e484df9ce6a42d6104bf4513a32570c60a6",
     "version": "2025-q3",
@@ -5713,19 +6884,56 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "stat-modifier",
-      "target": "this-unit",
-      "modifier": {
-        "stat": "S",
-        "operation": "add",
-        "value": 1,
-        "weapons": {
-          "type": "melee"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "duration": "turn",
+          "effect": {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "S",
+              "operation": "improve",
+              "value": 1,
+              "weapons": {
+                "type": "melee"
+              }
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-unit",
+              "filter": {
+                "designated": "righteous"
+              }
+            }
+          },
+          "effect": {
+            "type": "ability-part",
+            "duration": "phase",
+            "effect": {
+              "type": "stat-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "stat": "AP",
+                "operation": "improve",
+                "value": 1,
+                "weapons": {
+                  "type": "melee"
+                }
+              }
+            }
+          }
         }
-      }
+      ]
     },
     "scope": {
-      "duration": "turn"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -6071,7 +7279,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "f8ab9d1423f77b3c779e0d859fdc330a42bb206ace3658c9ec3171564774663d",
     "version": "2025-q3",
@@ -6080,7 +7288,7 @@
     "faction_id": "adepta-sororitas",
     "detachment_id": "sanctuary-guardians",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -6089,11 +7297,7 @@
           "target": "this-unit",
           "modifier": {
             "activity": "shoot",
-            "allow": true,
-            "after": [
-              "advance",
-              "fall-back"
-            ]
+            "allow": true
           }
         },
         {
@@ -6101,24 +7305,36 @@
           "target": "this-unit",
           "modifier": {
             "activity": "declare-charge",
-            "allow": true,
-            "after": [
-              "advance",
-              "fall-back"
-            ]
+            "allow": true
           }
         }
       ]
     },
     "scope": {
-      "duration": "turn"
+      "duration": "phase"
     },
     "applies_to": {
       "all_of": [
         "SANCTUARY GUARDIANS"
       ]
     },
-    "community_notes": "Used when the unit is selected to make an Advance or Fall Back move: that move does not prevent it from being eligible to shoot or declare a charge."
+    "community_notes": "Used when the unit is selected to make an Advance or Fall Back move: that move does not prevent it from being eligible to shoot or declare a charge.",
+    "trigger": {
+      "event": "selected",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "SANCTUARY GUARDIANS"
+        ]
+      },
+      "filter": {
+        "move_types": [
+          "advance",
+          "fall-back"
+        ],
+        "to": "move"
+      }
+    }
   },
   {
     "ability_id": "fires-of-damnation-sanctuary-guardians-adepta-sororitas",
@@ -6478,7 +7694,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "1e7659c19f05021ddbbcb42319770a21616cfb9c26a238ae4cee1a536c6d6b17",
     "version": "2025-q3",
@@ -6489,42 +7705,113 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "rules-bundle",
+      "type": "sequence",
       "steps": [
         {
-          "type": "stat-modifier",
-          "target": "this-model",
-          "modifier": {
-            "stat": "A",
-            "operation": "add",
-            "value": 1,
-            "weapons": {
-              "type": "melee"
-            }
+          "type": "conditional",
+          "condition": {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "wounds",
+                "parameters": {
+                  "subject": "this-model",
+                  "lost": true
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "stat-modifier",
+                "target": "this-model",
+                "modifier": {
+                  "stat": "A",
+                  "operation": "add",
+                  "value": 1,
+                  "weapons": {
+                    "type": "melee"
+                  }
+                }
+              },
+              {
+                "type": "stat-modifier",
+                "target": "this-model",
+                "modifier": {
+                  "stat": "S",
+                  "operation": "add",
+                  "value": 1,
+                  "weapons": {
+                    "type": "melee"
+                  }
+                }
+              },
+              {
+                "type": "stat-modifier",
+                "target": "this-model",
+                "modifier": {
+                  "stat": "D",
+                  "operation": "add",
+                  "value": 1,
+                  "weapons": {
+                    "type": "melee"
+                  }
+                }
+              }
+            ]
           }
         },
         {
-          "type": "stat-modifier",
-          "target": "this-model",
-          "modifier": {
-            "stat": "S",
-            "operation": "add",
-            "value": 1,
-            "weapons": {
-              "type": "melee"
+          "type": "conditional",
+          "condition": {
+            "type": "wounds",
+            "parameters": {
+              "subject": "this-model",
+              "lost": true
             }
-          }
-        },
-        {
-          "type": "stat-modifier",
-          "target": "this-model",
-          "modifier": {
-            "stat": "D",
-            "operation": "add",
-            "value": 1,
-            "weapons": {
-              "type": "melee"
-            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "stat-modifier",
+                "target": "this-model",
+                "modifier": {
+                  "stat": "A",
+                  "operation": "add",
+                  "value": 2,
+                  "weapons": {
+                    "type": "melee"
+                  }
+                }
+              },
+              {
+                "type": "stat-modifier",
+                "target": "this-model",
+                "modifier": {
+                  "stat": "S",
+                  "operation": "add",
+                  "value": 2,
+                  "weapons": {
+                    "type": "melee"
+                  }
+                }
+              },
+              {
+                "type": "stat-modifier",
+                "target": "this-model",
+                "modifier": {
+                  "stat": "D",
+                  "operation": "add",
+                  "value": 2,
+                  "weapons": {
+                    "type": "melee"
+                  }
+                }
+              }
+            ]
           }
         }
       ]
@@ -6545,7 +7832,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "73cbe0f80b1f9db8f68b6dfbf42aca4f5d7e4205abe0d0952235268d8f8a57b0",
     "version": "2025-q3",
@@ -6554,24 +7841,103 @@
     "faction_id": "adepta-sororitas",
     "detachment_id": "hallowed-martyrs",
     "ability_type": "enhancement",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "re-roll",
-      "target": "this-model",
-      "modifier": {
-        "roll": "resource-die",
-        "result_scope": "any-result"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "this-model",
+          "filter": {
+            "state": "on-battlefield"
+          }
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "strength",
+                  "parameters": {
+                    "below": "starting"
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "resource-die",
+              "target": "this-model",
+              "modifier": {
+                "pool": "miracle-dice-pool",
+                "operation": "substitute",
+                "value": "rolled"
+              }
+            }
+          },
+          {
+            "type": "resource-gain",
+            "target": "this-model",
+            "modifier": {
+              "pool": "miracle-dice-pool",
+              "amount": 1
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "strength",
+              "parameters": {
+                "below": "starting"
+              }
+            },
+            "effect": {
+              "type": "resource-die",
+              "target": "this-model",
+              "modifier": {
+                "pool": "miracle-dice-pool",
+                "operation": "substitute",
+                "value": "rolled"
+              }
+            }
+          }
+        ]
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
         "ADEPTA SORORITAS"
       ]
     },
-    "community_notes": "At the end of your Command phase, if the bearer is on the battlefield, re-roll 1 Miracle dice from your pool and return it showing the new result; if the bearer's unit is below its Starting Strength, re-roll up to 3 Miracle dice instead."
+    "community_notes": "At the end of your Command phase, if the bearer is on the battlefield, re-roll 1 Miracle dice from your pool and return it showing the new result; if the bearer's unit is below its Starting Strength, re-roll up to 3 Miracle dice instead.",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "mantle-of-ophelia-hallowed-martyrs-adepta-sororitas",
@@ -6802,7 +8168,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "5130951217deaa78f6cca92cdb0f6219ed0984fc0a8541dbd66b45f6e3c22604",
     "version": "2025-q3",
@@ -6813,7 +8179,7 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "rules-bundle",
+      "type": "sequence",
       "steps": [
         {
           "type": "stat-modifier",
@@ -6849,7 +8215,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "db34039738b46920cfdf64ff1c2d8f64c187a301932b1f6a378a79969c60e462",
     "version": "2025-q3",
@@ -6858,15 +8224,19 @@
     "faction_id": "adepta-sororitas",
     "detachment_id": "champions-of-faith",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "activated",
     "effect": {
-      "type": "rules-bundle",
+      "type": "sequence",
       "steps": [
         {
           "type": "ignore-modifiers",
           "target": "this-unit",
           "modifier": {
-            "what": "characteristics"
+            "what": "characteristics",
+            "stats": [
+              "WS",
+              "BS"
+            ]
           }
         },
         {
@@ -6935,7 +8305,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "7a5be1357ca86254c6505b35f9a6fd03181963edb6c5ab4c1589db38d06a7307",
     "version": "2025-q3",
@@ -6944,9 +8314,9 @@
     "faction_id": "adepta-sororitas",
     "detachment_id": "champions-of-faith",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "rules-bundle",
+      "type": "sequence",
       "steps": [
         {
           "type": "weapon-ability-grant",
@@ -6970,13 +8340,11 @@
               ],
               "level": "model"
             },
-            "filter": {
-              "by": "this-unit"
-            }
+            "subject": "this-unit"
           },
           "effect": {
             "type": "cp-gain",
-            "target": "this-unit",
+            "target": "this-model",
             "modifier": {
               "amount": 1
             }
@@ -7000,7 +8368,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "2cab02e2bdf0f40f845fe99d312e72a005691fd03257d70079e6b9b3b18d8d35",
     "version": "2025-q3",
@@ -7016,15 +8384,17 @@
         "owner": "enemy"
       },
       "modifier": {
-        "allow": false,
         "to": "battlefield",
         "from": "strategic-reserves",
-        "min_distance_from": {
-          "of": "this-model",
-          "range": {
-            "inches": 12
+        "allow": false,
+        "near": [
+          {
+            "of": "this-model",
+            "range": {
+              "inches": 12
+            }
           }
-        }
+        ]
       }
     },
     "scope": {
@@ -7042,7 +8412,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "8b315c38d0babf6ab7d26c0d33955c9560661b290ca27ddc0588074d023ea746",
     "version": "2025-q3",
@@ -7051,24 +8421,78 @@
     "faction_id": "adepta-sororitas",
     "detachment_id": "army-of-faith",
     "ability_type": "enhancement",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "resource-gain",
-      "target": "this-model",
-      "modifier": {
-        "pool": "miracle-dice-pool",
-        "amount": 1
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "this-model",
+          "filter": {
+            "state": "on-battlefield"
+          }
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "test",
+            "target": "this-model",
+            "modifier": {
+              "test": "leadership"
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "roll-result",
+              "parameters": {
+                "roll": "leadership",
+                "result": "success"
+              }
+            },
+            "effect": {
+              "type": "resource-gain",
+              "target": "this-model",
+              "modifier": {
+                "pool": "miracle-dice-pool",
+                "amount": 1
+              }
+            }
+          }
+        ]
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "phase"
     },
     "applies_to": {
       "all_of": [
         "ADEPTA SORORITAS"
       ]
     },
-    "community_notes": "Canoness or Palatine model only. At the start of your Command phase, if the bearer is on the battlefield, take a Leadership test for it; the Miracle dice is gained only if the test is passed (gate not encoded)."
+    "community_notes": "Canoness or Palatine model only. At the start of your Command phase, if the bearer is on the battlefield, take a Leadership test for it; the Miracle dice is gained only if the test is passed (gate not encoded).",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "blade-of-saint-ellynor-army-of-faith-adepta-sororitas",
@@ -7076,7 +8500,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "e7b8ae5e3c1adf31dd62e0a339b6b561ba7f515a2a3dc95ba60d53c3d156c04b",
     "version": "2025-q3",
@@ -7085,46 +8509,91 @@
     "faction_id": "adepta-sororitas",
     "detachment_id": "army-of-faith",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "rules-bundle",
+      "type": "sequence",
       "steps": [
         {
-          "type": "stat-modifier",
-          "target": "this-model",
-          "modifier": {
-            "stat": "S",
-            "operation": "add",
-            "value": 1,
-            "weapons": {
-              "type": "melee"
-            }
-          }
-        },
-        {
-          "type": "stat-modifier",
-          "target": "this-model",
-          "modifier": {
-            "stat": "AP",
-            "operation": "improve",
-            "value": 1,
-            "weapons": {
-              "type": "melee"
-            }
-          }
-        },
-        {
-          "type": "weapon-ability-grant",
-          "target": "this-model",
-          "modifier": {
-            "weapons": {
-              "type": "melee"
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "stat-modifier",
+                  "target": "this-model",
+                  "modifier": {
+                    "stat": "S",
+                    "operation": "improve",
+                    "value": 1,
+                    "weapons": {
+                      "type": "melee"
+                    }
+                  }
+                },
+                {
+                  "type": "stat-modifier",
+                  "target": "this-model",
+                  "modifier": {
+                    "stat": "AP",
+                    "operation": "improve",
+                    "value": 1,
+                    "weapons": {
+                      "type": "melee"
+                    }
+                  }
+                }
+              ]
             },
-            "keywords": [
-              {
-                "keyword_id": "precision"
+            {
+              "type": "weapon-ability-grant",
+              "target": "this-model",
+              "modifier": {
+                "keywords": [
+                  {
+                    "keyword_id": "precision"
+                  }
+                ],
+                "weapons": {
+                  "type": "melee"
+                }
               }
-            ]
+            }
+          ]
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "attacks-resolved",
+            "subject": "this-model",
+            "filter": {
+              "kind": "fight"
+            }
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "happened",
+              "parameters": {
+                "event": "model-destroyed",
+                "object": {
+                  "owner": "enemy",
+                  "level": "model"
+                },
+                "filter": {
+                  "by": "this-model"
+                },
+                "window": "event"
+              }
+            },
+            "effect": {
+              "type": "resource-gain",
+              "target": "this-model",
+              "modifier": {
+                "pool": "miracle-dice-pool",
+                "amount": 1
+              }
+            }
           }
         }
       ]
@@ -7145,7 +8614,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "b3148a322088ad5991a6a79b700951de94396f159536fa87db5b6e22d824a6b7",
     "version": "2025-q3",
@@ -7156,10 +8625,79 @@
     "ability_type": "enhancement",
     "behavior": "activated",
     "effect": {
-      "type": "test",
-      "target": "defender",
-      "modifier": {
-        "test": "battle-shock"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "matches",
+            "parameters": {
+              "subject": "selected-unit",
+              "filter": {
+                "within": {
+                  "of": "this-model",
+                  "range": {
+                    "inches": 12
+                  }
+                }
+              }
+            }
+          }
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "test",
+              "target": "selected-unit",
+              "modifier": {
+                "test": "battle-shock"
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "roll-result",
+                "parameters": {
+                  "roll": "battle-shock",
+                  "result": "failure"
+                }
+              },
+              "effect": {
+                "type": "resource-gain",
+                "target": "this-model",
+                "modifier": {
+                  "pool": "miracle-dice-pool",
+                  "amount": 1
+                }
+              }
+            }
+          ]
+        }
       }
     },
     "scope": {
@@ -7212,7 +8750,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "55ce8743657c19e31214695d1e235bd85ab052f4855ecfc55d9f9f3be3c9aecc",
     "version": "2025-q3",
@@ -7221,7 +8759,7 @@
     "faction_id": "adepta-sororitas",
     "detachment_id": "sanctuary-guardians",
     "ability_type": "enhancement",
-    "behavior": "activated",
+    "behavior": "reactive",
     "usage": {
       "frequency": "n-per-battle",
       "count": 1,
@@ -7235,7 +8773,7 @@
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -7243,7 +8781,11 @@
         "BATTLE SISTERS SQUAD"
       ]
     },
-    "community_notes": "Upgrade for a Sanctuary Guardians Battle Sisters Squad unit: once per battle, at the start of any phase, the unit heals D3+2 wounds."
+    "community_notes": "Upgrade for a Sanctuary Guardians Battle Sisters Squad unit: once per battle, at the start of any phase, the unit heals D3+2 wounds.",
+    "trigger": {
+      "event": "phase-started",
+      "optional": true
+    }
   },
   {
     "ability_id": "righteous-fervour-sanctuary-guardians-adepta-sororitas",
@@ -7251,7 +8793,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "ee09c29df29a6da660ac54e941e8ec1db5af2b628df34f12268b755048f03fb6",
     "version": "2025-q3",
@@ -7262,14 +8804,14 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "rules-bundle",
+      "type": "sequence",
       "steps": [
         {
           "type": "stat-modifier",
           "target": "this-model",
           "modifier": {
             "stat": "D",
-            "operation": "add",
+            "operation": "improve",
             "value": 1,
             "weapons": {
               "type": "melee"
@@ -7277,20 +8819,14 @@
           }
         },
         {
-          "type": "conditional",
-          "condition": {
-            "type": "attack-is",
-            "parameters": {
-              "attack_type": "melee"
-            }
-          },
-          "effect": {
-            "type": "roll-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "wound",
-              "operation": "add",
-              "value": 1
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "wound",
+            "operation": "add",
+            "value": 1,
+            "weapons": {
+              "type": "melee"
             }
           }
         }
@@ -7359,9 +8895,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "sanctuary-guardians-battle-sisters-squad"
     ],
@@ -7369,11 +8904,25 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "resource-gain",
+      "target": "this-model",
+      "modifier": {
+        "pool": "miracle-dice-pool",
+        "amount": 1
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "act-of-faith"
+      },
+      "optional": true
+    },
+    "source_digest": "e817d9dd3c8da5cef5e8020d85ecece21f49049acb92b82422f83ca503989358"
   },
   {
     "ability_id": "damaged-1-6-wounds-remaining-adepta-sororitas",
@@ -7381,9 +8930,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "triumph-of-saint-katherine"
     ],
@@ -7391,11 +8939,43 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "wounds",
+        "parameters": {
+          "subject": "this-model",
+          "remaining_max": 6
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "stat-modifier",
+            "target": "this-model",
+            "modifier": {
+              "stat": "A",
+              "operation": "halve"
+            }
+          },
+          {
+            "type": "ability-modifier",
+            "target": "this-model",
+            "modifier": {
+              "ability": "relics-of-the-matriarchs",
+              "aspect": "selections",
+              "operation": "set",
+              "value": 1
+            }
+          }
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "8bc656645f1b73bd5b5768a016e5560837c178559110a0a6def0589e96542252"
   },
   {
     "ability_id": "defenders-of-the-faith-sanctuary-guardians-battle-sisters-squad-adepta-sororitas",
@@ -7403,9 +8983,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "sanctuary-guardians-battle-sisters-squad"
     ],
@@ -7413,11 +8992,45 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "controls",
+        "parameters": {
+          "count": {
+            "min": 1
+          }
+        }
+      },
+      "effect": {
+        "type": "objective-sticky",
+        "target": "this-unit"
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    },
+    "source_digest": "244ee60595f9c8faed2cb7e6d9b27a3a1649e6a06810b7835864a0f81a91309c"
   },
   {
     "ability_id": "divine-guidance-adepta-sororitas",
@@ -7425,9 +9038,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "sanctuary-canoness-adalya"
     ],
@@ -7435,11 +9047,31 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "re-roll",
+      "target": "event-subject",
+      "modifier": {
+        "roll": "hit",
+        "result_scope": "any-result"
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "attack"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "SANCTUARY GUARDIANS"
+        ]
+      },
+      "optional": true
+    },
+    "source_digest": "093b73d7899a1f76ac1f5532edc49ef446e8fb91d3a35a141c0a4761014bb1e0"
   },
   {
     "ability_id": "extremis-trigger-word-sanctuary-guardians-arco-flagellants-adepta-sororitas",
@@ -7469,9 +9101,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "sanctuary-canoness-adalya"
     ],
@@ -7479,11 +9110,18 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 4,
+        "against": "psychic-and-mortal"
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "9134c8b8cb244a20775163152327d57fa8732c74c7c4f5d85b7d172f4d13dab3"
   },
   {
     "ability_id": "simulacrum-imperialis-sanctuary-guardians-adepta-sororitas",
@@ -7535,9 +9173,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "sanctuary-guardians-celestian-sacresants"
     ],
@@ -7545,10 +9182,43 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "attachment",
+        "parameters": {
+          "role": "led",
+          "with": {
+            "all_of": [
+              "ADEPTA SORORITAS",
+              "CHARACTER"
+            ]
+          }
+        }
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "attacker",
+        "modifier": {
+          "roll": "wound",
+          "operation": "subtract",
+          "value": 1
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
+    },
+    "source_digest": "1cd2c35b0bce8e0f44e7c41ddc5f876db528b0ba9665fc9867dc44c7895c580f"
   }
 ]

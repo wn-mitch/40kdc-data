@@ -101,7 +101,25 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Orks",
+        "Walker"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "none_of": [
+              "TITANIC"
+            ]
+          }
+        }
+      }
+    },
     "ability_id": "crazed-rampage-dread-mob-orks",
     "game_version": {
       "edition": "11th",
@@ -125,7 +143,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Speed Freeks"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "dakkastorm-kult-of-speed-orks",
     "game_version": {
       "edition": "11th",
@@ -177,7 +202,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Orks",
+        "Walker"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit"
+    },
     "ability_id": "dread-power-dread-mob-orks",
     "game_version": {
       "edition": "11th",
@@ -223,7 +256,23 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "any_of": [
+              "BOYZ",
+              "KOMMANDOS",
+              "STORMBOYZ"
+            ]
+          }
+        }
+      }
+    },
     "ability_id": "dubious-restraint-taktikal-brigade-orks",
     "game_version": {
       "edition": "11th",
@@ -283,7 +332,14 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Orks"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "flyin-headbutt-flyboyz-orks",
     "game_version": {
       "edition": "11th",
@@ -311,7 +367,25 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Orks"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "any_of": [
+              "MOUNTED",
+              "VEHICLE"
+            ]
+          }
+        }
+      }
+    },
     "ability_id": "fungus-fuel-injection-war-horde-orks",
     "game_version": {
       "edition": "11th",
@@ -369,7 +443,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Infantry",
+        "Orks"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "glowin-dakka-shoota-boyz-orks",
     "game_version": {
       "edition": "11th",
@@ -393,7 +475,36 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Beast Snagga"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "not_states": [
+                  "engaged"
+                ]
+              }
+            }
+          },
+          {
+            "type": "wounds",
+            "parameters": {
+              "subject": "this-unit",
+              "lost": true
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "goaded-into-action-da-big-hunt-orks",
     "game_version": {
       "edition": "11th",
@@ -411,7 +522,11 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "grab-it-wreckas-orks",
     "game_version": {
       "edition": "11th",
@@ -467,7 +582,40 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "FLASH GITZ",
+                  "TANKBUSTAS"
+                ]
+              }
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "subject": "event-subject",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success"
+              },
+              "window": "event"
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "gun-crazy-show-offs-wreckas-orks",
     "game_version": {
       "edition": "11th",
@@ -495,7 +643,14 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Orks"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "hit-em-harder-war-horde-orks",
     "game_version": {
       "edition": "11th",
@@ -553,7 +708,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Wagon"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "impending-krunch-blitz-brigade-orks",
     "game_version": {
       "edition": "11th",
@@ -609,7 +771,42 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Beast Snagga"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "not_states": [
+                  "engaged"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": "battlefield-edge",
+                  "range": {
+                    "inches": 6
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "instinctive-hunters-da-big-hunt-orks",
     "game_version": {
       "edition": "11th",
@@ -688,7 +885,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Infantry",
+        "Orks"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "kustom-dakka-shoota-boyz-orks",
     "game_version": {
       "edition": "11th",
@@ -706,7 +911,11 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "long-uncontrolled-bursts-flyboyz-orks",
     "game_version": {
       "edition": "11th",
@@ -793,7 +1002,22 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Infantry",
+        "Orks"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "model-count",
+        "parameters": {
+          "subject": "this-unit",
+          "min": 13
+        }
+      }
+    },
     "ability_id": "mob-mentality-green-tide-orks",
     "game_version": {
       "edition": "11th",
@@ -821,7 +1045,15 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Orks",
+        "Vehicle"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "mow-em-down-war-horde-orks",
     "game_version": {
       "edition": "11th",
@@ -849,7 +1081,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Infantry",
+        "Orks"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "never-enough-dakka-shoota-boyz-orks",
     "game_version": {
       "edition": "11th",
@@ -883,7 +1123,24 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Orks"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "none_of": [
+              "TITANIC"
+            ]
+          }
+        }
+      }
+    },
     "ability_id": "orks-is-never-beaten-war-horde-orks",
     "game_version": {
       "edition": "11th",
@@ -907,7 +1164,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Wagon"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "readied-brawlers-blitz-brigade-orks",
     "game_version": {
       "edition": "11th",
@@ -925,7 +1189,42 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Gretchin"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "not_states": [
+                  "engaged"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": "event-subject",
+                  "range": {
+                    "inches": 8
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "scarper-runt-swarm-orks",
     "game_version": {
       "edition": "11th",
@@ -959,7 +1258,14 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Speed Freeks"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit"
+    },
     "ability_id": "speediest-freeks-kult-of-speed-orks",
     "game_version": {
       "edition": "11th",
@@ -1054,7 +1360,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Mek Gunz"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "vindictive-artillerists-madcap-meks-orks",
     "game_version": {
       "edition": "11th",
@@ -1106,7 +1419,45 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "BOYZ",
+                  "KOMMANDOS",
+                  "STORMBOYZ"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "not_states": [
+                  "engaged"
+                ]
+              }
+            }
+          },
+          {
+            "type": "unit-state",
+            "parameters": {
+              "state": "engaged",
+              "at": "phase-start"
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "while-their-backs-are-turned-taktikal-brigade-orks",
     "game_version": {
       "edition": "11th",
@@ -1134,7 +1485,42 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Deffkoptas"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "not_states": [
+                  "engaged"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": "event-subject",
+                  "range": {
+                    "inches": 8
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "whirligig-evasion-flyboyz-orks",
     "game_version": {
       "edition": "11th",

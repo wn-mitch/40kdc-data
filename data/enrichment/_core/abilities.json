@@ -112,7 +112,7 @@
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "Monster/Vehicle unit after a Charge move: select one engaged enemy unit and one engaged model in your unit, roll D6 equal to that model's Toughness \u2014 each 5+ inflicts 1 mortal wound on the enemy unit (max 6), and each 1 inflicts 1 mortal wound on your own unit"
+    "community_notes": "Monster/Vehicle unit after a Charge move: select one engaged enemy unit and one engaged model in your unit, roll D6 equal to that model's Toughness — each 5+ inflicts 1 mortal wound on the enemy unit (max 6), and each 1 inflicts 1 mortal wound on your own unit"
   },
   {
     "ability_id": "epic-challenge",
@@ -172,7 +172,7 @@
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "One unengaged Explosives/Grenades unit that is eligible to shoot and did not Advance: select one such model and one unengaged enemy unit within 8\" and visible to it, then roll six D6 \u2014 each 4+ inflicts 1 mortal wound"
+    "community_notes": "One unengaged Explosives/Grenades unit that is eligible to shoot and did not Advance: select one such model and one unengaged enemy unit within 8\" and visible to it, then roll six D6 — each 4+ inflicts 1 mortal wound"
   },
   {
     "ability_id": "fire-overwatch",
@@ -441,15 +441,32 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "7f180fb5e7f7d43eac9337cc29101f902ebdec6556e154c6785055d0dae9343d",
     "version": "2025-q3",
     "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "deep-strike"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "this-unit",
+          "filter": {
+            "has_ability": [
+              "deep-strike"
+            ]
+          }
+        }
+      },
+      "effect": {
+        "type": "set-up",
+        "target": "event-subject",
+        "modifier": {
+          "to": "battlefield",
+          "min_enemy_distance": {
+            "inches": 8
+          }
+        }
       }
     },
     "scope": {
@@ -457,7 +474,15 @@
     },
     "unit_ids": [],
     "ability_type": "core",
-    "behavior": "activated"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "ingress"
+        ]
+      }
+    }
   },
   {
     "ability_id": "feel-no-pain",
@@ -491,15 +516,29 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "71f22703f4d6f50fe5dcc81323a1ef66423412c6fd3beeaed0df9a9d9d0b26d9",
     "version": "2025-q3",
     "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "fights-first"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "this-unit",
+          "filter": {
+            "has_ability": [
+              "fights-first"
+            ]
+          }
+        }
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "ability": "fights-first"
+        }
       }
     },
     "scope": {
@@ -542,15 +581,18 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "ca4b567df2eb67644dd49e42e986a2480bb39698b4c2e1baa8c672df61d7dd03",
     "version": "2025-q3",
     "effect": {
-      "type": "ability-grant",
-      "target": "this-model",
+      "type": "ability-modifier",
+      "target": "this-unit",
       "modifier": {
-        "ability": "hover"
+        "ability": "takes-to-the-skies",
+        "aspect": "range",
+        "operation": "lift-limit",
+        "value": 2
       }
     },
     "scope": {
@@ -558,7 +600,13 @@
     },
     "unit_ids": [],
     "ability_type": "core",
-    "behavior": "activated"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "ability"
+      }
+    }
   },
   {
     "ability_id": "infiltrators",
@@ -675,17 +723,40 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "259a208f3b74890127346efa737ed1ed0ecf3b6e96f57eb66b7ae867543fdc25",
     "version": "2025-q3",
     "effect": {
-      "type": "roll-modifier",
-      "target": "attacker",
-      "modifier": {
-        "roll": "hit",
-        "operation": "subtract",
-        "value": 1
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-unit",
+              "filter": {
+                "has_ability": [
+                  "stealth"
+                ]
+              }
+            }
+          },
+          {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "ability": "benefit-of-cover"
+        }
       }
     },
     "scope": {

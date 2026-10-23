@@ -9625,7 +9625,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "c022b5afc602b995499062abef1c7fb4ec353c176e6686f38bef54dfc771157d",
     "version": "2025-q3",
@@ -9634,7 +9634,7 @@
     "faction_id": "tau-empire",
     "detachment_id": "sudden-dawn-cadre",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -9643,10 +9643,11 @@
           "target": "event-subject",
           "modifier": {
             "stat": "A",
-            "operation": "add",
+            "operation": "improve",
             "value": 1,
             "weapons": {
-              "name": "pulse blaster"
+              "type": "ranged",
+              "name": "Pulse blaster"
             }
           }
         },
@@ -9655,17 +9656,18 @@
           "target": "event-subject",
           "modifier": {
             "stat": "A",
-            "operation": "add",
+            "operation": "improve",
             "value": 1,
             "weapons": {
-              "name": "pulse carbine"
+              "type": "ranged",
+              "name": "Pulse carbine"
             }
           }
         }
       ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -9673,7 +9675,16 @@
         "DEVILFISH"
       ]
     },
-    "community_notes": "[APPROX] Unit Upgrade (Devilfish unit, not a Character Enhancement): when a friendly unit disembarks from this unit, its pulse blaster and pulse carbine weapons get +1 Attacks. Encoded as an opaque grant."
+    "community_notes": "[APPROX] Unit Upgrade (Devilfish unit, not a Character Enhancement): when a friendly unit disembarks from this unit, its pulse blaster and pulse carbine weapons get +1 Attacks. Encoded as an opaque grant.",
+    "trigger": {
+      "event": "disembarked",
+      "subject": {
+        "owner": "friendly"
+      },
+      "filter": {
+        "transport": "this-unit"
+      }
+    }
   },
   {
     "ability_id": "shield-drone-commander-cloudspear-tau-empire",

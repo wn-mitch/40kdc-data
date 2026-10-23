@@ -24,7 +24,7 @@
         ],
         "activatable": [
           {
-            "id": "combat-doctrines-assault-force-adeptus-astartes#option-1",
+            "id": "combat-doctrines-assault-force-adeptus-astartes#devastator-doctrine",
             "label": "Devastator Doctrine",
             "group": {
               "id": "combat-doctrines-assault-force-adeptus-astartes?stance",
@@ -51,7 +51,8 @@
                         }
                       }
                     ]
-                  }
+                  },
+                  "optional": true
                 }
               }
             ],
@@ -126,93 +127,9 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [
-          "roll-modifier on \"charge\" is outside the damage path",
-          "effect type \"move\" is not modelled by the buff layer",
-          "activation condition cannot be evaluated against current context"
+          "conditional: cannot evaluate condition \"army-faction\" against current context"
         ],
-        "activatable": [
-          {
-            "id": "blessings-of-khorne-world-eaters#Martial Excellence",
-            "label": "Martial Excellence",
-            "group": {
-              "id": "blessings-of-khorne-world-eaters",
-              "maxActivations": 2
-            },
-            "requires": [
-              {
-                "type": "ability-part",
-                "trigger": {
-                  "event": "round-started",
-                  "optional": true
-                }
-              }
-            ],
-            "capRaise": null,
-            "buffs": [
-              {
-                "type": "extra-keyword",
-                "keywordRef": {
-                  "keyword_id": "sustained-hits",
-                  "parameters": {
-                    "value": 1
-                  }
-                }
-              }
-            ]
-          },
-          {
-            "id": "blessings-of-khorne-world-eaters#Warp Blades",
-            "label": "Warp Blades",
-            "group": {
-              "id": "blessings-of-khorne-world-eaters",
-              "maxActivations": 2
-            },
-            "requires": [
-              {
-                "type": "ability-part",
-                "trigger": {
-                  "event": "round-started",
-                  "optional": true
-                }
-              }
-            ],
-            "capRaise": null,
-            "buffs": [
-              {
-                "type": "extra-keyword",
-                "keywordRef": {
-                  "keyword_id": "lethal-hits"
-                }
-              }
-            ]
-          },
-          {
-            "id": "blessings-of-khorne-world-eaters#Decapitating Strikes",
-            "label": "Decapitating Strikes",
-            "group": {
-              "id": "blessings-of-khorne-world-eaters",
-              "maxActivations": 2
-            },
-            "requires": [
-              {
-                "type": "ability-part",
-                "trigger": {
-                  "event": "round-started",
-                  "optional": true
-                }
-              }
-            ],
-            "capRaise": null,
-            "buffs": [
-              {
-                "type": "extra-keyword",
-                "keywordRef": {
-                  "keyword_id": "devastating-wounds"
-                }
-              }
-            ]
-          }
-        ]
+        "activatable": []
       }
     },
     {
@@ -437,51 +354,9 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [
-          "effect type \"resource-gain\" is not modelled by the buff layer",
-          "effect type \"resource-spend\" is not modelled by the buff layer"
+          "conditional: cannot evaluate condition \"and\" against current context"
         ],
-        "activatable": [
-          {
-            "id": "ammo-runts-orks@selected:shoot",
-            "label": "+1 to hit",
-            "group": null,
-            "requires": [
-              {
-                "type": "ability-part",
-                "trigger": {
-                  "event": "selected",
-                  "filter": {
-                    "to": "shoot"
-                  },
-                  "condition": {
-                    "operator": "and",
-                    "operands": [
-                      {
-                        "type": "phase-is",
-                        "parameters": {
-                          "phase": "shooting"
-                        }
-                      },
-                      {
-                        "type": "player-turn-is",
-                        "parameters": {
-                          "turn": "your-turn"
-                        }
-                      }
-                    ]
-                  }
-                }
-              }
-            ],
-            "capRaise": null,
-            "buffs": [
-              {
-                "type": "hit-mod",
-                "value": 1
-              }
-            ]
-          }
-        ]
+        "activatable": []
       }
     },
     {
@@ -2330,7 +2205,9 @@
       "perspective": "attacker",
       "expected": {
         "applied": [],
-        "unsupportedReasons": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"and\" against current context"
+        ],
         "activatable": []
       }
     },
@@ -2347,13 +2224,10 @@
       },
       "perspective": "target",
       "expected": {
-        "applied": [
-          {
-            "type": "hit-mod",
-            "value": -1
-          }
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"and\" against current context"
         ],
-        "unsupportedReasons": [],
         "activatable": []
       }
     },

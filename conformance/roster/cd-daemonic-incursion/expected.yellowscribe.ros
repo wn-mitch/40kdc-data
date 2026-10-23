@@ -28,8 +28,7 @@
             </profile>
             <profile name="Deluge of Nurgle (Aura)" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Subtract 2 from the Move characteristic of enemy units within 6".
-Subtract 1 from the Objective Control characteristic of enemy units within 6".</characteristic>
+                <characteristic name="Description">While an enemy unit is within 6" of this model, subtract 2 from that unit's Move characteristic; subtract 1 from that unit's Objective Control characteristic.</characteristic>
               </characteristics>
             </profile>
             <profile name="Feel No Pain" typeName="Abilities">
@@ -39,7 +38,7 @@ Subtract 1 from the Objective Control characteristic of enemy units within 6".</
             </profile>
             <profile name="Greater Daemon of Nurgle (Aura)" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">If the unit is a NURGLE LEGIONES DAEMONICA unit, for the rest of the battle, friendly units within 6" count as being within The Shadow of Chaos.</characteristic>
+                <characteristic name="Description">While a friendly LEGIONES DAEMONICA NURGLE unit is within 6" of this model, that unit counts as being within The Shadow of Chaos.</characteristic>
               </characteristics>
             </profile>
             <profile name="Virulent Blessing (Psychic)" typeName="Abilities">
@@ -50,7 +49,7 @@ Subtract 1 from the Objective Control characteristic of enemy units within 6".</
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the Deep Strike ability.</characteristic>
+                <characteristic name="Description">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
               </characteristics>
             </profile>
             <profile name="Damaged" typeName="Abilities">
@@ -137,17 +136,18 @@ Subtract 1 from the Objective Control characteristic of enemy units within 6".</
             </profile>
             <profile name="Daemon Lord of Nurgle (Aura)" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Against NURGLE targets that are also LEGIONES DAEMONICA, until the end of the battle round, add 1 to the Toughness characteristic of friendly units within 6".</characteristic>
+                <characteristic name="Description">While a friendly LEGIONES DAEMONICA NURGLE unit is within 6" of this model, add 1 to that unit's Toughness characteristic.</characteristic>
               </characteristics>
             </profile>
             <profile name="Nurgle’s Rot (Psychic)" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Subtract 1 from the Toughness characteristic of enemy units within 12".</characteristic>
+                <characteristic name="Description">At the end of your Movement phase, you may use this ability, until the start of your next Movement phase:
+  -&gt; Select one enemy unit within 12" of this model: subtract 1 from that unit's Toughness characteristic.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the Deep Strike ability.</characteristic>
+                <characteristic name="Description">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
               </characteristics>
             </profile>
             <profile name="Feel No Pain" typeName="Abilities">
@@ -163,7 +163,7 @@ Subtract 1 from the Objective Control characteristic of enemy units within 6".</
             </profile>
             <profile name="Greater Daemon of Nurgle (Aura)" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">If the unit is a NURGLE LEGIONES DAEMONICA unit, for the rest of the battle, friendly units within 6" count as being within The Shadow of Chaos.</characteristic>
+                <characteristic name="Description">While a friendly LEGIONES DAEMONICA NURGLE unit is within 6" of this model, that unit counts as being within The Shadow of Chaos.</characteristic>
               </characteristics>
             </profile>
             <profile name="Damaged" typeName="Abilities">
@@ -264,7 +264,7 @@ Subtract 1 from the Objective Control characteristic of enemy units within 6".</
             </profile>
             <profile name="A Gory Path" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit can Consolidate up to 6".</characteristic>
+                <characteristic name="Description">When the unit ends a Consolidation move, the triggering unit can Consolidate up to 6".</characteristic>
               </characteristics>
             </profile>
             <profile name="Bloodmaster" typeName="Abilities">
@@ -279,7 +279,7 @@ Subtract 1 from the Objective Control characteristic of enemy units within 6".</
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the Deep Strike ability.</characteristic>
+                <characteristic name="Description">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -333,22 +333,24 @@ Subtract 1 from the Objective Control characteristic of enemy units within 6".</
             </profile>
             <profile name="Bane of Cowards" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Enemy units (excluding MONSTER or VEHICLE units) within Engagement Range cannot Fall Back.</characteristic>
+                <characteristic name="Description">Each time an enemy unit starts a Fall Back move (the triggering unit must not have MONSTER or VEHICLE), while the triggering unit is a unit within Engagement Range of a friendly unit with the Bane of Cowards ability:
+  -&gt; While the triggering unit is Battle-shocked, the triggering unit must take a Desperate Escape test, applying -1 to that test.
+  -&gt; While the triggering unit is not Battle-shocked, the triggering unit must take a Desperate Escape test.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the Deep Strike ability.</characteristic>
+                <characteristic name="Description">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
               </characteristics>
             </profile>
             <profile name="Daemonic Icon" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Set this model's Leadership characteristic to 6.</characteristic>
+                <characteristic name="Description">Set the unit's Leadership characteristic to 6.</characteristic>
               </characteristics>
             </profile>
             <profile name="Instrument of Chaos" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">For the rest of the battle, the unit gets +1 to Charge rolls.</characteristic>
+                <characteristic name="Description">The unit gets +1 to Charge rolls.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -459,17 +461,17 @@ Subtract 1 from the Objective Control characteristic of enemy units within 6".</
             </profile>
             <profile name="Collar of Khorne" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit has the Feel No Pain 3+ ability against Psychic Attacks.</characteristic>
+                <characteristic name="Description">This model has the Feel No Pain 3+ ability against Psychic Attacks.</characteristic>
               </characteristics>
             </profile>
             <profile name="Hunters from the Warp" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit can be placed into Strategic Reserves.</characteristic>
+                <characteristic name="Description">At the end of your opponent's turn, you may use this ability, while the unit is unengaged, the unit can be placed into Strategic Reserves.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the Deep Strike ability.</characteristic>
+                <characteristic name="Description">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
               </characteristics>
             </profile>
           </profiles>

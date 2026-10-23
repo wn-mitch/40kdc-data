@@ -350,7 +350,7 @@ The unit is eligible to act as an Observer even if it Advanced this turn.</chara
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the Deep Strike ability.</characteristic>
+                <characteristic name="Description">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
               </characteristics>
             </profile>
             <profile name="Gun Drone" typeName="Abilities">

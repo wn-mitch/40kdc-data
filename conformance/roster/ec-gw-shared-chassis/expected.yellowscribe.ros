@@ -99,7 +99,7 @@
             </profile>
             <profile name="Scuttling Horrors" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Each time an enemy unit ends a move, you may use this ability, once per turn, while the triggering unit is within 8" of the unit, while the unit is unengaged, the unit can make a Normal move of up to 6".</characteristic>
+                <characteristic name="Description">Each time an enemy unit ends a move, you may use this ability, during the Movement phase, in the opponent's turn, while the triggering unit is within 8" of the unit, while the unit is unengaged, the unit can make a Normal move of up to 6".</characteristic>
               </characteristics>
             </profile>
           </profiles>

@@ -5,9 +5,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "9613a6e6f25eea52e858b50582de021e126f4c1c6a91b2f58596bd63bb812004",
+    "source_digest": "212ae484eba841f92ccce67493791f0f203f494c01eb34c85df18147c0cf00fc",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -16,13 +16,10 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "stat-modifier",
+      "type": "damage-reduction",
       "target": "this-model",
       "modifier": {
-        "stat": "D",
-        "operation": "subtract",
-        "value": 1,
-        "incoming": true
+        "reduction": 1
       }
     },
     "scope": {
@@ -161,9 +158,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "aa877a34ea5728bdea6670df4930ae52024dc9a202d85ef878eba2e371e12583",
+    "source_digest": "2c6e9b70c4bab356a3218498436ab01104bfd96b330dac784dadc2ce33de7d27",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -171,27 +168,31 @@
     "detachment_id": "forgefathers-seekers",
     "ability_type": "enhancement",
     "behavior": "passive",
-    "usage": {
-      "frequency": "once-per-turn",
-      "per": "unit"
-    },
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ignore-modifiers",
+          "target": "this-unit",
+          "modifier": {
+            "what": "characteristics",
+            "stats": [
+              "WS",
+              "BS"
+            ]
+          }
+        },
+        {
+          "type": "ignore-modifiers",
+          "target": "this-unit",
+          "modifier": {
+            "what": "rolls",
+            "rolls": [
+              "hit"
+            ]
+          }
         }
-      },
-      "effect": {
-        "type": "roll-result",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "hit",
-          "result": 6
-        }
-      }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -209,36 +210,56 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "087fe43ce93967b81ca4249f02633a0192e6605c62f00bc72e7c8f9954ae6032",
+    "source_digest": "6bd4abc9278bdbb98e8953237810285f37e90745b76d80acc3505ded44303553",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "salamanders",
     "detachment_id": "forgefathers-seekers",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "weapon-ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "weapons": {
-          "keyword": {
-            "keyword_id": "torrent"
-          }
-        },
-        "keywords": [
-          {
-            "keyword_id": "devastating-wounds"
-          }
-        ]
+      "type": "conditional",
+      "condition": {
+        "type": "attack-is",
+        "parameters": {
+          "weapons": {
+            "keyword": {
+              "keyword_id": "torrent"
+            }
+          },
+          "attack_type": "ranged"
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "stat": "AP",
+          "operation": "improve",
+          "value": 1
+        }
       }
     },
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "Torrent weapons only. Target must not have been selected to shoot this phase"
+    "community_notes": "Torrent weapons only. Target must not have been selected to shoot this phase",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "attack"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS ASTARTES",
+          "INFANTRY"
+        ]
+      }
+    }
   },
   {
     "ability_id": "immolator-forgefathers-seekers-salamanders",
@@ -246,19 +267,32 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "salamanders",
     "detachment_id": "forgefathers-seekers",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "stat-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "stat": "A",
+        "operation": "improve",
+        "value": 1,
+        "weapons": {
+          "type": "ranged",
+          "keyword": {
+            "keyword_id": "torrent"
+          }
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "7995c38a13c48edb4355a43faa5a8a17c771a5a1232094bfc8dc1ba03c5361d7"
   },
   {
     "ability_id": "vulkans-quest-salamanders",
@@ -286,9 +320,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "2f34bd1c4c92340b0fcef13fa2abf579afd0a7223aec2bed3cdecd9dea799b47",
+    "source_digest": "efa9ad350dfd023d6d8238fccb710360ac0e7ed2ef71c56c3490cabe1d689304",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -297,16 +331,33 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "stat-modifier",
-      "target": "this-model",
-      "modifier": {
-        "stat": "S",
-        "operation": "add",
-        "value": 3,
-        "weapons": {
-          "type": "melee"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "this-model",
+          "modifier": {
+            "stat": "S",
+            "operation": "improve",
+            "value": 1,
+            "weapons": {
+              "type": "melee"
+            }
+          }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "this-model",
+          "modifier": {
+            "stat": "D",
+            "operation": "improve",
+            "value": 1,
+            "weapons": {
+              "type": "melee"
+            }
+          }
         }
-      }
+      ]
     },
     "scope": {
       "duration": "permanent"

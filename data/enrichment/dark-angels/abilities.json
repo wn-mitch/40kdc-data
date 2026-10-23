@@ -5,7 +5,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "324aa81580b024cecc34a46d88308951e8c085fe4286289ab8e7875ad3c47430",
     "version": "2025-q3",
@@ -20,7 +20,7 @@
       "target": "this-unit",
       "modifier": {
         "stat": "OC",
-        "operation": "add",
+        "operation": "improve",
         "value": 1
       }
     },
@@ -35,7 +35,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "93788aba73ddd2927b4601815fb96f7c076373b7c39b5d06e6243d2f427fba56",
     "version": "2025-q3",
@@ -44,18 +44,19 @@
     "faction_id": "dark-angels",
     "detachment_id": "the-vengeful-brethren",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
       "condition": {
         "type": "matches",
         "parameters": {
+          "subject": "event-subject",
           "filter": {
             "within": {
-              "range": "objective-control",
               "of": {
                 "objective": {}
-              }
+              },
+              "range": "objective-control"
             }
           }
         }
@@ -73,7 +74,19 @@
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "Used when a Vengeful Brethren unit within range of an objective is selected to attack in your Shooting phase or the Fight phase"
+    "community_notes": "Used when a Vengeful Brethren unit within range of an objective is selected to attack in your Shooting phase or the Fight phase",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "attack"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "VENGEFUL BRETHREN"
+        ]
+      }
+    }
   },
   {
     "ability_id": "determined-to-the-last-the-vengeful-brethren-dark-angels",
@@ -81,7 +94,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "63d2e590d0e38595c233c886c52538d07229c071944af127678d4b175bd706c1",
     "version": "2025-q3",
@@ -93,27 +106,53 @@
     "behavior": "reactive",
     "trigger": {
       "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
       "subject": {
         "owner": "enemy"
       },
-      "object": "this-unit",
-      "filter": {
-        "kind": "attack"
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "BLADEGUARD VETERAN SQUAD",
+          "VENGEFUL BRETHREN"
+        ]
       }
     },
     "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 2,
-      "comparison": "gte",
-      "on_success": {
-        "type": "act-on-death",
-        "target": "this-unit",
-        "modifier": {
-          "act": "fight"
-        }
+      "type": "ability-part",
+      "trigger": {
+        "event": "model-destroyed",
+        "object": "model-in-this-unit"
       },
-      "on_fail": null
+      "effect": {
+        "type": "act-on-death",
+        "target": "event-object",
+        "modifier": {
+          "act": "fight",
+          "resolution": "when-unit-fights",
+          "removal": "after-unit-fights-or-phase-end",
+          "gate": {
+            "dice": "D6",
+            "threshold": 2,
+            "comparison": "gte",
+            "modifiers": []
+          },
+          "eligibility": {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "eligible",
+                "parameters": {
+                  "subject": "this-unit",
+                  "to": "fight"
+                }
+              }
+            ]
+          }
+        }
+      }
     },
     "scope": {
       "duration": "phase"
@@ -126,9 +165,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "212e71923d80d107f038bddcf4c5cabafad539f1173ac62fb2e351dd8eba07a5",
+    "source_digest": "60f7d623dbaad1d6d8fd2abcd0effc0c76d98ed5cfc247d7e3deae2cefe4763c",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -138,12 +177,21 @@
     "behavior": "reactive",
     "trigger": {
       "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
       "subject": {
         "owner": "enemy"
       },
-      "object": "this-unit",
-      "filter": {
-        "kind": "attack"
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "RAVENWING"
+        ],
+        "any_of": [
+          "FLY",
+          "MOUNTED"
+        ]
       }
     },
     "effect": {
@@ -164,7 +212,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "593974e1e8435dedac86ae3f56ce3305375fdb61212c74f4d7c223c2cb8c0951",
     "version": "2025-q3",
@@ -173,20 +221,55 @@
     "faction_id": "dark-angels",
     "detachment_id": "darkflight-pursuit",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "stat-modifier",
-      "target": "stratagem-target",
-      "modifier": {
-        "stat": "detection-range",
-        "operation": "add",
-        "value": 3
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "recipient",
+          "filter": {
+            "within": {
+              "of": "this-unit",
+              "range": {
+                "inches": 6
+              }
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": {
+          "owner": "enemy",
+          "visible": {
+            "to": "this-model"
+          }
+        },
+        "modifier": {
+          "stat": "detection-range",
+          "operation": "add",
+          "value": 3
+        }
       }
     },
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "Used after a Ravenwing Fly unit has shot: visible enemy units within 6\" of it have +3\" detection range"
+    "community_notes": "Used after a Ravenwing Fly unit has shot: visible enemy units within 6\" of it have +3\" detection range",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "FLY",
+          "RAVENWING"
+        ]
+      }
+    }
   },
   {
     "ability_id": "we-are-vengeance-darkflight-pursuit-dark-angels",
@@ -194,7 +277,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "3b747faf5e4a8091377c7e4e05c37a349ba8df6dd2b3f9eacafc2ea5ad9527b7",
     "version": "2025-q3",
@@ -206,23 +289,49 @@
     "behavior": "reactive",
     "trigger": {
       "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
       "subject": {
         "owner": "enemy"
       },
-      "filter": {
-        "kind": "shoot"
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "all_of": [
+              "FLY",
+              "RAVENWING"
+            ]
+          }
+        }
       }
     },
     "effect": {
-      "type": "move",
-      "target": "this-unit",
-      "modifier": {
-        "move_type": "normal",
-        "distance": "D3+3"
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "targets-selected",
+          "subject": "event-subject",
+          "object": "this-unit",
+          "filter": {
+            "kind": "attack"
+          },
+          "window": "event"
+        }
+      },
+      "effect": {
+        "type": "move",
+        "target": "this-unit",
+        "modifier": {
+          "move_type": "normal",
+          "distance": "D3+3"
+        }
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "community_notes": "Usable on an unengaged Ravenwing Fly unit that the enemy unit targeted"
   },
@@ -318,54 +427,46 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "e0832ea863d65192a0a502c532c6109fd104f970a128a071f4816da5368c073d",
+    "source_digest": "24a774ab2de1722cdcc0559fa338e39187209b978e0bc1a90968228941baf3e4",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "dark-angels",
     "detachment_id": "wrath-of-the-rock",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "designate-target",
-      "designation": "oath-of-moment",
-      "select": {
-        "kind": "unit",
-        "selector": {
-          "filter": {
-            "owner": "enemy",
-            "within": {
-              "range": {
-                "inches": 12
-              },
-              "of": "this-model"
-            }
-          },
-          "count": {
-            "min": 1,
-            "max": 1
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "keywords": [
+          {
+            "keyword_id": "precision"
           }
+        ],
+        "weapons": {
+          "type": "melee"
         }
-      },
-      "applies": {
-        "to": "attackers-of-target",
-        "effect": {
-          "type": "re-roll",
-          "target": "this-unit",
-          "modifier": {
-            "roll": "hit",
-            "subset": "all-failures"
-          }
-        }
-      },
-      "duration": "until-next-command-phase"
+      }
     },
     "scope": {
-      "duration": "until-next-command-phase"
+      "duration": "phase"
     },
-    "community_notes": "Used just after your Oath of Moment target is destroyed: one enemy unit within 12\" of and visible to your Character becomes your Oath of Moment target"
+    "community_notes": "Used just after your Oath of Moment target is destroyed: one enemy unit within 12\" of and visible to your Character becomes your Oath of Moment target",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "fight"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS ASTARTES"
+        ]
+      }
+    }
   },
   {
     "ability_id": "relics-of-the-dark-age-wrath-of-the-rock-dark-angels",
@@ -373,9 +474,58 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "28482b6eb52df0a02ae38db5f09f68563b2aa5e44264c23d2e2a1ceb8701bd84",
+    "source_digest": "c2801f41a0d19eec0aa75438af74dbb89bff8d055b6de82c63830496b350236a",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "dark-angels",
+    "detachment_id": "wrath-of-the-rock",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "stat": "S",
+        "operation": "improve",
+        "value": 2,
+        "weapons": {
+          "type": "ranged"
+        }
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "community_notes": "Infantry or Mounted unit not yet selected to shoot this phase",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS ASTARTES"
+        ],
+        "any_of": [
+          "INFANTRY",
+          "MOUNTED"
+        ]
+      }
+    }
+  },
+  {
+    "ability_id": "lions-will-wrath-of-the-rock-dark-angels",
+    "name": "Lion's Will",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "source_digest": "65990113d16cc505b9893360486f2e693b9c0a6ef5df8e779d3ecd4c502c8467",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -387,77 +537,10 @@
       "type": "stat-modifier",
       "target": "this-unit",
       "modifier": {
-        "stat": "S",
-        "operation": "add",
-        "value": 2,
-        "weapons": {
-          "type": "ranged"
-        }
+        "stat": "OC",
+        "operation": "improve",
+        "value": 1
       }
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "community_notes": "Infantry or Mounted unit not yet selected to shoot this phase"
-  },
-  {
-    "ability_id": "lions-will-wrath-of-the-rock-dark-angels",
-    "name": "Lion's Will",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "9778ac5a8730e966746264006e5ea8d1dd3ce7d61931587324d3bde02d39f948",
-    "version": "2025-q3",
-    "supersedes": null,
-    "unit_ids": [],
-    "faction_id": "dark-angels",
-    "detachment_id": "wrath-of-the-rock",
-    "ability_type": "stratagem",
-    "behavior": "activated",
-    "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "stat-modifier",
-          "target": "this-unit",
-          "modifier": {
-            "stat": "OC",
-            "operation": "add",
-            "value": 1
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "matches",
-                "parameters": {
-                  "filter": {
-                    "any_of": [
-                      "DEATHWING",
-                      "RAVENWING",
-                      "VEHICLE"
-                    ]
-                  }
-                }
-              }
-            ]
-          },
-          "effect": {
-            "type": "roll-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "hit",
-              "operation": "add",
-              "value": 1
-            }
-          }
-        }
-      ]
     },
     "scope": {
       "duration": "turn"
@@ -558,31 +641,72 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "16f927d1a76d957942311ff1622d129bac083d4ef7e2d840c0d41c7c6a504f8f",
+    "source_digest": "2664fac5bd02cf47b296c03c909ebe3dcfa2bece4880e0c83cd370b8c6e97ee5",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "dark-angels",
     "detachment_id": "inner-circle-task-force",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "set-up",
-      "target": "this-unit",
-      "modifier": {
-        "to": "battlefield",
-        "via": "deep-strike",
-        "min_enemy_distance": {
-          "inches": 6
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-subject",
+          "filter": {
+            "has_ability": [
+              "deep-strike"
+            ]
+          }
         }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "set-up",
+            "target": "this-unit",
+            "modifier": {
+              "to": "battlefield",
+              "min_enemy_distance": {
+                "inches": 6
+              }
+            }
+          },
+          {
+            "type": "permission",
+            "target": "this-unit",
+            "modifier": {
+              "activity": "declare-charge",
+              "allow": false
+            }
+          }
+        ]
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "turn"
     },
-    "community_notes": "A Deathwing unit arriving by Deep Strike can be set up anywhere more than 6\" horizontally from enemy models; it is then not eligible to declare a charge this turn"
+    "community_notes": "A Deathwing unit arriving by Deep Strike can be set up anywhere more than 6\" horizontally from enemy models; it is then not eligible to declare a charge this turn",
+    "trigger": {
+      "event": "selected",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "DEATHWING"
+        ]
+      },
+      "filter": {
+        "move_types": [
+          "ingress"
+        ],
+        "to": "move"
+      }
+    }
   },
   {
     "ability_id": "champion-of-the-deathwing-inner-circle-task-force-dark-angels",
@@ -657,41 +781,38 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "c00b004bc2215f012fa6d3e992cbd4c0fc775a65d04a47b08c094033c0305c9f",
+    "source_digest": "e0428df1d0bfcc677206e79e609882b947570ec72a616815f75f4dcbb12941ff",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "dark-angels",
     "detachment_id": "inner-circle-task-force",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "move",
-          "target": "this-unit",
-          "modifier": {
-            "move_type": "pile-in",
-            "distance": 6
-          }
-        },
-        {
-          "type": "move",
-          "target": "this-unit",
-          "modifier": {
-            "move_type": "consolidation",
-            "distance": 6
-          }
-        }
-      ]
+      "type": "move",
+      "target": "this-unit",
+      "modifier": {
+        "move_type": "consolidation",
+        "distance": "D3+3"
+      }
     },
     "scope": {
       "duration": "permanent"
     },
-    "community_notes": "Deathwing model only. Models in the bearer's unit move an additional 3\" (6\" total) when they Pile In or Consolidate"
+    "community_notes": "Deathwing model only. Models in the bearer's unit move an additional 3\" (6\" total) when they Pile In or Consolidate",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "move_types": [
+          "consolidation"
+        ],
+        "to": "move"
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "supreme-combatant-the-vengeful-brethren-dark-angels",
@@ -699,7 +820,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "3923913f0c13840e7b09cf20d9b019ddfa34d131fcd5530ffde43eb2797649ed",
     "version": "2025-q3",
@@ -708,10 +829,9 @@
     "faction_id": "dark-angels",
     "detachment_id": "the-vengeful-brethren",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "choice",
-      "choice_label": "Weapon ability",
       "options": [
         {
           "type": "weapon-ability-grant",
@@ -743,7 +863,13 @@
     "scope": {
       "duration": "permanent"
     },
-    "community_notes": "Vengeful Brethren Gravis Captain only; chosen when the unit is selected to attack"
+    "community_notes": "Vengeful Brethren Gravis Captain only; chosen when the unit is selected to attack",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "attack"
+      }
+    }
   },
   {
     "ability_id": "dutiful-defenders-the-vengeful-brethren-dark-angels",
@@ -751,7 +877,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "3a93a6472efdccbc16cf4343a6316d6d1af292b3d77d68d357a8a67cdca82b3f",
     "version": "2025-q3",
@@ -770,7 +896,7 @@
       "target": "this-unit",
       "modifier": {
         "of": "stratagem",
-        "operation": "set",
+        "operation": "decrease",
         "amount": 1,
         "applies_to": "targeting-this-unit",
         "id": "heroic-intervention"
@@ -787,9 +913,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "dac4ee36f16460bbdc9aef23267a9fc5d123dacb15832aa8cef6ce94e77691c8",
+    "source_digest": "da03344afcb0d8229b5f9e9d985a2204bb4e47e3e170976e630e64ec1166edb4",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -798,45 +924,27 @@
     "ability_type": "enhancement",
     "behavior": "aura",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "re-roll",
-          "target": {
-            "owner": "friendly",
-            "all_of": [
-              "ADEPTUS ASTARTES"
-            ],
-            "within": {
-              "range": {
-                "inches": 6
-              }
-            }
-          },
-          "modifier": {
-            "roll": "battle-shock",
-            "result_scope": "any-result"
-          }
+      "type": "aura",
+      "target": "friendly-within-aura",
+      "modifier": {
+        "range": {
+          "inches": 6
         },
-        {
+        "effect": {
           "type": "re-roll",
-          "target": {
-            "owner": "friendly",
-            "all_of": [
-              "ADEPTUS ASTARTES"
-            ],
-            "within": {
-              "range": {
-                "inches": 6
-              }
-            }
-          },
+          "target": "this-unit",
           "modifier": {
             "roll": "leadership",
             "result_scope": "any-result"
           }
+        },
+        "eligible": {
+          "owner": "friendly",
+          "all_of": [
+            "ADEPTUS ASTARTES"
+          ]
         }
-      ]
+      }
     },
     "scope": {
       "duration": "permanent"
@@ -849,9 +957,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "6d0c271369a5425b8488605e7d284f9abe3a0ec42b605146f535a3238551ab4a",
+    "source_digest": "ea399b1d9f4d55256aea223f1d3c651b4187f96402c4542e3f46e7c25f7a4d0f",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -864,7 +972,7 @@
       "steps": [
         {
           "type": "stat-modifier",
-          "target": "this-unit",
+          "target": "this-model",
           "modifier": {
             "stat": "S",
             "operation": "add",
@@ -876,21 +984,9 @@
         },
         {
           "type": "stat-modifier",
-          "target": "this-unit",
+          "target": "this-model",
           "modifier": {
             "stat": "AP",
-            "operation": "improve",
-            "value": 1,
-            "weapons": {
-              "type": "melee"
-            }
-          }
-        },
-        {
-          "type": "stat-modifier",
-          "target": "this-unit",
-          "modifier": {
-            "stat": "D",
             "operation": "add",
             "value": 1,
             "weapons": {
@@ -947,36 +1043,23 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "dca3a2667e83f1f7341d9701bbb76a1479911052ff4c9e6392c902f0db33c9ae",
+    "source_digest": "29d9c02c387d986eb0b7a279324a40fa5cd81171602d9a08efc8b4fb3dcd322c",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "dark-angels",
     "detachment_id": "wrath-of-the-rock",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "activated",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "re-roll",
-          "target": "this-unit",
-          "modifier": {
-            "roll": "advance",
-            "result_scope": "any-result"
-          }
-        },
-        {
-          "type": "re-roll",
-          "target": "this-unit",
-          "modifier": {
-            "roll": "charge",
-            "result_scope": "any-result"
-          }
-        }
-      ]
+      "type": "re-roll",
+      "target": "this-unit",
+      "modifier": {
+        "roll": "charge",
+        "result_scope": "any-result"
+      }
     },
     "scope": {
       "duration": "permanent"
@@ -989,9 +1072,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "4a45a48b132f0af5b3442364239aeb3aeb20d231f8751b8ca5b7afbcce9dd9e4",
+    "source_digest": "54904c60bf04e229171d69a6e4e1cee24c42e75740e049de3a4447e3574c6155",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -1000,10 +1083,42 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "move",
-      "target": "this-unit",
-      "modifier": {
-        "move_type": "ingress"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "battle-round",
+            "parameters": {
+              "min": 1,
+              "max": 1
+            }
+          },
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "movement"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "effect": {
+        "type": "move",
+        "target": "this-unit",
+        "modifier": {
+          "move_type": "ingress"
+        }
       }
     },
     "scope": {
@@ -1059,17 +1174,28 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "0a5a1c2fa83f04b06c4fd9a8c78b29fb44558cde5ea8333958017cc2ab857d6c",
+    "source_digest": "b8c0e675b21a82a7ff68b6349e4fbd1a65bcfe0277289d147aa62cc3d7ed2b60",
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "this-unit",
-      "modifier": {
-        "stat": "OC",
-        "operation": "add",
-        "value": 1
+      "type": "conditional",
+      "condition": {
+        "type": "model-count",
+        "parameters": {
+          "subject": "this-unit",
+          "keyword": "RAVENWING ANCIENT",
+          "min": 1
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "stat": "OC",
+          "operation": "add",
+          "value": 1
+        }
       }
     },
     "scope": {
@@ -1088,57 +1214,21 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "9c6fd7f2b3402fdb228a7bf132eb9f568da2cce5c699ff474cf486b56179c332",
+    "source_digest": "c11bb6bf2c09e6b503e77295d2c3274ec70b94902fd25ec726727f5df935f28e",
     "version": "2025-q3",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "attachment",
-            "parameters": {
-              "subject": "this-model",
-              "role": "leading"
-            }
-          },
-          "effect": {
-            "type": "stat-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "stat": "A",
-              "operation": "add",
-              "value": 1
-            }
-          }
-        },
-        {
-          "type": "ability-part",
-          "trigger": {
-            "event": "destroyed",
-            "object": "this-model"
-          },
-          "effect": {
-            "type": "test",
-            "target": {
-              "owner": "friendly",
-              "all_of": [
-                "ADEPTUS ASTARTES"
-              ],
-              "within": {
-                "range": {
-                  "inches": 6
-                }
-              }
-            },
-            "modifier": {
-              "test": "battle-shock"
-            }
-          }
+      "type": "stat-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "stat": "A",
+        "operation": "add",
+        "value": 1,
+        "weapons": {
+          "type": "melee"
         }
-      ]
+      }
     },
     "scope": {
       "duration": "permanent"
@@ -1243,9 +1333,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "87210492f81198c81fc62fd81a1d1a8eaf2c631ee983f60ce5533e101a9f81ff",
+    "source_digest": "d3df0e9092ebdb6ead8bba5bdcc5745179e788e422f4ed901bf80af13d424a56",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -1254,15 +1344,15 @@
         "parameters": {
           "filter": {
             "within": {
-              "range": {
-                "inches": 3
-              },
               "of": {
                 "owner": "friendly",
                 "all_of": [
-                  "ADEPTUS ASTARTES",
+                  "DARK ANGELS",
                   "INFANTRY"
                 ]
+              },
+              "range": {
+                "inches": 3
               }
             }
           }
@@ -1270,14 +1360,14 @@
       },
       "effect": {
         "type": "ability-grant",
-        "target": "this-model",
+        "target": "this-unit",
         "modifier": {
           "ability": "lone-operative"
         }
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "unit_ids": [
       "lion-eljonson"
@@ -1293,18 +1383,35 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "34734b2864a338b22147873cbc0835155aa14176bcce1e7a184465a24130e64a",
+    "source_digest": "a1c64c964c0ab724c77ff528793e0d0dfebc6f2d6602f88bd355af134d35270c",
     "version": "2025-q3",
     "effect": {
-      "type": "roll-modifier",
-      "target": "this-unit",
-      "modifier": {
-        "roll": "hit",
-        "operation": "add",
-        "value": 1
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ignore-modifiers",
+          "target": "this-unit",
+          "modifier": {
+            "what": "characteristics",
+            "stats": [
+              "WS",
+              "BS"
+            ]
+          }
+        },
+        {
+          "type": "ignore-modifiers",
+          "target": "this-unit",
+          "modifier": {
+            "what": "rolls",
+            "rolls": [
+              "hit"
+            ]
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -1322,30 +1429,120 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "749513ef6cf036f51a65bc24e2be43ed5d8c2274f3c7fd841926ec43125a2560",
+    "source_digest": "1e3c7234178d7db1ae18c35081ef42aa133d75b29b822c0f81e26e4094385b7f",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "state": "battle-shocked"
+                  }
+                }
+              }
+            ]
+          }
+        ]
       },
       "effect": {
-        "type": "test",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 18
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "matches",
+            "parameters": {
+              "subject": "selected-unit",
+              "filter": {
+                "within": {
+                  "of": "this-model",
+                  "range": {
+                    "inches": 12
+                  }
+                }
+              }
             }
           }
         },
-        "modifier": {
-          "test": "battle-shock"
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "roll",
+              "dice": "D6",
+              "roll_var": "psychic",
+              "effect": {
+                "type": "dice-table",
+                "dice": "D6",
+                "outcomes": [
+                  {
+                    "results": [
+                      1
+                    ],
+                    "effect": {
+                      "type": "state-change",
+                      "target": "this-unit",
+                      "modifier": {
+                        "state": "battle-shocked",
+                        "set": true
+                      }
+                    }
+                  },
+                  {
+                    "results": [
+                      2,
+                      3,
+                      4,
+                      5,
+                      6
+                    ],
+                    "effect": {
+                      "type": "no-effect"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "test",
+              "target": "selected-unit",
+              "modifier": {
+                "test": "battle-shock",
+                "modifier": -1
+              }
+            }
+          ]
         }
       }
     },
@@ -1356,7 +1553,7 @@
       "ezekiel"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "activated",
     "faction_id": "dark-angels"
   },
   {
@@ -1365,36 +1562,18 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "33256c0f772d82f5bac3cf157e33a731ac980d4f3d86b74308995cc2bc606248",
+    "source_digest": "7100ce3705aab0feadc7f4324e61a48346d5229541aebcd16819470025a6dc90",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
-          },
-          {
-            "type": "attachment",
-            "parameters": {
-              "subject": "this-model",
-              "role": "leading"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "re-roll",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "hit",
-          "subset": "all-failures"
+      "type": "re-roll",
+      "target": "this-unit",
+      "modifier": {
+        "roll": "hit",
+        "result_scope": "any-result",
+        "weapons": {
+          "type": "melee"
         }
       }
     },
@@ -1414,30 +1593,30 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "38cd680cc3c6fa6ad13e15a385da30f3fd49834eccaa717a89d4885b133d66df",
+    "source_digest": "929f33d116c3e1dbed576efa6c8d64aae37fb5a5c25d1d1d449b504504727ca8",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
-        }
-      },
-      "effect": {
-        "type": "test",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
+      "type": "aura",
+      "target": "enemy-within-aura",
+      "modifier": {
+        "range": {
+          "inches": 6
+        },
+        "effect": {
+          "type": "test",
+          "target": "recipient",
+          "modifier": {
+            "test": "battle-shock",
+            "modifier": -1
           }
         },
-        "modifier": {
-          "test": "battle-shock"
+        "eligible": {
+          "owner": "enemy",
+          "all_of": [
+            "CHARACTER"
+          ]
         }
       }
     },
@@ -1448,8 +1627,17 @@
       "asmodai"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "dark-angels"
+    "behavior": "aura",
+    "faction_id": "dark-angels",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    }
   },
   {
     "ability_id": "grand-master-of-the-deathwing-dark-angels",
@@ -1457,28 +1645,30 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "6662928256e4cf5ae7da75a9c86b54c57f0c5f029fe869125114090d78cd77b8",
+    "source_digest": "0fe131a5b98ec4cb1662b4eb8a2c11f6d8b5c8683de847e833191e0ab756d9d1",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "attachment",
+        "type": "matches",
         "parameters": {
-          "subject": "this-model",
-          "role": "leading"
+          "subject": "defender",
+          "filter": {
+            "all_of": [
+              "CHARACTER"
+            ]
+          }
         }
       },
       "effect": {
-        "type": "weapon-ability-grant",
+        "type": "roll-modifier",
         "target": "this-unit",
         "modifier": {
-          "keywords": [
-            {
-              "keyword_id": "precision"
-            }
-          ]
+          "roll": "wound",
+          "operation": "add",
+          "value": 1
         }
       }
     },
@@ -1537,33 +1727,75 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "27935b2e8080f326f9eeec8f54e4a5ee06be89b8185cb7881ade7ed31a5f6865",
+    "source_digest": "9911481d92357d5083cfa6a334cc3beb2f6a573ec0e80778345ce4c1036bdfa3",
     "version": "2025-q3",
     "effect": {
-      "type": "choice",
-      "options": [
+      "type": "sequence",
+      "steps": [
         {
-          "type": "cost-modifier",
-          "target": "this-model",
-          "modifier": {
-            "of": "stratagem",
-            "id": "fire-overwatch",
-            "operation": "set",
-            "amount": 0,
-            "applies_to": "targeting-this-unit"
+          "type": "conditional",
+          "condition": {
+            "type": "model-count",
+            "parameters": {
+              "subject": "this-unit",
+              "keyword": "RAVENWING CHAMPION",
+              "min": 1
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "roll-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "advance",
+                  "operation": "add",
+                  "value": 1
+                }
+              },
+              {
+                "type": "roll-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "charge",
+                  "operation": "add",
+                  "value": 1
+                }
+              }
+            ]
           }
         },
         {
-          "type": "cost-modifier",
-          "target": "this-model",
-          "modifier": {
-            "of": "stratagem",
-            "id": "heroic-intervention",
-            "operation": "set",
-            "amount": 0,
-            "applies_to": "targeting-this-unit"
+          "type": "ability-part",
+          "trigger": {
+            "event": "used",
+            "filter": {
+              "kind": "stratagem"
+            }
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "model-count",
+              "parameters": {
+                "subject": "this-unit",
+                "keyword": "RAVENWING CHAMPION",
+                "min": 1
+              }
+            },
+            "effect": {
+              "type": "cost-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "of": "stratagem",
+                "operation": "decrease",
+                "amount": 1,
+                "applies_to": "the-triggering-use"
+              }
+            }
           }
         }
       ]
@@ -1575,7 +1807,7 @@
       "ravenwing-command-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "faction_id": "dark-angels"
   },
   {
@@ -1584,25 +1816,31 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "facce69f31dd10982e0eb9f1a1bedd9a5d2f9e51df17337935a8383e4f506b78",
+    "source_digest": "fe9b43c80149d78a5bc28ab135365fdd04690fc281bc18e9eaebf45cd0062a11",
     "version": "2025-q3",
     "effect": {
-      "type": "ability-grant",
-      "target": {
-        "owner": "friendly",
-        "all_of": [
-          "ADEPTUS ASTARTES"
-        ],
-        "within": {
-          "range": {
-            "inches": 6
-          }
-        }
-      },
+      "type": "aura",
+      "target": "friendly-within-aura",
       "modifier": {
-        "ability": "stealth"
+        "range": {
+          "inches": 6
+        },
+        "effect": {
+          "type": "ability-grant",
+          "target": "recipient",
+          "modifier": {
+            "ability": "stealth"
+          }
+        },
+        "eligible": {
+          "owner": "friendly",
+          "all_of": [
+            "DARK ANGELS"
+          ]
+        },
+        "of": "this-unit"
       }
     },
     "scope": {
@@ -1612,7 +1850,7 @@
       "ravenwing-darkshroud"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "aura",
     "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "dark-angels"
   },
@@ -1622,16 +1860,33 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "99c1102a98f35f338145a493a6b095c5e21ece8206e4f8f9bba95b4448d71ba8",
+    "source_digest": "97ea36222723d225598b0879caace6bd11b25ce4d85c5661e072fdec0cd052aa",
     "version": "2025-q3",
     "effect": {
-      "type": "damage-reduction",
-      "target": "this-unit",
-      "modifier": {
-        "reduction": 1
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "stat": "D",
+            "operation": "subtract",
+            "value": 1
+          }
+        },
+        {
+          "type": "targeting",
+          "target": "this-unit",
+          "modifier": {
+            "may": "cannot-target",
+            "kind": "stratagem",
+            "target": "this-unit",
+            "stratagem": "tactical-dreadnought-fortitude-terminator-storm-force-adeptus-astartes"
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -1649,47 +1904,61 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "8a606502edf57e2fe4c7dfbee920e1385f11b8f7ae13a4be7a1b8591d2025673",
+    "source_digest": "2da86f555cd93dd4a8c6ffcaf9d02f41c85fc287351d483715b2e1815e705b42",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
+      "type": "act-on-death",
+      "target": "event-object",
+      "modifier": {
+        "act": "fight",
+        "resolution": "when-unit-fights",
+        "removal": "after-unit-fights-or-phase-end",
+        "gate": {
+          "dice": "D6",
+          "threshold": 4,
+          "comparison": "gte",
+          "modifiers": []
+        },
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "fight"
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "eligible",
+                  "parameters": {
+                    "subject": "this-unit",
+                    "to": "fight"
+                  }
+                }
+              ]
             }
-          },
-          {
-            "type": "attachment",
-            "parameters": {
-              "subject": "this-model",
-              "role": "leading"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "act-on-death",
-        "target": "this-unit",
-        "modifier": {
-          "act": "fight"
+          ]
         }
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "unit_ids": [
       "lazarus"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "dark-angels"
+    "behavior": "reactive",
+    "faction_id": "dark-angels",
+    "trigger": {
+      "event": "model-destroyed",
+      "object": "model-in-this-unit"
+    }
   },
   {
     "ability_id": "knights-of-caliban-dark-angels",
@@ -1697,9 +1966,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "a2787baba450ca4111e50d712451b6adb765c6a9d2857c0fa690831d34d1a2ea",
+    "source_digest": "f302b17c8657a3539ddfe4e2d9337e649e40300548c9e73f93dbb3e369cebc0f",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -1723,22 +1992,28 @@
             {
               "keyword_id": "anti",
               "parameters": {
-                "target_keyword": "MONSTER",
+                "required_target_keywords_any": [
+                  "MONSTER",
+                  "VEHICLE"
+                ],
                 "threshold": 4
               }
             }
-          ]
+          ],
+          "weapons": {
+            "type": "melee"
+          }
         }
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "unit_ids": [
       "ravenwing-black-knights"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
+    "behavior": "passive",
     "faction_id": "dark-angels"
   },
   {
@@ -1747,23 +2022,23 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "efabae04446c4138bba0e51cecd0292fbbdbdbdc0fa7145ae80e7bea2cc1b23d",
+    "source_digest": "9bd8ebaef5d013c468411b61bbcf91142c177e686b6bb641a54b509cc7295f01",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
+        "type": "attack-is",
         "parameters": {
-          "phase": "shooting"
+          "attack_type": "ranged"
         }
       },
       "effect": {
         "type": "roll-modifier",
         "target": "attacker",
         "modifier": {
-          "roll": "hit",
+          "roll": "wound",
           "operation": "subtract",
           "value": 1
         }
@@ -1812,15 +2087,48 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "1aa740d5dba4b6e63b935fe162b32bea53e762a85f631a64983142dc997fa90c",
+    "source_digest": "113f4753b76549bcdb61d92829eec57fe668add46961368f43d25c7b2e48360c",
     "version": "2025-q3",
     "effect": {
-      "type": "return-models",
-      "target": "this-unit",
-      "modifier": {
-        "count": 1
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "model-count",
+            "parameters": {
+              "subject": "this-unit",
+              "keyword": "RAVENWING APOTHECARY",
+              "min": 1
+            }
+          },
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "command"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "effect": {
+        "type": "heal",
+        "target": "this-unit",
+        "modifier": {
+          "amount": "D3+1"
+        }
       }
     },
     "scope": {
@@ -1839,43 +2147,36 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "25b91bcd40ecb90380d825fbbbd9b164cff8cec58fd3990e6b4a6e300ffeaf68",
+    "source_digest": "b03baead4fdd227c2511dd4c2ede8adbf959b7f1fa3a8f721b6ba23841618df0",
     "version": "2025-q3",
     "effect": {
-      "type": "ability-part",
-      "trigger": {
-        "event": "phase-started",
-        "condition": {
-          "operator": "and",
-          "operands": [
-            {
-              "type": "phase-is",
-              "parameters": {
-                "phase": "command"
-              }
-            },
-            {
-              "type": "player-turn-is",
-              "parameters": {
-                "turn": "your-turn"
-              }
-            }
-          ]
-        }
-      },
-      "effect": {
-        "type": "stance-select",
-        "mode": "re-selectable",
-        "min_choices": 2,
-        "max_choices": 2,
-        "options": [
-          {
-            "name": "Mist-wreathed Shadow Realms",
-            "effect": {
-              "type": "conditional",
-              "condition": {
+      "type": "choice",
+      "options": [
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "phase-is",
+                    "parameters": {
+                      "phase": "command"
+                    }
+                  },
+                  {
+                    "type": "player-turn-is",
+                    "parameters": {
+                      "turn": "your-turn"
+                    }
+                  }
+                ]
+              },
+              {
                 "operator": "not",
                 "operands": [
                   {
@@ -1887,112 +2188,128 @@
                     }
                   }
                 ]
+              }
+            ]
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "set-up",
+                "target": "this-unit",
+                "modifier": {
+                  "to": "strategic-reserves",
+                  "arrives": "next-movement-phase",
+                  "allow_first_round": true
+                }
+              },
+              {
+                "type": "conditional",
+                "condition": {
+                  "operator": "and",
+                  "operands": [
+                    {
+                      "type": "phase-is",
+                      "parameters": {
+                        "phase": "movement"
+                      }
+                    },
+                    {
+                      "type": "player-turn-is",
+                      "parameters": {
+                        "turn": "your-turn"
+                      }
+                    }
+                  ]
+                },
+                "effect": {
+                  "type": "move",
+                  "target": "this-unit",
+                  "modifier": {
+                    "move_type": "ingress"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "melee"
+            }
+          },
+          "effect": {
+            "type": "aura",
+            "target": "friendly-within-aura",
+            "modifier": {
+              "range": {
+                "inches": 6
               },
               "effect": {
                 "type": "sequence",
                 "steps": [
                   {
-                    "type": "set-up",
-                    "target": "this-unit",
+                    "type": "re-roll",
+                    "target": "recipient",
                     "modifier": {
-                      "to": "strategic-reserves"
+                      "roll": "hit",
+                      "subset": "ones"
                     }
                   },
                   {
-                    "type": "set-up",
-                    "target": "this-unit",
+                    "type": "re-roll",
+                    "target": "recipient",
                     "modifier": {
-                      "to": "battlefield",
-                      "from": "strategic-reserves",
-                      "ignore_limits": true
+                      "roll": "wound",
+                      "subset": "ones"
                     }
                   }
                 ]
-              }
-            },
-            "id": "option-1"
-          },
-          {
-            "name": "Martial Exemplar",
-            "effect": {
-              "type": "sequence",
-              "steps": [
-                {
-                  "type": "re-roll",
-                  "target": {
-                    "owner": "friendly",
-                    "all_of": [
-                      "ADEPTUS ASTARTES"
-                    ],
-                    "within": {
-                      "range": {
-                        "inches": 6
-                      },
-                      "of": "this-model"
-                    }
-                  },
-                  "modifier": {
-                    "roll": "hit",
-                    "subset": "ones",
-                    "weapons": {
-                      "type": "melee"
-                    }
-                  }
-                },
-                {
-                  "type": "re-roll",
-                  "target": {
-                    "owner": "friendly",
-                    "all_of": [
-                      "ADEPTUS ASTARTES"
-                    ],
-                    "within": {
-                      "range": {
-                        "inches": 6
-                      },
-                      "of": "this-model"
-                    }
-                  },
-                  "modifier": {
-                    "roll": "wound",
-                    "subset": "ones",
-                    "weapons": {
-                      "type": "melee"
-                    }
-                  }
-                }
-              ]
-            },
-            "id": "option-2"
-          },
-          {
-            "name": "No Hiding From the Watchers",
-            "effect": {
-              "type": "feel-no-pain",
-              "target": {
+              },
+              "eligible": {
                 "owner": "friendly",
                 "all_of": [
-                  "ADEPTUS ASTARTES"
-                ],
-                "within": {
-                  "range": {
-                    "inches": 6
-                  },
-                  "of": "this-model"
-                }
+                  "DARK ANGELS"
+                ]
               },
+              "of": "this-unit"
+            }
+          }
+        },
+        {
+          "type": "aura",
+          "target": "friendly-within-aura",
+          "modifier": {
+            "range": {
+              "inches": 6
+            },
+            "effect": {
+              "type": "feel-no-pain",
+              "target": "recipient",
               "modifier": {
-                "threshold": 4,
-                "against": "mortal"
+                "threshold": 5,
+                "against": "psychic-and-mortal"
               }
             },
-            "id": "option-3"
+            "eligible": {
+              "owner": "friendly",
+              "all_of": [
+                "DARK ANGELS"
+              ]
+            },
+            "of": "this-unit"
           }
-        ]
-      }
+        }
+      ],
+      "choice_label": "abilities in the Primarch of the First Legion section",
+      "min_choices": 0,
+      "max_choices": 2
     },
     "scope": {
-      "duration": "battle-round"
+      "duration": "until-next-command-phase"
     },
     "unit_ids": [
       "lion-eljonson"
@@ -2003,11 +2320,23 @@
     "trigger": {
       "event": "phase-started",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "command"
-        }
-      }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "optional": true
     },
     "faction_id": "dark-angels"
   },
@@ -2017,25 +2346,16 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "ccee1e0b4d18b1358a9e666380b8960d3462683328db373f872871fd2b608439",
+    "source_digest": "c23f7e2e898b843201fc20bee4d78eca1e917bb09c0b5d80c483a868060d7529",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
-        }
-      },
-      "effect": {
-        "type": "feel-no-pain",
-        "target": "this-unit",
-        "modifier": {
-          "threshold": 4
-        }
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 4,
+        "against": "psychic-and-mortal"
       }
     },
     "scope": {
@@ -2084,9 +2404,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "14f917d5741c5020407a3ba0547832ddeda6ceb33128fa1422ac577c6a9885d4",
+    "source_digest": "73d41200965e7981ca66c7f691015f22d239b6750970da3f1a1b52b35b4601ef",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -2117,17 +2437,19 @@
               "object": {
                 "owner": "friendly",
                 "all_of": [
-                  "ADEPTUS ASTARTES"
-                ],
-                "excluding": "this-unit",
-                "within": {
-                  "range": {
-                    "inches": 6
-                  },
-                  "of": "this-model"
-                }
+                  "DARK ANGELS"
+                ]
               },
-              "window": "event"
+              "filter": {
+                "by": "event-subject"
+              },
+              "window": "event",
+              "proximity": {
+                "of": "this-unit",
+                "range": {
+                  "inches": 6
+                }
+              }
             }
           }
         ]
@@ -2136,39 +2458,63 @@
         "type": "sequence",
         "steps": [
           {
-            "type": "permission",
-            "target": "this-model",
-            "modifier": {
-              "activity": "shoot",
-              "allow": true,
-              "as_if": "shooting-phase"
+            "type": "conditional",
+            "condition": {
+              "type": "attack-is",
+              "parameters": {
+                "shooting_type": "normal"
+              }
+            },
+            "effect": {
+              "type": "permission",
+              "target": "this-unit",
+              "modifier": {
+                "activity": "shoot",
+                "allow": true
+              }
             }
           },
           {
-            "type": "targeting",
-            "target": "this-model",
-            "modifier": {
-              "by": "this-model",
-              "may": "must-target",
-              "target": "event-subject",
-              "kind": "shoot"
+            "type": "conditional",
+            "condition": {
+              "type": "attack-is",
+              "parameters": {
+                "shooting_type": "normal"
+              }
+            },
+            "effect": {
+              "type": "targeting",
+              "target": "this-unit",
+              "modifier": {
+                "by": "this-unit",
+                "may": "must-target",
+                "kind": "shoot",
+                "target": "event-subject"
+              }
             }
           }
         ]
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "unit_ids": [
       "land-speeder-vengeance"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "usage": {
-      "frequency": "once-per-turn"
-    },
-    "faction_id": "dark-angels"
+    "behavior": "reactive",
+    "faction_id": "dark-angels",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "strikes-of-retribution-dark-angels",
@@ -2176,9 +2522,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "3b543a564051ffe6892f8147c55d695e295c2957faa696145765854709c624ea",
+    "source_digest": "71adeee5b1a5174c0de1f1e79a8cfad3a424531d68f78a28e66b2da4eeae451f",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -2189,11 +2535,46 @@
         }
       },
       "effect": {
-        "type": "mortal-wounds",
-        "target": "defender",
-        "modifier": {
-          "count": 1
-        }
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "eligible",
+                  "parameters": {
+                    "subject": "this-unit",
+                    "to": "fight"
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "destroy-models",
+              "target": "this-model",
+              "modifier": {
+                "count": 1
+              }
+            }
+          },
+          {
+            "type": "act-on-death",
+            "target": "event-object",
+            "modifier": {
+              "act": "fight",
+              "resolution": "when-unit-fights",
+              "removal": "after-unit-fights-or-phase-end",
+              "gate": {
+                "dice": "D6",
+                "threshold": 2,
+                "comparison": "gte",
+                "modifiers": []
+              }
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -2213,32 +2594,22 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "e46b158be4d4c9b976d8f9273b013f67d2ab6a55fdb0d126979763f56281ae9b",
+    "source_digest": "c03a272f251fa744debd87e2d5703dacb7f836857df85874935186e559665bff",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
-        }
-      },
-      "effect": {
-        "type": "weapon-ability-grant",
-        "target": "this-unit",
-        "modifier": {
-          "keywords": [
-            {
-              "keyword_id": "sustained-hits",
-              "parameters": {
-                "value": 1
-              }
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "keywords": [
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 1
             }
-          ]
-        }
+          }
+        ]
       }
     },
     "scope": {
@@ -2325,29 +2696,25 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "f6a6ff15cf505322625923d2abe2a1883d1b806e16572c6cacba44c11626ed5d",
+    "source_digest": "f0fcf4d18600bda92640a061c04bd27eb9941b0ff95f75ab109df78972e3b6c3",
     "version": "2025-q3",
     "effect": {
-      "type": "feel-no-pain",
+      "type": "invulnerable-save",
       "target": "this-unit",
       "modifier": {
-        "threshold": 4
+        "invuln_sv": 4
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "unit_ids": [
       "azrael"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "usage": {
-      "frequency": "n-per-battle",
-      "count": 1
-    },
+    "behavior": "passive",
     "faction_id": "dark-angels"
   },
   {
@@ -2356,12 +2723,36 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "289c22b214142132934cb7818c33f615bd9960ba445b76309e97263b383d9af4",
+    "source_digest": "a6c002561986e711c70daac6dd8f981a08c07968850ae3fb713f62cbb1aeaecb",
     "version": "2025-q3",
     "effect": {
-      "type": "no-effect"
+      "type": "keyword-grant",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS ASTARTES"
+        ],
+        "any_of_filters": [
+          {
+            "all_of": [
+              "FLY",
+              "VEHICLE"
+            ]
+          },
+          {
+            "all_of": [
+              "MOUNTED"
+            ]
+          }
+        ]
+      },
+      "modifier": {
+        "keywords": [
+          "RAVENWING"
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
@@ -2377,16 +2768,16 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "2cbf343b90cbb8c7fea5bb638b9abc1cb51b4f4d9e740e9b536fc5b3276bbeef",
+    "source_digest": "cd42749a407f78d5918bbe4542cfa9f917c70e003c31e84a1514beafd35d7cdd",
     "version": "2025-q3",
     "effect": {
       "type": "feel-no-pain",
       "target": "this-unit",
       "modifier": {
         "threshold": 3,
-        "against": "psychic"
+        "against": "psychic-and-mortal"
       }
     },
     "scope": {
@@ -2465,19 +2856,63 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "dark-angels",
     "detachment_id": "darkflight-pursuit",
     "ability_type": "detachment",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "weapon-ability-grant",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "FLY",
+              "RAVENWING"
+            ]
+          },
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "ignores-cover"
+              }
+            ],
+            "weapons": {
+              "type": "ranged"
+            }
+          }
+        },
+        {
+          "type": "army-rule",
+          "target": "this-unit",
+          "modifier": {
+            "rule": "single-chapter"
+          }
+        },
+        {
+          "type": "keyword-grant",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "OUTRIDER SQUAD"
+            ]
+          },
+          "modifier": {
+            "keywords": [
+              "BATTLELINE"
+            ]
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "91e9240fe4df7144e5d6e10c0c8c4fd4f385b25a08553e2b236345bd528a465a"
   },
   {
     "ability_id": "bladeguard-dark-angels",
@@ -2485,9 +2920,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "vengeful-brethren-bladeguard-veteran-squad"
     ],
@@ -2495,11 +2929,71 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      },
+      "effect": {
+        "type": "choice",
+        "options": [
+          {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "operation": "add",
+              "value": 1,
+              "weapons": {
+                "type": "melee"
+              }
+            }
+          },
+          {
+            "type": "roll-modifier",
+            "target": "attacker",
+            "modifier": {
+              "roll": "hit",
+              "operation": "subtract",
+              "value": 1
+            }
+          }
+        ],
+        "min_choices": 1,
+        "max_choices": 1
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": [
+      {
+        "event": "selected",
+        "filter": {
+          "to": "fight"
+        },
+        "optional": true
+      },
+      {
+        "event": "targets-selected",
+        "filter": {
+          "kind": "attack"
+        },
+        "subject": {
+          "owner": "enemy"
+        },
+        "object": "this-unit",
+        "optional": true
+      }
+    ],
+    "usage": {
+      "frequency": "once-per-turn",
+      "per": "unit"
+    },
+    "source_digest": "66e8456e2520ef87faae7bcffbb7e2354c8219408fbee2ed2147052c607b0f3b"
   },
   {
     "ability_id": "dutiful-tenacity-dark-angels",
@@ -2527,9 +3021,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "master-zacharial"
     ],
@@ -2537,11 +3030,19 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "stat-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "stat": "D",
+        "operation": "subtract",
+        "value": 1
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "2e15643bc9a11ad1943ae27e101c0707d944661f88e6d8a45cf39e708ed0458f"
   },
   {
     "ability_id": "honoured-knights-dark-angels",
@@ -2589,9 +3090,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "vengeful-brethren-intercessor-squad"
     ],
@@ -2599,11 +3099,45 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "controls",
+        "parameters": {
+          "count": {
+            "min": 1
+          }
+        }
+      },
+      "effect": {
+        "type": "objective-sticky",
+        "target": "this-unit"
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    },
+    "source_digest": "244ee60595f9c8faed2cb7e6d9b27a3a1649e6a06810b7835864a0f81a91309c"
   },
   {
     "ability_id": "punishing-volley-dark-angels",
@@ -2611,9 +3145,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "vengeful-brethren-hellblaster-squad"
     ],
@@ -2621,11 +3154,68 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "subject": "event-subject",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success"
+              },
+              "window": "event"
+            }
+          }
+        },
+        "effect": {
+          "type": "test",
+          "target": "selected-unit",
+          "modifier": {
+            "test": "battle-shock"
+          }
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
+    },
+    "source_digest": "0a59ee6c10b5b06a2bd43417beeb6b775681d010a5b38c9059d86cea55a22f0a"
   },
   {
     "ability_id": "supreme-commander-dark-angels",
@@ -2633,9 +3223,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "lion-eljonson"
     ],
@@ -2643,11 +3232,29 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "this-model",
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      },
+      "effect": {
+        "type": "army-rule",
+        "target": "this-unit",
+        "modifier": {
+          "rule": "warlord-required"
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "db5f2bae245a8eb3cca1df9d81a364c92d2b3958c0471ebd7f0f15e2bd8a0f90"
   },
   {
     "ability_id": "teleport-homer-dark-angels",
@@ -2697,9 +3304,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "ezekiel"
     ],
@@ -2707,11 +3313,243 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "this-model",
+          "modifier": {
+            "stat": "psyker-level",
+            "operation": "set",
+            "value": 3
+          }
+        },
+        {
+          "type": "ability-part",
+          "optional": true,
+          "effect": {
+            "type": "ability-part",
+            "cost": {
+              "type": "resource-spend",
+              "target": "this-unit",
+              "modifier": {
+                "pool": "psychic-level",
+                "amount": 1,
+                "label": "Psychic Level"
+              }
+            },
+            "effect": {
+              "type": "conditional",
+              "condition": {
+                "operator": "and",
+                "operands": [
+                  {
+                    "operator": "and",
+                    "operands": [
+                      {
+                        "type": "phase-is",
+                        "parameters": {
+                          "phase": "shooting"
+                        }
+                      },
+                      {
+                        "type": "player-turn-is",
+                        "parameters": {
+                          "turn": "your-turn"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "operator": "not",
+                    "operands": [
+                      {
+                        "type": "matches",
+                        "parameters": {
+                          "filter": {
+                            "state": "battle-shocked"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              "effect": {
+                "type": "select-units",
+                "selector": {
+                  "filter": {
+                    "owner": "enemy"
+                  },
+                  "count": {
+                    "min": 1,
+                    "max": 1
+                  },
+                  "eligibility": {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "selected-unit",
+                      "filter": {
+                        "within": {
+                          "of": "this-model",
+                          "range": {
+                            "inches": 12
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "effect": {
+                  "type": "sequence",
+                  "steps": [
+                    {
+                      "type": "roll",
+                      "dice": "D6",
+                      "roll_var": "psychic",
+                      "effect": {
+                        "type": "dice-table",
+                        "dice": "D6",
+                        "outcomes": [
+                          {
+                            "results": [
+                              1
+                            ],
+                            "effect": {
+                              "type": "state-change",
+                              "target": "this-unit",
+                              "modifier": {
+                                "state": "battle-shocked",
+                                "set": true
+                              }
+                            }
+                          },
+                          {
+                            "results": [
+                              2,
+                              3,
+                              4,
+                              5,
+                              6
+                            ],
+                            "effect": {
+                              "type": "no-effect"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "test",
+                      "target": "selected-unit",
+                      "modifier": {
+                        "test": "battle-shock",
+                        "modifier": -1
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "targets-selected",
+            "filter": {
+              "kind": "attack"
+            },
+            "subject": {
+              "owner": "enemy"
+            },
+            "object": "this-unit",
+            "optional": true
+          },
+          "duration": "phase",
+          "cost": {
+            "type": "resource-spend",
+            "target": "this-unit",
+            "modifier": {
+              "pool": "psychic-level",
+              "amount": 1,
+              "label": "Psychic Level"
+            }
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "filter": {
+                      "state": "battle-shocked"
+                    }
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "roll",
+                  "dice": "D6",
+                  "roll_var": "psychic",
+                  "effect": {
+                    "type": "dice-table",
+                    "dice": "D6",
+                    "outcomes": [
+                      {
+                        "results": [
+                          1
+                        ],
+                        "effect": {
+                          "type": "state-change",
+                          "target": "this-unit",
+                          "modifier": {
+                            "state": "battle-shocked",
+                            "set": true
+                          }
+                        }
+                      },
+                      {
+                        "results": [
+                          2,
+                          3,
+                          4,
+                          5,
+                          6
+                        ],
+                        "effect": {
+                          "type": "no-effect"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "type": "roll-modifier",
+                  "target": "this-unit",
+                  "modifier": {
+                    "roll": "hit",
+                    "operation": "subtract",
+                    "value": 1
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "source_digest": "708e4a3605748ac20cee986f52f91d6c2532299e013c34758cee119a42f80b71"
   },
   {
     "ability_id": "combat-doctrines-dark-angels",
@@ -2739,9 +3577,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "inner-circle-companions"
     ],
@@ -2749,11 +3586,33 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "defender",
+          "filter": {
+            "all_of": [
+              "CHARACTER"
+            ]
+          }
+        }
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "roll": "hit",
+          "operation": "add",
+          "value": 1
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "c732046a395f75298da82bdcf86c8aeb3bcdcbe5ebf9e1c0f371d6a3edd7cf90"
   },
   {
     "ability_id": "master-strategist-dark-angels",
@@ -2761,9 +3620,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "lion-eljonson"
     ],
@@ -2771,11 +3629,40 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "ability-activate",
+        "target": "this-unit",
+        "modifier": {
+          "ability": "combat-doctrines-dark-angels",
+          "select": {
+            "by": "player"
+          }
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "until-next-command-phase"
+    },
+    "behavior": "activated",
+    "source_digest": "052f60cdfb40f5edd83ec07dbd82eac0b9ff9ff0440607c12a1588c96f773463"
   },
   {
     "ability_id": "the-deathwing-the-vengeful-brethren-dark-angels",
@@ -2809,15 +3696,38 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "dark-angels",
     "detachment_id": "the-vengeful-brethren",
     "ability_type": "faction",
     "effect": {
-      "type": "no-effect"
+      "type": "keyword-grant",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS ASTARTES"
+        ],
+        "any_of_filters": [
+          {
+            "all_of": [
+              "FLY",
+              "VEHICLE"
+            ]
+          },
+          {
+            "all_of": [
+              "MOUNTED"
+            ]
+          }
+        ]
+      },
+      "modifier": {
+        "keywords": [
+          "RAVENWING"
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
@@ -2827,7 +3737,9 @@
         "ability_ref": "the-ravenwing-dark-angels",
         "type": "replaces"
       }
-    ]
+    ],
+    "behavior": "passive",
+    "source_digest": "a6c002561986e711c70daac6dd8f981a08c07968850ae3fb713f62cbb1aeaecb"
   },
   {
     "ability_id": "the-watchers-dark-angels",
@@ -2835,9 +3747,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "lion-eljonson"
     ],
@@ -2845,11 +3756,18 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 4,
+        "against": "psychic-and-mortal"
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "c23f7e2e898b843201fc20bee4d78eca1e917bb09c0b5d80c483a868060d7529"
   },
   {
     "ability_id": "transhuman-strategist-dark-angels",
@@ -2857,19 +3775,55 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "dark-angels",
     "detachment_id": null,
     "ability_type": "faction",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-model",
+              "filter": {
+                "has_ability": [
+                  "transhuman-strategist-dark-angels"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-model",
+              "filter": {
+                "designated": "warlord"
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "cp-gain",
+        "target": "this-model",
+        "modifier": {
+          "amount": 1
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "round-started"
+    },
+    "source_digest": "81478b3fd3fffd4e3f8908ce41012074c69c27743954b785ff7b85680bdcb3e6"
   },
   {
     "ability_id": "watcher-in-the-dark-azrael-dark-angels",

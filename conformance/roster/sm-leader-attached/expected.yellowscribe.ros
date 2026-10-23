@@ -22,12 +22,19 @@
             </profile>
             <profile name="Crusade of Wrath" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">While this model is leading a unit, add 1 to the unit's Strength characteristic.</characteristic>
+                <characteristic name="Description">Add 1 to the Attacks characteristic of melee weapons equipped by models in this unit.
+Add 1 to the Strength characteristic of melee weapons equipped by models in this unit.</characteristic>
               </characteristics>
             </profile>
             <profile name="High Marshal" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">During the Fight phase, the target suffers D3 mortal wounds.</characteristic>
+                <characteristic name="Description">At the start of the Fight phase:
+  -&gt; Select one enemy unit if the selected unit is a unit within Engagement Range of the unit:
+    -&gt; Roll one D6:
+      - On 1: Nothing happens.
+      - On 2-3: That unit suffers D3 mortal wounds.
+      - On 4-5: That unit suffers 3 mortal wounds.
+      - On 6: That unit suffers D3+3 mortal wounds.</characteristic>
               </characteristics>
             </profile>
             <profile name="Leader" typeName="Abilities">
@@ -110,7 +117,9 @@
             </profile>
             <profile name="Targeted Intercession" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Nothing happens.</characteristic>
+                <characteristic name="Description">If the unit charged this turn:
+  -&gt; Improve the Strength characteristic of melee weapons equipped by models in this unit by 1.
+  -&gt; Improve the Armour Penetration characteristic of melee weapons equipped by models in this unit by 1.</characteristic>
               </characteristics>
             </profile>
           </profiles>

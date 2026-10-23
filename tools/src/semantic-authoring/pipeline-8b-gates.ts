@@ -200,7 +200,11 @@ export function isNonDamageEffect(node: unknown): boolean {
 }
 
 export function isOutsideDamagePath(item: EffectTranslation["unsupported"][number]): boolean {
-  if (STAT_MODIFIER_OUTSIDE_DAMAGE_PATH.test(item.reason) || ROLL_MODIFIER_OUTSIDE_DAMAGE_PATH.test(item.reason)) return true;
+  // The translator's own label is trusted only for a stat or roll this gate also counts as off the
+  // damage path: a damage stat the translator cannot place is a gap, not an exemption.
+  const fragmentModifier = (item.effectFragment as { modifier?: { stat?: unknown; roll?: unknown } } | undefined)?.modifier;
+  if (STAT_MODIFIER_OUTSIDE_DAMAGE_PATH.test(item.reason)) return typeof fragmentModifier?.stat !== "string" || !DAMAGE_STATS.has(fragmentModifier.stat);
+  if (ROLL_MODIFIER_OUTSIDE_DAMAGE_PATH.test(item.reason)) return typeof fragmentModifier?.roll !== "string" || !DAMAGE_ROLLS.has(fragmentModifier.roll);
   if (REROLL_OUTSIDE_DAMAGE_PATH.test(item.reason)) {
     const fragment = item.effectFragment as { modifier?: { roll?: unknown } } | undefined;
     const roll = fragment?.modifier?.roll;

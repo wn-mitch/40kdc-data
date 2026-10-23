@@ -854,6 +854,18 @@ function translateStatModifier(
       if (!isOnBuffedUnit) return;
       emit({ type: "toughness-mod", value });
       return;
+    case "D":
+      // The Damage of attacks against the buffed unit is defender-side: a reduction (Necrodermis)
+      // under target perspective. On the buffed unit it changes the Damage of its own attacks.
+      if (classifyTarget(node) === "attacker") {
+        if (opts.perspective !== "target") return;
+        if (value < 0) emit({ type: "damage-reduction", value: -value });
+        else out.unsupported.push({ reason: "stat-modifier D: raising the Damage of incoming attacks is not modelled", effectFragment: node });
+        return;
+      }
+      if (opts.perspective !== "attacker" || !isOnBuffedUnit) return;
+      emit({ type: "damage-mod", value });
+      return;
     case "Sv":
       // Improvement is a save-roll bonus. Literal addition to the Save characteristic
       // instead raises the needed roll, so add/subtract use the opposite sign.

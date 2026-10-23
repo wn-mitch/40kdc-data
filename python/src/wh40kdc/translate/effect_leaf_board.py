@@ -150,6 +150,11 @@ def _detach_phrase(m: dict[str, Any]) -> str:
     return f", as a separate unit{strength} (it is no longer part of its attached unit)"
 
 
+def _one_model(phrase: str) -> str:
+    """The phrase's first whole-word "models" in the singular."""
+    return re.sub(r"\bmodels\b", "model", phrase, count=1)
+
+
 def _return_models(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> str:
     wounds = _wounds_left(m.get("wounds_remaining"))
     where = f"{placement_phrase(m)}{placement_limits(m, ctx)}"
@@ -161,7 +166,7 @@ def _return_models(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> str:
     if isinstance(target, dict) and target.get("level") == "model":
         recipients = {key: value for key, value in target.items() if key != "member_of"}
         models = effect_subject(recipients, ctx).removeprefix("all ")
-        kind = f"destroyed {models.replace('models', 'model')}"
+        kind = "destroyed " + _one_model(models)
         what = (
             f"all destroyed {models}"
             if m.get("count") == "all"
@@ -212,7 +217,7 @@ def _act_on_death(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> str:
     elif subj == "this model":
         model = "this model"
     elif isinstance(target, dict) and target.get("level") == "model":
-        model = f"a {subj.removeprefix('all ').replace('models', 'model')}"
+        model = "a " + _one_model(subj.removeprefix("all "))
     else:
         model = f"a model in {subj}"
     gate = m.get("gate")
@@ -242,9 +247,7 @@ def _act_on_death(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> str:
         if m.get("resolution") == "when-unit-fights":
             resolution = f"when its unit is selected to fight, it can {act}"
         elif m.get("resolution") == "after-attacking-unit-finishes":
-            resolution = (
-                f"after the attacking unit has finished making its attacks, it can {act}"
-            )
+            resolution = f"after the attacking unit has finished making its attacks, it can {act}"
         else:
             resolution = f"it can {act}"
         return (
@@ -601,10 +604,7 @@ def _set_up(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
     marker_range = m.get("marker_range")
     if isinstance(marker_range, dict):
         wholly = "wholly " if marker_range.get("wholly") is True else ""
-        s += (
-            f", {wholly}within {range_phrase(marker_range.get('range'))} "
-            "of that marker"
-        )
+        s += f", {wholly}within {range_phrase(marker_range.get('range'))} of that marker"
     s += _mode_clause(m)
     if isinstance(m.get("turns"), list):
         turns = re.sub(r", ([^,]*)$", r" or \1", ", ".join(_turn_ord(t) for t in m["turns"]))
