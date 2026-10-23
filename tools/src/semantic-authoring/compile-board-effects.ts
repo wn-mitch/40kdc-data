@@ -29,7 +29,7 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
       const modifier: Node = { applies_to_moves: closed(leaf, "move_types") };
       if (leaf.parameters.maximum !== undefined) modifier.maximum = closed(leaf, "maximum");
       else modifier.distance_bonus = closed(leaf, "bonus");
-      return { type: "move-modifier", target: closed(leaf, "subject"), modifier };
+      return { type: "move-modifier", target: unitOf(leaf, "subject"), modifier };
     }
     case "move-through": {
       // A pair of listed tokens (move-through@4, families/moves.ts) is one list.

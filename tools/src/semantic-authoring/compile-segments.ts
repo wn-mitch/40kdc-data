@@ -150,7 +150,19 @@ export function sentenceSegments(leaves: readonly CompileLeaf[], sourceText: str
   const stratagem = leaves.some((leaf) => STRATAGEM_HEADER.has(leaf.family_id));
   const attackHeader = (leaf: CompileLeaf) => leaf.role === "EVENT" && leaf.family_id === "attack" && !stratagem;
   const attackFrame = header.some(attackHeader);
-  if (header.some((leaf) => (leaf.role === "EVENT" && !attackHeader(leaf)) || HEADER_ONCE.has(leaf.family_id))) return null;
+  if (header.some((leaf) => (leaf.role === "EVENT" && !attackHeader(leaf)) || HEADER_ONCE.has(leaf.family_id))) {
+    // The header's moment is the whole record's, except across a bold heading line ("**Favoured ka’tah**"): each block
+    // under one is a rule of its own, so it neither fires at the header's moment nor splits anywhere else.
+    const headed = sentences.map((sentence, position) => position > firstEffectful && hasEffect(sentence.concat(sentences.slice(position + 1).flat()))
+      && HEADING_LINE.test(sentenceGap(leaves, starts[position]!, sentence, sourceText)));
+    if (!headed.some(Boolean)) return null;
+    const blocks: CompileLeaf[][] = [[...header]];
+    sentences.forEach((sentence, position) => {
+      if (headed[position]) blocks.push([]);
+      if (position >= firstEffectful) blocks.at(-1)!.push(...sentence);
+    });
+    return blocks.every(hasEffect) ? blocks : null;
+  }
 
   // A colon's list runs until a sentence ends it: a bullet-free sentence that opens a moment or
   // "In addition," (rule a), or one that starts its own line with a label (rule b). Such a
@@ -276,14 +288,20 @@ export function joinSegments(results: readonly PartResult[], oneUse = false): { 
   const durations = results.map(({ mechanics }) => ((mechanics as unknown as Node).scope as Node | undefined)?.duration);
   // A Stratagem is one use: a part with no duration of its own lasts as long as the first part.
   const inherited = oneUse ? durations.find((duration) => duration !== undefined && duration !== "permanent") : undefined;
+  const behaviors = new Set(results.map((result) => String((result.mechanics as unknown as Node).behavior)));
+  const behavior = BEHAVIOR_RANK.find((kind) => behaviors.has(kind)) ?? "passive";
   for (const [position, { mechanics }] of results.entries()) {
     const node = mechanics as unknown as Node;
     const own = durations[position];
     const durationOf = own !== undefined && own !== "permanent" ? own : inherited;
+    // "You can select …" in a part of a record that is otherwise reactive: the record's behavior no longer says the player may decline it.
+    // A Stratagem's parts are one use the player already chose to make.
+    const declinable = !oneUse && node.behavior === "activated" && behavior !== "activated";
     const carried: Node = {
       ...(node.trigger != null ? { trigger: node.trigger } : {}),
       ...(node.usage != null ? { usage: node.usage } : {}),
       ...(durationOf !== undefined && durationOf !== "permanent" ? { duration: durationOf } : {}),
+      ...(declinable ? { optional: true } : {}),
     };
     const effect = node.effect as Node;
     if (Object.keys(carried).length) steps.push({ type: "ability-part", ...carried, effect });
@@ -291,8 +309,6 @@ export function joinSegments(results: readonly PartResult[], oneUse = false): { 
     else if (effect.type === "sequence" && (effect.steps as Node[]).every((step) => step.type === "ability-part")) steps.push(...(effect.steps as Node[]));
     else steps.push(effect);
   }
-  const behaviors = new Set(results.map((result) => String((result.mechanics as unknown as Node).behavior)));
-  const behavior = BEHAVIOR_RANK.find((kind) => behaviors.has(kind)) ?? "passive";
   const mechanics = { effect: { type: "sequence", steps }, scope: { duration: "permanent" }, behavior, trigger: null } as unknown as Mechanics;
   return { mechanics, checks, ...(cores.length === 1 ? { core: JSON.parse(cores[0]!) } : {}), errors };
 }

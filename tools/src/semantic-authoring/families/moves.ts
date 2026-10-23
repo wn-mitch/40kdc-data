@@ -391,4 +391,21 @@ export const MOVE_EXTENSIONS: readonly FamilyExtension[] = [
       return { ...result, maximum: "unlimited" };
     },
   },
+  {
+    // "When an enemy unit engaged with your unit makes a pile-in/consolidation move, -2\" from that move".
+    family: "move-distance",
+    version: 3,
+    description: "As the previous version, plus a negative bonus (the named moves go that many inches less far than normal: \"-2\\\" from that pile-in move\") and subject antecedent (the unit an earlier leaf introduced, such as \"an enemy unit engaged with your unit\").",
+    schema: (previous) => withProperties(previous, {
+      subject: widenedEnum(previous, "subject", [ANTECEDENT]),
+      bonus: optional({ anyOf: [{ type: "integer", minimum: 1, maximum: 24 }, { type: "integer", minimum: -24, maximum: -1 }] }),
+    }),
+    normalize: (input, previous) => {
+      const shortened = typeof input.bonus === "number" && input.bonus < 0;
+      // The previous version checks the leaf with this unit for the antecedent and the bonus's size for its sign.
+      const staged = { ...input, ...(input.subject === ANTECEDENT ? { subject: "this-unit" } : {}), ...(shortened ? { bonus: -(input.bonus as number) } : {}) };
+      const result = previous(staged);
+      return { ...result, ...(input.subject === ANTECEDENT ? { subject: ANTECEDENT } : {}), ...(shortened ? { bonus: -(result.bonus as number) } : {}) };
+    },
+  },
 ];

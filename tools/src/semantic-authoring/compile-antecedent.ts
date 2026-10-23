@@ -533,6 +533,8 @@ const ANY_UNIT_KEYS: Readonly<Record<string, readonly string[]>> = {
   "ability-modifier": ["subject"],
   // "**K** units from your army are eligible to shoot and declare a charge in a turn in which they Fell Back": every unit the filter matches.
   "act-after-move": ["subject"],
+  // "-2\" from that pile-in move" of an enemy unit an earlier unit-filter names.
+  "move-distance": ["subject"],
 };
 const ANY_UNIT_CONDITION_KEYS: Readonly<Record<string, readonly string[]>> = {
   "unit-state": ["subject", "with"], "unit-activity": ["subject"], "unit-position": ["subject", "of"], "unit-keyword": ["subject"], "hit-by-attacks": ["subject"],

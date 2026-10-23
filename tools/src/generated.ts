@@ -4920,9 +4920,9 @@ export interface MoveModifierEffect {
     ignore_vertical?: true;
     no_end_in_engagement?: true;
     /**
-     * A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, or the rating the unit prints for this rule.
+     * A distance bonus for the selected move; a negative integer shortens it ("-2\" from that pile-in move"). Numeric strings are not accepted.
      */
-    distance_bonus?: number | DiceExpression | BattleSizeValue | RollReference | CountOf | UnitRating;
+    distance_bonus?: Quantity | number;
     /**
      * The selected Advance has no maximum distance. This is an explicit distance-ceiling override, not an additional move.
      */

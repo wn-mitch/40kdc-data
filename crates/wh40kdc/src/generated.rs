@@ -24132,8 +24132,17 @@ impl ::std::convert::TryFrom<::std::string::String> for MoveMode {
 ///      "uniqueItems": true
 ///    },
 ///    "distance_bonus": {
-///      "description": "A distance bonus for the selected move; numeric strings are not accepted.",
-///      "$ref": "#/$defs/quantity"
+///      "description": "A distance bonus for the selected move; a negative integer shortens it (\"-2\\\" from that pile-in move\"). Numeric strings are not accepted.",
+///      "oneOf": [
+///        {
+///          "$ref": "#/$defs/quantity"
+///        },
+///        {
+///          "type": "integer",
+///          "maximum": -1.0,
+///          "minimum": -24.0
+///        }
+///      ]
 ///    },
 ///    "end_on_terrain": {
 ///      "const": true
@@ -24231,9 +24240,9 @@ pub struct MoveModifierEffectModifier {
     pub applies_to_moves: ::std::option::Option<
         Vec<MoveModifierEffectModifierAppliesToMovesItem>,
     >,
-    ///A distance bonus for the selected move; numeric strings are not accepted.
+    ///A distance bonus for the selected move; a negative integer shortens it ("-2\" from that pile-in move"). Numeric strings are not accepted.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub distance_bonus: ::std::option::Option<Quantity>,
+    pub distance_bonus: ::std::option::Option<MoveModifierEffectModifierDistanceBonus>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub end_on_terrain: ::std::option::Option<::serde_json::Value>,
     ///Where each move in applies_to_moves must end: as close as possible to the closest unit matching `of`. Does not change the move's distance.
@@ -24405,6 +24414,42 @@ for MoveModifierEffectModifierAppliesToMovesItem {
         value: ::std::string::String,
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         value.parse()
+    }
+}
+///A distance bonus for the selected move; a negative integer shortens it ("-2\" from that pile-in move"). Numeric strings are not accepted.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "A distance bonus for the selected move; a negative integer shortens it (\"-2\\\" from that pile-in move\"). Numeric strings are not accepted.",
+///  "oneOf": [
+///    {
+///      "$ref": "#/$defs/quantity"
+///    },
+///    {
+///      "type": "integer",
+///      "maximum": -1.0,
+///      "minimum": -24.0
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(untagged)]
+pub enum MoveModifierEffectModifierDistanceBonus {
+    Quantity(Quantity),
+    Integer(i64),
+}
+impl ::std::convert::From<Quantity> for MoveModifierEffectModifierDistanceBonus {
+    fn from(value: Quantity) -> Self {
+        Self::Quantity(value)
+    }
+}
+impl ::std::convert::From<i64> for MoveModifierEffectModifierDistanceBonus {
+    fn from(value: i64) -> Self {
+        Self::Integer(value)
     }
 }
 ///`MoveModifierEffectModifierPassthroughItem`

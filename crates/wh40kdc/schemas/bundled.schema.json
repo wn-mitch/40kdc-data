@@ -9816,8 +9816,17 @@
                   "const": true
                 },
                 "distance_bonus": {
-                  "$ref": "#/$defs/quantity",
-                  "description": "A distance bonus for the selected move; numeric strings are not accepted."
+                  "oneOf": [
+                    {
+                      "$ref": "#/$defs/quantity"
+                    },
+                    {
+                      "type": "integer",
+                      "minimum": -24,
+                      "maximum": -1
+                    }
+                  ],
+                  "description": "A distance bonus for the selected move; a negative integer shortens it (\"-2\\\" from that pile-in move\"). Numeric strings are not accepted."
                 },
                 "maximum": {
                   "const": "unlimited",

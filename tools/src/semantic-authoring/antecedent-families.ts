@@ -82,6 +82,8 @@ const EXTENDED_ANTECEDENT_KEYS: Readonly<Record<string, readonly string[]>> = {
   // "your **VEHICLE** unit is eligible to shoot …", "do not make an Advance roll for it" (act-after-move@3 and no-advance-roll@3, families/moves.ts).
   "act-after-move": ["subject"],
   "no-advance-roll": ["subject"],
+  // "-2\" from that pile-in move" of the enemy unit an earlier unit-filter names (move-distance@3, families/moves.ts).
+  "move-distance": ["subject"],
   // "in a turn in which it used its Foo ability": a family whose own enum lists antecedent.
   "ability-used": ["subject"],
   // "None of these models can be your WARLORD": the group of an earlier list-building rule or filter (compile-army.ts).
