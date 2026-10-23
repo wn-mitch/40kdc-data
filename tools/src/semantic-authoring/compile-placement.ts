@@ -22,10 +22,12 @@ function gapBetween(previous: CompileLeaf, next: CompileLeaf, sourceText: string
   // A leaf whose own span ends in the full stop ("... on an unmodified 3+.") closes its sentence when a moment
   // opens the next one with no space ("3+.When this unit ..."), so no gap bytes carry the break. Other leaves
   // (the items of a list that share their lead-in's conditions) keep their sentence.
-  const closes = next.family_id === "event" && previous.end_byte > previous.start_byte && SENTENCE_END.test(exactSpan(sourceText, previous.start_byte, previous.end_byte));
+  const ends = previous.end_byte > previous.start_byte && SENTENCE_END.test(exactSpan(sourceText, previous.start_byte, previous.end_byte));
+  const closes = next.family_id === "event" && ends;
   if (next.start_byte === previous.end_byte) return { sentence: closes, and: false };
   const gap = exactSpan(sourceText, previous.end_byte, next.start_byte);
-  return { sentence: closes || /[.;:]/u.test(gap), and: /\b(?:and|or)\b|\(/iu.test(gap) };
+  // A span ending in its own full stop ("have **Fights First.**") closes its sentence at a line break, as a stop in the gap would.
+  return { sentence: closes || (ends && /[\r\n]/u.test(gap)) || /[.;:]/u.test(gap), and: /\b(?:and|or)\b|\(/iu.test(gap) };
 }
 
 /**

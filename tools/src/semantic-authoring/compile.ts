@@ -833,7 +833,15 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   // A per-attack duration inside a phase window folds into the phase when an attack moment ends it (compile-attack-window.ts).
   let fold = attackFold(durations, triggerWindow(list), triggers.some(isAttackMoment));
   if (fold === "refused") errors.push(CONFLICTING_DURATIONS);
-  const split = fold === null && new Set(durations).size > 1;
+  // One duration printed in a later paragraph than an effect ("… have Fights First.\r**Additional Effect:** Until the
+  // end of the turn, …") is that paragraph's own, so it binds as one of several would and leaves the earlier effect
+  // without it. Only in a record with no moment: after a moment or a selection, the duration is that use's lifetime;
+  // and a later sentence on the same line ("; instead, until …", "If it does, until …") still continues the earlier one.
+  const lateAt = durationAt[0];
+  const lateDuration = durations.length === 1 && lateAt !== undefined && sourceText !== undefined && list.every((leaf) => leaf.role !== "EVENT")
+    && list.some((leaf, index) => leaf.role === "EFFECT" && places[index]!.sentence < places[lateAt]!.sentence && leaf.fragment === list[lateAt]!.fragment
+      && leaf.end_byte !== undefined && /[\r\n]/u.test(exactSpan(sourceText, leaf.end_byte, list[lateAt]!.start_byte)));
+  const split = fold === null && (new Set(durations).size > 1 || lateDuration);
   const firstEffectAt = list.findIndex((leaf) => leaf.role === "EFFECT");
   const leadingAt = [...new Set(triggerIndexes.filter((index) => firstEffectAt === -1 || index < firstEffectAt))];
   const binding = split ? bindDurations(list, places, durationAt, planned.map((item) => item.index), leadingAt, sourceText) : null;
