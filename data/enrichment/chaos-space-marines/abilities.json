@@ -51,7 +51,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "1104205b07a193af13a03d76c518b00e8d031ebf35a53481ab5347f2c8f22f0c",
     "version": "2025-q3",
@@ -60,7 +60,7 @@
       "steps": [
         {
           "type": "re-roll",
-          "target": "this-model",
+          "target": "this-unit",
           "modifier": {
             "roll": "hit",
             "result_scope": "any-result",
@@ -69,7 +69,7 @@
         },
         {
           "type": "re-roll",
-          "target": "this-model",
+          "target": "this-unit",
           "modifier": {
             "roll": "wound",
             "result_scope": "any-result",
@@ -85,8 +85,24 @@
       "heretic-astartes-daemon-prince"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "chaos-space-marines"
+    "behavior": "reactive",
+    "faction_id": "chaos-space-marines",
+    "trigger": [
+      {
+        "event": "selected",
+        "filter": {
+          "to": "shoot"
+        },
+        "optional": true
+      },
+      {
+        "event": "selected",
+        "filter": {
+          "to": "fight"
+        },
+        "optional": true
+      }
+    ]
   },
   {
     "ability_id": "lord-of-chaos-heretic-astartes-daemon-prince-chaos-space-marines",
@@ -12677,19 +12693,53 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "chaos-space-marines",
     "detachment_id": "veterans-of-the-long-war",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "choice",
+      "options": [
+        {
+          "type": "re-roll",
+          "target": "this-model",
+          "modifier": {
+            "roll": "hit",
+            "result_scope": "any-result",
+            "count": 1
+          }
+        },
+        {
+          "type": "re-roll",
+          "target": "this-model",
+          "modifier": {
+            "roll": "wound",
+            "result_scope": "any-result",
+            "count": 1
+          }
+        },
+        {
+          "type": "re-roll",
+          "target": "this-model",
+          "modifier": {
+            "roll": "save",
+            "result_scope": "any-result",
+            "count": 1
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "activated",
+    "usage": {
+      "frequency": "once-per-turn",
+      "per": "model"
+    },
+    "source_digest": "9d56c30c3d91199e7a24cf2b521b1634b20b49f14b7d89727e1f1bd3f6823ab9"
   },
   {
     "ability_id": "mark-of-the-hound-renegade-raiders-chaos-space-marines",

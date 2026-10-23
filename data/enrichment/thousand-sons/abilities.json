@@ -4359,7 +4359,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "05131536a4f71dac4e1e97a5194779215a32f126b44bed3b19f3eeac4240ca56",
     "version": "2025-q3",
@@ -4368,160 +4368,225 @@
     "faction_id": "thousand-sons",
     "detachment_id": "warpforged-cabal",
     "ability_type": "detachment",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "sequence",
       "steps": [
         {
-          "type": "conditional",
-          "condition": {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "matches",
-                "parameters": {
-                  "filter": {
-                    "within": {
-                      "range": {
-                        "inches": 6
-                      },
-                      "of": {
-                        "owner": "friendly",
-                        "all_of": [
-                          "THOUSAND SONS"
-                        ]
-                      }
-                    }
-                  }
-                }
+          "type": "ability-part",
+          "trigger": [
+            {
+              "event": "selected",
+              "filter": {
+                "to": "shoot"
               },
-              {
-                "type": "matches",
-                "parameters": {
-                  "filter": {
-                    "within": {
-                      "range": {
-                        "inches": 6
-                      },
-                      "of": {
-                        "owner": "friendly",
-                        "all_of": [
-                          "PSYKER"
-                        ]
-                      }
-                    }
-                  }
-                }
-              }
-            ]
-          },
+              "subject": {
+                "owner": "friendly",
+                "all_of": [
+                  "THOUSAND SONS",
+                  "VEHICLE"
+                ]
+              },
+              "optional": true
+            },
+            {
+              "event": "selected",
+              "filter": {
+                "to": "fight"
+              },
+              "subject": {
+                "owner": "friendly",
+                "all_of": [
+                  "THOUSAND SONS",
+                  "VEHICLE"
+                ]
+              },
+              "optional": true
+            }
+          ],
           "effect": {
             "type": "sequence",
             "steps": [
               {
-                "type": "re-roll",
-                "target": "this-unit",
-                "modifier": {
-                  "roll": "hit",
-                  "subset": "all-failures"
+                "type": "conditional",
+                "condition": {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "event-subject",
+                    "filter": {
+                      "within": {
+                        "of": {
+                          "owner": "friendly",
+                          "all_of": [
+                            "PSYKER",
+                            "THOUSAND SONS"
+                          ]
+                        },
+                        "range": {
+                          "inches": 6
+                        }
+                      }
+                    }
+                  }
+                },
+                "effect": {
+                  "type": "sequence",
+                  "steps": [
+                    {
+                      "type": "re-roll",
+                      "target": "this-unit",
+                      "modifier": {
+                        "roll": "hit",
+                        "result_scope": "any-result",
+                        "count": 1
+                      }
+                    },
+                    {
+                      "type": "re-roll",
+                      "target": "this-unit",
+                      "modifier": {
+                        "roll": "wound",
+                        "result_scope": "any-result",
+                        "count": 1
+                      }
+                    },
+                    {
+                      "type": "re-roll",
+                      "target": "this-unit",
+                      "modifier": {
+                        "roll": "damage",
+                        "result_scope": "any-result",
+                        "count": 1
+                      }
+                    }
+                  ]
                 }
               },
               {
-                "type": "re-roll",
-                "target": "this-unit",
-                "modifier": {
-                  "roll": "wound",
-                  "subset": "all-failures"
-                }
-              },
-              {
-                "type": "re-roll",
-                "target": "this-unit",
-                "modifier": {
-                  "roll": "damage",
-                  "subset": "all-failures"
+                "type": "conditional",
+                "condition": {
+                  "operator": "not",
+                  "operands": [
+                    {
+                      "type": "matches",
+                      "parameters": {
+                        "subject": "event-subject",
+                        "filter": {
+                          "within": {
+                            "of": {
+                              "owner": "friendly",
+                              "all_of": [
+                                "PSYKER",
+                                "THOUSAND SONS"
+                              ]
+                            },
+                            "range": {
+                              "inches": 6
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "effect": {
+                  "type": "choice",
+                  "options": [
+                    {
+                      "type": "re-roll",
+                      "target": "this-unit",
+                      "modifier": {
+                        "roll": "hit",
+                        "result_scope": "any-result",
+                        "count": 1
+                      }
+                    },
+                    {
+                      "type": "re-roll",
+                      "target": "this-unit",
+                      "modifier": {
+                        "roll": "wound",
+                        "result_scope": "any-result",
+                        "count": 1
+                      }
+                    },
+                    {
+                      "type": "re-roll",
+                      "target": "this-unit",
+                      "modifier": {
+                        "roll": "damage",
+                        "result_scope": "any-result",
+                        "count": 1
+                      }
+                    }
+                  ]
                 }
               }
             ]
           }
         },
         {
-          "type": "conditional",
-          "condition": {
-            "operator": "not",
-            "operands": [
-              {
-                "operator": "and",
-                "operands": [
-                  {
-                    "type": "matches",
-                    "parameters": {
-                      "filter": {
-                        "within": {
-                          "range": {
-                            "inches": 6
-                          },
-                          "of": {
-                            "owner": "friendly",
-                            "all_of": [
-                              "THOUSAND SONS"
-                            ]
-                          }
-                        }
-                      }
+          "type": "ability-part",
+          "trigger": {
+            "event": "model-destroyed",
+            "object": {
+              "owner": "friendly",
+              "all_of": [
+                "THOUSAND SONS",
+                "VEHICLE"
+              ],
+              "level": "model",
+              "member_of": "this-unit"
+            }
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "event-subject",
+                    "filter": {
+                      "has_ability": [
+                        "deadly-demise"
+                      ]
                     }
-                  },
-                  {
-                    "type": "matches",
-                    "parameters": {
-                      "filter": {
-                        "within": {
-                          "range": {
-                            "inches": 6
-                          },
-                          "of": {
-                            "owner": "friendly",
-                            "all_of": [
-                              "PSYKER"
-                            ]
-                          }
+                  }
+                },
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "event-object",
+                    "filter": {
+                      "within": {
+                        "of": {
+                          "owner": "friendly",
+                          "all_of": [
+                            "PSYKER",
+                            "THOUSAND SONS"
+                          ]
+                        },
+                        "range": {
+                          "inches": 6
                         }
                       }
                     }
                   }
-                ]
+                }
+              ]
+            },
+            "effect": {
+              "type": "ability-modifier",
+              "target": "this-model",
+              "modifier": {
+                "ability": "deadly-demise",
+                "aspect": "threshold",
+                "operation": "set",
+                "value": 5
               }
-            ]
-          },
-          "effect": {
-            "type": "choice",
-            "choice_label": "Re-roll one Hit, Wound, or Damage roll",
-            "options": [
-              {
-                "type": "re-roll",
-                "target": "this-unit",
-                "modifier": {
-                  "roll": "hit",
-                  "subset": "all-failures"
-                }
-              },
-              {
-                "type": "re-roll",
-                "target": "this-unit",
-                "modifier": {
-                  "roll": "wound",
-                  "subset": "all-failures"
-                }
-              },
-              {
-                "type": "re-roll",
-                "target": "this-unit",
-                "modifier": {
-                  "roll": "damage",
-                  "subset": "all-failures"
-                }
-              }
-            ]
+            }
           }
         }
       ]

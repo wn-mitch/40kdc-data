@@ -4842,19 +4842,146 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "emperors-chosen",
     "ability_type": "detachment",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "selected",
+            "filter": {
+              "to": "attack"
+            },
+            "subject": {
+              "owner": "friendly",
+              "all_of": [
+                "ADEPTUS CUSTODES"
+              ]
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "re-roll",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "hit",
+                  "result_scope": "any-result",
+                  "count": 1
+                }
+              },
+              {
+                "type": "re-roll",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "wound",
+                  "result_scope": "any-result",
+                  "count": 1
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "ability-part",
+          "optional": true,
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "rule-active",
+              "parameters": {
+                "rule": {
+                  "ability_id": "martial-katah-adeptus-custodes",
+                  "option_id": "rendax"
+                }
+              }
+            },
+            "effect": {
+              "type": "select-units",
+              "selector": {
+                "filter": {
+                  "owner": "enemy",
+                  "any_of": [
+                    "MONSTER",
+                    "VEHICLE"
+                  ]
+                },
+                "count": {
+                  "min": 1,
+                  "max": 1
+                },
+                "eligibility": {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "selected-unit",
+                    "filter": {
+                      "engaged_with": "this-unit"
+                    }
+                  }
+                }
+              },
+              "effect": {
+                "type": "dice-table",
+                "dice": "D6",
+                "outcomes": [
+                  {
+                    "results": [
+                      1,
+                      2
+                    ],
+                    "effect": {
+                      "type": "mortal-wounds",
+                      "target": "selected-unit",
+                      "modifier": {
+                        "count": 1
+                      }
+                    }
+                  },
+                  {
+                    "results": [
+                      3,
+                      4,
+                      5
+                    ],
+                    "effect": {
+                      "type": "mortal-wounds",
+                      "target": "selected-unit",
+                      "modifier": {
+                        "count": "D3"
+                      }
+                    }
+                  },
+                  {
+                    "results": [
+                      6
+                    ],
+                    "effect": {
+                      "type": "mortal-wounds",
+                      "target": "selected-unit",
+                      "modifier": {
+                        "count": 3
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "source_digest": "72d8d5a1b35d75dd481c9dfe858e61bfc305fb8bd59be60ad7f4cfdeda49d9ea"
   },
   {
     "ability_id": "martial-katah-tristraens-gilded-blades-adeptus-custodes",
@@ -7952,19 +8079,70 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "guardians-of-the-throne",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "attack-is",
+        "parameters": {
+          "attack_type": "ranged"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "result_scope": "any-result",
+              "count": 1
+            }
+          },
+          {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "wound",
+              "result_scope": "any-result",
+              "count": 1
+            }
+          },
+          {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "damage",
+              "result_scope": "any-result",
+              "count": 1
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS CUSTODES"
+        ]
+      }
+    },
+    "source_digest": "9662ea04250882028ea8a751cc0faa7e8f929572b205b6069b5c7057a84658c2"
   },
   {
     "ability_id": "rapid-reactions-aquilan-shield-adeptus-custodes",

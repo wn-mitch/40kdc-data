@@ -830,7 +830,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "e632ef8971e44a997652e4e03554fe0d1ba389f7b41b690d5186ec88f6beacaa",
     "version": "2025-q3",
@@ -839,26 +839,20 @@
       "steps": [
         {
           "type": "re-roll",
-          "target": "this-model",
+          "target": "this-unit",
           "modifier": {
             "roll": "hit",
             "result_scope": "any-result",
-            "count": 1,
-            "weapons": {
-              "type": "ranged"
-            }
+            "count": 1
           }
         },
         {
           "type": "re-roll",
-          "target": "this-model",
+          "target": "this-unit",
           "modifier": {
             "roll": "wound",
             "result_scope": "any-result",
-            "count": 1,
-            "weapons": {
-              "type": "ranged"
-            }
+            "count": 1
           }
         }
       ]
@@ -870,8 +864,16 @@
       "fire-prism"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "faction_id": "aeldari"
+    "behavior": "reactive",
+    "faction_id": "aeldari",
+    "trigger": {
+      "event": "selected",
+      "subject": "this-model",
+      "filter": {
+        "to": "shoot"
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "superlative-strategist-aeldari",
@@ -10302,19 +10304,62 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "aeldari",
     "detachment_id": "armoured-warhost",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "result_scope": "any-result",
+            "count": 1
+          }
+        },
+        {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "wound",
+            "result_scope": "any-result",
+            "count": 1
+          }
+        },
+        {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "damage",
+            "result_scope": "any-result",
+            "count": 1
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "AELDARI",
+          "VEHICLE"
+        ]
+      }
+    },
+    "source_digest": "acf591623ab9d12de1c8db792f0c2eb7c9f6ce7f1d92559deaedf220424427f3"
   },
   {
     "ability_id": "soulsight-devoted-of-ynnead-aeldari",

@@ -1265,17 +1265,41 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "bac4cd4bc01defa370d5f166c743a6bccc3108e6a84dd2d4d6d4c14a15804b01",
     "version": "2025-q3",
     "effect": {
-      "type": "re-roll",
-      "target": "this-unit",
-      "modifier": {
-        "roll": "damage",
-        "subset": "all-failures"
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "result_scope": "any-result",
+            "count": 1
+          }
+        },
+        {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "wound",
+            "result_scope": "any-result",
+            "count": 1
+          }
+        },
+        {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "damage",
+            "result_scope": "any-result",
+            "count": 1
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -1284,8 +1308,16 @@
       "rogal-dorn-commander"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "faction_id": "astra-militarum"
+    "behavior": "reactive",
+    "faction_id": "astra-militarum",
+    "trigger": {
+      "event": "selected",
+      "subject": "this-model",
+      "filter": {
+        "to": "shoot"
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "withering-hail-astra-militarum",

@@ -393,7 +393,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "1529861649d7bc9e4b3f923c6a4f495b22a0359d47bc4904f725aa6c2563538d",
     "version": "2025-q3",
@@ -421,14 +421,30 @@
       ]
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "attack-sequence"
     },
     "unit_ids": [
       "knight-despoiler"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "faction_id": "chaos-knights"
+    "behavior": "reactive",
+    "faction_id": "chaos-knights",
+    "trigger": [
+      {
+        "event": "selected",
+        "filter": {
+          "to": "shoot"
+        },
+        "optional": true
+      },
+      {
+        "event": "selected",
+        "filter": {
+          "to": "fight"
+        },
+        "optional": true
+      }
+    ]
   },
   {
     "ability_id": "searing-flames-chaos-knights",

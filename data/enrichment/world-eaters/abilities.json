@@ -4467,7 +4467,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "ce0edc5e2d68968cfbac55a5544e581aa0cd3df8761d1b176e92c2d9570d285c",
     "version": "2025-q3",
@@ -4476,13 +4476,26 @@
     "faction_id": "world-eaters",
     "detachment_id": "berzerker-warband",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "re-roll",
-      "target": "this-model",
-      "modifier": {
-        "roll": "blessings-of-khorne",
-        "subset": "all-failures"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "this-model",
+          "filter": {
+            "state": "on-battlefield"
+          }
+        }
+      },
+      "effect": {
+        "type": "re-roll",
+        "target": "this-unit",
+        "modifier": {
+          "roll": "blessings-of-khorne",
+          "result_scope": "any-result",
+          "count": 2
+        }
       }
     },
     "scope": {
@@ -4493,6 +4506,13 @@
       "all_of": [
         "WORLD EATERS"
       ]
+    },
+    "trigger": {
+      "event": "before-roll",
+      "filter": {
+        "roll": "blessings-of-khorne"
+      },
+      "optional": true
     }
   },
   {

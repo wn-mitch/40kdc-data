@@ -6355,19 +6355,80 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "tyranids",
     "detachment_id": "invasion-fleet",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "choice",
+      "options": [
+        {
+          "type": "re-roll",
+          "target": "this-model",
+          "modifier": {
+            "roll": "hit",
+            "result_scope": "any-result",
+            "count": 1
+          }
+        },
+        {
+          "type": "re-roll",
+          "target": "this-model",
+          "modifier": {
+            "roll": "wound",
+            "result_scope": "any-result",
+            "count": 1
+          }
+        },
+        {
+          "type": "re-roll",
+          "target": "this-model",
+          "modifier": {
+            "roll": "charge",
+            "result_scope": "any-result",
+            "count": 1
+          }
+        },
+        {
+          "type": "re-roll",
+          "target": "this-model",
+          "modifier": {
+            "roll": "advance",
+            "result_scope": "any-result",
+            "count": 1
+          }
+        },
+        {
+          "type": "re-roll",
+          "target": "this-model",
+          "modifier": {
+            "roll": "save",
+            "result_scope": "any-result",
+            "count": 1
+          }
+        },
+        {
+          "type": "re-roll",
+          "target": "this-model",
+          "modifier": {
+            "roll": "damage",
+            "result_scope": "any-result",
+            "count": 1
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "activated",
+    "usage": {
+      "frequency": "once-per-turn",
+      "per": "model"
+    },
+    "source_digest": "aa0da386a8ef913bfd1ae423d778194f8b40870b77bdeecec006393fad6f2f83"
   },
   {
     "ability_id": "piercing-talons-unending-swarm-tyranids",

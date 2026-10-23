@@ -3034,7 +3034,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "9d926fe700d6966f8d66098962be654edd23f5af28e196578ece60002f0bc3ef",
     "version": "2025-q3",
@@ -3043,26 +3043,20 @@
       "options": [
         {
           "type": "re-roll",
-          "target": "this-model",
+          "target": "this-unit",
           "modifier": {
             "roll": "hit",
             "result_scope": "any-result",
-            "count": 1,
-            "weapons": {
-              "type": "ranged"
-            }
+            "count": 1
           }
         },
         {
           "type": "re-roll",
-          "target": "this-model",
+          "target": "this-unit",
           "modifier": {
             "roll": "wound",
             "result_scope": "any-result",
-            "count": 1,
-            "weapons": {
-              "type": "ranged"
-            }
+            "count": 1
           }
         }
       ]
@@ -3075,8 +3069,16 @@
       "sky-ray-gunship"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "faction_id": "tau-empire"
+    "behavior": "reactive",
+    "faction_id": "tau-empire",
+    "trigger": {
+      "event": "selected",
+      "subject": "this-model",
+      "filter": {
+        "to": "shoot"
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "airborne-agility-tau-empire",
