@@ -4338,19 +4338,113 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "aquilan-shield",
     "ability_type": "detachment",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "defender",
+                  "filter": {
+                    "within": {
+                      "of": {
+                        "objective": {}
+                      },
+                      "range": "objective-control"
+                    }
+                  }
+                }
+              },
+              {
+                "type": "attack-is",
+                "parameters": {
+                  "attack_type": "ranged"
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "defender",
+                  "filter": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "ADEPTUS CUSTODES"
+                    ],
+                    "none_of": [
+                      "MONSTER",
+                      "VEHICLE"
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "attack-compare",
+                "parameters": {
+                  "left": {
+                    "of": "attacker",
+                    "stat": "S"
+                  },
+                  "comparison": "gt",
+                  "right": {
+                    "of": "defender",
+                    "stat": "T"
+                  }
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "roll-modifier",
+            "target": "attacker",
+            "modifier": {
+              "roll": "wound",
+              "operation": "subtract",
+              "value": 1
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "rule-active",
+            "parameters": {
+              "rule": {
+                "ability_id": "martial-katah-adeptus-custodes",
+                "option_id": "salvus"
+              }
+            }
+          },
+          "effect": {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "Range",
+              "operation": "add",
+              "value": 6,
+              "weapons": {
+                "type": "ranged"
+              }
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "4c0c4c7deea0f1e7b7354ed03ae02f6ca99fafe5b2a6a747c0d33a755608d766"
   },
   {
     "ability_id": "goldenwrath-upgrade-aquilan-talon-adeptus-custodes",
@@ -4391,19 +4485,62 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "emissaries-imperatus",
     "ability_type": "detachment",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-grant",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "ADEPTUS CUSTODES"
+            ]
+          },
+          "modifier": {
+            "ability": "fights-first"
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "rule-active",
+            "parameters": {
+              "rule": {
+                "ability_id": "martial-katah-adeptus-custodes",
+                "option_id": "conversai"
+              }
+            }
+          },
+          "effect": {
+            "type": "ability-part",
+            "duration": "turn",
+            "effect": {
+              "type": "permission",
+              "target": "this-unit",
+              "modifier": {
+                "activity": "start-action",
+                "allow": true,
+                "despite": [
+                  "advanced",
+                  "fell-back"
+                ]
+              }
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "1f996f8405a8474cc7755229b0a234957a68ea02712080e0e46f0dc3c38c1c60"
   },
   {
     "ability_id": "impenetrable-defence-adeptus-custodes",
@@ -5859,19 +5996,71 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "solar-watch",
     "ability_type": "detachment",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "move-ended",
+            "filter": {
+              "move_types": [
+                "fall-back"
+              ]
+            },
+            "subject": {
+              "owner": "friendly",
+              "all_of": [
+                "ADEPTUS CUSTODES"
+              ]
+            }
+          },
+          "effect": {
+            "type": "permission",
+            "target": "event-subject",
+            "modifier": {
+              "activity": "declare-charge",
+              "allow": true,
+              "despite": [
+                "fell-back"
+              ]
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "rule-active",
+            "parameters": {
+              "rule": {
+                "ability_id": "martial-katah-adeptus-custodes",
+                "option_id": "calistus"
+              }
+            }
+          },
+          "effect": {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "M",
+              "operation": "add",
+              "value": 2
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "source_digest": "5812c3d0dba4f8d3d5e8db179101280552d47e00cccf6fa88a48e81fca9195b6"
   },
   {
     "ability_id": "unstoppable-will-adeptus-custodes",
@@ -5999,19 +6188,134 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "shadowkeepers",
     "ability_type": "detachment",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "defender",
+                  "filter": {
+                    "within": {
+                      "of": {
+                        "objective": {}
+                      },
+                      "range": "objective-control"
+                    }
+                  }
+                }
+              },
+              {
+                "type": "attack-is",
+                "parameters": {
+                  "attack_type": "melee"
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "defender",
+                  "filter": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "ADEPTUS CUSTODES"
+                    ],
+                    "none_of": [
+                      "MONSTER",
+                      "VEHICLE"
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "attack-compare",
+                "parameters": {
+                  "left": {
+                    "of": "attacker",
+                    "stat": "S"
+                  },
+                  "comparison": "gt",
+                  "right": {
+                    "of": "defender",
+                    "stat": "T"
+                  }
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "roll-modifier",
+            "target": "attacker",
+            "modifier": {
+              "roll": "wound",
+              "operation": "subtract",
+              "value": 1
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "rule-active",
+            "parameters": {
+              "rule": {
+                "ability_id": "martial-katah-adeptus-custodes",
+                "option_id": "kaptaris"
+              }
+            }
+          },
+          "effect": {
+            "type": "select-units",
+            "selector": {
+              "filter": {
+                "owner": "enemy"
+              },
+              "count": {
+                "min": 1,
+                "max": 1
+              },
+              "eligibility": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "engaged_with": "this-unit"
+                  }
+                }
+              },
+              "limit": {
+                "count": 1,
+                "period": "phase"
+              }
+            },
+            "effect": {
+              "type": "test",
+              "target": "selected-unit",
+              "modifier": {
+                "test": "battle-shock",
+                "modifier": -1
+              }
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "activated",
+    "source_digest": "7a7857f2cb4c119a08eb734b7a3b97eae4ee6c4d96d8849c145c2de635122a74"
   },
   {
     "ability_id": "will-of-auramite-aquilan-wing-adeptus-custodes",

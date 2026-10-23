@@ -14099,7 +14099,112 @@
     }
   },
   {
-    "caseId": "greater-daemon-of-khorne-chaos-daemons#253",
+    "caseId": "gilded-guardians-adeptus-custodes#253",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "defender",
+                  "filter": {
+                    "within": {
+                      "of": {
+                        "objective": {}
+                      },
+                      "range": "objective-control"
+                    }
+                  }
+                }
+              },
+              {
+                "type": "attack-is",
+                "parameters": {
+                  "attack_type": "ranged"
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "defender",
+                  "filter": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "ADEPTUS CUSTODES"
+                    ],
+                    "none_of": [
+                      "MONSTER",
+                      "VEHICLE"
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "attack-compare",
+                "parameters": {
+                  "left": {
+                    "of": "attacker",
+                    "stat": "S"
+                  },
+                  "comparison": "gt",
+                  "right": {
+                    "of": "defender",
+                    "stat": "T"
+                  }
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "roll-modifier",
+            "target": "attacker",
+            "modifier": {
+              "roll": "wound",
+              "operation": "subtract",
+              "value": 1
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "rule-active",
+            "parameters": {
+              "rule": {
+                "ability_id": "martial-katah-adeptus-custodes",
+                "option_id": "salvus"
+              }
+            }
+          },
+          "effect": {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "Range",
+              "operation": "add",
+              "value": 6,
+              "weapons": {
+                "type": "ranged"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "While the target is within range of an objective marker, while making ranged attacks, while the target is a friendly ADEPTUS CUSTODES unit (excluding MONSTER or VEHICLE units), when the attack's S is more than the target's T, the attacking unit gets -1 to Wound rolls.\nWhile the Salvus option of Martial Katah is active, add 6 to the Range characteristic of ranged weapons equipped by models in this unit."
+    }
+  },
+  {
+    "caseId": "greater-daemon-of-khorne-chaos-daemons#254",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -14154,7 +14259,7 @@
     }
   },
   {
-    "caseId": "greater-daemon-of-nurgle-chaos-daemons#254",
+    "caseId": "greater-daemon-of-nurgle-chaos-daemons#255",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -14209,7 +14314,7 @@
     }
   },
   {
-    "caseId": "greater-daemon-of-slaanesh-chaos-daemons#255",
+    "caseId": "greater-daemon-of-slaanesh-chaos-daemons#256",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -14264,7 +14369,7 @@
     }
   },
   {
-    "caseId": "grot-shields-runt-swarm-orks#256",
+    "caseId": "grot-shields-runt-swarm-orks#257",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -14441,7 +14546,7 @@
     }
   },
   {
-    "caseId": "guns-blazing-chaos-space-marines#257",
+    "caseId": "guns-blazing-chaos-space-marines#258",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -14554,7 +14659,7 @@
     }
   },
   {
-    "caseId": "hallowed-ground-grey-knights#258",
+    "caseId": "hallowed-ground-grey-knights#259",
     "effect": {
       "type": "named-region-state",
       "target": {
@@ -14756,7 +14861,7 @@
     }
   },
   {
-    "caseId": "hammer-aflame-grey-knights#259",
+    "caseId": "hammer-aflame-grey-knights#260",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -14837,7 +14942,7 @@
     }
   },
   {
-    "caseId": "headlong-destruction-chaos-space-marines#260",
+    "caseId": "headlong-destruction-chaos-space-marines#261",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -14866,7 +14971,61 @@
     }
   },
   {
-    "caseId": "heroes-of-legend-imperial-knights#261",
+    "caseId": "heralds-of-the-throne-adeptus-custodes#262",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-grant",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "ADEPTUS CUSTODES"
+            ]
+          },
+          "modifier": {
+            "ability": "fights-first"
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "rule-active",
+            "parameters": {
+              "rule": {
+                "ability_id": "martial-katah-adeptus-custodes",
+                "option_id": "conversai"
+              }
+            }
+          },
+          "effect": {
+            "type": "ability-part",
+            "duration": "turn",
+            "effect": {
+              "type": "permission",
+              "target": "this-unit",
+              "modifier": {
+                "activity": "start-action",
+                "allow": true,
+                "despite": [
+                  "advanced",
+                  "fell-back"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "All friendly ADEPTUS CUSTODES units gain the Fights First ability.\nWhile the Conversai option of Martial Katah is active:\n  -> Until the end of the turn: the unit is eligible to start an Action even if it Advanced this turn or it Fell Back this turn."
+    }
+  },
+  {
+    "caseId": "heroes-of-legend-imperial-knights#263",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -14958,7 +15117,7 @@
     }
   },
   {
-    "caseId": "icon-of-khorne-world-eaters#262",
+    "caseId": "icon-of-khorne-world-eaters#264",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -15000,86 +15159,7 @@
     }
   },
   {
-    "caseId": "icon-of-war-khorne-daemonkin-world-eaters#263",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
-            "within": {
-              "range": {
-                "inches": 6
-              },
-              "of": {
-                "owner": "friendly",
-                "all_of": [
-                  "BLOOD LEGIONS"
-                ]
-              }
-            }
-          }
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "ability-grant",
-            "target": {
-              "owner": "friendly",
-              "all_of": [
-                "BLOOD LEGIONS"
-              ],
-              "within": {
-                "range": {
-                  "inches": 6
-                }
-              }
-            },
-            "modifier": {
-              "ability": "blessings-of-khorne-world-eaters"
-            }
-          },
-          {
-            "type": "conditional",
-            "condition": {
-              "type": "rule-active",
-              "parameters": {
-                "rule": "might-of-khorne-world-eaters"
-              }
-            },
-            "effect": {
-              "type": "re-roll",
-              "target": {
-                "owner": "friendly",
-                "all_of": [
-                  "BLOOD LEGIONS"
-                ],
-                "within": {
-                  "range": {
-                    "inches": 6
-                  }
-                }
-              },
-              "modifier": {
-                "roll": "battle-shock",
-                "result_scope": "any-result"
-              }
-            }
-          }
-        ]
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "expected": {
-      "text": "While the unit is within 6\" of a friendly BLOOD LEGIONS unit:\n  -> Friendly BLOOD LEGIONS units within 6\" gain the Blessings of Khorne ability.\n  -> While the Might of Khorne is active, you can re-roll the Battle-shock roll for friendly BLOOD LEGIONS units within 6\"."
-    }
-  },
-  {
-    "caseId": "idol-of-blessed-blood-khorne-lord-of-skulls-world-eaters#264",
+    "caseId": "idol-of-blessed-blood-khorne-lord-of-skulls-world-eaters#265",
     "effect": {
       "type": "resource-die",
       "target": "this-model",
@@ -15101,7 +15181,7 @@
     }
   },
   {
-    "caseId": "independent-power-tau-empire#265",
+    "caseId": "independent-power-tau-empire#266",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -15157,7 +15237,7 @@
     }
   },
   {
-    "caseId": "infested-war-zone-runt-swarm-orks#266",
+    "caseId": "infested-war-zone-runt-swarm-orks#267",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -15238,7 +15318,7 @@
     }
   },
   {
-    "caseId": "join-the-hunt-kroot-hunting-pack-tau-empire#267",
+    "caseId": "join-the-hunt-kroot-hunting-pack-tau-empire#268",
     "effect": {
       "type": "add-unit",
       "target": "this-unit",
@@ -15265,7 +15345,7 @@
     }
   },
   {
-    "caseId": "kaleidoscopic-tempest-hexwarp-thrallband-thousand-sons#268",
+    "caseId": "kaleidoscopic-tempest-hexwarp-thrallband-thousand-sons#269",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -15337,7 +15417,7 @@
     }
   },
   {
-    "caseId": "kill-team-agents-of-the-imperium#269",
+    "caseId": "kill-team-agents-of-the-imperium#270",
     "effect": {
       "type": "transport-capacity",
       "target": "this-unit",
@@ -15356,7 +15436,7 @@
     }
   },
   {
-    "caseId": "killing-blow-tau-empire#270",
+    "caseId": "killing-blow-tau-empire#271",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -15429,7 +15509,7 @@
     }
   },
   {
-    "caseId": "knightly-teachings-imperial-knights#271",
+    "caseId": "knightly-teachings-imperial-knights#272",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -15586,7 +15666,7 @@
     }
   },
   {
-    "caseId": "let-loose-the-wolves-space-wolves#272",
+    "caseId": "let-loose-the-wolves-space-wolves#273",
     "effect": {
       "type": "split-unit",
       "target": "this-unit",
@@ -15610,7 +15690,7 @@
     }
   },
   {
-    "caseId": "loyal-protector-astra-militarum#273",
+    "caseId": "loyal-protector-astra-militarum#274",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -15654,7 +15734,7 @@
     }
   },
   {
-    "caseId": "madcap-artillery-orks#274",
+    "caseId": "madcap-artillery-orks#275",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -15845,7 +15925,7 @@
     }
   },
   {
-    "caseId": "marker-beacon-advanced-acquisition-cadre-tau-empire#275",
+    "caseId": "marker-beacon-advanced-acquisition-cadre-tau-empire#276",
     "effect": {
       "type": "select-objective",
       "selector": {
@@ -15891,7 +15971,7 @@
     }
   },
   {
-    "caseId": "mobbed-orks#276",
+    "caseId": "mobbed-orks#277",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -16014,7 +16094,7 @@
     }
   },
   {
-    "caseId": "monarch-of-the-hunt-emperors-children#277",
+    "caseId": "monarch-of-the-hunt-emperors-children#278",
     "effect": {
       "type": "ability-part",
       "trigger": {
@@ -16113,75 +16193,6 @@
     },
     "expected": {
       "text": "-> At the start of the battle round, if during the first battle round:\n  -> Select one enemy unit, binding it as quarry selection (your Quarry target). When your Quarry target is destroyed, you must select one enemy unit, binding it as quarry selection to replace it. Only one such designation can be active for this bearer unit. For the rest of the battle, each time this model makes an attack against it, while making melee attacks, while that unit is tagged quarry, you can re-roll the Hit roll for attacks made by this model; you can re-roll the Wound roll for attacks made by this model."
-    }
-  },
-  {
-    "caseId": "murderous-imperative-adeptus-mechanicus#278",
-    "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "rule-active",
-            "parameters": {
-              "rule": {
-                "ability_id": "doctrina-imperatives-adeptus-mechanicus",
-                "option_id": "protector-imperative"
-              }
-            }
-          },
-          "effect": {
-            "type": "re-roll",
-            "target": {
-              "owner": "friendly",
-              "all_of": [
-                "SKITARII"
-              ]
-            },
-            "modifier": {
-              "roll": "hit",
-              "subset": "ones"
-            }
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "rule-active",
-            "parameters": {
-              "rule": {
-                "ability_id": "doctrina-imperatives-adeptus-mechanicus",
-                "option_id": "conqueror-imperative"
-              }
-            }
-          },
-          "effect": {
-            "type": "re-roll",
-            "target": {
-              "owner": "friendly",
-              "all_of": [
-                "SKITARII"
-              ]
-            },
-            "modifier": {
-              "roll": "wound",
-              "subset": "ones"
-            }
-          }
-        }
-      ]
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "applies_to": {
-      "all_of": [
-        "SKITARII"
-      ]
-    },
-    "expected": {
-      "text": "While the Protector Imperative option of Doctrina Imperatives is active, you can re-roll a Hit roll of 1 for attacks made by all friendly SKITARII units.\nWhile the Conqueror Imperative option of Doctrina Imperatives is active, you can re-roll a Wound roll of 1 for attacks made by all friendly SKITARII units.\nApplies to: units with SKITARII."
     }
   },
   {

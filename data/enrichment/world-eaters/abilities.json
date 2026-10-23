@@ -7813,7 +7813,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "25bd235728b876ae92aeb9614f5ef8b82c2662a2dca093680ce181ca8e17dd73",
     "version": "2025-q3",
@@ -7827,56 +7827,71 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "no-effect"
-        },
-        {
-          "type": "ability-part",
-          "trigger": {
-            "event": "phase-started",
-            "condition": {
-              "type": "phase-is",
-              "parameters": {
-                "phase": "fight"
-              }
-            }
+          "type": "ability-grant",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "DAEMON",
+              "VEHICLE"
+            ]
           },
-          "effect": {
-            "type": "select-units",
-            "selector": {
-              "filter": {
-                "owner": "enemy",
-                "engaged_with": "this-unit"
-              },
-              "count": {
-                "min": 0,
-                "max": 1
-              },
-              "limit": {
-                "count": 1,
-                "period": "phase"
-              }
-            },
-            "effect": {
-              "type": "sequence",
-              "steps": [
-                {
+          "modifier": {
+            "ability": "terror-of-khorne",
+            "definition": {
+              "type": "ability-part",
+              "name": "Terror of Khorne",
+              "effect": {
+                "type": "select-units",
+                "selector": {
+                  "filter": {
+                    "owner": "enemy"
+                  },
+                  "count": {
+                    "min": 1,
+                    "max": 1
+                  },
+                  "eligibility": {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "selected-unit",
+                      "filter": {
+                        "engaged_with": "this-unit"
+                      }
+                    }
+                  },
+                  "limit": {
+                    "count": 1,
+                    "period": "phase"
+                  }
+                },
+                "effect": {
                   "type": "test",
                   "target": "selected-unit",
                   "modifier": {
-                    "test": "battle-shock"
-                  }
-                },
-                {
-                  "type": "roll-modifier",
-                  "target": "selected-unit",
-                  "modifier": {
-                    "roll": "battle-shock",
-                    "operation": "subtract",
-                    "value": 1
+                    "test": "battle-shock",
+                    "modifier": -1
                   }
                 }
-              ]
+              },
+              "trigger": {
+                "event": "phase-started",
+                "condition": {
+                  "type": "phase-is",
+                  "parameters": {
+                    "phase": "fight"
+                  }
+                },
+                "optional": true
+              }
             }
+          }
+        },
+        {
+          "type": "army-rule",
+          "target": "this-unit",
+          "modifier": {
+            "rule": "detachment-tag-exclusive",
+            "tag": "ONSLAUGHT"
           }
         }
       ]
