@@ -73,7 +73,15 @@ func statChange(m map[string]any, what string) string {
 	return verb + " " + diceCase(val) + " " + prep + " " + what
 }
 
+// rollTargetStats are the characteristics a model rolls against, where a better value is a lower
+// number ("3+").
+var rollTargetStats = map[string]bool{"Sv": true, "WS": true, "BS": true, "Ld": true}
+
 func bounds(m map[string]any) string {
+	// An improved roll target is capped from below: "this cannot improve a model's Save to better than 3+".
+	if stat, _ := m["stat"].(string); m["operation"] == "improve" && rollTargetStats[stat] && m["minimum"] != nil && m["maximum"] == nil {
+		return " (to no better than " + ejstr(m["minimum"]) + "+)"
+	}
 	s := ""
 	if m["minimum"] != nil {
 		s += " (to a minimum of " + ejstr(m["minimum"]) + ")"

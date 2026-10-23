@@ -24,7 +24,8 @@ Buff = dict[str, Any]
 BuffSource = dict[str, Any]
 ResolvedModifiers = dict[str, Any]
 #: The engine context (TS ``EngineContext``). Beyond phase/timing/attacker state it may carry
-#: ``armyFaction`` (Army Faction id), ``battleSize`` (``incursion`` / ``strike-force`` /
+#: ``armyFaction`` (Army Faction id), ``targetArmyFaction`` (the defending army's),
+#: ``battleSize`` (``incursion`` / ``strike-force`` /
 #: ``onslaught``), ``attackerGuided`` (the attacker is Guided) and ``attackerModelCount`` /
 #: ``targetModelCount`` (models in each unit, for ``model-count``) and ``attackerWargear`` /
 #: ``targetWargear`` (complete maps of wargear id to the models of the chosen loadout carrying
@@ -282,6 +283,9 @@ def resolve_buffs(buffs: list[Buff], ctx: EngineContext) -> ResolvedModifiers:
         "skillMod": {"WS": {"value": 0, "sources": []}, "BS": {"value": 0, "sources": []}},
         # Ability-set Save characteristic; None keeps the printed one.
         "saveCharacteristic": None,
+        # Summed capped Save improvements; "best" is the most restrictive (largest) cap. None
+        # when none applies.
+        "saveImprove": None,
     }
 
     # Hit / wound mods: sum, then cap at ±1, with dominant source picked from
@@ -389,6 +393,14 @@ def resolve_buffs(buffs: list[Buff], ctx: EngineContext) -> ResolvedModifiers:
                 or (c["value"] == sc["value"] and _rank(source) < _rank(sc["dominantSource"]))
             ):
                 out["saveCharacteristic"] = {"value": c["value"], "dominantSource": source}
+        elif ctype == "save-improve":
+            si = out["saveImprove"]
+            if si is None:
+                out["saveImprove"] = {"value": c["value"], "best": c["best"], "sources": [source]}
+            else:
+                si["value"] += c["value"]
+                si["best"] = max(si["best"], c["best"])
+                si["sources"].append(source)
 
     # An ignored roll keeps only its positive modifiers.
     def kept(contribs: list[dict[str, Any]], ignored: bool) -> list[dict[str, Any]]:

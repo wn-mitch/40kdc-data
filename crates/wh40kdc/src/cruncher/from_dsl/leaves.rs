@@ -333,20 +333,20 @@ pub(super) fn stat_modifier(node: &Obj, opts: &WalkOpts, out: &mut Out) {
                     node,
                 );
             } else if on_buffed {
-                let save_mod = if matches!(
-                    m.get("operation").and_then(Value::as_str),
-                    Some("improve" | "worsen")
-                ) {
-                    value
-                } else {
-                    -value
+                let operation = m.get("operation").and_then(Value::as_str);
+                let cap = m.get("minimum").and_then(Value::as_f64);
+                let contribution = match (operation, cap) {
+                    // A capped improvement ("cannot improve a Save to better than N+") changes
+                    // the Save characteristic itself, not the save roll.
+                    (Some("improve"), Some(best)) => {
+                        json!({ "type": "save-improve", "value": value, "best": best })
+                    }
+                    (Some("improve" | "worsen"), _) => {
+                        json!({ "type": "save-mod", "value": value })
+                    }
+                    _ => json!({ "type": "save-mod", "value": -value }),
                 };
-                emit(
-                    opts,
-                    out,
-                    &gate,
-                    json!({ "type": "save-mod", "value": save_mod }),
-                );
+                emit(opts, out, &gate, contribution);
             }
         }
         _ => out.unsupported(

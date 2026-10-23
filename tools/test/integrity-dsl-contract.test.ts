@@ -89,7 +89,7 @@ describe("canonical DSL semantic integrity", () => {
       ability_id: "capacity", effect: { type: "stance-selection-capacity", modifier: { ability_id: "first-menu", allocation: "fixed-option", additional_selections: 1, option: { ability_id: "second-menu", option_id: "first" } } },
     }] });
     expect(errors.map((error) => error.message)).toEqual([
-      'duplicate stance option id "same" within this ability',
+      'duplicate option id "same" within this ability',
       "capacity options must belong to the containing ability_id",
     ]);
   });

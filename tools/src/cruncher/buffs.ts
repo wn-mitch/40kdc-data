@@ -108,7 +108,12 @@ export type BuffContribution =
    */
   | { type: "skill-mod"; stat: "WS" | "BS"; value: number }
   /** Defender-side: the Save characteristic becomes `value`+. Best (lowest) wins. */
-  | { type: "save-characteristic"; value: number };
+  | { type: "save-characteristic"; value: number }
+  /**
+   * Defender-side: improve the Save characteristic by `value`, but never to better than `best`+.
+   * Applies after any `save-characteristic` and before AP.
+   */
+  | { type: "save-improve"; value: number; best: number };
 
 /** Optional gating; the resolver drops buffs whose gate fails. */
 export type BuffApplicability = {
@@ -201,6 +206,8 @@ export type EngineContext = {
   targetAttached?: boolean;
   /** The army's Army Faction id. Drives the `army-faction` condition; undefined leaves it "unknown". */
   armyFaction?: string;
+  /** The defending army's Army Faction id, for the `army-faction` condition of the target's own rules. */
+  targetArmyFaction?: string;
   /** The battle size being played. Drives the `battle-size` condition; undefined leaves it "unknown". */
   battleSize?: "incursion" | "strike-force" | "onslaught";
   /**
@@ -355,6 +362,11 @@ export type ResolvedModifiers = {
   skillMod: Record<"WS" | "BS", { value: number; sources: BuffSource[] }>;
   /** Ability-set Save characteristic; `null` keeps the printed one. */
   saveCharacteristic: { value: number; dominantSource: BuffSource } | null;
+  /**
+   * Summed capped Save improvements. `best` is the most restrictive (largest) cap among the
+   * contributions; `null` when none applies.
+   */
+  saveImprove: { value: number; best: number; sources: BuffSource[] } | null;
 };
 
 /** Stable ordering used to break ties when multiple buffs claim the same field. */
@@ -501,6 +513,7 @@ export function resolveBuffs(buffs: Buff[], ctx: ResolveContext): ResolvedModifi
     ignoreModifiers: {},
     skillMod: { WS: { value: 0, sources: [] }, BS: { value: 0, sources: [] } },
     saveCharacteristic: null,
+    saveImprove: null,
   };
 
   // Hit / wound mods: sum, then cap at ±1, with dominant source picked from
@@ -631,6 +644,14 @@ export function resolveBuffs(buffs: Buff[], ctx: ResolveContext): ResolvedModifi
           (c.value === out.saveCharacteristic.value && rank(b.source) < rank(out.saveCharacteristic.dominantSource))
         ) {
           out.saveCharacteristic = { value: c.value, dominantSource: b.source };
+        }
+        break;
+      case "save-improve":
+        if (out.saveImprove === null) out.saveImprove = { value: c.value, best: c.best, sources: [b.source] };
+        else {
+          out.saveImprove.value += c.value;
+          out.saveImprove.best = Math.max(out.saveImprove.best, c.best);
+          out.saveImprove.sources.push(b.source);
         }
         break;
     }

@@ -22709,112 +22709,197 @@
   {
     "caseId": "voice-of-command-astra-militarum#328",
     "effect": {
-      "type": "issue-orders",
-      "range": {
-        "inches": 6
+      "type": "conditional",
+      "condition": {
+        "type": "army-faction",
+        "parameters": {
+          "faction": "astra-militarum"
+        }
       },
-      "options": [
-        {
-          "name": "Move! Move! Move!",
-          "effect": {
-            "type": "stat-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "stat": "M",
-              "operation": "add",
-              "value": 3
-            }
-          }
-        },
-        {
-          "name": "Fix Bayonets!",
-          "effect": {
-            "type": "stat-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "stat": "WS",
-              "operation": "improve",
-              "value": 1,
-              "weapons": {
-                "type": "melee"
-              }
-            }
-          }
-        },
-        {
-          "name": "Take Aim!",
-          "effect": {
-            "type": "stat-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "stat": "BS",
-              "operation": "improve",
-              "value": 1
-            }
-          }
-        },
-        {
-          "name": "First Rank, Fire! Second Rank, Fire!",
-          "effect": {
-            "type": "stat-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "stat": "A",
-              "operation": "improve",
-              "value": 1,
-              "weapons": {
-                "keyword": {
-                  "keyword_id": "rapid-fire"
+      "effect": {
+        "type": "ability-part",
+        "trigger": [
+          {
+            "event": "phase-started",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "phase-is",
+                  "parameters": {
+                    "phase": "command"
+                  }
+                },
+                {
+                  "type": "player-turn-is",
+                  "parameters": {
+                    "turn": "your-turn"
+                  }
                 }
-              }
+              ]
             }
-          }
-        },
-        {
-          "name": "Take Cover!",
-          "effect": {
-            "type": "stat-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "stat": "Sv",
-              "operation": "improve",
-              "value": 1
-            }
-          }
-        },
-        {
-          "name": "Duty and Honour!",
-          "effect": {
-            "type": "sequence",
-            "steps": [
-              {
-                "type": "roll-modifier",
-                "target": "this-unit",
-                "modifier": {
-                  "roll": "battle-shock",
-                  "operation": "add",
-                  "value": 1
+          },
+          {
+            "event": "phase-ended",
+            "condition": {
+              "operator": "or",
+              "operands": [
+                {
+                  "type": "happened",
+                  "parameters": {
+                    "event": "disembarked",
+                    "window": "phase"
+                  }
+                },
+                {
+                  "type": "happened",
+                  "parameters": {
+                    "event": "set-up",
+                    "window": "phase"
+                  }
                 }
-              },
-              {
+              ]
+            }
+          }
+        ],
+        "duration": "until-next-command-phase",
+        "effect": {
+          "type": "issue-orders",
+          "options": [
+            {
+              "id": "move-move-move",
+              "name": "MOVE! MOVE! MOVE",
+              "effect": {
                 "type": "stat-modifier",
                 "target": "this-unit",
                 "modifier": {
-                  "stat": "OC",
+                  "stat": "M",
                   "operation": "add",
-                  "value": 1
+                  "value": 3
                 }
               }
+            },
+            {
+              "id": "fix-bayonets",
+              "name": "FIX BAYONETS",
+              "effect": {
+                "type": "stat-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "stat": "WS",
+                  "operation": "improve",
+                  "value": 1,
+                  "weapons": {
+                    "type": "melee"
+                  }
+                }
+              }
+            },
+            {
+              "id": "take-aim",
+              "name": "TAKE AIM",
+              "effect": {
+                "type": "stat-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "stat": "BS",
+                  "operation": "improve",
+                  "value": 1,
+                  "weapons": {
+                    "type": "ranged"
+                  }
+                }
+              }
+            },
+            {
+              "id": "first-rank-fire-second-rank-fire",
+              "name": "FIRST RANK, FIRE! SECOND RANK, FIRE",
+              "effect": {
+                "type": "stat-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "stat": "A",
+                  "operation": "improve",
+                  "value": 1,
+                  "weapons": {
+                    "type": "ranged",
+                    "keyword": {
+                      "keyword_id": "rapid-fire"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "take-cover",
+              "name": "TAKE COVER",
+              "effect": {
+                "type": "stat-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "stat": "Sv",
+                  "operation": "improve",
+                  "value": 1,
+                  "minimum": 3
+                }
+              }
+            },
+            {
+              "id": "duty-and-honour",
+              "name": "DUTY AND HONOUR",
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "stat-modifier",
+                    "target": "this-unit",
+                    "modifier": {
+                      "stat": "Ld",
+                      "operation": "improve",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "type": "stat-modifier",
+                    "target": "this-unit",
+                    "modifier": {
+                      "stat": "OC",
+                      "operation": "improve",
+                      "value": 1
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "range": {
+            "inches": 6
+          },
+          "issuer": {
+            "all_of": [
+              "OFFICER"
+            ]
+          },
+          "one_at_a_time": true,
+          "ineligible_states": [
+            "battle-shocked"
+          ],
+          "ends_on": [
+            "battle-shocked"
+          ],
+          "benefit": {
+            "all_of": [
+              "ASTRA MILITARUM"
             ]
           }
         }
-      ]
+      }
     },
     "scope": {
-      "duration": "until-next-command-phase"
+      "duration": "permanent"
     },
     "expected": {
-      "text": "Until the start of your next Command phase:\n  -> Issue up to one or more Orders to eligible friendly units within 6\", each one of:\n    - Move! Move! Move!: add 3 to the unit's Move characteristic.\n    - Fix Bayonets!: improve the Weapon Skill characteristic of melee weapons equipped by models in this unit by 1.\n    - Take Aim!: improve the unit's Ballistic Skill characteristic by 1.\n    - First Rank, Fire! Second Rank, Fire!: improve the Attacks characteristic of weapons with [RAPID FIRE] equipped by models in this unit by 1.\n    - Take Cover!: improve the unit's Save characteristic by 1.\n    - Duty and Honour!: the unit gets +1 to Battle-shock rolls; add 1 to the unit's Objective Control characteristic."
+      "text": "If your Army Faction is ASTRA MILITARUM:\n  -> At the start of your Command phase or at the end of each phase, if the unit disembarked from a Transport this phase or the unit was set up this phase, until the start of your next Command phase:\n    -> OFFICER models can issue up to one or more Orders to eligible friendly units within 6\" that are not Battle-shocked, each one of:\n      - MOVE! MOVE! MOVE: add 3 to the unit's Move characteristic.\n      - FIX BAYONETS: improve the Weapon Skill characteristic of melee weapons equipped by models in this unit by 1.\n      - TAKE AIM: improve the Ballistic Skill characteristic of ranged weapons equipped by models in this unit by 1.\n      - FIRST RANK, FIRE! SECOND RANK, FIRE: improve the Attacks characteristic of ranged weapons with [RAPID FIRE] equipped by models in this unit by 1.\n      - TAKE COVER: improve the unit's Save characteristic by 1 (to no better than 3+).\n      - DUTY AND HONOUR: improve the unit's Leadership characteristic by 1; improve the unit's Objective Control characteristic by 1.\n    A unit holds at most one Order; a newer Order replaces it.\n    An Order ends when its unit becomes Battle-shocked.\n    Only ASTRA MILITARUM models in that unit benefit from its Order."
     }
   },
   {

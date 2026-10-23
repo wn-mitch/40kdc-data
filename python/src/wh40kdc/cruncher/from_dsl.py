@@ -378,6 +378,13 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
         for step in node.get("steps") or []:
             _walk(step, source, opts, out)
     elif node_type == "ability-part":
+        # Orders are issued at their own moment and last for the part's duration: each Order is a
+        # lever for the attacks made while it lasts, as a stance option is.
+        effect = node.get("effect")
+        if isinstance(effect, dict) and effect.get("type") == "issue-orders":
+            order_opts = {**opts, "duration": node.get("duration", opts.get("duration"))}
+            _walk(effect, source, order_opts, out)
+            return
         if node.get("trigger") is not None:
             effect = node.get("effect")
             bound = _selection.bind_event_subject(
@@ -979,6 +986,16 @@ def _translate_stat_modifier(
             )
             return
         if not is_on_buffed_unit:
+            return
+        # A capped improvement ("cannot improve a Save to better than N+") changes the Save
+        # characteristic itself, not the save roll.
+        minimum = modifier.get("minimum")
+        if (
+            modifier.get("operation") == "improve"
+            and isinstance(minimum, (int, float))
+            and not isinstance(minimum, bool)
+        ):
+            emit({"type": "save-improve", "value": value, "best": minimum})
             return
         save_mod = value if modifier.get("operation") in ("improve", "worsen") else -value
         emit({"type": "save-mod", "value": save_mod})
@@ -2432,6 +2449,8 @@ def _describe_contribution(c: dict[str, Any]) -> str:
         return f"{c['stat']} improved by {_num_str(c['value'])}"
     if ctype == "save-characteristic":
         return f"{_num_str(c['value'])}+ save"
+    if ctype == "save-improve":
+        return f"Save improved by {_num_str(c['value'])} (no better than {_num_str(c['best'])}+)"
     return "cover"
 
 
@@ -2888,10 +2907,12 @@ def _evaluate_condition(
             p.get("filter"), ctx, side, "friendly" if side == own_side else "enemy"
         )
     if ctype == "army-faction":
+        # "Your Army Faction" is the army of the side whose ability it is.
         faction = params.get("faction") if params else None
-        if not isinstance(faction, str) or ctx.get("armyFaction") is None:
+        army = ctx.get("targetArmyFaction" if perspective == "target" else "armyFaction")
+        if not isinstance(faction, str) or army is None:
             return "unknown"
-        return ctx["armyFaction"] == faction
+        return army == faction
     if ctype == "model-count":
         # "contains N or more models": min and max are inclusive. A keyword-restricted
         # count needs per-keyword model counts the context does not carry.

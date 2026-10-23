@@ -594,10 +594,16 @@ pub fn crunch_model(
     let ap = (weapon_profile.stats.ap as f64 + ap_mod).min(0.0);
     let save_mod = resolved.save_mod.value;
     let printed_sv = unit_profile.sv as f64;
-    let sv = resolved
+    let sv0 = resolved
         .save_characteristic
         .as_ref()
         .map_or(printed_sv, |s| s.value);
+    // A capped improvement never takes the Save past its cap, and never worsens a Save already
+    // at or better than the cap.
+    let sv = match &resolved.save_improve {
+        Some(si) => sv0.min(si.best.max(sv0 - si.value)),
+        None => sv0,
+    };
     let armor_target_raw = sv - ap - save_mod;
     // Cover is a hit penalty (11e), applied in the hits stage above — it no
     // longer touches the save here.
@@ -667,9 +673,13 @@ pub fn crunch_model(
         name: StageName::Unsaved,
         expected: unsaved,
         detail: format!(
-            "Sv{}+{}, AP{}{}{}{} → effective {}+ (P(save)={:.4}){}",
+            "Sv{}+{}{}, AP{}{}{}{} → effective {}+ (P(save)={:.4}){}",
             sv,
-            if sv != printed_sv { " (set)" } else { "" },
+            if sv0 != printed_sv { " (set)" } else { "" },
+            match &resolved.save_improve {
+                Some(si) if sv != sv0 => format!(" (improved, no better than {}+)", si.best),
+                _ => String::new(),
+            },
             signed(ap),
             if ap_mod != 0.0 {
                 format!(" (apmod {})", signed(ap_mod))

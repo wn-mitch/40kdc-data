@@ -228,8 +228,8 @@ describe("Semantic authoring leading-container compiler", () => {
     ]).mechanics.effect).toEqual({
       type: "issue-orders", count: 1, range: { inches: 6 }, eligible: { all_of: ["INFANTRY"] },
       options: [
-        { name: "First Rank, Fire!", effect: { type: "ability-grant", target: "this-model", modifier: { ability: "fights-first" } } },
-        { name: "Take Aim!", effect: { type: "invulnerable-save", target: "this-model", modifier: { invuln_sv: 4 } } },
+        { id: "option-1", name: "First Rank, Fire!", effect: { type: "ability-grant", target: "this-model", modifier: { ability: "fights-first" } } },
+        { id: "option-2", name: "Take Aim!", effect: { type: "invulnerable-save", target: "this-model", modifier: { invuln_sv: 4 } } },
       ],
     });
     expect(rendered(base(), [
@@ -239,6 +239,77 @@ describe("Semantic authoring leading-container compiler", () => {
       leaf("EVENT", "named-option", { label: "Take Aim!" }, 1, "C"),
       leaf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, 1, "C"),
     ]).length).toBeGreaterThan(0);
+  });
+
+  // Voice of Command's shape: who issues Orders before the opener, when they are issued and how long one lasts
+  // between it and the first Order, the rules of Orders after that, and a capped Save inside one Order.
+  const ordersRecord = () => [
+    leaf("RESTRICTION", "order-rule", { rule: "issuer", keywords: ["OFFICER"] }, 1, "A0"),
+    leaf("EFFECT", "issue-orders-open", { range: 6 }, 1, "A"),
+    leaf("CONDITION", "phase-window", { phase: "command", turn: "your" }, 2, "T"),
+    leaf("EVENT", "event", { kind: "phase-end", phase: "any", turn: "either" }, 34, "T"),
+    leaf("CONDITION", "unit-activity", { activities: ["disembarked-this-phase", "set-up-this-phase"], subject: "this-unit", negated: false }, 23, "T"),
+    leaf("DURATION", "duration", { endpoint: "start-of-next-command-phase" }, 5, "D"),
+    leaf("EFFECT", "apply-mark", { subject: "selected-unit", tag: "affected-by-order" }, 5, "D"),
+    leaf("RESTRICTION", "order-rule", { rule: "one-at-a-time" }, 1, "R1"),
+    leaf("RESTRICTION", "order-rule", { rule: "ineligible-state", state: "battle-shocked" }, 1, "R2"),
+    leaf("RESTRICTION", "order-rule", { rule: "ends-on-state", state: "battle-shocked" }, 1, "R3"),
+    leaf("RESTRICTION", "order-rule", { rule: "benefit", keywords: ["ASTRA MILITARUM"] }, 1, "R4"),
+    leaf("EVENT", "named-option", { label: "Take Aim!", option_id: "take-aim" }, 3, "B"),
+    leaf("EFFECT", "characteristic-modifier", { subject: "this-unit", characteristics: ["BS"], operation: "improve", value: 1, weapon_type: "ranged" }, 19, "B"),
+    leaf("EVENT", "named-option", { label: "Take Cover!" }, 3, "C"),
+    leaf("EFFECT", "characteristic-modifier", { subject: "this-unit", characteristics: ["Sv"], operation: "improve", value: 1, weapon_type: "all" }, 19, "C"),
+    leaf("CONDITION", "characteristic-floor", { characteristics: ["Sv"], minimum: 3 }, 2, "C"),
+  ];
+
+  it("compiles the rules of Orders, their timing and a capped Save onto issue-orders", () => {
+    expect(compiled(ordersRecord()).mechanics.effect).toEqual({
+      type: "ability-part",
+      trigger: [
+        { event: "phase-started", condition: { operator: "and", operands: [{ type: "phase-is", parameters: { phase: "command" } }, { type: "player-turn-is", parameters: { turn: "your-turn" } }] } },
+        { event: "phase-ended", condition: { operator: "or", operands: [{ type: "happened", parameters: { event: "disembarked", window: "phase" } }, { type: "happened", parameters: { event: "set-up", window: "phase" } }] } },
+      ],
+      duration: "until-next-command-phase",
+      effect: {
+        type: "issue-orders",
+        options: [
+          { id: "take-aim", name: "Take Aim!", effect: { type: "stat-modifier", target: "this-unit", modifier: { stat: "BS", operation: "improve", value: 1, weapons: { type: "ranged" } } } },
+          { id: "option-2", name: "Take Cover!", effect: { type: "stat-modifier", target: "this-unit", modifier: { stat: "Sv", operation: "improve", value: 1, minimum: 3 } } },
+        ],
+        range: { inches: 6 },
+        issuer: { all_of: ["OFFICER"] },
+        one_at_a_time: true,
+        ineligible_states: ["battle-shocked"],
+        ends_on: ["battle-shocked"],
+        benefit: { all_of: ["ASTRA MILITARUM"] },
+      },
+    });
+    const text = rendered(authored("astra-militarum", "voice-of-command-astra-militarum"), ordersRecord());
+    expect(text).toContain("OFFICER models can issue up to one or more Orders to eligible friendly units within 6\" that are not Battle-shocked, each one of:");
+    expect(text).toContain("improve the unit's Save characteristic by 1 (to no better than 3+)");
+    expect(text).toContain("A unit holds at most one Order; a newer Order replaces it.");
+    expect(text).toContain("An Order ends when its unit becomes Battle-shocked.");
+    expect(text).toContain("Only ASTRA MILITARUM models in that unit benefit from its Order.");
+  });
+
+  it("refuses an order-rule with no issue-orders, and two issuers that disagree", () => {
+    const orphan = compileLeaves([
+      leaf("RESTRICTION", "order-rule", { rule: "one-at-a-time" }, 1, "A"),
+      leaf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
+    ]);
+    expect(orphan.ok ? [] : orphan.errors).toEqual([expect.stringContaining("exactly one issue-orders-open")]);
+    const clash = compileLeaves([...ordersRecord(), leaf("RESTRICTION", "order-rule", { rule: "issuer", keywords: ["SERGEANT"] }, 1, "Z")]);
+    expect(clash.ok ? [] : clash.errors).toEqual([expect.stringContaining("different issuer keywords")]);
+  });
+
+  it("caps an improvement only under characteristic-floor@2, and only on a roll-target characteristic", () => {
+    const leaves = ordersRecord();
+    leaves[15] = { ...leaves[15]!, family_version: 1 };
+    expect(compileLeaves(leaves).ok).toBe(false);
+    const toughness = ordersRecord();
+    toughness[14] = { ...toughness[14]!, parameters: { ...toughness[14]!.parameters, characteristics: ["T"] } };
+    toughness[15] = { ...toughness[15]!, parameters: { characteristics: ["T"], minimum: 3 } };
+    expect(compileLeaves(toughness).ok).toBe(false);
   });
 
   it("compiles dice-pool-allocation-open into options gated by a dice requirement", () => {
@@ -355,6 +426,15 @@ describe("Semantic authoring dice-roll@2 roll_var binding", () => {
     // Rolling one die per something other than mortal wounds has no DSL shape: an error, not a guess.
     expect(compileLeaves([roll(), band(), leaf("EFFECT", "regain-wounds", { subject: "this-model", amount: "1" }, 3)]).ok).toBe(false);
     expect(() => normalizeFingerprintParameters("dice-roll", { dice: "D6", count: 1 }, 4)).toThrow(/count/u);
+  });
+
+  it("normalizes an order-rule to exactly the fields its rule takes", () => {
+    expect(normalizeFingerprintParameters("order-rule", { rule: "issuer", keywords: [" OFFICER", "OFFICER"] }, 1)).toEqual({ rule: "issuer", keywords: ["OFFICER"] });
+    expect(normalizeFingerprintParameters("order-rule", { rule: "ends-on-state", state: "battle-shocked" }, 1)).toEqual({ rule: "ends-on-state", state: "battle-shocked" });
+    expect(normalizeFingerprintParameters("order-rule", { rule: "one-at-a-time" }, 1)).toEqual({ rule: "one-at-a-time" });
+    expect(() => normalizeFingerprintParameters("order-rule", { rule: "benefit", keywords: [] }, 1)).toThrow(/keywords/u);
+    expect(() => normalizeFingerprintParameters("order-rule", { rule: "one-at-a-time", state: "battle-shocked" }, 1)).toThrow();
+    expect(() => normalizeFingerprintParameters("order-rule", { rule: "ineligible-state", state: "engaged" }, 1)).toThrow(/state/u);
   });
 
   it("accepts a dice expression outside the sampled enum unchanged", () => {

@@ -7067,14 +7067,14 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "weapons": {
-          "type": "ranged"
-        },
         "keywords": [
           {
             "keyword_id": "ignores-cover"
           }
-        ]
+        ],
+        "weapons": {
+          "type": "ranged"
+        }
       }
     },
     "scope": {
@@ -7196,9 +7196,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "38e4a3c34ce51639bdeed5d682a46670370b9f44fbb3c8aaa5a0462a84acbb61",
+    "source_digest": "29f203c84ddb41b2375244d3033f1752983ec43614a5494965b8c2cc07330fb5",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],

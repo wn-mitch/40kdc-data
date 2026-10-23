@@ -355,6 +355,12 @@ function walk(
       return;
     case "ability-part": {
       const partOpts = currentNode.duration === undefined ? opts : { ...opts, duration: currentNode.duration };
+      // Orders are issued at their own moment and last for the part's duration: each Order is a
+      // lever for the attacks made while it lasts, as a stance option is.
+      if ((currentNode.effect as { type?: unknown } | undefined)?.type === "issue-orders") {
+        walk(currentNode.effect, source, partOpts, out);
+        return;
+      }
       if (currentNode.trigger != null) {
         const bound = bindEventSubject(currentNode.trigger, currentNode.effect, opts.context, opts.perspective);
         if (bound !== currentNode.effect) {
@@ -877,6 +883,12 @@ function translateStatModifier(
         return;
       }
       if (!isOnBuffedUnit) return;
+      // A capped improvement ("cannot improve a Save to better than N+") changes the Save
+      // characteristic itself, not the save roll.
+      if (modifier.operation === "improve" && typeof modifier.minimum === "number") {
+        emit({ type: "save-improve", value, best: modifier.minimum });
+        return;
+      }
       emit({ type: "save-mod", value: modifier.operation === "improve" || modifier.operation === "worsen" ? value : -value });
       return;
     default:
@@ -1955,6 +1967,8 @@ function describeContribution(c: BuffContribution): string {
       return `${c.stat} improved by ${c.value}`;
     case "save-characteristic":
       return `${c.value}+ save`;
+    case "save-improve":
+      return `Save improved by ${c.value} (no better than ${c.best}+)`;
   }
 }
 
@@ -2073,9 +2087,11 @@ function evaluateCondition(
       return side ? matchesUnitFilter(params.filter, ctx, side, owner) : "unknown";
     }
     case "army-faction": {
+      // "Your Army Faction" is the army of the side whose ability it is.
       const faction = (condition.parameters as Record<string, unknown> | undefined)?.faction;
-      if (typeof faction !== "string" || ctx.armyFaction === undefined) return "unknown";
-      return ctx.armyFaction === faction;
+      const army = perspective === "target" ? ctx.targetArmyFaction : ctx.armyFaction;
+      if (typeof faction !== "string" || army === undefined) return "unknown";
+      return army === faction;
     }
     case "model-count": {
       // "contains N or more models": min and max are inclusive. A keyword-restricted count needs

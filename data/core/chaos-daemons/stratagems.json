@@ -1086,7 +1086,7 @@
           {
             "type": "rule-active",
             "parameters": {
-              "rule": "shadow-of-chaos"
+              "rule": "the-shadow-of-chaos-chaos-daemons"
             }
           }
         ]
@@ -2062,8 +2062,7 @@
         "Legiones Daemonica"
       ],
       "excluded_keywords": [
-        "Pink",
-        "Horrors"
+        "Pink Horrors"
       ],
       "count": "one",
       "side": "your-army",

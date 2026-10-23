@@ -3,6 +3,8 @@ import { trigger, triggerLeaves } from "./compile-triggers.js";
 import { canonicalDesignation, designationChoices, findReplacementOpeners, refuseEstablishmentCount, replacementTail, splitReplacementTail } from "./compile-redesignate.js";
 import { selectionFilter } from "./compile-wrappers.js";
 import { canonicalDurationName } from "./compile-durations.js";
+import { condition, duration } from "./compile-conditions.js";
+import { gatedMoment } from "./compile-usability-gate.js";
 
 /**
  * Container fragments (batch 5). `compile.ts` delegates here in two ways:
@@ -172,16 +174,73 @@ function buildStanceSelect(head: CompileLeaf, groups: CompileLeaf[][]): Node {
 }
 
 
-function buildIssueOrders(head: CompileLeaf, groups: CompileLeaf[][]): Node {
-  const options = groups.map((group) => {
-    const { name, effect: optionEffect } = namedOption(group, false);
-    return { name, effect: optionEffect };
+function buildIssueOrders(head: CompileLeaf, groups: CompileLeaf[][], rules: readonly CompileLeaf[]): Node {
+  const options = groups.map((group, index) => {
+    const { id, name, effect: optionEffect } = namedOption(group, false, index);
+    return { id, name, effect: optionEffect };
   });
   const node: Node = { type: "issue-orders", options };
   if (head.parameters.count !== undefined) node.count = closed(head, "count");
   if (head.parameters.range !== undefined) node.range = { inches: closed(head, "range") };
   if (head.parameters.eligible_keyword !== undefined) node.eligible = { all_of: [closed(head, "eligible_keyword")] };
-  return node;
+  return { ...node, ...orderRules(rules) };
+}
+
+/**
+ * When Orders are issued and how long one lasts, printed between the opener and its first Order
+ * ("… can issue Orders in your Command phase and at the end of a phase in which they disembarked …
+ * Until the start of your next Command phase, the unit you selected is affected by that Order").
+ * Each window or moment is one alternative trigger, gated by the conditions after it in its clause;
+ * the duration bounds the issued Order; "is affected by that Order" is what issuing one means.
+ */
+function issueOrdersTiming(leaves: readonly CompileLeaf[]): { trigger: Node | Node[]; duration?: string } | null {
+  const moments: Array<{ moment: Node; gates: Node[] }> = [];
+  let lifetime: string | undefined;
+  for (const leaf of leaves) {
+    if (leaf.family_id === "phase-window") {
+      // "in your Command phase": Orders are issued in that phase, from its start.
+      moments.push({ moment: { event: "phase-started", condition: condition(leaf) }, gates: [] });
+    } else if (leaf.role === "EVENT" && leaf.family_id === "event") {
+      for (const each of triggerLeaves(leaf)) moments.push({ moment: trigger(each), gates: [] });
+    } else if (leaf.role === "CONDITION") {
+      const last = moments.at(-1);
+      if (!last) throw new CompileError("An issue-orders condition needs the window or moment it gates before it.");
+      last.gates.push(condition(leaf));
+    } else if (leaf.role === "DURATION") {
+      if (lifetime !== undefined) throw new CompileError("An issued Order lasts for one printed duration.");
+      lifetime = duration(leaf);
+    } else if (!(leaf.family_id === "apply-mark" && leaf.parameters.tag === "affected-by-order" && leaf.parameters.subject === "selected-unit")) {
+      throw new CompileError(`${leaf.family_id} has no place in when Orders are issued.`);
+    }
+  }
+  if (moments.length === 0) return lifetime === undefined ? null : { trigger: [], duration: lifetime };
+  const triggers = moments.map(({ moment, gates }) => gatedMoment(moment, gates));
+  return { trigger: triggers.length === 1 ? triggers[0]! : triggers, ...(lifetime === undefined ? {} : { duration: lifetime }) };
+}
+
+/** The issue-orders fields its order-rule leaves set, wherever the record prints them; a repeated rule must agree. */
+function orderRules(rules: readonly CompileLeaf[]): Node {
+  const out: Node = {};
+  const keywords = (key: string, leaf: CompileLeaf) => {
+    const all_of = closed(leaf, "keywords") as string[];
+    const existing = out[key] as { all_of: string[] } | undefined;
+    if (existing && JSON.stringify(existing.all_of) !== JSON.stringify(all_of)) throw new CompileError(`Two order-rule leaves name different ${key} keywords.`);
+    out[key] = { all_of };
+  };
+  const states = (key: string, leaf: CompileLeaf) => {
+    out[key] = [...new Set([...((out[key] as string[] | undefined) ?? []), closed(leaf, "state") as string])];
+  };
+  for (const leaf of rules) {
+    switch (leaf.parameters.rule) {
+      case "issuer": keywords("issuer", leaf); break;
+      case "benefit": keywords("benefit", leaf); break;
+      case "one-at-a-time": out.one_at_a_time = true; break;
+      case "ineligible-state": states("ineligible_states", leaf); break;
+      case "ends-on-state": states("ends_on", leaf); break;
+      default: throw new CompileError(`order-rule ${String(leaf.parameters.rule)} has no issue-orders field.`);
+    }
+  }
+  return out;
 }
 
 function buildDicePoolAllocation(head: CompileLeaf, groups: CompileLeaf[][]): Node {
@@ -425,11 +484,11 @@ function buildSelectObjective(head: CompileLeaf, groups: CompileLeaf[][]): Node 
   return { type: "select-objective", selector, effect: effectsOf(groups[0]!, null, String(selector.bind_as)) };
 }
 
-function buildContainer(head: CompileLeaf, groups: CompileLeaf[][], replacement?: { optional: boolean }, timing?: Node): Node {
+function buildContainer(head: CompileLeaf, groups: CompileLeaf[][], replacement?: { optional: boolean }, timing?: Node, orderRuleLeaves: readonly CompileLeaf[] = []): Node {
   switch (head.family_id) {
     case "choice-open": return buildChoice(head, groups);
     case "stance-select-open": return buildStanceSelect(head, groups);
-    case "issue-orders-open": return buildIssueOrders(head, groups);
+    case "issue-orders-open": return buildIssueOrders(head, groups, orderRuleLeaves);
     case "dice-pool-allocation-open": return buildDicePoolAllocation(head, groups);
     case "risk-reward-open": return buildRiskReward(head, groups);
     case "resource-action-menu-open": return buildResourceActionMenu(head, groups);
@@ -465,6 +524,15 @@ function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly n
   const nodes = new Map<number, Node>();
   const consumed = new Set<number>();
   const replacements = findReplacementOpeners(list, (leaf) => LEADING_CONTAINERS.has(leaf.family_id));
+  // An order-rule belongs to the record's one issue-orders, wherever it is printed ("OFFICER with this
+  // ability can issue Orders" comes before the opener; the Battle-shock rules come after it).
+  const orderRuleIndexes = list.flatMap((leaf, index) => leaf.family_id === "order-rule" ? [index] : []);
+  if (orderRuleIndexes.length > 0) {
+    const openers = list.filter((leaf) => leaf.family_id === "issue-orders-open").length;
+    if (openers !== 1) throw new CompileError(`An order-rule needs exactly one issue-orders-open in its record; found ${openers}.`);
+    orderRuleIndexes.forEach((index) => consumed.add(index));
+  }
+  const orderRuleLeaves = orderRuleIndexes.map((index) => list[index]!);
   list.forEach((leaf, index) => {
     if (!LEADING_CONTAINERS.has(leaf.family_id)) return;
     // A replacement opener is the last sentence of its origin's ability part (below), so it builds no container of its own.
@@ -488,6 +556,7 @@ function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly n
       const bulletStarts = leaf.family_id === "choice-open" && bullets[cursor] === true;
       // Each item of a colon-introduced comma list is an option of its own (compile-placement.ts commaItems).
       const itemStarts = leaf.family_id === "choice-open" && commas[cursor] === true;
+      if (list[cursor]!.family_id === "order-rule") continue;
       const starts = byMarker ? list[cursor]!.family_id === "named-option" : currentSentence === null || sentence !== currentSentence || bulletStarts || itemStarts;
       if (starts) {
         if (currentSentence !== null) {
@@ -531,6 +600,12 @@ function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly n
     // the battle, …, and that unit has the effect of your chosen Plague") is about the options, not
     // one of them, whatever effects it has of its own.
     const aboutTheOptions = (group: readonly CompileLeaf[]) => byMarker && group.some((item) => item.family_id === "chosen-option-grant");
+    // issue-orders keeps its own timing: those sentences say when an Order is issued and how long it lasts.
+    let orderTiming: ReturnType<typeof issueOrdersTiming> = null;
+    if (leaf.family_id === "issue-orders-open") {
+      const firstOrder = groups.findIndex((group) => group[0]!.family_id === "named-option");
+      if (firstOrder > 0) orderTiming = issueOrdersTiming(groups.splice(0, firstOrder).flat());
+    }
     while (!SINGLE_BODY_CONTAINERS.has(leaf.family_id) && groups.length && groups[0]![0]!.family_id !== "named-option"
       && (groups[0]!.every((item) => item.role !== "EFFECT") || aboutTheOptions(groups[0]!))) {
       for (const returned of groups.shift()!) consumed.delete(list.indexOf(returned));
@@ -571,10 +646,16 @@ function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly n
     try {
       sharedOptionSteps = shared === null ? null : effectsOf(shared);
       let node = buildContainer(leaf, sentences, replacementTailOf, leaf.family_id === "persistent-designation-open"
-        ? persistentDesignationTiming(list, sentenceOf, index) : undefined);
+        ? persistentDesignationTiming(list, sentenceOf, index) : undefined, orderRuleLeaves);
       // "you can select up to one …" establishes the designation only if the controlling player chooses to.
       if (leaf.family_id === "persistent-designation-open" && designationChoices(list, sentenceOf, index).length > 0) {
         node = node.type === "ability-part" ? { ...node, optional: true } : { type: "ability-part", optional: true, effect: node };
+      }
+      if (orderTiming !== null) {
+        const part: Node = { type: "ability-part" };
+        if (!Array.isArray(orderTiming.trigger) || orderTiming.trigger.length > 0) part.trigger = orderTiming.trigger;
+        if (orderTiming.duration !== undefined) part.duration = orderTiming.duration;
+        node = { ...part, effect: node };
       }
       nodes.set(index, node);
     } finally {

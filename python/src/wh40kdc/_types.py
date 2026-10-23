@@ -3869,6 +3869,7 @@ class RiskRewardEffect(TypedDict):
 
 
 class Option5(TypedDict):
+    id: NotRequired[str]
     name: str
     effect: EffectNode
 
@@ -3878,6 +3879,11 @@ class IssueOrdersEffect(TypedDict):
     count: NotRequired[int]
     range: NotRequired[RangeRef]
     eligible: NotRequired[KeywordPredicate]
+    issuer: NotRequired[KeywordPredicate]
+    ineligible_states: NotRequired[list[Literal["battle-shocked"]]]
+    ends_on: NotRequired[list[Literal["battle-shocked"]]]
+    one_at_a_time: NotRequired[Literal[True]]
+    benefit: NotRequired[KeywordPredicate]
     options: list[Option5]
 
 

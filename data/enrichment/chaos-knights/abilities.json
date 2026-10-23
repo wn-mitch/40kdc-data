@@ -5261,7 +5261,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "3f4bb08b5e5bdd24b0063d9c7f56f6dcd7ed064eaf2b7f9ce955591fbe7abafa",
     "version": "2025-q3",
@@ -5275,14 +5275,14 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "weapons": {
-          "type": "ranged"
-        },
         "keywords": [
           {
             "keyword_id": "ignores-cover"
           }
-        ]
+        ],
+        "weapons": {
+          "type": "ranged"
+        }
       }
     },
     "scope": {

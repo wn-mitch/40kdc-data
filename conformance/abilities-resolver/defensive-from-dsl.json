@@ -476,6 +476,41 @@
       }
     },
     {
+      "caseId": "canonical/save-characteristic/improve-capped",
+      "_comment": "A Save improvement that cannot take the Save better than 3+ changes the Save characteristic itself (save-improve), not the save roll.",
+      "abilityId": "fabricated-save",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-save",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "stat": "Sv",
+          "operation": "improve",
+          "value": 1,
+          "minimum": 3
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [
+          {
+            "type": "save-improve",
+            "value": 1,
+            "best": 3
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
       "caseId": "scenario/player-turn/defender-during-attacker-turn",
       "abilityId": "fabricated-scenario",
       "source": {

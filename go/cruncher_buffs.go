@@ -421,6 +421,15 @@ type resolved struct {
 	skillMod map[string]float64
 	// saveCharacteristic is the ability-set Save; nil keeps the printed one.
 	saveCharacteristic *rankedValue
+	// saveImprove sums capped Save improvements; best is the most restrictive (largest) cap.
+	// nil when none applies.
+	saveImprove *saveImproveState
+}
+
+// saveImproveState is the summed save-improve read-out.
+type saveImproveState struct {
+	value float64
+	best  float64
 }
 
 type contribAcc struct {
@@ -544,6 +553,16 @@ func resolveBuffs(buffs []any, ctx map[string]any) *resolved {
 			sc := out.saveCharacteristic
 			if sc == nil || val < sc.value || (val == sc.value && rankOf(source) < sc.rank) {
 				out.saveCharacteristic = &rankedValue{val, rankOf(source)}
+			}
+		case "save-improve":
+			best, _ := num(c["best"])
+			if out.saveImprove == nil {
+				out.saveImprove = &saveImproveState{val, best}
+			} else {
+				out.saveImprove.value += val
+				if best > out.saveImprove.best {
+					out.saveImprove.best = best
+				}
 			}
 		}
 	}

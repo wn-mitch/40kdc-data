@@ -462,6 +462,14 @@ export const CHARACTERISTIC_EXTENSIONS: readonly FamilyExtension[] = [
   },
   CORE_ABILITY_GRANT_BEARER,
   // "each time a model in this unit makes a ranged attack, enemy units have the benefit of cover against the attack".
+  {
+    // "(this cannot improve a model's Save to better than 3+)".
+    family: "characteristic-floor",
+    version: 2,
+    description: "As the previous version, and a cap on an improved roll-target characteristic (Save, Weapon Skill, Ballistic Skill, Leadership): \"(this cannot improve a model's Save to better than 3+)\" is characteristics [Sv], minimum 3. Its change right before it improves those characteristics.",
+    schema: (previous) => previous,
+    normalize: (input, previous) => previous(input),
+  },
   targetSubject("core-ability-grant", 5, "the attack's target unit gains the ability, such as the Benefit of Cover against that attack"),
   {
     // "this unit has the Deep Strike ability": Deep Strike prints no rating.

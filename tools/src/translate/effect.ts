@@ -136,6 +136,11 @@ export interface Effect {
   count?: number;
   range?: number;
   eligible?: { keyword?: string };
+  issuer?: Record<string, unknown>;
+  benefit?: Record<string, unknown>;
+  ineligible_states?: string[];
+  ends_on?: string[];
+  one_at_a_time?: boolean;
   // resource-action-menu
   menu_id?: string;
   pool_id?: string;
@@ -956,10 +961,13 @@ export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): str
       const rng = e.range != null ? ` within ${rangePhrase(e.range)}` : "";
       // The eligible units: friendly units matching the keyword predicate ("friendly INFANTRY units").
       const units = filterSubject({ owner: "friendly", ...(e.eligible ?? {}) }, ctx).replace(/^all /, "");
-      const lines = [`${indent}${arrow}Issue up to ${n} Orders to eligible ${units}${rng}, each one of:`];
+      const states = Array.isArray(e.ineligible_states) ? ` that are not ${orList(e.ineligible_states.map(dekebabState))}` : "";
+      const issue = e.issuer != null ? `${filterSubject({ ...e.issuer, level: "model" }, ctx).replace(/^all /, "")} can issue` : "Issue";
+      const lines = [`${indent}${arrow}${issue} up to ${n} Orders to eligible ${units}${rng}${states}, each one of:`];
       for (const opt of e.options ?? []) {
         lines.push(`${indent}  - ${jstr(opt.name)}: ${describeEffectInline(opt.effect ?? {}, ctx)}.`);
       }
+      for (const rule of orderRuleSentences(e, ctx)) lines.push(`${indent}${rule}`);
       return lines.join("\n");
     }
     case "resource-action-menu": {
@@ -976,6 +984,20 @@ export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): str
       // Leaf at block position — render as a single capitalized sentence.
       return `${indent}${arrow}${capitalize(describeEffectInline(e, ctx))}.`;
   }
+}
+
+/** "Battle-shocked" for the unit states an issue-orders rule names. */
+function dekebabState(state: unknown): string {
+  return capitalize(jstr(state));
+}
+
+/** The issue-orders rules printed after its Orders: one at a time, what ends an Order, who benefits. */
+function orderRuleSentences(e: Effect, ctx: Ctx): string[] {
+  const out: string[] = [];
+  if (e.one_at_a_time === true) out.push("A unit holds at most one Order; a newer Order replaces it.");
+  if (Array.isArray(e.ends_on)) out.push(`An Order ends when its unit becomes ${orList(e.ends_on.map(dekebabState))}.`);
+  if (e.benefit != null) out.push(`Only ${filterSubject({ ...e.benefit, level: "model" }, ctx).replace(/^all /, "")} in that unit benefit from its Order.`);
+  return out;
 }
 
 /** The lifetime supplied by an ability's duration-only scope. */

@@ -340,6 +340,11 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 	if res.saveCharacteristic != nil {
 		sv = res.saveCharacteristic.value
 	}
+	// A capped improvement never takes the Save past its cap, and never worsens a Save already
+	// at or better than the cap.
+	if res.saveImprove != nil {
+		sv = math.Min(sv, math.Max(res.saveImprove.best, sv-res.saveImprove.value))
+	}
 	armorTargetRaw := sv - ap - res.saveMod
 	armorFinal := clampF(armorTargetRaw, 2, 7)
 	var effectiveInvuln *float64

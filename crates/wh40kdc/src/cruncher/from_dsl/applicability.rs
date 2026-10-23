@@ -251,6 +251,11 @@ fn describe_contribution(c: &Value) -> String {
             fmt_num(js_number(Some(v)))
         ),
         "save-characteristic" => format!("{}+ save", fmt_num(js_number(Some(v)))),
+        "save-improve" => format!(
+            "Save improved by {} (no better than {}+)",
+            fmt_num(js_number(Some(v))),
+            fmt_num(js_number(c.get("best")))
+        ),
         _ => "cover".to_string(),
     }
 }

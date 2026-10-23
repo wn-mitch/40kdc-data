@@ -1635,7 +1635,10 @@
           {
             "type": "rule-active",
             "parameters": {
-              "rule": "first-rank-fire-second-rank-fire-order"
+              "rule": {
+                "ability_id": "voice-of-command-astra-militarum",
+                "option_id": "first-rank-fire-second-rank-fire"
+              }
             }
           }
         ]
@@ -1734,7 +1737,10 @@
           {
             "type": "rule-active",
             "parameters": {
-              "rule": "duty-and-honour"
+              "rule": {
+                "ability_id": "voice-of-command-astra-militarum",
+                "option_id": "duty-and-honour"
+              }
             }
           }
         ]
@@ -1812,7 +1818,49 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Astra Militarum"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "disembarked",
+              "window": "turn"
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "opening-salvo-armoured-infantry-astra-militarum",
     "game_version": {
       "edition": "11th",
@@ -1918,9 +1966,11 @@
             }
           },
           {
-            "type": "rule-active",
+            "type": "matches",
             "parameters": {
-              "rule": "order"
+              "filter": {
+                "designated": "affected-by-order"
+              }
             }
           },
           {

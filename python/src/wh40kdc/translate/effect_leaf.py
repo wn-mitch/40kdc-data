@@ -139,7 +139,19 @@ def _stat_change(m: dict[str, Any], what: str) -> str:
     return f"{verb} {dice_case(val)} {'to' if verb == 'add' else 'from'} {what}"
 
 
+# Characteristics a model rolls against, where a better value is a lower number ("3+").
+_ROLL_TARGET_STATS = frozenset({"Sv", "WS", "BS", "Ld"})
+
+
 def _bounds(m: dict[str, Any]) -> str:
+    # An improved roll target is capped from below ("cannot improve a Save to better than 3+").
+    if (
+        m.get("operation") == "improve"
+        and str(m.get("stat")) in _ROLL_TARGET_STATS
+        and m.get("minimum") is not None
+        and m.get("maximum") is None
+    ):
+        return f" (to no better than {jstr(m['minimum'])}+)"
     lo = f" (to a minimum of {jstr(m['minimum'])})" if m.get("minimum") is not None else ""
     hi = f" (to a maximum of {jstr(m['maximum'])})" if m.get("maximum") is not None else ""
     return lo + hi

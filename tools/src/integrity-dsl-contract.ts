@@ -41,10 +41,13 @@ function hasActivation(ability: Node): boolean {
   return found;
 }
 
+/** Effects whose options carry ids other rules reference: a stance, a dice-pool allocation, Orders. */
+const OPTION_MENUS = new Set(["stance-select", "dice-pool-allocation", "issue-orders"]);
+
 function optionIds(ability: Node): string[] {
   const result: string[] = [];
   visit(ability.effect, "", (value) => {
-    if ((value.type === "stance-select" || value.type === "dice-pool-allocation") && Array.isArray(value.options)) {
+    if (OPTION_MENUS.has(String(value.type)) && Array.isArray(value.options)) {
       for (const option of value.options) if (node(option) && typeof option.id === "string") result.push(option.id);
     }
   });
@@ -167,9 +170,9 @@ export async function checkDslContract(root: string, result: ValidationResult): 
           definitions.add(ref.definition_id);
         }
       }
-      if ((value.type === "stance-select" || value.type === "dice-pool-allocation") && Array.isArray(value.options)) value.options.forEach((option, at) => {
+      if (OPTION_MENUS.has(String(value.type)) && Array.isArray(value.options)) value.options.forEach((option, at) => {
         if (!node(option) || typeof option.id !== "string") return;
-        if (seen.has(option.id)) issues.push({ path: `${path}/options/${at}/id`, message: `duplicate stance option id "${option.id}" within this ability` });
+        if (seen.has(option.id)) issues.push({ path: `${path}/options/${at}/id`, message: `duplicate option id "${option.id}" within this ability` });
         seen.add(option.id);
       });
       if (value.type === "ability-activate" && node(value.modifier)) {

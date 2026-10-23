@@ -3797,15 +3797,41 @@ export interface IssueOrdersEffect {
         per_battle_round: [NonTieredRangeRef, ...NonTieredRangeRef[]];
       };
   eligible?: KeywordPredicate1;
+  issuer?: KeywordPredicate2;
+  /**
+   * Units in any of these states cannot be issued an Order.
+   *
+   * @minItems 1
+   */
+  ineligible_states?: ["battle-shocked", ..."battle-shocked"[]];
+  /**
+   * An Order stops affecting a unit that enters any of these states.
+   *
+   * @minItems 1
+   */
+  ends_on?: ["battle-shocked", ..."battle-shocked"[]];
+  /**
+   * A unit is affected by at most one Order at a time; an Order issued to it later replaces the current one.
+   */
+  one_at_a_time?: true;
+  benefit?: KeywordPredicate3;
   /**
    * @minItems 1
    */
   options: [
     {
+      /**
+       * Stable id other rules reference this Order by ("affected by the Take Aim! Order").
+       */
+      id?: string;
       name: string;
       effect: EffectNode;
     },
     ...{
+      /**
+       * Stable id other rules reference this Order by ("affected by the Take Aim! Order").
+       */
+      id?: string;
       name: string;
       effect: EffectNode;
     }[]
@@ -3815,6 +3841,24 @@ export interface IssueOrdersEffect {
  * Which friendly units may receive an Order, by keyword.
  */
 export interface KeywordPredicate1 {
+  all_of?: KeywordList;
+  any_of?: KeywordList;
+  none_of?: KeywordList;
+  not_all_of?: KeywordList;
+}
+/**
+ * Which models with this ability issue Orders, by keyword; each one's datasheet sets how many Orders it issues and which units may receive them.
+ */
+export interface KeywordPredicate2 {
+  all_of?: KeywordList;
+  any_of?: KeywordList;
+  none_of?: KeywordList;
+  not_all_of?: KeywordList;
+}
+/**
+ * Only models with these keywords gain the benefit of an Order issued to their unit.
+ */
+export interface KeywordPredicate3 {
   all_of?: KeywordList;
   any_of?: KeywordList;
   none_of?: KeywordList;

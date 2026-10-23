@@ -808,6 +808,8 @@ export class Dataset {
       ...context,
       targetAttached: context.targetAttached ?? attached,
       targetUnitId: context.targetUnitId ?? input.unitId,
+      // The input's faction is the defending army whose rules the resolver walks.
+      targetArmyFaction: context.targetArmyFaction ?? factionId,
       targetAttachmentRole: context.targetAttachmentRole ?? input.attachmentRoles?.[input.unitId],
       targetKeywords: context.targetKeywords ?? keywords,
       targetModelKeywords: context.targetModelKeywords ?? modelKeywords,

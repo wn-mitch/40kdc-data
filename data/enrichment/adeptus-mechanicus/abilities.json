@@ -5123,14 +5123,14 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "weapons": {
-          "type": "melee"
-        },
         "keywords": [
           {
             "keyword_id": "lance"
           }
-        ]
+        ],
+        "weapons": {
+          "type": "melee"
+        }
       }
     },
     "scope": {

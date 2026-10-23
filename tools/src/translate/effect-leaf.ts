@@ -61,7 +61,12 @@ function statChange(m: Record<string, unknown>, what: string): string {
   return `${verb} ${diceCase(val)} ${verb === "add" ? "to" : "from"} ${what}`;
 }
 
+/** Characteristics a model rolls against, where a better value is a lower number ("3+"). */
+const ROLL_TARGET_STATS = new Set(["Sv", "WS", "BS", "Ld"]);
+
 function bounds(m: Record<string, unknown>): string {
+  // An improved roll target is capped from below: "this cannot improve a model's Save to better than 3+".
+  if (m.operation === "improve" && ROLL_TARGET_STATS.has(String(m.stat)) && m.minimum != null && m.maximum == null) return ` (to no better than ${jstr(m.minimum)}+)`;
   const min = m.minimum != null ? ` (to a minimum of ${jstr(m.minimum)})` : "";
   const max = m.maximum != null ? ` (to a maximum of ${jstr(m.maximum)})` : "";
   return min + max;

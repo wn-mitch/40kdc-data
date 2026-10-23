@@ -120,6 +120,22 @@ def _is_container(x: Any) -> bool:
     return _obj(x).get("type") in _CONTAINER_TYPES
 
 
+def _order_rule_sentences(e: Effect, ctx: Ctx) -> list[str]:
+    """The issue-orders rules after its Orders: one at a time, what ends an Order, who benefits."""
+    out: list[str] = []
+    if e.get("one_at_a_time") is True:
+        out.append("A unit holds at most one Order; a newer Order replaces it.")
+    ends_on = e.get("ends_on")
+    if isinstance(ends_on, list):
+        states = or_list([capitalize(jstr(s)) for s in ends_on])
+        out.append(f"An Order ends when its unit becomes {states}.")
+    benefit = e.get("benefit")
+    if benefit is not None:
+        models = filter_subject({**_obj(benefit), "level": "model"}, ctx).removeprefix("all ")
+        out.append(f"Only {models} in that unit benefit from its Order.")
+    return out
+
+
 def _option_lines(e: Effect, indent: str, ctx: Ctx) -> list[str]:
     return [
         f"{indent}  - {jstr(_obj(o).get('name'))}: {inline(_obj(o).get('effect'), ctx)}."
@@ -241,8 +257,21 @@ def describe_effect(e: Effect, depth: int = 0, ctx: Ctx | None = None) -> str:
         rng = f" within {range_phrase(e['range'])}" if e.get("range") is not None else ""
         units = filter_subject({"owner": "friendly", **_obj(e.get("eligible"))}, ctx)
         units = units.removeprefix("all ")
-        head = f"{indent}{arrow}Issue up to {n} Orders to eligible {units}{rng}, each one of:"
-        return "\n".join([head, *_option_lines(e, indent, ctx)])
+        states = e.get("ineligible_states")
+        not_states = (
+            f" that are not {or_list([capitalize(jstr(s)) for s in states])}"
+            if isinstance(states, list)
+            else ""
+        )
+        issuer = e.get("issuer")
+        issuer_models = filter_subject({**_obj(issuer), "level": "model"}, ctx)
+        issue = f"{issuer_models.removeprefix('all ')} can issue" if issuer is not None else "Issue"
+        head = (
+            f"{indent}{arrow}{issue} up to {n} Orders to eligible {units}{rng}{not_states}, "
+            "each one of:"
+        )
+        rules = [f"{indent}{rule}" for rule in _order_rule_sentences(e, ctx)]
+        return "\n".join([head, *_option_lines(e, indent, ctx), *rules])
     if t == "resource-action-menu":
         su = shared_usage_clause(e.get("shared_usage"))
         intro = (

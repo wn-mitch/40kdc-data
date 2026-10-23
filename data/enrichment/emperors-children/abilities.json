@@ -4597,7 +4597,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "dcae4dd82f904d48c4beb92a2a9eda2a80b7e6f1ebb56301377e95eaad73b000",
     "version": "2025-q3",
@@ -5519,7 +5519,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "0f57ed735e7f8212feee22b569e70a9ef9c5e23494a65ab6b1ed23bdbe6a3e5e",
     "version": "2025-q3",
@@ -5533,9 +5533,6 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "weapons": {
-          "type": "melee"
-        },
         "keywords": [
           {
             "keyword_id": "sustained-hits",
@@ -5543,7 +5540,10 @@
               "value": 1
             }
           }
-        ]
+        ],
+        "weapons": {
+          "type": "melee"
+        }
       }
     },
     "scope": {
@@ -5783,9 +5783,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "425f0fc6e6d41184720ee870170a64b8a18eb7d75575bd83eec98833818224cc",
+    "source_digest": "3517c3f2a0ed9d0b194730215bb8cf7160729311635e57b07a2dfdb5eec9ffbd",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -5798,12 +5798,12 @@
       "condition": {
         "type": "matches",
         "parameters": {
+          "subject": "defender",
           "filter": {
             "all_of": [
               "CHARACTER"
             ]
-          },
-          "subject": "defender"
+          }
         }
       },
       "effect": {
@@ -6005,7 +6005,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "ae00f5e68e9bb83a3fcb206b31cbdf5396e4e9d46cd285afb05ac71fc98b6baf",
     "version": "2025-q3",

@@ -26,6 +26,8 @@ const AURA_SIDES = ["friendly", "enemy"] as const;
 const STANCE_MODES = ["re-selectable", "consumable"] as const;
 const STANCE_SCOPES = ["army", "unit"] as const;
 const DICE_REQUIREMENT_TYPES = ["pair", "triple", "single", "run"] as const;
+const ORDER_RULES = ["issuer", "one-at-a-time", "ineligible-state", "ends-on-state", "benefit"] as const;
+const ORDER_STATES = ["battle-shocked"] as const;
 
 export const CONTAINER_FAMILIES: readonly SemanticFamilyDefinition[] = [
   {
@@ -161,6 +163,26 @@ export const CONTAINER_FAMILIES: readonly SemanticFamilyDefinition[] = [
     },
   },
   {
+    // "OFFICER with this ability can issue Orders", "a unit can only be affected by one Order at a time",
+    // "Orders cannot be issued to Battle-shocked units", "Only ASTRA MILITARUM models gain the benefit".
+    id: "order-rule",
+    version: 1,
+    role: "RESTRICTION",
+    label: "How Orders work",
+    description: "A rule of the record's issue-orders, wherever it is printed: issuer (the models with this ability that issue Orders, by keyword; each datasheet sets how many and to whom), one-at-a-time (a unit is affected by one Order; a later one replaces it), ineligible-state (units in this state cannot be issued an Order), ends-on-state (an Order stops affecting a unit that enters this state), or benefit (only models with these keywords gain an Order's benefit).",
+    starter: { rule: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["rule"],
+      properties: {
+        rule: { enum: ORDER_RULES },
+        keywords: { type: "array", minItems: 1, uniqueItems: true, items: { type: "string", minLength: 1 } },
+        state: { enum: ORDER_STATES },
+      },
+      additionalProperties: false,
+    },
+  },
+  {
     id: "dice-pool-allocation-open",
     version: 1,
     role: "EFFECT",
@@ -270,6 +292,19 @@ export function normalizeContainerParameters(family: string, input: Record<strin
       if ("range" in input) result.range = boundedInteger(input.range, 1, 48, "issue-orders-open.range");
       if ("eligible_keyword" in input) result.eligible_keyword = String(input.eligible_keyword);
       return result;
+    }
+    case "order-rule": {
+      const rule = enumValue(input.rule, ORDER_RULES, "order-rule.rule");
+      const needs = rule === "issuer" || rule === "benefit" ? ["rule", "keywords"] : rule === "one-at-a-time" ? ["rule"] : ["rule", "state"];
+      exactKeys(input, needs, family);
+      if (needs.includes("keywords")) {
+        if (!Array.isArray(input.keywords) || input.keywords.length === 0 || input.keywords.some((k) => typeof k !== "string" || k.trim() === "")) {
+          throw new TypeError("order-rule.keywords is the keywords as printed, one or more.");
+        }
+        return { rule, keywords: [...new Set((input.keywords as string[]).map((k) => k.trim()))] };
+      }
+      if (needs.includes("state")) return { rule, state: enumValue(input.state, ORDER_STATES, "order-rule.state") };
+      return { rule };
     }
     case "dice-pool-allocation-open":
       exactKeys(input, ["pool_count", "pool_die", "max_activations"], family);

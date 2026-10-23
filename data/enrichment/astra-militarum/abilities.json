@@ -1495,9 +1495,12 @@
         "operator": "and",
         "operands": [
           {
-            "type": "rule-active",
+            "type": "matches",
             "parameters": {
-              "rule": "order-astra-militarum"
+              "subject": "this-unit",
+              "filter": {
+                "designated": "affected-by-order"
+              }
             }
           },
           {
@@ -6419,118 +6422,203 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "f362d64f0d2c2a74ff01cdfc1e99a38fa7495886675644b6ef49e8a1fe8913f8",
+    "source_digest": "7866cf458400e027821662180e913b08bfa7c4008e6989fa00656dc58018bf4a",
     "version": "2025-q3",
     "effect": {
-      "type": "issue-orders",
-      "range": {
-        "inches": 6
+      "type": "conditional",
+      "condition": {
+        "type": "army-faction",
+        "parameters": {
+          "faction": "astra-militarum"
+        }
       },
-      "options": [
-        {
-          "name": "Move! Move! Move!",
-          "effect": {
-            "type": "stat-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "stat": "M",
-              "operation": "add",
-              "value": 3
-            }
-          }
-        },
-        {
-          "name": "Fix Bayonets!",
-          "effect": {
-            "type": "stat-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "stat": "WS",
-              "operation": "improve",
-              "value": 1,
-              "weapons": {
-                "type": "melee"
-              }
-            }
-          }
-        },
-        {
-          "name": "Take Aim!",
-          "effect": {
-            "type": "stat-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "stat": "BS",
-              "operation": "improve",
-              "value": 1
-            }
-          }
-        },
-        {
-          "name": "First Rank, Fire! Second Rank, Fire!",
-          "effect": {
-            "type": "stat-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "stat": "A",
-              "operation": "improve",
-              "value": 1,
-              "weapons": {
-                "keyword": {
-                  "keyword_id": "rapid-fire"
+      "effect": {
+        "type": "ability-part",
+        "trigger": [
+          {
+            "event": "phase-started",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "phase-is",
+                  "parameters": {
+                    "phase": "command"
+                  }
+                },
+                {
+                  "type": "player-turn-is",
+                  "parameters": {
+                    "turn": "your-turn"
+                  }
                 }
-              }
+              ]
             }
-          }
-        },
-        {
-          "name": "Take Cover!",
-          "effect": {
-            "type": "stat-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "stat": "Sv",
-              "operation": "improve",
-              "value": 1
-            }
-          }
-        },
-        {
-          "name": "Duty and Honour!",
-          "effect": {
-            "type": "sequence",
-            "steps": [
-              {
-                "type": "roll-modifier",
-                "target": "this-unit",
-                "modifier": {
-                  "roll": "battle-shock",
-                  "operation": "add",
-                  "value": 1
+          },
+          {
+            "event": "phase-ended",
+            "condition": {
+              "operator": "or",
+              "operands": [
+                {
+                  "type": "happened",
+                  "parameters": {
+                    "event": "disembarked",
+                    "window": "phase"
+                  }
+                },
+                {
+                  "type": "happened",
+                  "parameters": {
+                    "event": "set-up",
+                    "window": "phase"
+                  }
                 }
-              },
-              {
+              ]
+            }
+          }
+        ],
+        "duration": "until-next-command-phase",
+        "effect": {
+          "type": "issue-orders",
+          "options": [
+            {
+              "id": "move-move-move",
+              "name": "MOVE! MOVE! MOVE",
+              "effect": {
                 "type": "stat-modifier",
                 "target": "this-unit",
                 "modifier": {
-                  "stat": "OC",
+                  "stat": "M",
                   "operation": "add",
-                  "value": 1
+                  "value": 3
                 }
               }
+            },
+            {
+              "id": "fix-bayonets",
+              "name": "FIX BAYONETS",
+              "effect": {
+                "type": "stat-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "stat": "WS",
+                  "operation": "improve",
+                  "value": 1,
+                  "weapons": {
+                    "type": "melee"
+                  }
+                }
+              }
+            },
+            {
+              "id": "take-aim",
+              "name": "TAKE AIM",
+              "effect": {
+                "type": "stat-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "stat": "BS",
+                  "operation": "improve",
+                  "value": 1,
+                  "weapons": {
+                    "type": "ranged"
+                  }
+                }
+              }
+            },
+            {
+              "id": "first-rank-fire-second-rank-fire",
+              "name": "FIRST RANK, FIRE! SECOND RANK, FIRE",
+              "effect": {
+                "type": "stat-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "stat": "A",
+                  "operation": "improve",
+                  "value": 1,
+                  "weapons": {
+                    "type": "ranged",
+                    "keyword": {
+                      "keyword_id": "rapid-fire"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "take-cover",
+              "name": "TAKE COVER",
+              "effect": {
+                "type": "stat-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "stat": "Sv",
+                  "operation": "improve",
+                  "value": 1,
+                  "minimum": 3
+                }
+              }
+            },
+            {
+              "id": "duty-and-honour",
+              "name": "DUTY AND HONOUR",
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "stat-modifier",
+                    "target": "this-unit",
+                    "modifier": {
+                      "stat": "Ld",
+                      "operation": "improve",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "type": "stat-modifier",
+                    "target": "this-unit",
+                    "modifier": {
+                      "stat": "OC",
+                      "operation": "improve",
+                      "value": 1
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "range": {
+            "inches": 6
+          },
+          "issuer": {
+            "all_of": [
+              "OFFICER"
+            ]
+          },
+          "one_at_a_time": true,
+          "ineligible_states": [
+            "battle-shocked"
+          ],
+          "ends_on": [
+            "battle-shocked"
+          ],
+          "benefit": {
+            "all_of": [
+              "ASTRA MILITARUM"
             ]
           }
         }
-      ]
+      }
     },
     "scope": {
-      "duration": "until-next-command-phase"
+      "duration": "permanent"
     },
     "faction_id": "astra-militarum",
     "ability_type": "faction",
-    "behavior": "activated",
+    "behavior": "passive",
     "community_notes": "Each OFFICER datasheet specifies how many Orders it can issue per battle round and which units are eligible; Orders are issued in your Command phase (and at the end of a phase in which the OFFICER disembarked from a TRANSPORT or was set up). A unit can be affected by only one Order at a time. TAKE COVER! cannot improve a Save to better than 3+. Only ASTRA MILITARUM models benefit from an Order.",
     "unit_ids": [
       "draydens-lance-command-squad",
@@ -8708,7 +8796,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "9528ba1263d2a3c6507a74ae77e29b0094e726a4f9edc881868e709fdff88438",
     "version": "2025-q3",

@@ -134,7 +134,7 @@ describe("Semantic authoring shapes", () => {
       behavior: "passive",
     });
     expect(published.find((entry) => entry.ability_id === "partial")!.effect).toEqual(authoredEntry("partial").effect);
-    expect(publishableEntries(db)).toEqual({ factions: [], stale: 0, unchanged: 3 });
+    expect(publishableEntries(db)).toEqual({ factions: [], stale: 0, unchanged: 3, blocked: [] });
   }, 120_000);
 
   it("applies approve-shape and reject-shape from a signed decisions file, and refuses an unsigned draft", async () => {

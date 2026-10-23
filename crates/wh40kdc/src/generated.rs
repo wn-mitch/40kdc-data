@@ -21218,6 +21218,10 @@ pub struct InvulnerableSaveEffectModifier {
 ///    "type"
 ///  ],
 ///  "properties": {
+///    "benefit": {
+///      "description": "Only models with these keywords gain the benefit of an Order issued to their unit.",
+///      "$ref": "#/$defs/keyword-predicate"
+///    },
 ///    "count": {
 ///      "type": "integer",
 ///      "minimum": 1.0
@@ -21225,6 +21229,36 @@ pub struct InvulnerableSaveEffectModifier {
 ///    "eligible": {
 ///      "description": "Which friendly units may receive an Order, by keyword.",
 ///      "$ref": "#/$defs/keyword-predicate"
+///    },
+///    "ends_on": {
+///      "description": "An Order stops affecting a unit that enters any of these states.",
+///      "type": "array",
+///      "items": {
+///        "enum": [
+///          "battle-shocked"
+///        ]
+///      },
+///      "minItems": 1,
+///      "uniqueItems": true
+///    },
+///    "ineligible_states": {
+///      "description": "Units in any of these states cannot be issued an Order.",
+///      "type": "array",
+///      "items": {
+///        "enum": [
+///          "battle-shocked"
+///        ]
+///      },
+///      "minItems": 1,
+///      "uniqueItems": true
+///    },
+///    "issuer": {
+///      "description": "Which models with this ability issue Orders, by keyword; each one's datasheet sets how many Orders it issues and which units may receive them.",
+///      "$ref": "#/$defs/keyword-predicate"
+///    },
+///    "one_at_a_time": {
+///      "description": "A unit is affected by at most one Order at a time; an Order issued to it later replaces the current one.",
+///      "const": true
 ///    },
 ///    "options": {
 ///      "type": "array",
@@ -21237,6 +21271,11 @@ pub struct InvulnerableSaveEffectModifier {
 ///        "properties": {
 ///          "effect": {
 ///            "$ref": "#/$defs/effect-node"
+///          },
+///          "id": {
+///            "description": "Stable id other rules reference this Order by (\"affected by the Take Aim! Order\").",
+///            "type": "string",
+///            "minLength": 1
 ///          },
 ///          "name": {
 ///            "type": "string",
@@ -21266,17 +21305,176 @@ pub struct InvulnerableSaveEffectModifier {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct IssueOrdersEffect {
+    ///Only models with these keywords gain the benefit of an Order issued to their unit.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub benefit: ::std::option::Option<KeywordPredicate>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub count: ::std::option::Option<::std::num::NonZeroU64>,
     ///Which friendly units may receive an Order, by keyword.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub eligible: ::std::option::Option<KeywordPredicate>,
+    ///An Order stops affecting a unit that enters any of these states.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub ends_on: ::std::option::Option<Vec<IssueOrdersEffectEndsOnItem>>,
+    ///Units in any of these states cannot be issued an Order.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub ineligible_states: ::std::option::Option<
+        Vec<IssueOrdersEffectIneligibleStatesItem>,
+    >,
+    ///Which models with this ability issue Orders, by keyword; each one's datasheet sets how many Orders it issues and which units may receive them.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub issuer: ::std::option::Option<KeywordPredicate>,
+    ///A unit is affected by at most one Order at a time; an Order issued to it later replaces the current one.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub one_at_a_time: ::std::option::Option<::serde_json::Value>,
     pub options: ::std::vec::Vec<IssueOrdersEffectOptionsItem>,
     ///Orders go to eligible units within this distance of the officer.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub range: ::std::option::Option<RangeRef>,
     #[serde(rename = "type")]
     pub type_: IssueOrdersEffectType,
+}
+///`IssueOrdersEffectEndsOnItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "enum": [
+///    "battle-shocked"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum IssueOrdersEffectEndsOnItem {
+    #[serde(rename = "battle-shocked")]
+    BattleShocked,
+}
+impl ::std::fmt::Display for IssueOrdersEffectEndsOnItem {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::BattleShocked => f.write_str("battle-shocked"),
+        }
+    }
+}
+impl ::std::str::FromStr for IssueOrdersEffectEndsOnItem {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "battle-shocked" => Ok(Self::BattleShocked),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for IssueOrdersEffectEndsOnItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for IssueOrdersEffectEndsOnItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for IssueOrdersEffectEndsOnItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`IssueOrdersEffectIneligibleStatesItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "enum": [
+///    "battle-shocked"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum IssueOrdersEffectIneligibleStatesItem {
+    #[serde(rename = "battle-shocked")]
+    BattleShocked,
+}
+impl ::std::fmt::Display for IssueOrdersEffectIneligibleStatesItem {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::BattleShocked => f.write_str("battle-shocked"),
+        }
+    }
+}
+impl ::std::str::FromStr for IssueOrdersEffectIneligibleStatesItem {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "battle-shocked" => Ok(Self::BattleShocked),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for IssueOrdersEffectIneligibleStatesItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for IssueOrdersEffectIneligibleStatesItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for IssueOrdersEffectIneligibleStatesItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
 }
 ///`IssueOrdersEffectOptionsItem`
 ///
@@ -21293,6 +21491,11 @@ pub struct IssueOrdersEffect {
 ///    "effect": {
 ///      "$ref": "#/$defs/effect-node"
 ///    },
+///    "id": {
+///      "description": "Stable id other rules reference this Order by (\"affected by the Take Aim! Order\").",
+///      "type": "string",
+///      "minLength": 1
+///    },
 ///    "name": {
 ///      "type": "string",
 ///      "minLength": 1
@@ -21306,7 +21509,83 @@ pub struct IssueOrdersEffect {
 #[serde(deny_unknown_fields)]
 pub struct IssueOrdersEffectOptionsItem {
     pub effect: EffectNode,
+    ///Stable id other rules reference this Order by ("affected by the Take Aim! Order").
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<IssueOrdersEffectOptionsItemId>,
     pub name: IssueOrdersEffectOptionsItemName,
+}
+///Stable id other rules reference this Order by ("affected by the Take Aim! Order").
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Stable id other rules reference this Order by (\"affected by the Take Aim! Order\").",
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct IssueOrdersEffectOptionsItemId(::std::string::String);
+impl ::std::ops::Deref for IssueOrdersEffectOptionsItemId {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<IssueOrdersEffectOptionsItemId> for ::std::string::String {
+    fn from(value: IssueOrdersEffectOptionsItemId) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for IssueOrdersEffectOptionsItemId {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for IssueOrdersEffectOptionsItemId {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for IssueOrdersEffectOptionsItemId {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for IssueOrdersEffectOptionsItemId {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for IssueOrdersEffectOptionsItemId {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
 }
 ///`IssueOrdersEffectOptionsItemName`
 ///

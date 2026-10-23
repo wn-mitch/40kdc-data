@@ -40,6 +40,17 @@ pub struct ResolvedModifiers {
     pub skill_mod: SkillMods,
     /// Ability-set Save characteristic (lowest wins); `None` keeps the printed one.
     pub save_characteristic: Option<ThresholdState>,
+    /// Summed capped Save improvements; `None` when none applies.
+    pub save_improve: Option<SaveImproveState>,
+}
+
+/// Summed `save-improve` contributions: the total improvement and the most restrictive (largest)
+/// cap among them.
+#[derive(Clone, Debug)]
+pub struct SaveImproveState {
+    pub value: f64,
+    pub best: f64,
+    pub sources: Vec<BuffSource>,
 }
 
 /// A lowest-wins threshold plus the source that produced it (rank breaks ties).

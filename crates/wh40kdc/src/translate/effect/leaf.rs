@@ -99,7 +99,23 @@ fn stat_change(m: &P, what: &str) -> String {
     format!("{verb} {val} {prep} {what}")
 }
 
+/// Characteristics a model rolls against, where a better value is a lower number ("3+").
+const ROLL_TARGET_STATS: [&str; 4] = ["Sv", "WS", "BS", "Ld"];
+
 fn bounds(m: &P) -> String {
+    // An improved roll target is capped from below: "this cannot improve a model's Save to better than 3+".
+    let roll_target = m
+        .get("stat")
+        .and_then(Value::as_str)
+        .is_some_and(|stat| ROLL_TARGET_STATS.contains(&stat));
+    if m.get("operation").and_then(Value::as_str) == Some("improve")
+        && roll_target
+        && nn(m, "maximum").is_none()
+    {
+        if let Some(minimum) = nn(m, "minimum") {
+            return format!(" (to no better than {}+)", jv(minimum));
+        }
+    }
     let min = nn(m, "minimum")
         .map(|v| format!(" (to a minimum of {})", jv(v)))
         .unwrap_or_default();

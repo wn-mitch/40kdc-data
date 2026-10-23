@@ -5,7 +5,8 @@ import type { UnitNameContext } from "./compile-unit-names.js";
 /**
  * A leaf names a rule or ability as it is printed ("Reanimation Protocols", "Devastator Doctrine");
  * the record that prints it carries its faction's id ("reanimation-protocols-necrons") or is one
- * option of a stance ("combat-doctrines-adeptus-astartes" / "devastator-doctrine"). Each reference
+ * option of a stance or an Order ("combat-doctrines-adeptus-astartes" / "devastator-doctrine",
+ * "voice-of-command-astra-militarum" / "take-aim"). Each reference
  * resolves within the record's own faction, then the faction it inherits rules from, then shared
  * core, and only to a single candidate; anything else is left as written for integrity to report.
  * A granted weapon's printed name resolves the same way to its weapons.json id.
@@ -15,7 +16,7 @@ type Catalog = {
   ids: Set<string>;
   /** Record ids by printed-name slug. */
   byName: Map<string, string[]>;
-  /** Stance options by option id and by option-name slug. */
+  /** Stance options and Orders by option id and by option-name slug. */
   options: Map<string, Array<{ ability_id: string; option_id: string; scoped: boolean }>>;
   /** Abilities a record prints inside itself ("Fortify Takeover" in Prioritised Efficiency), by id and name slug. */
   definitions: Map<string, Array<{ ability_id: string; definition_id: string }>>;
@@ -50,8 +51,7 @@ function catalogOf(factionId: string): Catalog {
     if (typeof id !== "string") continue;
     catalog.ids.add(id);
     if (typeof record.name === "string") push(catalog.byName, slug(record.name), id);
-    const effect = record.effect as Record<string, unknown> | undefined;
-    if (effect?.type === "stance-select" && Array.isArray(effect.options)) {
+    for (const effect of menusOf(record.effect)) {
       for (const option of effect.options as Array<Record<string, unknown>>) {
         if (typeof option.id !== "string") continue;
         // A detachment's own copy of a rule (a Combat Patrol's Combat Doctrines) is scoped to it.
@@ -68,6 +68,22 @@ function catalogOf(factionId: string): Catalog {
   }
   catalogs.set(factionId, catalog);
   return catalog;
+}
+
+/** A record's stance menu (its top-level stance-select) and its Orders (an issue-orders anywhere in its effect). */
+function menusOf(effect: unknown): Array<Record<string, unknown>> {
+  const found: Array<Record<string, unknown>> = [];
+  const top = effect as Record<string, unknown> | undefined;
+  if (top?.type === "stance-select" && Array.isArray(top.options)) found.push(top);
+  const visit = (value: unknown): void => {
+    if (Array.isArray(value)) { value.forEach(visit); return; }
+    if (value === null || typeof value !== "object") return;
+    const node = value as Record<string, unknown>;
+    if (node.type === "issue-orders" && Array.isArray(node.options)) found.push(node);
+    Object.values(node).forEach(visit);
+  };
+  visit(effect);
+  return found;
 }
 
 /** The named abilities a record defines in its own effect, as [definition id, printed name]. */

@@ -676,10 +676,21 @@ func describeEffect(e map[string]any, depth int, ctx effCtx) string {
 			eligible[k] = v
 		}
 		units := strings.TrimPrefix(filterSubject(eligible, ctx), "all ")
-		lines := []string{indent + arrow + "Issue up to " + n + " Orders to eligible " + units + rng + ", each one of:"}
+		notStates := ""
+		if states, ok := e["ineligible_states"].([]any); ok {
+			notStates = " that are not " + orList(orderStates(states))
+		}
+		issue := "Issue"
+		if e["issuer"] != nil {
+			issue = orderModels(e["issuer"], ctx) + " can issue"
+		}
+		lines := []string{indent + arrow + issue + " up to " + n + " Orders to eligible " + units + rng + notStates + ", each one of:"}
 		for _, o := range getList(e, "options") {
 			om := mapOr(o)
 			lines = append(lines, indent+"  - "+ejstr(om["name"])+": "+describeEffectInline(mapOr(om["effect"]), ctx)+".")
+		}
+		for _, rule := range orderRuleSentences(e, ctx) {
+			lines = append(lines, indent+rule)
 		}
 		return strings.Join(lines, "\n")
 	case "resource-action-menu":
@@ -703,4 +714,39 @@ func selectUnitsBlock(e map[string]any, indent, arrow string, depth int, ctx eff
 	}
 	nested := selectedRecipient(describeEffectInline(inner, selectedCtx), sel)
 	return header + ": " + nested + "."
+}
+
+// orderStates renders each unit state an issue-orders rule names ("Battle-shocked").
+func orderStates(states []any) []string {
+	out := make([]string, 0, len(states))
+	for _, state := range states {
+		out = append(out, capitalize(ejstr(state)))
+	}
+	return out
+}
+
+// orderModels renders the models an issue-orders keyword predicate names ("OFFICER models").
+func orderModels(predicate any, ctx effCtx) string {
+	filter := map[string]any{}
+	for k, v := range mapOr(predicate) {
+		filter[k] = v
+	}
+	filter["level"] = "model"
+	return strings.TrimPrefix(filterSubject(filter, ctx), "all ")
+}
+
+// orderRuleSentences renders the issue-orders rules printed after its Orders: one at a time, what
+// ends an Order, who benefits.
+func orderRuleSentences(e map[string]any, ctx effCtx) []string {
+	var out []string
+	if e["one_at_a_time"] == true {
+		out = append(out, "A unit holds at most one Order; a newer Order replaces it.")
+	}
+	if states, ok := e["ends_on"].([]any); ok {
+		out = append(out, "An Order ends when its unit becomes "+orList(orderStates(states))+".")
+	}
+	if e["benefit"] != nil {
+		out = append(out, "Only "+orderModels(e["benefit"], ctx)+" in that unit benefit from its Order.")
+	}
+	return out
 }

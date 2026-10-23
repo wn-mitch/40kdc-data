@@ -12,7 +12,9 @@ use super::{
     child, choice_prompt, inline, is_container, items, part_head, part_inline, stance_additive,
     stance_pick, ty,
 };
-use crate::translate::condition::{condition_lead_in_value, nn, obj, range_phrase, truthy, P};
+use crate::translate::condition::{
+    condition_lead_in_value, nn, obj, or_list, range_phrase, truthy, P,
+};
 
 /// Block translation of a container effect tree (multi-line, two-space indentation).
 pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
@@ -239,8 +241,17 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
             eligible.extend(obj(nn(e, "eligible")).clone());
             let rendered = super::subject::filter_subject(&eligible, ctx);
             let units = rendered.strip_prefix("all ").unwrap_or(&rendered);
+            let not_states = e
+                .get("ineligible_states")
+                .and_then(Value::as_array)
+                .map(|states| format!(" that are not {}", or_list(&order_states(states))))
+                .unwrap_or_default();
+            let issue = match nn(e, "issuer") {
+                Some(issuer) => format!("{} can issue", model_subject(issuer, ctx)),
+                None => "Issue".to_string(),
+            };
             let mut lines = vec![format!(
-                "{indent}{arrow}Issue up to {n} Orders to eligible {units}{range}, each one of:"
+                "{indent}{arrow}{issue} up to {n} Orders to eligible {units}{range}{not_states}, each one of:"
             )];
             for o in items(e, "options") {
                 let o = obj(Some(o));
@@ -250,6 +261,11 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
                     inline(child(o, "effect"), ctx)
                 ));
             }
+            lines.extend(
+                order_rule_sentences(e, ctx)
+                    .into_iter()
+                    .map(|rule| format!("{indent}{rule}")),
+            );
             lines.join("\n")
         }
         "resource-action-menu" => menu_block(e, &indent, arrow, ctx),
@@ -259,4 +275,41 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
             capitalize(&inline(&Value::Object(e.clone()), ctx))
         ),
     }
+}
+
+/// "Battle-shocked" for each unit state an issue-orders rule names.
+fn order_states(states: &[Value]) -> Vec<String> {
+    states.iter().map(|s| capitalize(&jstr(Some(s)))).collect()
+}
+
+/// "OFFICER models": the models an issue-orders keyword predicate names.
+fn model_subject(predicate: &Value, ctx: &Ctx) -> String {
+    let mut filter = obj(Some(predicate)).clone();
+    filter.insert("level".into(), Value::from("model"));
+    let rendered = super::subject::filter_subject(&filter, ctx);
+    rendered
+        .strip_prefix("all ")
+        .unwrap_or(&rendered)
+        .to_string()
+}
+
+/// The issue-orders rules printed after its Orders: one at a time, what ends an Order, who benefits.
+fn order_rule_sentences(e: &P, ctx: &Ctx) -> Vec<String> {
+    let mut out = Vec::new();
+    if e.get("one_at_a_time") == Some(&Value::Bool(true)) {
+        out.push("A unit holds at most one Order; a newer Order replaces it.".to_string());
+    }
+    if let Some(states) = e.get("ends_on").and_then(Value::as_array) {
+        out.push(format!(
+            "An Order ends when its unit becomes {}.",
+            or_list(&order_states(states))
+        ));
+    }
+    if let Some(benefit) = nn(e, "benefit") {
+        out.push(format!(
+            "Only {} in that unit benefit from its Order.",
+            model_subject(benefit, ctx)
+        ));
+    }
+    out
 }

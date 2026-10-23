@@ -1152,8 +1152,7 @@
     "target_restrictions": {
       "required_keywords": [
         "Frenzied Reavers",
-        "Khorne",
-        "Berzerkers"
+        "Khorne Berzerkers"
       ],
       "count": "one",
       "side": "your-army",

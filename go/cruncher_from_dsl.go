@@ -313,6 +313,12 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 		if n["duration"] != nil {
 			partOpts.duration = n["duration"]
 		}
+		// Orders are issued at their own moment and last for the part's duration: each Order is a
+		// lever for the attacks made while it lasts, as a stance option is.
+		if effect, ok := n["effect"].(map[string]any); ok && effect["type"] == "issue-orders" {
+			dslWalk(effect, source, partOpts, out)
+			return
+		}
 		if n["trigger"] != nil {
 			if bound, changed := bindEventSubject(n["trigger"], n["effect"], opts.context, opts.perspective); changed {
 				rebound := cloneMap(n)
@@ -1568,6 +1574,12 @@ func translateStatModifier(node, source map[string]any, opts dslOpts, out *effec
 		if !isOnBuffedUnit {
 			return
 		}
+		// A capped improvement ("cannot improve a Save to better than N+") changes the Save
+		// characteristic itself, not the save roll.
+		if best, ok := num(modifier["minimum"]); ok && modifier["operation"] == "improve" {
+			emit(map[string]any{"type": "save-improve", "value": value, "best": best})
+			return
+		}
 		saveMod := -value
 		if modifier["operation"] == "improve" || modifier["operation"] == "worsen" {
 			saveMod = value
@@ -2162,6 +2174,8 @@ func describeContribution(c map[string]any) string {
 		return getStr(c, "stat") + " improved by " + numStr(c["value"])
 	case "save-characteristic":
 		return numStr(c["value"]) + "+ save"
+	case "save-improve":
+		return "Save improved by " + numStr(c["value"]) + " (no better than " + numStr(c["best"]) + "+)"
 	}
 	return "cover"
 }
@@ -2691,11 +2705,16 @@ func evaluateCondition(condition, ctx map[string]any, rest ...any) any {
 		}
 		return matchesUnitFilter(filter, ctx, side, owner)
 	case "army-faction":
+		// "Your Army Faction" is the army of the side whose ability it is.
 		faction, ok := params["faction"].(string)
-		if !ok || ctx["armyFaction"] == nil {
+		armyKey := "armyFaction"
+		if perspective == "target" {
+			armyKey = "targetArmyFaction"
+		}
+		if !ok || ctx[armyKey] == nil {
 			return nil
 		}
-		return ctx["armyFaction"] == faction
+		return ctx[armyKey] == faction
 	case "model-count":
 		// "contains N or more models": min and max are inclusive. A keyword-restricted count needs
 		// per-keyword model counts the context does not carry.

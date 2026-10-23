@@ -18,7 +18,7 @@ use super::gates::live_buffs;
 pub use super::resolved::{
     CappedMod, CoverState, CritThresholds, ExtraKeywordEntry, FeelNoPainState, HighestMod,
     IgnoredRolls, InvulnerableState, RerollOne, RerollOneState, RerollState, Rerolls,
-    ResolvedModifiers, SkillMods, SummedMod, ThresholdState,
+    ResolvedModifiers, SaveImproveState, SkillMods, SummedMod, ThresholdState,
 };
 use super::scenario::{ModelWounds, ScenarioObjective, UnitState, UnitStrength};
 
@@ -226,6 +226,12 @@ pub enum BuffContribution {
     SaveCharacteristic {
         value: f64,
     },
+    /// Defender-side: improve the Save characteristic by `value`, but never to better than
+    /// `best`+. Applies after any `save-characteristic` and before AP.
+    SaveImprove {
+        value: f64,
+        best: f64,
+    },
 }
 
 /// Optional gating; the resolver drops buffs whose gate fails.
@@ -388,6 +394,9 @@ pub struct EngineContext {
     /// The army's Army Faction id. Drives the `army-faction` condition; `None` leaves it unknown.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub army_faction: Option<String>,
+    /// The defending army's Army Faction id, for the `army-faction` condition of the target's own rules.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub target_army_faction: Option<String>,
     /// The battle size being played (`incursion` / `strike-force` / `onslaught`). Drives the
     /// `battle-size` condition; `None` leaves it unknown.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -461,6 +470,7 @@ impl EngineContext {
             attacker_attached: None,
             target_attached: None,
             army_faction: None,
+            target_army_faction: None,
             battle_size: None,
             attacker_guided: None,
             attacker_model_count: None,
@@ -648,6 +658,20 @@ pub fn resolve_buffs(buffs: &[Buff], ctx: &EngineContext) -> ResolvedModifiers {
             BuffContribution::SaveCharacteristic { value } => {
                 take_lowest(&mut out.save_characteristic, *value, &b.source);
             }
+            BuffContribution::SaveImprove { value, best } => match &mut out.save_improve {
+                None => {
+                    out.save_improve = Some(SaveImproveState {
+                        value: *value,
+                        best: *best,
+                        sources: vec![b.source.clone()],
+                    })
+                }
+                Some(cur) => {
+                    cur.value += *value;
+                    cur.best = cur.best.max(*best);
+                    cur.sources.push(b.source.clone());
+                }
+            },
         }
     }
 

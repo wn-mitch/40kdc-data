@@ -171,14 +171,20 @@ export function buildKeywords(dump: MfmDump, datasheetId: string, datasheetName:
       .slice()
       .sort((a, b) => a.displayOrder - b.displayOrder);
     for (const mk of mks) {
-      const nm = dump.enName(kwById.get(mk.keywordId));
+      const nm = plainHyphens(dump.enName(kwById.get(mk.keywordId)));
       if (!nm || seen.has(nm.toLowerCase())) continue;
       seen.add(nm.toLowerCase());
       out.push(nm);
     }
   }
-  if (!seen.has(datasheetName.toLowerCase())) out.push(datasheetName);
+  const name = plainHyphens(datasheetName)!;
+  if (!seen.has(name.toLowerCase())) out.push(name);
   return out;
+}
+
+/** The dump prints some keywords with a non-breaking hyphen (U+2011, "Grav‑Tank"); keywords use "-". */
+function plainHyphens(name: string | null | undefined): string | null | undefined {
+  return name?.replace(/\u2011/gu, "-");
 }
 
 /** The datasheet's own faction keyword names (`datasheet_faction_keyword`), deduped in display order. */

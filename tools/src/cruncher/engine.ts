@@ -265,7 +265,11 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
   // Worsening AP stops at 0.
   const AP = Math.min(0, weaponProfile.stats.AP + apMod);
   const saveMod = resolved.saveMod.value;
-  const Sv = resolved.saveCharacteristic?.value ?? unitProfile.Sv;
+  const Sv0 = resolved.saveCharacteristic?.value ?? unitProfile.Sv;
+  // A capped improvement never takes the Save past its cap, and never worsens a Save already
+  // at or better than the cap.
+  const saveImprove = resolved.saveImprove;
+  const Sv = saveImprove !== null ? Math.min(Sv0, Math.max(saveImprove.best, Sv0 - saveImprove.value)) : Sv0;
   const armorTargetRaw = Sv - AP - saveMod;
   // Cover is a hit penalty (11e), applied in the hits stage above — it no
   // longer touches the save here.
@@ -304,7 +308,7 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
   stages.push({
     name: "unsaved",
     expected: unsaved,
-    detail: `Sv${Sv}+${Sv !== unitProfile.Sv ? " (set)" : ""}, AP${signed(AP)}${apMod !== 0 ? ` (apmod ${signed(apMod)})` : ""}${saveMod !== 0 ? `, savemod ${signed(saveMod)}` : ""}${abilityInvuln !== null ? `, invuln ${abilityInvuln}+ (ability)` : ""} → effective ${effectiveSaveTarget}+ (P(save)=${pSaved.toFixed(4)})${resolved.rerollOne.save ? `; re-roll one saving throw: ${saveRerollOneDice.toFixed(4)} dice` : ""}`,
+    detail: `Sv${Sv}+${Sv0 !== unitProfile.Sv ? " (set)" : ""}${Sv !== Sv0 ? ` (improved, no better than ${saveImprove?.best}+)` : ""}, AP${signed(AP)}${apMod !== 0 ? ` (apmod ${signed(apMod)})` : ""}${saveMod !== 0 ? `, savemod ${signed(saveMod)}` : ""}${abilityInvuln !== null ? `, invuln ${abilityInvuln}+ (ability)` : ""} → effective ${effectiveSaveTarget}+ (P(save)=${pSaved.toFixed(4)})${resolved.rerollOne.save ? `; re-roll one saving throw: ${saveRerollOneDice.toFixed(4)} dice` : ""}`,
   });
 
   // 5. Damage

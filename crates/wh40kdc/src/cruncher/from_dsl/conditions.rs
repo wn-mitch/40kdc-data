@@ -182,8 +182,13 @@ pub(super) fn evaluate_condition_for_source(
             matches_unit_filter(p.get("filter")?, ctx, side, owner)
         }
         Some("army-faction") => {
+            // "Your Army Faction" is the army of the side whose ability it is.
             let faction = p.get("faction").and_then(Value::as_str)?;
-            Some(ctx.army_faction.as_deref()? == faction)
+            let army = match perspective {
+                TranslationPerspective::Target => ctx.target_army_faction.as_deref(),
+                _ => ctx.army_faction.as_deref(),
+            };
+            Some(army? == faction)
         }
         Some("model-count") => {
             // "contains N or more models": min and max are inclusive. A keyword-restricted count

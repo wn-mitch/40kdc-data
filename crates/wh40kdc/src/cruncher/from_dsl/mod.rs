@@ -543,6 +543,19 @@ fn dispatch(node: &Obj, opts: &WalkOpts, out: &mut Out) {
             }
         }
         Some("ability-part") => {
+            // Orders are issued at their own moment and last for the part's duration: each Order
+            // is a lever for the attacks made while it lasts, as a stance option is.
+            if let Some(effect) = node
+                .get("effect")
+                .filter(|e| e.as_object().is_some_and(|o| is_str(o, "type", "issue-orders")))
+            {
+                let mut part_opts = opts.clone();
+                if let Some(duration) = present(node, "duration") {
+                    part_opts.duration = Some(duration.clone());
+                }
+                walk(effect, &part_opts, out);
+                return;
+            }
             if let Some(trigger) = present(node, "trigger") {
                 if let Some(bound) = selection::bind_event_subject(
                     Some(trigger),

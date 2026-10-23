@@ -12175,6 +12175,40 @@
           "$ref": "#/$defs/keyword-predicate",
           "description": "Which friendly units may receive an Order, by keyword."
         },
+        "issuer": {
+          "$ref": "#/$defs/keyword-predicate",
+          "description": "Which models with this ability issue Orders, by keyword; each one's datasheet sets how many Orders it issues and which units may receive them."
+        },
+        "ineligible_states": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "battle-shocked"
+            ]
+          },
+          "description": "Units in any of these states cannot be issued an Order."
+        },
+        "ends_on": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "battle-shocked"
+            ]
+          },
+          "description": "An Order stops affecting a unit that enters any of these states."
+        },
+        "one_at_a_time": {
+          "const": true,
+          "description": "A unit is affected by at most one Order at a time; an Order issued to it later replaces the current one."
+        },
+        "benefit": {
+          "$ref": "#/$defs/keyword-predicate",
+          "description": "Only models with these keywords gain the benefit of an Order issued to their unit."
+        },
         "options": {
           "type": "array",
           "minItems": 1,
@@ -12182,6 +12216,11 @@
             "type": "object",
             "additionalProperties": false,
             "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Stable id other rules reference this Order by (\"affected by the Take Aim! Order\")."
+              },
               "name": {
                 "type": "string",
                 "minLength": 1

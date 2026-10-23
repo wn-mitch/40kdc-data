@@ -379,7 +379,15 @@ def crunch_model(
     ap = min(0, stats["AP"] + ap_mod)
     save_mod = resolved["saveMod"]["value"]
     save_characteristic = resolved["saveCharacteristic"]
-    sv = save_characteristic["value"] if save_characteristic is not None else unit_profile["Sv"]
+    sv0 = save_characteristic["value"] if save_characteristic is not None else unit_profile["Sv"]
+    # A capped improvement never takes the Save past its cap, and never worsens a Save already
+    # at or better than the cap.
+    save_improve = resolved["saveImprove"]
+    sv = (
+        min(sv0, max(save_improve["best"], sv0 - save_improve["value"]))
+        if save_improve is not None
+        else sv0
+    )
     armor_target_raw = sv - ap - save_mod
     # Cover is a hit penalty (11e), applied in the hits stage above — it no
     # longer touches the save here.
@@ -429,7 +437,9 @@ def crunch_model(
             crit_threshold=7,
         )
         unsaved -= save_reroll_one_dice * fresh_save[0]
-    set_text = " (set)" if sv != unit_profile["Sv"] else ""
+    set_text = " (set)" if sv0 != unit_profile["Sv"] else ""
+    if save_improve is not None and sv != sv0:
+        set_text += f" (improved, no better than {save_improve['best']}+)"
     detail_parts = [f"Sv{sv}+{set_text}, AP{_signed(ap)}"]
     if ap_mod != 0:
         detail_parts.append(f" (apmod {_signed(ap_mod)})")

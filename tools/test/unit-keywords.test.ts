@@ -25,6 +25,18 @@ describe("unit keywords", () => {
   it("splits a printed datasheet name, including one the dump spells with a non-breaking hyphen", () => {
     const index = keywordIndex(DATA);
     expect(splitKeywords("NOBZ", index)).toEqual(["Nobz"]);
-    expect(splitKeywords("BLITZA-BOMMER", index)).toEqual(["Blitza\u2011bommer"]);
+    expect(splitKeywords("BLITZA-BOMMER", index)).toEqual(["Blitza-bommer"]);
+  });
+
+  it("spells every keyword with a plain hyphen, never the dump's non-breaking one", () => {
+    const spelled: string[] = [];
+    for (const faction of readdirSync(join(DATA, "core"))) {
+      const file = join(DATA, "core", faction, "units.json");
+      if (!existsSync(file)) continue;
+      for (const unit of JSON.parse(readFileSync(file, "utf8")) as Array<{ id: string; keywords: string[] }>) {
+        for (const keyword of unit.keywords) if (keyword.includes("\u2011")) spelled.push(`${faction}/${unit.id}: ${keyword}`);
+      }
+    }
+    expect(spelled).toEqual([]);
   });
 });

@@ -50,6 +50,8 @@ export function bindCharacteristicAmounts(leaves: readonly CompileLeaf[]): Compi
 
 const FLOOR = "characteristic-floor";
 const LOWERING = new Set(["subtract", "worsen"]);
+/** Characteristics read as a roll target ("3+"): improving one lowers its number, so a cap on the improvement is a floor. */
+const ROLL_TARGET = new Set(["Sv", "WS", "BS", "Ld"]);
 
 /**
  * "Worsen the Move, Leadership and Objective Control characteristics … by 1 (this rule can only
@@ -67,9 +69,11 @@ export function bindCharacteristicFloors(leaves: readonly CompileLeaf[]): Compil
     if (floor.family_id !== FLOOR) { out.push(floor); continue; }
     const change = out.at(-1);
     if (change?.family_id !== CHANGE || change.fragment !== floor.fragment) throw new CompileError(`A characteristic floor at byte ${floor.start_byte} needs its characteristic change right before it.`);
-    if (!LOWERING.has(String(change.parameters.operation))) throw new CompileError(`A characteristic floor at byte ${floor.start_byte} follows a change that does not lower a characteristic.`);
     const lowered = change.parameters.characteristics as string[];
     const floored = floor.parameters.characteristics as string[];
+    // Version 2: "(this cannot improve a model's Save to better than 3+)" floors an improved roll-target characteristic.
+    const capsImprovement = floor.family_version >= 2 && change.parameters.operation === "improve" && floored.every((stat) => ROLL_TARGET.has(stat));
+    if (!LOWERING.has(String(change.parameters.operation)) && !capsImprovement) throw new CompileError(`A characteristic floor at byte ${floor.start_byte} follows a change that does not lower a characteristic.`);
     const minimum = floor.parameters.minimum as number;
     const missing = floored.filter((stat) => !lowered.includes(stat));
     if (missing.length) throw new CompileError(`A characteristic floor at byte ${floor.start_byte} names ${missing.join(", ")}, which the change before it does not lower.`);
