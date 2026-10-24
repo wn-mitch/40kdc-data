@@ -1,0 +1,51 @@
+{
+  "name": "bolt-rifle x5 vs intercessor, re-roll Hit rolls of 1 and one other failed Hit roll",
+  "attacker": {
+    "weaponId": "bolt-rifle",
+    "profileIndex": 0
+  },
+  "modelsFiring": 5,
+  "target": {
+    "unitId": "intercessor-squad",
+    "profileIndex": 0
+  },
+  "context": {
+    "phase": "shooting",
+    "attackerStationary": false,
+    "withinHalfRange": false
+  },
+  "buffs": [
+    {
+      "source": {
+        "kind": "manual",
+        "label": "Reroll hit ones (test)"
+      },
+      "contribution": {
+        "type": "reroll",
+        "roll": "hit",
+        "subset": "ones"
+      }
+    },
+    {
+      "source": {
+        "kind": "manual",
+        "label": "Re-roll one hit (test)"
+      },
+      "contribution": {
+        "type": "reroll-one",
+        "roll": "hit"
+      }
+    }
+  ],
+  "expected": {
+    "stages": {
+      "attacks": 10,
+      "hits": 8.3368,
+      "wounds": 2.7789,
+      "unsaved": 1.3895,
+      "damage": 1.3895,
+      "after-fnp": 1.3895,
+      "models-killed": 0.6947
+    }
+  }
+}

@@ -1,0 +1,403 @@
+use serde_json::{json, Value};
+
+use super::*;
+use crate::cruncher::buffs::{AbilityKind, BuffContribution};
+use crate::cruncher::effect_to_buffs;
+use crate::data::RawData;
+
+fn source(id: &str, kind: AbilityKind) -> BuffSource {
+    BuffSource::Ability {
+        ability_id: id.to_string(),
+        ability_kind: kind,
+        source_unit_id: None,
+    }
+}
+
+/// A minimal schema-valid ability record.
+fn ability(id: &str, effect: Value, extra: Value) -> Ability {
+    let mut a = json!({
+        "ability_id": id,
+        "authored_by": "40kdc-community",
+        "effect": effect,
+        "faction_id": "orks",
+        "game_version": { "dataslate": "codex-orks", "edition": "11th" },
+        "name": id,
+        "scope": { "duration": "permanent" },
+    });
+    a.as_object_mut()
+        .unwrap()
+        .extend(extra.as_object().cloned().unwrap_or_default());
+    serde_json::from_value(a).expect("test ability deserializes")
+}
+
+fn dataset(abilities: Vec<Ability>) -> Dataset {
+    Dataset::from_raw(RawData {
+        abilities,
+        ..RawData::default()
+    })
+}
+
+fn grant(id: &str) -> Value {
+    json!({ "type": "ability-grant", "target": "this-unit", "modifier": { "ability": id, "rules_bundle": true } })
+}
+
+fn assault() -> Value {
+    json!({ "type": "weapon-ability-grant", "target": "this-unit", "modifier": { "keywords": [{"keyword_id": "assault"}] } })
+}
+
+fn keyword_ids(t: &EffectTranslation) -> Vec<String> {
+    t.applied
+        .iter()
+        .filter_map(|b| match &b.contribution {
+            BuffContribution::ExtraKeyword { keyword_ref } => Some(keyword_ref.keyword_id.clone()),
+            _ => None,
+        })
+        .collect()
+}
+
+#[test]
+fn a_bundle_grant_expands_into_the_bundle_it_names() {
+    let ds = dataset(vec![
+        ability("grant-rule", grant("bundle"), json!({})),
+        ability(
+            "bundle",
+            json!({ "type": "rules-bundle", "steps": [assault()] }),
+            json!({}),
+        ),
+    ]);
+    let runts = ds.abilities.get_in_faction("grant-rule", "orks").unwrap();
+    let src = source("grant-rule", AbilityKind::Unit);
+    let expanded = ds.describe_buffs(runts, &src, None, TranslationPerspective::Attacker, None);
+    assert_eq!(keyword_ids(&expanded), ["assault"]);
+    let raw = effect_to_buffs(
+        &serde_json::to_value(&runts.effect).unwrap(),
+        &src,
+        &EngineContext::new(Phase::Shooting),
+        TranslationPerspective::Attacker,
+    );
+    assert!(keyword_ids(&raw).is_empty());
+}
+
+#[test]
+fn a_cyclic_or_non_bundle_grant_stays_unexpanded() {
+    let a = ability(
+        "bundle-a",
+        json!({ "type": "rules-bundle", "steps": [grant("bundle-b"), assault()] }),
+        json!({}),
+    );
+    let b = ability(
+        "bundle-b",
+        json!({ "type": "rules-bundle", "steps": [grant("bundle-a")] }),
+        json!({}),
+    );
+    let plain = ability("plain", assault(), json!({}));
+    let granter = ability(
+        "granter",
+        json!({ "type": "sequence", "steps": [grant("plain"), grant("bundle-a")] }),
+        json!({}),
+    );
+    let ds = dataset(vec![a, b, plain, granter]);
+    let granter = ds.abilities.get_any("granter").unwrap();
+    let t = ds.describe_buffs(
+        granter,
+        &source("granter", AbilityKind::Unit),
+        None,
+        TranslationPerspective::Attacker,
+        None,
+    );
+    // bundle-a expands (one [ASSAULT]); its grant of bundle-b expands, whose grant of
+    // bundle-a is a cycle and stays; the grant of a non-bundle ability stays.
+    assert_eq!(keyword_ids(&t), ["assault"]);
+    let unexpanded = t
+        .unsupported
+        .iter()
+        .filter(|u| u.reason == "effect type \"ability-grant\" is not modelled by the buff layer")
+        .count();
+    assert_eq!(unexpanded, 2);
+}
+
+#[test]
+fn a_usage_limit_makes_the_buff_a_lever_named_by_the_first_limit() {
+    let limits = json!([
+        { "frequency": "n-per-battle", "count": 1 },
+        { "frequency": "once-per-battle-round" }
+    ]);
+    let a = ability(
+        "once",
+        assault(),
+        json!({ "ability_type": "unit", "usage": limits }),
+    );
+    let ds = dataset(vec![a]);
+    let once = ds.abilities.get_any("once").unwrap();
+    let t = ds.describe_buffs(
+        once,
+        &source("once", AbilityKind::Unit),
+        None,
+        TranslationPerspective::Attacker,
+        None,
+    );
+    assert!(t.applied.is_empty(), "a limited use is not always on");
+    let ids: Vec<&str> = t.activatable.iter().map(|l| l.id.as_str()).collect();
+    assert_eq!(ids, ["once#activate"]);
+    assert_eq!(t.activatable[0].group.as_ref().unwrap().max_activations, 1);
+    assert_eq!(
+        t.activatable[0].requires.as_ref().unwrap()[0]["usage"],
+        limits
+    );
+}
+
+#[test]
+fn a_reactive_trigger_gates_unless_it_is_an_attack_step() {
+    let effect = assault();
+    let moment = json!({ "event": "phase-started", "filter": { "phase": "shooting" } });
+    let gated = trigger_gated(Some(&json!("reactive")), Some(&moment), &effect).expect("gated");
+    assert_eq!(gated["condition"]["parameters"]["timing"], "phase-started");
+    let hit = json!({ "event": "after-roll", "filter": { "roll": "hit" } });
+    assert_eq!(
+        trigger_gated(Some(&json!("reactive")), Some(&hit), &effect),
+        None
+    );
+    assert_eq!(
+        trigger_gated(Some(&json!("passive")), Some(&moment), &effect),
+        None
+    );
+}
+
+#[test]
+fn only_a_single_aura_range_gates_the_buffs() {
+    let within = |inches: u64| json!({ "type": "re-roll", "target": { "owner": "friendly", "within": { "range": { "inches": inches } } }, "modifier": { "roll": "hit", "subset": "ones" } });
+    assert_eq!(aura_inches(&within(6)), Some(6.0));
+    let two = json!({ "type": "sequence", "steps": [within(6), within(9)] });
+    assert_eq!(aura_inches(&two), None);
+    let ds = dataset(vec![ability("aura", within(6), json!({}))]);
+    let aura = ds.abilities.get_any("aura").unwrap();
+    let t = ds.describe_buffs(
+        aura,
+        &source("aura", AbilityKind::Unit),
+        None,
+        TranslationPerspective::Attacker,
+        None,
+    );
+    assert!(
+        t.applied.is_empty(),
+        "range membership is not inferred without board state"
+    );
+    assert_eq!(t.unsupported.len(), 1);
+}
+
+#[test]
+fn model_grants_do_not_make_supporting_abilities_or_aura_ranges() {
+    let nested_aura = json!({
+        "type": "ability-grant",
+        "target": "this-model",
+        "modifier": {
+            "definition": {
+                "type": "re-roll",
+                "target": {
+                    "owner": "friendly",
+                    "within": { "range": { "inches": 6 } }
+                },
+                "modifier": { "roll": "hit", "subset": "ones" }
+            }
+        }
+    });
+    assert!(!reaches_other_units(&nested_aura));
+    assert_eq!(aura_inches(&nested_aura), None);
+}
+
+#[test]
+fn aura_ranges_select_the_current_battle_round_tier() {
+    let tiered = json!({
+        "type": "re-roll",
+        "target": {
+            "owner": "friendly",
+            "within": {
+                "range": {
+                    "per_battle_round": [
+                        { "inches": 3 },
+                        { "inches": 6 },
+                        { "inches": 9 }
+                    ]
+                }
+            }
+        },
+        "modifier": { "roll": "hit", "subset": "ones" }
+    });
+    assert_eq!(aura_inches_for_round(&tiered, Some(1)), Some(3.0));
+    assert_eq!(aura_inches_for_round(&tiered, Some(2)), Some(6.0));
+    assert_eq!(aura_inches_for_round(&tiered, Some(9)), Some(9.0));
+    assert_eq!(aura_inches_for_round(&tiered, None), None);
+}
+
+#[test]
+fn eligible_abilities_keep_the_source_order_and_dedupe_per_kind() {
+    let ds = Dataset::embedded();
+    let input = EligibilityInput {
+        unit_id: "intercessor-squad".into(),
+        faction_id: Some("adeptus-astartes".into()),
+        ..EligibilityInput::default()
+    };
+    let got = ds.eligible_abilities(&input, Phase::Shooting);
+    let kinds: Vec<&str> = got.iter().map(|e| e.source.kind()).collect();
+    let first_unit = kinds
+        .iter()
+        .position(|k| *k == "unit")
+        .expect("unit abilities");
+    assert!(
+        kinds[..first_unit].iter().all(|k| *k == "army"),
+        "army before unit: {kinds:?}"
+    );
+    let mut keys: Vec<String> = got
+        .iter()
+        .map(|e| format!("{}::{}", e.source.kind(), e.ability.ability_id.as_str()))
+        .collect();
+    let n = keys.len();
+    keys.dedup();
+    assert_eq!(keys.len(), n);
+    assert!(ds
+        .eligible_abilities(
+            &EligibilityInput {
+                unit_id: "no-such-unit".into(),
+                ..input
+            },
+            Phase::Shooting
+        )
+        .is_empty());
+}
+
+#[test]
+fn a_rated_rule_reads_the_rating_its_unit_prints() {
+    let ds = Dataset::embedded();
+    let input = EligibilityInput {
+        unit_id: "mortifiers".into(),
+        faction_id: Some("adepta-sororitas".into()),
+        ..EligibilityInput::default()
+    };
+    let fnp = ds
+        .eligible_abilities(&input, Phase::Shooting)
+        .into_iter()
+        .find(|e| e.ability.ability_id.as_str() == "feel-no-pain")
+        .expect("Mortifiers list Feel No Pain");
+    assert_eq!(fnp.rating, Some(json!(5)));
+    let src = source("feel-no-pain", AbilityKind::Unit);
+    let rated = ds.describe_buffs(
+        fnp.ability,
+        &src,
+        None,
+        TranslationPerspective::Target,
+        fnp.rating.as_ref(),
+    );
+    assert_eq!(
+        rated
+            .applied
+            .iter()
+            .map(|b| b.contribution.clone())
+            .collect::<Vec<_>>(),
+        [BuffContribution::FeelNoPain {
+            threshold: 5.0,
+            scope: Default::default()
+        }]
+    );
+    // Without a unit in context the reference stays unresolved: no flat guess.
+    let unrated = ds.describe_buffs(
+        fnp.ability,
+        &src,
+        None,
+        TranslationPerspective::Target,
+        None,
+    );
+    assert!(unrated.applied.is_empty());
+}
+
+#[test]
+fn model_bundle_grants_never_become_combined_unit_buffs() {
+    let bundle = ability(
+        "bundle",
+        json!({"type": "rules-bundle", "steps": [assault()]}),
+        json!({}),
+    );
+    let grant = ability(
+        "grant",
+        json!({"type": "ability-grant", "target": "this-model", "modifier": {
+            "ability": "bundle", "rules_bundle": true
+        }}),
+        json!({}),
+    );
+    let ds = dataset(vec![bundle, grant]);
+    for kind in [AbilityKind::Unit, AbilityKind::Attached] {
+        let result = ds.describe_buffs(
+            ds.abilities.get_any("grant").unwrap(),
+            &source("grant", kind),
+            None,
+            TranslationPerspective::Attacker,
+            None,
+        );
+        assert!(result.applied.is_empty());
+        assert_eq!(result.unsupported.len(), 1);
+    }
+}
+
+#[test]
+fn parent_usage_preserves_child_stance_group_and_local_trigger() {
+    let a = ability(
+        "stances",
+        json!({"type": "stance-select", "mode": "re-selectable", "options": [
+            {"id": "first", "name": "First", "effect": assault()},
+            {"id": "second", "name": "Second", "effect": assault()}
+        ]}),
+        json!({"ability_type": "unit", "behavior": "reactive", "usage": {"frequency": "n-per-battle", "count": 1},
+        "trigger": {"event": "phase-started", "condition": {"type": "phase-is", "parameters": {"phase": "shooting"}}}}),
+    );
+    let ds = dataset(vec![a]);
+    let result = ds.describe_buffs(
+        ds.abilities.get_any("stances").unwrap(),
+        &source("stances", AbilityKind::Unit),
+        None,
+        TranslationPerspective::Attacker,
+        None,
+    );
+    assert!(result.applied.is_empty());
+    assert_eq!(result.activatable.len(), 2);
+    assert_eq!(result.activatable[0].id, "stances#first");
+    assert_eq!(
+        result.activatable[0].group.as_ref().unwrap().id,
+        "stances?stance"
+    );
+    assert!(result
+        .activatable
+        .iter()
+        .all(|lever| lever.requires.as_ref().unwrap()[0].get("usage").is_some()));
+}
+
+#[test]
+fn top_level_trigger_snapshot_rejects_current_membership_as_historical_evidence() {
+    let recipients = json!({"type":"for-each-unit",
+        "selector":{"filter":{"level":"model","member_of":"this-unit","attachment_role":"bodyguard"}},
+        "effect":{"type":"weapon-ability-grant","target":"recipient","modifier":{"keywords":[{"keyword_id":"assault"}]}}
+    });
+    let a = ability(
+        "snapshot",
+        json!({"type":"sequence","steps":[recipients]}),
+        json!({"ability_type":"unit","behavior":"reactive","trigger":{"event":"battle-started"}}),
+    );
+    let ds = dataset(vec![a]);
+    for role in [
+        None,
+        Some(crate::cruncher::AttachmentRole::Bodyguard),
+        Some(crate::cruncher::AttachmentRole::Leader),
+    ] {
+        let mut context = EngineContext::new(crate::Phase::Shooting);
+        context.attacker_attachment_role = role;
+        let result = ds.describe_buffs(
+            ds.abilities.get_any("snapshot").unwrap(),
+            &source("snapshot", AbilityKind::Unit),
+            Some(&context),
+            TranslationPerspective::Attacker,
+            None,
+        );
+        assert!(result.applied.is_empty() && result.activatable.is_empty());
+        assert_eq!(result.unsupported.len(), 1);
+        assert_eq!(result.unsupported[0].reason,
+            "trigger-time recipient snapshot is unavailable; current membership cannot establish historical recipients");
+    }
+}

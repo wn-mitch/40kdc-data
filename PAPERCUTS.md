@@ -170,8 +170,6 @@ I ran a jq probe with a literal TARGET placeholder instead of first extracting t
 ## 2026-09-03T19:23:34Z — codex
 
 This installed jj version has no archive subcommand, so the planned whole-parent materialization failed before comparison; use jj file show per composition instead.
-<<<<<<< conflict 1 of 1
-+++++++ qotqmzzv 02ae2248 "chore: Release 1.4.3" (rebase destination)
 
 ## 2026-09-08T16:37:21Z — gpt-6-astra
 
@@ -205,38 +203,298 @@ A jj log query failed because GitHub exposed an external-fork PR SHA that the lo
 
 A PR data-review subagent ran to completion but yielded null data, so the canonical data and stock-loadout audit had to be dispatched again.
 
-## 2026-09-15T00:05:56Z — openai-codex/gpt-5.6-sol
+## 2026-09-10T17:15:14Z — terra
 
-ast_edit matched all faction JSON properties but proposed invalid arrays by stripping captured string quotes, forcing a parsed JSON codemod fallback.
+Layout Editor's npm run check cannot run because svelte-check is not installed in the workspace; verification requires restoring dependencies first.
 
-## 2026-09-15T00:13:12Z — openai-codex/gpt-5.6-sol
+## 2026-09-10T20:45:02Z — terra
 
-just preflight fails by design on intended uncommitted generated artifacts, so it cannot serve as a pre-commit gate for schema changes; use verify-regen-stable plus test-all before committing, then preflight.
+The approved index-rebuild command used ../../40kdc-abilities from tools, which resolves to /Users/40kdc-abilities rather than the sibling store; the command failed before regeneration.
 
-## 2026-09-15T00:17:01Z — openai-codex/gpt-5.6-sol
+## 2026-09-10T20:51:58Z — terra
 
-Example-local npm test and check failed because workspace dependencies were absent; the repository requires npm ci at the monorepo root before example validation.
+just preflight runs verify-clean against @ after regeneration, so it always fails while an uncommitted data change correctly updates generated artifacts; use verify-regen-stable plus test-all before committing.
 
-## 2026-09-15T00:30:03Z — openai-codex/gpt-5.6-sol
+## 2026-09-10T20:56:44Z — terra
 
-gh pr merge failed in a jj detached working copy because it tried to determine a current git branch; pass -R owner/repo so the operation does not depend on checkout state.
+jj -R ../40kdc-abilities diff rejects an unqualified README.md path as rooted in the invoking repo; cross-repo file selection requires root:"README.md".
 
-## 2026-09-15T00:55:38Z — openai-codex/gpt-5.6-sol
+## 2026-09-11T13:53:08Z — openai-codex/gpt-5.6-sol
 
-Local npm credentials are unavailable, so accidental release cleanup must run through the authenticated GitHub Actions publish environment.
+The impeccable skill required a project-local .agents/skills/impeccable context loader, but this repository has no such installed path; the command failed before review UI work.
 
-## 2026-09-15T20:01:25Z — openai-codex/gpt-5.6-sol
+## 2026-09-11T15:42:38Z — openai-codex/gpt-5.6-sol
 
-A shell glob for optional per-faction artifacts expanded through every data/core child, causing cp to report dozens of expected missing paths after copying valid files. Use an explicit file list or nullglob-capable invocation for heterogeneous trees.
+Impeccable requires .agents/skills/impeccable/scripts/load-context.mjs, but this repo has no .agents directory; the documented loader path fails before UI work.
 
-## 2026-09-15T20:04:36Z — openai-codex/gpt-5.6-sol
+## 2026-09-11T16:49:41Z — terra
 
-Running npm test from tools with the repository-relative tools/test path made Vitest find no files because its root is already tools/. Use test/validate.test.ts or validate.test.ts from that workspace.
+tools has no test:conformance script; the focused conformance command must be discovered from package scripts after the alias fails.
 
-## 2026-09-15T20:09:55Z — openai-codex/gpt-5.6-sol
+## 2026-09-11T19:47:11Z — openai-codex/gpt-5.6-sol
 
-npm pack --dry-run --json interleaves prepack lifecycle output with JSON, so piping directly to jq fails and closes stdout, causing the postbuild audit to crash with EPIPE. Run prepack prerequisites separately and use --ignore-scripts for machine-readable inspection.
+Impeccable instructed running a repo-local .agents loader, but this repository has no installed .agents skill directory; the documented command failed before design work.
 
-## 2026-09-16T18:32:13Z — openai-codex/gpt-5.6-sol
+## 2026-09-11T20:22:38Z — openai-codex/gpt-5.6-sol
 
-The browser tab.run context exposes Puppeteer, not Playwright: page.locator(...).count() is unavailable despite locator-style APIs being common elsewhere. Use page.99520eval/querySelectorAll for DOM counts.
+Browser observation did not expose the empty-state file input as a button, so the initial acceptance-bundle upload lookup failed; selecting the underlying input directly was required.
+
+## 2026-09-11T21:16:07Z — openai-codex/gpt-5.6-sol
+
+Claude CLI accepted the structured-output schema locally but the API rejected top-level allOf with a 400; the help text does not document this schema subset, so the 13-item retry checkpoint failed without token spend.
+
+## 2026-09-14T23:37:51Z — openai-codex/gpt-5.6-sol
+
+The repository guidance names upstream/main, but jj has no upstream/main revision, so the initial lineage query failed and required inspecting the local main bookmark instead.
+
+## 2026-09-16T18:59:29Z — openai-codex/gpt-5.6-sol
+
+Root npx tsx resolved to a missing shell command even though both root and tools node_modules contain tsx; invoking the installed binary directly was required.
+
+## 2026-09-16T23:30:52Z — openai-codex/gpt-5.6-sol
+
+The reviewed bundle's missing-shape flag was not at the assumed shape_report.needs_schema path, causing a dead-end jq query while advancing the triage queue.
+
+## 2026-09-16T23:43:15Z — openai-codex/gpt-5.6-sol
+
+Used the wrong copied PDF basename in pdfinfo (11th instead of 11e), causing an avoidable dead-end metadata call.
+
+## 2026-09-16T23:45:05Z — openai-codex/gpt-5.6-sol
+
+A root-wide ignored-file glob for environment files timed out because the repository tree is large; narrower per-directory globs were required.
+
+## 2026-09-16T23:46:07Z — openai-codex/gpt-5.6-sol
+
+A broad home-directory glob timed out before locating this repository; repository discovery needed a scoped home-directory listing.
+
+## 2026-09-17T00:54:23Z — openai-codex/gpt-5.6-sol
+
+The impeccable skill instructed running a project-relative  loader, but this repo has no such checkout; the harness-installed  path is required.
+
+## 2026-09-17T01:29:07Z — openai-codex/gpt-5.6-sol
+
+An extra parenthesis in a long jq selector caused a dead-end query while inspecting affected ability entries.
+
+## 2026-09-17T02:47:46Z — openai-codex/gpt-5.6-sol
+
+gh search issues treated the parenthesized OR query as part of the repo qualifier and rejected it, so issue searches need separate simple queries.
+
+## 2026-09-17T11:28:08Z — openai-codex/gpt-5.6-sol
+
+jq rejected a damage-ability regex because the inline shell/regex escaping was easy to mis-specify; use character classes instead of backslash-escaped plus signs in inline jq patterns.
+
+## 2026-09-17T13:22:21Z — opus
+
+just preflight's drift gate compares against the working copy (@), so it can only pass on a committed tree: bumping conformance/SPEC_VERSION then running preflight costs a commit, a multi-minute regen, a failure naming go/spec.go and python/src/wh40kdc/_spec.py, and a second commit+preflight.
+
+## 2026-09-17T14:01:10Z — opus
+
+just regen never rebuilds data/share-registry.json, so adding entity ids leaves share.test failing on 'allocates every current shareable id' until you run npm run registry:build by hand — and it must run AFTER npm run codegen:data (registry:build reads the generated bundle), which is the opposite of the documented 'registry:build BEFORE codegen:data' order, so a naive single pass silently no-ops.
+
+## 2026-09-17T17:45:43Z — deepseek-v4
+
+referential-integrity's collision-policy test has a 5000ms default vitest timeout but takes ~2.5s alone and >6s under load, so a concurrent heavy job makes the suite fail flakily.
+
+## 2026-09-17T19:39:32Z — deepseek-v4-flash
+
+Widening an enum in effect.schema.json makes 'just regen' fail with a ~40-line recursive TypeScript union-mismatch dump (generated.ts widens automatically but hand-written interfaces in tools/src/translate/effect.ts do not), and the error names the deepest nested type rather than the stale interface, so the actual fix (width of one hand-written union) is hard to see.
+
+## 2026-09-17T20:30:20Z — deepseek/deepseek-v4-flash
+
+Adding @types/node to one npm workspace hoists it to the root node_modules/@types, so the Node types silently become ambient in every sibling workspace; it surfaced an unrelated setTimeout return-type error in examples/mechanic-evidence and forced a fix outside the workspace being changed.
+
+## 2026-09-20T20:07:47Z — openai-codex/gpt-5.6-sol
+
+The isolated evaluator initially staged composer.mjs but not parser.mjs, even though evaluation verifies both frozen bundle hashes; the container failed only after startup. The staging contract should enumerate every verified bundle.
+
+## 2026-09-22T14:36:03Z — openai-codex/gpt-5.6-sol
+
+Eval browser JavaScript rejected a TypeScript non-null assertion in an otherwise ordinary element lookup, forcing a retry with plain JavaScript.
+
+## 2026-09-23T15:19:02Z — sol
+
+The local Round-5 reviewer smoke could not bind its default port 4315 because another process already owns it; used a separate port to avoid disturbing that session.
+
+## 2026-09-23T17:14:12Z — openai-codex/gpt-6-sol
+
+Impeccable skill loader path from skill instructions is absent at .claude/skills, blocking its context preflight until its actual install path is located.
+
+## 2026-09-23T17:36:48Z — openai-codex/gpt-6-sol
+
+Node 24 node:sqlite StatementSync has no close() method; initial schema creation failed until statement.close calls were removed. Vitest 2/Vite 5 also misresolves static node:sqlite imports as sqlite, so local tests require createRequire for that built-in.
+
+## 2026-09-23T18:44:59Z — openai-codex/gpt-6-sol
+
+A concurrently running Vite dev server repeatedly reopened the Round 5C SQLite workbench during HMR and briefly blocked an init transaction; the bridge should close prior DB handles on hot reload, not only on HTTP server close.
+
+## 2026-09-23T19:12:27Z — gpt-6-sol
+
+Impeccable skill requires a repository-local .claude/skills/impeccable/scripts/load-context.mjs, but this repo has no such module; design context loader cannot run from its documented path.
+
+## 2026-09-23T19:37:17Z — gpt-6-sol
+
+The impeccable skill's documented .omp/agent/skills loader path does not exist; invoking node skill://impeccable/scripts/load-context.mjs works, but the first call dead-ends.
+
+## 2026-09-23T22:06:21Z — sol
+
+Impeccable skill loader command references .claude/skills/impeccable/scripts/load-context.mjs, which is absent in this checkout; UI preflight requires locating installed skill path instead.
+
+## 2026-09-24T01:31:02Z — sol
+
+Reading agent://FixtureRuleProposal through Eval appended an identical-output advisory after JSON; writing that text as a response file made import-work fail JSON parsing, requiring JSONDecoder.raw_decode to isolate the payload.
+
+## 2026-09-24T02:12:10Z — gpt-6-sol
+
+The browser text selector timed out on the Source-shape census disclosure even though observe exposed it; targeting the summary element directly is needed for this smoke check.
+
+## 2026-09-24T02:13:06Z — gpt-6-sol
+
+Running UI smoke while a parallel agent edits imported workbench modules causes Vite to reload and collapse the census editor, invalidating element selectors; wait for source edits to settle before browser interaction.
+
+## 2026-09-24T14:12:35Z — gpt-6-sol
+
+The language-server references request for createEscalation returned no server despite TypeScript project setup, so its direct callers had to be located by repository search before changing the API.
+
+## 2026-09-24T14:22:45Z — gpt-6-sol
+
+The impeccable skill's repo-relative context-loader command was absent, and an inferred installed path also failed; running node with the skill:// loader from repo cwd worked. A home-wide glob for the loader timed out and did not locate it.
+
+## 2026-09-24T15:08:39Z — openai-codex/gpt-6-sol
+
+Full tools Vitest run timed out on the referential-integrity real-dataset check at the 5s default; this obscures unrelated reviewer verification and requires a targeted rerun with a longer timeout.
+
+## 2026-09-24T15:35:04Z — gpt-6-sol
+
+The default Vitest 5s timeout expires in referential-integrity's real-dataset collision policy check under the full preflight load, despite validation succeeding; rerun with --testTimeout 30000.
+
+## 2026-09-24T15:42:52Z — gpt-6-sol
+
+Vitest --maxWorkers 4 alone fails before tests with minThreads/maxThreads conflict on this machine; supply --minWorkers alongside it when capping concurrency.
+
+## 2026-09-24T16:16:05Z — gpt-6-sol
+
+Round5C gaps use a type column, not category; an assumed aggregate query failed before producing the low-hanging-fruit queue. Check the SQLite table shape before reporting gap counts.
+
+## 2026-09-24T17:17:07Z — gpt-6-sol
+
+Bun Eval cannot import the Round5C stamps module because a dependency redeclares __dirname in its module runtime; use Node with tsx for direct domain calls instead.
+
+## 2026-09-24T17:25:17Z — gpt-6-sol
+
+Comparing all pages of six stamp previews timed out after three minutes; each page appears to recompute corpus matching, so use bounded first-page samples and preview totals for triage.
+
+## 2026-09-24T20:42:11Z — openai-codex/gpt-6-sol
+
+The lsp references call for tools/src/translate/condition.ts returned no language server, so callsites needed text inspection instead.
+
+## 2026-09-24T20:50:31Z — openai-codex/gpt-6-sol
+
+Assumed python/tests/test_translate.py existed; pytest failed before running tests. Locate test filename before invoking focused suite.
+
+## 2026-09-24T21:05:33Z — openai-codex/gpt-6-sol
+
+getQueue initializes the workbench even for a read-only inspection; opening a read-only SQLite connection fails with attempt to write a readonly database. Copy the database before diagnostics.
+
+## 2026-09-24T21:44:51Z — sol
+
+LSP rename for a local React helper reported no language server, so callsites require anchored edits; review UI TypeScript is excluded from tools/tsconfig.json and needs an explicit type-check command.
+
+## 2026-09-25T17:34:57Z — claude-opus-5-5
+
+omp config list rejects --config, so an isolation overlay can only be verified by a live model call's token count; the Round 5C OMP driver was probed that way.
+
+## 2026-09-27T14:08:46Z — claude-opus-5-5
+
+tooling/parity/differ.py defaults to the prebuilt, gitignored go/wh40kdc-runner binary, which goes stale after Go edits; a local parity run silently tests old Go code unless --go-cmd 'go run -C go ./cmd/wh40kdc-runner' is passed.
+
+## 2026-09-27T14:15:51Z — claude-opus-5-5
+
+The effect-translation corpus is not exercised by cargo test -p wh40kdc; only tooling/parity/differ.py checks Rust against it, and its default TS command uses a stale tools/dist/runner.js unless --ts-cmd points at tsx. A green cargo test therefore says nothing about describer parity.
+
+## 2026-09-27T17:48:01Z — claude-opus-5-5
+
+tooling/parity/differ.py also prefers a prebuilt target/release/wh40kdc-runner, which goes stale after Rust edits; a local TS-vs-Rust run reported a false divergence until the binary was rebuilt (cargo build --release --bin wh40kdc-runner).
+
+## 2026-09-27T21:28:12Z — claude-opus-5.5
+
+differ.py prefers the ignored prebuilt go/wh40kdc-runner over go run, so after Go source changes it silently tests a stale binary; rebuild it (go build -o go/wh40kdc-runner ./cmd/wh40kdc-runner) or pass --go-cmd.
+
+## 2026-09-27T21:28:12Z — claude-opus-5.5
+
+go/codegen/sync.sh copies the Rust crate's bundle.generated.json; when the Rust port regenerates it later, go/bundle.json goes stale (mission cards rendered legacy shapes) and scoring/linked-api diffs look like Go bugs. Re-run sync after any Rust bundle-data.
+
+## 2026-09-27T21:28:12Z — claude-opus-5.5
+
+npx tsx fails from the repo root (tsx not on PATH); the parity README's runner command needs tools/node_modules/.bin/tsx or a fresh tools/dist build.
+
+## 2026-09-27T21:56:32Z — claude-opus-5-5
+
+tooling/parity/differ.py defaults to the stale gitignored tools/dist/runner.js when present, producing 240 false TS/Py diffs after TS source changes; pass --ts-cmd 'tools/node_modules/.bin/tsx tools/src/runner.ts' (bare npx tsx isn't on PATH) or rebuild tools first.
+
+## 2026-09-28T03:42:26Z — claude-opus-5-5
+
+lldb -b 'run; bt' on the wh40kdc debug test binary hung with no output (stack-overflow triage); bisecting RUST_MIN_STACK sizes found the needed stack faster.
+
+## 2026-10-14T22:35:48Z — claude-opus-5-5
+
+Round 5C leafDescriberAudit enumerated every family's full parameter product on the first leafBoard call (unit-filter@15 ~120s, characteristic-modifier@18 ~77s locally), so each vitest worker paid ~200s (12 min in CI) and an async test hit its 5s timeout only when the timer won the race; sync blocking hid it locally.
+
+## 2026-10-15T16:38:03Z — openai-codex/gpt-6-astra
+
+Descriptive find failed every judgment request because its backend rejected the account; literal search is required for this migration investigation.
+
+## 2026-10-15T16:39:45Z — openai-codex/gpt-6-astra
+
+Private tsx scripts outside the tools package run as CommonJS, so import.meta.dirname is undefined; process.argv[1] supplies their filesystem location.
+
+## 2026-10-15T17:41:57Z — openai-codex/gpt-6-astra
+
+Root instructions require examples/AGENTS.md before app work, but that file is absent; the already-loaded project instructions remain the available convention source.
+
+## 2026-10-15T18:14:36Z — openai-codex/gpt-6-astra
+
+Schema edits from concurrent workers briefly left invalid JSON, blocking authoring CLI imports and tests before dispatch. Browser evaluation imported an isolated module instance; the UI smoke required an explicit page-module script to mutate in-memory fixture data.
+
+## 2026-10-15T19:00:35Z — gpt-6-astra
+
+Shared schema references use URL paths under defs while source files live under schemas/$defs; treating a $ref as a filesystem path led to a failed lookup. Resolve registered schema IDs or locate the source filename instead.
+
+## 2026-10-15T19:33:39Z — sol
+
+The LSP device has no language server for the TypeScript compiler files; reference-aware edits require bounded source inspection instead.
+
+## 2026-10-15T19:43:17Z — sol
+
+round5c review-apply resolves its JSON packet against the shell cwd rather than the documented repository-root path convention; invoking it from tools with a root-relative packet fails ENOENT.
+
+## 2026-10-15T20:01:36Z — sol
+
+Semantic code search failed all judge requests because the TypeSafe account had no available credits; switched to literal search instead of treating no hits as absence.
+
+## 2026-10-15T20:44:57Z — gpt-6.1-sol
+
+LLDB batch launch of a Rust test stalled before producing a trace and timed out; native layout diagnostics were needed to investigate recursive deserialization stack pressure.
+
+## 2026-10-15T20:56:29Z — gpt-6.1-sol
+
+Ranged reads of xd://eval/browser were interpreted as a different documentation topic, requiring a full docs read instead; a language-server reference lookup also raced code generation and needed its regenerated line anchor.
+
+## 2026-10-16T03:52:00Z — sol
+
+Eval tool results expose text and details through a non-enumerable result object; Object.keys returned empty and output(result) attempted agent-history lookup. Parsing runner discovery required bounded raw artifact reads instead.
+
+## 2026-10-16T04:29:18Z — sol
+
+Resolver example lookup used nonexistent test paths; grep skipped them, so the actual conformance fixture and exported API contracts were used instead.
+
+## 2026-10-20T18:31:17Z — claude-opus-5-5
+
+tooling/parity/differ.py defaults to the prebuilt tools/dist/runner.js; when dist predates a new op the area prints [skip] and the run still reports OK, so a new area can look verified without being checked. Rebuild tools (npm run build) or pass --ts-cmd with tsx src/runner.ts.
+
+## 2026-10-20T21:23:43Z — opus
+
+npm run damage:stack resolves HC_OUTPUT against the shell cwd (tools/), not the repo root as CLAUDE.md says tool paths do; the 88-cell matrix landed in tools/_private/velochy/ instead of _private/velochy/.
+
+## 2026-10-20T21:39:02Z — opus
+
+npm run damage:stack resumes every cell from an existing HC_OUTPUT file whose config scope matches, even after code changes; a rerun to the same path silently returned the previous results. Write to a fresh path to force a rerun.

@@ -8,7 +8,7 @@
 
 > **crunch**(`input`, `dataset?`): [`EngineOutput`](../type-aliases/EngineOutput.md)
 
-Defined in: [cruncher/engine.ts:53](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/engine.ts#L53)
+Defined in: [cruncher/engine.ts:65](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/cruncher/engine.ts#L65)
 
 Compute the expected per-stage projection for one (attacker, target, buffs)
 triple. The dataset defaults to the embedded one — pass an alternate when

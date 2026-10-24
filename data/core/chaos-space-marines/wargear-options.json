@@ -5,7 +5,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -21,7 +21,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -40,7 +40,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -90,7 +90,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -110,7 +110,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -135,7 +135,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -154,7 +154,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -173,7 +173,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -201,7 +201,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -221,7 +221,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -246,7 +246,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -263,7 +263,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -288,7 +288,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -305,7 +305,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -321,7 +321,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -342,7 +342,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -359,7 +359,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -376,7 +376,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -399,7 +399,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -420,7 +420,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -436,7 +436,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -461,7 +461,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -498,12 +498,11 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
-      "havoc-autocannon",
-      "havoc-lascannon"
+      "havoc-autocannon"
     ],
     "replacement_choice": [
       [
@@ -511,6 +510,9 @@
       ],
       [
         "havoc-reaper-chaincannon"
+      ],
+      [
+        "havoc-lascannon"
       ],
       [
         "havoc-heavy-bolter"
@@ -527,7 +529,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -547,7 +549,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -567,7 +569,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -601,7 +603,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -621,7 +623,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -646,7 +648,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -673,7 +675,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -682,12 +684,12 @@
     ],
     "replacement_choice": [
       [
-        "electroscourge",
-        "hades-lascannon"
+        "hades-lascannon",
+        "electroscourge"
       ],
       [
-        "electroscourge",
-        "heavy-reaper-autocannon"
+        "heavy-reaper-autocannon",
+        "electroscourge"
       ],
       [
         "hades-lascannon",
@@ -712,7 +714,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -739,7 +741,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -758,7 +760,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -779,7 +781,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -795,7 +797,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -818,7 +820,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -839,7 +841,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -856,7 +858,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -876,7 +878,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -897,7 +899,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -917,7 +919,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -937,7 +939,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -959,7 +961,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -981,7 +983,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1004,7 +1006,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1026,7 +1028,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1046,7 +1048,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1069,7 +1071,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1089,7 +1091,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1109,7 +1111,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1130,7 +1132,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1152,7 +1154,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -1169,7 +1171,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1189,7 +1191,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1223,7 +1225,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1248,7 +1250,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1267,7 +1269,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -1283,7 +1285,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -1304,7 +1306,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1325,7 +1327,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1345,7 +1347,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1375,7 +1377,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1394,7 +1396,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1418,7 +1420,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1438,7 +1440,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1458,7 +1460,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1478,7 +1480,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1519,7 +1521,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1686,7 +1688,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1721,7 +1723,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1747,7 +1749,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1766,7 +1768,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1785,7 +1787,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1805,7 +1807,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1829,7 +1831,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1848,7 +1850,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -1873,7 +1875,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1893,7 +1895,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1924,7 +1926,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -1941,7 +1943,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -1958,7 +1960,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1978,23 +1980,18 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
       "close-combat-weapon-fellgor-beastmen"
     ],
-    "replacement_choice": [
-      [
-        "great-weapon"
-      ],
-      [
-        "corrupted-stave"
-      ]
+    "replacement": [
+      "great-weapon"
     ],
     "model_constraint": {
       "model_name": "Fellgor Beastmen",
-      "max_count": 2
+      "max_count": 1
     }
   },
   {
@@ -2003,7 +2000,27 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "close-combat-weapon-fellgor-beastmen"
+    ],
+    "replacement": [
+      "corrupted-stave"
+    ],
+    "model_constraint": {
+      "model_name": "Fellgor Beastmen",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "fellgor-beastmen-wgo-mfm-3",
+    "unit_id": "fellgor-beastmen",
+    "faction_id": "chaos-space-marines",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2023,7 +2040,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2043,7 +2060,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2068,7 +2085,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -2100,7 +2117,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -2117,7 +2134,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2148,7 +2165,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2179,7 +2196,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2240,7 +2257,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2263,13 +2280,7 @@
         "lascannon-legionaries"
       ],
       [
-        "heavy-melee-weapon"
-      ],
-      [
         "missile-launcher"
-      ],
-      [
-        "balefire-tome"
       ],
       [
         "meltagun"
@@ -2296,7 +2307,47 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "boltgun"
+    ],
+    "replacement": [
+      "heavy-melee-weapon"
+    ],
+    "model_constraint": {
+      "model_name": "Legionary",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "legionaries-wgo-mfm-7",
+    "unit_id": "legionaries",
+    "faction_id": "chaos-space-marines",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "boltgun"
+    ],
+    "replacement": [
+      "balefire-tome"
+    ],
+    "model_constraint": {
+      "model_name": "Legionary",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "legionaries-wgo-mfm-8",
+    "unit_id": "legionaries",
+    "faction_id": "chaos-space-marines",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -2313,7 +2364,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -2329,7 +2380,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2348,7 +2399,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2367,7 +2418,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [

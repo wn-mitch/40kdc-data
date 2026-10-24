@@ -1,0 +1,229 @@
+{
+ "id": 4194,
+ "source_text": "**wwwwwww OF wwwwww** wwwww xxxx xxxx xxxx wwww www wwwwwwwww wwwwwww:\n**wwwwwwwww wwwwww:** xx xxxx xxxxxxxx xxxxx, wwww wwwww wwww wwww xx xxxxxxxx xx xxxxx, xxxx xxxx xxx xxx xxxx xxxxxxx. ww ww wwww, xxxxxx xxx xxxxx xxxx (xxxxxxxxx **xxxxxxxx** xxx **xxxxxxxx**). xxxxx xxx xxx xx xxx xxxxx, xxxxxxx xxxx xx xxxxxx xx xxxx xxxx xxx xxxx xxxxxx xxxx xxxxx xxxx (and wwww ww ww ww ww wwwwwwww wwwwww) and, xxxxx xxxxxxxxx xxxxx xxxxxxx, xx xxx xx xxxx xx xxxxx xxxxxxx xxx xxxx xxxxx xxxx, xxxxx xxx xxxxx xx xxxx xxxx xxxxxxxx xxxxx, xxxx xxxxx xxxx xx xxxxxxxx (wwww wwwwww wwwwww wwww wwww www www wwwwwwww of wwww wwwwwww and wwww wwwwwwwwwwww and wwwwwwwwww). xx xxxx xxxx xx xxxxxxx xxxxxxxx, xxxxx xxx xxxxx xx xxxx xxxx xxxxxxxx xxxxx, xx xx xxxx xxxxxx. xxxxx x xxxx xx xxxxxx, xxxxxxxx 2\" xxxx xxx xxxx xxxxxxxxxxxxxx and xxxxxxxx 2 xxxx xxxxxx xxxxx xxxx xxx xx.",
+ "leaves": [
+  {
+   "role": "CONDITION",
+   "family_id": "unit-owner",
+   "family_version": 1,
+   "parameters": {
+    "owner": "friendly"
+   },
+   "start_byte": 28,
+   "end_byte": 42,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "phase-window",
+   "family_version": 2,
+   "parameters": {
+    "phase": "shooting",
+    "turn": "your"
+   },
+   "start_byte": 93,
+   "end_byte": 115,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "EVENT",
+   "family_id": "event",
+   "family_version": 18,
+   "parameters": {
+    "kind": "selected",
+    "to": "shoot"
+   },
+   "start_byte": 138,
+   "end_byte": 158,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "RESTRICTION",
+   "family_id": "optional-use",
+   "family_version": 2,
+   "parameters": {
+    "who": "this-unit"
+   },
+   "start_byte": 160,
+   "end_byte": 190,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "EVENT",
+   "family_id": "select-unit",
+   "family_version": 4,
+   "parameters": {
+    "scope": "enemy",
+    "distance": "any",
+    "visible": false
+   },
+   "start_byte": 204,
+   "end_byte": 225,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "unit-keyword",
+   "family_version": 4,
+   "parameters": {
+    "keywords": [
+     "MONSTER",
+     "VEHICLE"
+    ],
+    "subject": "selected-unit",
+    "negated": true
+   },
+   "start_byte": 227,
+   "end_byte": 264,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "DURATION",
+   "family_id": "duration",
+   "family_version": 3,
+   "parameters": {
+    "endpoint": "end-of-phase"
+   },
+   "start_byte": 269,
+   "end_byte": 295,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "EFFECT",
+   "family_id": "targeting-restriction",
+   "family_version": 3,
+   "parameters": {
+    "may": "must-target",
+    "kind": "attack",
+    "weapon_type": "all",
+    "target": "antecedent",
+    "by": "this-unit"
+   },
+   "start_byte": 297,
+   "end_byte": 364,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "EVENT",
+   "family_id": "event",
+   "family_version": 18,
+   "parameters": {
+    "kind": "attacks-resolved"
+   },
+   "start_byte": 409,
+   "end_byte": 438,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "hit-by-attacks",
+   "family_version": 3,
+   "parameters": {
+    "subject": "antecedent"
+   },
+   "start_byte": 440,
+   "end_byte": 491,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "DURATION",
+   "family_id": "duration",
+   "family_version": 3,
+   "parameters": {
+    "endpoint": "start-of-next-shooting-phase"
+   },
+   "start_byte": 493,
+   "end_byte": 536,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "EFFECT",
+   "family_id": "apply-mark",
+   "family_version": 4,
+   "parameters": {
+    "subject": "antecedent",
+    "tag": "assailed"
+   },
+   "start_byte": 538,
+   "end_byte": 565,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "designated-filter",
+   "family_version": 1,
+   "parameters": {
+    "subject": "selected-unit",
+    "tag": "assailed"
+   },
+   "start_byte": 668,
+   "end_byte": 700,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "DURATION",
+   "family_id": "duration",
+   "family_version": 3,
+   "parameters": {
+    "endpoint": "start-of-next-shooting-phase"
+   },
+   "start_byte": 702,
+   "end_byte": 745,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "EFFECT",
+   "family_id": "apply-mark",
+   "family_version": 4,
+   "parameters": {
+    "subject": "antecedent",
+    "tag": "pinned"
+   },
+   "start_byte": 747,
+   "end_byte": 764,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "designated-filter",
+   "family_version": 1,
+   "parameters": {
+    "tag": "pinned"
+   },
+   "start_byte": 766,
+   "end_byte": 788,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "EFFECT",
+   "family_id": "characteristic-modifier",
+   "family_version": 14,
+   "parameters": {
+    "subject": "antecedent",
+    "characteristics": [
+     "M"
+    ],
+    "operation": "subtract",
+    "value": 2,
+    "weapon_type": "all"
+   },
+   "start_byte": 790,
+   "end_byte": 830,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "EFFECT",
+   "family_id": "roll-modifier",
+   "family_version": 5,
+   "parameters": {
+    "roll": "charge",
+    "operation": "subtract",
+    "value": 2
+   },
+   "start_byte": 835,
+   "end_byte": 875,
+   "fragment": "RAW_TEXT"
+  }
+ ],
+ "edits": null
+}

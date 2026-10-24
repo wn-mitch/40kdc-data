@@ -1,0 +1,106 @@
+{
+ "id": 10099,
+ "source_text": "xxxxx of the xxxxx xxxxx.\nxxx xxxxxxxx xxxxxxxxxxx xxxx.\nxxxx xxxxx xxxx **xxxxxxx** with xxxx xxxx xxxxx a **xxxxxx-xxxxx xxxx**, with -1 to that **xxxxxx-xxxxx xxxx**.",
+ "leaves": [
+  {
+   "role": "EVENT",
+   "family_id": "event",
+   "family_version": 18,
+   "parameters": {
+    "kind": "phase-start",
+    "phase": "fight",
+    "turn": "either"
+   },
+   "start_byte": 0,
+   "end_byte": 24,
+   "fragment": "WHEN"
+  },
+  {
+   "role": "RESTRICTION",
+   "family_id": "stratagem-target",
+   "family_version": 4,
+   "parameters": {
+    "count": "one"
+   },
+   "start_byte": 26,
+   "end_byte": 29,
+   "fragment": "TARGET"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "unit-filter",
+   "family_version": 8,
+   "parameters": {
+    "side": "friendly",
+    "keywords": [
+     "DREADNOUGHT"
+    ]
+   },
+   "start_byte": 30,
+   "end_byte": 55,
+   "fragment": "TARGET"
+  },
+  {
+   "role": "EVENT",
+   "family_id": "for-each-unit-select",
+   "family_version": 3,
+   "parameters": {},
+   "start_byte": 57,
+   "end_byte": 61,
+   "fragment": "EFFECT"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "unit-filter",
+   "family_version": 8,
+   "parameters": {
+    "side": "enemy"
+   },
+   "start_byte": 62,
+   "end_byte": 72,
+   "fragment": "EFFECT"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "unit-state",
+   "family_version": 12,
+   "parameters": {
+    "states": [
+     "engaged"
+    ],
+    "subject": "antecedent",
+    "negated": false,
+    "with": "this-unit"
+   },
+   "start_byte": 75,
+   "end_byte": 99,
+   "fragment": "EFFECT"
+  },
+  {
+   "role": "EFFECT",
+   "family_id": "test",
+   "family_version": 3,
+   "parameters": {
+    "target": "antecedent",
+    "test": "battle-shock"
+   },
+   "start_byte": 100,
+   "end_byte": 127,
+   "fragment": "EFFECT"
+  },
+  {
+   "role": "EFFECT",
+   "family_id": "roll-modifier",
+   "family_version": 5,
+   "parameters": {
+    "roll": "battle-shock",
+    "operation": "subtract",
+    "value": 1
+   },
+   "start_byte": 131,
+   "end_byte": 166,
+   "fragment": "EFFECT"
+  }
+ ],
+ "edits": null
+}

@@ -8,7 +8,7 @@
 
 > **emptyRawData**(): [`RawData`](../interfaces/RawData.md)
 
-Defined in: [data/types.ts:78](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/types.ts#L78)
+Defined in: [data/types.ts:88](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/types.ts#L88)
 
 A `RawData` with every collection initialised to an empty array.
 

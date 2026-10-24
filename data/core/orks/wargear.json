@@ -3,13 +3,17 @@
     "id": "kustom-force-field",
     "name": "kustom force field",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "mfm",
         "id": "aee34635-59e6-4c77-9f7c-6334aff37fb3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bb256a9c-6c16-4324-bacf-0ccd63244291"
       }
     ]
   },
@@ -49,13 +53,17 @@
     "id": "blastajet-force-field",
     "name": "blastajet force field",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "mfm",
         "id": "b64d38b3-82f0-49af-8259-d35ae3f6c065"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fa3cfe2c-a00b-4477-8704-028a96a3df7d"
       }
     ]
   },
@@ -92,7 +100,7 @@
     "name": "Bomb Squig",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "external_refs": [
       {
@@ -106,7 +114,7 @@
     "name": "Grot Oiler",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "external_refs": [
       {
@@ -120,7 +128,7 @@
     "name": "Pulsa Rokkit",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "external_refs": [
       {
@@ -134,7 +142,7 @@
     "name": "Grot Assistant",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "external_refs": [
       {
@@ -154,7 +162,21 @@
     "name": "Paired Krumpas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "id": "pulsa-rokkit-once-per-battle-per-unit",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "3fff9f1f-547f-4e75-9549-b8cdcf17ff97"
+      }
+    ],
+    "name": "Pulsa Rokkit (Once per battle, per unit)",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
     }
   }
 ]

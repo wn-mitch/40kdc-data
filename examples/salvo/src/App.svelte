@@ -5,6 +5,7 @@
   import TargetPane from "./lib/target-pane.svelte";
   import OutputPane from "./lib/output-pane.svelte";
   import ComparePane from "./lib/compare-pane.svelte";
+  import ScenarioPane from "./lib/scenario-pane.svelte";
   import Pane from "../../_shared/Pane.svelte";
   import SupportModal from "../../_shared/SupportModal.svelte";
   import AppHeader from "../../_shared/AppHeader.svelte";
@@ -26,6 +27,7 @@
       salvo.contextFlags.attackerStationary ||
       salvo.contextFlags.withinHalfRange,
   );
+  const scenarioOpen = $derived(Object.keys(salvo.scenario).length > 0);
   const importOpen = $derived(
     salvo.attackerRoster !== null || salvo.targetRoster !== null,
   );
@@ -57,6 +59,7 @@
       <Pane id="import" storagePrefix="salvo" title="Import roster" defaultOpen={importOpen}><ImportPane /></Pane>
       <Pane id="attacker" storagePrefix="salvo" title="Attacker" defaultOpen={attackerOpen}><AttackerPane /></Pane>
       <Pane id="target" storagePrefix="salvo" title="Target" defaultOpen={targetOpen}><TargetPane /></Pane>
+      <Pane id="scenario" storagePrefix="salvo" title="Scenario" defaultOpen={scenarioOpen}><ScenarioPane /></Pane>
       <Pane id="abilities" storagePrefix="salvo" title="Abilities & buffs" defaultOpen={abilitiesOpen}><AbilitiesPane /></Pane>
     </section>
 

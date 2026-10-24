@@ -20,28 +20,33 @@
                 <characteristic name="Description">4+ invulnerable save</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise D3" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, each enemy unit within 6" suffers D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit has the Deep Strike ability.</characteristic>
+                <characteristic name="Description">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
               </characteristics>
             </profile>
             <profile name="Surge of Wrath (Psychic)" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Against MONSTER targets or against VEHICLE targets:
-  -&gt; You can re-roll the Hit roll for attacks made by this model with melee weapons.
-  -&gt; You can re-roll the Wound roll for attacks made by this model with melee weapons.
-  -&gt; You can re-roll the Damage roll for attacks made by this model with melee weapons.</characteristic>
+                <characteristic name="Description">While making melee attacks against MONSTER or VEHICLE targets:
+  -&gt; You can re-roll the Hit roll for attacks made by this model.
+  -&gt; You can re-roll the Wound roll for attacks made by this model.
+  -&gt; You can re-roll the Damage roll for attacks made by this model.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Damaged" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
               </characteristics>
             </profile>
             <profile name="Warrior Strategist" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When this model's unit is targeted with a Stratagem, you may use this ability, once per battle round per army, when resolving this use, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP), before paying its cost.</characteristic>
+                <characteristic name="Description">Each time you use a Stratagem, you may use this ability, once per battle round per army, while the unit is friendly, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -95,37 +100,39 @@
             </profile>
             <profile name="Acrobatic Escape" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">During the Fight phase, the unit is eligible to shoot in a turn in which it Fell Back.</characteristic>
+                <characteristic name="Description">-&gt; At the end of the Fight phase: while the unit is engaged, the unit can Fall Back up to D6".
+-&gt; At the end of your opponent's turn, you may use this ability: while the unit is not within 3" of an enemy unit, the unit can be placed into Strategic Reserves; the unit can make an Ingress move.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit has the Deep Strike ability.</characteristic>
+                <characteristic name="Description">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
               </characteristics>
             </profile>
             <profile name="Fights First" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit has the Fights First ability.</characteristic>
+                <characteristic name="Description">While the unit has the Fights First ability, the unit gains the Fights First ability.</characteristic>
               </characteristics>
             </profile>
             <profile name="Infiltrators" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Once per battle, the unit has the Infiltrators ability.</characteristic>
+                <characteristic name="Description">The unit gains the Infiltrators ability.</characteristic>
               </characteristics>
             </profile>
             <profile name="Lone Operative" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">This model can only be selected as the target of ranged attacks if the attacking unit is within 12".</characteristic>
-              </characteristics>
-            </profile>
-            <profile name="Lord of Deceit (Aura)" typeName="Abilities">
-              <characteristics>
-                <characteristic name="Description">Against A targets, Stratagems that target enemy units within 12" cost 1 more CP.</characteristic>
+                <characteristic name="Description">Enemy units cannot target this model with ranged weapons unless the attacking unit is within 12".</characteristic>
               </characteristics>
             </profile>
             <profile name="Shadow Assignment" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">You can include only one of this unit in your army.</characteristic>
+                <characteristic name="Description">This model cannot be your Warlord.
+Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Reign of Confusion" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">When an enemy unit within 12" of this model is targeted with a Stratagem, you may use this ability, once per turn per model, increase the CP cost of that use of the Stratagem by 1CP.</characteristic>
               </characteristics>
             </profile>
           </profiles>

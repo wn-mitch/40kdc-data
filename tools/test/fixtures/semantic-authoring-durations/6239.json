@@ -1,0 +1,119 @@
+{
+ "id": 6239,
+ "source_text": "xx a **xxxxxxxxxx xxxxxx** xxxx xxxx xxxx with the xxxxxx xxxxxxx xxx xx xxxxxxxx to a **xxxxxx xxxxxxx xxxxx**, it xxx xx xxxxxxxx to this xxxx xxxxxxx. xx a **xxxxxxxxxx xxxxxx** xxxx xxxx xxxx xx xxxxxxxx to this xxxx xxxxxx the xxxxxxx xxxxxx xxxxxxxxxx xxxx, that xxxxx xxxxx the xxxxxx 6\" xxxxxxx.",
+ "leaves": [
+  {
+   "role": "CONDITION",
+   "family_id": "unit-filter",
+   "family_version": 8,
+   "parameters": {
+    "side": "friendly",
+    "keywords": [
+     "MINISTORUM PRIEST"
+    ]
+   },
+   "start_byte": 3,
+   "end_byte": 41,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "unit-has-ability",
+   "family_version": 3,
+   "parameters": {
+    "subject": "antecedent",
+    "ability": "leader"
+   },
+   "start_byte": 42,
+   "end_byte": 65,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "leading-unit",
+   "family_version": 6,
+   "parameters": {
+    "subject": "antecedent",
+    "attachment": "can-attach",
+    "object": "following-filter"
+   },
+   "start_byte": 66,
+   "end_byte": 86,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "unit-filter",
+   "family_version": 8,
+   "parameters": {
+    "side": "friendly",
+    "keywords": [
+     "BATTLE SISTERS SQUAD"
+    ]
+   },
+   "start_byte": 89,
+   "end_byte": 109,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "EFFECT",
+   "family_id": "army-construction",
+   "family_version": 3,
+   "parameters": {
+    "rule": "attachment",
+    "subject": "antecedent",
+    "object": "this-unit"
+   },
+   "start_byte": 113,
+   "end_byte": 144,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "COMBINATOR",
+   "family_id": "instead",
+   "family_version": 2,
+   "parameters": {},
+   "start_byte": 145,
+   "end_byte": 152,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "leader-target",
+   "family_version": 1,
+   "parameters": {
+    "leader_keywords": [
+     "MINISTORUM PRIEST"
+    ]
+   },
+   "start_byte": 157,
+   "end_byte": 220,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "EVENT",
+   "family_id": "event",
+   "family_version": 18,
+   "parameters": {
+    "kind": "battle-formations-declared"
+   },
+   "start_byte": 221,
+   "end_byte": 262,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "EFFECT",
+   "family_id": "core-ability-grant",
+   "family_version": 3,
+   "parameters": {
+    "subject": "this-model",
+    "ability": "scouts",
+    "value": 6
+   },
+   "start_byte": 264,
+   "end_byte": 302,
+   "fragment": "RAW_TEXT"
+  }
+ ],
+ "edits": null
+}

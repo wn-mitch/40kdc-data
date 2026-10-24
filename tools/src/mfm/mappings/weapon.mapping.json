@@ -136,7 +136,7 @@
       "transforms": [],
       "filters": [],
       "precedence": [
-        "Use the source unit's authored game_version; fall back to the repository launch default."
+        "Use the source unit's authored game_version; fall back to the current dump dataslate."
       ],
       "consumers": ["tools/src/mfm/gear-projection.ts#mintWeapon"],
       "reason": "The minted weapon inherits repository game-version context rather than translating dump metadata."
@@ -149,7 +149,7 @@
       "transforms": [],
       "filters": [],
       "precedence": [
-        "Use the source unit's authored game_version; fall back to the repository launch default."
+        "Use the source unit's authored game_version; fall back to the current dump dataslate."
       ],
       "consumers": ["tools/src/mfm/gear-projection.ts#mintWeapon"],
       "reason": "The minted weapon inherits repository game-version context rather than translating dump metadata."
@@ -162,7 +162,7 @@
       "transforms": [],
       "filters": [],
       "precedence": [
-        "Use the source unit's authored game_version; fall back to the repository launch default."
+        "Use the source unit's authored game_version; fall back to the current dump dataslate."
       ],
       "consumers": ["tools/src/mfm/gear-projection.ts#mintWeapon"],
       "reason": "The minted weapon inherits repository game-version context rather than translating dump metadata."
@@ -572,6 +572,102 @@
       "precedence": [],
       "consumers": ["tools/src/mfm/gear-projection.ts#mintWeapon"],
       "reason": "Only supported parameterized keyword forms produce value."
+    },
+    "/profiles/*/keywords/*/parameters/value/count_of": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
+      "reason": "Context-dependent keyword ratings are reviewed enrichment; the MFM weapon projection emits only flat or dice ratings."
+    },
+    "/profiles/*/keywords/*/parameters/value/incursion": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
+      "reason": "Battle-size keyword ratings are reviewed enrichment; the MFM weapon projection emits only flat or dice ratings."
+    },
+    "/profiles/*/keywords/*/parameters/value/keyword": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
+      "reason": "Context-dependent keyword ratings are reviewed enrichment; the MFM weapon projection emits only flat or dice ratings."
+    },
+    "/profiles/*/keywords/*/parameters/value/onslaught": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
+      "reason": "Battle-size keyword ratings are reviewed enrichment; the MFM weapon projection emits only flat or dice ratings."
+    },
+    "/profiles/*/keywords/*/parameters/value/rating": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
+      "reason": "Context-dependent keyword ratings are reviewed enrichment; the MFM weapon projection emits only flat or dice ratings."
+    },
+    "/profiles/*/keywords/*/parameters/value/roll_var": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
+      "reason": "Bound-roll keyword ratings are reviewed enrichment; the MFM weapon projection emits only flat or dice ratings."
+    },
+    "/profiles/*/keywords/*/parameters/value/strike-force": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
+      "reason": "Battle-size keyword ratings are reviewed enrichment; the MFM weapon projection emits only flat or dice ratings."
+    },
+    "/profiles/*/keywords/*/parameters/value/successes_on": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
+      "reason": "Bound-roll keyword ratings are reviewed enrichment; the MFM weapon projection emits only flat or dice ratings."
+    },
+    "/profiles/*/keywords/*/parameters/value/wargear": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
+      "reason": "Context-dependent keyword ratings are reviewed enrichment; the MFM weapon projection emits only flat or dice ratings."
+    },
+    "/profiles/*/keywords/*/parameters/value/within": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
+      "reason": "Range-filtered keyword ratings are reviewed enrichment; the MFM weapon projection emits only flat or dice ratings."
+    },
+    "/profiles/*/keywords/*/parameters/value/within/aura_of": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
+      "reason": "Range-filtered keyword ratings are reviewed enrichment; the MFM weapon projection emits only flat or dice ratings."
+    },
+    "/profiles/*/keywords/*/parameters/value/within/inches": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
+      "reason": "Range-filtered keyword ratings are reviewed enrichment; the MFM weapon projection emits only flat or dice ratings."
+    },
+    "/profiles/*/keywords/*/parameters/value/within/per_battle_round": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
+      "reason": "Tiered range-filtered ratings are reviewed enrichment; the MFM weapon projection emits only flat or dice ratings."
+    },
+    "/profiles/*/keywords/*/parameters/value/within/per_battle_round/*": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
+      "reason": "Tiered range-filtered ratings are reviewed enrichment; the MFM weapon projection emits only flat or dice ratings."
+    },
+    "/profiles/*/keywords/*/parameters/value/within/per_battle_round/*/aura_of": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
+      "reason": "Tiered range-filtered ratings are reviewed enrichment; the MFM weapon projection emits only flat or dice ratings."
+    },
+    "/profiles/*/keywords/*/parameters/value/within/per_battle_round/*/inches": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
+      "reason": "Tiered range-filtered ratings are reviewed enrichment; the MFM weapon projection emits only flat or dice ratings."
     },
     "/profiles/*/target_restrictions": {
       "provenance": "repo-authored",

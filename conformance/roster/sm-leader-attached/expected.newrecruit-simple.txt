@@ -11,5 +11,5 @@ Force Disposition: Take And Hold
 ## Battleline [195 pts]
 High Marshal Helbrecht [120 pts]: Attachment: leader -> Assault Intercessor Squad, Warlord, Sword of the High Marshals, Ferocity
 Assault Intercessor Squad [75 pts]:
-• 1x Assault Intercessor Sergeant: Astartes chainsword, Heavy bolt pistol
-• 4x Assault Intercessor: Astartes chainsword, Heavy bolt pistol
+• 1x Assault Intercessor Sergeant: Chainsword, Heavy bolt pistol
+• 4x Assault Intercessor: Chainsword, Heavy bolt pistol

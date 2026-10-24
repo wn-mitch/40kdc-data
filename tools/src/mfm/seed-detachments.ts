@@ -13,13 +13,14 @@
  *   - detachment id      = nameToId(name)
  *   - detachment_points  = detachmentPointsCost (+ per-faction override)
  *   - force_dispositions = detachment_force_disposition → disposition slug
- *   - CP enhancement id  = detachmentScopedId(name, detachment name)
+ *   - CP enhancement id  = its mirrored id (enhancementRepoId)
  *
  * IP: reads only numeric, identity, and localized entity-name fields. It never
  * dereferences GW rules or lore prose.
  */
+import { enhancementRepoId } from "./enhancements.js";
 import * as path from "path";
-import { nameToId, detachmentScopedId } from "../converters/id-generator.js";
+import { nameToId } from "../converters/id-generator.js";
 import {
   MfmDump,
   type DetachmentRow,
@@ -31,8 +32,8 @@ import { repoDirForFactionName, repoDirs } from "./faction-map.js";
 import { buildCanon, dispositionIdMap } from "./dispositions.js";
 import type { StagedWrite } from "./apply.js";
 import { acceptedGapIds } from "./accepted-gaps.js";
+import { currentGameVersion } from "./dataslate.js";
 
-const CONFIRMED = { edition: "11th", dataslate: "launch" } as const;
 /** Combat-Patrol-only entities carry this so the golden files them on the
  *  combat-patrol coverage dimension instead of inflating competitive gaps. */
 const COMBAT_PATROL_ONLY: readonly string[] = ["combat-patrol"];
@@ -111,6 +112,7 @@ export interface CandidateDet {
  * incomplete rows for supported factions fail loudly.
  */
 export function collectSeedDetachments(dump: MfmDump): CandidateDet[] {
+  const confirmed = currentGameVersion(dump);
   const { overrideBySlugDir } = buildCanon(dump);
   const dispOf = dispositionIdMap(dump);
   const detDisp = dump.groupBy("detachment_force_disposition", "detachmentId");
@@ -178,7 +180,8 @@ export function collectSeedDetachments(dump: MfmDump): CandidateDet[] {
         );
       // Seed the RAW GW name + id (keep any trailing " (Upgrade)"/" (Aura)" tag) —
       // the import-correct canon, matching the golden (enhIdsByDir) and buildEnhCanon.
-      const enhId = detachmentScopedId(en, name);
+      const enhId = enhancementRepoId(dump, e);
+      if (!enhId) throw new Error(`CP enhancement <${e.id}> of "${name}" has no mirrored id (no faction owns it)`);
       enhancements.push({
         id: enhId,
         name: en,
@@ -186,7 +189,7 @@ export function collectSeedDetachments(dump: MfmDump): CandidateDet[] {
         detachment_id: id,
         cost: 0,
         is_unique: true,
-        game_version: { ...CONFIRMED },
+        game_version: { ...confirmed },
         game_modes: [...COMBAT_PATROL_ONLY],
         points_provisional: false,
       });
@@ -220,6 +223,7 @@ export function runSeedDetachments(
   opts: SeedDetachmentsOptions = {},
 ): SeedDetachmentsReport {
   const { onlyDir, includeCombatPatrol = false } = opts;
+  const confirmed = currentGameVersion(dump);
   const candidates = collectSeedDetachments(dump);
 
   // dir → mutated detachment/enhancement arrays (loaded once, appended in place).
@@ -316,7 +320,7 @@ export function runSeedDetachments(
       name: c.name,
       faction_id: c.dir,
       enhancement_ids: enhancementIds,
-      game_version: { ...CONFIRMED },
+      game_version: { ...confirmed },
       detachment_points: c.dp,
       force_dispositions: [c.disposition],
     };

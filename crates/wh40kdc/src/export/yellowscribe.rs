@@ -29,9 +29,7 @@
 //! `python/src/wh40kdc/export/yellowscribe.py`).
 
 use crate::data::Dataset;
-use crate::generated::{
-    Unit, Weapon, WeaponProfilesItem, WeaponProfilesItemKeywordsItemParameters, WeaponType,
-};
+use crate::generated::{Unit, Weapon, WeaponKeywordRefParameters, WeaponProfilesItem, WeaponType};
 use crate::import::{Roster, RosterLoadoutGroup, RosterUnit, RosterWargear};
 use crate::translate::describe_ability;
 
@@ -133,16 +131,24 @@ fn fmt_target(v: i64) -> String {
 
 /// A weapon keyword's display label: `Anti-Infantry 4+`, `Rapid Fire 1`, or a
 /// bare `Devastating Wounds`. Mirrors the datasheet convention.
-fn keyword_label(
-    name: &str,
-    parameters: Option<&WeaponProfilesItemKeywordsItemParameters>,
-) -> String {
+fn keyword_label(name: &str, parameters: Option<&WeaponKeywordRefParameters>) -> String {
     if let Some(p) = parameters {
         if let (Some(tk), Some(th)) = (p.target_keyword.as_ref(), p.threshold) {
             return format!("{name}-{} {th}+", tk.as_str());
         }
         if let Some(value) = p.value.as_ref() {
-            return format!("{name} {value}");
+            return match value {
+                crate::generated::Quantity::Integer(value) => format!("{name} {value}"),
+                crate::generated::Quantity::DiceExpression(value) => {
+                    format!("{name} {}", value.as_str())
+                }
+                value => format!(
+                    "{name} {}",
+                    crate::translate::dice_case(Some(
+                        &serde_json::to_value(value).expect("quantity serializes"),
+                    ))
+                ),
+            };
         }
     }
     name.to_string()

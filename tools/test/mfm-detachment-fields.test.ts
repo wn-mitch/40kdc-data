@@ -9,6 +9,8 @@ import {
   requiredKeywordsForDetachment,
   tagsForDetachment,
   ruleIdsForDetachment,
+  datasheetListsForDetachment,
+  applyDatasheetLists,
   type DetFieldsReport,
   type DirDetFieldResult,
 } from "../src/mfm/detachment-fields.js";
@@ -123,11 +125,68 @@ describe("authoritative detachment field reconciliation", () => {
 });
 
 
+describe("detachment datasheet lists (synthetic)", () => {
+  const dump = new MfmDump({
+    data: {
+      datasheet: [
+        { id: "ds-yv", localisations: { en: { name: "Yvraine" } } },
+        { id: "ds-yn", localisations: { en: { name: "The Yncarne" } } },
+        { id: "ds-tm", localisations: { en: { name: "Troupe Master" } } },
+        { id: "ds-sk", localisations: { en: { name: "Skarbrand" } } },
+        { id: "ds-gone", localisations: { en: { name: "Retired Hero" } } },
+      ],
+      miniature: [
+        { id: "m-yv", datasheetId: "ds-yv" },
+        { id: "m-yn", datasheetId: "ds-yn" },
+        { id: "m-tm", datasheetId: "ds-tm" },
+      ],
+      detachment_mandatory_warlord_miniature: [
+        { detachmentId: "d-ynnead", miniatureId: "m-yv" },
+        { detachmentId: "d-ynnead", miniatureId: "m-yn" },
+      ],
+      detachment_granted_warlord_miniature: [{ detachmentId: "d-ghosts", miniatureId: "m-tm" }],
+      detachment_excluded_datasheet: [
+        { detachmentId: "d-shadow", datasheetId: "ds-sk" },
+        { detachmentId: "d-shadow", datasheetId: "ds-gone" },
+      ],
+    } as never,
+  });
+  const units = new Set(["yvraine", "the-yncarne", "troupe-master", "skarbrand"]);
+
+  it("resolves warlord miniatures and excluded datasheets to repo unit ids, per detachment", () => {
+    expect(datasheetListsForDetachment(dump, "d-ynnead", units)).toEqual({
+      mandatory_warlord_datasheet_ids: ["the-yncarne", "yvraine"],
+      granted_warlord_datasheet_ids: [],
+      excluded_datasheet_ids: [],
+    });
+    expect(datasheetListsForDetachment(dump, "d-ghosts", units).granted_warlord_datasheet_ids).toEqual(["troupe-master"]);
+  });
+
+  it("leaves out and reports a datasheet with no repo unit", () => {
+    const unresolved: string[] = [];
+    expect(datasheetListsForDetachment(dump, "d-shadow", units, unresolved).excluded_datasheet_ids).toEqual(["skarbrand"]);
+    expect(unresolved).toEqual(["Retired Hero"]);
+  });
+
+  it("replaces stale lists and clears a list the source no longer derives", () => {
+    const det = { id: "x", name: "X", faction_id: "f", excluded_datasheet_ids: ["old"], granted_warlord_datasheet_ids: ["kept"] };
+    const changed = applyDatasheetLists(det, {
+      mandatory_warlord_datasheet_ids: [],
+      granted_warlord_datasheet_ids: ["kept"],
+      excluded_datasheet_ids: [],
+    });
+    expect(changed).toEqual(["excluded_datasheet_ids"]);
+    expect(det).toEqual({ id: "x", name: "X", faction_id: "f", granted_warlord_datasheet_ids: ["kept"] });
+  });
+});
+
 describe("detachment-rule id derivation (synthetic)", () => {
-  it("slugs each dump rule display name to a sorted, de-duplicated bare id", () => {
+  it("gives each dump rule the mirrored id (<name>-<faction>), sorted and de-duplicated", () => {
     const dump = new MfmDump({
       data: {
-        detachment: [{ id: "d", localisations: { en: { name: "X" } } }],
+        faction_keyword: [{ id: "fk", parentFactionKeywordId: null, localisations: { en: { name: "Legiones Daemonica" } } }],
+        publication: [{ id: "p", factionKeywordId: "fk", isCombatPatrol: false, isLegends: false, isCoreRules: false, localisations: { en: { name: "Codex" } } }],
+        detachment: [{ id: "d", publicationId: "p", localisations: { en: { name: "X" } } }],
         detachment_rule: [
           { id: "r1", detachmentId: "d", displayOrder: 1, localisations: { en: { name: "Warp Rifts" } } },
           { id: "r2", detachmentId: "d", displayOrder: 0, localisations: { en: { name: "Prey on the Weak" } } },
@@ -136,7 +195,7 @@ describe("detachment-rule id derivation (synthetic)", () => {
         ],
       },
     });
-    expect(ruleIdsForDetachment(dump, "d")).toEqual(["prey-on-the-weak", "vulkans-quest", "warp-rifts"]);
+    expect(ruleIdsForDetachment(dump, "d")).toEqual(["prey-on-the-weak-chaos-daemons", "vulkans-quest-chaos-daemons", "warp-rifts-chaos-daemons"]);
   });
 
   it("returns an empty list when the detachment has no dump rule", () => {
@@ -165,10 +224,10 @@ describe.skipIf(!fs.existsSync(DEFAULT_DUMP_PATH))("detachment-fields over the r
 
   it("locks chapter-specific detachments in their routed directories", () => {
     expect(byDir.get("iron-hands")?.matched).toBeGreaterThan(0);
-    const hammer = JSON.parse(
+    const medusa = JSON.parse(
       fs.readFileSync(path.join(CORE_DIR, "iron-hands", "detachments.json"), "utf8"),
-    ).find((d: { id: string }) => d.id === "hammer-of-avernii") as { restrictions?: { required_keywords?: string[] } };
-    expect(hammer.restrictions?.required_keywords).toEqual(["Iron Hands"]);
+    ).find((d: { id: string }) => d.id === "medusas-wrath") as { restrictions?: { required_keywords?: string[] } };
+    expect(medusa.restrictions?.required_keywords).toEqual(["Iron Hands"]);
   });
 
   it("does not spuriously lock the Aeldari Combat-Patrol detachment to its own roster", () => {
@@ -188,28 +247,20 @@ describe.skipIf(!fs.existsSync(DEFAULT_DUMP_PATH))("detachment-fields over the r
     expect(sum((d) => d.ruleFilled.length)).toBe(0);
   });
 
-  it("surfaces authored rule links the dump disagrees with, never overwriting them", () => {
-    const reviews = report.dirs.flatMap((d) => d.ruleReview);
-    // Armoured Infantry: the dump lists a second rule (order) the repo has not linked.
-    const armoured = reviews.find((r) => r.id === "armoured-infantry");
-    expect(armoured?.derived).toEqual(["order", "squadron-command"]);
-    expect(armoured?.authored).toEqual(["squadron-command"]);
-    // The authored value on disk is untouched (surfaced, not overwritten).
+  it("finds every stored rule link matching the dump once the mirror has run", () => {
+    // `mfm:mirror` writes the rules the dump prints (a Combat Patrol's army rules ride its
+    // detachment); this pass derives the same set, so nothing is left to review.
+    expect(report.dirs.flatMap((d) => d.ruleReview)).toEqual([]);
+    // Armoured Infantry prints a second rule (an order) beside Squadron Command: both are linked.
     const rec = JSON.parse(
       fs.readFileSync(path.join(CORE_DIR, "astra-militarum", "detachments.json"), "utf8"),
-    ).find((d: { id: string }) => d.id === "armoured-infantry") as {
-      detachment_rule_id?: string;
-      detachment_rule_ids?: string[];
-    };
-    expect(rec.detachment_rule_id ?? rec.detachment_rule_ids?.join()).not.toContain("order");
-    // Current scoped-vs-bare id-form drift is surfaced; retired detachments are not.
-    expect(reviews.some((r) => r.id === "murdertalon-raiders")).toBe(true);
-    expect(reviews.some((r) => r.id === "more-dakka")).toBe(false);
+    ).find((d: { id: string }) => d.id === "armoured-infantry") as { detachment_rule_ids?: string[] };
+    expect(rec.detachment_rule_ids).toEqual(["squadron-command-astra-militarum", "order-astra-militarum"]);
   });
 
-  it("surfaces detachments whose dump rule has no authored ability as a worklist", () => {
-    // The new 11e chapter detachments carry a dump rule the repo has not authored an
-    // ability for yet — reported, never filled (prose is authored separately).
-    expect(sum((d) => d.ruleUnauthored.length)).toBeGreaterThan(0);
+  it("leaves no detachment whose dump rule lacks an ability record", () => {
+    // `mfm:mirror` stubs every rule the dump prints, so the unauthored worklist is empty; an
+    // entry here means a detachment the mirror did not see (seeded after it, never re-mirrored).
+    expect(report.dirs.flatMap((d) => d.ruleUnauthored)).toEqual([]);
   });
 });

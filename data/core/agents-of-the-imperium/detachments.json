@@ -3,20 +3,20 @@
     "id": "imperialis-fleet",
     "name": "Imperialis Fleet",
     "faction_id": "agents-of-the-imperium",
-    "detachment_rule_id": "at-all-costs",
+    "detachment_rule_id": "at-all-costs-agents-of-the-imperium",
     "enhancement_ids": [
-      "digital-weapons-imperialis-fleet",
-      "clandestine-operation-imperialis-fleet",
-      "fleetmaster-imperialis-fleet",
-      "combat-landers-imperialis-fleet"
+      "digital-weapons-imperialis-fleet-agents-of-the-imperium",
+      "clandestine-operation-imperialis-fleet-agents-of-the-imperium",
+      "fleetmaster-imperialis-fleet-agents-of-the-imperium",
+      "combat-landers-imperialis-fleet-agents-of-the-imperium"
     ],
     "stratagem_ids": [
-      "close-quarters-barrage-imperialis-fleet",
-      "masters-of-the-void-imperialis-fleet",
-      "selfless-bodyguard-imperialis-fleet",
-      "emperors-will-imperialis-fleet",
-      "violent-acquisition-imperialis-fleet",
-      "displacer-field-imperialis-fleet"
+      "violent-acquisition-imperialis-fleet-agents-of-the-imperium",
+      "masters-of-the-void-imperialis-fleet-agents-of-the-imperium",
+      "close-quarters-barrage-imperialis-fleet-agents-of-the-imperium",
+      "emperors-will-imperialis-fleet-agents-of-the-imperium",
+      "displacer-field-imperialis-fleet-agents-of-the-imperium",
+      "selfless-bodyguard-imperialis-fleet-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -31,26 +31,29 @@
         "namespace": "mfm",
         "id": "4a6a098b-92a6-44f1-8b4f-a7ba168ba049"
       }
+    ],
+    "detachment_rule_ids": [
+      "at-all-costs-agents-of-the-imperium"
     ]
   },
   {
     "id": "ordo-hereticus-purgation-force",
     "name": "Ordo Hereticus, Purgation Force",
     "faction_id": "agents-of-the-imperium",
-    "detachment_rule_id": "root-out-heresy",
+    "detachment_rule_id": "root-out-heresy-agents-of-the-imperium",
     "enhancement_ids": [
-      "liber-heresius-ordo-hereticus-purgation-force",
-      "no-escape-aura-ordo-hereticus-purgation-force",
-      "witch-hunter-ordo-hereticus-purgation-force",
-      "ignis-judicium-ordo-hereticus-purgation-force"
+      "liber-heresius-ordo-hereticus-purgation-force-agents-of-the-imperium",
+      "no-escape-aura-ordo-hereticus-purgation-force-agents-of-the-imperium",
+      "witch-hunter-ordo-hereticus-purgation-force-agents-of-the-imperium",
+      "ignis-judicium-ordo-hereticus-purgation-force-agents-of-the-imperium"
     ],
     "stratagem_ids": [
-      "dispense-justice-ordo-hereticus-purgation-force",
-      "execution-order-ordo-hereticus-purgation-force",
-      "line-of-fire-ordo-hereticus-purgation-force",
-      "exact-punishment-ordo-hereticus-purgation-force",
-      "inviolate-jurisdiction-ordo-hereticus-purgation-force",
-      "stun-grenades-ordo-hereticus-purgation-force"
+      "stun-grenades-ordo-hereticus-purgation-force-agents-of-the-imperium",
+      "dispense-justice-ordo-hereticus-purgation-force-agents-of-the-imperium",
+      "inviolate-jurisdiction-ordo-hereticus-purgation-force-agents-of-the-imperium",
+      "execution-order-ordo-hereticus-purgation-force-agents-of-the-imperium",
+      "line-of-fire-ordo-hereticus-purgation-force-agents-of-the-imperium",
+      "exact-punishment-ordo-hereticus-purgation-force-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -65,26 +68,29 @@
         "namespace": "mfm",
         "id": "6a6e3903-1b61-4706-8fc7-e48729a9880d"
       }
+    ],
+    "detachment_rule_ids": [
+      "root-out-heresy-agents-of-the-imperium"
     ]
   },
   {
     "id": "veiled-blade-elimination-force",
     "name": "Veiled Blade Elimination Force",
     "faction_id": "agents-of-the-imperium",
-    "detachment_rule_id": "extremis-sanction",
+    "detachment_rule_id": "extremis-sanction-agents-of-the-imperium",
     "enhancement_ids": [
-      "intraneural-biotech-veiled-blade-elimination-force",
-      "decoy-targets-veiled-blade-elimination-force",
-      "esoteric-explosives-veiled-blade-elimination-force",
-      "micromelta-rounds-veiled-blade-elimination-force"
+      "decoy-targets-veiled-blade-elimination-force-agents-of-the-imperium",
+      "esoteric-explosives-veiled-blade-elimination-force-agents-of-the-imperium",
+      "intraneural-biotech-veiled-blade-elimination-force-agents-of-the-imperium",
+      "micromelta-rounds-veiled-blade-elimination-force-agents-of-the-imperium"
     ],
     "stratagem_ids": [
-      "prime-target-veiled-blade-elimination-force",
-      "hyperstimms-veiled-blade-elimination-force",
-      "will-sapping-salvo-veiled-blade-elimination-force",
-      "orbital-oversight-veiled-blade-elimination-force",
-      "blind-grenades-veiled-blade-elimination-force",
-      "ensnaring-trap-veiled-blade-elimination-force"
+      "prime-target-veiled-blade-elimination-force-agents-of-the-imperium",
+      "hyperstimms-veiled-blade-elimination-force-agents-of-the-imperium",
+      "will-sapping-salvo-veiled-blade-elimination-force-agents-of-the-imperium",
+      "orbital-oversight-veiled-blade-elimination-force-agents-of-the-imperium",
+      "blind-grenades-veiled-blade-elimination-force-agents-of-the-imperium",
+      "ensnaring-trap-veiled-blade-elimination-force-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -99,26 +105,29 @@
         "namespace": "mfm",
         "id": "be6ba720-81c6-4dbc-8a37-1d61b4564f60"
       }
+    ],
+    "detachment_rule_ids": [
+      "extremis-sanction-agents-of-the-imperium"
     ]
   },
   {
     "id": "ordo-xenos-alien-hunters",
     "name": "Ordo Xenos, Alien Hunters",
     "faction_id": "agents-of-the-imperium",
-    "detachment_rule_id": "deathwatch-mission-tactics",
+    "detachment_rule_id": "deathwatch-mission-tactics-agents-of-the-imperium",
     "enhancement_ids": [
-      "universal-anathema-ordo-xenos-alien-hunters",
-      "blackweave-shroud-ordo-xenos-alien-hunters",
-      "beacon-angelis-ordo-xenos-alien-hunters",
-      "amulet-of-auto-chastisement-ordo-xenos-alien-hunters"
+      "universal-anathema-ordo-xenos-alien-hunters-agents-of-the-imperium",
+      "blackweave-shroud-ordo-xenos-alien-hunters-agents-of-the-imperium",
+      "beacon-angelis-ordo-xenos-alien-hunters-agents-of-the-imperium",
+      "amulet-of-auto-chastisement-ordo-xenos-alien-hunters-agents-of-the-imperium"
     ],
     "stratagem_ids": [
-      "armour-of-contempt-ordo-xenos-alien-hunters",
-      "adaptive-tactics-ordo-xenos-alien-hunters",
-      "rapid-tactical-relocation-ordo-xenos-alien-hunters",
-      "hellfire-rounds-ordo-xenos-alien-hunters",
-      "dragonfire-rounds-ordo-xenos-alien-hunters",
-      "kraken-rounds-ordo-xenos-alien-hunters"
+      "armour-of-contempt-ordo-xenos-alien-hunters-agents-of-the-imperium",
+      "adaptive-tactics-ordo-xenos-alien-hunters-agents-of-the-imperium",
+      "hellfire-rounds-ordo-xenos-alien-hunters-agents-of-the-imperium",
+      "dragonfire-rounds-ordo-xenos-alien-hunters-agents-of-the-imperium",
+      "kraken-rounds-ordo-xenos-alien-hunters-agents-of-the-imperium",
+      "rapid-tactical-relocation-ordo-xenos-alien-hunters-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -133,26 +142,29 @@
         "namespace": "mfm",
         "id": "e072fa96-aa3e-4a5f-ba03-376879f16c7f"
       }
+    ],
+    "detachment_rule_ids": [
+      "deathwatch-mission-tactics-agents-of-the-imperium"
     ]
   },
   {
     "id": "ordo-malleus-daemon-hunters",
     "name": "Ordo Malleus, Daemon Hunters",
     "faction_id": "agents-of-the-imperium",
-    "detachment_rule_id": "destroy-the-daemonic",
+    "detachment_rule_id": "destroy-the-daemonic-agents-of-the-imperium",
     "enhancement_ids": [
-      "formidable-resolve-ordo-malleus-daemon-hunters",
-      "daemon-slayer-ordo-malleus-daemon-hunters",
-      "grimoire-of-true-names-aura-ordo-malleus-daemon-hunters",
-      "gift-of-the-prescient-ordo-malleus-daemon-hunters"
+      "formidable-resolve-ordo-malleus-daemon-hunters-agents-of-the-imperium",
+      "daemon-slayer-ordo-malleus-daemon-hunters-agents-of-the-imperium",
+      "grimoire-of-true-names-aura-ordo-malleus-daemon-hunters-agents-of-the-imperium",
+      "gift-of-the-prescient-ordo-malleus-daemon-hunters-agents-of-the-imperium"
     ],
     "stratagem_ids": [
-      "ritual-of-warding-ordo-malleus-daemon-hunters",
-      "rites-of-exorcism-ordo-malleus-daemon-hunters",
-      "steel-heart-ordo-malleus-daemon-hunters",
-      "truesilver-armour-ordo-malleus-daemon-hunters",
-      "hexagrammic-wards-ordo-malleus-daemon-hunters",
-      "psybolt-ammunition-ordo-malleus-daemon-hunters"
+      "ritual-of-warding-ordo-malleus-daemon-hunters-agents-of-the-imperium",
+      "rites-of-exorcism-ordo-malleus-daemon-hunters-agents-of-the-imperium",
+      "steel-heart-ordo-malleus-daemon-hunters-agents-of-the-imperium",
+      "truesilver-armour-ordo-malleus-daemon-hunters-agents-of-the-imperium",
+      "hexagrammic-wards-ordo-malleus-daemon-hunters-agents-of-the-imperium",
+      "psybolt-ammunition-ordo-malleus-daemon-hunters-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -167,6 +179,9 @@
         "namespace": "mfm",
         "id": "e89bc216-2de7-4cf9-a640-2dcbfde06b56"
       }
+    ],
+    "detachment_rule_ids": [
+      "destroy-the-daemonic-agents-of-the-imperium"
     ]
   },
   {
@@ -174,12 +189,12 @@
     "name": "Inquisitor’s Hand",
     "faction_id": "agents-of-the-imperium",
     "enhancement_ids": [
-      "killer-reflexes-inquisitors-hand",
-      "sanctic-slayers-inquisitors-hand"
+      "killer-reflexes-inquisitors-hand-agents-of-the-imperium",
+      "sanctic-slayers-inquisitors-hand-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "game_modes": [
       "combat-patrol"
@@ -193,6 +208,15 @@
         "namespace": "mfm",
         "id": "b43cf4e2-b7be-491a-809a-5c2e9ae36723"
       }
+    ],
+    "detachment_rule_ids": [
+      "marked-for-death-agents-of-the-imperium",
+      "assigned-agents-inquisitors-hand-agents-of-the-imperium"
+    ],
+    "stratagem_ids": [
+      "urban-enforcers-inquisitors-hand-agents-of-the-imperium",
+      "superior-weaponry-inquisitors-hand-agents-of-the-imperium",
+      "inquisitorial-mandate-inquisitors-hand-agents-of-the-imperium"
     ]
   }
 ]

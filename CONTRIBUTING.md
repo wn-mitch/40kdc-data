@@ -50,9 +50,9 @@ npm run audit:coverage                             # 6. re-measure coverage
 
 Then PR the resulting `data/enrichment/<faction>/abilities.json` diffs.
 
-Source prose must remain in `_private/`, an ignored author-input directory, or
-the private `40kdc-abilities` store. Commit only structured DSL and
-community-authored notes.
+Source prose must remain in `_private/` (the MFM dump, read with
+`cd tools && npm run prose -- get <faction> <ability_id>`) or an ignored
+author-input directory. Commit only structured DSL and community-authored notes.
 
 ### Coverage report — what needs authoring
 
@@ -71,33 +71,42 @@ Repair worklist by faction — abilities still needing DSL work (not total cover
 
 | faction | stub\* | notes-stub | gw-leak | def-skipped |
 |---|--:|--:|--:|--:|
-| adeptus-astartes | 6 | 16 | 0 | 7 |
-| thousand-sons | 6 | 12 | 0 | 2 |
-| chaos-space-marines | 5 | 17 | 0 | 6 |
-| death-guard | 4 | 7 | 0 | 3 |
-| adeptus-custodes | 4 | 3 | 0 | 3 |
-| emperors-children | 3 | 8 | 0 | 1 |
-| world-eaters | 3 | 0 | 0 | 0 |
-| aeldari | 2 | 7 | 0 | 5 |
-| adepta-sororitas | 2 | 7 | 0 | 1 |
-| orks | 2 | 3 | 0 | 2 |
-| tyranids | 1 | 5 | 0 | 5 |
-| drukhari | 1 | 5 | 0 | 1 |
-| astra-militarum | 1 | 3 | 0 | 5 |
-| necrons | 1 | 2 | 0 | 1 |
-| genestealer-cults | 1 | 1 | 0 | 1 |
-| agents-of-the-imperium | 1 | 0 | 0 | 2 |
-| dark-angels | 1 | 0 | 0 | 0 |
-| chaos-daemons | 0 | 7 | 0 | 4 |
-| imperial-knights | 0 | 5 | 0 | 1 |
-| tau-empire | 0 | 3 | 0 | 3 |
+| adeptus-astartes | 155 | 1 | 0 | 3 |
+| aeldari | 139 | 7 | 0 | 5 |
+| necrons | 102 | 1 | 0 | 1 |
+| grey-knights | 87 | 0 | 0 | 0 |
+| tyranids | 84 | 4 | 0 | 5 |
+| astra-militarum | 83 | 2 | 0 | 5 |
+| leagues-of-votann | 82 | 0 | 0 | 0 |
+| genestealer-cults | 74 | 1 | 0 | 1 |
+| drukhari | 73 | 5 | 0 | 1 |
+| chaos-daemons | 65 | 7 | 0 | 4 |
+| imperial-knights | 58 | 3 | 0 | 1 |
+| agents-of-the-imperium | 54 | 0 | 0 | 2 |
+| space-wolves | 47 | 5 | 0 | 0 |
+| black-templars | 47 | 0 | 0 | 0 |
+| orks | 34 | 0 | 0 | 0 |
+| death-guard | 32 | 1 | 0 | 3 |
+| chaos-space-marines | 30 | 7 | 0 | 3 |
+| adeptus-mechanicus | 27 | 0 | 0 | 2 |
+| world-eaters | 24 | 0 | 0 | 0 |
+| deathwatch | 23 | 1 | 0 | 0 |
+| thousand-sons | 21 | 3 | 0 | 1 |
+| dark-angels | 21 | 0 | 0 | 2 |
+| blood-angels | 15 | 1 | 0 | 0 |
+| emperors-children | 13 | 3 | 0 | 1 |
+| adepta-sororitas | 11 | 7 | 0 | 1 |
+| ultramarines | 11 | 0 | 0 | 0 |
+| white-scars | 11 | 0 | 0 | 0 |
+| raven-guard | 10 | 0 | 0 | 0 |
+| salamanders | 5 | 0 | 0 | 0 |
+| tau-empire | 4 | 3 | 0 | 3 |
+| iron-hands | 4 | 0 | 0 | 0 |
+| adeptus-custodes | 3 | 3 | 0 | 3 |
+| imperial-fists | 2 | 0 | 0 | 0 |
+| _core | 1 | 0 | 0 | 0 |
 | chaos-knights | 0 | 2 | 0 | 0 |
-| grey-knights | 0 | 1 | 0 | 0 |
-| adeptus-mechanicus | 0 | 0 | 0 | 2 |
-| _core | 0 | 0 | 0 | 0 |
-| blood-angels | 0 | 0 | 0 | 0 |
-| leagues-of-votann | 0 | 0 | 0 | 0 |
-| **TOTAL** | **44** | **114** | **0** | **55** |
+| **TOTAL** | **1452** | **67** | **0** | **47** |
 
 `stub*` = empty-modifier placeholder nodes (highest need first) · `notes-stub` = flagged in `community_notes` · `gw-leak` = suspected verbatim GW text · `def-skipped` = defensive abilities skipped by the buff walk. Enumerated stub ids: [`data/_audit/worklist.md`](data/_audit/worklist.md). Full total+repair breakdown: [`data/_audit/summary.md`](data/_audit/summary.md).
 <!-- coverage:end -->

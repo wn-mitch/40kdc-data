@@ -1,5 +1,7 @@
 package wh40kdc
 
+import "strings"
+
 // Walks the dataset for every ability that could apply to a chosen unit in a
 // chosen phase. Go mirror of python .../abilities_resolver.py. Entries are
 // map[string]any{"ability": *AbilityView, "source": map, "phases": []string}.
@@ -47,9 +49,40 @@ func resolveEligibleAbilities(ds *Dataset, input map[string]any, phase string) [
 		return phases
 	}
 
-	// 1. Army.
+	// 1. Army. One with a detachment_id (a Combat Patrol box's own army rule) applies only in
+	// that detachment, and there it replaces each army rule it names with an interactions entry
+	// of type "replaces". In a Combat Patrol detachment only the army rules it lists apply.
+	army := []*AbilityView{}
+	replaced := map[string]bool{}
 	for _, ability := range ds.Abilities.ByFaction(factionID) {
-		if getStr(ability.Raw, "ability_type") != "faction" || !phaseMatches(ability) {
+		if getStr(ability.Raw, "ability_type") != "faction" {
+			continue
+		}
+		if own := getStr(ability.Raw, "detachment_id"); own != "" && own != getStr(input, "detachmentId") {
+			continue
+		}
+		army = append(army, ability)
+		interactions, _ := ability.Raw["interactions"].([]any)
+		for _, entryAny := range interactions {
+			if entry, ok := asMap(entryAny); ok && getStr(entry, "type") == "replaces" {
+				replaced[getStr(entry, "ability_ref")] = true
+			}
+		}
+	}
+	// A Combat Patrol detachment's detachment_rule_ids are its complete army-rule set.
+	if patrol, ok := ds.combatPatrolDetachment(getStr(input, "detachmentId"), factionID); ok {
+		listed := map[string]bool{}
+		for _, id := range getStrList(patrol, "detachment_rule_ids") {
+			listed[id] = true
+		}
+		for _, ability := range army {
+			if id := getStr(ability.Raw, "ability_id"); !listed[id] {
+				replaced[id] = true
+			}
+		}
+	}
+	for _, ability := range army {
+		if replaced[getStr(ability.Raw, "ability_id")] || !phaseMatches(ability) {
 			continue
 		}
 		pushUnique(map[string]any{"ability": ability, "source": map[string]any{"kind": "army"}, "phases": intersect(ability.Phases())})
@@ -75,6 +108,19 @@ func resolveEligibleAbilities(ds *Dataset, input map[string]any, phase string) [
 			detAny, ok = ds.Detachments.GetAny(detachmentID)
 		}
 		if ok {
+			// The combined unit's keywords: every member's, as one unit.
+			keywords := map[string]bool{}
+			members := []*UnitView{unit}
+			for _, memberID := range getStrList(input, "attachedUnitIds") {
+				if member, ok := ds.resolveUnitScoped(memberID, factionID); ok {
+					members = append(members, member)
+				}
+			}
+			for _, member := range members {
+				for _, keyword := range append(getStrList(member.Raw, "keywords"), getStrList(member.Raw, "faction_keywords")...) {
+					keywords[strings.ToLower(keyword)] = true
+				}
+			}
 			det := detAny.(map[string]any)
 			for _, stratID := range getStrList(det, "stratagem_ids") {
 				stratAny, ok := ds.Stratagems.Get(stratID)
@@ -86,18 +132,15 @@ func resolveEligibleAbilities(ds *Dataset, input map[string]any, phase string) [
 				if len(stratPhases) == 0 || !contains(stratPhases, phase) {
 					continue
 				}
+				if !stratagemCanTarget(stratagem, keywords) {
+					continue
+				}
 				abilityID, ok := stratagem["ability_id"].(string)
 				if !ok {
 					continue
 				}
-				// Stratagem ability ids are detachment-qualified but the
-				// ability copies are still replicated per faction (SM
-				// chapters) — prefer the resolving faction's copy, falling
-				// back for shared pools.
-				stratAbility, ok := ds.Abilities.GetInFaction(abilityID, factionID)
-				if !ok {
-					stratAbility, ok = ds.Abilities.GetAny(abilityID)
-				}
+				// Ability ids are unique: one record per stratagem, wherever its detachment is replicated.
+				stratAbility, ok := ds.Abilities.Get(abilityID)
 				if !ok {
 					continue
 				}
@@ -118,7 +161,7 @@ func resolveEligibleAbilities(ds *Dataset, input map[string]any, phase string) [
 		if !phaseMatches(ability) {
 			continue
 		}
-		pushUnique(map[string]any{"ability": ability, "source": map[string]any{"kind": "unit", "unitId": getStr(input, "unitId")}, "phases": intersect(ability.Phases())})
+		pushUnique(rated(map[string]any{"ability": ability, "source": map[string]any{"kind": "unit", "unitId": getStr(input, "unitId")}, "phases": intersect(ability.Phases())}, unit, ability))
 	}
 
 	// 5. Attached members.
@@ -131,11 +174,13 @@ func resolveEligibleAbilities(ds *Dataset, input map[string]any, phase string) [
 			if !phaseMatches(ability) {
 				continue
 			}
-			pushUnique(map[string]any{"ability": ability, "source": map[string]any{"kind": "attached", "unitId": memberID}, "phases": intersect(ability.Phases())})
+			pushUnique(rated(map[string]any{"ability": ability, "source": map[string]any{"kind": "attached", "unitId": memberID}, "phases": intersect(ability.Phases())}, member, ability))
 		}
 	}
 
-	// 6. Supporting units — aura-scoped only.
+	// 6. Supporting units — only abilities that can reach another unit (an aura,
+	// a friendly or enemy unit filter, a unit selection); an ability that only
+	// names its own unit describes a buff that never reaches the input unit.
 	for _, supportID := range getStrList(input, "supportingUnitIds") {
 		supporter, ok := ds.resolveUnitScoped(supportID, factionID)
 		if !ok {
@@ -145,14 +190,48 @@ func resolveEligibleAbilities(ds *Dataset, input map[string]any, phase string) [
 			if !phaseMatches(ability) {
 				continue
 			}
-			scope, _ := getMap(ability.Raw, "scope")
-			if !isAuraScope(scope["range"]) {
+			if !reachesOtherUnits(ability.Raw["effect"]) {
 				continue
 			}
-			pushUnique(map[string]any{"ability": ability, "source": map[string]any{"kind": "support", "sourceUnitId": supportID}, "phases": intersect(ability.Phases())})
+			pushUnique(rated(map[string]any{"ability": ability, "source": map[string]any{"kind": "support", "sourceUnitId": supportID}, "phases": intersect(ability.Phases())}, supporter, ability))
 		}
 	}
 	return out
+}
+
+// rated adds the rating the owning unit prints for a rated rule (Feel No Pain 5+ -> 5).
+func rated(entry map[string]any, unit *UnitView, ability *AbilityView) map[string]any {
+	if r, ok := unit.RatingOf(ability.ID()); ok {
+		entry["rating"] = r
+	}
+	return entry
+}
+
+// reachesOtherUnits reports whether an effect can reach a unit other than its
+// own: an aura, a unit-filter target (friendly or enemy), or a unit selection.
+// The translator decides what of it reaches the input unit.
+func reachesOtherUnits(effect any) bool {
+	switch node := effect.(type) {
+	case []any:
+		for _, child := range node {
+			if reachesOtherUnits(child) {
+				return true
+			}
+		}
+	case map[string]any:
+		if node["type"] == "aura" || node["type"] == "select-units" {
+			return true
+		}
+		if target, ok := node["target"].(map[string]any); ok && (target["owner"] == "friendly" || target["owner"] == "enemy") {
+			return true
+		}
+		for _, child := range node {
+			if reachesOtherUnits(child) {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 func isAuraScope(rng any) bool {
@@ -161,4 +240,75 @@ func isAuraScope(rng any) bool {
 		return false
 	}
 	return len(s) >= 5 && s[:5] == "aura-" || s == "any-on-battlefield" || s == "any-visible"
+}
+
+// stratagemCanTarget reports whether a unit with keywords (lower-cased) can be a stratagem's
+// friendly target. A stratagem with no friendly target (none printed, or only enemy targets) does
+// not restrict its user here; with several friendly targets, matching any one is enough. The
+// resolver does not know which model is the Warlord, so a Warlord target only needs a unit that
+// could contain it: one with CHARACTER, the keyword every Warlord carries. Mirrors TS
+// stratagemCanTarget.
+func stratagemCanTarget(stratagem map[string]any, keywords map[string]bool) bool {
+	var targets []map[string]any
+	switch raw := stratagem["target_restrictions"].(type) {
+	case map[string]any:
+		targets = []map[string]any{raw}
+	case []any:
+		for _, item := range raw {
+			if target, ok := item.(map[string]any); ok {
+				targets = append(targets, target)
+			}
+		}
+	default:
+		return true
+	}
+	has := func(keyword string) bool { return keywords[strings.ToLower(keyword)] }
+	friendly := 0
+	for _, target := range targets {
+		if getStr(target, "side") == "enemy" {
+			continue
+		}
+		friendly++
+		ok := true
+		if warlord, _ := target["warlord"].(bool); warlord {
+			ok = has("character")
+		}
+		for _, keyword := range getStrList(target, "required_keywords") {
+			ok = ok && has(keyword)
+		}
+		if anyOf := getStrList(target, "required_keywords_any"); len(anyOf) > 0 {
+			matched := false
+			for _, keyword := range anyOf {
+				matched = matched || has(keyword)
+			}
+			ok = ok && matched
+		}
+		for _, keyword := range getStrList(target, "excluded_keywords") {
+			ok = ok && !has(keyword)
+		}
+		if ok {
+			return true
+		}
+	}
+	return friendly == 0
+}
+
+// combatPatrolDetachment is the detachment detachmentID names (resolved within factionID first)
+// when it is a Combat Patrol box's: its game_modes include "combat-patrol".
+func (ds *Dataset) combatPatrolDetachment(detachmentID, factionID string) (map[string]any, bool) {
+	if detachmentID == "" {
+		return nil, false
+	}
+	detAny, ok := ds.Detachments.GetInFaction(detachmentID, factionID)
+	if !ok {
+		detAny, ok = ds.Detachments.GetAny(detachmentID)
+	}
+	if !ok {
+		return nil, false
+	}
+	det, ok := detAny.(map[string]any)
+	if !ok || !contains(getStrList(det, "game_modes"), "combat-patrol") {
+		return nil, false
+	}
+	return det, true
 }

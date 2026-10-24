@@ -64,7 +64,7 @@
     {
       "source": "metadata.data_version",
       "candidate_pointer": null,
-      "reason": "This numeric value identifies the dump snapshot only. It is non-entity provenance and must not be transformed into edition, dataslate, effective date, label, or supersession."
+      "reason": "This numeric value identifies the dump snapshot. tools/src/mfm/dataslate.ts looks it up in a curated table to name the game-versions entry dump-verified records are stamped with; it is never transformed into edition, effective date, label, or supersession, and an unmapped value is an error."
     }
   ]
 }

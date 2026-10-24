@@ -19,11 +19,18 @@
 //! `bundled-data` feature; build with `default-features = false` for a
 //! types-only crate with no embedded data and no extra dependencies.
 
+// The abilities resolver and an ability's buff translation build on the cruncher's DSL→buff
+// translator.
+#[cfg(feature = "cruncher")]
+mod abilities;
+mod ability_refs;
 mod collection;
 mod dataset;
 mod loadout;
 mod normalize;
 mod pricing;
+#[cfg(feature = "cruncher")]
+mod recipient_snapshots;
 
 // Roster-level legality + affordability build on both the Dataset and the
 // importer's `Roster`/`BattleSize` types, so they ride the `import` feature
@@ -35,17 +42,25 @@ pub mod battle_sizes;
 #[cfg(feature = "import")]
 pub mod roster;
 
+#[cfg(feature = "cruncher")]
+pub use abilities::{
+    aura_inches, stratagem_can_target, trigger_gated, EligibilityInput, EligibleAbility,
+    EligibleAbilitySource,
+};
+pub use ability_refs::{printed_wargear_ids, rating_of, unit_ability_ids, with_rating};
 pub use collection::Collection;
 pub use dataset::{Dataset, RawData, ReactiveTrigger};
 pub use loadout::{
     base_loadout, check_unit_legality, clamp_weapon_count, complete_loadout, group_loadout,
     loadout_candidates, loadout_models, loadout_tiers, maximal_loadout, option_cap,
-    validate_loadout, CompletedLoadout, Loadout, LoadoutGroup, LoadoutGroupWeapon, LoadoutModel,
-    LoadoutTier, Violation, ViolationCode, WeaponBound, LOADOUT_CANDIDATES_DEFAULT_LIMIT,
-    LOADOUT_CANDIDATES_TRUNCATED,
+    validate_loadout, weapon_bounds, CompletedLoadout, Loadout, LoadoutGroup, LoadoutGroupWeapon,
+    LoadoutModel, LoadoutTier, Violation, ViolationCode, WeaponBound,
+    LOADOUT_CANDIDATES_DEFAULT_LIMIT, LOADOUT_CANDIDATES_TRUNCATED,
 };
 pub use normalize::{normalize_name, strip_leading_the};
 pub use pricing::{base_unit_points, points_tier_missing};
+#[cfg(feature = "cruncher")]
+pub use recipient_snapshots::HistoricalSnapshotAbility;
 
 #[cfg(feature = "import")]
 pub use affordability::{

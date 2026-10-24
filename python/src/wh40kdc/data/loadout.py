@@ -16,8 +16,11 @@ Python mirror of ``tools/src/data/loadout.ts`` /
 from __future__ import annotations
 
 import math
-from collections.abc import Iterator
+import sys
+from collections.abc import Callable, Iterable, Iterator
 from typing import Any
+
+from wh40kdc.data.ability_refs import printed_wargear_ids
 
 WargearOption = dict[str, Any]
 Unit = dict[str, Any]
@@ -610,7 +613,9 @@ def _options_with_printed_unit_abilities(
             "replacement": [id_],
             "model_constraint": {"max_count": counts[id_]},
         }
-        for id_ in (unit.get("ability_ids") or [])
+        # A wargear item whose rule the datasheet prints ({id, wargear} in ability_ids)
+        # is stock equipment even when no option reaches it.
+        for id_ in printed_wargear_ids(unit.get("ability_ids"))
         if counts.get(id_, 0) > 0 and id_ not in reachable
     ]
     return list(options) if not additions else [*options, *additions]
@@ -624,12 +629,78 @@ def _solve_assignment(
     variant_caps: dict[str, int] | None = None,
     on_solution: Any = None,
 ) -> list[dict[str, Any]] | None:
-    """Deterministically search bounded row candidates; callbacks may cancel."""
+    """Deterministically search bounded row candidates; callbacks may cancel.
+
+    A state (row, candidate, models left, remaining bounds, cap usage) whose
+    subtree reached no complete assignment is recorded and never searched again;
+    a state whose unplaced models cannot field an item's remaining bounds is cut.
+    Neither skips a callback.
+    """
     remaining_lower, remaining_upper = dict(lower), dict(upper)
     option_usage = [0] * len(option_caps)
     variant_caps = variant_caps or {}
     variant_usage: dict[str, int] = {}
     picks: list[tuple[int, int, int]] = []
+    dead: set[tuple[Any, ...]] = set()
+    reached = 0
+
+    # Per-model item extremes over candidates `ci..` of row `ri`, and the totals
+    # rows `ri..` supply at full count, bound what the unplaced models can field.
+    item_set = set(lower) | set(upper)
+    for row in rows:
+        for cand in row["candidates"]:
+            item_set.update(cand["weapons"])
+    item_ids = list(item_set)
+    inf = float("inf")
+    suffix_extremes: list[list[tuple[list[float], list[float]]]] = []
+    for row in rows:
+        cands = row["candidates"]
+        out: list[tuple[list[float], list[float]]] = [
+            ([inf] * len(item_ids), [-inf] * len(item_ids))
+        ]
+        for cand in reversed(cands):
+            nmin, nmax = out[-1]
+            weapons = cand["weapons"]
+            out.append((
+                [min(nmin[at], weapons.get(id_, 0)) for at, id_ in enumerate(item_ids)],
+                [max(nmax[at], weapons.get(id_, 0)) for at, id_ in enumerate(item_ids)],
+            ))
+        out.reverse()
+        suffix_extremes.append(out)
+    tail: list[tuple[list[float], list[float]]] = [([0] * len(item_ids), [0] * len(item_ids))]
+    for ri in range(len(rows) - 1, -1, -1):
+        fmin, fmax = suffix_extremes[ri][0]
+        tmin, tmax = tail[-1]
+        count = rows[ri]["count"]
+        tail.append((
+            [tmin[at] + (count * fmin[at] if count > 0 else 0) for at in range(len(item_ids))],
+            [tmax[at] + (count * fmax[at] if count > 0 else 0) for at in range(len(item_ids))],
+        ))
+    tail.reverse()
+
+    def reachable(ri: int, ci: int, left: int) -> bool:
+        hmin, hmax = suffix_extremes[ri][ci]
+        tmin, tmax = tail[ri + 1]
+        for at, id_ in enumerate(item_ids):
+            most = (left * hmax[at] if left > 0 else 0) + tmax[at]
+            least = (left * hmin[at] if left > 0 else 0) + tmin[at]
+            if remaining_lower.get(id_, 0) > most:
+                return False
+            if remaining_upper.get(id_, 0) < least:
+                return False
+        return True
+
+    def state_key(ri: int, ci: int, left: int) -> tuple[Any, ...]:
+        # Remaining lower bounds are fixed by remaining upper bounds: both start
+        # from fixed bags and every pick subtracts the same amount from each.
+        return (
+            ri,
+            ci,
+            left,
+            tuple(sorted((k, v) for k, v in remaining_upper.items() if v != 0)),
+            tuple(option_usage),
+            tuple(sorted((k, v) for k, v in variant_usage.items() if v != 0)),
+        )
 
     def snapshot() -> list[dict[str, Any]]:
         return [
@@ -647,12 +718,28 @@ def _solve_assignment(
         if ri == len(rows):
             if any(count > 0 for count in remaining_lower.values()):
                 return False
+            nonlocal reached
+            reached += 1
             if on_solution is not None:
                 return bool(on_solution(snapshot()))
             return True
         return distribute(ri, 0, rows[ri]["count"])
 
     def distribute(ri: int, ci: int, left: int) -> bool:
+        if left > 0 and ci == len(rows[ri]["candidates"]):
+            return False
+        if not reachable(ri, ci, left):
+            return False
+        key = state_key(ri, ci, left)
+        if key in dead:
+            return False
+        before = reached
+        found = distribute_from(ri, ci, left)
+        if not found and reached == before:
+            dead.add(key)
+        return found
+
+    def distribute_from(ri: int, ci: int, left: int) -> bool:
         row = rows[ri]
         if ci == len(row["candidates"]):
             return left == 0 and assign_row(ri + 1)
@@ -732,15 +819,39 @@ def complete_loadout(
     models: list[LoadoutModel] | None,
     explicit_counts: dict[str, int],
 ) -> dict[str, Any] | None:
-    n = max(0, int(model_count))
-    if n == 0 or not _has_recorded_loadout_bases(models):
-        return None
-    assert models is not None
+    return _complete_loadout_relaxing(unit, model_count, options, models, explicit_counts, None)
 
+
+def _completion_lower_bounds(
+    options: list[WargearOption],
+    models: list[LoadoutModel],
+    explicit_counts: dict[str, int],
+) -> list[dict[str, int]]:
+    """The lower bounds :func:`complete_loadout` tries in turn: every explicit
+    count, then the same with the secondary items several multi-item choice
+    branches share left free."""
     strict_lower = {id_: count for id_, count in explicit_counts.items() if count > 0}
     lower_variants = [strict_lower]
+    relaxed_lower = dict(strict_lower)
+    for id_ in _repeated_co_items(options, models):
+        relaxed_lower.pop(id_, None)
+    if len(relaxed_lower) != len(strict_lower):
+        lower_variants.append(relaxed_lower)
+    return lower_variants
+
+
+def _repeated_co_items(options: list[WargearOption], models: list[LoadoutModel]) -> set[str]:
+    """Items :func:`complete_loadout`'s second pass leaves free.
+
+    Some source exporters double-count a secondary item shared by several
+    branches of one choice (the primary selections are still exact). A weapon
+    repeated in at least two multi-item branches, and never a pick on its own,
+    is mechanically determined by those primary selections, so the pass may
+    derive its count rather than requiring the duplicated aggregate. Defaults
+    are never relaxed.
+    """
     default_ids = {id_ for model in models for id_ in (model.get("default_weapon_ids") or [])}
-    repeated_co_items: set[str] = set()
+    out: set[str] = set()
     for option in options:
         occurrences: dict[str, int] = {}
         for branch in option.get("replacement_choice") or []:
@@ -750,14 +861,60 @@ def complete_loadout(
                 occurrences[id_] = occurrences.get(id_, 0) + 1
         for id_, count in occurrences.items():
             if count >= 2 and id_ not in default_ids:
-                repeated_co_items.add(id_)
-    relaxed_lower = dict(strict_lower)
-    for id_ in repeated_co_items:
-        relaxed_lower.pop(id_, None)
-    if len(relaxed_lower) != len(strict_lower):
-        lower_variants.append(relaxed_lower)
+                out.add(id_)
+    for option in options:
+        replacement = option.get("replacement")
+        branches = [replacement] if replacement else (option.get("replacement_choice") or [])
+        for branch in branches:
+            if len(branch) == 1:
+                out.discard(branch[0])
+    return out
 
-    effective_options = _options_with_printed_unit_abilities(unit, options, explicit_counts)
+
+def _complete_loadout_relaxing(
+    unit: Unit,
+    model_count: int,
+    options: list[WargearOption],
+    models: list[LoadoutModel] | None,
+    explicit_counts: dict[str, int],
+    relaxed: str | None,
+) -> dict[str, Any] | None:
+    """:func:`complete_loadout` with one variant cap token lifted, or none."""
+    n = max(0, int(model_count))
+    if n == 0 or not _has_recorded_loadout_bases(models):
+        return None
+    assert models is not None
+
+    def upper_for(default_counts: dict[str, int]) -> dict[str, int]:
+        upper = dict(default_counts)
+        for id_, explicit in explicit_counts.items():
+            upper[id_] = max(explicit, upper.get(id_, 0))
+        return upper
+
+    return _search_completion(
+        unit,
+        n,
+        _options_with_printed_unit_abilities(unit, options, explicit_counts),
+        models,
+        _completion_lower_bounds(options, models, explicit_counts),
+        upper_for,
+        relaxed,
+    )
+
+
+def _search_completion(
+    unit: Unit,
+    n: int,
+    effective_options: list[WargearOption],
+    models: list[LoadoutModel],
+    lower_variants: list[dict[str, int]],
+    upper_for: Callable[[dict[str, int]], dict[str, int]],
+    relaxed: str | None,
+) -> dict[str, Any] | None:
+    """The first legal whole-model assignment, over every composition allocation,
+    that fields at least ``lower`` of each item and at most ``upper_for(defaults)``;
+    a ``relaxed`` variant cap token is treated as unbounded. Mirror of the TS
+    reference."""
     for lower in lower_variants:
         for row_counts in _candidate_row_counts(models, n, lower):
             fixed_models = [
@@ -771,9 +928,7 @@ def complete_loadout(
                     continue
                 for id_ in model.get("default_weapon_ids") or []:
                     default_counts[id_] = default_counts.get(id_, 0) + count
-            upper = dict(default_counts)
-            for id_, explicit in explicit_counts.items():
-                upper[id_] = max(explicit, upper.get(id_, 0))
+            upper = upper_for(default_counts)
 
             option_caps = [option_cap(option, n, fixed_models) for option in effective_options]
             rows: list[dict[str, Any]] = []
@@ -783,7 +938,8 @@ def complete_loadout(
                 if count <= 0:
                     continue
                 prepared, caps = _row_candidates(model, index, count, n, effective_options)
-                variant_caps.update(caps)
+                for token, cap in caps.items():
+                    variant_caps[token] = _UNBOUNDED if token == relaxed else cap
                 candidates = [
                     candidate
                     for candidate in prepared
@@ -819,6 +975,10 @@ def complete_loadout(
                 continue
             return {"counts": counts, "groups": groups if n > 1 else None}
     return None
+
+
+# A lifted variant cap: larger than any usage a unit can reach.
+_UNBOUNDED = sys.maxsize
 
 
 def group_loadout(
@@ -899,6 +1059,34 @@ def _clamp_flat_budgets(unit: Unit, counts: dict[str, int]) -> None:
             counts[id_] = cap
 
 
+def _shared_row_swap_cap(
+    option: WargearOption,
+    model_count: int,
+    models: list[LoadoutModel] | None,
+) -> int | None:
+    """The most times a swap scoped to a model name several rows share can be taken.
+
+    Same-named rows split one miniature by default loadout (Imperial Navy Breachers'
+    Navis Armsmen), and each row's swap is scoped to the whole name, so
+    :func:`option_cap`'s eligible-model count would let one row's swap be taken by every
+    model of the name. The cap is the named rows' models carrying what the swap replaces.
+    ``None`` for any other option.
+    """
+    name = (option.get("model_constraint") or {}).get("model_name")
+    replaces = option.get("replaces") or []
+    if not name or not replaces or not models or not _has_recorded_defaults(models):
+        return None
+    if sum(1 for m in models if m.get("name") == name) < 2:
+        return None
+    carried: dict[str, int] = {}
+    for model, count in _allocate_models(models, model_count):
+        if model.get("name") != name:
+            continue
+        for id_ in model.get("default_weapon_ids") or []:
+            carried[id_] = carried.get(id_, 0) + count
+    return min(carried.get(id_, 0) // n for id_, n in _to_multiset(replaces).items())
+
+
 def weapon_bounds(
     unit: Unit,
     model_count: int,
@@ -915,6 +1103,9 @@ def weapon_bounds(
         bounds[id_] = {"min": count, "max": count}
     for option in options:
         cap = option_cap(option, model_count, models)
+        shared = _shared_row_swap_cap(option, model_count, models)
+        if shared is not None:
+            cap = min(cap, shared)
         for id_ in option.get("replaces") or []:
             b = bounds.get(id_, {"min": 0, "max": 0})
             bounds[id_] = {"min": max(0, b["min"] - cap), "max": b["max"]}
@@ -1036,11 +1227,29 @@ def validate_loadout(
             out.sort(key=lambda violation: (violation["id"], violation["code"]))
             return out
         valid_counts = all(isinstance(count, int) and count >= 0 for count in counts.values())
-        if (
-            valid_counts
-            and complete_loadout(unit, model_count, options, models, counts) is not None
-        ):
-            return []
+        completed = (
+            complete_loadout(unit, model_count, options, models, counts) if valid_counts else None
+        )
+        if completed is not None:
+            # A completion may field fewer copies of a relaxed co-item than the
+            # source claims (exporter tolerance); a claim no legal loadout
+            # reaches is still over its cap.
+            assert models is not None
+            relaxed = _repeated_co_items(options, models)
+            underfielded = [
+                id_
+                for id_, count in counts.items()
+                if id_ in relaxed and count > completed["counts"].get(id_, 0)
+            ]
+            solo = _solo_cap_violations(unit, model_count, options, models, counts, underfielded)
+            solo.sort(key=lambda violation: (violation["id"], violation["code"]))
+            return solo
+        if valid_counts:
+            assert models is not None
+            capped = _variant_cap_violations(unit, model_count, options, models, counts)
+            if capped:
+                capped.sort(key=lambda violation: (violation["id"], violation["code"]))
+                return capped
         return [
             {
                 "id": unit["id"],
@@ -1065,61 +1274,220 @@ def validate_loadout(
     return out
 
 
+def _budget_cap(budget: dict[str, Any], model_count: int, count: int) -> int:
+    """``count`` copies scaled by a budget's ratio at ``model_count`` (flat when
+    ``per_models`` is 0)."""
+    per_models = budget.get("per_models") or 0
+    if per_models:
+        return math.floor(model_count * count / per_models)
+    return count
+
+
 def _budget_violations(
     unit: Unit,
     model_count: int,
     counts: dict[str, int],
 ) -> list[dict[str, str]]:
-    """Shared-allowance violations: each ``wargear_budgets`` entry lets its listed
+    """Wargear-budget violations: each ``wargear_budgets`` entry lets its listed
     items take at most ``floor(model_count * count / per_models)`` copies between
-    them (``per_models == 0`` is a flat per-unit cap of ``count``). The violation
-    ``id`` is the budget's sorted items joined by ``+``. Mirror of the TS reference.
+    them (``per_models == 0`` is a flat per-unit cap), and its optional
+    ``duplicate_limit`` caps any one item on the same scale.
+
+    An item's own cap is the least of every budget's allowance and duplicate cap
+    that lists it; an item over it is ``exceeds-max`` on that item, in id order. A
+    budget whose items are each within their own caps but overdraw it together is
+    ``exceeds-allowance`` on its sorted items joined by ``+``, in budget order.
+    Mirror of the TS reference.
     """
-    out: list[dict[str, str]] = []
-    for budget in unit.get("wargear_budgets") or []:
-        items = budget.get("items") or []
-        if not items:
-            continue
-        used = sum(counts.get(id_, 0) for id_ in items)
+
+    def limit_text(budget: dict[str, Any], count: int) -> str:
         per_models = budget.get("per_models") or 0
-        count = budget.get("count")
-        if per_models:
-            cap = math.floor(model_count * count / per_models)
-            limit = f"{count} per {per_models} models"
-        else:
-            cap = count
-            limit = f"{count} per unit"
-        if used > cap:
-            id_ = "+".join(sorted(items))
+        return f"{count} per {per_models} models" if per_models else f"{count} per unit"
+
+    item_caps: dict[str, tuple[int, str]] = {}
+
+    def tighten(id_: str, cap: int, limit: str) -> None:
+        current = item_caps.get(id_)
+        if current is None or cap < current[0]:
+            item_caps[id_] = (cap, limit)
+
+    budgets = [b for b in unit.get("wargear_budgets") or [] if b.get("items")]
+    for budget in budgets:
+        for id_ in budget["items"]:
+            tighten(
+                id_,
+                _budget_cap(budget, model_count, budget["count"]),
+                limit_text(budget, budget["count"]),
+            )
+            dup = budget.get("duplicate_limit")
+            if dup is not None:
+                tighten(
+                    id_,
+                    _budget_cap(budget, model_count, dup),
+                    f"{limit_text(budget, dup)} of one item",
+                )
+
+    def over(id_: str) -> bool:
+        entry = item_caps.get(id_)
+        return entry is not None and counts.get(id_, 0) > entry[0]
+
+    out: list[dict[str, str]] = []
+    for id_ in sorted(item_caps):
+        if not over(id_):
+            continue
+        cap, limit = item_caps[id_]
+        out.append(
+            {
+                "id": id_,
+                "code": "exceeds-max",
+                "message": f"{id_}: {counts.get(id_)} exceeds allowance {cap} ({limit})",
+            }
+        )
+    for budget in budgets:
+        items = budget["items"]
+        used = sum(counts.get(id_, 0) for id_ in items)
+        cap = _budget_cap(budget, model_count, budget["count"])
+        if used <= cap or any(over(id_) for id_ in items):
+            continue
+        id_ = "+".join(sorted(items))
+        out.append(
+            {
+                "id": id_,
+                "code": "exceeds-allowance",
+                "message": (
+                    f"{id_}: {used} exceeds shared allowance {cap} "
+                    f"({limit_text(budget, budget['count'])})"
+                ),
+            }
+        )
+    return out
+
+
+def _solo_cap_violations(
+    unit: Unit,
+    model_count: int,
+    options: list[WargearOption],
+    models: list[LoadoutModel],
+    counts: dict[str, int],
+    ids: Iterable[str],
+) -> list[dict[str, str]]:
+    """``exceeds-max`` on each of ``ids`` (in id order) whose submitted count no
+    legal build fields: every option, variant and budget cap applied, other
+    submitted items free up to their envelope."""
+    wanted = sorted({id_ for id_ in ids if counts.get(id_, 0) > 0})
+    if not wanted:
+        return []
+    n = max(0, int(model_count))
+    effective_options = _options_with_printed_unit_abilities(unit, options, counts)
+    envelope = {id_: bound["max"] for id_, bound in weapon_bounds(unit, n, options, models).items()}
+    for budget in unit.get("wargear_budgets") or []:
+        for id_ in budget.get("items") or []:
+            cap = _budget_cap(budget, n, budget["count"])
+            dup = budget.get("duplicate_limit")
+            if dup is not None:
+                cap = min(cap, _budget_cap(budget, n, dup))
+            envelope[id_] = min(envelope.get(id_, cap), cap)
+    out: list[dict[str, str]] = []
+    for id_ in wanted:
+        count = counts[id_]
+        upper = dict(envelope)
+        for other, explicit in counts.items():
+            upper.setdefault(other, explicit)
+        upper[id_] = max(count, upper.get(id_, 0))
+
+        def probe_upper(_defaults: dict[str, int], fixed: dict[str, int] = upper) -> dict[str, int]:
+            return fixed
+
+        if (
+            _search_completion(
+                unit, n, effective_options, models, [{id_: count}], probe_upper, None
+            )
+            is None
+        ):
             out.append(
                 {
                     "id": id_,
-                    "code": "exceeds-allowance",
-                    "message": f"{id_}: {used} exceeds shared allowance {cap} ({limit})",
+                    "code": "exceeds-max",
+                    "message": (
+                        f"{id_}: {count} exceeds the most any legal loadout of "
+                        f"{model_count} models fields"
+                    ),
                 }
             )
-        # Per-item sub-cap: at most ``duplicate_limit`` copies of any ONE item, on
-        # top of the shared allowance. Mirror of the TS reference.
-        dup = budget.get("duplicate_limit")
-        if dup is not None:
-            if per_models:
-                dup_cap = math.floor(model_count * dup / per_models)
-                dup_limit = f"{dup} per {per_models} models"
-            else:
-                dup_cap = dup
-                dup_limit = f"{dup} per unit"
-            for id_ in sorted(items):
-                n = counts.get(id_, 0)
-                if n > dup_cap:
-                    out.append(
-                        {
-                            "id": id_,
-                            "code": "exceeds-allowance",
-                            "message": (
-                                f"{id_}: {n} exceeds per-item duplicate cap {dup_cap} ({dup_limit})"
-                            ),
-                        }
-                    )
+    return out
+
+
+def _variant_cap_violations(
+    unit: Unit,
+    model_count: int,
+    options: list[WargearOption],
+    models: list[LoadoutModel],
+    counts: dict[str, int],
+) -> list[dict[str, str]]:
+    """The caps a variant-row selection with no legal whole-model completion breaks.
+
+    Each submitted item, in id order, is tried alone: when no legal build fields
+    that many copies of it (every option, variant and budget cap applied, other
+    items free up to their envelope) it is ``exceeds-max`` on that item. Otherwise,
+    per variant row in order, each variant budget and then each capped variant is
+    lifted in turn; a cap whose lifting alone makes the selection completable is
+    ``exceeds-allowance`` on the equipment its variants add over the row's baseline
+    (its defaults, else what every variant shares), sorted and joined by ``+``.
+    Empty when no single cap explains the failure. Mirror of the TS reference.
+    """
+    n = max(0, int(model_count))
+    out = _solo_cap_violations(unit, model_count, options, models, counts, counts)
+    if out:
+        return out
+
+    reported: set[str] = set()
+    for row_index, row in enumerate(models):
+        variants = row.get("loadout_variants") or []
+        if not variants:
+            continue
+        defaults = row.get("default_weapon_ids") or []
+        baseline = set(
+            defaults
+            if defaults
+            else [
+                id_
+                for id_ in variants[0].get("weapon_ids") or []
+                if all(id_ in (variant.get("weapon_ids") or []) for variant in variants)
+            ]
+        )
+        caps: list[tuple[str, list[str]]] = [
+            (f"{row_index}:{index}", list(budget.get("variant_names") or []))
+            for index, budget in enumerate(row.get("loadout_variant_budgets") or [])
+        ]
+        for index, variant in enumerate(variants):
+            if variant.get("max_count") is not None:
+                caps.append((f"{row_index}:variant:{index}", [variant.get("name") or ""]))
+        for token, names in caps:
+            added: set[str] = set()
+            for variant in variants:
+                if (variant.get("name") or "") not in names:
+                    continue
+                for weapon in variant.get("weapon_ids") or []:
+                    if weapon not in baseline:
+                        added.add(weapon)
+            if not added:
+                continue
+            joined = "+".join(sorted(added))
+            if joined in reported:
+                continue
+            if _complete_loadout_relaxing(unit, n, options, models, counts, token) is None:
+                continue
+            reported.add(joined)
+            out.append(
+                {
+                    "id": joined,
+                    "code": "exceeds-allowance",
+                    "message": (
+                        f"{joined}: the selection overdraws the shared allowance of these "
+                        "whole-model alternatives"
+                    ),
+                }
+            )
     return out
 
 
@@ -1193,11 +1561,16 @@ def _encode_candidate(witness: list[str], counts: dict[str, int]) -> str:
 
 
 def _variant_budget_cap(budget: dict[str, Any], unit_count: int, row_count: int) -> int:
+    """A variant budget's allowance: flat ``count`` when ``per_models`` is 0, else
+    ``count * floor(models / per_models)`` when ``stepped``, else the proportional
+    ``floor(models * count / per_models)``, over the unit's or the row's models."""
     per_models = budget.get("per_models") or 0
     count = budget.get("count") or 0
     if per_models == 0:
         return count
     models = unit_count if budget.get("scope") == "unit" else row_count
+    if budget.get("stepped") is True:
+        return count * (models // per_models)
     return math.floor(models * count / per_models)
 
 

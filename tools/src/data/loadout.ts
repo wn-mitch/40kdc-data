@@ -13,6 +13,7 @@
  *
  * @packageDocumentation
  */
+import { printedWargearIds } from "./ability-refs.js";
 import type { Unit, WargearOption } from "../generated.js";
 
 /** Inclusive count range a single weapon/wargear id may take in a loadout. */
@@ -169,8 +170,14 @@ export interface LoadoutVariantBudget {
   count?: number;
   per_models?: number;
   scope?: string;
+  stepped?: boolean;
 }
 
+/**
+ * A variant budget's allowance: flat `count` when `per_models` is 0, else
+ * `count * floor(models / per_models)` when `stepped`, else the proportional
+ * `floor(models * count / per_models)`, over the unit's or the row's models.
+ */
 export function variantBudgetCap(
   budget: LoadoutVariantBudget,
   unitModelCount: number,
@@ -180,6 +187,7 @@ export function variantBudgetCap(
   const perModels = budget.per_models ?? 0;
   if (perModels === 0) return count;
   const models = budget.scope === "unit" ? unitModelCount : rowModelCount;
+  if (budget.stepped === true) return count * Math.floor(models / perModels);
   return Math.floor((models * count) / perModels);
 }
 
@@ -340,6 +348,33 @@ function clampFlatBudgets(unit: Unit, counts: Map<string, number>): void {
 }
 
 /**
+ * The most times a swap scoped to a model name several composition rows share can be
+ * taken: the named rows' models carrying what it replaces. Same-named rows split one
+ * miniature by default loadout (Imperial Navy Breachers' Navis Armsmen: 1 heavy shotgun,
+ * 1 las-volley, 7 navis shotguns), and each row's swap is scoped to the whole name, so
+ * {@link optionCap}'s eligible-model count would let the heavy-shotgun swap be taken by
+ * all 9 Armsmen. `Infinity` for any other option (no further cap).
+ */
+function sharedRowSwapCap(
+  option: WargearOption,
+  modelCount: number,
+  models?: readonly LoadoutModel[],
+): number {
+  const name = option.model_constraint?.model_name;
+  const replaces = option.replaces ?? [];
+  if (!name || replaces.length === 0 || !models || !hasRecordedDefaults(models)) return Infinity;
+  if (models.filter((model) => model.name === name).length < 2) return Infinity;
+  const carried = new Map<string, number>();
+  for (const { model, count } of allocateModels(models, modelCount)) {
+    if (model.name !== name) continue;
+    for (const id of model.default_weapon_ids ?? []) carried.set(id, (carried.get(id) ?? 0) + count);
+  }
+  let cap = Infinity;
+  for (const [id, n] of toMultiset(replaces)) cap = Math.min(cap, Math.floor((carried.get(id) ?? 0) / n));
+  return cap;
+}
+
+/**
  * Inclusive valid count range for each weapon/wargear id, used to clamp a UI's
  * per-weapon inputs so invalid loadouts are unreachable. A base weapon ranges
  * `[modelCount − maxSwapsAway, modelCount]`; an optional (replacement) id ranges
@@ -356,7 +391,7 @@ export function weaponBounds(
     bounds.set(id, { min: count, max: count });
   }
   for (const option of options) {
-    const cap = optionCap(option, modelCount, models);
+    const cap = Math.min(optionCap(option, modelCount, models), sharedRowSwapCap(option, modelCount, models));
     for (const id of option.replaces ?? []) {
       const b = bounds.get(id) ?? { min: 0, max: 0 };
       bounds.set(id, { min: Math.max(0, b.min - cap), max: b.max });
@@ -675,22 +710,31 @@ function enumerateRowCandidates(
   rowName: string | null,
   options: readonly WargearOption[],
   usedVariantBudgets: readonly string[] = [],
+  upper?: ReadonlyMap<string, number>,
 ): RowCandidate[] {
   const applicable: number[] = [];
   for (let i = 0; i < options.length; i++) {
     const name = options[i].model_constraint?.model_name ?? null;
     if (name == null || name === rowName) applicable.push(i);
   }
+  const replaceableIds = new Set(options.flatMap((option) => option.replaces ?? []));
+  const canStillReachUpper = (weapons: ReadonlyMap<string, number>): boolean => {
+    if (!upper) return true;
+    for (const [id, count] of weapons) {
+      if (count > (upper.get(id) ?? 0) && !replaceableIds.has(id)) return false;
+    }
+    return true;
+  };
 
   const stateKey = (w: Map<string, number>, used: readonly number[]) =>
     `${multisetKey(w)}#${[...used].sort((a, b) => a - b).join(",")}#${usedVariantBudgets.join(",")}`;
 
   const result: RowCandidate[] = [];
   const seen = new Set<string>();
-  const queue: { weapons: Map<string, number>; used: number[] }[] = [
-    { weapons: new Map(base), used: [] },
-  ];
-  seen.add(stateKey(base, []));
+  const queue: { weapons: Map<string, number>; used: number[] }[] = canStillReachUpper(base)
+    ? [{ weapons: new Map(base), used: [] }]
+    : [];
+  if (queue.length > 0) seen.add(stateKey(base, []));
 
   for (let head = 0; head < queue.length; head++) {
     const cur = queue[head];
@@ -716,6 +760,7 @@ function enumerateRowCandidates(
         for (const id of replaces) w.set(id, (w.get(id) ?? 0) - 1);
         for (const id of bundle) w.set(id, (w.get(id) ?? 0) + 1);
         for (const [id, c] of [...w]) if (c <= 0) w.delete(id);
+        if (!canStillReachUpper(w)) continue;
         const used = [...cur.used, oi].sort((a, b) => a - b);
         const k = stateKey(w, used);
         if (seen.has(k)) continue;
@@ -740,6 +785,7 @@ function rowCandidates(
   rowCount: number,
   unitCount: number,
   options: readonly WargearOption[],
+  upper?: ReadonlyMap<string, number>,
 ): { candidates: RowCandidate[]; variantCaps: Map<string, number> } {
   const variantCaps = new Map<string, number>();
   for (let bi = 0; bi < (row.loadout_variant_budgets?.length ?? 0); bi++) {
@@ -755,6 +801,8 @@ function rowCandidates(
         toMultiset(row.default_weapon_ids ?? []),
         row.name ?? null,
         options,
+        [],
+        upper,
       ),
       variantCaps,
     };
@@ -782,6 +830,7 @@ function rowCandidates(
       row.name ?? null,
       options,
       variantUses[vi],
+      upper,
     )) {
       const cost = candidate.usedOptions.length;
       let state = states.get(candidate.key);
@@ -840,6 +889,12 @@ type LoadoutAssignment = {
  * pre-sorted order, trying the largest feasible count first. Without `onSolution`
  * it returns the first solution; with it, it visits every solution until the
  * callback returns `true`, then returns that final solution.
+ *
+ * A search state is the position (row, candidate, models left) plus the remaining
+ * item bounds and cap usage. A state whose subtree reached no complete
+ * assignment is recorded and never searched again, so an infeasible bag fails in
+ * time bounded by its distinct states rather than by every way of splitting the
+ * models across candidates. Skipping such a subtree skips no callback.
  */
 function solveAssignment(
   rows: readonly SolverRow[],
@@ -862,18 +917,78 @@ function solveAssignment(
     count: p.count,
   }));
 
+  const dead = new Set<string>();
+  let reached = 0;
+  // Remaining lower bounds are fixed by remaining upper bounds: both start from
+  // fixed bags and every pick subtracts the same amount from each.
+  const stateKey = (ri: number, ci: number, left: number): string =>
+    `${ri}|${ci}|${left}|${[...remainingUpper].filter(([, c]) => c !== 0).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0)).map(([id, c]) => `${id}:${c}`).join(",")}|${usage.join(",")}|${[...variantUsage].filter(([, c]) => c !== 0).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0)).map(([id, c]) => `${id}:${c}`).join(",")}`;
+
   const assignRow = (ri: number): boolean => {
     if (ri === rows.length) {
       for (const c of remainingLower.values()) if (c > 0) return false;
+      reached += 1;
       if (onSolution) return onSolution(snapshot());
       return true;
     }
     return distribute(ri, 0, rows[ri].count);
   };
 
+  // Per-model item extremes over candidates `ci..` of row `ri`, and the totals
+  // rows `ri..` supply at full count, bound what the unplaced models can field.
+  const items = new Set<string>([...lower.keys(), ...upper.keys()]);
+  for (const row of rows) for (const cand of row.candidates) for (const id of cand.weapons.keys()) items.add(id);
+  const itemIds = [...items];
+  const suffixExtremes = rows.map((row) => {
+    const out: { min: number[]; max: number[] }[] = Array.from({ length: row.candidates.length + 1 });
+    out[row.candidates.length] = { min: itemIds.map(() => Infinity), max: itemIds.map(() => -Infinity) };
+    for (let ci = row.candidates.length - 1; ci >= 0; ci--) {
+      const next = out[ci + 1];
+      const weapons = row.candidates[ci].weapons;
+      out[ci] = {
+        min: itemIds.map((id, at) => Math.min(next.min[at], weapons.get(id) ?? 0)),
+        max: itemIds.map((id, at) => Math.max(next.max[at], weapons.get(id) ?? 0)),
+      };
+    }
+    return out;
+  });
+  const tail: { min: number[]; max: number[] }[] = Array.from({ length: rows.length + 1 });
+  tail[rows.length] = { min: itemIds.map(() => 0), max: itemIds.map(() => 0) };
+  for (let ri = rows.length - 1; ri >= 0; ri--) {
+    const full = suffixExtremes[ri][0];
+    const count = rows[ri].count;
+    tail[ri] = {
+      min: itemIds.map((_, at) => tail[ri + 1].min[at] + (count > 0 ? count * full.min[at] : 0)),
+      max: itemIds.map((_, at) => tail[ri + 1].max[at] + (count > 0 ? count * full.max[at] : 0)),
+    };
+  }
+  const reachable = (ri: number, ci: number, left: number): boolean => {
+    const here = suffixExtremes[ri][ci];
+    for (let at = 0; at < itemIds.length; at++) {
+      const id = itemIds[at];
+      const most = (left > 0 ? left * here.max[at] : 0) + tail[ri + 1].max[at];
+      const least = (left > 0 ? left * here.min[at] : 0) + tail[ri + 1].min[at];
+      if ((remainingLower.get(id) ?? 0) > most) return false;
+      if ((remainingUpper.get(id) ?? 0) < least) return false;
+    }
+    return true;
+  };
+
   const distribute = (ri: number, ci: number, left: number): boolean => {
+    if (left > 0 && ci === rows[ri].candidates.length) return false;
+    if (!reachable(ri, ci, left)) return false;
+    const key = stateKey(ri, ci, left);
+    if (dead.has(key)) return false;
+    const before = reached;
+    const found = distributeFrom(ri, ci, left);
+    if (!found && reached === before) dead.add(key);
+    return found;
+  };
+
+  const distributeFrom = (ri: number, ci: number, left: number): boolean => {
+    if (left === 0) return assignRow(ri + 1);
     const row = rows[ri];
-    if (ci === row.candidates.length) return left === 0 && assignRow(ri + 1);
+    if (ci === row.candidates.length) return false;
     const cand = row.candidates[ci];
     let hi = left;
     for (const [id, per] of cand.weapons) {
@@ -978,7 +1093,9 @@ function optionsWithPrintedUnitAbilities(
       for (const id of branch) reachable.add(id);
     }
   }
-  const additions = (unit.ability_ids ?? [])
+  // A wargear item whose rule the datasheet prints ({id, wargear} in ability_ids) is stock
+  // equipment even when no option reaches it.
+  const additions = printedWargearIds(unit.ability_ids)
     .filter((id) => (counts.get(id) ?? 0) > 0 && !reachable.has(id))
     .map(
       (id): WargearOption => ({
@@ -1012,6 +1129,7 @@ function exactGroups(
   options: readonly WargearOption[],
   models: readonly LoadoutModel[],
   counts: Map<string, number>,
+  prioritizeExactMatch = false,
 ): LoadoutGroup[] | null {
   const bag = new Map<string, number>();
   for (const [id, c] of counts) if (c > 0) bag.set(id, c);
@@ -1036,12 +1154,16 @@ function exactGroups(
         count,
         modelCount,
         effectiveOptions,
+        bag,
       );
       for (const [token, cap] of prepared.variantCaps) variantCaps.set(token, cap);
       const candidates = prepared.candidates
         .filter((candidate) => candidateCanBeSelected(candidate, bag, optionCaps))
         .sort(
           (a, b) =>
+            (prioritizeExactMatch
+              ? explicitContribution(b, bag) - explicitContribution(a, bag)
+              : 0) ||
             a.key.localeCompare(b.key) ||
             a.usedOptions.length - b.usedOptions.length ||
             a.usedOptions.join(",").localeCompare(b.usedOptions.join(",")),
@@ -1064,6 +1186,18 @@ export function groupLoadout(
   const n = Math.max(0, Math.floor(modelCount) || 0);
   if (n <= 1 || !hasRecordedLoadoutBases(models)) return null;
   return exactGroups(unit, n, options, models, counts);
+}
+
+function hasExactGroups(
+  unit: Unit,
+  modelCount: number,
+  options: readonly WargearOption[],
+  models: readonly LoadoutModel[],
+  counts: Map<string, number>,
+): boolean {
+  const n = Math.max(0, Math.floor(modelCount) || 0);
+  return n > 1 && hasRecordedLoadoutBases(models) &&
+    exactGroups(unit, n, options, models, counts, true) !== null;
 }
 
 /** A source loadout completed with only omitted per-model defaults. */
@@ -1089,24 +1223,47 @@ export function completeLoadout(
   models: readonly LoadoutModel[] | undefined,
   explicitCounts: Map<string, number>,
 ): CompletedLoadout | null {
-  const n = Math.max(0, Math.floor(modelCount) || 0);
-  if (n === 0 || !hasRecordedLoadoutBases(models)) return null;
+  return completeLoadoutRelaxing(unit, modelCount, options, models, explicitCounts, null);
+}
 
+/**
+ * The lower bounds {@link completeLoadout} tries in turn: every explicit count,
+ * then the same with the secondary items several multi-item choice branches
+ * share left free (see below).
+ */
+function completionLowerBounds(
+  options: readonly WargearOption[],
+  models: readonly LoadoutModel[],
+  explicitCounts: Map<string, number>,
+): Map<string, number>[] {
   const strictLower = new Map<string, number>();
   for (const [id, count] of explicitCounts) {
     if (count > 0) strictLower.set(id, count);
   }
   const lowerVariants = [strictLower];
 
-  // Some source exporters double-count a secondary item shared by several
-  // branches of one choice (the primary selections are still exact). A weapon
-  // repeated in at least two multi-item branches is mechanically determined by
-  // those primary selections, so a second pass may derive its count rather than
-  // requiring the duplicated aggregate. Defaults are never relaxed.
+  const relaxedLower = new Map(strictLower);
+  for (const id of repeatedCoItems(options, models)) relaxedLower.delete(id);
+  if (relaxedLower.size !== strictLower.size) lowerVariants.push(relaxedLower);
+  return lowerVariants;
+}
+
+/**
+ * Items {@link completeLoadout}'s second pass leaves free. Some source exporters
+ * double-count a secondary item shared by several branches of one choice (the
+ * primary selections are still exact). A weapon repeated in at least two
+ * multi-item branches, and never a pick on its own, is mechanically determined
+ * by those primary selections, so the pass may derive its count rather than
+ * requiring the duplicated aggregate. Defaults are never relaxed.
+ */
+function repeatedCoItems(
+  options: readonly WargearOption[],
+  models: readonly LoadoutModel[],
+): Set<string> {
   const defaultIds = new Set(
     models.flatMap((model) => model.default_weapon_ids ?? []),
   );
-  const repeatedCoItems = new Set<string>();
+  const out = new Set<string>();
   for (const option of options) {
     const occurrences = new Map<string, number>();
     for (const branch of option.replacement_choice ?? []) {
@@ -1116,19 +1273,59 @@ export function completeLoadout(
       }
     }
     for (const [id, count] of occurrences) {
-      if (count >= 2 && !defaultIds.has(id)) repeatedCoItems.add(id);
+      if (count >= 2 && !defaultIds.has(id)) out.add(id);
     }
   }
-  const relaxedLower = new Map(strictLower);
-  for (const id of repeatedCoItems) relaxedLower.delete(id);
-  if (relaxedLower.size !== strictLower.size) lowerVariants.push(relaxedLower);
+  for (const option of options) {
+    const branches = option.replacement ? [option.replacement] : (option.replacement_choice ?? []);
+    for (const branch of branches) if (branch.length === 1) out.delete(branch[0]);
+  }
+  return out;
+}
 
-  const effectiveOptions = optionsWithPrintedUnitAbilities(
+/** {@link completeLoadout} with one variant cap token (see {@link rowCandidates}) lifted, or none. */
+function completeLoadoutRelaxing(
+  unit: Unit,
+  modelCount: number,
+  options: readonly WargearOption[],
+  models: readonly LoadoutModel[] | undefined,
+  explicitCounts: Map<string, number>,
+  relaxed: string | null,
+): CompletedLoadout | null {
+  const n = Math.max(0, Math.floor(modelCount) || 0);
+  if (n === 0 || !hasRecordedLoadoutBases(models)) return null;
+  return searchCompletion(
     unit,
-    options,
-    explicitCounts,
+    n,
+    optionsWithPrintedUnitAbilities(unit, options, explicitCounts),
+    models,
+    completionLowerBounds(options, models, explicitCounts),
+    (defaultCounts) => {
+      const upper = new Map(defaultCounts);
+      for (const [id, explicit] of explicitCounts) {
+        upper.set(id, Math.max(explicit, upper.get(id) ?? 0));
+      }
+      return upper;
+    },
+    relaxed,
   );
+}
 
+/**
+ * The first legal whole-model assignment, over every composition allocation,
+ * that fields at least `lower` of each item and at most `upperFor(defaults)`,
+ * where `defaults` is the allocation's aggregate default equipment. A
+ * `relaxed` variant cap token is treated as unbounded.
+ */
+function searchCompletion(
+  unit: Unit,
+  n: number,
+  effectiveOptions: readonly WargearOption[],
+  models: readonly LoadoutModel[],
+  lowerVariants: readonly Map<string, number>[],
+  upperFor: (defaultCounts: ReadonlyMap<string, number>) => Map<string, number>,
+  relaxed: string | null,
+): CompletedLoadout | null {
   for (const lower of lowerVariants) {
     for (const rowCounts of candidateRowCounts(models, n, lower)) {
       const fixedModels = models.map((model, index) => ({
@@ -1144,10 +1341,7 @@ export function completeLoadout(
           defaultCounts.set(id, (defaultCounts.get(id) ?? 0) + count);
         }
       }
-      const upper = new Map(defaultCounts);
-      for (const [id, explicit] of explicitCounts) {
-        upper.set(id, Math.max(explicit, upper.get(id) ?? 0));
-      }
+      const upper = upperFor(defaultCounts);
 
       const optionCaps = effectiveOptions.map((option) =>
         optionCap(option, n, fixedModels),
@@ -1157,8 +1351,9 @@ export function completeLoadout(
       for (let index = 0; index < fixedModels.length; index++) {
         const count = rowCounts[index];
         if (count <= 0) continue;
-        const prepared = rowCandidates(fixedModels[index], index, count, n, effectiveOptions);
-        for (const [token, cap] of prepared.variantCaps) variantCaps.set(token, cap);
+        const prepared = rowCandidates(fixedModels[index], index, count, n, effectiveOptions, upper);
+        for (const [token, cap] of prepared.variantCaps)
+          variantCaps.set(token, token === relaxed ? Infinity : cap);
         const candidates = prepared.candidates
           .filter((candidate) =>
             candidateCanBeSelected(candidate, upper, optionCaps),
@@ -1259,7 +1454,19 @@ export function validateLoadout(
     // completion to determine whether omitted defaults make it legal.
     const directViolations = [...perItemBounds, ...budgets];
     if (directViolations.length > 0) return sortViolations(directViolations);
-    if (completeLoadout(unit, modelCount, options, models, counts) !== null) return [];
+    const completed = completeLoadout(unit, modelCount, options, models, counts);
+    if (completed !== null) {
+      // A completion may field fewer copies of a relaxed co-item than the
+      // source claims (exporter tolerance); a claim no legal loadout reaches
+      // is still over its cap.
+      const relaxed = repeatedCoItems(options, models);
+      const underfielded = [...counts]
+        .filter(([id, count]) => relaxed.has(id) && count > (completed.counts.get(id) ?? 0))
+        .map(([id]) => id);
+      return sortViolations(soloCapViolations(unit, modelCount, options, models, counts, underfielded));
+    }
+    const capped = variantCapViolations(unit, modelCount, options, models, counts);
+    if (capped.length > 0) return sortViolations(capped);
     return [{
       id: unit.id,
       code: "swap-conflict",
@@ -1267,64 +1474,180 @@ export function validateLoadout(
     }];
   }
 
-  if ((models?.length ?? 0) > 1 && groupLoadout(unit, modelCount, options, models, counts) !== null) return budgets;
+  if (models && hasExactGroups(unit, modelCount, options, models, counts)) return budgets;
   perItemBounds.push(...swapConflicts(unit, modelCount, options, counts, models), ...budgets);
   return sortViolations(perItemBounds);
 }
 
+type WargearBudget = NonNullable<Unit["wargear_budgets"]>[number];
+
 /**
- * Shared-allowance violations: each {@link Unit.wargear_budgets} entry lets its
+ * Wargear-budget violations: each {@link Unit.wargear_budgets} entry lets its
  * listed items take at most `floor(modelCount * count / per_models)` copies between
- * them (a GW "for every N models, X can take one of …" line). Summing the final
- * counts is robust to *how* the items are equipped — unlike per-option caps, which
- * the dump's cross-product loadout branches defeat. The violation `id` is the
- * budget's sorted items joined by `+`, so it is stable and identifies the group.
+ * them (a GW "for every N models, X can take one of …" line; `per_models === 0`
+ * is a flat per-unit cap), and its optional `duplicate_limit` caps any one item
+ * on the same scale. Summing the final counts is robust to *how* the items are
+ * equipped — unlike per-option caps, which the dump's cross-product loadout
+ * branches defeat.
+ *
+ * An item's own cap is the least of every budget's allowance and duplicate cap
+ * that lists it; an item over it is `exceeds-max` on that item, in id order. A
+ * budget whose items are each within their own caps but overdraw it together is
+ * `exceeds-allowance` on its sorted items joined by `+`, in budget order.
  */
 function budgetViolations(
   unit: Unit,
   modelCount: number,
   counts: Map<string, number>,
 ): Violation[] {
+  const scaled = (budget: WargearBudget, count: number): number => budgetCap(budget, modelCount, count);
+  const limitText = (budget: WargearBudget, count: number): string =>
+    budget.per_models ? `${count} per ${budget.per_models} models` : `${count} per unit`;
+  const itemCaps = new Map<string, { cap: number; limit: string }>();
+  const tighten = (id: string, cap: number, limit: string): void => {
+    const current = itemCaps.get(id);
+    if (!current || cap < current.cap) itemCaps.set(id, { cap, limit });
+  };
+  const budgets = (unit.wargear_budgets ?? []).filter((budget) => (budget.items ?? []).length > 0);
+  for (const budget of budgets) {
+    for (const id of budget.items) {
+      tighten(id, scaled(budget, budget.count), limitText(budget, budget.count));
+      const dup = budget.duplicate_limit;
+      if (dup != null) tighten(id, scaled(budget, dup), `${limitText(budget, dup)} of one item`);
+    }
+  }
   const out: Violation[] = [];
-  for (const budget of unit.wargear_budgets ?? []) {
-    const items = budget.items ?? [];
-    if (!items.length) continue;
+  const over = (id: string): boolean => (counts.get(id) ?? 0) > (itemCaps.get(id)?.cap ?? Infinity);
+  for (const id of [...itemCaps.keys()].sort()) {
+    if (!over(id)) continue;
+    const { cap, limit } = itemCaps.get(id)!;
+    out.push({
+      id,
+      code: "exceeds-max",
+      message: `${id}: ${counts.get(id)} exceeds allowance ${cap} (${limit})`,
+    });
+  }
+  for (const budget of budgets) {
+    const items = budget.items;
     const used = items.reduce((sum, id) => sum + (counts.get(id) ?? 0), 0);
-    // `per_models === 0` is a flat per-unit cap of `count`; otherwise a ratio.
-    const cap = budget.per_models
-      ? Math.floor((modelCount * budget.count) / budget.per_models)
-      : budget.count;
-    if (used > cap) {
-      const id = [...items].sort().join("+");
-      const limit = budget.per_models
-        ? `${budget.count} per ${budget.per_models} models`
-        : `${budget.count} per unit`;
+    const cap = scaled(budget, budget.count);
+    if (used <= cap || items.some(over)) continue;
+    const id = [...items].sort().join("+");
+    out.push({
+      id,
+      code: "exceeds-allowance",
+      message: `${id}: ${used} exceeds shared allowance ${cap} (${limitText(budget, budget.count)})`,
+    });
+  }
+  return out;
+}
+
+/** `count` copies scaled by a budget's ratio at `modelCount` (flat when `per_models` is 0). */
+function budgetCap(budget: WargearBudget, modelCount: number, count: number): number {
+  return budget.per_models ? Math.floor((modelCount * count) / budget.per_models) : count;
+}
+
+/**
+ * `exceeds-max` on each of `ids` (in id order) whose submitted count no legal
+ * build fields: every option, variant and budget cap applied, other submitted
+ * items free up to their envelope.
+ */
+function soloCapViolations(
+  unit: Unit,
+  modelCount: number,
+  options: readonly WargearOption[],
+  models: readonly LoadoutModel[],
+  counts: Map<string, number>,
+  ids: Iterable<string>,
+): Violation[] {
+  const wanted = [...ids].filter((id) => (counts.get(id) ?? 0) > 0).sort();
+  if (wanted.length === 0) return [];
+  const n = Math.max(0, Math.floor(modelCount) || 0);
+  const effectiveOptions = optionsWithPrintedUnitAbilities(unit, options, counts);
+  const envelope = new Map<string, number>();
+  for (const [id, bound] of weaponBounds(unit, n, options, models)) envelope.set(id, bound.max);
+  for (const budget of unit.wargear_budgets ?? []) {
+    for (const id of budget.items ?? []) {
+      let cap = budgetCap(budget, n, budget.count);
+      if (budget.duplicate_limit != null) cap = Math.min(cap, budgetCap(budget, n, budget.duplicate_limit));
+      envelope.set(id, Math.min(envelope.get(id) ?? cap, cap));
+    }
+  }
+  const out: Violation[] = [];
+  for (const id of wanted) {
+    const count = counts.get(id)!;
+    const upper = new Map(envelope);
+    for (const [other, explicit] of counts) if (!upper.has(other)) upper.set(other, explicit);
+    upper.set(id, Math.max(count, upper.get(id) ?? 0));
+    const lower = new Map([[id, count]]);
+    if (searchCompletion(unit, n, effectiveOptions, models, [lower], () => upper, null) === null) {
+      out.push({
+        id,
+        code: "exceeds-max",
+        message: `${id}: ${count} exceeds the most any legal loadout of ${modelCount} models fields`,
+      });
+    }
+  }
+  return out;
+}
+
+/**
+ * The caps a variant-row selection with no legal whole-model completion breaks.
+ * Each submitted item, in id order, is tried alone: when no legal build fields
+ * that many copies of it (every option, variant and budget cap applied, other
+ * items free up to their envelope) it is `exceeds-max` on that item. Otherwise,
+ * per variant row in order, each variant budget and then each capped variant is
+ * lifted in turn; a cap whose lifting alone makes the selection completable is
+ * `exceeds-allowance` on the equipment its variants add over the row's baseline
+ * (its defaults, else what every variant shares), sorted and joined by `+`.
+ * Empty when no single cap explains the failure.
+ */
+function variantCapViolations(
+  unit: Unit,
+  modelCount: number,
+  options: readonly WargearOption[],
+  models: readonly LoadoutModel[],
+  counts: Map<string, number>,
+): Violation[] {
+  const n = Math.max(0, Math.floor(modelCount) || 0);
+  const out = soloCapViolations(unit, modelCount, options, models, counts, counts.keys());
+  if (out.length > 0) return out;
+
+  const reported = new Set<string>();
+  for (let rowIndex = 0; rowIndex < models.length; rowIndex++) {
+    const row = models[rowIndex];
+    const variants = row.loadout_variants ?? [];
+    if (variants.length === 0) continue;
+    const baseline = new Set(
+      row.default_weapon_ids?.length
+        ? row.default_weapon_ids
+        : (variants[0].weapon_ids ?? []).filter((id) =>
+            variants.every((variant) => (variant.weapon_ids ?? []).includes(id)),
+          ),
+    );
+    const caps: { token: string; names: readonly string[] }[] = [];
+    (row.loadout_variant_budgets ?? []).forEach((budget, index) =>
+      caps.push({ token: `${rowIndex}:${index}`, names: budget.variant_names ?? [] }),
+    );
+    variants.forEach((variant, index) => {
+      if (variant.max_count != null) caps.push({ token: `${rowIndex}:variant:${index}`, names: [variant.name ?? ""] });
+    });
+    for (const { token, names } of caps) {
+      const added = new Set<string>();
+      for (const variant of variants) {
+        if (!names.includes(variant.name ?? "")) continue;
+        for (const id of variant.weapon_ids ?? []) if (!baseline.has(id)) added.add(id);
+      }
+      if (added.size === 0) continue;
+      const id = [...added].sort().join("+");
+      if (reported.has(id)) continue;
+      if (completeLoadoutRelaxing(unit, n, options, models, counts, token) === null) continue;
+      reported.add(id);
       out.push({
         id,
         code: "exceeds-allowance",
-        message: `${id}: ${used} exceeds shared allowance ${cap} (${limit})`,
+        message: `${id}: the selection overdraws the shared allowance of these whole-model alternatives`,
       });
-    }
-    // Per-item sub-cap: at most `duplicate_limit` copies of any ONE item, over and
-    // above the shared allowance (GW's "…and no more than N of the same" clause).
-    const dup = budget.duplicate_limit;
-    if (dup != null) {
-      const dupCap = budget.per_models
-        ? Math.floor((modelCount * dup) / budget.per_models)
-        : dup;
-      const dupLimit = budget.per_models
-        ? `${dup} per ${budget.per_models} models`
-        : `${dup} per unit`;
-      for (const id of [...items].sort()) {
-        const n = counts.get(id) ?? 0;
-        if (n > dupCap) {
-          out.push({
-            id,
-            code: "exceeds-allowance",
-            message: `${id}: ${n} exceeds per-item duplicate cap ${dupCap} (${dupLimit})`,
-          });
-        }
-      }
     }
   }
   return out;

@@ -6,7 +6,10 @@
  * @packageDocumentation
  */
 export {
+  isCombatPatrolDetachment,
+  replacedArmyRuleIds,
   resolveEligibleAbilities,
+  stratagemCanTarget,
   type EligibilityInput,
   type EligibleAbility,
   type EligibleAbilitySource,

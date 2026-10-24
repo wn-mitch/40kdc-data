@@ -59,16 +59,17 @@
   });
 
   // --- Loadouts sub-mode -------------------------------------------------
-  const loadoutEnum = $derived.by(() => {
+  const loadoutResult = $derived.by<{ value: ReturnType<typeof enumerateLoadouts> | null; error?: string }>(() => {
     if (salvo.compareMode !== "loadouts" || !salvo.compareFactionId || !salvo.compareLoadoutUnitId) {
-      return null;
+      return { value: null };
     }
     try {
-      return enumerateLoadouts(ds, salvo.compareFactionId, salvo.compareLoadoutUnitId);
-    } catch {
-      return null;
+      return { value: enumerateLoadouts(ds, salvo.compareFactionId, salvo.compareLoadoutUnitId) };
+    } catch (err) {
+      return { value: null, error: (err as Error).message };
     }
   });
+  const loadoutEnum = $derived(loadoutResult.value);
 
   const loadoutRankings = $derived.by<LoadoutRanking[]>(() => {
     if (!loadoutEnum || loadoutEnum.configs.length === 0 || targets.length === 0) return [];
@@ -125,6 +126,9 @@
     </select>
   </div>
 
+  {#if loadoutResult.error}
+    <p class="error" role="alert">Loadouts could not be enumerated: {loadoutResult.error}</p>
+  {/if}
   {#if salvo.compareMode === "loadouts"}
     <div class="row">
       <label for="cmp-unit">Unit</label>

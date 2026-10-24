@@ -8,6 +8,6 @@
 
 > `const` **forceDispositions**: [`Collection`](../classes/Collection.md)\<[`ForceDisposition`](../../generated/interfaces/ForceDisposition.md), [`ForceDisposition`](../../generated/interfaces/ForceDisposition.md)\> = `dataset.forceDispositions`
 
-Defined in: [data/index.ts:107](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/index.ts#L107)
+Defined in: [data/index.ts:187](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/index.ts#L187)
 
 All force dispositions.

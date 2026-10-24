@@ -20,7 +20,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -54,7 +54,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -89,7 +89,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -123,7 +123,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -166,7 +166,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -201,7 +201,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -236,7 +236,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -271,7 +271,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -309,7 +309,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -345,7 +345,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -397,24 +397,21 @@
             "weapon_ids": [
               "plague-knives-plague-marines",
               "bubotic-weapons"
-            ],
-            "max_count": 4
+            ]
           },
           {
             "name": "Plague Marine w/ heavy plague weapon",
             "weapon_ids": [
               "plague-knives-plague-marines",
               "heavy-plague-weapon"
-            ],
-            "max_count": 4
+            ]
           },
           {
             "name": "Plague Marine w/ blight launcher",
             "weapon_ids": [
               "plague-knives-plague-marines",
               "blight-launcher"
-            ],
-            "max_count": 2
+            ]
           },
           {
             "name": "Plague Marine w/ boltgun",
@@ -429,8 +426,7 @@
             "weapon_ids": [
               "plague-knives-plague-marines",
               "plague-spewer"
-            ],
-            "max_count": 2
+            ]
           },
           {
             "name": "Plague Marine w/ icon of despair",
@@ -469,6 +465,40 @@
         "loadout_variant_budgets": [
           {
             "variant_names": [
+              "Plague Marine w/ bubotic weapons"
+            ],
+            "count": 2,
+            "per_models": 5,
+            "scope": "unit",
+            "stepped": true
+          },
+          {
+            "variant_names": [
+              "Plague Marine w/ heavy plague weapon"
+            ],
+            "count": 2,
+            "per_models": 5,
+            "scope": "unit",
+            "stepped": true
+          },
+          {
+            "variant_names": [
+              "Plague Marine w/ blight launcher"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
+          },
+          {
+            "variant_names": [
+              "Plague Marine w/ plague spewer"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
+          },
+          {
+            "variant_names": [
               "Plague Marine w/ bubotic weapons",
               "Plague Marine w/ heavy plague weapon",
               "Plague Marine w/ blight launcher",
@@ -486,16 +516,16 @@
               "Plague Marine w/ plasma gun",
               "Plague Marine w/ plague belcher"
             ],
-            "count": 2,
-            "per_models": 0,
-            "scope": "model-row"
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -563,7 +593,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -598,7 +628,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -648,7 +678,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -702,7 +732,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -737,7 +767,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -772,7 +802,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -807,7 +837,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -841,7 +871,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -877,7 +907,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -914,7 +944,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -959,7 +989,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -995,7 +1025,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1030,7 +1060,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1067,7 +1097,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1102,7 +1132,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1137,7 +1167,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1171,7 +1201,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1246,35 +1276,63 @@
             "name": "Blightlord Terminator w/ flail",
             "weapon_ids": [
               "flail-of-corruption"
-            ],
-            "max_count": 2
+            ]
           },
           {
             "name": "Blightlord Terminator w/ blight launcher",
             "weapon_ids": [
               "bubotic-blade",
               "blight-launcher"
-            ],
-            "max_count": 2
+            ]
           },
           {
             "name": "Blightlord Terminator w/ reaper autocannon",
             "weapon_ids": [
               "bubotic-blade",
               "reaper-autocannon"
-            ],
-            "max_count": 2
+            ]
           },
           {
             "name": "Blightlord Terminator w/ plague spewer and bubotic blade",
             "weapon_ids": [
               "bubotic-blade",
               "plague-spewer"
-            ],
-            "max_count": 2
+            ]
           }
         ],
         "loadout_variant_budgets": [
+          {
+            "variant_names": [
+              "Blightlord Terminator w/ flail"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
+          },
+          {
+            "variant_names": [
+              "Blightlord Terminator w/ blight launcher"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
+          },
+          {
+            "variant_names": [
+              "Blightlord Terminator w/ reaper autocannon"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
+          },
+          {
+            "variant_names": [
+              "Blightlord Terminator w/ plague spewer and bubotic blade"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
+          },
           {
             "variant_names": [
               "Blightlord Terminator w/ combi-bolter",
@@ -1288,13 +1346,22 @@
             "count": 9,
             "per_models": 0,
             "scope": "model-row"
+          },
+          {
+            "variant_names": [
+              "Blightlord Terminator w/ combi-weapon"
+            ],
+            "count": 3,
+            "per_models": 5,
+            "scope": "unit",
+            "stepped": true
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1361,7 +1428,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1391,7 +1458,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -1419,8 +1486,8 @@
         "max": 1,
         "is_leader_model": true,
         "default_weapon_ids": [
-          "manreaper-strike-maggot-lords",
-          "plaguespurt-gauntlet-maggot-lords"
+          "manreaper",
+          "plaguespurt-gauntlet"
         ]
       },
       {
@@ -1428,14 +1495,14 @@
         "min": 2,
         "max": 2,
         "default_weapon_ids": [
-          "manreaper-strike-maggot-lords",
-          "plaguespurt-gauntlet-maggot-lords"
+          "manreaper",
+          "plaguespurt-gauntlet"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -1468,7 +1535,7 @@
         "max": 1,
         "is_leader_model": true,
         "default_weapon_ids": [
-          "plasma-pistol-maggot-lords",
+          "plasma-pistol",
           "power-fist"
         ]
       },
@@ -1479,7 +1546,7 @@
         "max": 1,
         "default_weapon_ids": [
           "blight-launcher",
-          "plague-knives-plague-marines"
+          "plague-knives"
         ]
       },
       {
@@ -1488,7 +1555,7 @@
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
-          "plague-knives-plague-marines",
+          "plague-knives",
           "plague-spewer"
         ]
       },
@@ -1499,13 +1566,13 @@
         "max": 4,
         "default_weapon_ids": [
           "boltgun",
-          "plague-knives-plague-marines"
+          "plague-knives"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -1547,13 +1614,13 @@
         "max": 1,
         "default_weapon_ids": [
           "numerological-artefacts",
-          "plasma-pistol-maggot-lords"
+          "plasma-pistol"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -1586,7 +1653,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -1596,6 +1663,245 @@
         "models": [
           {
             "name": "Sholgor the Putrid",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "beasts-of-nurgle",
+    "faction_id": "death-guard",
+    "models": [
+      {
+        "name": "Beast of Nurgle",
+        "min": 1,
+        "max": 2,
+        "default_weapon_ids": [
+          "putrid-appendages"
+        ]
+      }
+    ],
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Beast of Nurgle",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      },
+      {
+        "models": [
+          {
+            "name": "Beast of Nurgle",
+            "min": 2,
+            "max": 2
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "unit_id": "nurglings",
+    "faction_id": "death-guard",
+    "models": [
+      {
+        "name": "Nurgling Swarm",
+        "min": 3,
+        "max": 6,
+        "default_weapon_ids": [
+          "diseased-claws-and-teeth"
+        ]
+      }
+    ],
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Nurgling Swarm",
+            "min": 3,
+            "max": 3
+          }
+        ]
+      },
+      {
+        "models": [
+          {
+            "name": "Nurgling Swarm",
+            "min": 4,
+            "max": 6
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "unit_id": "plague-drones",
+    "faction_id": "death-guard",
+    "models": [
+      {
+        "name": "Plaguebringer",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "deaths-heads",
+          "foul-mouthparts",
+          "plaguesword"
+        ]
+      },
+      {
+        "name": "Plague Drone",
+        "min": 2,
+        "max": 5,
+        "default_weapon_ids": [
+          "deaths-heads",
+          "foul-mouthparts",
+          "plaguesword"
+        ]
+      }
+    ],
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Plaguebringer",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Plague Drone",
+            "min": 2,
+            "max": 2
+          }
+        ]
+      },
+      {
+        "models": [
+          {
+            "name": "Plaguebringer",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Plague Drone",
+            "min": 3,
+            "max": 5
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "unit_id": "plaguebearers",
+    "faction_id": "death-guard",
+    "models": [
+      {
+        "name": "Plagueridden",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "plaguesword"
+        ]
+      },
+      {
+        "name": "Plaguebearer",
+        "min": 9,
+        "max": 9,
+        "default_weapon_ids": [
+          "plaguesword"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Plagueridden",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Plaguebearer",
+            "min": 9,
+            "max": 9
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "rotigus",
+    "faction_id": "death-guard",
+    "models": [
+      {
+        "name": "Rotigus",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "streams-of-brackish-filth",
+          "gnarlrod"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Rotigus",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "great-unclean-one",
+    "faction_id": "death-guard",
+    "models": [
+      {
+        "name": "Great Unclean One",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "plague-flail",
+          "putrid-vomit",
+          "bilesword"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Great Unclean One",
             "min": 1,
             "max": 1
           }

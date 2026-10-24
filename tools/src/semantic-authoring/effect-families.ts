@@ -1,0 +1,311 @@
+import type { SemanticFamilyDefinition } from "./contracts.js";
+import { boundedInteger, enumSet, enumValue, exactKeys } from "./family-validation.js";
+
+/** Effect families added after the original registry; each maps to one DSL effect. */
+
+/** Version 1 subjects (characteristic-modifier version 2). "The bearer" is the model, so later versions spell it this-model. */
+const SUBJECTS_WITH_BEARER = ["this-unit", "this-model", "bearer"] as const;
+const SUBJECTS = ["this-unit", "this-model"] as const;
+/** sticky-objective@2's optional subject; a selected unit is also allowed, unlike the other SUBJECTS lists here. */
+const STICKY_SUBJECTS = ["this-unit", "this-model", "selected-unit"] as const;
+/** Model characteristics, then weapon characteristics; only the weapon ones can be limited to melee or ranged. */
+export const MODEL_CHARACTERISTICS = ["M", "T", "Sv", "W", "Ld", "OC"] as const;
+export const WEAPON_CHARACTERISTICS = ["A", "WS", "BS", "S", "AP", "D"] as const;
+const CHARACTERISTICS = [...MODEL_CHARACTERISTICS, ...WEAPON_CHARACTERISTICS] as const;
+/** Whose characteristic: a model or unit's (and its weapons'), or the attack being made. */
+const CHARACTERISTIC_SUBJECTS_WITH_BEARER = [...SUBJECTS_WITH_BEARER, "attack"] as const;
+const CHARACTERISTIC_SUBJECTS = [...SUBJECTS, "attack"] as const;
+const CHARACTERISTIC_OPERATIONS = ["add", "subtract", "improve", "worsen"] as const;
+/** Version 4: 11th edition's detection range (15" by default, 12" while the unit has gone to ground) is a model characteristic too. */
+const CHARACTERISTICS_V4 = [...CHARACTERISTICS, "detection-range"] as const;
+/** Version 4: a unit the ability selected can have its characteristics changed ("that enemy unit has +9\" detection range"). */
+const CHARACTERISTIC_SUBJECTS_V4 = [...CHARACTERISTIC_SUBJECTS, "selected-unit"] as const;
+const WEAPON_SCOPES = ["all", "melee", "ranged"] as const;
+
+export const MOVES = ["advance", "fall-back"] as const;
+export const ACTS = ["shoot", "charge"] as const;
+
+/** Amounts as GW prints them; plain numbers become numbers in the DSL. */
+export const WOUND_AMOUNTS = ["1", "2", "3", "D3", "D6", "D3+3"] as const;
+/** Version 3 adds the D3+1 and D3+2 amounts GW also prints for healing. */
+export const WOUND_AMOUNTS_V3 = [...WOUND_AMOUNTS, "D3+1", "D3+2"] as const;
+export const HEAL_PER = ["model", "unit"] as const;
+
+export const EFFECT_FAMILIES: readonly SemanticFamilyDefinition[] = [
+  {
+    id: "sticky-objective",
+    version: 1,
+    role: "EFFECT",
+    label: "Sticky objective",
+    description: "\"That objective marker remains under your control until your opponent's Level of Control over it is greater than yours at the end of a phase.\" Being within range of it is a separate condition.",
+    starter: {},
+    parameterSchema: { type: "object", properties: {}, additionalProperties: false },
+    deprecated: true,
+  },
+  {
+    id: "sticky-objective",
+    version: 2,
+    role: "EFFECT",
+    label: "Sticky objective",
+    description: "\"That objective marker remains under your control until your opponent's Level of Control over it is greater than yours at the end of a phase.\" Being within range of it is a separate condition. subject names whose objectives (default this-unit); a selected unit is also allowed.",
+    starter: {},
+    parameterSchema: { type: "object", properties: { subject: { enum: STICKY_SUBJECTS } }, additionalProperties: false },
+  },
+  {
+    id: "no-advance-roll",
+    version: 1,
+    role: "EFFECT",
+    label: "No Advance roll",
+    description: "\"Do not make an Advance roll for it\". What happens instead (add 6\" to Move) is its own leaf; the \"instead\" between them joins rather than replaces.",
+    starter: { subject: "" },
+    parameterSchema: { type: "object", required: ["subject"], properties: { subject: { enum: SUBJECTS_WITH_BEARER } }, additionalProperties: false },
+    deprecated: true,
+  },
+  {
+    id: "no-advance-roll",
+    version: 2,
+    role: "EFFECT",
+    label: "No Advance roll",
+    description: "\"Do not make an Advance roll for it\". What happens instead (add 6\" to Move) is its own leaf; the \"instead\" between them joins rather than replaces. \"The bearer\" is this model.",
+    starter: { subject: "" },
+    parameterSchema: { type: "object", required: ["subject"], properties: { subject: { enum: SUBJECTS } }, additionalProperties: false },
+  },
+  {
+    id: "act-after-move",
+    version: 1,
+    role: "EFFECT",
+    label: "Shoot or charge after advancing or falling back",
+    description: "A unit that Advanced or Fell Back this turn is still eligible to shoot, declare a charge, or both. Pick every move and action the wording names.",
+    starter: { subject: "", moves: [], acts: [] },
+    parameterSchema: {
+      type: "object",
+      required: ["subject", "moves", "acts"],
+      properties: {
+        subject: { enum: SUBJECTS_WITH_BEARER },
+        moves: { type: "array", items: { enum: MOVES }, minItems: 1, uniqueItems: true },
+        acts: { type: "array", items: { enum: ACTS }, minItems: 1, uniqueItems: true },
+      },
+      additionalProperties: false,
+    },
+    deprecated: true,
+  },
+  {
+    id: "act-after-move",
+    version: 2,
+    role: "EFFECT",
+    label: "Shoot or charge after advancing or falling back",
+    description: "A unit that Advanced or Fell Back this turn is still eligible to shoot, declare a charge, or both. Pick every move and action the wording names. \"The bearer\" is this model.",
+    starter: { subject: "", moves: [], acts: [] },
+    parameterSchema: {
+      type: "object",
+      required: ["subject", "moves", "acts"],
+      properties: {
+        subject: { enum: SUBJECTS },
+        moves: { type: "array", items: { enum: MOVES }, minItems: 1, uniqueItems: true },
+        acts: { type: "array", items: { enum: ACTS }, minItems: 1, uniqueItems: true },
+      },
+      additionalProperties: false,
+    },
+  },
+  {
+    id: "characteristic-modifier",
+    version: 2,
+    role: "EFFECT",
+    label: "Change characteristics",
+    description: "Adds, subtracts, improves or worsens one or more characteristics, for example the Armour Penetration of melee weapons, or the Strength of the attack being made. Setting a value is a different leaf.",
+    starter: { subject: "", characteristics: [], operation: "", value: null, weapon_type: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["subject", "characteristics", "operation", "value", "weapon_type"],
+      properties: {
+        subject: { enum: CHARACTERISTIC_SUBJECTS_WITH_BEARER },
+        characteristics: { type: "array", items: { enum: CHARACTERISTICS }, minItems: 1, uniqueItems: true },
+        operation: { enum: CHARACTERISTIC_OPERATIONS },
+        value: { type: "integer", minimum: 1, maximum: 20 },
+        // Which weapons carry the change; melee or ranged only for weapon characteristics.
+        weapon_type: { enum: WEAPON_SCOPES },
+      },
+      additionalProperties: false,
+    },
+    deprecated: true,
+  },
+  {
+    id: "characteristic-modifier",
+    version: 3,
+    role: "EFFECT",
+    label: "Change characteristics",
+    description: "Adds, subtracts, improves or worsens one or more characteristics, for example the Armour Penetration of melee weapons, or the Strength of the attack being made. Setting a value is a different leaf. \"The bearer\" is this model.",
+    starter: { subject: "", characteristics: [], operation: "", value: null, weapon_type: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["subject", "characteristics", "operation", "value", "weapon_type"],
+      properties: {
+        subject: { enum: CHARACTERISTIC_SUBJECTS },
+        characteristics: { type: "array", items: { enum: CHARACTERISTICS }, minItems: 1, uniqueItems: true },
+        operation: { enum: CHARACTERISTIC_OPERATIONS },
+        value: { type: "integer", minimum: 1, maximum: 20 },
+        // Which weapons carry the change; melee or ranged only for weapon characteristics.
+        weapon_type: { enum: WEAPON_SCOPES },
+      },
+      additionalProperties: false,
+    },
+    deprecated: true,
+  },
+  {
+    id: "characteristic-modifier",
+    version: 4,
+    role: "EFFECT",
+    label: "Change characteristics",
+    description: "Adds, subtracts, improves or worsens one or more characteristics, for example the Armour Penetration of melee weapons, the Strength of the attack being made, or a unit's detection range (\"that enemy unit has +9\\\" detection range\": subject selected-unit, detection-range, add 9). Setting a value is a different leaf. \"The bearer\" is this model.",
+    starter: { subject: "", characteristics: [], operation: "", value: null, weapon_type: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["subject", "characteristics", "operation", "value", "weapon_type"],
+      properties: {
+        subject: { enum: CHARACTERISTIC_SUBJECTS_V4 },
+        characteristics: { type: "array", items: { enum: CHARACTERISTICS_V4 }, minItems: 1, uniqueItems: true },
+        operation: { enum: CHARACTERISTIC_OPERATIONS },
+        value: { type: "integer", minimum: 1, maximum: 20 },
+        // Which weapons carry the change; melee or ranged only for weapon characteristics.
+        weapon_type: { enum: WEAPON_SCOPES },
+      },
+      additionalProperties: false,
+    },
+    deprecated: true,
+  },
+  {
+    id: "characteristic-modifier",
+    version: 5,
+    role: "EFFECT",
+    label: "Change characteristics",
+    description: "A stat adjustment records the characteristics, operation and amount without guessing its recipient or weapon scope. Signed shorthand bonuses improve the named stat; penalties worsen it. Reviewed subject and weapon_type bindings can accompany a qualified leaf. Setting a value is a different leaf.",
+    starter: { characteristics: [], operation: "", value: null },
+    parameterSchema: {
+      type: "object",
+      required: ["characteristics", "operation", "value"],
+      properties: {
+        subject: { enum: CHARACTERISTIC_SUBJECTS_V4 },
+        characteristics: { type: "array", items: { enum: CHARACTERISTICS_V4 }, minItems: 1, uniqueItems: true },
+        operation: { enum: CHARACTERISTIC_OPERATIONS },
+        value: { type: "integer", minimum: 1, maximum: 20 },
+        weapon_type: { enum: WEAPON_SCOPES },
+      },
+      additionalProperties: false,
+    },
+    deprecated: true,
+  },
+  {
+    id: "characteristic-modifier",
+    version: 6,
+    role: "EFFECT",
+    label: "Change characteristics",
+    description: "A stat adjustment records the characteristics, operation and amount without guessing its recipient or weapon scope. Signed shorthand bonuses improve the named stat; penalties worsen it. Reviewed subject and weapon_type bindings can accompany a qualified leaf. Setting a value is a different leaf.",
+    starter: { characteristics: [], operation: "", value: null },
+    parameterSchema: {
+      type: "object",
+      required: ["characteristics", "operation", "value"],
+      properties: {
+        subject: { enum: CHARACTERISTIC_SUBJECTS_V4 },
+        characteristics: { type: "array", items: { enum: CHARACTERISTICS_V4 }, minItems: 1, uniqueItems: true },
+        operation: { enum: CHARACTERISTIC_OPERATIONS },
+        value: { type: "integer", minimum: 1, maximum: Number.MAX_SAFE_INTEGER },
+        weapon_type: { enum: WEAPON_SCOPES },
+      },
+      additionalProperties: false,
+    },
+  },
+  {
+    id: "regain-wounds",
+    version: 1,
+    role: "EFFECT",
+    label: "Regain lost wounds",
+    description: "A model regains lost wounds (heals). Adding to the Wounds characteristic is a different leaf.",
+    starter: { subject: "", amount: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["subject", "amount"],
+      properties: { subject: { enum: SUBJECTS_WITH_BEARER }, amount: { enum: WOUND_AMOUNTS } },
+      additionalProperties: false,
+    },
+    deprecated: true,
+  },
+  {
+    id: "regain-wounds",
+    version: 2,
+    role: "EFFECT",
+    label: "Regain lost wounds",
+    description: "A model regains lost wounds (heals). Adding to the Wounds characteristic is a different leaf. \"The bearer\" is this model.",
+    starter: { subject: "", amount: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["subject", "amount"],
+      properties: { subject: { enum: SUBJECTS }, amount: { enum: WOUND_AMOUNTS } },
+      additionalProperties: false,
+    },
+    deprecated: true,
+  },
+  {
+    id: "regain-wounds",
+    version: 3,
+    role: "EFFECT",
+    label: "Regain lost wounds",
+    description: "A model, or each model in a unit, regains lost wounds (heals), including D3+1 and D3+2. Adding to the Wounds characteristic is a different leaf.",
+    starter: { subject: "", amount: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["subject", "amount"],
+      properties: { subject: { enum: SUBJECTS }, amount: { enum: WOUND_AMOUNTS_V3 }, per: { enum: HEAL_PER } },
+      additionalProperties: false,
+    },
+  },
+];
+
+export function normalizeEffectParameters(family: string, input: Record<string, unknown>, version: number): Record<string, unknown> | null {
+  switch (family) {
+    case "sticky-objective": {
+      if (version === 1) {
+        exactKeys(input, [], family);
+        return {};
+      }
+      if ("subject" in input) {
+        exactKeys(input, ["subject"], family);
+        return { subject: enumValue(input.subject, STICKY_SUBJECTS, "sticky-objective.subject") };
+      }
+      exactKeys(input, [], family);
+      return {};
+    }
+    case "no-advance-roll":
+      exactKeys(input, ["subject"], family);
+      return { subject: enumValue(input.subject, version === 1 ? SUBJECTS_WITH_BEARER : SUBJECTS, "no-advance-roll.subject") };
+    case "act-after-move":
+      exactKeys(input, ["subject", "moves", "acts"], family);
+      return { subject: enumValue(input.subject, version === 1 ? SUBJECTS_WITH_BEARER : SUBJECTS, "act-after-move.subject"), moves: enumSet(input.moves, MOVES, "act-after-move.moves"), acts: enumSet(input.acts, ACTS, "act-after-move.acts") };
+    case "characteristic-modifier": {
+      const hasSubject = version < 5 || "subject" in input;
+      const hasWeaponType = version < 5 || "weapon_type" in input;
+      exactKeys(input, ["characteristics", "operation", "value", ...(hasSubject ? ["subject"] : []), ...(hasWeaponType ? ["weapon_type"] : [])], family);
+      const characteristics = enumSet(input.characteristics, version >= 4 ? CHARACTERISTICS_V4 : CHARACTERISTICS, "characteristic-modifier.characteristics");
+      const weaponType = hasWeaponType ? enumValue(input.weapon_type, WEAPON_SCOPES, "characteristic-modifier.weapon_type") : undefined;
+      const subject = hasSubject ? enumValue(input.subject, version === 2 ? CHARACTERISTIC_SUBJECTS_WITH_BEARER : version >= 4 ? CHARACTERISTIC_SUBJECTS_V4 : CHARACTERISTIC_SUBJECTS, "characteristic-modifier.subject") : undefined;
+      if (weaponType !== undefined && weaponType !== "all" && characteristics.some((item) => !(WEAPON_CHARACTERISTICS as readonly string[]).includes(item))) {
+        throw new TypeError("characteristic-modifier: only weapon characteristics (A, WS, BS, S, AP, D) can be limited to melee or ranged weapons.");
+      }
+      // An attack is already melee or ranged by its attack leaf; saying it here too would say it twice.
+      if (subject === "attack" && weaponType !== undefined && weaponType !== "all") throw new TypeError("characteristic-modifier: the attack's own leaf says melee or ranged; use weapon type all.");
+      return { ...(hasSubject ? { subject } : {}), characteristics, operation: enumValue(input.operation, CHARACTERISTIC_OPERATIONS, "characteristic-modifier.operation"), value: boundedInteger(input.value, 1, version >= 6 ? Number.MAX_SAFE_INTEGER : 20, "characteristic-modifier.value"), ...(hasWeaponType ? { weapon_type: weaponType } : {}) };
+    }
+    case "regain-wounds": {
+      if (version >= 3) {
+        const keys = ["subject", "amount", ...("per" in input ? ["per"] : [])];
+        exactKeys(input, keys, family);
+        const result: Record<string, unknown> = { subject: enumValue(input.subject, SUBJECTS, "regain-wounds.subject"), amount: enumValue(input.amount, WOUND_AMOUNTS_V3, "regain-wounds.amount") };
+        if ("per" in input) result.per = enumValue(input.per, HEAL_PER, "regain-wounds.per");
+        return result;
+      }
+      exactKeys(input, ["subject", "amount"], family);
+      return { subject: enumValue(input.subject, version === 1 ? SUBJECTS_WITH_BEARER : SUBJECTS, "regain-wounds.subject"), amount: enumValue(input.amount, WOUND_AMOUNTS, "regain-wounds.amount") };
+    }
+    default:
+      return null;
+  }
+}

@@ -109,21 +109,12 @@ func NewDataset(raw rawData) *Dataset {
 	ds.Abilities = newCollection(raw["abilities"], func(i any) *AbilityView {
 		return &AbilityView{Raw: i.(map[string]any), ds: ds}
 	}, collectionOpts{
-		idOf: func(i any) string { return getStr(i.(map[string]any), "ability_id") },
-		// An ability_id is shared across factions with per-faction copies that
-		// legitimately diverge; key on (faction_id, id) so every faction's copy
-		// is kept and a unit resolves its own faction's ability — same scheme
-		// as weapons (issue #59). faction_id is stamped at bundle time; only
-		// the shared _core pool stays faction-less (first-wins fallback).
-		dedupeKeyOf: func(i any) string {
-			m := i.(map[string]any)
-			return getStr(m, "faction_id") + "::" + getStr(m, "ability_id")
-		},
-		nameOf:    func(i any) string { return getStr(i.(map[string]any), "name") },
-		factionOf: factionIDOf,
-		// Per-faction copies diverge (DSL fidelity, unit_ids) — same guard as weapons.
-		guardUnscoped: true,
-		entityLabel:   "ability",
+		// Ability ids are unique across the dataset (`<name>-<faction>`; core rules bare),
+		// so a plain Get is exact. An old bare faction id resolves to nothing.
+		idOf:        func(i any) string { return getStr(i.(map[string]any), "ability_id") },
+		nameOf:      func(i any) string { return getStr(i.(map[string]any), "name") },
+		factionOf:   factionIDOf,
+		entityLabel: "ability",
 	})
 
 	ds.TargetProfiles = idCollection(raw["target_profiles"], factionIDOf)
@@ -359,14 +350,16 @@ func matchesBodyguardKeywords(la, unit map[string]any) bool {
 // leadersAttachableTo returns the leaders whose leader-attachment data lists
 // bodyguardUnitID among its eligible bodyguards — by explicit id or by keyword
 // eligibility (e.g. an Inquisitor leading any Imperium Battleline Infantry
-// unit) — sorted by name. Faction-agnostic (GetAny). Go mirror of TS
-// Dataset.leadersAttachableTo.
+// unit) — sorted by name. Faction-agnostic (GetAny); a shared leader chassis
+// carries one attachment record per faction, so leaders are deduped by id. Go
+// mirror of TS Dataset.leadersAttachableTo.
 func (ds *Dataset) leadersAttachableTo(bodyguardUnitID string) []*UnitView {
 	var bodyguard map[string]any
 	if bg, ok := ds.Units.GetAny(bodyguardUnitID); ok {
 		bodyguard = bg.Raw
 	}
 	var out []*UnitView
+	seen := map[string]bool{}
 	for _, laAny := range ds.LeaderAttachments {
 		la := laAny.(map[string]any)
 		eligible := false
@@ -382,7 +375,8 @@ func (ds *Dataset) leadersAttachableTo(bodyguardUnitID string) []*UnitView {
 		if !eligible {
 			continue
 		}
-		if leader, ok := ds.Units.GetAny(getStr(la, "leader_id")); ok {
+		if leader, ok := ds.Units.GetAny(getStr(la, "leader_id")); ok && !seen[leader.ID()] {
+			seen[leader.ID()] = true
 			out = append(out, leader)
 		}
 	}
@@ -520,7 +514,7 @@ func (ds *Dataset) buildIndexes(raw rawData) {
 	}
 	for _, unitAny := range raw["units"] {
 		unit := unitAny.(map[string]any)
-		for _, abilityID := range getStrList(unit, "ability_ids") {
+		for _, abilityID := range unitAbilityIDs(unit) {
 			ds.unitsByAbility[abilityID] = append(ds.unitsByAbility[abilityID], unit)
 		}
 		for _, weaponID := range getStrList(unit, "weapon_ids") {

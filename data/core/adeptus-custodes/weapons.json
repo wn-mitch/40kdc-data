@@ -23,7 +23,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -56,7 +56,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -93,7 +93,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -133,7 +133,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -166,7 +166,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -199,7 +199,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -248,7 +248,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -288,7 +288,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -332,7 +332,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -369,7 +369,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -428,7 +428,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -508,7 +508,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -518,76 +518,6 @@
       {
         "namespace": "mfm",
         "id": "0be65028-8c16-40b6-a213-30e6547251fb"
-      }
-    ]
-  },
-  {
-    "id": "kheres-pattern-assault-cannon",
-    "name": "Kheres-pattern assault cannon",
-    "type": "ranged",
-    "profiles": [
-      {
-        "name": "Kheres-pattern assault cannon",
-        "range": 24,
-        "stats": {
-          "A": 6,
-          "S": 7,
-          "AP": -1,
-          "D": 1,
-          "BS": 2
-        },
-        "keywords": [
-          {
-            "keyword_id": "devastating-wounds"
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "f2da-e26c-e0e9-7c84"
-      },
-      {
-        "namespace": "mfm",
-        "id": "a667e3c9-dd42-4c62-8bab-45f71e015467"
-      }
-    ]
-  },
-  {
-    "id": "contemptor-combat-weapon",
-    "name": "Contemptor combat weapon",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Contemptor combat weapon",
-        "range": "Melee",
-        "stats": {
-          "A": 5,
-          "S": 12,
-          "AP": -2,
-          "D": 3,
-          "WS": 2
-        },
-        "keywords": []
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "355c-3441-af3d-849"
-      },
-      {
-        "namespace": "mfm",
-        "id": "cdaf0493-aed5-4a6d-b839-f7732efbe61d"
       }
     ]
   },
@@ -650,7 +580,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -697,7 +627,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -737,7 +667,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -782,7 +712,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -815,12 +745,20 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "dca3-638e-52a2-b1b8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "92dc1e72-d350-4e0f-ac89-32b32b89b71f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c7449b0e-8394-4fbb-a27b-4b38db59e94d"
       },
       {
         "namespace": "mfm",
@@ -852,7 +790,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1011,7 +949,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1052,7 +990,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1140,7 +1078,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1184,7 +1122,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1198,46 +1136,6 @@
       {
         "namespace": "mfm",
         "id": "b46cbae2-59ca-41d1-abec-baa21e4ffbd0"
-      }
-    ]
-  },
-  {
-    "id": "adrastus-bolt-caliver",
-    "name": "Adrastus bolt caliver",
-    "type": "ranged",
-    "profiles": [
-      {
-        "name": "Adrastus bolt caliver",
-        "range": 36,
-        "stats": {
-          "A": 3,
-          "S": 5,
-          "AP": -1,
-          "D": 2,
-          "BS": 2
-        },
-        "keywords": [
-          {
-            "keyword_id": "sustained-hits",
-            "parameters": {
-              "value": 1
-            }
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "3ae8-34d7-1ecc-276e"
-      },
-      {
-        "namespace": "mfm",
-        "id": "0fbb766e-13ee-4581-ab18-ceac605aceda"
       }
     ]
   },
@@ -1268,7 +1166,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1301,7 +1199,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1346,7 +1244,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1379,7 +1277,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1472,7 +1370,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1552,7 +1450,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1589,7 +1487,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1622,7 +1520,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1631,51 +1529,11 @@
       },
       {
         "namespace": "mfm",
-        "id": "dbaf17ff-06fd-4215-be55-c02fcd3d293b"
-      }
-    ]
-  },
-  {
-    "id": "somnus",
-    "name": "Somnus",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Somnus",
-        "range": "Melee",
-        "stats": {
-          "A": 4,
-          "S": 6,
-          "AP": -3,
-          "D": 3,
-          "WS": 2
-        },
-        "keywords": [
-          {
-            "keyword_id": "anti",
-            "parameters": {
-              "target_keyword": "Psyker",
-              "threshold": 5
-            }
-          },
-          {
-            "keyword_id": "devastating-wounds"
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "76cd-8f1-1163-3b37"
+        "id": "24b1f4cc-a519-40ce-b0d3-ecb4187ed0b0"
       },
       {
         "namespace": "mfm",
-        "id": "3b117cd6-ea1d-4ed3-951c-32b7f5e9cc6f"
+        "id": "dbaf17ff-06fd-4215-be55-c02fcd3d293b"
       }
     ]
   },
@@ -1706,7 +1564,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1739,7 +1597,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1776,7 +1634,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1819,7 +1677,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1852,7 +1710,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1892,7 +1750,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1906,55 +1764,6 @@
       {
         "namespace": "mfm",
         "id": "9f2694b8-c041-4d03-904c-d7912bbc3f34"
-      }
-    ]
-  },
-  {
-    "id": "gnosis",
-    "name": "Gnosis",
-    "type": "ranged",
-    "profiles": [
-      {
-        "name": "Ranged",
-        "range": 24,
-        "stats": {
-          "A": 3,
-          "S": 4,
-          "AP": -1,
-          "D": 2,
-          "BS": 2
-        },
-        "keywords": [
-          {
-            "keyword_id": "assault"
-          }
-        ]
-      },
-      {
-        "name": "Melee",
-        "range": "Melee",
-        "stats": {
-          "A": 7,
-          "S": 8,
-          "AP": -3,
-          "D": 2,
-          "WS": 2
-        },
-        "keywords": []
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "d45d-d0e4-3f9-e430"
-      },
-      {
-        "namespace": "mfm",
-        "id": "b92e8fca-ddcd-4e77-aea4-0e5839a1230f"
       }
     ]
   },
@@ -1998,7 +1807,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2041,7 +1850,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2081,7 +1890,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2096,11 +1905,11 @@
   },
   {
     "id": "solerite-power-gauntlet",
-    "name": "Solerite power gauntlet",
+    "name": "Solarite Power Gauntlet",
     "type": "melee",
     "profiles": [
       {
-        "name": "Solerite power gauntlet",
+        "name": "Solarite Power Gauntlet",
         "range": "Melee",
         "stats": {
           "A": 5,
@@ -2114,7 +1923,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2129,11 +1938,11 @@
   },
   {
     "id": "solerite-power-talon",
-    "name": "Solerite power talon",
+    "name": "Solarite Power Talon",
     "type": "melee",
     "profiles": [
       {
-        "name": "Solerite power talon",
+        "name": "Solarite Power Talon",
         "range": "Melee",
         "stats": {
           "A": 7,
@@ -2147,7 +1956,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2157,103 +1966,6 @@
       {
         "namespace": "mfm",
         "id": "6b994741-1240-428e-b038-362029c066f9"
-      }
-    ]
-  },
-  {
-    "id": "adrasite-spear",
-    "name": "Adrasite spear",
-    "type": "ranged",
-    "profiles": [
-      {
-        "name": "Adrasite spear",
-        "range": 18,
-        "stats": {
-          "A": 1,
-          "S": 5,
-          "AP": -2,
-          "D": 3,
-          "BS": 2
-        },
-        "keywords": []
-      },
-      {
-        "name": "Adrasite spear",
-        "range": "Melee",
-        "stats": {
-          "A": 5,
-          "S": 7,
-          "AP": -2,
-          "D": 2,
-          "WS": 2
-        },
-        "keywords": []
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "b12f-e63c-b93c-598d"
-      },
-      {
-        "namespace": "mfm",
-        "id": "2c188dbe-1149-4618-a512-400f55b20065"
-      }
-    ]
-  },
-  {
-    "id": "pyrithite-spear",
-    "name": "Pyrithite spear",
-    "type": "ranged",
-    "profiles": [
-      {
-        "name": "Pyrithite spear",
-        "range": 12,
-        "stats": {
-          "A": 1,
-          "S": 9,
-          "AP": -4,
-          "D": "D6",
-          "BS": 2
-        },
-        "keywords": [
-          {
-            "keyword_id": "melta",
-            "parameters": {
-              "value": 2
-            }
-          }
-        ]
-      },
-      {
-        "name": "Pyrithite spear",
-        "range": "Melee",
-        "stats": {
-          "A": 5,
-          "S": 7,
-          "AP": -2,
-          "D": 2,
-          "WS": 2
-        },
-        "keywords": []
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "e3e9-329-2dad-dd49"
-      },
-      {
-        "namespace": "mfm",
-        "id": "51039e07-ba34-4335-a7fa-4107b2d5179c"
       }
     ]
   },
@@ -2284,7 +1996,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2325,7 +2037,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2358,7 +2070,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2391,12 +2103,16 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "f12f-4184-ea9a-efbc"
+      },
+      {
+        "namespace": "mfm",
+        "id": "338374ba-f583-49ee-b785-711726e37031"
       },
       {
         "namespace": "mfm",
@@ -2424,7 +2140,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2434,6 +2150,10 @@
       {
         "namespace": "mfm",
         "id": "0599399d-4323-49b5-802f-be2df72b34a3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d70aa56f-9404-4626-b851-fea368943704"
       }
     ]
   },
@@ -2457,7 +2177,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2467,6 +2187,10 @@
       {
         "namespace": "mfm",
         "id": "3b4bff07-ef0a-444c-858b-958b3a64f132"
+      },
+      {
+        "namespace": "mfm",
+        "id": "68aa15af-8a2a-4dcd-b78a-b33183d23a89"
       }
     ]
   },
@@ -2490,7 +2214,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2500,39 +2224,10 @@
       {
         "namespace": "mfm",
         "id": "3fb8f047-b5d7-41cf-b4c8-26ddd50e3f86"
-      }
-    ]
-  },
-  {
-    "id": "armoured-tracks-venerable-land-raider",
-    "name": "Armoured tracks",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Armoured tracks",
-        "range": "Melee",
-        "stats": {
-          "A": 6,
-          "S": 8,
-          "AP": 0,
-          "D": 1,
-          "WS": 4
-        },
-        "keywords": []
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "abaf-ea8a-f3da-2cbc"
       },
       {
         "namespace": "mfm",
-        "id": "97fadcc6-6a5c-4bd5-bd90-bd881abd5a39"
+        "id": "af03a316-ac3f-4095-8700-5ee0292b8c82"
       }
     ]
   },
@@ -2654,7 +2349,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2702,7 +2397,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2837,7 +2532,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2882,7 +2577,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2896,39 +2591,6 @@
       {
         "namespace": "mfm",
         "id": "34df57a9-5fbb-42cd-8c1e-38d881c15981"
-      }
-    ]
-  },
-  {
-    "id": "misericordia-sagittarum-custodians",
-    "name": "Misericordia",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Misericordia",
-        "range": "Melee",
-        "stats": {
-          "A": 4,
-          "S": 5,
-          "AP": -2,
-          "D": 1,
-          "WS": 2
-        },
-        "keywords": []
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "a3c6-be36-80ef-7b86"
-      },
-      {
-        "namespace": "mfm",
-        "id": "db758f15-0054-41f9-8c1a-80d99f705971"
       }
     ]
   },
@@ -3033,23 +2695,179 @@
     ]
   },
   {
-    "id": "storm-bolter-venerable-land-raider",
-    "name": "Storm bolter",
+    "id": "hurricane-bolter",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "6ff7e329-1b35-4a92-981e-06d32a71253a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cf8a448b-f555-40aa-8227-8749f759942a"
+      }
+    ],
+    "name": "Hurricane Bolter",
     "type": "ranged",
     "profiles": [
       {
-        "name": "Storm bolter",
-        "range": 24,
+        "name": "Hurricane Bolter",
+        "range": 18,
         "stats": {
-          "A": 2,
-          "S": 4,
-          "AP": 0,
-          "D": 1,
+          "A": 3,
+          "S": 5,
+          "AP": -1,
+          "D": 2,
           "BS": 2
         },
         "keywords": [
           {
             "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 3
+            }
+          },
+          {
+            "keyword_id": "twin-linked"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "id": "dreadspear",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "14d59f48-ba30-4c8a-942f-dd36b3b5f90c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5a074154-23ac-4f26-aa54-2e19cfbb1512"
+      }
+    ],
+    "name": "Dreadspear",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Dreadspear",
+        "range": 18,
+        "stats": {
+          "A": 2,
+          "S": 10,
+          "AP": -3,
+          "D": "D3+2",
+          "BS": 2
+        }
+      },
+      {
+        "name": "Dreadspear",
+        "range": "Melee",
+        "stats": {
+          "A": 5,
+          "S": 12,
+          "AP": -3,
+          "D": "D3+3",
+          "WS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "lance"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "id": "eternity-pattern-paragon-blade",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "211c0d96-9fca-48cc-87a5-d9b4e8b44084"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f2c28c8c-b85c-4ef4-9840-7f6c1d247691"
+      }
+    ],
+    "name": "Eternity-pattern Paragon Blade",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Eternity-pattern Paragon Blade",
+        "range": "Melee",
+        "stats": {
+          "A": 6,
+          "S": 10,
+          "AP": -3,
+          "D": 3,
+          "WS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "precision"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "id": "pyrithite-spear",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "062f369e-5b0c-4ae0-b4b3-84f2e9c17496"
+      }
+    ],
+    "name": "Pyrithite Spear",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Pyrithite Spear",
+        "range": "Melee",
+        "stats": {
+          "A": 8,
+          "S": 8,
+          "AP": -2,
+          "D": 2,
+          "WS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "cleave",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      },
+      {
+        "name": "Pyrithite Spear",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 10,
+          "AP": -3,
+          "D": "D3+2",
+          "BS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "assault"
+          },
+          {
+            "keyword_id": "melta",
             "parameters": {
               "value": 2
             }
@@ -3059,65 +2877,354 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "id": "twin-neutronium-cascade-projectors",
     "external_refs": [
       {
-        "namespace": "bsdata",
-        "id": "e8a1-2a4e-fc19-905c"
+        "namespace": "mfm",
+        "id": "0ae8c2e6-5cbf-4f19-ad11-55ba04216050"
       },
       {
         "namespace": "mfm",
-        "id": "16ea02ec-fed3-4322-8651-890b5f46ef58"
+        "id": "2cac33a6-be6f-417a-b4b2-6762e0b069c5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "86fc06d4-f152-4720-9a27-09534d451cd3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "96e8c4a5-0ee4-4afe-b966-6358cf8a90f3"
       }
-    ]
-  },
-  {
-    "id": "balistus-grenade-launcher-gilded-blades",
-    "name": "Balistus grenade launcher",
+    ],
+    "name": "Twin Neutronium Cascade Projectors",
     "type": "ranged",
     "profiles": [
       {
-        "name": "Balistus grenade launcher",
-        "range": 18,
+        "name": "Twin Neutronium Cascade Projectors",
+        "range": 12,
         "stats": {
-          "A": "D6",
-          "S": 5,
-          "AP": -1,
+          "A": 3,
+          "S": 7,
+          "AP": -2,
           "D": 1,
-          "BS": 2
+          "BS": null
         },
         "keywords": [
           {
             "keyword_id": "blast"
+          },
+          {
+            "keyword_id": "torrent"
+          },
+          {
+            "keyword_id": "twin-linked"
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
-    },
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "id": "iliastus-accelerator-cannon",
     "external_refs": [
       {
         "namespace": "mfm",
-        "id": "f651a6f2-afe4-4cbf-951e-0b1bb2125817"
+        "id": "e01e737a-1764-487a-b17c-bc2c0078d942"
       }
-    ]
-  },
-  {
-    "id": "castellan-axe-gilded-blades",
-    "name": "Castellan axe",
+    ],
+    "name": "Iliastus Accelerator Cannon",
     "type": "ranged",
     "profiles": [
       {
-        "name": "Ranged",
+        "name": "Iliastus Accelerator Cannon",
+        "range": 48,
+        "stats": {
+          "A": 4,
+          "S": 10,
+          "AP": -1,
+          "D": 3,
+          "BS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 4
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "arachnus-blaze-carronade",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "b104765c-bb4c-42cb-8b03-1929b38ef080"
+      }
+    ],
+    "name": "Arachnus Blaze Carronade",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Arachnus Blaze Carronade",
+        "range": 48,
+        "stats": {
+          "A": 4,
+          "S": 12,
+          "AP": -3,
+          "D": "D6+2",
+          "BS": 2
+        }
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "adrathic-combi-destructor",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "502ee3da-4a95-46dc-ada9-d538145a5029"
+      },
+      {
+        "namespace": "mfm",
+        "id": "896113ac-c680-4f38-ba94-19e5d0d03417"
+      }
+    ],
+    "name": "Adrathic Combi-destructor",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Adrathic Combi-destructor",
+        "range": 12,
+        "stats": {
+          "A": 2,
+          "S": 5,
+          "AP": -2,
+          "D": 3,
+          "BS": 2
+        }
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "id": "twin-iliastus-accelerator-fusil",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "c62b7698-c8bc-4534-ac65-c0aa6cd9f2ca"
+      }
+    ],
+    "name": "Twin Iliastus Accelerator Fusil",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Twin Iliastus Accelerator Fusil",
+        "range": 48,
+        "stats": {
+          "A": 2,
+          "S": 10,
+          "AP": -1,
+          "D": 3,
+          "BS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 2
+            }
+          },
+          {
+            "keyword_id": "twin-linked"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "id": "gun-stock",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "2576842a-3866-454e-8bec-cf6c82c03ad3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "db23c461-7253-4479-84a9-8a3ebed1f556"
+      }
+    ],
+    "name": "Gun Stock",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Gun Stock",
+        "range": "Melee",
+        "stats": {
+          "A": 2,
+          "S": 3,
+          "AP": 0,
+          "D": 1,
+          "WS": 3
+        }
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "id": "dual-caestus-fists",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "d0c0a498-c3c7-4eb9-85ec-fb7ec5588c14"
+      }
+    ],
+    "name": "Dual Caestus Fists",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Dual Caestus Fists",
+        "range": "Melee",
+        "stats": {
+          "A": 7,
+          "S": 14,
+          "AP": -3,
+          "D": 4,
+          "WS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "twin-linked"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "id": "adrathic-desolator",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "1c2839a2-0432-48ed-9a33-7fd6efb0a557"
+      }
+    ],
+    "name": "Adrathic Desolator",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Adrathic Desolator",
         "range": 24,
         "stats": {
-          "A": 1,
-          "S": 4,
-          "AP": -1,
+          "A": 4,
+          "S": 10,
+          "AP": -2,
+          "D": 4,
+          "BS": 2
+        }
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "id": "caestus-fist",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "752a0c35-d6d6-4dec-912a-bba20bf42e27"
+      }
+    ],
+    "name": "Caestus Fist",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Caestus Fist",
+        "range": "Melee",
+        "stats": {
+          "A": 5,
+          "S": 14,
+          "AP": -3,
+          "D": 4,
+          "WS": 2
+        }
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "id": "verutum-lance",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "40cc7a71-ea14-4261-90fc-234acf36e084"
+      }
+    ],
+    "name": "Verutum Lance",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Verutum Lance",
+        "range": "Melee",
+        "stats": {
+          "A": 5,
+          "S": 7,
+          "AP": -2,
           "D": 2,
+          "WS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "lance"
+          },
+          {
+            "keyword_id": "precision"
+          }
+        ]
+      },
+      {
+        "name": "Verutum Lance",
+        "range": 18,
+        "stats": {
+          "A": 1,
+          "S": 10,
+          "AP": -2,
+          "D": 3,
           "BS": 2
         },
         "keywords": [
@@ -3125,29 +3232,305 @@
             "keyword_id": "assault"
           }
         ]
-      },
-      {
-        "name": "Melee",
-        "range": "Melee",
-        "stats": {
-          "A": 4,
-          "S": 9,
-          "AP": -1,
-          "D": 3,
-          "WS": 2
-        },
-        "keywords": []
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
-    },
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "id": "flamer",
     "external_refs": [
       {
         "namespace": "mfm",
-        "id": "73baadc4-6e5f-404d-bdef-a16674cfaefe"
+        "id": "6218d42f-1a9f-481b-bf46-092e63c9af1e"
       }
-    ]
+    ],
+    "name": "Flamer",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Flamer",
+        "range": 12,
+        "stats": {
+          "A": 3,
+          "S": 4,
+          "AP": -1,
+          "D": 1,
+          "BS": null
+        },
+        "keywords": [
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "Psyker",
+              "threshold": 4
+            }
+          },
+          {
+            "keyword_id": "assault"
+          },
+          {
+            "keyword_id": "blast"
+          },
+          {
+            "keyword_id": "torrent"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "id": "twin-infernus-incinerator",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "3f7b1a9a-b2ca-40a5-8b00-c9a9fed300a0"
+      }
+    ],
+    "name": "Twin Infernus Incinerator",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Twin Infernus Incinerator",
+        "range": 12,
+        "stats": {
+          "A": 3,
+          "S": 6,
+          "AP": -1,
+          "D": 1,
+          "BS": null
+        },
+        "keywords": [
+          {
+            "keyword_id": "blast"
+          },
+          {
+            "keyword_id": "torrent"
+          },
+          {
+            "keyword_id": "twin-linked"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "id": "warblade",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "44051bbb-a2b1-4fe7-8f90-430ea6877c1c"
+      }
+    ],
+    "name": "Warblade",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Warblade",
+        "range": 12,
+        "stats": {
+          "A": 4,
+          "S": 6,
+          "AP": -1,
+          "D": 2,
+          "BS": null
+        },
+        "keywords": [
+          {
+            "keyword_id": "blast"
+          },
+          {
+            "keyword_id": "torrent"
+          },
+          {
+            "keyword_id": "twin-linked"
+          }
+        ]
+      },
+      {
+        "name": "Warblade",
+        "range": "Melee",
+        "stats": {
+          "A": 8,
+          "S": 10,
+          "AP": -2,
+          "D": 3,
+          "WS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "cleave",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "arachnus-volley-cannon",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "4f5da997-3ff3-40ac-a08d-5175463b9ef6"
+      }
+    ],
+    "name": "Arachnus Volley Cannon",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Arachnus Volley Cannon",
+        "range": 24,
+        "stats": {
+          "A": 8,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "devastating-wounds"
+          },
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "id": "twin-corvae-las-pulser",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "d5171f11-3708-4dce-a567-a0851612ca92"
+      }
+    ],
+    "name": "Twin Corvae Las-pulser",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Twin Corvae Las-pulser",
+        "range": 18,
+        "stats": {
+          "A": 1,
+          "S": 10,
+          "AP": -3,
+          "D": "D3+2",
+          "BS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "twin-linked"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "id": "solarite-power-lance",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "70f0a1c8-2e1a-42f1-8e68-0b5d34a9cb9f"
+      }
+    ],
+    "name": "Solarite Power Lance",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Solarite Power Lance",
+        "range": "Melee",
+        "stats": {
+          "A": 5,
+          "S": 8,
+          "AP": -2,
+          "D": 3,
+          "WS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "lance"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "id": "master-crafted-flamer",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "335be5c5-6410-4a0c-a307-7bc1f8720df2"
+      }
+    ],
+    "name": "Master-crafted Flamer",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Master-crafted Flamer",
+        "range": 12,
+        "stats": {
+          "A": 4,
+          "S": 4,
+          "AP": -1,
+          "D": 1,
+          "BS": null
+        },
+        "keywords": [
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "Psyker",
+              "threshold": 4
+            }
+          },
+          {
+            "keyword_id": "assault"
+          },
+          {
+            "keyword_id": "blast"
+          },
+          {
+            "keyword_id": "torrent"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    }
   }
 ]

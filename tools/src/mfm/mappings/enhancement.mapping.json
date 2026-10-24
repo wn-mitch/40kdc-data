@@ -288,17 +288,17 @@
       "transforms": [
         {
           "symbol": "tools/src/mfm/enhancements.ts#runEnhancements",
-          "operation": "Stamp the confirmed repository launch game-version on a matched enhancement."
+          "operation": "Stamp the game-version tools/src/mfm/dataslate.ts maps the dump's data_version to on a matched enhancement."
         }
       ],
       "filters": [
         "Only existing entities matched by the derived enhancement id are reconciled."
       ],
       "precedence": [
-        "The reconciliation pass sets both game-version members to its confirmed launch constants."
+        "The reconciliation pass sets both game-version members to the current dump's dataslate."
       ],
       "consumers": ["tools/src/mfm/enhancements.ts#runEnhancements"],
-      "reason": "The game-version value is a repository confirmation stamp triggered by a matched MFM row, not a conversion of dump version metadata."
+      "reason": "The game-version value is a repository confirmation stamp triggered by a matched MFM row, looked up from the dump's data_version, not a conversion of it."
     },
     "/game_version/dataslate": {
       "provenance": "derived",
@@ -308,14 +308,14 @@
       "transforms": [
         {
           "symbol": "tools/src/mfm/enhancements.ts#runEnhancements",
-          "operation": "Stamp the confirmed repository launch dataslate on a matched enhancement."
+          "operation": "Stamp the dataslate tools/src/mfm/dataslate.ts maps the dump's data_version to on a matched enhancement."
         }
       ],
       "filters": [
         "Only existing entities matched by the derived enhancement id are reconciled."
       ],
       "precedence": [
-        "The reconciliation pass replaces the existing dataslate with its confirmed launch constant."
+        "The reconciliation pass replaces the existing dataslate with the current dump's dataslate."
       ],
       "consumers": ["tools/src/mfm/enhancements.ts#runEnhancements"],
       "reason": "This is repository confirmation metadata, not an implicit translation of the dump snapshot version."
@@ -627,7 +627,7 @@
     {
       "source": "data.enhancement.localisations.*.rules",
       "candidate_pointer": null,
-      "reason": "Localized rules prose is routed to the private raw-text store rather than copied into core data."
+      "reason": "Localized rules prose stays in the private MFM dump rather than being copied into core data."
     },
     {
       "source": "data.enhancement.publicationId",

@@ -149,6 +149,11 @@
       "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
       "reason": "Variant-count caps come from the BSData parent group's constraints and increment modifiers. MFM's limited sets are projected as item-count wargear_budgets, which count final equipment ids rather than selected model peers, so no MFM source represents this field."
     },
+    "/models/*/loadout_variant_budgets/*/stepped": {
+      "provenance": "not-in-mfm", "coverage": "unimplemented",
+      "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
+      "reason": "Variant-count caps come from the BSData parent group's constraints and increment modifiers. MFM's limited sets are projected as item-count wargear_budgets, which count final equipment ids rather than selected model peers, so no MFM source represents this field."
+    },
     "/models/*/profile_name": {
       "provenance": "repo-authored", "coverage": "partial", "sources": [], "joins": [],
       "transforms": [{ "symbol": "tools/src/mfm/wargear.ts#reconcileModels", "operation": "Preserve an existing profile_name while updating supported composition fields." }],
@@ -239,15 +244,15 @@
       "reason": "The tier maximum is copied from the supported composition-miniature row."
     },
     "/game_version": {
-      "provenance": "repo-authored", "coverage": "implemented", "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": ["Existing unit game_version precedes the repository launch fallback."],
+      "provenance": "repo-authored", "coverage": "implemented", "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": ["Existing unit game_version precedes the current dump dataslate fallback."],
       "consumers": ["tools/src/mfm/project-loadout.ts#projectUnit"], "reason": "The projection copies repository release context and never converts dump metadata into a game version."
     },
     "/game_version/edition": {
-      "provenance": "repo-authored", "coverage": "implemented", "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": ["Existing unit game_version precedes the repository launch fallback."],
+      "provenance": "repo-authored", "coverage": "implemented", "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": ["Existing unit game_version precedes the current dump dataslate fallback."],
       "consumers": ["tools/src/mfm/project-loadout.ts#projectUnit"], "reason": "Edition is repository release context, not a dump-metadata transform."
     },
     "/game_version/dataslate": {
-      "provenance": "repo-authored", "coverage": "implemented", "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": ["Existing unit game_version precedes the repository launch fallback."],
+      "provenance": "repo-authored", "coverage": "implemented", "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": ["Existing unit game_version precedes the current dump dataslate fallback."],
       "consumers": ["tools/src/mfm/project-loadout.ts#projectUnit"], "reason": "Dataslate is repository release context, not a dump-metadata transform."
     },
     "/game_modes": {
@@ -257,12 +262,42 @@
     "/game_modes/*": {
       "provenance": "repo-authored", "coverage": "unimplemented", "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
       "reason": "Current composition projection does not emit game_modes; any composition mode labels remain authored."
+    },
+    "/models/*/excluded_from_enhancements": {
+      "provenance": "direct",
+      "coverage": "implemented",
+      "sources": [
+        "data.miniature.excludedFromEnhancements",
+        "data.miniature.localisations.*.name"
+      ],
+      "joins": [
+        {
+          "relation": "miniature.datasheetId",
+          "direction": "children",
+          "purpose": "general"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/wargear.ts#runCompositionNames",
+          "operation": "Set the flag on the model row whose name matches an excluded miniature; clear it otherwise."
+        }
+      ],
+      "filters": [
+        "Emit only when true."
+      ],
+      "precedence": [
+        "The current MFM miniature flag is authoritative."
+      ],
+      "consumers": [
+        "tools/src/mfm/wargear.ts#runCompositionNames"
+      ],
+      "reason": "The miniature flag marks a CHARACTER model that cannot be given an Enhancement."
     }
   },
   "unmapped_mfm_fields": [
     { "source": "data.miniature.canBeNonCharacterWarlord", "candidate_pointer": "/models/*/is_leader_model", "reason": "A warlord eligibility flag is not the repository leader-model heuristic." },
     { "source": "data.miniature.cannotBeWarlord", "candidate_pointer": "/models/*/is_leader_model", "reason": "A warlord restriction is not the repository leader-model heuristic." },
-    { "source": "data.miniature.excludedFromEnhancements", "candidate_pointer": null, "reason": "Enhancement eligibility has no unit-composition destination." },
     { "source": "data.miniature.isIndividualModels", "candidate_pointer": null, "reason": "The current composition projection does not model this source classification." },
     { "source": "data.miniature.isSupremeCommander", "candidate_pointer": null, "reason": "The current composition projection does not model this source classification." },
     { "source": "data.miniature.miniatureSlots", "candidate_pointer": null, "reason": "The current composition projection does not model source slot counts." },

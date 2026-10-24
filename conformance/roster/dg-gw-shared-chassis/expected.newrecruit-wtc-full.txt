@@ -2,7 +2,7 @@
 + LIST NAME: Imported roster
 + FACTION KEYWORD: Death Guard
 + DETACHMENT: Virulent Vectorium
-+ FORCE DISPOSITION: Take And Hold
++ FORCE DISPOSITION: Purge The Foe
 + TOTAL ARMY POINTS: 165pts
 + POINTS LIMIT: 165pts
 +

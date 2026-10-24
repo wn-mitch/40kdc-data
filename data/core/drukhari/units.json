@@ -70,14 +70,20 @@
       "splinter-rifle"
     ],
     "ability_ids": [
-      "cluster-caltrops",
-      "eviscerating-fly-by",
-      "grav-talon",
-      "matchless-swiftness"
+      {
+        "id": "cluster-caltrops-drukhari",
+        "wargear": "cluster-caltrops"
+      },
+      "eviscerating-fly-by-drukhari",
+      {
+        "id": "grav-talon-drukhari",
+        "wargear": "grav-talon"
+      },
+      "matchless-swiftness-drukhari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -167,14 +173,20 @@
       "spirit-vortex"
     ],
     "ability_ids": [
-      "deadly-demise-1",
-      "feel-no-pain-5",
-      "pain-engine-aura",
-      "pain-parasite"
+      {
+        "id": "deadly-demise",
+        "value": 1
+      },
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      },
+      "pain-engine-drukhari",
+      "pain-parasite-drukhari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -242,14 +254,14 @@
       "archite-glaive-and-agoniser"
     ],
     "ability_ids": [
-      "bloody-spectacle",
+      "bloody-spectacle-drukhari",
       "leader",
-      "lithe-agility",
-      "storm-of-blades"
+      "lithe-agility-drukhari",
+      "storm-of-blades-drukhari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -340,14 +352,17 @@
       "stunclaw"
     ],
     "ability_ids": [
-      "battlefield-butchery",
+      "battlefield-butchery-drukhari",
       "deep-strike",
-      "phantasm-grenade-launcher",
-      "skyboard-evasion"
+      {
+        "id": "phantasm-grenade-launcher-drukhari",
+        "wargear": "phantasm-grenade-launcher"
+      },
+      "skyboard-evasion-drukhari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -403,7 +418,8 @@
       "Dedicated Transport",
       "Fly",
       "Aeldari",
-      "Venom"
+      "Venom",
+      "Frame"
     ],
     "faction_keywords": [
       "Drukhari"
@@ -425,19 +441,25 @@
       "twin-splinter-rifle"
     ],
     "ability_ids": [
-      "aerialists",
-      "firing-deck-6",
-      "rapid-deployment",
+      "aerialists-drukhari",
+      {
+        "id": "firing-deck",
+        "value": 6
+      },
+      "rapid-deployment-drukhari",
       "stealth",
       "deep-strike",
-      "deadly-demise-1"
+      {
+        "id": "deadly-demise",
+        "value": 1
+      }
     ],
     "transport_capacity": {
       "capacity": 6
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -517,13 +539,13 @@
       "splinter-pistol"
     ],
     "ability_ids": [
-      "murderous-crossfire",
-      "swooping-descent",
+      "murderous-crossfire-drukhari",
+      "swooping-descent-drukhari",
       "deep-strike"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -605,13 +627,20 @@
       "splinter-rifle"
     ],
     "ability_ids": [
-      "cruel-enforcers",
-      "kabalite-icon",
-      "sadistic-raiders"
+      "cruel-enforcers-drukhari",
+      {
+        "id": "kabalite-icon-drukhari",
+        "wargear": "kabalite-icon"
+      },
+      "sadistic-raiders-drukhari",
+      {
+        "id": "phantasm-grenade-launcher-drukhari",
+        "wargear": "phantasm-grenade-launcher"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -697,7 +726,8 @@
       "Dedicated Transport",
       "Fly",
       "Aeldari",
-      "Raider"
+      "Raider",
+      "Frame"
     ],
     "faction_keywords": [
       "Drukhari"
@@ -719,10 +749,16 @@
       "disintegrator-cannon"
     ],
     "ability_ids": [
-      "deadly-demise-d3",
-      "firing-deck-11",
-      "splinter-racks",
-      "vanguard-of-the-dark-city",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "firing-deck",
+        "value": 11
+      },
+      "splinter-racks-drukhari",
+      "vanguard-of-the-dark-city-drukhari",
       "deep-strike"
     ],
     "transport_capacity": {
@@ -730,7 +766,7 @@
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -796,15 +832,15 @@
       "leliths-blades"
     ],
     "ability_ids": [
-      "blur-of-blades",
-      "brides-of-death",
+      "blur-of-blades-drukhari",
+      "brides-of-death-drukhari",
       "fights-first",
       "leader",
-      "thrilling-spectacle"
+      "thrilling-spectacle-drukhari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -874,14 +910,17 @@
       "twin-splinter-rifle"
     ],
     "ability_ids": [
-      "ground-attack-craft",
-      "nowhere-to-run",
+      "ground-attack-craft-drukhari",
+      "nowhere-to-run-drukhari",
       "stealth",
-      "deadly-demise-d3"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -965,13 +1004,13 @@
       "splinter-pistol"
     ],
     "ability_ids": [
-      "airborne-evasion",
-      "winged-strike",
+      "airborne-evasion-drukhari",
+      "winged-strike-drukhari",
       "deep-strike"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1019,25 +1058,25 @@
     "points": [
       {
         "models": 1,
-        "cost": 75,
+        "cost": 70,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 2,
-        "cost": 150,
+        "cost": 140,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 85,
+        "cost": 80,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 2,
-        "cost": 160,
+        "cost": 150,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -1075,15 +1114,21 @@
       "twin-splinter-cannon"
     ],
     "ability_ids": [
-      "devoted-to-pain",
-      "mindless-killing-machines",
-      "torture-device",
-      "deadly-demise-1",
-      "feel-no-pain-5"
+      "devoted-to-pain-drukhari",
+      "mindless-killing-machines-drukhari",
+      "torture-device-drukhari",
+      {
+        "id": "deadly-demise",
+        "value": 1
+      },
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1132,17 +1177,17 @@
     "points": [
       {
         "models": 5,
-        "cost": 60
+        "cost": 55
       },
       {
         "models": 6,
         "models_max": 8,
-        "cost": 100
+        "cost": 90
       },
       {
         "models": 9,
         "models_max": 10,
-        "cost": 120
+        "cost": 110
       }
     ],
     "keywords": [
@@ -1173,12 +1218,12 @@
       "twin-torturers-tools"
     ],
     "ability_ids": [
-      "experimental-enhancements",
-      "torturer-s-craft"
+      "experimental-enhancements-drukhari",
+      "torturers-craft-drukhari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1273,15 +1318,18 @@
       "stinger-pistol-haemonculus"
     ],
     "ability_ids": [
-      "fear-incarnate-aura",
-      "fleshcraft",
+      "fear-incarnate-drukhari",
+      "fleshcraft-drukhari",
       "leader",
-      "pain-adept",
-      "feel-no-pain-5"
+      "pain-adept-drukhari",
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1350,16 +1398,22 @@
       "splinter-pistol-archon"
     ],
     "ability_ids": [
-      "devious-mastermind",
-      "hatred-eternal",
+      "devious-mastermind-drukhari",
+      "hatred-eternal-drukhari",
       "leader",
-      "overlord",
-      "shadowfield",
-      "soul-trap"
+      "overlord-drukhari",
+      {
+        "id": "shadowfield-drukhari",
+        "wargear": "shadowfield"
+      },
+      {
+        "id": "soul-trap-drukhari",
+        "wargear": "soul-trap"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1427,15 +1481,18 @@
       "razor-fan"
     ],
     "ability_ids": [
-      "archon-of-the-poisoned-tongue",
+      "archon-of-the-poisoned-tongue-drukhari",
       "leader",
-      "mind-like-a-steel-trap-aura",
-      "precognisant",
-      "feel-no-pain-5"
+      "mind-like-a-steel-trap-drukhari",
+      "precognisant-drukhari",
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1482,7 +1539,8 @@
       "Kabal",
       "Fly",
       "Aeldari",
-      "Ravager"
+      "Ravager",
+      "Frame"
     ],
     "faction_keywords": [
       "Drukhari"
@@ -1504,14 +1562,21 @@
       "disintegrator-cannon"
     ],
     "ability_ids": [
-      "agonising-suppression",
-      "eradicate-the-foe",
+      "agonising-suppression-drukhari",
+      "eradicate-the-foe-drukhari",
       "deep-strike",
-      "deadly-demise-d3"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1586,12 +1651,12 @@
       "splinter-pistol"
     ],
     "ability_ids": [
-      "acrobatic-gladiators",
-      "no-escape"
+      "acrobatic-gladiators-drukhari",
+      "no-escape-drukhari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1675,15 +1740,29 @@
       "stinger-pistol"
     ],
     "ability_ids": [
-      "archon-s-retinue",
-      "archon-s-will",
-      "assassins-poisons",
-      "scouts-7",
-      "stimm-needler"
+      "archons-retinue-drukhari",
+      "archons-will-drukhari",
+      "assassins-poisons-drukhari",
+      {
+        "id": "scouts",
+        "value": 7
+      },
+      {
+        "id": "stimm-needler-drukhari",
+        "wargear": "stimm-needler"
+      },
+      {
+        "id": "kabalite-icon-drukhari",
+        "wargear": "kabalite-icon"
+      },
+      {
+        "id": "phantasm-grenade-launcher-hand-of-the-archon-drukhari",
+        "wargear": "phantasm-grenade-launcher"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1768,14 +1847,21 @@
       "voidraven-missiles"
     ],
     "ability_ids": [
-      "nowhere-to-hide",
-      "void-mine",
+      "nowhere-to-hide-drukhari",
+      "void-mine-drukhari",
       "stealth",
-      "deadly-demise-d3"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1841,13 +1927,13 @@
     ],
     "ability_ids": [
       "leader",
-      "master-of-blades",
-      "onslaught",
-      "silent-executioner"
+      "master-of-blades-drukhari",
+      "onslaught-drukhari",
+      "silent-executioner-drukhari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1943,13 +2029,16 @@
       "klaive"
     ],
     "ability_ids": [
-      "decapitating-strikes",
-      "incubi-shrine-token",
-      "tormentors"
+      "decapitating-strikes-drukhari",
+      {
+        "id": "incubi-shrine-token-drukhari",
+        "wargear": "incubi-shrine-token"
+      },
+      "tormentors-drukhari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2047,15 +2136,15 @@
       "glimmersteel-blade"
     ],
     "ability_ids": [
-      "fade-away",
+      "fade-away-drukhari",
       "infiltrators",
-      "shade-weavers",
+      "shade-weavers-drukhari",
       "deep-strike",
       "stealth"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2101,7 +2190,8 @@
       "Coven of Agonies",
       "Fly",
       "Haemonculus Covens",
-      "Monster"
+      "Monster",
+      "Coven of Agonies Cronos"
     ],
     "faction_keywords": [
       "Drukhari"
@@ -2116,11 +2206,12 @@
       "spirit-vortex"
     ],
     "ability_ids": [
-      "empowered-engines-coven-of-agonies"
+      "empowered-engines-drukhari",
+      "pain-engine-coven-of-agonies-cronos-drukhari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -2161,7 +2252,8 @@
       "Coven of Agonies",
       "Fly",
       "Haemonculus Covens",
-      "Monster"
+      "Monster",
+      "Coven of Agonies Talos"
     ],
     "faction_keywords": [
       "Drukhari"
@@ -2176,11 +2268,12 @@
       "twin-splinter-cannon"
     ],
     "ability_ids": [
-      "torture-device-coven-of-agonies"
+      "torture-device-coven-of-agonies-talos-drukhari",
+      "mindless-killing-machines-coven-of-agonies-talos-drukhari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -2222,7 +2315,8 @@
       "Battleline",
       "Coven of Agonies",
       "Haemonculus Covens",
-      "Infantry"
+      "Infantry",
+      "Coven of Agonies Wracks"
     ],
     "faction_keywords": [
       "Drukhari"
@@ -2239,7 +2333,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -2255,6 +2349,10 @@
         "namespace": "mfm",
         "id": "c1473dd7-a21c-415f-9b4d-51186a28ae0e"
       }
+    ],
+    "ability_ids": [
+      "experimental-enhancements-coven-of-agonies-wracks-drukhari",
+      "torturers-craft-coven-of-agonies-wracks-drukhari"
     ]
   },
   {
@@ -2286,7 +2384,8 @@
       "Coven of Agonies",
       "Haemonculus",
       "Haemonculus Covens",
-      "Infantry"
+      "Infantry",
+      "Xatrophos Nuul"
     ],
     "faction_keywords": [
       "Drukhari"
@@ -2300,12 +2399,13 @@
       "stinger-pistol-xatrophos-nuul"
     ],
     "ability_ids": [
-      "fear-incarnate-aura-xatrophos-nuul",
-      "vile-weaponry-xatrophos-nuul"
+      "fear-incarnate-xatrophos-nuul-drukhari",
+      "vile-weaponry-drukhari",
+      "pain-adept-xatrophos-nuul-drukhari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"

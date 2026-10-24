@@ -117,6 +117,33 @@ fn run_query(ds: &Dataset, query: &str, args: &Value) -> Value {
             encoded.sort_by(|a, b| a.as_str().unwrap_or("").cmp(b.as_str().unwrap_or("")));
             Value::Array(encoded)
         }
+        "weapon_bounds" => {
+            let id = arg_str("unitId");
+            let model_count: u64 = arg_str("modelCount")
+                .parse()
+                .expect("modelCount is an integer");
+            let u = ds
+                .units
+                .get_any(id)
+                .unwrap_or_else(|| panic!("{query}: unknown unit {id}"));
+            let models = ds
+                .unit_compositions
+                .iter()
+                .find(|c| c.unit_id.as_str() == id)
+                .map(|c| wh40kdc::loadout_models(&c.models));
+            let bounds = wh40kdc::weapon_bounds(
+                u,
+                model_count,
+                &ds.wargear_options_of(u),
+                models.as_deref(),
+            );
+            let mut encoded: Vec<Value> = bounds
+                .iter()
+                .map(|(k, b)| Value::String(format!("{k}:{}-{}", b.min, b.max)))
+                .collect();
+            encoded.sort_by(|a, b| a.as_str().unwrap_or("").cmp(b.as_str().unwrap_or("")));
+            Value::Array(encoded)
+        }
         "loadout_candidates" => {
             let id = arg_str("unitId");
             let unit = args

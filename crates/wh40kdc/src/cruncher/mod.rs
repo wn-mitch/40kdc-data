@@ -17,41 +17,49 @@
 //! let weapon = ds.find_weapon("bolt-rifle").expect("bolt-rifle is bundled");
 //! let target = ds.find_unit("intercessor-squad").expect("intercessor-squad is bundled");
 //!
+//! let mut context = EngineContext::new(Phase::Shooting);
+//! context.attacker_stationary = Some(false);
+//! context.within_half_range = Some(false);
 //! let input = EngineInput {
 //!     attacker: AttackProfileRef { weapon, profile_index: 0 },
 //!     target: TargetProfileRef { unit: target, profile_index: 0, model_count: None },
 //!     models_firing: 5,
 //!     buffs: Vec::new(),
-//!     context: EngineContext {
-//!         phase: Phase::Shooting,
-//!         attacker_stationary: Some(false),
-//!         attacker_charged: None,
-//!         within_half_range: Some(false),
-//!         distance_inches: None,
-//!         attacker_in_cover: None,
-//!         target_in_cover: None,
-//!         attacker_keywords: None,
-//!         target_keywords: None,
-//!         timing: None,
-//!         attacker_attached: None,
-//!     },
+//!     context,
 //! };
 //! let out = crunch(&input, None).expect("crunch succeeds");
 //! assert_eq!(out.stages.len(), 7);
 //! ```
 
+pub mod allocation;
 pub mod attribution;
 pub mod buffs;
+mod damage_roll;
 pub mod engine;
+pub mod from_dsl;
 pub mod from_keyword;
+mod gates;
+pub mod recipient_snapshots;
+mod resolved;
+pub mod scenario;
 
+pub use allocation::{allocate, allocate_model, AllocationError, AllocationOutput};
 pub use attribution::{attribute_stages, AttributedStage, StageLift};
 pub use buffs::{
-    resolve_buffs, AbilityKind, Buff, BuffApplicability, BuffContribution, BuffSource,
-    EngineContext, RerollSubset, ResolvedModifiers, RollKind, WeaponKeywordRef,
+    resolve_buffs, AbilityKind, AttachmentRole, Buff, BuffApplicability, BuffContribution,
+    BuffSource, EngineContext, RerollSubset, ResolvedModifiers, RollKind, WeaponKeywordRef,
 };
 pub use engine::{
-    crunch, AttackProfileRef, CruncherError, EngineInput, EngineOutput, Stage, StageName,
-    TargetProfileRef,
+    crunch, crunch_model, AttackModel, AttackProfileRef, CruncherError, EngineInput, EngineOutput,
+    RollProbabilities, Stage, StageName, TargetProfileRef,
+};
+pub use from_dsl::{
+    apply_activation, effect_to_buffs, ActivatableBuff, ActivatableGroupRef, CapRaise,
+    EffectTranslation, StanceOptionRef, TranslationPerspective, UnsupportedFragment,
 };
 pub use from_keyword::buffs_from_keyword;
+pub use recipient_snapshots::RecipientSnapshot;
+pub use scenario::{
+    ModelWounds, ObjectiveController, ObjectiveTerritory, ScenarioObjective, ScenarioSide,
+    UnitState, UnitStrength,
+};

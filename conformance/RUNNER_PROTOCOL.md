@@ -98,6 +98,7 @@ The `query` enum covers the read paths on `Dataset`:
 | `weapons_of`             | `{"unitId":"<id>"}`                  | ordered list of weapon ids |
 | `wargear_options_of`     | `{"unitId":"<id>"}`                  | ordered list of wargear-option ids |
 | `base_loadout`           | `{"unitId":"<id>","modelCount":"<n>"}` | sorted list of `"id:count"` strings |
+| `weapon_bounds`          | `{"unitId":"<id>","modelCount":"<n>"}` | sorted list of `"id:min-max"` strings |
 | `maximal_loadout`        | `{"unitId":"<id>","modelCount":"<n>"}` | sorted list of `"id:count"` strings |
 | `loadout_candidates`     | `{"unitId":"<id>","factionId"?:"<id>","modelCount":"<n>","limit"?:"<n>"}` | ordered list of encoded candidates |
 | `phases_of`              | `{"abilityId":"<id>"}`               | ordered list of phase enum values |
@@ -124,7 +125,7 @@ Tier-aware whole-unit loadout legality (the `roster_legality` corpus). `unitId` 
 {"op":"check_roster_legality","args":{"factionId":"world-eaters","battleSize":"strike-force","forceDisposition":"purge-the-foe","detachments":[{"id":"berzerker-warband"}],"units":[{"unitId":"daemon-prince-of-khorne","modelCount":1,"isWarlord":true,"enhancementId":null,"leaderBodyguardId":null,"counts":{}}]}}
 ```
 
-Whole-army legality over a compact roster spec (the `roster_validation` corpus). Points and detachment-point costs are looked up from the dataset (not caller-supplied). Each unit carries `unitId`, `modelCount`, `isWarlord`, `enhancementId` (or null), `leaderBodyguardId` (or null), and `counts` (weapon/wargear id → count, fed to the per-unit loadout check). The response `value` is **sorted `"<scope>|<severity>|<code>:<id>"` strings**: `scope` is `army` for army-wide violations or `u<index>` (0-based into `units`) for unit-scoped ones; `severity` is `error` or `warn`. A roster is **legal iff it has no `error` entries** (a warn-only result is legal). Codes — per-unit loadout (as above, all `error`); army-construction `error`: `enhancement-wrong-detachment`, `enhancement-on-non-character`, `enhancement-keyword-mismatch`, `enhancement-excluded-keyword`, `enhancement-over-max-targets`, `leader-attachment-illegal`, `leader-must-attach`, `points-over-limit`, `detachment-points-over`, `detachment-tag-conflict`, `detachment-restriction-required`, `detachment-restriction-excluded`, `no-warlord`, `multiple-warlords`, `unit-minimum-unmet`; and `warn` (advisory — provisional 11e Force-Disposition data): `disposition-not-picked`, `disposition-invalid`.
+Whole-army legality over a compact roster spec (the `roster_validation` corpus). Points and detachment-point costs are looked up from the dataset (not caller-supplied). Each unit carries `unitId`, `modelCount`, `isWarlord`, `enhancementId` (or null), `leaderBodyguardId` (or null), and `counts` (weapon/wargear id → count, fed to the per-unit loadout check). The response `value` is **sorted `"<scope>|<severity>|<code>:<id>"` strings**: `scope` is `army` for army-wide violations or `u<index>` (0-based into `units`) for unit-scoped ones; `severity` is `error` or `warn`. A roster is **legal iff it has no `error` entries** (a warn-only result is legal). Codes — per-unit loadout (as above, all `error`); army-construction `error`: `enhancement-wrong-detachment`, `enhancement-on-non-character`, `enhancement-on-epic-hero` (an EPIC HERO given any Enhancement, Upgrades included), `enhancement-on-excluded-model` (every model row of the unit's composition is `excluded_from_enhancements`), `enhancement-keyword-mismatch`, `enhancement-excluded-keyword`, `enhancement-over-max-targets`, `leader-attachment-illegal`, `leader-must-attach`, `points-over-limit`, `detachment-points-over`, `detachment-tag-conflict`, `detachment-restriction-required`, `detachment-restriction-excluded`, `no-warlord`, `multiple-warlords`, `warlord-not-mandated` (a selected detachment's `mandatory_warlord_datasheet_ids` names none of the chosen Warlords; skipped when there is no Warlord), `detachment-excluded-datasheet` (unit-scoped: the unit is in a selected detachment's `excluded_datasheet_ids`), `unit-limit-exceeded` (id = the unit id: more units share a datasheet than the battle size's unit limit — incursion 2, strike-force 3, doubled for BATTLELINE (including conditional Battleline) and DEDICATED TRANSPORT units, 1 for every EPIC HERO), `enhancement-limit-exceeded` (id `roster`: more distinct Enhancements than the battle size allows — incursion 2, strike-force 4), `keyword-limit-exceeded` (id = the cap's keywords sorted and joined with `+`: a faction `keyword_limits` entry's count exceeds its `max` — in `units` mode (default) the number of units carrying all its keywords, in `alternatives` mode the number of its keywords carried by any unit; units with an exempt faction keyword never count — or a selected detachment's `keyword_limit_overrides` max for the same keyword set, the largest when several apply), `ally-pool-not-offered` / `ally-cannot-be-warlord` / `ally-cannot-take-enhancements` (unit-scoped) and `ally-points-over-limit` (id = the rule id) for the army faction's own units listed by an `exclusive` allied rule drawn from it (the rule's army and detachment gates, points cap, and Warlord/Enhancement locks; a selected detachment's mandatory or granted Warlord datasheets lift the Warlord lock), `unit-minimum-unmet`; points use a unit's `detachment_pricing` tiers when one names a selected detachment; and `warn` (advisory — provisional 11e Force-Disposition data): `disposition-not-picked`, `disposition-invalid`.
 
 ### `candidate_affordability`
 
@@ -152,7 +153,7 @@ Response value is a list of error objects: `[{"path":"/profiles/0/Sv","code":"RA
 - `ADDITIONAL_PROPERTY` — object has a property not allowed by `additionalProperties: false`.
 - `UNIQUE_VIOLATION` — array with `uniqueItems: true` has a duplicate.
 
-Adding a new code is a semantic change to the spec and bumps `SPEC_VERSION`. `target` is one of `unit`, `weapon`, `faction`, `ability`, `wargear`, `wargear-option`; more schemas can be added as needed.
+Adding a new code is a semantic change to the spec and bumps `SPEC_VERSION`. `target` is one of `unit`, `weapon`, `faction`, `ability`, `wargear`, `wargear-option`, `stratagem`; more schemas can be added as needed.
 
 ### `crunch`
 
@@ -190,6 +191,26 @@ below which lifts and residuals collapse to zero. Response value is the array of
 `buffs` array). `BuffSource` values inside `lifts[].source` use the serde
 kind-tagged discriminated union (`"manual"` / `"ability"` / `"weapon-keyword"`
 with camelCase fields).
+
+### `allocate`
+
+```json
+{"op":"allocate","args":{
+  "attacker":{"weaponId":"bolt-rifle","profileIndex":0},
+  "modelsFiring":5,
+  "target":{"unitId":"intercessor-squad","profileIndex":0},
+  "context":{"phase":"shooting","attackerStationary":false,"withinHalfRange":false},
+  "buffs":[]
+}}
+```
+
+Same input envelope as `crunch`. Response value is
+`{damageDealt, modelsDestroyed, modelsDestroyedDistribution}`: the expected
+wounds removed, the expected models destroyed, and the probability of each
+number of models destroyed from `0` to the target's model count. A quantity
+the allocation needs as a whole number (Attacks, Damage, Wounds, model counts)
+that resolves to a fraction answers `CRUNCH_ERROR`. Floats compare with
+`±5e-4` per value; the distribution's length is exact.
 
 ### `translate_scoring`
 

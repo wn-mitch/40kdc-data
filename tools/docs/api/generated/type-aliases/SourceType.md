@@ -8,7 +8,7 @@
 
 > **SourceType** = `"ability"` \| `"stratagem"` \| `"enhancement"` \| `"detachment-rule"` \| `"faction-rule"`
 
-Defined in: [generated.ts:68](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L68)
+Defined in: [generated.ts:181](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L181)
 
 Type of game element that is the source of an enrichment entry
 

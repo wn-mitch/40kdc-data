@@ -3,20 +3,20 @@
     "id": "blade-of-ultramar",
     "name": "Blade of Ultramar",
     "faction_id": "ultramarines",
-    "detachment_rule_id": null,
+    "detachment_rule_id": "mastered-doctrines-ultramarines",
     "enhancement_ids": [
-      "armour-of-antoninus-blade-of-ultramar",
-      "oath-of-macragge-blade-of-ultramar",
-      "student-of-the-codex-blade-of-ultramar",
-      "veteran-of-behemoth-blade-of-ultramar"
+      "student-of-the-codex-blade-of-ultramar-ultramarines",
+      "armour-of-antoninus-blade-of-ultramar-ultramarines",
+      "oath-of-macragge-blade-of-ultramar-ultramarines",
+      "veteran-of-behemoth-blade-of-ultramar-ultramarines"
     ],
     "stratagem_ids": [
-      "armour-of-contempt-blade-of-ultramar",
-      "ultramarian-adaptivity-blade-of-ultramar",
-      "exemplary-vigilance-blade-of-ultramar",
-      "tactical-foresight-blade-of-ultramar",
-      "practical-tactics-blade-of-ultramar",
-      "courage-and-honour-blade-of-ultramar"
+      "armour-of-contempt-blade-of-ultramar-ultramarines",
+      "exemplary-vigilance-blade-of-ultramar-ultramarines",
+      "ultramarian-adaptivity-blade-of-ultramar-ultramarines",
+      "courage-and-honour-blade-of-ultramar-ultramarines",
+      "practical-tactics-blade-of-ultramar-ultramarines",
+      "tactical-foresight-blade-of-ultramar-ultramarines"
     ],
     "game_version": {
       "edition": "11th",
@@ -34,101 +34,31 @@
     "external_refs": [
       {
         "namespace": "mfm",
-        "id": "114f009f-63b2-40bc-922a-83363eab24cc"
+        "id": "02b3f939-2e5a-4952-8f16-861e4de692f9"
       }
-    ]
-  },
-  {
-    "id": "reclamation-force",
-    "name": "Reclamation Force",
-    "faction_id": "ultramarines",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "seals-of-reconquest-reclamation-force",
-      "avenging-avatar-aura-reclamation-force",
-      "scroll-of-proclamation-reclamation-force",
-      "liberatum-reclamation-force"
     ],
-    "stratagem_ids": [
-      "crusading-conquerors-reclamation-force",
-      "scions-of-guilliman-reclamation-force",
-      "furious-dedication-reclamation-force",
-      "ultramarian-destiny-reclamation-force",
-      "fight-to-the-end-reclamation-force",
-      "marching-ever-on-reclamation-force"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 2,
-    "force_dispositions": [
-      "take-and-hold"
-    ],
-    "restrictions": {
-      "required_keywords": [
-        "Ultramarines"
-      ]
-    },
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "f6429de4-1567-4ee9-8570-8c3d405e93f9"
-      }
-    ]
-  },
-  {
-    "id": "1st-company-task-force",
-    "name": "1st Company Task Force",
-    "faction_id": "ultramarines",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "the-imperiums-sword-1st-company-task-force",
-      "fear-made-manifest-aura-1st-company-task-force",
-      "rites-of-war-1st-company-task-force",
-      "iron-resolve-1st-company-task-force"
-    ],
-    "stratagem_ids": [
-      "armour-of-contempt-blade-of-ultramar",
-      "heroes-of-the-chapter-1st-company-task-force",
-      "legendary-fortitude-1st-company-task-force",
-      "terrifying-proficiency-1st-company-task-force",
-      "duty-and-honour-1st-company-task-force",
-      "orbital-teleportarium-1st-company-task-force"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 2,
-    "force_dispositions": [
-      "purge-the-foe"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "01c7258d-72a9-4df9-bea2-b4f7bfdaebb8"
-      }
+    "detachment_rule_ids": [
+      "mastered-doctrines-ultramarines"
     ]
   },
   {
     "id": "gladius-task-force",
     "name": "Gladius Task Force",
     "faction_id": "ultramarines",
-    "detachment_rule_id": null,
+    "detachment_rule_id": "codex-discipline-adeptus-astartes",
     "enhancement_ids": [
-      "artificer-armour-gladius-task-force",
-      "the-honour-vehement-gladius-task-force",
-      "adept-of-the-codex-gladius-task-force",
-      "fire-discipline-gladius-task-force"
+      "standard-of-the-emperor-ascendant-gladius-task-force-adeptus-astartes",
+      "laurels-of-triumph-gladius-task-force-adeptus-astartes",
+      "adept-of-the-codex-gladius-task-force-adeptus-astartes",
+      "artificer-armour-gladius-task-force-adeptus-astartes"
     ],
     "stratagem_ids": [
-      "armour-of-contempt-blade-of-ultramar",
-      "honour-the-chapter-gladius-task-force",
-      "storm-of-fire-gladius-task-force",
-      "only-in-death-does-duty-end-gladius-task-force",
-      "adaptive-strategy-gladius-task-force",
-      "squad-tactics-gladius-task-force"
+      "armour-of-contempt-gladius-task-force-adeptus-astartes",
+      "adaptive-strategy-gladius-task-force-adeptus-astartes",
+      "a-worthy-death-gladius-task-force-adeptus-astartes",
+      "responsive-tactics-gladius-task-force-adeptus-astartes",
+      "storm-of-devastation-gladius-task-force-adeptus-astartes",
+      "might-of-angels-gladius-task-force-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -141,57 +71,27 @@
     "external_refs": [
       {
         "namespace": "mfm",
-        "id": "047e97fc-2e78-4db6-b401-1f8bb65d9162"
+        "id": "114dee6f-802a-49f4-a0db-0296eb5434b3"
       }
+    ],
+    "detachment_rule_ids": [
+      "codex-discipline-adeptus-astartes"
     ]
   },
   {
     "id": "stormlance-task-force",
     "name": "Stormlance Task Force",
     "faction_id": "ultramarines",
-    "detachment_rule_id": null,
+    "detachment_rule_id": "lightning-fast-strike-adeptus-astartes",
     "enhancement_ids": [
-      "fury-of-the-storm-stormlance-task-force",
-      "portents-of-wisdom-stormlance-task-force",
-      "feinting-withdrawal-stormlance-task-force",
-      "hunters-instincts-stormlance-task-force"
+      "supercharged-engines-upgrade-stormlance-task-force-adeptus-astartes",
+      "auspex-triangulation-shrines-upgrade-stormlance-task-force-adeptus-astartes"
     ],
     "stratagem_ids": [
-      "armour-of-contempt-blade-of-ultramar",
-      "blitzing-fusillade-stormlance-task-force",
-      "shock-assault-stormlance-task-force",
-      "ride-hard-ride-fast-stormlance-task-force",
-      "wind-swift-evasion-stormlance-task-force",
-      "full-throttle-stormlance-task-force"
+      "hurtling-targets-stormlance-task-force-adeptus-astartes",
+      "wind-swift-evasion-stormlance-task-force-adeptus-astartes",
+      "sudden-onslaught-stormlance-task-force-adeptus-astartes"
     ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 3,
-    "force_dispositions": [
-      "disruption"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "0854459d-3909-4621-8073-46d54d1a0464"
-      }
-    ]
-  },
-  {
-    "id": "librarius-conclave",
-    "name": "Librarius Conclave",
-    "faction_id": "ultramarines",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "celerity-librarius-conclave",
-      "prescience-librarius-conclave",
-      "obfuscation-librarius-conclave",
-      "temporal-corridor-librarius-conclave",
-      "fusillade-librarius-conclave"
-    ],
-    "stratagem_ids": [],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -203,192 +103,152 @@
     "external_refs": [
       {
         "namespace": "mfm",
-        "id": "9492c5aa-1baf-49d0-a587-c332d6119d10"
+        "id": "0a2a5520-e6cc-4f3f-ac87-b00addae1023"
       }
-    ]
-  },
-  {
-    "id": "vanguard-spearhead",
-    "name": "Vanguard Spearhead",
-    "faction_id": "ultramarines",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "the-blade-driven-deep-vanguard-spearhead",
-      "ghostweave-cloak-vanguard-spearhead",
-      "execute-and-redeploy-vanguard-spearhead",
-      "shadow-war-veteran-vanguard-spearhead"
     ],
-    "stratagem_ids": [
-      "armour-of-contempt-blade-of-ultramar",
-      "strike-from-the-shadows-vanguard-spearhead",
-      "surgical-strikes-vanguard-spearhead",
-      "calculated-feint-vanguard-spearhead",
-      "guerrilla-tactics-vanguard-spearhead",
-      "a-deadly-prize-vanguard-spearhead"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 2,
-    "force_dispositions": [
-      "reconnaissance"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "720ee5b2-2412-43f4-b145-bec27a90b6d5"
-      }
-    ]
-  },
-  {
-    "id": "orbital-assault-force",
-    "name": "Orbital Assault Force",
-    "faction_id": "ultramarines",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "laurels-of-thunder-orbital-assault-force",
-      "veteran-of-the-vanguard-orbital-assault-force",
-      "orbital-uplink-reliquary-orbital-assault-force",
-      "dedicated-gunship-orbital-assault-force"
-    ],
-    "stratagem_ids": [
-      "suppression-strafing-orbital-assault-force",
-      "blind-screen-orbital-assault-force",
-      "tactical-decapitation-orbital-assault-force",
-      "shock-onslaught-orbital-assault-force",
-      "onward-for-the-emperor-orbital-assault-force"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 2,
-    "force_dispositions": [
-      "take-and-hold"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "dd0c31ee-65db-4143-b1f9-60aaea303b1c"
-      }
-    ]
-  },
-  {
-    "id": "anvil-siege-force",
-    "name": "Anvil Siege Force",
-    "faction_id": "ultramarines",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "indomitable-fury-anvil-siege-force",
-      "fleet-commander-anvil-siege-force",
-      "stoic-defender-anvil-siege-force",
-      "architect-of-war-anvil-siege-force"
-    ],
-    "stratagem_ids": [
-      "battle-drill-recall-anvil-siege-force",
-      "armour-of-contempt-blade-of-ultramar",
-      "no-threat-too-great-anvil-siege-force",
-      "rigid-discipline-anvil-siege-force",
-      "not-one-backwards-step-anvil-siege-force",
-      "hail-of-vengeance-anvil-siege-force"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 2,
-    "force_dispositions": [
-      "take-and-hold"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "e544168f-0535-4b58-ac04-c5f3793ea56b"
-      }
-    ]
-  },
-  {
-    "id": "firestorm-assault-force",
-    "name": "Firestorm Assault Force",
-    "faction_id": "ultramarines",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "champion-of-humanity-firestorm-assault-force",
-      "war-tempered-artifice-firestorm-assault-force",
-      "forged-in-battle-firestorm-assault-force",
-      "adamantine-mantle-firestorm-assault-force"
-    ],
-    "stratagem_ids": [
-      "armour-of-contempt-blade-of-ultramar",
-      "crucible-of-battle-firestorm-assault-force",
-      "onslaught-of-fire-firestorm-assault-force",
-      "burning-vengeance-firestorm-assault-force",
-      "immolation-protocols-firestorm-assault-force",
-      "rapid-embarkation-firestorm-assault-force"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 2,
-    "force_dispositions": [
-      "priority-assets"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "fcc5de05-5825-4af5-9484-38af6358ff2b"
-      }
+    "detachment_rule_ids": [
+      "lightning-fast-strike-adeptus-astartes"
     ]
   },
   {
     "id": "ironstorm-spearhead",
     "name": "Ironstorm Spearhead",
     "faction_id": "ultramarines",
-    "detachment_rule_id": null,
+    "detachment_rule_id": "ironstorm-auto-targeters-adeptus-astartes",
     "enhancement_ids": [
-      "target-augury-web-ironstorm-spearhead",
-      "the-flesh-is-weak-ironstorm-spearhead",
-      "adept-of-the-omnissiah-ironstorm-spearhead",
-      "master-of-machine-war-ironstorm-spearhead"
+      "redoubtable-machine-spirit-upgrade-ironstorm-spearhead-adeptus-astartes",
+      "gunnery-honours-upgrade-ironstorm-spearhead-adeptus-astartes"
     ],
     "stratagem_ids": [
-      "unbowed-conviction-ironstorm-spearhead",
-      "armour-of-contempt-blade-of-ultramar",
-      "mercy-is-weakness-ironstorm-spearhead",
-      "vengeful-animus-ironstorm-spearhead",
-      "ancient-fury-ironstorm-spearhead",
-      "power-of-the-machine-spirit-ironstorm-spearhead"
+      "might-of-the-machine-spirit-ironstorm-spearhead-adeptus-astartes",
+      "layered-ceramite-ironstorm-spearhead-adeptus-astartes",
+      "headhunter-doctrine-ironstorm-spearhead-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": 2,
+    "detachment_points": 1,
     "force_dispositions": [
-      "take-and-hold"
+      "purge-the-foe"
     ],
     "external_refs": [
       {
         "namespace": "mfm",
-        "id": "fe7ac957-dfdf-4025-bd77-c387cd6c62a5"
+        "id": "b9473893-6dae-43fd-a3f2-e27a93a56c95"
       }
+    ],
+    "detachment_rule_ids": [
+      "ironstorm-auto-targeters-adeptus-astartes"
     ]
   },
   {
-    "id": "fulguris-task-force",
-    "name": "Fulguris Task Force",
+    "id": "assault-brethren",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "6fead3ce-6ab9-4637-9c53-70af7ee47328"
+      }
+    ],
+    "name": "Assault Brethren",
     "faction_id": "ultramarines",
-    "detachment_rule_id": null,
     "enhancement_ids": [
-      "bellicose-weapon-spirits-upgrade-fulguris-task-force",
-      "raptorial-cogitator-core-upgrade-fulguris-task-force"
+      "imperiums-sword-assault-brethren-adeptus-astartes",
+      "furious-assault-upgrade-assault-brethren-adeptus-astartes"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "take-and-hold"
+    ],
+    "detachment_rule_ids": [
+      "assault-mastery-adeptus-astartes"
     ],
     "stratagem_ids": [
-      "data-link-augury-fulguris-task-force",
-      "reactive-evasion-fulguris-task-force",
-      "anti-grav-surge-fulguris-task-force"
+      "gene-wrought-might-assault-brethren-adeptus-astartes",
+      "armour-of-contempt-assault-brethren-adeptus-astartes",
+      "duty-in-death-assault-brethren-adeptus-astartes"
+    ]
+  },
+  {
+    "id": "deathwatch-support",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "4fde4216-b0dd-4665-8556-2d394d293ed6"
+      }
+    ],
+    "name": "Deathwatch Support",
+    "faction_id": "ultramarines",
+    "enhancement_ids": [],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "disruption"
+    ],
+    "restrictions": {
+      "required_keywords": []
+    },
+    "detachment_rule_ids": [
+      "mission-tactics-deathwatch-support-deathwatch"
+    ],
+    "stratagem_ids": [
+      "blackstar-extraction-deathwatch-support-deathwatch",
+      "kraken-rounds-deathwatch-support-deathwatch",
+      "dragonfire-rounds-deathwatch-support-deathwatch",
+      "hellfire-rounds-deathwatch-support-deathwatch"
+    ]
+  },
+  {
+    "id": "devastator-brethren",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "31cf4080-95f4-44a4-acfc-9ac9e2c93c62"
+      }
+    ],
+    "name": "Devastator Brethren",
+    "faction_id": "ultramarines",
+    "enhancement_ids": [
+      "master-forged-firearms-devastator-brethren-adeptus-astartes",
+      "honour-of-vigilance-devastator-brethren-adeptus-astartes"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "purge-the-foe"
+    ],
+    "detachment_rule_ids": [
+      "devastator-mastery-adeptus-astartes"
+    ],
+    "stratagem_ids": [
+      "armour-of-contempt-devastator-brethren-adeptus-astartes",
+      "storm-of-fire-devastator-brethren-adeptus-astartes",
+      "hail-of-vengeance-devastator-brethren-adeptus-astartes"
+    ]
+  },
+  {
+    "id": "gauntlet-task-force",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "e27a3395-01d7-4d89-aa99-cc333d833217"
+      }
+    ],
+    "name": "Gauntlet Task Force",
+    "faction_id": "ultramarines",
+    "enhancement_ids": [
+      "linebreaker-onslaught-gauntlet-task-force-adeptus-astartes",
+      "damocles-class-uplink-gauntlet-task-force-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -398,26 +258,121 @@
     "force_dispositions": [
       "reconnaissance"
     ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "a65dba8d-ae69-4e3e-a72e-afeb748a98ca"
-      }
+    "detachment_rule_ids": [
+      "combined-deployment-adeptus-astartes"
+    ],
+    "stratagem_ids": [
+      "storm-and-secure-gauntlet-task-force-adeptus-astartes",
+      "aggressive-disembarkation-gauntlet-task-force-adeptus-astartes",
+      "duty-is-never-done-gauntlet-task-force-adeptus-astartes"
     ]
   },
   {
-    "id": "subversion-assets",
-    "name": "Subversion Assets",
+    "id": "gravis-linebreaker-force",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "c36cda66-a994-4354-aa2a-fb4fd2338efa"
+      }
+    ],
+    "name": "Gravis Linebreaker Force",
     "faction_id": "ultramarines",
-    "detachment_rule_id": null,
     "enhancement_ids": [
-      "shroud-field-subversion-assets",
-      "death-in-the-dark-upgrade-subversion-assets"
+      "indefatigable-fortitude-gravis-linebreaker-force-adeptus-astartes",
+      "relentless-advance-gravis-linebreaker-force-adeptus-astartes"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "take-and-hold"
+    ],
+    "detachment_rule_ids": [
+      "walking-fortress-adeptus-astartes"
     ],
     "stratagem_ids": [
-      "adaptive-operations-subversion-assets",
-      "strike-from-the-shadows-vanguard-spearhead",
-      "cloaked-position-subversion-assets"
+      "purgation-push-gravis-linebreaker-force-adeptus-astartes",
+      "armoured-impact-gravis-linebreaker-force-adeptus-astartes",
+      "annihilating-force-gravis-linebreaker-force-adeptus-astartes"
+    ]
+  },
+  {
+    "id": "gravis-siege-force",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "2fc4c2ed-d11d-40a5-8b56-2339e226203c"
+      }
+    ],
+    "name": "Gravis Siege Force",
+    "faction_id": "ultramarines",
+    "enhancement_ids": [
+      "immovable-conquerors-upgrade-gravis-siege-force-adeptus-astartes",
+      "narthecis-gauntlet-gravis-siege-force-adeptus-astartes"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "take-and-hold"
+    ],
+    "detachment_rule_ids": [
+      "indomitable-defence-adeptus-astartes"
+    ],
+    "stratagem_ids": [
+      "annihilating-force-gravis-siege-force-adeptus-astartes",
+      "suppression-volleys-gravis-siege-force-adeptus-astartes",
+      "stand-unyielding-gravis-siege-force-adeptus-astartes"
+    ]
+  },
+  {
+    "id": "ironclad-champions",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "1f9b6d20-1a56-4a45-8621-4ee2648e029a"
+      }
+    ],
+    "name": "Ironclad Champions",
+    "faction_id": "ultramarines",
+    "enhancement_ids": [
+      "artificer-sarcophagus-upgrade-ironclad-champions-adeptus-astartes",
+      "venerable-champion-aura-upgrade-ironclad-champions-adeptus-astartes"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "priority-assets"
+    ],
+    "detachment_rule_ids": [
+      "enduring-vengeance-adeptus-astartes"
+    ],
+    "stratagem_ids": [
+      "adamantine-terror-ironclad-champions-adeptus-astartes",
+      "mercy-is-weakness-ironclad-champions-adeptus-astartes",
+      "upstoppable-advance-ironclad-champions-adeptus-astartes"
+    ]
+  },
+  {
+    "id": "phobos-shadow-force",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "ad2c163a-82ee-4279-8dde-b36217f3e5d3"
+      }
+    ],
+    "name": "Phobos Shadow Force",
+    "faction_id": "ultramarines",
+    "enhancement_ids": [
+      "venator-omni-auspex-phobos-shadow-force-adeptus-astartes",
+      "execute-and-redeploy-phobos-shadow-force-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -427,166 +382,168 @@
     "force_dispositions": [
       "disruption"
     ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "b87e2dfa-d598-4fbb-a4ac-e08fdba03391"
-      }
+    "detachment_rule_ids": [
+      "shadow-masters-adeptus-astartes"
+    ],
+    "stratagem_ids": [
+      "mortis-snares-phobos-shadow-force-adeptus-astartes",
+      "tactical-withdrawal-phobos-shadow-force-adeptus-astartes",
+      "strike-from-the-shadows-phobos-shadow-force-adeptus-astartes"
     ]
   },
   {
-    "id": "armoured-speartip",
-    "name": "Armoured Speartip",
-    "faction_id": "ultramarines",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "liberator-armoured-speartip",
-      "tip-of-the-spear-armoured-speartip",
-      "shock-deployment-armoured-speartip",
-      "armoured-commander-armoured-speartip"
+    "id": "phobos-shock-force",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "55db5c18-2a63-4cbb-8ed4-542525cf600a"
+      }
     ],
-    "stratagem_ids": [
-      "machine-wrath-armoured-speartip",
-      "ceramite-sledgehammer-armoured-speartip",
-      "advanced-deployment-armoured-speartip",
-      "armour-of-contempt-blade-of-ultramar",
-      "purgation-doctrine-armoured-speartip",
-      "rapid-embarkation-firestorm-assault-force"
+    "name": "Phobos Shock Force",
+    "faction_id": "ultramarines",
+    "enhancement_ids": [
+      "seal-of-shrouding-phobos-shock-force-adeptus-astartes",
+      "venator-omni-auspex-phobos-shock-force-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": 3,
+    "detachment_points": 1,
     "force_dispositions": [
-      "take-and-hold"
+      "disruption"
     ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "2816281c-0f5d-4c0c-a63b-9be13599e674"
-      }
+    "detachment_rule_ids": [
+      "vanguard-ambushers-adeptus-astartes"
+    ],
+    "stratagem_ids": [
+      "umbral-evasion-phobos-shock-force-adeptus-astartes",
+      "strike-from-the-shadows-phobos-shock-force-adeptus-astartes",
+      "transhuman-reactions-phobos-shock-force-adeptus-astartes"
     ]
   },
   {
-    "id": "bastion-task-force",
-    "name": "Bastion Task Force",
-    "faction_id": "ultramarines",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "eye-of-the-primarch-bastion-task-force",
-      "hero-of-the-chapter-bastion-task-force",
-      "blades-of-valour-bastion-task-force",
-      "bombast-omnivox-bastion-task-force"
+    "id": "tactical-brethren",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "2df70179-96ad-4f64-b5fd-a0ee2b7a904d"
+      }
     ],
-    "stratagem_ids": [
-      "codex-discipline-bastion-task-force",
-      "shock-bombardment-bastion-task-force",
-      "guided-disruption-bastion-task-force",
-      "angels-defiant-bastion-task-force",
-      "light-of-vengeance-bastion-task-force",
-      "heresy-undone-bastion-task-force"
+    "name": "Tactical Brethren",
+    "faction_id": "ultramarines",
+    "enhancement_ids": [
+      "laurels-of-vigilance-tactical-brethren-adeptus-astartes",
+      "tactical-insight-tactical-brethren-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": 2,
-    "force_dispositions": [
-      "take-and-hold"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "b0cdcaeb-2e58-46e3-83c5-a1ece9ad4e66"
-      }
-    ]
-  },
-  {
-    "id": "ceramite-sentinels",
-    "name": "Ceramite Sentinels",
-    "faction_id": "ultramarines",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "honour-indefatigable-ceramite-sentinels",
-      "castellum-omnivox-ceramite-sentinels",
-      "defensive-mastery-ceramite-sentinels"
-    ],
-    "stratagem_ids": [
-      "unyielding-might-ceramite-sentinels",
-      "stand-to-the-end-ceramite-sentinels",
-      "priority-strike-ceramite-sentinels",
-      "augmented-targeting-ceramite-sentinels",
-      "armour-of-contempt-blade-of-ultramar",
-      "evasive-repositioning-ceramite-sentinels"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 3,
-    "force_dispositions": [
-      "take-and-hold"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "3f2130dc-e858-45a7-b42c-4cd5953b9b43"
-      }
-    ]
-  },
-  {
-    "id": "headhunter-task-force",
-    "name": "Headhunter Task Force",
-    "faction_id": "ultramarines",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "redoubtable-machine-spirit-headhunter-task-force",
-      "gunnery-honours-headhunter-task-force",
-      "firestorm-coordinators-headhunter-task-force",
-      "astartes-tank-ace-aura-headhunter-task-force"
-    ],
-    "stratagem_ids": [
-      "armour-of-contempt-blade-of-ultramar",
-      "rapid-gunnery-headhunter-task-force",
-      "reactive-repositioning-headhunter-task-force",
-      "target-weak-point-headhunter-task-force",
-      "kill-shot-headhunter-task-force",
-      "machine-vengeance-headhunter-task-force"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 2,
+    "detachment_points": 1,
     "force_dispositions": [
       "priority-assets"
     ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "a5da316c-604e-4aca-b5ac-53517dcd01b3"
-      }
+    "detachment_rule_ids": [
+      "tactical-mastery-adeptus-astartes"
+    ],
+    "stratagem_ids": [
+      "armour-of-contempt-tactical-brethren-adeptus-astartes",
+      "masterful-tactics-tactical-brethren-adeptus-astartes",
+      "domination-fire-tactical-brethren-adeptus-astartes"
     ]
   },
   {
-    "id": "vengeful-hosts",
-    "name": "Vengeful Hosts",
+    "id": "tacticus-attack-force",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "fe1cc3f3-76af-4036-9709-629374090134"
+      }
+    ],
+    "name": "Tacticus Attack Force",
     "faction_id": "ultramarines",
-    "enhancement_ids": [],
+    "enhancement_ids": [
+      "martial-paragon-tacticus-attack-force-adeptus-astartes",
+      "spearpoint-war-leader-tacticus-attack-force-adeptus-astartes"
+    ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "detachment_points": 1,
     "force_dispositions": [
       "take-and-hold"
     ],
+    "detachment_rule_ids": [
+      "wrath-of-the-chapter-adeptus-astartes"
+    ],
+    "stratagem_ids": [
+      "transhuman-swiftness-tacticus-attack-force-adeptus-astartes",
+      "tactical-focus-tacticus-attack-force-adeptus-astartes",
+      "relentless-assault-tacticus-attack-force-adeptus-astartes"
+    ]
+  },
+  {
+    "id": "tacticus-firestorm-force",
     "external_refs": [
       {
         "namespace": "mfm",
-        "id": "63c87e85-fd1a-4dc3-8bc9-226db3e966d6"
+        "id": "40603815-0ddb-4180-bd06-143ab40f0985"
       }
+    ],
+    "name": "Tacticus Firestorm Force",
+    "faction_id": "ultramarines",
+    "enhancement_ids": [
+      "cyber-familiar-tacticus-firestorm-force-adeptus-astartes",
+      "tempered-in-battle-aura-tacticus-firestorm-force-adeptus-astartes"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "priority-assets"
+    ],
+    "detachment_rule_ids": [
+      "codex-fire-patterns-adeptus-astartes"
+    ],
+    "stratagem_ids": [
+      "point-blank-brutality-tacticus-firestorm-force-adeptus-astartes",
+      "for-the-emperor-tacticus-firestorm-force-adeptus-astartes",
+      "relentless-assault-tacticus-firestorm-force-adeptus-astartes"
+    ]
+  },
+  {
+    "id": "terminator-storm-force",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "32355f5d-db41-4589-ad75-e2801b5d8afb"
+      }
+    ],
+    "name": "Terminator Storm Force",
+    "faction_id": "ultramarines",
+    "enhancement_ids": [
+      "champion-of-the-first-company-terminator-storm-force-adeptus-astartes",
+      "corporeum-reliquary-terminator-storm-force-adeptus-astartes"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "priority-assets"
+    ],
+    "detachment_rule_ids": [
+      "death-blow-adeptus-astartes"
+    ],
+    "stratagem_ids": [
+      "tactical-dreadnought-fortitude-terminator-storm-force-adeptus-astartes",
+      "gunship-extraction-terminator-storm-force-adeptus-astartes",
+      "merciless-veterans-terminator-storm-force-adeptus-astartes"
     ]
   }
 ]

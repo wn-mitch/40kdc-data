@@ -1,3 +1,4 @@
+import type { Scenario } from "./scenario.js";
 import {
   Dataset,
   tryImportRoster,
@@ -156,6 +157,13 @@ class SalvoState {
    * 18"). Null = unset → range gates stay permissive.
    */
   targetDistance = $state<number | null>(null);
+  /**
+   * Friendly units outside the combined unit whose auras and unit selections
+   * may reach it ("nearby" providers the player vouches for).
+   */
+  supportUnitIds = $state<string[]>([]);
+  /** Declared board and game state; unset fields leave their abilities unresolved. */
+  scenario = $state<Scenario>({});
 
   /** Effective on/off for a lever, honouring any user override of its default. */
   isBuffEnabled(id: string, defaultEnabled: boolean): boolean {
@@ -185,6 +193,10 @@ class SalvoState {
    * hand so a stale preset's model-count override doesn't linger.
    */
   targetPresetId = $state<string | null>(null);
+  /** The defending army's detachment, Stratagems it uses on the target, and the target's Enhancement. */
+  defenderDetachmentId = $state<string | null>(null);
+  defenderStratagemIds = $state<string[]>([]);
+  defenderEnhancementId = $state<string | null>(null);
 
   // Fleet comparison (the "Compare" view).
   compareFactionId = $state<string | null>("world-eaters");
@@ -196,6 +208,13 @@ class SalvoState {
   compareMode = $state<"matrix" | "loadouts">("matrix");
   /** Unit whose loadouts are ranked in "loadouts" sub-mode. */
   compareLoadoutUnitId = $state<string | null>(null);
+
+  /** The dataset unit being attacked, when the target is a dataset or roster unit. */
+  get targetUnitId(): string | null {
+    if (this.targetMode === "dataset") return this.datasetTargetUnitId;
+    if (this.targetMode === "roster") return this.targetRoster?.units[this.rosterTargetUnitIndex ?? -1]?.ref.id ?? null;
+    return null;
+  }
 
   /** Apply a target-profile preset: point the dataset target at its unit. */
   applyTargetPreset(profileId: string): void {

@@ -8,6 +8,6 @@
 
 > `const` **units**: [`Collection`](../classes/Collection.md)\<[`Unit`](../../generated/interfaces/Unit.md), [`UnitView`](../classes/UnitView.md)\> = `dataset.units`
 
-Defined in: [data/index.ts:79](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/index.ts#L79)
+Defined in: [data/index.ts:153](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/index.ts#L153)
 
 All units, linked to their faction, weapons, and abilities.

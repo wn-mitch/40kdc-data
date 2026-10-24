@@ -1,6 +1,6 @@
 /**
  * Build the authoring input for the DSL stub fan-out (#21): join each
- * empty-modifier stub to its *correct* source rule in the 10e archive.
+ * stub (isStubEntry) to its *correct* source rule in the 10e archive.
  *
  * The naive `ability.name → Datasheets_abilities.name` join is unsafe — ability
  * names collide across datasheets and factions (e.g. "Simulacrum Imperialis"
@@ -24,7 +24,7 @@ import { readdirSync, readFileSync, writeFileSync, mkdirSync, existsSync } from 
 import { resolve } from "node:path";
 import { homedir } from "node:os";
 import { fileURLToPath } from "node:url";
-import { hasEmptyModifier } from "./audit-coverage.js";
+import { isStubEntry } from "./audit-coverage.js";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const DATA_ROOT = resolve(__dirname, "../../data");
@@ -225,7 +225,7 @@ function buildFaction(faction: string, archive: ArchiveIndex): AuthorInputEntry[
 
   const out: AuthorInputEntry[] = [];
   for (const a of abilities) {
-    if (!hasEmptyModifier(a.effect)) continue;
+    if (!isStubEntry(a)) continue;
     const unitIds: string[] = a.unit_ids ?? [];
     const unitNames = unitIds.map((id) => unitName.get(id)).filter((n): n is string => !!n);
     const { src, reason } = resolveSource(archive, code, unitNames, a.name);

@@ -22,7 +22,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -72,7 +72,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -113,7 +113,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -150,7 +150,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -185,7 +185,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -219,7 +219,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -254,7 +254,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -333,7 +333,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -426,7 +426,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -480,7 +480,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -515,7 +515,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -551,7 +551,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -586,7 +586,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -622,7 +622,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -672,7 +672,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -727,7 +727,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -763,7 +763,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -796,7 +796,7 @@
         "max": 3,
         "default_weapon_ids": [
           "blissblade",
-          "bolt-pistol-callous-blades"
+          "bolt-pistol"
         ],
         "is_leader_model": false,
         "base_size_mm": {
@@ -807,7 +807,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -830,8 +830,8 @@
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
-          "bolt-pistol-callous-blades",
-          "power-sword-infractors"
+          "bolt-pistol",
+          "power-sword"
         ],
         "is_leader_model": true,
         "base_size_mm": {
@@ -844,7 +844,7 @@
         "min": 9,
         "max": 9,
         "default_weapon_ids": [
-          "bolt-pistol-callous-blades",
+          "bolt-pistol",
           "duelling-sabre"
         ],
         "is_leader_model": false,
@@ -856,7 +856,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -885,7 +885,7 @@
         "max": 1,
         "default_weapon_ids": [
           "phoenix-power-spear",
-          "power-fist-lord-exultant"
+          "power-fist"
         ],
         "is_leader_model": false,
         "base_size_mm": {
@@ -896,13 +896,232 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
         "models": [
           {
             "name": "Lord Kaphrael",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "daemonettes",
+    "faction_id": "emperors-children",
+    "models": [
+      {
+        "name": "Alluress",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "slashing-claws"
+        ]
+      },
+      {
+        "name": "Daemonette",
+        "min": 9,
+        "max": 9,
+        "default_weapon_ids": [
+          "slashing-claws"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Alluress",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Daemonette",
+            "min": 9,
+            "max": 9
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "fiends",
+    "faction_id": "emperors-children",
+    "models": [
+      {
+        "name": "Blissbringer",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "barbed-tail-and-dissecting-claws"
+        ]
+      },
+      {
+        "name": "Fiend",
+        "min": 2,
+        "max": 5,
+        "default_weapon_ids": [
+          "barbed-tail-and-dissecting-claws"
+        ]
+      }
+    ],
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Blissbringer",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Fiend",
+            "min": 2,
+            "max": 2
+          }
+        ]
+      },
+      {
+        "models": [
+          {
+            "name": "Blissbringer",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Fiend",
+            "min": 3,
+            "max": 5
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "unit_id": "seekers",
+    "faction_id": "emperors-children",
+    "models": [
+      {
+        "name": "Heartseeker",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "lashing-tongue",
+          "slashing-claws"
+        ]
+      },
+      {
+        "name": "Seeker",
+        "min": 4,
+        "max": 9,
+        "default_weapon_ids": [
+          "lashing-tongue",
+          "slashing-claws"
+        ]
+      }
+    ],
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Heartseeker",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Seeker",
+            "min": 4,
+            "max": 4
+          }
+        ]
+      },
+      {
+        "models": [
+          {
+            "name": "Heartseeker",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Seeker",
+            "min": 5,
+            "max": 9
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "unit_id": "shalaxi-helbane",
+    "faction_id": "emperors-children",
+    "models": [
+      {
+        "name": "Shalaxi Helbane",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "lash-of-slaanesh",
+          "pavane-of-slaanesh",
+          "snapping-claws",
+          "soulpiercer"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Shalaxi Helbane",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "keeper-of-secrets",
+    "faction_id": "emperors-children",
+    "models": [
+      {
+        "name": "Keeper of Secrets",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "phantasmagoria",
+          "snapping-claws",
+          "witstealer-sword"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Keeper of Secrets",
             "min": 1,
             "max": 1
           }

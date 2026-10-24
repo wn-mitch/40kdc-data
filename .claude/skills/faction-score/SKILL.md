@@ -11,8 +11,9 @@ weakest-fidelity abilities. A low cosine means the authored DSL lost or distorte
 real rule — i.e. the highest-value change to make next.
 
 The harness lives in the sibling repo `../40kdc-embeddings` and is **advisory only**:
-it reads raw GW prose from the out-of-repo `40kdc-abilities` store and the committed
-DSL from `data/enrichment/`, and writes a **gitignored** report. Nothing it produces is
+it reads raw GW prose from this repo's private dump-prose export (`_private/prose/`,
+written from `_private/dump.json`) and the committed DSL from `data/enrichment/`, and
+writes a **gitignored** report. Nothing it produces is
 ever committed to this repo (the report carries GW-prose snippets — IP boundary).
 
 ## Inputs
@@ -23,9 +24,13 @@ ever committed to this repo (the report carries GW-prose snippets — IP boundar
 ## Run it (one command)
 
 ```bash
+(cd /Users/will.mitchell/40kdc-data/tools && npm run prose -- export) && \
 cd /Users/will.mitchell/40kdc-embeddings && \
+  WH40KDC_ABILITIES_DIR=/Users/will.mitchell/40kdc-data/_private/prose \
   .venv/bin/python -m wh40kdc_embeddings roundtrip --faction <faction-id> --scope <faction-id>
 ```
+
+The export refreshes the prose from the dump; skip it when the dump has not changed.
 
 This writes (gitignored, machine-local):
 - `/Users/will.mitchell/40kdc-embeddings/_reports/roundtrip-<faction-id>.json`
@@ -64,6 +69,7 @@ prose never leaves the machine). Re-runs are fast — embeddings are cached.
 
 - `--faction` selects which abilities to score; `--scope` only names the output file —
   pass the same faction id to both so the file is `roundtrip-<faction-id>.json`.
-- Coverage is partial by design: only abilities with **both** raw store prose and a
-  non-empty describer render are scored. Shared `core` rules and prose-less detachment
-  rules are skipped — that's expected, not a failure.
+- Coverage is partial by design: only abilities with **both** dump prose (their own owner
+  prints the rule) and a non-empty describer render are scored. Abilities the dump does
+  not print, or prints in two different versions, are skipped — that's expected, not a
+  failure.

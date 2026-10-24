@@ -3,20 +3,20 @@
     "id": "cryptek-conclave",
     "name": "Cryptek Conclave",
     "faction_id": "necrons",
-    "detachment_rule_id": "technosorcerous-augmentations",
+    "detachment_rule_id": "technosorcerous-augmentations-necrons",
     "enhancement_ids": [
-      "quantum-abacus-cryptek-conclave",
-      "atomic-disintegrators-cryptek-conclave",
-      "gauntlet-of-compression-cryptek-conclave",
-      "gravitic-bolas-cryptek-conclave"
+      "quantum-abacus-cryptek-conclave-necrons",
+      "atomic-disintegrators-cryptek-conclave-necrons",
+      "gauntlet-of-compression-cryptek-conclave-necrons",
+      "gravitic-bolas-cryptek-conclave-necrons"
     ],
     "stratagem_ids": [
-      "molecular-targeting-cryptek-conclave",
-      "untapped-power-cryptek-conclave",
-      "synergistic-empowerment-cryptek-conclave",
-      "potentiality-syphon-cryptek-conclave",
-      "microscarab-swarm-cryptek-conclave",
-      "animus-curse-cryptek-conclave"
+      "molecular-targeting-cryptek-conclave-necrons",
+      "microscarab-swarm-cryptek-conclave-necrons",
+      "animus-curse-cryptek-conclave-necrons",
+      "synergistic-empowerment-cryptek-conclave-necrons",
+      "untapped-power-cryptek-conclave-necrons",
+      "potentiality-syphon-cryptek-conclave-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -31,26 +31,29 @@
         "namespace": "mfm",
         "id": "115f16a7-2641-415c-967c-cb8a370eb229"
       }
+    ],
+    "detachment_rule_ids": [
+      "technosorcerous-augmentations-necrons"
     ]
   },
   {
     "id": "starshatter-arsenal",
     "name": "Starshatter Arsenal",
     "faction_id": "necrons",
-    "detachment_rule_id": "relentless-onslaught",
+    "detachment_rule_id": "relentless-onslaught-necrons",
     "enhancement_ids": [
-      "dread-majesty-aura-starshatter-arsenal",
-      "miniaturised-nebuloscope-starshatter-arsenal",
-      "demanding-leader-starshatter-arsenal",
-      "chrono-impedance-fields-starshatter-arsenal"
+      "dread-majesty-aura-starshatter-arsenal-necrons",
+      "miniaturised-nebuloscope-starshatter-arsenal-necrons",
+      "demanding-leader-starshatter-arsenal-necrons",
+      "chrono-impedance-fields-starshatter-arsenal-necrons"
     ],
     "stratagem_ids": [
-      "merciless-reclamation-starshatter-arsenal",
-      "unyielding-forms-starshatter-arsenal",
-      "chronoshift-starshatter-arsenal",
-      "dimensional-tunnel-starshatter-arsenal",
-      "endless-servitude-starshatter-arsenal",
-      "reactive-reposition-starshatter-arsenal"
+      "merciless-reclamation-starshatter-arsenal-necrons",
+      "unyielding-forms-starshatter-arsenal-necrons",
+      "chronoshift-starshatter-arsenal-necrons",
+      "dimensional-tunnel-starshatter-arsenal-necrons",
+      "endless-servitude-starshatter-arsenal-necrons",
+      "reactive-reposition-starshatter-arsenal-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -65,26 +68,29 @@
         "namespace": "mfm",
         "id": "225b9e9c-7ebe-413f-a079-087bc98f380a"
       }
+    ],
+    "detachment_rule_ids": [
+      "relentless-onslaught-necrons"
     ]
   },
   {
     "id": "cursed-legion",
     "name": "Cursed Legion",
     "faction_id": "necrons",
-    "detachment_rule_id": "cold-fervour",
+    "detachment_rule_id": "cold-fervour-necrons",
     "enhancement_ids": [
-      "destroyer-ankh-cursed-legion",
-      "murdermind-cursed-legion",
-      "cursed-circlet-cursed-legion",
-      "mark-of-the-nekrosor-cursed-legion"
+      "destroyer-ankh-cursed-legion-necrons",
+      "murdermind-cursed-legion-necrons",
+      "mark-of-the-nekrosor-cursed-legion-necrons",
+      "cursed-circlet-cursed-legion-necrons"
     ],
     "stratagem_ids": [
-      "methodical-murder-cursed-legion",
-      "image-of-death-cursed-legion",
-      "spreading-madness-cursed-legion",
-      "mortis-protocols-cursed-legion",
-      "driven-to-butchery-cursed-legion",
-      "unnatural-aggression-cursed-legion"
+      "methodical-murder-cursed-legion-necrons",
+      "image-of-death-cursed-legion-necrons",
+      "mortis-protocols-cursed-legion-necrons",
+      "driven-to-butchery-cursed-legion-necrons",
+      "spreading-madness-cursed-legion-necrons",
+      "unnatural-aggression-cursed-legion-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -99,26 +105,29 @@
         "namespace": "mfm",
         "id": "412b33ad-7e6f-45a3-8638-ae880be94b9f"
       }
+    ],
+    "detachment_rule_ids": [
+      "cold-fervour-necrons"
     ]
   },
   {
     "id": "annihilation-legion",
     "name": "Annihilation Legion",
     "faction_id": "necrons",
-    "detachment_rule_id": "annihilation-protocol",
+    "detachment_rule_id": "annihilation-protocol-necrons",
     "enhancement_ids": [
-      "eternal-madness-annihilation-legion",
-      "ingrained-superiority-annihilation-legion",
-      "soulless-reaper-annihilation-legion",
-      "eldritch-nightmare-annihilation-legion"
+      "eternal-madness-annihilation-legion-necrons",
+      "ingrained-superiority-annihilation-legion-necrons",
+      "soulless-reaper-annihilation-legion-necrons",
+      "eldritch-nightmare-annihilation-legion-necrons"
     ],
     "stratagem_ids": [
-      "pitiless-hunters-annihilation-legion",
-      "blood-fuelled-cruelty-annihilation-legion",
-      "the-spoor-of-frailty-annihilation-legion",
-      "murderous-reanimation-annihilation-legion",
-      "insanitys-ire-annihilation-legion",
-      "masks-of-death-annihilation-legion"
+      "masks-of-death-annihilation-legion-necrons",
+      "the-spoor-of-frailty-annihilation-legion-necrons",
+      "murderous-reanimation-annihilation-legion-necrons",
+      "pitiless-hunters-annihilation-legion-necrons",
+      "blood-fuelled-cruelty-annihilation-legion-necrons",
+      "insanitys-ire-annihilation-legion-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -133,26 +142,29 @@
         "namespace": "mfm",
         "id": "4694ac41-4340-4e85-8824-5c47555f8c12"
       }
+    ],
+    "detachment_rule_ids": [
+      "annihilation-protocol-necrons"
     ]
   },
   {
     "id": "hypercrypt-legion",
     "name": "Hypercrypt Legion",
     "faction_id": "necrons",
-    "detachment_rule_id": "hyperphasing",
+    "detachment_rule_id": "hyperphasing-necrons",
     "enhancement_ids": [
-      "dimensional-overseer-hypercrypt-legion",
-      "arisen-tyrant-hypercrypt-legion",
-      "hyperspatial-transfer-node-hypercrypt-legion",
-      "osteoclave-fulcrum-hypercrypt-legion"
+      "dimensional-overseer-hypercrypt-legion-necrons",
+      "arisen-tyrant-hypercrypt-legion-necrons",
+      "hyperspatial-transfer-node-hypercrypt-legion-necrons",
+      "osteoclave-fulcrum-hypercrypt-legion-necrons"
     ],
     "stratagem_ids": [
-      "reanimation-crypts-hypercrypt-legion",
-      "cosmic-precision-hypercrypt-legion",
-      "hyperphasic-recall-hypercrypt-legion",
-      "dimensional-corridor-hypercrypt-legion",
-      "quantum-deflection-hypercrypt-legion",
-      "entropic-damping-hypercrypt-legion"
+      "hyperphasic-recall-hypercrypt-legion-necrons",
+      "quantum-deflection-hypercrypt-legion-necrons",
+      "reanimation-crypts-hypercrypt-legion-necrons",
+      "cosmic-precision-hypercrypt-legion-necrons",
+      "dimensional-corridor-hypercrypt-legion-necrons",
+      "entropic-damping-hypercrypt-legion-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -170,26 +182,29 @@
         "namespace": "mfm",
         "id": "489fc222-d9a1-4220-9ef2-9747c2fea283"
       }
+    ],
+    "detachment_rule_ids": [
+      "hyperphasing-necrons"
     ]
   },
   {
     "id": "pantheon-of-woe",
     "name": "Pantheon of Woe",
     "faction_id": "necrons",
-    "detachment_rule_id": "cosmic-distortion",
+    "detachment_rule_id": "cosmic-distortion-necrons",
     "enhancement_ids": [
-      "singularity-matrix-pantheon-of-woe",
-      "quantum-goad-pantheon-of-woe",
-      "animus-damper-pantheon-of-woe",
-      "reletavistic-tether-pantheon-of-woe"
+      "singularity-matrix-pantheon-of-woe-necrons",
+      "quantum-goad-pantheon-of-woe-necrons",
+      "animus-damper-pantheon-of-woe-necrons",
+      "reletavistic-tether-pantheon-of-woe-necrons"
     ],
     "stratagem_ids": [
-      "entrophasic-aura-targeting-pantheon-of-woe",
-      "chronodistortion-pantheon-of-woe",
-      "disharmonisation-cascade-pantheon-of-woe",
-      "mass-transmogrification-pantheon-of-woe",
-      "molecular-erosion-pantheon-of-woe",
-      "phase-melding-pantheon-of-woe"
+      "disharmonisation-cascade-pantheon-of-woe-necrons",
+      "molecular-erosion-pantheon-of-woe-necrons",
+      "mass-transmogrification-pantheon-of-woe-necrons",
+      "entrophasic-aura-targeting-pantheon-of-woe-necrons",
+      "chronodistortion-pantheon-of-woe-necrons",
+      "phase-melding-pantheon-of-woe-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -204,26 +219,29 @@
         "namespace": "mfm",
         "id": "a7ec286c-a305-435b-b402-91140c67d809"
       }
+    ],
+    "detachment_rule_ids": [
+      "cosmic-distortion-necrons"
     ]
   },
   {
     "id": "obeisance-phalanx",
     "name": "Obeisance Phalanx",
     "faction_id": "necrons",
-    "detachment_rule_id": "worthy-foes",
+    "detachment_rule_id": "worthy-foes-necrons",
     "enhancement_ids": [
-      "honourable-combatant-obeisance-phalanx",
-      "unflinching-will-obeisance-phalanx",
-      "warrior-noble-obeisance-phalanx",
-      "eternal-conqueror-obeisance-phalanx"
+      "honourable-combatant-obeisance-phalanx-necrons",
+      "unflinching-will-obeisance-phalanx-necrons",
+      "warrior-noble-obeisance-phalanx-necrons",
+      "eternal-conqueror-obeisance-phalanx-necrons"
     ],
     "stratagem_ids": [
-      "enslaved-artifice-obeisance-phalanx",
-      "nanoassembly-protocols-obeisance-phalanx",
-      "suffer-no-rival-obeisance-phalanx",
-      "your-time-is-nigh-obeisance-phalanx",
-      "sentinels-of-eternity-obeisance-phalanx",
-      "territorial-obsession-obeisance-phalanx"
+      "your-time-is-nigh-obeisance-phalanx-necrons",
+      "enslaved-artifice-obeisance-phalanx-necrons",
+      "nanoassembly-protocols-obeisance-phalanx-necrons",
+      "sentinels-of-eternity-obeisance-phalanx-necrons",
+      "suffer-no-rival-obeisance-phalanx-necrons",
+      "territorial-obsession-obeisance-phalanx-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -238,32 +256,35 @@
         "namespace": "mfm",
         "id": "df0e5858-2c4a-486b-b693-8971f837388d"
       }
+    ],
+    "detachment_rule_ids": [
+      "worthy-foes-necrons"
     ]
   },
   {
     "id": "canoptek-court",
     "name": "Canoptek Court",
     "faction_id": "necrons",
-    "detachment_rule_id": "power-matrix",
+    "detachment_rule_id": "power-matrix-necrons",
     "enhancement_ids": [
-      "dimensional-sanctum-canoptek-court",
-      "hyperphasic-fulcrum-canoptek-court",
-      "autodivinator-canoptek-court",
-      "metalodermal-tesla-weave-canoptek-court"
+      "dimensional-sanctum-canoptek-court-necrons",
+      "hyperphasic-fulcrum-canoptek-court-necrons",
+      "autodivinator-canoptek-court-necrons",
+      "metalodermal-tesla-weave-canoptek-court-necrons"
     ],
     "stratagem_ids": [
-      "curse-of-the-cryptek-canoptek-court",
-      "cynosure-of-eradication-canoptek-court",
-      "solar-pulse-canoptek-court",
-      "reactive-subroutines-canoptek-court",
-      "countertemporal-shift-canoptek-court",
-      "suboptimal-facade-canoptek-court"
+      "curse-of-the-cryptek-canoptek-court-necrons",
+      "cynosure-of-eradication-canoptek-court-necrons",
+      "solar-pulse-canoptek-court-necrons",
+      "reactive-subroutines-canoptek-court-necrons",
+      "countertemporal-shift-canoptek-court-necrons",
+      "suboptimal-facade-canoptek-court-necrons"
     ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": 3,
+    "detachment_points": 2,
     "force_dispositions": [
       "take-and-hold"
     ],
@@ -272,26 +293,29 @@
         "namespace": "mfm",
         "id": "e40617a8-ec95-44e2-bc46-956a6fac4538"
       }
+    ],
+    "detachment_rule_ids": [
+      "power-matrix-necrons"
     ]
   },
   {
     "id": "awakened-dynasty",
     "name": "Awakened Dynasty",
     "faction_id": "necrons",
-    "detachment_rule_id": "command-protocols",
+    "detachment_rule_id": "command-protocols-necrons",
     "enhancement_ids": [
-      "veil-of-darkness-awakened-dynasty",
-      "nether-realm-casket-awakened-dynasty",
-      "phasal-subjugator-aura-awakened-dynasty",
-      "enaegic-dermal-bond-awakened-dynasty"
+      "veil-of-darkness-awakened-dynasty-necrons",
+      "nether-realm-casket-awakened-dynasty-necrons",
+      "phasal-subjugator-aura-awakened-dynasty-necrons",
+      "enaegic-dermal-bond-awakened-dynasty-necrons"
     ],
     "stratagem_ids": [
-      "protocol-of-the-hungry-void-awakened-dynasty",
-      "protocol-of-the-conquering-tyrant-awakened-dynasty",
-      "protocol-of-the-eternal-revenant-awakened-dynasty",
-      "protocol-of-the-undying-legions-awakened-dynasty",
-      "protocol-of-the-sudden-storm-awakened-dynasty",
-      "protocol-of-the-vengeful-stars-awakened-dynasty"
+      "protocol-of-the-eternal-revenant-awakened-dynasty-necrons",
+      "protocol-of-the-undying-legions-awakened-dynasty-necrons",
+      "protocol-of-the-hungry-void-awakened-dynasty-necrons",
+      "protocol-of-the-sudden-storm-awakened-dynasty-necrons",
+      "protocol-of-the-conquering-tyrant-awakened-dynasty-necrons",
+      "protocol-of-the-vengeful-stars-awakened-dynasty-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -309,21 +333,24 @@
         "namespace": "mfm",
         "id": "ef55259d-3884-4b3b-b215-08ab337d4a24"
       }
+    ],
+    "detachment_rule_ids": [
+      "command-protocols-necrons"
     ]
   },
   {
     "id": "hand-of-the-dynasty",
     "name": "Hand of the Dynasty",
     "faction_id": "necrons",
-    "detachment_rule_id": "hypermotility-protocols",
+    "detachment_rule_id": "hypermotility-protocols-necrons",
     "enhancement_ids": [
-      "enlivened-sentinels-upgrade-hand-of-the-dynasty",
-      "tools-of-dominion-upgrade-hand-of-the-dynasty"
+      "enlivened-sentinels-upgrade-hand-of-the-dynasty-necrons",
+      "tools-of-dominion-upgrade-hand-of-the-dynasty-necrons"
     ],
     "stratagem_ids": [
-      "dominance-protocols-hand-of-the-dynasty",
-      "will-of-the-conqueror-hand-of-the-dynasty",
-      "nanosaturation-hand-of-the-dynasty"
+      "nanosaturation-hand-of-the-dynasty-necrons",
+      "dominance-protocols-hand-of-the-dynasty-necrons",
+      "will-of-the-conqueror-hand-of-the-dynasty-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -341,21 +368,24 @@
         "namespace": "mfm",
         "id": "8e281a27-1d5a-415b-8b92-34cd0ed53b63"
       }
+    ],
+    "detachment_rule_ids": [
+      "hypermotility-protocols-necrons"
     ]
   },
   {
     "id": "skyshroud-spearhead",
     "name": "Skyshroud Spearhead",
     "faction_id": "necrons",
-    "detachment_rule_id": "transdimensional-deployment",
+    "detachment_rule_id": "transdimensional-deployment-necrons",
     "enhancement_ids": [
-      "recursive-reanimation-upgrade-skyshroud-spearhead",
-      "deepening-madness-upgrade-skyshroud-spearhead"
+      "recursive-reanimation-upgrade-skyshroud-spearhead-necrons",
+      "deepening-madness-upgrade-skyshroud-spearhead-necrons"
     ],
     "stratagem_ids": [
-      "omnilocked-strafing-skyshroud-spearhead",
-      "swift-as-death-skyshroud-spearhead",
-      "evasive-protocols-skyshroud-spearhead"
+      "omnilocked-strafing-skyshroud-spearhead-necrons",
+      "evasive-protocols-skyshroud-spearhead-necrons",
+      "swift-as-death-skyshroud-spearhead-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -370,22 +400,24 @@
         "namespace": "mfm",
         "id": "cd5f7a63-6d73-4094-9977-e8b7530d1a8f"
       }
+    ],
+    "detachment_rule_ids": [
+      "transdimensional-deployment-necrons"
     ]
   },
   {
     "id": "the-phaerons-armoury",
     "name": "The Phaeron’s Armoury",
     "faction_id": "necrons",
-    "detachment_rule_id": "empowered-engines",
+    "detachment_rule_id": "empowered-engines-necrons",
     "enhancement_ids": [
-      "prelocational-optimiser-the-phaerons-armoury",
-      "mortality-shroud-aura-the-phaerons-armoury",
-      "mortality-shroud-aura-upgrade-the-phaerons-armoury"
+      "prelocational-optimiser-the-phaerons-armoury-necrons",
+      "mortality-shroud-aura-upgrade-the-phaerons-armoury-necrons"
     ],
     "stratagem_ids": [
-      "subsurface-quantumweave-the-phaerons-armoury",
-      "particle-pulse-the-phaerons-armoury",
-      "cosmic-storm-the-phaerons-armoury"
+      "cosmic-storm-the-phaerons-armoury-necrons",
+      "subsurface-quantumweave-the-phaerons-armoury-necrons",
+      "particle-pulse-the-phaerons-armoury-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -403,6 +435,9 @@
         "namespace": "mfm",
         "id": "3818a5e4-5d1a-410b-a63f-9a850b923635"
       }
+    ],
+    "detachment_rule_ids": [
+      "empowered-engines-necrons"
     ]
   },
   {
@@ -410,12 +445,12 @@
     "name": "Amonhotekh’s Guard",
     "faction_id": "necrons",
     "enhancement_ids": [
-      "metalline-might-amonhotekhs-guard",
-      "unblemished-legions-amonhotekhs-guard"
+      "metalline-might-amonhotekhs-guard-necrons",
+      "unblemished-legions-amonhotekhs-guard-necrons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "game_modes": [
       "combat-patrol"
@@ -429,6 +464,15 @@
         "namespace": "mfm",
         "id": "4077647f-9af3-4900-a123-2b7fabb66454"
       }
+    ],
+    "detachment_rule_ids": [
+      "territorial-imperatives-necrons",
+      "reanimation-protocols-amonhotekhs-guard-necrons"
+    ],
+    "stratagem_ids": [
+      "aggression-protocols-amonhotekhs-guard-necrons",
+      "reinforced-resilience-amonhotekhs-guard-necrons",
+      "gauss-storm-amonhotekhs-guard-necrons"
     ]
   }
 ]

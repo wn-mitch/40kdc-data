@@ -8,7 +8,7 @@
 
 > **ActivatableBuff** = `object`
 
-Defined in: [cruncher/from-dsl.ts:60](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/from-dsl.ts#L60)
+Defined in: [cruncher/from-dsl.ts:73](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/cruncher/from-dsl.ts#L73)
 
 A buff-bearing *player decision* the cruncher can't make on its own: a
 dice-pool option, a `choice` branch, or an activation gated on a timing the
@@ -24,7 +24,7 @@ resolver gates them per-target rather than the lever vanishing.
 
 > **id**: `string`
 
-Defined in: [cruncher/from-dsl.ts:62](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/from-dsl.ts#L62)
+Defined in: [cruncher/from-dsl.ts:75](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/cruncher/from-dsl.ts#L75)
 
 Stable toggle id, e.g. `"blessings-of-khorne#Warp Blades"`.
 
@@ -34,7 +34,7 @@ Stable toggle id, e.g. `"blessings-of-khorne#Warp Blades"`.
 
 > **label**: `string`
 
-Defined in: [cruncher/from-dsl.ts:64](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/from-dsl.ts#L64)
+Defined in: [cruncher/from-dsl.ts:77](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/cruncher/from-dsl.ts#L77)
 
 Human label for the lever (option name, or a summary of its buffs).
 
@@ -44,9 +44,9 @@ Human label for the lever (option name, or a summary of its buffs).
 
 > **buffs**: [`Buff`](Buff.md)[]
 
-Defined in: [cruncher/from-dsl.ts:66](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/from-dsl.ts#L66)
+Defined in: [cruncher/from-dsl.ts:79](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/cruncher/from-dsl.ts#L79)
 
-Contributions this activation adds when the player opts in (≥1).
+Contributions this activation adds when the player opts in (≥1, or none for a [capRaise](#capraise) lever).
 
 ***
 
@@ -54,6 +54,67 @@ Contributions this activation adds when the player opts in (≥1).
 
 > `optional` **group?**: [`ActivatableGroupRef`](ActivatableGroupRef.md)
 
-Defined in: [cruncher/from-dsl.ts:68](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/from-dsl.ts#L68)
+Defined in: [cruncher/from-dsl.ts:81](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/cruncher/from-dsl.ts#L81)
 
 Set when the lever belongs to a mutually-limited pool.
+
+***
+
+### capRaise?
+
+> `optional` **capRaise?**: `object`
+
+Defined in: [cruncher/from-dsl.ts:86](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/cruncher/from-dsl.ts#L86)
+
+The lever raises the cap of another ability's lever pool instead of adding buffs ("select one
+more augmentation"): `ability` names that ability as the DSL does, `by` the extra activations.
+
+#### ability
+
+> **ability**: `string`
+
+#### by
+
+> **by**: `number`
+
+#### allocation
+
+> **allocation**: `"choose-one-option"` \| `"fixed-option"`
+
+#### option?
+
+> `optional` **option?**: `object`
+
+##### option.ability\_id
+
+> **ability\_id**: `string`
+
+##### option.option\_id
+
+> **option\_id**: `string`
+
+#### options?
+
+> `optional` **options?**: `object`[]
+
+***
+
+### groups?
+
+> `optional` **groups?**: [`ActivatableGroupRef`](ActivatableGroupRef.md)[]
+
+Defined in: [cruncher/from-dsl.ts:88](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/cruncher/from-dsl.ts#L88)
+
+All enclosing activation pools apply, in addition to the option's own group.
+
+***
+
+### requires?
+
+> `optional` **requires?**: `unknown`[]
+
+Defined in: [cruncher/from-dsl.ts:94](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/cruncher/from-dsl.ts#L94)
+
+DSL fragments the player vouches for when opting in, in the order they apply: a unit
+selection (its range, visibility and eligibility), a gating roll, a model count. Absent when
+the lever assumes nothing beyond the choice itself.

@@ -12,39 +12,39 @@ const KHARN = { unitId: "kharn-the-betrayer", factionId: "world-eaters" };
 describe("Dataset.stackableBuffsFor", () => {
   it("surfaces Blessings of Khorne's three keyword buffs as grouped opt-in levers", () => {
     const { buffs, groups } = ds.stackableBuffsFor(KHARN, { phase: "fight" });
-    const bless = buffs.filter((b) => b.id.startsWith("blessings-of-khorne#"));
+    const bless = buffs.filter((b) => b.id.startsWith("blessings-of-khorne-world-eaters#"));
     expect(bless.map((b) => b.id)).toEqual([
-      "blessings-of-khorne#Martial Excellence",
-      "blessings-of-khorne#Warp Blades",
-      "blessings-of-khorne#Decapitating Strikes",
+      "blessings-of-khorne-world-eaters#Martial Excellence",
+      "blessings-of-khorne-world-eaters#Warp Blades",
+      "blessings-of-khorne-world-eaters#Decapitating Strikes",
     ]);
     // Opt-in (off by default), all under one capped group.
     expect(bless.every((b) => b.enabled === false)).toBe(true);
-    expect(bless.every((b) => b.group === "blessings-of-khorne")).toBe(true);
-    const group = groups.find((g) => g.id === "blessings-of-khorne");
-    expect(group).toEqual({ id: "blessings-of-khorne", label: "Blessings of Khorne", maxActivations: 2 });
+    expect(bless.every((b) => b.group === "blessings-of-khorne-world-eaters")).toBe(true);
+    const group = groups.find((g) => g.id === "blessings-of-khorne-world-eaters");
+    expect(group).toEqual({ id: "blessings-of-khorne-world-eaters", abilityId: "blessings-of-khorne-world-eaters", label: "Blessings of Khorne", maxActivations: 2 });
     // The labels are prefixed with the ability name at the dataset layer.
     expect(bless[0].label).toBe("Blessings of Khorne — Martial Excellence");
   });
 
   it("defers Decapitating Strikes' 'vs Infantry' gate to applicableWhen", () => {
     const { buffs } = ds.stackableBuffsFor(KHARN, { phase: "fight" });
-    const decap = buffs.find((b) => b.id === "blessings-of-khorne#Decapitating Strikes")!;
+    const decap = buffs.find((b) => b.id === "blessings-of-khorne-world-eaters#Decapitating Strikes")!;
     expect(decap.buffs[0].contribution).toMatchObject({ type: "extra-keyword" });
     expect(decap.buffs[0].applicableWhen).toEqual({
-      requiresTargetKeyword: "Infantry",
+      requiresTargetKeyword: "INFANTRY",
       phases: ["fight"],
     });
   });
 
   it("does not surface a lever for Berzerker Frenzy (resurrection has no combat buff)", () => {
     const { buffs } = ds.stackableBuffsFor(KHARN, { phase: "fight" });
-    expect(buffs.some((b) => b.id.includes("berzerker-frenzy"))).toBe(false);
+    expect(buffs.some((b) => b.id.includes("berzerker-frenzy-world-eaters"))).toBe(false);
   });
 
   it("opting into a lever resolves to the buff in its phase, and only vs the right target", () => {
     const { buffs } = ds.stackableBuffsFor(KHARN, { phase: "fight" });
-    const decap = buffs.find((b) => b.id === "blessings-of-khorne#Decapitating Strikes")!;
+    const decap = buffs.find((b) => b.id === "blessings-of-khorne-world-eaters#Decapitating Strikes")!;
 
     const vsInfantry: EngineContext = { phase: "fight", targetKeywords: ["infantry"] };
     const vsVehicle: EngineContext = { phase: "fight", targetKeywords: ["vehicle"] };
@@ -92,21 +92,19 @@ describe("Dataset.stackableBuffsFor", () => {
   });
 });
 
-// Kharn's "Legendary Killer" grants the combined unit melee hit & wound rerolls,
-// gated behind a `model-is-leader` condition. That condition (and the 268 uses
-// of `is-attached`) was unevaluatable until `EngineContext.attackerAttached`
-// carried the attachment fact from `attachedUnitIds` into the DSL translator.
-// These guard that the gated rerolls surface only when an attachment is present.
-describe("attachment-gated conditions (is-attached / model-is-leader)", () => {
+// The source model's actual role governs leading, independently of whichever
+// attached member is selected for the damage calculation.
+describe("source-bound attachment conditions", () => {
   /** The two reroll contributions Legendary Killer should yield, in either order. */
   function legendaryKillerRerolls(buffs: { id: string; buffs: { contribution: unknown }[] }[]) {
-    const lever = buffs.find((b) => b.id.endsWith(":legendary-killer"));
+    const lever = buffs.find((b) => b.id.endsWith(":legendary-killer-world-eaters"));
     return (lever?.buffs ?? []).map((b) => b.contribution);
   }
 
   it("reported direction: Berzerkers led by Kharn get his melee rerolls (sourced attached)", () => {
     const { buffs } = ds.stackableBuffsFor(
-      { unitId: "khorne-berzerkers", factionId: "world-eaters", attachedUnitIds: ["kharn-the-betrayer"] },
+      { unitId: "khorne-berzerkers", factionId: "world-eaters", attachedUnitIds: ["kharn-the-betrayer"],
+        attachmentRoles: { "khorne-berzerkers": "bodyguard", "kharn-the-betrayer": "leader" } },
       { phase: "fight" },
     );
     expect(legendaryKillerRerolls(buffs)).toEqual(
@@ -115,13 +113,14 @@ describe("attachment-gated conditions (is-attached / model-is-leader)", () => {
         { type: "reroll", roll: "wound", subset: "ones" },
       ]),
     );
-    const lever = buffs.find((b) => b.id.endsWith(":legendary-killer"))!;
+    const lever = buffs.find((b) => b.id.endsWith(":legendary-killer-world-eaters"))!;
     expect(lever.source).toMatchObject({ abilityKind: "attached", sourceUnitId: "kharn-the-betrayer" });
   });
 
   it("reverse direction: Kharn leading Berzerkers still yields his rerolls (sourced unit)", () => {
     const { buffs } = ds.stackableBuffsFor(
-      { ...KHARN, attachedUnitIds: ["khorne-berzerkers"] },
+      { ...KHARN, attachedUnitIds: ["khorne-berzerkers"],
+        attachmentRoles: { "khorne-berzerkers": "bodyguard", "kharn-the-betrayer": "leader" } },
       { phase: "fight" },
     );
     expect(legendaryKillerRerolls(buffs)).toEqual(
@@ -130,13 +129,12 @@ describe("attachment-gated conditions (is-attached / model-is-leader)", () => {
         { type: "reroll", roll: "wound", subset: "ones" },
       ]),
     );
-    const lever = buffs.find((b) => b.id.endsWith(":legendary-killer"))!;
+    const lever = buffs.find((b) => b.id.endsWith(":legendary-killer-world-eaters"))!;
     expect(lever.source).toMatchObject({ abilityKind: "unit" });
   });
 
   it("negative control: unattached Kharn yields no Legendary Killer rerolls", () => {
-    // No attachedUnitIds → attackerAttached undefined → model-is-leader stays
-    // "unknown" → the gated rerolls remain unsupported, not surfaced as a buff.
+    // No attachment means the source cannot be leading; no keyword inference.
     const { buffs } = ds.stackableBuffsFor(KHARN, { phase: "fight" });
     expect(legendaryKillerRerolls(buffs)).toEqual([]);
   });
@@ -152,7 +150,7 @@ describe("Berzerker Warband detachment buffs", () => {
 
   it("surfaces Hack and Slash as an opt-in stratagem lever that improves AP", () => {
     const { buffs } = ds.stackableBuffsFor(WARBAND, { phase: "fight" });
-    const strat = buffs.find((b) => b.id === "detachment-stratagem:hack-and-slash-berzerker-warband");
+    const strat = buffs.find((b) => b.id === "detachment-stratagem:hack-and-slash-berzerker-warband-world-eaters");
     expect(strat, "hack-and-slash lever").toBeDefined();
     // Stratagems cost CP — off by default.
     expect(strat!.enabled).toBe(false);
@@ -164,19 +162,19 @@ describe("Berzerker Warband detachment buffs", () => {
     expect(resolveBuffs(strat!.buffs, { phase: "shooting" }).apMod.value).toBe(0);
   });
 
-  it("applies Relentless Rage's +1 A / +2 S only when the unit charged this turn", () => {
-    // Not charged → the conditional drops, no lever.
-    const notCharged = ds.stackableBuffsFor(WARBAND, { phase: "fight", attackerCharged: false });
-    expect(notCharged.buffs.some((b) => b.id === "detachment:relentless-rage")).toBe(false);
-
-    // Charged → the detachment rule surfaces (on by default — it's not a strat).
-    const charged = ds.stackableBuffsFor(WARBAND, { phase: "fight", attackerCharged: true });
-    const rage = charged.buffs.find((b) => b.id === "detachment:relentless-rage");
-    expect(rage, "relentless-rage lever").toBeDefined();
-    expect(rage!.enabled).toBe(true);
-    expect(rage!.source).toMatchObject({ abilityKind: "detachment" });
-    const resolved = resolveBuffs(rage!.buffs, { phase: "fight" });
-    expect(resolved.attacksMod.value).toBe(1);
-    expect(resolved.strengthMod.value).toBe(2);
+  it("applies Relentless Rage's +1 A to melee attacks whether or not the unit charged", () => {
+    for (const attackerCharged of [false, true]) {
+      // The detachment rule surfaces on by default — it's not a strat.
+      const { buffs } = ds.stackableBuffsFor(WARBAND, { phase: "fight", attackerCharged });
+      const rage = buffs.find((b) => b.id === "detachment:relentless-rage-world-eaters");
+      expect(rage, "relentless-rage lever").toBeDefined();
+      expect(rage!.enabled).toBe(true);
+      expect(rage!.source).toMatchObject({ abilityKind: "detachment" });
+      const resolved = resolveBuffs(rage!.buffs, { phase: "fight" });
+      expect(resolved.attacksMod.value).toBe(1);
+      expect(resolved.strengthMod.value).toBe(0);
+      // Melee only: nothing reaches a shooting attack.
+      expect(resolveBuffs(rage!.buffs, { phase: "shooting" }).attacksMod.value).toBe(0);
+    }
   });
 });

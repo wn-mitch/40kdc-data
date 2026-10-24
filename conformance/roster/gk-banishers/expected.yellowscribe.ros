@@ -22,12 +22,12 @@
             </profile>
             <profile name="Champion of the Order of Purifiers (Psychic)" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">While this model is leading a unit, add 1 to the Attacks characteristic of Purifying Flame weapons equipped by models in this unit.</characteristic>
+                <characteristic name="Description">While this model is leading a unit, add 1 to the Attacks characteristic of ranged purifying flame weapons equipped by models in this unit.</characteristic>
               </characteristics>
             </profile>
             <profile name="Foesight (Psychic)" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Against CHARACTER targets, you can re-roll the Hit roll.</characteristic>
+                <characteristic name="Description">Against CHARACTER targets, you can re-roll the Hit roll for attacks made by this model.</characteristic>
               </characteristics>
             </profile>
             <profile name="Leader" typeName="Abilities">
@@ -37,7 +37,7 @@
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit has the Deep Strike ability.</characteristic>
+                <characteristic name="Description">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -120,28 +120,33 @@
                 <characteristic name="Description">4+ invulnerable save</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise D3" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, each enemy unit within 6" suffers D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit has the Deep Strike ability.</characteristic>
+                <characteristic name="Description">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
               </characteristics>
             </profile>
             <profile name="Surge of Wrath (Psychic)" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Against MONSTER targets or against VEHICLE targets:
-  -&gt; You can re-roll the Hit roll for attacks made by this model with melee weapons.
-  -&gt; You can re-roll the Wound roll for attacks made by this model with melee weapons.
-  -&gt; You can re-roll the Damage roll for attacks made by this model with melee weapons.</characteristic>
+                <characteristic name="Description">While making melee attacks against MONSTER or VEHICLE targets:
+  -&gt; You can re-roll the Hit roll for attacks made by this model.
+  -&gt; You can re-roll the Wound roll for attacks made by this model.
+  -&gt; You can re-roll the Damage roll for attacks made by this model.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Damaged" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
               </characteristics>
             </profile>
             <profile name="Warrior Strategist" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When this model's unit is targeted with a Stratagem, you may use this ability, once per battle round per army, when resolving this use, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP), before paying its cost.</characteristic>
+                <characteristic name="Description">Each time you use a Stratagem, you may use this ability, once per battle round per army, while the unit is friendly, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -220,13 +225,13 @@
             </profile>
             <profile name="Sanctity of Purpose" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Unless the target unit is within range of an objective marker, re-roll a Wound roll of 1.
-If the target unit is within range of an objective marker, you can re-roll the Wound roll.</characteristic>
+                <characteristic name="Description">While the target is not within range of an objective marker, you can re-roll a Wound roll of 1.
+While the target is within range of an objective marker, you can re-roll the Wound roll.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit has the Deep Strike ability.</characteristic>
+                <characteristic name="Description">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
               </characteristics>
             </profile>
           </profiles>

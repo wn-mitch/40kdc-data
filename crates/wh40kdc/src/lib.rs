@@ -28,7 +28,7 @@
 //!     .filter(|a| ds.phases_of(a).contains(&Phase::Shooting))
 //!     .map(|a| a.ability_id.as_str())
 //!     .collect();
-//! assert_eq!(shooting, ["berzerker-frenzy"]);
+//! assert_eq!(shooting, ["berzerker-frenzy-world-eaters"]);
 //! # }
 //! ```
 
@@ -81,12 +81,13 @@ pub mod data;
 #[cfg(feature = "bundled-data")]
 pub use data::{normalize_name, Collection, Dataset, RawData, ReactiveTrigger};
 
+#[cfg(feature = "bundled-data")]
 pub use data::{
     base_loadout, base_unit_points, check_unit_legality, clamp_weapon_count, group_loadout,
     loadout_candidates, loadout_models, loadout_tiers, maximal_loadout, option_cap,
-    points_tier_missing, validate_loadout, Loadout, LoadoutGroup, LoadoutGroupWeapon, LoadoutModel,
-    LoadoutTier, Violation, ViolationCode, WeaponBound, LOADOUT_CANDIDATES_DEFAULT_LIMIT,
-    LOADOUT_CANDIDATES_TRUNCATED,
+    points_tier_missing, validate_loadout, weapon_bounds, Loadout, LoadoutGroup,
+    LoadoutGroupWeapon, LoadoutModel, LoadoutTier, Violation, ViolationCode, WeaponBound,
+    LOADOUT_CANDIDATES_DEFAULT_LIMIT, LOADOUT_CANDIDATES_TRUNCATED,
 };
 
 // Roster-level legality + affordability primitives (need both the Dataset and
@@ -132,9 +133,10 @@ pub mod cruncher;
 pub mod translate;
 
 pub use translate::{
-    describe_ability, describe_ability_parts, describe_applies_to, describe_award,
-    describe_condition, describe_effect, describe_effect_inline, describe_effect_with_scope,
-    describe_scope, describe_scoring_card, describe_trigger,
+    condition_lead_in_value, describe_ability, describe_ability_parts, describe_applies_to,
+    describe_award, describe_condition, describe_condition_value, describe_effect,
+    describe_effect_inline, describe_effect_with_scope, describe_scope, describe_scoring_card,
+    describe_selection_eligibility_value, describe_trigger, describe_trigger_value,
 };
 
 /// Roster-highlighting scope: resolve which units an ability's curated

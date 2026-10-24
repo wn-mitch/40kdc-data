@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
+	"strings"
 	"testing"
 )
 
@@ -113,15 +114,25 @@ func runDSLCorpus(t *testing.T, filename string) {
 	for _, cAny := range getList(dsl, "cases") {
 		c, _ := asMap(cAny)
 		abilityID := getStr(c, "abilityId")
-		ability, ok := ds.Abilities.GetAny(abilityID)
-		if !ok {
-			t.Errorf("unknown ability %q", abilityID)
-			continue
-		}
 		source, _ := getMap(c, "source")
 		ctx, _ := getMap(c, "context")
 		perspective := strOr(c, "perspective", "attacker")
-		result := effectToBuffs(ability.Raw["effect"], source, ctx, perspective)
+		// Frozen specimens exercise the inline translator. Real records must
+		// take the same AbilityView path as production consumers so trigger
+		// gating, bundle resolution and recipient snapshots are included.
+		var result *effectTranslation
+		if rawEffect, frozen := c["effect"]; frozen {
+			rating, hasRating := c["rating"]
+			result = effectToBuffs(withRating(rawEffect, rating, hasRating), source, ctx, perspective)
+		} else {
+			ability, ok := ds.Abilities.GetAny(abilityID)
+			if !ok {
+				t.Errorf("unknown ability %q", abilityID)
+				continue
+			}
+			rating, hasRating := c["rating"]
+			result = ability.describeRatedBuffs(source, ctx, perspective, rating, hasRating)
+		}
 		expected, _ := getMap(c, "expected")
 
 		var appliedContribs []any
@@ -152,19 +163,23 @@ func runDSLCorpus(t *testing.T, filename string) {
 					buffs = append(buffs, bm["contribution"])
 				}
 				acts = append(acts, map[string]any{
-					"id":    a["id"],
-					"label": a["label"],
-					"group": a["group"],
-					"buffs": orEmpty(buffs),
+					"id":       a["id"],
+					"label":    a["label"],
+					"group":    a["group"],
+					"requires": a["requires"],
+					"capRaise": a["capRaise"],
+					"buffs":    orEmpty(buffs),
 				})
 			}
-			// Normalise expected entries so a missing "group" reads as null.
+			// An expected lever omits "group", "requires" and "capRaise" when it has none.
 			var expActs []any
 			for _, eAny := range getList(expected, "activatable") {
 				e, _ := asMap(eAny)
 				ne := cloneMap(e)
-				if _, has := ne["group"]; !has {
-					ne["group"] = nil
+				for _, key := range []string{"group", "requires", "capRaise"} {
+					if _, has := ne[key]; !has {
+						ne[key] = nil
+					}
 				}
 				expActs = append(expActs, ne)
 			}
@@ -186,32 +201,95 @@ func TestFromDSLCorpus(t *testing.T)          { runDSLCorpus(t, "from-dsl.json")
 func TestDefensiveFromDSLCorpus(t *testing.T) { runDSLCorpus(t, "defensive-from-dsl.json") }
 
 func TestCountCappedRerollIsNotAppliedAsUnlimited(t *testing.T) {
-	effect := map[string]any{
-		"type":   "re-roll",
-		"target": "unit",
-		"modifier": map[string]any{
-			"roll":         "hit",
-			"result_scope": "any-result",
-			"count":        float64(1),
-		},
-	}
 	source := map[string]any{
 		"kind":        "ability",
 		"abilityId":   "count-capped-reroll",
 		"abilityKind": "unit",
 	}
-	result := effectToBuffs(effect, source, map[string]any{"phase": "shooting"}, "attacker")
-	if len(result.applied) != 0 {
-		t.Fatalf("applied = %#v, want none", result.applied)
+	translate := func(roll string, count float64) *effectTranslation {
+		effect := map[string]any{
+			"type":   "re-roll",
+			"target": "this-unit",
+			"modifier": map[string]any{
+				"roll":         roll,
+				"result_scope": "any-result",
+				"count":        count,
+			},
+		}
+		return effectToBuffs(effect, source, map[string]any{"phase": "shooting"}, "attacker")
 	}
-	if len(result.unsupported) != 1 {
-		t.Fatalf("unsupported = %#v, want one diagnostic", result.unsupported)
+
+	// One die of any result is priced as a single re-rolled die, not an unlimited re-roll.
+	one := translate("hit", 1)
+	if len(one.applied) != 1 || len(one.unsupported) != 0 {
+		t.Fatalf("count 1: applied = %#v, unsupported = %#v", one.applied, one.unsupported)
 	}
-	diagnostic, ok := asMap(result.unsupported[0])
-	if !ok {
-		t.Fatalf("unsupported diagnostic = %#v, want object", result.unsupported[0])
+	buff, _ := asMap(one.applied[0])
+	contribution, _ := getMap(buff, "contribution")
+	if getStr(contribution, "type") != "reroll-one" || getStr(contribution, "roll") != "hit" {
+		t.Fatalf("count 1 contribution = %#v, want reroll-one hit", contribution)
 	}
-	if got := getStr(diagnostic, "reason"); got != "re-roll: count-capped permissions are not modelled by the expected-value engine" {
-		t.Fatalf("reason = %q", got)
+
+	// A larger finite permission is refused.
+	two := translate("hit", 2)
+	if len(two.applied) != 0 || len(two.unsupported) != 1 {
+		t.Fatalf("count 2: applied = %#v, unsupported = %#v", two.applied, two.unsupported)
+	}
+	diagnostic, _ := asMap(two.unsupported[0])
+	if got := getStr(diagnostic, "reason"); got != "re-roll: a count-capped permission other than one die of any result is not modelled by the expected-value engine" {
+		t.Fatalf("count 2 reason = %q", got)
+	}
+
+	// A count-capped roll off the damage path is outside it, not count-capped.
+	charge := translate("charge", 1)
+	if len(charge.applied) != 0 || len(charge.unsupported) != 1 {
+		t.Fatalf("charge: applied = %#v, unsupported = %#v", charge.applied, charge.unsupported)
+	}
+	diagnostic, _ = asMap(charge.unsupported[0])
+	if got := getStr(diagnostic, "reason"); !strings.Contains(got, "outside the damage path") {
+		t.Fatalf("charge reason = %q", got)
+	}
+}
+
+// TestEffectTranslationCorpus renders every effect-translation case with the Go describer; the
+// rendered text is the contract, byte for byte.
+func TestEffectTranslationCorpus(t *testing.T) {
+	var cases []map[string]any
+	if err := json.Unmarshal(loadCorpus(t, "effect-translation", "cases.json"), &cases); err != nil {
+		t.Fatal(err)
+	}
+	for _, c := range cases {
+		ability := map[string]any{"effect": c["effect"]}
+		for _, key := range []string{"scope", "usage", "trigger", "applies_to"} {
+			if c[key] != nil {
+				ability[key] = c[key]
+			}
+		}
+		want := c["expected"].(map[string]any)["text"]
+		if got := describeAbility(ability); got != want {
+			t.Errorf("%v:\n got  %q\n want %q", c["caseId"], got, want)
+		}
+	}
+}
+
+func TestStratagemTargetsCorpus(t *testing.T) {
+	var corpus map[string]any
+	if err := json.Unmarshal(loadCorpus(t, "abilities-resolver", "stratagem-targets.json"), &corpus); err != nil {
+		t.Fatal(err)
+	}
+	cases, _ := corpus["cases"].([]any)
+	if len(cases) == 0 {
+		t.Fatal("the stratagem-target corpus is empty")
+	}
+	for _, item := range cases {
+		c, _ := asMap(item)
+		keywords := map[string]bool{}
+		for _, keyword := range getStrList(c, "keywords") {
+			keywords[keyword] = true
+		}
+		got := stratagemCanTarget(map[string]any{"target_restrictions": c["target_restrictions"]}, keywords)
+		if want, _ := c["expected"].(bool); got != want {
+			t.Errorf("%s: got %v, want %v", getStr(c, "name"), got, want)
+		}
 	}
 }

@@ -28,6 +28,7 @@ pub const VALIDATOR_TARGETS: &[&str] = &[
     "ability",
     "wargear",
     "wargear-option",
+    "stratagem",
 ];
 
 fn keyword_to_code(keyword: &str) -> Option<&'static str> {

@@ -10,6 +10,7 @@ from __future__ import annotations
 
 from typing import Any, TypedDict
 
+from wh40kdc.data.ability_refs import unit_ability_ids
 from wh40kdc.data.bundle import RawData, empty_raw_data, raw_data
 from wh40kdc.data.collection import Collection, id_collection
 from wh40kdc.data.entities import (
@@ -34,10 +35,17 @@ def _buff_source_from_eligible(entry: dict[str, Any]) -> dict[str, Any]:
             "abilityKind": "attached",
             "sourceUnitId": entry["source"]["unitId"],
         }
+    if kind == "support":
+        return {
+            "kind": "ability",
+            "abilityId": ability_id,
+            "abilityKind": "support",
+            "sourceUnitId": entry["source"]["sourceUnitId"],
+        }
     if kind == "detachment-stratagem":
         ability_kind = "detachment-stratagem"
     else:
-        ability_kind = kind  # army / detachment / unit / support
+        ability_kind = kind  # army / detachment / unit
     return {"kind": "ability", "abilityId": ability_id, "abilityKind": ability_kind}
 
 
@@ -130,22 +138,13 @@ class Dataset:
             id_aliases=embedded_registry_aliases(),
             wrap=lambda f: FactionView(f, self),
         )
-        # An ability_id is shared across factions (each faction's enrichment
-        # authors its own copy of e.g. "deadly-demise-d3", and the copies
-        # legitimately diverge); dedupe on (faction_id, id) so every faction's
-        # copy is retained and a unit resolves its own faction's ability — the
-        # same scheme as weapons (issue #59). `faction_id` is stamped at bundle
-        # time from the enrichment directory; only the shared `_core` pool
-        # stays faction-less, reachable through the first-wins fallback.
+        # Ability ids are unique across the dataset (`<name>-<faction>`; core rules bare),
+        # so a plain get() is exact. An old bare faction id resolves to nothing.
         self.abilities: Collection[dict[str, Any], AbilityView] = Collection(
             raw["abilities"],
             id_of=lambda a: a["ability_id"],
-            dedupe_key_of=lambda a: f"{a.get('faction_id') or ''}::{a['ability_id']}",
             name_of=lambda a: a.get("name"),
             faction_of=lambda a: a.get("faction_id"),
-            # Per-faction copies diverge (DSL fidelity, unit_ids) — same guard
-            # as weapons.
-            guard_unscoped=True,
             entity_label="ability",
             wrap=lambda a: AbilityView(a, self),
         )
@@ -418,10 +417,12 @@ class Dataset:
 
         The attachment is stored on the leader pointing down to its bodyguards,
         so answering "which leaders can attach to this unit?" means scanning
-        the attachment list. Sorted by name. Empty for a unit that no leader
-        can attach to (including leader units).
+        the attachment list. A shared leader chassis carries one attachment
+        record per faction, so leaders are deduped by id. Sorted by name. Empty
+        for a unit that no leader can attach to (including leader units).
         """
         bodyguard = self.units.get_any(bodyguard_unit_id)
+        seen: set[str] = set()
         out = []
         for la in self.leader_attachments:
             # Keyword eligibility (e.g. an Inquisitor leading any Imperium
@@ -433,7 +434,8 @@ class Dataset:
             # Attachment data is faction-agnostic (no faction context
             # here); accept first-wins for a shared chassis via get_any.
             unit = self.units.get_any(la["leader_id"])
-            if unit is not None:
+            if unit is not None and unit.id not in seen:
+                seen.add(unit.id)
                 out.append(unit)
         return sorted(out, key=lambda u: u.name)
 
@@ -470,6 +472,77 @@ class Dataset:
 
         return resolve_eligible_abilities(self, input, phase)
 
+    def _historical_snapshot_abilities(
+        self, input: dict[str, Any], context: dict[str, Any], perspective: str, phase: str
+    ) -> list[dict[str, Any]]:
+        """Recover source-owned abilities attested by a recipient snapshot after detachment."""
+        unit_id = input.get("unitId")
+        faction_id = input.get("factionId")
+        if not isinstance(unit_id, str):
+            return []
+        out: list[dict[str, Any]] = []
+        seen: set[tuple[str, str]] = set()
+        for snapshot in context.get("recipientSnapshots") or []:
+            if not isinstance(snapshot, dict):
+                continue
+            if (
+                snapshot.get("perspective") != perspective
+                or snapshot.get("recipientUnitId") != unit_id
+            ):
+                continue
+            source = snapshot.get("source")
+            if not isinstance(source, dict) or source.get("kind") != "ability":
+                continue
+            ability_kind = source.get("abilityKind")
+            source_unit_id = snapshot.get("sourceUnitId")
+            if (
+                ability_kind not in ("unit", "attached", "support")
+                or not isinstance(source_unit_id, str)
+            ):
+                continue
+            if ability_kind == "unit" and source_unit_id != unit_id:
+                continue
+            owner = (
+                self.units.get_in_faction(source_unit_id, faction_id)
+                if faction_id
+                else self.units.get_any(source_unit_id)
+            )
+            ability_id = source.get("abilityId")
+            ability = (
+                self.abilities.get_in_faction(ability_id, faction_id)
+                if isinstance(ability_id, str) and faction_id
+                else self.abilities.get_any(ability_id)
+                if isinstance(ability_id, str)
+                else None
+            )
+            if owner is None or ability is None:
+                continue
+            intrinsic = ability.id in {held.id for held in owner.abilities}
+            from wh40kdc.data.lever_providers import can_take_enhancement
+
+            enhancement = any(
+                item.get("ability_id") == ability.id
+                and item.get("detachment_id") == input.get("detachmentId")
+                and can_take_enhancement(self, item, owner)
+                for item in self.enhancements
+            )
+            if not intrinsic and not enhancement:
+                continue
+            if ability.phases and phase not in ability.phases:
+                continue
+            key = (str(ability_kind), ability.id)
+            if key in seen:
+                continue
+            seen.add(key)
+            if ability_kind == "unit":
+                entry_source = {"kind": "unit", "unitId": source_unit_id}
+            elif ability_kind == "attached":
+                entry_source = {"kind": "attached", "unitId": source_unit_id}
+            else:
+                entry_source = {"kind": "support", "sourceUnitId": source_unit_id}
+            out.append({"ability": ability, "source": entry_source, "phases": [phase]})
+        return out
+
     def buffs_for(self, input: dict[str, Any], context: dict[str, Any]) -> list[dict[str, Any]]:
         """Attacker-perspective buff stack for a (unit, phase) combination.
 
@@ -498,15 +571,52 @@ class Dataset:
         the activatable gates the DSL models as dice-pool options, ``choice``
         branches, or timing-gated activations. Returns
         ``{"buffs": [StackableBuff], "groups": [StackableBuffGroup]}``.
+
+        A lever may also carry ``cost`` (``{"cp"}`` for a Stratagem, ``{"points"}`` for an
+        Enhancement), ``requires`` (DSL fragments the player vouches for), ``requiresLever`` (the
+        lever providing it) and ``raisesCap`` (``{"group", "by"}``: it raises a pool's cap instead
+        of adding buffs). Supporting units' levers are opt-in and name the supporting unit in
+        their source's ``sourceUnitId``.
         """
+        from wh40kdc.data.lever_providers import (
+            AbilityLevers,
+            ability_levers,
+            combined_keywords_lower,
+            combined_unit,
+            enhancement_levers,
+            resolve_cap_raises,
+            shared_keywords_lower,
+        )
+
         buffs: list[dict[str, Any]] = []
-        groups: dict[str, dict[str, Any]] = {}
+        groups: list[dict[str, Any]] = []
+        cap_raises: dict[int, Any] = {}
+
+        def take(levers: AbilityLevers) -> None:
+            buffs.extend(levers.buffs)
+            for group in levers.groups:
+                if not any(g["id"] == group["id"] for g in groups):
+                    groups.append(group)
+            cap_raises.update(levers.cap_raises)
+
+        unit_id = input.get("unitId") or ""
+        unit, faction_id, combined = combined_unit(self, input)
+
+        # Surface actual attachment membership and the combined unit's keywords to the DSL
+        # translator so attachment-role conditions and keyword filters evaluate.
+        # Clone — never mutate the caller's context. An explicitly-set value wins.
         ctx = self._derived_context(input, context)
+        if ctx.get("attackerKeywords") is None and combined:
+            ctx["attackerKeywords"] = combined_keywords_lower(combined)
+        if ctx.get("attackerModelKeywords") is None and combined:
+            ctx["attackerModelKeywords"] = shared_keywords_lower(combined)
 
         # Intrinsic weapon-profile keywords — always on. Weapon ids are
         # shared across factions with divergent stats, so resolve within the
         # input unit's faction (get_any fallback for a cross-faction id).
-        weapon_faction = self._weapon_faction(input)
+        weapon_faction = input.get("factionId")
+        if weapon_faction is None and unit is not None:
+            weapon_faction = unit.raw.get("faction_id")
         for ref in input.get("weaponProfiles") or []:
             weapon = (
                 self.weapons.get_in_faction(ref["weaponId"], weapon_faction)
@@ -528,45 +638,51 @@ class Dataset:
                 }
             )
 
-        for entry in self.eligible_abilities(input, ctx["phase"]):
-            source = _buff_source_from_eligible(entry)
-            translation = entry["ability"].describe_buffs(source, ctx, "attacker")
-            # Stratagems cost CP — opt-in, not on by default.
-            is_stratagem = entry["source"]["kind"] == "detachment-stratagem"
-
-            if translation["applied"]:
-                buffs.append(
-                    {
-                        "id": f"{entry['source']['kind']}:{entry['ability'].id}",
-                        "label": entry["ability"].name,
-                        "buffs": translation["applied"],
-                        "enabled": not is_stratagem,
-                        "source": source,
-                    }
+        eligible = self.eligible_abilities(input, ctx["phase"])
+        eligible.extend(
+            self._historical_snapshot_abilities(input, ctx, "attacker", ctx["phase"])
+        )
+        # A record the unit already holds is not granted again by another ability.
+        held = {entry["ability"].id for entry in eligible if entry["source"]["kind"] != "support"}
+        for entry in eligible:
+            kind = entry["source"]["kind"]
+            take(
+                ability_levers(
+                    self,
+                    ability=entry["ability"],
+                    source=_buff_source_from_eligible(entry),
+                    rating=entry.get("rating"),
+                    ctx=ctx,
+                    faction_id=faction_id,
+                    id_base=f"{kind}:{entry['ability'].id}",
+                    label=entry["ability"].name,
+                    # Another unit's ability reaches this one only where the player places it
+                    # (range, selection), so its levers are opt-in.
+                    enabled=kind != "support",
+                    # Stratagems cost CP — opt-in, not on by default.
+                    gate=(
+                        {"cost": {"cp": entry["source"]["cpCost"]}}
+                        if kind == "detachment-stratagem"
+                        else None
+                    ),
+                    held=held,
                 )
+            )
 
-            for act in translation["activatable"]:
-                group_id = None
-                if act.get("group"):
-                    group_id = act["group"]["id"]
-                    if group_id not in groups:
-                        groups[group_id] = {
-                            "id": group_id,
-                            "label": entry["ability"].name,
-                            "maxActivations": act["group"]["maxActivations"],
-                        }
-                lever = {
-                    "id": act["id"],
-                    "label": f"{entry['ability'].name} — {act['label']}",
-                    "buffs": act["buffs"],
-                    "enabled": False,
-                    "source": source,
-                }
-                if group_id is not None:
-                    lever["group"] = group_id
-                buffs.append(lever)
+        # Enhancements a character in the combined unit could take from the detachment.
+        take(
+            enhancement_levers(
+                self,
+                detachment_id=input.get("detachmentId"),
+                crunched_unit_id=unit_id,
+                bearers=combined,
+                ctx=ctx,
+                faction_id=faction_id,
+                held=held,
+            )
+        )
 
-        return {"buffs": buffs, "groups": list(groups.values())}
+        return {"buffs": resolve_cap_raises(buffs, cap_raises, groups), "groups": groups}
 
     def _weapon_faction(self, input: dict[str, Any]) -> str | None:
         """The faction to scope ``weaponProfiles`` lookups by: the explicit
@@ -578,20 +694,116 @@ class Dataset:
         return unit.raw.get("faction_id") if unit is not None else None
 
     def _derived_context(self, input: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
-        """Clone the caller's context, deriving ``attackerAttached`` from a
-        non-empty ``attachedUnitIds`` when not explicitly set."""
+        """Derive current attachment identity without inventing member roles."""
         ctx = dict(context)
+        roles = input.get("attachmentRoles")
+        unit_id = input.get("unitId")
         if ctx.get("attackerAttached") is None:
             ctx["attackerAttached"] = bool(input.get("attachedUnitIds"))
+        if ctx.get("attackerUnitId") is None:
+            ctx["attackerUnitId"] = unit_id
+        if ctx.get("attackerAttachmentRole") is None and isinstance(roles, dict):
+            ctx["attackerAttachmentRole"] = roles.get(unit_id)
+        if ctx.get("attachmentRoles") is None:
+            ctx["attachmentRoles"] = roles
         return ctx
 
     def _collect_buffs(
         self, input: dict[str, Any], context: dict[str, Any], perspective: str
     ) -> list[dict[str, Any]]:
         """Shared implementation for buffs_for / defensive_buffs_for."""
-        out: list[dict[str, Any]] = []
-        ctx = self._derived_context(input, context)
+        from wh40kdc.data.lever_providers import combined_keywords_lower, shared_keywords_lower
 
+        out: list[dict[str, Any]] = []
+        unit = (
+            self.units.get_in_faction(input["unitId"], input["factionId"])
+            if input.get("factionId")
+            else None
+        ) or self.units.get_any(input.get("unitId") or "")
+        faction_id = input.get("factionId") or (
+            unit.raw.get("faction_id") if unit is not None else None
+        )
+        combined = [unit] if unit is not None else []
+        for member_id in input.get("attachedUnitIds") or []:
+            member = (
+                self.units.get_in_faction(member_id, faction_id)
+                if faction_id
+                else None
+            ) or self.units.get_any(member_id)
+            if member is not None:
+                combined.append(member)
+        keywords = combined_keywords_lower(combined) if combined else None
+        model_keywords = shared_keywords_lower(combined) if combined else None
+        attached = bool(input.get("attachedUnitIds"))
+        roles = input.get("attachmentRoles")
+        if perspective == "attacker":
+            ctx = {
+                **context,
+                "attackerAttached": (
+                    attached
+                    if context.get("attackerAttached") is None
+                    else context["attackerAttached"]
+                ),
+                "attackerUnitId": (
+                    input.get("unitId")
+                    if context.get("attackerUnitId") is None
+                    else context["attackerUnitId"]
+                ),
+                "attackerAttachmentRole": (
+                    roles.get(input.get("unitId")) if isinstance(roles, dict) else None
+                )
+                if context.get("attackerAttachmentRole") is None
+                else context["attackerAttachmentRole"],
+                "attackerKeywords": (
+                    keywords
+                    if context.get("attackerKeywords") is None
+                    else context["attackerKeywords"]
+                ),
+                "attackerModelKeywords": (
+                    model_keywords
+                    if context.get("attackerModelKeywords") is None
+                    else context["attackerModelKeywords"]
+                ),
+                "attachmentRoles": (
+                    roles
+                    if context.get("attachmentRoles") is None
+                    else context["attachmentRoles"]
+                ),
+            }
+        else:
+            ctx = {
+                **context,
+                "targetAttached": (
+                    attached
+                    if context.get("targetAttached") is None
+                    else context["targetAttached"]
+                ),
+                "targetUnitId": (
+                    input.get("unitId")
+                    if context.get("targetUnitId") is None
+                    else context["targetUnitId"]
+                ),
+                "targetAttachmentRole": (
+                    roles.get(input.get("unitId")) if isinstance(roles, dict) else None
+                )
+                if context.get("targetAttachmentRole") is None
+                else context["targetAttachmentRole"],
+                "targetKeywords": (
+                    keywords
+                    if context.get("targetKeywords") is None
+                    else context["targetKeywords"]
+                ),
+                "targetModelKeywords": (
+                    model_keywords
+                    if context.get("targetModelKeywords") is None
+                    else context["targetModelKeywords"]
+                ),
+                "attachmentRoles": (
+                    roles
+                    if context.get("attachmentRoles") is None
+                    else context["attachmentRoles"]
+                ),
+            }
         # Weapon-profile keywords are attacker-only. Faction-scoped like
         # stackable_buffs_for — first-wins would crunch the wrong faction's stats.
         if perspective == "attacker":
@@ -607,7 +819,9 @@ class Dataset:
                 out.extend(weapon.profile_buffs(ref.get("profileIndex"), ctx))
 
         opted_in = set(input.get("optedInStratagemIds") or [])
-        for entry in self.eligible_abilities(input, ctx["phase"]):
+        entries = self.eligible_abilities(input, ctx["phase"])
+        entries.extend(self._historical_snapshot_abilities(input, ctx, perspective, ctx["phase"]))
+        for entry in entries:
             source_info = entry["source"]
             if (
                 source_info["kind"] == "detachment-stratagem"
@@ -615,7 +829,7 @@ class Dataset:
             ):
                 continue
             source = _buff_source_from_eligible(entry)
-            out.extend(entry["ability"].get_buffs(source, ctx, perspective))
+            out.extend(entry["ability"].get_buffs(source, ctx, perspective, entry.get("rating")))
 
         return out
 
@@ -627,7 +841,7 @@ class Dataset:
                 if phase not in existing:
                     existing.append(phase)
         for unit in raw["units"]:
-            for ability_id in unit.get("ability_ids") or []:
+            for ability_id in unit_ability_ids(unit.get("ability_ids")):
                 self._units_by_ability.setdefault(ability_id, []).append(unit)
             for weapon_id in unit.get("weapon_ids") or []:
                 self._units_by_weapon.setdefault(weapon_id, []).append(unit)

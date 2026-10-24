@@ -57,12 +57,19 @@
       "forgefiend-claws"
     ],
     "ability_ids": [
-      "deadly-demise-d3",
-      "furious-onslaught"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "furious-onslaught-world-eaters",
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -135,14 +142,14 @@
       "plasma-pistol"
     ],
     "ability_ids": [
-      "berzerker-frenzy",
+      "berzerker-frenzy-world-eaters",
       "leader",
-      "legendary-killer",
-      "the-betrayer"
+      "legendary-killer-world-eaters",
+      "the-betrayer-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -188,7 +195,6 @@
     "keywords": [
       "Infantry",
       "Character",
-      "Grenades",
       "Chaos",
       "Master of Executions",
       "Khorne"
@@ -209,13 +215,13 @@
       "bolt-pistol"
     ],
     "ability_ids": [
-      "a-worthy-skull",
-      "forwards-for-blood",
+      "a-worthy-skull-world-eaters",
+      "forwards-for-blood-world-eaters",
       "leader"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -258,12 +264,12 @@
     "points": [
       {
         "models": 10,
-        "cost": 160
+        "cost": 170
       },
       {
         "models": 11,
         "models_max": 20,
-        "cost": 320
+        "cost": 330
       }
     ],
     "keywords": [
@@ -272,7 +278,8 @@
       "Grenades",
       "Chaos",
       "Khorne",
-      "Berzerkers"
+      "Berzerkers",
+      "Khorne Berzerkers"
     ],
     "faction_keywords": [
       "World Eaters"
@@ -292,12 +299,16 @@
       "plasma-pistol-khorne-berzerkers"
     ],
     "ability_ids": [
-      "blood-surge",
-      "icon-of-khorne"
+      "blood-surge-world-eaters",
+      {
+        "id": "icon-of-khorne-world-eaters",
+        "wargear": "icon-of-khorne"
+      },
+      "murderous-charge-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -348,7 +359,7 @@
       },
       {
         "models": 20,
-        "cost": 130
+        "cost": 120
       }
     ],
     "keywords": [
@@ -377,12 +388,15 @@
       "skullsmasher-and-mangler"
     ],
     "ability_ids": [
-      "icon-of-khorne",
-      "objective-ravaged"
+      {
+        "id": "icon-of-khorne-world-eaters",
+        "wargear": "icon-of-khorne"
+      },
+      "objective-ravaged-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -455,13 +469,13 @@
       "plasma-pistol"
     ],
     "ability_ids": [
-      "aggressive-advance",
-      "crush-all-who-stand-before-us",
+      "aggressive-advance-world-eaters",
+      "crush-all-who-stand-before-us-world-eaters",
       "leader"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -511,7 +525,8 @@
       "Chaos",
       "Khorne",
       "Daemon",
-      "Daemon Prince"
+      "Daemon Prince",
+      "Daemon Prince of Khorne with Wings"
     ],
     "faction_keywords": [
       "World Eaters"
@@ -529,14 +544,17 @@
       "infernal-cannon"
     ],
     "ability_ids": [
-      "bloodied-terror",
-      "deadly-demise-d3",
+      "bloodied-terror-world-eaters",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
       "deep-strike",
-      "swooping-predator"
+      "swooping-predator-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -574,13 +592,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 220,
+        "cost": 200,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 240,
+        "cost": 220,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -591,7 +609,9 @@
       "Smoke",
       "Chaos",
       "Land Raider",
-      "Khorne"
+      "Khorne",
+      "Frame",
+      "Chaos Land Raider"
     ],
     "faction_keywords": [
       "World Eaters"
@@ -613,15 +633,22 @@
       "twin-heavy-bolter"
     ],
     "ability_ids": [
-      "assault-ramp",
-      "deadly-demise-d6"
+      "assault-ramp-world-eaters",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      {
+        "id": "damaged",
+        "value": 5
+      }
     ],
     "transport_capacity": {
       "capacity": 14
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -696,13 +723,20 @@
       "maulerfiend-fists"
     ],
     "ability_ids": [
-      "deadly-demise-d3",
-      "savage-exaltation",
-      "the-scent-of-blood"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "savage-exaltation-world-eaters",
+      "the-scent-of-blood-world-eaters",
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -783,13 +817,20 @@
       "shearing-claws"
     ],
     "ability_ids": [
-      "deadly-demise-d6",
-      "scuttling-walker",
-      "unleash-wrath"
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "scuttling-walker-world-eaters",
+      "unleash-wrath-world-eaters",
+      {
+        "id": "damaged",
+        "value": 6
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -866,13 +907,20 @@
       "heldrake-claws"
     ],
     "ability_ids": [
-      "airborne-predator",
-      "deadly-demise-d3",
-      "hover"
+      "airborne-predator-world-eaters",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "hover",
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -920,7 +968,8 @@
       "Chaos",
       "Khorne",
       "Daemon",
-      "Daemon Prince"
+      "Daemon Prince",
+      "Daemon Prince of Khorne"
     ],
     "faction_keywords": [
       "World Eaters"
@@ -938,14 +987,17 @@
       "infernal-cannon"
     ],
     "ability_ids": [
-      "deadly-demise-d3",
-      "devastating-assault",
-      "direct-the-slaughter",
-      "lord-of-murder"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "devastating-assault-world-eaters",
+      "direct-the-slaughter-world-eaters",
+      "lord-of-murder-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -990,7 +1042,7 @@
       {
         "models": 4,
         "models_max": 6,
-        "cost": 255,
+        "cost": 250,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
@@ -1003,7 +1055,7 @@
       {
         "models": 4,
         "models_max": 6,
-        "cost": 270,
+        "cost": 265,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -1031,12 +1083,15 @@
       "chainblades-eightbound"
     ],
     "ability_ids": [
-      "beacons-of-rage",
-      "scouts-6"
+      "beacons-of-rage-world-eaters",
+      {
+        "id": "scouts",
+        "value": 6
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1079,7 +1134,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 100
+        "cost": 90
       }
     ],
     "keywords": [
@@ -1106,15 +1161,18 @@
       "lacerator-and-daemonic-claw"
     ],
     "ability_ids": [
-      "deadly-demise-d3",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
       "leader",
-      "lord-of-the-eightbound",
-      "possessed-lord",
-      "rage-eternal"
+      "lord-of-the-eightbound-world-eaters",
+      "possessed-lord-world-eaters",
+      "rage-eternal-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1160,7 +1218,7 @@
       {
         "models": 4,
         "models_max": 6,
-        "cost": 265,
+        "cost": 260,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
@@ -1173,7 +1231,7 @@
       {
         "models": 4,
         "models_max": 6,
-        "cost": 280,
+        "cost": 275,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -1202,11 +1260,11 @@
     ],
     "ability_ids": [
       "deep-strike",
-      "rend-and-tear"
+      "rend-and-tear-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1278,15 +1336,18 @@
       "cowards-bane"
     ],
     "ability_ids": [
-      "bloody-stampede",
+      "bloody-stampede-world-eaters",
       "deep-strike",
-      "fire-riders",
+      "fire-riders-world-eaters",
       "leader",
-      "scouts-6"
+      {
+        "id": "scouts",
+        "value": 6
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1344,7 +1405,9 @@
       "Smoke",
       "Chaos",
       "Rhino",
-      "Khorne"
+      "Khorne",
+      "Frame",
+      "Chaos Rhino"
     ],
     "faction_keywords": [
       "World Eaters"
@@ -1364,16 +1427,22 @@
       "havoc-launcher"
     ],
     "ability_ids": [
-      "deadly-demise-d3",
-      "firing-deck-2",
-      "meet-any-challenge"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "firing-deck",
+        "value": 2
+      },
+      "meet-any-challenge-world-eaters"
     ],
     "transport_capacity": {
       "capacity": 12
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1447,13 +1516,16 @@
       "twin-lascannon"
     ],
     "ability_ids": [
-      "deadly-demise-1",
-      "devoted-to-destruction",
-      "frenzy"
+      {
+        "id": "deadly-demise",
+        "value": 1
+      },
+      "devoted-to-destruction-world-eaters",
+      "frenzy-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1507,7 +1579,9 @@
       "Smoke",
       "Chaos",
       "Predator Destructor",
-      "Khorne"
+      "Khorne",
+      "Frame",
+      "Chaos Predator Destructor"
     ],
     "faction_keywords": [
       "World Eaters"
@@ -1530,12 +1604,19 @@
       "predator-autocannon"
     ],
     "ability_ids": [
-      "deadly-demise-d3",
-      "punishing-suppression"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "punishing-suppression-world-eaters",
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1603,15 +1684,22 @@
       "samniarius-and-spinegrinder"
     ],
     "ability_ids": [
-      "deadly-demise-d6",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
       "deep-strike",
-      "reborn-in-blood",
-      "supreme-commander",
-      "wrathful-presence"
+      "reborn-in-blood-world-eaters",
+      "supreme-commander-world-eaters",
+      "wrathful-presence-world-eaters",
+      {
+        "id": "damaged",
+        "value": 6
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1665,7 +1753,9 @@
       "Smoke",
       "Chaos",
       "Predator Annihilator",
-      "Khorne"
+      "Khorne",
+      "Frame",
+      "Chaos Predator Annihilator"
     ],
     "faction_keywords": [
       "World Eaters"
@@ -1688,12 +1778,19 @@
       "predator-twin-lascannon"
     ],
     "ability_ids": [
-      "blood-hungry-annihilator",
-      "deadly-demise-d3"
+      "blood-hungry-annihilator-world-eaters",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1731,27 +1828,27 @@
     "points": [
       {
         "models": 5,
-        "cost": 165,
+        "cost": 175,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 330,
+        "cost": 350,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 5,
-        "cost": 175,
+        "cost": 185,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 340,
+        "cost": 360,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -1761,7 +1858,8 @@
       "Chaos",
       "Terminator",
       "Terminator Squad",
-      "Khorne"
+      "Khorne",
+      "Chaos Terminators"
     ],
     "faction_keywords": [
       "World Eaters"
@@ -1785,12 +1883,12 @@
       "reaper-autocannon-chaos-terminators"
     ],
     "ability_ids": [
-      "bloody-fury",
+      "bloody-fury-world-eaters",
       "deep-strike"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1877,7 +1975,9 @@
       "Chaos",
       "Khorne",
       "Daemon",
-      "Lord of Skulls"
+      "Lord of Skulls",
+      "Frame",
+      "Khorne Lord of Skulls"
     ],
     "faction_keywords": [
       "World Eaters"
@@ -1899,13 +1999,24 @@
       "skullhurler"
     ],
     "ability_ids": [
-      "deadly-demise-d6-plus-2",
-      "idol-of-blessed-blood",
-      "super-heavy-war-engine"
+      {
+        "id": "deadly-demise",
+        "value": "D6+2"
+      },
+      "idol-of-blessed-blood-khorne-lord-of-skulls-world-eaters",
+      "super-heavy-war-engine-world-eaters",
+      {
+        "id": "damaged",
+        "value": 8
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1951,7 +2062,6 @@
       "Chaos",
       "Chaos Spawn",
       "Spawn",
-      "Mutant",
       "Khorne"
     ],
     "faction_keywords": [
@@ -1969,13 +2079,19 @@
       "hideous-mutations"
     ],
     "ability_ids": [
-      "feel-no-pain-5-plus",
-      "scouts-8",
-      "to-slake-its-rage"
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      },
+      {
+        "id": "scouts",
+        "value": 8
+      },
+      "to-slake-its-rage-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2017,7 +2133,7 @@
     "points": [
       {
         "models": 8,
-        "cost": 75
+        "cost": 70
       }
     ],
     "keywords": [
@@ -2046,11 +2162,11 @@
     ],
     "ability_ids": [
       "infiltrators",
-      "loping-speed"
+      "loping-speed-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2102,7 +2218,8 @@
       "Explosives",
       "Frenzied Reavers",
       "Infantry",
-      "Khorne"
+      "Khorne",
+      "Frenzied Reavers Jakhals"
     ],
     "faction_keywords": [
       "World Eaters"
@@ -2118,12 +2235,12 @@
       "mauler-chainblade"
     ],
     "ability_ids": [
-      "icon-of-khorne",
-      "objective-ravaged"
+      "icon-of-khorne-frenzied-reavers-jakhals-world-eaters",
+      "objective-ravaged-frenzied-reavers-jakhals-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -2166,7 +2283,8 @@
       "Explosives",
       "Frenzied Reavers",
       "Infantry",
-      "Khorne"
+      "Khorne",
+      "Frenzied Reavers Khorne Berzerkers"
     ],
     "faction_keywords": [
       "World Eaters"
@@ -2182,12 +2300,12 @@
       "khornate-eviscerator"
     ],
     "ability_ids": [
-      "blood-surge",
-      "icon-of-khorne"
+      "blood-surge-frenzied-reavers-khorne-berzerkers-world-eaters",
+      "icon-of-khorne-frenzied-reavers-jakhals-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -2233,7 +2351,8 @@
       "Character",
       "Frenzied Reavers",
       "Infantry",
-      "Khorne"
+      "Khorne",
+      "Frenzied Reavers Master of Executions"
     ],
     "faction_keywords": [
       "World Eaters"
@@ -2247,12 +2366,11 @@
       "axe-of-dismemberment"
     ],
     "ability_ids": [
-      "a-worthy-skull",
-      "leader"
+      "a-worthy-skull-frenzied-reavers-master-of-executions-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -2301,7 +2419,8 @@
       "Daemon Prince",
       "Frenzied Reavers",
       "Khorne",
-      "Monster"
+      "Monster",
+      "Vorrakh, Lord of the Frenzied Reavers"
     ],
     "faction_keywords": [
       "World Eaters"
@@ -2315,13 +2434,13 @@
       "infernal-cannon"
     ],
     "ability_ids": [
-      "devastating-assault-frenzied-reavers",
-      "direct-the-slaughter-frenzied-reavers",
-      "lord-of-murder-frenzied-reavers"
+      "devastating-assault-vorrakh-lord-of-the-frenzied-reavers-world-eaters",
+      "direct-the-slaughter-vorrakh-lord-of-the-frenzied-reavers-world-eaters",
+      "lord-of-murder-vorrakh-lord-of-the-frenzied-reavers-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -2337,6 +2456,437 @@
         "namespace": "mfm",
         "id": "c1293a75-ad62-442b-b6ea-d9303fdf2e52"
       }
+    ]
+  },
+  {
+    "id": "bloodcrushers",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "5d70ec64-046f-4454-9024-2a5b3c98580d"
+      }
+    ],
+    "name": "Bloodcrushers",
+    "faction_id": "world-eaters",
+    "profiles": [
+      {
+        "name": "Bloodcrusher",
+        "M": 10,
+        "T": 7,
+        "W": 4,
+        "Sv": 3,
+        "invuln_sv": 5,
+        "Ld": 7,
+        "OC": 2
+      }
+    ],
+    "points": [
+      {
+        "models": 3,
+        "cost": 95,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 4,
+        "models_max": 6,
+        "cost": 190,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 3,
+        "cost": 115,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      },
+      {
+        "models": 4,
+        "models_max": 6,
+        "cost": 210,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Mounted",
+      "Chaos",
+      "Daemon",
+      "Khorne",
+      "Summoned",
+      "Bloodcrushers"
+    ],
+    "faction_keywords": [
+      "Blood Legions"
+    ],
+    "model_count": {
+      "min": 3,
+      "max": 6
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "hellblade",
+      "juggernauts-bladed-horn"
+    ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 90,
+      "length": 52.5
+    },
+    "wargear_budgets": [
+      {
+        "items": [
+          "instrument-of-chaos"
+        ],
+        "count": 1,
+        "per_models": 0
+      },
+      {
+        "items": [
+          "daemonic-icon"
+        ],
+        "count": 1,
+        "per_models": 0
+      }
+    ],
+    "ability_ids": [
+      "brass-stampede-world-eaters",
+      {
+        "id": "daemonic-icon-world-eaters",
+        "wargear": "daemonic-icon"
+      },
+      "deep-strike",
+      {
+        "id": "instrument-of-chaos-world-eaters",
+        "wargear": "instrument-of-chaos"
+      }
+    ]
+  },
+  {
+    "id": "bloodletters",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "d40f017b-61dc-4bc4-98c9-44d6cd78b7ad"
+      }
+    ],
+    "name": "Bloodletters",
+    "faction_id": "world-eaters",
+    "role": "battleline",
+    "profiles": [
+      {
+        "name": "Bloodletter",
+        "M": 8,
+        "T": 4,
+        "W": 1,
+        "Sv": 7,
+        "invuln_sv": 5,
+        "Ld": 7,
+        "OC": 1
+      }
+    ],
+    "points": [
+      {
+        "models": 10,
+        "cost": 90
+      }
+    ],
+    "keywords": [
+      "Infantry",
+      "Battleline",
+      "Chaos",
+      "Daemon",
+      "Khorne",
+      "Summoned",
+      "Bloodletters"
+    ],
+    "faction_keywords": [
+      "Blood Legions"
+    ],
+    "model_count": {
+      "min": 10,
+      "max": 10
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "hellblade"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
+    "wargear_budgets": [
+      {
+        "items": [
+          "instrument-of-chaos"
+        ],
+        "count": 1,
+        "per_models": 0
+      },
+      {
+        "items": [
+          "daemonic-icon"
+        ],
+        "count": 1,
+        "per_models": 0
+      }
+    ],
+    "ability_ids": [
+      "bane-of-cowards-world-eaters",
+      {
+        "id": "daemonic-icon-world-eaters",
+        "wargear": "daemonic-icon"
+      },
+      "deep-strike",
+      {
+        "id": "instrument-of-chaos-world-eaters",
+        "wargear": "instrument-of-chaos"
+      }
+    ]
+  },
+  {
+    "id": "bloodthirster",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "fdbbd4fa-7f3e-4b4f-ac05-0e8ee653b8ea"
+      }
+    ],
+    "name": "Bloodthirster",
+    "faction_id": "world-eaters",
+    "role": "character",
+    "profiles": [
+      {
+        "name": "Bloodthirster",
+        "M": 12,
+        "T": 11,
+        "W": 18,
+        "Sv": 3,
+        "invuln_sv": 4,
+        "Ld": 6,
+        "OC": 5
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 320,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 1,
+        "cost": 335,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Monster",
+      "Character",
+      "Fly",
+      "Chaos",
+      "Daemon",
+      "Khorne",
+      "Summoned",
+      "Bloodthirster"
+    ],
+    "faction_keywords": [
+      "Blood Legions"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "hellfire-breath",
+      "great-axe-of-khorne",
+      "bloodflail",
+      "axe-of-khorne",
+      "lash-of-khorne"
+    ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 120,
+      "length": 92
+    },
+    "conditional_keywords": [
+      {
+        "keyword": "Shadow Legion",
+        "required_detachment_id": "shadow-legion"
+      }
+    ],
+    "ability_ids": [
+      "daemon-lord-of-khorne-world-eaters",
+      {
+        "id": "damaged",
+        "value": 6
+      },
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "deep-strike",
+      "relentless-carnage-world-eaters"
+    ]
+  },
+  {
+    "id": "flesh-hounds",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "be8c889b-4d53-46a2-a96f-6bd15c96cd7d"
+      }
+    ],
+    "name": "Flesh Hounds",
+    "faction_id": "world-eaters",
+    "profiles": [
+      {
+        "name": "Flesh Hound",
+        "M": 12,
+        "T": 4,
+        "W": 2,
+        "Sv": 7,
+        "invuln_sv": 5,
+        "Ld": 7,
+        "OC": 1
+      }
+    ],
+    "points": [
+      {
+        "models": 5,
+        "cost": 75
+      },
+      {
+        "models": 6,
+        "models_max": 10,
+        "cost": 150
+      }
+    ],
+    "keywords": [
+      "Beast",
+      "Chaos",
+      "Daemon",
+      "Khorne",
+      "Summoned",
+      "Flesh Hounds"
+    ],
+    "faction_keywords": [
+      "Blood Legions"
+    ],
+    "model_count": {
+      "min": 5,
+      "max": 10
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "burning-roar",
+      "gore-drenched-fangs"
+    ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 60,
+      "length": 35.5
+    },
+    "ability_ids": [
+      {
+        "id": "collar-of-khorne-world-eaters",
+        "wargear": "collar-of-khorne"
+      },
+      "deep-strike",
+      "hunters-from-the-warp-world-eaters"
+    ]
+  },
+  {
+    "id": "skarbrand",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "950d3e3d-e4cb-4ff0-aa3a-df8d0552de41"
+      }
+    ],
+    "name": "Skarbrand",
+    "faction_id": "world-eaters",
+    "role": "epic-hero",
+    "profiles": [
+      {
+        "name": "Skarbrand",
+        "M": 10,
+        "T": 11,
+        "W": 20,
+        "Sv": 3,
+        "invuln_sv": 4,
+        "Ld": 6,
+        "OC": 5
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 315
+      }
+    ],
+    "keywords": [
+      "Monster",
+      "Character",
+      "Epic Hero",
+      "Chaos",
+      "Khorne",
+      "Daemon",
+      "Summoned",
+      "Skarbrand"
+    ],
+    "faction_keywords": [
+      "Blood Legions"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "bellow-of-endless-fury",
+      "slaughter-and-carnage"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 100
+    },
+    "ability_ids": [
+      "damaged-1-7-wounds-remaining-world-eaters",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "deep-strike",
+      "murderlust-world-eaters",
+      "rage-embodied-world-eaters"
     ]
   }
 ]

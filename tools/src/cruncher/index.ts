@@ -11,6 +11,7 @@ export {
   type BuffContribution,
   type BuffSource,
   type EngineContext,
+  type RecipientSnapshot,
   type ResolveContext,
   type ResolvedModifiers,
   type WeaponKeywordRef,
@@ -19,7 +20,9 @@ export { buffsFromKeyword } from "./from-keyword.js";
 export { getBuffs, type HasBuffs } from "./get-buffs.js";
 export {
   crunch,
+  crunchModel,
   profileCanTarget,
+  type AttackModel,
   type AttackProfileRef,
   type EngineInput,
   type EngineOutput,
@@ -31,3 +34,8 @@ export {
   type AttributedStage,
   type StageLift,
 } from "./attribution.js";
+export {
+  allocate,
+  allocateModel,
+  type AllocationOutput,
+} from "./allocation.js";

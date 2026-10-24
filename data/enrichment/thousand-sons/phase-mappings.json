@@ -1,6 +1,6 @@
 [
   {
-    "source_id": "deadly-demise-1",
+    "source_id": "deadly-demise",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -13,7 +13,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "terrifying-assault",
+    "source_id": "terrifying-assault-thousand-sons",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -25,7 +25,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "devoted-to-destruction",
+    "source_id": "devoted-to-destruction-thousand-sons",
     "source_type": "ability",
     "phases": [
       "fight"
@@ -37,20 +37,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "deadly-demise-d6",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "mutating-vortex-aura",
+    "source_id": "mutating-vortex-thousand-sons",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -62,7 +49,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "assault-ramp",
+    "source_id": "assault-ramp-thousand-sons",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -75,7 +62,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "bestial-prophet",
+    "source_id": "bestial-prophet-thousand-sons",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -88,7 +75,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "sacrificial-blessing",
+    "source_id": "sacrificial-blessing-thousand-sons",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -101,7 +88,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "empyric-guidance-psychic",
+    "source_id": "empyric-guidance-thousand-sons",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -113,7 +100,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "twisted-sorceries-psychic",
+    "source_id": "twisted-sorceries-thousand-sons",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -126,20 +113,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "deadly-demise-d3",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "siege-shield",
+    "source_id": "siege-shield-thousand-sons",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -151,7 +125,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "firing-deck-2",
+    "source_id": "firing-deck",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -164,7 +138,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "sorcerous-support",
+    "source_id": "sorcerous-support-thousand-sons",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -177,7 +151,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "scryer-of-fates-psychic",
+    "source_id": "scryer-of-fates-thousand-sons",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -189,7 +163,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "bringers-of-change",
+    "source_id": "bringers-of-change-thousand-sons",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -201,7 +175,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "icon-of-flame",
+    "source_id": "icon-of-flame-thousand-sons",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -213,7 +187,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "malefic-maelstrom-psychic",
+    "source_id": "malefic-maelstrom-thousand-sons",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -226,7 +200,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "prophesied-doom",
+    "source_id": "prophesied-doom-thousand-sons",
     "source_type": "ability",
     "phases": [
       "charge"
@@ -238,7 +212,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "malign-trickery",
+    "source_id": "malign-trickery-thousand-sons",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -262,7 +236,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "unearthly-power",
+    "source_id": "unearthly-power-thousand-sons",
     "source_type": "ability",
     "phases": [
       "command"
@@ -274,7 +248,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "ensorcelled-destruction",
+    "source_id": "ensorcelled-destruction-thousand-sons",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -286,7 +260,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "scuttling-walker",
+    "source_id": "scuttling-walker-thousand-sons",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -298,7 +272,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "destroyer-of-futures",
+    "source_id": "destroyer-of-futures-thousand-sons",
     "source_type": "ability",
     "phases": [
       "command",
@@ -311,7 +285,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "hunter-of-souls",
+    "source_id": "hunter-of-souls-thousand-sons",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -324,7 +298,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "aetherstride-psychic",
+    "source_id": "aetherstride-thousand-sons",
     "source_type": "ability",
     "phases": [
       "command",
@@ -340,7 +314,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "scouts-6",
+    "source_id": "scouts",
     "source_type": "ability",
     "phases": [
       "command"
@@ -352,7 +326,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "ambushing-hunters",
+    "source_id": "ambushing-hunters-thousand-sons",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -364,7 +338,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "brayhorn",
+    "source_id": "brayhorn-thousand-sons",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -377,7 +351,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "herd-banner",
+    "source_id": "herd-banner-thousand-sons",
     "source_type": "ability",
     "phases": [
       "command"
@@ -401,7 +375,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "prophetic-sentinels",
+    "source_id": "prophetic-sentinels-thousand-sons",
     "source_type": "ability",
     "phases": [
       "command",
@@ -415,7 +389,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "illusions-of-tzeentch-psychic",
+    "source_id": "illusions-of-tzeentch-thousand-sons",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -427,7 +401,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "binding-tendrils-psychic",
+    "source_id": "binding-tendrils-thousand-sons",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -440,7 +414,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "snarling-protector",
+    "source_id": "snarling-protector-thousand-sons",
     "source_type": "ability",
     "phases": [
       "command",
@@ -453,7 +427,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "rebind-rubricae-psychic",
+    "source_id": "rebind-rubricae-thousand-sons",
     "source_type": "ability",
     "phases": [
       "command"
@@ -465,7 +439,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "marked-by-fate-psychic",
+    "source_id": "marked-by-fate-thousand-sons",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -478,7 +452,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "ensorcelled-annihilation",
+    "source_id": "ensorcelled-annihilation-thousand-sons",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -490,7 +464,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "blazing-salvoes",
+    "source_id": "blazing-salvoes-thousand-sons",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -515,7 +489,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "flame-wreathed",
+    "source_id": "flame-wreathed-thousand-sons",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -527,646 +501,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "sulphurous-veil",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "hex-marked-armour",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "ensorcelled-infusion",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "kaleidoscopic-tempest",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "unwavering-phalanx",
-    "source_type": "stratagem",
-    "phases": [
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "devastating-sorcery",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "mutate-landscape",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "malevolent-animus",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "through-the-veil",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "warding-hex",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "psychic-dominion",
-    "source_type": "stratagem",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "destined-by-fate",
-    "source_type": "stratagem",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "desecration-of-worlds",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "arcane-focus",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "gift-of-change",
-    "source_type": "stratagem",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "ethereal-phantasm",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "fractal-disjunction",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "chronosorcerous-bleed",
-    "source_type": "stratagem",
-    "phases": [
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "glimmershift-portal",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "cyberspirit-machinations",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "scouring-warpflame",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "wrath-of-the-doomed",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "strands-of-time",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "egotistical-power",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "warped-vicissitude",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "deranged-ferocity",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "blessed-transmutations",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "touched-by-tzeentch",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "twisted-mirage",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "ardent-automata",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "inexorable-advance",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "revenge-of-the-rubricae",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "deceptive-glamour",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "implacable-guardians",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "warpflame-gargoyles",
-    "source_type": "stratagem",
-    "phases": [
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "infernal-fusillade",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "umbralefic-crystal",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "eldritch-vortex-of-etaph",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "arcane-might",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "empowered-manifestation",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "empyric-onslaught",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "noctilith-mantle",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "nethershriek-mind-eater",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "duplicitous-malediction",
-    "source_type": "enhancement",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "tome-of-true-names",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "bray-lord",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "risen-rubricae",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "arcane-thralls-aura",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "lord-of-the-rubricae",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "stave-abominus",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "biomechanical-mutation",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "infernal-pacts",
+    "source_id": "infernal-pacts-thousand-sons",
     "source_type": "detachment-rule",
     "phases": [
       "shooting"
@@ -1178,7 +513,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "warpfire-infusion",
+    "source_id": "warpfire-infusion-thousand-sons",
     "source_type": "detachment-rule",
     "phases": [
       "shooting",
@@ -1191,7 +526,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "flow-of-magic",
+    "source_id": "flow-of-magic-thousand-sons",
     "source_type": "detachment-rule",
     "phases": [
       "command",
@@ -1207,7 +542,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "kindred-sorcery",
+    "source_id": "kindred-sorcery-thousand-sons",
     "source_type": "detachment-rule",
     "phases": [
       "command",
@@ -1221,7 +556,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "warpmeld-sacrifice",
+    "source_id": "warpmeld-sacrifice-thousand-sons",
     "source_type": "detachment-rule",
     "phases": [
       "shooting",
@@ -1234,7 +569,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "sorcerous-invigoration",
+    "source_id": "sorcerous-invigoration-thousand-sons",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -1246,7 +581,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "ensorcelled-animus",
+    "source_id": "ensorcelled-animus-thousand-sons",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -1259,198 +594,10 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "all-seeing-mutant-hordes",
+    "source_id": "all-seeing-mutant-hordes-thousand-sons",
     "source_type": "ability",
     "phases": [
       "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "eruption-of-vitality",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "curse-of-life",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "walking-rampart",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "occulus-infernum",
-    "source_type": "ability",
-    "phases": [
-      "movement",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "unravelled-fates",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "thicket-of-bladed-bone",
-    "source_type": "ability",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "relentless-rebirth",
-    "source_type": "ability",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "mutagenic-magicks",
-    "source_type": "ability",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "multitudinous-limbs",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "arcane-venting",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "ectoplasmic-extrusion",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "warp-fields",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "prismatic-displacement",
-    "source_type": "ability",
-    "phases": [
-      "movement",
-      "shooting",
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "temporal-instability",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "the-land-writhes",
-    "source_type": "ability",
-    "phases": [
-      "movement"
     ],
     "game_version": {
       "edition": "11th",

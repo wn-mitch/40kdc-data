@@ -5,7 +5,7 @@
     "faction_id": "emperors-children",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -21,15 +21,15 @@
     "faction_id": "emperors-children",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
       [
-        "combi-weapon"
+        "combi-bolter"
       ],
       [
-        "combi-bolter"
+        "combi-weapon"
       ]
     ],
     "model_constraint": {
@@ -42,7 +42,7 @@
     "faction_id": "emperors-children",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -70,7 +70,7 @@
     "faction_id": "emperors-children",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -95,7 +95,7 @@
     "faction_id": "emperors-children",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -112,7 +112,7 @@
     "faction_id": "emperors-children",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -132,7 +132,7 @@
     "faction_id": "emperors-children",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -149,7 +149,7 @@
     "faction_id": "emperors-children",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -174,7 +174,7 @@
     "faction_id": "emperors-children",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -198,7 +198,7 @@
     "faction_id": "emperors-children",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -222,7 +222,7 @@
     "faction_id": "emperors-children",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -242,7 +242,7 @@
     "faction_id": "emperors-children",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -263,7 +263,7 @@
     "faction_id": "emperors-children",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -283,7 +283,7 @@
     "faction_id": "emperors-children",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -303,7 +303,7 @@
     "faction_id": "emperors-children",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -311,7 +311,7 @@
     ],
     "model_constraint": {
       "model_name": "Tormentor",
-      "any_number": true
+      "max_count": 1
     }
   },
   {
@@ -320,7 +320,7 @@
     "faction_id": "emperors-children",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -340,7 +340,7 @@
     "faction_id": "emperors-children",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -360,7 +360,7 @@
     "faction_id": "emperors-children",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -380,7 +380,7 @@
     "faction_id": "emperors-children",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -412,7 +412,7 @@
     "faction_id": "emperors-children",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -437,7 +437,7 @@
     "faction_id": "emperors-children",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -456,7 +456,7 @@
     "faction_id": "emperors-children",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -476,7 +476,7 @@
     "faction_id": "emperors-children",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -493,7 +493,7 @@
     "faction_id": "emperors-children",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -513,7 +513,7 @@
     "faction_id": "emperors-children",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -525,6 +525,98 @@
     ],
     "model_constraint": {
       "any_number": true
+    }
+  },
+  {
+    "id": "daemonettes-wgo-mfm-1",
+    "unit_id": "daemonettes",
+    "faction_id": "emperors-children",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replacement": [
+      "daemonic-icon"
+    ],
+    "model_constraint": {
+      "model_name": "Daemonette",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "daemonettes-wgo-mfm-2",
+    "unit_id": "daemonettes",
+    "faction_id": "emperors-children",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replacement": [
+      "instrument-of-chaos"
+    ],
+    "model_constraint": {
+      "model_name": "Daemonette",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "keeper-of-secrets-wgo-mfm-1",
+    "unit_id": "keeper-of-secrets",
+    "faction_id": "emperors-children",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replacement_choice": [
+      [
+        "shining-aegis"
+      ],
+      [
+        "ritual-knife"
+      ],
+      [
+        "living-whip"
+      ]
+    ],
+    "model_constraint": {
+      "any_number": true
+    }
+  },
+  {
+    "id": "seekers-wgo-mfm-1",
+    "unit_id": "seekers",
+    "faction_id": "emperors-children",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replacement": [
+      "instrument-of-chaos"
+    ],
+    "model_constraint": {
+      "model_name": "Seeker",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "seekers-wgo-mfm-2",
+    "unit_id": "seekers",
+    "faction_id": "emperors-children",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replacement": [
+      "daemonic-icon"
+    ],
+    "model_constraint": {
+      "model_name": "Seeker",
+      "max_count": 1
     }
   }
 ]

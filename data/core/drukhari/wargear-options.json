@@ -5,7 +5,7 @@
     "faction_id": "drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -27,7 +27,7 @@
     "faction_id": "drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -52,7 +52,7 @@
     "faction_id": "drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -74,7 +74,7 @@
     "faction_id": "drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -99,7 +99,7 @@
     "faction_id": "drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -115,7 +115,7 @@
     "faction_id": "drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -139,7 +139,7 @@
     "faction_id": "drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -166,7 +166,7 @@
     "faction_id": "drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -183,7 +183,7 @@
     "faction_id": "drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -202,7 +202,7 @@
     "faction_id": "drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -229,7 +229,7 @@
     "faction_id": "drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -254,7 +254,7 @@
     "faction_id": "drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -279,7 +279,7 @@
     "faction_id": "drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -301,7 +301,7 @@
     "faction_id": "drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -321,29 +321,78 @@
     "faction_id": "drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
       "splinter-rifle"
     ],
-    "replacement_choice": [
-      [
-        "shredder"
-      ],
-      [
-        "dark-lance"
-      ],
-      [
-        "blaster"
-      ],
-      [
-        "splinter-cannon-kabalite-warriors"
-      ]
+    "replacement": [
+      "shredder"
     ],
     "model_constraint": {
       "model_name": "Kabalite Warrior",
-      "max_count": 4
+      "max_count": 1
+    }
+  },
+  {
+    "id": "kabalite-warriors-wgo-mfm-5",
+    "unit_id": "kabalite-warriors",
+    "faction_id": "drukhari",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "splinter-rifle"
+    ],
+    "replacement": [
+      "dark-lance"
+    ],
+    "model_constraint": {
+      "model_name": "Kabalite Warrior",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "kabalite-warriors-wgo-mfm-6",
+    "unit_id": "kabalite-warriors",
+    "faction_id": "drukhari",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "splinter-rifle"
+    ],
+    "replacement": [
+      "blaster"
+    ],
+    "model_constraint": {
+      "model_name": "Kabalite Warrior",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "kabalite-warriors-wgo-mfm-7",
+    "unit_id": "kabalite-warriors",
+    "faction_id": "drukhari",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "splinter-rifle"
+    ],
+    "replacement": [
+      "splinter-cannon-kabalite-warriors"
+    ],
+    "model_constraint": {
+      "model_name": "Kabalite Warrior",
+      "max_count": 1
     }
   },
   {
@@ -352,7 +401,7 @@
     "faction_id": "drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -371,7 +420,7 @@
     "faction_id": "drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -390,7 +439,7 @@
     "faction_id": "drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -411,7 +460,7 @@
     "faction_id": "drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -438,7 +487,7 @@
     "faction_id": "drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -472,7 +521,7 @@
     "faction_id": "drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -507,7 +556,7 @@
     "faction_id": "drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -537,7 +586,7 @@
     "faction_id": "drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -564,7 +613,7 @@
     "faction_id": "drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -599,7 +648,7 @@
     "faction_id": "drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -654,7 +703,7 @@
     "faction_id": "drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -678,7 +727,7 @@
     "faction_id": "drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -702,7 +751,7 @@
     "faction_id": "drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -722,7 +771,7 @@
     "faction_id": "drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -742,7 +791,7 @@
     "faction_id": "drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -763,7 +812,7 @@
     "faction_id": "drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -783,7 +832,7 @@
     "faction_id": "drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -827,7 +876,7 @@
     "faction_id": "drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -844,7 +893,7 @@
     "faction_id": "drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -869,7 +918,7 @@
     "faction_id": "drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -889,7 +938,7 @@
     "faction_id": "drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -911,7 +960,7 @@
     "faction_id": "drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -932,7 +981,7 @@
     "faction_id": "drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -948,7 +997,7 @@
     "faction_id": "drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -970,7 +1019,7 @@
     "faction_id": "drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [

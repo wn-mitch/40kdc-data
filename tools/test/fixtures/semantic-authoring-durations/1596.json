@@ -1,0 +1,146 @@
+{
+ "id": 1596,
+ "source_text": "xxxxx xx xxxx xxxxxxxxxxxx xxxxxxxxxxxxxx xxxx.\nxxx **xxxxx xxxxxxxxx xxxxxxxx** xxxx xxxx xxxx xxxx.\nxxxxx xxx xxx xx xxx xxxxx, xxxxx xxxxx xxxx xxx xxx xx xx xxx xxxxxxxxxxx xx xxxxxxxxxxxxxx xxxxxx xx xxx xx xxxxxx 12\" xx xxxx xxxx.",
+ "leaves": [
+  {
+   "role": "EVENT",
+   "family_id": "event",
+   "family_version": 18,
+   "parameters": {
+    "kind": "step-started",
+    "step": "reinforcements",
+    "turn": "opponent"
+   },
+   "start_byte": 0,
+   "end_byte": 46,
+   "fragment": "WHEN"
+  },
+  {
+   "role": "RESTRICTION",
+   "family_id": "stratagem-target",
+   "family_version": 4,
+   "parameters": {
+    "count": "one"
+   },
+   "start_byte": 48,
+   "end_byte": 51,
+   "fragment": "TARGET"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "unit-filter",
+   "family_version": 8,
+   "parameters": {
+    "side": "friendly",
+    "keywords": [
+     "ASTRA MILITARUM",
+     "INFANTRY"
+    ]
+   },
+   "start_byte": 54,
+   "end_byte": 85,
+   "fragment": "TARGET"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "unit-owner",
+   "family_version": 1,
+   "parameters": {
+    "owner": "friendly"
+   },
+   "start_byte": 86,
+   "end_byte": 100,
+   "fragment": "TARGET"
+  },
+  {
+   "role": "DURATION",
+   "family_id": "duration",
+   "family_version": 3,
+   "parameters": {
+    "endpoint": "end-of-phase"
+   },
+   "start_byte": 102,
+   "end_byte": 128,
+   "fragment": "EFFECT"
+  },
+  {
+   "role": "EVENT",
+   "family_id": "event",
+   "family_version": 18,
+   "parameters": {
+    "kind": "set-up",
+    "owner": "enemy",
+    "from": "strategic-reserves"
+   },
+   "start_byte": 130,
+   "end_byte": 194,
+   "fragment": "EFFECT"
+  },
+  {
+   "role": "EFFECT",
+   "family_id": "set-up",
+   "family_version": 5,
+   "parameters": {
+    "subject": "antecedent",
+    "to": "battlefield",
+    "allow": false
+   },
+   "start_byte": 195,
+   "end_byte": 211,
+   "fragment": "EFFECT"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "unit-position",
+   "family_version": 14,
+   "parameters": {
+    "kind": "within",
+    "inches": 12,
+    "of": "this-unit",
+    "subject": "antecedent",
+    "negated": false
+   },
+   "start_byte": 212,
+   "end_byte": 235,
+   "fragment": "EFFECT"
+  }
+ ],
+ "edits": null,
+ "baseline_mechanics": {
+  "effect": {
+   "type": "set-up",
+   "target": {
+    "owner": "enemy"
+   },
+   "modifier": {
+    "to": "battlefield",
+    "from": "strategic-reserves",
+    "allow": false,
+    "near": [
+     {
+      "of": "this-unit",
+      "range": {
+       "inches": 12
+      }
+     }
+    ]
+   }
+  },
+  "scope": {
+   "duration": "phase"
+  },
+  "behavior": "reactive",
+  "trigger": {
+   "event": "step-started",
+   "filter": {
+    "step": "reinforcements"
+   },
+   "condition": {
+    "type": "player-turn-is",
+    "parameters": {
+     "turn": "opponent-turn"
+    }
+   }
+  }
+ }
+}

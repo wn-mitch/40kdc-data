@@ -8,7 +8,7 @@
 
 > **Buff** = `object`
 
-Defined in: [cruncher/buffs.ts:105](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/buffs.ts#L105)
+Defined in: [cruncher/buffs.ts:139](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/cruncher/buffs.ts#L139)
 
 A single buff: where it came from, when it applies, what it contributes.
 
@@ -18,7 +18,7 @@ A single buff: where it came from, when it applies, what it contributes.
 
 > **source**: [`BuffSource`](BuffSource.md)
 
-Defined in: [cruncher/buffs.ts:106](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/buffs.ts#L106)
+Defined in: [cruncher/buffs.ts:140](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/cruncher/buffs.ts#L140)
 
 ***
 
@@ -26,7 +26,7 @@ Defined in: [cruncher/buffs.ts:106](https://github.com/wn-mitch/40kdc-data/blob/
 
 > `optional` **applicableWhen?**: [`BuffApplicability`](BuffApplicability.md)
 
-Defined in: [cruncher/buffs.ts:107](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/buffs.ts#L107)
+Defined in: [cruncher/buffs.ts:141](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/cruncher/buffs.ts#L141)
 
 ***
 
@@ -34,4 +34,4 @@ Defined in: [cruncher/buffs.ts:107](https://github.com/wn-mitch/40kdc-data/blob/
 
 > **contribution**: [`BuffContribution`](BuffContribution.md)
 
-Defined in: [cruncher/buffs.ts:108](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/buffs.ts#L108)
+Defined in: [cruncher/buffs.ts:142](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/cruncher/buffs.ts#L142)

@@ -2,10 +2,9 @@
  * enhancements.ts — Phase 3A: reconcile enhancement point costs against the
  * GW MFM dump.
  *
- * The repo enhancement id is `detachmentScopedId(name, detachment-name)`, which
- * is exactly how the dump's (enhancement, detachment) pair slugs — so matching is
- * a direct id lookup. For each matched enhancement we set the canon `cost`, clear
- * `points_provisional`, and stamp the confirmed launch dataslate (cost is the
+ * The repo enhancement id is the one `mfm:mirror` derives from the dump row
+ * ({@link enhancementRepoId}), so matching is a direct id lookup. For each matched enhancement we set the canon `cost`, clear
+ * `points_provisional`, and stamp the current dump's dataslate (cost is the
  * provisional field here, so confirming it is precisely what those flags record —
  * unlike Phase 2 dispositions, where touching game_version would over-claim).
  *
@@ -15,6 +14,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import { detachmentScopedId, nameToId } from "../converters/id-generator.js";
+import { mirrorIds } from "./mirror/ids.js";
 import { MfmDump, type DetachmentRow,
 type EnhancementRow,
 type MfmTableName, type MfmStringKey, type MfmRow, } from "./loader.js";
@@ -23,9 +23,9 @@ import { repoDirForFactionName, repoDirs } from "./faction-map.js";
 import { requiredKeywordsForDetachment } from "./detachment-fields.js";
 import { keywordLabel, factionKeywordLabel, keywordLabels } from "./keywords.js";
 import type { StagedWrite } from "./apply.js";
+import { currentGameVersion } from "./dataslate.js";
 
 
-const CONFIRMED = { edition: "11th", dataslate: "launch" };
 
 interface EnhRecord {
   id: string;
@@ -107,19 +107,20 @@ export function cleanEnhName(name: string): string {
  *  the value is `number | null` and callers must not overwrite an authored cost
  *  with null. */
 export function buildEnhCanon(dump: MfmDump): Map<string, number | null> {
-  const detName = dump.byId("detachment");
   const m = new Map<string, number | null>();
   for (const e of dump.table("enhancement")) {
-    const en = dump.enName(e);
-    const dn = dump.enName(detName.get(e.detachmentId));
-    if (!en || !dn) continue;
-    try {
-      m.set(detachmentScopedId(en, dn), e.basePointsCost);
-    } catch {
-      /* unsluggable — skip */
-    }
+    const id = enhancementRepoId(dump, e);
+    if (id) m.set(id, e.basePointsCost);
   }
   return m;
+}
+
+/**
+ * Repo id for a dump enhancement: the id `mfm:mirror` gives the row
+ * (`<name with its printed tag>-<detachment>-<faction>`). Null for a row no faction owns.
+ */
+export function enhancementRepoId(dump: MfmDump, e: { id: string }): string | null {
+  return mirrorIds(dump).idOf("enhancement", e.id) ?? null;
 }
 
 /** groupBy that tolerates a focused fixture omitting the table (returns empty). */
@@ -232,9 +233,29 @@ export interface EnhFields {
   unresolvedKeywordIds: string[];
 }
 
+/** The dump's placeholder required keyword: a keyword row named "DNU" that no unit carries. */
+const PLACEHOLDER_KEYWORD = "DNU";
+
+/**
+ * The bearer keyword the printed rule names for each enhancement whose dump
+ * eligibility is the "DNU" placeholder: each card names the one model that may have
+ * it ("C'TAN SHARD OF THE NIGHTBRINGER model only", "EVERSOR ASSASSIN models only").
+ * A "DNU" group with no entry here is unresolved, so it never reaches the repo.
+ */
+const PLACEHOLDER_BEARER_KEYWORDS: Readonly<Record<string, string>> = {
+  "singularity-matrix-pantheon-of-woe-necrons": "C’tan Shard of the Deceiver",
+  "quantum-goad-pantheon-of-woe-necrons": "C’tan Shard of the Nightbringer",
+  "animus-damper-pantheon-of-woe-necrons": "C’tan Shard of the Void Dragon",
+  "reletavistic-tether-pantheon-of-woe-necrons": "Transcendent C’tan",
+  "intraneural-biotech-veiled-blade-elimination-force-agents-of-the-imperium": "Eversor Assassin",
+  "decoy-targets-veiled-blade-elimination-force-agents-of-the-imperium": "Callidus Assassin",
+  "esoteric-explosives-veiled-blade-elimination-force-agents-of-the-imperium": "Culexus Assassin",
+  "micromelta-rounds-veiled-blade-elimination-force-agents-of-the-imperium": "Vindicare Assassin",
+};
+
 /**
  * Enhancement repo-id → structured fields, from the dump. Keyed identically to
- * {@link buildEnhCanon} (`detachmentScopedId(cleanEnhName, detachment)`) so a
+ * {@link buildEnhCanon} ({@link enhancementRepoId}) so a
  * matched repo enhancement's fields line up with its cost.
  *
  *   - upgrade_tag           ← enhancementType === "upgrade" (11e upgrade class)
@@ -263,15 +284,8 @@ export function buildEnhFieldCanon(dump: MfmDump): Map<string, EnhFields> {
 
   const out = new Map<string, EnhFields>();
   for (const e of dump.table("enhancement")) {
-    const en = dump.enName(e);
-    const dn = dump.enName(detName.get(e.detachmentId));
-    if (!en || !dn) continue;
-    let id: string;
-    try {
-      id = detachmentScopedId(en, dn);
-    } catch {
-      continue; // unsluggable — skip
-    }
+    const id = enhancementRepoId(dump, e);
+    if (!id) continue;
 
     const unresolved: string[] = [];
     const exclusion_keywords = keywordLabels(
@@ -286,7 +300,8 @@ export function buildEnhFieldCanon(dump: MfmDump): Map<string, EnhFields> {
       const members = new Set<string>();
       for (const r of kwByGroup.get(g.id) ?? []) {
         const label = keywordLabel(dump, r.keywordId);
-        if (label) members.add(label);
+        const bearer = label === PLACEHOLDER_KEYWORD ? PLACEHOLDER_BEARER_KEYWORDS[id] : label;
+        if (bearer) members.add(bearer);
         else unresolved.push(r.keywordId);
       }
       for (const r of fkwByGroup.get(g.id) ?? []) {
@@ -339,18 +354,11 @@ export function buildEnhFieldCanon(dump: MfmDump): Map<string, EnhFields> {
  * Id'd exactly as `buildEnhCanon` keys its canon so the ids line up.
  */
 export function combatPatrolEnhIds(dump: MfmDump): Set<string> {
-  const detName = dump.byId("detachment");
   const ids = new Set<string>();
   for (const e of dump.table("enhancement")) {
     if (!e.isCombatPatrol) continue;
-    const en = dump.enName(e);
-    const dn = dump.enName(detName.get(e.detachmentId));
-    if (!en || !dn) continue;
-    try {
-      ids.add(detachmentScopedId(en, dn));
-    } catch {
-      /* unsluggable — skip */
-    }
+    const id = enhancementRepoId(dump, e);
+    if (id) ids.add(id);
   }
   return ids;
 }
@@ -391,10 +399,10 @@ export function normalizeEnhancementNames(dump: MfmDump): EnhNormResult {
     const dn = dump.enName(detName.get(e.detachmentId));
     if (!en || !dn) continue;
     let base: string;
-    let rawId: string;
+    const rawId = enhancementRepoId(dump, e);
+    if (!rawId) continue;
     try {
       base = detachmentScopedId(cleanEnhName(en), dn);
-      rawId = detachmentScopedId(en, dn);
     } catch {
       continue; // unsluggable — skip
     }
@@ -463,6 +471,7 @@ export function runEnhancements(
   write: boolean,
   opts: { includeCombatPatrol?: boolean } = {}
 ): EnhReport {
+  const confirmed = currentGameVersion(dump);
   const canon = buildEnhCanon(dump);
   const fieldCanon = buildEnhFieldCanon(dump);
   const matchedIds = new Set<string>();
@@ -526,15 +535,15 @@ export function runEnhancements(
       }
       const needsConfirm =
         e.points_provisional !== false ||
-        e.game_version?.dataslate !== CONFIRMED.dataslate ||
-        e.game_version?.edition !== CONFIRMED.edition;
+        e.game_version?.dataslate !== confirmed.dataslate ||
+        e.game_version?.edition !== confirmed.edition;
       if (needsConfirm) res.confirmed++;
       // Mutate in-memory in BOTH modes; the dry-run rehearsal validates the result.
       if (cost !== null) e.cost = cost;
       e.points_provisional = false;
       if (e.game_version) {
-        e.game_version.edition = CONFIRMED.edition;
-        e.game_version.dataslate = CONFIRMED.dataslate;
+        e.game_version.edition = confirmed.edition;
+        e.game_version.dataslate = confirmed.dataslate;
       }
       if (cpIds.has(e.id)) e.game_modes = ["combat-patrol"];
 
@@ -579,10 +588,11 @@ export function runEnhancements(
     const sourceDetachment = dump.byId("detachment").get(source.detachmentId);
     const detachmentName = dump.enName(sourceDetachment);
     if (!name || !detachmentName) continue;
-    let id: string;
+    const repoId = enhancementRepoId(dump, source);
+    if (!repoId) continue;
+    const id = repoId;
     let detachmentId: string;
     try {
-      id = detachmentScopedId(name, detachmentName);
       detachmentId = nameToId(detachmentName);
     } catch {
       continue;
@@ -647,12 +657,14 @@ export function runEnhancements(
     }
     const record: EnhRecord = {
       id,
+      // The dump ref ties the seed to its row; without it `mfm:mirror` retires the seed as unprinted.
+      external_refs: [{ namespace: "mfm", id: source.id }],
       name,
       detachment_id: detachmentId,
       cost: source.basePointsCost,
       ability_id: null,
       is_unique: true,
-      game_version: { ...CONFIRMED },
+      game_version: { ...confirmed },
       points_provisional: false,
       upgrade_tag: fields.upgrade_tag,
       max_targets: fields.max_targets,
@@ -663,6 +675,9 @@ export function runEnhancements(
     }
     if (eligibility.keyword_restriction_groups) {
       record.keyword_restriction_groups = eligibility.keyword_restriction_groups;
+    }
+    if (fields.exclusion_keywords) {
+      record.exclusion_keywords = fields.exclusion_keywords;
     }
     if (fields.attachment_bodyguard_ids) {
       record.attachment_bodyguard_ids = fields.attachment_bodyguard_ids;

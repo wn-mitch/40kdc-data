@@ -6,12 +6,15 @@
  * dataset, yet are structurally just strings, so AJV cannot check them and the
  * semantic integrity pass does not own them:
  *
- *  - `unit-has-keyword` / `target-has-keyword` conditions, whose
- *    `parameters.keyword` operand must name a keyword some unit, faction, or
- *    keyword catalog actually defines. An unresolvable operand is dead data: the
- *    gate can never become true, and nothing reports it.
- *  - `cp-refund` / `stratagem-cost-modifier` effects, whose `modifier.stratagem`
- *    value must name a core Stratagem id. An unresolvable value points at no
+ *  - keyword lists: the `all_of` / `any_of` operands of a `has-keyword`
+ *    condition, and the `all_of` / `any_of` / `none_of` lists of a unit filter
+ *    (a trigger's subject or object, a `within` target, an attachment's `with`,
+ *    and every other unit-ref written as a filter). Each entry must name a
+ *    keyword some unit, faction, or keyword catalog actually defines. An
+ *    unresolvable entry is dead data: the gate can never become true (or the
+ *    exclusion never excludes), and nothing reports it.
+ *  - a Stratagem named by an effect (a Stratagem `cost-modifier`'s `modifier.id`,
+ *    a `permission` or `targeting` `modifier.stratagem`), which must be a core Stratagem id. An unresolvable value points at no
  *    entity, and the translators still title-case it into readable prose.
  *
  * This module is deliberately separate from `validate-all`: the repository
@@ -40,10 +43,11 @@ export type DanglingReferenceKind = "keyword" | "stratagem";
  * cost modifier, without re-reading the source record.
  */
 export type DanglingReferenceType =
-  | "unit-has-keyword"
-  | "target-has-keyword"
-  | "cp-refund"
-  | "stratagem-cost-modifier";
+  | "has-keyword"
+  | "unit-filter"
+  | "cost-modifier"
+  | "permission"
+  | "targeting";
 
 /** One unresolved reference, located precisely enough to fix by hand. */
 export interface DanglingReference {
@@ -65,23 +69,34 @@ export interface ReferenceVocabularies {
   stratagems: Set<string>;
 }
 
-/**
- * Effect types whose `modifier.stratagem` names a core Stratagem.
- *
- * Deliberately a closed list: other effects carry a `stratagem` property as
- * display text, so matching on the property name alone would invent references
- * the schemas never promised.
- */
-const STRATAGEM_EFFECT_TYPES = new Set<DanglingReferenceType>([
-  "cp-refund",
-  "stratagem-cost-modifier",
-]);
+/** The Stratagem an effect names: its modifier key, for the effect types that name one. */
+function stratagemKey(type: string, modifier: Record<string, unknown>): "id" | "stratagem" | null {
+  if (type === "cost-modifier") return modifier.of === "stratagem" ? "id" : null;
+  return type === "permission" || type === "targeting" ? "stratagem" : null;
+}
 
-/** Condition types whose `parameters.keyword` names a gameplay keyword. */
-const KEYWORD_CONDITION_TYPES = new Set<DanglingReferenceType>([
-  "unit-has-keyword",
-  "target-has-keyword",
-]);
+/** The `has-keyword` operands that name gameplay keywords (`chosen_by` names an ability). */
+const HAS_KEYWORD_LISTS = ["all_of", "any_of"] as const;
+
+/** The unit-filter lists that name gameplay keywords (`designated` names a tag). */
+const UNIT_FILTER_LISTS = ["all_of", "any_of", "none_of"] as const;
+
+/** Unit-filter properties (common.schema.json#/$defs/unit-filter); an object with any other key is not one. */
+const UNIT_FILTER_KEYS = new Set(["owner", "all_of", "any_of", "none_of", "designated", "state", "level", "visible", "within", "excluding"]);
+
+/**
+ * Is `node` a unit filter? The DSL has no discriminator for it, so match its closed property
+ * set: at least one keyword list, and nothing a unit filter cannot carry. That keeps look-alikes
+ * out — a dice requirement's `any_of` holds objects and sits beside no filter keys, but an
+ * effect node carries `type`.
+ */
+function isUnitFilter(node: Record<string, unknown>): boolean {
+  const keys = Object.keys(node);
+  return (
+    keys.every((key) => UNIT_FILTER_KEYS.has(key)) &&
+    UNIT_FILTER_LISTS.some((list) => Array.isArray(node[list]))
+  );
+}
 
 /**
  * Narrow keyword normalization: trim, drop all whitespace, lowercase.
@@ -312,47 +327,69 @@ export async function collectDanglingAbilityReferences(
             ? ability.id
             : "";
 
-      visitObjects(ability, `/${index}`, (node, path) => {
-        const type = node.type;
-        if (typeof type !== "string") return;
+      /** `has-keyword` parameter objects, already audited as the condition's operands. */
+      const keywordParameters = new WeakSet<object>();
+      const checkList = (
+        list: unknown,
+        path: string,
+        referenceType: DanglingReferenceType,
+      ): void => {
+        if (!Array.isArray(list)) return;
+        list.forEach((keyword, position) => {
+          // Non-string entries are the AJV pass's problem, not a dangling reference.
+          if (typeof keyword !== "string") return;
+          if (vocabularies.keywords.has(normalizeKeyword(keyword))) return;
+          findings.push({
+            kind: "keyword",
+            reference_type: referenceType,
+            source_file: sourceFile,
+            ability_id: abilityId,
+            path: `${path}/${position}`,
+            value: keyword,
+          });
+        });
+      };
 
-        if (KEYWORD_CONDITION_TYPES.has(type as DanglingReferenceType)) {
+      visitObjects(ability, `/${index}`, (node, path) => {
+        // A parent is visited before its children, so the has-keyword branch marks its
+        // parameters before the walk reaches them as a filter-shaped object.
+        if (typeof node.type !== "string") {
+          if (!keywordParameters.has(node) && isUnitFilter(node)) {
+            for (const list of UNIT_FILTER_LISTS) {
+              checkList(node[list], `${path}/${list}`, "unit-filter");
+            }
+          }
+          return;
+        }
+        const type = node.type;
+
+        if (type === "has-keyword") {
           const parameters = node.parameters;
           if (parameters !== null && typeof parameters === "object") {
-            const keyword = (parameters as Record<string, unknown>).keyword;
-            if (
-              typeof keyword === "string" &&
-              !vocabularies.keywords.has(normalizeKeyword(keyword))
-            ) {
-              findings.push({
-                kind: "keyword",
-                reference_type: type as DanglingReferenceType,
-                source_file: sourceFile,
-                ability_id: abilityId,
-                path: `${path}/parameters/keyword`,
-                value: keyword,
-              });
+            keywordParameters.add(parameters);
+            for (const list of HAS_KEYWORD_LISTS) {
+              checkList(
+                (parameters as Record<string, unknown>)[list],
+                `${path}/parameters/${list}`,
+                "has-keyword",
+              );
             }
           }
         }
 
-        if (STRATAGEM_EFFECT_TYPES.has(type as DanglingReferenceType)) {
-          const modifier = node.modifier;
-          if (modifier !== null && typeof modifier === "object") {
-            const stratagem = (modifier as Record<string, unknown>).stratagem;
-            if (
-              typeof stratagem === "string" &&
-              !vocabularies.stratagems.has(stratagem)
-            ) {
-              findings.push({
-                kind: "stratagem",
-                reference_type: type as DanglingReferenceType,
-                source_file: sourceFile,
-                ability_id: abilityId,
-                path: `${path}/modifier/stratagem`,
-                value: stratagem,
-              });
-            }
+        const modifier = node.modifier;
+        if (typeof type === "string" && modifier !== null && typeof modifier === "object" && !Array.isArray(modifier)) {
+          const key = stratagemKey(type, modifier as Record<string, unknown>);
+          const stratagem = key ? (modifier as Record<string, unknown>)[key] : undefined;
+          if (key && typeof stratagem === "string" && !vocabularies.stratagems.has(stratagem)) {
+            findings.push({
+              kind: "stratagem",
+              reference_type: type as DanglingReferenceType,
+              source_file: sourceFile,
+              ability_id: abilityId,
+              path: `${path}/modifier/${key}`,
+              value: stratagem,
+            });
           }
         }
       });

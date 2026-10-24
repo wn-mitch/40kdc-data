@@ -1,6 +1,7 @@
 package wh40kdc
 
 import (
+	"encoding/json"
 	"math"
 	"regexp"
 	"strconv"
@@ -105,35 +106,78 @@ func stage(name string, expected float64) map[string]any {
 // triple. Returns the stages, the resolved modifiers (for attribution), or an
 // error.
 func crunch(input map[string]any, ds *Dataset) ([]map[string]any, *resolved, error) {
+	stages, res, _, err := crunchModel(input, ds)
+	return stages, res, err
+}
+
+// crunchModel is crunch plus the AttackModel (cruncher_allocation.go) its
+// stages were computed from.
+func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved, *AttackModel, error) {
 	attacker, _ := getMap(input, "attacker")
 	target, _ := getMap(input, "target")
 	weapon, _ := getMap(attacker, "weapon")
 	profiles := getList(weapon, "profiles")
 	profileIndex := asInt(attacker["profileIndex"])
 	if profileIndex < 0 || profileIndex >= len(profiles) {
-		return nil, nil, &crunchError{"crunch: attacker.profileIndex out of range for weapon " + getStr(weapon, "id")}
+		return nil, nil, nil, &crunchError{"crunch: attacker.profileIndex out of range for weapon " + getStr(weapon, "id")}
 	}
 	weaponProfile, _ := asMap(profiles[profileIndex])
 	unit, _ := getMap(target, "unit")
 	unitProfiles := getList(unit, "profiles")
 	targetProfileIndex := asInt(target["profileIndex"])
 	if targetProfileIndex < 0 || targetProfileIndex >= len(unitProfiles) {
-		return nil, nil, &crunchError{"crunch: target.profileIndex out of range for unit " + getStr(unit, "id")}
+		return nil, nil, nil, &crunchError{"crunch: target.profileIndex out of range for unit " + getStr(unit, "id")}
 	}
 	unitProfile, _ := asMap(unitProfiles[targetProfileIndex])
 	if !profileCanTarget(weaponProfile, unit) {
-		return nil, nil, &crunchError{msg: "crunch: weapon " + getStr(weapon, "id") +
+		return nil, nil, nil, &crunchError{msg: "crunch: weapon " + getStr(weapon, "id") +
 			" profile " + strconv.Itoa(profileIndex) + " cannot target unit " + getStr(unit, "id")}
 	}
 
 	targetKeywords := unitKeywordsLower(unit)
 	ctx := cloneMap(getMapOr(input, "context"))
+	if ctx["attackerUnitId"] == nil {
+		ctx["attackerUnitId"] = getStr(attacker, "unitId")
+	}
+	if ctx["targetUnitId"] == nil {
+		ctx["targetUnitId"] = getStr(unit, "id")
+	}
 	if ctx["targetKeywords"] == nil {
 		tk := make([]any, len(targetKeywords))
 		for i, k := range targetKeywords {
 			tk[i] = k
 		}
 		ctx["targetKeywords"] = tk
+	}
+	if ctx["weaponNames"] == nil {
+		// Lower-cased, de-duplicated weapon and profile names drive applicableWhen.weaponName.
+		names := []any{}
+		for _, v := range []any{weapon["name"], weaponProfile["name"]} {
+			if name, ok := v.(string); ok && !containsAny(names, lower(name)) {
+				names = append(names, lower(name))
+			}
+		}
+		ctx["weaponNames"] = names
+	}
+	// The request's weaponKeywords and weaponKeywordRefs each default to the profile's printed
+	// keywords independently, so refs the request supplies survive a defaulted id list.
+	if ctx["weaponKeywords"] == nil || ctx["weaponKeywordRefs"] == nil {
+		keywords := []any{}
+		refs := []any{}
+		for _, refAny := range getList(weaponProfile, "keywords") {
+			if ref, ok := asMap(refAny); ok && ref != nil {
+				if id := getStr(ref, "keyword_id"); id != "" && !containsAny(keywords, id) {
+					keywords = append(keywords, id)
+				}
+				refs = append(refs, ref)
+			}
+		}
+		if ctx["weaponKeywords"] == nil {
+			ctx["weaponKeywords"] = keywords
+		}
+		if ctx["weaponKeywordRefs"] == nil {
+			ctx["weaponKeywordRefs"] = refs
+		}
 	}
 
 	profBuffs := profileBuffsFor(attacker, ds, ctx)
@@ -149,7 +193,7 @@ func crunch(input map[string]any, ds *Dataset) ([]map[string]any, *resolved, err
 	// 1. Attacks
 	baseA, err := evalStatValue(stats["A"])
 	if err != nil {
-		return nil, nil, err
+		return nil, nil, nil, err
 	}
 	attacksPerModel := baseA + res.attacksMod
 	rapidFire := res.findKeyword("rapid-fire")
@@ -158,7 +202,7 @@ func crunch(input map[string]any, ds *Dataset) ([]map[string]any, *resolved, err
 	if rapidFire != nil && halfRange {
 		rapidFireExtra, err = evalStatValue(paramValue(rapidFire, "value"))
 		if err != nil {
-			return nil, nil, err
+			return nil, nil, nil, err
 		}
 	}
 	blast := res.findKeyword("blast")
@@ -185,7 +229,9 @@ func crunch(input map[string]any, ds *Dataset) ([]map[string]any, *resolved, err
 
 	// 2. Hits
 	ignoresCover := res.findKeyword("ignores-cover") != nil
-	covered := res.coverActive && !ignoresCover && !isMelee
+	// Ignoring hit modifiers also ignores the cover penalty.
+	_, ignoreHit := res.ignoreModifiers["hit"]
+	covered := res.coverActive && !ignoresCover && !isMelee && !ignoreHit
 	coverHitPenalty := 0.0
 	if covered {
 		coverHitPenalty = -1
@@ -198,6 +244,7 @@ func crunch(input map[string]any, ds *Dataset) ([]map[string]any, *resolved, err
 	}
 	torrent := res.findKeyword("torrent") != nil
 	var hits, critHits float64
+	hitPass, hitCrit := 1.0, 0.0
 	if torrent {
 		hits = attacks
 		critHits = 0
@@ -207,19 +254,38 @@ func crunch(input map[string]any, ds *Dataset) ([]map[string]any, *resolved, err
 			if isMelee {
 				ws = "WS"
 			}
-			return nil, nil, &crunchError{"crunch: weapon " + getStr(weapon, "id") + " missing " + ws}
+			return nil, nil, nil, &crunchError{"crunch: weapon " + getStr(weapon, "id") + " missing " + ws}
 		}
 		hitStatN, _ := num(hitStat)
+		// A WS/BS improvement changes the characteristic itself, floored at 2+.
+		skillStat := "BS"
+		if isMelee {
+			skillStat = "WS"
+		}
+		if skillMod := res.skillMod[skillStat]; skillMod != 0 {
+			hitStatN = math.Max(2, hitStatN-skillMod)
+		}
+		critHitThreshold := 6.0
+		if crit, ok := res.critThresholds["hit"]; ok {
+			critHitThreshold = math.Min(6, crit.value)
+		}
 		hitModifier := res.hitMod + coverHitPenalty
-		passP, critP := checkProbabilities(hitStatN, hitModifier, rerollSubset(res, "hit"), true, true, 6)
+		passP, critP, openP := checkProbabilities(hitStatN, hitModifier, rerollSubset(res, "hit"), true, true, critHitThreshold)
+		hitPass, hitCrit = passP, critP
 		hits = attacks * passP
 		critHits = attacks * critP
+		if _, ok := res.rerollOne["hit"]; ok {
+			freshPass, freshCrit, _ := checkProbabilities(hitStatN, hitModifier, "none", true, true, critHitThreshold)
+			dice := oneRerollDice(attacks, openP)
+			hits += dice * freshPass
+			critHits += dice * freshCrit
+		}
 	}
 	sustained := res.findKeyword("sustained-hits")
 	if sustained != nil {
 		sv, err := evalStatValue(paramValue(sustained, "value"))
 		if err != nil {
-			return nil, nil, err
+			return nil, nil, nil, err
 		}
 		hits += critHits * sv
 	}
@@ -228,24 +294,16 @@ func crunch(input map[string]any, ds *Dataset) ([]map[string]any, *resolved, err
 	// 3. Wounds
 	sBase, err := evalStatValue(stats["S"])
 	if err != nil {
-		return nil, nil, err
+		return nil, nil, nil, err
 	}
 	sStat := sBase + res.strengthMod
 	tStat := numOr0(unitProfile["T"]) + res.toughnessMod
 	stdWoundNeeded := woundThreshold(sStat, tStat)
-	anti := res.findKeyword("anti")
-	antiThreshold := 7.0
-	if anti != nil {
-		params, _ := getMap(anti, "parameters")
-		targetKw, _ := params["target_keyword"].(string)
-		if targetKw != "" && containsStr2(targetKeywords, lower(targetKw)) {
-			threshold := jsNumber(params["threshold"])
-			if !math.IsInf(threshold, 0) && !math.IsNaN(threshold) {
-				antiThreshold = threshold
-			}
-		}
-	}
+	antiThreshold := antiWoundThreshold(res.extraKeywords, targetKeywords)
 	critWoundThreshold := math.Min(6, antiThreshold)
+	if crit, ok := res.critThresholds["wound"]; ok {
+		critWoundThreshold = math.Min(critWoundThreshold, crit.value)
+	}
 	hasLethal := res.findKeyword("lethal-hits") != nil
 	hitsForWoundRoll := hits
 	lethalAutoWounds := 0.0
@@ -253,9 +311,15 @@ func crunch(input map[string]any, ds *Dataset) ([]map[string]any, *resolved, err
 		hitsForWoundRoll = hits - critHits
 		lethalAutoWounds = critHits
 	}
-	woundPass, woundCrit := checkProbabilities(float64(stdWoundNeeded), res.woundMod, rerollSubset(res, "wound"), true, true, critWoundThreshold)
+	woundPass, woundCrit, woundOpen := checkProbabilities(float64(stdWoundNeeded), res.woundMod, rerollSubset(res, "wound"), true, true, critWoundThreshold)
 	regularWoundsFromRoll := hitsForWoundRoll * (woundPass - woundCrit)
 	critWoundsFromRoll := hitsForWoundRoll * woundCrit
+	if _, ok := res.rerollOne["wound"]; ok {
+		freshPass, freshCrit, _ := checkProbabilities(float64(stdWoundNeeded), res.woundMod, "none", true, true, critWoundThreshold)
+		dice := oneRerollDice(hitsForWoundRoll, woundOpen)
+		regularWoundsFromRoll += dice * (freshPass - freshCrit)
+		critWoundsFromRoll += dice * freshCrit
+	}
 	totalRegularWounds := regularWoundsFromRoll + lethalAutoWounds
 	hasDevastating := res.findKeyword("devastating-wounds") != nil
 	mortalWoundsStream := 0.0
@@ -270,8 +334,13 @@ func crunch(input map[string]any, ds *Dataset) ([]map[string]any, *resolved, err
 	stages = append(stages, stage("wounds", totalWounds))
 
 	// 4. Saves
-	ap := numOr0(stats["AP"]) + res.apMod
-	armorTargetRaw := numOr0(unitProfile["Sv"]) - ap - res.saveMod
+	// Worsening AP stops at 0.
+	ap := math.Min(0, numOr0(stats["AP"])+res.apMod)
+	sv := numOr0(unitProfile["Sv"])
+	if res.saveCharacteristic != nil {
+		sv = res.saveCharacteristic.value
+	}
+	armorTargetRaw := sv - ap - res.saveMod
 	armorFinal := clampF(armorTargetRaw, 2, 7)
 	var effectiveInvuln *float64
 	// Attack-scoped invuln (issue #87): a ranged-/melee-only save applies only to
@@ -300,35 +369,66 @@ func crunch(input map[string]any, ds *Dataset) ([]map[string]any, *resolved, err
 	if effectiveInvuln != nil {
 		effectiveSaveTarget = math.Min(armorFinal, *effectiveInvuln)
 	}
-	savePass, _ := checkProbabilities(effectiveSaveTarget, 0, rerollSubset(res, "save"), true, false, 7)
+	savePass, _, saveOpen := checkProbabilities(effectiveSaveTarget, 0, rerollSubset(res, "save"), true, false, 7)
 	pSaved := savePass
 	if effectiveSaveTarget >= 7 {
 		pSaved = 0
 	}
 	unsaved := regularWoundsForSaves * (1 - pSaved)
+	// "Re-roll one saving throw": one failed save no other permission re-rolled is rolled again.
+	if _, ok := res.rerollOne["save"]; ok && effectiveSaveTarget < 7 {
+		if dice := oneRerollDice(regularWoundsForSaves, saveOpen); dice > 0 {
+			freshPass, _, _ := checkProbabilities(effectiveSaveTarget, 0, "none", true, false, 7)
+			unsaved -= dice * freshPass
+		}
+	}
 	stages = append(stages, stage("unsaved", unsaved))
 
 	// 5. Damage
-	baseD, err := evalStatValue(stats["D"])
-	if err != nil {
-		return nil, nil, err
+	// Evaluated first so an unparseable D reports the stat-value error, matching
+	// the reference engine's order.
+	if _, err := evalStatValue(stats["D"]); err != nil {
+		return nil, nil, nil, err
 	}
 	melta := res.findKeyword("melta")
 	meltaBonus := 0.0
 	if melta != nil && halfRange {
 		meltaBonus, err = evalStatValue(paramValue(melta, "value"))
 		if err != nil {
-			return nil, nil, err
+			return nil, nil, nil, err
 		}
 	}
-	beforeReduction := math.Max(0, baseD+meltaBonus+res.damageMod)
-	damageReduction := res.damageReduction
-	damagePerHit := beforeReduction
-	if damageReduction > 0 {
-		damagePerHit = math.Max(1, beforeReduction-damageReduction)
+	// 10e damage-reduction abilities always carry the canonical "to a minimum
+	// of 1" clause, so the floor lives in the math, not the data. The clause
+	// only applies when damage-reduction is active. Both floors act on each
+	// Damage roll, as does a damage reroll.
+	damageReroll := ""
+	if e, ok := res.rerolls["damage"]; ok {
+		damageReroll = e.subset
 	}
+	perAttack, err := damageRoll(damageRollInput{
+		stat:      stats["D"],
+		bonus:     meltaBonus,
+		modifier:  res.damageMod,
+		reduction: res.damageReduction,
+		reroll:    damageReroll,
+	})
+	if err != nil {
+		return nil, nil, nil, err
+	}
+	damagePerHit := perAttack.expected
 	damageMain := unsaved * damagePerHit
 	damageMortal := mortalWoundsStream * damagePerHit
+	// "Re-roll one Damage roll" over every Damage roll, main and mortal streams
+	// alike, shared in proportion to their rolls. A roll another permission
+	// already re-rolled cannot be re-rolled, so beside one the die is not priced.
+	damageRolls := unsaved + mortalWoundsStream
+	if _, ok := res.rerollOne["damage"]; ok && damageReroll == "" && damageRolls > 0 {
+		if gain := oneDamageRerollGain(perAttack.distribution, damageRolls); gain > 0 {
+			damageMain += gain * (unsaved / damageRolls)
+			damageMortal += gain * (mortalWoundsStream / damageRolls)
+		}
+	}
 	damage := damageMain + damageMortal
 	stages = append(stages, stage("damage", damage))
 
@@ -348,7 +448,34 @@ func crunch(input map[string]any, ds *Dataset) ([]map[string]any, *resolved, err
 	}
 	stages = append(stages, stage("models-killed", expectedModelsKilled))
 
-	return stages, res, nil
+	var rapidFireStat, sustainedStat any
+	if rapidFire != nil && halfRange {
+		rapidFireStat = paramValue(rapidFire, "value")
+	}
+	if sustained != nil {
+		sustainedStat = paramValue(sustained, "value")
+	}
+	model := &AttackModel{
+		ModelsFiring:    modelsFiring,
+		AttacksStat:     stats["A"],
+		AttacksBonus:    res.attacksMod + blastExtra,
+		RapidFireStat:   rapidFireStat,
+		Torrent:         torrent,
+		HitPass:         hitPass,
+		HitCrit:         hitCrit,
+		SustainedStat:   sustainedStat,
+		Lethal:          hasLethal,
+		WoundPass:       woundPass,
+		WoundCrit:       woundCrit,
+		Devastating:     hasDevastating,
+		Unsaved:         1 - pSaved,
+		Damage:          perAttack.distribution,
+		WoundLost:       pSurviveAll,
+		MortalWoundLost: pSurviveAll * pSurviveMortal,
+		Wounds:          woundsStat,
+		ModelCount:      tmc,
+	}
+	return stages, res, model, nil
 }
 
 func getMapOr(m map[string]any, key string) map[string]any {
@@ -385,6 +512,50 @@ func unitKeywordsLower(unit map[string]any) []string {
 	return out
 }
 
+// antiWoundThreshold is the lowest critical-wound threshold any Anti keyword grants against the
+// target, or 7 (unreachable) when none applies. An Anti applies when it names a target: its
+// target_keyword the unit has, at least one of its required_target_keywords_any, and none of its
+// excluded_target_keywords. Only an integer threshold in 2..6 counts. targetKeywords are lower
+// case. Mirror of the Anti loop in tools/src/cruncher/engine.ts.
+func antiWoundThreshold(extraKeywords []extraKw, targetKeywords []string) float64 {
+	threshold := 7.0
+	hasAny := func(raw any) bool {
+		list, _ := raw.([]any)
+		for _, keyword := range list {
+			if text, ok := keyword.(string); ok && containsStr2(targetKeywords, lower(text)) {
+				return true
+			}
+		}
+		return false
+	}
+	for _, entry := range extraKeywords {
+		if getStr(entry.keywordRef, "keyword_id") != "anti" {
+			continue
+		}
+		params, _ := getMap(entry.keywordRef, "parameters")
+		targetKw, hasTargetKw := params["target_keyword"].(string)
+		required, hasRequired := params["required_target_keywords_any"].([]any)
+		_, hasExcluded := params["excluded_target_keywords"].([]any)
+		if !hasTargetKw && !hasRequired && !hasExcluded {
+			continue
+		}
+		if hasTargetKw && !containsStr2(targetKeywords, lower(targetKw)) {
+			continue
+		}
+		if hasRequired && !hasAny(required) {
+			continue
+		}
+		if hasExcluded && hasAny(params["excluded_target_keywords"]) {
+			continue
+		}
+		value := jsNumber(params["threshold"])
+		if value == math.Trunc(value) && value >= 2 && value <= 6 {
+			threshold = math.Min(threshold, value)
+		}
+	}
+	return threshold
+}
+
 func containsStr2(xs []string, x string) bool {
 	for _, v := range xs {
 		if v == x {
@@ -409,7 +580,10 @@ func woundThreshold(s, t float64) int {
 	}
 }
 
-func checkProbabilities(unmodifiedNeeded, modifier float64, reroll string, autoFailOnOne, autoPassOnSix bool, critThreshold float64) (float64, float64) {
+// checkProbabilities returns the pass and crit chances of one die, and the
+// chance it fails with no permission re-rolling it (what a "re-roll one" can
+// still take).
+func checkProbabilities(unmodifiedNeeded, modifier float64, reroll string, autoFailOnOne, autoPassOnSix bool, critThreshold float64) (float64, float64, float64) {
 	outcome := func(face int) (int, int) {
 		f := float64(face)
 		if autoFailOnOne && face == 1 {
@@ -426,7 +600,7 @@ func checkProbabilities(unmodifiedNeeded, modifier float64, reroll string, autoF
 		}
 		return 0, 0
 	}
-	passP, critP := 0.0, 0.0
+	passP, critP, openP := 0.0, 0.0, 0.0
 	for face := 1; face <= 6; face++ {
 		p, c := outcome(face)
 		if p == 1 {
@@ -436,6 +610,7 @@ func checkProbabilities(unmodifiedNeeded, modifier float64, reroll string, autoF
 		}
 		eligible := reroll == "all-failures" || (reroll == "ones" && face == 1)
 		if !eligible {
+			openP += 1.0 / 6
 			continue
 		}
 		rerollPass, rerollCrit := 0.0, 0.0
@@ -447,7 +622,29 @@ func checkProbabilities(unmodifiedNeeded, modifier float64, reroll string, autoF
 		passP += rerollPass / 6
 		critP += rerollCrit / 6
 	}
-	return passP, critP
+	return passP, critP, openP
+}
+
+// oneRerollDice is the expected dice a "re-roll one" re-rolls over a pool of
+// `pool` dice that each end failed and un-rerolled with probability `open`:
+// for a whole pool, 1 - (1 - open)^pool. A pool carried as an expectation is
+// read between the whole pools either side of it.
+func oneRerollDice(pool, open float64) float64 {
+	if pool <= 0 || open <= 0 {
+		return 0
+	}
+	return betweenWholePools(pool, func(dice float64) float64 { return 1 - math.Pow(1-open, dice) })
+}
+
+// betweenWholePools reads atWhole at a fractional pool, linearly between the
+// whole pools either side.
+func betweenWholePools(pool float64, atWhole func(float64) float64) float64 {
+	low := math.Floor(pool)
+	below := atWhole(low)
+	if pool == low {
+		return below
+	}
+	return below + (pool-low)*(atWhole(low+1)-below)
 }
 
 func jsNumber(v any) float64 {
@@ -475,18 +672,30 @@ func jsNumber(v any) float64 {
 	return math.NaN()
 }
 
+func unresolvedQuantityError(v any) error {
+	encoded, err := json.Marshal(v)
+	if err != nil {
+		encoded = []byte("<unserializable>")
+	}
+	return &crunchError{"evalStatValue: unresolved quantity " + string(encoded)}
+}
+
 func evalStatValue(v any) (float64, error) {
 	if isNumber(v) {
 		f, _ := num(v)
+		if math.IsNaN(f) || math.IsInf(f, 0) {
+			return 0, unresolvedQuantityError(v)
+		}
 		return f, nil
+	}
+	if v != nil {
+		if _, ok := v.(string); !ok {
+			return 0, unresolvedQuantityError(v)
+		}
 	}
 	s, ok := v.(string)
 	if !ok {
-		n := jsNumber(v)
-		if !math.IsInf(n, 0) && !math.IsNaN(n) && n != 0 {
-			return n, nil
-		}
-		return 0, nil
+		return 0, unresolvedQuantityError(v)
 	}
 	trimmed := strings.TrimSpace(s)
 	if trimmed == "" {

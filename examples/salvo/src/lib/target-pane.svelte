@@ -2,6 +2,7 @@
   import { salvo, ds } from "./store.svelte.js";
   import { resolveRosterUnit } from "@alpaca-software/40kdc-data";
   import EmptyState from "./EmptyState.svelte";
+  import DefenderBuild from "./defender-build.svelte";
 
   const factions = $derived(
     ds.factions.all.slice().sort((a, b) => a.name.localeCompare(b.name)),
@@ -257,6 +258,8 @@
     }}
   />
 </div>
+
+<DefenderBuild />
 
 <style>
   .stats-grid {

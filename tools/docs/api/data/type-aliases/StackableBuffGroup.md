@@ -8,7 +8,7 @@
 
 > **StackableBuffGroup** = `object`
 
-Defined in: [data/dataset.ts:75](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/dataset.ts#L75)
+Defined in: [data/dataset.ts:108](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L108)
 
 A pool of [StackableBuff](StackableBuff.md) levers limited to `maxActivations` at once.
 
@@ -18,7 +18,17 @@ A pool of [StackableBuff](StackableBuff.md) levers limited to `maxActivations` a
 
 > **id**: `string`
 
-Defined in: [data/dataset.ts:76](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/dataset.ts#L76)
+Defined in: [data/dataset.ts:109](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L109)
+
+***
+
+### abilityId?
+
+> `optional` **abilityId?**: `string`
+
+Defined in: [data/dataset.ts:111](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L111)
+
+Stable owning ability id, independent of its display name.
 
 ***
 
@@ -26,7 +36,7 @@ Defined in: [data/dataset.ts:76](https://github.com/wn-mitch/40kdc-data/blob/0b6
 
 > **label**: `string`
 
-Defined in: [data/dataset.ts:77](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/dataset.ts#L77)
+Defined in: [data/dataset.ts:112](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L112)
 
 ***
 
@@ -34,4 +44,4 @@ Defined in: [data/dataset.ts:77](https://github.com/wn-mitch/40kdc-data/blob/0b6
 
 > **maxActivations**: `number`
 
-Defined in: [data/dataset.ts:78](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/dataset.ts#L78)
+Defined in: [data/dataset.ts:113](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L113)

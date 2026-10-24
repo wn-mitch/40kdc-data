@@ -1,6 +1,6 @@
 [
   {
-    "id": "argath-the-king-of-blades-daemonic-incursion",
+    "id": "argath-the-king-of-blades-daemonic-incursion-chaos-daemons",
     "name": "A’rgath, The King of Blades",
     "detachment_id": "daemonic-incursion",
     "cost": 20,
@@ -8,11 +8,11 @@
       "Khorne",
       "Legiones Daemonica"
     ],
-    "ability_id": null,
+    "ability_id": "argath-the-king-of-blades-daemonic-incursion-chaos-daemons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -29,7 +29,7 @@
     ]
   },
   {
-    "id": "the-everstave-daemonic-incursion",
+    "id": "the-everstave-daemonic-incursion-chaos-daemons",
     "name": "The Everstave",
     "detachment_id": "daemonic-incursion",
     "cost": 25,
@@ -37,11 +37,11 @@
       "Legiones Daemonica",
       "Tzeentch"
     ],
-    "ability_id": null,
+    "ability_id": "the-everstave-daemonic-incursion-chaos-daemons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -58,7 +58,7 @@
     ]
   },
   {
-    "id": "the-endless-gift-daemonic-incursion",
+    "id": "the-endless-gift-daemonic-incursion-chaos-daemons",
     "name": "The Endless Gift",
     "detachment_id": "daemonic-incursion",
     "cost": 30,
@@ -66,11 +66,11 @@
       "Legiones Daemonica",
       "Nurgle"
     ],
-    "ability_id": null,
+    "ability_id": "the-endless-gift-daemonic-incursion-chaos-daemons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -87,7 +87,7 @@
     ]
   },
   {
-    "id": "soulstealer-daemonic-incursion",
+    "id": "soulstealer-daemonic-incursion-chaos-daemons",
     "name": "Soulstealer",
     "detachment_id": "daemonic-incursion",
     "cost": 15,
@@ -95,11 +95,11 @@
       "Legiones Daemonica",
       "Slaanesh"
     ],
-    "ability_id": null,
+    "ability_id": "soulstealer-daemonic-incursion-chaos-daemons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -116,7 +116,7 @@
     ]
   },
   {
-    "id": "slaughterthirst-aura-blood-legion",
+    "id": "slaughterthirst-aura-blood-legion-chaos-daemons",
     "name": "Slaughterthirst (Aura)",
     "detachment_id": "blood-legion",
     "cost": 25,
@@ -124,11 +124,11 @@
       "Khorne",
       "Legiones Daemonica"
     ],
-    "ability_id": null,
+    "ability_id": "slaughterthirst-aura-blood-legion-chaos-daemons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -145,7 +145,7 @@
     ]
   },
   {
-    "id": "furys-cage-blood-legion",
+    "id": "furys-cage-blood-legion-chaos-daemons",
     "name": "Fury’s Cage",
     "detachment_id": "blood-legion",
     "cost": 20,
@@ -154,11 +154,11 @@
       "Legiones Daemonica",
       "Monster"
     ],
-    "ability_id": null,
+    "ability_id": "furys-cage-blood-legion-chaos-daemons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -175,7 +175,7 @@
     ]
   },
   {
-    "id": "brazenmaw-blood-legion",
+    "id": "brazenmaw-blood-legion-chaos-daemons",
     "name": "Brazenmaw",
     "detachment_id": "blood-legion",
     "cost": 15,
@@ -183,11 +183,11 @@
       "Khorne",
       "Legiones Daemonica"
     ],
-    "ability_id": null,
+    "ability_id": "brazenmaw-blood-legion-chaos-daemons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -204,7 +204,7 @@
     ]
   },
   {
-    "id": "gateway-unto-damnation-blood-legion",
+    "id": "gateway-unto-damnation-blood-legion-chaos-daemons",
     "name": "Gateway Unto Damnation",
     "detachment_id": "blood-legion",
     "cost": 10,
@@ -213,11 +213,11 @@
       "Legiones Daemonica",
       "Monster"
     ],
-    "ability_id": null,
+    "ability_id": "gateway-unto-damnation-blood-legion-chaos-daemons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -234,7 +234,7 @@
     ]
   },
   {
-    "id": "inescapable-eye-scintillating-legion",
+    "id": "inescapable-eye-scintillating-legion-chaos-daemons",
     "name": "Inescapable Eye",
     "detachment_id": "scintillating-legion",
     "cost": 15,
@@ -242,11 +242,11 @@
       "Legiones Daemonica",
       "Tzeentch"
     ],
-    "ability_id": null,
+    "ability_id": "inescapable-eye-scintillating-legion-chaos-daemons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -263,7 +263,7 @@
     ]
   },
   {
-    "id": "infernal-puppeteer-scintillating-legion",
+    "id": "infernal-puppeteer-scintillating-legion-chaos-daemons",
     "name": "Infernal Puppeteer",
     "detachment_id": "scintillating-legion",
     "cost": 20,
@@ -272,11 +272,11 @@
       "Monster",
       "Tzeentch"
     ],
-    "ability_id": null,
+    "ability_id": "infernal-puppeteer-scintillating-legion-chaos-daemons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -293,7 +293,7 @@
     ]
   },
   {
-    "id": "neverblade-scintillating-legion",
+    "id": "neverblade-scintillating-legion-chaos-daemons",
     "name": "Neverblade",
     "detachment_id": "scintillating-legion",
     "cost": 25,
@@ -302,11 +302,11 @@
       "Monster",
       "Tzeentch"
     ],
-    "ability_id": null,
+    "ability_id": "neverblade-scintillating-legion-chaos-daemons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -323,7 +323,7 @@
     ]
   },
   {
-    "id": "improbable-shield-aura-scintillating-legion",
+    "id": "improbable-shield-aura-scintillating-legion-chaos-daemons",
     "name": "Improbable Shield (Aura)",
     "detachment_id": "scintillating-legion",
     "cost": 30,
@@ -331,11 +331,11 @@
       "Legiones Daemonica",
       "Tzeentch"
     ],
-    "ability_id": null,
+    "ability_id": "improbable-shield-aura-scintillating-legion-chaos-daemons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -352,7 +352,7 @@
     ]
   },
   {
-    "id": "cankerblight-aura-plague-legion",
+    "id": "cankerblight-aura-plague-legion-chaos-daemons",
     "name": "Cankerblight (Aura)",
     "detachment_id": "plague-legion",
     "cost": 15,
@@ -360,11 +360,11 @@
       "Legiones Daemonica",
       "Nurgle"
     ],
-    "ability_id": null,
+    "ability_id": "cankerblight-aura-plague-legion-chaos-daemons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -381,7 +381,7 @@
     ]
   },
   {
-    "id": "maggot-maws-plague-legion",
+    "id": "maggot-maws-plague-legion-chaos-daemons",
     "name": "Maggot Maws",
     "detachment_id": "plague-legion",
     "cost": 15,
@@ -389,11 +389,11 @@
       "Legiones Daemonica",
       "Nurgle"
     ],
-    "ability_id": null,
+    "ability_id": "maggot-maws-plague-legion-chaos-daemons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -410,7 +410,7 @@
     ]
   },
   {
-    "id": "droning-shroud-aura-plague-legion",
+    "id": "droning-shroud-aura-plague-legion-chaos-daemons",
     "name": "Droning Shroud (Aura)",
     "detachment_id": "plague-legion",
     "cost": 35,
@@ -419,11 +419,11 @@
       "Monster",
       "Nurgle"
     ],
-    "ability_id": null,
+    "ability_id": "droning-shroud-aura-plague-legion-chaos-daemons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -440,7 +440,7 @@
     ]
   },
   {
-    "id": "font-of-spores-aura-plague-legion",
+    "id": "font-of-spores-aura-plague-legion-chaos-daemons",
     "name": "Font of Spores (Aura)",
     "detachment_id": "plague-legion",
     "cost": 20,
@@ -449,11 +449,11 @@
       "Monster",
       "Nurgle"
     ],
-    "ability_id": null,
+    "ability_id": "font-of-spores-aura-plague-legion-chaos-daemons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -470,7 +470,7 @@
     ]
   },
   {
-    "id": "false-majesty-aura-legion-of-excess",
+    "id": "false-majesty-aura-legion-of-excess-chaos-daemons",
     "name": "False Majesty (Aura)",
     "detachment_id": "legion-of-excess",
     "cost": 30,
@@ -478,11 +478,11 @@
       "Legiones Daemonica",
       "Slaanesh"
     ],
-    "ability_id": null,
+    "ability_id": "false-majesty-aura-legion-of-excess-chaos-daemons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -499,7 +499,7 @@
     ]
   },
   {
-    "id": "dreaming-crown-aura-legion-of-excess",
+    "id": "dreaming-crown-aura-legion-of-excess-chaos-daemons",
     "name": "Dreaming Crown (Aura)",
     "detachment_id": "legion-of-excess",
     "cost": 30,
@@ -507,11 +507,11 @@
       "Legiones Daemonica",
       "Slaanesh"
     ],
-    "ability_id": null,
+    "ability_id": "dreaming-crown-aura-legion-of-excess-chaos-daemons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -528,7 +528,7 @@
     ]
   },
   {
-    "id": "avatar-of-perfection-legion-of-excess",
+    "id": "avatar-of-perfection-legion-of-excess-chaos-daemons",
     "name": "Avatar of Perfection",
     "detachment_id": "legion-of-excess",
     "cost": 15,
@@ -537,11 +537,11 @@
       "Monster",
       "Slaanesh"
     ],
-    "ability_id": null,
+    "ability_id": "avatar-of-perfection-legion-of-excess-chaos-daemons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -558,7 +558,7 @@
     ]
   },
   {
-    "id": "soul-glutton-legion-of-excess",
+    "id": "soul-glutton-legion-of-excess-chaos-daemons",
     "name": "Soul Glutton",
     "detachment_id": "legion-of-excess",
     "cost": 10,
@@ -567,11 +567,11 @@
       "Monster",
       "Slaanesh"
     ],
-    "ability_id": null,
+    "ability_id": "soul-glutton-legion-of-excess-chaos-daemons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -588,18 +588,18 @@
     ]
   },
   {
-    "id": "leaping-shadows-shadow-legion",
+    "id": "leaping-shadows-shadow-legion-chaos-daemons",
     "name": "Leaping Shadows",
     "detachment_id": "shadow-legion",
     "cost": 25,
     "keyword_restrictions": [
       "Shadow Legion"
     ],
-    "ability_id": null,
+    "ability_id": "leaping-shadows-shadow-legion-chaos-daemons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -616,18 +616,18 @@
     ]
   },
   {
-    "id": "mantle-of-gloom-aura-shadow-legion",
+    "id": "mantle-of-gloom-aura-shadow-legion-chaos-daemons",
     "name": "Mantle of Gloom (Aura)",
     "detachment_id": "shadow-legion",
     "cost": 20,
     "keyword_restrictions": [
       "Shadow Legion"
     ],
-    "ability_id": null,
+    "ability_id": "mantle-of-gloom-aura-shadow-legion-chaos-daemons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -644,18 +644,18 @@
     ]
   },
   {
-    "id": "fade-to-darkness-shadow-legion",
+    "id": "fade-to-darkness-shadow-legion-chaos-daemons",
     "name": "Fade to Darkness",
     "detachment_id": "shadow-legion",
     "cost": 30,
     "keyword_restrictions": [
       "Shadow Legion"
     ],
-    "ability_id": null,
+    "ability_id": "fade-to-darkness-shadow-legion-chaos-daemons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -672,18 +672,18 @@
     ]
   },
   {
-    "id": "malice-made-manifest-shadow-legion",
+    "id": "malice-made-manifest-shadow-legion-chaos-daemons",
     "name": "Malice Made Manifest",
     "detachment_id": "shadow-legion",
     "cost": 25,
     "keyword_restrictions": [
       "Shadow Legion"
     ],
-    "ability_id": null,
+    "ability_id": "malice-made-manifest-shadow-legion-chaos-daemons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -700,7 +700,7 @@
     ]
   },
   {
-    "id": "apocalyptic-steeds-upgrade-cavalcade-of-chaos",
+    "id": "apocalyptic-steeds-upgrade-cavalcade-of-chaos-chaos-daemons",
     "name": "Apocalyptic Steeds (Upgrade)",
     "detachment_id": "cavalcade-of-chaos",
     "cost": 10,
@@ -708,11 +708,11 @@
       "Legiones Daemonica",
       "Mounted"
     ],
-    "ability_id": "apocalyptic-steeds-cavalcade-of-chaos",
+    "ability_id": "apocalyptic-steeds-upgrade-cavalcade-of-chaos-chaos-daemons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": true,
@@ -729,7 +729,7 @@
     ]
   },
   {
-    "id": "soul-shattering-charge-upgrade-cavalcade-of-chaos",
+    "id": "soul-shattering-charge-upgrade-cavalcade-of-chaos-chaos-daemons",
     "name": "Soul-shattering Charge (Upgrade)",
     "detachment_id": "cavalcade-of-chaos",
     "cost": 10,
@@ -737,11 +737,11 @@
       "Legiones Daemonica",
       "Mounted"
     ],
-    "ability_id": "soul-shattering-charge-cavalcade-of-chaos",
+    "ability_id": "soul-shattering-charge-upgrade-cavalcade-of-chaos-chaos-daemons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": true,
@@ -758,7 +758,7 @@
     ]
   },
   {
-    "id": "swollen-with-power-upgrade-lords-of-the-warp",
+    "id": "swollen-with-power-upgrade-lords-of-the-warp-chaos-daemons",
     "name": "Swollen with Power (Upgrade)",
     "detachment_id": "lords-of-the-warp",
     "cost": 10,
@@ -766,11 +766,11 @@
       "Character",
       "Legiones Daemonica"
     ],
-    "ability_id": "swollen-with-power-lords-of-the-warp",
+    "ability_id": "swollen-with-power-upgrade-lords-of-the-warp-chaos-daemons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": true,
@@ -790,7 +790,7 @@
     ]
   },
   {
-    "id": "bane-forged-weapons-upgrade-warptide",
+    "id": "bane-forged-weapons-upgrade-warptide-chaos-daemons",
     "name": "Bane-forged Weapons (Upgrade)",
     "detachment_id": "warptide",
     "cost": 15,
@@ -798,11 +798,11 @@
       "Battleline",
       "Legiones Daemonica"
     ],
-    "ability_id": "bane-forged-weapons-warptide",
+    "ability_id": "bane-forged-weapons-upgrade-warptide-chaos-daemons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": true,
@@ -819,7 +819,7 @@
     ]
   },
   {
-    "id": "soul-hungry-slaughterers-upgrade-warptide",
+    "id": "soul-hungry-slaughterers-upgrade-warptide-chaos-daemons",
     "name": "Soul-hungry Slaughterers (Upgrade)",
     "detachment_id": "warptide",
     "cost": 10,
@@ -827,11 +827,11 @@
       "Battleline",
       "Legiones Daemonica"
     ],
-    "ability_id": "soul-hungry-slaughterers-warptide",
+    "ability_id": "soul-hungry-slaughterers-upgrade-warptide-chaos-daemons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": true,

@@ -19,7 +19,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -39,7 +39,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -59,7 +59,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -80,7 +80,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -96,7 +96,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -107,7 +107,17 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "leader_id": "preacher-teguen",
+    "eligible_bodyguard_ids": [
+      "inquisitors-hand-inquisitorial-agents"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
     }
   },
   {
@@ -118,7 +128,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -129,7 +139,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -140,17 +150,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
-    }
-  },
-  {
-    "leader_id": "preacher-teguen",
-    "eligible_bodyguard_ids": [
-      "inquisitors-hand-inquisitorial-agents"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   }
 ]

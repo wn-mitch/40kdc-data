@@ -1,0 +1,61 @@
+{
+  "name": "Canonical weapon scope: same-id-wrong-target",
+  "attacker": {
+    "weaponId": "bolt-rifle",
+    "profileIndex": 0
+  },
+  "target": {
+    "unitId": "intercessor-squad",
+    "profileIndex": 0
+  },
+  "modelsFiring": 5,
+  "context": {
+    "phase": "shooting",
+    "withinHalfRange": true,
+    "attackerStationary": false,
+    "weaponKeywordRefs": [
+      {
+        "keyword_id": "anti",
+        "parameters": {
+          "target_keyword": "INFANTRY",
+          "threshold": 4
+        }
+      }
+    ]
+  },
+  "buffs": [
+    {
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-weapon-scope",
+        "abilityKind": "unit"
+      },
+      "contribution": {
+        "type": "strength-mod",
+        "value": 2
+      },
+      "applicableWhen": {
+        "weaponKeywords": [
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "VEHICLE",
+              "threshold": 4
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "expected": {
+    "stages": {
+      "attacks": 10,
+      "hits": 6.6667,
+      "wounds": 2.2222,
+      "unsaved": 1.1111,
+      "damage": 1.1111,
+      "after-fnp": 1.1111,
+      "models-killed": 0.5556
+    }
+  }
+}

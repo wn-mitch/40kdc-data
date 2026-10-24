@@ -10,11 +10,12 @@
     "behavior": "passive",
     "effect": {
       "type": "invulnerable-save",
-      "target": "unit",
-      "modifier": { "invuln_sv": 5 }
+      "target": "this-unit",
+      "modifier": {
+        "invuln_sv": 5
+      }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     }
   },
@@ -32,19 +33,40 @@
       "condition": {
         "operator": "and",
         "operands": [
-          { "type": "phase-is", "parameters": { "phase": "fight" } },
-          { "type": "timing-is", "parameters": { "timing": "on-destroyed" } },
-          { "type": "unit-below-half-strength" }
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "model-destroyed",
+              "window": "event",
+              "object": "this-model",
+              "filter": {
+                "timing": "before-removal"
+              }
+            }
+          },
+          {
+            "type": "strength",
+            "parameters": {
+              "below": "half"
+            }
+          }
         ]
       },
       "effect": {
-        "type": "fight-on-death",
-        "target": "self",
-        "modifier": {}
+        "type": "act-on-death",
+        "target": "this-model",
+        "modifier": {
+          "act": "fight"
+        }
       }
     },
     "scope": {
-      "range": "self",
       "duration": "phase"
     },
     "community_notes": "Triggers before the model is removed. Attacks are resolved with the destroyed model's profile."
@@ -63,9 +85,25 @@
       "condition": {
         "operator": "and",
         "operands": [
-          { "type": "phase-is", "parameters": { "phase": "command" } },
-          { "type": "timing-is", "parameters": { "timing": "start-of-phase" } },
-          { "type": "player-turn-is", "parameters": { "turn": "your-turn" } }
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "phase-started",
+              "window": "event"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
         ]
       },
       "effect": {
@@ -73,20 +111,41 @@
         "options": [
           {
             "type": "stat-modifier",
-            "target": "friendly-within-aura",
-            "modifier": { "stat": "A", "operation": "add", "value": 1 }
+            "target": {
+              "owner": "friendly",
+              "within": {
+                "range": {
+                  "inches": 6
+                }
+              }
+            },
+            "modifier": {
+              "stat": "A",
+              "operation": "add",
+              "value": 1
+            }
           },
           {
-            "type": "leadership-modifier",
-            "target": "enemy-within-aura",
-            "modifier": { "stat": "Ld", "operation": "add", "value": 1 }
+            "type": "stat-modifier",
+            "target": {
+              "owner": "enemy",
+              "within": {
+                "range": {
+                  "inches": 6
+                }
+              }
+            },
+            "modifier": {
+              "stat": "Ld",
+              "operation": "worsen",
+              "value": 1
+            }
           }
         ],
         "choice_label": "Choose one at the start of your Command phase"
       }
     },
     "scope": {
-      "range": "aura-6",
       "duration": "turn"
     },
     "interactions": [

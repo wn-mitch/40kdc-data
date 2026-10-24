@@ -19,18 +19,47 @@ func asList(v any) ([]any, bool) {
 	return l, ok
 }
 
-// isNumber reports whether v is a JSON number. Decoded JSON numbers are
-// float64; bool is a distinct Go type so (unlike Python) it is never confused
-// for a number.
+// isNumber reports whether v is a numeric value. Decoded JSON numbers are
+// float64; in-memory fixtures may use the other Go numeric types.
 func isNumber(v any) bool {
-	_, ok := v.(float64)
-	return ok
+	switch v.(type) {
+	case float64, float32, int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64:
+		return true
+	default:
+		return false
+	}
 }
 
 // num returns v as a float64, or (0,false).
 func num(v any) (float64, bool) {
-	f, ok := v.(float64)
-	return f, ok
+	switch n := v.(type) {
+	case float64:
+		return n, true
+	case float32:
+		return float64(n), true
+	case int:
+		return float64(n), true
+	case int8:
+		return float64(n), true
+	case int16:
+		return float64(n), true
+	case int32:
+		return float64(n), true
+	case int64:
+		return float64(n), true
+	case uint:
+		return float64(n), true
+	case uint8:
+		return float64(n), true
+	case uint16:
+		return float64(n), true
+	case uint32:
+		return float64(n), true
+	case uint64:
+		return float64(n), true
+	default:
+		return 0, false
+	}
 }
 
 // asInt truncates a JSON number to an int (0 when not a number).

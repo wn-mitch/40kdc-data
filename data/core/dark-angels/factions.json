@@ -25,7 +25,18 @@
       }
     ],
     "faction_rule_ids": [
-      "oath-of-moment"
+      "combat-doctrines-dark-angels",
+      "transhuman-strategist-dark-angels",
+      "the-ravenwing-dark-angels",
+      "the-deathwing-dark-angels"
+    ],
+    "army_construction_rules": [
+      {
+        "type": "faction-keyword-cohesion",
+        "base_faction_keyword": "Adeptus Astartes",
+        "additional_keyword_source": "chapter",
+        "max_distinct": 1
+      }
     ]
   }
 ]

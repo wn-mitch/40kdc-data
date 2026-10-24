@@ -15,15 +15,15 @@
                 <characteristic name="OC">1</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise 1" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, each enemy unit within 6" suffers 1 mortal wound.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Feel No Pain 5+" typeName="Abilities">
+            <profile name="Feel No Pain" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit has the Feel No Pain 5+ ability.</characteristic>
+                <characteristic name="Description">The unit has the Feel No Pain X+ ability, X being its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Lethal Ichor" typeName="Abilities">
@@ -31,34 +31,9 @@
                 <characteristic name="Description">During the Fight phase, the target suffers 1 mortal wound.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Mind-breaking Mutations (Aura)" typeName="Abilities">
+            <profile name="Scouts" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Modify the unit's characteristics.</characteristic>
-              </characteristics>
-            </profile>
-            <profile name="Regenerating Monstrosities" typeName="Abilities">
-              <characteristics>
-                <characteristic name="Description">This model regains up to 3 lost wounds.</characteristic>
-              </characteristics>
-            </profile>
-            <profile name="Scouts 6&quot;" typeName="Abilities">
-              <characteristics>
-                <characteristic name="Description">Before the first battle round, the unit can make a Scout move of up to 6".</characteristic>
-              </characteristics>
-            </profile>
-            <profile name="Scouts 8&quot;" typeName="Abilities">
-              <characteristics>
-                <characteristic name="Description">Before the first battle round, the unit can make a Scout move of up to 8".</characteristic>
-              </characteristics>
-            </profile>
-            <profile name="Scuttling Horrors" typeName="Abilities">
-              <characteristics>
-                <characteristic name="Description">An enemy unit ends a move, you may use this ability, once per turn, the unit can make a Reactive move.</characteristic>
-              </characteristics>
-            </profile>
-            <profile name="To Slake its Rage" typeName="Abilities">
-              <characteristics>
-                <characteristic name="Description">The unit is eligible to declare a charge in a turn in which it Advanced.</characteristic>
+                <characteristic name="Description">The unit gains the Scouts X" ability, X being its rating.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -68,6 +43,7 @@
             <category name="Chaos"/>
             <category name="Nurgle"/>
             <category name="Spawn"/>
+            <category name="Chaos Spawn"/>
           </categories>
           <selections>
             <selection id="unit0-m0" name="Chaos Spawn" type="model" number="1">
@@ -103,42 +79,21 @@
                 <characteristic name="OC">2</characteristic>
               </characteristics>
             </profile>
-            <profile name="Assault Vehicle" typeName="Abilities">
-              <characteristics>
-                <characteristic name="Description">Units can disembark from this model after it has Advanced; such units count as having made a Normal move, but cannot declare a charge this turn.</characteristic>
-              </characteristics>
-            </profile>
             <profile name="Fire Support" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">During the Shooting phase, until the end of the phase, you can re-roll the Wound roll.</characteristic>
+                <characteristic name="Description">After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of the phase:
+  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Fire Support Target). Until the end of the phase, each time a friendly unit makes an attack against it, if the attacking unit disembarked from this Transport this turn, you can re-roll the Wound roll for attacks made by all friendly models.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Firing Deck 2" typeName="Abilities">
+            <profile name="Firing Deck" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the Firing Deck ability (2).</characteristic>
+                <characteristic name="Description">The unit gains the Firing Deck X ability, X being its rating.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Meet Any Challenge" typeName="Abilities">
-              <characteristics>
-                <characteristic name="Description">An enemy unit ends a move, you may use this ability, the unit can make a Reactive move.</characteristic>
-              </characteristics>
-            </profile>
-            <profile name="Self Repair" typeName="Abilities">
-              <characteristics>
-                <characteristic name="Description">This model regains up to 1 lost wound.</characteristic>
-              </characteristics>
-            </profile>
-            <profile name="Sorcerous Support" typeName="Abilities">
-              <characteristics>
-                <characteristic name="Description">During the Shooting phase, until the end of the phase:
-  -&gt; The unit gets +1 to Hit rolls.
-  -&gt; The unit gets +1 to Wound rolls.</characteristic>
-              </characteristics>
-            </profile>
-            <profile name="Deadly Demise D3" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, each enemy unit within 6" suffers D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -151,6 +106,8 @@
             <category name="Transport"/>
             <category name="Dedicated Transport"/>
             <category name="Rhino"/>
+            <category name="Frame"/>
+            <category name="Chaos Rhino"/>
           </categories>
           <selections>
             <selection id="unit1-m0" name="Chaos Rhino" type="model" number="1">

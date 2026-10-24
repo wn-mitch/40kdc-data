@@ -1,0 +1,410 @@
+import type { DatabaseSync } from "node:sqlite";
+
+import { hashJson } from "../round4/hash.js";
+import { sourceQualified } from "./family-validation.js";
+import { BUFF_FAMILIES, normalizeBuffParameters } from "./buff-families.js";
+import { CORE_FAMILIES, normalizeCoreParameters } from "./core-families.js";
+import { EFFECT_FAMILIES, normalizeEffectParameters } from "./effect-families.js";
+import { DICE_FAMILIES, normalizeDiceParameters } from "./dice-families.js";
+import { normalizeRestrictionParameters, RESTRICTION_FAMILIES } from "./restriction-families.js";
+import { normalizeTargetingParameters, TARGETING_FAMILIES } from "./targeting-families.js";
+import { MOVEMENT_FAMILIES, normalizeMovementParameters } from "./movement-families.js";
+import { ECONOMY_FAMILIES, normalizeEconomyParameters } from "./economy-families.js";
+import { normalizePsychicParameters, PSYCHIC_FAMILIES } from "./psychic-families.js";
+import { normalizeUnitStateParameters, UNIT_STATE_EFFECT_FAMILIES } from "./unit-state-families.js";
+import { normalizeWeaponBuffParameters, WEAPON_BUFF_FAMILIES } from "./weapon-buff-families.js";
+import { normalizeWeaponRangeParameters, WEAPON_RANGE_FAMILIES } from "./families/weapons.js";
+import { ABILITY_MODIFIER_FAMILIES, normalizeAbilityModifierParameters } from "./ability-modifier-families.js";
+import { CONTAINER_FAMILIES, normalizeContainerParameters } from "./container-families.js";
+import { NAMED_REGION_FAMILIES, normalizeNamedRegionParameters } from "./named-region-family.js";
+import { COUNTS_AS_MOVED_FAMILIES, normalizeCountsAsMovedParameters } from "./families/moves.js";
+import { MOVE_PASSTHROUGH_USED_FAMILIES, normalizeMovePassthroughUsedParameters } from "./families/moves.js";
+import { normalizePredicateParameters, PREDICATE_FAMILIES } from "./predicate-families.js";
+import { normalizePredicateParameters2, PREDICATE_FAMILIES_2 } from "./predicate-families-2.js";
+import { normalizeSetUpRestrictionParameters, SET_UP_RESTRICTION_FAMILIES } from "./families/set-up.js";
+import { normalizeOptionalCostParameters, OPTIONAL_COST_FAMILIES } from "./optional-cost-families.js";
+import { normalizePredicateSubjectParameters, PREDICATE_SUBJECT_FAMILIES } from "./predicate-subject-families.js";
+import { normalizeTestParameters, TEST_FAMILIES } from "./test-family.js";
+import { normalizeTargetedParameters, TARGETED_FAMILIES } from "./targeted-family.js";
+import { normalizeGapContainerParameters, GAP_CONTAINER_FAMILIES } from "./gap-container-families.js";
+import { MISSION_PREDICATE_FAMILIES, normalizeMissionPredicateParameters } from "./mission-predicate-families.js";
+import { ENGAGEMENT_RELATION_FAMILIES } from "./families/regions.js";
+import { CONDITION_EXCLUSION_FAMILIES } from "./families/leaf-structure.js";
+import { OTHERWISE_FAMILIES, normalizeOtherwiseParameters } from "./families/leaf-structure.js";
+import { normalizeRollProhibitionParameters, ROLL_PROHIBITION_FAMILIES } from "./families/rolls.js";
+import { normalizeWeaponHasAbilityParameters, WEAPON_HAS_ABILITY_FAMILIES } from "./weapon-has-ability-family.js";
+import { ARMY_INCLUDES_FAMILIES, normalizeArmyIncludesParameters } from "./army-includes-family.js";
+import { HISTORY_WINDOW_FAMILIES, normalizeHistoryWindowParameters } from "./history-window-family.js";
+import { AURA_RANGE_V3, normalizeUnitFilterParameters, SELECT_UNIT_V2, UNIT_FILTER_FAMILIES } from "./unit-filter-family.js";
+import { COUNT_FAMILIES, normalizeCountParameters } from "./count-families.js";
+import { CHARACTERISTIC_AMOUNT_FAMILIES, normalizeCharacteristicAmountParameters } from "./characteristic-amount-families.js";
+import { DISCONTIGUOUS_LEAF_FAMILIES, normalizeDiscontiguousLeafParameters } from "./families/leaf-structure.js";
+import { EQUIPPED_WEAPON_COUNT_FAMILIES, normalizeEquippedWeaponParameters } from "./equipped-weapon-families.js";
+import { NAMED_WARGEAR_LOADOUT_FAMILIES, normalizeNamedWargearParameters } from "./families/wargear.js";
+import { normalizeWithAntecedent, withAntecedentVersions } from "./antecedent-families.js";
+import { NAMED_ABILITY_FAMILIES, normalizeNamedAbilityParameters } from "./named-ability-families.js";
+import { familyExtension, withFamilyExtensions } from "./families/index.js";
+import { EMBARKED_PERMISSION_FAMILIES, normalizeEmbarkedPermissionParameters } from "./embarked-permission-families.js";
+import { GRANTED_FAMILIES, normalizeGrantedParameters } from "./families/abilities.js";
+import { NAMED_ABILITY_STATE_FAMILIES, normalizeNamedAbilityStateParameters } from "./named-ability-state-families.js";
+import { OATH_FAMILIES, normalizeOathParameters } from "./oath-families.js";
+import { ABILITY_USE_FAMILIES, normalizeAbilityUseParameters } from "./ability-use-families.js";
+import { NAMED_RANGE_FAMILIES, normalizeNamedRangeParameters } from "./named-ranges.js";
+
+export const SEMANTIC_ROLES = ["EFFECT", "DURATION", "EVENT", "CONDITION"] as const;
+export type SemanticRole = (typeof SEMANTIC_ROLES)[number];
+/** Leaf roles: the proposal roles, combinators (which join leaves), and restrictions (limits on when and by whom an ability is used). */
+export const LEAF_ROLES = [...SEMANTIC_ROLES, "COMBINATOR", "RESTRICTION"] as const;
+export type LeafRole = (typeof LEAF_ROLES)[number];
+
+type FamilyParameters = Record<string, unknown>;
+
+/** The rule kind an ability's own record carries (`abilities.source_type`). */
+export const ABILITY_KINDS = ["stratagem", "unit", "enhancement", "detachment", "faction", "core"] as const;
+export type AbilityKind = (typeof ABILITY_KINDS)[number];
+
+export type SemanticFamilyDefinition = {
+  id: string;
+  version: number;
+  role: LeafRole;
+  label: string;
+  description: string;
+  starter: Record<string, unknown>;
+  parameterSchema: Record<string, unknown>;
+  /**
+   * A superseded version. Its existing fingerprints stay readable, but no new fingerprint or
+   * model request may use it; `upgradeFamilyVersions` moves its leaves to the current version.
+   */
+  deprecated?: true;
+  /**
+   * Which ability kinds this family can legitimately label (`ABILITY_KINDS`); omitted means every
+   * kind. A Luna request built for a batch of abilities sends only the families that fit at least
+   * one ability kind in that batch (`activeRegistry`), and `importLuna` rejects an EXISTING span
+   * whose family doesn't fit its own ability's kind (recorded as unresolved with the reason) —
+   * some families genuinely mean something different, or nothing, outside their kind (a
+   * Stratagem's TARGET or WHEN has no meaning on a unit ability, and vice versa).
+   */
+  kinds?: readonly AbilityKind[];
+};
+
+/** True when a family (by its declared `kinds`, default every kind) fits an ability kind. */
+export function familyFitsKind(family: Pick<SemanticFamilyDefinition, "kinds">, kind: string): boolean {
+  return family.kinds === undefined || (family.kinds as readonly string[]).includes(kind);
+}
+
+export { PHASE_EVENT_KINDS } from "./core-families.js";
+export type * from "./stamp-types.js";
+
+/** Versioned, human-reviewed semantic families available to local tooling. */
+export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = withFamilyExtensions(withAntecedentVersions([
+  ...CORE_FAMILIES,
+  ...BUFF_FAMILIES,
+  ...TARGETING_FAMILIES,
+  ...EFFECT_FAMILIES,
+  ...RESTRICTION_FAMILIES,
+  ...DICE_FAMILIES,
+  ...MOVEMENT_FAMILIES,
+  ...ECONOMY_FAMILIES,
+  ...UNIT_STATE_EFFECT_FAMILIES,
+  ...WEAPON_BUFF_FAMILIES,
+  ...WEAPON_RANGE_FAMILIES,
+  ...ABILITY_MODIFIER_FAMILIES,
+  ...CONTAINER_FAMILIES,
+  ...NAMED_REGION_FAMILIES,
+  ...COUNTS_AS_MOVED_FAMILIES,
+  ...PREDICATE_FAMILIES,
+  ...PREDICATE_FAMILIES_2,
+  ...SET_UP_RESTRICTION_FAMILIES,
+  ...OPTIONAL_COST_FAMILIES,
+  ...PREDICATE_SUBJECT_FAMILIES,
+  ...TEST_FAMILIES,
+  ...TARGETED_FAMILIES,
+  ...GAP_CONTAINER_FAMILIES,
+  ...PSYCHIC_FAMILIES,
+  ...MISSION_PREDICATE_FAMILIES,
+  ...ENGAGEMENT_RELATION_FAMILIES,
+  ...CONDITION_EXCLUSION_FAMILIES,
+  ...OTHERWISE_FAMILIES,
+  ...ROLL_PROHIBITION_FAMILIES,
+  ...WEAPON_HAS_ABILITY_FAMILIES,
+  ...ARMY_INCLUDES_FAMILIES,
+  ...HISTORY_WINDOW_FAMILIES,
+  ...UNIT_FILTER_FAMILIES,
+  ...NAMED_ABILITY_FAMILIES,
+  ...GRANTED_FAMILIES,
+  ...NAMED_ABILITY_STATE_FAMILIES,
+  ...OATH_FAMILIES,
+  ...ABILITY_USE_FAMILIES,
+  ...COUNT_FAMILIES,
+  ...EQUIPPED_WEAPON_COUNT_FAMILIES,
+  ...CHARACTERISTIC_AMOUNT_FAMILIES,
+  ...NAMED_WARGEAR_LOADOUT_FAMILIES,
+  ...DISCONTIGUOUS_LEAF_FAMILIES,
+  AURA_RANGE_V3,
+  SELECT_UNIT_V2,
+  ...EMBARKED_PERMISSION_FAMILIES,
+  ...MOVE_PASSTHROUGH_USED_FAMILIES,
+  ...NAMED_RANGE_FAMILIES,
+]));
+
+/** The version new fingerprints and model requests use for a family. */
+export function currentFamilyVersion(id: string): number {
+  const current = REVIEWED_FAMILY_REGISTRY.filter((family) => family.id === id && !family.deprecated);
+  if (current.length !== 1) throw new RangeError(`Reviewed family ${id} has ${current.length} current versions.`);
+  return current[0]!.version;
+}
+
+const familiesByKey: Record<string, SemanticFamilyDefinition> = Object.fromEntries(
+  REVIEWED_FAMILY_REGISTRY.map((family) => [`${family.id}@${family.version}`, family]),
+);
+
+function requiredObject(parameters: FamilyParameters): Record<string, unknown> {
+  if (parameters === null || typeof parameters !== "object" || Array.isArray(parameters)) {
+    throw new TypeError("Fingerprint parameters must be a JSON object.");
+  }
+  return parameters;
+}
+
+/** Return one reviewed family definition or fail rather than inventing a family. */
+export function reviewedFamily(id: string, version = 1): SemanticFamilyDefinition {
+  const family = familiesByKey[`${id}@${version}`];
+  if (!family) throw new RangeError(`Unknown reviewed semantic family ${id}@${version}.`);
+  return family;
+}
+
+/** Resolve a family's semantic role from the reviewed registry. */
+export function familyRole(id: string, version = 1): LeafRole {
+  return reviewedFamily(id, version).role;
+}
+
+/** Validate and canonicalise parameters for a reviewed semantic family. */
+export function normalizeFingerprintParameters(
+  family: string,
+  parameters: FamilyParameters,
+  version = 1,
+): Record<string, unknown> {
+  const definition = reviewedFamily(family, version);
+  const input = requiredObject(parameters);
+  // A family extension checks its own additions and hands the rest to the previous version.
+  const extension = familyExtension(family, version);
+  if (extension) return extension.normalize(input, (rest) => normalizeFingerprintParameters(family, rest, version - 1));
+  return normalizeWithAntecedent(family, input, version, (checked, at) => familyParameters(family, checked, at), definition.parameterSchema);
+}
+
+/** Each family's own parameter rules, at one version. */
+function familyParameters(family: string, input: Record<string, unknown>, version: number): Record<string, unknown> {
+  const normalized = normalizeCoreParameters(family, input, version)
+    ?? normalizeBuffParameters(family, input, version)
+    ?? normalizeTargetingParameters(family, input, version)
+    ?? normalizeEffectParameters(family, input, version)
+    ?? normalizeRestrictionParameters(family, input, version)
+    ?? normalizeDiceParameters(family, input, version)
+    ?? normalizeMovementParameters(family, input, version)
+    ?? normalizeEconomyParameters(family, input)
+    ?? normalizePsychicParameters(family, input)
+    ?? normalizeUnitStateParameters(family, input)
+    ?? normalizeWeaponBuffParameters(family, input, version)
+    ?? normalizeWeaponRangeParameters(family, input)
+    ?? normalizeAbilityModifierParameters(family, input, version)
+    ?? normalizeContainerParameters(family, input, version)
+    ?? normalizeUnitFilterParameters(family, input)
+    ?? normalizeNamedRegionParameters(family, input, version)
+    ?? normalizePredicateParameters(family, input)
+    ?? normalizePredicateParameters2(family, input)
+    ?? normalizeSetUpRestrictionParameters(family, input)
+    ?? normalizeOptionalCostParameters(family, input)
+    ?? normalizePredicateSubjectParameters(family, input, version)
+    ?? normalizeTestParameters(family, input, version)
+    ?? normalizeTargetedParameters(family, input)
+    ?? normalizeGapContainerParameters(family, input, version)
+    ?? normalizeMissionPredicateParameters(family, input)
+    ?? normalizeNamedAbilityParameters(family, input)
+    ?? normalizeGrantedParameters(family, input)
+    ?? normalizeNamedAbilityStateParameters(family, input, version)
+    ?? normalizeOathParameters(family, input)
+    ?? normalizeAbilityUseParameters(family, input)
+    ?? normalizeCountParameters(family, input)
+    ?? normalizeCharacteristicAmountParameters(family, input)
+    ?? normalizeDiscontiguousLeafParameters(family, input)
+    ?? normalizeEquippedWeaponParameters(family, input)
+    ?? normalizeNamedWargearParameters(family, input)
+    ?? normalizeArmyIncludesParameters(family, input)
+    ?? normalizeHistoryWindowParameters(family, input)
+    ?? normalizeEmbarkedPermissionParameters(family, input)
+    ?? normalizeCountsAsMovedParameters(family, input)
+    ?? normalizeOtherwiseParameters(family, input)
+    ?? normalizeRollProhibitionParameters(family, input)
+    ?? normalizeWeaponHasAbilityParameters(family, input)
+    ?? normalizeMovePassthroughUsedParameters(family, input)
+    ?? normalizeNamedRangeParameters(family, input);
+  if (normalized) return normalized;
+  throw new RangeError(`Unknown reviewed semantic family ${family}@${version}.`);
+}
+
+/**
+ * Workbench fragment of a span over the record's name column (not source_text). Its offsets are name
+ * bytes. Body readers exclude it with `source_spans.fragment <> 'NAME'`, and ordered listings put it last.
+ */
+export const NAME_FRAGMENT = "NAME";
+
+/** Decode an exact UTF-8 byte span and reject boundaries that split a code point. */
+export function exactSpan(source: string, start: number, end: number): string {
+  if (!Number.isSafeInteger(start) || !Number.isSafeInteger(end) || start < 0 || end <= start) {
+    throw new RangeError("Source span offsets must be ordered, non-negative UTF-8 byte integers.");
+  }
+  const bytes = Buffer.from(source, "utf8");
+  if (end > bytes.length) throw new RangeError(`Source span ends at ${end}, beyond ${bytes.length} UTF-8 bytes.`);
+  const selected = bytes.subarray(start, end);
+  const text = selected.toString("utf8");
+  if (!Buffer.from(text, "utf8").equals(selected)) {
+    throw new RangeError("Source span offsets split a UTF-8 code point.");
+  }
+  return text;
+}
+
+/** Seed every registry version once and reject drift in a reviewed definition. */
+export function seedReviewedFamilies(db: DatabaseSync): void {
+  const select = db.prepare(
+    "SELECT role, parameter_schema_json, status FROM semantic_families WHERE id = ? AND version = ?",
+  );
+  const insert = db.prepare(
+    "INSERT INTO semantic_families (id, version, role, parameter_schema_json, status) VALUES (?, ?, ?, ?, ?)",
+  );
+  const deprecate = db.prepare("UPDATE semantic_families SET status = 'deprecated' WHERE id = ? AND version = ? AND status = 'active'");
+
+  {
+    for (const family of REVIEWED_FAMILY_REGISTRY) {
+      const schemaJson = JSON.stringify(family.parameterSchema);
+      const status = family.deprecated ? "deprecated" : "active";
+      const existing = select.get(family.id, family.version) as
+        | { role: string; parameter_schema_json: string; status: string }
+        | undefined;
+      if (!existing) {
+        insert.run(family.id, family.version, family.role, schemaJson, status);
+        continue;
+      }
+      if (
+        existing.role !== family.role ||
+        hashJson(JSON.parse(existing.parameter_schema_json)) !== hashJson(family.parameterSchema)
+      ) {
+        throw new Error(`Reviewed registry drift for ${family.id}@${family.version}.`);
+      }
+      // Deprecation is one-way: a version the registry retires stops accepting new leaves.
+      if (existing.status !== status) {
+        if (existing.status === "deprecated") throw new Error(`Reviewed family ${family.id}@${family.version} was deprecated and cannot return.`);
+        deprecate.run(family.id, family.version);
+      }
+    }
+  }
+}
+
+/**
+ * Source wording as a keyword comparison sees it: lower case, without the bold markers the printed
+ * text puts around part of a keyword ("ANTI-**NON-**VEHICLE"), with the typographic hyphens the
+ * printed text uses ("ANTI‑MONSTER", U+2010–U+2012, en dash, minus) and no-break spaces folded to
+ * their plain forms.
+ */
+export function foldKeywordText(text: string): string {
+  return text.replace(/\*/gu, "").replace(/[\u2010-\u2013\u2212]/gu, "-").replace(/[\u00a0\u202f]/gu, " ").toLowerCase();
+}
+
+/** Require the granted ability name in the exact source-backed effect span. */
+/**
+ * Whether a printed Blast span gives a rating other than 1. Blast takes no rating in the keyword:
+ * plain [Blast] and [Blast 1] are the keyword Blast, and any other rating has no authored form yet.
+ */
+export function blastRatingRefused(text: string): boolean {
+  return [...foldKeywordText(text).matchAll(/blast\s*(\d+)/gu)].some((match) => match[1] !== "1");
+}
+
+export function validateFamilySource(family: string, parameters: Record<string, unknown>, exactText: string): void {
+  const keywordFamily = family === "weapon-ability-grant" || family === "weapon-ability-keyword" || family === "weapon-ability-removal";
+  if (keywordFamily && parameters.keyword !== undefined
+    && !foldKeywordText(exactText).includes(foldKeywordText(String(parameters.keyword)))) {
+    throw new TypeError("The granted weapon ability must occur in the exact source span.");
+  }
+  if (keywordFamily && parameters.keyword === "Blast" && blastRatingRefused(exactText)) {
+    throw new TypeError("Blast with a rating other than 1 has no authored keyword; it is a gap.");
+  }
+}
+
+/**
+ * Where a source-qualified fingerprint value is allowed to come from, beyond a literal quote
+ * inside the leaf's own span. A pronoun ("that unit", "it") legitimately points outside its span:
+ * `wholeSourceText` allows a quote found anywhere in the ability's own source (still real source
+ * text, just not this leaf's own words), and `bindingSurfaces` allows a reference to another span
+ * in the same response via the contract's `binding` structural span — a true cross-reference, not
+ * a quote, which compiles to the DSL's selection_var/event_var refs rather than a literal.
+ */
+export type FingerprintSourceContext = {
+  wholeSourceText?: string;
+  bindingSurfaces?: ReadonlySet<string>;
+};
+
+/**
+ * Insert or return the canonical fingerprint for one reviewed family version.
+ *
+ * Legacy IDs remain separate historical evidence; callers map them through
+ * `legacy_fingerprint_id` instead of reproducing their old hash recipe.
+ */
+export function validateFingerprint(
+  db: DatabaseSync,
+  family: string,
+  parameters: Record<string, unknown>,
+  version = 1,
+  exactText?: string,
+  sourceContext?: FingerprintSourceContext,
+): string {
+  const definition = reviewedFamily(family, version);
+  const normalized = normalizeFingerprintParameters(family, parameters, version);
+  if (exactText !== undefined && (!exactText || exactText !== exactText.trim())) {
+    throw new TypeError("Fingerprint exact text must be nonblank and preserve its source boundaries.");
+  }
+  if (exactText !== undefined) {
+    for (const value of Object.values(normalized)) {
+      const source = sourceQualified(value, "Fingerprint parameter");
+      if (!source) continue;
+      const inOwnSpan = exactText.includes(source.source);
+      const inWholeSource = sourceContext?.wholeSourceText !== undefined && sourceContext.wholeSourceText.includes(source.source);
+      const isBindingReference = sourceContext?.bindingSurfaces?.has(source.source) ?? false;
+      if (!inOwnSpan && !inWholeSource && !isBindingReference) {
+        throw new TypeError("A source-qualified fingerprint value must occur in the exact source span, elsewhere in the ability's source text, or a same-response binding reference.");
+      }
+    }
+  }
+  if (exactText !== undefined) validateFamilySource(family, normalized, exactText);
+
+  const familyRow = db.prepare(
+    "SELECT role, parameter_schema_json, status FROM semantic_families WHERE id = ? AND version = ?",
+  );
+  const stored = familyRow.get(family, version) as
+    | { role: string; parameter_schema_json: string; status: string }
+    | undefined;
+  if (!stored || stored.status !== "active" || stored.role !== definition.role) {
+    throw new Error(`Reviewed family ${family}@${version} is not active in this workbench.`);
+  }
+  if (hashJson(JSON.parse(stored.parameter_schema_json)) !== hashJson(definition.parameterSchema)) {
+    throw new Error(`Reviewed family ${family}@${version} does not match the local registry.`);
+  }
+
+  const canonicalHash = hashJson({ family, version, parameters: normalized });
+  const id = `fp_${canonicalHash}`;
+  const parametersJson = JSON.stringify(normalized);
+  const insert = db.prepare(
+    "INSERT OR IGNORE INTO fingerprints (id, family_id, family_version, parameters_json, canonical_hash, legacy_fingerprint_id, status) VALUES (?, ?, ?, ?, ?, NULL, 'active')",
+  );
+  const select = db.prepare("SELECT id, family_id, family_version, parameters_json FROM fingerprints WHERE canonical_hash = ?");
+  {
+    insert.run(id, family, version, parametersJson, canonicalHash);
+    const fingerprint = select.get(canonicalHash) as
+      | { id: string; family_id: string; family_version: number; parameters_json: string }
+      | undefined;
+    if (!fingerprint || fingerprint.id !== id || fingerprint.family_id !== family || fingerprint.family_version !== version) {
+      throw new Error(`Fingerprint canonical-hash conflict for ${family}@${version}.`);
+    }
+    if (hashJson(JSON.parse(fingerprint.parameters_json)) !== hashJson(normalized)) {
+      throw new Error(`Fingerprint parameter conflict for ${family}@${version}.`);
+    }
+    return fingerprint.id;
+  }
+}

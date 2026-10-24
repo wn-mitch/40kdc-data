@@ -49,14 +49,25 @@
       "sonic-lance"
     ],
     "ability_ids": [
-      "deadly-demise-2d6",
-      "revenant-jet-pack",
-      "titanic-advance",
-      "towering-wraith-construct"
+      {
+        "id": "deadly-demise",
+        "value": "2D6"
+      },
+      "revenant-jet-pack-aeldari",
+      "titanic-advance-aeldari",
+      "towering-wraith-construct-revenant-titan-aeldari",
+      {
+        "id": "damaged",
+        "value": 10
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 8
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -101,7 +112,8 @@
       "Infantry",
       "Aeldari",
       "Support Weapon",
-      "Shadow Weaver Platform"
+      "Shadow Weaver Platform",
+      "Frame"
     ],
     "faction_keywords": [
       "Asuryani"
@@ -120,13 +132,13 @@
       "shuriken-catapult"
     ],
     "ability_ids": [
-      "monofilament-snare",
-      "support-artillery",
-      "support-weapon"
+      "monofilament-snare-aeldari",
+      "support-artillery-aeldari",
+      "support-weapon-aeldari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -207,15 +219,21 @@
       "shuriken-pistol"
     ],
     "ability_ids": [
-      "aspect-shrine-token",
+      {
+        "id": "aspect-shrine-token-aeldari",
+        "wargear": "aspect-shrine-token"
+      },
       "infiltrators",
-      "mandiblasters",
-      "scouts-7",
+      "mandiblasters-aeldari",
+      {
+        "id": "scouts",
+        "value": 7
+      },
       "stealth"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -292,13 +310,13 @@
       "the-staff-of-ulthamar-and-witchblade"
     ],
     "ability_ids": [
-      "diviner-of-futures",
-      "doom-psychic",
+      "diviner-of-futures-aeldari",
+      "doom-aeldari",
       "leader"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -370,13 +388,16 @@
       "wraithbone-fists"
     ],
     "ability_ids": [
-      "deadly-demise-1",
-      "fated-hero",
-      "psychic-guidance"
+      {
+        "id": "deadly-demise",
+        "value": 1
+      },
+      "fated-hero-aeldari",
+      "psychic-guidance-wraithlord-aeldari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -432,7 +453,8 @@
       "Transport",
       "Dedicated Transport",
       "Fly",
-      "Wave Serpent"
+      "Wave Serpent",
+      "Frame"
     ],
     "faction_keywords": [
       "Asuryani"
@@ -459,8 +481,15 @@
       "wraithbone-hull"
     ],
     "ability_ids": [
-      "deadly-demise-d3",
-      "wave-serpent-shield"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "wave-serpent-shield-aeldari",
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "transport_capacity": {
       "capacity": 12,
@@ -470,7 +499,7 @@
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -509,7 +538,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 100
+        "cost": 90
       }
     ],
     "keywords": [
@@ -537,14 +566,14 @@
       "storm-of-whispers"
     ],
     "ability_ids": [
-      "herald-of-ynnead",
+      "herald-of-ynnead-aeldari",
       "leader",
-      "servant-of-the-whispering-god",
-      "word-of-the-phoenix-psychic"
+      "servant-of-the-whispering-god-yvraine-aeldari",
+      "word-of-the-phoenix-aeldari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -636,18 +665,31 @@
       "shuriken-pistol",
       "shuriken-rifle",
       "witch-staff",
-      "wraithcannon"
+      "wraithcannon",
+      "close-combat-weapon"
     ],
     "ability_ids": [
-      "channeller-stones",
-      "faolchu",
-      "mistshield",
-      "piratical-raiders",
-      "scouts-7"
+      {
+        "id": "channeller-stones-aeldari",
+        "wargear": "channeller-stones"
+      },
+      {
+        "id": "faolchu-aeldari",
+        "wargear": "faolchu"
+      },
+      {
+        "id": "mistshield-aeldari",
+        "wargear": "mistshield"
+      },
+      "piratical-raiders-aeldari",
+      {
+        "id": "scouts",
+        "value": 7
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -717,7 +759,8 @@
       "Vehicle",
       "Aeldari",
       "Fly",
-      "Fire Prism"
+      "Fire Prism",
+      "Frame"
     ],
     "faction_keywords": [
       "Asuryani"
@@ -740,12 +783,19 @@
       "wraithbone-hull"
     ],
     "ability_ids": [
-      "crystal-matrix",
-      "deadly-demise-d3"
+      "crystal-matrix-aeldari",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -784,7 +834,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 75
+        "cost": 70
       }
     ],
     "keywords": [
@@ -816,14 +866,14 @@
       "star-glaive"
     ],
     "ability_ids": [
-      "aspect-training",
+      "aspect-training-aeldari",
       "leader",
-      "path-of-command",
-      "superlative-strategist"
+      "path-of-command-aeldari",
+      "superlative-strategist-aeldari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -900,7 +950,8 @@
     "keywords": [
       "Infantry",
       "Aeldari",
-      "Incubi"
+      "Incubi",
+      "Ynnari Incubi"
     ],
     "faction_keywords": [
       "Ynnari"
@@ -918,11 +969,11 @@
       "klaive"
     ],
     "ability_ids": [
-      "tormentors"
+      "tormentors-aeldari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -970,7 +1021,7 @@
     "points": [
       {
         "models": 5,
-        "cost": 120,
+        "cost": 110,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
@@ -983,7 +1034,7 @@
       },
       {
         "models": 5,
-        "cost": 130,
+        "cost": 120,
         "unit_count_min": 3,
         "unit_count_max": null
       },
@@ -1023,12 +1074,15 @@
       "firepike"
     ],
     "ability_ids": [
-      "aspect-shrine-token",
-      "assured-destruction"
+      {
+        "id": "aspect-shrine-token-aeldari",
+        "wargear": "aspect-shrine-token"
+      },
+      "assured-destruction-aeldari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1105,13 +1159,13 @@
       "sword-of-asur"
     ],
     "ability_ids": [
-      "hand-of-asuryan",
+      "hand-of-asuryan-aeldari",
       "leader",
-      "tactical-acumen"
+      "tactical-acumen-aeldari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1191,13 +1245,16 @@
       "shuriken-pistol"
     ],
     "ability_ids": [
-      "crewed-platform",
-      "serpent-shield",
-      "stormblades"
+      "crewed-platform-storm-guardians-aeldari",
+      {
+        "id": "serpent-shield-aeldari",
+        "wargear": "serpent-shield"
+      },
+      "stormblades-aeldari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1260,12 +1317,12 @@
         "models": 1,
         "cost": 110,
         "unit_count_min": 1,
-        "unit_count_max": 1
+        "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 125,
-        "unit_count_min": 2,
+        "cost": 130,
+        "unit_count_min": 3,
         "unit_count_max": null
       }
     ],
@@ -1273,7 +1330,8 @@
       "Infantry",
       "Aeldari",
       "Support Weapon",
-      "D-cannon Platform"
+      "D-cannon Platform",
+      "Frame"
     ],
     "faction_keywords": [
       "Asuryani"
@@ -1292,11 +1350,13 @@
       "shuriken-catapult"
     ],
     "ability_ids": [
-      "structural-collapse"
+      "structural-collapse-aeldari",
+      "support-artillery-aeldari",
+      "support-weapon-aeldari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1348,7 +1408,8 @@
       "Fly",
       "Psyker",
       "Warlocks",
-      "Warlock Skyrunner Conclave"
+      "Warlock Skyrunner Conclave",
+      "Warlock Skyrunners"
     ],
     "faction_keywords": [
       "Asuryani"
@@ -1370,12 +1431,13 @@
       "witchblade"
     ],
     "ability_ids": [
-      "psychic-communion-psychic",
-      "runes-of-battle-psychic"
+      "psychic-communion-aeldari",
+      "runes-of-battle-aeldari",
+      "support"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1447,13 +1509,13 @@
     ],
     "ability_ids": [
       "deep-strike",
-      "empyric-ambush",
+      "empyric-ambush-aeldari",
       "leader",
-      "whispering-web"
+      "whispering-web-aeldari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1493,7 +1555,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 70
+        "cost": 65
       }
     ],
     "keywords": [
@@ -1518,15 +1580,18 @@
       "shrieker-cannon"
     ],
     "ability_ids": [
-      "cruel-amusement",
-      "death-is-not-enough",
-      "flip-belt",
+      "cruel-amusement-aeldari",
+      "death-is-not-enough-aeldari",
+      {
+        "id": "flip-belt-aeldari",
+        "wargear": "flip-belt"
+      },
       "lone-operative",
-      "travelling-players"
+      "travelling-players-aeldari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1594,13 +1659,16 @@
     ],
     "ability_ids": [
       "leader",
-      "piratical-hero",
-      "prince-of-corsairs",
-      "scouts-7"
+      "piratical-hero-aeldari",
+      "prince-of-corsairs-aeldari",
+      {
+        "id": "scouts",
+        "value": 7
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1640,7 +1708,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 245
+        "cost": 230
       }
     ],
     "keywords": [
@@ -1669,15 +1737,18 @@
       "vilith-zhar"
     ],
     "ability_ids": [
-      "avatar-of-the-whispering-god",
-      "ethereal-form",
-      "inevitable-death",
+      "avatar-of-the-whispering-god-aeldari",
+      "ethereal-form-aeldari",
+      "inevitable-death-aeldari",
       "deep-strike",
-      "deadly-demise-d3"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1748,13 +1819,13 @@
       "witchblade-farseer-skyrunner"
     ],
     "ability_ids": [
-      "branching-fates-psychic",
+      "branching-fates-farseer-skyrunner-aeldari",
       "leader",
-      "misfortune-psychic"
+      "misfortune-aeldari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1794,7 +1865,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 115
+        "cost": 105
       }
     ],
     "keywords": [
@@ -1819,16 +1890,20 @@
       "solitaire-weapons"
     ],
     "ability_ids": [
-      "blitz",
-      "blur-of-movement",
+      "blitz-aeldari",
+      "blur-of-movement-aeldari",
       "fights-first",
-      "path-of-damnation",
+      "path-of-damnation-aeldari",
       "stealth",
-      "lone-operative"
+      "lone-operative",
+      {
+        "id": "flip-belt-aeldari",
+        "wargear": "flip-belt"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1894,13 +1969,13 @@
       "maugetar"
     ],
     "ability_ids": [
-      "face-of-death",
-      "harvester-of-souls",
+      "face-of-death-aeldari",
+      "harvester-of-souls-aeldari",
       "leader"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1979,13 +2054,16 @@
       "shuriken-pistol"
     ],
     "ability_ids": [
-      "raid-and-run",
+      "raid-and-run-aeldari",
       "deep-strike",
-      "scouts-7"
+      {
+        "id": "scouts",
+        "value": 7
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2079,11 +2157,12 @@
       "starcannon-guardian-defenders"
     ],
     "ability_ids": [
-      "fleet-of-foot"
+      "fleet-of-foot-aeldari",
+      "crewed-platform-aeldari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2154,12 +2233,25 @@
       "wraith-glaive"
     ],
     "ability_ids": [
-      "deadly-demise-d6-6",
-      "flawless-poise"
+      {
+        "id": "deadly-demise",
+        "value": "D6+6"
+      },
+      "flawless-poise-aeldari",
+      {
+        "id": "damaged",
+        "value": 16
+      },
+      "titanic-advance-aeldari",
+      "towering-wraith-construct-aeldari",
+      {
+        "id": "damaged-objective-control",
+        "value": 10
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2224,13 +2316,20 @@
       "the-wailing-doom"
     ],
     "ability_ids": [
-      "molten-form",
-      "the-bloody-handed-aura",
-      "deadly-demise-d3"
+      "molten-form-aeldari",
+      "the-bloody-handed-aeldari",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2301,12 +2400,15 @@
       "war-walker-feet"
     ],
     "ability_ids": [
-      "crystalline-targeting",
-      "scouts-9"
+      "crystalline-targeting-aeldari",
+      {
+        "id": "scouts",
+        "value": 9
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2345,7 +2447,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 85
+        "cost": 80
       }
     ],
     "keywords": [
@@ -2373,14 +2475,17 @@
       "waystave"
     ],
     "ability_ids": [
-      "aethersense-psychic",
-      "fury-of-the-void-psychic",
+      "aethersense-aeldari",
+      "fury-of-the-void-aeldari",
       "leader",
-      "scouts-7"
+      {
+        "id": "scouts",
+        "value": 7
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2448,11 +2553,15 @@
       "wraithbone-hull"
     ],
     "ability_ids": [
-      "mindshock-pod-aura-psychic"
+      "mindshock-pod-aeldari",
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2531,14 +2640,28 @@
       "titanic-feet"
     ],
     "ability_ids": [
-      "deadly-demise-d6",
-      "point-blank-devastation",
-      "scattershield",
-      "titanic-strides"
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "point-blank-devastation-aeldari",
+      {
+        "id": "scattershield-aeldari",
+        "wargear": "scattershield"
+      },
+      "titanic-strides-aeldari",
+      {
+        "id": "damaged",
+        "value": 6
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2594,7 +2717,8 @@
       "Mounted",
       "Fly",
       "Aeldari",
-      "Reavers"
+      "Reavers",
+      "Ynnari Reavers"
     ],
     "faction_keywords": [
       "Ynnari"
@@ -2617,13 +2741,19 @@
       "splinter-rifle"
     ],
     "ability_ids": [
-      "cluster-caltrops",
-      "eviscerating-fly-by",
-      "grav-talon"
+      {
+        "id": "cluster-caltrops-aeldari",
+        "wargear": "cluster-caltrops"
+      },
+      "eviscerating-fly-by-aeldari",
+      {
+        "id": "grav-talon-aeldari",
+        "wargear": "grav-talon"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2744,13 +2874,16 @@
       "sunpistol"
     ],
     "ability_ids": [
-      "aspect-shrine-token",
-      "grenade-pack-flyover",
+      {
+        "id": "aspect-shrine-token-aeldari",
+        "wargear": "aspect-shrine-token"
+      },
+      "grenade-pack-flyover-aeldari",
       "deep-strike"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2823,11 +2956,12 @@
       "wraithcannon-wraithguard"
     ],
     "ability_ids": [
-      "war-construct"
+      "war-construct-aeldari",
+      "psychic-guidance-aeldari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2905,13 +3039,13 @@
       "the-fire-axe"
     ],
     "ability_ids": [
-      "burning-lance",
+      "burning-lance-aeldari",
       "leader",
-      "unquenchable-resolve"
+      "unquenchable-resolve-aeldari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2958,7 +3092,8 @@
       "Infantry",
       "Character",
       "Aeldari",
-      "Succubus"
+      "Succubus",
+      "Ynnari Succubus"
     ],
     "faction_keywords": [
       "Ynnari"
@@ -2977,13 +3112,13 @@
       "succubus-weapons"
     ],
     "ability_ids": [
-      "empowered-by-death",
+      "empowered-by-death-aeldari",
       "leader",
-      "storm-of-blades"
+      "storm-of-blades-aeldari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3069,12 +3204,15 @@
       "twin-shuriken-catapult"
     ],
     "ability_ids": [
-      "extreme-mobility",
-      "shimmershield"
+      "extreme-mobility-aeldari",
+      {
+        "id": "shimmershield-aeldari",
+        "wargear": "shimmershield"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3138,13 +3276,14 @@
       "asu-var"
     ],
     "ability_ids": [
-      "leader",
-      "way-of-the-blade",
-      "yvraine-s-champion"
+      "way-of-the-blade-aeldari",
+      "yvraines-champion-aeldari",
+      "servant-of-the-whispering-god-aeldari",
+      "support"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3223,12 +3362,19 @@
       "wraithcannon"
     ],
     "ability_ids": [
-      "reavers-of-the-void",
-      "scouts-7"
+      "reavers-of-the-void-aeldari",
+      {
+        "id": "scouts",
+        "value": 7
+      },
+      {
+        "id": "mistshield-aeldari",
+        "wargear": "mistshield"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3291,7 +3437,8 @@
       "Infantry",
       "Aeldari",
       "Support Weapon",
-      "Vibro Cannon Platform"
+      "Vibro Cannon Platform",
+      "Frame"
     ],
     "faction_keywords": [
       "Asuryani"
@@ -3310,11 +3457,13 @@
       "vibro-cannon"
     ],
     "ability_ids": [
-      "sonic-destruction"
+      "sonic-destruction-aeldari",
+      "support-artillery-aeldari",
+      "support-weapon-aeldari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3381,14 +3530,19 @@
       "shuriken-pistol-shadowseer"
     ],
     "ability_ids": [
-      "fog-of-dreams-psychic",
+      "fog-of-dreams-aeldari",
       "leader",
-      "treacherous-illusion-psychic",
-      "stealth"
+      "treacherous-illusion-aeldari",
+      "stealth",
+      {
+        "id": "flip-belt-aeldari",
+        "wargear": "flip-belt"
+      },
+      "travelling-players-aeldari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3457,13 +3611,13 @@
     ],
     "ability_ids": [
       "leader",
-      "storm-of-silence",
-      "whirling-death",
+      "storm-of-silence-aeldari",
+      "whirling-death-aeldari",
       "fights-first"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3566,13 +3720,16 @@
       "spinneret-rifle"
     ],
     "ability_ids": [
-      "aspect-shrine-token",
-      "flickerjump",
+      {
+        "id": "aspect-shrine-token-aeldari",
+        "wargear": "aspect-shrine-token"
+      },
+      "flickerjump-aeldari",
       "deep-strike"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3662,12 +3819,15 @@
       "tempest-launcher"
     ],
     "ability_ids": [
-      "aspect-shrine-token",
-      "inescapable-accuracy"
+      {
+        "id": "aspect-shrine-token-aeldari",
+        "wargear": "aspect-shrine-token"
+      },
+      "inescapable-accuracy-aeldari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3722,7 +3882,8 @@
       "Infantry",
       "Battleline",
       "Aeldari",
-      "Kabalite Warriors"
+      "Kabalite Warriors",
+      "Ynnari Kabalite Warriors"
     ],
     "faction_keywords": [
       "Ynnari"
@@ -3747,12 +3908,15 @@
       "sybarite-weapon"
     ],
     "ability_ids": [
-      "phantasm-grenade-launcher",
-      "sadistic-raiders"
+      {
+        "id": "phantasm-grenade-launcher-aeldari",
+        "wargear": "phantasm-grenade-launcher"
+      },
+      "sadistic-raiders-aeldari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3827,7 +3991,8 @@
       "Vehicle",
       "Aeldari",
       "Fly",
-      "Voidweaver"
+      "Voidweaver",
+      "Frame"
     ],
     "faction_keywords": [
       "Harlequins"
@@ -3850,13 +4015,16 @@
       "voidweaver-haywire-cannon"
     ],
     "ability_ids": [
-      "polychromatic-camouflage",
+      "polychromatic-camouflage-aeldari",
       "stealth",
-      "deadly-demise-1"
+      {
+        "id": "deadly-demise",
+        "value": 1
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3900,7 +4068,7 @@
       {
         "models": 4,
         "models_max": 6,
-        "cost": 175
+        "cost": 165
       }
     ],
     "keywords": [
@@ -3930,13 +4098,16 @@
       "shuriken-pistol-shroud-runners"
     ],
     "ability_ids": [
-      "target-acquisition",
+      "target-acquisition-aeldari",
       "stealth",
-      "scouts-9"
+      {
+        "id": "scouts",
+        "value": 9
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -4003,12 +4174,13 @@
       "witchblade"
     ],
     "ability_ids": [
-      "leader",
-      "runes-of-fortune-psychic"
+      "runes-of-fortune-aeldari",
+      "psychic-communion-warlock-aeldari",
+      "support"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -4087,12 +4259,27 @@
       "titanic-ghostglaive"
     ],
     "ability_ids": [
-      "titanic-agility",
-      "deadly-demise-d6"
+      "titanic-agility-aeldari",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      {
+        "id": "damaged",
+        "value": 6
+      },
+      {
+        "id": "scattershield-aeldari",
+        "wargear": "scattershield"
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -4139,7 +4326,8 @@
       "Battleline",
       "Aeldari",
       "Grenades",
-      "Wyches"
+      "Wyches",
+      "Ynnari Wyches"
     ],
     "faction_keywords": [
       "Ynnari"
@@ -4158,11 +4346,11 @@
       "splinter-pistol"
     ],
     "ability_ids": [
-      "no-escape"
+      "no-escape-aeldari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -4206,7 +4394,7 @@
       {
         "models": 3,
         "models_max": 4,
-        "cost": 120
+        "cost": 110
       }
     ],
     "keywords": [
@@ -4234,11 +4422,13 @@
       "witchblade"
     ],
     "ability_ids": [
-      "protect-psychic"
+      "protect-aeldari",
+      "psychic-communion-aeldari",
+      "support"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -4278,7 +4468,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 65
+        "cost": 60
       }
     ],
     "keywords": [
@@ -4306,12 +4496,13 @@
       "witchblade-farseer"
     ],
     "ability_ids": [
-      "guide-psychic",
-      "leader"
+      "guide-aeldari",
+      "leader",
+      "branching-fates-aeldari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -4350,14 +4541,14 @@
     "points": [
       {
         "models": 1,
-        "cost": 170,
+        "cost": 165,
         "unit_count_min": 1,
-        "unit_count_max": 1
+        "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 190,
-        "unit_count_min": 2,
+        "cost": 195,
+        "unit_count_min": 3,
         "unit_count_max": null
       }
     ],
@@ -4365,7 +4556,8 @@
       "Vehicle",
       "Aeldari",
       "Fly",
-      "Night Spinner"
+      "Night Spinner",
+      "Frame"
     ],
     "faction_keywords": [
       "Asuryani"
@@ -4388,12 +4580,19 @@
       "wraithbone-hull"
     ],
     "ability_ids": [
-      "monofilament-web",
-      "deadly-demise-d3"
+      "monofilament-web-aeldari",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -4466,13 +4665,14 @@
       "star-glaive"
     ],
     "ability_ids": [
-      "indomitable-strength-of-will",
+      "indomitable-strength-of-will-aeldari",
       "leader",
-      "deep-strike"
+      "deep-strike",
+      "path-of-command-aeldari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -4555,12 +4755,19 @@
       "shuriken-pistol"
     ],
     "ability_ids": [
-      "aspect-shrine-token",
-      "bladestorm"
+      {
+        "id": "aspect-shrine-token-aeldari",
+        "wargear": "aspect-shrine-token"
+      },
+      "bladestorm-aeldari",
+      {
+        "id": "shimmershield-aeldari",
+        "wargear": "shimmershield"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -4650,13 +4857,16 @@
       "triskele"
     ],
     "ability_ids": [
-      "acrobatic",
-      "aspect-shrine-token",
+      "acrobatic-aeldari",
+      {
+        "id": "aspect-shrine-token-aeldari",
+        "wargear": "aspect-shrine-token"
+      },
       "fights-first"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -4711,7 +4921,8 @@
       "Aeldari",
       "Transport",
       "Fly",
-      "Falcon"
+      "Falcon",
+      "Frame"
     ],
     "faction_keywords": [
       "Asuryani"
@@ -4738,9 +4949,16 @@
       "wraithbone-hull"
     ],
     "ability_ids": [
-      "fire-support",
+      "fire-support-aeldari",
       "deep-strike",
-      "deadly-demise-d3"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "transport_capacity": {
       "capacity": 6,
@@ -4750,7 +4968,7 @@
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -4821,11 +5039,11 @@
       "twin-shuriken-catapult"
     ],
     "ability_ids": [
-      "swift-demise"
+      "swift-demise-aeldari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -4899,13 +5117,18 @@
       "troupe-masters-blade"
     ],
     "ability_ids": [
-      "cegorach-s-favour",
-      "choreographer-of-war",
-      "leader"
+      "cegorachs-favour-aeldari",
+      "choreographer-of-war-aeldari",
+      "leader",
+      {
+        "id": "flip-belt-aeldari",
+        "wargear": "flip-belt"
+      },
+      "travelling-players-aeldari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -4975,13 +5198,13 @@
       "shuriken-pistol-rangers"
     ],
     "ability_ids": [
-      "path-of-the-outcast",
+      "path-of-the-outcast-aeldari",
       "stealth",
       "infiltrators"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -5049,11 +5272,15 @@
       "wraithbone-hull"
     ],
     "ability_ids": [
-      "skyhunter"
+      "skyhunter-aeldari",
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -5109,7 +5336,9 @@
       "Transport",
       "Dedicated Transport",
       "Fly",
-      "Raider"
+      "Raider",
+      "Frame",
+      "Ynnari Raider"
     ],
     "faction_keywords": [
       "Ynnari"
@@ -5131,17 +5360,23 @@
       "disintegrator-cannon"
     ],
     "ability_ids": [
-      "aethersails",
-      "firing-deck-11",
+      "aethersails-aeldari",
+      {
+        "id": "firing-deck",
+        "value": 11
+      },
       "deep-strike",
-      "deadly-demise-d3"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "transport_capacity": {
       "capacity": 11
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -5193,7 +5428,8 @@
       "Fly",
       "Smoke",
       "Grenades",
-      "Starfang"
+      "Starfang",
+      "Starfangs"
     ],
     "faction_keywords": [
       "Asuryani"
@@ -5213,13 +5449,19 @@
       "wraithbone-hull"
     ],
     "ability_ids": [
-      "hallucinogen-grenades",
-      "deadly-demise-1",
-      "scouts-7"
+      "hallucinogen-grenades-aeldari",
+      {
+        "id": "deadly-demise",
+        "value": 1
+      },
+      {
+        "id": "scouts",
+        "value": 7
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -5257,12 +5499,12 @@
     "points": [
       {
         "models": 2,
-        "cost": 95
+        "cost": 90
       },
       {
         "models": 3,
         "models_max": 4,
-        "cost": 190
+        "cost": 180
       }
     ],
     "keywords": [
@@ -5294,11 +5536,11 @@
       "zephyrglaive"
     ],
     "ability_ids": [
-      "acrobatic-grace"
+      "acrobatic-grace-aeldari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -5344,7 +5586,8 @@
       "Infantry",
       "Character",
       "Aeldari",
-      "Archon"
+      "Archon",
+      "Ynnari Archon"
     ],
     "faction_keywords": [
       "Ynnari"
@@ -5364,13 +5607,16 @@
     ],
     "ability_ids": [
       "leader",
-      "overlord",
-      "reborn-mastermind",
-      "shadow-field"
+      "overlord-aeldari",
+      "reborn-mastermind-aeldari",
+      {
+        "id": "shadow-field-aeldari",
+        "wargear": "shadow-field"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -5441,14 +5687,14 @@
       "shining-blade"
     ],
     "ability_ids": [
-      "cloudstrider",
-      "cry-of-the-wind",
+      "cloudstrider-aeldari",
+      "cry-of-the-wind-aeldari",
       "leader",
       "deep-strike"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -5512,12 +5758,16 @@
       "ghostswords"
     ],
     "ability_ids": [
-      "forceshield",
-      "malevolent-souls"
+      {
+        "id": "forceshield-aeldari",
+        "wargear": "forceshield"
+      },
+      "malevolent-souls-aeldari",
+      "psychic-guidance-aeldari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -5603,11 +5853,15 @@
       "shuriken-pistol"
     ],
     "ability_ids": [
-      "dance-of-death"
+      "dance-of-death-aeldari",
+      {
+        "id": "flip-belt-aeldari",
+        "wargear": "flip-belt"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -5689,7 +5943,9 @@
       "Transport",
       "Dedicated Transport",
       "Fly",
-      "Venom"
+      "Venom",
+      "Frame",
+      "Ynnari Venom"
     ],
     "faction_keywords": [
       "Ynnari"
@@ -5711,18 +5967,24 @@
       "twin-splinter-rifle"
     ],
     "ability_ids": [
-      "firing-deck-6",
-      "lithe-embarkation",
+      {
+        "id": "firing-deck",
+        "value": 6
+      },
+      "lithe-embarkation-aeldari",
       "deep-strike",
       "stealth",
-      "deadly-demise-1"
+      {
+        "id": "deadly-demise",
+        "value": 1
+      }
     ],
     "transport_capacity": {
       "capacity": 6
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -5771,7 +6033,8 @@
       "Vehicle",
       "Aeldari",
       "Fly",
-      "Vypers"
+      "Vypers",
+      "Vyper"
     ],
     "faction_keywords": [
       "Asuryani"
@@ -5794,11 +6057,15 @@
       "wraithbone-hull"
     ],
     "ability_ids": [
-      "harassment-fire"
+      "harassment-fire-aeldari",
+      {
+        "id": "deadly-demise",
+        "value": 1
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -5863,14 +6130,14 @@
       "witch-staff"
     ],
     "ability_ids": [
-      "spirit-mark",
-      "spiritseer",
-      "tears-of-isha-psychic",
+      "spirit-mark-aeldari",
+      "spiritseer-aeldari",
+      "tears-of-isha-aeldari",
       "stealth"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -5927,7 +6194,8 @@
       "Dedicated Transport",
       "Smoke",
       "Fly",
-      "Starweaver"
+      "Starweaver",
+      "Frame"
     ],
     "faction_keywords": [
       "Harlequins"
@@ -5948,16 +6216,22 @@
       "shuriken-cannon-starweaver"
     ],
     "ability_ids": [
-      "rapid-embarkation",
-      "deadly-demise-1",
-      "firing-deck-6"
+      "rapid-embarkation-aeldari",
+      {
+        "id": "deadly-demise",
+        "value": 1
+      },
+      {
+        "id": "firing-deck",
+        "value": 6
+      }
     ],
     "transport_capacity": {
       "capacity": 6
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -6012,7 +6286,8 @@
       "Aeldari",
       "Aspect Warriors",
       "Infantry",
-      "Kygharil's Protectors"
+      "Kygharil's Protectors",
+      "Kygharil's Protectors Dire Avengers"
     ],
     "faction_keywords": [
       "Asuryani"
@@ -6027,11 +6302,13 @@
       "weapon-strike"
     ],
     "ability_ids": [
-      "battle-focus"
+      "aspect-shrine-token-kygharils-protectors-dire-avengers-aeldari",
+      "bladestorm-kygharils-protectors-dire-avengers-aeldari",
+      "shimmershield-kygharils-protectors-dire-avengers-aeldari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -6087,7 +6364,8 @@
       "Fly",
       "Infantry",
       "Jump Pack",
-      "Kygharil's Protectors"
+      "Kygharil's Protectors",
+      "Kygharil's Protectors Warp Spiders"
     ],
     "faction_keywords": [
       "Asuryani"
@@ -6103,11 +6381,12 @@
       "weapon-strike"
     ],
     "ability_ids": [
-      "battle-focus"
+      "aspect-shrine-token-kygharils-protectors-dire-avengers-aeldari",
+      "engulfing-flames-aeldari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -6151,7 +6430,8 @@
       "Aeldari",
       "Infantry",
       "Kygharil's Protectors",
-      "Wraith Construct"
+      "Wraith Construct",
+      "Kygharil's Protectors Wraithblades"
     ],
     "faction_keywords": [
       "Asuryani"
@@ -6164,11 +6444,13 @@
       "ghostaxe"
     ],
     "ability_ids": [
-      "battle-focus"
+      "forceshield-kygharils-protectors-wraithblades-aeldari",
+      "malevolent-souls-kygharils-protectors-wraithblades-aeldari",
+      "psychic-guidance-kygharils-protectors-wraithblades-aeldari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -6215,7 +6497,8 @@
       "Infantry",
       "Kygharil's Protectors",
       "Psyker",
-      "Spiritseer"
+      "Spiritseer",
+      "Spiritseer Kygharil"
     ],
     "faction_keywords": [
       "Asuryani"
@@ -6225,15 +6508,17 @@
       "max": 1
     },
     "weapon_ids": [
-      "shuriken-pistol-spiritseer",
-      "witch-staff"
+      "witch-staff",
+      "shuriken-pistol"
     ],
     "ability_ids": [
-      "battle-focus"
+      "spirit-mark-psychic-aeldari",
+      "spiritseer-spiritseer-kygharil-aeldari",
+      "tears-of-isha-spiritseer-kygharil-aeldari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -6279,7 +6564,8 @@
       "Character",
       "Exodite",
       "Mobile",
-      "Mounted"
+      "Mounted",
+      "Clanblade"
     ],
     "faction_keywords": [
       "Asuryani"
@@ -6294,12 +6580,14 @@
       "solar-carbine"
     ],
     "ability_ids": [
-      "battle-focus",
-      "leader"
+      "battle-focus-aeldari",
+      "leader",
+      "blade-of-the-clans-aeldari",
+      "cornered-prey-aeldari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -6348,19 +6636,37 @@
     "points": [
       {
         "models": 3,
-        "cost": 90
+        "cost": 85,
+        "unit_count_min": 1,
+        "unit_count_max": 2
       },
       {
         "models": 4,
         "models_max": 6,
-        "cost": 180
+        "cost": 180,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 3,
+        "cost": 95,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      },
+      {
+        "models": 4,
+        "models_max": 6,
+        "cost": 190,
+        "unit_count_min": 3,
+        "unit_count_max": null
       }
     ],
     "keywords": [
       "Aeldari",
       "Exodite",
       "Mobile",
-      "Mounted"
+      "Mounted",
+      "Dragon Knights"
     ],
     "faction_keywords": [
       "Asuryani"
@@ -6375,11 +6681,17 @@
       "solar-carbine"
     ],
     "ability_ids": [
-      "battle-focus"
+      "battle-focus-aeldari",
+      "agile-reach-aeldari",
+      {
+        "id": "drakolithe-aeldari",
+        "wargear": "drakolithe-once-per-battle-per-token"
+      },
+      "on-the-hunt-aeldari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -6388,8 +6700,8 @@
         "items": [
           "drakolithe-once-per-battle-per-token"
         ],
-        "count": 2,
-        "per_models": 3
+        "count": 4,
+        "per_models": 6
       }
     ],
     "external_refs": [
@@ -6427,7 +6739,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 80
+        "cost": 75
       }
     ],
     "keywords": [
@@ -6435,7 +6747,8 @@
       "Character",
       "Exodite",
       "Mobile",
-      "Mounted"
+      "Mounted",
+      "Leystalker"
     ],
     "faction_keywords": [
       "Asuryani"
@@ -6450,14 +6763,22 @@
       "long-rifle"
     ],
     "ability_ids": [
-      "battle-focus",
+      "battle-focus-aeldari",
       "lone-operative",
-      "scouts-9",
-      "stealth"
+      {
+        "id": "scouts",
+        "value": 9
+      },
+      "stealth",
+      {
+        "id": "drakolithe-aeldari",
+        "wargear": "drakolithe-once-per-battle-per-token"
+      },
+      "panicked-quarry-aeldari"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -6496,7 +6817,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 60
+        "cost": 55
       }
     ],
     "keywords": [
@@ -6505,7 +6826,8 @@
       "Exodite",
       "Mobile",
       "Mounted",
-      "Psyker"
+      "Psyker",
+      "Stonesinger"
     ],
     "faction_keywords": [
       "Asuryani"
@@ -6522,11 +6844,13 @@
       "venomcrest-spit"
     ],
     "ability_ids": [
-      "battle-focus"
+      "battle-focus-aeldari",
+      "elemental-ensnarement-aeldari",
+      "support"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,

@@ -1,0 +1,3 @@
+[
+  { "id": "scouts", "name": "Scouts", "required_parameters": ["value"], "effect": null, "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" } }
+]

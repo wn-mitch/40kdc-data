@@ -1,0 +1,700 @@
+package wh40kdc
+
+import (
+	"math"
+	"regexp"
+	"strconv"
+	"strings"
+)
+
+// The shared words of the effect describer: the rendering context, subject
+// phrases for effect targets, verb agreement, and the name tables for
+// characteristics, rolls, tests and pools. ASCII-only; pinned byte-for-byte
+// across the ports by conformance/effect-translation. Mirror of
+// tools/src/translate/effect-words.ts.
+
+// effCtx is the rendering context threaded down from the containers to the leaves.
+type effCtx struct {
+	// selectedUnit: inside a select-units / for-each-unit, the selected unit reads "that unit".
+	selectedUnit bool
+	// selectedModel: inside a model-level selection, the selected model reads "that model".
+	selectedModel bool
+	// unitSubject: an explicit beneficiary binding inside a designated attack ("" when unset).
+	unitSubject string
+	// auraRecipient: inside an aura, the recipient reads "that unit".
+	auraRecipient bool
+	// destroyedTrigger: the ability's trigger already says a unit or model is destroyed; leaves must not repeat it.
+	destroyedTrigger bool
+}
+
+// ejstr is JS-template stringification: null -> "?", arrays join with ", ",
+// numbers print without a trailing ".0".
+func ejstr(v any) string {
+	switch x := v.(type) {
+	case nil:
+		return "?"
+	case []any:
+		parts := make([]string, len(x))
+		for i, e := range x {
+			parts[i] = ejstr(e)
+		}
+		return strings.Join(parts, ", ")
+	case bool:
+		if x {
+			return "true"
+		}
+		return "false"
+	case string:
+		return x
+	case float64:
+		return numStr(x)
+	case map[string]any:
+		return "[object Object]"
+	}
+	return numStr(v)
+}
+
+// parseNumber mirrors TS Number()/Python float(): a JSON number, or a numeric
+// string. Returns (value, true) only when the value parses cleanly.
+func parseNumber(v any) (float64, bool) {
+	switch x := v.(type) {
+	case float64:
+		return x, true
+	case string:
+		f, err := strconv.ParseFloat(strings.TrimSpace(x), 64)
+		if err != nil {
+			return 0, false
+		}
+		return f, true
+	}
+	return 0, false
+}
+
+// mod returns an effect's `modifier` object (empty when absent).
+func mod(e map[string]any) map[string]any {
+	m, _ := getMap(e, "modifier")
+	if m == nil {
+		return map[string]any{}
+	}
+	return m
+}
+
+// jstrList maps a JSON array through ejstr (nil when v is not an array).
+func jstrList(v any) []string {
+	l, ok := asList(v)
+	if !ok {
+		return nil
+	}
+	out := make([]string, len(l))
+	for i, e := range l {
+		out[i] = ejstr(e)
+	}
+	return out
+}
+
+var titleSmall = map[string]bool{
+	"of": true, "or": true, "and": true, "the": true, "a": true, "an": true,
+	"to": true, "in": true, "on": true, "for": true, "with": true,
+}
+
+// titleCase turns a kebab-case identifier into a display name with lowercase linking words.
+func titleCase(s string) string {
+	words := strings.Split(dekebab(s), " ")
+	out := make([]string, len(words))
+	for i, w := range words {
+		if w == "" {
+			out[i] = w
+		} else if i > 0 && titleSmall[strings.ToLower(w)] {
+			out[i] = strings.ToLower(w)
+		} else {
+			out[i] = strings.ToUpper(w[:1]) + w[1:]
+		}
+	}
+	return strings.Join(out, " ")
+}
+
+// capWord capitalizes the first character and lowercases the rest (MONSTER -> Monster).
+func capWord(s string) string {
+	if s == "" {
+		return s
+	}
+	return strings.ToUpper(s[:1]) + strings.ToLower(s[1:])
+}
+
+// andList renders an Oxford-free conjunction list ("a", "a and b", "a, b and c").
+func andList(items []string) string {
+	switch len(items) {
+	case 0:
+		return ""
+	case 1:
+		return items[0]
+	case 2:
+		return items[0] + " and " + items[1]
+	}
+	return strings.Join(items[:len(items)-1], ", ") + " and " + items[len(items)-1]
+}
+
+// orList renders an Oxford-free disjunction list ("a", "a or b", "a, b or c").
+func orList(items []string) string {
+	switch len(items) {
+	case 0:
+		return ""
+	case 1:
+		return items[0]
+	case 2:
+		return items[0] + " or " + items[1]
+	}
+	return strings.Join(items[:len(items)-1], ", ") + " or " + items[len(items)-1]
+}
+
+var dRe = regexp.MustCompile(`[dD]`)
+
+// diceCase prints dice tokens with a capital D (d3 -> D3, 2d6 -> 2D6); a bound
+// or counted quantity prints its phrase.
+func diceCase(v any) string {
+	if q, ok := v.(map[string]any); ok {
+		return quantityPhrase(q)
+	}
+	return dRe.ReplaceAllString(ejstr(v), "D")
+}
+
+var antiRe = regexp.MustCompile(`(?i)^anti[\s-]+(.*)$`)
+var antiRatedRe = regexp.MustCompile(`(?i)^(.*?)[\s-]*(\d+)\s*(?:\+|plus)?$`)
+
+// bracketKeyword renders a structured catalog weapon keyword reference.
+func bracketKeyword(k any) string {
+	ref, ok := asMap(k)
+	if !ok || ref == nil {
+		return "[?]"
+	}
+	parameters := mapOr(ref["parameters"])
+	name := strings.ToUpper(dekebab(ejstr(ref["keyword_id"])))
+	against := ""
+	if values, ok := asList(parameters["required_target_keywords_any"]); ok && len(values) > 0 {
+		against = " (against " + orList(jstrList(values)) + " units)"
+	}
+	excluding := ""
+	if values, ok := asList(parameters["excluded_target_keywords"]); ok && len(values) > 0 {
+		excluding = " (excluding " + orList(jstrList(values)) + " units)"
+	}
+	if ref["keyword_id"] == "anti" {
+		target := ""
+		if parameters["target_keyword"] != nil {
+			target = "-" + strings.ToUpper(ejstr(parameters["target_keyword"]))
+		}
+		rating := ""
+		if parameters["threshold"] != nil {
+			rating = " " + ejstr(parameters["threshold"]) + "+"
+		}
+		return "[ANTI" + target + rating + "]" + against + excluding
+	}
+	rating := ""
+	if parameters["value"] != nil {
+		rating = " " + diceCase(parameters["value"])
+	}
+	return "[" + name + rating + "]" + against + excluding
+}
+
+var testNames = map[string]string{"battle-shock": "Battle-shock", "desperate-escape": "Desperate Escape"}
+
+func testName(test any) string {
+	t := ejstr(test)
+	if n, ok := testNames[t]; ok {
+		return n
+	}
+	return titleCase(t)
+}
+
+var pluralUnitsRe = regexp.MustCompile(` (units|models)\b`)
+var unitsWordRe = regexp.MustCompile(` units\b`)
+
+// isPlural reports whether a subject noun phrase takes a plural verb.
+func isPlural(subj string) bool {
+	return pluralUnitsRe.MatchString(subj) || strings.HasPrefix(subj, "all ") || strings.HasPrefix(subj, "targets ")
+}
+
+var pluralVerbs = map[string]string{
+	"has": "have", "is": "are", "gets": "get", "gains": "gain", "suffers": "suffer", "retains": "retain", "makes": "make",
+	"passes": "pass", "fails": "fail", "treats": "treat", "regains": "regain", "counts": "count", "ignores": "ignore", "loses": "lose",
+	"scores": "score", "takes": "take", "resolves": "resolve", "does": "do", "controls": "control",
+	"receives": "receive", "keeps": "keep",
+}
+
+// ev is subject-verb agreement: the plural form of a present-tense verb when the subject is plural.
+func ev(subj, singular string) string {
+	if !isPlural(subj) {
+		return singular
+	}
+	if p, ok := pluralVerbs[singular]; ok {
+		return p
+	}
+	return strings.TrimSuffix(singular, "s")
+}
+
+var statNames = map[string]string{
+	"M": "Move", "T": "Toughness", "Sv": "Save", "W": "Wounds", "A": "Attacks", "Ld": "Leadership", "OC": "Objective Control",
+	"S": "Strength", "WS": "Weapon Skill", "BS": "Ballistic Skill", "AP": "Armour Penetration", "D": "Damage", "Range": "Range",
+	"detection-range": "detection range",
+}
+
+func statName(stat any) string {
+	s := ejstr(stat)
+	if n, ok := statNames[s]; ok {
+		return n
+	}
+	return titleCase(s)
+}
+
+// poolName renders a resource-pool token (cp -> CP, otherwise Title Case).
+func poolName(pool any) string {
+	p := ejstr(pool)
+	if strings.ToLower(p) == "cp" {
+		return "CP"
+	}
+	return titleCase(p)
+}
+
+// poolUnits is the unit of resource a pool holds, singular, for pools whose id does not name it.
+var poolUnits = map[string]string{"blood-tithe": "Blood Tithe point", "battle-focus": "Battle Focus token", "yp": "YP"}
+
+// poolNouns are the countable nouns a pool id can end in: singular, plural.
+var poolNouns = map[string][2]string{
+	"dice": {"die", "dice"}, "die": {"die", "dice"}, "token": {"token", "tokens"}, "tokens": {"token", "tokens"},
+	"point": {"point", "points"}, "points": {"point", "points"}, "marker": {"marker", "markers"},
+}
+
+// resourceNoun is a pool's noun: its author label (pluralized by count), else
+// the resource the pool holds ("1 Miracle die", "2 Pain tokens").
+func resourceNoun(pool, label, count any) string {
+	one := jsNumber(ejstr(count)) == 1
+	if l, ok := label.(string); ok && l != "" {
+		if one {
+			return l
+		}
+		return l + "s"
+	}
+	id := strings.ToLower(ejstr(pool))
+	if id == "cp" {
+		return "CP"
+	}
+	base := strings.TrimSuffix(id, "-pool")
+	if unit, ok := poolUnits[base]; ok {
+		if unit == "YP" || one {
+			return unit
+		}
+		return unit + "s"
+	}
+	words := strings.Split(base, "-")
+	noun, ok := poolNouns[words[len(words)-1]]
+	if !ok {
+		return titleCase(base)
+	}
+	head := titleCase(strings.Join(words[:len(words)-1], "-"))
+	if head != "" {
+		head += " "
+	}
+	if one {
+		return head + noun[0]
+	}
+	return head + noun[1]
+}
+
+var rollNames = map[string]string{
+	"hit": "Hit", "wound": "Wound", "charge": "Charge", "damage": "Damage", "advance": "Advance", "save": "saving throw",
+	"leadership": "Leadership", "battle-shock": "Battle-shock", "desperate-escape": "Desperate Escape", "normal": "Normal move",
+	"deadly-demise": "Deadly Demise", "dark-pact": "Dark Pact", "blessings-of-khorne": "Blessings of Khorne", "resource-die": "pool die",
+	"manoeuvre": "Agile Manoeuvre", "channelling": "Channel the Warp",
+}
+
+func rollName(roll any) string {
+	// The dice a named ability rolls: "Reanimation Protocols".
+	if r, ok := roll.(map[string]any); ok && r["of_ability"] != nil {
+		return abilityLabel(r["of_ability"])
+	}
+	r := ejstr(roll)
+	if n, ok := rollNames[r]; ok {
+		return n
+	}
+	return titleCase(r)
+}
+
+// esigned renders +1 / -1 from an operation + value (a negative value flips the sign, never +-1).
+func esigned(operation, value any) string {
+	sign := -1
+	if operation == "add" || operation == "improve" {
+		sign = 1
+	}
+	if n := jsNumber(value); !math.IsNaN(n) && n < 0 {
+		sign = -sign
+		value = math.Abs(n)
+	}
+	if sign > 0 {
+		return "+" + diceCase(value)
+	}
+	return "-" + diceCase(value)
+}
+
+// formatComparison renders a dice comparison ("a 4+", "a 3 or less", ...).
+func formatComparison(comp string, threshold any) string {
+	th := ejstr(threshold)
+	switch comp {
+	case "lte":
+		return "a " + th + " or less"
+	case "gt":
+		return "greater than " + th
+	case "lt":
+		return "less than " + th
+	case "eq":
+		return "exactly " + th
+	}
+	return "a " + th + "+"
+}
+
+// possessive renders the possessive form of a subject (the unit -> the unit's).
+func possessive(s string) string {
+	if strings.HasSuffix(s, "s") {
+		return s + "'"
+	}
+	return s + "'s"
+}
+
+var clauseSubjectRe = regexp.MustCompile(` (within|other than|that|with) `)
+
+// ofOrPossessive renders "<subj>'s <rest>", or "the <rest> of <subj>" when the
+// subject is a clause ending in a range.
+func ofOrPossessive(subj, rest string) string {
+	if clauseSubjectRe.MatchString(subj) || strings.HasSuffix(subj, "\"") {
+		return "the " + rest + " of " + subj
+	}
+	return possessive(subj) + " " + rest
+}
+
+// noneOf is the subject of a "cannot" clause: "all enemy units cannot ..." reads "enemy units cannot ...".
+func noneOf(subj string) string {
+	return strings.TrimPrefix(subj, "all ")
+}
+
+// pronoun is the possessive pronoun agreeing with the subject (its / their).
+func pronoun(subj string) string {
+	if isPlural(subj) {
+		return "their"
+	}
+	return "its"
+}
+
+var abilityLabels = map[string]string{
+	"nurgles-gift-death-guard": "Nurgle's Gift (Aura)",
+	"fights-first":             "Fights First",
+}
+
+// abilityLabel is the display label for an ability id: a curated override, else Title Case.
+func abilityLabel(id any) string {
+	if l, ok := abilityLabels[ejstr(id)]; ok {
+		return l
+	}
+	return idLabel(ejstr(id))
+}
+
+var weaponLabels = map[string]string{
+	"imperiums-sword":                  "Imperium's Sword",
+	"imperiums-sword-assault-brethren": "Imperium's Sword",
+	"tl-4-9-lords-of-the-forge":        "TL-4ø9",
+	"eadbanger-wurrband":               "'Eadbanger",
+}
+
+// weaponLabel is the display name for a granted weapon id: a curated override, else Title Case of
+// the id. A trailing "-drone" is the disambiguator for a drone's weapon entity and is not printed.
+func weaponLabel(id any) string {
+	key := ejstr(id)
+	if l, ok := weaponLabels[key]; ok {
+		return l
+	}
+	return titleCase(strings.TrimSuffix(key, "-drone"))
+}
+
+var trailingWeaponsRe = regexp.MustCompile(`(?i)\s+weapons?$`)
+var kebabSlugRe = regexp.MustCompile(`^[a-z0-9]+(-[a-z0-9]+)+$`)
+
+// weaponNoun renders the canonical weapon scope as a noun.
+func weaponNoun(m map[string]any) string {
+	scope := mapOr(m["weapons"])
+	kind := ""
+	if scope["type"] != nil {
+		kind = ejstr(scope["type"]) + " "
+	}
+	keywords := func(value any) string {
+		if values, ok := asList(value); ok {
+			parts := make([]string, len(values))
+			for i, ref := range values {
+				parts[i] = bracketKeyword(ref)
+			}
+			return orList(parts)
+		}
+		return bracketKeyword(value)
+	}
+	keyword := ""
+	if scope["keyword"] != nil {
+		keyword = " with " + keywords(scope["keyword"])
+	}
+	exclusion := ""
+	if scope["exclude_name"] != nil {
+		exclusion += " other than \"" + ejstr(scope["exclude_name"]) + "\""
+	}
+	if scope["exclude_keyword"] != nil {
+		exclusion += " (excluding weapons with " + keywords(scope["exclude_keyword"]) + ")"
+	}
+	raw := ""
+	if scope["name"] != nil {
+		raw = trailingWeaponsRe.ReplaceAllString(ejstr(scope["name"]), "")
+	}
+	named := raw
+	if kebabSlugRe.MatchString(raw) {
+		named = titleCase(raw)
+	}
+	if ref, ok := asMap(scope["ref"]); ok && ref != nil {
+		if selected, ok := asMap(ref["selected_by"]); ok && selected != nil {
+			return "the " + kind + "weapons selected for " + abilityLabel(selected["ability"]) + keyword + exclusion
+		}
+		return "the selected " + kind + "weapon" + keyword + exclusion
+	}
+	if named != "" {
+		named += " "
+	}
+	return kind + named + "weapons" + keyword + exclusion
+}
+
+// hasWeapon reports whether a modifier carries a canonical weapon scope.
+func hasWeapon(m map[string]any) bool { return m["weapons"] != nil }
+
+func weaponRollScope(m map[string]any) string {
+	if hasWeapon(m) {
+		return " with " + weaponNoun(m)
+	}
+	return ""
+}
+
+var roleSubjects = map[string]string{
+	"this-model":         "this model",
+	"model-in-this-unit": "a model in this unit",
+	"defender":           "the target",
+	"event-subject":      "the triggering unit",
+	"event-object":       "that unit",
+	"stratagem-target":   "that unit",
+	"bearer-transport":   "the Transport this unit is embarked within",
+	"ability-unit":       "this unit",
+}
+
+// filterSubject renders a unit filter as the plural subject of an effect
+// (friendly INFANTRY units within 6").
+func filterSubject(f map[string]any, ctx effCtx) string {
+	owner := ""
+	switch f["owner"] {
+	case "friendly":
+		owner = "friendly "
+	case "enemy":
+		owner = "enemy "
+	}
+	all := ""
+	if l, ok := asList(f["all_of"]); ok {
+		all = strings.Join(jstrList(l), " ") + " "
+	}
+	noun := "units"
+	if f["level"] == "model" {
+		role := ""
+		switch f["attachment_role"] {
+		case "bodyguard":
+			role = "Bodyguard "
+		case "leader":
+			role = "Leader "
+		}
+		noun = role + "models"
+	}
+	// "friendly LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE units": keyword-only alternatives.
+	compact, isCompact := keywordAlternatives(f)
+	s := owner + all + noun
+	if isCompact {
+		s = owner + orList(compact) + " " + noun
+	}
+	// Any other alternatives: "units that are PSYKER units or units that are Battle-shocked".
+	if isList(f["any_of_filters"]) && !isCompact {
+		alts := []string{}
+		for _, a := range alternativeFilters(f) {
+			alts = append(alts, strings.TrimPrefix(filterSubject(a, ctx), "all "))
+		}
+		s += " that are " + orList(alts)
+	}
+	if l, ok := asList(f["any_of"]); ok {
+		s += " with the " + orList(jstrList(l)) + " keyword"
+	}
+	if l, ok := asList(f["none_of"]); ok {
+		s += " (excluding " + orList(jstrList(l)) + " " + noun + ")"
+	}
+	if l, ok := asList(f["not_all_of"]); ok {
+		s += " (excluding " + strings.Join(jstrList(l), " ") + " " + noun + ")"
+	}
+	if l, ok := asList(f["model_names"]); ok {
+		s += " named " + orList(jstrList(l))
+	}
+	if l, ok := asList(f["unit_ids"]); ok {
+		s += " with unit ID " + orList(jstrList(l))
+	}
+	within, hasWithin := asMap(f["within"])
+	if hasWithin && within != nil {
+		s += " "
+		if within["wholly"] == true {
+			s += "wholly "
+		}
+		s += "within " + rangePhrase(within["range"])
+		if within["of"] != nil {
+			s += " of " + placeRefPhrase(within["of"])
+		}
+	} else {
+		hasWithin = false
+	}
+	s += filterRelations(f, ctx)
+	if visible, ok := asMap(f["visible"]); ok && visible != nil {
+		s += " visible to " + effectSubject(visible["to"], ctx)
+	}
+	if f["designated"] != nil {
+		s += " that are " + designationPhrase(ejstr(f["designated"]), true)
+		if f["designated_by"] != nil {
+			s += " by " + effectSubject(f["designated_by"], ctx)
+		}
+	}
+	if f["not_designated"] != nil {
+		s += " that are not " + designationPhrase(ejstr(f["not_designated"]), true)
+	}
+	if f["state"] != nil {
+		s += " that are " + statePhrase(ejstr(f["state"]), false)
+	}
+	if l, ok := asList(f["not_states"]); ok {
+		negs := []string{}
+		for _, x := range jstrList(l) {
+			negs = append(negs, statePhrase(x, true))
+		}
+		s += " that are " + andList(negs)
+	}
+	if f["excluding"] != nil {
+		s += " other than " + effectSubject(f["excluding"], ctx)
+	}
+	bounded := hasWithin || f["visible"] != nil || f["designated"] != nil || f["not_designated"] != nil || f["state"] != nil || f["not_states"] != nil ||
+		f["embarked_in"] != nil || f["member_of"] != nil || f["engaged_with"] != nil || f["not_engaged_with"] != nil
+	if bounded {
+		return s
+	}
+	return "all " + s
+}
+
+// effectSubject renders an effect target (a unit-ref) as the effect's subject.
+func effectSubject(target any, ctx effCtx) string {
+	if target == nil || target == "this-unit" {
+		if ctx.unitSubject != "" {
+			return ctx.unitSubject
+		}
+		if ctx.selectedUnit || ctx.selectedModel {
+			return "this unit"
+		}
+		return "the unit"
+	}
+	switch target {
+	case "selected-unit":
+		if ctx.selectedModel {
+			return "that model"
+		}
+		if ctx.selectedUnit {
+			return "that unit"
+		}
+		return "the selected unit"
+	case "recipient":
+		if ctx.auraRecipient {
+			return "that unit"
+		}
+		return "the unit"
+	case "attacker":
+		if ctx.unitSubject != "" {
+			return ctx.unitSubject
+		}
+		return "the attacking unit"
+	}
+	if s, ok := target.(string); ok {
+		if p, ok := roleSubjects[s]; ok {
+			return p
+		}
+		return dekebab(s)
+	}
+	r := mapOr(target)
+	if _, ok := r["event_var"].(string); ok {
+		return "that unit"
+	}
+	if sv, ok := r["selection_var"].(string); ok {
+		return "the bound " + strings.ReplaceAll(sv, "_", " ")
+	}
+	if st, ok := r["stratagem_target"].(string); ok {
+		return "the " + dekebab(strings.TrimPrefix(st, "the-")) + " target"
+	}
+	return filterSubject(r, ctx)
+}
+
+// weaponHolder names who carries a weapon filter's weapons ("this model", "models in this unit").
+func weaponHolder(target any, ctx effCtx) string {
+	if target == "this-model" {
+		return "this model"
+	}
+	if ctx.unitSubject != "" && (target == nil || target == "this-unit" || target == "attacker") {
+		return "models in " + ctx.unitSubject
+	}
+	if target == "selected-unit" && ctx.selectedModel {
+		return "that model"
+	}
+	if target == nil || target == "this-unit" {
+		return "models in this unit"
+	}
+	if target == "selected-unit" {
+		if ctx.selectedUnit {
+			return "models in that unit"
+		}
+		return "models in the selected unit"
+	}
+	return effectSubject(target, ctx)
+}
+
+// regionPhrase renders a region-ref as a place ("enemy territory", "the Ruins terrain area").
+func regionPhrase(r map[string]any) string {
+	if jsTruthy(r["rule_region"]) {
+		return titleCase(ejstr(mapOr(r["rule_region"])["region_id"]))
+	}
+	if jsTruthy(r["territory"]) {
+		return dekebab(ejstr(r["territory"]))
+	}
+	area := mapOr(r["terrain_area"])
+	where := "a terrain area"
+	if area["footprint"] != nil {
+		where = "the " + dekebab(ejstr(area["footprint"])) + " terrain area"
+	}
+	if area["designated"] != nil {
+		where += " tagged " + dekebab(ejstr(area["designated"]))
+	}
+	return where
+}
+
+// designationFor renders a tag an effect applies: GW-printed tags stay as
+// printed, internal ones read "marked as ...".
+func designationFor(tag string) string {
+	if label, ok := designationTerm(tag, false); ok {
+		return label
+	}
+	if tag == strings.ToUpper(tag) {
+		return tag
+	}
+	return "marked as " + dekebab(tag)
+}
+
+// replaceFirst mirrors JS String.replace with a non-global regex: only the
+// first match is replaced (repl is literal).
+func replaceFirst(re *regexp.Regexp, s, repl string) string {
+	loc := re.FindStringIndex(s)
+	if loc == nil {
+		return s
+	}
+	return s[:loc[0]] + repl + s[loc[1]:]
+}

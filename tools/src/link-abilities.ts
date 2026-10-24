@@ -26,6 +26,7 @@
  *   npx tsx tools/src/link-abilities.ts --dry-run        # report only
  */
 
+import { abilityIdsOf } from "./data/ability-refs.js";
 import { readFileSync, writeFileSync, existsSync, readdirSync } from "node:fs";
 import { resolve, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -133,14 +134,15 @@ export function linkAbilities(opts: LinkOptions = {}): LinkSummary {
       if (!incoming) continue;
       handled.add(unit.id);
 
-      const before = new Set(unit.ability_ids ?? []);
-      const beforeCount = before.size;
-      const merged = new Set([...before, ...incoming]);
-      if (merged.size === beforeCount) continue;
+      const before = new Set(abilityIdsOf(unit.ability_ids));
+      const added = [...incoming].filter((id) => !before.has(id)).sort();
+      if (added.length === 0) continue;
 
-      linksAdded += merged.size - beforeCount;
+      linksAdded += added.length;
       unitsChanged += 1;
-      unit.ability_ids = [...merged].sort();
+      // Sorted by id; an existing `{id, value}` entry keeps its object form.
+      const entryOf = new Map(((unit.ability_ids ?? []) as unknown[]).map((e) => [abilityIdsOf([e])[0], e] as const));
+      unit.ability_ids = [...before, ...added].sort().map((id) => entryOf.get(id) ?? id) as typeof unit.ability_ids;
       mutated = true;
     }
 

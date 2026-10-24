@@ -271,6 +271,26 @@ func (s *RunnerState) handleLinkedQuery(args any) map[string]any {
 		}
 		sort.Strings(strs)
 		return okResp(toAnyList(strs))
+	case "weapon_bounds":
+		u, ok := ds.Units.GetAny(unitID)
+		if !ok {
+			return unknownUnit()
+		}
+		var models []any
+		for _, cAny := range ds.UnitCompositions {
+			c, _ := asMap(cAny)
+			if getStr(c, "unit_id") == unitID {
+				models = getList(c, "models")
+				break
+			}
+		}
+		bounds := weaponBounds(u.Raw, asInt(in["modelCount"]), ds.wargearOptionsOf(u.Raw), models)
+		strs := make([]string, 0, len(bounds))
+		for id, b := range bounds {
+			strs = append(strs, id+":"+itoa(b.min)+"-"+itoa(b.max))
+		}
+		sort.Strings(strs)
+		return okResp(toAnyList(strs))
 	case "loadout_candidates":
 		u, ok := ds.Units.GetAny(unitID)
 		if factionID := getStr(in, "factionId"); factionID != "" {

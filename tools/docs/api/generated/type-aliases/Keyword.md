@@ -8,7 +8,7 @@
 
 > **Keyword** = `string`
 
-Defined in: [generated.ts:28](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L28)
+Defined in: [generated.ts:28](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L28)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "keyword".

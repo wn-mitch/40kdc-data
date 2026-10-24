@@ -1,4 +1,5 @@
 import * as fs from "node:fs";
+import { abilityIdsOf } from "./data/ability-refs.js";
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
 import { applyWrites, type StagedWrite } from "./mfm/apply.js";
@@ -182,8 +183,9 @@ export function validateInventory(inventory: CodexInventory): void {
     for (const weaponId of asArray(unit.weapon_ids, `unit ${unitId}.weapon_ids`)) {
       if (!suppliedWeapons.has(string(weaponId, `unit ${unitId}.weapon_ids`))) throw new Error(`covered unit has unresolved weapon ${weaponId} (${unitId})`);
     }
-    for (const abilityId of asArray(unit.ability_ids, `unit ${unitId}.ability_ids`)) {
-      if (!abilityIds.has(string(abilityId, `unit ${unitId}.ability_ids`))) throw new Error(`covered unit has unresolved ability ${abilityId} (${unitId})`);
+    asArray(unit.ability_ids, `unit ${unitId}.ability_ids`);
+    for (const abilityId of abilityIdsOf(unit.ability_ids)) {
+      if (!abilityIds.has(abilityId)) throw new Error(`covered unit has unresolved ability ${abilityId} (${unitId})`);
     }
   }
   const suppliedDetachments = new Map(inventory.entities.detachments.map((row) => [string(row.id, "detachment.id"), row]));

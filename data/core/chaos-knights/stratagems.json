@@ -1,6 +1,6 @@
 [
   {
-    "id": "profane-symbiosis-infernal-lance",
+    "id": "profane-symbiosis-infernal-lance-chaos-knights",
     "name": "PROFANE SYMBIOSIS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -15,8 +15,42 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "profane-symbiosis-infernal-lance",
+    "target_restrictions": {
+      "required_keywords": [
+        "Chaos Knights"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "this-unit",
+                  "filter": {
+                    "designated": "empowered"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "profane-symbiosis-infernal-lance-chaos-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -33,7 +67,7 @@
     ]
   },
   {
-    "id": "hellforged-construction-infernal-lance",
+    "id": "hellforged-construction-infernal-lance-chaos-knights",
     "name": "HELLFORGED CONSTRUCTION",
     "category": "detachment",
     "type": "battle-tactic",
@@ -44,8 +78,24 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "hellforged-construction-infernal-lance",
+    "target_restrictions": {
+      "required_keywords": [
+        "Chaos Knights"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "hellforged-construction-infernal-lance-chaos-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -62,7 +112,7 @@
     ]
   },
   {
-    "id": "hungry-for-combat-houndpack-lance",
+    "id": "hungry-for-combat-houndpack-lance-chaos-knights",
     "name": "HUNGRY FOR COMBAT",
     "category": "detachment",
     "type": "battle-tactic",
@@ -74,7 +124,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "hungry-for-combat-houndpack-lance",
+    "ability_id": "hungry-for-combat-houndpack-lance-chaos-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -91,7 +141,7 @@
     ]
   },
   {
-    "id": "animalistic-rage-houndpack-lance",
+    "id": "animalistic-rage-houndpack-lance-chaos-knights",
     "name": "ANIMALISTIC RAGE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -104,7 +154,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "animalistic-rage-houndpack-lance",
+    "ability_id": "animalistic-rage-houndpack-lance-chaos-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -121,7 +171,7 @@
     ]
   },
   {
-    "id": "conquerors-without-mercy-traitoris-lance",
+    "id": "conquerors-without-mercy-traitoris-lance-chaos-knights",
     "name": "CONQUERORS WITHOUT MERCY",
     "category": "detachment",
     "type": "battle-tactic",
@@ -133,7 +183,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "conquerors-without-mercy-traitoris-lance",
+    "ability_id": "conquerors-without-mercy-traitoris-lance-chaos-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -150,7 +200,7 @@
     ]
   },
   {
-    "id": "vox-howl-houndpack-lance",
+    "id": "vox-howl-houndpack-lance-chaos-knights",
     "name": "VOX-HOWL",
     "category": "detachment",
     "type": "battle-tactic",
@@ -163,7 +213,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "vox-howl-houndpack-lance",
+    "ability_id": "vox-howl-houndpack-lance-chaos-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -180,7 +230,7 @@
     ]
   },
   {
-    "id": "claimed-for-the-dark-gods-lords-of-dread",
+    "id": "claimed-for-the-dark-gods-lords-of-dread-chaos-knights",
     "name": "CLAIMED FOR THE DARK GODS",
     "category": "detachment",
     "type": "epic-deed",
@@ -192,7 +242,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "claimed-for-the-dark-gods-lords-of-dread",
+    "ability_id": "claimed-for-the-dark-gods-lords-of-dread-chaos-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -209,7 +259,7 @@
     ]
   },
   {
-    "id": "spiteful-demise-lords-of-dread",
+    "id": "spiteful-demise-lords-of-dread-chaos-knights",
     "name": "SPITEFUL DEMISE",
     "category": "detachment",
     "type": "epic-deed",
@@ -224,8 +274,16 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "spiteful-demise-lords-of-dread",
+    "target_restrictions": {
+      "required_keywords": [
+        "Chaos Knights",
+        "Character"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "spiteful-demise-lords-of-dread-chaos-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -242,7 +300,7 @@
     ]
   },
   {
-    "id": "titanic-duel-lords-of-dread",
+    "id": "titanic-duel-lords-of-dread-chaos-knights",
     "name": "TITANIC DUEL",
     "category": "detachment",
     "type": "epic-deed",
@@ -255,7 +313,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "titanic-duel-lords-of-dread",
+    "ability_id": "titanic-duel-lords-of-dread-chaos-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -272,7 +330,7 @@
     ]
   },
   {
-    "id": "trophy-hunter-lords-of-dread",
+    "id": "trophy-hunter-lords-of-dread-chaos-knights",
     "name": "TROPHY HUNTER",
     "category": "detachment",
     "type": "epic-deed",
@@ -283,8 +341,16 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "trophy-hunter-lords-of-dread",
+    "target_restrictions": {
+      "required_keywords": [
+        "Chaos Knights",
+        "Character"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "trophy-hunter-lords-of-dread-chaos-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -301,7 +367,7 @@
     ]
   },
   {
-    "id": "crushed-like-vermin-lords-of-dread",
+    "id": "crushed-like-vermin-lords-of-dread-chaos-knights",
     "name": "CRUSHED LIKE VERMIN",
     "category": "detachment",
     "type": "epic-deed",
@@ -312,8 +378,16 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "crushed-like-vermin-lords-of-dread",
+    "target_restrictions": {
+      "required_keywords": [
+        "Chaos Knights",
+        "Character"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "crushed-like-vermin-lords-of-dread-chaos-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -330,7 +404,7 @@
     ]
   },
   {
-    "id": "corrupting-taint-infernal-lance",
+    "id": "corrupting-taint-infernal-lance-chaos-knights",
     "name": "CORRUPTING TAINT",
     "category": "detachment",
     "type": "epic-deed",
@@ -341,8 +415,16 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "corrupting-taint-infernal-lance",
+    "target_restrictions": {
+      "required_keywords": [
+        "Chaos Knights",
+        "Character"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "corrupting-taint-infernal-lance-chaos-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -359,7 +441,7 @@
     ]
   },
   {
-    "id": "imperious-advance-traitoris-lance",
+    "id": "imperious-advance-traitoris-lance-chaos-knights",
     "name": "IMPERIOUS ADVANCE",
     "category": "detachment",
     "type": "epic-deed",
@@ -372,7 +454,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "imperious-advance-traitoris-lance",
+    "ability_id": "imperious-advance-traitoris-lance-chaos-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -389,7 +471,7 @@
     ]
   },
   {
-    "id": "runes-of-disdain-lords-of-dread",
+    "id": "runes-of-disdain-lords-of-dread-chaos-knights",
     "name": "RUNES OF DISDAIN",
     "category": "detachment",
     "type": "epic-deed",
@@ -401,8 +483,25 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "runes-of-disdain-lords-of-dread",
+    "target_restrictions": {
+      "required_keywords": [
+        "Chaos Knights",
+        "Character"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "runes-of-disdain-lords-of-dread-chaos-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -419,7 +518,7 @@
     ]
   },
   {
-    "id": "avenge-the-masters-iconoclast-fiefdom",
+    "id": "avenge-the-masters-iconoclast-fiefdom-chaos-knights",
     "name": "AVENGE THE MASTERS!",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -434,8 +533,12 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "avenge-the-masters-iconoclast-fiefdom",
+    "target_restrictions": {
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "avenge-the-masters-iconoclast-fiefdom-chaos-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -452,7 +555,7 @@
     ]
   },
   {
-    "id": "cunning-hunter-houndpack-lance",
+    "id": "cunning-hunter-houndpack-lance-chaos-knights",
     "name": "CUNNING HUNTER",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -463,8 +566,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "cunning-hunter-houndpack-lance",
+    "target_restrictions": {
+      "required_keywords": [
+        "War Dog"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "cunning-hunter-houndpack-lance-chaos-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -481,7 +591,7 @@
     ]
   },
   {
-    "id": "harrying-hounds-houndpack-lance",
+    "id": "harrying-hounds-houndpack-lance-chaos-knights",
     "name": "HARRYING HOUNDS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -492,8 +602,41 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "harrying-hounds-houndpack-lance",
+    "target_restrictions": {
+      "required_keywords": [
+        "War Dog"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": "event-subject",
+                  "range": {
+                    "inches": 8
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "harrying-hounds-houndpack-lance-chaos-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -510,7 +653,7 @@
     ]
   },
   {
-    "id": "encircling-pack-houndpack-lance",
+    "id": "encircling-pack-houndpack-lance-chaos-knights",
     "name": "ENCIRCLING PACK",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -521,8 +664,55 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "encircling-pack-houndpack-lance",
+    "target_restrictions": {
+      "required_keywords": [
+        "War Dog"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": "battlefield-edge",
+                  "range": {
+                    "inches": 12
+                  },
+                  "wholly": true
+                }
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "state": "engaged"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "encircling-pack-houndpack-lance-chaos-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -539,7 +729,7 @@
     ]
   },
   {
-    "id": "disdain-for-the-weak-traitoris-lance",
+    "id": "disdain-for-the-weak-traitoris-lance-chaos-knights",
     "name": "DISDAIN FOR THE WEAK",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -551,7 +741,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "disdain-for-the-weak-traitoris-lance",
+    "ability_id": "disdain-for-the-weak-traitoris-lance-chaos-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -568,7 +758,7 @@
     ]
   },
   {
-    "id": "a-long-leash-traitoris-lance",
+    "id": "a-long-leash-traitoris-lance-chaos-knights",
     "name": "A LONG LEASH",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -580,7 +770,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "a-long-leash-traitoris-lance",
+    "ability_id": "a-long-leash-traitoris-lance-chaos-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -597,19 +787,36 @@
     ]
   },
   {
-    "id": "storm-of-darkness-traitoris-lance",
+    "id": "storm-of-darkness-traitoris-lance-chaos-knights",
     "name": "STORM OF DARKNESS",
     "category": "detachment",
     "type": "strategic-ploy",
     "detachment_id": "traitoris-lance",
     "cp_cost": 1,
     "phases": [
-      "shooting"
+      "shooting",
+      "fight"
     ],
-    "player_turn": "opponent-turn",
+    "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "storm-of-darkness-traitoris-lance",
+    "target_restrictions": {
+      "required_keywords": [
+        "Chaos Knights"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "storm-of-darkness-traitoris-lance-chaos-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -626,7 +833,7 @@
     ]
   },
   {
-    "id": "unleash-balefire-infernal-lance",
+    "id": "unleash-balefire-infernal-lance-chaos-knights",
     "name": "UNLEASH BALEFIRE",
     "category": "detachment",
     "type": "wargear",
@@ -637,8 +844,43 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "unleash-balefire-infernal-lance",
+    "target_restrictions": {
+      "required_keywords": [
+        "Chaos Knights"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "unleash-balefire-infernal-lance-chaos-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -655,7 +897,7 @@
     ]
   },
   {
-    "id": "warp-vision-infernal-lance",
+    "id": "warp-vision-infernal-lance-chaos-knights",
     "name": "WARP VISION",
     "category": "detachment",
     "type": "wargear",
@@ -667,7 +909,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "warp-vision-infernal-lance",
+    "ability_id": "warp-vision-infernal-lance-chaos-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -684,7 +926,7 @@
     ]
   },
   {
-    "id": "diabolic-bulwark-infernal-lance",
+    "id": "diabolic-bulwark-infernal-lance-chaos-knights",
     "name": "DIABOLIC BULWARK",
     "category": "detachment",
     "type": "wargear",
@@ -695,8 +937,24 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "diabolic-bulwark-infernal-lance",
+    "target_restrictions": {
+      "required_keywords": [
+        "Chaos Knights"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "diabolic-bulwark-infernal-lance-chaos-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -713,7 +971,7 @@
     ]
   },
   {
-    "id": "pterrorshades-traitoris-lance",
+    "id": "pterrorshades-traitoris-lance-chaos-knights",
     "name": "PTERRORSHADES",
     "category": "detachment",
     "type": "wargear",
@@ -729,7 +987,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "pterrorshades-traitoris-lance",
+    "ability_id": "pterrorshades-traitoris-lance-chaos-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -746,7 +1004,7 @@
     ]
   },
   {
-    "id": "rune-cursed-stronghold-bastions-of-tyranny",
+    "id": "rune-cursed-stronghold-bastions-of-tyranny-chaos-knights",
     "name": "RUNE-CURSED STRONGHOLD",
     "category": "detachment",
     "detachment_id": "bastions-of-tyranny",
@@ -760,8 +1018,15 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "rune-cursed-stronghold-bastions-of-tyranny",
+    "target_restrictions": {
+      "required_keywords": [
+        "Knight Tyrant"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "rune-cursed-stronghold-bastions-of-tyranny-chaos-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -778,7 +1043,7 @@
     ]
   },
   {
-    "id": "pitiless-focus-bastions-of-tyranny",
+    "id": "pitiless-focus-bastions-of-tyranny-chaos-knights",
     "name": "PITILESS FOCUS",
     "category": "detachment",
     "detachment_id": "bastions-of-tyranny",
@@ -788,8 +1053,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "pitiless-focus-bastions-of-tyranny",
+    "target_restrictions": {
+      "required_keywords": [
+        "Knight Tyrant"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "pitiless-focus-bastions-of-tyranny-chaos-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -806,7 +1078,7 @@
     ]
   },
   {
-    "id": "intimidating-reminder-bastions-of-tyranny",
+    "id": "intimidating-reminder-bastions-of-tyranny-chaos-knights",
     "name": "INTIMIDATING REMINDER",
     "category": "detachment",
     "detachment_id": "bastions-of-tyranny",
@@ -816,8 +1088,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "intimidating-reminder-bastions-of-tyranny",
+    "target_restrictions": {
+      "required_keywords": [
+        "Knight Tyrant"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "intimidating-reminder-bastions-of-tyranny-chaos-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -834,7 +1113,7 @@
     ]
   },
   {
-    "id": "insensate-bloodthirst-hunting-warpack",
+    "id": "insensate-bloodthirst-hunting-warpack-chaos-knights",
     "name": "INSENSATE BLOODTHIRST",
     "category": "detachment",
     "detachment_id": "hunting-warpack",
@@ -844,8 +1123,15 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "insensate-bloodthirst-hunting-warpack",
+    "target_restrictions": {
+      "required_keywords": [
+        "War Dog"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit"
+    },
+    "ability_id": "insensate-bloodthirst-hunting-warpack-chaos-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -862,7 +1148,7 @@
     ]
   },
   {
-    "id": "leash-of-the-masters-hunting-warpack",
+    "id": "leash-of-the-masters-hunting-warpack-chaos-knights",
     "name": "LEASH OF THE MASTERS",
     "category": "detachment",
     "detachment_id": "hunting-warpack",
@@ -872,8 +1158,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "leash-of-the-masters-hunting-warpack",
+    "target_restrictions": {
+      "required_keywords": [
+        "War Dog"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "leash-of-the-masters-hunting-warpack-chaos-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -890,7 +1183,7 @@
     ]
   },
   {
-    "id": "stalking-focus-hunting-warpack",
+    "id": "stalking-focus-hunting-warpack-chaos-knights",
     "name": "STALKING FOCUS",
     "category": "detachment",
     "detachment_id": "hunting-warpack",
@@ -901,7 +1194,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "stalking-focus-hunting-warpack",
+    "ability_id": "stalking-focus-hunting-warpack-chaos-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -918,7 +1211,7 @@
     ]
   },
   {
-    "id": "dark-sacrifice-iconoclast-fiefdom",
+    "id": "dark-sacrifice-iconoclast-fiefdom-chaos-knights",
     "name": "DARK SACRIFICE",
     "category": "detachment",
     "detachment_id": "iconoclast-fiefdom",
@@ -929,7 +1222,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "dark-sacrifice-iconoclast-fiefdom",
+    "ability_id": "dark-sacrifice-iconoclast-fiefdom-chaos-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -946,7 +1239,7 @@
     ]
   },
   {
-    "id": "coursing-thralls-iconoclast-fiefdom",
+    "id": "coursing-thralls-iconoclast-fiefdom-chaos-knights",
     "name": "COURSING THRALLS",
     "category": "detachment",
     "detachment_id": "iconoclast-fiefdom",
@@ -956,8 +1249,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "coursing-thralls-iconoclast-fiefdom",
+    "target_restrictions": {
+      "required_keywords": [
+        "Damned"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit"
+    },
+    "ability_id": "coursing-thralls-iconoclast-fiefdom-chaos-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -974,7 +1274,7 @@
     ]
   },
   {
-    "id": "feral-arrogance-helhunt-lance",
+    "id": "feral-arrogance-helhunt-lance-chaos-knights",
     "name": "FERAL ARROGANCE",
     "category": "detachment",
     "detachment_id": "helhunt-lance",
@@ -988,8 +1288,15 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "feral-arrogance-helhunt-lance",
+    "target_restrictions": {
+      "required_keywords": [
+        "Chaos Knights"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "feral-arrogance-helhunt-lance-chaos-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1007,7 +1314,7 @@
     ]
   },
   {
-    "id": "merciless-fusillade-helhunt-lance",
+    "id": "merciless-fusillade-helhunt-lance-chaos-knights",
     "name": "MERCILESS FUSILLADE",
     "category": "detachment",
     "detachment_id": "helhunt-lance",
@@ -1019,7 +1326,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "merciless-fusillade-helhunt-lance",
+    "ability_id": "merciless-fusillade-helhunt-lance-chaos-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1037,7 +1344,7 @@
     ]
   },
   {
-    "id": "beasthide-manifestation-helhunt-lance",
+    "id": "beasthide-manifestation-helhunt-lance-chaos-knights",
     "name": "BEASTHIDE MANIFESTATION",
     "category": "detachment",
     "detachment_id": "helhunt-lance",
@@ -1048,8 +1355,24 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "beasthide-manifestation-helhunt-lance",
+    "target_restrictions": {
+      "required_keywords": [
+        "Chaos Knights"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "beasthide-manifestation-helhunt-lance-chaos-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1067,7 +1390,7 @@
     ]
   },
   {
-    "id": "flush-the-quarry-helhunt-lance",
+    "id": "flush-the-quarry-helhunt-lance-chaos-knights",
     "name": "FLUSH THE QUARRY",
     "category": "detachment",
     "detachment_id": "helhunt-lance",
@@ -1077,8 +1400,70 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "flush-the-quarry-helhunt-lance",
+    "target_restrictions": [
+      {
+        "required_keywords": [
+          "Chaos Knights",
+          "Titanic"
+        ],
+        "name": "first",
+        "count": "one",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "filter": {
+              "owner": "friendly"
+            }
+          }
+        }
+      },
+      {
+        "required_keywords": [
+          "War Dog"
+        ],
+        "name": "second",
+        "count": "up-to",
+        "count_max": 3,
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "within": {
+                    "of": {
+                      "stratagem_target": "first"
+                    },
+                    "range": {
+                      "inches": 6
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "same-unit",
+                  "parameters": {
+                    "as": {
+                      "stratagem_target": "first"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "ability_id": "flush-the-quarry-helhunt-lance-chaos-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1096,7 +1481,7 @@
     ]
   },
   {
-    "id": "contemptuous-volleys-helhunt-lance",
+    "id": "contemptuous-volleys-helhunt-lance-chaos-knights",
     "name": "CONTEMPTUOUS VOLLEYS",
     "category": "detachment",
     "detachment_id": "helhunt-lance",
@@ -1106,8 +1491,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "contemptuous-volleys-helhunt-lance",
+    "target_restrictions": {
+      "required_keywords": [
+        "Chaos Knights"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "contemptuous-volleys-helhunt-lance-chaos-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1125,7 +1517,7 @@
     ]
   },
   {
-    "id": "goaded-beast-helhunt-lance",
+    "id": "goaded-beast-helhunt-lance-chaos-knights",
     "name": "GOADED BEAST",
     "category": "detachment",
     "detachment_id": "helhunt-lance",
@@ -1135,8 +1527,35 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "goaded-beast-helhunt-lance",
+    "target_restrictions": {
+      "required_keywords": [
+        "Chaos Knights"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "wounds",
+            "parameters": {
+              "subject": "this-unit",
+              "lost": true
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "goaded-beast-helhunt-lance-chaos-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

@@ -57,13 +57,19 @@
       "sentinel-chainsaw"
     ],
     "ability_ids": [
-      "daring-recon",
-      "deadly-demise-1",
-      "scouts-9"
+      "daring-recon-astra-militarum",
+      {
+        "id": "deadly-demise",
+        "value": 1
+      },
+      {
+        "id": "scouts",
+        "value": 9
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -135,14 +141,14 @@
       "power-weapon"
     ],
     "ability_ids": [
-      "get-back-in-the-fight",
+      "get-back-in-the-fight-astra-militarum",
       "leader",
-      "orders",
-      "senior-officer"
+      "orders-cadian-castellan-astra-militarum",
+      "senior-officer-astra-militarum"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -227,18 +233,18 @@
       "straight-silver-knife"
     ],
     "ability_ids": [
-      "covert-stealth-team",
+      "covert-stealth-team-astra-militarum",
       "fights-first",
       "infiltrators",
       "lone-operative",
-      "orders",
       "stealth",
-      "tanith-camo-cloaks",
-      "voice-of-command"
+      "tanith-camo-cloaks-astra-militarum",
+      "voice-of-command-astra-militarum",
+      "orders-gaunts-ghosts-astra-militarum"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -306,14 +312,17 @@
       "ripper-gun"
     ],
     "ability_ids": [
-      "feel-no-pain-5",
-      "loyal-protector",
-      "ogryn-bodyguard",
-      "thunderous-head-butt"
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      },
+      "loyal-protector-astra-militarum",
+      "ogryn-bodyguard-astra-militarum",
+      "thunderous-head-butt-astra-militarum"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -392,12 +401,15 @@
       "sergeants-autogun"
     ],
     "ability_ids": [
-      "shock-troops",
-      "vox-caster"
+      "shock-troops-astra-militarum",
+      {
+        "id": "vox-caster-astra-militarum",
+        "wargear": "vox-caster"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -477,7 +489,8 @@
       "Militarum Tempestus",
       "Command Squad",
       "Character",
-      "Officer"
+      "Officer",
+      "Militarum Tempestus Command Squad"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -504,17 +517,30 @@
       "tempestus-dagger"
     ],
     "ability_ids": [
-      "command-rod",
+      {
+        "id": "command-rod-astra-militarum",
+        "wargear": "command-rod"
+      },
       "deep-strike",
       "leader",
-      "master-vox",
-      "medi-pack",
-      "regimental-standard",
-      "tempestor-prime"
+      {
+        "id": "master-vox-astra-militarum",
+        "wargear": "master-vox"
+      },
+      {
+        "id": "medi-pack-militarum-tempestus-command-squad-astra-militarum",
+        "wargear": "medi-pack"
+      },
+      {
+        "id": "regimental-standard-astra-militarum",
+        "wargear": "regimental-standard"
+      },
+      "tempestor-prime-astra-militarum",
+      "orders-astra-militarum"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -612,7 +638,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 130
+        "cost": 120
       }
     ],
     "keywords": [
@@ -641,13 +667,14 @@
     ],
     "ability_ids": [
       "leader",
-      "supreme-commander",
-      "the-collegiate-astrolex",
-      "the-lord-solar"
+      "supreme-commander-astra-militarum",
+      "the-collegiate-astrolex-astra-militarum",
+      "the-lord-solar-astra-militarum",
+      "orders-lord-solar-leontus-astra-militarum"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -724,13 +751,13 @@
       "sentry-hot-shot-volley-gun"
     ],
     "ability_ids": [
-      "precision-drop",
-      "servo-sentry",
+      "precision-drop-astra-militarum",
+      "servo-sentry-astra-militarum",
       "deep-strike"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -824,12 +851,12 @@
       "twin-krieg-heavy-stubber"
     ],
     "ability_ids": [
-      "embarking",
-      "final-duty"
+      "embarking-krieg-heavy-weapons-squad-astra-militarum",
+      "final-duty-astra-militarum"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -903,15 +930,21 @@
       "tankstopper-rifle"
     ],
     "ability_ids": [
-      "demolition-gear",
+      {
+        "id": "demolition-gear-astra-militarum",
+        "wargear": "demolition-gear"
+      },
       "infiltrators",
-      "ratling-battlemutt",
-      "shoot-sharp-and-scarper",
+      {
+        "id": "ratling-battlemutt-astra-militarum",
+        "wargear": "ratling-battlemutt"
+      },
+      "shoot-sharp-and-scarper-astra-militarum",
       "stealth"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -969,7 +1002,8 @@
       "Smoke",
       "Imperium",
       "Squadron",
-      "Leman Russ Battle Tank"
+      "Leman Russ Battle Tank",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -995,12 +1029,19 @@
       "storm-bolter"
     ],
     "ability_ids": [
-      "armoured-spearhead",
-      "deadly-demise-d3"
+      "armoured-spearhead-astra-militarum",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1089,12 +1130,23 @@
       "twin-heavy-flamer"
     ],
     "ability_ids": [
-      "concussive-wave",
-      "deadly-demise-d6-2"
+      "concussive-wave-astra-militarum",
+      {
+        "id": "deadly-demise",
+        "value": "D6+2"
+      },
+      {
+        "id": "damaged",
+        "value": 8
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1150,7 +1202,8 @@
       "Squadron",
       "Transport",
       "Dedicated Transport",
-      "Taurox Prime"
+      "Taurox Prime",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -1173,15 +1226,18 @@
       "twin-taurox-hot-shot-volley-gun"
     ],
     "ability_ids": [
-      "transport-support",
-      "deadly-demise-d3"
+      "transport-support-astra-militarum",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "transport_capacity": {
       "capacity": 12
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1250,11 +1306,11 @@
       "malleus-rocket-launcher"
     ],
     "ability_ids": [
-      "rearm-reload-fire"
+      "rearm-reload-fire-astra-militarum"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1327,14 +1383,17 @@
     },
     "weapon_ids": [],
     "ability_ids": [
-      "compact",
-      "demolition-charges",
-      "unstable-payload",
-      "deadly-demise-1"
+      "compact-astra-militarum",
+      "demolition-charges-astra-militarum",
+      "unstable-payload-astra-militarum",
+      {
+        "id": "deadly-demise",
+        "value": 1
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1391,7 +1450,8 @@
       "Squadron",
       "Imperium",
       "Officer",
-      "Rogal Dorn Commander"
+      "Rogal Dorn Commander",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -1417,13 +1477,21 @@
       "twin-battle-cannon"
     ],
     "ability_ids": [
-      "called-shots",
-      "deadly-demise-d6",
-      "vox-net"
+      "called-shots-astra-militarum",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "vox-net-astra-militarum",
+      {
+        "id": "damaged",
+        "value": 6
+      },
+      "orders-leman-russ-commander-astra-militarum"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1477,7 +1545,8 @@
       "Smoke",
       "Imperium",
       "Squadron",
-      "Leman Russ Exterminator"
+      "Leman Russ Exterminator",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -1503,12 +1572,19 @@
       "storm-bolter"
     ],
     "ability_ids": [
-      "withering-hail",
-      "deadly-demise-d3"
+      "withering-hail-astra-militarum",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1562,26 +1638,26 @@
         "models": 3,
         "cost": 90,
         "unit_count_min": 1,
-        "unit_count_max": 1
+        "unit_count_max": 2
       },
       {
         "models": 4,
         "models_max": 6,
         "cost": 200,
         "unit_count_min": 1,
-        "unit_count_max": 1
+        "unit_count_max": 2
       },
       {
         "models": 3,
-        "cost": 105,
-        "unit_count_min": 2,
+        "cost": 120,
+        "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 4,
         "models_max": 6,
-        "cost": 215,
-        "unit_count_min": 2,
+        "cost": 230,
+        "unit_count_min": 3,
         "unit_count_max": null
       }
     ],
@@ -1609,14 +1685,23 @@
       "grenadier-gauntlet"
     ],
     "ability_ids": [
-      "brute-shield",
-      "feel-no-pain-6",
-      "slabshield",
-      "wall-of-muscle"
+      {
+        "id": "brute-shield-astra-militarum",
+        "wargear": "brute-shield"
+      },
+      {
+        "id": "feel-no-pain",
+        "value": 6
+      },
+      {
+        "id": "slabshield-astra-militarum",
+        "wargear": "slabshield"
+      },
+      "wall-of-muscle-astra-militarum"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1683,12 +1768,12 @@
     ],
     "ability_ids": [
       "leader",
-      "malign-wardings-psychic",
-      "psychic-barrier-psychic"
+      "malign-wardings-astra-militarum",
+      "psychic-barrier-astra-militarum"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1758,11 +1843,11 @@
       "weapons-team-close-combat-weapons"
     ],
     "ability_ids": [
-      "covering-fire"
+      "covering-fire-astra-militarum"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1831,12 +1916,15 @@
       "weapons-team-close-combat-weapons"
     ],
     "ability_ids": [
-      "bring-it-down",
-      "scouts-6"
+      "bring-it-down-astra-militarum",
+      {
+        "id": "scouts",
+        "value": 6
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1890,7 +1978,8 @@
       "Titanic",
       "Smoke",
       "Imperium",
-      "Hellhammer"
+      "Hellhammer",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -1914,12 +2003,23 @@
       "twin-heavy-flamer-hellhammer"
     ],
     "ability_ids": [
-      "close-quarters-warfare",
-      "deadly-demise-d6-2"
+      "close-quarters-warfare-astra-militarum",
+      {
+        "id": "deadly-demise",
+        "value": "D6+2"
+      },
+      {
+        "id": "damaged",
+        "value": 8
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1963,7 +2063,8 @@
     "keywords": [
       "Fortification",
       "Imperium",
-      "Aegis Defence Line"
+      "Aegis Defence Line",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -1978,15 +2079,15 @@
     },
     "weapon_ids": [],
     "ability_ids": [
-      "defence-line",
-      "deployment",
-      "emplacement-platform",
-      "fortification",
-      "reinforced-cover"
+      "defence-line-astra-militarum",
+      "deployment-astra-militarum",
+      "emplacement-platform-astra-militarum",
+      "fortification-astra-militarum",
+      "reinforced-cover-astra-militarum"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2063,12 +2164,15 @@
       "sentinel-chainsaw"
     ],
     "ability_ids": [
-      "mobile-hunter-killers",
-      "deadly-demise-1"
+      "mobile-hunter-killers-astra-militarum",
+      {
+        "id": "deadly-demise",
+        "value": 1
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2136,12 +2240,13 @@
     ],
     "ability_ids": [
       "leader",
-      "political-overwatch",
-      "summary-execution"
+      "political-overwatch-astra-militarum",
+      "summary-execution-astra-militarum",
+      "orders-commissar-astra-militarum"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2182,12 +2287,12 @@
         "models": 1,
         "cost": 125,
         "unit_count_min": 1,
-        "unit_count_max": 1
+        "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 135,
-        "unit_count_min": 2,
+        "cost": 145,
+        "unit_count_min": 3,
         "unit_count_max": null
       }
     ],
@@ -2197,7 +2302,8 @@
       "Smoke",
       "Imperium",
       "Squadron",
-      "Deathstrike"
+      "Deathstrike",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -2218,12 +2324,19 @@
       "hunter-killer-missile-deathstrike"
     ],
     "ability_ids": [
-      "deathstrike-missile",
-      "deadly-demise-d6"
+      "deathstrike-missile-astra-militarum",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2305,11 +2418,11 @@
       "savage-claws"
     ],
     "ability_ids": [
-      "screening-line"
+      "screening-line-astra-militarum"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2378,11 +2491,11 @@
       "siege-cannon"
     ],
     "ability_ids": [
-      "remorseless-barrage"
+      "remorseless-barrage-astra-militarum"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2436,7 +2549,8 @@
       "Smoke",
       "Imperium",
       "Squadron",
-      "Leman Russ Executioner"
+      "Leman Russ Executioner",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -2462,12 +2576,19 @@
       "storm-bolter"
     ],
     "ability_ids": [
-      "gung-ho-executioners",
-      "deadly-demise-d3"
+      "gung-ho-executioners-astra-militarum",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2579,12 +2700,16 @@
       "power-weapon-tempestus-scions"
     ],
     "ability_ids": [
-      "storm-troopers",
-      "deep-strike"
+      "storm-troopers-astra-militarum",
+      "deep-strike",
+      {
+        "id": "vox-caster-astra-militarum",
+        "wargear": "vox-caster"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2660,7 +2785,8 @@
       "Smoke",
       "Imperium",
       "Transport",
-      "Stormlord"
+      "Stormlord",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -2682,16 +2808,30 @@
       "vulcan-mega-bolter"
     ],
     "ability_ids": [
-      "firing-deck-12",
-      "mount-up",
-      "deadly-demise-d6-2"
+      {
+        "id": "firing-deck",
+        "value": 12
+      },
+      "mount-up-astra-militarum",
+      {
+        "id": "deadly-demise",
+        "value": "D6+2"
+      },
+      {
+        "id": "damaged",
+        "value": 8
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 4
+      }
     ],
     "transport_capacity": {
       "capacity": 40
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2740,7 +2880,8 @@
       "Loyal Protector",
       "Ogryn",
       "Bodyguard",
-      "Character"
+      "Character",
+      "Ogryn Bodyguard"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -2761,15 +2902,24 @@
       "ripper-gun-ogryn-bodyguard"
     ],
     "ability_ids": [
-      "brute-shield",
-      "feel-no-pain-6",
-      "loyal-protector",
-      "ogryn-bodyguard",
-      "slabshield"
+      {
+        "id": "brute-shield-astra-militarum",
+        "wargear": "brute-shield"
+      },
+      {
+        "id": "feel-no-pain",
+        "value": 6
+      },
+      "ogryn-bodyguard-astra-militarum",
+      "loyal-protector-ogryn-bodyguard-astra-militarum",
+      {
+        "id": "slabshield-ogryn-bodyguard-astra-militarum",
+        "wargear": "slabshield"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2852,13 +3002,23 @@
       "power-weapon-kasrkin"
     ],
     "ability_ids": [
-      "melta-mine",
-      "warrior-elite",
-      "scouts-6"
+      {
+        "id": "melta-mine-astra-militarum",
+        "wargear": "melta-mine"
+      },
+      "warrior-elite-astra-militarum",
+      {
+        "id": "scouts",
+        "value": 6
+      },
+      {
+        "id": "vox-caster-astra-militarum",
+        "wargear": "vox-caster"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2953,7 +3113,8 @@
       "Cadian",
       "Command Squad",
       "Character",
-      "Officer"
+      "Officer",
+      "Cadian Command Squad"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -2981,12 +3142,25 @@
       "power-weapon-cadian-command-squad"
     ],
     "ability_ids": [
-      "cadia-stands",
-      "leader"
+      "cadia-stands-astra-militarum",
+      "leader",
+      {
+        "id": "master-vox-astra-militarum",
+        "wargear": "master-vox"
+      },
+      {
+        "id": "medi-pack-astra-militarum",
+        "wargear": "medi-pack"
+      },
+      "orders-astra-militarum",
+      {
+        "id": "regimental-standard-astra-militarum",
+        "wargear": "regimental-standard"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3047,7 +3221,8 @@
       "Catachan",
       "Command Squad",
       "Character",
-      "Officer"
+      "Officer",
+      "Catachan Command Squad"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -3078,13 +3253,29 @@
       "sniper-rifle-catachan-command-squad"
     ],
     "ability_ids": [
-      "gung-ho-command",
+      "gung-ho-command-astra-militarum",
       "leader",
-      "scouts-6"
+      {
+        "id": "scouts",
+        "value": 6
+      },
+      {
+        "id": "master-vox-astra-militarum",
+        "wargear": "master-vox"
+      },
+      {
+        "id": "medi-pack-astra-militarum",
+        "wargear": "medi-pack"
+      },
+      "orders-astra-militarum",
+      {
+        "id": "regimental-standard-astra-militarum",
+        "wargear": "regimental-standard"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3163,7 +3354,8 @@
       "Smoke",
       "Imperium",
       "Transport",
-      "Doomhammer"
+      "Doomhammer",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -3184,16 +3376,30 @@
       "twin-heavy-flamer-doomhammer"
     ],
     "ability_ids": [
-      "close-range-titan-killer",
-      "deadly-demise-d6-2",
-      "firing-deck-6"
+      "close-range-titan-killer-astra-militarum",
+      {
+        "id": "deadly-demise",
+        "value": "D6+2"
+      },
+      {
+        "id": "firing-deck",
+        "value": 12
+      },
+      {
+        "id": "damaged",
+        "value": 8
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 4
+      }
     ],
     "transport_capacity": {
       "capacity": 26
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3247,7 +3453,8 @@
       "Smoke",
       "Imperium",
       "Squadron",
-      "Rogal Dorn Battle Tank"
+      "Rogal Dorn Battle Tank",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -3273,12 +3480,19 @@
       "twin-battle-cannon"
     ],
     "ability_ids": [
-      "ablative-plating-hammer-of-the-emperor",
-      "deadly-demise-d6"
+      "ablative-plating-astra-militarum",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      {
+        "id": "damaged",
+        "value": 6
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3344,17 +3558,13 @@
       "zealots-vindictor"
     ],
     "ability_ids": [
-      "holy-hatred",
-      "holy-mission",
-      "holy-piety",
+      "holy-piety-astra-militarum",
       "leader",
-      "righteous-smiting",
-      "war-hymns",
-      "zealot"
+      "war-hymns-astra-militarum"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3437,12 +3647,19 @@
       "power-weapon-death-korps-of-krieg"
     ],
     "ability_ids": [
-      "death-korps-medi-pack",
-      "grim-demeanour"
+      {
+        "id": "death-korps-medi-pack-astra-militarum",
+        "wargear": "death-korps-medi-pack"
+      },
+      "grim-demeanour-astra-militarum",
+      {
+        "id": "vox-caster-astra-militarum",
+        "wargear": "vox-caster"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3510,7 +3727,8 @@
       "Titanic",
       "Smoke",
       "Imperium",
-      "Banesword"
+      "Banesword",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -3531,12 +3749,23 @@
       "twin-heavy-flamer-banesword"
     ],
     "ability_ids": [
-      "armour-obliteration",
-      "deadly-demise-d6-2"
+      "armour-obliteration-astra-militarum",
+      {
+        "id": "deadly-demise",
+        "value": "D6+2"
+      },
+      {
+        "id": "damaged",
+        "value": 8
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3576,12 +3805,12 @@
         "models": 1,
         "cost": 95,
         "unit_count_min": 1,
-        "unit_count_max": 1
+        "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 115,
-        "unit_count_min": 2,
+        "cost": 125,
+        "unit_count_min": 3,
         "unit_count_max": null
       }
     ],
@@ -3591,7 +3820,8 @@
       "Smoke",
       "Imperium",
       "Squadron",
-      "Wyvern"
+      "Wyvern",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -3612,12 +3842,19 @@
       "wyvern-quad-stormshard-mortar"
     ],
     "ability_ids": [
-      "suppression-bombardment",
-      "deadly-demise-d3"
+      "suppression-bombardment-astra-militarum",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3708,11 +3945,11 @@
       "steeds-hooves"
     ],
     "ability_ids": [
-      "horsemasters"
+      "horsemasters-astra-militarum"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3759,13 +3996,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 125,
+        "cost": 115,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 135,
+        "cost": 125,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -3775,7 +4012,8 @@
       "Smoke",
       "Imperium",
       "Squadron",
-      "Hellhound"
+      "Hellhound",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -3799,12 +4037,19 @@
       "multi-melta"
     ],
     "ability_ids": [
-      "flush-them-out",
-      "deadly-demise-d6"
+      "flush-them-out-astra-militarum",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3858,7 +4103,8 @@
       "Smoke",
       "Imperium",
       "Squadron",
-      "Leman Russ Punisher"
+      "Leman Russ Punisher",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -3884,12 +4130,19 @@
       "storm-bolter"
     ],
     "ability_ids": [
-      "mow-down-the-enemy",
-      "deadly-demise-d3"
+      "mow-down-the-enemy-astra-militarum",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3963,7 +4216,8 @@
       "Krieg",
       "Command Squad",
       "Character",
-      "Officer"
+      "Officer",
+      "Krieg Command Squad"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -3993,14 +4247,29 @@
       "trench-club"
     ],
     "ability_ids": [
-      "alchemyk-counteragents",
-      "grim-determination",
+      {
+        "id": "alchemyk-counteragents-astra-militarum",
+        "wargear": "alchemyk-counteragents"
+      },
+      "grim-determination-astra-militarum",
       "leader",
-      "servo-scribes"
+      {
+        "id": "servo-scribes-astra-militarum",
+        "wargear": "servo-scribes"
+      },
+      {
+        "id": "master-vox-astra-militarum",
+        "wargear": "master-vox"
+      },
+      "orders-astra-militarum",
+      {
+        "id": "regimental-standard-astra-militarum",
+        "wargear": "regimental-standard"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -4068,16 +4337,16 @@
       "ripper-pistol"
     ],
     "ability_ids": [
-      "like-fighting-a-shadow",
+      "like-fighting-a-shadow-astra-militarum",
       "lone-operative",
-      "loner",
-      "one-man-army",
+      "loner-astra-militarum",
+      "one-man-army-astra-militarum",
       "stealth",
       "infiltrators"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -4131,7 +4400,8 @@
       "Smoke",
       "Imperium",
       "Squadron",
-      "Leman Russ Demolisher"
+      "Leman Russ Demolisher",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -4157,12 +4427,19 @@
       "storm-bolter"
     ],
     "ability_ids": [
-      "line-breaker",
-      "deadly-demise-d3"
+      "line-breaker-astra-militarum",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -4232,7 +4509,8 @@
       "Squadron",
       "Transport",
       "Dedicated Transport",
-      "Taurox"
+      "Taurox",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -4251,15 +4529,18 @@
       "twin-autocannon-taurox"
     ],
     "ability_ids": [
-      "rapid-deployment",
-      "deadly-demise-d3"
+      "rapid-deployment-astra-militarum",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "transport_capacity": {
       "capacity": 12
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -4327,12 +4608,15 @@
       "ripper-gun-ogryn-squad"
     ],
     "ability_ids": [
-      "point-blank-barrage",
-      "feel-no-pain-6"
+      "point-blank-barrage-astra-militarum",
+      {
+        "id": "feel-no-pain",
+        "value": 6
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -4371,7 +4655,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 75
+        "cost": 70
       }
     ],
     "keywords": [
@@ -4402,13 +4686,17 @@
     ],
     "ability_ids": [
       "leader",
-      "leading-the-charge",
-      "tough-to-kill",
-      "feel-no-pain-6"
+      "leading-the-charge-astra-militarum",
+      "tough-to-kill-astra-militarum",
+      {
+        "id": "feel-no-pain",
+        "value": 6
+      },
+      "orders-lord-marshal-dreir-astra-militarum"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -4474,14 +4762,14 @@
       "servo-arm"
     ],
     "ability_ids": [
-      "enginseer",
+      "enginseer-astra-militarum",
       "leader",
-      "omnissiah-s-blessing",
-      "vengeance-for-the-omnissiah"
+      "omnissiahs-blessing-astra-militarum",
+      "vengeance-for-the-omnissiah-astra-militarum"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -4537,7 +4825,8 @@
       "Smoke",
       "Imperium",
       "Transport",
-      "Banehammer"
+      "Banehammer",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -4558,16 +4847,30 @@
       "twin-heavy-flamer-banehammer"
     ],
     "ability_ids": [
-      "firing-deck-6",
-      "tremor-quake",
-      "deadly-demise-d6-2"
+      {
+        "id": "firing-deck",
+        "value": 6
+      },
+      "tremor-quake-astra-militarum",
+      {
+        "id": "deadly-demise",
+        "value": "D6+2"
+      },
+      {
+        "id": "damaged",
+        "value": 8
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 4
+      }
     ],
     "transport_capacity": {
       "capacity": 26
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -4640,12 +4943,19 @@
       "laspistol-catachan-jungle-fighters"
     ],
     "ability_ids": [
-      "jungle-fighters",
-      "scouts-6"
+      "jungle-fighters-astra-militarum",
+      {
+        "id": "scouts",
+        "value": 6
+      },
+      {
+        "id": "vox-caster-astra-militarum",
+        "wargear": "vox-caster"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -4702,7 +5012,8 @@
       "Squadron",
       "Imperium",
       "Officer",
-      "Leman Russ Commander"
+      "Leman Russ Commander",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -4734,12 +5045,21 @@
       "vanquisher-battle-cannon"
     ],
     "ability_ids": [
-      "death-befitting-an-officer",
-      "deadly-demise-d3"
+      "death-befitting-an-officer-astra-militarum",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      },
+      "orders-leman-russ-commander-astra-militarum",
+      "vox-net-astra-militarum"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -4809,7 +5129,6 @@
     "keywords": [
       "Vehicle",
       "Fly",
-      "Aircraft",
       "Imperium",
       "Transport",
       "Valkyrie"
@@ -4835,16 +5154,23 @@
       "multiple-rocket-pod"
     ],
     "ability_ids": [
-      "airborne-insertion",
+      "airborne-insertion-astra-militarum",
       "hover",
-      "deadly-demise-d6"
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      {
+        "id": "damaged",
+        "value": 5
+      }
     ],
     "transport_capacity": {
       "capacity": 12
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -4911,12 +5237,13 @@
     ],
     "ability_ids": [
       "leader",
-      "lord-castellan",
-      "tactical-genius"
+      "lord-castellan-astra-militarum",
+      "tactical-genius-astra-militarum",
+      "orders-lord-marshal-dreir-astra-militarum"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -4971,7 +5298,8 @@
       "Smoke",
       "Titanic",
       "Imperium",
-      "Shadowsword"
+      "Shadowsword",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -4992,12 +5320,23 @@
       "volcano-cannon"
     ],
     "ability_ids": [
-      "titan-killer",
-      "deadly-demise-d6-2"
+      "titan-killer-astra-militarum",
+      {
+        "id": "deadly-demise",
+        "value": "D6+2"
+      },
+      {
+        "id": "damaged",
+        "value": 8
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -5037,12 +5376,12 @@
         "models": 1,
         "cost": 150,
         "unit_count_min": 1,
-        "unit_count_max": 1
+        "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 170,
-        "unit_count_min": 2,
+        "cost": 180,
+        "unit_count_min": 3,
         "unit_count_max": null
       }
     ],
@@ -5052,7 +5391,8 @@
       "Smoke",
       "Imperium",
       "Squadron",
-      "Manticore"
+      "Manticore",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -5073,12 +5413,19 @@
       "storm-eagle-rockets"
     ],
     "ability_ids": [
-      "furious-barrage",
-      "deadly-demise-d3"
+      "furious-barrage-astra-militarum",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -5135,7 +5482,8 @@
       "Squadron",
       "Transport",
       "Dedicated Transport",
-      "Chimera"
+      "Chimera",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -5159,16 +5507,22 @@
       "storm-bolter"
     ],
     "ability_ids": [
-      "firing-deck-2",
-      "mobile-command-vehicle",
-      "deadly-demise-d3"
+      {
+        "id": "firing-deck",
+        "value": 2
+      },
+      "mobile-command-vehicle-astra-militarum",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "transport_capacity": {
       "capacity": 12
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -5235,12 +5589,19 @@
       "lascannon"
     ],
     "ability_ids": [
-      "fiery-vengeance",
-      "deadly-demise-d6"
+      "fiery-vengeance-astra-militarum",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      {
+        "id": "damaged",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -5294,7 +5655,8 @@
       "Smoke",
       "Imperium",
       "Squadron",
-      "Leman Russ Vanquisher"
+      "Leman Russ Vanquisher",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -5320,12 +5682,19 @@
       "vanquisher-battle-cannon"
     ],
     "ability_ids": [
-      "tank-killer",
-      "deadly-demise-d3"
+      "tank-killer-astra-militarum",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -5379,12 +5748,12 @@
         "models": 1,
         "cost": 115,
         "unit_count_min": 1,
-        "unit_count_max": 1
+        "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 135,
-        "unit_count_min": 2,
+        "cost": 145,
+        "unit_count_min": 3,
         "unit_count_max": null
       }
     ],
@@ -5394,7 +5763,8 @@
       "Smoke",
       "Imperium",
       "Squadron",
-      "Basilisk"
+      "Basilisk",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -5415,12 +5785,19 @@
       "hunter-killer-missile"
     ],
     "ability_ids": [
-      "earthshaker-rounds",
-      "deadly-demise-d3"
+      "earthshaker-rounds-astra-militarum",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -5474,7 +5851,8 @@
       "Titanic",
       "Smoke",
       "Imperium",
-      "Baneblade"
+      "Baneblade",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -5498,12 +5876,23 @@
       "twin-heavy-flamer-baneblade"
     ],
     "ability_ids": [
-      "rolling-fortress",
-      "deadly-demise-d6-2"
+      "rolling-fortress-astra-militarum",
+      {
+        "id": "deadly-demise",
+        "value": "D6+2"
+      },
+      {
+        "id": "damaged",
+        "value": 8
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -5608,13 +5997,19 @@
       "trench-club-krieg-combat-engineers"
     ],
     "ability_ids": [
-      "grenadiers",
-      "remote-mine",
-      "scouts-6"
+      "grenadiers-astra-militarum",
+      {
+        "id": "remote-mine-astra-militarum",
+        "wargear": "remote-mine"
+      },
+      {
+        "id": "scouts",
+        "value": 6
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -5676,7 +6071,8 @@
       "Smoke",
       "Imperium",
       "Squadron",
-      "Hydra"
+      "Hydra",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -5697,12 +6093,19 @@
       "hydra-autocannon"
     ],
     "ability_ids": [
-      "flak-battery",
-      "deadly-demise-d3"
+      "flak-battery-astra-militarum",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -5756,7 +6159,8 @@
       "Smoke",
       "Imperium",
       "Squadron",
-      "Leman Russ Eradicator"
+      "Leman Russ Eradicator",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -5782,12 +6186,19 @@
       "storm-bolter"
     ],
     "ability_ids": [
-      "urban-warfare",
-      "deadly-demise-d3"
+      "urban-warfare-astra-militarum",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -5859,7 +6270,7 @@
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -5909,6 +6320,19 @@
         "namespace": "mfm",
         "id": "fb5a75f3-c273-4e98-bf11-d6a1568257ae"
       }
+    ],
+    "ability_ids": [
+      "independent-operatives-astra-militarum",
+      "infiltrators",
+      "stealth",
+      {
+        "id": "vox-caster-astra-militarum",
+        "wargear": "vox-caster"
+      },
+      {
+        "id": "vox-relay-beacon-astra-militarum",
+        "wargear": "vox-relay-beacon"
+      }
     ]
   },
   {
@@ -5949,7 +6373,8 @@
       "Squadron",
       "Transport",
       "Dedicated Transport",
-      "Centaur RSV"
+      "Centaur RSV",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -5960,7 +6385,7 @@
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -5981,6 +6406,17 @@
         "namespace": "mfm",
         "id": "94ede55d-7c9d-4c45-a763-c81cc447f74f"
       }
+    ],
+    "ability_ids": [
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "firing-deck",
+        "value": 12
+      },
+      "rapid-strike-vehicle-astra-militarum"
     ]
   },
   {
@@ -6013,7 +6449,8 @@
       "Epic Hero",
       "Imperium",
       "Officer",
-      "Commissar Graves"
+      "Commissar Graves",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -6024,7 +6461,7 @@
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -6048,6 +6485,19 @@
         "namespace": "mfm",
         "id": "c44173e3-4f62-4315-9ce9-79ae18fb9350"
       }
+    ],
+    "ability_ids": [
+      {
+        "id": "aquiline-prow-astra-militarum",
+        "wargear": "aquiline-prow"
+      },
+      "brutal-disciplinarian-astra-militarum",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "mechanised-spearhead-astra-militarum",
+      "orders-commissar-graves-astra-militarum"
     ]
   },
   {
@@ -6078,7 +6528,8 @@
       "Character",
       "Epic Hero",
       "Imperium",
-      "Commissar Graves on Foot"
+      "Commissar Graves on Foot",
+      "Officer"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -6089,7 +6540,7 @@
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -6115,6 +6566,13 @@
         "namespace": "mfm",
         "id": "82cd4b5e-d171-4ed7-bd67-a3a1bdae62ce"
       }
+    ],
+    "ability_ids": [
+      "brutal-disciplinarian-commissar-graves-on-foot-astra-militarum",
+      "icon-of-discipline-astra-militarum",
+      "leader",
+      "orders-commissar-graves-on-foot-astra-militarum",
+      "using-commissar-graves-astra-militarum"
     ]
   },
   {
@@ -6137,7 +6595,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 120
+        "cost": 110
       }
     ],
     "keywords": [
@@ -6157,7 +6615,7 @@
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -6186,6 +6644,12 @@
         "namespace": "mfm",
         "id": "085f2132-e2f9-4367-847a-5978597d525e"
       }
+    ],
+    "ability_ids": [
+      "hero-of-hades-hive-astra-militarum",
+      "leader",
+      "orders-commissar-yarrick-astra-militarum",
+      "will-of-iron-astra-militarum"
     ]
   },
   {
@@ -6219,7 +6683,8 @@
       "Imperium",
       "Smoke",
       "Squadron",
-      "Hippogriff AFV"
+      "Hippogriff AFV",
+      "Frame"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -6230,7 +6695,7 @@
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -6259,6 +6724,13 @@
       {
         "namespace": "mfm",
         "id": "21ded206-d6ec-483c-b0de-9a453ca09f32"
+      }
+    ],
+    "ability_ids": [
+      "convoy-escort-vehicle-astra-militarum",
+      {
+        "id": "deadly-demise",
+        "value": 1
       }
     ]
   },
@@ -6289,7 +6761,8 @@
       "Explosives",
       "Imperium",
       "Mounted",
-      "Regiment"
+      "Regiment",
+      "Drayden's Lance Attilan Rough Riders"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -6302,16 +6775,16 @@
       "goad-lance",
       "hunting-lance",
       "lasgun",
-      "laspistol-attilan-rough-riders",
-      "power-sabre-attilan-rough-riders",
-      "steeds-hooves"
+      "steeds-hooves",
+      "laspistol",
+      "power-sabre"
     ],
     "ability_ids": [
-      "horsemasters-draydens-lance"
+      "horsemasters-draydens-lance-attilan-rough-riders-astra-militarum"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -6368,7 +6841,10 @@
       "Explosives",
       "Imperium",
       "Infantry",
-      "Platoon"
+      "Platoon",
+      "Officer",
+      "Character",
+      "Drayden's Lance Command Squad"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -6386,16 +6862,16 @@
       "power-weapon"
     ],
     "ability_ids": [
-      "medi-pack-draydens-lance",
-      "orders-draydens-lance",
-      "regimental-standard-draydens-lance",
-      "master-vox-draydens-lance",
-      "voice-of-command-draydens-lance",
-      "over-there-draydens-lance"
+      "medi-pack-draydens-lance-command-squad-astra-militarum",
+      "orders-draydens-lance-command-squad-astra-militarum",
+      "regimental-standard-draydens-lance-command-squad-astra-militarum",
+      "master-vox-draydens-lance-command-squad-astra-militarum",
+      "voice-of-command-astra-militarum",
+      "over-there-astra-militarum"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -6440,7 +6916,8 @@
       "Explosives",
       "Imperium",
       "Infantry",
-      "Regiment"
+      "Regiment",
+      "Drayden's Lance Kasrkin"
     ],
     "faction_keywords": [
       "Astra Militarum"
@@ -6450,26 +6927,26 @@
       "max": 10
     },
     "weapon_ids": [
-      "chainsword-kasrkin",
       "flamer",
-      "grenade-launcher-kasrkin",
       "gun-stocks",
       "hot-shot-lasgun",
       "hot-shot-laspistol",
       "hot-shot-marksman-rifle",
       "hot-shot-volley-gun",
-      "plasma-gun-kasrkin",
-      "plasma-pistol"
+      "plasma-pistol",
+      "chainsword",
+      "grenade-launcher",
+      "plasma-gun"
     ],
     "ability_ids": [
-      "warrior-elite-draydens-lance",
-      "melta-mine-draydens-lance",
-      "vox-caster-draydens-lance",
-      "voice-of-command-draydens-lance"
+      "warrior-elite-draydens-lance-kasrkin-astra-militarum",
+      "melta-mine-draydens-lance-kasrkin-astra-militarum",
+      "vox-caster-draydens-lance-kasrkin-astra-militarum",
+      "voice-of-command-astra-militarum"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"

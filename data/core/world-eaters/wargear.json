@@ -67,14 +67,57 @@
     "id": "icon-of-khorne",
     "name": "icon of Khorne",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-995"
     },
     "category": "icon",
     "external_refs": [
       {
         "namespace": "mfm",
         "id": "1da7917a-f89a-4123-92b2-9127f85da662"
+      }
+    ]
+  },
+  {
+    "id": "instrument-of-chaos",
+    "name": "Instrument of Chaos",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "e77cb7d8-d6cd-472a-a771-91fee3e48bcd"
+      }
+    ]
+  },
+  {
+    "id": "daemonic-icon",
+    "name": "Daemonic Icon",
+    "category": "icon",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "79b389ec-f1c4-42b1-833d-4e1b86817377"
+      }
+    ]
+  },
+  {
+    "id": "collar-of-khorne",
+    "name": "Collar of Khorne",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "80a80408-8489-4694-a5f4-72cf40036349"
       }
     ]
   }

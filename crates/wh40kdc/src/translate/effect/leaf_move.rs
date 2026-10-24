@@ -1,0 +1,513 @@
+//! Single effects that move or place units: moves, move modifiers and set-up. Mirrors the
+//! matching functions in `tools/src/translate/effect-leaf-board.ts`.
+
+use serde_json::Value;
+
+use super::placement::{place_phrase, placement_limits, placement_phrase};
+use super::words::*;
+use crate::translate::condition::{and_list, describe_condition_value, nn, obj, range_phrase, P};
+use crate::translate::dekebab;
+
+/// "its full wounds", "half of its starting number of wounds", "3 wounds", "D3 wounds": what a
+/// set-up or returned model has left.
+pub(super) fn wounds_left(value: Option<&Value>) -> String {
+    match value {
+        None | Some(Value::Null) => "its full wounds".to_string(),
+        Some(x) if x.as_str() == Some("full") => "its full wounds".to_string(),
+        Some(x) if x.as_str() == Some("half-starting") => {
+            "half of its starting number of wounds".to_string()
+        }
+        Some(x) if is_literal(Some(x)) => {
+            let n = dice_case(Some(x));
+            format!("{n} {}", if n == "1" { "wound" } else { "wounds" })
+        }
+        Some(x) => amount_of(Some(x), "wound", "wounds"),
+    }
+}
+
+/// ", as a separate unit with a Starting Strength of 1 (it is no longer part of its attached unit)".
+pub(super) fn detach_phrase(m: &P) -> String {
+    if !is_true(m, "detach") {
+        return String::new();
+    }
+    let strength = nn(m, "starting_strength")
+        .map(|s| format!(" with a Starting Strength of {}", jv(s)))
+        .unwrap_or_default();
+    format!(", as a separate unit{strength} (it is no longer part of its attached unit)")
+}
+
+pub(super) fn move_verb(t: &str) -> String {
+    match t {
+        "normal" => "make a Normal move",
+        "advance" => "Advance",
+        "fall-back" => "Fall Back",
+        "charge" => "declare a charge",
+        "pile-in" => "Pile In",
+        "consolidation" => "Consolidate",
+        "surge" => "make a Surge move",
+        "scout" => "make a Scout move",
+        "ingress" => "make an Ingress move",
+        "disembark" => "disembark",
+        "embark" => "embark",
+        "pulse-jet" => "make a Pulse Jet move",
+        other => return format!("make a {} move", dekebab(other)),
+    }
+    .to_string()
+}
+
+pub(super) fn move_noun(t: &str) -> String {
+    match t {
+        "normal" => "Normal",
+        "advance" => "Advance",
+        "fall-back" => "Fall Back",
+        "charge" => "Charge",
+        "pile-in" => "Pile-in",
+        "consolidation" => "Consolidation",
+        "surge" => "Surge",
+        "scout" => "Scout",
+        "ingress" => "Ingress",
+        "disembark" => "Disembark",
+        "embark" => "Embark",
+        "pulse-jet" => "Pulse Jet",
+        other => return dekebab(other),
+    }
+    .to_string()
+}
+
+pub(super) fn passthrough(p: &[Value]) -> String {
+    let items: Vec<String> = p
+        .iter()
+        .map(|x| {
+            if let Value::Object(item) = x {
+                return pass_item(item);
+            }
+            let x = jv(x);
+            match x.as_str() {
+                "non-titanic-models" => "non-Titanic models".to_string(),
+                "friendly-vehicles" => "friendly Vehicle models".to_string(),
+                "friendly-monsters" => "friendly Monster models".to_string(),
+                "terrain-le-4" => "terrain features 4\" or lower".to_string(),
+                "tall-terrain" => "terrain features over 4\"".to_string(),
+                "all-terrain" => "terrain features".to_string(),
+                "enemy-models" => "enemy models".to_string(),
+                other => dekebab(other),
+            }
+        })
+        .collect();
+    and_list(&items)
+}
+
+/// A typed pass-through item: "models (excluding MONSTER and VEHICLE models)", "terrain
+/// features 4\" or lower".
+fn pass_item(x: &P) -> String {
+    if sv(x, "kind") == Some("terrain") {
+        return match sv(x, "height") {
+            Some("up-to-4") => "terrain features 4\" or lower",
+            Some("over-4") => "terrain features over 4\"",
+            _ => "terrain features",
+        }
+        .to_string();
+    }
+    let owner = match sv(x, "owner") {
+        Some("friendly") => "friendly ",
+        Some("enemy") => "enemy ",
+        _ => "",
+    };
+    let all = map_arr(x, "all_of", |k| title_case(&jv(k).to_lowercase()))
+        .map(|k| format!("{} ", k.join(" ")))
+        .unwrap_or_default();
+    let excl = map_arr(x, "excluding", jv)
+        .map(|k| format!(" (excluding {} models)", and_list(&k)))
+        .unwrap_or_default();
+    format!("{owner}{all}models{excl}")
+}
+
+/// " using the Assault Disembarkation rules", " using the Desperate Escape rules".
+fn mode_clause(m: &P) -> String {
+    let Some(mode) = nn(m, "mode") else {
+        return String::new();
+    };
+    let mode = title_case(&jv(mode));
+    if sv(m, "move_type") == Some("disembark") || sv(m, "from") == Some("transport") {
+        format!(" using the {mode} Disembarkation rules")
+    } else {
+        format!(" using the {mode} rules")
+    }
+}
+
+/// A unit-ref keeps its effect-subject phrase; markers, objectives and edges read as places.
+/// As `endsNearestPhrase` in the TypeScript describer: the closest unit's name, with the waiver's
+/// alternative end when `waives` is closest-enemy-model.
+fn ends_nearest_phrase(e: &P, ctx: &Ctx, who: &str, move_ref: &str) -> String {
+    // The enemy unit the trigger names is "that enemy unit", not the closest of a group.
+    let event_subject = e.get("of").and_then(Value::as_str) == Some("event-subject");
+    // An objective names no unit: any marker, or the one a select-objective bound.
+    let objective = e.get("of").and_then(|of| of.get("objective"));
+    let named = if event_subject {
+        String::new()
+    } else if let Some(obj) = objective {
+        if obj.get("selection_var").is_some() {
+            "selected objective".to_string()
+        } else {
+            "objective marker".to_string()
+        }
+    } else {
+        let mut named = effect_subject(e.get("of"), ctx);
+        for article in ["an ", "a ", "the ", "all "] {
+            if let Some(rest) = named.strip_prefix(article) {
+                named = rest.to_string();
+                break;
+            }
+        }
+        named.replacen(" units", " unit", 1).replace(" units)", ")")
+    };
+    let nearest = if event_subject {
+        "as close as possible to that enemy unit".to_string()
+    } else {
+        format!("as close as possible to the closest {named}")
+    };
+    let must = if jstr(e.get("per")) == "model" {
+        format!(
+            "each model in {} must end {move_ref}",
+            if who == "it" { "the unit" } else { who }
+        )
+    } else {
+        format!("{who} must end {move_ref}")
+    };
+    if jstr(e.get("waives")) == "closest-enemy-model" {
+        format!("{must} either closer to the closest enemy model or {nearest}")
+    } else if jstr(e.get("instead_of")) == "closest-enemy-unit" {
+        format!("{must} {nearest}, instead of as close as possible to the closest enemy unit")
+    } else {
+        format!("{must} {nearest}")
+    }
+}
+
+fn ends_of(of: Option<&Value>, ctx: &Ctx) -> String {
+    let Some(of) = of.filter(|o| !o.is_null()) else {
+        return "this model".to_string();
+    };
+    let place = match of {
+        Value::String(s) => s.starts_with("battlefield-"),
+        Value::Object(o) => nn(o, "marker").is_some() || nn(o, "objective").is_some(),
+        _ => false,
+    };
+    if place {
+        place_phrase(Some(of), ctx)
+    } else {
+        effect_subject(Some(of), ctx)
+    }
+}
+
+pub(super) fn movement(m: &P, subj: &str, ctx: &Ctx) -> String {
+    let verb = move_verb(&jstr(m.get("move_type")));
+    let up_to = match nn(m, "distance") {
+        Some(d) if verb.starts_with("make ") => format!(" of up to {}\"", dice_case(Some(d))),
+        Some(d) => format!(" up to {}\"", dice_case(Some(d))),
+        None => String::new(),
+    };
+    let mut s = format!("{subj} can {verb}{up_to}{}", mode_clause(m));
+    if m.get("as_if").and_then(|v| v.as_str()) == Some("movement-phase") {
+        s.push_str(" as if it were your Movement phase");
+    }
+    if let Some(p) = arr(m, "passthrough") {
+        s.push_str(&format!(
+            ", moving over {} as though they were not there",
+            passthrough(p)
+        ));
+    }
+    if let Some(ends) = nn(m, "ends_within") {
+        let ends = obj(Some(ends));
+        let of = ends_of(ends.get("of"), ctx);
+        s.push_str(&format!(
+            ", ending that move {}within {} of {of}",
+            if is_true(ends, "wholly") {
+                "wholly "
+            } else {
+                ""
+            },
+            range_phrase(ends.get("range"))
+        ));
+    }
+    if let Some(c) = nn(m, "ends_when") {
+        let replaces = if is_true(m, "ends_when_replaces") {
+            " (instead of the usual threshold)"
+        } else {
+            ""
+        };
+        s.push_str(&format!(
+            "; it must end that move where {}{replaces}",
+            describe_condition_value(c)
+        ));
+    }
+    if let Some(e) = nn(m, "ends_nearest") {
+        s.push_str(&format!(
+            "; {}",
+            ends_nearest_phrase(obj(Some(e)), ctx, "it", "that move")
+        ));
+    }
+    if is_true(m, "allow_engagement") {
+        s.push_str(if jstr(m.get("engaged_with")) == "nearest-move-end" {
+            "; it can end that move within Engagement Range of that enemy unit"
+        } else {
+            "; it can end that move within Engagement Range of enemy units"
+        });
+    }
+    if let Some(c) = nn(m, "counts_as_move") {
+        s.push_str(&format!("; that move counts as {}", moved_phrase(Some(c))));
+    }
+    if is_true(m, "keeps_eligible") {
+        s.push_str("; doing so does not change what it is eligible to do this turn");
+    }
+    s
+}
+
+pub(super) fn move_modifier(m: &P, subj: &str, ctx: &Ctx) -> String {
+    let kinds = map_arr(m, "applies_to_moves", |x| move_noun(&jv(x))).map(|k| and_list(&k));
+    let mut clauses: Vec<String> = Vec::new();
+    if sv(m, "maximum") == Some("unlimited") {
+        clauses.push(format!("{subj} can move any distance"));
+    }
+    if let Some(bonus) = nn(m, "distance_bonus") {
+        let n = num(Some(bonus));
+        let moves = match &kinds {
+            Some(k) => format!("{k} moves"),
+            None => "Move characteristic".to_string(),
+        };
+        clauses.push(if !n.is_nan() && n < 0.0 {
+            format!(
+                "subtract {}\" from {}",
+                fnum(n.abs()),
+                of_or_possessive(subj, &moves)
+            )
+        } else {
+            format!(
+                "add {}\" to {}",
+                dice_case(Some(bonus)),
+                of_or_possessive(subj, &moves)
+            )
+        });
+    }
+    if sv(m, "advance") == Some("fixed-6") {
+        clauses.push(format!(
+            "{subj} {} not make an Advance roll; add 6\" to {} Move characteristic instead",
+            v(subj, "does"),
+            pronoun(subj)
+        ));
+    }
+    if let Some(p) = arr(m, "passthrough") {
+        clauses.push(format!(
+            "{subj} can move over {} as though they were not there",
+            passthrough(p)
+        ));
+    }
+    if is_true(m, "no_end_in_engagement") {
+        clauses.push(format!(
+            "{subj} cannot end a move within Engagement Range of any enemy unit"
+        ));
+    }
+    if let Some(e) = nn(m, "ends_nearest") {
+        clauses.push(ends_nearest_phrase(
+            obj(Some(e)),
+            ctx,
+            subj,
+            &format!("{} move", pronoun(subj)),
+        ));
+    }
+    // With a distance bonus, ends_when is the bonus's proviso: it is available only where a move can end there.
+    if let Some(c) = nn(m, "ends_when") {
+        let where_ = describe_condition_value(c);
+        clauses.push(if nn(m, "distance_bonus").is_some() {
+            format!("the extra distance applies only if {subj} can end {} move where {where_}, and must end it there", pronoun(subj))
+        } else {
+            let replaces = if is_true(m, "ends_when_replaces") { " (instead of the usual threshold)" } else { "" };
+            format!("{subj} must end {} move where {where_}{replaces}", pronoun(subj))
+        });
+    }
+    if is_true(m, "end_on_terrain") {
+        clauses.push(format!(
+            "{subj} can end {} moves on top of terrain features",
+            pronoun(subj)
+        ));
+    }
+    if is_true(m, "ignore_vertical") {
+        clauses.push(format!(
+            "{subj} {} vertical distances when {}",
+            v(subj, "ignores"),
+            if pronoun(subj) == "their" {
+                "they move"
+            } else {
+                "it moves"
+            }
+        ));
+    }
+    let s = clauses.join("; ");
+    match kinds {
+        Some(k) if nn(m, "distance_bonus").is_none() => {
+            format!("{s}, during {} {k} moves", pronoun(subj))
+        }
+        _ => s,
+    }
+}
+
+pub(super) const ORD: &[&str] = &["", "first", "second", "third", "fourth", "fifth"];
+
+pub(super) fn ordinal(t: &Value) -> String {
+    t.as_u64()
+        .and_then(|i| ORD.get(i as usize))
+        .map(|s| s.to_string())
+        .unwrap_or_else(|| format!("{}th", jv(t)))
+}
+
+/// `list.join(", ").replace(/, ([^,]*)$/, " or $1")`.
+pub(super) fn or_last(joined: &str) -> String {
+    match joined.rfind(", ") {
+        Some(i) if !joined[i + 2..].contains(',') => {
+            format!("{} or {}", &joined[..i], &joined[i + 2..])
+        }
+        _ => joined.to_string(),
+    }
+}
+
+pub(super) fn set_up(m: &P, subj: &str, ctx: &Ctx) -> String {
+    let who = match m.get("subject") {
+        Some(s) if s.as_str() == Some("models-on-this-model") => {
+            "the models on this model".to_string()
+        }
+        Some(s) if !s.is_null() => effect_subject(Some(s), ctx),
+        _ => subj.to_string(),
+    };
+    // An ingress or other placement replaces the usual set-up limits; a Reserves set-up ignores the Reserves limits.
+    let reserves =
+        sv(m, "to") == Some("strategic-reserves") || sv(m, "from") == Some("strategic-reserves");
+    let limits = if is_true(m, "ignore_limits") {
+        if reserves {
+            ", ignoring any limits on units in Strategic Reserves"
+        } else {
+            ", ignoring the usual set-up limits"
+        }
+    } else {
+        ""
+    };
+    let denied = is_false(m, "allow");
+    let can = if denied {
+        "cannot"
+    } else if is_true(m, "mandatory") {
+        "must"
+    } else {
+        "can"
+    };
+    if sv(m, "to") == Some("strategic-reserves") {
+        let who = if denied { none_of(&who) } else { who };
+        return format!("{who} {can} be placed into Strategic Reserves{limits}");
+    }
+    let from = match sv(m, "from") {
+        Some("strategic-reserves") => " from Strategic Reserves",
+        Some("transport") => " from its Transport",
+        _ => "",
+    };
+    let who = if denied { none_of(&who) } else { who };
+    let mut s = if sv(m, "from") == Some("battlefield") {
+        format!("{who} {can} be removed from the battlefield and set up again")
+    } else {
+        format!("{who} {can} be set up on the battlefield{from}")
+    };
+    if sv(m, "via") == Some("deep-strike") {
+        s.push_str(" using the Deep Strike rules");
+    }
+    if sv(m, "via") == Some("cult-ambush") {
+        s.push_str(" using a Cult Ambush marker");
+    }
+    if let Some(range) = nn(m, "marker_range").map(|value| obj(Some(value))) {
+        let wholly = if is_true(range, "wholly") {
+            "wholly "
+        } else {
+            ""
+        };
+        s.push_str(&format!(
+            ", {wholly}within {} of that marker",
+            range_phrase(range.get("range"))
+        ));
+    }
+    s.push_str(&mode_clause(m));
+    if let Some(turns) = arr(m, "turns") {
+        let joined = turns.iter().map(ordinal).collect::<Vec<_>>().join(", ");
+        s.push_str(&format!(
+            " in the Reinforcements step of your {} Movement phase",
+            or_last(&joined)
+        ));
+    }
+    if sv(m, "arrives") == Some("next-movement-phase") {
+        s.push_str(&format!(
+            " in the Reinforcements step of your next Movement phase{}",
+            if is_true(m, "allow_first_round") {
+                " (even in the first battle round)"
+            } else {
+                ""
+            }
+        ));
+    }
+    if let Some(sections) = nn(m, "sections") {
+        s.push_str(&format!(" as {} separate sections", jv(sections)));
+    }
+    s.push_str(&placement_phrase(m));
+    s.push_str(&placement_limits(m, ctx));
+    if let Some(edge) = nn(m, "within_edge") {
+        s.push_str(&format!(
+            " wholly within {} of a battlefield edge",
+            range_phrase(Some(edge))
+        ));
+    }
+    if let Some(d) = nn(m, "min_enemy_distance") {
+        s.push_str(&format!(
+            " more than {} away from all enemy models",
+            range_phrase(Some(d))
+        ));
+    }
+    if let Some(md) = nn(m, "min_distance_from") {
+        let md = obj(Some(md));
+        let of = match nn(md, "of") {
+            Some(of) => effect_subject(Some(of), ctx),
+            None => "this model".to_string(),
+        };
+        s.push_str(&format!(
+            " {} {}{} {of}",
+            if denied { "within" } else { "more than" },
+            range_phrase(md.get("range")),
+            if denied { " of" } else { " away from" }
+        ));
+    }
+    if let Some(off) = nn(m, "round_offset") {
+        let n = num(Some(off));
+        s.push_str(&format!(
+            ", treating the battle round as {} {} than it is",
+            fnum(n.abs()),
+            if n < 0.0 { "lower" } else { "higher" }
+        ));
+    }
+    if nn(m, "wounds_remaining").is_some() {
+        s.push_str(&format!(
+            ", with {} remaining",
+            wounds_left(m.get("wounds_remaining"))
+        ));
+    }
+    s.push_str(&detach_phrase(m));
+    if let Some(strength) = nn(m, "starting_strength") {
+        if !is_true(m, "detach") {
+            s.push_str(&format!(
+                "; its unit has a Starting Strength of {}",
+                jv(strength)
+            ));
+        }
+    }
+    if is_true(m, "allow_engagement") {
+        s.push_str("; it can be set up within Engagement Range of enemy units");
+    }
+    if let Some(c) = nn(m, "counts_as_move") {
+        s.push_str(&format!(
+            "; it counts as having made {} this turn",
+            moved_phrase(Some(c))
+        ));
+    }
+    s + limits
+}

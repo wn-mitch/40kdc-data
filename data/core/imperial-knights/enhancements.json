@@ -1,35 +1,17 @@
 [
   {
-    "id": "omnissian-champion-questor-forgepact",
-    "name": "Omnissian Champion",
-    "detachment_id": "questor-forgepact",
-    "cost": 30,
-    "keyword_restrictions": [
-      "Imperial Knights"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "points_provisional": true,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "knight-of-the-opus-machina-aura-questor-forgepact",
+    "id": "knight-of-the-opus-machina-aura-questor-forgepact-imperial-knights",
     "name": "Knight of the Opus Machina (Aura)",
     "detachment_id": "questor-forgepact",
     "cost": 15,
     "keyword_restrictions": [
       "Imperial Knights"
     ],
-    "ability_id": null,
+    "ability_id": "knight-of-the-opus-machina-aura-questor-forgepact-imperial-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -46,18 +28,18 @@
     ]
   },
   {
-    "id": "magos-questoris-questor-forgepact",
+    "id": "magos-questoris-questor-forgepact-imperial-knights",
     "name": "Magos Questoris",
     "detachment_id": "questor-forgepact",
     "cost": 20,
     "keyword_restrictions": [
       "Tech-Priest"
     ],
-    "ability_id": null,
+    "ability_id": "magos-questoris-questor-forgepact-imperial-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -74,36 +56,18 @@
     ]
   },
   {
-    "id": "vocifer-magnificat-aura-questor-forgepact",
-    "name": "Vocifer Magnificat (Aura)",
-    "detachment_id": "questor-forgepact",
-    "cost": 15,
-    "keyword_restrictions": [
-      "Imperial Knights"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "points_provisional": true,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "bearer-of-the-iron-chalice-valourstrike-lance",
+    "id": "bearer-of-the-iron-chalice-valourstrike-lance-imperial-knights",
     "name": "Bearer of the Iron Chalice",
     "detachment_id": "valourstrike-lance",
     "cost": 20,
     "keyword_restrictions": [
       "Imperial Knights"
     ],
-    "ability_id": null,
+    "ability_id": "bearer-of-the-iron-chalice-valourstrike-lance-imperial-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -120,18 +84,18 @@
     ]
   },
   {
-    "id": "bearer-of-the-evanescent-ion-valourstrike-lance",
+    "id": "bearer-of-the-evanescent-ion-valourstrike-lance-imperial-knights",
     "name": "Bearer of the Evanescent Ion",
     "detachment_id": "valourstrike-lance",
     "cost": 15,
     "keyword_restrictions": [
       "Imperial Knights"
     ],
-    "ability_id": null,
+    "ability_id": "bearer-of-the-evanescent-ion-valourstrike-lance-imperial-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -148,18 +112,18 @@
     ]
   },
   {
-    "id": "bearer-of-the-judicants-helm-valourstrike-lance",
+    "id": "bearer-of-the-judicants-helm-valourstrike-lance-imperial-knights",
     "name": "Bearer of the Judicant’s Helm",
     "detachment_id": "valourstrike-lance",
     "cost": 25,
     "keyword_restrictions": [
       "Imperial Knights"
     ],
-    "ability_id": null,
+    "ability_id": "bearer-of-the-judicants-helm-valourstrike-lance-imperial-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -176,18 +140,18 @@
     ]
   },
   {
-    "id": "bearer-of-the-lancers-sigil-valourstrike-lance",
+    "id": "bearer-of-the-lancers-sigil-valourstrike-lance-imperial-knights",
     "name": "Bearer of the Lancer’s Sigil",
     "detachment_id": "valourstrike-lance",
     "cost": 25,
     "keyword_restrictions": [
       "Imperial Knights"
     ],
-    "ability_id": null,
+    "ability_id": "bearer-of-the-lancers-sigil-valourstrike-lance-imperial-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -204,18 +168,18 @@
     ]
   },
   {
-    "id": "acquisitor-at-arms-gate-warden-lance",
+    "id": "acquisitor-at-arms-gate-warden-lance-imperial-knights",
     "name": "Acquisitor-at-Arms",
     "detachment_id": "gate-warden-lance",
     "cost": 15,
     "keyword_restrictions": [
       "Imperial Knights"
     ],
-    "ability_id": null,
+    "ability_id": "acquisitor-at-arms-gate-warden-lance-imperial-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -232,18 +196,18 @@
     ]
   },
   {
-    "id": "purgations-hand-gate-warden-lance",
+    "id": "purgations-hand-gate-warden-lance-imperial-knights",
     "name": "Purgation’s Hand",
     "detachment_id": "gate-warden-lance",
     "cost": 20,
     "keyword_restrictions": [
       "Imperial Knights"
     ],
-    "ability_id": null,
+    "ability_id": "purgations-hand-gate-warden-lance-imperial-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -260,18 +224,18 @@
     ]
   },
   {
-    "id": "augury-halo-gate-warden-lance",
+    "id": "augury-halo-gate-warden-lance-imperial-knights",
     "name": "Augury Halo",
     "detachment_id": "gate-warden-lance",
     "cost": 20,
     "keyword_restrictions": [
       "Imperial Knights"
     ],
-    "ability_id": null,
+    "ability_id": "augury-halo-gate-warden-lance-imperial-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -288,18 +252,18 @@
     ]
   },
   {
-    "id": "vengeful-tread-gate-warden-lance",
+    "id": "vengeful-tread-gate-warden-lance-imperial-knights",
     "name": "Vengeful Tread",
     "detachment_id": "gate-warden-lance",
     "cost": 15,
     "keyword_restrictions": [
       "Imperial Knights"
     ],
-    "ability_id": null,
+    "ability_id": "vengeful-tread-gate-warden-lance-imperial-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -316,18 +280,18 @@
     ]
   },
   {
-    "id": "herald-of-triumph-questoris-companions",
+    "id": "herald-of-triumph-questoris-companions-imperial-knights",
     "name": "Herald of Triumph",
     "detachment_id": "questoris-companions",
     "cost": 15,
     "keyword_restrictions": [
       "Imperial Knights"
     ],
-    "ability_id": null,
+    "ability_id": "herald-of-triumph-questoris-companions-imperial-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -344,18 +308,18 @@
     ]
   },
   {
-    "id": "wyrmslayer-divination-questoris-companions",
+    "id": "wyrmslayer-divination-questoris-companions-imperial-knights",
     "name": "Wyrmslayer Divination",
     "detachment_id": "questoris-companions",
     "cost": 10,
     "keyword_restrictions": [
       "Imperial Knights"
     ],
-    "ability_id": null,
+    "ability_id": "wyrmslayer-divination-questoris-companions-imperial-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -372,18 +336,18 @@
     ]
   },
   {
-    "id": "pennant-of-silvered-fury-questoris-companions",
+    "id": "pennant-of-silvered-fury-questoris-companions-imperial-knights",
     "name": "Pennant of Silvered Fury",
     "detachment_id": "questoris-companions",
     "cost": 15,
     "keyword_restrictions": [
       "Imperial Knights"
     ],
-    "ability_id": null,
+    "ability_id": "pennant-of-silvered-fury-questoris-companions-imperial-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -400,18 +364,18 @@
     ]
   },
   {
-    "id": "crushing-condemnation-questoris-companions",
+    "id": "crushing-condemnation-questoris-companions-imperial-knights",
     "name": "Crushing Condemnation",
     "detachment_id": "questoris-companions",
     "cost": 10,
     "keyword_restrictions": [
       "Imperial Knights"
     ],
-    "ability_id": null,
+    "ability_id": "crushing-condemnation-questoris-companions-imperial-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -428,18 +392,18 @@
     ]
   },
   {
-    "id": "mentors-pride-spearhead-at-arms",
+    "id": "mentors-pride-spearhead-at-arms-imperial-knights",
     "name": "Mentor’s Pride",
     "detachment_id": "spearhead-at-arms",
     "cost": 20,
     "keyword_restrictions": [
       "Imperial Knights"
     ],
-    "ability_id": null,
+    "ability_id": "mentors-pride-spearhead-at-arms-imperial-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -456,18 +420,18 @@
     ]
   },
   {
-    "id": "fables-of-nightmare-spearhead-at-arms",
+    "id": "fables-of-nightmare-spearhead-at-arms-imperial-knights",
     "name": "Fables of Nightmare",
     "detachment_id": "spearhead-at-arms",
     "cost": 10,
     "keyword_restrictions": [
       "Imperial Knights"
     ],
-    "ability_id": null,
+    "ability_id": "fables-of-nightmare-spearhead-at-arms-imperial-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -484,18 +448,18 @@
     ]
   },
   {
-    "id": "tales-of-heroism-spearhead-at-arms",
+    "id": "tales-of-heroism-spearhead-at-arms-imperial-knights",
     "name": "Tales of Heroism",
     "detachment_id": "spearhead-at-arms",
     "cost": 10,
     "keyword_restrictions": [
       "Imperial Knights"
     ],
-    "ability_id": null,
+    "ability_id": "tales-of-heroism-spearhead-at-arms-imperial-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -512,18 +476,18 @@
     ]
   },
   {
-    "id": "martial-tuition-spearhead-at-arms",
+    "id": "martial-tuition-spearhead-at-arms-imperial-knights",
     "name": "Martial Tuition",
     "detachment_id": "spearhead-at-arms",
     "cost": 15,
     "keyword_restrictions": [
       "Imperial Knights"
     ],
-    "ability_id": null,
+    "ability_id": "martial-tuition-spearhead-at-arms-imperial-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -540,7 +504,7 @@
     ]
   },
   {
-    "id": "blessed-plate-dominus-foebreakers",
+    "id": "blessed-plate-dominus-foebreakers-imperial-knights",
     "name": "Blessed Plate",
     "detachment_id": "dominus-foebreakers",
     "cost": 30,
@@ -548,11 +512,11 @@
       "Dominus",
       "Imperial Knights"
     ],
-    "ability_id": "blessed-plate-dominus-foebreakers",
+    "ability_id": "blessed-plate-dominus-foebreakers-imperial-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -569,7 +533,7 @@
     ]
   },
   {
-    "id": "archeotech-autoloaders-dominus-foebreakers",
+    "id": "archeotech-autoloaders-dominus-foebreakers-imperial-knights",
     "name": "Archeotech Autoloaders",
     "detachment_id": "dominus-foebreakers",
     "cost": 25,
@@ -577,11 +541,11 @@
       "Dominus",
       "Imperial Knights"
     ],
-    "ability_id": "archeotech-autoloaders-dominus-foebreakers",
+    "ability_id": "archeotech-autoloaders-dominus-foebreakers-imperial-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -598,18 +562,18 @@
     ]
   },
   {
-    "id": "gyro-optimised-actuators-upgrade-throne-bonded-outriders",
+    "id": "gyro-optimised-actuators-upgrade-throne-bonded-outriders-imperial-knights",
     "name": "Gyro-optimised Actuators (Upgrade)",
     "detachment_id": "throne-bonded-outriders",
     "cost": 15,
     "keyword_restrictions": [
       "Armiger"
     ],
-    "ability_id": "gyro-optimised-actuators-throne-bonded-outriders",
+    "ability_id": "gyro-optimised-actuators-upgrade-throne-bonded-outriders-imperial-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": true,
@@ -626,18 +590,18 @@
     ]
   },
   {
-    "id": "ancestral-overbleed-upgrade-throne-bonded-outriders",
+    "id": "ancestral-overbleed-upgrade-throne-bonded-outriders-imperial-knights",
     "name": "Ancestral Overbleed (Upgrade)",
     "detachment_id": "throne-bonded-outriders",
     "cost": 10,
     "keyword_restrictions": [
       "Armiger"
     ],
-    "ability_id": "ancestral-overbleed-throne-bonded-outriders",
+    "ability_id": "ancestral-overbleed-upgrade-throne-bonded-outriders-imperial-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": true,
@@ -654,18 +618,18 @@
     ]
   },
   {
-    "id": "mysterious-guardian-freeblade-company",
+    "id": "mysterious-guardian-freeblade-company-imperial-knights",
     "name": "Mysterious Guardian",
     "detachment_id": "freeblade-company",
     "cost": 35,
     "keyword_restrictions": [
       "Imperial Knights"
     ],
-    "ability_id": "mysterious-guardian-freeblade-company",
+    "ability_id": "mysterious-guardian-freeblade-company-imperial-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -682,18 +646,18 @@
     ]
   },
   {
-    "id": "sanctuary-freeblade-company",
+    "id": "sanctuary-freeblade-company-imperial-knights",
     "name": "Sanctuary",
     "detachment_id": "freeblade-company",
     "cost": 20,
     "keyword_restrictions": [
       "Imperial Knights"
     ],
-    "ability_id": "sanctuary-freeblade-company",
+    "ability_id": "sanctuary-freeblade-company-imperial-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -710,18 +674,18 @@
     ]
   },
   {
-    "id": "bringer-of-justice-freeblade-company",
+    "id": "bringer-of-justice-freeblade-company-imperial-knights",
     "name": "Bringer of Justice",
     "detachment_id": "freeblade-company",
     "cost": 30,
     "keyword_restrictions": [
       "Imperial Knights"
     ],
-    "ability_id": "bringer-of-justice-freeblade-company",
+    "ability_id": "bringer-of-justice-freeblade-company-imperial-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -738,18 +702,18 @@
     ]
   },
   {
-    "id": "hunters-eye-freeblade-company",
+    "id": "hunters-eye-freeblade-company-imperial-knights",
     "name": "Hunter’s Eye",
     "detachment_id": "freeblade-company",
     "cost": 25,
     "keyword_restrictions": [
       "Imperial Knights"
     ],
-    "ability_id": "hunters-eye-freeblade-company",
+    "ability_id": "hunters-eye-freeblade-company-imperial-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "points_provisional": false,
     "upgrade_tag": false,

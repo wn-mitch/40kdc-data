@@ -3,26 +3,26 @@
     "id": "berzerker-warband",
     "name": "Berzerker Warband",
     "faction_id": "world-eaters",
-    "detachment_rule_id": "relentless-rage",
+    "detachment_rule_id": "relentless-rage-world-eaters",
     "enhancement_ids": [
-      "berzerker-glaive-berzerker-warband",
-      "helm-of-brazen-ire-berzerker-warband",
-      "favoured-of-khorne-berzerker-warband",
-      "battle-lust-berzerker-warband"
+      "berzerker-glaive-berzerker-warband-world-eaters",
+      "helm-of-brazen-ire-berzerker-warband-world-eaters",
+      "favoured-of-khorne-berzerker-warband-world-eaters",
+      "battle-lust-berzerker-warband-world-eaters"
     ],
     "stratagem_ids": [
-      "hack-and-slash-berzerker-warband",
-      "frenzied-resilience-berzerker-warband",
-      "blood-offering-berzerker-warband",
-      "skulls-for-the-skull-throne-berzerker-warband",
-      "apoplectic-frenzy-berzerker-warband",
-      "berzerkers-wrath-berzerker-warband"
+      "blood-offering-berzerker-warband-world-eaters",
+      "hack-and-slash-berzerker-warband-world-eaters",
+      "frenzied-resilience-berzerker-warband-world-eaters",
+      "skulls-for-the-skull-throne-berzerker-warband-world-eaters",
+      "apoplectic-frenzy-berzerker-warband-world-eaters",
+      "berzerkers-wrath-berzerker-warband-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": 3,
+    "detachment_points": 2,
     "force_dispositions": [
       "purge-the-foe"
     ],
@@ -31,26 +31,29 @@
         "namespace": "mfm",
         "id": "0a5d7ebb-ce39-4751-a90c-889883517b66"
       }
+    ],
+    "detachment_rule_ids": [
+      "relentless-rage-world-eaters"
     ]
   },
   {
     "id": "possessed-slaughterband",
     "name": "Possessed Slaughterband",
     "faction_id": "world-eaters",
-    "detachment_rule_id": "brazen-fury",
+    "detachment_rule_id": "brazen-fury-world-eaters",
     "enhancement_ids": [
-      "malicious-vigour-possessed-slaughterband",
-      "killing-clarity-possessed-slaughterband",
-      "frenzied-focus-possessed-slaughterband",
-      "violent-demise-possessed-slaughterband"
+      "malicious-vigour-possessed-slaughterband-world-eaters",
+      "killing-clarity-possessed-slaughterband-world-eaters",
+      "frenzied-focus-possessed-slaughterband-world-eaters",
+      "violent-demise-possessed-slaughterband-world-eaters"
     ],
     "stratagem_ids": [
-      "daemonic-strength-possessed-slaughterband",
-      "daemonic-resistance-possessed-slaughterband",
-      "immortal-fury-possessed-slaughterband",
-      "rapid-manifestation-possessed-slaughterband",
-      "warp-stalkers-possessed-slaughterband",
-      "horrifying-violence-possessed-slaughterband"
+      "daemonic-resistance-possessed-slaughterband-world-eaters",
+      "daemonic-strength-possessed-slaughterband-world-eaters",
+      "immortal-fury-possessed-slaughterband-world-eaters",
+      "rapid-manifestation-possessed-slaughterband-world-eaters",
+      "warp-stalkers-possessed-slaughterband-world-eaters",
+      "horrifying-violence-possessed-slaughterband-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -65,21 +68,24 @@
         "namespace": "mfm",
         "id": "11575a4f-0e5c-46e2-9085-392f11226cab"
       }
+    ],
+    "detachment_rule_ids": [
+      "brazen-fury-world-eaters"
     ]
   },
   {
     "id": "vessels-of-wrath",
     "name": "Vessels of Wrath",
     "faction_id": "world-eaters",
-    "detachment_rule_id": "wrath-of-khorne",
+    "detachment_rule_id": "wrath-of-khorne-world-eaters",
     "enhancement_ids": [
-      "archslaughterer-vessels-of-wrath",
-      "gateways-to-glory-vessels-of-wrath"
+      "archslaughterer-vessels-of-wrath-world-eaters",
+      "gateways-to-glory-vessels-of-wrath-world-eaters"
     ],
     "stratagem_ids": [
-      "scorn-the-witch-vessels-of-wrath",
-      "aspire-to-infamy-vessels-of-wrath",
-      "punish-the-craven-vessels-of-wrath"
+      "scorn-the-witch-vessels-of-wrath-world-eaters",
+      "aspire-to-infamy-vessels-of-wrath-world-eaters",
+      "punish-the-craven-vessels-of-wrath-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -94,26 +100,29 @@
         "namespace": "mfm",
         "id": "e8136aea-8e9c-470a-aa7b-a33dfa33c9ea"
       }
+    ],
+    "detachment_rule_ids": [
+      "wrath-of-khorne-world-eaters"
     ]
   },
   {
     "id": "khorne-daemonkin",
     "name": "Khorne Daemonkin",
     "faction_id": "world-eaters",
-    "detachment_rule_id": "blood-tithe",
+    "detachment_rule_id": "blood-tithe-world-eaters",
     "enhancement_ids": [
-      "icon-of-war-khorne-daemonkin",
-      "blood-forged-armour-khorne-daemonkin",
-      "disciple-of-khorne-khorne-daemonkin",
-      "blade-of-endless-bloodshed-khorne-daemonkin"
+      "icon-of-war-khorne-daemonkin-world-eaters",
+      "blood-forged-armour-khorne-daemonkin-world-eaters",
+      "disciple-of-khorne-khorne-daemonkin-world-eaters",
+      "blade-of-endless-bloodshed-khorne-daemonkin-world-eaters"
     ],
     "stratagem_ids": [
-      "daemonic-fury-khorne-daemonkin",
-      "blessing-of-burning-blood-khorne-daemonkin",
-      "a-worthy-skull-khorne-daemonkin",
-      "summoned-by-slaughter-khorne-daemonkin",
-      "daemontide-khorne-daemonkin",
-      "murder-call-khorne-daemonkin"
+      "summoned-by-slaughter-khorne-daemonkin-world-eaters",
+      "daemonic-fury-khorne-daemonkin-world-eaters",
+      "a-worthy-skull-khorne-daemonkin-world-eaters",
+      "blessing-of-burning-blood-khorne-daemonkin-world-eaters",
+      "daemontide-khorne-daemonkin-world-eaters",
+      "murder-call-khorne-daemonkin-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -128,26 +137,29 @@
         "namespace": "mfm",
         "id": "960c7ecf-3cc0-4d10-8d0c-5839273ea651"
       }
+    ],
+    "detachment_rule_ids": [
+      "blood-tithe-world-eaters"
     ]
   },
   {
     "id": "cult-of-blood",
     "name": "Cult of Blood",
     "faction_id": "world-eaters",
-    "detachment_rule_id": "idols-of-khorne",
+    "detachment_rule_id": "idols-of-khorne-world-eaters",
     "enhancement_ids": [
-      "chosen-of-the-blood-god-cult-of-blood",
-      "butcher-lord-cult-of-blood",
-      "brazen-form-cult-of-blood",
-      "strategic-slaughter-cult-of-blood"
+      "chosen-of-the-blood-god-cult-of-blood-world-eaters",
+      "butcher-lord-cult-of-blood-world-eaters",
+      "brazen-form-cult-of-blood-world-eaters",
+      "strategic-slaughter-cult-of-blood-world-eaters"
     ],
     "stratagem_ids": [
-      "bloodthirsty-horde-cult-of-blood",
-      "bloody-vengeance-cult-of-blood",
-      "brazen-idol-cult-of-blood",
-      "in-the-shadow-of-brass-idols-cult-of-blood",
-      "fail-not-the-blood-god-cult-of-blood",
-      "drawn-to-the-slaughter-cult-of-blood"
+      "bloody-vengeance-cult-of-blood-world-eaters",
+      "drawn-to-the-slaughter-cult-of-blood-world-eaters",
+      "in-the-shadow-of-brass-idols-cult-of-blood-world-eaters",
+      "bloodthirsty-horde-cult-of-blood-world-eaters",
+      "fail-not-the-blood-god-cult-of-blood-world-eaters",
+      "brazen-idol-cult-of-blood-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -162,26 +174,29 @@
         "namespace": "mfm",
         "id": "ae5e755c-230d-46a9-ad1a-d3afaf3633ca"
       }
+    ],
+    "detachment_rule_ids": [
+      "idols-of-khorne-world-eaters"
     ]
   },
   {
     "id": "goretrack-onslaught",
     "name": "Goretrack Onslaught",
     "faction_id": "world-eaters",
-    "detachment_rule_id": "rush-to-the-fray",
+    "detachment_rule_id": "rush-to-the-fray-world-eaters",
     "enhancement_ids": [
-      "murderous-onslaught-goretrack-onslaught",
-      "aggressive-deployment-goretrack-onslaught",
-      "unleash-hell-goretrack-onslaught",
-      "infernal-infusion-goretrack-onslaught"
+      "murderous-onslaught-goretrack-onslaught-world-eaters",
+      "aggressive-deployment-goretrack-onslaught-world-eaters",
+      "unleash-hell-goretrack-onslaught-world-eaters",
+      "infernal-infusion-goretrack-onslaught-world-eaters"
     ],
     "stratagem_ids": [
-      "endless-pursuit-of-violence-goretrack-onslaught",
-      "smash-through-goretrack-onslaught",
-      "aggressive-disembarkation-goretrack-onslaught",
-      "full-throttle-assault-goretrack-onslaught",
-      "unrelenting-advance-goretrack-onslaught",
-      "fury-unleashed-goretrack-onslaught"
+      "endless-pursuit-of-violence-goretrack-onslaught-world-eaters",
+      "smash-through-goretrack-onslaught-world-eaters",
+      "aggressive-disembarkation-goretrack-onslaught-world-eaters",
+      "full-throttle-assault-goretrack-onslaught-world-eaters",
+      "unrelenting-advance-goretrack-onslaught-world-eaters",
+      "fury-unleashed-goretrack-onslaught-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -197,21 +212,24 @@
         "namespace": "mfm",
         "id": "b21e5072-38d5-42b5-9143-9aabcbf499d8"
       }
+    ],
+    "detachment_rule_ids": [
+      "rush-to-the-fray-world-eaters"
     ]
   },
   {
     "id": "brazen-engines",
     "name": "Brazen Engines",
     "faction_id": "world-eaters",
-    "detachment_rule_id": "rampaging-terrors",
+    "detachment_rule_id": "rampaging-terrors-world-eaters",
     "enhancement_ids": [
-      "talons-of-butchery-upgrade-brazen-engines",
-      "murder-forged-entity-upgrade-brazen-engines"
+      "talons-of-butchery-upgrade-brazen-engines-world-eaters",
+      "murder-forged-entity-upgrade-brazen-engines-world-eaters"
     ],
     "stratagem_ids": [
-      "apoplectic-clarity-brazen-engines",
-      "trail-of-destruction-brazen-engines",
-      "goaded-to-fury-brazen-engines"
+      "apoplectic-clarity-brazen-engines-world-eaters",
+      "goaded-to-fury-brazen-engines-world-eaters",
+      "trail-of-destruction-brazen-engines-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -227,21 +245,24 @@
         "namespace": "mfm",
         "id": "b316e2f6-0b93-4805-9b5e-38f050875ad3"
       }
+    ],
+    "detachment_rule_ids": [
+      "rampaging-terrors-world-eaters"
     ]
   },
   {
     "id": "butchers-of-khorne",
     "name": "Butchers of Khorne",
     "faction_id": "world-eaters",
-    "detachment_rule_id": "adamantine-avalanche",
+    "detachment_rule_id": "adamantine-avalanche-world-eaters",
     "enhancement_ids": [
-      "sanctified-in-slaughter-upgrade-butchers-of-khorne",
-      "gore-stained-veterans-upgrade-butchers-of-khorne"
+      "sanctified-in-slaughter-upgrade-butchers-of-khorne-world-eaters",
+      "gore-stained-veterans-upgrade-butchers-of-khorne-world-eaters"
     ],
     "stratagem_ids": [
-      "focused-ferocity-butchers-of-khorne",
-      "a-trophy-for-the-throne-butchers-of-khorne",
-      "wrath-beyond-reason-butchers-of-khorne"
+      "wrath-beyond-reason-butchers-of-khorne-world-eaters",
+      "focused-ferocity-butchers-of-khorne-world-eaters",
+      "a-trophy-for-the-throne-butchers-of-khorne-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -256,6 +277,9 @@
         "namespace": "mfm",
         "id": "16d7618b-880a-4f47-97e2-385df44bc860"
       }
+    ],
+    "detachment_rule_ids": [
+      "adamantine-avalanche-world-eaters"
     ]
   },
   {
@@ -263,12 +287,12 @@
     "name": "Frenzied Reavers",
     "faction_id": "world-eaters",
     "enhancement_ids": [
-      "bane-of-the-craven-frenzied-reavers",
-      "fearsome-presence-frenzied-reavers"
+      "fearsome-presence-frenzied-reavers-world-eaters",
+      "bane-of-the-craven-frenzied-reavers-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "game_modes": [
       "combat-patrol"
@@ -282,6 +306,15 @@
         "namespace": "mfm",
         "id": "b05a886f-004a-4c1d-87a5-30d92a81a35d"
       }
+    ],
+    "detachment_rule_ids": [
+      "berzerker-charge-world-eaters",
+      "blessings-of-khorne-frenzied-reavers-world-eaters"
+    ],
+    "stratagem_ids": [
+      "berserk-resilience-frenzied-reavers-world-eaters",
+      "horrifying-butchery-frenzied-reavers-world-eaters",
+      "rabid-response-frenzied-reavers-world-eaters"
     ]
   }
 ]

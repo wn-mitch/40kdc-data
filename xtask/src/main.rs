@@ -16,6 +16,9 @@ use schemars::schema::RootSchema;
 use serde_json::Value;
 use typify::{TypeSpace, TypeSpaceSettings};
 
+mod compact;
+mod dispatch;
+
 fn main() -> Result<()> {
     match std::env::args().nth(1).as_deref() {
         Some("codegen") => codegen(),
@@ -35,6 +38,150 @@ fn workspace_root() -> PathBuf {
         .to_path_buf()
 }
 
+/// Make each `effect-node` variant's `type` constant a checked value. typify turns
+/// `oneOf` into an untagged enum and a bare `{"const": X}` into an unchecked
+/// `serde_json::Value`, so the first variant whose other fields fit would win (an
+/// `ability-part` with a `name` read as a `named-effect`). A one-value string enum
+/// means the same and generates a type that only accepts X, so every variant is
+/// told apart by its `type`. Only codegen's input changes; the schema does not.
+fn tag_effect_variants(schema: &mut serde_json::Value) {
+    let refs: Vec<String> = schema
+        .pointer("/$defs/effect-node/oneOf")
+        .and_then(|members| members.as_array())
+        .map(|members| {
+            members
+                .iter()
+                .filter_map(|member| member.get("$ref")?.as_str())
+                .filter_map(|reference| reference.strip_prefix("#/$defs/"))
+                .map(str::to_string)
+                .collect()
+        })
+        .unwrap_or_default();
+    for name in refs {
+        let Some(type_schema) = schema.pointer_mut(&format!("/$defs/{name}/properties/type"))
+        else {
+            continue;
+        };
+        let Some(constant) = type_schema
+            .get("const")
+            .and_then(|c| c.as_str())
+            .map(str::to_string)
+        else {
+            continue;
+        };
+        *type_schema = serde_json::json!({ "type": "string", "enum": [constant] });
+    }
+}
+
+/// Give each member of a `type`-keyed `oneOf` its own named definition for one
+/// inline object property. typify turns such a `oneOf` into a `type`-tagged enum
+/// but names every member's inline `<property>` object after the enum (for example
+/// `SimpleConditionParameters`, `SingleEffectModifier`) and keeps only the first, so
+/// every member but the first would fail to deserialize. Moving each object to
+/// `$defs/<type>-<suffix>` (and referencing it) gives every member its own type.
+/// Only codegen's input changes; the schema does not.
+fn hoist_member_objects(schema: &mut serde_json::Value, def: &str, property: &str, suffix: &str) {
+    let mut hoisted: Vec<(String, serde_json::Value)> = Vec::new();
+    if let Some(members) = schema
+        .pointer_mut(&format!("/$defs/{def}/oneOf"))
+        .and_then(|members| members.as_array_mut())
+    {
+        for member in members {
+            let Some(constant) = member
+                .pointer("/properties/type/const")
+                .and_then(|c| c.as_str())
+                .map(str::to_string)
+            else {
+                continue;
+            };
+            let Some(object) = member.pointer_mut(&format!("/properties/{property}")) else {
+                continue;
+            };
+            if object.get("$ref").is_some() {
+                continue;
+            }
+            // An `anyOf` of bare `required` lists means "at least one of these
+            // keys". typify turns it into one variant per list that admits only
+            // that key, rejecting valid data that sets several (`lost` and
+            // `remaining_max`). Dropping it keeps every key optional; the
+            // validator still enforces the constraint from the real schema.
+            if let Some(obj) = object.as_object_mut() {
+                let presence_only =
+                    obj.get("anyOf")
+                        .and_then(|any| any.as_array())
+                        .is_some_and(|any| {
+                            any.iter().all(|m| {
+                                m.as_object()
+                                    .is_some_and(|m| m.keys().all(|k| k == "required"))
+                            })
+                        });
+                if presence_only {
+                    obj.remove("anyOf");
+                }
+            }
+            let name = format!("{constant}-{suffix}");
+            let body = std::mem::replace(
+                object,
+                serde_json::json!({ "$ref": format!("#/$defs/{name}") }),
+            );
+            hoisted.push((name, body));
+        }
+    }
+    if let Some(defs) = schema.get_mut("$defs").and_then(|d| d.as_object_mut()) {
+        for (name, body) in hoisted {
+            defs.insert(name, body);
+        }
+    }
+}
+
+/// True when `node` only constrains which keys are present: a `required` list, a `not`
+/// of such a constraint, or an `allOf`/`oneOf`/`anyOf` of them.
+fn presence_only(node: &serde_json::Value) -> bool {
+    let Some(obj) = node.as_object() else {
+        return false;
+    };
+    !obj.is_empty()
+        && obj.iter().all(|(key, value)| match key.as_str() {
+            "required" => value.is_array(),
+            "not" => presence_only(value),
+            "allOf" | "oneOf" | "anyOf" => value
+                .as_array()
+                .is_some_and(|members| members.iter().all(presence_only)),
+            _ => false,
+        })
+}
+
+/// Drop presence-only `not`, `allOf` and `anyOf` constraints from every object schema that
+/// declares `properties`. typify cannot express them: it emits an empty enum for an
+/// `allOf` of key-exclusivity `oneOf`s (`dice-gated`: exactly one of `dice`/`from`) and
+/// silently drops properties from a struct with a sibling `not` (resource-spend's `face`
+/// and `requirement`), and splits an `anyOf` of `required` lists into one strict variant per
+/// list, rejecting records that set several (a unit ability ref with `value` and `wargear`).
+/// Dropping them keeps every key optional; the validator still
+/// enforces the constraint from the real schema. `oneOf` siblings are left to typify,
+/// which generates working types for them. Only codegen's input changes; the schema does not.
+fn strip_presence_constraints(node: &mut serde_json::Value) {
+    match node {
+        serde_json::Value::Object(obj) => {
+            if obj.contains_key("properties") {
+                for key in ["not", "allOf", "anyOf"] {
+                    if obj.get(key).is_some_and(|v| {
+                        v.as_array()
+                            .map_or_else(|| presence_only(v), |m| m.iter().all(presence_only))
+                    }) {
+                        obj.remove(key);
+                    }
+                }
+            }
+            for value in obj.values_mut() {
+                strip_presence_constraints(value);
+            }
+        }
+        serde_json::Value::Array(items) => items.iter_mut().for_each(strip_presence_constraints),
+        _ => {}
+    }
+}
+
 fn codegen() -> Result<()> {
     let root = workspace_root();
     let schema_path = root.join("crates/wh40kdc/schemas/bundled.schema.json");
@@ -42,7 +189,19 @@ fn codegen() -> Result<()> {
 
     let content = std::fs::read_to_string(&schema_path)
         .with_context(|| format!("reading {}", schema_path.display()))?;
-    let schema: RootSchema = serde_json::from_str(&content)
+    let mut raw: serde_json::Value = serde_json::from_str(&content)
+        .with_context(|| format!("parsing {} as JSON", schema_path.display()))?;
+    let dispatch_schema = raw.clone();
+    tag_effect_variants(&mut raw);
+    strip_presence_constraints(&mut raw);
+    hoist_member_objects(
+        &mut raw,
+        "simple-condition",
+        "parameters",
+        "condition-parameters",
+    );
+    hoist_member_objects(&mut raw, "single-effect", "modifier", "effect-modifier");
+    let schema: RootSchema = serde_json::from_value(raw)
         .with_context(|| format!("parsing {} as a JSON Schema", schema_path.display()))?;
 
     let mut settings = TypeSpaceSettings::default();
@@ -56,8 +215,10 @@ fn codegen() -> Result<()> {
         .context("typify failed to ingest the bundled schema")?;
 
     let tokens = type_space.to_stream();
-    let file = syn::parse2::<syn::File>(tokens)
+    let mut file = syn::parse2::<syn::File>(tokens)
         .context("generated token stream did not parse as a Rust file")?;
+    compact::install(&mut file)?;
+    dispatch::install(&mut file, &dispatch_schema)?;
     let formatted = prettyplease::unparse(&file);
 
     // The `mod generated` declaration in lib.rs carries `#[rustfmt::skip]`, so
@@ -112,29 +273,16 @@ const FILE_TO_COLLECTION: &[(&str, &str)] = &[
 /// (`_core` is deliberately *not* excluded — its shared abilities are bundled.)
 const EXCLUDED_DIRS: &[&str] = &["_example", "_port-audit"];
 
-/// When a faction-stamped record is eligible for stamping (see [`STAMP_FACTION`]).
-#[derive(Clone, Copy, PartialEq)]
-enum StampRule {
-    /// Stamp only when the record has no `faction_id` key at all (an authored
-    /// value, even `null`, is preserved verbatim for byte-stability).
-    Absent,
-    /// Additionally overwrite an explicit `null` (ability records author
-    /// `faction_id: null` on non-faction-typed entries; the null carries no
-    /// information the directory doesn't).
-    AbsentOrNull,
-}
-
 /// Collections whose records are stamped with their owning faction (the
 /// `data/{core,enrichment}/<faction>/` directory) at bundle time, so ids
 /// shared across factions resolve faction-scoped in the linked API instead of
-/// first-wins (issue #59 generalized). Records in `_`-prefixed directories
-/// (the shared `enrichment/_core` pool) are never stamped — they stay
-/// faction-less on purpose so faction-scoped lookup falls back to them.
+/// first-wins (issue #59 generalized). A record is stamped only when it has no
+/// `faction_id` key at all (an authored value, even `null`, is kept verbatim for
+/// byte-stability). Records in `_`-prefixed directories (the shared
+/// `enrichment/_core` pool) are never stamped. Abilities are not stamped: their
+/// ids are unique and every faction record names its faction.
 /// Mirrors `tools/src/codegen-data.ts` `STAMP_FACTION` — keep the two in sync.
-const STAMP_FACTION: &[(&str, StampRule)] = &[
-    ("weapons", StampRule::Absent),
-    ("abilities", StampRule::AbsentOrNull),
-];
+const STAMP_FACTION: &[&str] = &["weapons"];
 
 /// Bundle every authored `data/` file into one embedded JSON object.
 ///
@@ -180,17 +328,12 @@ fn bundle_data() -> Result<()> {
         // across factions resolve faction-scoped rather than first-wins (see
         // STAMP_FACTION for the per-collection rules and the `_core`
         // exclusion). Mirrors the TS bundler.
-        if let Some(&(_, rule)) = STAMP_FACTION.iter().find(|&&(name, _)| name == key) {
+        if STAMP_FACTION.contains(&key) {
             if let Some(faction) = faction_of_path(file) {
                 if !faction.starts_with('_') {
                     for item in &mut items {
                         if let Value::Object(map) = item {
-                            let stampable = match map.get("faction_id") {
-                                None => true,
-                                Some(Value::Null) => rule == StampRule::AbsentOrNull,
-                                Some(_) => false,
-                            };
-                            if stampable {
+                            if !map.contains_key("faction_id") {
                                 map.insert(
                                     "faction_id".to_string(),
                                     Value::String(faction.clone()),

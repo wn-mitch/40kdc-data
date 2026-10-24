@@ -5,7 +5,7 @@
     "faction_id": "chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -32,7 +32,7 @@
     "faction_id": "chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -51,20 +51,32 @@
     "faction_id": "chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
-    "replacement_choice": [
-      [
-        "daemonic-icon"
-      ],
-      [
-        "instrument-of-chaos"
-      ]
+    "replacement": [
+      "daemonic-icon"
     ],
     "model_constraint": {
       "model_name": "Daemonette",
-      "any_number": true
+      "max_count": 1
+    }
+  },
+  {
+    "id": "daemonettes-wgo-mfm-2",
+    "unit_id": "daemonettes",
+    "faction_id": "chaos-daemons",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replacement": [
+      "instrument-of-chaos"
+    ],
+    "model_constraint": {
+      "model_name": "Daemonette",
+      "max_count": 1
     }
   },
   {
@@ -73,19 +85,30 @@
     "faction_id": "chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
-    "replacement_choice": [
-      [
-        "instrument-of-chaos"
-      ],
-      [
-        "daemonic-icon"
-      ]
+    "replacement": [
+      "instrument-of-chaos"
     ],
     "model_constraint": {
-      "any_number": true
+      "max_count": 1
+    }
+  },
+  {
+    "id": "pink-horrors-wgo-mfm-2",
+    "unit_id": "pink-horrors",
+    "faction_id": "chaos-daemons",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replacement": [
+      "daemonic-icon"
+    ],
+    "model_constraint": {
+      "max_count": 1
     }
   },
   {
@@ -94,20 +117,32 @@
     "faction_id": "chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
-    "replacement_choice": [
-      [
-        "instrument-of-chaos"
-      ],
-      [
-        "daemonic-icon"
-      ]
+    "replacement": [
+      "instrument-of-chaos"
     ],
     "model_constraint": {
       "model_name": "Plaguebearer",
-      "any_number": true
+      "max_count": 1
+    }
+  },
+  {
+    "id": "plaguebearers-wgo-mfm-2",
+    "unit_id": "plaguebearers",
+    "faction_id": "chaos-daemons",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replacement": [
+      "daemonic-icon"
+    ],
+    "model_constraint": {
+      "model_name": "Plaguebearer",
+      "max_count": 1
     }
   },
   {
@@ -116,7 +151,7 @@
     "faction_id": "chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -140,20 +175,32 @@
     "faction_id": "chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
-    "replacement_choice": [
-      [
-        "daemonic-icon"
-      ],
-      [
-        "instrument-of-chaos"
-      ]
+    "replacement": [
+      "daemonic-icon"
     ],
     "model_constraint": {
       "model_name": "Seeker",
-      "any_number": true
+      "max_count": 1
+    }
+  },
+  {
+    "id": "seekers-wgo-mfm-2",
+    "unit_id": "seekers",
+    "faction_id": "chaos-daemons",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replacement": [
+      "instrument-of-chaos"
+    ],
+    "model_constraint": {
+      "model_name": "Seeker",
+      "max_count": 1
     }
   },
   {
@@ -162,20 +209,32 @@
     "faction_id": "chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
-    "replacement_choice": [
-      [
-        "instrument-of-chaos"
-      ],
-      [
-        "daemonic-icon"
-      ]
+    "replacement": [
+      "instrument-of-chaos"
     ],
     "model_constraint": {
       "model_name": "Bloodletter",
-      "any_number": true
+      "max_count": 1
+    }
+  },
+  {
+    "id": "bloodletters-wgo-mfm-2",
+    "unit_id": "bloodletters",
+    "faction_id": "chaos-daemons",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replacement": [
+      "daemonic-icon"
+    ],
+    "model_constraint": {
+      "model_name": "Bloodletter",
+      "max_count": 1
     }
   },
   {
@@ -184,7 +243,7 @@
     "faction_id": "chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -205,7 +264,7 @@
     "faction_id": "chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -224,7 +283,7 @@
     "faction_id": "chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -243,20 +302,32 @@
     "faction_id": "chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
-    "replacement_choice": [
-      [
-        "instrument-of-chaos"
-      ],
-      [
-        "daemonic-icon"
-      ]
+    "replacement": [
+      "instrument-of-chaos"
     ],
     "model_constraint": {
       "model_name": "Bloodcrusher",
-      "any_number": true
+      "max_count": 1
+    }
+  },
+  {
+    "id": "bloodcrushers-wgo-mfm-2",
+    "unit_id": "bloodcrushers",
+    "faction_id": "chaos-daemons",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replacement": [
+      "daemonic-icon"
+    ],
+    "model_constraint": {
+      "model_name": "Bloodcrusher",
+      "max_count": 1
     }
   },
   {
@@ -265,20 +336,32 @@
     "faction_id": "chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
-    "replacement_choice": [
-      [
-        "daemonic-icon"
-      ],
-      [
-        "instrument-of-chaos"
-      ]
+    "replacement": [
+      "daemonic-icon"
     ],
     "model_constraint": {
       "model_name": "Plague Drone",
-      "any_number": true
+      "max_count": 1
+    }
+  },
+  {
+    "id": "plague-drones-wgo-mfm-2",
+    "unit_id": "plague-drones",
+    "faction_id": "chaos-daemons",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replacement": [
+      "instrument-of-chaos"
+    ],
+    "model_constraint": {
+      "model_name": "Plague Drone",
+      "max_count": 1
     }
   },
   {
@@ -287,7 +370,7 @@
     "faction_id": "chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [

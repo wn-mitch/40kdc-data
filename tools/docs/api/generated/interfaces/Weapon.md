@@ -6,7 +6,7 @@
 
 # Interface: Weapon
 
-Defined in: [generated.ts:1329](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L1329)
+Defined in: [generated.ts:7052](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7052)
 
 A weapon entry with one or more stat profiles (e.g., standard and overcharge modes).
 
@@ -19,23 +19,23 @@ via the `definition` "weapon".
 
 > **id**: `string`
 
-Defined in: [generated.ts:1330](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L1330)
+Defined in: [generated.ts:7053](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7053)
 
 ***
+
 ### external\_refs?
 
 > `optional` **external\_refs?**: [`ExternalReferenceList`](../type-aliases/ExternalReferenceList.md)
 
-Defined in: [generated.ts:2722](https://github.com/wn-mitch/40kdc-data/blob/c9c88e6391023daf41c88513e9ecb21950c56b1c/tools/src/generated.ts#L2722)
+Defined in: [generated.ts:7054](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7054)
 
 ***
-
 
 ### name
 
 > **name**: `string`
 
-Defined in: [generated.ts:1331](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L1331)
+Defined in: [generated.ts:7055](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7055)
 
 ***
 
@@ -43,15 +43,25 @@ Defined in: [generated.ts:1331](https://github.com/wn-mitch/40kdc-data/blob/0b69
 
 > **type**: `"ranged"` \| `"melee"`
 
-Defined in: [generated.ts:1332](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L1332)
+Defined in: [generated.ts:7056](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7056)
+
+***
+
+### faction\_id?
+
+> `optional` **faction\_id?**: `string`
+
+Defined in: [generated.ts:7060](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7060)
+
+Kebab-case identifier
 
 ***
 
 ### profiles
 
-> **profiles**: \[\{ `name`: `string`; `range?`: `number` \| `"Melee"`; `stats`: \{\[`k`: `string`\]: `unknown`; `A`: [`StatValue`](../type-aliases/StatValue.md); `BS?`: `number` \| `null`; `WS?`: `number` \| `null`; `S`: [`StatValue`](../type-aliases/StatValue.md); `AP`: `number`; `D`: [`StatValue`](../type-aliases/StatValue.md); \}; `keywords?`: `object`[]; \}, ...\{ name: string; range?: number \| "Melee"; stats: \{ A: StatValue; BS?: number \| null; WS?: number \| null; S: StatValue; AP: number; D: StatValue; \[k: string\]: unknown \}; keywords?: \{ keyword\_id: string; parameters?: \{ value?: StatValue; target\_keyword?: string; threshold?: number \} \}\[\] \}\[\]\]
+> **profiles**: \[\{ `name`: `string`; `range?`: `number` \| `"Melee"`; `stats`: \{\[`k`: `string`\]: `unknown`; `A`: [`StatValue`](../type-aliases/StatValue.md); `BS?`: `number` \| `null`; `WS?`: `number` \| `null`; `S`: [`StatValue`](../type-aliases/StatValue.md); `AP`: `number`; `D`: [`StatValue`](../type-aliases/StatValue.md); \}; `keywords?`: [`WeaponKeywordRef`](WeaponKeywordRef.md)[]; `target_restrictions?`: \{ `required_keywords_any?`: [`KeywordList11`](../type-aliases/KeywordList11.md); `excluded_keywords?`: [`KeywordList12`](../type-aliases/KeywordList12.md); \} \| `null`; \}, ...\{ name: string; range?: number \| "Melee"; stats: \{ A: StatValue; BS?: number \| null; WS?: number \| null; S: StatValue; AP: number; D: StatValue; \[k: string\]: unknown \}; keywords?: WeaponKeywordRef\[\]; target\_restrictions?: \{ required\_keywords\_any?: KeywordList11; excluded\_keywords?: KeywordList12 \} \| null \}\[\]\]
 
-Defined in: [generated.ts:1336](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L1336)
+Defined in: [generated.ts:7064](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7064)
 
 #### Min Items
 
@@ -63,4 +73,12 @@ Defined in: [generated.ts:1336](https://github.com/wn-mitch/40kdc-data/blob/0b69
 
 > **game\_version**: [`GameVersionReference`](GameVersionReference.md)
 
-Defined in: [generated.ts:1392](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L1392)
+Defined in: [generated.ts:7114](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7114)
+
+***
+
+### game\_modes?
+
+> `optional` **game\_modes?**: [`GameModes7`](../type-aliases/GameModes7.md)
+
+Defined in: [generated.ts:7115](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7115)

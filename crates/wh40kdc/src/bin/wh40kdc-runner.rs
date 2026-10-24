@@ -14,8 +14,8 @@ use serde::Serialize;
 use serde_json::{json, Value};
 
 use wh40kdc::cruncher::{
-    attribute_stages, crunch, AttackProfileRef, AttributedStage, Buff, BuffSource, EngineContext,
-    EngineInput, StageLift, StageName, TargetProfileRef,
+    allocate, attribute_stages, crunch, AttackProfileRef, AttributedStage, Buff, BuffSource,
+    EngineContext, EngineInput, StageLift, StageName, TargetProfileRef,
 };
 use wh40kdc::export::{export_roster_with_dataset, ExportFormat};
 use wh40kdc::import::{
@@ -775,6 +775,33 @@ fn handle_linked_query(state: &mut RunnerState, args: &Value) -> Value {
             encoded.sort_by(|a, b| a.as_str().unwrap_or("").cmp(b.as_str().unwrap_or("")));
             ok_value(Value::Array(encoded))
         }
+        "weapon_bounds" => {
+            let id = str_arg("unitId");
+            let Some(unit) = ds.units.get_any(id) else {
+                return err_value(
+                    ErrorKind::UnknownEntity,
+                    Some(json!({ "kind": "unit", "id": id })),
+                );
+            };
+            let model_count: u64 = str_arg("modelCount").parse().unwrap_or(0);
+            let models = ds
+                .unit_compositions
+                .iter()
+                .find(|c| c.unit_id.as_str() == id)
+                .map(|c| wh40kdc::loadout_models(&c.models));
+            let bounds = wh40kdc::weapon_bounds(
+                unit,
+                model_count,
+                &ds.wargear_options_of(unit),
+                models.as_deref(),
+            );
+            let mut encoded: Vec<Value> = bounds
+                .iter()
+                .map(|(k, b)| Value::String(format!("{k}:{}-{}", b.min, b.max)))
+                .collect();
+            encoded.sort_by(|a, b| a.as_str().unwrap_or("").cmp(b.as_str().unwrap_or("")));
+            ok_value(Value::Array(encoded))
+        }
         "maximal_loadout" => {
             let id = str_arg("unitId");
             let Some(unit) = ds.units.get_any(id) else {
@@ -1250,6 +1277,21 @@ fn handle_attribution(state: &mut RunnerState, args: &Value) -> Value {
     }
 }
 
+fn handle_allocate(state: &mut RunnerState, args: &Value) -> Value {
+    let ds = state.dataset();
+    let (input, _eps) = match build_engine_input(ds, args, "allocate") {
+        Ok(x) => x,
+        Err(e) => return e,
+    };
+    match allocate(&input, Some(ds)) {
+        Ok(out) => ok_value(serde_json::to_value(&out).unwrap_or(Value::Null)),
+        Err(e) => err_value(
+            ErrorKind::CrunchError,
+            Some(json!({ "detail": e.to_string() })),
+        ),
+    }
+}
+
 fn handle_translate_scoring(state: &mut RunnerState, args: &Value) -> Value {
     let Some(card_id) = args.get("cardId").and_then(Value::as_str) else {
         return err_value(
@@ -1287,7 +1329,7 @@ fn handle_translate_effect(args: &Value) -> Value {
         .get("scope")
         .filter(|v| !v.is_null())
         .and_then(|v| serde_json::from_value(v.clone()).ok());
-    let applies_to: Option<wh40kdc::AbilityAppliesTo> = args
+    let applies_to: Option<wh40kdc::KeywordPredicate> = args
         .get("applies_to")
         .filter(|v| !v.is_null())
         .and_then(|v| serde_json::from_value(v.clone()).ok());
@@ -1317,7 +1359,7 @@ fn handle_match_applies_to(args: &Value) -> Value {
             Some(json!({ "detail": "match_applies_to.units must be an array" })),
         );
     };
-    let filter: Option<wh40kdc::AbilityAppliesTo> = args
+    let filter: Option<wh40kdc::KeywordPredicate> = args
         .get("applies_to")
         .filter(|v| !v.is_null())
         .and_then(|v| serde_json::from_value(v.clone()).ok());
@@ -1680,6 +1722,7 @@ fn dispatch(state: &mut RunnerState, op: &str, args: &Value) -> Value {
         "validate" => handle_validate(args),
         "crunch" => handle_crunch(state, args),
         "attribution" => handle_attribution(state, args),
+        "allocate" => handle_allocate(state, args),
         "translate_scoring" => handle_translate_scoring(state, args),
         "translate_effect" => handle_translate_effect(args),
         "match_applies_to" => handle_match_applies_to(args),

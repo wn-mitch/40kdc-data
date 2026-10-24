@@ -8,6 +8,6 @@
 
 > `const` **wargearOptions**: [`Collection`](../classes/Collection.md)\<[`WargearOption`](../../generated/interfaces/WargearOption.md), [`WargearOption`](../../generated/interfaces/WargearOption.md)\> = `dataset.wargearOptions`
 
-Defined in: [data/index.ts:95](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/index.ts#L95)
+Defined in: [data/index.ts:175](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/index.ts#L175)
 
 All wargear options.

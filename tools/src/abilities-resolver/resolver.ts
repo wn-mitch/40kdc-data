@@ -6,18 +6,22 @@
  * Resolution order — stable for snapshot tests:
  *
  * 1. **army** — faction-scoped abilities whose `ability_type` is `"faction"`
- *    and whose `faction_id` matches the input.
+ *    and whose `faction_id` matches the input. One with a `detachment_id` (a
+ *    Combat Patrol's own army rule) applies only in that detachment, and there
+ *    drops each army rule it `replaces` (`interactions`). In a Combat Patrol
+ *    detachment only the army rules its `detachment_rule_ids` list apply.
  * 2. **detachment** — abilities authored against the detachment
  *    (`ability_type` is `"detachment"`, `detachment_id` matches).
  * 3. **detachment-stratagem** — stratagems on the detachment, each yielding
- *    the ability referenced by `stratagem.ability_id` (if any).
+ *    the ability referenced by `stratagem.ability_id` (if any), when the
+ *    combined unit can be the stratagem's friendly target (its keywords).
  * 4. **unit** — abilities listed in `unit.ability_ids`.
  * 5. **attached** — abilities of each attached member. A leader + bodyguard
  *    (and, in 11th, support) form one combined unit, so every member's
  *    abilities apply to the whole unit — pulled in full (not aura-filtered),
  *    whichever member is the selected/firing unit.
- * 6. **support** — abilities on supporting units whose scope range is an
- *    aura (not `self` / `unit`).
+ * 6. **support** — abilities on supporting units whose effects can reach
+ *    another unit (auras, unit selections, or friendly/enemy target filters).
  *
  * Each step phase-filters via the existing `Dataset.phasesFor` index. The
  * resolver collects abilities first, *then* filters by phase, so the SPA can
@@ -49,6 +53,8 @@ export type EligibilityInput = {
    * multi-member attachments need no shape change; order is preserved.
    */
   attachedUnitIds?: string[];
+  /** Actual roles within this attached unit, keyed by unit id; never inferred from datasheet abilities. */
+  attachmentRoles?: Readonly<Record<string, "leader" | "bodyguard">>;
   /** Friendly units whose auras could apply (M2 walks only their aura-ranged abilities). */
   supportingUnitIds?: string[];
 };
@@ -58,6 +64,8 @@ export type EligibleAbility = {
   source: EligibleAbilitySource;
   /** The subset of `ability.phases` that intersect the requested phase. */
   phases: Phase[];
+  /** The rating the owning unit prints for a rated rule (Feel No Pain 5+ → 5). */
+  rating?: string | number;
 };
 
 /** Compute the sorted-by-source eligible-ability list for one (unit, phase). */
@@ -79,9 +87,15 @@ export function resolveEligibleAbilities(
   const seen = new Set<string>();
   const out: EligibleAbility[] = [];
 
-  // 1. Army — faction-scoped abilities (faction rule + any other faction-typed).
+  // 1. Army — faction-scoped abilities (faction rule + any other faction-typed). An army rule
+  // with a `detachment_id` is a Combat Patrol box's own army rule: it applies only in that
+  // detachment, and there it replaces each army rule it names with `interactions` `replaces`.
+  // A Combat Patrol detachment's `detachment_rule_ids` are its complete army-rule set.
+  const replaced = replacedArmyRuleIds(dataset, factionId, [input.detachmentId]);
   for (const ability of dataset.abilities.byFaction(factionId)) {
     if (ability.raw.ability_type !== "faction") continue;
+    if (ability.raw.detachment_id != null && ability.raw.detachment_id !== input.detachmentId) continue;
+    if (replaced.has(ability.id)) continue;
     if (!phaseMatches(ability, phase)) continue;
     pushUnique(out, seen, { ability, source: { kind: "army" }, phases: intersect(ability.phases, phase) });
   }
@@ -107,17 +121,20 @@ export function resolveEligibleAbilities(
       dataset.detachments.getInFaction(input.detachmentId, factionId) ??
       dataset.detachments.getAny(input.detachmentId);
     if (detachment) {
+      // The combined unit's keywords: every member's, as one unit.
+      const keywords = new Set<string>();
+      for (const member of [unit, ...(input.attachedUnitIds ?? []).map((id) => resolveUnit(id, factionId))]) {
+        for (const keyword of [...(member?.keywords ?? []), ...(member?.factionKeywords ?? [])]) keywords.add(keyword.toLowerCase());
+      }
       for (const stratId of detachment.stratagem_ids ?? []) {
         const stratagem = dataset.stratagems.get(stratId);
         if (!stratagem) continue;
         if (!stratagemPhaseMatches(stratagem, phase)) continue;
+        if (!stratagemCanTarget(stratagem, keywords)) continue;
         const ability =
           stratagem.ability_id !== null && stratagem.ability_id !== undefined
-            ? // Stratagem ability ids are detachment-qualified but the ability
-              // copies are still replicated per faction (SM chapters) — prefer
-              // the resolving faction's copy, falling back for shared pools.
-              (dataset.abilities.getInFaction(stratagem.ability_id, factionId) ??
-              dataset.abilities.getAny(stratagem.ability_id))
+            ? // Ability ids are unique: one record per stratagem, wherever its detachment is replicated.
+              dataset.abilities.get(stratagem.ability_id)
             : undefined;
         if (!ability) continue;
         pushUnique(out, seen, {
@@ -140,6 +157,7 @@ export function resolveEligibleAbilities(
       ability,
       source: { kind: "unit", unitId: input.unitId },
       phases: intersect(ability.phases, phase),
+      ...rated(unit.ratingOf(ability.id)),
     });
   }
 
@@ -155,22 +173,25 @@ export function resolveEligibleAbilities(
         ability,
         source: { kind: "attached", unitId: memberId },
         phases: intersect(ability.phases, phase),
+        ...rated(member.ratingOf(ability.id)),
       });
     }
   }
 
-  // 6. Supporting units — only aura-scoped abilities (otherwise the buff
-  // would describe a self-target effect that doesn't reach the input unit).
+  // 6. Supporting units — only abilities that can reach another unit (an aura,
+  // a friendly or enemy unit filter, a unit selection); an ability that only
+  // names its own unit describes a buff that never reaches the input unit.
   for (const supportId of input.supportingUnitIds ?? []) {
     const supporter = resolveUnit(supportId, factionId);
     if (!supporter) continue;
     for (const ability of supporter.abilities) {
       if (!phaseMatches(ability, phase)) continue;
-      if (!isAuraScope(ability.raw.scope?.range)) continue;
+      if (!reachesOtherUnits(ability.raw.effect)) continue;
       pushUnique(out, seen, {
         ability,
         source: { kind: "support", sourceUnitId: supportId },
         phases: intersect(ability.phases, phase),
+        ...rated(supporter.ratingOf(ability.id)),
       });
     }
   }
@@ -181,6 +202,40 @@ export function resolveEligibleAbilities(
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
+
+const rated = (rating: string | number | undefined): { rating?: string | number } => (rating === undefined ? {} : { rating });
+
+/**
+ * The army rules of `factionId` that the selected detachments' own army rules replace: a
+ * faction-typed record with a `detachment_id` among `detachmentIds` (a Combat Patrol box's army
+ * rule) drops each record its `interactions` name with type `replaces`. A selected Combat Patrol
+ * detachment (`game_modes` includes `combat-patrol`) lists its complete army-rule set in
+ * `detachment_rule_ids`, so it also drops every faction-typed record it does not list. Callers
+ * that combine several detachments pass all of them, so a rule replaced in one is not restored by
+ * another.
+ */
+export function replacedArmyRuleIds(dataset: Dataset, factionId: string, detachmentIds: readonly (string | undefined)[]): Set<string> {
+  const out = new Set<string>();
+  const army = dataset.abilities.byFaction(factionId).filter((ability) => ability.raw.ability_type === "faction");
+  for (const ability of army) {
+    if (ability.raw.detachment_id == null) continue;
+    if (!detachmentIds.includes(ability.raw.detachment_id)) continue;
+    for (const entry of ability.raw.interactions ?? []) if (entry.type === "replaces") out.add(entry.ability_ref);
+  }
+  for (const detachmentId of detachmentIds) {
+    if (detachmentId === undefined) continue;
+    const detachment = dataset.detachments.getInFaction(detachmentId, factionId) ?? dataset.detachments.getAny(detachmentId);
+    if (!detachment || !isCombatPatrolDetachment(detachment)) continue;
+    const listed = new Set(detachment.detachment_rule_ids ?? []);
+    for (const ability of army) if (!listed.has(ability.id)) out.add(ability.id);
+  }
+  return out;
+}
+
+/** True when a detachment is a Combat Patrol box's (`game_modes` includes `combat-patrol`). */
+export function isCombatPatrolDetachment(detachment: { game_modes?: readonly string[] | null }): boolean {
+  return (detachment.game_modes ?? []).includes("combat-patrol");
+}
 
 function phaseMatches(ability: AbilityView, phase: Phase): boolean {
   const phases = ability.phases;
@@ -196,13 +251,48 @@ function stratagemPhaseMatches(stratagem: Stratagem, phase: Phase): boolean {
   return (stratagem.phases as Phase[]).includes(phase);
 }
 
+type TargetRestriction = { side?: string; warlord?: true; required_keywords?: string[]; required_keywords_any?: string[]; excluded_keywords?: string[] };
+
+/**
+ * Whether a unit with `keywords` (lower-cased) can be a stratagem's friendly target. A stratagem
+ * with no friendly target (none printed, or only enemy targets) does not restrict its user here;
+ * with several friendly targets, matching any one is enough. The resolver does not know which
+ * model is the Warlord, so a Warlord target only needs a unit that could contain it: one with
+ * CHARACTER, the keyword every Warlord carries.
+ */
+export function stratagemCanTarget(stratagem: Stratagem, keywords: ReadonlySet<string>): boolean {
+  const raw = stratagem.target_restrictions as TargetRestriction | TargetRestriction[] | null | undefined;
+  if (!raw) return true;
+  const friendly = (Array.isArray(raw) ? raw : [raw]).filter((target) => target.side !== "enemy");
+  if (friendly.length === 0) return true;
+  const has = (keyword: string) => keywords.has(keyword.toLowerCase());
+  return friendly.some((target) => (target.warlord !== true || has("character"))
+    && (target.required_keywords ?? []).every(has)
+    && ((target.required_keywords_any ?? []).length === 0 || target.required_keywords_any!.some(has))
+    && !(target.excluded_keywords ?? []).some(has));
+}
+
 function intersect(phases: Phase[], phase: Phase): Phase[] {
   return phases.includes(phase) ? [phase] : phases;
 }
 
-function isAuraScope(range: unknown): boolean {
-  if (typeof range !== "string") return false;
-  return range.startsWith("aura-") || range === "any-on-battlefield" || range === "any-visible";
+/**
+ * Whether an effect can reach a unit other than its own: an aura, a unit-filter target (friendly
+ * or enemy), or a unit selection. The translator decides what of it reaches the input unit.
+ */
+export function reachesOtherUnits(effect: unknown): boolean {
+  if (Array.isArray(effect)) return effect.some(reachesOtherUnits);
+  if (effect === null || typeof effect !== "object") return false;
+  const node = effect as Record<string, unknown>;
+  if (node.type === "aura" || node.type === "select-units") return true;
+  const target = node.target;
+  if (target !== null && typeof target === "object" && !Array.isArray(target) && "owner" in target) {
+    if (target.owner === "friendly" || target.owner === "enemy") return true;
+  }
+  // A model-only grant's definition cannot become an aura from the whole unit.
+  if (node.type === "ability-grant" && (target === "this-model" || target === "model-in-this-unit"
+    || (target !== null && typeof target === "object" && "level" in target && target.level === "model"))) return false;
+  return Object.values(node).some(reachesOtherUnits);
 }
 
 function pushUnique(

@@ -4,21 +4,32 @@
     "name": "Lethal Hits",
     "required_parameters": [],
     "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "sustained-hits",
     "name": "Sustained Hits",
-    "required_parameters": ["value"],
+    "required_parameters": [
+      "value"
+    ],
     "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "devastating-wounds",
     "name": "Devastating Wounds",
     "required_parameters": [],
     "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "twin-linked",
@@ -26,17 +37,28 @@
     "required_parameters": [],
     "effect": {
       "type": "re-roll",
-      "target": "self",
-      "modifier": { "roll": "wound", "subset": "all-failures" }
+      "target": "this-model",
+      "modifier": {
+        "roll": "wound",
+        "subset": "all-failures"
+      }
     },
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "rapid-fire",
     "name": "Rapid Fire",
-    "required_parameters": ["value"],
+    "required_parameters": [
+      "value"
+    ],
     "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "heavy",
@@ -44,216 +66,343 @@
     "required_parameters": [],
     "effect": {
       "type": "conditional",
-      "condition": { "type": "remained-stationary" },
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "move-ended",
+          "filter": {
+            "move_types": [
+              "remain-stationary"
+            ]
+          },
+          "window": "turn"
+        }
+      },
       "effect": {
         "type": "roll-modifier",
-        "target": "self",
-        "modifier": { "roll": "hit", "operation": "add", "value": 1 }
+        "target": "this-model",
+        "modifier": {
+          "roll": "hit",
+          "operation": "add",
+          "value": 1
+        }
       }
     },
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "assault",
     "name": "Assault",
     "required_parameters": [],
     "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "pistol",
     "name": "Pistol",
     "required_parameters": [],
     "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "torrent",
     "name": "Torrent",
     "required_parameters": [],
     "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "blast",
     "name": "Blast",
     "required_parameters": [],
     "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "optional_parameters": [
+      "value"
+    ]
   },
   {
     "id": "melta",
     "name": "Melta",
-    "required_parameters": ["value"],
+    "required_parameters": [
+      "value"
+    ],
     "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "anti",
     "name": "Anti",
-    "required_parameters": ["target_keyword", "threshold"],
+    "required_parameters": [
+      "target_keyword",
+      "threshold"
+    ],
     "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "ignores-cover",
     "name": "Ignores Cover",
     "required_parameters": [],
     "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "precision",
     "name": "Precision",
     "required_parameters": [],
     "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "hazardous",
     "name": "Hazardous",
     "required_parameters": [],
     "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "indirect-fire",
     "name": "Indirect Fire",
     "required_parameters": [],
     "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "extra-attacks",
     "name": "Extra Attacks",
     "required_parameters": [],
     "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "psychic",
     "name": "Psychic",
     "required_parameters": [],
     "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "one-shot",
     "name": "One Shot",
     "required_parameters": [],
     "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "lance",
     "name": "Lance",
     "required_parameters": [],
     "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "cleave",
     "name": "Cleave",
-    "required_parameters": ["value"],
+    "required_parameters": [
+      "value"
+    ],
     "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "close-quarters",
     "name": "Close-quarters",
     "required_parameters": [],
     "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "overcharge",
     "name": "Overcharge",
     "required_parameters": [],
     "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "conversion",
     "name": "Conversion",
     "required_parameters": [],
     "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "linked-fire",
     "name": "Linked Fire",
     "required_parameters": [],
     "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "plasma-warhead",
     "name": "Plasma Warhead",
     "required_parameters": [],
     "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "psychic-assassin",
     "name": "Psychic Assassin",
     "required_parameters": [],
     "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "reverberating-summons",
     "name": "Reverberating Summons",
     "required_parameters": [],
     "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "bubblechukka",
     "name": "Bubblechukka",
     "required_parameters": [],
     "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "dead-choppy",
     "name": "Dead Choppy",
     "required_parameters": [],
     "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "harpooned",
     "name": "Harpooned",
     "required_parameters": [],
     "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "hooked",
     "name": "Hooked",
     "required_parameters": [],
     "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "impaled",
     "name": "Impaled",
     "required_parameters": [],
     "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "hunter",
     "name": "Hunter",
-    "required_parameters": ["target_keyword"],
+    "required_parameters": [
+      "target_keyword"
+    ],
     "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "launch" }
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
   },
   {
     "id": "snagged",
     "name": "Snagged",
     "required_parameters": [],
     "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "supa-hazardous",
+    "name": "Supa-Hazardous",
+    "required_parameters": [],
+    "effect": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   }
 ]

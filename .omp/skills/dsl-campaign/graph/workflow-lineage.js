@@ -175,9 +175,9 @@ const MIN_PROHIBITED_TEXT_LENGTH = 20
 
 export function prohibitedStoreStrings(storePath) {
   const indexPath = existsSync(storePath) && statSync(storePath).isDirectory() ? join(storePath, 'index.json') : storePath
-  if (!existsSync(indexPath)) throw new Error(`raw-text store missing: ${storePath}`)
+  if (!existsSync(indexPath)) throw new Error(`prose export missing: ${storePath} (run: cd tools && npm run prose -- export)`)
   const index = JSON.parse(readFileSync(indexPath, 'utf8'))
-  if (!index?.factions || typeof index.factions !== 'object') throw new TypeError('raw-text store index requires factions')
+  if (!index?.factions || typeof index.factions !== 'object') throw new TypeError('prose export index requires factions')
   const entries = []
   const collect = (value, storeKey) => {
     if (typeof value === 'string') {

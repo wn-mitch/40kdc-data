@@ -1,6 +1,37 @@
 [
   {
-    "id": "anathema-blademastery-null-maiden-vigil",
+    "id": "advanced-stabilisers-grav-assault-force-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "955e9d60-fd3b-410f-a0bd-d3d7ee97cb1b"
+      }
+    ],
+    "name": "Advanced Stabilisers",
+    "category": "detachment",
+    "detachment_id": "grav-assault-force",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": {
+      "required_keywords": [
+        "Grav-assault"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "advanced-stabilisers-grav-assault-force-adeptus-custodes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "anathema-blademastery-null-maiden-vigil-adeptus-custodes",
     "name": "ANATHEMA BLADEMASTERY",
     "category": "detachment",
     "type": "battle-tactic",
@@ -11,8 +42,24 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "anathema-blademastery-null-maiden-vigil",
+    "target_restrictions": {
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "subject": "this-unit",
+          "filter": {
+            "level": "unit",
+            "unit_ids": [
+              "vigilator-squad"
+            ]
+          }
+        }
+      }
+    },
+    "ability_id": "anathema-blademastery-null-maiden-vigil-adeptus-custodes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -24,196 +71,145 @@
       },
       {
         "namespace": "mfm",
-        "id": "5eed0fdf-fe60-42db-a87b-f3308420c6cc"
+        "id": "0094c9e7-8c97-427f-abd4-2955745ca1d1"
       }
     ]
   },
   {
-    "id": "arcane-genetic-alchemy-shield-host",
-    "name": "ARCANE GENETIC ALCHEMY",
-    "category": "detachment",
-    "type": "battle-tactic",
-    "detachment_id": "shield-host",
-    "cp_cost": 1,
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "player_turn": "either",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "arcane-genetic-alchemy-shield-host",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
+    "id": "at-spears-length-solar-watch-adeptus-custodes",
     "external_refs": [
       {
-        "namespace": "game-datacards",
-        "id": "a67cf9db-eb8f-5ff9-98aa-3c716862bf0f"
-      },
-      {
         "namespace": "mfm",
-        "id": "c86305d1-9ed8-4611-853b-2e9582c62091"
+        "id": "9ef3e24d-04b7-4886-9721-da1b6b1dd288"
       }
-    ]
-  },
-  {
-    "id": "archeotech-munitions-shield-host",
-    "name": "ARCHEOTECH MUNITIONS",
+    ],
+    "name": "At Spear’s Length",
     "category": "detachment",
-    "type": "wargear",
-    "detachment_id": "shield-host",
+    "detachment_id": "solar-watch",
     "cp_cost": 1,
     "phases": [
-      "shooting"
+      "movement"
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "archeotech-munitions-shield-host",
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "at-spears-length-solar-watch-adeptus-custodes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "5a3d02bc-0076-5505-a923-84977062b675"
-      },
-      {
-        "namespace": "mfm",
-        "id": "ce8cf776-9cb6-48b5-9ea9-bddb56f19407"
-      }
-    ]
+    }
   },
   {
-    "id": "avenge-the-fallen-shield-host",
-    "name": "AVENGE THE FALLEN",
+    "id": "avenge-the-fallen-honoured-companions-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "9331e696-bcd6-47ba-bfa9-492210e7971c"
+      }
+    ],
+    "name": "Avenge the Fallen",
     "category": "detachment",
-    "type": "strategic-ploy",
-    "detachment_id": "shield-host",
+    "detachment_id": "honoured-companions",
     "cp_cost": 1,
     "phases": [
       "fight"
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "avenge-the-fallen-shield-host",
+    "target_restrictions": {
+      "required_keywords": [
+        "Trusted Sentinel"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "avenge-the-fallen-honoured-companions-adeptus-custodes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "074a438b-8074-5a3d-91be-4c1dc5c06510"
-      },
-      {
-        "namespace": "mfm",
-        "id": "da903080-91ba-4138-a20c-d7719a69754d"
-      }
-    ]
+    }
   },
   {
-    "id": "deathsong-scythes-silent-hunters",
-    "name": "DEATHSONG SCYTHES",
+    "id": "bearers-of-his-light-emissaries-imperatus-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "79523137-69b0-4981-b4db-6346275f7239"
+      }
+    ],
+    "name": "Bearers of His Light",
     "category": "detachment",
-    "detachment_id": "silent-hunters",
+    "detachment_id": "emissaries-imperatus",
     "cp_cost": 1,
     "phases": [
       "fight"
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "deathsong-scythes-silent-hunters",
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "bearers-of-his-light-emissaries-imperatus-adeptus-custodes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "bc0eae6b-6872-5310-a58f-31eb2282e37c"
-      },
-      {
-        "namespace": "mfm",
-        "id": "df90dc29-28d9-4484-b6aa-266ce4b3699d"
-      }
-    ]
+    }
   },
   {
-    "id": "defiant-to-the-last-lions-of-the-emperor",
-    "name": "DEFIANT TO THE LAST",
+    "id": "driven-by-duty-aquilan-wing-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "df4a31d4-635d-4488-b9e3-aa239a3dfba2"
+      }
+    ],
+    "name": "Driven by Duty",
     "category": "detachment",
-    "type": "strategic-ploy",
-    "detachment_id": "lions-of-the-emperor",
+    "detachment_id": "aquilan-wing",
     "cp_cost": 1,
     "phases": [
-      "fight"
+      "movement"
     ],
-    "player_turn": "either",
+    "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "defiant-to-the-last-lions-of-the-emperor",
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes",
+        "Aquilan Wing"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "driven-by-duty-aquilan-wing-adeptus-custodes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "5701483f-5126-59c6-886e-db7b4d4e9856"
-      },
-      {
-        "namespace": "mfm",
-        "id": "3d93b0b2-7640-4265-985b-0c1a9e206643"
-      }
-    ]
+    }
   },
   {
-    "id": "desperations-price-null-maiden-vigil",
-    "name": "DESPERATION’S PRICE",
-    "category": "detachment",
-    "type": "strategic-ploy",
-    "detachment_id": "null-maiden-vigil",
-    "cp_cost": 1,
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
+    "id": "duty-unto-death-auric-champions-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "d3b272a2-9557-42e1-b735-8e19a7f533e0"
+      }
     ],
-    "player_turn": "either",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "desperations-price-null-maiden-vigil",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "a306a34a-64e6-5294-a65f-e063b2e965ed"
-      },
-      {
-        "namespace": "mfm",
-        "id": "985ebdd0-d67f-4c45-90a5-8955020d801b"
-      }
-    ]
-  },
-  {
-    "id": "earning-of-a-name-auric-champions",
-    "name": "EARNING OF A NAME",
+    "name": "Duty Unto Death",
     "category": "detachment",
-    "type": "epic-deed",
     "detachment_id": "auric-champions",
     "cp_cost": 1,
     "phases": [
@@ -222,203 +218,79 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "earning-of-a-name-auric-champions",
+    "ability_id": "duty-unto-death-auric-champions-adeptus-custodes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "c8a9d9d9-e8f4-549c-a018-ff9c67f0b2c5"
-      },
-      {
-        "namespace": "mfm",
-        "id": "57f66cf6-3c56-4811-82c8-8f7e92bf2b86"
-      }
-    ]
+    }
   },
   {
-    "id": "electroexorcist-saturation-tharanatoi-hammerblow",
-    "name": "ELECTROEXORCIST SATURATION",
+    "id": "emperors-domain-honoured-companions-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "25fda1da-efb0-48dd-9725-5ebf27e027f1"
+      }
+    ],
+    "name": "Emperor’s Domain",
     "category": "detachment",
-    "detachment_id": "tharanatoi-hammerblow",
+    "detachment_id": "honoured-companions",
     "cp_cost": 1,
     "phases": [
-      "shooting"
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "emperors-domain-honoured-companions-adeptus-custodes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "fury-of-the-emperor-lions-of-the-emperor-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "876ae115-e0c7-496e-8fe8-1ac7fc087d4e"
+      }
+    ],
+    "name": "Fury of the Emperor",
+    "category": "detachment",
+    "detachment_id": "lions-of-the-emperor",
+    "cp_cost": 1,
+    "phases": [
+      "charge"
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "electroexorcist-saturation-tharanatoi-hammerblow",
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes",
+        "Terminator"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "fury-of-the-emperor-lions-of-the-emperor-adeptus-custodes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "68599c6d-d3ea-59c0-b2d3-2255e2624136"
-      },
-      {
-        "namespace": "mfm",
-        "id": "586938da-eb36-4a8c-9ebc-eacd8ac75f90"
-      }
-    ]
+    }
   },
   {
-    "id": "emperors-executioners-talons-of-the-emperor",
-    "name": "EMPEROR’S EXECUTIONERS",
-    "category": "detachment",
-    "type": "battle-tactic",
-    "detachment_id": "talons-of-the-emperor",
-    "cp_cost": 2,
-    "phases": [
-      "fight"
+    "id": "gilded-champion-auric-champions-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "b302a055-5fb9-488e-9ff9-66db90ccf5f4"
+      }
     ],
-    "player_turn": "either",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "emperors-executioners-talons-of-the-emperor",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "d536aca0-1462-5b2d-9fa6-3f1ef526c2e0"
-      },
-      {
-        "namespace": "mfm",
-        "id": "f5c50ce4-bc47-4982-a25c-e9e09f28737d"
-      }
-    ]
-  },
-  {
-    "id": "emperors-vengeance-solar-spearhead",
-    "name": "EMPEROR’S VENGEANCE",
+    "name": "Gilded Champion",
     "category": "detachment",
-    "type": "battle-tactic",
-    "detachment_id": "solar-spearhead",
-    "cp_cost": 1,
-    "phases": [
-      "fight"
-    ],
-    "player_turn": "either",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "emperors-vengeance-solar-spearhead",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "a7c98252-cb20-5601-8c0a-0089ee266157"
-      },
-      {
-        "namespace": "mfm",
-        "id": "9876dec8-0561-44cf-b491-429cd673c76b"
-      }
-    ]
-  },
-  {
-    "id": "empyric-severance-talons-of-the-emperor",
-    "name": "EMPYRIC SEVERANCE",
-    "category": "detachment",
-    "type": "battle-tactic",
-    "detachment_id": "talons-of-the-emperor",
-    "cp_cost": 1,
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "player_turn": "either",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "empyric-severance-talons-of-the-emperor",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "a2009fc1-5c4f-5d08-849c-6657d38ada9f"
-      },
-      {
-        "namespace": "mfm",
-        "id": "17071980-b9bf-4a01-afe9-c31c1eefc773"
-      }
-    ]
-  },
-  {
-    "id": "flawless-construction-might-of-the-moritoi",
-    "name": "FLAWLESS CONSTRUCTION",
-    "category": "detachment",
-    "detachment_id": "might-of-the-moritoi",
-    "cp_cost": 1,
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "player_turn": "either",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "flawless-construction-might-of-the-moritoi",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "b77bafd4-eaa1-5056-87f1-13c2e5df7096"
-      },
-      {
-        "namespace": "mfm",
-        "id": "3687c101-794e-4b3b-9281-b799cc7c439e"
-      }
-    ]
-  },
-  {
-    "id": "flawless-construction-solar-spearhead",
-    "name": "FLAWLESS CONSTRUCTION",
-    "category": "detachment",
-    "type": "battle-tactic",
-    "detachment_id": "solar-spearhead",
-    "cp_cost": 1,
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "player_turn": "either",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "flawless-construction-solar-spearhead",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "2331013b-f394-57b7-b80d-a8eea4ec2b51"
-      },
-      {
-        "namespace": "mfm",
-        "id": "9d0e1b4f-c0d6-4678-afef-549b0b6877b8"
-      }
-    ]
-  },
-  {
-    "id": "gilded-champion-lions-of-the-emperor",
-    "name": "GILDED CHAMPION",
-    "category": "detachment",
-    "type": "strategic-ploy",
-    "detachment_id": "lions-of-the-emperor",
+    "detachment_id": "auric-champions",
     "cp_cost": 1,
     "phases": [
       "command",
@@ -430,24 +302,14 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "gilded-champion-lions-of-the-emperor",
+    "ability_id": "gilded-champion-auric-champions-adeptus-custodes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "df49ad1f-c4f0-5ee7-85e6-2ffdd842cfea"
-      },
-      {
-        "namespace": "mfm",
-        "id": "8fdffebf-bfd9-4812-bb51-5108e84c9e37"
-      }
-    ]
+    }
   },
   {
-    "id": "gilded-spear-tristraens-gilded-blades",
+    "id": "gilded-spear-tristraens-gilded-blades-adeptus-custodes",
     "name": "Gilded Spear",
     "category": "detachment",
     "detachment_id": "tristraens-gilded-blades",
@@ -458,7 +320,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "gilded-spear-tristraens-gilded-blades",
+    "ability_id": "gilded-spear-tristraens-gilded-blades-adeptus-custodes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -471,10 +333,119 @@
     ]
   },
   {
-    "id": "hardened-resolve-tharanatoi-hammerblow",
-    "name": "HARDENED RESOLVE",
+    "id": "golden-light-of-the-moiraides-dread-host-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "7efedbb1-34fe-437a-b28a-c7661a1c6bf3"
+      }
+    ],
+    "name": "Golden Light of the Moiraides",
     "category": "detachment",
-    "detachment_id": "tharanatoi-hammerblow",
+    "detachment_id": "dread-host",
+    "cp_cost": 2,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "golden-light-of-the-moiraides-dread-host-adeptus-custodes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "gravimetric-grenade-solar-watch-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "79658bf5-7f13-406e-a6c7-fe955668339e"
+      }
+    ],
+    "name": "Gravimetric Grenade",
+    "category": "detachment",
+    "detachment_id": "solar-watch",
+    "cp_cost": 1,
+    "phases": [
+      "charge"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "not_states": [
+              "engaged"
+            ]
+          }
+        }
+      }
+    },
+    "ability_id": "gravimetric-grenade-solar-watch-adeptus-custodes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "grim-responsibility-shadowkeepers-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "76293e5f-efe0-4ed0-954d-fcedb22124eb"
+      }
+    ],
+    "name": "Grim Responsibility",
+    "category": "detachment",
+    "detachment_id": "shadowkeepers",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "grim-responsibility-shadowkeepers-adeptus-custodes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "honoured-interred-might-of-the-moritoi-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "a5a58f23-851b-4e05-8b55-91484bf5f3c3"
+      }
+    ],
+    "name": "Honoured Interred",
+    "category": "detachment",
+    "detachment_id": "might-of-the-moritoi",
     "cp_cost": 1,
     "phases": [
       "shooting",
@@ -482,54 +453,229 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "hardened-resolve-tharanatoi-hammerblow",
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes",
+        "Dreadnought"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit"
+    },
+    "ability_id": "honoured-interred-might-of-the-moritoi-adeptus-custodes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "521864b4-358d-5370-9906-cbfe3e15f048"
-      },
-      {
-        "namespace": "mfm",
-        "id": "342d243e-237b-425e-af03-f0cb82e857b8"
-      }
-    ]
+    }
   },
   {
-    "id": "hunt-as-one-talons-of-the-emperor",
-    "name": "HUNT AS ONE",
+    "id": "impenetrable-bastion-emperors-chosen-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "1124e967-dd5f-49ec-a057-4048b0265df2"
+      }
+    ],
+    "name": "Impenetrable Bastion",
     "category": "detachment",
-    "type": "strategic-ploy",
-    "detachment_id": "talons-of-the-emperor",
+    "detachment_id": "emperors-chosen",
     "cp_cost": 1,
     "phases": [
       "movement"
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "hunt-as-one-talons-of-the-emperor",
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes"
+      ],
+      "excluded_keywords": [
+        "Monster",
+        "Vehicle"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit"
+    },
+    "ability_id": "impenetrable-bastion-emperors-chosen-adeptus-custodes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "2a675476-6df7-5da8-85f7-3aab52ac8114"
-      },
-      {
-        "namespace": "mfm",
-        "id": "b87ca775-c322-4333-aa5d-b9fae2c56cce"
-      }
-    ]
+    }
   },
   {
-    "id": "inevitable-wrath-tristraens-gilded-blades",
+    "id": "in-auramite-clad-emperors-chosen-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "409957e9-4bc7-48a5-96f6-8943e545ac7c"
+      }
+    ],
+    "name": "In Auramite clad",
+    "category": "detachment",
+    "detachment_id": "emperors-chosen",
+    "cp_cost": 1,
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "none_of": [
+              "CUSTODIAN WARDENS"
+            ]
+          }
+        }
+      }
+    },
+    "ability_id": "in-auramite-clad-emperors-chosen-adeptus-custodes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "in-auramite-clad-guardians-of-the-throne-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "86b60c6f-8343-4696-8636-2d0f57734366"
+      }
+    ],
+    "name": "In Auramite clad",
+    "category": "detachment",
+    "detachment_id": "guardians-of-the-throne",
+    "cp_cost": 1,
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "none_of": [
+              "CUSTODIAN WARDENS"
+            ]
+          }
+        }
+      }
+    },
+    "ability_id": "in-auramite-clad-guardians-of-the-throne-adeptus-custodes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "indomitable-guardians-shadowkeepers-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "fa0bd347-ef98-451a-ba79-aa7e8b139837"
+      }
+    ],
+    "name": "Indomitable Guardians",
+    "category": "detachment",
+    "detachment_id": "shadowkeepers",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": {
+                    "objective": {}
+                  },
+                  "range": "objective-control"
+                }
+              }
+            }
+          },
+          {
+            "type": "eligible",
+            "parameters": {
+              "subject": "this-unit",
+              "to": "fight"
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "indomitable-guardians-shadowkeepers-adeptus-custodes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "inevitable-annihilation-grav-assault-force-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "bb5b5c0c-b9ec-4836-b2eb-a4dccb12599e"
+      }
+    ],
+    "name": "Inevitable Annihilation",
+    "category": "detachment",
+    "detachment_id": "grav-assault-force",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": {
+      "required_keywords": [
+        "Grav-assault"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "inevitable-annihilation-grav-assault-force-adeptus-custodes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "inevitable-wrath-tristraens-gilded-blades-adeptus-custodes",
     "name": "Inevitable Wrath",
     "category": "detachment",
     "detachment_id": "tristraens-gilded-blades",
@@ -540,7 +686,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "inevitable-wrath-tristraens-gilded-blades",
+    "ability_id": "inevitable-wrath-tristraens-gilded-blades-adeptus-custodes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -553,65 +699,100 @@
     ]
   },
   {
-    "id": "manoeuvre-and-fire-lions-of-the-emperor",
-    "name": "MANOEUVRE AND FIRE",
+    "id": "inexorable-solar-watch-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "04eda0f4-35e9-4803-9910-51fe12df8e39"
+      }
+    ],
+    "name": "Inexorable",
     "category": "detachment",
-    "type": "strategic-ploy",
-    "detachment_id": "lions-of-the-emperor",
+    "detachment_id": "solar-watch",
     "cp_cost": 1,
     "phases": [
       "movement"
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "manoeuvre-and-fire-lions-of-the-emperor",
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "inexorable-solar-watch-adeptus-custodes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "40356130-890d-562f-bf86-65be287dfc81"
-      },
-      {
-        "namespace": "mfm",
-        "id": "1ba62209-9b85-4ff8-96c0-8bf99d35955b"
-      }
-    ]
+    }
   },
   {
-    "id": "multipotentiality-shield-host",
-    "name": "MULTIPOTENTIALITY",
+    "id": "lightning-wrath-dread-host-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "1242c6d0-9143-4187-9cf1-942ef3b89638"
+      }
+    ],
+    "name": "Lightning Wrath",
     "category": "detachment",
-    "type": "strategic-ploy",
-    "detachment_id": "shield-host",
+    "detachment_id": "dread-host",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "lightning-wrath-dread-host-adeptus-custodes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "manoeuvre-and-fire-aquilan-shield-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "caf9ded5-7232-405d-8df5-5ca42111af9a"
+      }
+    ],
+    "name": "Manoeuvre and Fire",
+    "category": "detachment",
+    "detachment_id": "aquilan-shield",
     "cp_cost": 1,
     "phases": [
       "movement"
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "multipotentiality-shield-host",
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "manoeuvre-and-fire-aquilan-shield-adeptus-custodes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "a19b6897-cc82-5ad1-9ae4-4f3d350213e7"
-      },
-      {
-        "namespace": "mfm",
-        "id": "8e0c63e9-0417-425a-930d-2f6286be4137"
-      }
-    ]
+    }
   },
   {
-    "id": "never-outmatched-tristraens-gilded-blades",
+    "id": "never-outmatched-tristraens-gilded-blades-adeptus-custodes",
     "name": "Never Outmatched",
     "category": "detachment",
     "detachment_id": "tristraens-gilded-blades",
@@ -621,8 +802,15 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "never-outmatched-tristraens-gilded-blades",
+    "target_restrictions": {
+      "required_keywords": [
+        "Tristraen's Gilded Blades"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "never-outmatched-tristraens-gilded-blades-adeptus-custodes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -635,64 +823,135 @@
     ]
   },
   {
-    "id": "peerless-warrior-lions-of-the-emperor",
-    "name": "PEERLESS WARRIOR",
-    "category": "detachment",
-    "type": "battle-tactic",
-    "detachment_id": "lions-of-the-emperor",
-    "cp_cost": 1,
-    "phases": [
-      "fight"
+    "id": "no-escape-shadowkeepers-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "d96ed45d-f14a-4f3d-aab7-ec79a4dea453"
+      }
     ],
-    "player_turn": "either",
+    "name": "No Escape",
+    "category": "detachment",
+    "detachment_id": "shadowkeepers",
+    "cp_cost": 2,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "peerless-warrior-lions-of-the-emperor",
+    "ability_id": "no-escape-shadowkeepers-adeptus-custodes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "d31a3858-39ae-5439-8601-214ddd008f39"
-      },
-      {
-        "namespace": "mfm",
-        "id": "b16af145-a7ba-473f-8386-ed8fb276e828"
-      }
-    ]
+    }
   },
   {
-    "id": "prioritised-eradication-might-of-the-moritoi",
-    "name": "PRIORITISED ERADICATION",
+    "id": "on-gilded-wings-aquilan-wing-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "de03c0f3-ce1c-4779-ad87-60601f39f592"
+      }
+    ],
+    "name": "On Gilded Wings",
     "category": "detachment",
-    "detachment_id": "might-of-the-moritoi",
+    "detachment_id": "aquilan-wing",
+    "cp_cost": 2,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": {
+      "required_keywords": [
+        "Aquilan Wing",
+        "Venatari with Kinetic Destroyers"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "not_states": [
+              "engaged"
+            ]
+          }
+        }
+      }
+    },
+    "ability_id": "on-gilded-wings-aquilan-wing-adeptus-custodes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "preternatural-rapidity-dread-host-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "94b8a4a5-b867-44ef-a14b-9147fda23d65"
+      }
+    ],
+    "name": "Preternatural Rapidity",
+    "category": "detachment",
+    "detachment_id": "dread-host",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "preternatural-rapidity-dread-host-adeptus-custodes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "prime-target-guardians-of-the-throne-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "027c4d0d-1884-4412-b145-442dcb6200f7"
+      }
+    ],
+    "name": "Prime Target",
+    "category": "detachment",
+    "detachment_id": "guardians-of-the-throne",
     "cp_cost": 1,
     "phases": [
       "shooting"
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "prioritised-eradication-might-of-the-moritoi",
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "prime-target-guardians-of-the-throne-adeptus-custodes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "4b2690b1-7f3d-5d7d-9873-cef4957a9705"
-      },
-      {
-        "namespace": "mfm",
-        "id": "dfa96045-020a-40da-a05a-110841d6114f"
-      }
-    ]
+    }
   },
   {
-    "id": "psy-chaff-volley-null-maiden-vigil",
+    "id": "psy-chaff-volley-null-maiden-vigil-adeptus-custodes",
     "name": "PSY-CHAFF VOLLEY",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -703,8 +962,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "psy-chaff-volley-null-maiden-vigil",
+    "target_restrictions": {
+      "required_keywords": [
+        "Prosecutors"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "psy-chaff-volley-null-maiden-vigil-adeptus-custodes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -716,70 +982,12 @@
       },
       {
         "namespace": "mfm",
-        "id": "29d8fbb6-9a19-47a9-9c0c-348c18f2031b"
+        "id": "766c8e58-761c-4712-923d-ca5dba526af0"
       }
     ]
   },
   {
-    "id": "psychic-abominations-null-maiden-vigil",
-    "name": "PSYCHIC ABOMINATIONS",
-    "category": "detachment",
-    "type": "strategic-ploy",
-    "detachment_id": "null-maiden-vigil",
-    "cp_cost": 1,
-    "phases": [
-      "shooting"
-    ],
-    "player_turn": "opponent-turn",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "psychic-abominations-null-maiden-vigil",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "e36ea723-6740-5ccc-9c2d-39a204ea498f"
-      },
-      {
-        "namespace": "mfm",
-        "id": "dec320fe-e3fd-475d-9e59-d4ca35479940"
-      }
-    ]
-  },
-  {
-    "id": "punishment-inescapable-solar-spearhead",
-    "name": "PUNISHMENT INESCAPABLE",
-    "category": "detachment",
-    "type": "strategic-ploy",
-    "detachment_id": "solar-spearhead",
-    "cp_cost": 1,
-    "phases": [
-      "shooting"
-    ],
-    "player_turn": "your-turn",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "punishment-inescapable-solar-spearhead",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "3d77c98d-15ad-5d90-a367-ff23c84096d2"
-      },
-      {
-        "namespace": "mfm",
-        "id": "bcb0956b-1bcd-4210-9135-c9a2494bc31a"
-      }
-    ]
-  },
-  {
-    "id": "purgation-sweep-null-maiden-vigil",
+    "id": "purgation-sweep-null-maiden-vigil-adeptus-custodes",
     "name": "PURGATION SWEEP",
     "category": "detachment",
     "type": "battle-tactic",
@@ -790,8 +998,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "purgation-sweep-null-maiden-vigil",
+    "target_restrictions": {
+      "required_keywords": [
+        "Witchseekers"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "purgation-sweep-null-maiden-vigil-adeptus-custodes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -803,103 +1018,172 @@
       },
       {
         "namespace": "mfm",
-        "id": "e71fa2b3-af09-442a-b69d-5160a2c30289"
+        "id": "8d32b886-8cd7-4854-a771-92f80925a238"
       }
     ]
   },
   {
-    "id": "relentless-persecution-solar-spearhead",
-    "name": "RELENTLESS PERSECUTION",
+    "id": "rapid-reactions-aquilan-shield-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "989d8f2a-5dfc-4f51-b81f-a03352b85752"
+      }
+    ],
+    "name": "Rapid Reactions",
     "category": "detachment",
-    "type": "strategic-ploy",
-    "detachment_id": "solar-spearhead",
+    "detachment_id": "aquilan-shield",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes",
+        "Infantry"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "unit-state",
+        "parameters": {
+          "state": "engaged",
+          "with": "event-subject",
+          "at": "phase-start"
+        }
+      }
+    },
+    "ability_id": "rapid-reactions-aquilan-shield-adeptus-custodes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "relentless-destroyers-aquilan-talon-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "b0663ac0-0b4d-4cae-bca5-61e594e79cb1"
+      }
+    ],
+    "name": "Relentless Destroyers",
+    "category": "detachment",
+    "detachment_id": "aquilan-talon",
     "cp_cost": 1,
     "phases": [
       "movement"
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "relentless-persecution-solar-spearhead",
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes",
+        "Aquilan Talon"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "relentless-destroyers-aquilan-talon-adeptus-custodes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "97d3de44-18a0-5a30-a24a-1cd9af091955"
-      },
-      {
-        "namespace": "mfm",
-        "id": "b25a7834-58da-4565-9f0a-68df133f1b1f"
-      }
-    ]
+    }
   },
   {
-    "id": "shield-of-honour-talons-of-the-emperor",
-    "name": "SHIELD OF HONOUR",
+    "id": "selfless-service-emissaries-imperatus-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "8c588f6d-455e-4032-aae1-1e0fe34ef9f5"
+      }
+    ],
+    "name": "Selfless Service",
     "category": "detachment",
-    "type": "epic-deed",
-    "detachment_id": "talons-of-the-emperor",
+    "detachment_id": "emissaries-imperatus",
     "cp_cost": 1,
     "phases": [
-      "shooting"
+      "charge"
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "shield-of-honour-talons-of-the-emperor",
+    "ability_id": "selfless-service-emissaries-imperatus-adeptus-custodes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "55788da7-0fe6-51a8-8a04-a788cfd66e12"
-      },
-      {
-        "namespace": "mfm",
-        "id": "8a965f6c-aa11-4319-bc3c-6b1c349fa15e"
-      }
-    ]
+    }
   },
   {
-    "id": "shoulder-the-mantle-auric-champions",
-    "name": "SHOULDER THE MANTLE",
+    "id": "shield-of-honour-guardians-of-the-throne-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "2c35eab3-567c-4672-a8ba-924060f1e46f"
+      }
+    ],
+    "name": "Shield of Honour",
     "category": "detachment",
-    "type": "epic-deed",
-    "detachment_id": "auric-champions",
+    "detachment_id": "guardians-of-the-throne",
     "cp_cost": 1,
     "phases": [
-      "movement"
+      "fight"
     ],
-    "player_turn": "your-turn",
+    "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "shoulder-the-mantle-auric-champions",
+    "ability_id": "shield-of-honour-guardians-of-the-throne-adeptus-custodes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "4c8aa840-f7e3-5372-b97f-94c1945abf3b"
-      },
-      {
-        "namespace": "mfm",
-        "id": "f07bab95-3154-4908-bce2-d95fd4789aed"
-      }
-    ]
+    }
   },
   {
-    "id": "slayer-of-champions-auric-champions",
-    "name": "SLAYER OF CHAMPIONS",
+    "id": "slayers-of-nightmares-emissaries-imperatus-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "bda17696-cc1a-4687-b0aa-51020af18e64"
+      }
+    ],
+    "name": "Slayers of Nightmares",
     "category": "detachment",
-    "type": "epic-deed",
-    "detachment_id": "auric-champions",
+    "detachment_id": "emissaries-imperatus",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "slayers-of-nightmares-emissaries-imperatus-adeptus-custodes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "superhuman-focus-emperors-chosen-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "c6cbd543-ec27-46d4-9549-7d55ac235e4c"
+      }
+    ],
+    "name": "Superhuman Focus",
+    "category": "detachment",
+    "detachment_id": "emperors-chosen",
     "cp_cost": 1,
     "phases": [
       "command",
@@ -910,30 +1194,46 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "slayer-of-champions-auric-champions",
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-unit",
+              "filter": {
+                "designated": "readied"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "superhuman-focus-emperors-chosen-adeptus-custodes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "8f64e309-5abf-5854-8b86-21853d7e66cb"
-      },
-      {
-        "namespace": "mfm",
-        "id": "c42f1a6c-7209-44c3-8a08-1983a33aa429"
-      }
-    ]
+    }
   },
   {
-    "id": "superhuman-reserves-auric-champions",
-    "name": "SUPERHUMAN RESERVES",
+    "id": "superhuman-focus-guardians-of-the-throne-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "6c816b2f-d57b-44ce-b987-a223937d14c3"
+      }
+    ],
+    "name": "Superhuman Focus",
     "category": "detachment",
-    "type": "epic-deed",
-    "detachment_id": "auric-champions",
-    "cp_cost": 2,
+    "detachment_id": "guardians-of-the-throne",
+    "cp_cost": 1,
     "phases": [
       "command",
       "movement",
@@ -943,198 +1243,257 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "superhuman-reserves-auric-champions",
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-unit",
+              "filter": {
+                "designated": "readied"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "superhuman-focus-guardians-of-the-throne-adeptus-custodes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "9204f309-136e-5283-a608-3259901cef86"
-      },
-      {
-        "namespace": "mfm",
-        "id": "7837eece-806c-4ae4-bec1-3154e533e778"
-      }
-    ]
+    }
   },
   {
-    "id": "swift-as-the-eagle-lions-of-the-emperor",
-    "name": "SWIFT AS THE EAGLE",
-    "category": "detachment",
-    "type": "strategic-ploy",
-    "detachment_id": "lions-of-the-emperor",
-    "cp_cost": 1,
-    "phases": [
-      "shooting"
+    "id": "swift-as-the-eagle-guardians-of-the-throne-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "5675d7d3-eba4-4102-9e8c-8d5ad13fe4a0"
+      }
     ],
-    "player_turn": "opponent-turn",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "swift-as-the-eagle-lions-of-the-emperor",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "79872d8a-9042-51c0-bbf7-99a0569f3640"
-      },
-      {
-        "namespace": "mfm",
-        "id": "2abcb82e-781f-455d-9441-3af1b0632799"
-      }
-    ]
-  },
-  {
-    "id": "synchronised-inferno-silent-hunters",
-    "name": "SYNCHRONISED INFERNO",
+    "name": "Swift as the Eagle",
     "category": "detachment",
-    "detachment_id": "silent-hunters",
-    "cp_cost": 1,
-    "phases": [
-      "shooting"
-    ],
-    "player_turn": "your-turn",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "synchronised-inferno-silent-hunters",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "90402af6-dfe2-58be-a8cd-66f99182bda9"
-      },
-      {
-        "namespace": "mfm",
-        "id": "9786c88d-4694-4c3d-b3c3-c63c25e15a85"
-      }
-    ]
-  },
-  {
-    "id": "taloned-pincer-talons-of-the-emperor",
-    "name": "TALONED PINCER",
-    "category": "detachment",
-    "type": "battle-tactic",
-    "detachment_id": "talons-of-the-emperor",
+    "detachment_id": "guardians-of-the-throne",
     "cp_cost": 1,
     "phases": [
       "movement"
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "taloned-pincer-talons-of-the-emperor",
+    "target_restrictions": {
+      "required_keywords": [
+        "Trusted Sentinel"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "not_states": [
+                  "engaged"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": "event-subject",
+                  "range": {
+                    "inches": 8
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "swift-as-the-eagle-guardians-of-the-throne-adeptus-custodes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "9521dc86-5801-56e4-8de6-a64fe2bf0612"
-      },
-      {
-        "namespace": "mfm",
-        "id": "7a56d34b-6e72-4e9f-bdab-e159d6adacdc"
-      }
-    ]
+    }
   },
   {
-    "id": "talons-interlocked-talons-of-the-emperor",
-    "name": "TALONS INTERLOCKED",
-    "category": "detachment",
-    "type": "battle-tactic",
-    "detachment_id": "talons-of-the-emperor",
-    "cp_cost": 1,
-    "phases": [
-      "shooting"
+    "id": "swift-as-the-eagle-honoured-companions-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "a1f4f006-ac21-450c-bee6-3697139c5e6d"
+      }
     ],
-    "player_turn": "your-turn",
+    "name": "Swift as the Eagle",
+    "category": "detachment",
+    "detachment_id": "honoured-companions",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "talons-interlocked-talons-of-the-emperor",
+    "target_restrictions": {
+      "required_keywords": [
+        "Trusted Sentinel"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "not_states": [
+                  "engaged"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": "event-subject",
+                  "range": {
+                    "inches": 8
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "swift-as-the-eagle-honoured-companions-adeptus-custodes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "8bbef73d-18f9-56eb-934e-c834e58a458b"
-      },
-      {
-        "namespace": "mfm",
-        "id": "35dbd75b-fa44-489d-b243-38467b8777e1"
-      }
-    ]
+    }
   },
   {
-    "id": "the-emperors-auspice-auric-champions",
-    "name": "THE EMPEROR’S AUSPICE",
+    "id": "terrible-might-aquilan-talon-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "82a0aee0-3b46-41ff-aa20-dbd41139e07f"
+      }
+    ],
+    "name": "Terrible Might",
     "category": "detachment",
-    "type": "epic-deed",
-    "detachment_id": "auric-champions",
+    "detachment_id": "aquilan-talon",
     "cp_cost": 1,
     "phases": [
-      "fight",
-      "shooting"
+      "fight"
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "the-emperors-auspice-auric-champions",
+    "target_restrictions": {
+      "required_keywords": [
+        "Aquilan Talon",
+        "Contemptor-Achillus Dreadnought"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "state": "engaged"
+          }
+        }
+      }
+    },
+    "ability_id": "terrible-might-aquilan-talon-adeptus-custodes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "06948deb-eaa0-5a7c-b502-219f3f4f72f9"
-      },
-      {
-        "namespace": "mfm",
-        "id": "61aafa75-fdc3-4c3b-99e0-08a8f2255a85"
-      }
-    ]
+    }
   },
   {
-    "id": "umbral-prosecution-silent-hunters",
-    "name": "UMBRAL PROSECUTION",
+    "id": "tip-of-the-talon-aquilan-shield-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "d5c2b647-f97c-46d0-9770-3688e5c169de"
+      }
+    ],
+    "name": "Tip of the Talon",
     "category": "detachment",
-    "detachment_id": "silent-hunters",
+    "detachment_id": "aquilan-shield",
     "cp_cost": 1,
     "phases": [
       "shooting"
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "umbral-prosecution-silent-hunters",
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "tip-of-the-talon-aquilan-shield-adeptus-custodes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "afd9425a-195d-548f-9b80-ad5eebe6f93b"
-      },
-      {
-        "namespace": "mfm",
-        "id": "9494bd29-d121-496c-bb4d-f6d1e2897445"
-      }
-    ]
+    }
   },
   {
-    "id": "unleash-the-lions-lions-of-the-emperor",
+    "id": "unceasing-onslaught-might-of-the-moritoi-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "7ed4a00b-04a6-446f-85e4-8bc70cef5eb0"
+      }
+    ],
+    "name": "Unceasing Onslaught",
+    "category": "detachment",
+    "detachment_id": "might-of-the-moritoi",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes",
+        "Dreadnought"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "unceasing-onslaught-might-of-the-moritoi-adeptus-custodes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "unleash-the-lions-lions-of-the-emperor-adeptus-custodes",
     "name": "UNLEASH THE LIONS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1145,8 +1504,22 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "unleash-the-lions-lions-of-the-emperor",
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes",
+        "Terminator"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "model-count",
+        "parameters": {
+          "min": 2
+        }
+      }
+    },
+    "ability_id": "unleash-the-lions-lions-of-the-emperor-adeptus-custodes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1158,239 +1531,197 @@
       },
       {
         "namespace": "mfm",
-        "id": "b2865d6e-0ca3-40a7-9241-96779ec150cb"
+        "id": "78cb847f-c0fe-4860-b05a-f54e18fe06ab"
       }
     ]
   },
   {
-    "id": "unleash-the-lions-tharanatoi-hammerblow",
-    "name": "UNLEASH THE LIONS",
+    "id": "unlimited-endurance-guardians-of-the-throne-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "89346c89-ccf5-4462-ba1b-00b7ec639229"
+      }
+    ],
+    "name": "Unlimited Endurance",
     "category": "detachment",
-    "detachment_id": "tharanatoi-hammerblow",
+    "detachment_id": "guardians-of-the-throne",
     "cp_cost": 1,
     "phases": [
-      "command"
+      "movement"
     ],
     "player_turn": "your-turn",
-    "timing": "once-per-turn",
-    "target_restrictions": null,
-    "ability_id": "unleash-the-lions-tharanatoi-hammerblow",
+    "timing": "once-per-phase",
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "unlimited-endurance-guardians-of-the-throne-adeptus-custodes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "a274a0ef-2e4a-5d6a-9f0d-966265008ba0"
-      },
-      {
-        "namespace": "mfm",
-        "id": "10fc0ca3-629c-4140-9a0a-74227662ab9e"
-      }
-    ]
+    }
   },
   {
-    "id": "unstoppable-advance-might-of-the-moritoi",
-    "name": "UNSTOPPABLE ADVANCE",
+    "id": "unstoppable-champion-aquilan-talon-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "fd464e11-4a44-4b18-980e-c13981659865"
+      }
+    ],
+    "name": "Unstoppable Champion",
+    "category": "detachment",
+    "detachment_id": "aquilan-talon",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": {
+      "required_keywords": [
+        "Aquilan Talon",
+        "Contemptor-Achillus Dreadnought"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "unstoppable-champion-aquilan-talon-adeptus-custodes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "unstoppable-momentum-might-of-the-moritoi-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "cfabe86c-1933-427d-9c8d-1110e2c2f94d"
+      }
+    ],
+    "name": "Unstoppable momentum",
     "category": "detachment",
     "detachment_id": "might-of-the-moritoi",
     "cp_cost": 1,
     "phases": [
-      "movement"
+      "movement",
+      "charge"
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "unstoppable-advance-might-of-the-moritoi",
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes",
+        "Dreadnought"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "unstoppable-momentum-might-of-the-moritoi-adeptus-custodes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "4122c0e6-4f34-5276-b9e4-f437fe5c2c51"
-      },
-      {
-        "namespace": "mfm",
-        "id": "a6a629f0-0db1-4bb1-8a51-eb7979f4d55a"
-      }
-    ]
+    }
   },
   {
-    "id": "unstoppable-solar-spearhead",
-    "name": "UNSTOPPABLE",
-    "category": "detachment",
-    "type": "strategic-ploy",
-    "detachment_id": "solar-spearhead",
-    "cp_cost": 1,
-    "phases": [
-      "movement"
+    "id": "vengeance-inescapable-aquilan-wing-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "a767da80-8b73-4903-95df-70fd05e0ee1e"
+      }
     ],
-    "player_turn": "your-turn",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "unstoppable-solar-spearhead",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "5c35a845-2234-578f-b8a7-a05dd9e57891"
-      },
-      {
-        "namespace": "mfm",
-        "id": "097d09b5-a924-4d63-986f-d58d79f092f9"
-      }
-    ]
-  },
-  {
-    "id": "unwavering-sentinels-shield-host",
-    "name": "UNWAVERING SENTINELS",
+    "name": "Vengeance Inescapable",
     "category": "detachment",
-    "type": "strategic-ploy",
-    "detachment_id": "shield-host",
+    "detachment_id": "aquilan-wing",
     "cp_cost": 1,
     "phases": [
       "fight"
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "unwavering-sentinels-shield-host",
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes",
+        "Aquilan Wing"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "vengeance-inescapable-aquilan-wing-adeptus-custodes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "08c3aa50-27bd-5ed4-871c-92ceda2ada25"
-      },
-      {
-        "namespace": "mfm",
-        "id": "ac6ec481-d026-4e38-bfca-563a35d74bb1"
-      }
-    ]
+    }
   },
   {
-    "id": "vigil-unending-auric-champions",
-    "name": "VIGIL UNENDING",
+    "id": "victory-before-death-grav-assault-force-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "ce788905-ad68-43a4-ae74-872f41f40a46"
+      }
+    ],
+    "name": "Victory Before Death",
     "category": "detachment",
-    "type": "epic-deed",
-    "detachment_id": "auric-champions",
+    "detachment_id": "grav-assault-force",
+    "cp_cost": 1,
+    "phases": [
+      "command",
+      "movement",
+      "shooting",
+      "charge",
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "victory-before-death-grav-assault-force-adeptus-custodes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "vigil-unending-lions-of-the-emperor-adeptus-custodes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "75e82547-fa7d-4842-b04e-42f546961095"
+      }
+    ],
+    "name": "Vigil Unending",
+    "category": "detachment",
+    "detachment_id": "lions-of-the-emperor",
     "cp_cost": 2,
     "phases": [
+      "shooting",
       "fight"
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "vigil-unending-auric-champions",
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Custodes",
+        "Terminator"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit"
+    },
+    "ability_id": "vigil-unending-lions-of-the-emperor-adeptus-custodes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "cf271627-8af5-57bf-9399-153475f15a1e"
-      },
-      {
-        "namespace": "mfm",
-        "id": "4898bc4c-936a-4c3f-868b-d7ea4e7bbc1a"
-      }
-    ]
-  },
-  {
-    "id": "vigilance-eternal-shield-host",
-    "name": "VIGILANCE ETERNAL",
-    "category": "detachment",
-    "type": "strategic-ploy",
-    "detachment_id": "shield-host",
-    "cp_cost": 1,
-    "phases": [
-      "movement"
-    ],
-    "player_turn": "your-turn",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "vigilance-eternal-shield-host",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "9ee2e4ee-cbd8-5181-826d-90c20aa830f6"
-      },
-      {
-        "namespace": "mfm",
-        "id": "0a6ffb4a-4466-4cd2-ae41-b1230b066602"
-      }
-    ]
-  },
-  {
-    "id": "witch-hunters-null-maiden-vigil",
-    "name": "WITCH HUNTERS",
-    "category": "detachment",
-    "type": "battle-tactic",
-    "detachment_id": "null-maiden-vigil",
-    "cp_cost": 1,
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "player_turn": "either",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "witch-hunters-null-maiden-vigil",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "e7f3ef59-cb7a-516a-9ffb-cbe90b679491"
-      },
-      {
-        "namespace": "mfm",
-        "id": "01203a84-00f4-4406-9ba5-6dc0b75f2648"
-      }
-    ]
-  },
-  {
-    "id": "wrathful-advance-solar-spearhead",
-    "name": "WRATHFUL ADVANCE",
-    "category": "detachment",
-    "type": "battle-tactic",
-    "detachment_id": "solar-spearhead",
-    "cp_cost": 1,
-    "phases": [
-      "fight"
-    ],
-    "player_turn": "either",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "wrathful-advance-solar-spearhead",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "b346a58a-c646-5502-ba88-e8d8d35d9d17"
-      },
-      {
-        "namespace": "mfm",
-        "id": "b7add7a9-6705-4e92-b4dc-3093bde8bf2d"
-      }
-    ]
+    }
   }
 ]

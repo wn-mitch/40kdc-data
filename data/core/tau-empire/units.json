@@ -66,12 +66,15 @@
       "rampager-fists"
     ],
     "ability_ids": [
-      "kroot-linebreakers",
-      "scouts-7"
+      "kroot-linebreakers-tau-empire",
+      {
+        "id": "scouts",
+        "value": 7
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -123,7 +126,8 @@
       "Titanic",
       "Transport",
       "Markerlight",
-      "Manta"
+      "Manta",
+      "Frame"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -145,17 +149,24 @@
       "seeker-missile"
     ],
     "ability_ids": [
-      "aggressive-deployment",
-      "air-caste-colossus",
-      "deadly-demise-3d6",
-      "hover"
+      "aggressive-deployment-tau-empire",
+      "air-caste-colossus-tau-empire",
+      {
+        "id": "deadly-demise",
+        "value": "3D6"
+      },
+      "hover",
+      {
+        "id": "damaged",
+        "value": 20
+      }
     ],
     "transport_capacity": {
       "capacity": 200
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -210,7 +221,8 @@
       "Fly",
       "Battlesuit",
       "Crisis",
-      "Fireknife"
+      "Fireknife",
+      "Crisis Fireknife Battlesuits"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -230,15 +242,24 @@
     ],
     "ability_ids": [
       "deep-strike",
-      "fireknife",
-      "gun-drone",
-      "marker-drone",
-      "shield-drone",
-      "weapon-support-systems"
+      "fireknife-tau-empire",
+      {
+        "id": "gun-drone-tau-empire",
+        "wargear": "gun-drone"
+      },
+      {
+        "id": "marker-drone-tau-empire",
+        "wargear": "marker-drone"
+      },
+      {
+        "id": "shield-drone-tau-empire",
+        "wargear": "shield-drone"
+      },
+      "weapon-support-systems-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -343,7 +364,8 @@
     "keywords": [
       "Vehicle",
       "Fly",
-      "Piranhas"
+      "Piranhas",
+      "Frame"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -367,13 +389,19 @@
       "twin-pulse-carbine"
     ],
     "ability_ids": [
-      "deadly-demise-1",
-      "drone-harassment-tactics",
-      "scouts-9"
+      {
+        "id": "deadly-demise",
+        "value": 1
+      },
+      "drone-harassment-tactics-tau-empire",
+      {
+        "id": "scouts",
+        "value": 9
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -432,7 +460,8 @@
       "Battlesuit",
       "Grenades",
       "Markerlight",
-      "Stealth"
+      "Stealth",
+      "Stealth Battlesuits"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -452,14 +481,25 @@
       "pulse-pistol"
     ],
     "ability_ids": [
-      "forward-observers",
-      "homing-beacon",
+      "forward-observers-tau-empire",
+      {
+        "id": "homing-beacon-tau-empire",
+        "wargear": "homing-beacon"
+      },
       "infiltrators",
-      "stealth"
+      "stealth",
+      {
+        "id": "gun-drone-tau-empire",
+        "wargear": "gun-drone"
+      },
+      {
+        "id": "marker-drone-tau-empire",
+        "wargear": "marker-drone"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -535,12 +575,19 @@
       "twin-missile-pod"
     ],
     "ability_ids": [
-      "deadly-demise-d3",
-      "pulse-bombs"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "pulse-bombs-tau-empire",
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -603,7 +650,8 @@
       "Infantry",
       "Grenades",
       "Kroot",
-      "Farstalkers"
+      "Farstalkers",
+      "Kroot Farstalkers"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -627,14 +675,17 @@
       "tau-tech-rifle"
     ],
     "ability_ids": [
-      "bounty-hunters",
-      "pech-ra",
+      "bounty-hunters-tau-empire",
+      {
+        "id": "pechra-tau-empire",
+        "wargear": "pechra"
+      },
       "stealth",
       "infiltrators"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -705,7 +756,8 @@
       "Walker",
       "Titanic",
       "Towering",
-      "Ta’unar Supremacy Armour"
+      "Ta’unar Supremacy Armour",
+      "Frame"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -730,14 +782,25 @@
       "tri-axis-ion-cannon"
     ],
     "ability_ids": [
-      "coordinated-strike",
-      "deadly-demise-d6-3",
-      "for-the-greater-good",
-      "super-heavy-walker"
+      "coordinated-strike-tau-empire",
+      {
+        "id": "deadly-demise",
+        "value": "D6+3"
+      },
+      "for-the-greater-good-tau-empire",
+      "super-heavy-walker",
+      {
+        "id": "damaged",
+        "value": 10
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -812,15 +875,39 @@
       "semi-automatic-grenade-launcher"
     ],
     "ability_ids": [
-      "grav-inhibitor-drone",
-      "pulse-accelerator-drone",
-      "recon-drone",
-      "target-uploaded",
-      "scouts-7"
+      {
+        "id": "grav-inhibitor-drone-tau-empire",
+        "wargear": "grav-inhibitor-drone"
+      },
+      {
+        "id": "pulse-accelerator-drone-tau-empire",
+        "wargear": "pulse-accelerator-drone"
+      },
+      {
+        "id": "recon-drone-tau-empire",
+        "wargear": "drone-burst-cannon-drone"
+      },
+      "target-uploaded-tau-empire",
+      {
+        "id": "scouts",
+        "value": 7
+      },
+      {
+        "id": "gun-drone-tau-empire",
+        "wargear": "gun-drone"
+      },
+      {
+        "id": "marker-drone-tau-empire",
+        "wargear": "marker-drone"
+      },
+      {
+        "id": "shield-drone-tau-empire",
+        "wargear": "shield-drone"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -921,13 +1008,28 @@
       "support-turret"
     ],
     "ability_ids": [
-      "ds8-support-turret",
-      "guardian-drone",
-      "suppression-volley"
+      "ds8-support-turret-tau-empire",
+      {
+        "id": "guardian-drone-tau-empire",
+        "wargear": "guardian-drone"
+      },
+      "suppression-volley-tau-empire",
+      {
+        "id": "gun-drone-tau-empire",
+        "wargear": "gun-drone"
+      },
+      {
+        "id": "marker-drone-tau-empire",
+        "wargear": "marker-drone"
+      },
+      {
+        "id": "shield-drone-tau-empire",
+        "wargear": "shield-drone"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -975,7 +1077,7 @@
     "points": [
       {
         "models": 2,
-        "cost": 230
+        "cost": 240
       }
     ],
     "keywords": [
@@ -1005,16 +1107,22 @@
       "xv-pulse-pistol"
     ],
     "ability_ids": [
-      "exemplars-of-mont-ka",
-      "mv15-gun-drone",
-      "neocapacitor-shields",
-      "retro-thrusters",
-      "scouts-8",
+      "exemplars-of-montka-tau-empire",
+      {
+        "id": "mv15-gun-drone-tau-empire",
+        "wargear": "mv15-gun-drone"
+      },
+      "neocapacitor-shields-tau-empire",
+      "retro-thrusters-tau-empire",
+      {
+        "id": "scouts",
+        "value": 8
+      },
       "deep-strike"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1069,7 +1177,8 @@
       "Fly",
       "Battlesuit",
       "Crisis",
-      "Starscythe"
+      "Starscythe",
+      "Crisis Starscythe Battlesuits"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -1088,13 +1197,25 @@
       "tau-flamer"
     ],
     "ability_ids": [
-      "battlesuit-support-systems",
-      "starscythe",
-      "deep-strike"
+      "battlesuit-support-systems-tau-empire",
+      "starscythe-tau-empire",
+      "deep-strike",
+      {
+        "id": "gun-drone-tau-empire",
+        "wargear": "gun-drone"
+      },
+      {
+        "id": "marker-drone-tau-empire",
+        "wargear": "marker-drone"
+      },
+      {
+        "id": "shield-drone-tau-empire",
+        "wargear": "shield-drone"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1201,13 +1322,23 @@
       "swiftstrike-railgun"
     ],
     "ability_ids": [
-      "deadly-demise-d6-2",
-      "strafing-run",
-      "transport-bay"
+      {
+        "id": "deadly-demise",
+        "value": "D6+2"
+      },
+      "strafing-run-tau-empire",
+      {
+        "id": "transport-bay-tau-empire",
+        "wargear": "transport-bay"
+      },
+      {
+        "id": "damaged",
+        "value": 6
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1246,7 +1377,7 @@
     "points": [
       {
         "models": 10,
-        "cost": 90
+        "cost": 80
       }
     ],
     "keywords": [
@@ -1275,11 +1406,28 @@
       "support-turret"
     ],
     "ability_ids": [
-      "breach-and-clear"
+      "breach-and-clear-tau-empire",
+      "ds8-support-turret-tau-empire",
+      {
+        "id": "guardian-drone-tau-empire",
+        "wargear": "guardian-drone"
+      },
+      {
+        "id": "gun-drone-tau-empire",
+        "wargear": "gun-drone"
+      },
+      {
+        "id": "marker-drone-tau-empire",
+        "wargear": "marker-drone"
+      },
+      {
+        "id": "shield-drone-tau-empire",
+        "wargear": "shield-drone"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1368,14 +1516,25 @@
       "twin-tau-flamer"
     ],
     "ability_ids": [
-      "heavy-walker",
-      "support-system",
-      "titan-killer",
-      "deadly-demise-d6-2"
+      "heavy-walker-tau-empire",
+      "support-system-tau-empire",
+      "titan-killer-tau-empire",
+      {
+        "id": "deadly-demise",
+        "value": "D6+2"
+      },
+      {
+        "id": "damaged",
+        "value": 5
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 3
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1421,7 +1580,8 @@
       "Vehicle",
       "Transport",
       "Fly",
-      "Tidewall Gunrig"
+      "Tidewall Gunrig",
+      "Frame"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -1438,17 +1598,23 @@
       "supremacy-railgun"
     ],
     "ability_ids": [
-      "firing-deck-11",
-      "fortification",
-      "tidewall-cover",
-      "deadly-demise-d3"
+      {
+        "id": "firing-deck",
+        "value": 11
+      },
+      "fortification-tau-empire",
+      "tidewall-cover-tau-empire",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "transport_capacity": {
       "capacity": 11
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1497,7 +1663,8 @@
     "keywords": [
       "Beasts",
       "Kroot",
-      "Hounds"
+      "Hounds",
+      "Kroot Hounds"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -1514,14 +1681,17 @@
       "ripping-fangs"
     ],
     "ability_ids": [
-      "hunting-hounds",
-      "loping-pounce",
+      "hunting-hounds-tau-empire",
+      "loping-pounce-tau-empire",
       "stealth",
-      "scouts-7"
+      {
+        "id": "scouts",
+        "value": 7
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1591,14 +1761,29 @@
       "honour-stave"
     ],
     "ability_ids": [
-      "coordinated-leadership",
-      "failure-is-not-an-option",
-      "hover-drone",
-      "leader"
+      "coordinated-leadership-tau-empire",
+      "failure-is-not-an-option-tau-empire",
+      {
+        "id": "hover-drone-tau-empire",
+        "wargear": "hover-drone"
+      },
+      "leader",
+      {
+        "id": "gun-drone-tau-empire",
+        "wargear": "gun-drone"
+      },
+      {
+        "id": "marker-drone-tau-empire",
+        "wargear": "marker-drone"
+      },
+      {
+        "id": "shield-drone-tau-empire",
+        "wargear": "shield-drone"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1653,7 +1838,8 @@
       "Walker",
       "Fly",
       "Battlesuit",
-      "Riptide"
+      "Riptide",
+      "Riptide Battlesuit"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -1676,15 +1862,25 @@
       "twin-smart-missile-system-riptide-battlesuit"
     ],
     "ability_ids": [
-      "battlesuit-support-system",
-      "deadly-demise-d6",
-      "missile-drone",
-      "nova-charge",
-      "weapon-support-system"
+      "battlesuit-support-system-riptide-battlesuit-tau-empire",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      {
+        "id": "missile-drone-tau-empire",
+        "wargear": "missile-drone"
+      },
+      "nova-charge-tau-empire",
+      "weapon-support-system-riptide-battlesuit-tau-empire",
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1757,15 +1953,15 @@
       "high-intensity-plasma-rifle"
     ],
     "ability_ids": [
-      "independent-power",
+      "independent-power-tau-empire",
       "leader",
-      "puretide-s-teachings",
-      "way-of-the-short-blade",
+      "puretides-teachings-tau-empire",
+      "way-of-the-short-blade-tau-empire",
       "deep-strike"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1839,12 +2035,15 @@
       "tanglecannon"
     ],
     "ability_ids": [
-      "kroot-packmates",
-      "scouts-7"
+      "kroot-packmates-tau-empire",
+      {
+        "id": "scouts",
+        "value": 7
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1913,18 +2112,24 @@
       "pulse-pistol-commander-shadowsun"
     ],
     "ability_ids": [
-      "advanced-guardian-drone",
-      "agile-combatant",
-      "command-link-drone-aura",
-      "hero-of-the-empire-aura",
+      {
+        "id": "advanced-guardian-drone-tau-empire",
+        "wargear": "advanced-guardian-drone"
+      },
+      "agile-combatant-tau-empire",
+      {
+        "id": "command-link-drone-tau-empire",
+        "wargear": "command-link-drone-aura"
+      },
+      "hero-of-the-empire-tau-empire",
       "lone-operative",
-      "supreme-commander",
+      "supreme-commander-tau-empire",
       "stealth",
       "infiltrators"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1979,7 +2184,8 @@
       "Fly",
       "Smoke",
       "Battlesuit",
-      "Ghostkeel"
+      "Ghostkeel",
+      "Ghostkeel Battlesuit"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -2002,15 +2208,26 @@
       "twin-tau-flamer"
     ],
     "ability_ids": [
-      "stealth-drones",
+      "stealth-drones-tau-empire",
       "stealth",
       "infiltrators",
-      "deadly-demise-d3",
-      "lone-operative"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "lone-operative",
+      {
+        "id": "battlesuit-support-system-ghostkeel-battlesuit-tau-empire",
+        "wargear": "battlesuit-support-system"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2091,12 +2308,19 @@
       "twin-heavy-rail-cannon"
     ],
     "ability_ids": [
-      "titan-hunter",
-      "deadly-demise-d6-2"
+      "titan-hunter-tau-empire",
+      {
+        "id": "deadly-demise",
+        "value": "D6+2"
+      },
+      {
+        "id": "damaged",
+        "value": 6
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2141,7 +2365,8 @@
       "Vehicle",
       "Fly",
       "Markerlight",
-      "Sky Ray Gunship"
+      "Sky Ray Gunship",
+      "Frame"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -2165,13 +2390,20 @@
       "twin-pulse-carbine"
     ],
     "ability_ids": [
-      "targeting-array",
-      "velocity-tracker",
-      "deadly-demise-d3"
+      "targeting-array-tau-empire",
+      "velocity-tracker-tau-empire",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2241,13 +2473,16 @@
       "tau-flamer"
     ],
     "ability_ids": [
-      "airborne-agility",
-      "oversight-drone",
+      "airborne-agility-tau-empire",
+      {
+        "id": "oversight-drone-tau-empire",
+        "wargear": "oversight-drone"
+      },
       "deep-strike"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2320,14 +2555,37 @@
       "tau-flamer"
     ],
     "ability_ids": [
-      "coldstar-commander",
+      "coldstar-commander-tau-empire",
       "leader",
-      "shield-generator",
-      "deep-strike"
+      {
+        "id": "shield-generator-tau-empire",
+        "wargear": "shield-generator"
+      },
+      "deep-strike",
+      {
+        "id": "battlesuit-support-system-tau-empire",
+        "wargear": "battlesuit-support-system"
+      },
+      {
+        "id": "gun-drone-tau-empire",
+        "wargear": "gun-drone"
+      },
+      {
+        "id": "marker-drone-tau-empire",
+        "wargear": "marker-drone"
+      },
+      {
+        "id": "shield-drone-tau-empire",
+        "wargear": "shield-drone"
+      },
+      {
+        "id": "weapon-support-system-tau-empire",
+        "wargear": "weapon-support-system"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2412,7 +2670,8 @@
       "Character",
       "Kroot",
       "Shaper",
-      "Trail Shaper"
+      "Trail Shaper",
+      "Kroot Trail Shaper"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -2430,16 +2689,19 @@
       "shapers-blade"
     ],
     "ability_ids": [
-      "kroot-ambush",
+      "kroot-ambush-tau-empire",
       "leader",
-      "trail-finding",
+      "trail-finding-tau-empire",
       "stealth",
       "infiltrators",
-      "scouts-7"
+      {
+        "id": "scouts",
+        "value": 7
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2490,7 +2752,8 @@
       "Vehicle",
       "Transport",
       "Fly",
-      "Tidewall Shieldline"
+      "Tidewall Shieldline",
+      "Frame"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -2505,16 +2768,24 @@
     },
     "weapon_ids": [],
     "ability_ids": [
-      "firing-deck-20",
-      "tidewall-defence-platform",
-      "deadly-demise-d3"
+      {
+        "id": "firing-deck",
+        "value": 20
+      },
+      "tidewall-defence-platform-tau-empire",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "fortification-tau-empire",
+      "tidewall-cover-tau-empire"
     ],
     "transport_capacity": {
       "capacity": 11
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2591,7 +2862,8 @@
       "Vehicle",
       "Walker",
       "Battlesuit",
-      "Broadside"
+      "Broadside",
+      "Broadside Battlesuits"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -2613,11 +2885,31 @@
       "twin-smart-missile-system-broadside-battlesuits"
     ],
     "ability_ids": [
-      "advanced-armour"
+      "advanced-armour-tau-empire",
+      {
+        "id": "gun-drone-tau-empire",
+        "wargear": "gun-drone"
+      },
+      {
+        "id": "marker-drone-tau-empire",
+        "wargear": "marker-drone"
+      },
+      {
+        "id": "missile-drone-tau-empire",
+        "wargear": "missile-drone"
+      },
+      {
+        "id": "shield-drone-tau-empire",
+        "wargear": "shield-drone"
+      },
+      {
+        "id": "weapon-support-system-tau-empire",
+        "wargear": "weapon-support-system"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2695,13 +2987,37 @@
       "tau-flamer"
     ],
     "ability_ids": [
-      "enforcer-commander",
+      "enforcer-commander-tau-empire",
       "leader",
-      "deep-strike"
+      "deep-strike",
+      {
+        "id": "battlesuit-support-system-tau-empire",
+        "wargear": "battlesuit-support-system"
+      },
+      {
+        "id": "gun-drone-tau-empire",
+        "wargear": "gun-drone"
+      },
+      {
+        "id": "marker-drone-tau-empire",
+        "wargear": "marker-drone"
+      },
+      {
+        "id": "shield-drone-tau-empire",
+        "wargear": "shield-drone"
+      },
+      {
+        "id": "shield-generator-tau-empire",
+        "wargear": "shield-generator"
+      },
+      {
+        "id": "weapon-support-system-tau-empire",
+        "wargear": "weapon-support-system"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2803,13 +3119,25 @@
       "fireblade-pulse-rifle"
     ],
     "ability_ids": [
-      "crack-shot",
+      "crack-shot-tau-empire",
       "leader",
-      "volley-fire"
+      "volley-fire-tau-empire",
+      {
+        "id": "gun-drone-tau-empire",
+        "wargear": "gun-drone"
+      },
+      {
+        "id": "marker-drone-tau-empire",
+        "wargear": "marker-drone"
+      },
+      {
+        "id": "shield-drone-tau-empire",
+        "wargear": "shield-drone"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2877,12 +3205,19 @@
       "seeker-missile"
     ],
     "ability_ids": [
-      "ground-strike-fighter",
-      "deadly-demise-d3"
+      "ground-strike-fighter-tau-empire",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2937,7 +3272,8 @@
       "Fly",
       "Transport",
       "Dedicated Transport",
-      "Devilfish"
+      "Devilfish",
+      "Frame"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -2961,15 +3297,18 @@
       "twin-pulse-carbine"
     ],
     "ability_ids": [
-      "rapid-deployment",
-      "deadly-demise-d3"
+      "rapid-deployment-tau-empire",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "transport_capacity": {
       "capacity": 12
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3034,15 +3373,18 @@
       "shade"
     ],
     "ability_ids": [
-      "jammer-array",
+      "jammer-array-tau-empire",
       "leader",
-      "structural-analyser",
+      "structural-analyser-tau-empire",
       "infiltrators",
-      "scouts-7"
+      {
+        "id": "scouts",
+        "value": 7
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3095,7 +3437,8 @@
     "keywords": [
       "Vehicle",
       "Fly",
-      "Hammerhead Gunship"
+      "Hammerhead Gunship",
+      "Frame"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -3121,12 +3464,20 @@
       "twin-pulse-carbine-hammerhead-gunship"
     ],
     "ability_ids": [
-      "armour-hunter",
-      "deadly-demise-d3"
+      "armour-hunter-tau-empire",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 5
+      },
+      "targeting-array-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3172,7 +3523,8 @@
       "Vehicle",
       "Transport",
       "Fly",
-      "Tidewall Droneport"
+      "Tidewall Droneport",
+      "Frame"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -3189,16 +3541,24 @@
       "drone-defenders"
     ],
     "ability_ids": [
-      "droneport",
-      "deadly-demise-d3",
-      "firing-deck-11"
+      "droneport-tau-empire",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "firing-deck",
+        "value": 11
+      },
+      "fortification-tau-empire",
+      "tidewall-cover-tau-empire"
     ],
     "transport_capacity": {
       "capacity": 11
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3253,7 +3613,8 @@
       "Fly",
       "Battlesuit",
       "Crisis",
-      "Sunforge"
+      "Sunforge",
+      "Crisis Sunforge Battlesuits"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -3271,12 +3632,24 @@
       "fusion-blaster"
     ],
     "ability_ids": [
-      "sunforge",
-      "deep-strike"
+      "sunforge-tau-empire",
+      "deep-strike",
+      {
+        "id": "gun-drone-tau-empire",
+        "wargear": "gun-drone"
+      },
+      {
+        "id": "marker-drone-tau-empire",
+        "wargear": "marker-drone"
+      },
+      {
+        "id": "shield-drone-tau-empire",
+        "wargear": "shield-drone"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3364,14 +3737,14 @@
       "pulse-pistol-firesight-team"
     ],
     "ability_ids": [
-      "precise-targeting",
+      "precise-targeting-tau-empire",
       "stealth",
       "infiltrators",
       "lone-operative"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3421,7 +3794,8 @@
       "Infantry",
       "Grenades",
       "Kroot",
-      "Carnivores"
+      "Carnivores",
+      "Kroot Carnivores"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -3442,14 +3816,17 @@
       "tanglebomb-launcher"
     ],
     "ability_ids": [
-      "bodyguard",
-      "fieldcraft",
+      "bodyguard-tau-empire",
+      "fieldcraft-tau-empire",
       "stealth",
-      "scouts-7"
+      {
+        "id": "scouts",
+        "value": 7
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3506,7 +3883,8 @@
       "Character",
       "Kroot",
       "Shaper",
-      "War Shaper"
+      "War Shaper",
+      "Kroot War Shaper"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -3527,15 +3905,18 @@
     ],
     "ability_ids": [
       "leader",
-      "root-of-honour",
-      "war-leader",
+      "root-of-honour-tau-empire",
+      "war-leader-tau-empire",
       "stealth",
       "infiltrators",
-      "scouts-7"
+      {
+        "id": "scouts",
+        "value": 7
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3582,7 +3963,8 @@
       "Mounted",
       "Character",
       "Kroot",
-      "Lone-spear"
+      "Lone-spear",
+      "Kroot Lone-spear"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -3604,15 +3986,18 @@
       "kroot-long-gun"
     ],
     "ability_ids": [
-      "advanced-scouting",
-      "fire-and-fade",
+      "advanced-scouting-tau-empire",
+      "fire-and-fade-tau-empire",
       "stealth",
       "lone-operative",
-      "scouts-7"
+      {
+        "id": "scouts",
+        "value": 7
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3659,7 +4044,8 @@
       "Character",
       "Kroot",
       "Shaper",
-      "Flesh Shaper"
+      "Flesh Shaper",
+      "Kroot Flesh Shaper"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -3678,15 +4064,18 @@
     ],
     "ability_ids": [
       "leader",
-      "rites-of-feasting",
-      "ritual-butchery",
+      "rites-of-feasting-tau-empire",
+      "ritual-butchery-tau-empire",
       "stealth",
       "infiltrators",
-      "scouts-7"
+      {
+        "id": "scouts",
+        "value": 7
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3735,7 +4124,8 @@
       "Fly",
       "Sudden Dawn Cadre",
       "Vehicle",
-      "Walker"
+      "Walker",
+      "Commander Cloudspear"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -3746,16 +4136,16 @@
     },
     "weapon_ids": [
       "airbursting-fragmentation-projector",
-      "battlesuit-fists-commander-in-enforcer-battlesuit",
-      "plasma-rifle-commander-in-enforcer-battlesuit"
+      "battlesuit-fists",
+      "plasma-rifle"
     ],
     "ability_ids": [
-      "shield-drone-commander-cloudspear",
-      "superior-weapon-support-system-commander-cloudspear"
+      "shield-drone-commander-cloudspear-tau-empire",
+      "superior-weapon-support-system-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -3802,7 +4192,8 @@
       "Fire Warrior",
       "Infantry",
       "Markerlight",
-      "Sudden Dawn Cadre"
+      "Sudden Dawn Cadre",
+      "Sudden Dawn Cadre Breacher Team"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -3817,11 +4208,11 @@
       "pulse-pistol"
     ],
     "ability_ids": [
-      "breach-and-clear-sudden-dawn-cadre"
+      "breach-and-clear-sudden-dawn-cadre-breacher-team-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -3867,7 +4258,8 @@
       "Fly",
       "Sudden Dawn Cadre",
       "Transport",
-      "Vehicle"
+      "Vehicle",
+      "Sudden Dawn Cadre Devilfish"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -3878,15 +4270,15 @@
     },
     "weapon_ids": [
       "accelerator-burst-cannon",
-      "armoured-hull-devilfish",
-      "twin-pulse-carbine"
+      "twin-pulse-carbine",
+      "armoured-hull"
     ],
     "transport_capacity": {
       "capacity": 12
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -3898,6 +4290,9 @@
         "namespace": "mfm",
         "id": "4f83b0bc-ee0d-4ea8-89fc-b609fbddf28b"
       }
+    ],
+    "ability_ids": [
+      "rapid-disembark-tau-empire"
     ]
   },
   {
@@ -3926,7 +4321,8 @@
       "Explosives",
       "Infantry",
       "Markerlight",
-      "Sudden Dawn Cadre"
+      "Sudden Dawn Cadre",
+      "Sudden Dawn Cadre Pathfinder Team"
     ],
     "faction_keywords": [
       "T’au Empire"
@@ -3942,11 +4338,12 @@
       "rail-rifle"
     ],
     "ability_ids": [
-      "target-uploaded-sudden-dawn-cadre"
+      "target-uploaded-sudden-dawn-cadre-pathfinder-team-tau-empire",
+      "grav-inhibitor-drone-sudden-dawn-cadre-pathfinder-team-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"

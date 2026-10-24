@@ -5,7 +5,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -21,7 +21,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -37,7 +37,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -70,7 +70,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -94,7 +94,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -122,7 +122,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -142,7 +142,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -164,7 +164,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -181,7 +181,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -212,40 +212,18 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
       "hot-shot-lasgun"
     ],
-    "replacement_choice": [
-      [
-        "meltagun-militarum-tempestus-command-squad"
-      ],
-      [
-        "hot-shot-volley-gun"
-      ],
-      [
-        "plasma-gun-militarum-tempestus-command-squad"
-      ],
-      [
-        "hot-shot-laspistol",
-        "master-vox"
-      ],
-      [
-        "grenade-launcher-militarum-tempestus-command-squad"
-      ],
-      [
-        "flamer"
-      ],
-      [
-        "hot-shot-laspistol",
-        "medi-pack"
-      ]
+    "replacement": [
+      "meltagun-militarum-tempestus-command-squad"
     ],
     "model_constraint": {
       "model_name": "Tempestus Scion",
-      "any_number": true
+      "max_count": 1
     }
   },
   {
@@ -254,21 +232,18 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
-    "replacement_choice": [
-      [
-        "regimental-standard"
-      ],
-      [
-        "hot-shot-laspistol",
-        "medi-pack"
-      ]
+    "replaces": [
+      "hot-shot-lasgun"
+    ],
+    "replacement": [
+      "hot-shot-volley-gun"
     ],
     "model_constraint": {
       "model_name": "Tempestus Scion",
-      "any_number": true
+      "max_count": 1
     }
   },
   {
@@ -277,7 +252,144 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "hot-shot-lasgun"
+    ],
+    "replacement": [
+      "plasma-gun-militarum-tempestus-command-squad"
+    ],
+    "model_constraint": {
+      "model_name": "Tempestus Scion",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "militarum-tempestus-command-squad-wgo-mfm-4",
+    "unit_id": "militarum-tempestus-command-squad",
+    "faction_id": "astra-militarum",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "hot-shot-lasgun"
+    ],
+    "replacement": [
+      "hot-shot-laspistol",
+      "master-vox"
+    ],
+    "model_constraint": {
+      "model_name": "Tempestus Scion",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "militarum-tempestus-command-squad-wgo-mfm-5",
+    "unit_id": "militarum-tempestus-command-squad",
+    "faction_id": "astra-militarum",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "hot-shot-lasgun"
+    ],
+    "replacement": [
+      "grenade-launcher-militarum-tempestus-command-squad"
+    ],
+    "model_constraint": {
+      "model_name": "Tempestus Scion",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "militarum-tempestus-command-squad-wgo-mfm-6",
+    "unit_id": "militarum-tempestus-command-squad",
+    "faction_id": "astra-militarum",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "hot-shot-lasgun"
+    ],
+    "replacement": [
+      "flamer"
+    ],
+    "model_constraint": {
+      "model_name": "Tempestus Scion",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "militarum-tempestus-command-squad-wgo-mfm-7",
+    "unit_id": "militarum-tempestus-command-squad",
+    "faction_id": "astra-militarum",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "hot-shot-lasgun"
+    ],
+    "replacement": [
+      "hot-shot-laspistol",
+      "medi-pack"
+    ],
+    "model_constraint": {
+      "model_name": "Tempestus Scion",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "militarum-tempestus-command-squad-wgo-mfm-8",
+    "unit_id": "militarum-tempestus-command-squad",
+    "faction_id": "astra-militarum",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replacement": [
+      "regimental-standard"
+    ],
+    "model_constraint": {
+      "model_name": "Tempestus Scion",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "militarum-tempestus-command-squad-wgo-mfm-9",
+    "unit_id": "militarum-tempestus-command-squad",
+    "faction_id": "astra-militarum",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replacement": [
+      "hot-shot-laspistol",
+      "medi-pack"
+    ],
+    "model_constraint": {
+      "model_name": "Tempestus Scion",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "militarum-tempestus-command-squad-wgo-mfm-10",
+    "unit_id": "militarum-tempestus-command-squad",
+    "faction_id": "astra-militarum",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -302,19 +414,53 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "hot-shot-lascarbine"
+    ],
+    "replacement": [
+      "hot-shot-laspistol"
+    ],
+    "model_constraint": {
+      "model_name": "Tempestus Aquilon",
+      "max_count": 2
+    }
+  },
+  {
+    "id": "tempestus-aquilons-wgo-mfm-2",
+    "unit_id": "tempestus-aquilons",
+    "faction_id": "astra-militarum",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "hot-shot-lascarbine"
+    ],
+    "replacement": [
+      "hot-shot-long-las"
+    ],
+    "model_constraint": {
+      "model_name": "Tempestus Aquilon",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "tempestus-aquilons-wgo-mfm-3",
+    "unit_id": "tempestus-aquilons",
+    "faction_id": "astra-militarum",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
       "hot-shot-lascarbine"
     ],
     "replacement_choice": [
-      [
-        "hot-shot-laspistol"
-      ],
-      [
-        "hot-shot-long-las"
-      ],
       [
         "plasma-carbine"
       ],
@@ -324,16 +470,16 @@
     ],
     "model_constraint": {
       "model_name": "Tempestus Aquilon",
-      "max_count": 4
+      "max_count": 1
     }
   },
   {
-    "id": "tempestus-aquilons-wgo-mfm-2",
+    "id": "tempestus-aquilons-wgo-mfm-4",
     "unit_id": "tempestus-aquilons",
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -345,16 +491,16 @@
     ],
     "model_constraint": {
       "model_name": "Gunfighter",
-      "max_count": 2
+      "any_number": true
     }
   },
   {
-    "id": "tempestus-aquilons-wgo-mfm-3",
+    "id": "tempestus-aquilons-wgo-mfm-5",
     "unit_id": "tempestus-aquilons",
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -401,12 +547,12 @@
     }
   },
   {
-    "id": "tempestus-aquilons-wgo-mfm-4",
+    "id": "tempestus-aquilons-wgo-mfm-6",
     "unit_id": "tempestus-aquilons",
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -423,12 +569,12 @@
     }
   },
   {
-    "id": "tempestus-aquilons-wgo-mfm-5",
+    "id": "tempestus-aquilons-wgo-mfm-7",
     "unit_id": "tempestus-aquilons",
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -453,7 +599,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -478,7 +624,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -497,7 +643,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -513,7 +659,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -529,7 +675,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -545,7 +691,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -609,7 +755,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -640,7 +786,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -661,7 +807,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -688,7 +834,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -719,7 +865,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -738,7 +884,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -762,7 +908,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -778,7 +924,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -802,7 +948,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -821,7 +967,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -841,7 +987,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -864,7 +1010,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -887,7 +1033,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -918,7 +1064,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -982,7 +1128,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -1003,7 +1149,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -1019,7 +1165,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1039,7 +1185,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1059,7 +1205,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1079,7 +1225,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1099,7 +1245,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1129,7 +1275,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1159,7 +1305,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -1186,7 +1332,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1217,7 +1363,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1250,7 +1396,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -1266,7 +1412,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -1282,7 +1428,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1301,7 +1447,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1320,7 +1466,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -1336,7 +1482,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1355,7 +1501,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1382,7 +1528,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1446,7 +1592,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -1477,7 +1623,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -1498,7 +1644,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -1514,7 +1660,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1539,7 +1685,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1564,7 +1710,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1576,10 +1722,6 @@
       ],
       [
         "meltagun-tempestus-scions"
-      ],
-      [
-        "hot-shot-laspistol",
-        "vox-caster"
       ],
       [
         "plasma-gun-tempestus-scions"
@@ -1597,12 +1739,33 @@
     }
   },
   {
+    "id": "tempestus-scions-wgo-mfm-4",
+    "unit_id": "tempestus-scions",
+    "faction_id": "astra-militarum",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "hot-shot-lasgun"
+    ],
+    "replacement": [
+      "hot-shot-laspistol",
+      "vox-caster"
+    ],
+    "model_constraint": {
+      "model_name": "Tempestus Scion",
+      "max_count": 1
+    }
+  },
+  {
     "id": "stormlord-wgo-mfm-1",
     "unit_id": "stormlord",
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1633,7 +1796,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -1660,7 +1823,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1684,7 +1847,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1708,7 +1871,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1724,9 +1887,6 @@
       ],
       [
         "grenade-launcher-kasrkin"
-      ],
-      [
-        "hot-shot-marksman-rifle"
       ],
       [
         "meltagun-kasrkin"
@@ -1749,15 +1909,18 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
+    "replaces": [
+      "hot-shot-lasgun"
+    ],
     "replacement": [
-      "vox-caster"
+      "hot-shot-marksman-rifle"
     ],
     "model_constraint": {
       "model_name": "Kasrkin",
-      "any_number": true
+      "max_count": 1
     }
   },
   {
@@ -1766,7 +1929,24 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replacement": [
+      "vox-caster"
+    ],
+    "model_constraint": {
+      "model_name": "Kasrkin",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "kasrkin-wgo-mfm-4",
+    "unit_id": "kasrkin",
+    "faction_id": "astra-militarum",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1781,12 +1961,12 @@
     }
   },
   {
-    "id": "kasrkin-wgo-mfm-4",
+    "id": "kasrkin-wgo-mfm-5",
     "unit_id": "kasrkin",
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1811,7 +1991,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1836,7 +2016,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1861,7 +2041,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1902,7 +2082,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1934,7 +2114,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1959,7 +2139,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1984,7 +2164,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -2012,23 +2192,15 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
-    "replacement_choice": [
-      [
-        "regimental-standard"
-      ],
-      [
-        "medi-pack"
-      ],
-      [
-        "master-vox"
-      ]
+    "replacement": [
+      "regimental-standard"
     ],
     "model_constraint": {
       "model_name": "Veteran Guardsman",
-      "any_number": true
+      "max_count": 1
     }
   },
   {
@@ -2037,7 +2209,41 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replacement": [
+      "medi-pack"
+    ],
+    "model_constraint": {
+      "model_name": "Veteran Guardsman",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "catachan-command-squad-wgo-mfm-5",
+    "unit_id": "catachan-command-squad",
+    "faction_id": "astra-militarum",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replacement": [
+      "master-vox"
+    ],
+    "model_constraint": {
+      "model_name": "Veteran Guardsman",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "catachan-command-squad-wgo-mfm-6",
+    "unit_id": "catachan-command-squad",
+    "faction_id": "astra-militarum",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2074,7 +2280,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2105,7 +2311,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -2132,7 +2338,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2151,7 +2357,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -2174,7 +2380,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2194,7 +2400,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -2217,7 +2423,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2237,7 +2443,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -2254,7 +2460,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2279,7 +2485,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2311,7 +2517,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2331,7 +2537,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2365,7 +2571,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -2382,7 +2588,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -2409,7 +2615,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2440,7 +2646,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2459,7 +2665,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -2475,7 +2681,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2495,7 +2701,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2515,7 +2721,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -2532,7 +2738,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2556,7 +2762,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -2572,7 +2778,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2596,7 +2802,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -2627,7 +2833,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2691,7 +2897,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -2707,7 +2913,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -2728,7 +2934,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2753,7 +2959,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2773,7 +2979,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2804,7 +3010,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2829,7 +3035,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -2846,7 +3052,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -2862,7 +3068,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -2883,7 +3089,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2947,7 +3153,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -2978,7 +3184,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -2994,7 +3200,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -3021,7 +3227,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3052,7 +3258,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3072,7 +3278,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -3089,7 +3295,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -3105,7 +3311,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -3126,7 +3332,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3162,7 +3368,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3226,7 +3432,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -3257,7 +3463,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3276,7 +3482,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -3293,7 +3499,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3313,7 +3519,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -3340,7 +3546,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3371,7 +3577,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -3387,7 +3593,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3406,7 +3612,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -3422,7 +3628,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -3443,7 +3649,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3462,7 +3668,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3486,7 +3692,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3507,7 +3713,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -3538,7 +3744,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3602,7 +3808,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -3618,7 +3824,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -3639,7 +3845,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3658,7 +3864,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -3674,7 +3880,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -3701,7 +3907,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3732,26 +3938,20 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
       "autopistol",
       "trench-club-krieg-combat-engineers"
     ],
-    "replacement_choice": [
-      [
-        "close-combat-weapon-krieg-combat-engineers",
-        "flamer"
-      ],
-      [
-        "combat-shotgun",
-        "close-combat-weapon-krieg-combat-engineers"
-      ]
+    "replacement": [
+      "close-combat-weapon-krieg-combat-engineers",
+      "flamer"
     ],
     "model_constraint": {
       "model_name": "Krieg Combat Engineer",
-      "any_number": true
+      "max_count": 1
     }
   },
   {
@@ -3760,15 +3960,16 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
+      "autopistol",
       "trench-club-krieg-combat-engineers"
     ],
     "replacement": [
-      "close-combat-weapon-krieg-combat-engineers",
-      "remote-mine"
+      "combat-shotgun",
+      "close-combat-weapon-krieg-combat-engineers"
     ],
     "model_constraint": {
       "model_name": "Krieg Combat Engineer",
@@ -3781,7 +3982,28 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "trench-club-krieg-combat-engineers"
+    ],
+    "replacement": [
+      "close-combat-weapon-krieg-combat-engineers",
+      "remote-mine"
+    ],
+    "model_constraint": {
+      "model_name": "Krieg Combat Engineer",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "krieg-combat-engineers-wgo-mfm-4",
+    "unit_id": "krieg-combat-engineers",
+    "faction_id": "astra-militarum",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3804,12 +4026,12 @@
     }
   },
   {
-    "id": "krieg-combat-engineers-wgo-mfm-4",
+    "id": "krieg-combat-engineers-wgo-mfm-5",
     "unit_id": "krieg-combat-engineers",
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3852,12 +4074,12 @@
     }
   },
   {
-    "id": "krieg-combat-engineers-wgo-mfm-5",
+    "id": "krieg-combat-engineers-wgo-mfm-6",
     "unit_id": "krieg-combat-engineers",
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3882,7 +4104,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -3901,7 +4123,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -3917,7 +4139,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -3938,7 +4160,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -4002,7 +4224,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -4033,7 +4255,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -4049,12 +4271,12 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
-      "vox-caster",
-      "vox-relay-beacon"
+      "vox-relay-beacon",
+      "vox-caster"
     ],
     "model_constraint": {
       "model_name": "Recon Trooper",
@@ -4067,7 +4289,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -4105,7 +4327,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -4132,7 +4354,7 @@
     "faction_id": "astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [

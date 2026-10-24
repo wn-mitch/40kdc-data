@@ -27,6 +27,7 @@ import {
   maximalLoadout,
   checkUnitLegality,
   loadoutCandidates,
+  weaponBounds,
 } from "./data/loadout.js";
 import { validateRosterCore, type NormRoster } from "./data/roster-resolve.js";
 import {
@@ -48,6 +49,7 @@ import {
 import { selectAdapter } from "./import/adapter.js";
 import { createValidator } from "./schema-loader.js";
 import {
+  allocate,
   attributeStages,
   crunch,
   type Buff,
@@ -653,6 +655,20 @@ function handleLinkedQuery(state: RunnerState, args: unknown): RunnerResponse {
         // Encode the id→count map as sorted "id:count" strings for set compare.
         return ok([...lo.counts].map(([id, n]) => `${id}:${n}`).sort());
       }
+      case "weapon_bounds": {
+        const u = resolveUnit(input.unitId);
+        if (!u)
+          return err("UNKNOWN_ENTITY", { kind: "unit", id: input.unitId });
+        const comp = ds.unitCompositionOf(u.raw);
+        const bounds = weaponBounds(
+          u.raw,
+          Number(input.modelCount),
+          ds.wargearOptionsOf(u.raw),
+          comp?.models,
+        );
+        // Encode each id's inclusive range as sorted "id:min-max" strings for set compare.
+        return ok([...bounds].map(([id, b]) => `${id}:${b.min}-${b.max}`).sort());
+      }
       case "maximal_loadout": {
         const u = resolveUnit(input.unitId);
         if (!u)
@@ -788,6 +804,7 @@ const VALIDATOR_TARGETS: Record<string, string> = {
     "https://40kdc.dev/schemas/enrichment/ability-dsl/ability.schema.json",
   wargear: "https://40kdc.dev/schemas/core/wargear.schema.json",
   "wargear-option": "https://40kdc.dev/schemas/core/wargear-option.schema.json",
+  stratagem: "https://40kdc.dev/schemas/core/stratagem.schema.json",
 };
 
 function ajvKeywordToCode(keyword: string): string {
@@ -987,6 +1004,19 @@ function handleAttribution(state: RunnerState, args: unknown): RunnerResponse {
         intrinsics: s.intrinsics,
       })),
     );
+  } catch (e) {
+    return err("CRUNCH_ERROR", { detail: (e as Error).message });
+  }
+}
+
+function handleAllocate(state: RunnerState, args: unknown): RunnerResponse {
+  if (typeof args !== "object" || args === null) {
+    return err("INVALID_INPUT", { detail: "allocate args must be an object" });
+  }
+  const built = buildEngineInput(state, args as CrunchArgs, "allocate");
+  if (!built.ok) return built.response;
+  try {
+    return ok(allocate(built.input, getDataset(state)));
   } catch (e) {
     return err("CRUNCH_ERROR", { detail: (e as Error).message });
   }
@@ -1566,6 +1596,8 @@ export function dispatch(
       return handleLoadout(state, req.args);
     case "attribution":
       return handleAttribution(state, req.args);
+    case "allocate":
+      return handleAllocate(state, req.args);
     case "translate_scoring":
       return handleTranslateScoring(state, req.args);
     case "translate_effect":

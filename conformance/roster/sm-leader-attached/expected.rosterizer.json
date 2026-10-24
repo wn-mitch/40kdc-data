@@ -95,8 +95,8 @@
                 "assets": {
                   "included": [
                     {
-                      "item": "Weapon§Astartes chainsword",
-                      "name": "Astartes chainsword",
+                      "item": "Weapon§Chainsword",
+                      "name": "Chainsword",
                       "quantity": 1
                     },
                     {
@@ -114,8 +114,8 @@
                 "assets": {
                   "included": [
                     {
-                      "item": "Weapon§Astartes chainsword",
-                      "name": "Astartes chainsword",
+                      "item": "Weapon§Chainsword",
+                      "name": "Chainsword",
                       "quantity": 4
                     },
                     {

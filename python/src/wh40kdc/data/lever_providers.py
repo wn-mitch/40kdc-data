@@ -1,0 +1,396 @@
+"""Levers that come from outside the crunched unit's own ability list: Enhancements a model in
+the unit could take, ability records another ability grants to the unit, and raises to the cap
+of a lever pool. :meth:`Dataset.stackable_buffs_for` assembles them with the unit's own levers.
+
+Python mirror of ``tools/src/data/lever-providers.ts``. Levers are plain dicts with the TS
+camelCase keys (``id``, ``label``, ``buffs``, ``enabled``, ``source``, ``group``, ``cost``,
+``requires``, ``requiresLever``, ``raisesCap``).
+"""
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from wh40kdc.data.dataset import Dataset
+    from wh40kdc.data.entities import AbilityView, UnitView
+
+Lever = dict[str, Any]
+
+
+class AbilityLevers:
+    """Levers one provider contributes, the pools they belong to, and the cap raises to resolve.
+
+    ``cap_raises`` maps ``id(lever)`` to the lever and its canonical capacity-raise
+    metadata. The TS map is keyed by the lever object, which remains alive in ``buffs``
+    until the owning stance group is resolved.
+    """
+
+    def __init__(self) -> None:
+        self.buffs: list[Lever] = []
+        self.groups: list[dict[str, Any]] = []
+        self.cap_raises: dict[int, tuple[Lever, dict[str, Any]]] = {}
+
+    def raise_cap(self, lever: Lever, raise_: dict[str, Any]) -> None:
+        self.cap_raises[id(lever)] = (lever, raise_)
+
+
+def combined_unit(
+    ds: Dataset, input: dict[str, Any]
+) -> tuple[UnitView | None, str, list[UnitView]]:
+    """The crunched unit, the faction it is resolved in, and the combined unit (the unit followed
+    by its attached members). An explicit ``factionId`` wins over the unit's own faction."""
+    unit_id = input.get("unitId") or ""
+    input_faction = input.get("factionId")
+    unit = (
+        ds.units.get_in_faction(unit_id, input_faction) if input_faction else None
+    ) or ds.units.get_any(unit_id)
+    unit_faction = unit.raw.get("faction_id") if unit is not None else None
+    if input_faction is not None:
+        faction_id = input_faction
+    else:
+        faction_id = unit_faction if unit_faction is not None else ""
+    members = [
+        view
+        for view in (
+            ds.units.get_in_faction(member_id, faction_id) or ds.units.get_any(member_id)
+            for member_id in input.get("attachedUnitIds") or []
+        )
+        if view is not None
+    ]
+    return unit, faction_id, [unit, *members] if unit is not None else members
+
+
+def combined_keywords_lower(units: list[UnitView]) -> list[str]:
+    """Lower-cased union of the units' keywords and faction keywords."""
+    out: dict[str, None] = {}
+    for unit in units:
+        for keyword in [*unit.keywords, *unit.faction_keywords]:
+            out[keyword.lower()] = None
+    return list(out)
+
+
+def shared_keywords_lower(units: list[UnitView]) -> list[str]:
+    """Lower-cased keywords and faction keywords every one of the units carries.
+
+    The data lists keywords per datasheet, so these are the keywords every model of the combined
+    unit carries.
+    """
+    if not units:
+        return []
+    first, *rest = (combined_keywords_lower([unit]) for unit in units)
+    others = [set(keywords) for keywords in rest]
+    return [keyword for keyword in first if all(keyword in other for other in others)]
+
+
+def can_take_enhancement(ds: Dataset, enhancement: dict[str, Any], bearer: UnitView) -> bool:
+    """Whether ``bearer`` can take ``enhancement`` under the Select Enhancements rules the roster
+    validator enforces: a CHARACTER (or an Upgrade), not an EPIC HERO, with a model that may take
+    Enhancements, carrying every keyword of one restriction group and none of the exclusions."""
+    keywords = set(combined_keywords_lower([bearer]))
+
+    def has(keyword: str) -> bool:
+        return keyword.lower() in keywords
+
+    if not has("character") and enhancement.get("upgrade_tag") is not True:
+        return False
+    if bearer.raw.get("role") == "epic-hero" or has("epic hero"):
+        return False
+    composition = ds.unit_composition_of(bearer.raw)
+    rows = (composition or {}).get("models") or []
+    if rows and all(model.get("excluded_from_enhancements") is True for model in rows):
+        return False
+    groups = enhancement.get("keyword_restriction_groups")
+    if groups is not None:
+        eligible = any(all(has(k) for k in group) for group in groups)
+    else:
+        eligible = all(has(k) for k in enhancement.get("keyword_restrictions") or [])
+    return eligible and not any(has(k) for k in enhancement.get("exclusion_keywords") or [])
+
+
+def ability_levers(
+    ds: Dataset,
+    *,
+    ability: AbilityView,
+    source: dict[str, Any],
+    rating: Any = None,
+    ctx: dict[str, Any],
+    faction_id: str,
+    id_base: str,
+    label: str,
+    enabled: bool,
+    gate: dict[str, Any] | None = None,
+    held: set[str],
+) -> AbilityLevers:
+    """The levers one eligible ability gives the crunched unit.
+
+    - Buffs it applies outright form one lever ``id_base``, on by default when ``enabled``.
+    - A cost-bearing provider (``gate``: a Stratagem, an Enhancement) is one opt-in lever
+      ``id_base`` carrying the cost, even when it applies no buff itself; its choices and the
+      records it grants name it in ``requiresLever``, so the cost is paid once.
+    - Its choices are opt-in levers in their own pools; a lever raising another pool's cap is
+      recorded for :func:`resolve_cap_raises`.
+    - Each ability record it grants to the unit (not already among ``held``) is translated as the
+      unit's own ability, with the provider's default state. ``held`` is extended with each grant.
+    """
+    out = AbilityLevers()
+    translation = ability.describe_buffs(source, ctx, "attacker", rating)
+    grants = [g for g in granted_record_ids(translation) if g["abilityId"] not in held]
+    levers: list[Lever] = []
+    requires_lever = id_base if gate else None
+
+    for act in translation["activatable"]:
+        lever = lever_from_activatable(act, f"{ability.name} — {act['label']}", source)
+        if requires_lever:
+            lever["requiresLever"] = requires_lever
+        group = act.get("group")
+        if group and not any(g["id"] == group["id"] for g in out.groups):
+            out.groups.append(
+                {
+                    **group,
+                    "label": ability.name,
+                    "abilityId": ability.id,
+                }
+            )
+        if act.get("capRaise"):
+            out.raise_cap(lever, act["capRaise"])
+        levers.append(lever)
+    for grant in grants:
+        held.add(grant["abilityId"])
+        granted = granted_record_levers(
+            ds,
+            grant["abilityId"],
+            faction_id,
+            {
+                "abilityId": ability.id,
+                "source": source,
+                "enabled": False if gate else enabled,
+                "requiresLever": requires_lever,
+            },
+            ctx,
+        )
+        if granted is None:
+            continue
+        levers.extend(granted["buffs"])
+        out.groups.extend(granted["groups"])
+
+    if gate:
+        if translation["applied"] or levers:
+            gate_lever: Lever = {
+                "id": id_base,
+                "label": label,
+                "buffs": translation["applied"],
+                "enabled": False,
+                "source": source,
+                "cost": gate["cost"],
+            }
+            if gate.get("group"):
+                gate_lever["group"] = gate["group"]
+            out.buffs.append(gate_lever)
+    elif translation["applied"]:
+        out.buffs.append(
+            {
+                "id": id_base,
+                "label": label,
+                "buffs": translation["applied"],
+                "enabled": enabled,
+                "source": source,
+            }
+        )
+    out.buffs.extend(levers)
+    return out
+
+
+def enhancement_levers(
+    ds: Dataset,
+    *,
+    detachment_id: str | None,
+    crunched_unit_id: str,
+    bearers: list[UnitView],
+    ctx: dict[str, Any],
+    faction_id: str,
+    held: set[str],
+) -> AbilityLevers:
+    """One lever per (Enhancement, bearer) pair a detachment offers the combined unit, costing
+    the Enhancement's points, in a pool of one per bearer (a model takes at most one
+    Enhancement). The bearer's model-scoped effects stay on that model when it is not the
+    crunched unit (core rule 19.04), as for any attached member's ability."""
+    out = AbilityLevers()
+    if not detachment_id:
+        return out
+    seen: set[str] = set()
+    offered: list[dict[str, Any]] = []
+    for enhancement in ds.enhancements:
+        if enhancement.get("detachment_id") != detachment_id or enhancement["id"] in seen:
+            continue
+        seen.add(enhancement["id"])
+        offered.append(enhancement)
+    for bearer in bearers:
+        group = f"enhancement@{bearer.id}"
+        before = len(out.buffs)
+        for enhancement in offered:
+            ability_id = enhancement.get("ability_id")
+            if not ability_id or not can_take_enhancement(ds, enhancement, bearer):
+                continue
+            ability = ds.abilities.get_in_faction(
+                ability_id, bearer.faction_id
+            ) or ds.abilities.get_any(ability_id)
+            if ability is None:
+                continue
+            if bearer.id == crunched_unit_id:
+                source = {"kind": "ability", "abilityId": ability.id, "abilityKind": "unit"}
+            else:
+                source = {
+                    "kind": "ability",
+                    "abilityId": ability.id,
+                    "abilityKind": "attached",
+                    "sourceUnitId": bearer.id,
+                }
+            levers = ability_levers(
+                ds,
+                ability=ability,
+                source=source,
+                ctx=ctx,
+                faction_id=faction_id,
+                id_base=f"enhancement:{enhancement['id']}@{bearer.id}",
+                label=f"{enhancement['name']} ({bearer.name})",
+                enabled=False,
+                gate={"cost": {"points": enhancement.get("cost")}, "group": group},
+                held=set(held),
+            )
+            out.buffs.extend(levers.buffs)
+            out.groups.extend(levers.groups)
+            out.cap_raises.update(levers.cap_raises)
+        if len(out.buffs) > before:
+            out.groups.append(
+                {"id": group, "label": f"Enhancement on {bearer.name}", "maxActivations": 1}
+            )
+    return out
+
+
+def lever_from_activatable(act: dict[str, Any], label: str, source: dict[str, Any]) -> Lever:
+    """A lever from a translator activatable; ``group`` keeps the activatable's pool id."""
+    lever: Lever = {
+        "id": act["id"],
+        "label": label,
+        "buffs": act["buffs"],
+        "enabled": False,
+        "source": source,
+    }
+    if act.get("group"):
+        lever["group"] = act["group"]["id"]
+    if act.get("requires") is not None:
+        lever["requires"] = act["requires"]
+    return lever
+
+
+#: Grant targets that name the crunched unit (or the aura recipient it is) once the translator
+#: let the grant through.
+_GRANT_RECIPIENTS = frozenset(["this-unit", "ability-unit", "recipient", "selected-unit"])
+
+
+def granted_record_ids(translation: dict[str, Any]) -> list[dict[str, Any]]:
+    """The ability records a translation grants to the crunched unit: each unsupported
+    ``ability-grant`` naming a record that reaches the unit. The translator has already dropped
+    grants whose filter excludes the unit or that name the providing unit itself, so a grant that
+    reached ``unsupported`` with a self or friendly-filter target reaches the crunched unit."""
+    out: list[dict[str, Any]] = []
+    for item in translation["unsupported"]:
+        node = item.get("effectFragment")
+        if not isinstance(node, dict) or node.get("type") != "ability-grant":
+            continue
+        modifier = node.get("modifier")
+        if (
+            not isinstance(modifier, dict)
+            or not isinstance(modifier.get("ability"), str)
+            or modifier.get("definition") is not None
+        ):
+            continue
+        target = node.get("target")
+        if isinstance(target, str):
+            reaches = target in _GRANT_RECIPIENTS
+        else:
+            reaches = isinstance(target, dict) and target.get("owner") == "friendly"
+        if reaches and not any(g["abilityId"] == modifier["ability"] for g in out):
+            out.append({"abilityId": modifier["ability"], "fragment": item})
+    return out
+
+
+def granted_record_levers(
+    ds: Dataset,
+    granted_id: str,
+    faction_id: str,
+    provider: dict[str, Any],
+    ctx: dict[str, Any],
+) -> dict[str, Any] | None:
+    """Translate a granted record as the crunched unit's own ability and return its buffs as
+    levers the grant provides. Ids are prefixed with the granting ability so two grants of the
+    same record stay distinct. None when the record does not resolve."""
+    record = ds.abilities.get_in_faction(granted_id, faction_id) or ds.abilities.get_any(granted_id)
+    if record is None:
+        return None
+    # The granted ability is held by the crunched unit: its "this unit" is the crunched unit.
+    held = {"kind": "ability", "abilityId": record.id, "abilityKind": "unit"}
+    translation = record.describe_buffs(held, ctx, "attacker")
+    buffs: list[Lever] = []
+    groups: dict[str, dict[str, Any]] = {}
+    prefix = f"{provider['abilityId']}>"
+    requires_lever = provider.get("requiresLever")
+    dependency = {"requiresLever": requires_lever} if requires_lever else {}
+    if translation["applied"]:
+        buffs.append(
+            {
+                "id": f"{prefix}{record.id}",
+                "label": record.name,
+                "buffs": translation["applied"],
+                "enabled": provider["enabled"],
+                "source": provider["source"],
+                **dependency,
+            }
+        )
+    for act in translation["activatable"]:
+        lever = lever_from_activatable(act, f"{record.name} — {act['label']}", provider["source"])
+        lever["id"] = f"{prefix}{act['id']}"
+        if act.get("group"):
+            group = f"{prefix}{act['group']['id']}"
+            groups.setdefault(
+                group,
+                {
+                    **act["group"],
+                    "id": group,
+                    "label": record.name,
+                    "abilityId": record.id,
+                },
+            )
+            lever["group"] = group
+        lever.update(dependency)
+        buffs.append(lever)
+    return {"buffs": buffs, "groups": list(groups.values())}
+
+
+def resolve_cap_raises(
+    levers: list[Lever],
+    pending: dict[int, tuple[Lever, dict[str, Any]]],
+    groups: list[dict[str, Any]],
+) -> list[Lever]:
+    """Resolve each cap-raising lever to the stance pool owned by the named ability."""
+    out: list[Lever] = []
+    for lever in levers:
+        entry = pending.get(id(lever))
+        if entry is None or entry[0] is not lever:
+            out.append(lever)
+            continue
+        raise_ = entry[1]
+        group = next(
+            (
+                candidate
+                for candidate in groups
+                if candidate.get("abilityId") == raise_["ability"]
+                and candidate["id"].endswith("?stance")
+            ),
+            None,
+        )
+        if group is not None:
+            allocation = {key: value for key, value in raise_.items() if key != "ability"}
+            out.append({**lever, "raisesCap": {**allocation, "group": group["id"]}})
+    return out

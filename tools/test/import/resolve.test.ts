@@ -39,7 +39,7 @@ describe("resolve (against embedded grey-knights data)", () => {
   it("resolves the enhancement scoped to the detachment", () => {
     const gm = unitById(roster, "grand-master-in-nemesis-dreadknight")!;
     expect(gm.is_warlord).toBe(true);
-    expect(gm.enhancement?.id).toBe("pyresoul-psychic-banishers");
+    expect(gm.enhancement?.id).toBe("pyresoul-psychic-banishers-grey-knights");
     expect(gm.enhancement?.resolved).toBe(true);
   });
 
@@ -288,7 +288,7 @@ describe("name resolution: faction-prefixed shared chassis and unit aliases", ()
 describe("enhancement RAW-name resolution (import-correctness)", () => {
   it("resolves an Upgrade enhancement by its RAW '(Upgrade)' roster name", () => {
     const hit = ds.enhancements.find("Symphonic Payload (Upgrade)");
-    expect(hit?.id).toBe("symphonic-payload-upgrade-chorus-of-condemnation");
+    expect(hit?.id).toBe("symphonic-payload-upgrade-chorus-of-condemnation-adepta-sororitas");
     // The stored display name keeps the tag (what a roster line carries).
     expect(hit?.name).toBe("Symphonic Payload (Upgrade)");
   });
@@ -296,11 +296,16 @@ describe("enhancement RAW-name resolution (import-correctness)", () => {
   it("keeps every '(Upgrade)'/'(Aura)'/'(Psychic)'-tagged name in lockstep with its id", () => {
     const tagged = ds.enhancements.all.filter((e) => /\((Upgrade|Aura|Psychic)\)$/.test(e.name ?? ""));
     expect(tagged.length).toBeGreaterThan(90);
+    const sharing = new Map<string, string[]>();
+    for (const e of tagged) sharing.set(e.name!, [...(sharing.get(e.name!) ?? []), e.id]);
     for (const e of tagged) {
       const tag = (e.name!.match(/\((Upgrade|Aura|Psychic)\)$/)![1]).toLowerCase();
       // id embeds the same lowercased tag token, so find() round-trips the RAW name.
       expect(e.id).toContain(`-${tag}-`);
-      expect(ds.enhancements.find(e.name!)?.id).toBe(e.id);
+      // Two detachments can print the same enhancement name; a name alone then finds one of them.
+      const owners = sharing.get(e.name!)!;
+      if (owners.length === 1) expect(ds.enhancements.find(e.name!)?.id).toBe(e.id);
+      else expect(owners).toContain(ds.enhancements.find(e.name!)?.id);
     }
   });
 });

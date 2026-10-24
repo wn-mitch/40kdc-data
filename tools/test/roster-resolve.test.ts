@@ -6,6 +6,7 @@ import {
   primaryDetachmentId,
   resolveAttachedLeader,
   resolveAttachmentPartners,
+  resolveAttachmentRoles,
   resolveRosterUnit,
   resolveRosterWargear,
   validateRosterCore,
@@ -122,6 +123,29 @@ describe("resolveAttachmentPartners", () => {
     const lone = rosterOf([rosterUnit("battle-sisters-squad"), rosterUnit("palatine")]);
     expect(resolveAttachmentPartners(lone, "battle-sisters-squad")).toEqual([]);
   });
+
+  it("includes all co-leaders from either end without including unrelated units", () => {
+    const multi = rosterOf([
+      rosterUnit("character-bodyguard"),
+      leaderUnit("first-leader", "character-bodyguard"),
+      leaderUnit("second-leader", "character-bodyguard"),
+      rosterUnit("unattached-leader"),
+    ]);
+    expect(resolveAttachmentPartners(multi, "first-leader").map((unit) => unit.ref.id))
+      .toEqual(["character-bodyguard", "second-leader"]);
+    expect(resolveAttachmentRoles(multi, "first-leader")).toEqual({
+      "character-bodyguard": "bodyguard",
+      "first-leader": "leader",
+      "second-leader": "leader",
+    });
+    expect(resolveAttachmentRoles(multi, "unattached-leader")).toEqual({});
+  });
+
+  it("does not invent membership for unresolved or absent bodyguards", () => {
+    const unresolved = leaderUnit("first-leader", "missing-bodyguard");
+    expect(resolveAttachmentRoles(rosterOf([unresolved]), "first-leader")).toEqual({});
+    expect(resolveAttachmentPartners(rosterOf([unresolved]), "first-leader")).toEqual([]);
+  });
 });
 
 describe("resolveRosterWargear", () => {
@@ -232,8 +256,9 @@ describe("checkRosterLegality", () => {
     ]);
     const report = checkRosterLegality(roster, ds);
     expect(report).toHaveLength(1);
-    const allowance = report[0].violations.find((v) => v.code === "exceeds-allowance");
-    expect(allowance?.id).toContain("reaper-autocannon");
+    // 5 reapers alone exceed the shared 2-at-10 allowance, the most the unit can field.
+    const over = report[0].violations.find((v) => v.code === "exceeds-max");
+    expect(over?.id).toBe("reaper-autocannon-chaos-terminators");
   });
 
   it("flags 3× reaper-autocannon at 10 models (over the 2-per-squad allowance)", () => {
@@ -247,7 +272,7 @@ describe("checkRosterLegality", () => {
       ]),
     ]);
     const report = checkRosterLegality(roster, ds);
-    expect(report[0].violations.some((v) => v.code === "exceeds-allowance")).toBe(true);
+    expect(report[0].violations.some((v) => v.code === "exceeds-max" && v.id === "reaper-autocannon-chaos-terminators")).toBe(true);
   });
 
   it("passes 2× reaper-autocannon at 10 models (within the allowance)", () => {

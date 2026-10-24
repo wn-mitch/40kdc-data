@@ -1,6 +1,6 @@
 [package]
 name = "wh40kdc"
-version = "1.4.5"
+version = "1.5.0"
 description = "Warhammer 40K dataset for the 40kdc-data schema layer: generated types, an embedded dataset behind a linked typed API, plus ListForge + NewRecruit roster importers and exporters."
 readme = "README.md"
 keywords = ["warhammer", "40k", "wargaming", "schema", "serde"]
@@ -47,6 +47,12 @@ share = ["dep:base64"]
 # Hand-rolled schema validator emitting the closed-enum (path, code) errors over
 # the embedded BUNDLED_SCHEMA. Self-contained — needs only serde_json.
 validate = []
+
+# The conformance runner drives every area, so it builds only with every feature on.
+[[bin]]
+name = "wh40kdc-runner"
+path = "src/bin/wh40kdc-runner.rs"
+required-features = ["import", "export", "cruncher", "share", "validate"]
 
 [dependencies]
 serde = { version = "1", features = ["derive"] }

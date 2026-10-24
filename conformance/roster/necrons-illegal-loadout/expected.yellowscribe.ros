@@ -22,7 +22,7 @@
             </profile>
             <profile name="Implacable Resilience" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Each time an attack targets the unit, reduce the Damage of that attack by 1.</characteristic>
+                <characteristic name="Description">Subtract 1 from the attacking unit's Damage characteristic.</characteristic>
               </characteristics>
             </profile>
             <profile name="Leader" typeName="Abilities">
@@ -32,12 +32,12 @@
             </profile>
             <profile name="My Will Be Done" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Once per battle, you can use one Stratagem on this model for 0CP.</characteristic>
+                <characteristic name="Description">When this model's unit is targeted with a Stratagem, you may use this ability, once per battle round per army, while the unit is friendly, while the unit has the My Will Be Done ability, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).</characteristic>
               </characteristics>
             </profile>
             <profile name="Resurrection Orb" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Once per battle, while this model is leading a unit, return 1 destroyed model to the unit with full wounds.</characteristic>
+                <characteristic name="Description">While this model is leading a unit, the unit regains up to D6 lost wounds.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -99,7 +99,7 @@
             </profile>
             <profile name="Their Number is Legion" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">You can re-roll the Reanimation Protocols roll.</characteristic>
+                <characteristic name="Description">When you use Reanimation Protocols, you may use this ability, you can re-roll the Reanimation Protocols roll.</characteristic>
               </characteristics>
             </profile>
           </profiles>

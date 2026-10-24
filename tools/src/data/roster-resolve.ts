@@ -10,7 +10,12 @@ import type { BattleSize, Roster, RosterDetachment, RosterUnit, RosterWargear } 
 import type { Detachment } from "../generated.js";
 import type { Dataset } from "./dataset.js";
 import type { UnitView, WeaponView } from "./entities.js";
-import { detachmentCapForBattleSize, pointsLimitForBattleSize } from "./battle-sizes.js";
+import {
+  detachmentCapForBattleSize,
+  enhancementLimitForBattleSize,
+  pointsLimitForBattleSize,
+  unitLimitForBattleSize,
+} from "./battle-sizes.js";
 import { checkUnitLegality, type Violation } from "./loadout.js";
 import { hostUnitPoints, wargearPoints } from "./pricing.js";
 
@@ -140,6 +145,8 @@ export function checkRosterLegality(roster: Roster, dataset: Dataset): UnitLegal
 export type RosterViolationCode =
   | "enhancement-wrong-detachment"
   | "enhancement-on-non-character"
+  | "enhancement-on-epic-hero"
+  | "enhancement-on-excluded-model"
   | "enhancement-keyword-mismatch"
   | "enhancement-excluded-keyword"
   | "enhancement-over-max-targets"
@@ -155,6 +162,15 @@ export type RosterViolationCode =
   | "unit-excluded-from-faction"
   | "no-warlord"
   | "multiple-warlords"
+  | "warlord-not-mandated"
+  | "detachment-excluded-datasheet"
+  | "keyword-limit-exceeded"
+  | "unit-limit-exceeded"
+  | "enhancement-limit-exceeded"
+  | "ally-pool-not-offered"
+  | "ally-points-over-limit"
+  | "ally-cannot-be-warlord"
+  | "ally-cannot-take-enhancements"
   | "unit-minimum-unmet";
 
 /** One army-level legality violation. */
@@ -323,6 +339,14 @@ export function validateRosterCore(spec: NormRoster, dataset: Dataset): RosterLe
       enh.upgrade_tag !== true
     )
       err("enhancement-on-non-character", enh.id, `${enh.id} can only be taken by a Character`, idx);
+    // 11e Select Enhancements: EPIC HERO models cannot be given Enhancements (Upgrades included).
+    if (view.raw.role === "epic-hero" || keywordSet(view, su).has("Epic Hero"))
+      err("enhancement-on-epic-hero", enh.id, `${enh.id} cannot be given to Epic Hero ${view.id}`, idx);
+    // A unit whose every model is `excluded_from_enhancements` (Ogryn Bodyguard,
+    // Transcendent C'tan) has no model that can carry the Enhancement.
+    const rows = dataset.unitCompositionOf(view.raw)?.models ?? [];
+    if (rows.length > 0 && rows.every((m) => m.excluded_from_enhancements === true))
+      err("enhancement-on-excluded-model", enh.id, `${enh.id} cannot be given to ${view.id}: no model in it can take Enhancements`, idx);
     const kws = keywordSet(view, su);
     const eligible = enh.keyword_restriction_groups
       ? enh.keyword_restriction_groups.some((group) => group.every((keyword) => kws.has(keyword)))
@@ -358,18 +382,22 @@ export function validateRosterCore(spec: NormRoster, dataset: Dataset): RosterLe
   // --- Points total (ordinal-aware) + wargear + enhancement costs. ----------
   // Host-aware: a foreign unit with an allied_points entry for this army
   // (Agents' Imperium price, a chapter's reprice of a shared datasheet)
-  // prices from that entry, not its native table.
+  // prices from that entry, not its native table; a `detachment_pricing` entry
+  // for a selected detachment (Pantheon of Woe's C'tan) overrides both.
   const rosterFaction = spec.factionId ? dataset.factions.get(spec.factionId)?.raw : undefined;
   const ordinals = new Map<string, number>();
+  const unitCosts: number[] = spec.units.map(() => 0);
   let total = 0;
   spec.units.forEach((su, idx) => {
     const view = views[idx];
     if (!view) return;
     const ord = (ordinals.get(su.unitId) ?? 0) + 1;
     ordinals.set(su.unitId, ord);
-    total += hostUnitPoints(view.raw, su.modelCount, ord, rosterFaction);
-    total += wargearPoints(view.raw, su.counts);
-    if (su.enhancementId) total += dataset.enhancements.get(su.enhancementId)?.cost ?? 0;
+    let cost = hostUnitPoints(view.raw, su.modelCount, ord, rosterFaction, spec.detachmentIds);
+    cost += wargearPoints(view.raw, su.counts);
+    if (su.enhancementId) cost += dataset.enhancements.get(su.enhancementId)?.cost ?? 0;
+    unitCosts[idx] = cost;
+    total += cost;
   });
   const limit = pointsLimitForBattleSize(spec.battleSize);
   if (limit !== null && total > limit)
@@ -443,6 +471,128 @@ export function validateRosterCore(spec: NormRoster, dataset: Dataset): RosterLe
   if (warlords === 0) err("no-warlord", "roster", "army has no warlord");
   else if (warlords > 1) err("multiple-warlords", "roster", `army has ${warlords} warlords`);
 
+  // --- Detachment Warlord requirement (e.g. Devoted of Ynnead). -------------
+  // Checked only when a Warlord is chosen; a missing one is `no-warlord` above.
+  for (const d of detachments) {
+    const mandated = d.mandatory_warlord_datasheet_ids ?? [];
+    if (mandated.length === 0 || warlords === 0) continue;
+    if (!spec.units.some((su) => su.isWarlord && mandated.includes(su.unitId)))
+      err("warlord-not-mandated", d.id, `${d.id} requires the Warlord to be one of: ${mandated.join(", ")}`);
+  }
+
+  // --- Detachment datasheet exclusions (e.g. Shadow Legion). ----------------
+  for (const d of detachments) {
+    const excluded = d.excluded_datasheet_ids ?? [];
+    if (excluded.length === 0) continue;
+    spec.units.forEach((su, idx) => {
+      if (excluded.includes(su.unitId))
+        err("detachment-excluded-datasheet", su.unitId, `${su.unitId} cannot be included with ${d.id}`, idx);
+    });
+  }
+
+  // --- Unit limit per datasheet (11e Select Battle Size). -------------------
+  // Units sharing a datasheet: at most the battle size's unit limit (incursion
+  // 2, strike-force 3), doubled for BATTLELINE (including detachment-granted
+  // Battleline) and DEDICATED TRANSPORT units; every EPIC HERO is limited to 1.
+  const unitLimit = unitLimitForBattleSize(spec.battleSize);
+  const copies = new Map<string, { count: number; limit: number }>();
+  spec.units.forEach((su, idx) => {
+    const view = views[idx];
+    if (!view) return;
+    const kws = keywordSet(view, su);
+    const role = view.raw.role;
+    let limit: number | null = unitLimit;
+    if (role === "epic-hero" || kws.has("Epic Hero")) limit = 1;
+    else if (limit !== null && (role === "battleline" || role === "dedicated-transport" || kws.has("Battleline") || kws.has("Dedicated Transport")))
+      limit *= 2;
+    if (limit === null) return;
+    const entry = copies.get(view.id) ?? { count: 0, limit };
+    entry.count += 1;
+    entry.limit = Math.max(entry.limit, limit);
+    copies.set(view.id, entry);
+  });
+  for (const [id, { count, limit }] of copies)
+    if (count > limit) err("unit-limit-exceeded", id, `army includes ${count} ${id} units, over the limit of ${limit}`);
+
+  // --- Enhancement limit (11e Select Battle Size: incursion 2, strike-force 4).
+  // Counted as distinct Enhancements chosen: an upgrade applied to several units
+  // is one Enhancement choice.
+  const enhancementLimit = enhancementLimitForBattleSize(spec.battleSize);
+  const enhancementsChosen = new Set(spec.units.flatMap((su) => (su.enhancementId ? [su.enhancementId] : []))).size;
+  if (enhancementLimit !== null && enhancementsChosen > enhancementLimit)
+    err("enhancement-limit-exceeded", "roster", `army takes ${enhancementsChosen} Enhancements, over the limit of ${enhancementLimit}`);
+
+  // --- Army-wide keyword caps (faction `keyword_limits`). -------------------
+  // Units with an exempt faction keyword never count. `units` mode counts units
+  // carrying every keyword (keywords, faction keywords or name); `alternatives`
+  // mode counts how many of the keywords appear on any unit (Farsight / Ethereal). A selected detachment's
+  // `keyword_limit_overrides` entry for the same keyword set replaces `max`
+  // (the largest wins when several detachments override it).
+  const sameKeywords = (a: readonly string[], b: readonly string[]): boolean =>
+    a.length === b.length && [...a].sort().every((k, i) => k === [...b].sort()[i]);
+  for (const kl of rosterFaction?.keyword_limits ?? []) {
+    let max = kl.max;
+    let overridden = false;
+    for (const d of detachments)
+      for (const o of d.keyword_limit_overrides ?? [])
+        if (sameKeywords(o.keywords, kl.keywords)) {
+          max = overridden ? Math.max(max, o.max) : o.max;
+          overridden = true;
+        }
+    const exempt = kl.exempt_faction_keywords ?? [];
+    const counted = spec.units
+      .map((su, idx) => ({ su, view: views[idx] }))
+      .filter(({ view }) => view && !(view.raw.faction_keywords ?? []).some((k) => exempt.includes(k)))
+      .map(({ su, view }) => keywordSet(view!, su));
+    // `units`: units carrying every keyword. `alternatives`: distinct keywords present.
+    const count =
+      kl.mode === "alternatives"
+        ? kl.keywords.filter((k) => counted.some((kws) => kws.has(k))).length
+        : counted.filter((kws) => kl.keywords.every((k) => kws.has(k))).length;
+    if (count > max) {
+      const id = [...kl.keywords].sort().join("+");
+      err("keyword-limit-exceeded", id, `army includes ${count} of ${id}, over the limit of ${max}`);
+    }
+  }
+
+  // --- Exclusive allied pools (the army faction's own pool-only units). -----
+  // Units listed by an `exclusive` rule drawn from the army faction can only be
+  // taken through that rule, so their pool is known without per-unit attribution:
+  // the rule must be offered (army keyword + detachment gates), and its points cap
+  // and Warlord/Enhancement locks apply. A selected detachment that names a unit
+  // for Warlord (mandatory or granted) lifts the Warlord lock for it.
+  const detachmentWarlords = new Set<string>(
+    detachments.flatMap((d) => [...(d.mandatory_warlord_datasheet_ids ?? []), ...(d.granted_warlord_datasheet_ids ?? [])]),
+  );
+  for (const rule of dataset.alliedRules.all) {
+    if (!rule.exclusive || !spec.factionId || rule.source_faction_id !== spec.factionId) continue;
+    const pool = new Set(rule.source_datasheet_ids ?? []);
+    const members = spec.units
+      .map((su, idx) => ({ su, idx, view: views[idx] }))
+      .filter(({ su, view }) => view !== undefined && view.raw.faction_id === spec.factionId && pool.has(su.unitId));
+    if (members.length === 0) continue;
+    const armyGate =
+      (rule.army_keywords_any ?? []).length === 0 ||
+      (rule.army_keywords_any ?? []).some((k) => armyKeywordSet.has(k));
+    const detachmentGate =
+      (rule.detachment_ids ?? []).length === 0 ||
+      (rule.detachment_ids ?? []).some((id) => spec.detachmentIds.includes(id));
+    if (!armyGate || !detachmentGate)
+      for (const { su, idx } of members)
+        err("ally-pool-not-offered", su.unitId, `${su.unitId} is only available through ${rule.id}, which this army does not offer`, idx);
+    const cap = (rule.points_limits ?? []).find((p) => p.battle_size === spec.battleSize)?.max_points;
+    if (cap != null) {
+      const spent = members.reduce((sum, { idx }) => sum + unitCosts[idx], 0);
+      if (spent > cap) err("ally-points-over-limit", rule.id, `${rule.id} units total ${spent}, over the ${cap} limit`);
+    }
+    for (const { su, idx } of members) {
+      if (rule.cannot_be_warlord && su.isWarlord && !detachmentWarlords.has(su.unitId))
+        err("ally-cannot-be-warlord", su.unitId, `${su.unitId} cannot be Warlord under ${rule.id}`, idx);
+      if (rule.cannot_take_enhancements && su.enhancementId)
+        err("ally-cannot-take-enhancements", su.unitId, `${su.unitId} cannot take an Enhancement under ${rule.id}`, idx);
+    }
+  }
+
   // --- Unit minimums (e.g. Houndpack: 3+ WAR DOG units). --------------------
   for (const d of detachments) {
     for (const um of d.unit_minimums ?? []) {
@@ -462,8 +612,9 @@ export function validateRosterCore(spec: NormRoster, dataset: Dataset): RosterLe
 /**
  * Whole-army legality for a resolved {@link Roster}: the per-unit loadout check
  * plus the nine army-construction dimensions (enhancements, leader attachment,
- * points, detachment points, force disposition, detachment tags/restrictions,
- * warlord, unit minimums). A roster is legal iff `army` has no `error`-severity
+ * points, detachment points, force disposition, detachment tags/restrictions/
+ * datasheet exclusions, warlord presence and detachment Warlord requirement,
+ * unit minimums). A roster is legal iff `army` has no `error`-severity
  * entries and every `units[].violations` is empty.
  */
 export function checkRoster(roster: Roster, dataset: Dataset): RosterLegality {
@@ -519,8 +670,8 @@ export function resolveAttachedLeader(
  *   - `unitId` is the **bodyguard** → the leader(s) whose
  *     `leader_attachment.bodyguard_ref.id` points at it (body-first, the
  *     {@link resolveAttachedLeader} direction), and
- *   - `unitId` is the **leader** → the bodyguard its own `leader_attachment`
- *     points to.
+ *   - `unitId` is a **leader** → its bodyguard and every other leader in the
+ *     same attachment.
  * Returns the partner {@link RosterUnit}s (deduped, source order). Empty when
  * the unit has no attachment in this roster — the common case, since
  * attachments are optional at game start. Shaped as a list to carry 11th
@@ -530,23 +681,50 @@ export function resolveAttachmentPartners(
   roster: Roster,
   unitId: string,
 ): RosterUnit[] {
-  const seen = new Set<RosterUnit>();
-  const out: RosterUnit[] = [];
-  const add = (u: RosterUnit | undefined) => {
-    if (!u || seen.has(u)) return;
-    seen.add(u);
-    out.push(u);
-  };
+  const memberIds = attachmentMemberIds(roster, unitId);
+  const partners = new Set<RosterUnit>();
+  for (const unit of roster.units) {
+    if (unit.ref.id !== null && unit.ref.id !== unitId && memberIds.has(unit.ref.id)) partners.add(unit);
+  }
+  return [...partners];
+}
 
-  for (const u of roster.units) {
-    // Body-first: leaders pointing down at `unitId`.
-    if (u.leader_attachment?.bodyguard_ref.id === unitId) add(u);
-    // Leader-first: `unitId`'s own entry points down at a bodyguard.
-    if (u.ref.id === unitId && u.leader_attachment) {
-      add(roster.units.find((b) => b.ref.id === u.leader_attachment!.bodyguard_ref.id));
+/** Actual attachment roles, independent of CHARACTER keywords or the Leader ability. */
+export function resolveAttachmentRoles(
+  roster: Roster,
+  unitId: string,
+): Readonly<Record<string, "leader" | "bodyguard">> {
+  const memberIds = attachmentMemberIds(roster, unitId);
+  const roles: Record<string, "leader" | "bodyguard"> = {};
+  for (const unit of roster.units) {
+    const id = unit.ref.id;
+    const bodyguardId = unit.leader_attachment?.bodyguard_ref.id;
+    if (id === null || !memberIds.has(id) || bodyguardId == null || !memberIds.has(bodyguardId)) continue;
+    roles[id] = "leader";
+    roles[bodyguardId] ??= "bodyguard";
+  }
+  return roles;
+}
+
+function attachmentMemberIds(roster: Roster, unitId: string): Set<string> {
+  const present = new Set(roster.units.flatMap((unit) => unit.ref.id === null ? [] : [unit.ref.id]));
+  const members = new Set<string>();
+  if (!present.has(unitId)) return members;
+  members.add(unitId);
+  let changed = true;
+  while (changed) {
+    changed = false;
+    for (const unit of roster.units) {
+      const id = unit.ref.id;
+      const bodyguardId = unit.leader_attachment?.bodyguard_ref.id;
+      if (id === null || bodyguardId == null || !present.has(bodyguardId)) continue;
+      if (!members.has(id) && !members.has(bodyguardId)) continue;
+      if (!members.has(id) || !members.has(bodyguardId)) changed = true;
+      members.add(id);
+      members.add(bodyguardId);
     }
   }
-  return out;
+  return members;
 }
 
 /**

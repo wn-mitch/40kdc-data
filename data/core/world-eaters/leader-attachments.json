@@ -1,12 +1,22 @@
 [
   {
+    "leader_id": "frenzied-reavers-master-of-executions",
+    "eligible_bodyguard_ids": [
+      "frenzied-reavers-khorne-berzerkers"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
     "leader_id": "kharn-the-betrayer",
     "eligible_bodyguard_ids": [
       "khorne-berzerkers"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -18,7 +28,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -30,7 +40,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -40,7 +50,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -51,17 +61,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
-    }
-  },
-  {
-    "leader_id": "frenzied-reavers-master-of-executions",
-    "eligible_bodyguard_ids": [
-      "frenzied-reavers-khorne-berzerkers"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   }
 ]

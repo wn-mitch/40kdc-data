@@ -1,0 +1,3029 @@
+[
+  {
+    "ability_id": "condemnatory-annihilation-black-templars",
+    "name": "Condemnatory Annihilation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "source_digest": "edc6f2a6f8e04a8c3ab4df484cb629a75775f0967e7cba1f798efc40c3e3490c",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "model-destroyed",
+          "object": {
+            "owner": "enemy",
+            "level": "model"
+          },
+          "filter": {
+            "by": "this-unit"
+          },
+          "window": "phase"
+        }
+      },
+      "effect": {
+        "type": "for-each-unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy",
+            "engaged_with": "this-unit"
+          }
+        },
+        "effect": {
+          "type": "test",
+          "target": "recipient",
+          "modifier": {
+            "test": "battle-shock",
+            "modifier": -1
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "execrator"
+    ],
+    "ability_type": "unit",
+    "behavior": "reactive",
+    "faction_id": "black-templars",
+    "trigger": {
+      "event": "attacks-resolved"
+    }
+  },
+  {
+    "ability_id": "crusade-of-wrath-black-templars",
+    "name": "Crusade of Wrath",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "source_digest": "43302321f2c7e5558149f8bcb9b452dd7ddc137176c178200a734090be0c7696",
+    "version": "2025-q3",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "stat": "A",
+            "operation": "add",
+            "value": 1,
+            "weapons": {
+              "type": "melee"
+            }
+          }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "stat": "S",
+            "operation": "add",
+            "value": 1,
+            "weapons": {
+              "type": "melee"
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "high-marshal-helbrecht"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "black-templars"
+  },
+  {
+    "ability_id": "exploit-their-cowardice-black-templars",
+    "name": "Exploit Their Cowardice",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "source_digest": "bd8fc752f6dc4a5e817d4a8dd99a6c083e33f57a7df3dd09cdcf6aca6d7bc848",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "movement"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "opponent-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "unit-state",
+            "parameters": {
+              "subject": "event-subject",
+              "state": "engaged",
+              "with": "this-unit",
+              "at": "phase-start"
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "state": "engaged"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "effect": {
+        "type": "move",
+        "target": "this-unit",
+        "modifier": {
+          "move_type": "normal",
+          "distance": 6
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "sword-brethren-squad"
+    ],
+    "ability_type": "unit",
+    "behavior": "reactive",
+    "faction_id": "black-templars",
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "fall-back"
+        ]
+      },
+      "subject": {
+        "owner": "enemy"
+      }
+    }
+  },
+  {
+    "ability_id": "heirs-of-sigismund-black-templars",
+    "name": "Heirs of Sigismund",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "source_digest": "3ce947d1c863f46392b04857d54747806493cea994080782434505f8cf12d215",
+    "version": "2025-q3",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "army-rule",
+          "target": "this-unit",
+          "modifier": {
+            "rule": "composition",
+            "with": {
+              "all_of": [
+                "Adeptus Astartes",
+                "Psyker"
+              ]
+            },
+            "max": 0
+          }
+        },
+        {
+          "type": "army-rule",
+          "target": "this-unit",
+          "modifier": {
+            "rule": "composition",
+            "datasheets": [
+              "gladiator-lancer",
+              "gladiator-reaper",
+              "gladiator-valiant",
+              "impulsor",
+              "repulsor",
+              "repulsor-executioner"
+            ],
+            "max": 0
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "faction_id": "black-templars",
+    "ability_type": "faction",
+    "behavior": "passive",
+    "unit_ids": []
+  },
+  {
+    "ability_id": "high-marshal-black-templars",
+    "name": "High Marshal",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "source_digest": "560b59ff8ca1edbd62b1e008d4d559382b8f1c944c07ff3888c0da44f31a0019",
+    "version": "2025-q3",
+    "effect": {
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "subject": "selected-unit",
+            "filter": {
+              "engaged_with": "this-unit"
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "dice-table",
+        "dice": "D6",
+        "outcomes": [
+          {
+            "results": [
+              1
+            ],
+            "effect": {
+              "type": "no-effect"
+            }
+          },
+          {
+            "results": [
+              2,
+              3
+            ],
+            "effect": {
+              "type": "mortal-wounds",
+              "target": "selected-unit",
+              "modifier": {
+                "count": "D3"
+              }
+            }
+          },
+          {
+            "results": [
+              4,
+              5
+            ],
+            "effect": {
+              "type": "mortal-wounds",
+              "target": "selected-unit",
+              "modifier": {
+                "count": 3
+              }
+            }
+          },
+          {
+            "results": [
+              6
+            ],
+            "effect": {
+              "type": "mortal-wounds",
+              "target": "selected-unit",
+              "modifier": {
+                "count": "D3+3"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "high-marshal-helbrecht"
+    ],
+    "ability_type": "unit",
+    "behavior": "reactive",
+    "faction_id": "black-templars",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    }
+  },
+  {
+    "ability_id": "inspirational-exemplar-black-templars",
+    "name": "Inspirational Exemplar",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "source_digest": "0e35a2df92dd644d7b1fb2825ab4ac5eaddd939e22e1039f4bd32072cfb250ab",
+    "version": "2025-q3",
+    "effect": {
+      "type": "roll-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "roll": "hit",
+        "operation": "add",
+        "value": 1,
+        "weapons": {
+          "type": "melee"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "marshal"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "black-templars"
+  },
+  {
+    "ability_id": "litanies-of-the-devout-black-templars",
+    "name": "Litanies of the Devout",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "source_digest": "7100ce3705aab0feadc7f4324e61a48346d5229541aebcd16819470025a6dc90",
+    "version": "2025-q3",
+    "effect": {
+      "type": "re-roll",
+      "target": "this-unit",
+      "modifier": {
+        "roll": "hit",
+        "result_scope": "any-result",
+        "weapons": {
+          "type": "melee"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "chaplain-grimaldus"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "black-templars"
+  },
+  {
+    "ability_id": "martial-honour-black-templars",
+    "name": "Martial Honour",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "source_digest": "cc66ff2a282d57055834181f837163efebe609e710dff63d42a75d6e2de3a0dd",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "destroyed",
+          "object": {
+            "owner": "enemy"
+          },
+          "filter": {
+            "by": "this-unit",
+            "attack_type": "melee"
+          },
+          "window": "phase"
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "OC",
+          "operation": "improve",
+          "value": 5
+        }
+      }
+    },
+    "scope": {
+      "duration": "battle"
+    },
+    "unit_ids": [
+      "crusade-ancient"
+    ],
+    "ability_type": "unit",
+    "behavior": "activated",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "black-templars"
+  },
+  {
+    "ability_id": "pious-fervour-black-templars",
+    "name": "Pious Fervour",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "source_digest": "af4922ac58c56f4f6647c022b9e789aa11e1bcfb58521cd921a046a535f2de4a",
+    "version": "2025-q3",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "this-model",
+      "modifier": {
+        "stat": "A",
+        "operation": "improve",
+        "value": 1,
+        "weapons": {
+          "type": "melee"
+        }
+      },
+      "scaling": {
+        "per": 1,
+        "of": "enemy-units-in-range",
+        "max_value": 3,
+        "evaluated": "on-apply",
+        "within": {
+          "inches": 6
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "marshal"
+    ],
+    "ability_type": "unit",
+    "behavior": "reactive",
+    "faction_id": "black-templars",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "fight"
+      },
+      "optional": true
+    }
+  },
+  {
+    "ability_id": "remorseless-persecution-black-templars",
+    "name": "Remorseless Persecution",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "source_digest": "e3c73862fc010405e55bf4cb39539b6007d4044a3ab4563f6f264cedf4398034",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "permission",
+        "target": "this-unit",
+        "modifier": {
+          "activity": "declare-charge",
+          "allow": true,
+          "despite": [
+            "advanced"
+          ]
+        }
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "unit_ids": [
+      "execrator"
+    ],
+    "ability_type": "unit",
+    "behavior": "reactive",
+    "faction_id": "black-templars",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "move_types": [
+          "advance"
+        ],
+        "to": "move"
+      }
+    }
+  },
+  {
+    "ability_id": "righteous-zeal-black-templars",
+    "name": "Righteous Zeal",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "ad8b4602a2d23317dd3e5a2386cc5878fd873e63aaa56011966c33abc503733e",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "opponent-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "model-destroyed",
+              "object": "model-in-this-unit",
+              "filter": {
+                "by": "event-subject"
+              },
+              "window": "event"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "move",
+            "target": "this-unit",
+            "modifier": {
+              "move_type": "surge",
+              "distance": "D6"
+            }
+          },
+          {
+            "type": "move-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "applies_to_moves": [
+                "surge"
+              ],
+              "distance_bonus": 1
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "unit_ids": [
+      "crusader-squad"
+    ],
+    "ability_type": "unit",
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "black-templars",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "subject": {
+        "owner": "enemy"
+      }
+    }
+  },
+  {
+    "ability_id": "templar-vows-black-templars",
+    "name": "Templar Vows",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "9e7f49a4dd74452cc744881680127e919668480316d33c87802fb86b473ce732",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "charge",
+              "subset": "all-failures"
+            }
+          },
+          {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "wound",
+              "operation": "add",
+              "value": 1
+            }
+          },
+          {
+            "type": "weapon-ability-grant",
+            "target": "this-unit",
+            "modifier": {
+              "keywords": [
+                {
+                  "keyword_id": "precision"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "faction_id": "black-templars",
+    "ability_type": "detachment",
+    "behavior": "passive",
+    "community_notes": "auto-generated from faction rule",
+    "unit_ids": [],
+    "detachment_id": "vow-sworn-crusaders"
+  },
+  {
+    "ability_id": "temple-relics-black-templars",
+    "name": "Temple Relics",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "source_digest": "89add6a4fd5ccee94e1042786d74698105ea40252e487d749725dad2681e26bd",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "model-count",
+        "parameters": {
+          "subject": "this-unit",
+          "keyword": "CENOBYTE SERVITOR",
+          "min": 1
+        }
+      },
+      "effect": {
+        "type": "choice",
+        "options": [
+          {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "roll-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "advance",
+                  "operation": "add",
+                  "value": 1
+                }
+              },
+              {
+                "type": "roll-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "charge",
+                  "operation": "add",
+                  "value": 1
+                }
+              }
+            ]
+          },
+          {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "T",
+              "operation": "add",
+              "value": 1
+            }
+          },
+          {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "AP",
+              "operation": "improve",
+              "value": 1,
+              "weapons": {
+                "type": "melee"
+              }
+            }
+          }
+        ],
+        "choice_label": "Temple Relics",
+        "min_choices": 0,
+        "max_choices": 1
+      }
+    },
+    "scope": {
+      "duration": "until-next-command-phase"
+    },
+    "unit_ids": [
+      "chaplain-grimaldus"
+    ],
+    "ability_type": "unit",
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "black-templars",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "ability_id": "vehement-aggression-black-templars",
+    "name": "Vehement Aggression",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "source_digest": "9825e7caf7f5315b3e8f410e702843b05c89701bb3f951742a93ab806c214132",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "test",
+            "target": "this-unit",
+            "modifier": {
+              "test": "leadership"
+            }
+          },
+          {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "subset": "ones",
+              "weapons": {
+                "type": "melee"
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "roll-result",
+                  "parameters": {
+                    "roll": "leadership",
+                    "result": "success"
+                  }
+                },
+                {
+                  "type": "attack-is",
+                  "parameters": {
+                    "attack_type": "melee"
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "re-roll",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "hit",
+                "subset": "ones"
+              }
+            }
+          },
+          {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "wound",
+              "subset": "ones"
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "unit_ids": [
+      "castellan"
+    ],
+    "ability_type": "unit",
+    "behavior": "reactive",
+    "faction_id": "black-templars",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "fight"
+      },
+      "optional": true
+    }
+  },
+  {
+    "ability_id": "vengeful-exhortation-black-templars",
+    "name": "Vengeful Exhortation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "source_digest": "7840880e1ca72c501f2389498e31e74ebcdbc6a08c8c86f8ac4d3410ce2202c8",
+    "version": "2025-q3",
+    "effect": {
+      "type": "act-on-death",
+      "target": "event-object",
+      "modifier": {
+        "act": "fight",
+        "resolution": "when-unit-fights",
+        "removal": "after-unit-fights-or-phase-end",
+        "gate": {
+          "dice": "D6",
+          "threshold": 4,
+          "comparison": "gte",
+          "modifiers": []
+        },
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "fight"
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "eligible",
+                  "parameters": {
+                    "subject": "this-unit",
+                    "to": "fight"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "unit_ids": [
+      "crusade-ancient"
+    ],
+    "ability_type": "unit",
+    "behavior": "reactive",
+    "faction_id": "black-templars",
+    "trigger": {
+      "event": "model-destroyed",
+      "object": "model-in-this-unit",
+      "optional": true
+    }
+  },
+  {
+    "ability_id": "aquilon-optics-black-templars",
+    "name": "Aquilon Optics",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "stub": true,
+    "unit_ids": [
+      "gladiator-lancer"
+    ],
+    "faction_id": "black-templars",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "armour-of-faith-black-templars",
+    "name": "Armour of Faith",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [
+      "emperors-champion"
+    ],
+    "faction_id": "black-templars",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "damage-reduction",
+      "target": "this-model",
+      "modifier": {
+        "reduction": 1
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "damage-allocated",
+      "object": "this-model"
+    },
+    "source_digest": "5a79bd88a59dd02e7d336d4dc1d7a4c451017529ae4e5242548d236b15427fc4"
+  },
+  {
+    "ability_id": "augury-servo-host-vow-sworn-crusaders-black-templars",
+    "name": "Augury Servo-Host",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "vow-sworn-crusaders",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy",
+            "visible": {
+              "to": "this-model"
+            }
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "matches",
+            "parameters": {
+              "subject": "selected-unit",
+              "filter": {
+                "within": {
+                  "of": "this-unit",
+                  "range": {
+                    "inches": 18
+                  }
+                }
+              }
+            }
+          }
+        },
+        "effect": {
+          "type": "rule-state",
+          "target": "selected-unit",
+          "modifier": {
+            "direction": "suppressed",
+            "rule_kind": "core-rule",
+            "rule": "benefit-of-cover"
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "behavior": "activated",
+    "source_digest": "3e9cb01a2c603175cd33867f2e173549418dfaeebc03a6c89f1306f7e7fbf8f9"
+  },
+  {
+    "ability_id": "blade-of-detestation-marshals-household-black-templars",
+    "name": "Blade of Detestation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "marshals-household",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "bladeguard-black-templars",
+    "name": "Bladeguard (Once per turn per unit)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [
+      "vow-sworn-bladeguard-veteran-squad"
+    ],
+    "faction_id": "black-templars",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      },
+      "effect": {
+        "type": "choice",
+        "options": [
+          {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "subset": "ones",
+              "weapons": {
+                "type": "melee"
+              }
+            }
+          },
+          {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "save",
+              "subset": "ones"
+            }
+          }
+        ],
+        "choice_label": "one of the following",
+        "min_choices": 1,
+        "max_choices": 1
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": [
+      {
+        "event": "selected",
+        "filter": {
+          "to": "fight"
+        },
+        "optional": true
+      },
+      {
+        "event": "targets-selected",
+        "filter": {
+          "kind": "attack"
+        },
+        "subject": {
+          "owner": "enemy"
+        },
+        "object": "this-unit",
+        "optional": true
+      }
+    ],
+    "source_digest": "c58a9af3a2389906fbbce3fb536c80d5c74a7a761addef88223139c043bda891"
+  },
+  {
+    "ability_id": "blessed-aura-vow-sworn-of-vedrenn-black-templars",
+    "name": "Blessed Aura",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "vow-sworn-of-vedrenn",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "attack-is",
+        "parameters": {
+          "attack_type": "melee"
+        }
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "attacker",
+        "modifier": {
+          "roll": "hit",
+          "operation": "subtract",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "until-start-next-turn"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "after-roll",
+      "filter": {
+        "roll": "battle-shock",
+        "result": "success"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "VOW-SWORN OF VEDRENN"
+        ]
+      }
+    },
+    "source_digest": "f966d4383c57d8eabd7ffc3e568ccf4c1e7554700a15de8f7c5c7b5c1eaa18ab"
+  },
+  {
+    "ability_id": "chosen-of-the-emperor-black-templars",
+    "name": "Chosen of the Emperor",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [
+      "emperors-champion"
+    ],
+    "faction_id": "black-templars",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "army-rule",
+      "target": "this-unit",
+      "modifier": {
+        "rule": "unique",
+        "with": {
+          "owner": "friendly",
+          "all_of": [
+            "EMPEROR'S CHAMPION"
+          ]
+        },
+        "max": 1
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "passive",
+    "source_digest": "a02a8a8b0b2ebb7bdf13a4f7ab22c07c1f360686ca055c49e609fce050edeaaa"
+  },
+  {
+    "ability_id": "close-range-destruction-black-templars",
+    "name": "Close-range Destruction",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "vow-sworn-of-vedrenn",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "come-to-their-aid-vow-sworn-of-vedrenn-black-templars",
+    "name": "Come To Their Aid",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "vow-sworn-of-vedrenn",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "after-roll",
+            "filter": {
+              "roll": "charge"
+            },
+            "subject": {
+              "owner": "friendly",
+              "all_of": [
+                "VOW-SWORN OF VEDRENN"
+              ]
+            }
+          },
+          "effect": {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "charge",
+              "operation": "add",
+              "value": 2
+            }
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "targets-selected",
+            "filter": {
+              "kind": "charge"
+            },
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "all_of": [
+                    "VOW-SWORN OF VEDRENN"
+                  ]
+                }
+              }
+            }
+          },
+          "effect": {
+            "type": "targeting",
+            "target": "this-unit",
+            "modifier": {
+              "may": "must-target",
+              "kind": "charge"
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "source_digest": "27498193645d7d3be4419a04a9fe9028284d294cc63cf322ef0613292e08ed98"
+  },
+  {
+    "ability_id": "consecrating-aura-vow-sworn-crusaders-black-templars",
+    "name": "Consecrating Aura",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "vow-sworn-crusaders",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "invulnerable-save",
+      "target": "this-unit",
+      "modifier": {
+        "invuln_sv": 5
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "passive",
+    "source_digest": "982ce8c765589d56ccc6afb9a2fbf3e6396090369bffba0b68af318b95c93a52"
+  },
+  {
+    "ability_id": "deft-riposte-black-templars",
+    "name": "Deft Riposte",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [
+      "emperors-champion-vedrenn"
+    ],
+    "faction_id": "black-templars",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "keywords": [
+          {
+            "keyword_id": "hazardous"
+          }
+        ],
+        "weapons": {
+          "type": "melee"
+        },
+        "incoming": true
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "passive",
+    "source_digest": "21418186f8f95f467d5fe83104f908ee9db7f9aebb5813c759c264c268dbb17b"
+  },
+  {
+    "ability_id": "devout-push-vow-sworn-crusaders-black-templars",
+    "name": "Devout Push",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "vow-sworn-crusaders",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "divine-endurance-vow-sworn-of-vedrenn-black-templars",
+    "name": "Divine Endurance",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "vow-sworn-of-vedrenn",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "divine-protection-vow-sworn-of-vedrenn-black-templars",
+    "name": "Divine Protection",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "vow-sworn-of-vedrenn",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "invulnerable-save",
+      "target": "this-unit",
+      "modifier": {
+        "invuln_sv": 4
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit",
+      "optional": true
+    },
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "unit"
+    },
+    "source_digest": "e53aca0ef81cc9b0ed8c4e9b741bdb394f70297860a43c4b72572648812caa4e"
+  },
+  {
+    "ability_id": "dread-crusaders-vow-sworn-crusaders-black-templars",
+    "name": "Dread Crusaders",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "vow-sworn-crusaders",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "test",
+      "target": "event-subject",
+      "modifier": {
+        "test": "battle-shock",
+        "modifier": -1
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "charge"
+      },
+      "subject": {
+        "owner": "enemy"
+      }
+    },
+    "source_digest": "ff67329c299ebc2204cfa28c8dd41bee30cce3b80823c3ff57bba431c23ec0e4"
+  },
+  {
+    "ability_id": "exploit-their-cowardice-vow-sworn-sword-brethren-squad-black-templars",
+    "name": "Exploit Their Cowardice",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [
+      "vow-sworn-sword-brethren-squad"
+    ],
+    "faction_id": "black-templars",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "unit-state",
+            "parameters": {
+              "subject": "event-subject",
+              "state": "engaged",
+              "with": "this-unit",
+              "at": "phase-start"
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "state": "engaged"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "effect": {
+        "type": "move",
+        "target": "this-unit",
+        "modifier": {
+          "move_type": "normal"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "move_types": [
+          "fall-back"
+        ]
+      }
+    },
+    "source_digest": "b9ca6abcfb8578542c886773e7e8ca71f82a09c34681d6f5234c430479f520ba"
+  },
+  {
+    "ability_id": "faith-fuelled-resolve-black-templars",
+    "name": "Faith-fuelled Resolve",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "marshals-household",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "recipient",
+                "filter": {
+                  "within": {
+                    "of": {
+                      "objective": {}
+                    },
+                    "range": "objective-control"
+                  }
+                }
+              }
+            },
+            "effect": {
+              "type": "stat-modifier",
+              "target": {
+                "owner": "friendly",
+                "all_of": [
+                  "SWORD BRETHREN SQUAD"
+                ]
+              },
+              "modifier": {
+                "stat": "A",
+                "operation": "improve",
+                "value": 1,
+                "weapons": {
+                  "type": "melee"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "army-rule",
+              "target": "this-unit",
+              "modifier": {
+                "rule": "composition",
+                "with": {
+                  "all_of": [
+                    "BLACK TEMPLARS"
+                  ]
+                }
+              }
+            },
+            {
+              "type": "army-rule",
+              "target": "this-unit",
+              "modifier": {
+                "rule": "single-chapter"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "passive",
+    "source_digest": "0c0d8f09e0416c0d861934b4094aad2d39bb6d371b28cd3ad63e89d89dbe71ea"
+  },
+  {
+    "ability_id": "fervent-exemplars-upgrade-marshals-household-black-templars",
+    "name": "Fervent Exemplars (Upgrade)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "marshals-household",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "roll-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "roll": "charge",
+        "operation": "add",
+        "value": 1
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "passive",
+    "source_digest": "650e343b2b3eb9d4c742f3fd054b013b155aa235208d9218d667fe985971728f"
+  },
+  {
+    "ability_id": "for-the-emperors-honour-vow-sworn-crusaders-black-templars",
+    "name": "For The Emperor’s Honour!",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "vow-sworn-crusaders",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "keywords": [
+          {
+            "keyword_id": "precision"
+          }
+        ],
+        "weapons": {
+          "type": "melee"
+        }
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "fight"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS ASTARTES",
+          "INFANTRY"
+        ]
+      }
+    },
+    "source_digest": "b6422516cfe9b5632e201cfc89026f77cb83a7ae0962154ef5e02f7c7fe33fd5"
+  },
+  {
+    "ability_id": "heavy-strikes-vow-sworn-of-vedrenn-black-templars",
+    "name": "Heavy Strikes",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "vow-sworn-of-vedrenn",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "heresy-begets-retribution-vow-sworn-crusaders-black-templars",
+    "name": "Heresy Begets Retribution",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "vow-sworn-crusaders",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-subject",
+          "filter": {
+            "within": {
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "ADEPTUS ASTARTES",
+                  "INFANTRY"
+                ]
+              },
+              "range": {
+                "inches": 8
+              }
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "move",
+        "target": "this-unit",
+        "modifier": {
+          "move_type": "surge",
+          "distance": "D6"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      }
+    },
+    "source_digest": "d54f8bad3a6696fa4b8a2020bbf6501246f02ac6767b912ed993d4620b45cdea"
+  },
+  {
+    "ability_id": "incendiary-animus-vow-sworn-crusaders-black-templars",
+    "name": "Incendiary Animus",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "vow-sworn-crusaders",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "stat": "S",
+        "operation": "improve",
+        "value": 1,
+        "weapons": {
+          "type": "melee"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "passive",
+    "source_digest": "be7dea2ad906529d66c191eeac2d2b214141a96e4fc6642df3ade8e8373034be"
+  },
+  {
+    "ability_id": "inheritors-of-sigismund-upgrade-marshals-household-black-templars",
+    "name": "Inheritors of Sigismund (Upgrade)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "marshals-household",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "fights-first"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "passive",
+    "source_digest": "cb9a212c18fa381edeb15c5d0b09b40717068f74c68feb6b68178f6956c167f1"
+  },
+  {
+    "ability_id": "oathbound-exemplar-fist-of-the-god-emperor-black-templars",
+    "name": "Oathbound Exemplar",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "fist-of-the-god-emperor",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "permission",
+      "target": "this-unit",
+      "modifier": {
+        "activity": "start-action",
+        "allow": true,
+        "despite": [
+          "advanced",
+          "fell-back"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "move_types": [
+          "advance",
+          "fall-back"
+        ],
+        "to": "move"
+      }
+    },
+    "source_digest": "8faae433e15602f46b7cf34ae2f8a98c407873d272e81454214b56798708f34c"
+  },
+  {
+    "ability_id": "orbital-comms-array-black-templars",
+    "name": "Orbital Comms Array (Aura)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [
+      "impulsor"
+    ],
+    "faction_id": "black-templars",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "scouts",
+        "value": 6
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "passive",
+    "source_digest": "fade7da1d16c5025f14b80a4ba6a3a48b36582be82aaea6595e8d7aefe5d911a"
+  },
+  {
+    "ability_id": "pious-enmity-vow-sworn-crusaders-black-templars",
+    "name": "Pious Enmity",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "vow-sworn-crusaders",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "attack-is",
+        "parameters": {
+          "attack_type": "melee"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "subset": "ones"
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "attack-is",
+                  "parameters": {
+                    "attack_type": "melee"
+                  }
+                },
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "defender",
+                    "filter": {
+                      "any_of": [
+                        "MONSTER",
+                        "VEHICLE"
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "re-roll",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "hit",
+                "subset": "ones"
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "attack-is",
+                  "parameters": {
+                    "attack_type": "melee"
+                  }
+                },
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "defender",
+                    "filter": {
+                      "any_of": [
+                        "MONSTER",
+                        "VEHICLE"
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "re-roll",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "wound",
+                "subset": "ones",
+                "weapons": {
+                  "type": "melee"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "fight"
+      },
+      "subject": {
+        "owner": "friendly",
+        "any_of": [
+          "CHAPLAIN",
+          "JUDICIAR"
+        ]
+      }
+    },
+    "source_digest": "fa366494c60cd9b4e28f7d647a5e1a01c58025cc637970c51463d6ed26f9ffd9"
+  },
+  {
+    "ability_id": "priority-target-acquisition-black-templars",
+    "name": "Priority Target Acquisition",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [
+      "gladiator-valiant"
+    ],
+    "faction_id": "black-templars",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "defender",
+              "filter": {
+                "within": {
+                  "of": "this-unit",
+                  "range": {
+                    "inches": 12
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "stat": "S",
+          "operation": "improve",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "passive",
+    "source_digest": "a4315fcf64e92638c3cc6c38668388b60e6951fac170ee41c1d1ade880a085c2"
+  },
+  {
+    "ability_id": "purge-and-sanctify-black-templars",
+    "name": "Purge and Sanctify",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "fist-of-the-god-emperor",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "reaping-tally-black-templars",
+    "name": "Reaping Tally",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [
+      "gladiator-reaper"
+    ],
+    "faction_id": "black-templars",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "defender",
+                  "filter": {
+                    "all_of": [
+                      "MONSTER"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "defender",
+                  "filter": {
+                    "all_of": [
+                      "VEHICLE"
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "stat": "AP",
+          "operation": "improve",
+          "value": 1,
+          "weapons": {
+            "type": "ranged"
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "passive",
+    "source_digest": "440d25a15440bad157e681ad38ddd79e50190d40236ac7150410bc350999ebeb"
+  },
+  {
+    "ability_id": "righteous-fervour-upgrade-fist-of-the-god-emperor-black-templars",
+    "name": "Righteous Fervour",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "fist-of-the-god-emperor",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "righteous-zeal-vow-sworn-crusader-squad-black-templars",
+    "name": "Righteous Zeal (Once per turn, per unit)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [
+      "vow-sworn-crusader-squad"
+    ],
+    "faction_id": "black-templars",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "opponent-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "model-destroyed",
+              "object": "model-in-this-unit",
+              "filter": {
+                "by": "event-subject"
+              },
+              "window": "event"
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "state": "engaged"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "move",
+            "target": "this-unit",
+            "modifier": {
+              "move_type": "surge",
+              "distance": "D6"
+            }
+          },
+          {
+            "type": "move-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "applies_to_moves": [
+                "surge"
+              ],
+              "distance_bonus": 2
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "subject": {
+        "owner": "enemy"
+      }
+    },
+    "source_digest": "ad3dec5b144932b9b22f1dcca321cbb27e19a99277ba5f4c841cd12bcda83f6c"
+  },
+  {
+    "ability_id": "shield-dome-black-templars",
+    "name": "Shield Dome",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [
+      "impulsor"
+    ],
+    "faction_id": "black-templars",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "invulnerable-save",
+      "target": "this-unit",
+      "modifier": {
+        "invuln_sv": 5
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "passive",
+    "source_digest": "e6c1ad10b997f6bf42947c8d1f6573ad3944a37224b599e22ba1deadbb83301b"
+  },
+  {
+    "ability_id": "sigismunds-heir-black-templars",
+    "name": "Sigismund’s Heir",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [
+      "emperors-champion"
+    ],
+    "faction_id": "black-templars",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "roll-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "roll": "charge",
+        "operation": "add",
+        "value": 1
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "passive",
+    "source_digest": "021c079b6383a287f5d84917095d00271c7bc2057400c915a286a95b56e8fa9d"
+  },
+  {
+    "ability_id": "slayers-of-abominations-marshals-household-black-templars",
+    "name": "Slayers of Abominations",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "marshals-household",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "defender",
+          "filter": {
+            "any_of": [
+              "MONSTER",
+              "VEHICLE"
+            ]
+          }
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "stat": "S",
+          "operation": "improve",
+          "value": 2,
+          "weapons": {
+            "type": "melee"
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "fight"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "SWORD BRETHREN SQUAD"
+        ]
+      }
+    },
+    "source_digest": "ddecc959ec7b059d4fa748915221169152f588c02458923827f57c025b0a3f99"
+  },
+  {
+    "ability_id": "spoor-of-the-unholy-vow-sworn-crusaders-black-templars",
+    "name": "Spoor of the Unholy",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "vow-sworn-crusaders",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ignore-modifiers",
+          "target": "this-unit",
+          "modifier": {
+            "what": "characteristics",
+            "stats": [
+              "WS",
+              "BS"
+            ]
+          }
+        },
+        {
+          "type": "ignore-modifiers",
+          "target": "this-unit",
+          "modifier": {
+            "what": "rolls",
+            "rolls": [
+              "hit"
+            ]
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "attack"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS ASTARTES"
+        ]
+      }
+    },
+    "source_digest": "395d777b6122ae4a86403497a53484c9c53392bd691c4752b73749210daafaee"
+  },
+  {
+    "ability_id": "templar-vows-vow-sworn-of-vedrenn-black-templars",
+    "name": "Templar Vows",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "vow-sworn-of-vedrenn",
+    "ability_type": "faction",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "unsparing-execution-marshals-household-black-templars",
+    "name": "Unsparing Execution",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "marshals-household",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "zealous-vanguard-vow-sworn-crusaders-black-templars",
+    "name": "Zealous Vanguard",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "vow-sworn-crusaders",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "scouts",
+        "value": 6
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "passive",
+    "source_digest": "349c5a158bcd408ec59e51227f5476de773be95f05c2a3b0941b909b54c013e6"
+  },
+  {
+    "ability_id": "angels-defiant-fist-of-the-god-emperor-black-templars",
+    "name": "Angels Defiant",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "source_digest": "71a16375384c1a9b686f3f9ea777fc48debeb04dd560e2af64456ee54af01875",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "fist-of-the-god-emperor",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "CRUSADER SQUAD"
+        ]
+      }
+    },
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "attack-compare",
+        "parameters": {
+          "left": {
+            "of": "attacker",
+            "stat": "S"
+          },
+          "comparison": "gt",
+          "right": {
+            "of": "defender",
+            "stat": "T"
+          }
+        }
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "attacker",
+        "modifier": {
+          "roll": "wound",
+          "operation": "subtract",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "community_notes": "Battleline unit targeted by the attacking unit; applies while the attack's Strength exceeds the unit's Toughness"
+  },
+  {
+    "ability_id": "avowed-destruction-fist-of-the-god-emperor-black-templars",
+    "name": "Avowed Destruction",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "fist-of-the-god-emperor",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "choice",
+      "options": [
+        {
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "lethal-hits"
+              }
+            ],
+            "weapons": {
+              "type": "melee"
+            }
+          }
+        },
+        {
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "sustained-hits",
+                "parameters": {
+                  "value": 1
+                }
+              }
+            ],
+            "weapons": {
+              "type": "melee"
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "fight"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "CRUSADER SQUAD"
+        ]
+      }
+    },
+    "source_digest": "9eecb40edb5fda244486b23896bea6c4d097ed5d655bf0264e6a69d4e5d2b98e"
+  },
+  {
+    "ability_id": "combat-doctrines-black-templars",
+    "name": "Combat Doctrines",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": null,
+    "ability_type": "faction",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "combat-embarkation-black-templars",
+    "name": "Combat Embarkation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "stub": true,
+    "unit_ids": [
+      "repulsor"
+    ],
+    "faction_id": "black-templars",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "doctrinal-flexibility-fist-of-the-god-emperor-black-templars",
+    "name": "Doctrinal Flexibility",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "fist-of-the-god-emperor",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "ability-activate",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "combat-doctrines-black-templars",
+        "select": {
+          "by": "player"
+        },
+        "exclusive": true
+      }
+    },
+    "scope": {
+      "duration": "until-next-command-phase"
+    },
+    "behavior": "activated",
+    "source_digest": "995f47207285072fbb96f419cceff223e7923e843bdc74d9d5c821098a44742c"
+  },
+  {
+    "ability_id": "executioner-black-templars",
+    "name": "Executioner",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [
+      "repulsor-executioner"
+    ],
+    "faction_id": "black-templars",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "strength",
+                "parameters": {
+                  "subject": "defender",
+                  "below": "half"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "roll": "hit",
+          "operation": "add",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "passive",
+    "source_digest": "b8da9e684be07f1dbde06717e8361ee5d25191e2523fc06aa0e5db556c6d96ec"
+  },
+  {
+    "ability_id": "faithful-cenobytes-black-templars",
+    "name": "Faithful Cenobytes",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "stub": true,
+    "unit_ids": [
+      "chaplain-grimaldus"
+    ],
+    "faction_id": "black-templars",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "heirs-of-sigismund-vow-sworn-of-vedrenn-black-templars",
+    "name": "Heirs of Sigismund",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "vow-sworn-of-vedrenn",
+    "ability_type": "faction",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "army-rule",
+          "target": "this-unit",
+          "modifier": {
+            "rule": "composition",
+            "with": {
+              "all_of": [
+                "Adeptus Astartes",
+                "Psyker"
+              ]
+            },
+            "max": 0
+          }
+        },
+        {
+          "type": "army-rule",
+          "target": "this-unit",
+          "modifier": {
+            "rule": "composition",
+            "datasheets": [
+              "gladiator-lancer",
+              "gladiator-reaper",
+              "gladiator-valiant",
+              "impulsor",
+              "repulsor",
+              "repulsor-executioner"
+            ],
+            "max": 0
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "interactions": [
+      {
+        "ability_ref": "heirs-of-sigismund-black-templars",
+        "type": "replaces"
+      }
+    ],
+    "behavior": "passive",
+    "source_digest": "3ce947d1c863f46392b04857d54747806493cea994080782434505f8cf12d215"
+  },
+  {
+    "ability_id": "rapid-disembarkation-black-templars",
+    "name": "Rapid Disembarkation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "stub": true,
+    "unit_ids": [
+      "impulsor"
+    ],
+    "faction_id": "black-templars",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "transhuman-strategist-black-templars",
+    "name": "Transhuman Strategist",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": null,
+    "ability_type": "faction",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-model",
+              "filter": {
+                "has_ability": [
+                  "transhuman-strategist-black-templars"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-model",
+              "filter": {
+                "designated": "warlord"
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "cp-gain",
+        "target": "this-model",
+        "modifier": {
+          "amount": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "round-started"
+    },
+    "source_digest": "81478b3fd3fffd4e3f8908ce41012074c69c27743954b785ff7b85680bdcb3e6"
+  }
+]

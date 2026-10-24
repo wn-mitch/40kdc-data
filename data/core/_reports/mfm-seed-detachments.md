@@ -7,19 +7,19 @@ Combat Patrol parents and their cost-0 enhancements remain opt-in.
 | --- | --- | --- | --- | --- |
 | adepta-sororitas | 0 | 0 | 0 | 9 |
 | adeptus-astartes | 0 | 0 | 0 | 17 |
-| adeptus-custodes | 0 | 0 | 0 | 10 |
+| adeptus-custodes | 0 | 0 | 0 | 16 |
 | adeptus-mechanicus | 0 | 0 | 0 | 11 |
 | aeldari | 0 | 0 | 0 | 16 |
 | agents-of-the-imperium | 0 | 0 | 0 | 6 |
 | astra-militarum | 0 | 0 | 0 | 12 |
-| black-templars | 0 | 0 | 0 | 21 |
-| blood-angels | 0 | 0 | 0 | 25 |
+| black-templars | 0 | 0 | 0 | 19 |
+| blood-angels | 0 | 0 | 0 | 20 |
 | chaos-daemons | 0 | 0 | 0 | 9 |
 | chaos-knights | 0 | 0 | 0 | 8 |
 | chaos-space-marines | 0 | 0 | 0 | 18 |
-| dark-angels | 0 | 0 | 0 | 25 |
+| dark-angels | 0 | 0 | 0 | 20 |
 | death-guard | 0 | 0 | 0 | 10 |
-| deathwatch | 0 | 0 | 0 | 17 |
+| deathwatch | 0 | 0 | 0 | 16 |
 | drukhari | 0 | 0 | 0 | 10 |
 | emperors-children | 0 | 0 | 0 | 11 |
 | genestealer-cults | 0 | 0 | 0 | 10 |
@@ -32,13 +32,13 @@ Combat Patrol parents and their cost-0 enhancements remain opt-in.
 | orks | 0 | 0 | 0 | 16 |
 | raven-guard | 0 | 0 | 0 | 17 |
 | salamanders | 0 | 0 | 0 | 17 |
-| space-wolves | 0 | 0 | 0 | 24 |
+| space-wolves | 0 | 0 | 0 | 20 |
 | tau-empire | 0 | 0 | 0 | 8 |
 | thousand-sons | 0 | 0 | 0 | 10 |
 | tyranids | 0 | 0 | 0 | 11 |
-| ultramarines | 0 | 0 | 0 | 18 |
+| ultramarines | 0 | 0 | 0 | 17 |
 | white-scars | 0 | 0 | 0 | 17 |
 | world-eaters | 0 | 0 | 0 | 9 |
 
-Total: 0 detachment(s), 0 enhancement(s) created; 0 held back; 468 skipped.
+Total: 0 detachment(s), 0 enhancement(s) created; 0 held back; 456 skipped.
 

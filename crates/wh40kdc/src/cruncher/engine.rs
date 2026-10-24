@@ -18,6 +18,7 @@ use serde_json::Value;
 use super::buffs::{
     resolve_buffs, Buff, EngineContext, FeelNoPainState, ResolvedModifiers, WeaponKeywordRef,
 };
+use super::damage_roll::{damage_roll, one_damage_reroll_gain, DamageRollInput};
 use super::from_keyword::buffs_from_keyword;
 use crate::data::Dataset;
 use crate::{KeywordList, StatValue, Unit, Weapon, WeaponProfilesItem, WeaponProfilesItemRange};
@@ -113,6 +114,44 @@ pub struct EngineOutput {
     pub resolved: ResolvedModifiers,
 }
 
+/// A check's probability of passing and of passing as a critical success.
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct RollProbabilities {
+    pub pass: f64,
+    pub crit: f64,
+}
+
+/// The per-roll parameters behind one crunch, for the discrete allocation
+/// stage ([`allocation`](super::allocation)): every probability is the one
+/// the expected-value stages use.
+#[derive(Clone, Debug)]
+pub struct AttackModel {
+    pub models_firing: u64,
+    /// One model's Attacks characteristic, before the flat additions below.
+    pub attacks_stat: Value,
+    /// Flat attacks every model adds: the modifier and Blast.
+    pub attacks_bonus: f64,
+    /// Rapid Fire's extra attacks per model when active, else `None`.
+    pub rapid_fire_stat: Option<Value>,
+    pub torrent: bool,
+    pub hit: RollProbabilities,
+    /// Sustained Hits' extra hits per critical hit, else `None`.
+    pub sustained_stat: Option<Value>,
+    pub lethal: bool,
+    pub wound: RollProbabilities,
+    pub devastating: bool,
+    /// Probability a wound that reaches the save is not saved.
+    pub unsaved: f64,
+    /// Final per-attack damage as (value, probability), ascending by value.
+    pub damage: Vec<(f64, f64)>,
+    /// Probability each wound is lost despite Feel No Pain: on every wound.
+    pub wound_lost: f64,
+    /// As `wound_lost`, for mortal wounds (every-wound and mortal-only Feel No Pain).
+    pub mortal_wound_lost: f64,
+    pub wounds: u64,
+    pub model_count: u64,
+}
+
 /// Failures the engine can't recover from: out-of-range profile indexes,
 /// missing required stats, or unparseable dice-notation strings. Better to
 /// surface these than to silently return zero and produce a confidently wrong
@@ -188,6 +227,14 @@ pub fn crunch(
     input: &EngineInput,
     dataset: Option<&Dataset>,
 ) -> Result<EngineOutput, CruncherError> {
+    crunch_model(input, dataset).map(|(output, _)| output)
+}
+
+/// [`crunch`] with the [`AttackModel`] its stages were computed from.
+pub fn crunch_model(
+    input: &EngineInput,
+    dataset: Option<&Dataset>,
+) -> Result<(EngineOutput, AttackModel), CruncherError> {
     let ds: &Dataset = match dataset {
         Some(d) => d,
         None => Dataset::embedded(),
@@ -224,6 +271,43 @@ pub fn crunch(
     if ctx.target_keywords.is_none() {
         ctx.target_keywords = Some(target_keywords.clone());
     }
+    if ctx.weapon_names.is_none() {
+        let mut names: Vec<String> = Vec::with_capacity(2);
+        for name in [
+            input.attacker.weapon.name.to_lowercase(),
+            weapon_profile.name.to_lowercase(),
+        ] {
+            if !names.contains(&name) {
+                names.push(name);
+            }
+        }
+        ctx.weapon_names = Some(names);
+    }
+    if ctx.weapon_keywords.is_none() {
+        let mut keywords: Vec<String> = Vec::new();
+        for kref in &weapon_profile.keywords {
+            let id = kref.keyword_id.to_string();
+            if !keywords.contains(&id) {
+                keywords.push(id);
+            }
+        }
+        ctx.weapon_keywords = Some(keywords);
+    }
+    if ctx.weapon_keyword_refs.is_none() {
+        ctx.weapon_keyword_refs = Some(
+            weapon_profile
+                .keywords
+                .iter()
+                .map(|reference| WeaponKeywordRef {
+                    keyword_id: reference.keyword_id.to_string(),
+                    parameters: reference.parameters.as_ref().map(|parameters| {
+                        serde_json::to_value(parameters)
+                            .expect("weapon keyword parameters serialize")
+                    }),
+                })
+                .collect(),
+        );
+    }
 
     // Auto-inject weapon-keyword buffs from the attacker profile, then append
     // the caller-supplied stack. resolve_buffs deduplicates and ranks them.
@@ -240,7 +324,7 @@ pub fn crunch(
     let rapid_fire = find_extra_keyword(&resolved, "rapid-fire");
     let half_range = ctx.within_half_range == Some(true);
     let rapid_fire_extra_per_model = match (rapid_fire, half_range) {
-        (Some(kw), true) => eval_param_value(parameter(kw, "value")),
+        (Some(kw), true) => eval_param_value(parameter(kw, "value"))?,
         _ => 0.0,
     };
     let blast = find_extra_keyword(&resolved, "blast");
@@ -253,14 +337,10 @@ pub fn crunch(
             .map(|mc| mc.min.get())
             .unwrap_or(1)
     });
-    let blast_extra_per_model = blast
-        .map(|keyword| {
-            let value = parameter(keyword, "value")
-                .map(|parameter| eval_param_value(Some(parameter)))
-                .unwrap_or(1.0);
-            (target_model_count / 5) as f64 * value
-        })
-        .unwrap_or(0.0);
+    let blast_extra_per_model = match blast.and_then(|keyword| parameter(keyword, "value")) {
+        Some(value) => (target_model_count / 5) as f64 * eval_param_value(Some(value))?,
+        None => 0.0,
+    };
     let models_firing = input.models_firing as f64;
     let attacks =
         models_firing * (attacks_per_model + rapid_fire_extra_per_model + blast_extra_per_model);
@@ -280,14 +360,41 @@ pub fn crunch(
     // save bonus. Ranged-only, negated by ignores-cover, moot for auto-hitting
     // Torrent weapons (no hit roll).
     let ignores_cover = find_extra_keyword(&resolved, "ignores-cover").is_some();
-    let covered = resolved.cover.active && !ignores_cover && !is_melee;
+    // Ignoring hit modifiers also ignores the cover penalty.
+    let covered = resolved.cover.active
+        && !ignores_cover
+        && !is_melee
+        && resolved.ignore_modifiers.hit.is_none();
     let cover_hit_penalty = if covered { -1.0 } else { 0.0 };
-    let hit_stat_opt = if is_melee {
+    let printed_hit_stat = if is_melee {
         weapon_profile.stats.ws
     } else {
         weapon_profile.stats.bs
     };
+    // A WS/BS improvement changes the characteristic itself, floored at 2+.
+    let skill_mod = if is_melee {
+        resolved.skill_mod.ws.value
+    } else {
+        resolved.skill_mod.bs.value
+    };
+    let hit_stat_opt = printed_hit_stat.map(|stat| {
+        if skill_mod != 0.0 {
+            (stat as f64 - skill_mod).max(2.0) as i64
+        } else {
+            stat
+        }
+    });
+    let crit_hit_threshold = resolved
+        .crit_thresholds
+        .hit
+        .as_ref()
+        .map_or(6.0, |t| t.value)
+        .min(6.0) as i64;
     let torrent = find_extra_keyword(&resolved, "torrent").is_some();
+    let mut hit_probs = RollProbabilities {
+        pass: 1.0,
+        crit: 0.0,
+    };
     let (hits_raw, crit_hits, mut hits_detail) = if torrent {
         (attacks, 0.0, format!("Torrent: auto-hits ({attacks:.4})"))
     } else {
@@ -296,7 +403,7 @@ pub fn crunch(
             profile_index: input.attacker.profile_index,
             melee: is_melee,
         })?;
-        let probs = check_probabilities(CheckArgs {
+        let hit_check = CheckArgs {
             unmodified_needed: hit_stat,
             modifier: resolved.hit_mod.value + cover_hit_penalty,
             reroll: resolved
@@ -307,12 +414,17 @@ pub fn crunch(
                 .map_or(RerollKind::None, RerollKind::from_subset),
             auto_fail_on_one: true,
             auto_pass_on_six: true,
-            crit_threshold: 6,
-        });
-        let hits = attacks * probs.pass;
-        let crits = attacks * probs.crit;
-        let detail = format!(
-            "{}{}+ (mod {}{}, reroll {}) → P(hit)={:.4}, P(crit)={:.4}",
+            crit_threshold: crit_hit_threshold,
+        };
+        let probs = check_probabilities(hit_check);
+        hit_probs = RollProbabilities {
+            pass: probs.pass,
+            crit: probs.crit,
+        };
+        let mut hits = attacks * probs.pass;
+        let mut crits = attacks * probs.crit;
+        let mut detail = format!(
+            "{}{}+ (mod {}{}, reroll {}{}) → P(hit)={:.4}, P(crit)={:.4}",
             if is_melee { "WS" } else { "BS" },
             hit_stat,
             signed(resolved.hit_mod.value),
@@ -326,15 +438,30 @@ pub fn crunch(
                     super::buffs::RerollSubset::AllFailures => "all-failures",
                 })
                 .unwrap_or("none"),
+            if crit_hit_threshold < 6 {
+                format!(", crit {crit_hit_threshold}+")
+            } else {
+                String::new()
+            },
             probs.pass,
             probs.crit,
         );
+        if resolved.reroll_one.hit.is_some() {
+            let fresh = check_probabilities(CheckArgs {
+                reroll: RerollKind::None,
+                ..hit_check
+            });
+            let dice = one_reroll_dice(attacks, probs.open);
+            hits += dice * fresh.pass;
+            crits += dice * fresh.crit;
+            detail.push_str(&format!("; re-roll one Hit roll: {dice:.4} dice"));
+        }
         (hits, crits, detail)
     };
     let mut hits = hits_raw;
     let sustained = find_extra_keyword(&resolved, "sustained-hits");
     if let Some(kw) = sustained {
-        let sustained_value = eval_param_value(parameter(kw, "value"));
+        let sustained_value = eval_param_value(parameter(kw, "value"))?;
         hits += crit_hits * sustained_value;
         let label = parameter(kw, "value")
             .map(value_to_label)
@@ -354,25 +481,45 @@ pub fn crunch(
     let t_val = unit_profile.t.get() as f64 + resolved.toughness_mod.value;
     let std_wound_needed = wound_threshold(s_val, t_val);
     let mut anti_threshold: i64 = 7; // unreachable
-    if let Some(anti) = find_extra_keyword(&resolved, "anti") {
-        let target_kw = parameter(anti, "target_keyword")
-            .and_then(Value::as_str)
-            .map(str::to_lowercase);
-        if let Some(target_kw) = target_kw {
-            if target_keywords.iter().any(|k| k == &target_kw) {
-                if let Some(t) = parameter(anti, "threshold").and_then(Value::as_i64) {
-                    anti_threshold = t;
-                }
-            }
+    for entry in &resolved.extra_keywords {
+        let anti = &entry.keyword_ref;
+        if anti.keyword_id != "anti" {
+            continue;
+        }
+        let target = parameter(anti, "target_keyword").and_then(Value::as_str);
+        let has_target = target.is_some()
+            || parameter(anti, "required_target_keywords_any").is_some_and(Value::is_array)
+            || parameter(anti, "excluded_target_keywords").is_some_and(Value::is_array);
+        if !has_target
+            || target.is_some_and(|wanted| {
+                !target_keywords
+                    .iter()
+                    .any(|owned| owned.eq_ignore_ascii_case(wanted))
+            })
+            || !keyword_applies_to_target(anti.parameters.as_ref(), &ctx)
+        {
+            continue;
+        }
+        if let Some(threshold) = parameter(anti, "threshold")
+            .and_then(Value::as_i64)
+            .filter(|threshold| (2..=6).contains(threshold))
+        {
+            anti_threshold = anti_threshold.min(threshold);
         }
     }
-    let crit_wound_threshold = anti_threshold.min(6);
+    let crit_wound_threshold = anti_threshold.min(6).min(
+        resolved
+            .crit_thresholds
+            .wound
+            .as_ref()
+            .map_or(6.0, |t| t.value) as i64,
+    );
 
     let has_lethal = find_extra_keyword(&resolved, "lethal-hits").is_some();
     let hits_for_wound_roll = if has_lethal { hits - crit_hits } else { hits };
     let lethal_auto_wounds = if has_lethal { crit_hits } else { 0.0 };
 
-    let wound_probs = check_probabilities(CheckArgs {
+    let wound_check = CheckArgs {
         unmodified_needed: std_wound_needed,
         modifier: resolved.wound_mod.value,
         reroll: resolved
@@ -384,9 +531,20 @@ pub fn crunch(
         auto_fail_on_one: true,
         auto_pass_on_six: true,
         crit_threshold: crit_wound_threshold,
-    });
-    let regular_wounds_from_roll = hits_for_wound_roll * (wound_probs.pass - wound_probs.crit);
-    let crit_wounds_from_roll = hits_for_wound_roll * wound_probs.crit;
+    };
+    let wound_probs = check_probabilities(wound_check);
+    let mut regular_wounds_from_roll = hits_for_wound_roll * (wound_probs.pass - wound_probs.crit);
+    let mut crit_wounds_from_roll = hits_for_wound_roll * wound_probs.crit;
+    let mut wound_reroll_one_dice = 0.0;
+    if resolved.reroll_one.wound.is_some() {
+        let fresh = check_probabilities(CheckArgs {
+            reroll: RerollKind::None,
+            ..wound_check
+        });
+        wound_reroll_one_dice = one_reroll_dice(hits_for_wound_roll, wound_probs.open);
+        regular_wounds_from_roll += wound_reroll_one_dice * (fresh.pass - fresh.crit);
+        crit_wounds_from_roll += wound_reroll_one_dice * fresh.crit;
+    }
     let total_regular_wounds = regular_wounds_from_roll + lethal_auto_wounds;
     let has_devastating = find_extra_keyword(&resolved, "devastating-wounds").is_some();
     let mortal_wounds_stream = if has_devastating {
@@ -404,7 +562,7 @@ pub fn crunch(
         name: StageName::Wounds,
         expected: total_wounds,
         detail: format!(
-            "S{s_val} vs T{t_val} → need {std_wound_needed}+, anti {}, P(wound)={:.4} ({:.4} crit), lethal {}, devastating {}",
+            "S{s_val} vs T{t_val} → need {std_wound_needed}+, anti {}, P(wound)={:.4} ({:.4} crit), lethal {}, devastating {}{}",
             if anti_threshold <= 6 {
                 format!("{anti_threshold}+ (active)")
             } else {
@@ -422,14 +580,25 @@ pub fn crunch(
             } else {
                 "—".to_string()
             },
+            if resolved.reroll_one.wound.is_some() {
+                format!("; re-roll one Wound roll: {wound_reroll_one_dice:.4} dice")
+            } else {
+                String::new()
+            },
         ),
     });
 
     // 4. Saves
     let ap_mod = resolved.ap_mod.value;
-    let ap = weapon_profile.stats.ap as f64 + ap_mod;
+    // Worsening AP stops at 0.
+    let ap = (weapon_profile.stats.ap as f64 + ap_mod).min(0.0);
     let save_mod = resolved.save_mod.value;
-    let armor_target_raw = unit_profile.sv as f64 - ap - save_mod;
+    let printed_sv = unit_profile.sv as f64;
+    let sv = resolved
+        .save_characteristic
+        .as_ref()
+        .map_or(printed_sv, |s| s.value);
+    let armor_target_raw = sv - ap - save_mod;
     // Cover is a hit penalty (11e), applied in the hits stage above — it no
     // longer touches the save here.
     let armor_final = clamp(armor_target_raw, 2.0, 7.0);
@@ -475,13 +644,32 @@ pub fn crunch(
     } else {
         save_probs.pass
     };
-    let unsaved = regular_wounds_for_saves * (1.0 - p_saved);
+    let mut unsaved = regular_wounds_for_saves * (1.0 - p_saved);
+    // "Re-roll one saving throw": one failed save no other permission re-rolled is rolled again.
+    let save_reroll_one_dice = if resolved.reroll_one.save.is_some() && effective_save_target < 7.0
+    {
+        one_reroll_dice(regular_wounds_for_saves, save_probs.open)
+    } else {
+        0.0
+    };
+    if save_reroll_one_dice > 0.0 {
+        let fresh = check_probabilities(CheckArgs {
+            unmodified_needed: effective_save_target as i64,
+            modifier: 0.0,
+            reroll: RerollKind::None,
+            auto_fail_on_one: true,
+            auto_pass_on_six: false,
+            crit_threshold: 7,
+        });
+        unsaved -= save_reroll_one_dice * fresh.pass;
+    }
     stages.push(Stage {
         name: StageName::Unsaved,
         expected: unsaved,
         detail: format!(
-            "Sv{}+, AP{}{}{}{} → effective {}+ (P(save)={:.4})",
-            unit_profile.sv,
+            "Sv{}+{}, AP{}{}{}{} → effective {}+ (P(save)={:.4}){}",
+            sv,
+            if sv != printed_sv { " (set)" } else { "" },
             signed(ap),
             if ap_mod != 0.0 {
                 format!(" (apmod {})", signed(ap_mod))
@@ -499,6 +687,11 @@ pub fn crunch(
             },
             effective_save_target,
             p_saved,
+            if resolved.reroll_one.save.is_some() {
+                format!("; re-roll one saving throw: {save_reroll_one_dice:.4} dice")
+            } else {
+                String::new()
+            },
         ),
     });
 
@@ -506,28 +699,46 @@ pub fn crunch(
     let base_d = eval_stat_value(&weapon_profile.stats.d)?;
     let melta = find_extra_keyword(&resolved, "melta");
     let melta_bonus = match (melta, half_range) {
-        (Some(kw), true) => eval_param_value(parameter(kw, "value")),
+        (Some(kw), true) => eval_param_value(parameter(kw, "value"))?,
         _ => 0.0,
     };
-    let before_reduction = (base_d + melta_bonus + resolved.damage_mod.value).max(0.0);
     let damage_reduction = resolved.damage_reduction.value;
     // 10e damage-reduction abilities always carry the canonical "to a minimum
     // of 1" clause, so the floor lives in the math, not the data. The clause
     // only applies when damage-reduction is active — without it, a D1 weapon
-    // with a -1 attacker damage-mod still produces 0 damage.
-    let damage_per_hit = if damage_reduction > 0.0 {
-        (before_reduction - damage_reduction).max(1.0)
-    } else {
-        before_reduction
-    };
-    let damage_main = unsaved * damage_per_hit;
-    let damage_mortal = mortal_wounds_stream * damage_per_hit;
+    // with a -1 attacker damage-mod still produces 0 damage. Both floors act on
+    // each Damage roll, as does a damage reroll.
+    let damage_reroll = resolved.rerolls.damage.as_ref().map(|r| r.subset);
+    let per_attack = damage_roll(&DamageRollInput {
+        stat: &weapon_profile.stats.d,
+        bonus: melta_bonus,
+        modifier: resolved.damage_mod.value,
+        reduction: damage_reduction,
+        reroll: damage_reroll,
+    })?;
+    let damage_per_hit = per_attack.expected;
+    let mut damage_main = unsaved * damage_per_hit;
+    let mut damage_mortal = mortal_wounds_stream * damage_per_hit;
+    // "Re-roll one Damage roll" over every Damage roll, main and mortal streams alike, shared in
+    // proportion to their rolls. A roll another permission already re-rolled cannot be re-rolled,
+    // so beside one the single die is not priced.
+    let damage_rolls = unsaved + mortal_wounds_stream;
+    let damage_reroll_one =
+        if resolved.reroll_one.damage.is_some() && damage_reroll.is_none() && damage_rolls > 0.0 {
+            one_damage_reroll_gain(&per_attack.distribution, damage_rolls)
+        } else {
+            0.0
+        };
+    if damage_reroll_one > 0.0 {
+        damage_main += damage_reroll_one * (unsaved / damage_rolls);
+        damage_mortal += damage_reroll_one * (mortal_wounds_stream / damage_rolls);
+    }
     let damage = damage_main + damage_mortal;
     stages.push(Stage {
         name: StageName::Damage,
         expected: damage,
         detail: format!(
-            "D {base_d}{}{}{} = {damage_per_hit} per hit; main {damage_main:.4}, mortal {damage_mortal:.4}",
+            "D {base_d}{}{}{}{} = {damage_per_hit} per hit{}; main {damage_main:.4}, mortal {damage_mortal:.4}",
             if melta_bonus != 0.0 {
                 format!(" + Melta {melta_bonus} (half range)")
             } else {
@@ -540,6 +751,22 @@ pub fn crunch(
             },
             if damage_reduction > 0.0 {
                 format!(" -{damage_reduction} (defender, min 1)")
+            } else {
+                String::new()
+            },
+            match damage_reroll {
+                Some(subset) => format!(
+                    ", reroll {}{}",
+                    match subset {
+                        super::buffs::RerollSubset::Ones => "ones",
+                        super::buffs::RerollSubset::AllFailures => "all-failures",
+                    },
+                    if per_attack.reroll_used { "" } else { " (no effect)" },
+                ),
+                None => String::new(),
+            },
+            if resolved.reroll_one.damage.is_some() {
+                format!("; re-roll one Damage roll: +{damage_reroll_one:.4}")
             } else {
                 String::new()
             },
@@ -582,7 +809,38 @@ pub fn crunch(
         ),
     });
 
-    Ok(EngineOutput { stages, resolved })
+    let model = AttackModel {
+        models_firing: input.models_firing,
+        attacks_stat: stat_to_value(&weapon_profile.stats.a),
+        attacks_bonus: resolved.attacks_mod.value + blast_extra_per_model,
+        rapid_fire_stat: rapid_fire
+            .filter(|_| half_range)
+            .and_then(|kw| parameter(kw, "value").cloned()),
+        torrent,
+        hit: hit_probs,
+        sustained_stat: sustained.and_then(|kw| parameter(kw, "value").cloned()),
+        lethal: has_lethal,
+        wound: RollProbabilities {
+            pass: wound_probs.pass,
+            crit: wound_probs.crit,
+        },
+        devastating: has_devastating,
+        unsaved: 1.0 - p_saved,
+        damage: per_attack.distribution,
+        wound_lost: p_survive_all,
+        mortal_wound_lost: p_survive_all * p_survive_mortal,
+        wounds: unit_profile.w.get(),
+        model_count: target_model_count,
+    };
+    Ok((EngineOutput { stages, resolved }, model))
+}
+
+/// A characteristic as the JSON value TS carries it as: a number or a string.
+fn stat_to_value(stat: &StatValue) -> Value {
+    match stat {
+        StatValue::Integer(n) => Value::from(*n),
+        StatValue::DiceExpression(s) => Value::String(s.to_string()),
+    }
 }
 
 // ---------------------------------------------------------------------------
@@ -590,6 +848,7 @@ pub fn crunch(
 // ---------------------------------------------------------------------------
 
 /// Lower-cased union of a unit's `keywords` + `faction_keywords`.
+
 fn unit_keywords_lower(unit: &Unit) -> Vec<String> {
     let mut out: Vec<String> = Vec::new();
     if let Some(KeywordList(kws)) = &unit.keywords {
@@ -689,29 +948,36 @@ fn parameter<'a>(kw: &'a WeaponKeywordRef, key: &str) -> Option<&'a Value> {
 fn eval_stat_value(v: &StatValue) -> Result<f64, CruncherError> {
     match v {
         StatValue::Integer(n) => Ok(*n as f64),
-        StatValue::String(s) => parse_dice_or_number(s),
+        StatValue::DiceExpression(s) => parse_dice_or_number(s),
     }
 }
 
-/// Permissive variant for [`Value`]-typed parameters
-/// (`WeaponKeywordRef.parameters.value` etc.); unrecognised values resolve
-/// to 0 to match TS's `evalStatValue(undefined) → 0` fallback for missing
-/// keyword params.
-fn eval_param_value(v: Option<&Value>) -> f64 {
+/// Keyword ratings must be concrete before the stateless engine evaluates them.
+/// Missing or contextual quantities are errors, never invented zero/one ratings.
+fn eval_param_value(v: Option<&Value>) -> Result<f64, CruncherError> {
     match v {
-        Some(Value::Number(n)) => n.as_f64().unwrap_or(0.0),
-        Some(Value::String(s)) => parse_dice_or_number(s).unwrap_or(0.0),
-        _ => 0.0,
+        Some(Value::Number(n)) => n
+            .as_f64()
+            .filter(|value| value.is_finite())
+            .ok_or_else(|| CruncherError::ParseStat(n.to_string())),
+        Some(Value::String(s)) => parse_dice_or_number(s),
+        value => Err(CruncherError::ParseStat(
+            value.map_or_else(|| "missing quantity".into(), Value::to_string),
+        )),
     }
 }
 
 fn parse_dice_or_number(input: &str) -> Result<f64, CruncherError> {
     let trimmed = input.trim();
     if trimmed.is_empty() {
-        return Ok(0.0);
+        return Err(CruncherError::ParseStat(input.to_string()));
     }
     if let Ok(n) = trimmed.parse::<f64>() {
-        return Ok(n);
+        return if n.is_finite() {
+            Ok(n)
+        } else {
+            Err(CruncherError::ParseStat(input.to_string()))
+        };
     }
     parse_dice(trimmed).ok_or_else(|| CruncherError::ParseStat(input.to_string()))
 }
@@ -804,6 +1070,7 @@ impl RerollKind {
     }
 }
 
+#[derive(Clone, Copy)]
 struct CheckArgs {
     unmodified_needed: i64,
     modifier: f64,
@@ -817,6 +1084,8 @@ struct CheckArgs {
 struct CheckProbs {
     pass: f64,
     crit: f64,
+    /// A failed die no permission re-rolls: what a "re-roll one" can still take.
+    open: f64,
 }
 
 /// Probability a single die check passes (and the conditional crit rate).
@@ -841,6 +1110,7 @@ fn check_probabilities(args: CheckArgs) -> CheckProbs {
 
     let mut pass = 0.0;
     let mut crit = 0.0;
+    let mut open = 0.0;
     for face in 1..=6 {
         let (p, c) = outcome(face);
         if p == 1.0 {
@@ -851,6 +1121,7 @@ fn check_probabilities(args: CheckArgs) -> CheckProbs {
         let eligible = matches!(args.reroll, RerollKind::AllFailures)
             || (matches!(args.reroll, RerollKind::Ones) && face == 1);
         if !eligible {
+            open += 1.0 / 6.0;
             continue;
         }
         let mut reroll_pass = 0.0;
@@ -863,7 +1134,31 @@ fn check_probabilities(args: CheckArgs) -> CheckProbs {
         pass += reroll_pass / 6.0;
         crit += reroll_crit / 6.0;
     }
-    CheckProbs { pass, crit }
+    CheckProbs { pass, crit, open }
+}
+
+/// Expected dice a "re-roll one" re-rolls over a pool of `pool` dice that each end failed and
+/// un-rerolled with probability `open`: for a whole pool, the chance at least one does,
+/// 1 - (1 - open)^pool. A pool the engine carries as an expectation is read between the whole
+/// pools either side of it, which is exact when it is one of the two and never overstates a
+/// concave gain.
+pub(crate) fn one_reroll_dice(pool: f64, open: f64) -> f64 {
+    if pool > 0.0 && open > 0.0 {
+        between_whole_pools(pool, |dice| 1.0 - (1.0 - open).powf(dice))
+    } else {
+        0.0
+    }
+}
+
+/// `at_whole` at a fractional `pool`, read linearly between the whole pools either side.
+pub(crate) fn between_whole_pools(pool: f64, at_whole: impl Fn(f64) -> f64) -> f64 {
+    let low = pool.floor();
+    let below = at_whole(low);
+    if pool == low {
+        below
+    } else {
+        below + (pool - low) * (at_whole(low + 1.0) - below)
+    }
 }
 
 fn clamp(n: f64, lo: f64, hi: f64) -> f64 {

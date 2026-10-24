@@ -6,7 +6,7 @@
 use std::path::PathBuf;
 
 use serde::Deserialize;
-use wh40kdc::{unit_matches_applies_to, AbilityAppliesTo};
+use wh40kdc::{unit_matches_applies_to, KeywordPredicate};
 
 #[derive(Deserialize)]
 struct UnitKeywords {
@@ -27,7 +27,7 @@ struct Expected {
 struct Case {
     #[serde(rename = "caseId")]
     case_id: String,
-    applies_to: Option<AbilityAppliesTo>,
+    applies_to: Option<KeywordPredicate>,
     units: Vec<UnitKeywords>,
     expected: Expected,
 }
@@ -59,4 +59,29 @@ fn applies_to_conformance() {
             .collect();
         assert_eq!(matched, case.expected.matched_ids, "case {}", case.case_id);
     }
+}
+
+#[test]
+fn canonical_static_predicates_normalize_keywords_and_empty_constraints() {
+    let filter: KeywordPredicate = serde_json::from_value(serde_json::json!({
+        "all_of": ["EMPEROR’S CHILDREN"],
+        "any_of": ["INFANTRY", "VEHICLE"],
+        "none_of": ["MONSTER"],
+        "not_all_of": ["CHARACTER", "VEHICLE"]
+    }))
+    .unwrap();
+    assert!(unit_matches_applies_to(
+        Some(&filter),
+        ["emperor's children", "infantry"]
+    ));
+    assert!(!unit_matches_applies_to(
+        Some(&filter),
+        ["emperor's children", "vehicle", "character"]
+    ));
+    let empty: KeywordPredicate = serde_json::from_value(serde_json::json!({
+        "all_of": [], "any_of": [], "none_of": [], "not_all_of": []
+    }))
+    .unwrap();
+    assert!(unit_matches_applies_to(Some(&empty), []));
+    assert!(!unit_matches_applies_to(None, ["INFANTRY"]));
 }

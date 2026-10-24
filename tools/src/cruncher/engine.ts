@@ -20,6 +20,7 @@ import {
 } from "./buffs.js";
 import { Dataset } from "../data/dataset.js";
 import { isMeleeProfile } from "../data/weapon-profile.js";
+import { damageRoll, oneDamageRerollGain } from "./damage-roll.js";
 
 export type AttackProfileRef = { weapon: Weapon; profileIndex: number };
 export type TargetProfileRef = {
@@ -46,6 +47,37 @@ export type EngineInput = {
 
 export type EngineOutput = { stages: Stage[]; resolved: ResolvedModifiers };
 
+/**
+ * The per-roll parameters behind one crunch, for the discrete allocation stage
+ * (`allocation.ts`): every probability is the one the expected-value stages use.
+ */
+export type AttackModel = {
+  modelsFiring: number;
+  /** One model's Attacks characteristic, before the flat additions below. */
+  attacksStat: unknown;
+  /** Flat attacks every model adds: the modifier and Blast. */
+  attacksBonus: number;
+  /** Rapid Fire's extra attacks per model when active, else null. */
+  rapidFireStat: unknown;
+  torrent: boolean;
+  hit: { pass: number; crit: number };
+  /** Sustained Hits' extra hits per critical hit, else null. */
+  sustainedStat: unknown;
+  lethal: boolean;
+  wound: { pass: number; crit: number };
+  devastating: boolean;
+  /** Probability a wound that reaches the save is not saved. */
+  unsaved: number;
+  /** Final per-attack damage. */
+  damage: Array<{ value: number; probability: number }>;
+  /** Probability each wound is lost despite Feel No Pain: on every wound, and on mortal wounds only. */
+  woundLost: number;
+  mortalWoundLost: number;
+  wounds: number;
+  modelCount: number;
+};
+
+
 /** Whether a weapon profile may select this target under profile-level restrictions such as Hunter. */
 export function profileCanTarget(profile: Weapon["profiles"][number], target: Unit): boolean {
   const restrictions = profile.target_restrictions;
@@ -62,6 +94,11 @@ export function profileCanTarget(profile: Weapon["profiles"][number], target: Un
  * crunching against a different bundle (e.g. tests).
  */
 export function crunch(input: EngineInput, dataset?: Dataset): EngineOutput {
+  return crunchModel(input, dataset).output;
+}
+
+/** {@link crunch} with the {@link AttackModel} its stages were computed from. */
+export function crunchModel(input: EngineInput, dataset?: Dataset): { output: EngineOutput; model: AttackModel } {
   const ds = dataset ?? lazyEmbeddedDataset();
   const weaponProfile = input.attacker.weapon.profiles[input.attacker.profileIndex];
   if (!weaponProfile) {
@@ -85,6 +122,9 @@ export function crunch(input: EngineInput, dataset?: Dataset): EngineOutput {
   const ctx: EngineContext = {
     ...input.context,
     targetKeywords: input.context.targetKeywords ?? targetKeywords,
+    weaponNames: input.context.weaponNames ?? [...new Set([input.attacker.weapon.name, weaponProfile.name].map((name) => name.toLowerCase()))],
+    weaponKeywords: input.context.weaponKeywords ?? [...new Set((weaponProfile.keywords ?? []).map((ref) => ref.keyword_id))],
+    weaponKeywordRefs: input.context.weaponKeywordRefs ?? weaponProfile.keywords,
   };
 
   // Auto-inject weapon-keyword buffs from the attacker profile, then append
@@ -103,8 +143,8 @@ export function crunch(input: EngineInput, dataset?: Dataset): EngineOutput {
   const rapidFireExtraPerModel = rapidFire && halfRange ? evalStatValue(rapidFire.parameters?.value) : 0;
   const blast = findKeyword(resolved, "blast");
   const targetModelCount = input.target.modelCount ?? input.target.unit.model_count?.min ?? 1;
-  const blastExtraPerModel = blast
-    ? Math.floor(targetModelCount / 5) * evalStatValue(blast.parameters?.value ?? 1)
+  const blastExtraPerModel = blast?.parameters?.value !== undefined
+    ? Math.floor(targetModelCount / 5) * evalStatValue(blast.parameters.value)
     : 0;
   const attacks = input.modelsFiring * (attacksPerModel + rapidFireExtraPerModel + blastExtraPerModel);
   stages.push({
@@ -118,14 +158,20 @@ export function crunch(input: EngineInput, dataset?: Dataset): EngineOutput {
   // save bonus. Ranged-only, negated by ignores-cover, and moot for auto-hitting
   // Torrent weapons (no hit roll).
   const ignoresCover = !!findKeyword(resolved, "ignores-cover");
+  // Ignoring hit modifiers also ignores the cover penalty.
   const covered =
-    resolved.cover.active && !ignoresCover && !isMelee;
+    resolved.cover.active && !ignoresCover && !isMelee && !resolved.ignoreModifiers.hit;
   const coverHitPenalty = covered ? -1 : 0;
-  const hitStat = isMelee ? weaponProfile.stats.WS : weaponProfile.stats.BS;
+  const printedHitStat = isMelee ? weaponProfile.stats.WS : weaponProfile.stats.BS;
+  // A WS/BS improvement changes the characteristic itself, floored at 2+.
+  const skillMod = resolved.skillMod[isMelee ? "WS" : "BS"].value;
+  const hitStat = typeof printedHitStat === "number" && skillMod !== 0 ? Math.max(2, printedHitStat - skillMod) : printedHitStat;
+  const critHitThreshold = Math.min(6, resolved.critThresholds.hit?.value ?? 6);
   const torrent = !!findKeyword(resolved, "torrent");
   let hits: number;
   let critHits: number;
   let hitsDetail: string;
+  let hitProbs = { pass: 1, crit: 0 };
   if (torrent) {
     hits = attacks;
     critHits = 0;
@@ -136,22 +182,30 @@ export function crunch(input: EngineInput, dataset?: Dataset): EngineOutput {
         `crunch: weapon ${input.attacker.weapon.id} profile ${input.attacker.profileIndex} missing ${isMelee ? "WS" : "BS"}`,
       );
     }
-    const probs = checkProbabilities({
+    const hitCheck = {
       unmodifiedNeeded: hitStat,
       modifier: resolved.hitMod.value + coverHitPenalty,
-      reroll: resolved.rerolls.hit?.subset ?? "none",
       autoFailOnOne: true,
       autoPassOnSix: true,
-      critThreshold: 6,
-    });
+      critThreshold: critHitThreshold,
+    };
+    const probs = checkProbabilities({ ...hitCheck, reroll: resolved.rerolls.hit?.subset ?? "none" });
+    hitProbs = probs;
     hits = attacks * probs.pass;
     critHits = attacks * probs.crit;
-    hitsDetail = `${isMelee ? "WS" : "BS"}${hitStat}+ (mod ${signed(resolved.hitMod.value)}${covered ? ", cover -1" : ""}, reroll ${resolved.rerolls.hit?.subset ?? "none"}) → P(hit)=${probs.pass.toFixed(4)}, P(crit)=${probs.crit.toFixed(4)}`;
+    hitsDetail = `${isMelee ? "WS" : "BS"}${hitStat}+ (mod ${signed(resolved.hitMod.value)}${covered ? ", cover -1" : ""}, reroll ${resolved.rerolls.hit?.subset ?? "none"}${critHitThreshold < 6 ? `, crit ${critHitThreshold}+` : ""}) → P(hit)=${probs.pass.toFixed(4)}, P(crit)=${probs.crit.toFixed(4)}`;
+    if (resolved.rerollOne.hit) {
+      const fresh = checkProbabilities({ ...hitCheck, reroll: "none" });
+      const dice = oneRerollDice(attacks, probs.open);
+      hits += dice * fresh.pass;
+      critHits += dice * fresh.crit;
+      hitsDetail += `; re-roll one Hit roll: ${dice.toFixed(4)} dice`;
+    }
   }
   const sustained = findKeyword(resolved, "sustained-hits");
   if (sustained) {
     hits += critHits * evalStatValue(sustained.parameters?.value);
-    hitsDetail += `; +Sustained Hits ${sustained.parameters?.value ?? 1} on ${critHits.toFixed(4)} crits`;
+    hitsDetail += `; +Sustained Hits ${sustained.parameters?.value} on ${critHits.toFixed(4)} crits`;
   }
   stages.push({ name: "hits", expected: hits, detail: hitsDetail });
 
@@ -159,31 +213,42 @@ export function crunch(input: EngineInput, dataset?: Dataset): EngineOutput {
   const S = evalStatValue(weaponProfile.stats.S) + resolved.strengthMod.value;
   const T = unitProfile.T + resolved.toughnessMod.value;
   const stdWoundNeeded = woundThreshold(S, T);
-  const anti = findKeyword(resolved, "anti");
   let antiThreshold = 7; // unreachable
-  if (anti) {
-    const targetKw = (anti.parameters?.target_keyword as string | undefined)?.toLowerCase();
-    if (targetKw && targetKeywords.includes(targetKw)) {
-      const threshold = Number(anti.parameters?.threshold);
-      if (Number.isFinite(threshold)) antiThreshold = threshold;
-    }
+  for (const { keywordRef: anti } of resolved.extraKeywords) {
+    if (anti.keyword_id !== "anti") continue;
+    const targetKeyword = anti.parameters?.target_keyword;
+    const required = anti.parameters?.required_target_keywords_any;
+    const excluded = anti.parameters?.excluded_target_keywords;
+    const hasTarget = typeof targetKeyword === "string" || Array.isArray(required) || Array.isArray(excluded);
+    if (!hasTarget || (typeof targetKeyword === "string" && !targetKeywords.includes(targetKeyword.toLowerCase()))) continue;
+    if (Array.isArray(required) && !required.some((keyword) => typeof keyword === "string" && targetKeywords.includes(keyword.toLowerCase()))) continue;
+    if (Array.isArray(excluded) && excluded.some((keyword) => typeof keyword === "string" && targetKeywords.includes(keyword.toLowerCase()))) continue;
+    const threshold = Number(anti.parameters?.threshold);
+    if (Number.isInteger(threshold) && threshold >= 2 && threshold <= 6) antiThreshold = Math.min(antiThreshold, threshold);
   }
-  const critWoundThreshold = Math.min(6, antiThreshold);
+  const critWoundThreshold = Math.min(6, antiThreshold, resolved.critThresholds.wound?.value ?? 6);
 
   const hasLethal = !!findKeyword(resolved, "lethal-hits");
   const hitsForWoundRoll = hasLethal ? hits - critHits : hits;
   const lethalAutoWounds = hasLethal ? critHits : 0;
 
-  const woundProbs = checkProbabilities({
+  const woundCheck = {
     unmodifiedNeeded: stdWoundNeeded,
     modifier: resolved.woundMod.value,
-    reroll: resolved.rerolls.wound?.subset ?? "none",
     autoFailOnOne: true,
     autoPassOnSix: true,
     critThreshold: critWoundThreshold,
-  });
-  const regularWoundsFromRoll = hitsForWoundRoll * (woundProbs.pass - woundProbs.crit);
-  const critWoundsFromRoll = hitsForWoundRoll * woundProbs.crit;
+  };
+  const woundProbs = checkProbabilities({ ...woundCheck, reroll: resolved.rerolls.wound?.subset ?? "none" });
+  let regularWoundsFromRoll = hitsForWoundRoll * (woundProbs.pass - woundProbs.crit);
+  let critWoundsFromRoll = hitsForWoundRoll * woundProbs.crit;
+  let woundRerollOneDice = 0;
+  if (resolved.rerollOne.wound) {
+    const fresh = checkProbabilities({ ...woundCheck, reroll: "none" });
+    woundRerollOneDice = oneRerollDice(hitsForWoundRoll, woundProbs.open);
+    regularWoundsFromRoll += woundRerollOneDice * (fresh.pass - fresh.crit);
+    critWoundsFromRoll += woundRerollOneDice * fresh.crit;
+  }
   const totalRegularWounds = regularWoundsFromRoll + lethalAutoWounds;
   const hasDevastating = !!findKeyword(resolved, "devastating-wounds");
   const mortalWoundsStream = hasDevastating ? critWoundsFromRoll : 0;
@@ -192,14 +257,16 @@ export function crunch(input: EngineInput, dataset?: Dataset): EngineOutput {
   stages.push({
     name: "wounds",
     expected: totalWounds,
-    detail: `S${S} vs T${T} → need ${stdWoundNeeded}+, anti ${antiThreshold <= 6 ? `${antiThreshold}+ (active)` : "n/a"}, P(wound)=${woundProbs.pass.toFixed(4)} (${critWoundsFromRoll.toFixed(4)} crit), lethal ${hasLethal ? "+" + lethalAutoWounds.toFixed(4) : "—"}, devastating ${hasDevastating ? mortalWoundsStream.toFixed(4) + " MW" : "—"}`,
+    detail: `S${S} vs T${T} → need ${stdWoundNeeded}+, anti ${antiThreshold <= 6 ? `${antiThreshold}+ (active)` : "n/a"}, P(wound)=${woundProbs.pass.toFixed(4)} (${critWoundsFromRoll.toFixed(4)} crit), lethal ${hasLethal ? "+" + lethalAutoWounds.toFixed(4) : "—"}, devastating ${hasDevastating ? mortalWoundsStream.toFixed(4) + " MW" : "—"}${resolved.rerollOne.wound ? `; re-roll one Wound roll: ${woundRerollOneDice.toFixed(4)} dice` : ""}`,
   });
 
   // 4. Saves
   const apMod = resolved.apMod.value;
-  const AP = weaponProfile.stats.AP + apMod;
+  // Worsening AP stops at 0.
+  const AP = Math.min(0, weaponProfile.stats.AP + apMod);
   const saveMod = resolved.saveMod.value;
-  const armorTargetRaw = unitProfile.Sv - AP - saveMod;
+  const Sv = resolved.saveCharacteristic?.value ?? unitProfile.Sv;
+  const armorTargetRaw = Sv - AP - saveMod;
   // Cover is a hit penalty (11e), applied in the hits stage above — it no
   // longer touches the save here.
   const armorFinal = clamp(armorTargetRaw, 2, 7);
@@ -227,32 +294,54 @@ export function crunch(input: EngineInput, dataset?: Dataset): EngineOutput {
     critThreshold: 7,
   });
   const pSaved = effectiveSaveTarget >= 7 ? 0 : saveProbs.pass;
-  const unsaved = regularWoundsForSaves * (1 - pSaved);
+  let unsaved = regularWoundsForSaves * (1 - pSaved);
+  // "Re-roll one saving throw": one failed save no other permission re-rolled is rolled again.
+  const saveRerollOneDice = resolved.rerollOne.save && effectiveSaveTarget < 7 ? oneRerollDice(regularWoundsForSaves, saveProbs.open) : 0;
+  if (saveRerollOneDice > 0) {
+    const fresh = checkProbabilities({ unmodifiedNeeded: effectiveSaveTarget, modifier: 0, reroll: "none", autoFailOnOne: true, autoPassOnSix: false, critThreshold: 7 });
+    unsaved -= saveRerollOneDice * fresh.pass;
+  }
   stages.push({
     name: "unsaved",
     expected: unsaved,
-    detail: `Sv${unitProfile.Sv}+, AP${signed(AP)}${apMod !== 0 ? ` (apmod ${signed(apMod)})` : ""}${saveMod !== 0 ? `, savemod ${signed(saveMod)}` : ""}${abilityInvuln !== null ? `, invuln ${abilityInvuln}+ (ability)` : ""} → effective ${effectiveSaveTarget}+ (P(save)=${pSaved.toFixed(4)})`,
+    detail: `Sv${Sv}+${Sv !== unitProfile.Sv ? " (set)" : ""}, AP${signed(AP)}${apMod !== 0 ? ` (apmod ${signed(apMod)})` : ""}${saveMod !== 0 ? `, savemod ${signed(saveMod)}` : ""}${abilityInvuln !== null ? `, invuln ${abilityInvuln}+ (ability)` : ""} → effective ${effectiveSaveTarget}+ (P(save)=${pSaved.toFixed(4)})${resolved.rerollOne.save ? `; re-roll one saving throw: ${saveRerollOneDice.toFixed(4)} dice` : ""}`,
   });
 
   // 5. Damage
   const baseD = evalStatValue(weaponProfile.stats.D);
   const melta = findKeyword(resolved, "melta");
   const meltaBonus = melta && halfRange ? evalStatValue(melta.parameters?.value) : 0;
-  const beforeReduction = Math.max(0, baseD + meltaBonus + resolved.damageMod.value);
   const damageReduction = resolved.damageReduction.value;
   // 10e damage-reduction abilities always carry the canonical "to a minimum
   // of 1" clause, so the floor lives in the math, not the data. The clause
   // only applies when damage-reduction is active — without it, a D1 weapon
-  // with a -1 attacker damage-mod still produces 0 damage.
-  const damagePerHit =
-    damageReduction > 0 ? Math.max(1, beforeReduction - damageReduction) : beforeReduction;
-  const damageMain = unsaved * damagePerHit;
-  const damageMortal = mortalWoundsStream * damagePerHit;
+  // with a -1 attacker damage-mod still produces 0 damage. Both floors act on
+  // each Damage roll, as does a damage reroll.
+  const damageReroll = resolved.rerolls.damage?.subset;
+  const perAttack = damageRoll({
+    stat: weaponProfile.stats.D,
+    bonus: meltaBonus,
+    modifier: resolved.damageMod.value,
+    reduction: damageReduction,
+    ...(damageReroll ? { reroll: damageReroll } : {}),
+  });
+  const damagePerHit = perAttack.expected;
+  let damageMain = unsaved * damagePerHit;
+  let damageMortal = mortalWoundsStream * damagePerHit;
+  // "Re-roll one Damage roll" over every Damage roll, main and mortal streams alike, shared in
+  // proportion to their rolls. A roll another permission already re-rolled cannot be re-rolled, so
+  // beside one the single die is not priced.
+  const damageRolls = unsaved + mortalWoundsStream;
+  const damageRerollOne = resolved.rerollOne.damage && !damageReroll && damageRolls > 0 ? oneDamageRerollGain(perAttack.distribution, damageRolls) : 0;
+  if (damageRerollOne > 0) {
+    damageMain += damageRerollOne * (unsaved / damageRolls);
+    damageMortal += damageRerollOne * (mortalWoundsStream / damageRolls);
+  }
   const damage = damageMain + damageMortal;
   stages.push({
     name: "damage",
     expected: damage,
-    detail: `D ${baseD}${meltaBonus ? ` + Melta ${meltaBonus} (half range)` : ""}${resolved.damageMod.value !== 0 ? ` ${signed(resolved.damageMod.value)} (mod)` : ""}${damageReduction > 0 ? ` -${damageReduction} (defender, min 1)` : ""} = ${damagePerHit} per hit; main ${damageMain.toFixed(4)}, mortal ${damageMortal.toFixed(4)}`,
+    detail: `D ${baseD}${meltaBonus ? ` + Melta ${meltaBonus} (half range)` : ""}${resolved.damageMod.value !== 0 ? ` ${signed(resolved.damageMod.value)} (mod)` : ""}${damageReduction > 0 ? ` -${damageReduction} (defender, min 1)` : ""}${damageReroll ? `, reroll ${damageReroll}${perAttack.rerollUsed ? "" : " (no effect)"}` : ""} = ${damagePerHit} per hit${resolved.rerollOne.damage ? `; re-roll one Damage roll: +${damageRerollOne.toFixed(4)}` : ""}; main ${damageMain.toFixed(4)}, mortal ${damageMortal.toFixed(4)}`,
   });
 
   // 6. FNP
@@ -277,7 +366,25 @@ export function crunch(input: EngineInput, dataset?: Dataset): EngineOutput {
     detail: `W${W} per model, ${targetModelCount} models in target; ${afterFnp.toFixed(4)} damage / ${W} = ${(afterFnp / W).toFixed(4)} (capped at ${targetModelCount})`,
   });
 
-  return { stages, resolved };
+  const model: AttackModel = {
+    modelsFiring: input.modelsFiring,
+    attacksStat: weaponProfile.stats.A,
+    attacksBonus: resolved.attacksMod.value + blastExtraPerModel,
+    rapidFireStat: rapidFire && halfRange ? rapidFire.parameters?.value : null,
+    torrent,
+    hit: hitProbs,
+    sustainedStat: sustained ? sustained.parameters?.value : null,
+    lethal: hasLethal,
+    wound: woundProbs,
+    devastating: hasDevastating,
+    unsaved: 1 - pSaved,
+    damage: perAttack.distribution,
+    woundLost: pSurviveAll,
+    mortalWoundLost: pSurviveAll * pSurviveMortal,
+    wounds: W,
+    modelCount: targetModelCount,
+  };
+  return { output: { stages, resolved }, model };
 }
 
 // ---------------------------------------------------------------------------
@@ -347,7 +454,7 @@ function checkProbabilities(args: {
   autoPassOnSix: boolean;
   /** Natural roll ≥ this is a crit. Use 7 to disable crits. */
   critThreshold: number;
-}): { pass: number; crit: number } {
+}): { pass: number; crit: number; open: number } {
   function outcome(face: number): { pass: number; crit: number } {
     if (args.autoFailOnOne && face === 1) return { pass: 0, crit: 0 };
     if (face >= args.critThreshold) return { pass: 1, crit: 1 };
@@ -359,6 +466,8 @@ function checkProbabilities(args: {
 
   let pass = 0;
   let crit = 0;
+  // A failed die no permission re-rolls: what a "re-roll one" can still take.
+  let open = 0;
   for (let face = 1; face <= 6; face++) {
     const initial = outcome(face);
     if (initial.pass === 1) {
@@ -369,7 +478,10 @@ function checkProbabilities(args: {
     // Failed initial — eligible for reroll?
     const eligible =
       args.reroll === "all-failures" || (args.reroll === "ones" && face === 1);
-    if (!eligible) continue;
+    if (!eligible) {
+      open += 1 / 6;
+      continue;
+    }
     // Reroll: uniform over 1..6.
     let rerollPass = 0;
     let rerollCrit = 0;
@@ -381,7 +493,24 @@ function checkProbabilities(args: {
     pass += rerollPass / 6;
     crit += rerollCrit / 6;
   }
-  return { pass, crit };
+  return { pass, crit, open };
+}
+
+/**
+ * Expected dice a "re-roll one" re-rolls over a pool of `pool` dice that each end failed and
+ * un-rerolled with probability `open`: for a whole pool, the chance at least one does,
+ * 1 - (1 - open)^pool. A pool the engine carries as an expectation is read between the whole pools
+ * either side of it, which is exact when it is one of the two and never overstates a concave gain.
+ */
+export function oneRerollDice(pool: number, open: number): number {
+  return pool > 0 && open > 0 ? betweenWholePools(pool, (dice) => 1 - Math.pow(1 - open, dice)) : 0;
+}
+
+/** `atWhole` at a fractional `pool`, read linearly between the whole pools either side. */
+export function betweenWholePools(pool: number, atWhole: (dice: number) => number): number {
+  const low = Math.floor(pool);
+  const below = atWhole(low);
+  return pool === low ? below : below + (pool - low) * (atWhole(low + 1) - below);
 }
 
 /**
@@ -390,10 +519,10 @@ function checkProbabilities(args: {
  * silently return 0 and produce a confidently wrong damage projection.
  */
 function evalStatValue(v: unknown): number {
-  if (typeof v === "number") return v;
-  if (typeof v !== "string") return Number(v) || 0;
+  if (typeof v === "number" && Number.isFinite(v)) return v;
+  if (typeof v !== "string") throw new Error(`evalStatValue: unresolved quantity ${JSON.stringify(v)}`);
   const trimmed = v.trim();
-  if (trimmed === "") return 0;
+  if (trimmed === "") throw new Error("evalStatValue: empty quantity");
   const asNumber = Number(trimmed);
   if (Number.isFinite(asNumber)) return asNumber;
   const match = /^(\d*)D(\d+)([+-]\d+)?$/i.exec(trimmed);

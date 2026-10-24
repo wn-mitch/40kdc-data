@@ -1,22 +1,20 @@
 {
   "name": "Intercessor Squad (adeptus-astartes) in shooting phase",
-  "input": { "unitId": "intercessor-squad", "factionId": "adeptus-astartes" },
+  "input": {
+    "unitId": "intercessor-squad",
+    "factionId": "adeptus-astartes"
+  },
   "phase": "shooting",
   "expected": {
     "army": [
-      "curse-of-the-wulfen",
-      "heirs-of-sigismund",
-      "kill-teams",
-      "oath-of-moment",
-      "sagas",
-      "sons-of-russ",
-      "space-marine-chapters",
-      "templar-vows",
-      "the-deathwing",
-      "the-ravenwing",
-      "the-sons-of-sanguinius",
-      "the-unforgiven"
+      "combat-doctrines-adeptus-astartes",
+      "librarius-adeptus-astartes",
+      "special-move-types-adeptus-astartes",
+      "transhuman-strategist-adeptus-astartes"
     ],
-    "unit": ["target-elimination"]
+    "unit": [
+      "bolter-discipline-adeptus-astartes",
+      "tactical-mainstay-adeptus-astartes"
+    ]
   }
 }

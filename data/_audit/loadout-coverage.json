@@ -1,12 +1,321 @@
 {
   "generatedFrom": "tools/src/audit-loadout-coverage.ts",
-  "totalSkeletons": 0,
-  "byFaction": {},
-  "totalWeaponless": 8,
-  "weaponlessByFaction": {
-    "adeptus-astartes": [
-      "drop-pod"
+  "totalSkeletons": 34,
+  "byFaction": {
+    "adepta-sororitas": [
+      {
+        "faction": "adepta-sororitas",
+        "unit_id": "sanctuary-canoness-adalya",
+        "missing": [
+          "weapons",
+          "wargear-options",
+          "composition"
+        ]
+      },
+      {
+        "faction": "adepta-sororitas",
+        "unit_id": "sanctuary-guardians-arco-flagellants",
+        "missing": [
+          "weapons",
+          "wargear-options",
+          "composition"
+        ]
+      },
+      {
+        "faction": "adepta-sororitas",
+        "unit_id": "sanctuary-guardians-battle-sisters-squad",
+        "missing": [
+          "weapons",
+          "wargear-options",
+          "composition"
+        ]
+      },
+      {
+        "faction": "adepta-sororitas",
+        "unit_id": "sanctuary-guardians-celestian-sacresants",
+        "missing": [
+          "weapons",
+          "wargear-options",
+          "composition"
+        ]
+      }
     ],
+    "adeptus-astartes": [
+      {
+        "faction": "adeptus-astartes",
+        "unit_id": "askars-wolfpack-blood-claws",
+        "missing": [
+          "weapons",
+          "wargear-options",
+          "composition"
+        ]
+      },
+      {
+        "faction": "adeptus-astartes",
+        "unit_id": "askars-wolfpack-wolf-guard-terminators",
+        "missing": [
+          "weapons",
+          "wargear-options",
+          "composition"
+        ]
+      },
+      {
+        "faction": "adeptus-astartes",
+        "unit_id": "askars-wolfpack-wulfen",
+        "missing": [
+          "weapons",
+          "wargear-options",
+          "composition"
+        ]
+      },
+      {
+        "faction": "adeptus-astartes",
+        "unit_id": "assault-force-captain",
+        "missing": [
+          "weapons",
+          "wargear-options",
+          "composition"
+        ]
+      },
+      {
+        "faction": "adeptus-astartes",
+        "unit_id": "assault-force-intercessor-squad",
+        "missing": [
+          "weapons",
+          "wargear-options",
+          "composition"
+        ]
+      },
+      {
+        "faction": "adeptus-astartes",
+        "unit_id": "assault-force-land-speeder",
+        "missing": [
+          "weapons",
+          "wargear-options",
+          "composition",
+          "abilities"
+        ]
+      },
+      {
+        "faction": "adeptus-astartes",
+        "unit_id": "assault-force-librarian",
+        "missing": [
+          "weapons",
+          "wargear-options",
+          "composition"
+        ]
+      },
+      {
+        "faction": "adeptus-astartes",
+        "unit_id": "assault-force-vanguard-veteran-squad-with-jump-packs",
+        "missing": [
+          "weapons",
+          "wargear-options",
+          "composition"
+        ]
+      },
+      {
+        "faction": "adeptus-astartes",
+        "unit_id": "captain-raldeo",
+        "missing": [
+          "weapons",
+          "wargear-options",
+          "composition"
+        ]
+      },
+      {
+        "faction": "adeptus-astartes",
+        "unit_id": "drop-pod",
+        "missing": [
+          "weapons",
+          "wargear-options"
+        ]
+      },
+      {
+        "faction": "adeptus-astartes",
+        "unit_id": "emperors-champion-vedrenn",
+        "missing": [
+          "weapons",
+          "wargear-options",
+          "composition"
+        ]
+      },
+      {
+        "faction": "adeptus-astartes",
+        "unit_id": "fyrri-askar",
+        "missing": [
+          "weapons",
+          "wargear-options",
+          "composition"
+        ]
+      },
+      {
+        "faction": "adeptus-astartes",
+        "unit_id": "marneus-calgar",
+        "missing": [
+          "weapons",
+          "wargear-options",
+          "composition"
+        ]
+      },
+      {
+        "faction": "adeptus-astartes",
+        "unit_id": "master-zacharial",
+        "missing": [
+          "weapons",
+          "wargear-options",
+          "composition"
+        ]
+      },
+      {
+        "faction": "adeptus-astartes",
+        "unit_id": "sanguinary-spearhead-assault-intercessor-squad",
+        "missing": [
+          "weapons",
+          "wargear-options",
+          "composition"
+        ]
+      },
+      {
+        "faction": "adeptus-astartes",
+        "unit_id": "sanguinary-spearhead-sanguinary-guard",
+        "missing": [
+          "weapons",
+          "wargear-options",
+          "composition"
+        ]
+      },
+      {
+        "faction": "adeptus-astartes",
+        "unit_id": "vengeful-brethren-bladeguard-veteran-squad",
+        "missing": [
+          "weapons",
+          "wargear-options",
+          "composition"
+        ]
+      },
+      {
+        "faction": "adeptus-astartes",
+        "unit_id": "vengeful-brethren-hellblaster-squad",
+        "missing": [
+          "weapons",
+          "wargear-options",
+          "composition"
+        ]
+      },
+      {
+        "faction": "adeptus-astartes",
+        "unit_id": "vengeful-brethren-intercessor-squad",
+        "missing": [
+          "weapons",
+          "wargear-options",
+          "composition"
+        ]
+      },
+      {
+        "faction": "adeptus-astartes",
+        "unit_id": "vow-sworn-bladeguard-veteran-squad",
+        "missing": [
+          "weapons",
+          "wargear-options",
+          "composition"
+        ]
+      },
+      {
+        "faction": "adeptus-astartes",
+        "unit_id": "vow-sworn-crusader-squad",
+        "missing": [
+          "weapons",
+          "wargear-options",
+          "composition"
+        ]
+      },
+      {
+        "faction": "adeptus-astartes",
+        "unit_id": "vow-sworn-sword-brethren-squad",
+        "missing": [
+          "weapons",
+          "wargear-options",
+          "composition"
+        ]
+      }
+    ],
+    "adeptus-custodes": [
+      {
+        "faction": "adeptus-custodes",
+        "unit_id": "aquilan-talon-contemptor-achillus-dreadnought",
+        "missing": [
+          "weapons",
+          "wargear-options",
+          "composition"
+        ]
+      },
+      {
+        "faction": "adeptus-custodes",
+        "unit_id": "aquilan-talon-sentinel-guard-sodality",
+        "missing": [
+          "weapons",
+          "wargear-options",
+          "composition"
+        ]
+      },
+      {
+        "faction": "adeptus-custodes",
+        "unit_id": "aquilan-talon-shield-captain",
+        "missing": [
+          "weapons",
+          "wargear-options",
+          "composition"
+        ]
+      },
+      {
+        "faction": "adeptus-custodes",
+        "unit_id": "aquilan-wing-sentinel-guard-sodality",
+        "missing": [
+          "weapons",
+          "wargear-options",
+          "composition"
+        ]
+      },
+      {
+        "faction": "adeptus-custodes",
+        "unit_id": "aquilan-wing-shield-captain",
+        "missing": [
+          "weapons",
+          "wargear-options",
+          "composition"
+        ]
+      },
+      {
+        "faction": "adeptus-custodes",
+        "unit_id": "aquilan-wing-venatari-with-kinetic-destroyers",
+        "missing": [
+          "weapons",
+          "wargear-options",
+          "composition"
+        ]
+      },
+      {
+        "faction": "adeptus-custodes",
+        "unit_id": "sentinel-guard-sodality",
+        "missing": [
+          "weapons",
+          "composition"
+        ]
+      },
+      {
+        "faction": "adeptus-custodes",
+        "unit_id": "venatari-with-kinetic-destroyers",
+        "missing": [
+          "weapons",
+          "wargear-options",
+          "composition"
+        ]
+      }
+    ]
+  },
+  "totalWeaponless": 7,
+  "weaponlessByFaction": {
     "astra-militarum": [
       "aegis-defence-line",
       "cyclops-demolition-vehicle"

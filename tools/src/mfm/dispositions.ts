@@ -5,8 +5,8 @@
  * The repo already carries provisional `force_dispositions` + `detachment_points`
  * on every detachment (authored pre-launch at dataslate "pre-launch-provisional").
  * This pass treats the dump as authoritative: it compares each repo detachment to
- * the dump's value, reports diffs, corrects them on --write, and stamps the
- * confirmed launch dataslate.
+ * the dump's value, reports diffs, and corrects them on --write. The `dataslates`
+ * pass decides the detachment's game_version.
  *
  * Dump shape:
  *   force_disposition                 5 rows; UUID → name → repo disposition id
@@ -104,9 +104,15 @@ export function buildCanon(dump: MfmDump): {
     });
   }
 
-  // Per-faction DP overrides → keyed by `${slug}@@${dir}`.
+  // Per-faction DP overrides → keyed by `${slug}@@${dir}`. The dump's override table is empty
+  // from data version 963 (its generated row type is `never`), so the rows are read untyped.
   const overrideBySlugDir = new Map<string, number>();
-  for (const row of dump.table("detachment_faction_detachment_points_cost")) {
+  const overrides = dump.table("detachment_faction_detachment_points_cost") as unknown as Array<{
+    detachmentId: string;
+    factionKeywordId: string;
+    detachmentPointsCost: number;
+  }>;
+  for (const row of overrides) {
     const slug = uuidToSlug.get(row.detachmentId);
     const fkName = dump.enName(dump.byId("faction_keyword").get(row.factionKeywordId));
     const dir = repoDirForFactionName(fkName);
@@ -187,9 +193,9 @@ export function runDispositions(
       }
       // Reconcile only the two fields the dump is authoritative for here, in BOTH
       // modes (the dry-run rehearsal validates the result). The detachment's
-      // game_version dataslate is left untouched — bumping it to "launch" would
-      // over-claim, since its rule/enhancement/stratagem references aren't
-      // reconciled until later phases.
+      // game_version dataslate is left untouched — stamping the dump's dataslate
+      // here would over-claim; the `dataslates` pass stamps it once the
+      // detachment's rules verify too.
       det.detachment_points = targetDp;
       det.force_dispositions = targetDisp;
       if (cpSlugs.has(det.id)) det.game_modes = ["combat-patrol"];

@@ -5,7 +5,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -25,7 +25,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -45,7 +45,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -62,7 +62,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -79,7 +79,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -96,7 +96,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -113,7 +113,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -130,7 +130,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -147,7 +147,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -167,7 +167,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -187,7 +187,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -204,7 +204,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -223,7 +223,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -240,7 +240,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -257,7 +257,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -277,7 +277,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -297,7 +297,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -324,7 +324,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -343,7 +343,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -351,7 +351,7 @@
     ],
     "model_constraint": {
       "model_name": "Kroot Farstalker",
-      "any_number": true
+      "max_count": 1
     }
   },
   {
@@ -360,7 +360,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -385,7 +385,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -405,7 +405,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -433,7 +433,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -455,7 +455,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -481,7 +481,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -506,7 +506,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -523,7 +523,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -540,7 +540,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -565,7 +565,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -594,7 +594,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -614,7 +614,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -630,7 +630,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -647,7 +647,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -664,7 +664,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -681,7 +681,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -701,7 +701,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -721,7 +721,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -741,7 +741,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -761,7 +761,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -778,7 +778,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -795,7 +795,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -812,7 +812,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -839,7 +839,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -856,7 +856,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -877,7 +877,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -897,7 +897,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -913,7 +913,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -942,7 +942,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -966,7 +966,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -985,7 +985,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -1001,7 +1001,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -1026,7 +1026,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -1043,7 +1043,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1062,7 +1062,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1086,7 +1086,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1105,7 +1105,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -1121,7 +1121,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1140,7 +1140,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1164,7 +1164,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1185,7 +1185,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -1202,7 +1202,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1229,7 +1229,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1249,7 +1249,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1269,7 +1269,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1289,7 +1289,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -1306,7 +1306,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1320,28 +1320,13 @@
         "plasma-rifle-commander-in-coldstar-battlesuit"
       ],
       [
-        "battlesuit-support-system"
-      ],
-      [
-        "cyclic-ion-blaster-commander-in-coldstar-battlesuit"
-      ],
-      [
-        "weapon-support-system"
-      ],
-      [
         "fusion-blaster-commander-in-coldstar-battlesuit"
       ],
       [
         "missile-pod-commander-in-coldstar-battlesuit"
       ],
       [
-        "shield-generator"
-      ],
-      [
         "tau-flamer"
-      ],
-      [
-        "airbursting-fragmentation-projector"
       ]
     ],
     "model_constraint": {
@@ -1354,7 +1339,102 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "high-output-burst-cannon"
+    ],
+    "replacement": [
+      "battlesuit-support-system"
+    ],
+    "model_constraint": {
+      "max_count": 1
+    }
+  },
+  {
+    "id": "commander-in-coldstar-battlesuit-wgo-mfm-3",
+    "unit_id": "commander-in-coldstar-battlesuit",
+    "faction_id": "tau-empire",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "high-output-burst-cannon"
+    ],
+    "replacement": [
+      "cyclic-ion-blaster-commander-in-coldstar-battlesuit"
+    ],
+    "model_constraint": {
+      "max_count": 1
+    }
+  },
+  {
+    "id": "commander-in-coldstar-battlesuit-wgo-mfm-4",
+    "unit_id": "commander-in-coldstar-battlesuit",
+    "faction_id": "tau-empire",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "high-output-burst-cannon"
+    ],
+    "replacement": [
+      "weapon-support-system"
+    ],
+    "model_constraint": {
+      "max_count": 1
+    }
+  },
+  {
+    "id": "commander-in-coldstar-battlesuit-wgo-mfm-5",
+    "unit_id": "commander-in-coldstar-battlesuit",
+    "faction_id": "tau-empire",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "high-output-burst-cannon"
+    ],
+    "replacement": [
+      "shield-generator"
+    ],
+    "model_constraint": {
+      "max_count": 1
+    }
+  },
+  {
+    "id": "commander-in-coldstar-battlesuit-wgo-mfm-6",
+    "unit_id": "commander-in-coldstar-battlesuit",
+    "faction_id": "tau-empire",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "high-output-burst-cannon"
+    ],
+    "replacement": [
+      "airbursting-fragmentation-projector"
+    ],
+    "model_constraint": {
+      "max_count": 1
+    }
+  },
+  {
+    "id": "commander-in-coldstar-battlesuit-wgo-mfm-7",
+    "unit_id": "commander-in-coldstar-battlesuit",
+    "faction_id": "tau-empire",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -1374,12 +1454,12 @@
     }
   },
   {
-    "id": "commander-in-coldstar-battlesuit-wgo-mfm-3",
+    "id": "commander-in-coldstar-battlesuit-wgo-mfm-8",
     "unit_id": "commander-in-coldstar-battlesuit",
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -1425,7 +1505,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1435,6 +1515,7 @@
       "high-yield-missile-pods"
     ],
     "model_constraint": {
+      "model_name": "Broadside Shas’vre",
       "any_number": true
     }
   },
@@ -1444,7 +1525,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -1462,6 +1543,7 @@
       ]
     ],
     "model_constraint": {
+      "model_name": "Broadside Shas’ui",
       "any_number": true,
       "max_count": 2
     }
@@ -1472,7 +1554,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1482,6 +1564,7 @@
       "high-yield-missile-pods"
     ],
     "model_constraint": {
+      "model_name": "Broadside Shas’ui",
       "any_number": true
     }
   },
@@ -1491,7 +1574,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -1509,6 +1592,7 @@
       ]
     ],
     "model_constraint": {
+      "model_name": "Broadside Shas’vre",
       "any_number": true,
       "max_count": 2
     }
@@ -1519,7 +1603,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -1557,6 +1641,7 @@
       ]
     ],
     "model_constraint": {
+      "model_name": "Broadside Shas’vre",
       "any_number": true
     }
   },
@@ -1566,7 +1651,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -1604,6 +1689,7 @@
       ]
     ],
     "model_constraint": {
+      "model_name": "Broadside Shas’ui",
       "any_number": true
     }
   },
@@ -1613,7 +1699,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -1638,7 +1724,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -1684,7 +1770,64 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "burst-cannon-commander-in-enforcer-battlesuit"
+    ],
+    "replacement": [
+      "battlesuit-support-system"
+    ],
+    "model_constraint": {
+      "max_count": 1
+    }
+  },
+  {
+    "id": "commander-in-enforcer-battlesuit-wgo-mfm-4",
+    "unit_id": "commander-in-enforcer-battlesuit",
+    "faction_id": "tau-empire",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "burst-cannon-commander-in-enforcer-battlesuit"
+    ],
+    "replacement": [
+      "weapon-support-system"
+    ],
+    "model_constraint": {
+      "max_count": 1
+    }
+  },
+  {
+    "id": "commander-in-enforcer-battlesuit-wgo-mfm-5",
+    "unit_id": "commander-in-enforcer-battlesuit",
+    "faction_id": "tau-empire",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "burst-cannon-commander-in-enforcer-battlesuit"
+    ],
+    "replacement": [
+      "cyclic-ion-blaster-commander-in-enforcer-battlesuit"
+    ],
+    "model_constraint": {
+      "max_count": 1
+    }
+  },
+  {
+    "id": "commander-in-enforcer-battlesuit-wgo-mfm-6",
+    "unit_id": "commander-in-enforcer-battlesuit",
+    "faction_id": "tau-empire",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1692,22 +1835,7 @@
     ],
     "replacement_choice": [
       [
-        "battlesuit-support-system"
-      ],
-      [
-        "weapon-support-system"
-      ],
-      [
-        "cyclic-ion-blaster-commander-in-enforcer-battlesuit"
-      ],
-      [
         "missile-pod-commander-in-enforcer-battlesuit"
-      ],
-      [
-        "airbursting-fragmentation-projector"
-      ],
-      [
-        "shield-generator"
       ],
       [
         "plasma-rifle-commander-in-enforcer-battlesuit"
@@ -1724,12 +1852,50 @@
     }
   },
   {
+    "id": "commander-in-enforcer-battlesuit-wgo-mfm-7",
+    "unit_id": "commander-in-enforcer-battlesuit",
+    "faction_id": "tau-empire",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "burst-cannon-commander-in-enforcer-battlesuit"
+    ],
+    "replacement": [
+      "airbursting-fragmentation-projector"
+    ],
+    "model_constraint": {
+      "max_count": 1
+    }
+  },
+  {
+    "id": "commander-in-enforcer-battlesuit-wgo-mfm-8",
+    "unit_id": "commander-in-enforcer-battlesuit",
+    "faction_id": "tau-empire",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "burst-cannon-commander-in-enforcer-battlesuit"
+    ],
+    "replacement": [
+      "shield-generator"
+    ],
+    "model_constraint": {
+      "max_count": 1
+    }
+  },
+  {
     "id": "cadre-fireblade-wgo-mfm-1",
     "unit_id": "cadre-fireblade",
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -1754,7 +1920,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1773,7 +1939,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -1790,7 +1956,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1811,7 +1977,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1830,7 +1996,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1857,7 +2023,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -1874,7 +2040,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -1891,7 +2057,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -1908,7 +2074,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -1925,7 +2091,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -1942,7 +2108,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -1959,7 +2125,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -1976,7 +2142,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1996,7 +2162,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2016,7 +2182,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2035,7 +2201,7 @@
     "faction_id": "tau-empire",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [

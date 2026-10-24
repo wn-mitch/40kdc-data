@@ -30,6 +30,11 @@
             "items": { "$ref": "../defs/common.schema.json#/$defs/entity-id" }
           },
           "is_leader_model": { "type": "boolean", "default": false },
+          "excluded_from_enhancements": {
+            "type": "boolean",
+            "default": false,
+            "description": "True when this model cannot be given an Enhancement even though it is a CHARACTER (e.g. Ogryn Bodyguard, Transcendent C'tan). An Enhancement needs a model in the unit that is not excluded."
+          },
           "base_size_mm": {
             "description": "This model's base. Absent when no base could be resolved for the model.",
             "$ref": "../defs/common.schema.json#/$defs/base-size"
@@ -70,7 +75,7 @@
             }
           },
           "loadout_variant_budgets": {
-            "description": "Caps over how many variant selections this model row may make, counting SELECTED VARIANTS rather than final weapon ids (two variants sharing a weapon must not charge each other's allowance). A singleton `variant_names` is an individual cap, several names a shared pool, and intersecting budgets a ratio plus a hard ceiling. The selected count across `variant_names` must not exceed `floor(scope_model_count * count / per_models)`, or simply `count` when `per_models` is 0.",
+            "description": "Caps over how many variant selections this model row may make, counting SELECTED VARIANTS rather than final weapon ids (two variants sharing a weapon must not charge each other's allowance). A singleton `variant_names` is an individual cap, several names a shared pool, and intersecting budgets a ratio plus a hard ceiling. The selected count across `variant_names` must not exceed `floor(scope_model_count * count / per_models)`, `count * floor(scope_model_count / per_models)` when `stepped`, or simply `count` when `per_models` is 0.",
             "type": "array",
             "minItems": 1,
             "items": {
@@ -91,6 +96,10 @@
                 "scope": {
                   "description": "Which model count scales the allowance: the whole unit, or just this model row.",
                   "enum": ["unit", "model-row"]
+                },
+                "stepped": {
+                  "description": "When true, the allowance grows only per full block of `per_models` models: `count * floor(scope_model_count / per_models)` (\"for every 5 models, up to 2\" is 2 at 5-9 models and 4 at 10). Absent or false, it is the proportional `floor(scope_model_count * count / per_models)`. Meaningless when `per_models` is 0.",
+                  "type": "boolean"
                 }
               },
               "required": ["variant_names", "count", "per_models", "scope"],

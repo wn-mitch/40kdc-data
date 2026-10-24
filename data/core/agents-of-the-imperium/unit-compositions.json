@@ -77,7 +77,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -161,7 +161,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -207,7 +207,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -251,7 +251,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -305,7 +305,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -350,7 +350,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -408,7 +408,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -519,7 +519,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -577,7 +577,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -662,7 +662,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -724,7 +724,7 @@
         }
       },
       {
-        "name": "Deathwatch Veterans",
+        "name": "Deathwatch Veteran",
         "profile_name": "Deathwatch Veterans",
         "min": 4,
         "max": 9,
@@ -741,7 +741,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -752,7 +752,7 @@
             "max": 1
           },
           {
-            "name": "Deathwatch Veterans",
+            "name": "Deathwatch Veteran",
             "min": 4,
             "max": 4
           }
@@ -766,8 +766,8 @@
             "max": 1
           },
           {
-            "name": "Deathwatch Veterans",
-            "min": 5,
+            "name": "Deathwatch Veteran",
+            "min": 9,
             "max": 9
           }
         ]
@@ -780,7 +780,7 @@
             "max": 1
           },
           {
-            "name": "Deathwatch Veterans",
+            "name": "Deathwatch Veteran",
             "min": 4,
             "max": 4
           }
@@ -794,8 +794,8 @@
             "max": 1
           },
           {
-            "name": "Deathwatch Veterans",
-            "min": 5,
+            "name": "Deathwatch Veteran",
+            "min": 9,
             "max": 9
           }
         ]
@@ -823,7 +823,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -876,7 +876,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -904,56 +904,225 @@
     "faction_id": "agents-of-the-imperium",
     "models": [
       {
-        "name": "Watch Sergeant",
-        "profile_name": "Deathwatch Veteran",
+        "name": "Kill Team Sergeant",
         "min": 1,
         "max": 1,
-        "default_weapon_ids": [
-          "boltgun",
-          "close-combat-weapon-aquila-kill-team",
-          "plasma-pistol-aquila-kill-team",
-          "plasma-pistol"
-        ],
         "is_leader_model": true,
         "base_size_mm": {
           "shape": "round",
           "diameter": 32
-        }
-      },
-      {
-        "name": "Deathwatch Veteran",
-        "min": 2,
-        "max": 7,
+        },
         "default_weapon_ids": [
-          "special-issue-bolt-pistol",
-          "xenophase-blade"
-        ],
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 32
-        }
+          "plasma-pistol-aquila-kill-team",
+          "power-weapon-aquila-kill-team"
+        ]
       },
       {
         "name": "Gravis Veteran",
-        "min": 2,
+        "min": 1,
         "max": 2,
         "default_weapon_ids": [
           "bolt-pistol-aquila-kill-team",
-          "close-combat-weapon-aquila-kill-team",
-          "infernus-heavy-bolter-aquila-kill-team"
+          "infernus-heavy-bolter-aquila-kill-team",
+          "knives-and-fists"
         ],
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
           "diameter": 32
         }
+      },
+      {
+        "name": "Deathwatch Veteran with Heavy Thunder Hammer and Bolt Pistol",
+        "min": 1,
+        "max": 2,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "bolt-pistol-aquila-kill-team",
+          "heavy-thunder-hammer"
+        ]
+      },
+      {
+        "name": "Deathwatch Veteran with Deathwatch Marksman Bolt Carbine, Special-issue Bolt Pistol and Knives and Fists",
+        "min": 1,
+        "max": 2,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "deathwatch-marksman-bolt-carbine",
+          "knives-and-fists",
+          "special-issue-bolt-pistol"
+        ]
+      },
+      {
+        "name": "Deathwatch Veteran with Stalker Bolt Rifle, Bolt Pistol and Knives and Fists",
+        "min": 1,
+        "max": 2,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "bolt-pistol-aquila-kill-team",
+          "knives-and-fists",
+          "stalker-bolt-rifle"
+        ]
+      },
+      {
+        "name": "Deathwatch Veteran with Xenophase Blade and Special-issue Bolt Pistol",
+        "min": 0,
+        "max": 1,
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "special-issue-bolt-pistol",
+          "xenophase-blade"
+        ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
+      "dataslate": "mfm-995"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Kill Team Sergeant",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Gravis Veteran",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Deathwatch Veteran with Heavy Thunder Hammer and Bolt Pistol",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Deathwatch Veteran with Deathwatch Marksman Bolt Carbine, Special-issue Bolt Pistol and Knives and Fists",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Deathwatch Veteran with Stalker Bolt Rifle, Bolt Pistol and Knives and Fists",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      },
+      {
+        "models": [
+          {
+            "name": "Kill Team Sergeant",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Gravis Veteran",
+            "min": 2,
+            "max": 2
+          },
+          {
+            "name": "Deathwatch Veteran with Heavy Thunder Hammer and Bolt Pistol",
+            "min": 2,
+            "max": 2
+          },
+          {
+            "name": "Deathwatch Veteran with Deathwatch Marksman Bolt Carbine, Special-issue Bolt Pistol and Knives and Fists",
+            "min": 2,
+            "max": 2
+          },
+          {
+            "name": "Deathwatch Veteran with Stalker Bolt Rifle, Bolt Pistol and Knives and Fists",
+            "min": 2,
+            "max": 2
+          },
+          {
+            "name": "Deathwatch Veteran with Xenophase Blade and Special-issue Bolt Pistol",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      },
+      {
+        "models": [
+          {
+            "name": "Kill Team Sergeant",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Gravis Veteran",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Deathwatch Veteran with Heavy Thunder Hammer and Bolt Pistol",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Deathwatch Veteran with Deathwatch Marksman Bolt Carbine, Special-issue Bolt Pistol and Knives and Fists",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Deathwatch Veteran with Stalker Bolt Rifle, Bolt Pistol and Knives and Fists",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      },
+      {
+        "models": [
+          {
+            "name": "Kill Team Sergeant",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Gravis Veteran",
+            "min": 2,
+            "max": 2
+          },
+          {
+            "name": "Deathwatch Veteran with Heavy Thunder Hammer and Bolt Pistol",
+            "min": 2,
+            "max": 2
+          },
+          {
+            "name": "Deathwatch Veteran with Deathwatch Marksman Bolt Carbine, Special-issue Bolt Pistol and Knives and Fists",
+            "min": 2,
+            "max": 2
+          },
+          {
+            "name": "Deathwatch Veteran with Stalker Bolt Rifle, Bolt Pistol and Knives and Fists",
+            "min": 2,
+            "max": 2
+          },
+          {
+            "name": "Deathwatch Veteran with Xenophase Blade and Special-issue Bolt Pistol",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
   },
   {
     "unit_id": "vindicare-assassin",
@@ -977,7 +1146,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1160,7 +1329,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1223,105 +1392,52 @@
       },
       {
         "name": "Navis Armsman",
-        "min": 9,
-        "max": 9,
+        "min": 1,
+        "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
           "diameter": 25
         },
-        "loadout_variants": [
-          {
-            "name": "Navis Armsman w/ heavy shotgun",
-            "weapon_ids": [
-              "close-combat-weapon-imperial-navy-breachers",
-              "navis-heavy-shotgun"
-            ],
-            "max_count": 1
-          },
-          {
-            "name": "Navis Armsman w/ special weapon",
-            "weapon_ids": [
-              "close-combat-weapon-imperial-navy-breachers"
-            ],
-            "max_count": 1
-          },
-          {
-            "name": "Navis Armsman w/ power weapon",
-            "weapon_ids": [
-              "close-combat-weapon-imperial-navy-breachers",
-              "autopistol",
-              "power-weapon-imperial-navy-breachers"
-            ],
-            "max_count": 1
-          },
-          {
-            "name": "Navis Armsman",
-            "weapon_ids": [
-              "close-combat-weapon-imperial-navy-breachers"
-            ],
-            "max_count": 7
-          },
-          {
-            "name": "Navis Armsman w/ chainfist",
-            "weapon_ids": [
-              "close-combat-weapon-imperial-navy-breachers",
-              "autopistol",
-              "chainfist"
-            ],
-            "max_count": 1
-          }
-        ],
-        "loadout_variant_budgets": [
-          {
-            "variant_names": [
-              "Navis Armsman w/ heavy shotgun",
-              "Navis Armsman w/ special weapon",
-              "Navis Armsman w/ power weapon",
-              "Navis Armsman",
-              "Navis Armsman w/ chainfist"
-            ],
-            "count": 9,
-            "per_models": 0,
-            "scope": "model-row"
-          }
+        "default_weapon_ids": [
+          "navis-las-volley",
+          "close-combat-weapon-imperial-navy-breachers"
+        ]
+      },
+      {
+        "name": "Navis Armsman",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        },
+        "default_weapon_ids": [
+          "navis-heavy-shotgun",
+          "close-combat-weapon-imperial-navy-breachers",
+          "endurant-shield"
+        ]
+      },
+      {
+        "name": "Navis Armsman",
+        "min": 7,
+        "max": 7,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        },
+        "default_weapon_ids": [
+          "navis-shotgun",
+          "close-combat-weapon-imperial-navy-breachers"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "tiers": [
-      {
-        "models": [
-          {
-            "name": "Navis Sergeant-at-Arms",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Navis Armsman",
-            "min": 9,
-            "max": 9
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Navis Sergeant-at-Arms",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Navis Armsman",
-            "min": 9,
-            "max": 9
-          }
-        ]
-      }
-    ]
+      "dataslate": "mfm-995"
+    }
   },
   {
     "unit_id": "culexus-assassin",
@@ -1344,7 +1460,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1413,11 +1529,11 @@
         },
         "loadout_variants": [
           {
-            "name": "Vigilant w/ combat shotgun",
+            "name": "Vigilant w/ shotgun",
             "weapon_ids": [
               "arbites-combat-shotgun",
-              "arbites-shotpistol",
-              "close-combat-weapon-vigilant-squad"
+              "close-combat-weapon-vigilant-squad",
+              "arbites-shotpistol"
             ],
             "max_count": 9
           },
@@ -1488,7 +1604,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1581,7 +1697,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1645,7 +1761,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1690,7 +1806,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1733,7 +1849,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1779,7 +1895,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1855,18 +1971,83 @@
             "max_count": 1
           },
           {
-            "name": "Battle Sister w/ Special or Heavy Weapon",
+            "name": "Battle Sister w/ Special or Heavy Weapon (Ministorum heavy flamer)",
             "weapon_ids": [
               "bolt-pistol",
-              "close-combat-weapon-sisters-of-battle-squad"
+              "close-combat-weapon-sisters-of-battle-squad",
+              "ministorum-heavy-flamer"
             ],
             "max_count": 1
           },
           {
-            "name": "Battle Sister w/ Special Weapon",
+            "name": "Battle Sister w/ Special or Heavy Weapon (Heavy bolter)",
             "weapon_ids": [
               "bolt-pistol",
-              "close-combat-weapon-sisters-of-battle-squad"
+              "close-combat-weapon-sisters-of-battle-squad",
+              "heavy-bolter-sisters-of-battle-squad"
+            ],
+            "max_count": 1
+          },
+          {
+            "name": "Battle Sister w/ Special or Heavy Weapon (Artificer-crafted storm bolter)",
+            "weapon_ids": [
+              "bolt-pistol",
+              "close-combat-weapon-sisters-of-battle-squad",
+              "artificer-crafted-storm-bolter"
+            ],
+            "max_count": 1
+          },
+          {
+            "name": "Battle Sister w/ Special or Heavy Weapon (Meltagun)",
+            "weapon_ids": [
+              "bolt-pistol",
+              "close-combat-weapon-sisters-of-battle-squad",
+              "meltagun-sisters-of-battle-squad"
+            ],
+            "max_count": 1
+          },
+          {
+            "name": "Battle Sister w/ Special or Heavy Weapon (Ministorum flamer)",
+            "weapon_ids": [
+              "bolt-pistol",
+              "close-combat-weapon-sisters-of-battle-squad",
+              "ministorum-flamer"
+            ],
+            "max_count": 1
+          },
+          {
+            "name": "Battle Sister w/ Special or Heavy Weapon (Multi-melta)",
+            "weapon_ids": [
+              "bolt-pistol",
+              "close-combat-weapon-sisters-of-battle-squad",
+              "multi-melta"
+            ],
+            "max_count": 1
+          },
+          {
+            "name": "Battle Sister w/ Special Weapon (Artificer-crafted storm bolter)",
+            "weapon_ids": [
+              "bolt-pistol",
+              "close-combat-weapon-sisters-of-battle-squad",
+              "artificer-crafted-storm-bolter"
+            ],
+            "max_count": 1
+          },
+          {
+            "name": "Battle Sister w/ Special Weapon (Meltagun)",
+            "weapon_ids": [
+              "bolt-pistol",
+              "close-combat-weapon-sisters-of-battle-squad",
+              "meltagun-sisters-of-battle-squad"
+            ],
+            "max_count": 1
+          },
+          {
+            "name": "Battle Sister w/ Special Weapon (Ministorum flamer)",
+            "weapon_ids": [
+              "bolt-pistol",
+              "close-combat-weapon-sisters-of-battle-squad",
+              "ministorum-flamer"
             ],
             "max_count": 1
           }
@@ -1874,10 +2055,40 @@
         "loadout_variant_budgets": [
           {
             "variant_names": [
+              "Battle Sister w/ Special or Heavy Weapon (Ministorum heavy flamer)",
+              "Battle Sister w/ Special or Heavy Weapon (Heavy bolter)",
+              "Battle Sister w/ Special or Heavy Weapon (Artificer-crafted storm bolter)",
+              "Battle Sister w/ Special or Heavy Weapon (Meltagun)",
+              "Battle Sister w/ Special or Heavy Weapon (Ministorum flamer)",
+              "Battle Sister w/ Special or Heavy Weapon (Multi-melta)"
+            ],
+            "count": 1,
+            "per_models": 0,
+            "scope": "model-row"
+          },
+          {
+            "variant_names": [
+              "Battle Sister w/ Special Weapon (Artificer-crafted storm bolter)",
+              "Battle Sister w/ Special Weapon (Meltagun)",
+              "Battle Sister w/ Special Weapon (Ministorum flamer)"
+            ],
+            "count": 1,
+            "per_models": 0,
+            "scope": "model-row"
+          },
+          {
+            "variant_names": [
               "Battle Sister",
               "Battle Sister w/ Simulacrum Imperialis",
-              "Battle Sister w/ Special or Heavy Weapon",
-              "Battle Sister w/ Special Weapon"
+              "Battle Sister w/ Special or Heavy Weapon (Ministorum heavy flamer)",
+              "Battle Sister w/ Special or Heavy Weapon (Heavy bolter)",
+              "Battle Sister w/ Special or Heavy Weapon (Artificer-crafted storm bolter)",
+              "Battle Sister w/ Special or Heavy Weapon (Meltagun)",
+              "Battle Sister w/ Special or Heavy Weapon (Ministorum flamer)",
+              "Battle Sister w/ Special or Heavy Weapon (Multi-melta)",
+              "Battle Sister w/ Special Weapon (Artificer-crafted storm bolter)",
+              "Battle Sister w/ Special Weapon (Meltagun)",
+              "Battle Sister w/ Special Weapon (Ministorum flamer)"
             ],
             "count": 9,
             "per_models": 0,
@@ -1888,7 +2099,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1936,16 +2147,17 @@
           "length": 92
         },
         "default_weapon_ids": [
-          "blackstar-rocket-launcher",
-          "blackstar-rocket-launcher",
           "armoured-hull",
+          "auspex-array",
+          "blackstar-rocket-launcher",
+          "blackstar-rocket-launcher",
           "twin-assault-cannon"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1988,7 +2200,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2076,7 +2288,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2167,7 +2379,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -2191,7 +2403,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2220,7 +2432,7 @@
         },
         "default_weapon_ids": [
           "agents-implement",
-          "heavy-bolter-inquisitorial-agents"
+          "heavy-bolter"
         ]
       },
       {
@@ -2249,8 +2461,8 @@
         },
         "default_weapon_ids": [
           "agent-firearm",
-          "agents-implement",
-          "plasma-pistol-standard-inquisitors-hand"
+          "plasma-pistol",
+          "agents-implement"
         ]
       },
       {
@@ -2270,7 +2482,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2341,9 +2553,9 @@
           "diameter": 28.5
         },
         "default_weapon_ids": [
-          "grenade-launcher-frag-inquisitors-hand",
-          "gun-stocks",
-          "shotpistol"
+          "grenade-launcher",
+          "shotpistol",
+          "gun-stocks"
         ]
       },
       {
@@ -2356,9 +2568,9 @@
           "diameter": 28.5
         },
         "default_weapon_ids": [
-          "gun-stocks",
           "shotpistol",
-          "webber-inquisitors-hand"
+          "webber",
+          "gun-stocks"
         ]
       },
       {
@@ -2379,7 +2591,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2433,7 +2645,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {

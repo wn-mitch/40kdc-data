@@ -18,5 +18,5 @@ Char1: 1x High Marshal Helbrecht (120 pts)
 Attachment: leader -> Assault Intercessor Squad
 
 5x Assault Intercessor Squad (75 pts)
-• 1x Assault Intercessor Sergeant: Astartes chainsword, Heavy bolt pistol
-• 4x Assault Intercessor: Astartes chainsword, Heavy bolt pistol
+• 1x Assault Intercessor Sergeant: Chainsword, Heavy bolt pistol
+• 4x Assault Intercessor: Chainsword, Heavy bolt pistol

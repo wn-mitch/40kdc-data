@@ -5,7 +5,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -24,7 +24,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -45,7 +45,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -72,7 +72,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -85,8 +85,8 @@
         "heavy-reaper-autocannon"
       ],
       [
-        "hades-lascannon",
-        "heavy-reaper-autocannon"
+        "heavy-reaper-autocannon",
+        "hades-lascannon"
       ],
       [
         "electroscourge",
@@ -111,7 +111,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -138,7 +138,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -159,7 +159,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -175,7 +175,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -198,7 +198,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -214,7 +214,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -235,7 +235,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -258,7 +258,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -279,7 +279,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -298,7 +298,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -326,7 +326,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -351,7 +351,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -371,7 +371,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -405,7 +405,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -425,7 +425,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -433,7 +433,7 @@
     ],
     "model_constraint": {
       "model_name": "Plague Marine",
-      "any_number": true
+      "max_count": 1
     }
   },
   {
@@ -442,7 +442,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -459,7 +459,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -476,7 +476,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -496,7 +496,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -617,7 +617,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -644,7 +644,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -719,7 +719,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -740,7 +740,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -772,7 +772,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -797,7 +797,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -818,7 +818,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -834,7 +834,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -854,7 +854,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -876,7 +876,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -897,7 +897,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -917,7 +917,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -937,7 +937,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -957,7 +957,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -969,6 +969,112 @@
     "model_constraint": {
       "model_name": "Blightlord Terminator",
       "any_number": true
+    }
+  },
+  {
+    "id": "great-unclean-one-wgo-mfm-1",
+    "unit_id": "great-unclean-one",
+    "faction_id": "death-guard",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "plague-flail"
+    ],
+    "replacement": [
+      "bileblade"
+    ],
+    "model_constraint": {
+      "any_number": true
+    }
+  },
+  {
+    "id": "great-unclean-one-wgo-mfm-2",
+    "unit_id": "great-unclean-one",
+    "faction_id": "death-guard",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "bilesword"
+    ],
+    "replacement": [
+      "doomsday-bell"
+    ],
+    "model_constraint": {
+      "any_number": true
+    }
+  },
+  {
+    "id": "plague-drones-wgo-mfm-1",
+    "unit_id": "plague-drones",
+    "faction_id": "death-guard",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replacement": [
+      "instrument-of-chaos"
+    ],
+    "model_constraint": {
+      "model_name": "Plague Drone",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "plague-drones-wgo-mfm-2",
+    "unit_id": "plague-drones",
+    "faction_id": "death-guard",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replacement": [
+      "daemonic-icon"
+    ],
+    "model_constraint": {
+      "model_name": "Plague Drone",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "plaguebearers-wgo-mfm-1",
+    "unit_id": "plaguebearers",
+    "faction_id": "death-guard",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replacement": [
+      "daemonic-icon"
+    ],
+    "model_constraint": {
+      "model_name": "Plaguebearer",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "plaguebearers-wgo-mfm-2",
+    "unit_id": "plaguebearers",
+    "faction_id": "death-guard",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replacement": [
+      "instrument-of-chaos"
+    ],
+    "model_constraint": {
+      "model_name": "Plaguebearer",
+      "max_count": 1
     }
   }
 ]

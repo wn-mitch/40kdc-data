@@ -129,7 +129,7 @@ describe("runner: ops dispatch through the public API", () => {
       op: "linked_query",
       args: { query: "abilities_of", input: { unitId: "kharn-the-betrayer" } },
     });
-    expect(resp.value).toEqual(["berzerker-frenzy", "leader", "legendary-killer", "the-betrayer"]);
+    expect(resp.value).toEqual(["berzerker-frenzy-world-eaters", "leader", "legendary-killer-world-eaters", "the-betrayer-world-eaters"]);
   });
 
   it("linked_query rejects an unknown unit with UNKNOWN_ENTITY", () => {

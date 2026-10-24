@@ -6,9 +6,9 @@
 
 # Function: effectToBuffs()
 
-> **effectToBuffs**(`effect`, `source`, `context`, `perspective?`): [`EffectTranslation`](../type-aliases/EffectTranslation.md)
+> **effectToBuffs**(`effect`, `source`, `context`, `perspective?`, `activation?`): [`EffectTranslation`](../type-aliases/EffectTranslation.md)
 
-Defined in: [cruncher/from-dsl.ts:119](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/from-dsl.ts#L119)
+Defined in: [cruncher/from-dsl.ts:173](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/cruncher/from-dsl.ts#L173)
 
 Walk an ability DSL `effect` tree and produce the buff stack it contributes
 against `context` from the given `perspective`, plus an `unsupported` list
@@ -31,6 +31,24 @@ naming any branches the buff layer can't express today.
 ### perspective?
 
 [`TranslationPerspective`](../type-aliases/TranslationPerspective.md) = `"attacker"`
+
+### activation?
+
+#### usage?
+
+`unknown`
+
+#### cost?
+
+`unknown`
+
+#### optional?
+
+`boolean`
+
+#### duration?
+
+`unknown`
 
 ## Returns
 

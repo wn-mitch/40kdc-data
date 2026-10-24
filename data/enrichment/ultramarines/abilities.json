@@ -1,0 +1,488 @@
+[
+  {
+    "ability_id": "armour-of-antoninus-blade-of-ultramar-ultramarines",
+    "name": "Armour of Antoninus",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "ultramarines",
+    "detachment_id": "blade-of-ultramar",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "this-model",
+          "modifier": {
+            "stat": "Sv",
+            "operation": "set",
+            "value": 2
+          }
+        },
+        {
+          "type": "feel-no-pain",
+          "target": "this-model",
+          "modifier": {
+            "threshold": 5
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "passive",
+    "source_digest": "f9e2332023b36503c6ef2f029c4bc61f27523ea34e546404b4fddb45fa68ccc0"
+  },
+  {
+    "ability_id": "armour-of-contempt-blade-of-ultramar-ultramarines",
+    "name": "Armour of Contempt",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "ultramarines",
+    "detachment_id": "blade-of-ultramar",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "attacker",
+      "modifier": {
+        "stat": "AP",
+        "operation": "worsen",
+        "value": 1
+      }
+    },
+    "scope": {
+      "duration": "attack-sequence"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS ASTARTES"
+        ]
+      }
+    },
+    "source_digest": "e2d8acd51c560532b851277b3e7157d690709032620bfb93975742b1be397aaf"
+  },
+  {
+    "ability_id": "courage-and-honour-blade-of-ultramar-ultramarines",
+    "name": "Courage and Honour!",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "ultramarines",
+    "detachment_id": "blade-of-ultramar",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "keywords": [
+          {
+            "keyword_id": "lance"
+          }
+        ],
+        "weapons": {
+          "type": "melee"
+        }
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "fight"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS ASTARTES"
+        ]
+      }
+    },
+    "source_digest": "342b55a6b905c137b78f8167f7154135f19d10d8430518821fa674b3bdb46e36"
+  },
+  {
+    "ability_id": "exemplary-vigilance-blade-of-ultramar-ultramarines",
+    "name": "Exemplary Vigilance",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "ultramarines",
+    "detachment_id": "blade-of-ultramar",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "keywords": [
+          {
+            "keyword_id": "ignores-cover"
+          }
+        ],
+        "weapons": {
+          "type": "ranged"
+        }
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS ASTARTES"
+        ]
+      }
+    },
+    "source_digest": "f881d7eef5e5adbe9096f04526b3be5f1b5529c156eef1ae314e80aa3f7ccef0"
+  },
+  {
+    "ability_id": "mastered-doctrines-ultramarines",
+    "name": "Mastered Doctrines",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "ultramarines",
+    "detachment_id": "blade-of-ultramar",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "oath-of-macragge-blade-of-ultramar-ultramarines",
+    "name": "Oath of Macragge",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "ultramarines",
+    "detachment_id": "blade-of-ultramar",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "stat-modifier",
+              "target": "this-model",
+              "modifier": {
+                "stat": "S",
+                "operation": "add",
+                "value": 1,
+                "weapons": {
+                  "type": "melee"
+                }
+              }
+            },
+            {
+              "type": "stat-modifier",
+              "target": "this-model",
+              "modifier": {
+                "stat": "AP",
+                "operation": "add",
+                "value": 1,
+                "weapons": {
+                  "type": "melee"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "rule-active",
+            "parameters": {
+              "rule": {
+                "ability_id": "combat-doctrines-adeptus-astartes",
+                "option_id": "assault-doctrine"
+              }
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "stat-modifier",
+                "target": "this-model",
+                "modifier": {
+                  "stat": "S",
+                  "operation": "add",
+                  "value": 2,
+                  "weapons": {
+                    "type": "melee"
+                  }
+                }
+              },
+              {
+                "type": "stat-modifier",
+                "target": "this-model",
+                "modifier": {
+                  "stat": "AP",
+                  "operation": "add",
+                  "value": 2,
+                  "weapons": {
+                    "type": "melee"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "passive",
+    "source_digest": "2c2cba7ccc1907dc849967a2b20ca1d98eb028de28738fc25ea79e6ac56ea64d"
+  },
+  {
+    "ability_id": "practical-tactics-blade-of-ultramar-ultramarines",
+    "name": "Practical Tactics",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "ultramarines",
+    "detachment_id": "blade-of-ultramar",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-subject",
+          "filter": {
+            "within": {
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "ADEPTUS ASTARTES"
+                ],
+                "any_of": [
+                  "INFANTRY",
+                  "MOUNTED"
+                ],
+                "not_states": [
+                  "engaged"
+                ]
+              },
+              "range": {
+                "inches": 8
+              }
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "move",
+        "target": "this-unit",
+        "modifier": {
+          "move_type": "normal",
+          "distance": "D3+3"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      }
+    },
+    "source_digest": "7d794aba68c84dc1d9e632e36ddb6512e53d4b8df2078339884aa484f4fd6726"
+  },
+  {
+    "ability_id": "student-of-the-codex-blade-of-ultramar-ultramarines",
+    "name": "Student of the Codex",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "ultramarines",
+    "detachment_id": "blade-of-ultramar",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "tactical-foresight-blade-of-ultramar-ultramarines",
+    "name": "Tactical Foresight",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "ultramarines",
+    "detachment_id": "blade-of-ultramar",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "attack-compare",
+        "parameters": {
+          "left": {
+            "of": "attacker",
+            "stat": "S"
+          },
+          "comparison": "gt",
+          "right": {
+            "of": "defender",
+            "stat": "T"
+          }
+        }
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "attacker",
+        "modifier": {
+          "roll": "wound",
+          "operation": "subtract",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS ASTARTES"
+        ]
+      }
+    },
+    "source_digest": "60474b8575b2c6f7052b03b4833eedd44b50f835cfe20a72fec36217223c0ba3"
+  },
+  {
+    "ability_id": "ultramarian-adaptivity-blade-of-ultramar-ultramarines",
+    "name": "Ultramarian Adaptivity",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "ultramarines",
+    "detachment_id": "blade-of-ultramar",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "ability-activate",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "combat-doctrines-adeptus-astartes",
+        "select": {
+          "by": "player"
+        },
+        "exclusive": true
+      }
+    },
+    "scope": {
+      "duration": "until-next-command-phase"
+    },
+    "behavior": "activated",
+    "source_digest": "99c83a0f3d9db1fee792968e48f8da2c0d77678b3c2788f122e321761d25d21f"
+  },
+  {
+    "ability_id": "veteran-of-behemoth-blade-of-ultramar-ultramarines",
+    "name": "Veteran of Behemoth",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "ultramarines",
+    "detachment_id": "blade-of-ultramar",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "keywords": [
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ],
+        "weapons": {
+          "type": "ranged"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "passive",
+    "source_digest": "d0008e731bda4a7c84bd28ca58d1d917dc3f7b54512dec64980b4d4375a534b0"
+  }
+]

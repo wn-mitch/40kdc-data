@@ -42,7 +42,8 @@ import {
 } from "./loader.js";
 import { repoDirs } from "./faction-map.js";
 import { keywordLabel } from "./keywords.js";
-import { CONFIRMED, candidateDirs, homeScore } from "./wargear.js";
+import { candidateDirs, homeScore } from "./wargear.js";
+import { currentGameVersion } from "./dataslate.js";
 import { CORE_DIR, readJsonArray } from "./repo-files.js";
 import type { StagedWrite } from "./apply.js";
 
@@ -74,6 +75,8 @@ export interface DirAttachmentResult {
   rolesChanged: number;
   /** leader-attachment records emitted from the dump (≥1 resolvable bodyguard). */
   leadersEmitted: number;
+  /** leader ids of the records emitted from the dump. */
+  emittedLeaderIds: string[];
   /** existing leader-attachment records preserved (dump did not describe the leader). */
   leadersPreserved: number;
   /** leaders the dump describes but whose bodyguards did not resolve to repo ids. */
@@ -92,6 +95,7 @@ export interface AttachmentReport {
  * {@link applyWrites}.
  */
 export function runAttachmentRoles(dump: MfmDump, onlyDir?: string): AttachmentReport {
+  const confirmed = currentGameVersion(dump);
   const dirs = repoDirs();
   // Bucket non-Legends datasheets by candidate repo dir (home + shared-roster parents).
   const byDir = new Map<string, DatasheetRow[]>();
@@ -126,6 +130,7 @@ export function runAttachmentRoles(dump: MfmDump, onlyDir?: string): AttachmentR
       matched: 0,
       rolesChanged: 0,
       leadersEmitted: 0,
+      emittedLeaderIds: [],
       leadersPreserved: 0,
       unresolvedLeaders: [],
       changes: [],
@@ -201,7 +206,7 @@ export function runAttachmentRoles(dump: MfmDump, onlyDir?: string): AttachmentR
           leader_id: id,
           eligible_bodyguard_ids: [...eligible].sort(),
           ...(keywords.size ? { eligible_bodyguard_keywords: [...keywords] } : {}),
-          game_version: { ...CONFIRMED },
+          game_version: { ...confirmed },
         });
       } else if (unresolved.length) {
         // Dump describes this leader but no bodyguard resolved — skip emitting (schema
@@ -223,6 +228,7 @@ export function runAttachmentRoles(dump: MfmDump, onlyDir?: string): AttachmentR
     for (const [lid, rec] of dumpLa) {
       merged.set(lid, rec);
       res.leadersEmitted++;
+      res.emittedLeaderIds.push(lid);
     }
     const mergedArr = [...merged.values()].sort((a, b) => a.leader_id.localeCompare(b.leader_id));
     // Stage iff the file content actually changes (or we have records for a new file).

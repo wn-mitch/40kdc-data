@@ -5,7 +5,7 @@
     "faction_id": "world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -29,7 +29,7 @@
     "faction_id": "world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -49,7 +49,7 @@
     "faction_id": "world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -70,7 +70,7 @@
     "faction_id": "world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -87,7 +87,7 @@
     "faction_id": "world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -107,7 +107,7 @@
     "faction_id": "world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -124,7 +124,7 @@
     "faction_id": "world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -144,7 +144,7 @@
     "faction_id": "world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -164,7 +164,7 @@
     "faction_id": "world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -184,7 +184,7 @@
     "faction_id": "world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -204,7 +204,7 @@
     "faction_id": "world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -221,7 +221,7 @@
     "faction_id": "world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -242,7 +242,7 @@
     "faction_id": "world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -258,7 +258,7 @@
     "faction_id": "world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -278,7 +278,7 @@
     "faction_id": "world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -297,7 +297,7 @@
     "faction_id": "world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -318,7 +318,7 @@
     "faction_id": "world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -345,7 +345,7 @@
     "faction_id": "world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -372,7 +372,7 @@
     "faction_id": "world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -381,8 +381,8 @@
     ],
     "replacement_choice": [
       [
-        "electroscourge",
-        "hades-lascannon"
+        "hades-lascannon",
+        "electroscourge"
       ],
       [
         "heavy-reaper-autocannon",
@@ -393,8 +393,8 @@
         "heavy-reaper-autocannon"
       ],
       [
-        "hades-lascannon",
-        "heavy-reaper-autocannon"
+        "heavy-reaper-autocannon",
+        "hades-lascannon"
       ],
       [
         "hades-lascannon",
@@ -411,7 +411,7 @@
     "faction_id": "world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -430,7 +430,7 @@
     "faction_id": "world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -462,7 +462,7 @@
     "faction_id": "world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -490,7 +490,7 @@
     "faction_id": "world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -531,7 +531,7 @@
     "faction_id": "world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -698,7 +698,7 @@
     "faction_id": "world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -733,7 +733,7 @@
     "faction_id": "world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -754,7 +754,7 @@
     "faction_id": "world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -770,7 +770,7 @@
     "faction_id": "world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -793,7 +793,7 @@
     "faction_id": "world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -816,7 +816,7 @@
     "faction_id": "world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -832,7 +832,7 @@
     "faction_id": "world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -853,7 +853,7 @@
     "faction_id": "world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -884,7 +884,7 @@
     "faction_id": "world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -909,7 +909,7 @@
     "faction_id": "world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -929,7 +929,7 @@
     "faction_id": "world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -976,7 +976,7 @@
     "faction_id": "world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1001,7 +1001,7 @@
     "faction_id": "world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1029,7 +1029,7 @@
     "faction_id": "world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1053,7 +1053,7 @@
     "faction_id": "world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1072,7 +1072,7 @@
     "faction_id": "world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1088,6 +1088,100 @@
     ],
     "model_constraint": {
       "model_name": "Goremongers",
+      "any_number": true
+    }
+  },
+  {
+    "id": "bloodcrushers-wgo-mfm-1",
+    "unit_id": "bloodcrushers",
+    "faction_id": "world-eaters",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replacement": [
+      "daemonic-icon"
+    ],
+    "model_constraint": {
+      "model_name": "Bloodcrusher",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "bloodcrushers-wgo-mfm-2",
+    "unit_id": "bloodcrushers",
+    "faction_id": "world-eaters",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replacement": [
+      "instrument-of-chaos"
+    ],
+    "model_constraint": {
+      "model_name": "Bloodcrusher",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "bloodletters-wgo-mfm-1",
+    "unit_id": "bloodletters",
+    "faction_id": "world-eaters",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replacement": [
+      "instrument-of-chaos"
+    ],
+    "model_constraint": {
+      "model_name": "Bloodletter",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "bloodletters-wgo-mfm-2",
+    "unit_id": "bloodletters",
+    "faction_id": "world-eaters",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replacement": [
+      "daemonic-icon"
+    ],
+    "model_constraint": {
+      "model_name": "Bloodletter",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "bloodthirster-wgo-mfm-1",
+    "unit_id": "bloodthirster",
+    "faction_id": "world-eaters",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "great-axe-of-khorne"
+    ],
+    "replacement_choice": [
+      [
+        "bloodflail",
+        "axe-of-khorne"
+      ],
+      [
+        "lash-of-khorne",
+        "axe-of-khorne"
+      ]
+    ],
+    "model_constraint": {
       "any_number": true
     }
   }

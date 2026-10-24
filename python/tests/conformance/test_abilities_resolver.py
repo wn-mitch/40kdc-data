@@ -13,13 +13,15 @@ from typing import Any
 
 import pytest
 
+from wh40kdc.abilities_resolver import stratagem_can_target
 from wh40kdc.cruncher import effect_to_buffs
+from wh40kdc.data.ability_refs import with_rating
 
 from ..conftest import CORPUS
 
 _DIR = CORPUS / "abilities-resolver"
 _RESOLVER_CASES = (
-    sorted(p.name for p in _DIR.glob("*.json") if not p.name.endswith("from-dsl.json"))
+    sorted(p.name for p in _DIR.glob("0*.json"))
     if _DIR.exists()
     else []
 )
@@ -37,29 +39,66 @@ def test_eligible_abilities(dataset: Any, case_file: str) -> None:
     assert grouped == case["expected"]
 
 
+_TARGET_CASES = (
+    json.loads((_DIR / "stratagem-targets.json").read_text(encoding="utf-8"))["cases"]
+    if (_DIR / "stratagem-targets.json").exists()
+    else []
+)
+
+
+@pytest.mark.skipif(not _TARGET_CASES, reason="conformance corpus not available")
+@pytest.mark.parametrize("case", _TARGET_CASES, ids=lambda case: case["name"])
+def test_stratagem_can_target(case: dict[str, Any]) -> None:
+    stratagem = {"target_restrictions": case["target_restrictions"]}
+    assert stratagem_can_target(stratagem, set(case["keywords"])) is case["expected"]
+
+
 def _run_dsl_corpus(dataset: Any, filename: str) -> None:
     dsl = json.loads((_DIR / filename).read_text(encoding="utf-8"))
     for c in dsl["cases"]:
-        ability = dataset.abilities.get_any(c["abilityId"])
-        assert ability is not None, f"unknown ability {c['abilityId']}"
         perspective = c.get("perspective", "attacker")
-        result = effect_to_buffs(ability.raw.get("effect"), c["source"], c["context"], perspective)
+        if "effect" in c:
+            effect = with_rating(c["effect"], c.get("rating"))
+            result = effect_to_buffs(effect, c["source"], c["context"], perspective)
+        else:
+            ability = dataset.abilities.get_any(c["abilityId"])
+            assert ability is not None, f"unknown ability {c['abilityId']}"
+            result = ability.describe_buffs(
+                c["source"],
+                c["context"],
+                perspective,
+                c.get("rating"),
+            )
         applied_contribs = [b["contribution"] for b in result["applied"]]
-        assert applied_contribs == c["expected"]["applied"], f"{c['abilityId']} ({perspective})"
+        message = f"{c['abilityId']} ({perspective})"
+        assert applied_contribs == c["expected"]["applied"], message
         reasons = [u["reason"] for u in result["unsupported"]]
-        assert reasons == c["expected"]["unsupportedReasons"], f"{c['abilityId']} ({perspective})"
+        assert reasons == c["expected"]["unsupportedReasons"], message
         if "activatable" in c["expected"]:
             acts = [
                 {
                     "id": a["id"],
                     "label": a["label"],
                     "group": a.get("group"),
+                    "groups": a.get("groups"),
+                    "requires": a.get("requires"),
+                    "capRaise": a.get("capRaise"),
                     "buffs": [b["contribution"] for b in a["buffs"]],
                 }
                 for a in result["activatable"]
             ]
-            expected_acts = [{**e, "group": e.get("group")} for e in c["expected"]["activatable"]]
-            assert acts == expected_acts, f"{c['abilityId']} ({perspective})"
+            # Expected levers omit optional metadata when it is absent.
+            expected_acts = [
+                {
+                    "group": None,
+                    "groups": None,
+                    "requires": None,
+                    "capRaise": None,
+                    **e,
+                }
+                for e in c["expected"]["activatable"]
+            ]
+            assert acts == expected_acts, message
 
 
 @pytest.mark.skipif(not _DIR.exists(), reason="conformance corpus not available")

@@ -1,21 +1,8 @@
-"""Roster-highlighting scope: resolve which units an ability (typically a
-detachment rule) benefits, from its curated ``applies_to`` keyword filter.
+"""Roster-highlighting scope: resolve which units an ability benefits from its
+curated static keyword subset.
 
-This is the contract consumers replicate: a unit matches iff it carries every
-``required_keywords`` entry and none of the ``excluded_keywords``, compared
-against the union of its ``keywords`` and ``faction_keywords``. Matching is
-exact-string and case-sensitive — keywords are authored in datasheet Title Case
-on both sides.
-
-Two distinct "no constraint" forms, both deliberate:
-  - a ``None``/absent filter has no resolvable scope and matches nothing (the
-    app renders no highlight rather than guess);
-  - a present filter with neither keyword list constrains nothing and matches
-    every unit (vacuous required/excluded sets).
-
-Mirrors ``tools/src/scope.ts`` (TS) and ``wh40kdc::scope`` (Rust); pinned
-byte-for-byte across the ports by the ``conformance/applies-to`` corpus (bump
-``conformance/SPEC_VERSION`` on change).
+``applies_to`` is intentionally not scraped from runtime effects. A missing or
+null filter matches nothing; an explicit empty object matches every unit.
 """
 
 from __future__ import annotations
@@ -30,17 +17,31 @@ def unit_matches_applies_to(
     applies_to: dict[str, Any] | None,
     owned_keywords: Iterable[str],
 ) -> bool:
-    """True when a unit owning ``owned_keywords`` (the union of its ``keywords``
-    and ``faction_keywords``) falls within ``applies_to``'s scope. See the module
-    docstring for the ``None``-vs-empty-filter semantics."""
+    """Match canonical all/any/none keyword subsets."""
     if applies_to is None:
         return False
-    owned = set(owned_keywords)
-    if any(kw not in owned for kw in applies_to.get("required_keywords") or []):
+    owned = {keyword_key(kw) for kw in owned_keywords}
+    all_of = applies_to.get("all_of") or []
+    any_of = applies_to.get("any_of") or []
+    none_of = applies_to.get("none_of") or []
+    not_all_of = applies_to.get("not_all_of") or []
+    if any(keyword_key(kw) not in owned for kw in all_of):
         return False
-    if any(kw in owned for kw in applies_to.get("excluded_keywords") or []):
+    if any_of and not any(keyword_key(kw) in owned for kw in any_of):
+        return False
+    if any(keyword_key(kw) in owned for kw in none_of):
+        return False
+    if not_all_of and all(keyword_key(kw) in owned for kw in not_all_of):
         return False
     return True
+
+
+def keyword_key(keyword: str) -> str:
+    """How two keyword spellings compare.
+
+    Uppercase, with a curly apostrophe read as a straight one.
+    """
+    return keyword.upper().replace("’", "'")
 
 
 def ability_applies_to_unit(applies_to: dict[str, Any] | None, unit: dict[str, Any]) -> bool:

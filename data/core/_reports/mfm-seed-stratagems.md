@@ -3,12 +3,16 @@
 Creates repo stratagem entities for dump stratagems with no repo entity. Structural
 fields are dump-derived; phases are prose-parsed and timing defaults to
 `once-per-phase`, so every seed is stamped `pre-launch-provisional` for review.
-Prose routes to the store via `mfm-backfill-store`, never here.
+Prose stays in the private dump (read it with `npm run prose`), never here.
 
-- **Seeded:** 0
+- **Seeded:** 3
 - **Held back (Combat Patrol):** 0
-- **Skipped (coreless — manual review):** 2 (`counteroffensive`, `new-orders`)
+- **Skipped (coreless — manual review):** 0
 - **Skipped (no repo dir):** 0
 - **Skipped (no canon):** 0
 
+## orks (3)
 
+- `get-stuck-in-ardmob-orks` — Get Stuck In
+- `krump-em-ardmob-orks` — Krump ’Em
+- `medi-squigs-ardmob-orks` — Medi-Squigs

@@ -20,9 +20,9 @@ func TestBaseUnitPointsOrdinalBands(t *testing.T) {
 	cases := []struct {
 		models, ordinal, want int
 	}{
-		{5, 1, 165}, {5, 2, 165}, {10, 1, 330},
-		{5, 3, 175}, {10, 3, 340}, {5, 7, 175},
-		{7, 1, 330}, // inside the 6-10 range tier (not the 5-model tier)
+		{5, 1, 175}, {5, 2, 175}, {10, 1, 350},
+		{5, 3, 185}, {10, 3, 360}, {5, 7, 185},
+		{7, 1, 350}, // inside the 6-10 range tier (not the 5-model tier)
 	}
 	for _, c := range cases {
 		if got := baseUnitPoints(ct, c.models, c.ordinal); got != c.want {
@@ -52,15 +52,15 @@ func TestPointsTierMissing(t *testing.T) {
 	}
 }
 
-// Venatari Custodians: 3 @150 for the first two copies (160 thereafter), or 4-6
-// @300 (310 thereafter).
-func TestRangePricedTierVenatari(t *testing.T) {
+// Reavers: 3 @75 for the first two copies (85 thereafter), or 4-6 @150 (160
+// thereafter).
+func TestRangePricedTierReavers(t *testing.T) {
 	ds := EmbeddedDataset()
-	ven, ok := ds.Units.GetInFaction("venatari-custodians", "adeptus-custodes")
+	ven, ok := ds.Units.GetInFaction("reavers", "drukhari")
 	if !ok {
-		t.Fatal("venatari-custodians not in dataset")
+		t.Fatal("reavers not in dataset")
 	}
-	for _, c := range []struct{ models, want int }{{3, 150}, {4, 300}, {5, 300}, {6, 300}} {
+	for _, c := range []struct{ models, want int }{{3, 75}, {4, 150}, {5, 150}, {6, 150}} {
 		if got := baseUnitPoints(ven.Raw, c.models, 1); got != c.want {
 			t.Errorf("baseUnitPoints(%d models) = %d, want %d", c.models, got, c.want)
 		}
