@@ -6712,9 +6712,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "1c5501ddc24dc64b2f6557a985e154f3e840ae46522fbed19730041cda123145",
+    "source_digest": "c5b098e427f9588587e4bfc9867f8f8c13b9081658ba7c06ca7cb3359711f962",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -6723,94 +6723,115 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "rule-state",
-          "target": {
-            "owner": "enemy"
-          },
-          "modifier": {
-            "direction": "suppressed",
-            "rule_kind": "core-rule",
-            "rule": "ordered-retreat"
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "state": "battle-shocked"
-              }
-            }
-          },
-          "effect": {
-            "type": "roll-modifier",
-            "target": {
-              "owner": "enemy"
-            },
-            "modifier": {
-              "roll": "desperate-escape",
-              "operation": "subtract",
-              "value": 1
-            }
-          }
-        }
-      ]
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "trigger": {
-      "event": "selected",
-      "subject": {
-        "owner": "enemy"
-      },
-      "filter": {
-        "to": "move",
-        "move_types": [
-          "fall-back"
-        ]
-      },
+      "type": "conditional",
       "condition": {
         "operator": "and",
         "operands": [
           {
-            "type": "phase-is",
+            "type": "matches",
             "parameters": {
-              "phase": "movement"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent-turn"
+              "subject": "event-subject",
+              "filter": {
+                "engaged_with": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "LEGIONES DAEMONICA",
+                    "MOUNTED"
+                  ]
+                }
+              }
             }
           },
           {
             "type": "matches",
             "parameters": {
+              "subject": "event-subject",
               "filter": {
-                "within": {
-                  "range": "engagement",
-                  "of": {
-                    "owner": "friendly",
-                    "all_of": [
-                      "LEGIONES DAEMONICA",
-                      "MOUNTED"
-                    ]
-                  }
-                }
-              },
-              "subject": "event-subject"
+                "engaged_with": "this-unit"
+              }
             }
           }
         ]
       },
-      "optional": true
-    }
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "event-subject",
+                "filter": {
+                  "state": "battle-shocked"
+                }
+              }
+            },
+            "effect": {
+              "type": "test",
+              "target": "event-subject",
+              "modifier": {
+                "test": "desperate-escape",
+                "modifier": -1
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "event-subject",
+                    "filter": {
+                      "state": "battle-shocked"
+                    }
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "test",
+              "target": "event-subject",
+              "modifier": {
+                "test": "desperate-escape"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "trigger": [
+      {
+        "event": "selected",
+        "subject": {
+          "owner": "enemy"
+        },
+        "filter": {
+          "move_types": [
+            "fall-back"
+          ],
+          "to": "move"
+        }
+      },
+      {
+        "event": "selected",
+        "filter": {
+          "move_types": [
+            "fall-back"
+          ],
+          "to": "move"
+        },
+        "subject": {
+          "owner": "enemy"
+        }
+      }
+    ]
   },
   {
     "ability_id": "carnival-of-excess-lords-of-the-warp-chaos-daemons",

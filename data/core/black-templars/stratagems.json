@@ -495,7 +495,21 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Sword Brethren Squad"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "unit-state",
+        "parameters": {
+          "state": "engaged",
+          "with": "event-subject"
+        }
+      }
+    },
     "ability_id": "unsparing-execution-marshals-household-black-templars",
     "game_version": {
       "edition": "11th",

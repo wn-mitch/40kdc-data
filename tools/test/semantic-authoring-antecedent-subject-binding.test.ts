@@ -415,6 +415,48 @@ describe("'That K unit' naming the friendly unit of the WHEN's distance clause (
     ]);
     expect(coreOf(result).bound_to).toBe("triggering-unit");
   });
+
+  // Hunts: an enemy Falling Back while engaged with a friendly K unit left "That K unit" bound to the enemy mover.
+  const fallBack = "Opponent's Movement phase, when an enemy unit is selected to Fall Back, if that unit is engaged with a friendly PIONEERS unit. That PIONEERS unit. Until the end of the phase, your unit's ranged attacks have [PRECISION].";
+  const fallBackItems = (state: Record<string, unknown>): Item[] => [
+    ["Opponent's Movement phase", "use-window", { your_phases: [], opponent_phases: ["movement"], either_phases: [] }, "WHEN"],
+    ["enemy unit", "unit-filter", { side: "enemy" }, "WHEN"],
+    ["selected to Fall Back", "event", { kind: "selected", move_types: ["fall-back"], to: "move" }, "WHEN"],
+    ["if that unit is engaged with a", "unit-state", state, "WHEN"],
+    ["friendly PIONEERS unit", "unit-filter", { side: "friendly", keywords: ["PIONEERS"] }, "WHEN"],
+    ["That PIONEERS unit", "triggering-target", { selects: "unit", keywords: ["PIONEERS"], match: "all" }, "TARGET"],
+    ["Until the end of the phase", "duration", { endpoint: "end-of-phase" }, "EFFECT"],
+    ["your unit's ranged attacks have", "weapon-property-scope", { subject: "this-unit", weapon_type: "ranged" }, "EFFECT"],
+    ["PRECISION", "weapon-ability-keyword", { keyword: "Precision" }, "EFFECT"],
+  ];
+
+  it("targets the friendly unit the enemy mover is engaged with, now or at the start of the phase", () => {
+    const engaged = { states: ["engaged"], subject: "antecedent", negated: false, with: "following-filter" };
+    expect(coreOf(compileItems(fallBack, fallBackItems(engaged)))).toEqual({
+      count: "one", side: "your-army", selects: "unit", required_keywords: ["PIONEERS"],
+      eligibility: { type: "unit-state", parameters: { state: "engaged", with: "event-subject" } },
+    });
+    expect(coreOf(compileItems(fallBack, fallBackItems({ ...engaged, at: "phase-start" }))).eligibility)
+      .toEqual({ type: "unit-state", parameters: { state: "engaged", with: "event-subject", at: "phase-start" } });
+  });
+});
+
+describe("'That K unit' after the triggering attacks destroyed a model in a friendly K unit", () => {
+  // Hunts: the unit that lost a model was refused as "no friendly K unit in the moment".
+  const text = "Opponent's Shooting phase, when an enemy unit has shot, if those attacks destroyed a model in a friendly PIONEERS unit. That PIONEERS unit. Your unit can shoot.";
+  it("binds the target to the unit the enemy attacked", () => {
+    const result = compileItems(text, [
+      ["Opponent's Shooting phase", "use-window", { your_phases: [], opponent_phases: ["shooting"], either_phases: [] }, "WHEN"],
+      ["enemy unit", "unit-filter", { side: "enemy" }, "WHEN"],
+      ["has shot", "event", { kind: "enemy-has-shot" }, "WHEN"],
+      ["those attacks destroyed a model in a", "unit-activity", { activities: ["destroyed-models-by-triggering-attacks"], negated: false, named: "none", container: "after", destroyer: "event-subject" }, "WHEN"],
+      ["friendly PIONEERS unit", "unit-filter", { side: "friendly", keywords: ["PIONEERS"] }, "WHEN"],
+      ["That PIONEERS unit", "triggering-target", { selects: "unit", keywords: ["PIONEERS"], match: "all" }, "TARGET"],
+      ["Your unit can shoot", "eligibility-permission", { subject: "this-unit", activity: "shoot", allow: true }, "EFFECT"],
+    ]);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    expect((result as any).core.target_restrictions).toMatchObject({ required_keywords: ["PIONEERS"], bound_to: "attacked-unit" });
+  });
 });
 
 describe("describers read the lowered shapes without raw ids", () => {

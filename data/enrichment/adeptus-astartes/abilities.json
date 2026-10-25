@@ -1303,19 +1303,54 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "0e4216955d3ee9d0506abcfe2858b2e25966c78efb01cdd50c20f96e91ca3a49",
+    "source_digest": "ae4fdbe02eb73fd368afc713841575ad044c0777b58cb01248ca440c4279d496",
     "version": "2025-q3",
     "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "benefit-of-cover"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
+            }
+          },
+          {
+            "type": "in-region",
+            "parameters": {
+              "subject": "defender",
+              "region": {
+                "terrain_area": {
+                  "footprint": "terrain area"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "weapon-ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "keywords": [
+            {
+              "keyword_id": "sustained-hits",
+              "parameters": {
+                "value": 1
+              }
+            }
+          ],
+          "weapons": {
+            "type": "ranged"
+          }
+        }
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "unit_ids": [
       "storm-speeder-hammerstrike"
@@ -4877,9 +4912,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "e2705fb67cd97e88c4e236870eb383479a86913feaaa17b184fa4b27a01a7ae7",
+    "source_digest": "cd505ee4977cbcb19a0dea0a2b51f039256619a04e55c3b51a31c8403dca1d3f",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -4889,20 +4924,84 @@
     "behavior": "reactive",
     "trigger": {
       "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
       "subject": {
         "owner": "enemy"
       },
-      "filter": {
-        "kind": "shoot"
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "all_of": [
+              "ADEPTUS ASTARTES"
+            ]
+          }
+        }
       }
     },
     "effect": {
-      "type": "permission",
-      "target": "this-unit",
-      "modifier": {
-        "activity": "shoot",
-        "allow": true,
-        "as_if": "shooting-phase"
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "model-destroyed",
+          "object": {
+            "level": "model",
+            "member_of": {
+              "owner": "friendly",
+              "all_of": [
+                "ADEPTUS ASTARTES"
+              ]
+            }
+          },
+          "filter": {
+            "by": "event-subject"
+          },
+          "window": "event"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "attack-is",
+              "parameters": {
+                "shooting_type": "normal"
+              }
+            },
+            "effect": {
+              "type": "permission",
+              "target": "this-unit",
+              "modifier": {
+                "activity": "shoot",
+                "allow": true
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "attack-is",
+              "parameters": {
+                "shooting_type": "normal"
+              }
+            },
+            "effect": {
+              "type": "targeting",
+              "target": "this-unit",
+              "modifier": {
+                "by": "this-unit",
+                "may": "must-target",
+                "kind": "shoot",
+                "target": "event-subject"
+              }
+            }
+          }
+        ]
       }
     },
     "scope": {

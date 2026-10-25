@@ -371,10 +371,12 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
       }
       // The attack being made belongs to whoever attacks, as for characteristic-modifier below.
       const owner = subject === "attack" && leaf.family_version >= 7 ? attackOwner(context) : target(subject);
+      // AP is printed negative ("an Armour Penetration characteristic of -2"); the DSL stores its magnitude.
+      const value = closed(leaf, "value");
       return {
         type: "stat-modifier", target: owner,
         modifier: {
-          stat: characteristic, operation: "set", value: closed(leaf, "value"), ...weaponScope(leaf),
+          stat: characteristic, operation: "set", value: characteristic === "AP" && typeof value === "number" ? Math.abs(value) : value, ...weaponScope(leaf),
         },
       };
     }

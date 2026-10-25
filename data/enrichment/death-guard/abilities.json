@@ -4840,9 +4840,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "bc46754fe53b391a24bb6d5d0cb852d8303c3d5680415e727881b79301fe21a2",
+    "source_digest": "6c57eb8e98c0ebd7588871970250438468002ca8bef92e207cc8f419846f7168",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -4851,85 +4851,10 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "dice-table",
-      "dice": "D6",
-      "outcomes": [
-        {
-          "results": [
-            1
-          ],
-          "effect": {
-            "type": "mortal-wounds",
-            "target": "event-subject",
-            "modifier": {
-              "count": 1
-            }
-          }
-        },
-        {
-          "results": [
-            2,
-            3,
-            4,
-            5
-          ],
-          "effect": {
-            "type": "mortal-wounds",
-            "target": "event-subject",
-            "modifier": {
-              "count": "D3"
-            }
-          }
-        },
-        {
-          "results": [
-            6
-          ],
-          "effect": {
-            "type": "mortal-wounds",
-            "target": "event-subject",
-            "modifier": {
-              "count": 3
-            }
-          }
-        }
-      ]
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "trigger": {
-      "event": "selected",
-      "filter": {
-        "move_types": [
-          "fall-back"
-        ],
-        "to": "move"
-      },
-      "subject": {
-        "owner": "enemy"
-      },
-      "optional": true,
+      "type": "conditional",
       "condition": {
         "operator": "and",
         "operands": [
-          {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "phase-is",
-                "parameters": {
-                  "phase": "movement"
-                }
-              },
-              {
-                "type": "player-turn-is",
-                "parameters": {
-                  "turn": "opponent-turn"
-                }
-              }
-            ]
-          },
           {
             "type": "matches",
             "parameters": {
@@ -4943,10 +4868,93 @@
                 }
               }
             }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "event-subject",
+              "filter": {
+                "engaged_with": "this-unit"
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "dice-table",
+        "dice": "D6",
+        "outcomes": [
+          {
+            "results": [
+              1
+            ],
+            "effect": {
+              "type": "mortal-wounds",
+              "target": "event-subject",
+              "modifier": {
+                "count": 1
+              }
+            }
+          },
+          {
+            "results": [
+              2,
+              3,
+              4,
+              5
+            ],
+            "effect": {
+              "type": "mortal-wounds",
+              "target": "event-subject",
+              "modifier": {
+                "count": "D3"
+              }
+            }
+          },
+          {
+            "results": [
+              6
+            ],
+            "effect": {
+              "type": "mortal-wounds",
+              "target": "event-subject",
+              "modifier": {
+                "count": 3
+              }
+            }
           }
         ]
       }
-    }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": [
+      {
+        "event": "selected",
+        "filter": {
+          "move_types": [
+            "fall-back"
+          ],
+          "to": "move"
+        },
+        "subject": {
+          "owner": "enemy"
+        }
+      },
+      {
+        "event": "selected",
+        "filter": {
+          "move_types": [
+            "fall-back"
+          ],
+          "to": "move"
+        },
+        "subject": {
+          "owner": "enemy"
+        }
+      }
+    ]
   },
   {
     "ability_id": "territorial-infection-paragons-of-putrescence-death-guard",

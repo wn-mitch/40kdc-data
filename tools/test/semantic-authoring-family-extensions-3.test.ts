@@ -159,6 +159,9 @@ describe("Semantic authoring family extensions, third round", () => {
     expect(() => normalize("feel-no-pain", { subject: "this-model", threshold: 5, against: "all", model_keywords: ["CHARACTER"] })).toThrow(/models of a unit/u);
     const set = compiled([leaf("characteristic-set", { subject: "this-model", characteristic: "D", value: 2, weapon_type: "melee", weapon_name: "flail" })]);
     expect(first(set, "stat-modifier")).toMatchObject({ modifier: { stat: "D", operation: "set", value: 2, weapons: { type: "melee", name: "flail" } } });
+    // A printed "Armour Penetration characteristic of -2" is stored as its magnitude.
+    const ap = compiled([leaf("characteristic-set", { subject: "this-model", characteristic: "AP", value: -2, weapon_type: "ranged" })]);
+    expect(first(ap, "stat-modifier")).toMatchObject({ modifier: { stat: "AP", operation: "set", value: 2 } });
   });
 
   it("inflicts any dice amount of mortal wounds, and sets a unit up near where it was destroyed beyond the Reserves limits", () => {

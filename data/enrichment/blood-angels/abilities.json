@@ -521,9 +521,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "b93b5a5435cc6992d0cda503f8b578c9298eaddc4fd68086d934f42634ba5bc0",
+    "source_digest": "12686d332ce15e98583286289131465ca001a1a2089176b4b7e2cd53b98ee58e",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -533,25 +533,61 @@
     "behavior": "reactive",
     "trigger": {
       "event": "move-ended",
-      "subject": {
-        "owner": "enemy"
-      },
       "filter": {
         "move_types": [
           "fall-back"
         ]
+      },
+      "subject": {
+        "owner": "enemy"
       }
     },
     "effect": {
-      "type": "move",
-      "target": "this-unit",
-      "modifier": {
-        "move_type": "normal",
-        "distance": "D3+3"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "unit-state",
+            "parameters": {
+              "subject": "event-subject",
+              "state": "engaged",
+              "with": {
+                "owner": "friendly",
+                "all_of": [
+                  "SANGUINARY GUARD"
+                ]
+              },
+              "at": "phase-start"
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "defender",
+                  "filter": {
+                    "state": "engaged"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "effect": {
+        "type": "move",
+        "target": "this-unit",
+        "modifier": {
+          "move_type": "normal",
+          "distance": "D3+3"
+        }
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "community_notes": "Sanguinary Guard unit left unengaged after an enemy unit it was engaged with ends a Fall Back move"
   },
@@ -754,7 +790,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "d5591f86bbc6abf77814817b143c0d5cce799aed5773645d632baa75f9436ea8",
     "version": "2025-q3",
@@ -764,61 +800,111 @@
     "detachment_id": "sanguinary-spearhead",
     "ability_type": "stratagem",
     "behavior": "reactive",
-    "trigger": {
-      "event": "move-ended",
-      "subject": {
-        "owner": "enemy"
-      },
-      "filter": {
-        "move_types": [
-          "fall-back"
-        ]
-      }
-    },
-    "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "rule-state",
-          "target": {
-            "owner": "enemy",
-            "within": {
-              "range": "engagement"
-            }
-          },
-          "modifier": {
-            "direction": "granted",
-            "rule_kind": "core-rule",
-            "rule": "desperate-escape"
-          }
+    "trigger": [
+      {
+        "event": "selected",
+        "subject": {
+          "owner": "enemy"
         },
-        {
-          "type": "conditional",
-          "condition": {
+        "filter": {
+          "move_types": [
+            "fall-back"
+          ],
+          "to": "move"
+        }
+      },
+      {
+        "event": "selected",
+        "filter": {
+          "move_types": [
+            "fall-back"
+          ],
+          "to": "move"
+        },
+        "subject": {
+          "owner": "enemy"
+        }
+      }
+    ],
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
             "type": "matches",
             "parameters": {
+              "subject": "event-subject",
               "filter": {
-                "state": "battle-shocked"
-              },
-              "subject": "defender"
+                "engaged_with": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "SANGUINARY SPEARHEAD"
+                  ]
+                }
+              }
             }
           },
-          "effect": {
-            "type": "roll-modifier",
-            "target": {
-              "owner": "enemy",
-              "within": {
-                "range": "engagement"
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "event-subject",
+              "filter": {
+                "engaged_with": "this-unit"
               }
-            },
-            "modifier": {
-              "roll": "desperate-escape",
-              "operation": "subtract",
-              "value": 1
             }
           }
-        }
-      ]
+        ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "event-subject",
+                "filter": {
+                  "state": "battle-shocked"
+                }
+              }
+            },
+            "effect": {
+              "type": "test",
+              "target": "event-subject",
+              "modifier": {
+                "test": "desperate-escape",
+                "modifier": -1
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "event-subject",
+                    "filter": {
+                      "state": "battle-shocked"
+                    }
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "test",
+              "target": "event-subject",
+              "modifier": {
+                "test": "desperate-escape"
+              }
+            }
+          }
+        ]
+      }
     },
     "scope": {
       "duration": "phase"

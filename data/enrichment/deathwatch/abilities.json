@@ -1672,19 +1672,222 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "deathwatch",
     "detachment_id": "deathwatch-support",
     "ability_type": "detachment",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "ability-grant",
+              "target": {
+                "owner": "friendly",
+                "all_of": [
+                  "KILL TEAM"
+                ],
+                "has_ability": [
+                  "mission-tactics-deathwatch-support-deathwatch"
+                ]
+              },
+              "modifier": {
+                "ability": "furor-tactics",
+                "definition": {
+                  "type": "ability-part",
+                  "name": "Furor Tactics",
+                  "effect": {
+                    "type": "conditional",
+                    "condition": {
+                      "type": "rule-active",
+                      "parameters": {
+                        "rule": {
+                          "ability_id": "combat-doctrines-adeptus-astartes",
+                          "option_id": "devastator-doctrine"
+                        }
+                      }
+                    },
+                    "effect": {
+                      "type": "weapon-ability-grant",
+                      "target": "this-unit",
+                      "modifier": {
+                        "keywords": [
+                          {
+                            "keyword_id": "sustained-hits",
+                            "parameters": {
+                              "value": 1
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "ability-grant",
+              "target": {
+                "owner": "friendly",
+                "all_of": [
+                  "KILL TEAM"
+                ],
+                "has_ability": [
+                  "mission-tactics-deathwatch-support-deathwatch"
+                ]
+              },
+              "modifier": {
+                "ability": "malleus-tactics",
+                "definition": {
+                  "type": "ability-part",
+                  "name": "Malleus Tactics",
+                  "effect": {
+                    "type": "conditional",
+                    "condition": {
+                      "type": "rule-active",
+                      "parameters": {
+                        "rule": {
+                          "ability_id": "combat-doctrines-adeptus-astartes",
+                          "option_id": "tactical-doctrine"
+                        }
+                      }
+                    },
+                    "effect": {
+                      "type": "weapon-ability-grant",
+                      "target": "this-unit",
+                      "modifier": {
+                        "keywords": [
+                          {
+                            "keyword_id": "lethal-hits"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "ability-grant",
+              "target": {
+                "owner": "friendly",
+                "all_of": [
+                  "KILL TEAM"
+                ],
+                "has_ability": [
+                  "mission-tactics-deathwatch-support-deathwatch"
+                ]
+              },
+              "modifier": {
+                "ability": "purgatus-tactics",
+                "definition": {
+                  "type": "ability-part",
+                  "name": "Purgatus Tactics",
+                  "effect": {
+                    "type": "conditional",
+                    "condition": {
+                      "operator": "and",
+                      "operands": [
+                        {
+                          "type": "rule-active",
+                          "parameters": {
+                            "rule": {
+                              "ability_id": "combat-doctrines-adeptus-astartes",
+                              "option_id": "assault-doctrine"
+                            }
+                          }
+                        },
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "defender",
+                            "filter": {
+                              "owner": "enemy"
+                            }
+                          }
+                        },
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "defender",
+                            "filter": {
+                              "within": {
+                                "of": "this-unit",
+                                "range": {
+                                  "inches": 9
+                                }
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "effect": {
+                      "type": "weapon-ability-grant",
+                      "target": "this-unit",
+                      "modifier": {
+                        "keywords": [
+                          {
+                            "keyword_id": "precision"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "army-rule",
+          "target": "this-unit",
+          "modifier": {
+            "rule": "composition",
+            "with": {
+              "all_of": [
+                "DEATHWATCH"
+              ]
+            },
+            "max": 500,
+            "measure": "points"
+          }
+        },
+        {
+          "type": "army-rule",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "DEATHWATCH"
+            ]
+          },
+          "modifier": {
+            "rule": "warlord-forbidden"
+          }
+        },
+        {
+          "type": "army-rule",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "KILL TEAM"
+            ]
+          },
+          "modifier": {
+            "rule": "enhancement-source"
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "activated",
+    "source_digest": "d9677f8f165a11b21418deeeefaf6b32e17c935c45e556bf07b924f8dc9c69f2"
   },
   {
     "ability_id": "purgatus-quarry-deathwatch",

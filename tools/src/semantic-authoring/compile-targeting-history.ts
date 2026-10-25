@@ -45,8 +45,9 @@ const attackedTarget = (leaf: CompileLeaf) => leaf.fragment === "TARGET"
 
 /**
  * Bind a Stratagem target to the unit an enemy selected as a target. Historical wording carries a
- * `targeted` leaf; an immediate targets-selected event already carries its object filter. In both
- * forms the TARGET is the attacked unit, never the enemy actor.
+ * `targeted` leaf; a friendly unit the triggering attacks destroyed a model in was attacked; an
+ * immediate targets-selected event already carries its object filter. In every form the TARGET is
+ * the attacked unit, never the enemy actor.
  */
 export function bindTargetedTarget(list: readonly CompileLeaf[]): CompileLeaf[] {
   const targets = list.filter(attackedTarget);
@@ -66,6 +67,12 @@ export function bindTargetedTarget(list: readonly CompileLeaf[]): CompileLeaf[] 
     });
   }
   if (targeted.length > 1) return [...list];
+  // "if those attacks destroyed a model in a friendly X unit. That X unit.": the unit that lost the model was attacked.
+  const lost = destroyedMemberFilters(list);
+  if (lost.length === 1) {
+    return list.map((leaf) => leaf === targets[0] ? { ...leaf, parameters: { ...leaf.parameters, attacked_filter: lost[0] } } : leaf);
+  }
+  if (lost.length > 1) return [...list];
   const immediate = list.filter((leaf) => leaf.family_id === "event" && leaf.fragment === "WHEN"
     && leaf.parameters.kind === "enemy-selected-targets" && leaf.parameters.object_filter !== undefined);
   if (immediate.length !== 1) return [...list];
@@ -75,6 +82,18 @@ export function bindTargetedTarget(list: readonly CompileLeaf[]): CompileLeaf[] 
     ? { ...leaf, parameters: { ...leaf.parameters, attacked_filter: filter } }
     : leaf);
 }
+/** The friendly units a WHEN clause's triggering attacks destroyed a model in, as their unit filters. */
+function destroyedMemberFilters(list: readonly CompileLeaf[]): Node[] {
+  return list.flatMap((leaf) => {
+    if (leaf.fragment !== "WHEN" || leaf.family_id !== "unit-activity" || leaf.parameters.negated === true) return [];
+    if (!((leaf.parameters.activities ?? []) as string[]).includes("destroyed-models-by-triggering-attacks")) return [];
+    return ((leaf.parameters.destructions ?? []) as Node[]).flatMap((destruction) => {
+      const member = (destruction.object as Node | undefined)?.member_of as Node | undefined;
+      return member !== undefined && typeof member === "object" && member.owner === "friendly" ? [structuredClone(member)] : [];
+    });
+  });
+}
+
 const ATTACKED_FILTER_KEYS: Readonly<Record<string, true>> = {
   owner: true,
   all_of: true,

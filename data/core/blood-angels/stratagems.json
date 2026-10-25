@@ -240,7 +240,22 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Sanguinary Guard"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "unit-state",
+        "parameters": {
+          "state": "engaged",
+          "with": "event-subject",
+          "at": "phase-start"
+        }
+      }
+    },
     "ability_id": "inexorable-valour-encarmine-speartip-blood-angels",
     "game_version": {
       "edition": "11th",
@@ -453,7 +468,21 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Sanguinary Spearhead"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "unit-state",
+        "parameters": {
+          "state": "engaged",
+          "with": "event-subject"
+        }
+      }
+    },
     "ability_id": "show-no-mercy-sanguinary-spearhead-blood-angels",
     "game_version": {
       "edition": "11th",
