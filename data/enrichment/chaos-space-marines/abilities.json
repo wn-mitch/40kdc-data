@@ -4596,7 +4596,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "6a006f307ac3f3b000e17e0b145141c2ec5fcbc2a760403b5475f0e03666df7e",
     "version": "2025-q3",
@@ -4610,10 +4610,51 @@
         }
       },
       "effect": {
-        "type": "mortal-wounds",
-        "target": "defender",
-        "modifier": {
-          "count": 1
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "matches",
+            "parameters": {
+              "subject": "selected-unit",
+              "filter": {
+                "engaged_with": "this-unit"
+              }
+            }
+          }
+        },
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "selected-unit",
+          "modifier": {
+            "count": 1,
+            "per": "success",
+            "roll": {
+              "dice": 1,
+              "threshold": 4,
+              "for_each": {
+                "filter": {
+                  "owner": "friendly",
+                  "level": "model",
+                  "member_of": "this-unit"
+                },
+                "eligibility": {
+                  "type": "matches",
+                  "parameters": {
+                    "filter": {
+                      "engaged_with": "selected-unit"
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -4624,8 +4665,16 @@
       "haarken-worldclaimer"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "chaos-space-marines"
+    "behavior": "reactive",
+    "faction_id": "chaos-space-marines",
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "charge"
+        ]
+      }
+    }
   },
   {
     "ability_id": "herald-of-the-apocalypse-chaos-space-marines",
@@ -10419,9 +10468,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "mutilators"
     ],
@@ -10429,11 +10477,76 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "charge",
+            "result_scope": "any-result"
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "move-ended",
+            "subject": {
+              "owner": "friendly"
+            },
+            "filter": {
+              "move_types": [
+                "charge"
+              ]
+            }
+          },
+          "effect": {
+            "type": "select-units",
+            "selector": {
+              "filter": {
+                "owner": "enemy"
+              },
+              "count": {
+                "min": 1,
+                "max": 1
+              }
+            },
+            "effect": {
+              "type": "mortal-wounds",
+              "target": "selected-unit",
+              "modifier": {
+                "count": "D3",
+                "per": "success",
+                "roll": {
+                  "dice": 1,
+                  "threshold": 4,
+                  "for_each": {
+                    "filter": {
+                      "owner": "friendly",
+                      "level": "model",
+                      "member_of": "this-unit"
+                    },
+                    "eligibility": {
+                      "type": "matches",
+                      "parameters": {
+                        "filter": {
+                          "engaged_with": "selected-unit"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "source_digest": "204cc92ac5def4280f163d2164eeaacc8dec87421c43cb27caa43cd71074163a"
   },
   {
     "ability_id": "cultists-brand-chaos-cult-chaos-space-marines",

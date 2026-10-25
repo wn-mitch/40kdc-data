@@ -589,7 +589,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Deathwing"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "wrath-of-the-lion-inner-circle-task-force-dark-angels",
     "game_version": {
       "edition": "11th",

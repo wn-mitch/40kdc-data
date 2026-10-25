@@ -524,4 +524,22 @@ describe("authoring-only shapes the leaves already express (SS-G)", () => {
     ]);
     expect(mechanics.effect.condition).toMatchObject({ type: "matches", parameters: { subject: "event-subject", filter: { within: { of: "this-model", range: "engagement" } } } });
   });
+
+  // Hunts: "that VEHICLE unit" after "an enemy unit targets a friendly VEHICLE unit" fell back to the moment's
+  // subject, giving the enemy attacker the Feel No Pain the targeted vehicle gets.
+  it("binds an anaphor that prints the object's keyword to the moment's object, not its subject", () => {
+    const text = "When an enemy unit targets a friendly ALPHA VEHICLE unit within 6\" of this unit, you can use this ability. If you do, that VEHICLE unit has Feel No Pain 5+.";
+    const items = (anaphor: string): Item[] => [
+      ["enemy unit", "unit-filter", { side: "enemy" }],
+      ["targets a", "event", { kind: "targets-selected", owner: "enemy", action_kind: "attack" }],
+      ["friendly ALPHA VEHICLE unit", "unit-filter", { side: "friendly", keywords: ["ALPHA", "VEHICLE"] }],
+      ["within 6\" of this unit", "unit-position", { kind: "within", inches: 6, of: "this-unit", subject: "antecedent", negated: false }],
+      ["you can use this ability", "optional-use", { who: "you" }],
+      [anaphor, "feel-no-pain", { subject: "antecedent", threshold: 5, against: "all" }],
+    ];
+    expect(mechanicsOf(text, items("that VEHICLE unit has Feel No Pain 5+")).effect.target).toBe("event-object");
+    // A keyword both units print says nothing about which one it is.
+    const shared = text.replace("When an enemy unit", "When an enemy VEHICLE unit");
+    expect(mechanicsOf(shared, [["enemy VEHICLE unit", "unit-filter", { side: "enemy", keywords: ["VEHICLE"] }], ...items("that VEHICLE unit has Feel No Pain 5+").slice(1)]).effect.target).toBe("event-subject");
+  });
 });

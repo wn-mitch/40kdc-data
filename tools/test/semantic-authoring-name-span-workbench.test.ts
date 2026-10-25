@@ -190,6 +190,31 @@ describe("Semantic authoring NAME spans in the workbench", () => {
     }
   });
 
+  it("adds repeated wording at offsets no span holds yet, and refuses offsets that do not hold it", async () => {
+    const body = "At battle start, one D6. Later, one D6.";
+    const value = fixture(NAME, body);
+    try {
+      const second = body.lastIndexOf("one D6");
+      const end = second + Buffer.byteLength("one D6", "utf8");
+      const add = (start_byte: number, end_byte: number) => applyChatReview(value.db, {
+        reviewer: REVIEWER,
+        decisions: [{
+          action: "add", ability_version_id: value.abilityId, start_byte, end_byte, exact_text: "one D6",
+          role: "EVENT", family_id: "event", family_version: currentFamilyVersion("event"), parameters: { kind: "battle-started" },
+        }],
+      });
+      const shifted = await add(second + 1, end + 1);
+      expect(shifted.applied).toEqual([]);
+      expect(shifted.failed[0]?.error).toMatch(/do not hold the requested wording/u);
+      const report = await add(second, end);
+      expect(report.failed).toEqual([]);
+      const span = value.db.prepare("SELECT start_byte, end_byte FROM source_spans JOIN annotations ON annotations.span_id = source_spans.id WHERE annotations.status = 'active'").get();
+      expect(span).toEqual({ start_byte: second, end_byte: end });
+    } finally {
+      value.db.close();
+    }
+  });
+
   it("rejects an explicit add occurrence whose wording does not match", async () => {
     const body = "At battle start, one D6. Later, one D6.";
     const value = fixture(NAME, body);

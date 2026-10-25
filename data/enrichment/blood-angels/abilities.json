@@ -561,9 +561,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "29a080bd13ddcc113bf962c1aacbcfc10151736abc3af15516095a11abc6b775",
+    "source_digest": "b32deb30ff0e4c0f959a6d035562bbf274edd85750d253dc22ead742d4454501",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -577,24 +577,64 @@
         "move_types": [
           "charge"
         ]
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "SANGUINARY GUARD"
+        ]
       }
     },
     "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 3,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": "stratagem-target",
-        "modifier": {
-          "count": 1
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "subject": "selected-unit",
+            "filter": {
+              "engaged_with": "this-unit"
+            }
+          }
         }
       },
-      "on_fail": null
+      "effect": {
+        "type": "mortal-wounds",
+        "target": "selected-unit",
+        "modifier": {
+          "count": 1,
+          "per": "success",
+          "roll": {
+            "dice": 1,
+            "threshold": 3,
+            "for_each": {
+              "filter": {
+                "owner": "friendly",
+                "level": "model",
+                "member_of": "this-unit"
+              },
+              "eligibility": {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "engaged_with": "selected-unit"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "community_notes": "Used when a Sanguinary Guard unit ends a Charge move: roll one D6 per model engaged with one selected enemy unit; each 3+ inflicts 1 mortal wound"
   },

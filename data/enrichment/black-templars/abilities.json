@@ -1113,19 +1113,80 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "black-templars",
     "detachment_id": "marshals-household",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "subject": "selected-unit",
+            "filter": {
+              "engaged_with": "this-unit"
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "mortal-wounds",
+        "target": "selected-unit",
+        "modifier": {
+          "count": 1,
+          "max": 6,
+          "per": "success",
+          "roll": {
+            "dice": 1,
+            "threshold": 4,
+            "for_each": {
+              "filter": {
+                "owner": "friendly",
+                "level": "model",
+                "member_of": "this-unit"
+              },
+              "eligibility": {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "engaged_with": "selected-unit"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "charge"
+        ]
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "SWORD BRETHREN SQUAD"
+        ]
+      }
+    },
+    "source_digest": "10035355d8941bd262bfa5f27fc34c66ec900f25b55d83c150d9aabb4d140842"
   },
   {
     "ability_id": "bladeguard-black-templars",

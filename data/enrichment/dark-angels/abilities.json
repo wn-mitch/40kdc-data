@@ -600,9 +600,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "162d0176f98058fa081d1b5da386cabfaf1161452ba5b23488252ec7b96468d8",
+    "source_digest": "ece96785a3e1179f85bdce0be11d0d4082536d7d8818d8a161dd171b0ade0a79",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -616,24 +616,65 @@
         "move_types": [
           "charge"
         ]
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "DEATHWING"
+        ]
       }
     },
     "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 4,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": "stratagem-target",
-        "modifier": {
-          "count": 1
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "subject": "selected-unit",
+            "filter": {
+              "engaged_with": "this-unit"
+            }
+          }
         }
       },
-      "on_fail": null
+      "effect": {
+        "type": "mortal-wounds",
+        "target": "selected-unit",
+        "modifier": {
+          "count": 1,
+          "max": 6,
+          "per": "success",
+          "roll": {
+            "dice": 1,
+            "threshold": 3,
+            "for_each": {
+              "filter": {
+                "owner": "friendly",
+                "level": "model",
+                "member_of": "this-unit"
+              },
+              "eligibility": {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "engaged_with": "selected-unit"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "community_notes": "Deathwing Infantry unit after a Charge move: select one engaged enemy unit and roll one D6 per model, adding 1 if that enemy unit is within range of your Vowed objective marker - each 4+ inflicts 1 mortal wound (max 3)"
   },

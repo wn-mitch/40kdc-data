@@ -1111,7 +1111,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Grey Knights"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "grind-them-underfoot-hallowed-conclave-grey-knights",
     "game_version": {
       "edition": "11th",

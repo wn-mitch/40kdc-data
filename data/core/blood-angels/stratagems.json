@@ -305,7 +305,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Sanguinary Guard"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "judgement-of-the-golden-host-encarmine-speartip-blood-angels",
     "game_version": {
       "edition": "11th",

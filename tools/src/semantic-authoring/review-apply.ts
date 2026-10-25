@@ -170,6 +170,23 @@ function addDecision(db: DatabaseSync, item: ChatDecision): Record<string, unkno
         ability.id, item.start_byte!, item.end_byte!,
       ) as Array<{ id: number; fragment: string; start_byte: number; end_byte: number; exact_text: string }>);
     const matchingRows = item.fragment === undefined ? rows : rows.filter((candidate) => candidate.fragment === item.fragment);
+    // Bytes no span holds yet: the occurrence is new, so its bytes must hold the wording inside one body fragment.
+    if (spanId === undefined && matchingRows.length === 0 && item.fragment !== NAME_FRAGMENT) {
+      const start = item.start_byte!;
+      const end = item.end_byte!;
+      const fragments = JSON.parse(ability.fragments_json) as Array<{ fragment: string; start_byte: number; end_byte: number }>;
+      const holder = fragments.filter((fragment) => fragment.start_byte <= start && end <= fragment.end_byte
+        && (item.fragment === undefined || fragment.fragment === item.fragment));
+      if (holder.length !== 1) throw new Error(`Bytes ${start}-${end} of ability ${ability.id} lie in ${holder.length} fragments, not one.`);
+      if (exactSpan(ability.source_text, start, end) !== item.exact_text) throw new Error(`Bytes ${start}-${end} of ability ${ability.id} do not hold the requested wording.`);
+      return {
+        action: "confirm", ability_version_id: ability.id, source_hash: ability.source_hash, fragment: holder[0]!.fragment,
+        start_byte: start, end_byte: end, exact_text: item.exact_text,
+        role: item.role, family_id: item.family_id, ...(item.family_version ? { family_version: item.family_version } : {}), parameters: item.parameters ?? {},
+        ...(item.historical ? { historical: true } : {}),
+        ...(item.allow_overlap ? { allow_overlap: true } : {}),
+      };
+    }
     if (matchingRows.length !== 1) {
       throw new Error(matchingRows.length === 0
         ? `No source span ${item.span_id ?? `${item.start_byte}-${item.end_byte}`} belongs to ability ${ability.id}.`

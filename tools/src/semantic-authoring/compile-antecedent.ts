@@ -1,6 +1,6 @@
 import { DESTRUCTION_ACTIVITIES } from "./families/unit-activity.js";
 import { ANTECEDENT, antecedentKeys, keyEnum } from "./antecedent-families.js";
-import { reviewedFamily } from "./contracts.js";
+import { exactSpan, reviewedFamily } from "./contracts.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { awaitsFollowingFilter } from "./families/shared.js";
 import { exclusionOnly } from "./compile-select-exclusions.js";
@@ -510,8 +510,28 @@ function antecedentRole(leaves: readonly CompileLeaf[], index: number, focus?: (
   if (!inWhen && leaves.some((other) => STRATAGEM_TARGETS.has(other.family_id))) return focus?.(index) ?? "this-unit";
   // "Each time an attack is allocated to a model, … that model": the unit the moment happens to,
   // which the DSL's damage-allocated trigger holds as its object; its subject is the attacker.
+  if (moment && namesObjectKeyword(leaves, leaves.indexOf(moment), index, sourceText)) return "event-object";
   if (moment) return OBJECT_MOMENTS.has(String(moment.parameters.kind)) || filterNamesObject(leaves, leaves.indexOf(moment)) ? "event-object" : "event-subject";
   return null;
+}
+
+/**
+ * "When an enemy unit targets a friendly VEHICLE unit …, that VEHICLE unit has …": the anaphor prints a
+ * keyword of the unit-filter right after the moment (its object) that the filter before it (its
+ * subject) lacks, so it names the moment's object.
+ */
+function namesObjectKeyword(leaves: readonly CompileLeaf[], momentIndex: number, index: number, sourceText?: string): boolean {
+  const leaf = leaves[index]!;
+  const moment = leaves[momentIndex]!;
+  if (sourceText === undefined || leaf.end_byte === undefined) return false;
+  // The object filter is folded onto the moment (object_filter) or still sits right after it.
+  const after = leaves[momentIndex + 1]?.family_id === "unit-filter" ? leaves[momentIndex + 1]!.parameters.keywords : undefined;
+  const objectKeywords = ((moment.parameters.object_filter as { all_of?: string[] } | undefined)?.all_of ?? after ?? []) as string[];
+  const subject = leaves[momentIndex - 1]?.family_id === "unit-filter" ? (leaves[momentIndex - 1]!.parameters.keywords ?? []) as string[] : [];
+  const words = exactSpan(sourceText, leaf.start_byte, leaf.end_byte).replace(/\*/gu, "");
+  const named = /\bthat ([A-Z][A-Z' -]*[A-Z]) (unit|model)\b/u.exec(words)?.[1];
+  const has = (list: readonly string[]) => list.some((keyword) => keyword.toUpperCase() === named);
+  return named !== undefined && has(objectKeywords) && !has(subject);
 }
 
 /**

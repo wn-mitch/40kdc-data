@@ -332,7 +332,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Gravis"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "armoured-impact-gravis-linebreaker-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",

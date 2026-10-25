@@ -102,7 +102,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Sword Brethren Squad"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "blade-of-detestation-marshals-household-black-templars",
     "game_version": {
       "edition": "11th",
