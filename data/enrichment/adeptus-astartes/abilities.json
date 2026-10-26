@@ -4723,9 +4723,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "8dc5a867b172dcf917b92e67be887fbe3dc783db2459b3779be75e38aa14578c",
+    "source_digest": "99c83a0f3d9db1fee792968e48f8da2c0d77678b3c2788f122e321761d25d21f",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -4734,37 +4734,15 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "choice",
-      "choice_label": "Combat Doctrine",
-      "options": [
-        {
-          "type": "rule-state",
-          "target": "this-unit",
-          "modifier": {
-            "direction": "granted",
-            "rule_kind": "keyword",
-            "rule": "devastator-doctrine"
-          }
+      "type": "ability-activate",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "combat-doctrines-adeptus-astartes",
+        "select": {
+          "by": "player"
         },
-        {
-          "type": "rule-state",
-          "target": "this-unit",
-          "modifier": {
-            "direction": "granted",
-            "rule_kind": "keyword",
-            "rule": "tactical-doctrine"
-          }
-        },
-        {
-          "type": "rule-state",
-          "target": "this-unit",
-          "modifier": {
-            "direction": "granted",
-            "rule_kind": "keyword",
-            "rule": "assault-doctrine"
-          }
-        }
-      ]
+        "exclusive": true
+      }
     },
     "scope": {
       "duration": "until-next-command-phase"
@@ -5173,9 +5151,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "1549392fded352b603e3853ee7a8339109aa46919347b1be332b4d56e13cc930",
+    "source_digest": "2acf1cf06dfadf312843484cfc45e932639538de8345a8c71c22a9058ed69595",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -5184,34 +5162,62 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "move-ended",
-      "subject": {
-        "owner": "enemy"
-      },
-      "filter": {
-        "move_types": [
-          "normal",
-          "advance",
-          "fall-back"
-        ]
-      },
-      "proximity": {
-        "of": "this-model",
-        "range": {
-          "inches": 8
+      "event": "phase-ended",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
         }
       }
     },
     "effect": {
-      "type": "move",
-      "target": "this-unit",
-      "modifier": {
-        "move_type": "normal",
-        "distance": 6
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "state": "engaged"
+                  }
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "move",
+            "target": "this-unit",
+            "modifier": {
+              "move_type": "normal"
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "state": "engaged"
+              }
+            }
+          },
+          "effect": {
+            "type": "move",
+            "target": "this-unit",
+            "modifier": {
+              "move_type": "fall-back"
+            }
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "community_notes": "Infantry or Mounted unit; cannot select a unit within Engagement Range of enemy units"
   },

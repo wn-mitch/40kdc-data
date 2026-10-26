@@ -119,10 +119,23 @@ export function projectRecords(dataRoot: string, factionId: string, records: rea
   return { dataRoot, file, relativePath: relativeAbilityPath(dataRoot, file), beforeText, afterText: `${JSON.stringify(entries, null, 2)}\n`, entries, diff, core };
 }
 
-/** The files one publication writes: the faction's abilities.json, and its core stratagems.json when targets change. */
-export function stagedWrites(projection: Pick<RecordProjection, "file" | "entries" | "core">, abilitiesText: string, coreText: string | undefined): StagedWrite[] {
+/**
+ * The files one publication writes: the faction's abilities.json, its core stratagems.json when targets
+ * change, and each other faction's replicated copy of a changed stratagem (`replicaTexts` in the order of
+ * `core.replicas`; the projection's own bytes when omitted).
+ */
+export function stagedWrites(
+  projection: Pick<RecordProjection, "file" | "entries" | "core">, abilitiesText: string, coreText: string | undefined,
+  replicaTexts: readonly string[] | undefined = projection.core?.replicas.map((replica) => replica.afterText),
+): StagedWrite[] {
   const writes: StagedWrite[] = [{ path: projection.file, value: projection.entries as unknown, text: abilitiesText }];
-  if (projection.core && coreText !== undefined) writes.push({ path: projection.core.file, value: projection.core.records, text: coreText });
+  if (projection.core && coreText !== undefined) {
+    writes.push({ path: projection.core.file, value: projection.core.records, text: coreText });
+    projection.core.replicas.forEach((replica, position) => {
+      const text = replicaTexts?.[position];
+      if (text !== undefined) writes.push({ path: replica.file, value: replica.records, text });
+    });
+  }
   return writes;
 }
 

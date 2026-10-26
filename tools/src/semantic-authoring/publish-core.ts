@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join, relative, sep } from "node:path";
 
 import { hashJson } from "../round4/hash.js";
@@ -13,14 +13,24 @@ import { coreTargetKeywords, keywordIndex, liftWarlord } from "./core-keywords.j
 
 export type CoreRow = { id: string; ability_id: string; core: { target_restrictions: Record<string, unknown> | Array<Record<string, unknown>> } | null };
 
-export type CoreProjection = {
+/** One core stratagems.json a publication rewrites. */
+export type CoreFile = {
   file: string;
   relativePath: string;
   beforeHash: string;
   afterHash: string;
   afterText: string;
   records: Array<Record<string, unknown>>;
+};
+
+export type CoreProjection = CoreFile & {
   diff: Array<{ entry_id: string; ability_id: string; fields: Array<{ field: string; before: unknown; after: unknown }> }>;
+  /**
+   * Other factions' core stratagems.json holding a changed record. Core stratagems are replicated
+   * byte-identical across factions (integrity.ts COLLISION_POLICIES), so each copy takes the
+   * publishing faction's updated record; a write to one copy alone would fail validation.
+   */
+  replicas: CoreFile[];
 };
 
 /** The core fields a publication writes, as recorded in its manifest. */
@@ -85,12 +95,41 @@ export function projectCore(dataRoot: string, factionId: string, rows: readonly 
   }
   const afterText = `${JSON.stringify(records, null, 2)}\n`;
   const relativePath = relative(dataRoot, file).split(sep).join("/");
-  return { file, relativePath, beforeHash: sha256(beforeText), afterHash: sha256(afterText), afterText, records, diff };
+  const changed = new Map(changing.map((row) => {
+    const record = records.find((candidate) => (candidate.ability_id ?? candidate.id) === row.ability_id)!;
+    return [record.id, record] as const;
+  }));
+  const replicas = factionId === "_core" ? [] : replicaFiles(dataRoot, factionId, changed);
+  return { file, relativePath, beforeHash: sha256(beforeText), afterHash: sha256(afterText), afterText, records, diff, replicas };
+}
+
+/** Every other faction's core stratagems.json that holds a changed record, rewritten with the publishing faction's copy. */
+function replicaFiles(dataRoot: string, factionId: string, changed: ReadonlyMap<unknown, Record<string, unknown>>): CoreFile[] {
+  const coreRoot = join(dataRoot, "core");
+  const out: CoreFile[] = [];
+  for (const entry of readdirSync(coreRoot, { withFileTypes: true }).filter((item) => item.isDirectory()).map((item) => item.name).sort()) {
+    if (entry === factionId) continue;
+    const file = coreStratagemFile(dataRoot, entry);
+    if (!existsSync(file)) continue;
+    const beforeText = readFileSync(file, "utf8");
+    const records = JSON.parse(beforeText) as Array<Record<string, unknown>>;
+    if (!Array.isArray(records) || !records.some((record) => changed.has(record.id))) continue;
+    const updated = records.map((record) => changed.get(record.id) ?? record);
+    const afterText = `${JSON.stringify(updated, null, 2)}\n`;
+    if (afterText === beforeText) continue;
+    out.push({ file, relativePath: relative(dataRoot, file).split(sep).join("/"), beforeHash: sha256(beforeText), afterHash: sha256(afterText), afterText, records: updated });
+  }
+  return out;
 }
 
 /** The manifest block for a core projection. */
-export function coreManifest(projection: CoreProjection | null): CoreManifest | undefined {
+export function coreManifest(projection: CoreFile | null): CoreManifest | undefined {
   return projection ? { destination: projection.file, relative_path: projection.relativePath, before_hash: projection.beforeHash, after_hash: projection.afterHash, after_text: projection.afterText } : undefined;
+}
+
+/** The manifest blocks for the replicated copies a core projection also rewrites. */
+export function coreReplicaManifests(projection: CoreProjection | null): CoreManifest[] {
+  return (projection?.replicas ?? []).map((replica) => coreManifest(replica)!);
 }
 
 /** What the core file holds now, for reconciling an interrupted publication. */

@@ -128,6 +128,45 @@ describe("Semantic authoring stratagem targets", () => {
     expect((await interrupted(true)).recovered).toHaveLength(1);
   });
 
+  it("writes the new TARGET into every faction's replicated copy of the stratagem, and recovers only when all hold it", async () => {
+    // A second faction carries a byte-identical copy of the stratagem, as core stratagems are replicated.
+    const replicaFile = join(dirname(dirname(stratagemsFile)), "fixture-chapter", "stratagems.json");
+    mkdirSync(dirname(replicaFile), { recursive: true });
+    copyFileSync(stratagemsFile, replicaFile);
+    for (const [exact_text, family_id, parameters] of [
+      ["Your Shooting phase", "use-window", { your_phases: ["shooting"], opponent_phases: [], either_phases: [] }],
+      ["One STELLAR WARDENS INFANTRY unit from your army", "stratagem-target", { count: "one", side: "your-army", selects: "unit", keywords: ["STELLAR WARDENS INFANTRY"], match: "all", excluded_keywords: [] }],
+      ["that has not been selected to shoot this phase", "unit-activity", { activities: ["selected-to-shoot-this-phase"], subject: "this-unit", negated: true }],
+      ["Until the end of the phase", "duration", { endpoint: "end-of-phase" }],
+      ["models in your unit have the Fights First ability", "fights-first", { subject: "this-unit" }],
+    ] as const) confirmSurface(db, { reviewer: REVIEWER, exact_text, family_id, parameters: parameters as Record<string, unknown> });
+    const shape = listShapes(db).shapes[0]!;
+    await approveShape(db, { reviewer: REVIEWER, signature: shape.signature, ability_version_ids: [(db.prepare("SELECT id FROM abilities WHERE ability_id = 'hold-fast'").get() as { id: number }).id] });
+    const entry = db.prepare("SELECT id FROM compiled_entries WHERE status = 'approved'").get() as { id: string };
+
+    const interrupted = async (writeReplica: boolean) => {
+      const preview = await preparePublication(db, { faction_id: "fixture", entry_ids: [entry.id] });
+      const manifest = JSON.parse((db.prepare("SELECT manifest_json FROM publication_batches WHERE id = ?").get(preview.batch_id) as { manifest_json: string }).manifest_json);
+      expect(manifest.core_replicas.map((replica: { relative_path: string }) => replica.relative_path)).toEqual(["core/fixture-chapter/stratagems.json"]);
+      db.prepare("UPDATE publication_batches SET state = 'publishing' WHERE id = ?").run(preview.batch_id);
+      const before = [manifest.destination, manifest.core.destination, replicaFile].map((file) => readFileSync(file, "utf8"));
+      writeFileSync(manifest.destination, manifest.after_text);
+      writeFileSync(manifest.core.destination, manifest.core.after_text);
+      if (writeReplica) writeFileSync(replicaFile, manifest.core_replicas[0].after_text);
+      const result = reconcilePublicationBatches(db, preview.batch_id);
+      [manifest.destination, manifest.core.destination, replicaFile].forEach((file, position) => writeFileSync(file, before[position]!));
+      return result;
+    };
+    // The replica still holds the old bytes: that is not a finished publication.
+    expect(await interrupted(false)).toMatchObject({ recovered: [], failed: [expect.any(String)] });
+    expect((await interrupted(true)).recovered).toHaveLength(1);
+
+    const preview = await preparePublication(db, { faction_id: "fixture", entry_ids: [entry.id] });
+    await publishPublication(db, { batch_id: preview.batch_id, preview_hash: preview.preview_hash });
+    expect(readFileSync(replicaFile, "utf8")).toBe(readFileSync(stratagemsFile, "utf8"));
+    expect((JSON.parse(readFileSync(replicaFile, "utf8")) as Array<Record<string, unknown>>)[0]!.target_restrictions).toMatchObject({ required_keywords: ["Stellar Wardens", "Infantry"] });
+  });
+
   it("splits bolded keyword groups and refuses alternatives core cannot store flat", () => {
     const index = keywordIndex(process.env.SEMANTIC_AUTHORING_DATA_ROOT!);
     expect(canonicalTarget({ required_keywords_any: ["STELLAR WARDENS INFANTRY", "STELLAR WARDENS BATTLELINE"], count: "one" }, index))

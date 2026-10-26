@@ -971,7 +971,7 @@
     "timing": "once-per-phase",
     "target_restrictions": {
       "required_keywords": [
-        "Prosecutors"
+        "Prosecutor Squad"
       ],
       "count": "one",
       "selects": "unit",
@@ -1007,7 +1007,7 @@
     "timing": "once-per-phase",
     "target_restrictions": {
       "required_keywords": [
-        "Witchseekers"
+        "Witchseeker Squad"
       ],
       "count": "one",
       "selects": "unit",

@@ -11,7 +11,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Astartes"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit"
+    },
     "ability_id": "adaptive-strategy-gladius-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
@@ -402,7 +409,22 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Astartes",
+        "Mounted"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "eligible",
+        "parameters": {
+          "subject": "this-unit",
+          "to": "fight"
+        }
+      }
+    },
     "ability_id": "wind-swift-evasion-stormlance-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
