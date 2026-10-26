@@ -105,6 +105,12 @@ describe("Semantic authoring economy-family compiler", () => {
     expect(rendered(base(), [leaf("EFFECT", "sticky-objective", { subject: "this-model" }, 2)]).length).toBeGreaterThan(0);
   });
 
+  it("lets sticky-objective@3 name each unit a for-each loop reaches, which v2 refuses", () => {
+    expect(normalizeFingerprintParameters("sticky-objective", { subject: "recipient" }, 3)).toEqual({ subject: "recipient" });
+    expect(() => normalizeFingerprintParameters("sticky-objective", { subject: "recipient" }, 2)).toThrow(/sticky-objective\.subject/u);
+    expect(compiled([leaf("EFFECT", "sticky-objective", { subject: "recipient" }, 3)]).mechanics.effect).toEqual({ type: "objective-sticky", target: "recipient" });
+  });
+
   it("compiles stratagem-cost, amount required unless the operation waives the cost", () => {
     expect(compiled([leaf("EFFECT", "stratagem-cost", { of: "stratagem", operation: "decrease", amount: 1 })]).mechanics.effect)
       .toEqual({ type: "cost-modifier", target: "this-unit", modifier: { of: "stratagem", operation: "decrease", amount: 1 } });
