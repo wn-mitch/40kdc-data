@@ -361,8 +361,8 @@ func moveModifierLeaf(m map[string]any, subj string, ctx effCtx) string {
 			clauses = append(clauses, "add "+diceCase(m["distance_bonus"])+"\" to "+ofOrPossessive(subj, moves))
 		}
 	}
-	if m["advance"] == "fixed-6" {
-		clauses = append(clauses, subj+" "+ev(subj, "does")+" not make an Advance roll; add 6\" to "+pronoun(subj)+" Move characteristic instead")
+	if advance, ok := m["advance"].(string); ok && (advance == "fixed-6" || advance == "fixed-8") {
+		clauses = append(clauses, subj+" "+ev(subj, "does")+" not make an Advance roll; add "+strings.TrimPrefix(advance, "fixed-")+"\" to "+pronoun(subj)+" Move characteristic instead")
 	}
 	if _, ok := asList(m["passthrough"]); ok {
 		clauses = append(clauses, subj+" can move over "+passthroughList(m["passthrough"])+" as though they were not there")

@@ -3929,6 +3929,8 @@ function genEffectTranslation(): void {
     { caseId: "fidelity/trigger-destroyed-weapon-keyword", trigger: { event: "destroyed", subject: "this-unit", object: { owner: "enemy" }, filter: { weapons: { keyword: { keyword_id: "psychic" } } } }, effect: { type: "resource-gain", target: "this-model", modifier: { pool: "blood-tithe-pool", amount: 1 } } },
     { caseId: "fidelity/condition-destroyed-melee-event", effect: { type: "conditional", condition: { type: "happened", parameters: { event: "destroyed", object: { owner: "enemy" }, filter: { by: "this-unit", attack_type: "melee" }, window: "event" } }, effect: { type: "resource-gain", target: "this-model", modifier: { pool: "blood-tithe-pool", amount: 1 } } } },
     { caseId: "fidelity/condition-destroyed-melee-phase", effect: { type: "conditional", condition: { type: "happened", parameters: { event: "destroyed", object: { owner: "enemy" }, filter: { by: "this-unit", attack_type: "melee" }, window: "phase" } }, effect: { type: "resource-gain", target: "this-model", modifier: { pool: "blood-tithe-pool", amount: 1 } } } },
+    // An Advance with no roll that adds 8" instead of the core 6".
+    { caseId: "fidelity/move-modifier-advance-fixed-8", effect: { type: "move-modifier", target: "this-unit", modifier: { advance: "fixed-8" } } },
   ];
   for (const example of fidelityBoundaryCases) {
     const scope = { duration: "resolution" };

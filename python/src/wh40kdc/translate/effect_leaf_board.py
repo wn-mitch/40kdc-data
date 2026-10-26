@@ -512,9 +512,10 @@ def _move_modifier(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
             clauses.append(
                 f'add {dice_case(m["distance_bonus"])}" to {of_or_possessive(subj, moves)}'
             )
-    if m.get("advance") == "fixed-6":
+    if m.get("advance") in ("fixed-6", "fixed-8"):
+        inches = m["advance"][len("fixed-"):]
         clauses.append(
-            f'{subj} {v(subj, "does")} not make an Advance roll; add 6" to {pronoun(subj)} '
+            f'{subj} {v(subj, "does")} not make an Advance roll; add {inches}" to {pronoun(subj)} '
             "Move characteristic instead"
         )
     if isinstance(m.get("passthrough"), list):

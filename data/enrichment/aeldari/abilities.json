@@ -106,17 +106,15 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "9ccf4475433a0feb4919ab5079105f336669cfb49dacd60d32bcb40cc39f68b7",
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
+      "type": "move-modifier",
       "target": "this-unit",
       "modifier": {
-        "stat": "M",
-        "operation": "add",
-        "value": 8
+        "advance": "fixed-8"
       }
     },
     "scope": {
@@ -126,8 +124,16 @@
       "revenant-titan"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "aeldari"
+    "behavior": "reactive",
+    "faction_id": "aeldari",
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "advance"
+        ]
+      }
+    }
   },
   {
     "ability_id": "support-weapon-aeldari",

@@ -5,17 +5,97 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "ecd9e343114e84c6d836a3d7a86449767d54a6043a2ff8e65ce322cadaa1ddb2",
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "this-unit",
-      "modifier": {
-        "stat": "M",
-        "operation": "add",
-        "value": 8
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "ability-part",
+            "trigger": {
+              "event": "selected",
+              "filter": {
+                "move_types": [
+                  "advance"
+                ],
+                "to": "move"
+              },
+              "optional": true
+            },
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "resource-spend",
+                  "target": "this-model",
+                  "modifier": {
+                    "pool": "pain-token-pool",
+                    "amount": 1,
+                    "label": "Pain token"
+                  }
+                },
+                {
+                  "type": "designate",
+                  "target": "this-unit",
+                  "modifier": {
+                    "tag": "empowered"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "type": "ability-part",
+            "trigger": {
+              "event": "move-ended",
+              "filter": {
+                "move_types": [
+                  "advance"
+                ]
+              }
+            },
+            "effect": {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "this-unit",
+                  "filter": {
+                    "designated": "empowered"
+                  }
+                }
+              },
+              "effect": {
+                "type": "move-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "advance": "fixed-8"
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -25,7 +105,7 @@
       "reavers"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "faction_id": "drukhari"
   },
   {

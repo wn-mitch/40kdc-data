@@ -234,11 +234,13 @@ const PROHIBITIONS = new Set(["no-advance-roll"]);
 /** A gate that tests an Advance already made ("if it Advanced this turn"): no moment where a roll can still be skipped. */
 const testsMadeAdvance = (gates: Node[]) => gates.some((gate) => /"type":"happened"[^]*"move_types":\[[^\]]*"advance"/.test(JSON.stringify(gate)));
 
-/** "Add 6 to Move": what a no-advance-roll's `advance: fixed-6` does in place of the roll. */
+/** The Move an Advance with no roll adds in place of the roll: the core 6", or 8" (the DSL's move-modifier advance). */
+const FIXED_ADVANCES = new Set([6, 8]);
+
 function isAdvanceInPlace(node: Node): boolean {
   const modifier = node.modifier as Node | undefined;
   return node.type === "stat-modifier" && node.target !== "attacker" && modifier?.stat === "M" && modifier.operation === "add"
-    && Number(modifier.value) === 6 && modifier.weapons === undefined;
+    && FIXED_ADVANCES.has(Number(modifier.value)) && modifier.weapons === undefined;
 }
 
 /** Words that narrow which models a per-model roll covers; a per_model roll counts every model of its unit. */
@@ -1026,9 +1028,11 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
         else if (folded !== undefined && kept !== undefined && folded !== kept) errors.push(CONFLICTING_DURATIONS);
         else if (folded !== undefined && kept === undefined) boundDuration.set(previous.index, folded);
         boundDuration.delete(replacement.index);
+        // "add 8\" to the Move characteristic … instead": the no-roll advances that far.
+        (previous.node.modifier as Node).advance = `fixed-${Number((replacement.node.modifier as Node).value)}`;
         planned.splice(planned.indexOf(replacement), 1);
       }
-      else errors.push(`"Instead" after ${previous.leaf.family_id} must add 6 to Move; ${replacement.leaf.family_id} has no DSL fragment there.`);
+      else errors.push(`"Instead" after ${previous.leaf.family_id} must add 6" or 8" to Move; ${replacement.leaf.family_id} has no DSL fragment there.`);
       continue;
     }
     // "X. Or: Y and Z" with no earlier effect of Y's kind: the player picks one group of effects.
@@ -1105,7 +1109,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   }
 
   // "Do not make an Advance roll" followed directly by "add 6\" to Move" (no moment between, no "instead"): the no-roll
-  // already moves 6 in place of the roll, so the +6 is that same 6 and folds into it. The fold needs the same unit and
+  // moves that far in place of the roll, so the +6 (or +8) is that same move and folds into it. The fold needs the same unit and
   // gate on both; otherwise the +6 would stack on the no-roll's move (its own move on another unit, or a gated +6).
   for (const previous of planned.filter((item) => PROHIBITIONS.has(item.leaf.family_id))) {
     const next = planned.filter((item) => item.index > previous.index).at(0);
@@ -1121,6 +1125,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     if (folded !== undefined && kept !== undefined && folded !== kept) errors.push(CONFLICTING_DURATIONS);
     else if (folded !== undefined && kept === undefined) boundDuration.set(previous.index, folded);
     boundDuration.delete(next.index);
+    (previous.node.modifier as Node).advance = `fixed-${Number((next.node.modifier as Node).value)}`;
     planned.splice(planned.indexOf(next), 1);
   }
 

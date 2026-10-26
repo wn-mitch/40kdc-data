@@ -24397,7 +24397,11 @@ impl ::std::convert::TryFrom<::std::string::String> for MoveMode {
 ///  "minProperties": 1,
 ///  "properties": {
 ///    "advance": {
-///      "const": "fixed-6"
+///      "description": "Advance without an Advance roll, adding this many inches to Move instead (fixed-6 is the core rule's 6\").",
+///      "enum": [
+///        "fixed-6",
+///        "fixed-8"
+///      ]
 ///    },
 ///    "applies_to_moves": {
 ///      "type": "array",
@@ -24513,8 +24517,9 @@ impl ::std::convert::TryFrom<::std::string::String> for MoveMode {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct MoveModifierEffectModifier {
+    ///Advance without an Advance roll, adding this many inches to Move instead (fixed-6 is the core rule's 6").
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub advance: ::std::option::Option<::serde_json::Value>,
+    pub advance: ::std::option::Option<MoveModifierEffectModifierAdvance>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub applies_to_moves: ::std::option::Option<
         Vec<MoveModifierEffectModifierAppliesToMovesItem>,
@@ -24560,6 +24565,84 @@ impl ::std::default::Default for MoveModifierEffectModifier {
             no_end_in_engagement: Default::default(),
             passthrough: Default::default(),
         }
+    }
+}
+///Advance without an Advance roll, adding this many inches to Move instead (fixed-6 is the core rule's 6").
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Advance without an Advance roll, adding this many inches to Move instead (fixed-6 is the core rule's 6\").",
+///  "enum": [
+///    "fixed-6",
+///    "fixed-8"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum MoveModifierEffectModifierAdvance {
+    #[serde(rename = "fixed-6")]
+    Fixed6,
+    #[serde(rename = "fixed-8")]
+    Fixed8,
+}
+impl ::std::fmt::Display for MoveModifierEffectModifierAdvance {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Fixed6 => f.write_str("fixed-6"),
+            Self::Fixed8 => f.write_str("fixed-8"),
+        }
+    }
+}
+impl ::std::str::FromStr for MoveModifierEffectModifierAdvance {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "fixed-6" => Ok(Self::Fixed6),
+            "fixed-8" => Ok(Self::Fixed8),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for MoveModifierEffectModifierAdvance {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for MoveModifierEffectModifierAdvance {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for MoveModifierEffectModifierAdvance {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
     }
 }
 ///`MoveModifierEffectModifierAppliesToMovesItem`

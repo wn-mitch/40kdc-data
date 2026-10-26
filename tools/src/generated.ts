@@ -4971,7 +4971,10 @@ export interface MoveModifierEffect {
      * The selected Advance has no maximum distance. This is an explicit distance-ceiling override, not an additional move.
      */
     maximum?: "unlimited";
-    advance?: "fixed-6";
+    /**
+     * Advance without an Advance roll, adding this many inches to Move instead (fixed-6 is the core rule's 6").
+     */
+    advance?: "fixed-6" | "fixed-8";
     end_on_terrain?: true;
     ends_nearest?: EndsNearest2;
     ends_when?: AbilityDSLCondition6;

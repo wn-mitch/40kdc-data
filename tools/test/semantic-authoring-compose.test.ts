@@ -394,7 +394,15 @@ describe("Semantic authoring composition rules", () => {
       ["Skip the dash roll for it", "EFFECT", "no-advance-roll", { subject: "this-unit" }],
       ["instead", "COMBINATOR", "instead", {}],
       ["add three to its Move", "EFFECT", "characteristic-modifier", { subject: "this-unit", characteristics: ["M"], operation: "add", value: 3, weapon_type: "all" }],
-    ])[0]).toMatch(/must add 6 to Move/u);
+    ])[0]).toMatch(/must add 6" or 8" to Move/u);
+    // "instead, add 8\" to the Move characteristic": the no-roll advance is 8", not the core 6".
+    const eight = compiled("Skip the dash roll for it; instead, until the end of the phase, add eight to its Move.", [
+      ["Skip the dash roll for it", "EFFECT", "no-advance-roll", { subject: "this-unit" }],
+      ["instead", "COMBINATOR", "instead", {}],
+      ["until the end of the phase", "DURATION", "duration", { endpoint: "end-of-phase" }],
+      ["add eight to its Move", "EFFECT", "characteristic-modifier", { subject: "this-unit", characteristics: ["M"], operation: "add", value: 8, weapon_type: "all" }],
+    ]);
+    expect(eight.mechanics.effect).toEqual({ type: "move-modifier", target: "this-unit", modifier: { advance: "fixed-8" } });
   });
 
   it("refuses an effect on \"that unit\" when nothing selects it", () => {

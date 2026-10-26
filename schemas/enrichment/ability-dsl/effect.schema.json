@@ -3294,7 +3294,11 @@
                   "description": "The selected Advance has no maximum distance. This is an explicit distance-ceiling override, not an additional move."
                 },
                 "advance": {
-                  "const": "fixed-6"
+                  "enum": [
+                    "fixed-6",
+                    "fixed-8"
+                  ],
+                  "description": "Advance without an Advance roll, adding this many inches to Move instead (fixed-6 is the core rule's 6\")."
                 },
                 "end_on_terrain": {
                   "const": true

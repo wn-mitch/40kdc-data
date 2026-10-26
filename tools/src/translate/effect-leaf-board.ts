@@ -213,7 +213,7 @@ function moveModifier(m: Record<string, unknown>, subj: string, ctx: Ctx): strin
     const moves = kinds ? `${kinds} moves` : "Move characteristic";
     clauses.push(!Number.isNaN(n) && n < 0 ? `subtract ${Math.abs(n)}" from ${ofOrPossessive(subj, moves)}` : `add ${diceCase(m.distance_bonus)}" to ${ofOrPossessive(subj, moves)}`);
   }
-  if (m.advance === "fixed-6") clauses.push(`${subj} ${v(subj, "does")} not make an Advance roll; add 6" to ${pronoun(subj)} Move characteristic instead`);
+  if (m.advance === "fixed-6" || m.advance === "fixed-8") clauses.push(`${subj} ${v(subj, "does")} not make an Advance roll; add ${m.advance.slice("fixed-".length)}" to ${pronoun(subj)} Move characteristic instead`);
   if (Array.isArray(m.passthrough)) clauses.push(`${subj} can move over ${passthrough(m.passthrough)} as though they were not there`);
   if (m.no_end_in_engagement === true) clauses.push(`${subj} cannot end a move within Engagement Range of any enemy unit`);
   if (m.ends_nearest != null) clauses.push(endsNearestPhrase(m.ends_nearest as P, ctx, subj, `${pronoun(subj)} move`));

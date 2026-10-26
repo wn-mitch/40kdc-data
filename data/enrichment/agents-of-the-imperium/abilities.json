@@ -5132,35 +5132,11 @@
           {
             "type": "conditional",
             "condition": {
-              "operator": "and",
-              "operands": [
-                {
-                  "type": "roll-result",
-                  "parameters": {
-                    "roll": "leadership",
-                    "result": "success"
-                  }
-                },
-                {
-                  "type": "roll-result",
-                  "parameters": {
-                    "roll": "leadership",
-                    "result": "failure"
-                  }
-                },
-                {
-                  "operator": "not",
-                  "operands": [
-                    {
-                      "type": "eligible",
-                      "parameters": {
-                        "subject": "selected-unit",
-                        "to": "shoot"
-                      }
-                    }
-                  ]
-                }
-              ]
+              "type": "roll-result",
+              "parameters": {
+                "roll": "leadership",
+                "result": "success"
+              }
             },
             "effect": {
               "type": "roll-modifier",
@@ -5169,6 +5145,24 @@
                 "roll": "hit",
                 "operation": "subtract",
                 "value": 1
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "roll-result",
+              "parameters": {
+                "roll": "leadership",
+                "result": "failure"
+              }
+            },
+            "effect": {
+              "type": "permission",
+              "target": "selected-unit",
+              "modifier": {
+                "activity": "shoot",
+                "allow": false
               }
             }
           }

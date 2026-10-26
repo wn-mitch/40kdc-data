@@ -288,9 +288,12 @@ pub(super) fn move_modifier(m: &P, subj: &str, ctx: &Ctx) -> String {
             )
         });
     }
-    if sv(m, "advance") == Some("fixed-6") {
+    if let Some(inches) = sv(m, "advance")
+        .filter(|advance| matches!(*advance, "fixed-6" | "fixed-8"))
+        .and_then(|advance| advance.strip_prefix("fixed-"))
+    {
         clauses.push(format!(
-            "{subj} {} not make an Advance roll; add 6\" to {} Move characteristic instead",
+            "{subj} {} not make an Advance roll; add {inches}\" to {} Move characteristic instead",
             v(subj, "does"),
             pronoun(subj)
         ));
