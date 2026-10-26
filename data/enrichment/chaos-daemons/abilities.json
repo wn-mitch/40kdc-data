@@ -3279,23 +3279,136 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "ffe7afd31e62738b87dfc1d669a9eaa5e8d3c8df1907f37c5df793366ca7f644",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-model",
+              "filter": {
+                "all_of": [
+                  "PSYKER"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-model",
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-model",
+              "filter": {
+                "has_ability": [
+                  "horrible-fascination-chaos-daemons"
+                ]
+              }
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "mortal-wounds",
-        "target": "defender",
-        "modifier": {
-          "count": "D3"
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "within": {
+                      "of": "this-model",
+                      "range": {
+                        "inches": 12
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "visible": {
+                      "to": "this-model"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "effect": {
+          "type": "dice-table",
+          "dice": "D6",
+          "outcomes": [
+            {
+              "results": [
+                1
+              ],
+              "effect": {
+                "type": "mortal-wounds",
+                "target": "this-model",
+                "modifier": {
+                  "count": "D3"
+                }
+              }
+            },
+            {
+              "results": [
+                2,
+                3,
+                4,
+                5
+              ],
+              "effect": {
+                "type": "roll-modifier",
+                "target": "selected-unit",
+                "modifier": {
+                  "roll": "hit",
+                  "operation": "subtract",
+                  "value": 1
+                }
+              }
+            },
+            {
+              "results": [
+                6
+              ],
+              "effect": {
+                "type": "permission",
+                "target": "selected-unit",
+                "modifier": {
+                  "activity": "shoot",
+                  "allow": false
+                }
+              }
+            }
+          ]
         }
       }
     },
@@ -3306,9 +3419,34 @@
       "contorted-epitome"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "defensive ability (skipped for damage calc)",
-    "faction_id": "chaos-daemons"
+    "faction_id": "chaos-daemons",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      },
+      "optional": true
+    },
+    "usage": {
+      "frequency": "once-per-phase",
+      "per": "army"
+    }
   },
   {
     "ability_id": "poxbringer-chaos-daemons",

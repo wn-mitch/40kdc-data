@@ -517,6 +517,15 @@ export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: str
       // defender. Its side is always said, so it is the owner check on the defender; `visible` after it binds to it (compile-antecedent.ts).
       if (leaf.parameters.side === "any") throw new CompileError("A unit-filter naming an attack's target must say friendly or enemy.");
       out.push({ ...leaf, family_id: "unit-filter-target", parameters: { ...leaf.parameters, owner_explicit: true, attack_target_named: true } });
+    } else if (isFilter(leaf) && out.at(-1)?.family_id === "leading-unit" && out.at(-1)!.fragment === leaf.fragment
+      && ["leading", "any"].includes(String(out.at(-1)!.parameters.attachment)) && joinerBetween(sourceText, out.at(-1)!, leaf) === "") {
+      // "while the bearer is leading a" + "X or Y unit": the unit it is attached to, lowered to the attachment's `with`.
+      const attachment = out.at(-1)!;
+      if (leaf.parameters.level === "model") throw new CompileError("An attachment's unit filter must name units, not models.");
+      const filter = dslUnitFilter(leaf);
+      const authored = attachment.parameters.attached_to_keywords as string[] | undefined;
+      if (authored !== undefined) filter.all_of = [...new Set([...((filter.all_of as string[] | undefined) ?? []), ...authored])];
+      out[out.length - 1] = { ...attachment, end_byte: leaf.end_byte, parameters: { ...attachment.parameters, attached_to_filter: filter } };
     } else if (isFilter(leaf) && followedBy(out.at(-1), leaf)) {
       // "within 8\" of a" + "friendly unengaged unit": the other unit of the distance or engagement
       // before it. A "from your army" after it is the filter's own wording.

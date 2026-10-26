@@ -14515,19 +14515,111 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "aeldari",
     "detachment_id": "guardian-battlehost",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading",
+          "with": {
+            "owner": "friendly",
+            "any_of": [
+              "DIRE AVENGERS",
+              "GUARDIANS"
+            ]
+          }
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "cost-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "of": "stratagem",
+              "operation": "set",
+              "amount": 0,
+              "applies_to": "targeting-this-unit",
+              "id": "fire-overwatch"
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "filter": {
+                      "within": {
+                        "of": {
+                          "objective": {
+                            "controlled_by": "friendly"
+                          }
+                        },
+                        "range": "objective-control"
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "roll-result",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "hit",
+                "succeeds_on": 5
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "within": {
+                    "of": {
+                      "objective": {
+                        "controlled_by": "friendly"
+                      }
+                    },
+                    "range": "objective-control"
+                  }
+                }
+              }
+            },
+            "effect": {
+              "type": "roll-result",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "hit",
+                "succeeds_on": 4
+              }
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "resolution"
+    },
+    "behavior": "activated",
+    "usage": {
+      "frequency": "once-per-battle-round",
+      "per": "model"
+    },
+    "source_digest": "075793f100f63399790ac5ceadf69613b33f29a04c162bc44a87724367604d1c"
   },
   {
     "ability_id": "psychic-communion-warlock-aeldari",

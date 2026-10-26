@@ -372,8 +372,10 @@ export function condition(leaf: CompileLeaf): Node {
       // A Leader is a model, so this model, this unit and the bearer's unit leading all say the
       // Leader model is leading. Version 1 leaves only ever meant leading.
       const attachment = leaf.family_version >= 2 ? closed(leaf, "attachment") : "leading";
-      // Version 4: the unit it is attached to has these keywords.
-      const attachedTo = leaf.parameters.attached_to_keywords === undefined ? {} : { with: { all_of: closed(leaf, "attached_to_keywords") } };
+      // Version 4: the unit it is attached to has these keywords; a unit-filter right after the leaf
+      // names that unit whole (compile-unit-filters.ts), keeping any authored keywords.
+      const attachedTo = leaf.parameters.attached_to_filter !== undefined ? { with: leaf.parameters.attached_to_filter }
+        : leaf.parameters.attached_to_keywords === undefined ? {} : { with: { all_of: closed(leaf, "attached_to_keywords") } };
       // Version 5: another model or unit ("that CHARACTER model is leading a unit").
       const named = String(closed(leaf, "subject"));
       if (!["this-model", "this-unit", "bearers-unit"].includes(named)) {
