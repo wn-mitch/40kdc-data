@@ -6610,19 +6610,48 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-mechanicus",
     "detachment_id": "rad-zone-corps",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "move-modifier",
+      "target": "event-subject",
+      "modifier": {
+        "advance": "fixed-6"
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": [
+      {
+        "event": "move-started",
+        "filter": {
+          "move_types": [
+            "advance"
+          ]
+        },
+        "subject": {
+          "stratagem_target": "first"
+        }
+      },
+      {
+        "event": "move-started",
+        "filter": {
+          "move_types": [
+            "advance"
+          ]
+        },
+        "subject": {
+          "stratagem_target": "second"
+        }
+      }
+    ],
+    "source_digest": "68d9a65b728bf9eac7beeeb71e4bab29390ff0c400daa381f236997d3840a841"
   },
   {
     "ability_id": "analytical-divination-haloscreed-battle-clade-adeptus-mechanicus",
