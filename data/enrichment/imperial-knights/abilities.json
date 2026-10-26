@@ -4399,19 +4399,139 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "imperial-knights",
     "detachment_id": "valourstrike-lance",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "IMPERIAL KNIGHTS"
+            ],
+            "excluding": "this-unit",
+            "level": "model"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "within": {
+                      "of": "this-model",
+                      "range": {
+                        "inches": 12
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "visible": {
+                      "to": "this-model"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "conditional",
+              "condition": {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "army-state",
+                    "parameters": {
+                      "owner": "friendly",
+                      "state": "honoured"
+                    }
+                  }
+                ]
+              },
+              "effect": {
+                "type": "heal",
+                "target": "selected-unit",
+                "modifier": {
+                  "amount": "D3"
+                }
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "army-state",
+                "parameters": {
+                  "owner": "friendly",
+                  "state": "honoured"
+                }
+              },
+              "effect": {
+                "type": "heal",
+                "target": "selected-unit",
+                "modifier": {
+                  "amount": 3
+                }
+              }
+            }
+          ]
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    },
+    "source_digest": "2ffd51a5c1ee17de3f726e25b3f52005662f8ae7c61adc92dea40cff32c1b742"
   },
   {
     "ability_id": "bearer-of-the-judicants-helm-valourstrike-lance-imperial-knights",

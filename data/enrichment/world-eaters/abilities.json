@@ -4720,7 +4720,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "222874de844e226faeae5ecfa35a560307369337f1bdaccc60e810d87001895b",
     "version": "2025-q3",
@@ -4729,7 +4729,7 @@
     "faction_id": "world-eaters",
     "detachment_id": "berzerker-warband",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "activated",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -4738,7 +4738,7 @@
           "target": "this-unit",
           "modifier": {
             "roll": "charge",
-            "subset": "all-failures"
+            "result_scope": "any-result"
           }
         },
         {

@@ -1661,7 +1661,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "bdb336351c6d507dd707aa41ab97e7ae7b2b6559189338dc217025329836ee3e",
     "version": "2025-q3",
@@ -1669,23 +1669,29 @@
       "type": "ability-modifier",
       "target": "this-model",
       "modifier": {
-        "ability": "voice-of-command-astra-militarum",
+        "ability": "voice-of-command",
         "aspect": "range",
         "operation": "set",
         "value": 12
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "unit_ids": [
       "leman-russ-commander",
       "rogal-dorn-commander"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "astra-militarum"
+    "faction_id": "astra-militarum",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "order"
+      }
+    }
   },
   {
     "ability_id": "called-shots-astra-militarum",
@@ -12394,19 +12400,47 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "astra-militarum",
     "detachment_id": "combined-arms",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "ability-modifier",
+        "target": "this-model",
+        "modifier": {
+          "ability": "voice-of-command",
+          "aspect": "uses",
+          "operation": "add",
+          "value": 1
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "9b003c6ec8cf69af6c3acb2ffee9f4125ae64dfd90d2759d374dd5875c07b19f"
   },
   {
     "ability_id": "guerrilla-honours-recon-element-astra-militarum",

@@ -2465,28 +2465,368 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "ce231245c155fdb271340f0470f599578955f7cc205c569e4fa01421a8337f41",
+    "source_digest": "99920dffe0e8ad1dbb08f88cb3725b018106a4d9db5050db055c3517371d0638",
     "version": "2025-q3",
     "effect": {
-      "type": "mortal-wounds",
-      "target": "defender",
-      "modifier": {
-        "count": "D3"
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "phase-ended",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "phase-is",
+                  "parameters": {
+                    "phase": "fight"
+                  }
+                },
+                {
+                  "type": "player-turn-is",
+                  "parameters": {
+                    "turn": "opponent-turn"
+                  }
+                }
+              ]
+            }
+          },
+          "effect": {
+            "type": "select-units",
+            "selector": {
+              "filter": {
+                "owner": "enemy",
+                "none_of": [
+                  "AIRCRAFT"
+                ],
+                "lacks_ability": [
+                  "lone-operative"
+                ],
+                "visible": {
+                  "to": "this-model"
+                }
+              },
+              "count": {
+                "min": 1,
+                "max": 1
+              },
+              "eligibility": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "within": {
+                      "of": "this-unit",
+                      "range": {
+                        "inches": 24
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "effect": {
+              "type": "designate",
+              "target": "selected-unit",
+              "modifier": {
+                "tag": "slowed"
+              }
+            }
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "selected",
+            "subject": "selected-unit",
+            "filter": {
+              "to": "move"
+            }
+          },
+          "effect": {
+            "type": "dice-table",
+            "dice": "D6",
+            "outcomes": [
+              {
+                "results": [
+                  1,
+                  2,
+                  3,
+                  4
+                ],
+                "effect": {
+                  "type": "sequence",
+                  "steps": [
+                    {
+                      "type": "conditional",
+                      "condition": {
+                        "operator": "and",
+                        "operands": [
+                          {
+                            "type": "matches",
+                            "parameters": {
+                              "subject": "event-subject",
+                              "filter": {
+                                "designated": "slowed"
+                              }
+                            }
+                          },
+                          {
+                            "operator": "and",
+                            "operands": [
+                              {
+                                "type": "phase-is",
+                                "parameters": {
+                                  "phase": "movement"
+                                }
+                              },
+                              {
+                                "type": "player-turn-is",
+                                "parameters": {
+                                  "turn": "opponent-turn"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "operator": "not",
+                            "operands": [
+                              {
+                                "type": "happened",
+                                "parameters": {
+                                  "subject": "event-subject",
+                                  "event": "move-ended",
+                                  "filter": {
+                                    "move_types": [
+                                      "remain-stationary"
+                                    ]
+                                  },
+                                  "window": "turn"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      "effect": {
+                        "type": "mortal-wounds",
+                        "target": "event-subject",
+                        "modifier": {
+                          "count": "D3"
+                        }
+                      }
+                    },
+                    {
+                      "type": "conditional",
+                      "condition": {
+                        "operator": "and",
+                        "operands": [
+                          {
+                            "type": "matches",
+                            "parameters": {
+                              "subject": "event-subject",
+                              "filter": {
+                                "designated": "slowed"
+                              }
+                            }
+                          },
+                          {
+                            "operator": "and",
+                            "operands": [
+                              {
+                                "type": "phase-is",
+                                "parameters": {
+                                  "phase": "movement"
+                                }
+                              },
+                              {
+                                "type": "player-turn-is",
+                                "parameters": {
+                                  "turn": "opponent-turn"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "operator": "not",
+                            "operands": [
+                              {
+                                "type": "happened",
+                                "parameters": {
+                                  "subject": "event-subject",
+                                  "event": "move-ended",
+                                  "filter": {
+                                    "move_types": [
+                                      "remain-stationary"
+                                    ]
+                                  },
+                                  "window": "turn"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      "effect": {
+                        "type": "stat-modifier",
+                        "target": "event-subject",
+                        "modifier": {
+                          "stat": "M",
+                          "operation": "subtract",
+                          "value": 2
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "results": [
+                  5,
+                  6
+                ],
+                "effect": {
+                  "type": "sequence",
+                  "steps": [
+                    {
+                      "type": "conditional",
+                      "condition": {
+                        "operator": "and",
+                        "operands": [
+                          {
+                            "type": "matches",
+                            "parameters": {
+                              "subject": "event-subject",
+                              "filter": {
+                                "designated": "slowed"
+                              }
+                            }
+                          },
+                          {
+                            "operator": "and",
+                            "operands": [
+                              {
+                                "type": "phase-is",
+                                "parameters": {
+                                  "phase": "movement"
+                                }
+                              },
+                              {
+                                "type": "player-turn-is",
+                                "parameters": {
+                                  "turn": "opponent-turn"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "operator": "not",
+                            "operands": [
+                              {
+                                "type": "happened",
+                                "parameters": {
+                                  "subject": "event-subject",
+                                  "event": "move-ended",
+                                  "filter": {
+                                    "move_types": [
+                                      "remain-stationary"
+                                    ]
+                                  },
+                                  "window": "turn"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      "effect": {
+                        "type": "mortal-wounds",
+                        "target": "event-subject",
+                        "modifier": {
+                          "count": "2D3"
+                        }
+                      }
+                    },
+                    {
+                      "type": "conditional",
+                      "condition": {
+                        "operator": "and",
+                        "operands": [
+                          {
+                            "type": "matches",
+                            "parameters": {
+                              "subject": "event-subject",
+                              "filter": {
+                                "designated": "slowed"
+                              }
+                            }
+                          },
+                          {
+                            "operator": "and",
+                            "operands": [
+                              {
+                                "type": "phase-is",
+                                "parameters": {
+                                  "phase": "movement"
+                                }
+                              },
+                              {
+                                "type": "player-turn-is",
+                                "parameters": {
+                                  "turn": "opponent-turn"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "operator": "not",
+                            "operands": [
+                              {
+                                "type": "happened",
+                                "parameters": {
+                                  "subject": "event-subject",
+                                  "event": "move-ended",
+                                  "filter": {
+                                    "move_types": [
+                                      "remain-stationary"
+                                    ]
+                                  },
+                                  "window": "turn"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      "effect": {
+                        "type": "stat-modifier",
+                        "target": "event-subject",
+                        "modifier": {
+                          "stat": "M",
+                          "operation": "subtract",
+                          "value": 3
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "one-use"
+      "duration": "until-end-of-opponent-next-movement-phase"
     },
     "unit_ids": [
       "ravenwing-dark-talon"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "usage": {
-      "frequency": "once-per-turn"
-    },
+    "behavior": "reactive",
     "faction_id": "dark-angels"
   },
   {

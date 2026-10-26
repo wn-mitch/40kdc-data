@@ -398,19 +398,169 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "white-scars",
     "detachment_id": "spearpoint-task-force",
     "ability_type": "detachment",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "stance-selection-capacity",
+              "modifier": {
+                "ability_id": "combat-doctrines-adeptus-astartes",
+                "additional_selections": 1,
+                "allocation": "choose-one-option",
+                "options": [
+                  {
+                    "ability_id": "combat-doctrines-adeptus-astartes",
+                    "option_id": "assault-doctrine"
+                  },
+                  {
+                    "ability_id": "combat-doctrines-adeptus-astartes",
+                    "option_id": "tactical-doctrine"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "roll-modifier",
+              "target": {
+                "owner": "friendly",
+                "all_of": [
+                  "ADEPTUS ASTARTES"
+                ],
+                "any_of": [
+                  "MOUNTED",
+                  "SPEEDER"
+                ]
+              },
+              "modifier": {
+                "roll": "advance",
+                "operation": "add",
+                "value": 1
+              }
+            },
+            {
+              "type": "ability-grant",
+              "target": {
+                "owner": "friendly",
+                "all_of": [
+                  "SUBODEN KHAN"
+                ]
+              },
+              "modifier": {
+                "ability": "wrath-of-the-first-khan",
+                "definition": {
+                  "type": "ability-part",
+                  "name": "Wrath of the First Khan",
+                  "effect": {
+                    "type": "conditional",
+                    "condition": {
+                      "type": "eligible",
+                      "parameters": {
+                        "subject": "this-unit",
+                        "to": "fight"
+                      }
+                    },
+                    "effect": {
+                      "type": "choice",
+                      "options": [
+                        {
+                          "type": "conditional",
+                          "condition": {
+                            "operator": "not",
+                            "operands": [
+                              {
+                                "type": "matches",
+                                "parameters": {
+                                  "filter": {
+                                    "state": "engaged"
+                                  }
+                                }
+                              }
+                            ]
+                          },
+                          "effect": {
+                            "type": "move",
+                            "target": "this-unit",
+                            "modifier": {
+                              "move_type": "normal"
+                            }
+                          }
+                        },
+                        {
+                          "type": "conditional",
+                          "condition": {
+                            "type": "matches",
+                            "parameters": {
+                              "filter": {
+                                "state": "engaged"
+                              }
+                            }
+                          },
+                          "effect": {
+                            "type": "move",
+                            "target": "this-unit",
+                            "modifier": {
+                              "move_type": "fall-back"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "trigger": {
+                    "event": "phase-ended",
+                    "condition": {
+                      "type": "phase-is",
+                      "parameters": {
+                        "phase": "fight"
+                      }
+                    },
+                    "optional": true
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "army-rule",
+              "target": "this-unit",
+              "modifier": {
+                "rule": "composition",
+                "with": {
+                  "all_of": [
+                    "WHITE SCARS"
+                  ]
+                }
+              }
+            },
+            {
+              "type": "army-rule",
+              "target": "this-unit",
+              "modifier": {
+                "rule": "single-chapter"
+              }
+            }
+          ]
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "activated",
+    "source_digest": "9505cd4242ce90772d7add62e20189023d8c41d3ba7c08fb6d5f29034fc8fb46"
   },
   {
     "ability_id": "stormseers-wisdom-spearpoint-task-force-white-scars",
