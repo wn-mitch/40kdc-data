@@ -58,6 +58,21 @@ export function bulletBreaks(leaves: readonly CompileLeaf[], sourceText: string 
   });
 }
 
+/**
+ * Where a new line without a bullet sits between leaves: entry `i` is true when the source between
+ * `leaves[i-1]` and `leaves[i]` holds a line break and no bullet character. A bulleted list ends there
+ * ("■ …\n■ …\nIn either case, …"), so the line after it is not part of the last bullet (compile-containers.ts).
+ */
+export function plainLineBreaks(leaves: readonly CompileLeaf[], sourceText: string | undefined): boolean[] {
+  return leaves.map((leaf, index) => {
+    if (index === 0 || sourceText === undefined) return false;
+    const previous = leaves[index - 1]!;
+    if (previous.end_byte === undefined || leaf.start_byte <= previous.end_byte) return false;
+    const gap = exactSpan(sourceText, previous.end_byte, leaf.start_byte);
+    return gap.includes("\n") && !BULLET.test(gap);
+  });
+}
+
 /** The gap between two list items: a comma, with optional "and"/"or" and the markup around a bracketed keyword. */
 const COMMA_GAP = /^[\s\]\[*]*,[\s\]\[*]*(?:(?:and|or)\s+)?[\s\]\[*]*$/u;
 /** The gap from a colon-introduced menu's opener to its first item, which holds the colon. */

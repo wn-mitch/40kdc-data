@@ -165,6 +165,7 @@ DESIGNATION_IDS: frozenset[str] = frozenset(
         "signal-fire-target",
         "singular-purpose-enemy",
         "singular-purpose-marker",
+        "singular-purpose-target",
         "slayer-of-champions",
         "slayers-oath",
         "slowed",

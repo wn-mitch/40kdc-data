@@ -137,15 +137,54 @@ describe("Semantic authoring choice-open over a keyword menu", () => {
     ]).join(" ")).toContain("can only hold effect leaves");
   });
 
-  it("refuses a bulleted option whose sentence break hides a condition", () => {
+  // A bullet bounds its option, so a sentence break inside it cannot cut the option in two: the condition
+  // in the bullet's second sentence gates only that sentence's effect, inside the option.
+  it("keeps a bulleted option's later sentence, condition and all, inside that option", () => {
     const text = "Choose one:\n■ Add one to hit rolls. If the foe is thinned, add one to wound rolls.\n■ Add one to save rolls.";
-    expect(failures(text, [
+    expect(compiled(text, [
       ["Choose one:", "EFFECT", "choice-open", { min_choices: 1, max_choices: 1 }],
       ["Add one to hit rolls", "EFFECT", "roll-modifier", plus("hit")],
       ["If the foe is thinned", "CONDITION", "unit-state", { states: ["below-starting-strength"], subject: "target", negated: false }],
       ["add one to wound rolls", "EFFECT", "roll-modifier", plus("wound")],
       ["Add one to save rolls", "EFFECT", "roll-modifier", plus("save")],
-    ]).join(" ")).toContain("can only hold effect leaves");
+    ]).mechanics.effect).toEqual({
+      type: "choice", min_choices: 1, max_choices: 1,
+      options: [
+        { type: "sequence", steps: [
+          { type: "roll-modifier", target: "this-unit", modifier: plus("hit") },
+          { type: "conditional", condition: { type: "strength", parameters: { subject: "defender", below: "starting" } }, effect: { type: "roll-modifier", target: "this-unit", modifier: plus("wound") } },
+        ] },
+        { type: "roll-modifier", target: "this-unit", modifier: plus("save") },
+      ],
+    });
+  });
+
+  // Hunts: a bullet that opens its own container ("Select one objective marker. …") ended the choice there.
+  it("takes a container that opens inside a bullet as that option's own", () => {
+    const text = "Choose one:\n■ Add one to hit rolls.\n■ Select one objective marker. While this unit is within range of that objective marker, add one to save rolls.";
+    const effect = compiled(text, [
+      ["Choose one:", "EFFECT", "choice-open", { min_choices: 1, max_choices: 1 }],
+      ["Add one to hit rolls", "EFFECT", "roll-modifier", plus("hit")],
+      ["Select one objective marker", "EFFECT", "select-objective-open", { bind_as: "objective-marker", count: 1 }],
+      ["While this unit is within range of that objective marker", "CONDITION", "unit-position", { kind: "objective-range", controlled_by: "any", subject: "this-unit", negated: false, objective: "selected" }],
+      ["add one to save rolls", "EFFECT", "roll-modifier", plus("save")],
+    ]).mechanics.effect as { type: string; options: Array<Record<string, unknown>> };
+    expect(effect.type).toBe("choice");
+    expect(effect.options).toHaveLength(2);
+    expect(effect.options[1]!.type).toBe("select-objective");
+  });
+
+  // Hunts: the line after the last bullet ("In either case, …") was read as more of that bullet.
+  it("ends a bulleted choice at the first line after its last bullet", () => {
+    const text = "Choose one:\n■ Add one to hit rolls.\n■ Add one to save rolls.\nIn either case, add one to wound rolls.";
+    const effect = compiled(text, [
+      ["Choose one:", "EFFECT", "choice-open", { min_choices: 1, max_choices: 1 }],
+      ["Add one to hit rolls", "EFFECT", "roll-modifier", plus("hit")],
+      ["Add one to save rolls", "EFFECT", "roll-modifier", plus("save")],
+      ["add one to wound rolls", "EFFECT", "roll-modifier", plus("wound")],
+    ]).mechanics.effect as Record<string, unknown>;
+    expect(JSON.stringify(effect)).toContain('"options":[{"type":"roll-modifier","target":"this-unit","modifier":{"roll":"hit","operation":"add","value":1}},{"type":"roll-modifier","target":"this-unit","modifier":{"roll":"save","operation":"add","value":1}}]');
+    expect(JSON.stringify(effect).match(/"roll":"wound"/gu)).toHaveLength(1);
   });
 
   // Non-regression: effects-only bulleted options with full stops compile as before.

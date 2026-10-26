@@ -17,8 +17,8 @@ const UNITS = "destroyed-units-by-triggering-attacks";
 const MODELS = "destroyed-models-by-triggering-attacks";
 /** Every destruction activity: the two by the triggering attacks, and the windowed history (named by a history-window leaf). */
 const ALL_DESTRUCTIONS: readonly string[] = [...DESTRUCTION_ACTIVITIES, WINDOWED_DESTRUCTION];
-/** Moments whose attacks are those of the unit or units they name: attacks resolved, or an enemy having shot. */
-const ATTACK_MOMENTS = new Set(["attacks-resolved", "enemy-has-shot"]);
+/** Moments whose attacks are those of the unit or units they name: attacks resolved, an enemy having shot, or this unit having shot. */
+const ATTACK_MOMENTS = new Set(["attacks-resolved", "enemy-has-shot", "after-shooting"]);
 /** Unit-ref roles a destroyed unit can be measured from at destruction. */
 const POSITION_OF = new Set(["this-unit", "event-subject", "stratagem-target", "attacker", "defender", "selected-unit", "recipient"]);
 
@@ -146,7 +146,7 @@ export function foldTriggeringDestruction(input: readonly CompileLeaf[]): Compil
     if (!momentFor(destroyer, input, windowed)) {
       throw new CompileError(windowed
         ? `A windowed destruction by ${String(destroyer)} needs the ${destroyer === "defender" ? "attack whose target it is" : destroyer === "stratagem-target" ? "Stratagem whose target it is" : "moment whose subject it is"} in the record.`
-        : "Destroyed by those attacks needs a moment whose attacks it names: the attacks resolved, an enemy having shot, or the Stratagem's target.");
+        : "Destroyed by those attacks needs a moment whose attacks it names: the attacks resolved, a unit having shot, or the Stratagem's target.");
     }
     const at = nextFilter(input, index, named === "before" ? -1 : 1, leaf.fragment);
     if (at === null) throw new CompileError(`A destruction activity names no unit-filter ${named === "before" ? "before" : "after"} its verb.`);

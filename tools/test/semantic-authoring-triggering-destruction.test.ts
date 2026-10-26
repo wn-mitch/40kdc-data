@@ -113,6 +113,20 @@ describe("destroyed by the triggering attacks: units", () => {
     ]))).toMatch(/takes no wholly, negated or side/);
   });
 
+  // Hunts: "when this unit has shot, if those attacks destroyed an enemy model" was refused for naming no attacks.
+  it("reads this unit having shot as the moment whose attacks did the destroying", () => {
+    const mechanics = compiled(placed("When this unit has shot, if those attacks destroyed an enemy model, this unit has the Feel No Pain 6+ ability.", [
+      ["When this unit has shot", "event", { kind: "after-shooting" }],
+      ["those attacks destroyed", "unit-activity", { activities: [MODELS], named: "after", container: "none", destroyer: "event-subject", negated: false }],
+      ["an enemy model", "unit-filter", { side: "enemy", level: "model" }],
+      FNP_PART,
+    ]));
+    expect(nodes(mechanics, (node) => node.type === "happened").map((node) => node.parameters)).toEqual([
+      { event: "model-destroyed", object: { owner: "enemy", level: "model" }, filter: { by: "event-subject" }, window: "event" },
+    ]);
+    expect(schemaErrors(mechanics)).toEqual([]);
+  });
+
   it("leaves out proximity when no distance follows the destroyed unit", () => {
     const mechanics = compiled(placed("When an enemy unit has shot, if those attacks destroyed a friendly DARK ANGELS unit, this unit has the Feel No Pain 6+ ability.", [
       ["When an enemy unit has shot", "event", { kind: "enemy-has-shot" }],

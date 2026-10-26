@@ -159,6 +159,7 @@ export const DESIGNATION_IDS: ReadonlySet<string> = new Set([
   "signal-fire-target",
   "singular-purpose-enemy",
   "singular-purpose-marker",
+  "singular-purpose-target",
   "slayer-of-champions",
   "slayers-oath",
   "slowed",

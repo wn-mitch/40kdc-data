@@ -509,18 +509,18 @@ export type ContainerPlan = { nodes: Map<number, Node>; consumed: Set<number> };
  */
 export function planContainers(
   list: readonly CompileLeaf[], sentenceOf: readonly number[], nested: ((leaves: readonly CompileLeaf[], objective?: string) => Node) | null = null, bullets: readonly boolean[] = [],
-  commas: readonly boolean[] = [],
+  commas: readonly boolean[] = [], lines: readonly boolean[] = [],
 ): ContainerPlan {
   const outer = nestedCompiler;
   nestedCompiler = nested;
   try {
-    return planContainerNodes(list, sentenceOf, bullets, commas);
+    return planContainerNodes(list, sentenceOf, bullets, commas, lines);
   } finally {
     nestedCompiler = outer;
   }
 }
 
-function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly number[], bullets: readonly boolean[], commas: readonly boolean[]): ContainerPlan {
+function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly number[], bullets: readonly boolean[], commas: readonly boolean[], lines: readonly boolean[]): ContainerPlan {
   const nodes = new Map<number, Node>();
   const consumed = new Set<number>();
   const replacements = findReplacementOpeners(list, (leaf) => LEADING_CONTAINERS.has(leaf.family_id));
@@ -535,6 +535,8 @@ function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly n
   const orderRuleLeaves = orderRuleIndexes.map((index) => list[index]!);
   list.forEach((leaf, index) => {
     if (!LEADING_CONTAINERS.has(leaf.family_id)) return;
+    // A container inside a bulleted choice's option is part of that option (below), which compiles it.
+    if (consumed.has(index)) return;
     // A replacement opener is the last sentence of its origin's ability part (below), so it builds no container of its own.
     if (replacements.replacements.has(index)) return;
     // An origin with a replacement reads on through it: its trailing sentence is part of the origin.
@@ -551,13 +553,22 @@ function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly n
     // A choice whose options carry named-option markers splits at them too.
     const byMarker = NAMED_OPTION_CONTAINERS.has(leaf.family_id)
       || (leaf.family_id === "choice-open" && list.slice(index + 1).some((item) => item.family_id === "named-option"));
-    for (let cursor = index + 1; cursor < list.length && (replacement !== undefined || !LEADING_CONTAINERS.has(list[cursor]!.family_id)); cursor += 1) {
+    // "select one of the following: ■ … ■ …" with a bullet right after the opener: each bullet is one
+    // option, however many sentences it holds, and a container that opens inside a bullet ("Select one
+    // objective marker. …") is part of that option rather than the end of the choice.
+    const byBullet = !byMarker && leaf.family_id === "choice-open" && bullets[index + 1] === true;
+    for (let cursor = index + 1; cursor < list.length && (replacement !== undefined || byBullet || !LEADING_CONTAINERS.has(list[cursor]!.family_id)); cursor += 1) {
       const sentence = sentenceOf[cursor]!;
       const bulletStarts = leaf.family_id === "choice-open" && bullets[cursor] === true;
+      // A bulleted choice ends at a later choice of its own kind, or at a line after the last bullet;
+      // another container is an option's own.
+      if (byBullet && (list[cursor]!.family_id === "choice-open" || lines[cursor] === true)) break;
       // Each item of a colon-introduced comma list is an option of its own (compile-placement.ts commaItems).
       const itemStarts = leaf.family_id === "choice-open" && commas[cursor] === true;
       if (list[cursor]!.family_id === "order-rule") continue;
-      const starts = byMarker ? list[cursor]!.family_id === "named-option" : currentSentence === null || sentence !== currentSentence || bulletStarts || itemStarts;
+      const starts = byMarker ? list[cursor]!.family_id === "named-option"
+        : byBullet ? currentSentence === null || bulletStarts
+          : currentSentence === null || sentence !== currentSentence || bulletStarts || itemStarts;
       if (starts) {
         if (currentSentence !== null) {
           if (bulletStarts) bulletBoundaries += 1;

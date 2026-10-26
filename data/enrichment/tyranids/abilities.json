@@ -462,138 +462,143 @@
     "ability_id": "singular-purpose-tyranids",
     "ability_type": "unit",
     "authored_by": "40kdc-community",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "choice_label": "Singular Purpose",
-      "options": [
-        {
-          "type": "ability-part",
-          "trigger": {
-            "event": "round-started",
-            "condition": {
-              "type": "battle-round",
-              "parameters": {
-                "min": 1,
-                "max": 1
-              }
-            }
-          },
-          "effect": {
-            "consumer": {
-              "beneficiary": "this-model",
-              "effect": {
-                "steps": [
-                  {
-                    "type": "re-roll",
-                    "target": "this-model",
-                    "modifier": {
-                      "roll": "hit",
-                      "subset": "all-failures"
-                    }
-                  },
-                  {
-                    "type": "re-roll",
-                    "target": "this-model",
-                    "modifier": {
-                      "roll": "wound",
-                      "subset": "all-failures"
-                    }
-                  }
-                ],
-                "type": "sequence"
-              },
-              "relation": "attacks-selected-unit"
-            },
-            "designation": "singular-purpose-enemy",
-            "duration": "battle",
-            "select": {
-              "kind": "unit",
-              "selector": {
-                "filter": {
-                  "owner": "enemy"
-                },
-                "count": {
-                  "min": 1,
-                  "max": 1
-                }
-              }
-            },
-            "type": "persistent-designation",
-            "selection_policy": "one-time"
-          }
-        },
-        {
-          "type": "ability-part",
-          "trigger": {
-            "event": "round-started",
-            "condition": {
-              "type": "battle-round",
-              "parameters": {
-                "min": 1,
-                "max": 1
-              }
-            }
-          },
-          "effect": {
-            "consumer": {
-              "beneficiary": "this-model",
-              "effect": {
-                "steps": [
-                  {
-                    "type": "feel-no-pain",
-                    "target": "this-model",
-                    "modifier": {
-                      "threshold": 5
-                    }
-                  },
-                  {
-                    "type": "stat-modifier",
-                    "target": "this-model",
-                    "modifier": {
-                      "stat": "OC",
-                      "operation": "set",
-                      "value": 15
-                    }
-                  }
-                ],
-                "type": "sequence"
-              },
-              "relation": "within-selected-marker"
-            },
-            "designation": "singular-purpose-marker",
-            "duration": "battle",
-            "select": {
-              "kind": "objective",
-              "selector": {
-                "filter": {},
-                "count": {
-                  "min": 1,
-                  "max": 1
-                }
-              }
-            },
-            "type": "persistent-designation",
-            "selection_policy": "one-time"
-          }
+      "type": "conditional",
+      "condition": {
+        "type": "battle-round",
+        "parameters": {
+          "min": 1,
+          "max": 1
         }
-      ],
-      "type": "choice"
+      },
+      "effect": {
+        "type": "choice",
+        "options": [
+          {
+            "type": "ability-part",
+            "effect": {
+              "type": "designate-target",
+              "designation": "singular-purpose-target",
+              "select": {
+                "kind": "unit",
+                "selector": {
+                  "filter": {
+                    "owner": "enemy"
+                  },
+                  "count": {
+                    "min": 1,
+                    "max": 1
+                  }
+                }
+              },
+              "applies": {
+                "to": "bearer-attacks-target",
+                "effect": {
+                  "type": "sequence",
+                  "steps": [
+                    {
+                      "type": "re-roll",
+                      "target": "this-model",
+                      "modifier": {
+                        "roll": "hit",
+                        "result_scope": "any-result"
+                      }
+                    },
+                    {
+                      "type": "re-roll",
+                      "target": "this-model",
+                      "modifier": {
+                        "roll": "wound",
+                        "result_scope": "any-result"
+                      }
+                    }
+                  ]
+                }
+              },
+              "duration": "battle"
+            },
+            "duration": "battle"
+          },
+          {
+            "type": "select-objective",
+            "selector": {
+              "filter": {},
+              "bind_as": "objective-marker",
+              "count": {
+                "min": 1,
+                "max": 1
+              }
+            },
+            "effect": {
+              "type": "ability-part",
+              "effect": {
+                "type": "conditional",
+                "condition": {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "this-model",
+                    "filter": {
+                      "within": {
+                        "of": {
+                          "objective": {
+                            "selection_var": "objective-marker"
+                          }
+                        },
+                        "range": "objective-control"
+                      }
+                    }
+                  }
+                },
+                "effect": {
+                  "type": "sequence",
+                  "steps": [
+                    {
+                      "type": "feel-no-pain",
+                      "target": "this-model",
+                      "modifier": {
+                        "threshold": 5
+                      }
+                    },
+                    {
+                      "type": "stat-modifier",
+                      "target": "this-model",
+                      "modifier": {
+                        "stat": "OC",
+                        "operation": "set",
+                        "value": 15
+                      }
+                    }
+                  ]
+                }
+              },
+              "duration": "battle"
+            }
+          }
+        ],
+        "choice_label": "one of the following",
+        "min_choices": 1,
+        "max_choices": 1
+      }
     },
     "game_version": {
-      "dataslate": "pre-launch-provisional",
-      "edition": "11th"
+      "edition": "11th",
+      "dataslate": "mfm-995"
     },
     "source_digest": "7e99ba8df6ff1534647d58781695a32361da904226084542574e2ff754a52c1d",
     "name": "Singular Purpose",
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "unit_ids": [
       "norn-assimilator",
       "norn-emissary"
     ],
     "version": "2025-q3",
-    "faction_id": "tyranids"
+    "faction_id": "tyranids",
+    "trigger": {
+      "event": "round-started"
+    }
   },
   {
     "ability_id": "unnatural-resilience-tyranids",

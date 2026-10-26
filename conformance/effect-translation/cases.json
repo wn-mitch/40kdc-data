@@ -29014,17 +29014,99 @@
   {
     "caseId": "adepta-sororitas-fidelity/fiery-conviction-adepta-sororitas",
     "effect": {
-      "type": "cp-gain",
-      "target": "this-model",
-      "modifier": {
-        "amount": 1
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "this-model",
+          "filter": {
+            "state": "on-battlefield"
+          }
+        }
+      },
+      "effect": {
+        "type": "choice",
+        "options": [
+          {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "resource-spend",
+                "target": "this-model",
+                "modifier": {
+                  "pool": "miracle-dice-pool",
+                  "amount": 1
+                }
+              },
+              {
+                "type": "cp-gain",
+                "target": "this-model",
+                "modifier": {
+                  "amount": 1
+                }
+              }
+            ]
+          },
+          {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "test",
+                "target": "this-model",
+                "modifier": {
+                  "test": "leadership"
+                }
+              },
+              {
+                "type": "conditional",
+                "condition": {
+                  "type": "roll-result",
+                  "parameters": {
+                    "roll": "leadership",
+                    "result": "success"
+                  }
+                },
+                "effect": {
+                  "type": "cp-gain",
+                  "target": "this-model",
+                  "modifier": {
+                    "amount": 1
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "min_choices": 1,
+        "max_choices": 1
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
+    },
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "optional": true
     },
     "expected": {
-      "text": "You gain 1CP."
+      "text": "At the start of your Command phase, you may use this ability, while this model is on the battlefield, until the end of the phase:\n  Select exactly 1 distinct options:\n    - Spend 1 Miracle die; you gain 1CP.\n    - This model must take a Leadership test; if the triggering leadership roll succeeded, you gain 1CP."
     }
   },
   {

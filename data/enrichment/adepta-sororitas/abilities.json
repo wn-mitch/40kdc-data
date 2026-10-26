@@ -2964,26 +2964,108 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "0b36290756bd677905f9c46e98521acc567a5fa6e4d53c5fcb42500bf9709023",
     "version": "2025-q3",
     "effect": {
-      "type": "cp-gain",
-      "target": "this-model",
-      "modifier": {
-        "amount": 1
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "this-model",
+          "filter": {
+            "state": "on-battlefield"
+          }
+        }
+      },
+      "effect": {
+        "type": "choice",
+        "options": [
+          {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "resource-spend",
+                "target": "this-model",
+                "modifier": {
+                  "pool": "miracle-dice-pool",
+                  "amount": 1
+                }
+              },
+              {
+                "type": "cp-gain",
+                "target": "this-model",
+                "modifier": {
+                  "amount": 1
+                }
+              }
+            ]
+          },
+          {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "test",
+                "target": "this-model",
+                "modifier": {
+                  "test": "leadership"
+                }
+              },
+              {
+                "type": "conditional",
+                "condition": {
+                  "type": "roll-result",
+                  "parameters": {
+                    "roll": "leadership",
+                    "result": "success"
+                  }
+                },
+                "effect": {
+                  "type": "cp-gain",
+                  "target": "this-model",
+                  "modifier": {
+                    "amount": 1
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "min_choices": 1,
+        "max_choices": 1
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "unit_ids": [
       "junith-eruita"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "adepta-sororitas"
+    "behavior": "reactive",
+    "faction_id": "adepta-sororitas",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "righteous-smiting-adepta-sororitas",
