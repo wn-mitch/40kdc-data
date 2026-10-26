@@ -8862,7 +8862,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "93cd87322b53687e4fc647ad4418a64019ab763536dfb2ccaab6e8bff5eb3444",
     "version": "2025-q3",
@@ -8871,57 +8871,81 @@
     "faction_id": "tau-empire",
     "detachment_id": "experimental-prototype-cadre",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "sequence",
       "steps": [
+        {
+          "type": "select-weapon",
+          "target": "this-model",
+          "modifier": {
+            "bind_as": "supernova-airbursting-fragmentation-projector",
+            "weapons": {
+              "name": "airbursting fragmentation projector"
+            }
+          }
+        },
         {
           "type": "stat-modifier",
           "target": "this-model",
           "modifier": {
             "stat": "S",
-            "operation": "add",
+            "operation": "improve",
             "value": 3,
             "weapons": {
-              "type": "ranged"
+              "ref": {
+                "weapon_var": "supernova-airbursting-fragmentation-projector"
+              }
             }
           }
         },
         {
-          "type": "stat-modifier",
-          "target": "this-model",
-          "modifier": {
-            "stat": "AP",
-            "operation": "improve",
-            "value": 1,
-            "weapons": {
-              "type": "ranged"
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "stat-modifier",
+              "target": "this-model",
+              "modifier": {
+                "stat": "AP",
+                "operation": "improve",
+                "value": 1,
+                "weapons": {
+                  "ref": {
+                    "weapon_var": "supernova-airbursting-fragmentation-projector"
+                  }
+                }
+              }
+            },
+            {
+              "type": "stat-modifier",
+              "target": "this-model",
+              "modifier": {
+                "stat": "D",
+                "operation": "improve",
+                "value": 1,
+                "weapons": {
+                  "ref": {
+                    "weapon_var": "supernova-airbursting-fragmentation-projector"
+                  }
+                }
+              }
             }
-          }
-        },
-        {
-          "type": "stat-modifier",
-          "target": "this-model",
-          "modifier": {
-            "stat": "D",
-            "operation": "add",
-            "value": 1,
-            "weapons": {
-              "type": "ranged"
-            }
-          }
+          ]
         }
       ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
         "BATTLESUIT"
       ]
     },
-    "community_notes": "Applies to one Airbursting Fragmentation Projector selected in the Declare Battle Formations step; the weapon-name scoping is not encoded."
+    "community_notes": "Applies to one Airbursting Fragmentation Projector selected in the Declare Battle Formations step; the weapon-name scoping is not encoded.",
+    "trigger": {
+      "event": "battle-formations-declared"
+    }
   },
   {
     "ability_id": "thermoneutronic-projector-experimental-prototype-cadre-tau-empire",
@@ -8929,7 +8953,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "de65a4b63f113e59ff8e5206420a5301f3e78cdee768a4e4d453eecaf13f3e01",
     "version": "2025-q3",
@@ -8938,57 +8962,82 @@
     "faction_id": "tau-empire",
     "detachment_id": "experimental-prototype-cadre",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "sequence",
       "steps": [
+        {
+          "type": "select-weapon",
+          "target": "this-model",
+          "modifier": {
+            "bind_as": "selected-weapon",
+            "weapons": {
+              "name": "t’au flamer"
+            },
+            "count": 1
+          }
+        },
         {
           "type": "stat-modifier",
           "target": "this-model",
           "modifier": {
             "stat": "S",
-            "operation": "add",
+            "operation": "improve",
             "value": 2,
             "weapons": {
-              "type": "ranged"
+              "ref": {
+                "weapon_var": "selected-weapon"
+              }
             }
           }
         },
         {
-          "type": "stat-modifier",
-          "target": "this-model",
-          "modifier": {
-            "stat": "AP",
-            "operation": "improve",
-            "value": 1,
-            "weapons": {
-              "type": "ranged"
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "stat-modifier",
+              "target": "this-model",
+              "modifier": {
+                "stat": "AP",
+                "operation": "improve",
+                "value": 1,
+                "weapons": {
+                  "ref": {
+                    "weapon_var": "selected-weapon"
+                  }
+                }
+              }
+            },
+            {
+              "type": "stat-modifier",
+              "target": "this-model",
+              "modifier": {
+                "stat": "D",
+                "operation": "improve",
+                "value": 1,
+                "weapons": {
+                  "ref": {
+                    "weapon_var": "selected-weapon"
+                  }
+                }
+              }
             }
-          }
-        },
-        {
-          "type": "stat-modifier",
-          "target": "this-model",
-          "modifier": {
-            "stat": "D",
-            "operation": "add",
-            "value": 1,
-            "weapons": {
-              "type": "ranged"
-            }
-          }
+          ]
         }
       ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
         "BATTLESUIT"
       ]
     },
-    "community_notes": "Applies to one T'au Flamer selected in the Declare Battle Formations step; the weapon-name scoping is not encoded."
+    "community_notes": "Applies to one T'au Flamer selected in the Declare Battle Formations step; the weapon-name scoping is not encoded.",
+    "trigger": {
+      "event": "battle-formations-declared"
+    }
   },
   {
     "ability_id": "plasma-accelerator-rifle-experimental-prototype-cadre-tau-empire",
@@ -8996,7 +9045,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "e8e72055113cc44b927a8e39ab040c1e27e6887bac742faa43c83c69d75b754c",
     "version": "2025-q3",
@@ -9005,69 +9054,95 @@
     "faction_id": "tau-empire",
     "detachment_id": "experimental-prototype-cadre",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "sequence",
       "steps": [
+        {
+          "type": "select-weapon",
+          "target": "this-model",
+          "modifier": {
+            "bind_as": "plasma-rifle-weapon",
+            "weapons": {
+              "name": "plasma rifle"
+            }
+          }
+        },
         {
           "type": "stat-modifier",
           "target": "this-model",
           "modifier": {
             "stat": "S",
-            "operation": "add",
+            "operation": "improve",
             "value": 2,
             "weapons": {
-              "type": "ranged"
+              "ref": {
+                "weapon_var": "plasma-rifle-weapon"
+              }
             }
           }
         },
         {
-          "type": "stat-modifier",
-          "target": "this-model",
-          "modifier": {
-            "stat": "A",
-            "operation": "add",
-            "value": 1,
-            "weapons": {
-              "type": "ranged"
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "stat-modifier",
+              "target": "this-model",
+              "modifier": {
+                "stat": "A",
+                "operation": "improve",
+                "value": 1,
+                "weapons": {
+                  "ref": {
+                    "weapon_var": "plasma-rifle-weapon"
+                  }
+                }
+              }
+            },
+            {
+              "type": "stat-modifier",
+              "target": "this-model",
+              "modifier": {
+                "stat": "AP",
+                "operation": "improve",
+                "value": 1,
+                "weapons": {
+                  "ref": {
+                    "weapon_var": "plasma-rifle-weapon"
+                  }
+                }
+              }
+            },
+            {
+              "type": "stat-modifier",
+              "target": "this-model",
+              "modifier": {
+                "stat": "D",
+                "operation": "improve",
+                "value": 1,
+                "weapons": {
+                  "ref": {
+                    "weapon_var": "plasma-rifle-weapon"
+                  }
+                }
+              }
             }
-          }
-        },
-        {
-          "type": "stat-modifier",
-          "target": "this-model",
-          "modifier": {
-            "stat": "AP",
-            "operation": "improve",
-            "value": 1,
-            "weapons": {
-              "type": "ranged"
-            }
-          }
-        },
-        {
-          "type": "stat-modifier",
-          "target": "this-model",
-          "modifier": {
-            "stat": "D",
-            "operation": "add",
-            "value": 1,
-            "weapons": {
-              "type": "ranged"
-            }
-          }
+          ]
         }
       ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
         "BATTLESUIT"
       ]
     },
-    "community_notes": "Applies to one Plasma Rifle selected in the Declare Battle Formations step; the weapon-name scoping is not encoded."
+    "community_notes": "Applies to one Plasma Rifle selected in the Declare Battle Formations step; the weapon-name scoping is not encoded.",
+    "trigger": {
+      "event": "battle-formations-declared"
+    }
   },
   {
     "ability_id": "exemplar-of-the-kauyon-kauyon-tau-empire",

@@ -2525,51 +2525,38 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "d697827d9cb67632e3983ac91969a15dba475985fe91bea65c008dc580c2dc45",
+    "source_digest": "d1c6ef3213e5376c94b340cda8b39f9299a721599d279c9bab5b271c84a386d2",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "roll-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "advance",
-              "operation": "add",
-              "value": 1
-            }
-          },
-          {
-            "type": "roll-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "charge",
-              "operation": "add",
-              "value": 1
-            }
-          },
-          {
-            "type": "roll-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "hit",
-              "operation": "add",
-              "value": 1
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "rule-state",
+          "target": "this-unit",
+          "modifier": {
+            "direction": "granted",
+            "rule_kind": "faction-rule",
+            "rule": {
+              "ability_id": "combat-doctrines-adeptus-astartes",
+              "option_id": "assault-doctrine"
             }
           }
-        ]
-      }
+        },
+        {
+          "type": "rule-state",
+          "target": "this-unit",
+          "modifier": {
+            "direction": "granted",
+            "rule_kind": "faction-rule",
+            "rule": {
+              "ability_id": "combat-doctrines-adeptus-astartes",
+              "option_id": "tactical-doctrine"
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"

@@ -348,19 +348,29 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "ultramarines",
     "detachment_id": "blade-of-ultramar",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "rule-state",
+      "target": "this-unit",
+      "modifier": {
+        "direction": "granted",
+        "rule_kind": "faction-rule",
+        "rule": {
+          "ability_id": "combat-doctrines-adeptus-astartes",
+          "option_id": "tactical-doctrine"
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "4e1ff7a32afefbaebe6e201377775abe8655d78becc65fd59dde32eed4b921c1"
   },
   {
     "ability_id": "tactical-foresight-blade-of-ultramar-ultramarines",

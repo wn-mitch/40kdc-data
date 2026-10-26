@@ -155,6 +155,7 @@ const UNMODELLED_EFFECT_TYPE = /^effect type "(.*)" is not modelled by the buff 
  */
 const OUTSIDE_CRUNCHER_SCOPE: ReadonlyArray<{ reason: RegExp; why: string }> = [
   { reason: /^effect type "rule-state" is not modelled by the buff layer$/u, why: "a named rule's state (an active doctrine) is a scenario choice, not a buff" },
+  { reason: /^rule-state: persistent ability ownership and suppression are not resolved by the buff engine$/u, why: "a named rule made active for a unit, or taken from it, resolves through that rule" },
   { reason: /^effect type "ability-activate" is not modelled by the buff layer$/u, why: "activating another ability resolves that ability, not a buff of this one" },
   { reason: /^effect type "resource-(spend|die)" is not modelled by the buff layer$/u, why: "spending a banked resource (miracle dice) is a player decision per roll" },
   { reason: /^effect type "weapon-grant" is not modelled by the buff layer$/u, why: "a granted weapon is a loadout change, not a modifier to the crunched weapon" },
@@ -167,6 +168,9 @@ const OUTSIDE_CRUNCHER_SCOPE: ReadonlyArray<{ reason: RegExp; why: string }> = [
   { reason: /^target "event-subject" is not resolved by the buff engine$/u, why: "the triggering unit is bound only at runtime" },
   { reason: /^target "event-object" is not resolved by the buff engine$/u, why: "the unit the triggering action aimed at is bound only at runtime" },
   { reason: /^select-weapon: a bound weapon is not resolved by the buff engine$/u, why: "a chosen weapon is bound only at runtime" },
+  { reason: /^(?:stat-modifier|roll-modifier|re-roll|roll-result): narrows by "weapons\.ref" which the cruncher can't resolve here$/u, why: "a weapon an earlier selection binds is bound only at runtime" },
+  { reason: /^trigger-time recipient snapshot is unavailable; current membership cannot establish historical recipients$/u, why: "the units an ability reached when it triggered are bound only at runtime" },
+  { reason: /^re-roll: its count is set by the number of models-equipped-with; not resolved by the buff engine$/u, why: "a re-roll count set by how many models carry an item depends on the fielded loadout" },
 ];
 
 /** Whether an unsupported item is marked as outside the cruncher's scope. */

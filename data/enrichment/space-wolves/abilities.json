@@ -891,26 +891,50 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "1d10e438f8b2686fcbd73f97b84d52101fc4661a12a7bcd07bfad69126daf524",
+    "source_digest": "162e611360cefd6bca994b0592a475828420fb4bcb9e305a85e52ee7b92f7a6a",
     "version": "2025-q3",
     "effect": {
-      "type": "cost-modifier",
-      "target": {
-        "owner": "enemy",
-        "within": {
-          "range": {
-            "inches": 12
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "rule-state",
+          "target": "this-unit",
+          "modifier": {
+            "direction": "granted",
+            "rule_kind": "faction-rule",
+            "rule": {
+              "ability_id": "combat-doctrines-adeptus-astartes",
+              "option_id": "assault-doctrine"
+            }
+          }
+        },
+        {
+          "type": "rule-state",
+          "target": "this-unit",
+          "modifier": {
+            "direction": "granted",
+            "rule_kind": "faction-rule",
+            "rule": {
+              "ability_id": "combat-doctrines-adeptus-astartes",
+              "option_id": "devastator-doctrine"
+            }
+          }
+        },
+        {
+          "type": "rule-state",
+          "target": "this-unit",
+          "modifier": {
+            "direction": "granted",
+            "rule_kind": "faction-rule",
+            "rule": {
+              "ability_id": "combat-doctrines-adeptus-astartes",
+              "option_id": "tactical-doctrine"
+            }
           }
         }
-      },
-      "modifier": {
-        "of": "stratagem",
-        "operation": "increase",
-        "amount": 1,
-        "applies_to": "targeting-this-unit"
-      }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -919,8 +943,11 @@
       "logan-grimnar"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "space-wolves"
+    "behavior": "reactive",
+    "faction_id": "space-wolves",
+    "trigger": {
+      "event": "phase-started"
+    }
   },
   {
     "ability_id": "hammer-blow-space-wolves",

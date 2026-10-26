@@ -4264,7 +4264,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "faa87c70273cbeac4ef060a128182f8aef013904ccbafd936b0595b4dab8a9ef",
     "version": "2025-q3",
@@ -4272,9 +4272,14 @@
       "type": "re-roll",
       "target": "this-unit",
       "modifier": {
-        "roll": "any",
+        "roll": {
+          "of_ability": "eviscerating-fly-by-aeldari"
+        },
         "result_scope": "any-result",
-        "pool": "eviscerating-fly-by"
+        "count": {
+          "count_of": "models-equipped-with",
+          "wargear": "cluster-caltrops"
+        }
       }
     },
     "scope": {
@@ -4284,9 +4289,17 @@
       "ynnari-reavers"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "[APPROX] The rule grants one re-roll per model equipped with cluster caltrops; the per-model re-roll count is not expressible, so it is modeled as a re-roll of the Eviscerating Fly-by wound dice (subset all-failures per the codebase re-roll convention). Full rule in raw-text store.",
-    "faction_id": "aeldari"
+    "faction_id": "aeldari",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "ability",
+        "id": "eviscerating-fly-by-aeldari"
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "grenade-pack-flyover-aeldari",

@@ -24,6 +24,20 @@ describe("pipeline-8b cruncher unsupported classification", () => {
     expect(classifyUnsupported(unsupported)).toEqual({ honestUnknown: 0, outsideDamagePath: 1, unrecognizedShape: 0 });
   });
 
+  it("marks a rule-state that makes a named option active for a unit as outside the cruncher's scope", () => {
+    const active = effectToBuffs({ type: "rule-state", target: "this-unit", modifier: { direction: "granted", rule_kind: "faction-rule", rule: { ability_id: "example-doctrines", option_id: "example-option" } } }, source, ctx).unsupported;
+    expect(active.map((item) => item.reason)).toEqual(["rule-state: persistent ability ownership and suppression are not resolved by the buff engine"]);
+    expect(classifyUnsupported(active)).toEqual({ honestUnknown: 0, outsideDamagePath: 1, unrecognizedShape: 0 });
+  });
+
+  it("marks a modifier on a weapon an earlier selection binds as outside the cruncher's scope, but not a malformed weapon keyword", () => {
+    const bound = effectToBuffs({ type: "stat-modifier", target: "this-model", modifier: { stat: "D", operation: "improve", value: 1, weapons: { ref: { weapon_var: "example-weapon" } } } }, source, ctx).unsupported;
+    expect(bound.map((item) => item.reason)).toEqual(['stat-modifier: narrows by "weapons.ref" which the cruncher can\'t resolve here']);
+    expect(classifyUnsupported(bound)).toEqual({ honestUnknown: 0, outsideDamagePath: 1, unrecognizedShape: 0 });
+    const malformed = effectToBuffs({ type: "stat-modifier", target: "this-model", modifier: { stat: "D", operation: "improve", value: 1, weapons: { keyword: { keyword_id: "" } } } }, source, ctx).unsupported;
+    expect(classifyUnsupported(malformed)).toEqual({ honestUnknown: 0, outsideDamagePath: 0, unrecognizedShape: 1 });
+  });
+
   it("passes an effect marked as outside the cruncher's scope, but not an unmarked one", () => {
     const marked = effectToBuffs({ type: "rule-state", target: "this-unit", modifier: { rule_kind: "faction-rule", rule: "example-doctrine", state: "active" } }, source, ctx).unsupported;
     expect(marked.map((item) => item.reason)).toEqual(['effect type "rule-state" is not modelled by the buff layer']);

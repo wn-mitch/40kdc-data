@@ -5267,27 +5267,30 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "5f9760457ffba17c4fed6aa3ef56bdea2a18ba5c8c653482a090b1d79d4bb2c5",
+    "source_digest": "4e1ff7a32afefbaebe6e201377775abe8655d78becc65fd59dde32eed4b921c1",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "adeptus-astartes",
     "detachment_id": "gladius-task-force",
     "ability_type": "enhancement",
-    "behavior": "activated",
+    "behavior": "passive",
     "effect": {
       "type": "rule-state",
       "target": "this-unit",
       "modifier": {
         "direction": "granted",
-        "rule_kind": "keyword",
-        "rule": "tactical-doctrine"
+        "rule_kind": "faction-rule",
+        "rule": {
+          "ability_id": "combat-doctrines-adeptus-astartes",
+          "option_id": "tactical-doctrine"
+        }
       }
     },
     "scope": {
-      "duration": "until-next-command-phase"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -8249,9 +8252,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "marneus-calgar",
       "roboute-guilliman"
@@ -8260,11 +8262,51 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "rule-state",
+          "target": "this-unit",
+          "modifier": {
+            "direction": "granted",
+            "rule_kind": "faction-rule",
+            "rule": {
+              "ability_id": "combat-doctrines-adeptus-astartes",
+              "option_id": "assault-doctrine"
+            }
+          }
+        },
+        {
+          "type": "rule-state",
+          "target": "this-unit",
+          "modifier": {
+            "direction": "granted",
+            "rule_kind": "faction-rule",
+            "rule": {
+              "ability_id": "combat-doctrines-adeptus-astartes",
+              "option_id": "devastator-doctrine"
+            }
+          }
+        },
+        {
+          "type": "rule-state",
+          "target": "this-unit",
+          "modifier": {
+            "direction": "granted",
+            "rule_kind": "faction-rule",
+            "rule": {
+              "ability_id": "combat-doctrines-adeptus-astartes",
+              "option_id": "tactical-doctrine"
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "419b2bc94dd3c9221826dcb23d7cc4d96eaeb4864dde52f717ecdcd75db1c0fd"
   },
   {
     "ability_id": "codex-fire-patterns-adeptus-astartes",
@@ -13842,19 +13884,29 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-astartes",
     "detachment_id": "tactical-brethren",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "rule-state",
+      "target": "this-unit",
+      "modifier": {
+        "direction": "granted",
+        "rule_kind": "faction-rule",
+        "rule": {
+          "ability_id": "combat-doctrines-adeptus-astartes",
+          "option_id": "tactical-doctrine"
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "4e1ff7a32afefbaebe6e201377775abe8655d78becc65fd59dde32eed4b921c1"
   },
   {
     "ability_id": "tempered-in-battle-aura-tacticus-firestorm-force-adeptus-astartes",

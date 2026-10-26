@@ -5287,28 +5287,92 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "d9a00e8cfae71821b00b94cf12c14a64bc58838df2e315693881bb44e8388109",
+    "source_digest": "e6aa1c66abf819af5ec9fc5713117e3b5ca4ac0611420f4a2f326073e19c0f02",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "matches",
+        "type": "army-faction",
         "parameters": {
-          "filter": {
-            "state": "on-battlefield"
-          },
-          "subject": "this-unit"
+          "faction": "necrons"
         }
       },
       "effect": {
-        "type": "heal",
-        "target": "this-unit",
-        "modifier": {
-          "amount": "D3",
-          "per": "unit"
-        }
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "ability-part",
+            "trigger": {
+              "event": "phase-ended",
+              "condition": {
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "phase-is",
+                    "parameters": {
+                      "phase": "command"
+                    }
+                  },
+                  {
+                    "type": "player-turn-is",
+                    "parameters": {
+                      "turn": "your-turn"
+                    }
+                  }
+                ]
+              }
+            },
+            "effect": {
+              "type": "for-each-unit",
+              "selector": {
+                "filter": {
+                  "owner": "friendly",
+                  "has_ability": [
+                    "reanimation-protocols-necrons"
+                  ]
+                }
+              },
+              "effect": {
+                "type": "conditional",
+                "condition": {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "recipient",
+                    "filter": {
+                      "state": "on-battlefield"
+                    }
+                  }
+                },
+                "effect": {
+                  "type": "ability-activate",
+                  "target": "recipient",
+                  "modifier": {
+                    "ability": "reanimation-protocols-necrons"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "ability-part",
+            "trigger": {
+              "event": "used",
+              "filter": {
+                "kind": "ability",
+                "id": "reanimation-protocols-necrons"
+              }
+            },
+            "effect": {
+              "type": "heal",
+              "target": "this-unit",
+              "modifier": {
+                "amount": "D3"
+              }
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -5322,16 +5386,7 @@
       "transcendent-ctan"
     ],
     "ability_type": "faction",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "phase-ended",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "command"
-        }
-      }
-    }
+    "behavior": "reactive"
   },
   {
     "ability_id": "drain-life-necrons",
@@ -11540,15 +11595,95 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "necrons",
     "detachment_id": "amonhotekhs-guard",
     "ability_type": "faction",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "army-faction",
+        "parameters": {
+          "faction": "necrons"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "ability-part",
+            "trigger": {
+              "event": "phase-ended",
+              "condition": {
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "phase-is",
+                    "parameters": {
+                      "phase": "command"
+                    }
+                  },
+                  {
+                    "type": "player-turn-is",
+                    "parameters": {
+                      "turn": "your-turn"
+                    }
+                  }
+                ]
+              }
+            },
+            "effect": {
+              "type": "for-each-unit",
+              "selector": {
+                "filter": {
+                  "owner": "friendly",
+                  "has_ability": [
+                    "reanimation-protocols-amonhotekhs-guard-necrons"
+                  ]
+                }
+              },
+              "effect": {
+                "type": "conditional",
+                "condition": {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "recipient",
+                    "filter": {
+                      "state": "on-battlefield"
+                    }
+                  }
+                },
+                "effect": {
+                  "type": "ability-activate",
+                  "target": "this-unit",
+                  "modifier": {
+                    "ability": "reanimation-protocols-necrons"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "ability-part",
+            "trigger": {
+              "event": "used",
+              "filter": {
+                "kind": "ability",
+                "id": "reanimation-protocols-necrons"
+              }
+            },
+            "effect": {
+              "type": "heal",
+              "target": "recipient",
+              "modifier": {
+                "amount": "D3"
+              }
+            }
+          }
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
@@ -11558,7 +11693,9 @@
         "ability_ref": "reanimation-protocols-necrons",
         "type": "replaces"
       }
-    ]
+    ],
+    "behavior": "reactive",
+    "source_digest": "e6aa1c66abf819af5ec9fc5713117e3b5ca4ac0611420f4a2f326073e19c0f02"
   },
   {
     "ability_id": "reinforced-resilience-amonhotekhs-guard-necrons",

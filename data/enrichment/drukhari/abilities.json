@@ -218,30 +218,21 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "faa87c70273cbeac4ef060a128182f8aef013904ccbafd936b0595b4dab8a9ef",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "happened",
-        "parameters": {
-          "event": "used",
-          "subject": "this-unit",
-          "filter": {
-            "kind": "ability",
-            "id": "eviscerating-fly-by-drukhari"
-          },
-          "window": "phase"
-        }
-      },
-      "effect": {
-        "type": "re-roll",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "any",
-          "result_scope": "any-result"
+      "type": "re-roll",
+      "target": "this-unit",
+      "modifier": {
+        "roll": {
+          "of_ability": "eviscerating-fly-by-drukhari"
+        },
+        "result_scope": "any-result",
+        "count": {
+          "count_of": "models-equipped-with",
+          "wargear": "cluster-caltrops"
         }
       }
     },
@@ -252,9 +243,17 @@
       "reavers"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "[APPROX] The rule grants one re-roll per model equipped with cluster caltrops; the per-model re-roll count is not expressible, so it is modeled as a re-roll of the Eviscerating Fly-by wound dice (subset all-failures per the codebase re-roll convention). Full rule in raw-text store.",
-    "faction_id": "drukhari"
+    "faction_id": "drukhari",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "ability",
+        "id": "eviscerating-fly-by-drukhari"
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "grav-talon-drukhari",
@@ -4870,27 +4869,94 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "eb780ee3164ba718d8dfbce92cd699711f657691c90f7561278cbb438c46a7de",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "phase-started",
+            "condition": {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "fight"
+              }
+            }
+          },
+          "usage": {
+            "frequency": "once-per-phase",
+            "per": "army"
+          },
+          "effect": {
+            "type": "for-each-unit",
+            "selector": {
+              "filter": {
+                "owner": "enemy"
+              }
+            },
+            "effect": {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "recipient",
+                  "filter": {
+                    "engaged_with": {
+                      "owner": "friendly",
+                      "has_ability": [
+                        "tormentors-drukhari"
+                      ]
+                    }
+                  }
+                }
+              },
+              "effect": {
+                "type": "test",
+                "target": "recipient",
+                "modifier": {
+                  "test": "battle-shock"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "attack-is",
+                "parameters": {
+                  "attack_type": "melee"
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "defender",
+                  "filter": {
+                    "state": "battle-shocked"
+                  }
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "operation": "add",
+              "value": 1
+            }
+          }
         }
-      },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "hit",
-          "operation": "add",
-          "value": 1
-        }
-      }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -4899,7 +4965,7 @@
       "incubi"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "faction_id": "drukhari"
   },
   {
