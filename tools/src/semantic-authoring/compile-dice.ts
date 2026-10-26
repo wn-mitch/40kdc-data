@@ -65,6 +65,45 @@ export function perSuccess(planned: Planned[], banded: Planned[], dice: string, 
   return planned.map((item) => gated(item.gate, item.node));
 }
 
+/** The amount fields of an effect that can read a bound roll. */
+const AMOUNT_FIELDS = ["value", "count", "amount"];
+
+/** Rebuild an effect with each amount equal to the roll's dice read from the roll instead; null when none is. */
+function readRoll(node: Node, dice: string, rollVar: string): Node | null {
+  const modifier = node.modifier as Node | undefined;
+  if (modifier !== undefined && AMOUNT_FIELDS.some((field) => modifier[field] === dice)) {
+    return { ...node, modifier: Object.fromEntries(Object.entries(modifier).map(([key, value]) => [key, AMOUNT_FIELDS.includes(key) && value === dice ? { roll_var: rollVar } : value])) };
+  }
+  if (node.type === "sequence") {
+    const steps = (node.steps as Node[]).map((step) => readRoll(step, dice, rollVar));
+    return steps.some((step) => step !== null) ? { ...node, steps: steps.map((step, at) => step ?? (node.steps as Node[])[at]!) } : null;
+  }
+  return null;
+}
+
+/**
+ * "Roll one D3: your unit suffers a number of mortal wounds equal to the result": a roll with no
+ * result band whose result an effect after it takes as its amount (written as the roll's own dice).
+ * The effects from the first reader to the last share that one roll, bound as the DSL's `roll`
+ * step. Null when the roll is not a single plain die or no effect reads it.
+ */
+function resultReaders(planned: Planned[], roll: CompileLeaf): Node[] | null {
+  const parameters = roll.parameters;
+  if (["count", "per_model", "for_each", "bonus", "roll_var", "conditional_bonus", "pool_condition", "kind"].some((key) => parameters[key] !== undefined)) return null;
+  const dice = String(parameters.dice);
+  const rollVar = "result";
+  const read = planned.map((item) => readRoll(item.node, dice, rollVar));
+  const first = read.findIndex((node) => node !== null);
+  if (first < 0) return null;
+  // Only an effect after the roll can read its result.
+  if (planned.some((item, at) => read[at] !== null && (item.leaf.start_byte ?? 0) < (roll.start_byte ?? 0))) return null;
+  const last = read.length - 1 - [...read].reverse().findIndex((node) => node !== null);
+  const steps = planned.map((item, at) => gated(item.gate, read[at] ?? item.node));
+  const shared = steps.slice(first, last + 1);
+  const rolled: Node = { type: "roll", dice, roll_var: rollVar, effect: shared.length === 1 ? shared[0]! : { type: "sequence", steps: shared } };
+  return [...steps.slice(0, first), rolled, ...steps.slice(last + 1)];
+}
+
 /**
  * Replace roll-gated effects with the roll shape. `global` may hold a band that gates every
  * effect; it is moved onto each effect first. Returns the ordered steps of the ability body.
@@ -77,6 +116,8 @@ export function resolveRolls(planned: Planned[], global: Node[], rolls: readonly
   }
   const banded = planned.filter((item) => item.gate.some(isRollMarker));
   if (banded.length === 0) {
+    const read = rolls.length === 1 ? resultReaders(planned, rolls[0]!) : null;
+    if (read) return read;
     if (rolls.length) throw new CompileError("A roll has no result band (\"on a 4+\") saying what it decides.");
     return planned.map((item) => gated(item.gate, item.node));
   }

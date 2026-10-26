@@ -185,6 +185,19 @@ describe("Semantic authoring Stratagem target modes (\"or\" between targets, \"A
       ["Each unit targeted with this Stratagem is not within Engagement Range", "unit-state", { states: ["engaged"], subject: "each-target", negated: true }, "RESTRICTIONS"],
       DURATION, ELIGIBLE)).toMatch(/several targets/u);
   });
+
+  // Hunts: "You cannot target a unit that …" on a one-target Stratagem lowered to a defender gate on the effect.
+  it("applies a target condition in RESTRICTIONS to the one target's eligibility, not to the effect", () => {
+    const text = "Movement phase. One ALPHA unit from your army. Until the end of the turn, your unit is eligible to shoot and charge after falling back. You cannot target a unit that is within Engagement Range of enemy units.";
+    const { target, mechanics } = compiled(text, WINDOW,
+      ["One", "stratagem-target", { count: "one" }, "TARGET"],
+      ["ALPHA unit from your army", "unit-filter", { side: "friendly", keywords: ["ALPHA"] }, "TARGET"],
+      DURATION, ELIGIBLE,
+      ["You cannot target a unit that is within Engagement Range", "unit-state", { states: ["engaged"], subject: "target", negated: true }, "RESTRICTIONS"]);
+    expect(target.eligibility).toEqual({ operator: "not", operands: [{ type: "matches", parameters: { filter: { state: "engaged" } } }] });
+    expect(JSON.stringify(mechanics)).not.toContain("defender");
+    expect(targetValid(target)).toBe(true);
+  });
 });
 
 describe("Stratagem target_restrictions modes in the schema", () => {

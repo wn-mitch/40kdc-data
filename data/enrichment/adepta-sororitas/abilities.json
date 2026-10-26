@@ -7705,7 +7705,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "b75213bf9db2da46c2dc780308af5f423dbee8795bcc4a287af63dc86eb4b016",
     "version": "2025-q3",
@@ -7716,26 +7716,12 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "in-region",
-        "parameters": {
-          "subject": "event-object",
-          "region": {
-            "terrain_area": {
-              "footprint": "terrain area"
-            }
-          }
-        }
-      },
-      "effect": {
-        "type": "stat-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "stat": "Sv",
-          "operation": "improve",
-          "value": 1
-        }
+      "type": "stat-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "stat": "Sv",
+        "operation": "improve",
+        "value": 1
       }
     },
     "scope": {
@@ -8576,7 +8562,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "3ef4ac143eac20485743fa018ed92f23e1ae794e341182a5d1c659c365f1a61a",
     "version": "2025-q3",
@@ -8587,16 +8573,86 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "stat-modifier",
-      "target": "this-model",
-      "modifier": {
-        "stat": "A",
-        "operation": "add",
-        "value": 1,
-        "weapons": {
-          "type": "melee"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "this-unit",
+                  "filter": {
+                    "designated": "righteous"
+                  }
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "stat-modifier",
+            "target": "this-model",
+            "modifier": {
+              "stat": "A",
+              "operation": "add",
+              "value": 1,
+              "weapons": {
+                "type": "melee"
+              }
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-unit",
+              "filter": {
+                "designated": "righteous"
+              }
+            }
+          },
+          "effect": {
+            "type": "stat-modifier",
+            "target": "this-model",
+            "modifier": {
+              "stat": "A",
+              "operation": "add",
+              "value": 2,
+              "weapons": {
+                "type": "melee"
+              }
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-unit",
+              "filter": {
+                "designated": "righteous"
+              }
+            }
+          },
+          "effect": {
+            "type": "stat-modifier",
+            "target": "this-model",
+            "modifier": {
+              "stat": "D",
+              "operation": "add",
+              "value": 1,
+              "weapons": {
+                "type": "melee"
+              }
+            }
+          }
         }
-      }
+      ]
     },
     "scope": {
       "duration": "permanent"

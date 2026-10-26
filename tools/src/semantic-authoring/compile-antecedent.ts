@@ -42,6 +42,16 @@ export function momentNamesUnit(leaves: readonly CompileLeaf[], index: number): 
   return leaves[at]?.family_id === "unit-filter" && leaves[at]!.fragment === leaf.fragment;
 }
 
+/** Moments that happen to a unit, whose object a unit-filter right after them can name. */
+export function objectEvent(leaf: CompileLeaf | undefined): boolean {
+  if (leaf?.family_id !== "event" || leaf.parameters.object_owner !== undefined || leaf.parameters.object_filter !== undefined) return false;
+  // A unit-filter after a plain "is destroyed" names who destroyed it ("by an attack made by a
+  // friendly X unit"), not what was destroyed; only "this unit destroys an X unit" names the object.
+  // "when an enemy unit targets a friendly X unit": the unit targeted.
+  return leaf.parameters.kind === "damage-allocated" || leaf.parameters.kind === "enemy-selected-targets" || leaf.parameters.kind === "targets-selected"
+    || ((leaf.parameters.kind === "unit-destroyed" || leaf.parameters.kind === "model-destroyed") && leaf.parameters.by !== undefined);
+}
+
 /** Moments whose only named unit is the one they happen to (the trigger's object). */
 const OBJECT_MOMENTS = new Set(["damage-allocated"]);
 
@@ -496,7 +506,11 @@ function antecedentRole(leaves: readonly CompileLeaf[], index: number, focus?: (
   if (selectionFollowsVerb(leaves, index) !== null) return verbFirstSelection(leaves, index);
   // "For each enemy unit …, that unit …": each pass's unit, which the DSL's for-each-unit calls its recipient.
   if (earlier.some((other) => other.family_id === "for-each-unit-select")) return AURA_RECIPIENT;
-  if (bareFilter(leaves, index)) return FILTERED_UNITS;
+  // "when an enemy unit targets a friendly X unit that is within range of an objective": the filter is the moment's
+  // object (compile-unit-filters.ts folds it onto the moment), so a condition on its units is on that object.
+  const filterAt = bareFilterAt(leaves, index);
+  if (filterAt > 0 && leaves[index]!.role === "CONDITION" && leaves[filterAt - 1]!.fragment === leaves[index]!.fragment && objectEvent(leaves[filterAt - 1])) return "event-object";
+  if (filterAt >= 0) return FILTERED_UNITS;
   if (earlier.some((other) => other.family_id === "aura-range")) return AURA_RECIPIENT;
   const moment = earlier.filter((_other, at) => momentNamesUnit(leaves, at)).at(-1);
   // In a Stratagem's WHEN clause, "an enemy unit ends a move" + "within 8\" of …": the moment's

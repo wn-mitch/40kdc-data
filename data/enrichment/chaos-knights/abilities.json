@@ -2738,9 +2738,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "6dc29716e23abb2879be466315be398257468c02552309fc86e5c652206f2581",
+    "source_digest": "e39a180f013ca488fd406bd345f484e2f4d7a07e677fb0a2eb18d121b58113b1",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -2749,19 +2749,25 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "stat-modifier",
-      "target": "attacker",
-      "modifier": {
-        "stat": "AP",
-        "operation": "worsen",
-        "value": 1,
-        "weapons": {
-          "type": "ranged"
+      "type": "conditional",
+      "condition": {
+        "type": "attack-is",
+        "parameters": {
+          "attack_type": "ranged"
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "attacker",
+        "modifier": {
+          "stat": "AP",
+          "operation": "worsen",
+          "value": 1
         }
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "attack-sequence"
     },
     "community_notes": "Ranged attacks that target your WAR DOG unit (within range of an objective) have -1 AP until that enemy unit has attacked.",
     "trigger": {
@@ -2776,32 +2782,8 @@
         "owner": "friendly",
         "all_of": [
           "WAR DOG"
-        ],
-        "within": {
-          "range": "objective-control",
-          "of": {
-            "objective": {}
-          }
-        }
-      },
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent-turn"
-            }
-          }
         ]
-      },
-      "optional": true
+      }
     }
   },
   {

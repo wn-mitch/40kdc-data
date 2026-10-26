@@ -7511,7 +7511,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "8897ac4b313e677eea8959c6643e9f8536ceb380fb4abb2e9cd4ac1f66dcb14e",
     "version": "2025-q3",
@@ -7559,24 +7559,6 @@
       },
       "subject": {
         "owner": "enemy"
-      },
-      "optional": true,
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "charge"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent-turn"
-            }
-          }
-        ]
       }
     }
   },
@@ -7669,28 +7651,11 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "not",
-        "operands": [
-          {
-            "type": "matches",
-            "parameters": {
-              "subject": "defender",
-              "filter": {
-                "state": "engaged"
-              }
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "set-up",
-        "target": "this-unit",
-        "modifier": {
-          "to": "strategic-reserves",
-          "from": "battlefield"
-        }
+      "type": "set-up",
+      "target": "this-unit",
+      "modifier": {
+        "to": "strategic-reserves",
+        "from": "battlefield"
       }
     },
     "scope": {

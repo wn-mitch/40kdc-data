@@ -4291,7 +4291,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "97cdb478e01a1b1054e847078f838ef8834bf3ce5245dbe63e8d0bd7430a9ea7",
     "version": "2025-q3",
@@ -4303,16 +4303,15 @@
     "behavior": "reactive",
     "effect": {
       "type": "stat-modifier",
-      "target": "this-unit",
+      "target": "attacker",
       "modifier": {
         "stat": "AP",
         "operation": "worsen",
-        "value": 1,
-        "incoming": true
+        "value": 1
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "attack-sequence"
     },
     "applies_to": {
       "all_of": [
@@ -4331,43 +4330,8 @@
         "owner": "friendly",
         "all_of": [
           "TECH-PRIEST"
-        ],
-        "within": {
-          "range": "objective-control",
-          "of": {
-            "objective": {}
-          }
-        }
-      },
-      "condition": {
-        "operator": "or",
-        "operands": [
-          {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "phase-is",
-                "parameters": {
-                  "phase": "shooting"
-                }
-              },
-              {
-                "type": "player-turn-is",
-                "parameters": {
-                  "turn": "opponent-turn"
-                }
-              }
-            ]
-          },
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
-          }
         ]
-      },
-      "optional": true
+      }
     }
   },
   {
@@ -8340,19 +8304,41 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-mechanicus",
     "detachment_id": "purge-corps-deltic-9",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "roll-modifier",
+      "target": "attacker",
+      "modifier": {
+        "roll": "wound",
+        "operation": "subtract",
+        "value": 1
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "PURGE CORPS DELTIC-9"
+        ]
+      }
+    },
+    "source_digest": "c95b875daa42ea33e6e93c0a0d6ded457b305ac6daf00313d5565c1820156238"
   },
   {
     "ability_id": "logis-explorator-maniple-adeptus-mechanicus",

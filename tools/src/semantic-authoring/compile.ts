@@ -56,7 +56,7 @@ import { foldWarlordTests, gatesTriggerOnWarlord } from "./compile-warlord-test.
 import { foldEngagementExclusive } from "./compile-engagement-exclusive.js";
 import { applyHolderAllowance, foldHolderAbilities } from "./compile-holder-abilities.js";
 import { destroyedFilterObject, wrapModelAura, groupMembership } from "./compile-model-level.js";
-import { bindTargetedTarget, namesSelection } from "./compile-targeting-history.js";
+import { bindTargetedTarget, namesSelection, onAttackedTarget } from "./compile-targeting-history.js";
 import { dropRedundantMenuOpeners, foldWeaponKeywords, refuseBlastRating } from "./compile-weapon-keywords.js";
 import { foldWeaponScopes, hoistWeaponRecipients } from "./compile-weapon-scopes.js";
 import { bindFrameAntecedents, bindScopeAttacks, bindWeaponAntecedents, bindWeaponStatAntecedents, refuseUnboundWeaponScope } from "./compile-weapon-antecedent.js";
@@ -650,11 +650,13 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
       }
       // In the TARGET fragment no attack is being made: "target" is the candidate unit, the eligibility's default subject.
       // Each target (subject each-target) is the candidate of every group it is copied into (compile-target-groups.ts).
-      // An each-target condition in RESTRICTIONS ("Each unit targeted with this Stratagem must …") is eligibility too.
+      // A target or each-target condition in RESTRICTIONS ("You cannot target a unit that …", "Each unit targeted with this
+      // Stratagem must …") is eligibility too: no attack is made there, so "target" is the Stratagem's.
       // A Stratagem's battle-round restriction is when it can be used: it joins the WHEN moment's condition (compile-usability-gate.ts).
       else if (usabilityAt.has(index)) usabilityNodes.push(condition(leaf));
-      else if (leaf.role === "CONDITION" && (leaf.fragment === "TARGET" || (leaf.fragment === "RESTRICTIONS" && leaf.parameters.subject === "each-target"))) {
-        const candidate = leaf.parameters.subject === "target" || leaf.parameters.subject === "each-target";
+      else if (leaf.role === "CONDITION" && (leaf.fragment === "TARGET" || (leaf.fragment === "RESTRICTIONS" && (leaf.parameters.subject === "each-target" || leaf.parameters.subject === "target")) || onAttackedTarget(list, leaf))) {
+        // A WHEN condition on the targeted unit (compile-targeting-history.ts onAttackedTarget) is on the candidate too.
+        const candidate = leaf.parameters.subject === "target" || leaf.parameters.subject === "each-target" || leaf.fragment === "WHEN";
         targetConditions.push({ index, eachTarget: leaf.parameters.subject === "each-target", node: condition(candidate ? { ...leaf, parameters: { ...leaf.parameters, subject: "this-unit" } } : leaf) });
       }
       else if (leaf.role === "CONDITION" && WRAP_CONDITION_FAMILIES.has(leaf.family_id)) {

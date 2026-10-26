@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 
 import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
-import { currentFamilyVersion, normalizeFingerprintParameters, REVIEWED_FAMILY_REGISTRY } from "../src/semantic-authoring/contracts.js";
+import { currentFamilyVersion, familyRole, normalizeFingerprintParameters, REVIEWED_FAMILY_REGISTRY } from "../src/semantic-authoring/contracts.js";
 import { checkEntry, entryWithMechanics } from "../src/semantic-authoring/entries.js";
 import { mapToLatest } from "../src/semantic-authoring/family-versions.js";
 import { prefillFromSource, type PrefillFamily } from "../src/semantic-authoring/leaf-prefill.js";
@@ -236,5 +236,33 @@ describe("Semantic authoring dice-family prefill", () => {
     expect(prefill("fight-on-death", "When its unit fights, this model can fight")).toMatchObject({ act: "fight", timing: "when-its-unit-fights" });
     expect(prefill("fight-on-death", "This model can shoot before being removed from play")).toEqual({ act: "shoot", subject: "this-model" });
     expect(prefill("fight-on-death", "This unit can shoot before being removed from play")).toEqual({ act: "shoot", subject: "this-unit" });
+  });
+});
+
+describe("a roll whose result an effect takes as its amount", () => {
+  const base = () => authored("adeptus-mechanicus", "control-edict-adeptus-mechanicus");
+  const versioned = (family: string, parameters: Record<string, unknown>) =>
+    leaf(familyRole(family, currentFamilyVersion(family)), family, normalizeFingerprintParameters(family, parameters, currentFamilyVersion(family)), currentFamilyVersion(family));
+
+  // Hunts: "roll one D3: … mortal wounds equal to the result" was refused for having no result band.
+  it("binds the roll once and reads it in the effect, leaving the effects that do not read it outside", () => {
+    const leaves = [
+      versioned("dice-roll", { dice: "D3" }),
+      versioned("mortal-wounds", { recipient: "this-unit", count: "D3" }),
+      versioned("battle-shock-state", { recipient: "this-unit", set: false }),
+    ];
+    const effect = compiled(leaves).mechanics.effect as Record<string, any>;
+    expect(effect.steps[0]).toEqual({ type: "roll", dice: "D3", roll_var: "result", effect: { type: "mortal-wounds", target: "this-unit", modifier: { count: { roll_var: "result" } } } });
+    expect(effect.steps[1].type).toBe("state-change");
+    expect(rendered(base(), leaves)).toMatch(/result of that roll/u);
+  });
+
+  it("still refuses a band-less roll no effect reads", () => {
+    const result = compileLeaves([
+      versioned("dice-roll", { dice: "D3" }),
+      versioned("mortal-wounds", { recipient: "this-unit", count: "D6" }),
+    ]);
+    expect(result.ok).toBe(false);
+    expect(result.ok ? [] : result.errors).toContainEqual(expect.stringMatching(/no result band/u));
   });
 });

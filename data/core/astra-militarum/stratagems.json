@@ -2702,7 +2702,45 @@
     ],
     "player_turn": "either",
     "timing": "once-per-turn",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords_any": [
+        "Bullgryn Squad",
+        "Ogryn Squad"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "level": "unit",
+                "unit_ids": [
+                  "bullgryn-squad",
+                  "ogryn-squad"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": {
+                    "objective": {}
+                  },
+                  "range": "objective-control"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "thick-skulled-obdurance-abhuman-auxiliaries-astra-militarum",
     "game_version": {
       "edition": "11th",

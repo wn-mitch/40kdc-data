@@ -2522,25 +2522,97 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "049c7ab288f4f7e86086cfda37d2be4ccdccfe12aad777ee51daac5aeebda0ab",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "command"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "mortal-wounds",
-        "target": "defender",
-        "modifier": {
-          "count": "D3"
-        }
+        "type": "dice-table",
+        "dice": "D6",
+        "outcomes": [
+          {
+            "results": [
+              1
+            ],
+            "effect": {
+              "type": "mortal-wounds",
+              "target": "this-unit",
+              "modifier": {
+                "count": "D3"
+              }
+            }
+          },
+          {
+            "results": [
+              2,
+              3,
+              4,
+              5
+            ],
+            "effect": {
+              "type": "return-models",
+              "target": {
+                "level": "model",
+                "member_of": "this-unit",
+                "all_of": [
+                  "BODYGUARD"
+                ]
+              },
+              "modifier": {
+                "count": 1
+              }
+            }
+          },
+          {
+            "results": [
+              6
+            ],
+            "effect": {
+              "type": "return-models",
+              "target": {
+                "level": "model",
+                "member_of": "this-unit",
+                "all_of": [
+                  "BODYGUARD"
+                ]
+              },
+              "modifier": {
+                "count": 2
+              }
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -2550,7 +2622,7 @@
       "exalted-sorcerer"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "activated",
     "faction_id": "thousand-sons"
   },
   {

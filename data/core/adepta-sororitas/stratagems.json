@@ -1559,14 +1559,30 @@
       "selects": "unit",
       "bound_to": "attacked-unit",
       "eligibility": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
-            "none_of": [
-              "ARCO-FLAGELLANTS"
-            ]
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "none_of": [
+                  "ARCO-FLAGELLANTS"
+                ]
+              }
+            }
+          },
+          {
+            "type": "in-region",
+            "parameters": {
+              "subject": "this-unit",
+              "region": {
+                "terrain_area": {
+                  "footprint": "terrain area"
+                }
+              }
+            }
           }
-        }
+        ]
       }
     },
     "ability_id": "take-cover-sanctuary-guardians-adepta-sororitas",

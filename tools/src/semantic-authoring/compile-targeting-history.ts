@@ -82,6 +82,20 @@ export function bindTargetedTarget(list: readonly CompileLeaf[]): CompileLeaf[] 
     ? { ...leaf, parameters: { ...leaf.parameters, attacked_filter: filter } }
     : leaf);
 }
+/**
+ * "when an enemy unit targets a friendly X unit that is within range of an objective. That X unit.": a WHEN
+ * condition on the moment's object, in a Stratagem whose target is the attacked unit, is on that target, so
+ * it is the target's eligibility rather than a gate the effect reads.
+ */
+export function onAttackedTarget(list: readonly CompileLeaf[], leaf: CompileLeaf): boolean {
+  if (leaf.fragment !== "WHEN" || leaf.role !== "CONDITION" || leaf.parameters.subject !== "event-object") return false;
+  const targetsSelected = list.some((other) => other.family_id === "event" && other.fragment === "WHEN"
+    && (other.parameters.kind === "enemy-selected-targets" || other.parameters.kind === "targets-selected"));
+  const attacked = list.filter((other) => (other.family_id === "triggering-target" && other.parameters.attacked_filter !== undefined)
+    || (other.family_id === "target-binding" && other.parameters.bound_to === "attacked-unit"));
+  return targetsSelected && attacked.length === 1;
+}
+
 /** The friendly units a WHEN clause's triggering attacks destroyed a model in, as their unit filters. */
 function destroyedMemberFilters(list: readonly CompileLeaf[]): Node[] {
   return list.flatMap((leaf) => {

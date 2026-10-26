@@ -1652,19 +1652,58 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "deathwatch",
     "detachment_id": "deathwatch-support",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "stat": "Range",
+            "operation": "add",
+            "value": 6,
+            "weapons": {
+              "type": "ranged"
+            }
+          }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "stat": "S",
+            "operation": "add",
+            "value": 1,
+            "weapons": {
+              "type": "ranged"
+            }
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "KILL TEAM"
+        ]
+      }
+    },
+    "source_digest": "35ca2fda1143b348ff08b33a6951a18c42d2bc7e946c7c4ec745f8e0d10145d9"
   },
   {
     "ability_id": "mission-tactics-deathwatch-support-deathwatch",

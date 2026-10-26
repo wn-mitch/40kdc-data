@@ -459,6 +459,31 @@ describe("'That K unit' after the triggering attacks destroyed a model in a frie
   });
 });
 
+describe("a WHEN condition on the unit an enemy targets", () => {
+  // Hunts: "that is within range of an objective" after the targeted unit's filter had no filter to name
+  // (the moment takes the filter as its object), and a WHEN gate on the moment's object is not one the
+  // effect can read when the Stratagem's target is that unit.
+  const text = "Opponent's Shooting phase, when an enemy unit targets a friendly PIONEERS unit that is within range of an objective. That PIONEERS unit. Attacks that target your unit have -1 to wound rolls.";
+  it("is the target's eligibility, not a gate on the effect", () => {
+    const result = compileItems(text, [
+      ["Opponent's Shooting phase", "use-window", { your_phases: [], opponent_phases: ["shooting"], either_phases: [] }, "WHEN"],
+      ["enemy unit", "unit-filter", { side: "enemy" }, "WHEN"],
+      ["targets", "event", { kind: "enemy-selected-targets" }, "WHEN"],
+      ["friendly PIONEERS unit", "unit-filter", { side: "friendly", keywords: ["PIONEERS"] }, "WHEN"],
+      ["within range of an objective", "unit-position", { kind: "objective-range", controlled_by: "any", subject: "antecedent", negated: false }, "WHEN"],
+      ["That PIONEERS unit", "triggering-target", { selects: "unit", keywords: ["PIONEERS"], match: "all" }, "TARGET"],
+      ["Attacks that target your unit", "attack", { direction: "targeted", unit: "this-unit", attack_type: "any" }, "EFFECT"],
+      ["-1 to wound rolls", "roll-modifier", { roll: "wound", operation: "subtract", value: 1 }, "EFFECT"],
+    ]);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    expect((result as any).core.target_restrictions).toMatchObject({
+      required_keywords: ["PIONEERS"], bound_to: "attacked-unit",
+      eligibility: { type: "matches", parameters: { filter: { within: { of: { objective: {} }, range: "objective-control" } } } },
+    });
+    expect(json(result.mechanics)).not.toContain("event-object");
+  });
+});
+
 describe("describers read the lowered shapes without raw ids", () => {
   it("a destruction of the Stratagem's target by the defender", () => {
     const text = describeCondition({ type: "happened", parameters: { event: "destroyed", object: "stratagem-target", filter: { by: "defender" }, window: "battle" } } as never);

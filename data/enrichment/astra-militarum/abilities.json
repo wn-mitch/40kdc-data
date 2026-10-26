@@ -6878,7 +6878,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "96631e48905371488e2ce0d75d52ac09e54a1870c212b8f66366016cc71b55d1",
     "version": "2025-q3",
@@ -6890,16 +6890,15 @@
     "behavior": "reactive",
     "effect": {
       "type": "stat-modifier",
-      "target": "this-unit",
+      "target": "attacker",
       "modifier": {
         "stat": "AP",
         "operation": "worsen",
-        "value": 1,
-        "incoming": true
+        "value": 1
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "attack-sequence"
     },
     "applies_to": {
       "all_of": [
@@ -6920,43 +6919,8 @@
         "unit_ids": [
           "bullgryn-squad",
           "ogryn-squad"
-        ],
-        "within": {
-          "range": "objective-control",
-          "of": {
-            "objective": {}
-          }
-        }
-      },
-      "condition": {
-        "operator": "or",
-        "operands": [
-          {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "phase-is",
-                "parameters": {
-                  "phase": "shooting"
-                }
-              },
-              {
-                "type": "player-turn-is",
-                "parameters": {
-                  "turn": "opponent-turn"
-                }
-              }
-            ]
-          },
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
-          }
         ]
-      },
-      "optional": true
+      }
     }
   },
   {

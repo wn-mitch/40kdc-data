@@ -1,6 +1,6 @@
 import { exactSpan } from "./contracts.js";
 import { ALTERNATIVELY, OR_CONNECTIVE, ONE_OR_MORE, uncoveredText } from "./compile-target-modes.js";
-import { attackOfFilter, AURA_RECIPIENT, FILTERED_UNITS, momentOfFilter, targetedAttackOfFilter } from "./compile-antecedent.js";
+import { attackOfFilter, AURA_RECIPIENT, FILTERED_UNITS, momentOfFilter, objectEvent, targetedAttackOfFilter } from "./compile-antecedent.js";
 import { awaitsFollowingFilter } from "./families/shared.js";
 import { EXCLUDED_FROM_ATTACKS } from "./families/unit-filters.js";
 import { FILTER_SUBJECT_TARGET } from "./families/unit-filters.js";
@@ -876,17 +876,6 @@ function attackerFilter(filter: CompileLeaf, attack: CompileLeaf): Record<string
   // The filter's own membership (groupMembership) wins over the attack's unit.
   const { owner: _owner, ...rest } = dsl;
   return { member_of: "this-unit", ...rest };
-}
-
-
-/** Moments that happen to a unit, whose object a unit-filter right after them can name. */
-function objectEvent(leaf: CompileLeaf | undefined): boolean {
-  if (leaf?.family_id !== "event" || leaf.parameters.object_owner !== undefined || leaf.parameters.object_filter !== undefined) return false;
-  // A unit-filter after a plain "is destroyed" names who destroyed it ("by an attack made by a
-  // friendly X unit"), not what was destroyed; only "this unit destroys an X unit" names the object.
-  // "when an enemy unit targets a friendly X unit": the unit targeted.
-  return leaf.parameters.kind === "damage-allocated" || leaf.parameters.kind === "enemy-selected-targets" || leaf.parameters.kind === "targets-selected"
-    || ((leaf.parameters.kind === "unit-destroyed" || leaf.parameters.kind === "model-destroyed") && leaf.parameters.by !== undefined);
 }
 
 /**
