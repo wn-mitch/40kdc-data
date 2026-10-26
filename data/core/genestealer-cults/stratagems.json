@@ -2235,14 +2235,27 @@
             }
           },
           {
-            "type": "happened",
-            "parameters": {
-              "event": "set-up",
-              "filter": {
-                "from": "deep-strike"
+            "operator": "and",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "set-up",
+                  "window": "phase"
+                }
               },
-              "window": "phase"
-            }
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "used",
+                  "filter": {
+                    "kind": "ability",
+                    "id": "deep-strike"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
           }
         ]
       }

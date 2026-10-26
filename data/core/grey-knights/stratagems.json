@@ -668,14 +668,27 @@
             }
           },
           {
-            "type": "happened",
-            "parameters": {
-              "event": "set-up",
-              "filter": {
-                "from": "deep-strike"
+            "operator": "and",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "set-up",
+                  "window": "phase"
+                }
               },
-              "window": "phase"
-            }
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "used",
+                  "filter": {
+                    "kind": "ability",
+                    "id": "deep-strike"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
           }
         ]
       }
@@ -1159,14 +1172,27 @@
       "side": "your-army",
       "selects": "unit",
       "eligibility": {
-        "type": "happened",
-        "parameters": {
-          "event": "set-up",
-          "filter": {
-            "from": "deep-strike"
+        "operator": "and",
+        "operands": [
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "set-up",
+              "window": "phase"
+            }
           },
-          "window": "phase"
-        }
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "used",
+              "filter": {
+                "kind": "ability",
+                "id": "deep-strike"
+              },
+              "window": "phase"
+            }
+          }
+        ]
       }
     },
     "ability_id": "hallowed-beacon-warpbane-task-force-grey-knights",
@@ -1526,14 +1552,27 @@
             }
           },
           {
-            "type": "happened",
-            "parameters": {
-              "event": "set-up",
-              "filter": {
-                "from": "deep-strike"
+            "operator": "and",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "set-up",
+                  "window": "turn"
+                }
               },
-              "window": "turn"
-            }
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "used",
+                  "filter": {
+                    "kind": "ability",
+                    "id": "deep-strike"
+                  },
+                  "window": "turn"
+                }
+              }
+            ]
           },
           {
             "operator": "not",

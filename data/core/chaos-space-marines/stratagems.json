@@ -2720,14 +2720,27 @@
             }
           },
           {
-            "type": "happened",
-            "parameters": {
-              "event": "set-up",
-              "filter": {
-                "from": "deep-strike"
+            "operator": "and",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "set-up",
+                  "window": "turn"
+                }
               },
-              "window": "turn"
-            }
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "used",
+                  "filter": {
+                    "kind": "ability",
+                    "id": "deep-strike"
+                  },
+                  "window": "turn"
+                }
+              }
+            ]
           },
           {
             "operator": "not",
@@ -3921,14 +3934,27 @@
         "operator": "and",
         "operands": [
           {
-            "type": "happened",
-            "parameters": {
-              "event": "set-up",
-              "filter": {
-                "from": "deep-strike"
+            "operator": "and",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "set-up",
+                  "window": "turn"
+                }
               },
-              "window": "turn"
-            }
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "used",
+                  "filter": {
+                    "kind": "ability",
+                    "id": "deep-strike"
+                  },
+                  "window": "turn"
+                }
+              }
+            ]
           },
           {
             "operator": "not",

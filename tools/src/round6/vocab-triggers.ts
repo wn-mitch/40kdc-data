@@ -79,7 +79,8 @@ const EVENTS: Record<string, Spec> = {
   "moved-through-terrain": { event: "move-ended", filter: { through: "terrain" } },
 
   "unit-set-up": { event: "set-up" },
-  "deep-strike-setup": { event: "set-up", filter: { from: "deep-strike" } },
+  // Deep Strike changes where an Ingress Move sets the unit up: the set-up, and the unit's use of Deep Strike in it.
+  "deep-strike-setup": { event: "set-up", condition: { type: "happened", parameters: { event: "used", filter: { kind: "ability", id: "deep-strike" }, window: "event" } } },
   reinforcements: { event: "set-up", filter: { from: "strategic-reserves" } },
   "set-up-from-reserves": { event: "set-up", filter: { from: "strategic-reserves" } },
   "arrives-from-strategic-reserves": { event: "set-up", filter: { from: "strategic-reserves" } },

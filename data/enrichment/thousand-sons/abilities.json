@@ -1988,15 +1988,29 @@
             ]
           },
           {
-            "type": "happened",
-            "parameters": {
-              "subject": "event-subject",
-              "event": "set-up",
-              "filter": {
-                "from": "deep-strike"
+            "operator": "and",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "subject": "event-subject",
+                  "event": "set-up",
+                  "window": "phase"
+                }
               },
-              "window": "phase"
-            }
+              {
+                "type": "happened",
+                "parameters": {
+                  "subject": "event-subject",
+                  "event": "used",
+                  "filter": {
+                    "kind": "ability",
+                    "id": "deep-strike"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
           }
         ]
       },

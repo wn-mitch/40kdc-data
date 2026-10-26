@@ -107,7 +107,12 @@ describe("unit history", () => {
       ["this unit was set up using Deep Strike this turn", "unit-activity", { activities: ["set-up-by-deep-strike-this-turn"], subject: "this-unit", negated: false }],
       ["this unit has the Feel No Pain 6+ ability", "feel-no-pain", FNP],
     ]));
-    expect(nodes(arrived, (node) => node.type === "happened")[0]!.parameters).toEqual({ event: "set-up", filter: { from: "deep-strike" }, window: "turn" });
+    // Deep Strike places an Ingress Move out of Strategic Reserves: the set-up names no source, and the unit used Deep Strike in the same window.
+    expect(nodes(arrived, (node) => node.type === "happened").map((node) => node.parameters)).toEqual([
+      { event: "set-up", window: "turn" },
+      { event: "used", filter: { kind: "ability", id: "deep-strike" }, window: "turn" },
+    ]);
+    expect(schemaErrors(arrived)).toEqual([]);
     const lost = compiled(placed("If this unit had models destroyed by those attacks, this unit has the Feel No Pain 6+ ability.", [
       ["this unit had models destroyed by those attacks", "unit-activity", { activities: ["lost-models-to-triggering-attacks"], subject: "this-unit", negated: false }],
       ["this unit has the Feel No Pain 6+ ability", "feel-no-pain", FNP],

@@ -3364,15 +3364,29 @@
             ]
           },
           {
-            "type": "happened",
-            "parameters": {
-              "subject": "event-subject",
-              "event": "set-up",
-              "filter": {
-                "from": "deep-strike"
+            "operator": "and",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "subject": "event-subject",
+                  "event": "set-up",
+                  "window": "phase"
+                }
               },
-              "window": "phase"
-            }
+              {
+                "type": "happened",
+                "parameters": {
+                  "subject": "event-subject",
+                  "event": "used",
+                  "filter": {
+                    "kind": "ability",
+                    "id": "deep-strike"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
           }
         ]
       },
@@ -3433,7 +3447,7 @@
       "optional": true
     },
     "expected": {
-      "text": "When this model is set up, you may use this ability, during the Movement phase, in your turn, if the triggering unit was set up using Deep Strike this phase, until the end of the turn:\n  -> This model resolves the Aetherstride ability now.\n  -> The unit can be set up on the battlefield more than 6\" away from all enemy models.\n  -> Dark Blessing weapons equipped by this model gain [SUSTAINED HITS D3].\n  -> The triggering unit cannot declare a charge."
+      "text": "When this model is set up, you may use this ability, during the Movement phase, in your turn, if the triggering unit was set up this phase, if the triggering unit used the Deep Strike ability this phase, until the end of the turn:\n  -> This model resolves the Aetherstride ability now.\n  -> The unit can be set up on the battlefield more than 6\" away from all enemy models.\n  -> Dark Blessing weapons equipped by this model gain [SUSTAINED HITS D3].\n  -> The triggering unit cannot declare a charge."
     }
   },
   {

@@ -95,6 +95,29 @@ const ACTIVITIES: Record<string, [string, Node, string]> = {
 };
 
 /**
+ * Set-ups made through one of the unit's own abilities, and the window: "set up using the Deep
+ * Strike ability this phase". Deep Strike changes where a unit's Ingress Move out of Strategic
+ * Reserves may set it up, so the set-up and a use of Deep Strike by the same unit in the same window
+ * name it; a `from` filter could not also say the unit came from Strategic Reserves.
+ */
+const SET_UP_BY_ABILITY: Record<string, [string, string]> = {
+  "set-up-by-deep-strike-this-phase": ["deep-strike", "phase"],
+  "set-up-by-deep-strike-this-turn": ["deep-strike", "turn"],
+};
+
+/** The set-up through a unit's own ability: both events, by the subject, in the window. */
+function setUpByAbility(subject: unknown, ability: string, window: string): Node {
+  const who = subject ? { subject } : {};
+  return {
+    operator: "and",
+    operands: [
+      { type: "happened", parameters: { ...who, event: "set-up", window } },
+      { type: "happened", parameters: { ...who, event: "used", filter: { kind: "ability", id: ability }, window } },
+    ],
+  };
+}
+
+/**
  * Version 8 history, whose subject is not the unit the event happens to: the unit that destroyed
  * enemy units (the DSL's filter.by), or the unit whose models the triggering attacks destroyed.
  */
@@ -102,8 +125,6 @@ const HISTORY: Record<string, (subject: string | undefined, attackType?: string)
   // Version 15: "whose melee attacks destroyed an enemy unit"; attackType narrows the destroying attacks.
   "destroyed-enemy-unit-this-phase": (subject, attackType) => ({ event: "destroyed", object: { owner: "enemy" }, filter: { by: subject ?? "this-unit", ...(attackType ? { attack_type: attackType } : {}) }, window: "phase" }),
   "destroyed-enemy-unit-this-turn": (subject, attackType) => ({ event: "destroyed", object: { owner: "enemy" }, filter: { by: subject ?? "this-unit", ...(attackType ? { attack_type: attackType } : {}) }, window: "turn" }),
-  "set-up-by-deep-strike-this-phase": (subject) => ({ ...(subject ? { subject } : {}), event: "set-up", filter: { from: "deep-strike" }, window: "phase" }),
-  "set-up-by-deep-strike-this-turn": (subject) => ({ ...(subject ? { subject } : {}), event: "set-up", filter: { from: "deep-strike" }, window: "turn" }),
   // Version 9: "that disembarked from this TRANSPORT this turn"; the Transport is this unit.
   // Version 10: "that arrived from Reserves this turn"; Reserves are Strategic Reserves.
   "set-up-from-reserves-this-phase": (subject) => ({ ...(subject ? { subject } : {}), event: "set-up", filter: { from: "strategic-reserves" }, window: "phase" }),
@@ -451,6 +472,8 @@ export function condition(leaf: CompileLeaf): Node {
       // Version 15: "not chosen by the Foo Gadget this phase" names its Gadgets (compile-opponent-stratagem.ts).
       if (checkStratagemActivity(leaf, activities)) return polarity(leaf, stratagemTargetedAnyOf(leaf, subject));
       const own = anyOf(activities.map((activity) => {
+        const byAbility = SET_UP_BY_ABILITY[activity];
+        if (byAbility) return setUpByAbility(subject, ...byAbility);
         const history = HISTORY[activity];
         if (history) return { type: "happened", parameters: history(subject, leaf.parameters.attack_type as string | undefined) };
         const [event, filter, window] = ACTIVITIES[activity]!;
