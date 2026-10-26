@@ -5,35 +5,52 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "11b16c98c9ac34860ee473b8c42da593c59d9cea95d2b7f2f8f8f0013b01f476",
     "version": "2025-q3",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "set-up",
-          "target": "this-model",
-          "modifier": {
-            "to": "battlefield",
-            "from": "strategic-reserves",
-            "via": "deep-strike",
-            "min_enemy_distance": {
-              "inches": 6
-            },
-            "placement": "anywhere"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
           }
-        },
-        {
-          "type": "permission",
-          "target": "this-model",
-          "modifier": {
-            "activity": "declare-charge",
-            "allow": false
+        ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "set-up",
+            "target": "this-model",
+            "modifier": {
+              "to": "battlefield",
+              "min_enemy_distance": {
+                "inches": 6
+              }
+            }
+          },
+          {
+            "type": "permission",
+            "target": "event-subject",
+            "modifier": {
+              "activity": "declare-charge",
+              "allow": false
+            }
           }
-        }
-      ]
+        ]
+      }
     },
     "scope": {
       "duration": "turn"
@@ -46,15 +63,18 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
       "event": "set-up",
-      "filter": {
-        "from": "deep-strike"
-      },
       "condition": {
-        "type": "phase-is",
+        "type": "happened",
         "parameters": {
-          "phase": "movement"
+          "event": "used",
+          "filter": {
+            "kind": "ability",
+            "id": "deep-strike"
+          },
+          "window": "event"
         }
-      }
+      },
+      "optional": true
     },
     "faction_id": "tyranids"
   },

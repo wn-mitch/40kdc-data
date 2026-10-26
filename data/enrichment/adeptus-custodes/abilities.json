@@ -452,17 +452,104 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "2d057ca853c2cbf7ee8872216a4278764a549e3357095cfe6d29aa936487b0d2",
+    "source_digest": "94b30a27b97ba218961d38629a3baa96bd2b8c4b58ddd70c8076751a29692890",
     "version": "2025-q3",
     "effect": {
-      "type": "feel-no-pain",
-      "target": "this-unit",
-      "modifier": {
-        "threshold": 3,
-        "against": "psychic-and-mortal"
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "feel-no-pain",
+              "target": {
+                "owner": "friendly",
+                "all_of": [
+                  "ANATHEMA PSYKANA"
+                ]
+              },
+              "modifier": {
+                "threshold": 3,
+                "against": "psychic"
+              }
+            },
+            {
+              "type": "ability-grant",
+              "target": {
+                "owner": "friendly",
+                "all_of": [
+                  "ANATHEMA PSYKANA"
+                ]
+              },
+              "modifier": {
+                "ability": "psychic-null",
+                "definition": {
+                  "type": "ability-part",
+                  "name": "Psychic Null",
+                  "effect": {
+                    "type": "aura",
+                    "target": "friendly-within-aura",
+                    "modifier": {
+                      "range": {
+                        "inches": 6
+                      },
+                      "effect": {
+                        "type": "feel-no-pain",
+                        "target": "recipient",
+                        "modifier": {
+                          "threshold": 5,
+                          "against": "psychic"
+                        }
+                      },
+                      "eligible": {
+                        "owner": "friendly",
+                        "all_of": [
+                          "ADEPTUS CUSTODES"
+                        ]
+                      },
+                      "of": "this-unit"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "army-rule",
+          "target": "this-unit",
+          "modifier": {
+            "rule": "composition",
+            "with": {
+              "all_of": [
+                "ANATHEMA PSYKANA"
+              ]
+            }
+          }
+        },
+        {
+          "type": "army-rule",
+          "target": "this-unit",
+          "modifier": {
+            "rule": "faction-forbidden",
+            "faction": "anathema-psykana"
+          }
+        },
+        {
+          "type": "army-rule",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "ANATHEMA PSYKANA"
+            ]
+          },
+          "modifier": {
+            "rule": "warlord-forbidden"
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -474,7 +561,7 @@
       "witchseeker-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "activated",
     "faction_id": "adeptus-custodes"
   },
   {

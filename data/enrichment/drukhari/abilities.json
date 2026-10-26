@@ -1203,6 +1203,17 @@
             "type": "ability-part",
             "trigger": {
               "event": "set-up",
+              "condition": {
+                "type": "happened",
+                "parameters": {
+                  "event": "used",
+                  "filter": {
+                    "kind": "ability",
+                    "id": "deep-strike"
+                  },
+                  "window": "event"
+                }
+              },
               "optional": true
             },
             "effect": {

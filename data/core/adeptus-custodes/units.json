@@ -640,11 +640,10 @@
     "keywords": [
       "Infantry",
       "Imperium",
-      "Anathema Psykana",
       "Vigilator Squad"
     ],
     "faction_keywords": [
-      "Adeptus Custodes"
+      "Anathema Psykana"
     ],
     "base_size_mm": {
       "shape": "round",
@@ -719,11 +718,10 @@
     "keywords": [
       "Infantry",
       "Imperium",
-      "Anathema Psykana",
       "Witchseeker Squad"
     ],
     "faction_keywords": [
-      "Adeptus Custodes"
+      "Anathema Psykana"
     ],
     "base_size_mm": {
       "shape": "round",
@@ -1053,11 +1051,10 @@
       "Infantry",
       "Character",
       "Imperium",
-      "Anathema Psykana",
       "Knight-Centura"
     ],
     "faction_keywords": [
-      "Adeptus Custodes"
+      "Anathema Psykana"
     ],
     "base_size_mm": {
       "shape": "round",
@@ -1141,12 +1138,11 @@
       "Dedicated Transport",
       "Smoke",
       "Imperium",
-      "Anathema Psykana",
       "Frame",
       "Anathema Psykana Rhino"
     ],
     "faction_keywords": [
-      "Adeptus Custodes"
+      "Anathema Psykana"
     ],
     "base_size_mm": {
       "shape": "hull",
@@ -1904,11 +1900,10 @@
     "keywords": [
       "Infantry",
       "Imperium",
-      "Anathema Psykana",
       "Prosecutor Squad"
     ],
     "faction_keywords": [
-      "Adeptus Custodes"
+      "Anathema Psykana"
     ],
     "base_size_mm": {
       "shape": "round",

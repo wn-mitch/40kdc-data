@@ -9810,19 +9810,25 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "faction",
     "effect": {
-      "type": "no-effect"
+      "type": "army-rule",
+      "target": "this-unit",
+      "modifier": {
+        "rule": "faction-forbidden",
+        "faction": "blood-legions"
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "f1601e76a7a0a7292f88ba212f253e4dc78b0b4fbf8f1593fe139942a4255c0d"
   },
   {
     "ability_id": "rabid-response-frenzied-reavers-world-eaters",

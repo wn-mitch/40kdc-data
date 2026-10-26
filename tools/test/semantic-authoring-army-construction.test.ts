@@ -254,7 +254,12 @@ describe("army-construction core checks", () => {
     };
     const faction = "You cannot select DEATH GUARD as your Army Faction.";
     expect(compiled(faction, ["You cannot select DEATH GUARD as your Army Faction", army, { rule: "faction-forbidden", with_keywords: ["DEATH GUARD"] }])).toEqual([]);
+    // A daemon cult legion has no faction record; its units carry it as their faction keyword.
+    const legion = "You cannot select BLOOD LEGIONS as your Army Faction.";
+    expect(compiled(legion, ["You cannot select BLOOD LEGIONS as your Army Faction", army, { rule: "faction-forbidden", with_keywords: ["BLOOD LEGIONS"] }])).toEqual([]);
     // A unit keyword is not an Army Faction: the ban is a composition rule with max 0.
+    const keyword = "You cannot select INFANTRY as your Army Faction.";
+    expect(compiled(keyword, ["You cannot select INFANTRY as your Army Faction", army, { rule: "faction-forbidden", with_keywords: ["INFANTRY"] }]).join()).toMatch(/no core Army Faction: infantry/);
     const unit = "You cannot select ALPHA as your Army Faction.";
     expect(compiled(unit, ["You cannot select ALPHA as your Army Faction", army, { rule: "faction-forbidden", with_keywords: ["ALPHA"] }]).join()).toMatch(/no core Army Faction: alpha/);
     const sheets = "Your army cannot include the following datasheets: Intercessor Squad, Alpha Squad.";

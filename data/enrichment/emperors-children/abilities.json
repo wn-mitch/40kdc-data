@@ -2108,13 +2108,13 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "819ad86f35756328f2895a783e61043d7e3f0293a512f85077968ca167371d3e",
     "version": "2025-q3",
     "effect": {
       "type": "army-rule",
-      "target": "this-model",
+      "target": "this-unit",
       "modifier": {
         "rule": "faction-forbidden",
         "faction": "legions-of-excess"

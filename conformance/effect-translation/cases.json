@@ -11084,10 +11084,21 @@
       "duration": "turn"
     },
     "trigger": {
-      "event": "set-up"
+      "event": "set-up",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "used",
+          "filter": {
+            "kind": "ability",
+            "id": "deep-strike"
+          },
+          "window": "event"
+        }
+      }
     },
     "expected": {
-      "text": "When the unit is set up, until the end of the turn, enemy units cannot target the unit with the Fire Overwatch Stratagem."
+      "text": "When the unit is set up, if the unit is using Deep Strike, until the end of the turn, enemy units cannot target the unit with the Fire Overwatch Stratagem."
     }
   },
   {

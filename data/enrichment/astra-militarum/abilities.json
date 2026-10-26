@@ -1048,6 +1048,17 @@
     "faction_id": "astra-militarum",
     "trigger": {
       "event": "set-up",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "used",
+          "filter": {
+            "kind": "ability",
+            "id": "deep-strike"
+          },
+          "window": "event"
+        }
+      },
       "optional": true
     }
   },

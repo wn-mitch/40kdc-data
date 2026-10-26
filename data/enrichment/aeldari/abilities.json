@@ -6876,6 +6876,18 @@
           "trigger": {
             "event": "set-up",
             "subject": "this-model",
+            "condition": {
+              "type": "happened",
+              "parameters": {
+                "event": "used",
+                "subject": "this-model",
+                "filter": {
+                  "kind": "ability",
+                  "id": "deep-strike"
+                },
+                "window": "event"
+              }
+            },
             "optional": true
           },
           "duration": "turn",

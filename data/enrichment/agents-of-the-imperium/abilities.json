@@ -2064,6 +2064,17 @@
     "faction_id": "agents-of-the-imperium",
     "trigger": {
       "event": "set-up",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "used",
+          "filter": {
+            "kind": "ability",
+            "id": "deep-strike"
+          },
+          "window": "event"
+        }
+      },
       "optional": true
     }
   },

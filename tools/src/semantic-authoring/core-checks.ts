@@ -109,8 +109,17 @@ function coreWargearIds(dataRoot: string): Set<string> {
 
 const factionIdCache = new Map<string, Set<string>>();
 
-/** Every core faction id (each faction directory's factions.json). */
-function coreFactionIds(dataRoot: string): Set<string> {
+/** A faction keyword as an id: lower-case, apostrophes dropped, other runs of non-alphanumerics a hyphen. */
+function factionKeywordId(keyword: string): string {
+  return keyword.toLowerCase().replace(/[‘’']/gu, "").replace(/[^a-z0-9]+/gu, "-").replace(/^-+|-+$/gu, "");
+}
+
+/**
+ * Every Army Faction a rule can name: each core faction id (each faction directory's factions.json)
+ * and each faction keyword a core unit carries, as an id. A daemon cult legion (Blood Legions) is an
+ * Army Faction with no faction record of its own; its units carry it as their faction keyword.
+ */
+function armyFactionIds(dataRoot: string): Set<string> {
   const cached = factionIdCache.get(dataRoot);
   if (cached) return cached;
   const core = join(dataRoot, "core");
@@ -118,8 +127,15 @@ function coreFactionIds(dataRoot: string): Set<string> {
   if (existsSync(core)) {
     for (const dir of readdirSync(core)) {
       const file = join(core, dir, "factions.json");
-      if (!existsSync(file)) continue;
-      for (const record of JSON.parse(readFileSync(file, "utf8")) as Array<{ id?: unknown }>) if (typeof record.id === "string") ids.add(record.id);
+      if (existsSync(file)) {
+        for (const record of JSON.parse(readFileSync(file, "utf8")) as Array<{ id?: unknown }>) if (typeof record.id === "string") ids.add(record.id);
+      }
+      const units = join(core, dir, "units.json");
+      if (existsSync(units)) {
+        for (const unit of JSON.parse(readFileSync(units, "utf8")) as Array<{ faction_keywords?: unknown }>) {
+          if (Array.isArray(unit.faction_keywords)) for (const keyword of unit.faction_keywords) if (typeof keyword === "string") ids.add(factionKeywordId(keyword));
+        }
+      }
     }
   }
   factionIdCache.set(dataRoot, ids);
@@ -238,8 +254,8 @@ export function coreCheckErrors(dataRoot: string, abilityId: string, checks: rea
     } else if (check.kind === "named-wargear") {
       if (!coreWargearIds(dataRoot).has(check.parameters.id)) errors.push(`The wargear ${check.parameters.id} is not a core wargear record.`);
     } else if (check.kind === "army-factions") {
-      // "You cannot select X as your Army Faction": X must be a faction, not a unit keyword or a Detachment.
-      const known = coreFactionIds(dataRoot);
+      // "You cannot select X as your Army Faction": X must be a faction or a unit's faction keyword, not a unit keyword or a Detachment.
+      const known = armyFactionIds(dataRoot);
       const missing = check.parameters.ids.filter((id) => !known.has(id));
       if (missing.length) errors.push(`A faction-forbidden rule names no core Army Faction: ${missing.join(", ")}. A ban on units is a composition rule with max 0.`);
     } else if (check.kind === "datasheets") {

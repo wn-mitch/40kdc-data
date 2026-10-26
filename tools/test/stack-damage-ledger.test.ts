@@ -58,12 +58,12 @@ describe("stack damage ledger", () => {
   });
 
   it("rejects a provider whose only fragments act outside the attack", () => {
-    // Pact of Blood is a seeded stub: its effect is no-effect.
+    // Pact of Blood is a list-building rule: its effect is an army-rule.
     const fight = cellFor("world-eaters", "fight");
     expect(fight.ledger.find((candidate) => candidate.abilityId === "pact-of-blood-world-eaters")).toMatchObject({
       status: "rejected",
       relevant: false,
-      reasons: ["no current-attack effect", 'effect type "no-effect" is not modelled by the buff layer'],
+      reasons: ["no current-attack effect", 'effect type "army-rule" is not modelled by the buff layer'],
     });
   });
 

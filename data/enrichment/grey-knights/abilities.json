@@ -3779,7 +3779,18 @@
     },
     "behavior": "reactive",
     "trigger": {
-      "event": "set-up"
+      "event": "set-up",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "used",
+          "filter": {
+            "kind": "ability",
+            "id": "deep-strike"
+          },
+          "window": "event"
+        }
+      }
     },
     "source_digest": "b3f12e8f37d9fe9929751a18edd8f1fb4876d14f19b92b53fac4a0e539469aa3"
   },
