@@ -34,6 +34,9 @@ describe("pipeline-8b cruncher unsupported classification", () => {
     const bound = effectToBuffs({ type: "stat-modifier", target: "this-model", modifier: { stat: "D", operation: "improve", value: 1, weapons: { ref: { weapon_var: "example-weapon" } } } }, source, ctx).unsupported;
     expect(bound.map((item) => item.reason)).toEqual(['stat-modifier: narrows by "weapons.ref" which the cruncher can\'t resolve here']);
     expect(classifyUnsupported(bound)).toEqual({ honestUnknown: 0, outsideDamagePath: 1, unrecognizedShape: 0 });
+    const granted = effectToBuffs({ type: "weapon-ability-grant", target: "this-unit", modifier: { keywords: [{ keyword_id: "lethal-hits" }], weapons: { ref: { weapon_var: "example-weapon" } } } }, source, ctx).unsupported;
+    expect(granted.map((item) => item.reason)).toEqual(["weapon-ability-grant: unresolved weapons.ref"]);
+    expect(classifyUnsupported(granted)).toEqual({ honestUnknown: 0, outsideDamagePath: 1, unrecognizedShape: 0 });
     const malformed = effectToBuffs({ type: "stat-modifier", target: "this-model", modifier: { stat: "D", operation: "improve", value: 1, weapons: { keyword: { keyword_id: "" } } } }, source, ctx).unsupported;
     expect(classifyUnsupported(malformed)).toEqual({ honestUnknown: 0, outsideDamagePath: 0, unrecognizedShape: 1 });
   });

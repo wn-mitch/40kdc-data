@@ -168,7 +168,7 @@ const OUTSIDE_CRUNCHER_SCOPE: ReadonlyArray<{ reason: RegExp; why: string }> = [
   { reason: /^target "event-subject" is not resolved by the buff engine$/u, why: "the triggering unit is bound only at runtime" },
   { reason: /^target "event-object" is not resolved by the buff engine$/u, why: "the unit the triggering action aimed at is bound only at runtime" },
   { reason: /^select-weapon: a bound weapon is not resolved by the buff engine$/u, why: "a chosen weapon is bound only at runtime" },
-  { reason: /^(?:stat-modifier|roll-modifier|re-roll|roll-result): narrows by "weapons\.ref" which the cruncher can't resolve here$/u, why: "a weapon an earlier selection binds is bound only at runtime" },
+  { reason: /^(?:(?:stat-modifier|roll-modifier|re-roll|roll-result): narrows by "weapons\.ref" which the cruncher can't resolve here|weapon-ability-grant: unresolved weapons\.ref)$/u, why: "a weapon an earlier selection binds is bound only at runtime" },
   { reason: /^trigger-time recipient snapshot is unavailable; current membership cannot establish historical recipients$/u, why: "the units an ability reached when it triggered are bound only at runtime" },
   { reason: /^re-roll: its count is set by the number of models-equipped-with; not resolved by the buff engine$/u, why: "a re-roll count set by how many models carry an item depends on the fielded loadout" },
 ];

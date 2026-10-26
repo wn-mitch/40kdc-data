@@ -335,6 +335,16 @@ describe("integrity: phase-4 bindings", () => {
     expect(await run(leaf("split-unit", { model_counts: [5, 5], bind_as: ["a", "b", "c"] }))).toEqual(["split-unit names 3 bindings for 2 resulting units"]);
   });
 
+  it("binds a weapon an earlier part selects for later parts, but not one selected inside a choice or condition", async () => {
+    const select = { type: "select-weapon", target: "this-model", modifier: { bind_as: "blade", weapons: { type: "melee" } } };
+    const uses = leaf("stat-modifier", { stat: "D", operation: "add", value: 1, weapons: { ref: { weapon_var: "blade" } } });
+    const part = (effect: unknown) => ({ type: "ability-part", trigger: { event: "battle-started" }, effect });
+    expect(await run({ type: "sequence", steps: [part({ type: "sequence", steps: [select, leaf("no-effect", {})] }), part(uses)] })).toEqual([]);
+    const unbound = ['weapon "blade" is not bound by an earlier select-weapon step'];
+    expect(await run({ type: "sequence", steps: [part({ type: "choice", options: [select, leaf("no-effect", {})] }), part(uses)] })).toEqual(unbound);
+    expect(await run({ type: "sequence", steps: [part({ type: "conditional", condition: { type: "battle-round", parameters: { round: 1 } }, effect: select }), part(uses)] })).toEqual(unbound);
+  });
+
   it("requires a stratagem_target to be a named target of the ability's Stratagem", async () => {
     const effect = leaf("return-models", { count: "D3+1" }, { stratagem_target: "tzaangors" });
     const strat = (targets: unknown) => [{ id: "probe-strat", ability_id: "shape-probe", target_restrictions: targets }];

@@ -63,6 +63,20 @@ function isRollRef(v: unknown): v is { roll_var: string } {
   return isNode(v) && typeof v.roll_var === "string" && Object.keys(v).every((k) => k === "roll_var" || k === "successes_on");
 }
 
+/**
+ * The weapons a sequence step binds for the steps after it: a select-weapon step itself, or one an earlier part
+ * makes unconditionally ("At the start of the battle, select one melee weapon …. In addition, each time … that
+ * weapon …"): through an ability part's effect, a nested sequence or a unit selection's effect. A selection inside
+ * a choice option or a condition may never be made, so it binds nothing outside it.
+ */
+function weaponsBoundBy(step: unknown): string[] {
+  if (!isNode(step)) return [];
+  if (step.type === "select-weapon") return isNode(step.modifier) && typeof step.modifier.bind_as === "string" ? [step.modifier.bind_as] : [];
+  if (step.type === "sequence" && Array.isArray(step.steps)) return step.steps.flatMap(weaponsBoundBy);
+  if (step.type === "ability-part" || step.type === "select-units") return weaponsBoundBy(step.effect);
+  return [];
+}
+
 /** Walk a DSL tree checking roll / objective binding scope, weapon bindings and split-unit arity. */
 function checkBindings(node: unknown, path: string, scope: Scope, weapons: ReadonlySet<string>, out: Issue[]): void {
   if (Array.isArray(node)) {
@@ -90,7 +104,7 @@ function checkBindings(node: unknown, path: string, scope: Scope, weapons: Reado
       const available = new Set(weapons);
       v.forEach((step, index) => {
         checkBindings(step, `${at}/${index}`, inner, available, out);
-        if (isNode(step) && step.type === "select-weapon" && isNode(step.modifier) && typeof step.modifier.bind_as === "string") available.add(step.modifier.bind_as);
+        for (const name of weaponsBoundBy(step)) available.add(name);
       });
       continue;
     }
