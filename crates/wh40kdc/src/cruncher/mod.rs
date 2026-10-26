@@ -42,6 +42,7 @@ mod gates;
 pub mod recipient_snapshots;
 mod resolved;
 pub mod scenario;
+mod weapon_bindings;
 
 pub use allocation::{allocate, allocate_model, AllocationError, AllocationOutput};
 pub use attribution::{attribute_stages, AttributedStage, StageLift};

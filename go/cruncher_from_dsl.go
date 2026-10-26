@@ -59,6 +59,7 @@ func effectToBuffs(effect any, source map[string]any, context map[string]any, pe
 		}
 		effect = resolved
 	}
+	effect = resolveNamedWeaponBindings(effect)
 	abilityID := "effect"
 	if getStr(source, "kind") == "ability" {
 		if a := getStr(source, "abilityId"); a != "" {

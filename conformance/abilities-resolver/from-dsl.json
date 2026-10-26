@@ -272,7 +272,7 @@
       "source": {
         "kind": "ability",
         "abilityId": "the-imperiums-sword-1st-company-task-force-adeptus-astartes",
-        "abilityKind": "enhancement"
+        "abilityKind": "detachment"
       },
       "context": {
         "phase": "fight"
@@ -5024,6 +5024,80 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"unit-wargear\" against current context"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "Plasma Accelerator Rifle binds one of the bearer's Plasma rifles by name; the weapon-scoped S/A/AP/D improvements resolve to that name, so the four buffs apply only to a weapon named plasma rifle.",
+      "abilityId": "plasma-accelerator-rifle-experimental-prototype-cadre-tau-empire",
+      "source": {
+        "kind": "ability",
+        "abilityId": "plasma-accelerator-rifle-experimental-prototype-cadre-tau-empire",
+        "abilityKind": "detachment"
+      },
+      "context": {
+        "phase": "shooting",
+        "weaponNames": [
+          "plasma rifle"
+        ]
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [
+          {
+            "id": "plasma-accelerator-rifle-experimental-prototype-cadre-tau-empire@battle-formations-declared",
+            "label": "+2 strength, +1 attacks, AP -1, +1 damage",
+            "group": null,
+            "requires": [
+              {
+                "type": "ability-part",
+                "trigger": {
+                  "event": "battle-formations-declared"
+                }
+              }
+            ],
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "strength-mod",
+                "value": 2
+              },
+              {
+                "type": "attacks-mod",
+                "value": 1
+              },
+              {
+                "type": "ap-mod",
+                "value": -1
+              },
+              {
+                "type": "damage-mod",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "_comment": "Nova Charge selects one ranged weapon without naming it: the player picks among several, so the binding and the Devastating Wounds grant on it stay unresolved.",
+      "abilityId": "nova-charge-tau-empire",
+      "source": {
+        "kind": "ability",
+        "abilityId": "nova-charge-tau-empire",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerTurn": true
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "select-weapon: a bound weapon is not resolved by the buff engine",
+          "weapon-ability-grant: unresolved weapons.ref"
         ],
         "activatable": []
       }

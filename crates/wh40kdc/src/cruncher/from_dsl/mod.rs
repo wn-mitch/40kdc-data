@@ -236,6 +236,7 @@ pub(crate) fn effect_to_buffs_with_duration(
     } else {
         effect
     };
+    let effect = super::weapon_bindings::resolve_named_weapon_bindings(&effect);
     let (ability_id, ability_kind) = match source {
         BuffSource::Ability {
             ability_id,

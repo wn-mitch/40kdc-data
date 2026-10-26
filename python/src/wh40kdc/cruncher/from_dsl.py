@@ -30,6 +30,7 @@ from wh40kdc.cruncher.from_dsl_shapes import (
     scaled_to_cap,
     unsized_value_reason,
 )
+from wh40kdc.cruncher.weapon_bindings import resolve_named_weapon_bindings
 from wh40kdc.scope import unit_matches_applies_to
 
 EffectTranslation = dict[str, Any]
@@ -80,6 +81,7 @@ def effect_to_buffs(
             )
             return out
         effect = snapshot["effect"]
+    effect = resolve_named_weapon_bindings(effect)
     ability_id = source.get("abilityId", "effect") if source.get("kind") == "ability" else "effect"
     opts = {
         "context": context,
@@ -1150,6 +1152,22 @@ def _translate_keyword_grant(
                     "effectFragment": {"removes": [keyword]},
                 }
             )
+    if modifier.get("if_present") is not None:
+        out["unsupported"].append(
+            {
+                "reason": (
+                    "weapon-ability-grant: incrementing an existing keyword rating is not modelled"
+                ),
+                "effectFragment": node,
+            }
+        )
+        return
+    narrowed = _unhonorable_narrowing(modifier)
+    if narrowed:
+        out["unsupported"].append(
+            {"reason": f"weapon-ability-grant: unresolved {narrowed}", "effectFragment": node}
+        )
+        return
     keywords = modifier.get("keywords")
     if not isinstance(keywords, list):
         return

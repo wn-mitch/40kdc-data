@@ -42,6 +42,7 @@ import type { Phase } from "../generated.js";
 import { bindEachRecipient, bindEventSubject, planSelection } from "./from-dsl-selection.js";
 import { matchesUnitFilter } from "./unit-filter.js";
 import { RECIPIENT_SNAPSHOT_UNAVAILABLE, resolveRecipientSnapshots } from "./recipient-snapshots.js";
+import { resolveNamedWeaponBindings } from "./weapon-bindings.js";
 
 /** A fragment we couldn't translate. The SPA can render these as warnings. */
 export type UnsupportedFragment = {
@@ -191,6 +192,11 @@ export function effectToBuffs(
     }
     effect = snapshot.effect;
   }
+  // A moment gate the data layer registered keeps its activation when the rewrite copies it.
+  effect = resolveNamedWeaponBindings(effect, (from, to) => {
+    const activation = activationSources.get(from);
+    if (activation) activationSources.set(to, activation);
+  });
   const abilityId = source.kind === "ability" ? source.abilityId : "effect";
   walk(effect, source, { context, perspective, abilityId, duration: activation?.duration }, out);
   if (activation?.usage != null || activation?.cost != null || activation?.optional === true) {

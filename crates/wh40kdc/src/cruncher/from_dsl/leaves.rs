@@ -416,13 +416,6 @@ pub(super) fn keyword_grant(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     let Some(m) = object(node.get("modifier")) else {
         return;
     };
-    if let Some(key) = unhonorable_narrowing(m) {
-        out.unsupported(
-            format!("weapon-ability-grant: unresolved {key} selector"),
-            node,
-        );
-        return;
-    }
     for keyword in list(m.get("removes")) {
         let label = if keyword.get("keyword_id").and_then(Value::as_str).is_some() {
             super::applicability::keyword_label(keyword)
@@ -435,6 +428,17 @@ pub(super) fn keyword_grant(node: &Obj, opts: &WalkOpts, out: &mut Out) {
             ),
             json!({ "removes": [keyword] }),
         ));
+    }
+    if m.get("if_present").is_some_and(|value| !value.is_null()) {
+        out.unsupported(
+            "weapon-ability-grant: incrementing an existing keyword rating is not modelled",
+            node,
+        );
+        return;
+    }
+    if let Some(key) = unhonorable_narrowing(m) {
+        out.unsupported(format!("weapon-ability-grant: unresolved {key}"), node);
+        return;
     }
     let gate = weapon_applicability(m);
     for raw in list(m.get("keywords")) {

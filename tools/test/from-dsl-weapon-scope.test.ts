@@ -59,3 +59,30 @@ describe("effectToBuffs: weapon-scoped conditions", () => {
     }
   });
 });
+
+describe("effectToBuffs: a weapon a selection binds by name", () => {
+  const bound = (scope: Record<string, unknown>) => ({
+    type: "sequence",
+    steps: [
+      { type: "select-weapon", target: "this-model", modifier: { bind_as: "example-weapon", weapons: scope } },
+      { type: "sequence", steps: [{ type: "stat-modifier", target: "this-model", modifier: { stat: "A", operation: "improve", value: 1, weapons: { ref: { weapon_var: "example-weapon" } } } }] },
+    ],
+  });
+
+  it("applies the effects naming the bound weapon to that weapon only", () => {
+    const { applied, unsupported } = effectToBuffs(bound({ name: "example blaster" }), source, {});
+    expect(unsupported).toEqual([]);
+    expect(applied).toEqual([{ source, contribution: { type: "attacks-mod", value: 1 }, applicableWhen: { weaponName: "example blaster" } }]);
+    expect(hits(gun("example blaster", []), applied)).toBeGreaterThan(hits(gun("example blaster", []), []));
+    expect(hits(gun("other blaster", []), applied)).toBe(hits(gun("other blaster", []), []));
+  });
+
+  it("keeps a selection that does not name its weapon unresolved: the player picks among several", () => {
+    const { applied, unsupported } = effectToBuffs(bound({ type: "ranged" }), source, {});
+    expect(applied).toEqual([]);
+    expect(unsupported.map((item) => item.reason)).toEqual([
+      "select-weapon: a bound weapon is not resolved by the buff engine",
+      'stat-modifier: narrows by "weapons.ref" which the cruncher can\'t resolve here',
+    ]);
+  });
+});
