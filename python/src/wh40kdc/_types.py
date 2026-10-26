@@ -1510,16 +1510,6 @@ class PhaseMapping(TypedDict):
     authored_by: NotRequired[ContributorRef]
 
 
-class ObjectiveFilter(TypedDict):
-    role: NotRequired[Literal["central", "expansion", "home", "non-home"]]
-    home_of: NotRequired[Literal["friendly", "enemy"]]
-    territory: NotRequired[Literal["your-territory", "enemy-territory", "no-mans-land"]]
-    controlled_by: NotRequired[Owner]
-    designated: NotRequired[DesignationId]
-    name: NotRequired[EntityId]
-    selection_var: NotRequired[str]
-
-
 class TerrainArea(TypedDict):
     designated: NotRequired[DesignationId]
     footprint: NotRequired[str]
@@ -1565,17 +1555,9 @@ RollSelector: TypeAlias = Literal["any", "all"] | RollKind
 Quantity: TypeAlias = int | DiceExpression | BattleSizeValue | RollReference | CountOf | UnitRating
 
 
-class PlaceRef1(TypedDict):
-    objective: ObjectiveFilter
-
-
 class PlacementRegion(TypedDict):
     region: RegionRef
     wholly: NotRequired[Literal[True]]
-
-
-class Of(TypedDict):
-    objective: ObjectiveFilter
 
 
 AbilityUsage: TypeAlias = AbilityUsageLimit | list[AbilityUsageLimit]
@@ -1590,14 +1572,6 @@ class Parameters33(TypedDict):
 class SimpleCondition27(TypedDict):
     type: Literal["roll-result"]
     parameters: Parameters33
-
-
-class Subject(TypedDict):
-    objective: ObjectiveFilter
-
-
-class EventTarget1(TypedDict):
-    objective: ObjectiveFilter
 
 
 class Override(TypedDict):
@@ -1747,19 +1721,6 @@ class Weapon(TypedDict):
 class Models(TypedDict):
     count: CountBounds
     state: Literal["carry", "lack"]
-
-
-class Parameters30(TypedDict):
-    by: NotRequired[DefiniteOwner]
-    objective: NotRequired[ObjectiveFilter]
-    count: NotRequired[CountBounds]
-    compare: NotRequired[Compare]
-    proportion: NotRequired[Proportion]
-
-
-class SimpleCondition24(TypedDict):
-    type: Literal["controls"]
-    parameters: NotRequired[Parameters30]
 
 
 class Parameters31(TypedDict):
@@ -2024,6 +1985,22 @@ class ObjectiveSelector(TypedDict):
     eligibility: NotRequired[Condition]
 
 
+class Within1(TypedDict):
+    range: RangeRef
+    of: NotRequired[PlaceRef]
+
+
+class ObjectiveFilter(TypedDict):
+    role: NotRequired[Literal["central", "expansion", "home", "non-home"]]
+    home_of: NotRequired[Literal["friendly", "enemy"]]
+    territory: NotRequired[Literal["your-territory", "enemy-territory", "no-mans-land"]]
+    controlled_by: NotRequired[Owner]
+    designated: NotRequired[DesignationId]
+    name: NotRequired[EntityId]
+    selection_var: NotRequired[str]
+    within: NotRequired[Within1]
+
+
 EventFilter = TypedDict(
     "EventFilter",
     {
@@ -2094,6 +2071,10 @@ EventFilter = TypedDict(
 )
 
 
+class PlaceRef1(TypedDict):
+    objective: ObjectiveFilter
+
+
 PlaceRef: TypeAlias = (
     UnitRef | PlaceRef1 | PlaceRef2 | Literal["battlefield-edge", "battlefield-centre"] | RegionRef
 )
@@ -2108,6 +2089,10 @@ class PlacementNear(TypedDict):
 class PlacementAway(TypedDict):
     of: PlaceRef
     range: RangeRef
+
+
+class Of(TypedDict):
+    objective: ObjectiveFilter
 
 
 class EndsNearest(TypedDict):
@@ -2583,6 +2568,19 @@ class SimpleCondition23(TypedDict):
     parameters: Parameters29
 
 
+class Parameters30(TypedDict):
+    by: NotRequired[DefiniteOwner]
+    objective: NotRequired[ObjectiveFilter]
+    count: NotRequired[CountBounds]
+    compare: NotRequired[Compare]
+    proportion: NotRequired[Proportion]
+
+
+class SimpleCondition24(TypedDict):
+    type: Literal["controls"]
+    parameters: NotRequired[Parameters30]
+
+
 class Parameters34(TypedDict):
     subject: NotRequired[UnitRef]
     to: NotRequired[UnitRef]
@@ -2600,6 +2598,10 @@ class Parameters35(TypedDict):
 class SimpleCondition28(TypedDict):
     type: Literal["visible"]
     parameters: Parameters34 | Parameters35
+
+
+class Subject(TypedDict):
+    objective: ObjectiveFilter
 
 
 class Parameters36(TypedDict):
@@ -2621,7 +2623,7 @@ class SimpleCondition29(TypedDict):
     parameters: Parameters36 | Parameters37
 
 
-class Within1(TypedDict):
+class Within2(TypedDict):
     of: PlaceRef
     range: RangeRef
 
@@ -2631,7 +2633,7 @@ class Parameters39(TypedDict):
     count: NotRequired[CountBounds]
     friendly_unit_in_same_terrain_area: NotRequired[Literal[True]]
     no_enemy_in_terrain_area: NotRequired[Literal[True]]
-    within: NotRequired[Within1]
+    within: NotRequired[Within2]
 
 
 class SimpleCondition31(TypedDict):
@@ -2727,6 +2729,10 @@ class CompoundCondition2(TypedDict):
 
 
 CompoundCondition: TypeAlias = CompoundCondition1 | CompoundCondition2
+
+
+class EventTarget1(TypedDict):
+    objective: ObjectiveFilter
 
 
 EventTarget: TypeAlias = UnitRef | EventTarget1 | EventTarget2

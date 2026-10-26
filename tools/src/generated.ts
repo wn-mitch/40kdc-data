@@ -1533,6 +1533,13 @@ export interface ObjectiveFilter {
    * The objective marker a select-objective step bound.
    */
   selection_var?: string;
+  /**
+   * Only objective markers within this range of `of` (default the model with the ability).
+   */
+  within?: {
+    range: RangeRef;
+    of?: PlaceRef;
+  };
 }
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema

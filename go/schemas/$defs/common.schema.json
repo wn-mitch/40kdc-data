@@ -1136,6 +1136,22 @@
           "type": "string",
           "minLength": 1,
           "description": "The objective marker a select-objective step bound."
+        },
+        "within": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "range"
+          ],
+          "properties": {
+            "range": {
+              "$ref": "#/$defs/range-ref"
+            },
+            "of": {
+              "$ref": "#/$defs/place-ref"
+            }
+          },
+          "description": "Only objective markers within this range of `of` (default the model with the ability)."
         }
       }
     },

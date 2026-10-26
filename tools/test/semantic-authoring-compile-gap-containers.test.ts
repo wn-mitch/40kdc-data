@@ -381,6 +381,11 @@ describe("Semantic authoring select-objective compiler", () => {
       leaf("EFFECT", "select-objective-open", { bind_as: "target_objective" }, "A"),
       leaf("EFFECT", "fights-first", { subject: "this-model" }, "B"),
     ]).length).toBeGreaterThan(0);
+    // The range is part of the selector the schema accepts, and the describer says it.
+    expect(rendered(base(), [
+      leaf("EFFECT", "select-objective-open", { bind_as: "target_objective", range_inches: 6 }, "A"),
+      leaf("EFFECT", "fights-first", { subject: "this-model" }, "B"),
+    ])).toMatch(/objective marker within 6" of this model/u);
   });
 
   it("iterates every eligible objective without selection bounds", () => {

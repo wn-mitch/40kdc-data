@@ -27341,6 +27341,22 @@ pub struct OathStateConditionParameters {
 ///        "enemy-territory",
 ///        "no-mans-land"
 ///      ]
+///    },
+///    "within": {
+///      "description": "Only objective markers within this range of `of` (default the model with the ability).",
+///      "type": "object",
+///      "required": [
+///        "range"
+///      ],
+///      "properties": {
+///        "of": {
+///          "$ref": "#/$defs/place-ref"
+///        },
+///        "range": {
+///          "$ref": "#/$defs/range-ref"
+///        }
+///      },
+///      "additionalProperties": false
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -27367,6 +27383,8 @@ pub struct ObjectiveFilter {
     pub selection_var: ::std::option::Option<ObjectiveFilterSelectionVar>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub territory: ::std::option::Option<ObjectiveFilterTerritory>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub within: ::std::option::Option<ObjectiveFilterWithin>,
 }
 impl ::std::default::Default for ObjectiveFilter {
     fn default() -> Self {
@@ -27378,6 +27396,7 @@ impl ::std::default::Default for ObjectiveFilter {
             role: Default::default(),
             selection_var: Default::default(),
             territory: Default::default(),
+            within: Default::default(),
         }
     }
 }
@@ -27694,6 +27713,36 @@ impl ::std::convert::TryFrom<::std::string::String> for ObjectiveFilterTerritory
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         value.parse()
     }
+}
+///Only objective markers within this range of `of` (default the model with the ability).
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Only objective markers within this range of `of` (default the model with the ability).",
+///  "type": "object",
+///  "required": [
+///    "range"
+///  ],
+///  "properties": {
+///    "of": {
+///      "$ref": "#/$defs/place-ref"
+///    },
+///    "range": {
+///      "$ref": "#/$defs/range-ref"
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct ObjectiveFilterWithin {
+    #[serde(default)]
+    pub of: ::std::boxed::Box<::std::option::Option<PlaceRef>>,
+    pub range: RangeRef,
 }
 ///`ObjectiveSelector`
 ///

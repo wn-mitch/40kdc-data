@@ -862,5 +862,53 @@
       }
     },
     "expected_errors": []
+  },
+  {
+    "name": "ability: select one objective marker within a range of this model",
+    "target": "ability",
+    "input": {
+      "ability_id": "warden-claim-line",
+      "name": "Claim Line",
+      "authored_by": "40kdc-community",
+      "game_version": {
+        "edition": "10th",
+        "dataslate": "2025-q3"
+      },
+      "version": "2025-q3",
+      "unit_ids": [
+        "ironclad-sentinels"
+      ],
+      "ability_type": "unit",
+      "behavior": "passive",
+      "scope": {
+        "duration": "permanent"
+      },
+      "effect": {
+        "type": "select-objective",
+        "selector": {
+          "filter": {
+            "within": {
+              "range": {
+                "inches": 12
+              },
+              "of": "this-model"
+            }
+          },
+          "bind_as": "claimed-marker",
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        },
+        "effect": {
+          "type": "ability-grant",
+          "target": "this-model",
+          "modifier": {
+            "ability": "fights-first"
+          }
+        }
+      }
+    },
+    "expected_errors": []
   }
 ]

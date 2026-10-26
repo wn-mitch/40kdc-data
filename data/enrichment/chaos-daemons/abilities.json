@@ -1503,45 +1503,26 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "517657805d76c0b4223234a5e9f118e32dff3b8d933a63442fdd19e2b4251acc",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "not",
-        "operands": [
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "all_of": [
-                  "PINK HORROR"
-                ]
-              }
-            }
-          }
-        ]
+        "type": "model-count",
+        "parameters": {
+          "subject": "this-unit",
+          "keyword": "PINK HORROR",
+          "max": 0
+        }
       },
       "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "ability-grant",
-            "target": "this-unit",
-            "modifier": {
-              "ability": "sullen-malevolence-chaos-daemons"
-            }
-          },
-          {
-            "type": "ability-grant",
-            "target": "this-unit",
-            "modifier": {
-              "ability": "exploding-horrors-chaos-daemons"
-            }
-          }
-        ]
+        "type": "datasheet-swap",
+        "target": "this-unit",
+        "modifier": {
+          "datasheet": "blue-horrors"
+        }
       }
     },
     "scope": {
