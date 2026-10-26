@@ -58,6 +58,25 @@ describe("Semantic authoring independent sentences", () => {
     expect(sentenceSegments(list, text)).toBeNull();
   });
 
+  it("gives a listed item with its own phase and selection a part of its own, under the header's condition", () => {
+    const text = "While this model is within 3\" of a friendly ALPHA unit:This model has **Stealth**. In your Shooting phase, you can select one friendly ALPHA unit. That unit's attacks can re-roll Hit rolls of 1.";
+    const list = placed(text,
+      ["this model is within 3\" of a friendly ALPHA unit", "unit-position", { kind: "within", inches: 3, of: "matching-unit", subject: "this-model", negated: false, of_keywords: ["ALPHA"], of_side: "friendly" }],
+      ["This model has **Stealth", "core-ability-grant", { subject: "this-model", ability: "stealth" }],
+      ["In your Shooting phase", "phase-window", { phase: "shooting", turn: "your" }],
+      ["you can", "optional-use", { who: "you" }],
+      ["select one", "select-unit", { distance: "any", visible: false }],
+      ["friendly ALPHA unit", "unit-filter", { side: "friendly", keywords: ["ALPHA"] }],
+      ["That unit's attacks can re-roll Hit rolls of 1", "reroll", { roll: "hit", subset: "ones", weapon_type: "all", subject: "antecedent" }]);
+    const steps = mechanicsOf(list, text).effect.steps;
+    expect(steps).toHaveLength(2);
+    // The grant holds under the header's condition alone; the selection does not reach it.
+    expect(steps[0]).toMatchObject({ type: "conditional", condition: { type: "matches" }, effect: { type: "ability-grant", target: "this-model" } });
+    expect(JSON.stringify(steps[1])).toContain("\"type\":\"matches\"");
+    expect(JSON.stringify(steps[1])).not.toContain("ability-grant");
+    expect(JSON.stringify(steps[1])).toContain("\"type\":\"select-units\"");
+  });
+
   it("does not split an ability whose header holds a moment or a usage limit", () => {
     const text = "Once per battle. Each time this unit shoots, add 1 to the Hit roll. Each time this unit fights, add 1 to the Wound roll.";
     const list = placed(text,

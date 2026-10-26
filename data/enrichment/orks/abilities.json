@@ -6474,155 +6474,73 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "9ef10a26df9f4cde6d28359f088ad5796c393f186ef82d1c389594a5e17b59f1",
+    "source_digest": "8427f73d40a3b3565386842bd117b97e3f09bb3af5215cd54642ecbaf5a09512",
     "version": "2025-q3",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "ability-part",
-          "trigger": {
-            "event": "targets-selected",
-            "subject": {
-              "owner": "friendly"
-            },
-            "filter": {
-              "kind": "stratagem"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
             }
           },
-          "effect": {
-            "type": "conditional",
-            "condition": {
-              "operator": "and",
-              "operands": [
-                {
-                  "type": "matches",
-                  "parameters": {
-                    "filter": {
-                      "state": "battle-shocked"
-                    }
-                  }
-                },
-                {
-                  "type": "attachment",
-                  "parameters": {
-                    "subject": "this-model",
-                    "role": "leading"
-                  }
-                },
-                {
-                  "type": "matches",
-                  "parameters": {
-                    "filter": {
-                      "owner": "friendly"
-                    }
-                  }
-                },
-                {
-                  "type": "matches",
-                  "parameters": {
-                    "filter": {
-                      "all_of": [
-                        "ORKS"
-                      ]
-                    }
-                  }
-                },
-                {
-                  "type": "matches",
-                  "parameters": {
-                    "filter": {
-                      "all_of": [
-                        "INFANTRY"
-                      ]
-                    }
-                  }
-                }
+          {
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-unit",
+              "role": "attached"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "permission",
+            "target": "this-unit",
+            "modifier": {
+              "activity": "use-stratagem",
+              "allow": true,
+              "despite": [
+                "battle-shocked"
               ]
-            },
+            }
+          },
+          {
+            "type": "roll",
+            "dice": "D3",
+            "roll_var": "result",
             "effect": {
-              "type": "permission",
-              "target": "event-subject",
+              "type": "mortal-wounds",
+              "target": "this-unit",
               "modifier": {
-                "activity": "use-stratagem",
-                "allow": true,
-                "despite": [
-                  "battle-shocked"
-                ],
-                "stratagem": "breakin-heads-war-horde-orks"
+                "count": {
+                  "roll_var": "result"
+                }
               }
             }
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "attachment",
-                "parameters": {
-                  "subject": "this-model",
-                  "role": "leading"
-                }
-              },
-              {
-                "type": "matches",
-                "parameters": {
-                  "filter": {
-                    "owner": "friendly"
-                  }
-                }
-              },
-              {
-                "type": "matches",
-                "parameters": {
-                  "filter": {
-                    "all_of": [
-                      "ORKS"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "matches",
-                "parameters": {
-                  "filter": {
-                    "all_of": [
-                      "INFANTRY"
-                    ]
-                  }
-                }
-              }
-            ]
           },
-          "effect": {
-            "type": "sequence",
-            "steps": [
-              {
-                "type": "mortal-wounds",
-                "target": "event-subject",
-                "modifier": {
-                  "count": "D3"
-                }
-              },
-              {
-                "type": "state-change",
-                "target": "event-subject",
-                "modifier": {
-                  "state": "battle-shocked",
-                  "set": false
-                }
-              }
-            ]
+          {
+            "type": "state-change",
+            "target": "this-unit",
+            "modifier": {
+              "state": "battle-shocked",
+              "set": false
+            }
           }
-        }
-      ]
+        ]
+      }
     },
     "scope": {
-      "duration": "one-use"
+      "duration": "phase"
     },
     "unit_ids": [],
     "ability_type": "stratagem",
@@ -6632,11 +6550,20 @@
     "faction_id": "orks",
     "trigger": {
       "event": "state-changed",
-      "subject": {
-        "owner": "friendly"
-      },
       "filter": {
         "state": "battle-shocked"
+      },
+      "optional": true,
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "all_of": [
+              "INFANTRY",
+              "ORKS"
+            ]
+          }
+        }
       }
     }
   },
@@ -11876,7 +11803,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "19b0b69d21bad3de2ae653de03e51edf191d191cfa2d2582bae7294e3bc67100",
     "version": "2025-q3",
@@ -11888,11 +11815,9 @@
           "condition": {
             "type": "matches",
             "parameters": {
+              "subject": "this-model",
               "filter": {
                 "within": {
-                  "range": {
-                    "inches": 3
-                  },
                   "of": {
                     "owner": "friendly",
                     "all_of": [
@@ -11902,10 +11827,12 @@
                     "none_of": [
                       "BIG MEK"
                     ]
+                  },
+                  "range": {
+                    "inches": 3
                   }
                 }
-              },
-              "subject": "this-model"
+              }
             }
           },
           "effect": {
@@ -11917,18 +11844,57 @@
           }
         },
         {
-          "type": "conditional",
-          "condition": {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
+          "type": "ability-part",
+          "duration": "turn",
           "effect": {
-            "type": "designate-target",
-            "designation": "dreadherder-target",
-            "select": {
-              "kind": "unit",
+            "type": "conditional",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "this-model",
+                    "filter": {
+                      "within": {
+                        "of": {
+                          "owner": "friendly",
+                          "all_of": [
+                            "ORKS",
+                            "WALKER"
+                          ],
+                          "none_of": [
+                            "BIG MEK"
+                          ]
+                        },
+                        "range": {
+                          "inches": 3
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "operator": "and",
+                  "operands": [
+                    {
+                      "type": "phase-is",
+                      "parameters": {
+                        "phase": "shooting"
+                      }
+                    },
+                    {
+                      "type": "player-turn-is",
+                      "parameters": {
+                        "turn": "your-turn"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            "effect": {
+              "type": "select-units",
               "selector": {
                 "filter": {
                   "owner": "friendly",
@@ -11947,35 +11913,27 @@
                   "min": 1,
                   "max": 1
                 }
-              }
-            },
-            "applies": {
-              "to": "target",
+              },
               "effect": {
                 "type": "re-roll",
-                "target": "this-unit",
+                "target": "selected-unit",
                 "modifier": {
                   "roll": "hit",
                   "subset": "ones"
                 }
               }
-            },
-            "duration": "turn"
+            }
           }
         }
       ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "unit_ids": [],
     "ability_type": "enhancement",
     "behavior": "activated",
     "detachment_id": "dread-mob",
-    "usage": {
-      "frequency": "once-per-turn",
-      "per": "unit"
-    },
     "applies_to": {
       "all_of": [
         "BIG MEK"

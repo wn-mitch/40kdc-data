@@ -198,8 +198,13 @@ export function sentenceSegments(leaves: readonly CompileLeaf[], sourceText: str
     const standing = standingGrant(sentence) && parts.at(-1)!.some((leaf) => leaf.role === "EVENT" && leaf.family_id !== "select-unit" && leaf.family_id !== "dice-roll");
     // A menu whose options begin at named-option markers holds every sentence after its opener: "Each time …" there is one option's moment.
     const inMenu = parts.at(-1)!.some((leaf) => isContainerOpener(leaf.family_id)) && parts.at(-1)!.some((leaf) => leaf.family_id === "named-option");
-    const opensPart = position > firstEffectful && !inList[position] && !inMenu && parts.at(-1)!.some((leaf) => leaf.role === "EFFECT") && (
-      moments[position] || labels[position] || standing || selfTimedMenu(position)) && !REFERS_BACK.test(words.replace(/^in addition,\s*/iu, "").split(",")[0]!) && !SUCH.test(words);
+    // "While …: this model has K. In your Shooting phase, you can select …": an item of the list the header's colon
+    // introduces that holds its own selection or phase is a rule of its own under the header's condition, so neither
+    // reaches a sibling item.
+    const ownTiming = (leaves: readonly CompileLeaf[]) => leaves.some((leaf) => leaf.family_id === "select-unit" || leaf.family_id === "phase-window");
+    const headerItem = listed[firstEffectful]! && inList[position]! && !inMenu && (ownTiming(sentence) || ownTiming(parts.at(-1)!));
+    const opensPart = position > firstEffectful && (!inList[position] || headerItem) && !inMenu && parts.at(-1)!.some((leaf) => leaf.role === "EFFECT") && (
+      headerItem || moments[position] || labels[position] || standing || selfTimedMenu(position)) && !REFERS_BACK.test(words.replace(/^in addition,\s*/iu, "").split(",")[0]!) && !SUCH.test(words);
     // "None of these models can be your WARLORD" after a composition rule: the group it points back
     // to is that rule's (compile-army.ts), so the sentence stays in that rule's part.
     const pointsBack = armyOnly(sentence) && parts.at(-1)!.some((leaf) => leaf.family_id === "army-construction" && leaf.parameters.rule === "composition")
