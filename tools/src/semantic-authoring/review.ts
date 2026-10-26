@@ -1182,6 +1182,18 @@ function assertProposalStatus(db: DatabaseSync, proposalId: number, expected: st
   if (!row || row.status !== expected) conflict("This batch cannot be undone because one of its proposals was later changed.");
 }
 
+/** The relation a connective-relation batch replaced (`before`) and set (`after`); null is none. */
+function relabelled(metadataJson: string | null): { before: string | null; after: string | null } {
+  const metadata = JSON.parse(metadataJson ?? "{}") as { before?: unknown; after?: unknown };
+  return { before: typeof metadata.before === "string" ? metadata.before : null, after: typeof metadata.after === "string" ? metadata.after : null };
+}
+
+/** One connective's own reviewed relation; null when it has none. */
+function connectiveRelation(db: DatabaseSync, proposalId: number): string | null {
+  const row = db.prepare("SELECT json_extract(reason_json, '$.reviewed_relation') AS relation FROM proposals WHERE id = ?").get(proposalId) as { relation: unknown } | undefined;
+  return typeof row?.relation === "string" ? row.relation : null;
+}
+
 function abilityVersionForProposal(db: DatabaseSync, proposalId: number): number {
   const row = db.prepare(`
     SELECT source_spans.ability_version_id
@@ -1204,10 +1216,10 @@ export function undoBatch(
   assertReviewer(actor, undo.reviewer);
   return withTransaction(db, () => {
     const original = db.prepare(`
-      SELECT id, operation, reviewer
+      SELECT id, operation, reviewer, metadata_json
       FROM annotation_batches
       WHERE id = ?
-    `).get(batchId) as { id: string; operation: string; reviewer: string } | undefined;
+    `).get(batchId) as { id: string; operation: string; reviewer: string; metadata_json: string | null } | undefined;
     if (!original) missing(`Unknown annotation batch ${batchId}.`);
     if (original.reviewer !== undo.reviewer) conflict("Only the original reviewer can undo this decision batch.");
     const alreadyReversed = db.prepare("SELECT id FROM annotation_batches WHERE reversed_batch_id = ?").get(batchId);
@@ -1241,6 +1253,9 @@ export function undoBatch(
       const proposalTransition = PROPOSAL_UNDO_TRANSITIONS[member.entity_kind];
       if (proposalTransition) assertProposalStatus(db, id, proposalTransition.expected);
       if (member.entity_kind === "proposal-created") assertProposalStatus(db, id, "unresolved");
+      if (member.entity_kind === "connective-relabelled" && connectiveRelation(db, id) !== relabelled(original.metadata_json).after) {
+        conflict("This batch cannot restore a connective's relation because it was later changed.");
+      }
       if (member.entity_kind === "gap-created") {
         const gap = db.prepare("SELECT status FROM gaps WHERE id = ?").get(id) as { status: string } | undefined;
         if (!gap || gap.status !== "open") conflict("This batch cannot be undone because one of its gaps was later changed.");
@@ -1291,6 +1306,13 @@ export function undoBatch(
         const retracted = db.prepare("UPDATE proposals SET status = 'rejected' WHERE id = ? AND status = 'unresolved'").run(id);
         if (retracted.changes !== 1) conflict("An unresolved proposal changed during undo.");
         addMember(db, reversalId, "proposal-retracted", id);
+        touchedAbilities.add(abilityVersionForProposal(db, id));
+      }
+      if (member.entity_kind === "connective-relabelled") {
+        const { before } = relabelled(original.metadata_json);
+        if (before === null) db.prepare("UPDATE proposals SET reason_json = json_remove(reason_json, '$.reviewed_relation') WHERE id = ?").run(id);
+        else db.prepare("UPDATE proposals SET reason_json = json_set(reason_json, '$.reviewed_relation', ?) WHERE id = ?").run(before, id);
+        addMember(db, reversalId, "connective-relation-restored", id);
         touchedAbilities.add(abilityVersionForProposal(db, id));
       }
       if (member.entity_kind === "gap-created") {

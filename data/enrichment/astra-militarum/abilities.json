@@ -198,28 +198,22 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "dcb0860b15b355845caa762e620194caae2fb6d495fa4c57a5354829cf77aa7a",
     "version": "2025-q3",
     "effect": {
-      "type": "ability-modifier",
-      "target": "this-model",
-      "modifier": {
-        "ability": "voice-of-command-astra-militarum",
-        "aspect": "uses",
-        "operation": "set",
-        "value": 2,
-        "recipients": {
-          "owner": "friendly",
-          "all_of": [
-            "REGIMENT"
-          ]
-        }
+      "type": "issue-orders",
+      "menu_from": "voice-of-command-astra-militarum",
+      "count": 2,
+      "eligible": {
+        "all_of": [
+          "REGIMENT"
+        ]
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "unit_ids": [
       "cadian-castellan"
@@ -10562,34 +10556,29 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "version": "launch",
     "effect": {
-      "type": "ability-modifier",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "voice-of-command-astra-militarum",
-        "aspect": "uses",
-        "operation": "set",
-        "value": 2,
-        "recipients": {
-          "owner": "friendly",
-          "all_of": [
-            "DRAYDEN'S LANCE"
-          ]
-        }
+      "type": "issue-orders",
+      "menu_from": "voice-of-command-astra-militarum",
+      "count": 2,
+      "eligible": {
+        "all_of": [
+          "Drayden's Lance"
+        ]
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "unit_ids": [
       "draydens-lance-command-squad"
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "faction_id": "astra-militarum"
+    "faction_id": "astra-militarum",
+    "source_digest": "cb9a165997271fcb64a1d1c884a61dc157beb0c1b5ef582b137910d2081e3734"
   },
   {
     "ability_id": "regimental-standard-draydens-lance-command-squad-astra-militarum",
@@ -12973,9 +12962,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "cadian-command-squad",
       "catachan-command-squad",
@@ -12986,11 +12974,20 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "issue-orders",
+      "menu_from": "voice-of-command-astra-militarum",
+      "count": 1,
+      "eligible": {
+        "all_of": [
+          "REGIMENT"
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "093f7de9a8204e58e76d516951a4fd0ff1e70ee054ebb421e972f1da4cea4a5b"
   },
   {
     "ability_id": "orders-commissar-astra-militarum",
@@ -12998,9 +12995,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "commissar"
     ],
@@ -13008,11 +13004,24 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "issue-orders",
+      "menu_from": "voice-of-command-astra-militarum",
+      "count": 1,
+      "eligible": {
+        "all_of": [
+          "REGIMENT"
+        ]
+      },
+      "only_options": [
+        "duty-and-honour",
+        "fix-bayonets"
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "e4fb5675c8042b1001e744bb4918f47d437ecf641b9836a3d2abfec6380752c2"
   },
   {
     "ability_id": "orders-commissar-graves-astra-militarum",
@@ -13020,9 +13029,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "commissar-graves"
     ],
@@ -13030,11 +13038,26 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "issue-orders",
+      "menu_from": "voice-of-command-astra-militarum",
+      "count": 1,
+      "eligible": {
+        "any_of": [
+          "REGIMENT",
+          "SQUADRON"
+        ]
+      },
+      "only_options": [
+        "move-move-move",
+        "duty-and-honour",
+        "fix-bayonets"
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "ed1223e68369204bbf7026cb8e9eabe02fde531d6d69ac1932915505ec31892e"
   },
   {
     "ability_id": "orders-commissar-graves-on-foot-astra-militarum",
@@ -13042,9 +13065,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "commissar-graves-on-foot"
     ],
@@ -13052,11 +13074,25 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "issue-orders",
+      "menu_from": "voice-of-command-astra-militarum",
+      "count": 1,
+      "eligible": {
+        "all_of": [
+          "REGIMENT"
+        ]
+      },
+      "only_options": [
+        "move-move-move",
+        "duty-and-honour",
+        "fix-bayonets"
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "4beb2cea6e61bca3c1daf8c528265fff30a3060dd37fbd43537407bf1cbe91a7"
   },
   {
     "ability_id": "orders-commissar-yarrick-astra-militarum",
@@ -13064,9 +13100,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "commissar-yarrick"
     ],
@@ -13074,11 +13109,22 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "issue-orders",
+      "menu_from": "voice-of-command-astra-militarum",
+      "count": 2,
+      "eligible": {
+        "any_of": [
+          "REGIMENT",
+          "SQUADRON",
+          "TITANIC"
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "30233fb53809f64540a1f704a6910ef2f338b9ebcf1877bc3f3f012a0bc18fab"
   },
   {
     "ability_id": "orders-gaunts-ghosts-astra-militarum",
@@ -13086,9 +13132,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "gaunts-ghosts"
     ],
@@ -13096,11 +13141,21 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "issue-orders",
+      "menu_from": "voice-of-command-astra-militarum",
+      "count": 2,
+      "eligible": {
+        "any_of": [
+          "GAUNT'S GHOSTS",
+          "REGIMENT"
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "5f32b195f10ae060a12e320b3c89f560e082119668436aed725520a54c362a59"
   },
   {
     "ability_id": "orders-leman-russ-commander-astra-militarum",
@@ -13108,9 +13163,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "leman-russ-commander",
       "rogal-dorn-commander"
@@ -13119,11 +13173,20 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "issue-orders",
+      "menu_from": "voice-of-command-astra-militarum",
+      "count": 2,
+      "eligible": {
+        "all_of": [
+          "SQUADRON"
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "700dd2909011c1d42b3f43cb76253c906b16e9dda4560a6466d95c3b87a892f3"
   },
   {
     "ability_id": "orders-lord-marshal-dreir-astra-militarum",
@@ -13131,9 +13194,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "lord-marshal-dreir",
       "ursula-creed"
@@ -13142,11 +13204,20 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "issue-orders",
+      "menu_from": "voice-of-command-astra-militarum",
+      "count": 3,
+      "eligible": {
+        "all_of": [
+          "REGIMENT"
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "d443ededcc85959027ab8e46f3faa105d55a9317328b93e7804cc9c5989b9ed4"
   },
   {
     "ability_id": "orders-lord-solar-leontus-astra-militarum",
@@ -13154,9 +13225,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "lord-solar-leontus"
     ],
@@ -13164,11 +13234,22 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "issue-orders",
+      "menu_from": "voice-of-command-astra-militarum",
+      "count": 3,
+      "eligible": {
+        "any_of": [
+          "REGIMENT",
+          "SQUADRON",
+          "TITANIC"
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "b9114f79cf1c64be3708a503becdcef416d4618c263bae40a3858b9fac496163"
   },
   {
     "ability_id": "over-the-top-siege-regiment-astra-militarum",

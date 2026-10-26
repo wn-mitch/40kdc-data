@@ -3818,7 +3818,7 @@ export interface IssueOrdersEffect {
   /**
    * @minItems 1
    */
-  options: [
+  options?: [
     {
       /**
        * Stable id other rules reference this Order by ("affected by the Take Aim! Order").
@@ -3836,6 +3836,16 @@ export interface IssueOrdersEffect {
       effect: EffectNode;
     }[]
   ];
+  /**
+   * Kebab-case identifier
+   */
+  menu_from?: string;
+  /**
+   * Only these Orders of the `menu_from` menu, by option id, can be issued.
+   *
+   * @minItems 1
+   */
+  only_options?: [EntityId, ...EntityId[]];
 }
 /**
  * Which friendly units may receive an Order, by keyword.

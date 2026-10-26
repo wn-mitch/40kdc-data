@@ -423,6 +423,9 @@ func describeEffectInlineBase(e map[string]any, ctx effCtx) string {
 		}
 		return "take a " + testName(risk["test"]) + " test (on a failure, " + onFail + "), then " + describeEffectInline(mapOr(e["reward"]), ctx)
 	case "issue-orders":
+		if e["menu_from"] != nil {
+			return "issue Orders from " + abilityLabel(e["menu_from"]) + onlyOrders(e)
+		}
 		var names []string
 		for _, o := range getList(e, "options") {
 			names = append(names, ejstr(mapOr(o)["name"]))
@@ -684,6 +687,18 @@ func describeEffect(e map[string]any, depth int, ctx effCtx) string {
 		if e["issuer"] != nil {
 			issue = orderModels(e["issuer"], ctx) + " can issue"
 		}
+		if e["menu_from"] != nil {
+			// An officer's datasheet: how many of its army rule's Orders it issues, and to which units.
+			orders := "Orders"
+			if count, ok := e["count"].(float64); ok && count == 1 {
+				orders = "Order"
+			}
+			who := "This model can issue"
+			if e["issuer"] != nil {
+				who = issue
+			}
+			return indent + arrow + who + " up to " + n + " " + orders + " from " + abilityLabel(e["menu_from"]) + " to eligible " + units + rng + notStates + onlyOrders(e) + "."
+		}
 		lines := []string{indent + arrow + issue + " up to " + n + " Orders to eligible " + units + rng + notStates + ", each one of:"}
 		for _, o := range getList(e, "options") {
 			om := mapOr(o)
@@ -749,4 +764,17 @@ func orderRuleSentences(e map[string]any, ctx effCtx) []string {
 		out = append(out, "Only "+orderModels(e["benefit"], ctx)+" in that unit benefit from its Order.")
 	}
 	return out
+}
+
+// onlyOrders is ", only Duty and Honour or Fix Bayonets": the Orders of its menu an officer is limited to.
+func onlyOrders(e map[string]any) string {
+	ids, ok := e["only_options"].([]any)
+	if !ok {
+		return ""
+	}
+	labels := make([]string, 0, len(ids))
+	for _, id := range ids {
+		labels = append(labels, abilityLabel(id))
+	}
+	return ", only " + orList(labels)
 }

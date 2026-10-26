@@ -9,12 +9,12 @@ import { hashJson } from "../src/round4/hash.js";
 import { humanActor } from "../src/semantic-authoring/authority.js";
 import { compileLeaves } from "../src/semantic-authoring/compile.js";
 import { compilationInputsHash } from "../src/semantic-authoring/compiled.js";
-import { confirmConnectiveSpan } from "../src/semantic-authoring/connective-surfaces.js";
+import { confirmConnectiveSpan, relabelConnective } from "../src/semantic-authoring/connective-surfaces.js";
 import { connectiveRowsSql, reviewedConnectives } from "../src/semantic-authoring/connective-rows.js";
 import { initializeWorkbench } from "../src/semantic-authoring/db.js";
 import { tiledSources } from "../src/semantic-authoring/leaf-view.js";
 import { propagateDuplicateTexts } from "../src/semantic-authoring/propagate.js";
-import { applyAnnotationBatch } from "./semantic-authoring-human.js";
+import { applyAnnotationBatch, undoBatch } from "./semantic-authoring-human.js";
 
 const DatabaseSync = createRequire(import.meta.url)("node:sqlite").DatabaseSync as { new(path: string): DatabaseType };
 type DatabaseSync = DatabaseType;
@@ -106,6 +106,33 @@ describe("reviewed connective rows", () => {
       // A source that is no longer accepted gives nothing.
       db.prepare("UPDATE proposals SET status = 'rejected' WHERE id = ?").run(proposal);
       expect(reviewedConnectives(db, [twin])).toEqual([]);
+    } finally {
+      db.close();
+    }
+  });
+
+  it("relabels an accepted connective through its source, and undo restores the relation it replaced", () => {
+    const { db, source, twin, proposal } = fixture("condition-of");
+    const actor = humanActor(REVIEWER, "test");
+    try {
+      propagateDuplicateTexts(db, { dryRun: false });
+      const copy = (db.prepare(`
+        SELECT proposals.id FROM proposals JOIN source_spans ON source_spans.id = proposals.span_id
+        WHERE proposals.role = 'CONNECTIVE' AND source_spans.ability_version_id = ?
+      `).get(twin) as { id: number }).id;
+      // A copy has no relation of its own to decide.
+      expect(() => relabelConnective(db, { reviewer: REVIEWER, proposal_id: copy, relation: null }, actor)).toThrow(/is a copy of/u);
+      expect(() => relabelConnective(db, { reviewer: REVIEWER, proposal_id: proposal, relation: "condition-of" }, actor)).toThrow(/already has relation/u);
+      expect(() => relabelConnective(db, { reviewer: REVIEWER, proposal_id: proposal, relation: "means-something" }, actor)).toThrow(/not a known relation/u);
+      const { batch_id } = relabelConnective(db, { reviewer: REVIEWER, proposal_id: proposal, relation: null }, actor);
+      // Cleared at the source, so the copy follows.
+      expect(reviewedConnectives(db, [source, twin])).toEqual([]);
+      undoBatch(db, batch_id, { reviewer: REVIEWER });
+      expect(reviewedConnectives(db, [source, twin]).map((row) => row.relation)).toEqual(["condition-of", "condition-of"]);
+      // A relation changed after the relabel is not overwritten by undoing it.
+      const again = relabelConnective(db, { reviewer: REVIEWER, proposal_id: proposal, relation: null }, actor);
+      setRelation(db, proposal, "coexists-with");
+      expect(() => undoBatch(db, again.batch_id, { reviewer: REVIEWER })).toThrow(/later changed/u);
     } finally {
       db.close();
     }

@@ -30,6 +30,7 @@ from wh40kdc.translate.effect_inline import (
     dice_table_result_label,
     inline,
     leadership_test,
+    only_orders,
     part_head,
     part_inline,
     pool_text,
@@ -64,6 +65,7 @@ from wh40kdc.translate.effect_select import (
 )
 from wh40kdc.translate.effect_words import (
     Ctx,
+    ability_label,
     capitalize,
     filter_subject,
     is_num,
@@ -266,6 +268,14 @@ def describe_effect(e: Effect, depth: int = 0, ctx: Ctx | None = None) -> str:
         issuer = e.get("issuer")
         issuer_models = filter_subject({**_obj(issuer), "level": "model"}, ctx)
         issue = f"{issuer_models.removeprefix('all ')} can issue" if issuer is not None else "Issue"
+        if e.get("menu_from") is not None:
+            # An officer's datasheet: how many of its army rule's Orders it issues, and to whom.
+            orders = "Order" if e.get("count") == 1 else "Orders"
+            who = issue if issuer is not None else "This model can issue"
+            return (
+                f"{indent}{arrow}{who} up to {n} {orders} from {ability_label(e['menu_from'])} "
+                f"to eligible {units}{rng}{not_states}{only_orders(e)}."
+            )
         head = (
             f"{indent}{arrow}{issue} up to {n} Orders to eligible {units}{rng}{not_states}, "
             "each one of:"

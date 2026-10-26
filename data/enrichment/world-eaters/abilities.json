@@ -5323,7 +5323,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "bf3440e41ca907e02fabb3f198f5d3dbbc04da4e9dc32aca287c8de914508277",
     "version": "2025-q3",
@@ -5332,7 +5332,7 @@
     "faction_id": "world-eaters",
     "detachment_id": "khorne-daemonkin",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -5348,8 +5348,11 @@
         {
           "type": "ability-part",
           "trigger": {
-            "event": "destroyed",
-            "object": "this-model"
+            "event": "model-destroyed",
+            "object": "this-model",
+            "filter": {
+              "timing": "before-removal"
+            }
           },
           "effect": {
             "type": "resource-gain",

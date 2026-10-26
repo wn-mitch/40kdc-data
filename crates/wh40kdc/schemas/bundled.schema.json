@@ -12162,7 +12162,7 @@
     "issue-orders-effect": {
       "type": "object",
       "additionalProperties": false,
-      "$comment": "An officer issues up to `count` Orders per round to eligible friendly units within `range` inches, each a pick from the `options` menu (Astra Militarum Voice of Command). `count`/`eligible` are typically per-officer-datasheet; the shared menu lives on the army rule. Each option carries a `name` and the `effect` the chosen Order applies to the receiving unit.",
+      "$comment": "An officer issues up to `count` Orders per round to eligible friendly units within `range` inches, each a pick from the `options` menu (Astra Militarum Voice of Command). `count`/`eligible` are typically per-officer-datasheet; the shared menu lives on the army rule. Each option carries a `name` and the `effect` the chosen Order applies to the receiving unit. A per-officer record prints no menu: `menu_from` names the ability holding it, and `only_options` narrows it.",
       "properties": {
         "type": {
           "const": "issue-orders"
@@ -12238,11 +12238,23 @@
               "effect"
             ]
           }
+        },
+        "menu_from": {
+          "$ref": "#/$defs/entity-id",
+          "description": "The ability whose issue-orders lists the Orders this one issues, when it prints none of its own (an officer's datasheet ability issuing the army rule's Orders)."
+        },
+        "only_options": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/entity-id"
+          },
+          "description": "Only these Orders of the `menu_from` menu, by option id, can be issued."
         }
       },
       "required": [
-        "type",
-        "options"
+        "type"
       ]
     },
     "transport-occupancy-subject-kind": {

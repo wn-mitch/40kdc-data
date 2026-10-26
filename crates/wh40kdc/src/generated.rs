@@ -21214,7 +21214,6 @@ pub struct InvulnerableSaveEffectModifier {
 ///{
 ///  "type": "object",
 ///  "required": [
-///    "options",
 ///    "type"
 ///  ],
 ///  "properties": {
@@ -21256,9 +21255,22 @@ pub struct InvulnerableSaveEffectModifier {
 ///      "description": "Which models with this ability issue Orders, by keyword; each one's datasheet sets how many Orders it issues and which units may receive them.",
 ///      "$ref": "#/$defs/keyword-predicate"
 ///    },
+///    "menu_from": {
+///      "description": "The ability whose issue-orders lists the Orders this one issues, when it prints none of its own (an officer's datasheet ability issuing the army rule's Orders).",
+///      "$ref": "#/$defs/entity-id"
+///    },
 ///    "one_at_a_time": {
 ///      "description": "A unit is affected by at most one Order at a time; an Order issued to it later replaces the current one.",
 ///      "const": true
+///    },
+///    "only_options": {
+///      "description": "Only these Orders of the `menu_from` menu, by option id, can be issued.",
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/entity-id"
+///      },
+///      "minItems": 1,
+///      "uniqueItems": true
 ///    },
 ///    "options": {
 ///      "type": "array",
@@ -21298,7 +21310,7 @@ pub struct InvulnerableSaveEffectModifier {
 ///    }
 ///  },
 ///  "additionalProperties": false,
-///  "$comment": "An officer issues up to `count` Orders per round to eligible friendly units within `range` inches, each a pick from the `options` menu (Astra Militarum Voice of Command). `count`/`eligible` are typically per-officer-datasheet; the shared menu lives on the army rule. Each option carries a `name` and the `effect` the chosen Order applies to the receiving unit."
+///  "$comment": "An officer issues up to `count` Orders per round to eligible friendly units within `range` inches, each a pick from the `options` menu (Astra Militarum Voice of Command). `count`/`eligible` are typically per-officer-datasheet; the shared menu lives on the army rule. Each option carries a `name` and the `effect` the chosen Order applies to the receiving unit. A per-officer record prints no menu: `menu_from` names the ability holding it, and `only_options` narrows it."
 ///}
 /// ```
 /// </details>
@@ -21324,9 +21336,16 @@ pub struct IssueOrdersEffect {
     ///Which models with this ability issue Orders, by keyword; each one's datasheet sets how many Orders it issues and which units may receive them.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub issuer: ::std::option::Option<KeywordPredicate>,
+    ///The ability whose issue-orders lists the Orders this one issues, when it prints none of its own (an officer's datasheet ability issuing the army rule's Orders).
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub menu_from: ::std::option::Option<EntityId>,
     ///A unit is affected by at most one Order at a time; an Order issued to it later replaces the current one.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub one_at_a_time: ::std::option::Option<::serde_json::Value>,
+    ///Only these Orders of the `menu_from` menu, by option id, can be issued.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub only_options: ::std::option::Option<Vec<EntityId>>,
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub options: ::std::vec::Vec<IssueOrdersEffectOptionsItem>,
     ///Orders go to eligible units within this distance of the officer.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]

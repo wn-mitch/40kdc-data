@@ -250,6 +250,24 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
                 Some(issuer) => format!("{} can issue", model_subject(issuer, ctx)),
                 None => "Issue".to_string(),
             };
+            if let Some(menu) = nn(e, "menu_from") {
+                // An officer's datasheet: how many of its army rule's Orders it issues, and to which units.
+                let orders = if e.get("count").and_then(Value::as_i64) == Some(1) {
+                    "Order"
+                } else {
+                    "Orders"
+                };
+                let who = if nn(e, "issuer").is_some() {
+                    issue
+                } else {
+                    "This model can issue".to_string()
+                };
+                return format!(
+                    "{indent}{arrow}{who} up to {n} {orders} from {} to eligible {units}{range}{not_states}{}.",
+                    ability_label(Some(menu)),
+                    only_orders(e)
+                );
+            }
             let mut lines = vec![format!(
                 "{indent}{arrow}{issue} up to {n} Orders to eligible {units}{range}{not_states}, each one of:"
             )];
@@ -274,6 +292,21 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
             "{indent}{arrow}{}.",
             capitalize(&inline(&Value::Object(e.clone()), ctx))
         ),
+    }
+}
+
+/// ", only Duty and Honour or Fix Bayonets": the Orders of its menu an officer is limited to.
+pub(super) fn only_orders(e: &P) -> String {
+    match e.get("only_options").and_then(Value::as_array) {
+        Some(ids) => format!(
+            ", only {}",
+            or_list(
+                &ids.iter()
+                    .map(|id| ability_label(Some(id)))
+                    .collect::<Vec<_>>()
+            )
+        ),
+        None => String::new(),
     }
 }
 

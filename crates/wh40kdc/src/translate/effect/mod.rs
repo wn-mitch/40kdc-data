@@ -535,6 +535,11 @@ fn inline_base(e: &P, ctx: &Ctx) -> String {
                 inline(child(e, "reward"), ctx)
             )
         }
+        "issue-orders" if nn(e, "menu_from").is_some() => format!(
+            "issue Orders from {}{}",
+            ability_label(nn(e, "menu_from")),
+            block::only_orders(e)
+        ),
         "issue-orders" => format!(
             "issue Orders, each one of: {}",
             items(e, "options")

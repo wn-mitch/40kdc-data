@@ -20,6 +20,8 @@ type Catalog = {
   options: Map<string, Array<{ ability_id: string; option_id: string; scoped: boolean }>>;
   /** Abilities a record prints inside itself ("Fortify Takeover" in Prioritised Efficiency), by id and name slug. */
   definitions: Map<string, Array<{ ability_id: string; definition_id: string }>>;
+  /** Army-wide records whose issue-orders lists Orders of its own (Voice of Command). */
+  orderMenus: string[];
 };
 
 const DATA = new URL("../../../data/", import.meta.url);
@@ -44,7 +46,7 @@ export function parentFaction(factionId: string): string | null {
 function catalogOf(factionId: string): Catalog {
   const cached = catalogs.get(factionId);
   if (cached) return cached;
-  const catalog: Catalog = { ids: new Set(), byName: new Map(), options: new Map(), definitions: new Map() };
+  const catalog: Catalog = { ids: new Set(), byName: new Map(), options: new Map(), definitions: new Map(), orderMenus: [] };
   const push = <T>(map: Map<string, T[]>, key: string, value: T): void => { map.set(key, [...(map.get(key) ?? []), value]); };
   for (const record of readJson(new URL(`enrichment/${factionId}/abilities.json`, DATA)) as Array<Record<string, unknown>>) {
     const id = record.ability_id;
@@ -52,6 +54,7 @@ function catalogOf(factionId: string): Catalog {
     catalog.ids.add(id);
     if (typeof record.name === "string") push(catalog.byName, slug(record.name), id);
     for (const effect of menusOf(record.effect)) {
+      if (effect.type === "issue-orders" && typeof record.detachment_id !== "string") catalog.orderMenus.push(id);
       for (const option of effect.options as Array<Record<string, unknown>>) {
         if (typeof option.id !== "string") continue;
         // A detachment's own copy of a rule (a Combat Patrol's Combat Doctrines) is scoped to it.
@@ -149,6 +152,16 @@ export function resolveDefinitionName(factionId: string, name: string): { abilit
   return null;
 }
 
+/** The one army-wide record whose issue-orders lists the faction's Orders, nearest scope first; null when none or several do. */
+export function resolveOrderMenu(factionId: string): string | null {
+  for (const faction of scopes(factionId)) {
+    const menus = [...new Set(catalogOf(faction).orderMenus)];
+    if (menus.length === 1) return menus[0]!;
+    if (menus.length > 1) return null;
+  }
+  return null;
+}
+
 /** A named rule's record, else one option of a stance, else an ability a record defines inside itself. */
 function resolveRule(faction: string, name: string): string | { ability_id: string; option_id: string } | { ability_id: string; definition_id: string } | null {
   return resolveRecordName(faction, name) ?? resolveOptionName(faction, name) ?? resolveDefinitionName(faction, name);
@@ -206,6 +219,19 @@ export function resolveRuleReferences(leaves: readonly CompileLeaf[], context?: 
         if (typeof name !== "string") return leaf;
         const rule = resolveRule(faction, name);
         return rule && rule !== name ? withParameter("rule", rule) : leaf;
+      }
+      case "issue-orders-open": {
+        // An officer's datasheet issues Orders from its faction's one menu (Voice of Command).
+        const menu = resolveOrderMenu(faction);
+        return menu ? withParameter("__menu", menu) : leaf;
+      }
+      case "order-rule": {
+        // "can only issue the Duty and Honour! and Fix Bayonets! Orders": each printed name as an option id of the menu.
+        if (parameters.rule !== "only-orders" || !Array.isArray(parameters.orders)) return leaf;
+        const menu = resolveOrderMenu(faction);
+        const options = (parameters.orders as string[]).map((name) => resolveOptionName(faction, slug(name)));
+        if (menu === null || options.some((option) => option === null || option.ability_id !== menu)) return leaf;
+        return withParameter("__options", options.map((option) => option!.option_id));
       }
       case "weapon-grant": {
         const name = parameters.weapon_id;

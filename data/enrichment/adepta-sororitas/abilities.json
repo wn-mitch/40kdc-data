@@ -7465,7 +7465,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "7a71aac4ccbab17dbbf59ff19f457258cdff523e55b0b55ec4090c6e2f1c97b1",
     "version": "2025-q3",
@@ -7474,15 +7474,51 @@
     "faction_id": "adepta-sororitas",
     "detachment_id": "army-of-faith",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "stat-modifier",
-      "target": "this-unit",
-      "modifier": {
-        "stat": "AP",
-        "operation": "improve",
-        "value": 1
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "stat": "AP",
+            "operation": "improve",
+            "value": 1
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "attacks-resolved"
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "happened",
+              "parameters": {
+                "event": "model-destroyed",
+                "object": {
+                  "owner": "enemy",
+                  "level": "model"
+                },
+                "filter": {
+                  "by": "this-unit"
+                },
+                "window": "event"
+              }
+            },
+            "effect": {
+              "type": "resource-gain",
+              "target": "this-model",
+              "modifier": {
+                "pool": "miracle-dice-pool",
+                "amount": 1
+              }
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "phase"
@@ -7500,7 +7536,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "9ca80b811603ab752fa746c18679e57c69853b86daa9c42d7cadc7fcc0ca1e63",
     "version": "2025-q3",
@@ -7509,20 +7545,56 @@
     "faction_id": "adepta-sororitas",
     "detachment_id": "army-of-faith",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "weapon-ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "weapons": {
-          "type": "melee"
-        },
-        "keywords": [
-          {
-            "keyword_id": "lance"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "lance"
+              }
+            ],
+            "weapons": {
+              "type": "melee"
+            }
           }
-        ]
-      }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "attacks-resolved"
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "happened",
+              "parameters": {
+                "event": "model-destroyed",
+                "object": {
+                  "owner": "enemy",
+                  "level": "model"
+                },
+                "filter": {
+                  "by": "this-unit"
+                },
+                "window": "event"
+              }
+            },
+            "effect": {
+              "type": "resource-gain",
+              "target": "this-model",
+              "modifier": {
+                "pool": "miracle-dice-pool",
+                "amount": 1
+              }
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "phase"

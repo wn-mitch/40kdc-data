@@ -22,7 +22,7 @@ import { definedGrantHead, definitionPart, describeLeaf, isDefinedGrant, LEAF_TY
 import { expiryTrail } from "./expiry.js";
 import { objectiveSelectorPhrase, rollHead, selectObjectiveBlock, selectObjectiveInline, selectionBinding, selectionLimit, selectorCount, selectorNoun, selectorSubject, selectUnitsSubject } from "./effect-bind.js";
 import {
-  capitalize, diceCase, filterSubject, formatComparison, jstr, orList, quantityPhrase, rangePhrase, regionPhrase, requirementPhrase, resourceNoun, rollKindNoun, scaleSource,
+  abilityLabel, capitalize, diceCase, filterSubject, formatComparison, jstr, orList, quantityPhrase, rangePhrase, regionPhrase, requirementPhrase, resourceNoun, rollKindNoun, scaleSource,
   signed, testName, type Ctx,
 } from "./effect-words.js";
 export type { Ctx };
@@ -141,6 +141,8 @@ export interface Effect {
   ineligible_states?: string[];
   ends_on?: string[];
   one_at_a_time?: boolean;
+  menu_from?: string;
+  only_options?: string[];
   // resource-action-menu
   menu_id?: string;
   pool_id?: string;
@@ -648,6 +650,7 @@ function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
     case "risk-reward":
       return `take a ${testName(e.risk?.test)} test (on a failure, ${e.risk?.on_fail ? describeEffectInline(e.risk.on_fail, ctx) : "suffer a consequence"}), then ${describeEffectInline(e.reward ?? {}, ctx)}`;
     case "issue-orders":
+      if (e.menu_from != null) return `issue Orders from ${abilityLabel(e.menu_from)}${onlyOrders(e)}`;
       return `issue Orders, each one of: ${(e.options ?? []).map((o) => jstr(o.name)).join(" / ")}`;
     case "resource-action-menu":
       return `actions may be performed when their conditions are met: ${(e.actions ?? []).map((a) => describeMenuAction(a, ctx)).join(" / ")}`;
@@ -963,6 +966,12 @@ export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): str
       const units = filterSubject({ owner: "friendly", ...(e.eligible ?? {}) }, ctx).replace(/^all /, "");
       const states = Array.isArray(e.ineligible_states) ? ` that are not ${orList(e.ineligible_states.map(dekebabState))}` : "";
       const issue = e.issuer != null ? `${filterSubject({ ...e.issuer, level: "model" }, ctx).replace(/^all /, "")} can issue` : "Issue";
+      if (e.menu_from != null) {
+        // An officer's datasheet: how many of its army rule's Orders it issues, and to which units.
+        const orders = e.count === 1 ? "Order" : "Orders";
+        const who = e.issuer != null ? issue : "This model can issue";
+        return `${indent}${arrow}${who} up to ${n} ${orders} from ${abilityLabel(e.menu_from)} to eligible ${units}${rng}${states}${onlyOrders(e)}.`;
+      }
       const lines = [`${indent}${arrow}${issue} up to ${n} Orders to eligible ${units}${rng}${states}, each one of:`];
       for (const opt of e.options ?? []) {
         lines.push(`${indent}  - ${jstr(opt.name)}: ${describeEffectInline(opt.effect ?? {}, ctx)}.`);
@@ -984,6 +993,11 @@ export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): str
       // Leaf at block position — render as a single capitalized sentence.
       return `${indent}${arrow}${capitalize(describeEffectInline(e, ctx))}.`;
   }
+}
+
+/** ", only Duty and Honour or Fix Bayonets": the Orders of its menu an officer is limited to. */
+function onlyOrders(e: Effect): string {
+  return Array.isArray(e.only_options) ? `, only ${orList(e.only_options.map((id) => abilityLabel(id)))}` : "";
 }
 
 /** "Battle-shocked" for the unit states an issue-orders rule names. */

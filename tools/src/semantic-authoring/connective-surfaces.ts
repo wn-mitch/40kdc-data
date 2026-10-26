@@ -156,3 +156,39 @@ export function confirmConnectiveSpan(db: DatabaseSync, value: { reviewer: strin
     return { batch_id: batchId, span_id: spanId };
   });
 }
+
+/**
+ * Set or clear (`relation: null`) the reviewed relation of one accepted connective: Will's decision
+ * about what the words relate, made again. A bare "If" decided as a condition on what happened can
+ * become the wording that opens the moment the rule fires on. A copy takes its relation from the
+ * proposal it was copied from (connective-rows.ts), so a copy is relabelled through that source.
+ * The batch keeps the relation it replaced, so undo restores it.
+ */
+export function relabelConnective(db: DatabaseSync, value: { reviewer: string; proposal_id: number; relation: string | null }, actor: Actor): { batch_id: string } {
+  requireHuman(actor, "decide a connective");
+  assertReviewer(actor, value.reviewer);
+  if (value.relation !== null && !CONNECTIVE_RELATION_TYPES.includes(value.relation)) throw new Error(`"${value.relation}" is not a known relation type.`);
+  return withTransaction(db, () => {
+    const row = db.prepare(`
+      SELECT proposals.reason_json, source_spans.ability_version_id FROM proposals JOIN source_spans ON source_spans.id = proposals.span_id
+      WHERE proposals.id = ? AND proposals.role = 'CONNECTIVE' AND proposals.status = 'accepted'
+    `).get(value.proposal_id) as { reason_json: string; ability_version_id: number } | undefined;
+    if (!row) throw new Error(`No accepted connective ${value.proposal_id}.`);
+    const reason = JSON.parse(row.reason_json) as { reviewed_relation?: unknown; copied_from_proposal?: unknown };
+    if (reason.copied_from_proposal !== undefined) throw new Error(`Connective ${value.proposal_id} is a copy of ${String(reason.copied_from_proposal)}; relabel that proposal.`);
+    const before = typeof reason.reviewed_relation === "string" ? reason.reviewed_relation : null;
+    if (before === value.relation) throw new Error(`Connective ${value.proposal_id} already has relation ${String(before)}.`);
+    const batchId = newBatch(db, actor.reviewer, { action: "connective-relation", proposal_id: value.proposal_id, before, after: value.relation });
+    setConnectiveRelation(db, value.proposal_id, value.relation);
+    addMember(db, batchId, "connective-relabelled", value.proposal_id);
+    invalidateWholeReview(db, new Set([row.ability_version_id]));
+    bumpWorkbenchRevision(db);
+    return { batch_id: batchId };
+  });
+}
+
+/** Write one connective's reviewed relation, or remove it. */
+export function setConnectiveRelation(db: DatabaseSync, proposalId: number, relation: string | null): void {
+  if (relation === null) db.prepare("UPDATE proposals SET reason_json = json_remove(reason_json, '$.reviewed_relation') WHERE id = ?").run(proposalId);
+  else db.prepare("UPDATE proposals SET reason_json = json_set(reason_json, '$.reviewed_relation', ?) WHERE id = ?").run(relation, proposalId);
+}

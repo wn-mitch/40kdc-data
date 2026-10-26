@@ -27,6 +27,8 @@ const STANCE_MODES = ["re-selectable", "consumable"] as const;
 const STANCE_SCOPES = ["army", "unit"] as const;
 const DICE_REQUIREMENT_TYPES = ["pair", "triple", "single", "run"] as const;
 const ORDER_RULES = ["issuer", "one-at-a-time", "ineligible-state", "ends-on-state", "benefit"] as const;
+/** Version 2 adds only-orders: the officer issues only the named Orders of the menu. */
+const ORDER_RULES_V2 = [...ORDER_RULES, "only-orders"] as const;
 const ORDER_STATES = ["battle-shocked"] as const;
 
 export const CONTAINER_FAMILIES: readonly SemanticFamilyDefinition[] = [
@@ -181,6 +183,27 @@ export const CONTAINER_FAMILIES: readonly SemanticFamilyDefinition[] = [
       },
       additionalProperties: false,
     },
+    deprecated: true,
+  },
+  {
+    // "This OFFICER can only issue the Duty and Honour! and Fix Bayonets! Orders."
+    id: "order-rule",
+    version: 2,
+    role: "RESTRICTION",
+    label: "How Orders work",
+    description: "As version 1, plus only-orders: the officer issues only these Orders of its menu, by their printed names.",
+    starter: { rule: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["rule"],
+      properties: {
+        rule: { enum: ORDER_RULES_V2 },
+        keywords: { type: "array", minItems: 1, uniqueItems: true, items: { type: "string", minLength: 1 } },
+        state: { enum: ORDER_STATES },
+        orders: { type: "array", minItems: 1, uniqueItems: true, items: { type: "string", minLength: 1 } },
+      },
+      additionalProperties: false,
+    },
   },
   {
     id: "dice-pool-allocation-open",
@@ -294,7 +317,14 @@ export function normalizeContainerParameters(family: string, input: Record<strin
       return result;
     }
     case "order-rule": {
-      const rule = enumValue(input.rule, ORDER_RULES, "order-rule.rule");
+      const rule = enumValue(input.rule, version >= 2 ? ORDER_RULES_V2 : ORDER_RULES, "order-rule.rule");
+      if (rule === "only-orders") {
+        exactKeys(input, ["rule", "orders"], family);
+        if (!Array.isArray(input.orders) || input.orders.length === 0 || input.orders.some((name) => typeof name !== "string" || name.trim() === "")) {
+          throw new TypeError("order-rule.orders is the Orders' names as printed, one or more.");
+        }
+        return { rule, orders: [...new Set((input.orders as string[]).map((name) => name.trim()))] };
+      }
       const needs = rule === "issuer" || rule === "benefit" ? ["rule", "keywords"] : rule === "one-at-a-time" ? ["rule"] : ["rule", "state"];
       exactKeys(input, needs, family);
       if (needs.includes("keywords")) {

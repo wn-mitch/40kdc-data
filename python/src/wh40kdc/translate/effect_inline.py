@@ -45,6 +45,7 @@ from wh40kdc.translate.effect_select import (
 )
 from wh40kdc.translate.effect_words import (
     Ctx,
+    ability_label,
     capitalize,
     dice_case,
     filter_subject,
@@ -466,6 +467,8 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx) -> str:
         on_fail = inline(risk["on_fail"], ctx) if risk.get("on_fail") else "suffer a consequence"
         reward = inline(e.get("reward"), ctx)
         return f"take a {test_name(risk.get('test'))} test (on a failure, {on_fail}), then {reward}"
+    if t == "issue-orders" and e.get("menu_from") is not None:
+        return f"issue Orders from {ability_label(e['menu_from'])}{only_orders(e)}"
     if t == "issue-orders":
         return (
             "issue Orders, each one of: "
@@ -583,3 +586,9 @@ def leadership_test(e: Effect, ctx: Ctx) -> str:
         f"{who} takes a {kind} test (2D6, passing on its current Leadership or higher{mods}); "
         f"if passed, {success}{fail}"
     )
+
+
+def only_orders(e: dict[str, Any]) -> str:
+    """The Orders of its menu an officer is limited to: ", only Duty and Honour or Fix Bayonets"."""
+    ids = e.get("only_options")
+    return f", only {or_list([ability_label(i) for i in ids])}" if isinstance(ids, list) else ""

@@ -323,7 +323,8 @@ export function mergeStackedFilters(input: readonly CompileLeaf[], sourceText?: 
       if (last === leaf && !exclusionOnly && awaiting !== undefined && awaiting.fragment === leaf.fragment && awaitsFollowingFilter(awaiting.parameters)) break;
       const joiner = between.length === 0 ? joinerBetween(sourceText, last, candidate!) : null;
       if (joiner !== null && ALTERNATIVE_JOINERS.has(joiner)) {
-        sawOr ||= joiner.includes("or");
+        // A bulleted list of filters ("to: ■ X units ■ Y units") names alternatives, as "or" does.
+        sawOr ||= joiner.includes("or") || joiner === "■";
         groups.push({ filter: candidate!, at: next + 1 });
         last = candidate!;
         continue;
@@ -378,8 +379,8 @@ function refuseUnnamedMode(sourceText: string, first: CompileLeaf, second: Compi
   }
 }
 
-/** Joiners that make the next filter an alternative to the one before it, read without bold or spaces. */
-const ALTERNATIVE_JOINERS = new Set(["or", ",", ",or"]);
+/** Joiners that make the next filter an alternative to the one before it, read without bold or spaces; "■" is a bullet. */
+const ALTERNATIVE_JOINERS = new Set(["or", ",", ",or", "■"]);
 
 /** The source between two leaves, without bold markers, spaces or an exclusion's parentheses. */
 function joinerBetween(sourceText: string | undefined, left: CompileLeaf, right: CompileLeaf): string | null {
@@ -443,6 +444,13 @@ export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: str
     if (isFilter(leaf) && embarkedStateBefore(out.at(-1), leaf)) {
       // "TORMENTORS units embarked within it" + "(excluding Battle-shocked units)": the exclusion narrows the embarked units.
       out[out.length - 1] = foldEmbarkedExclusion(out.at(-1)!, leaf, dslUnitFilter(leaf));
+      continue;
+    }
+    if (isFilter(leaf) && out.at(-1)?.family_id === "issue-orders-open" && out.at(-1)!.fragment === leaf.fragment) {
+      // "This OFFICER can issue up to 2 Orders to" + "REGIMENT or SQUADRON units" (or one filter per
+      // bullet): the units an Order can be issued to.
+      out[out.length - 1] = foldOrderRecipients(out.at(-1)!, leaf);
+      index = pastOwners(list, index, leaf) - 1;
       continue;
     }
     if (leaf.family_id === "move-end-nearest" && destinationOf(leaf) === "following-filter") {
@@ -940,4 +948,29 @@ function filteredAfter(list: readonly CompileLeaf[], index: number): number | nu
     || (list[at]?.role === "DURATION" && list[at]!.fragment === list[index]!.fragment)) at += 1;
   const leaf = list[at];
   return leaf && Object.values(leaf.parameters).includes(FILTERED_UNITS) ? at : null;
+}
+
+/**
+ * The units an issue-orders' Orders can go to, from a unit-filter after its opener: friendly units by
+ * keyword. Several filters (one per bullet) are alternatives, so each must name a single keyword or
+ * an any-of; their keywords join one any-of. Stored on the opener as `__eligible`.
+ */
+function foldOrderRecipients(opener: CompileLeaf, filter: CompileLeaf): CompileLeaf {
+  const { owner, ...rest } = dslUnitFilter(filter);
+  if (owner !== "friendly") throw new CompileError("Orders are issued to friendly units; the unit-filter after an issue-orders opener must say friendly.");
+  if (Object.keys(rest).some((key) => key !== "all_of" && key !== "any_of") || (rest.all_of !== undefined && rest.any_of !== undefined)) {
+    throw new CompileError("The units an Order can go to are named by keywords only: all of them, or any one of them.");
+  }
+  if (opener.parameters.eligible_keyword !== undefined) throw new CompileError("An issue-orders opener that names its eligible keyword takes no unit-filter after it.");
+  const previous = opener.parameters.__eligible as { all_of?: string[]; any_of?: string[] } | undefined;
+  let eligible: Record<string, unknown> = rest;
+  if (previous !== undefined) {
+    const alternatives = (predicate: { all_of?: unknown; any_of?: unknown }): string[] => {
+      if (Array.isArray(predicate.any_of)) return predicate.any_of as string[];
+      if (Array.isArray(predicate.all_of) && predicate.all_of.length === 1) return predicate.all_of as string[];
+      throw new CompileError("Units an Order can go to, named in several filters, must each be one keyword or an any-of.");
+    };
+    eligible = { any_of: [...new Set([...alternatives(previous), ...alternatives(rest)])] };
+  }
+  return { ...opener, end_byte: Math.max(opener.end_byte ?? opener.start_byte, filter.end_byte ?? filter.start_byte), parameters: { ...opener.parameters, __eligible: eligible } };
 }

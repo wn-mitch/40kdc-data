@@ -4,7 +4,7 @@ import type { DatabaseSync } from "node:sqlite";
 import { humanActor } from "./authority.js";
 import { applyAnnotationBatch, markPilotReviewed } from "./review.js";
 import { confirmSurface, leafSurface, moveSurface, retireSurface } from "./leaves.js";
-import { confirmConnectiveSpan, confirmConnectiveSurface } from "./connective-surfaces.js";
+import { confirmConnectiveSpan, confirmConnectiveSurface, relabelConnective } from "./connective-surfaces.js";
 import { confirmOperator, type OperatorSlot } from "./leaf-operators.js";
 import { NAME_FRAGMENT } from "./compile-name.js";
 import { approveShape, compiledRecordsOf, rejectShapeMembers } from "./shapes.js";
@@ -44,15 +44,15 @@ export type ChatDecision = {
   allow_overlap?: boolean;
   /** For `correct` of an annotation: same-role leaves inside the new wording that it absorbs (one list, one leaf). */
   merges_annotation_ids?: number[];
-  action: "confirm" | "correct" | "retire" | "reject" | "novel" | "ambiguous" | "connective" | "add" | "gap" | "surface" | "retire-surface" | "connective-surface" | "add-connective" | "operator" | "move-surface" | "approve-shape" | "reject-shape";
+  action: "confirm" | "correct" | "retire" | "reject" | "novel" | "ambiguous" | "connective" | "add" | "gap" | "surface" | "retire-surface" | "connective-surface" | "add-connective" | "operator" | "move-surface" | "approve-shape" | "reject-shape" | "connective-relation";
   /** For `approve-shape` / `reject-shape`: the shape signature the members compile to. */
   signature?: string;
   /** For `approve-shape` / `reject-shape`: the source versions decided. */
   ability_version_ids?: number[];
   /** For `add` with an explicit occurrence, the UTF-8 byte end (paired with `start_byte`). */
   end_byte?: number;
-  /** For `connective-surface`: the composition relation the joiner expresses, if any. */
-  relation?: string;
+  /** For `connective-surface` / `add-connective`: the composition relation the joiner expresses, if any; for `connective-relation`, the new relation, or null to clear it. */
+  relation?: string | null;
   role?: string;
   family_id?: string;
   family_version?: number;
@@ -302,15 +302,21 @@ export async function applyChatReview(db: DatabaseSync, review: ChatReview): Pro
       if (item.action === "add-connective") {
         // One span with no rule meaning in its record (a designer's note), out of the denominator.
         const report = confirmConnectiveSpan(db, {
-          reviewer: actor.reviewer, ability_version_id: Number(item.ability_version_id), exact_text: String(item.exact_text ?? ""), relation: item.relation,
+          reviewer: actor.reviewer, ability_version_id: Number(item.ability_version_id), exact_text: String(item.exact_text ?? ""), relation: item.relation ?? undefined,
           ...(item.start_byte !== undefined ? { start_byte: Number(item.start_byte) } : {}),
         }, actor);
         applied.push({ ability_version_id: Number(item.ability_version_id), batch_id: report.batch_id } as never);
         continue;
       }
+      if (item.action === "connective-relation") {
+        // An accepted connective's relation decided again; null clears it.
+        if (item.proposal_id === undefined || item.relation === undefined) throw new Error("connective-relation needs proposal_id and relation (a relation type, or null to clear it).");
+        applied.push({ proposal_id: item.proposal_id, batch_id: relabelConnective(db, { reviewer: actor.reviewer, proposal_id: Number(item.proposal_id), relation: item.relation }, actor).batch_id });
+        continue;
+      }
       if (item.action === "connective-surface") {
         // Joining words decided once: a connective wherever they occur between leaves, in scope.
-        const report = confirmConnectiveSurface(db, { reviewer: actor.reviewer, exact_text: String(item.exact_text ?? ""), scope: item.scope, relation: item.relation }, actor);
+        const report = confirmConnectiveSurface(db, { reviewer: actor.reviewer, exact_text: String(item.exact_text ?? ""), scope: item.scope, relation: item.relation ?? undefined }, actor);
         applied.push({ batch_id: report.batch_id, connective: report } as never);
         continue;
       }

@@ -174,16 +174,26 @@ function buildStanceSelect(head: CompileLeaf, groups: CompileLeaf[][]): Node {
 }
 
 
+/**
+ * An issue-orders: its own Orders, one per named option, or none, when an officer's datasheet issues
+ * the Orders its faction's army rule lists (`menu_from`, resolved by compile-rule-refs.ts).
+ */
 function buildIssueOrders(head: CompileLeaf, groups: CompileLeaf[][], rules: readonly CompileLeaf[]): Node {
   const options = groups.map((group, index) => {
     const { id, name, effect: optionEffect } = namedOption(group, false, index);
     return { id, name, effect: optionEffect };
   });
-  const node: Node = { type: "issue-orders", options };
+  const node: Node = { type: "issue-orders" };
+  if (options.length > 0) node.options = options;
+  else if (typeof head.parameters.__menu === "string") node.menu_from = head.parameters.__menu;
+  else throw new CompileError("An issue-orders with no Orders of its own needs its faction's one army rule that lists them.");
   if (head.parameters.count !== undefined) node.count = closed(head, "count");
   if (head.parameters.range !== undefined) node.range = { inches: closed(head, "range") };
   if (head.parameters.eligible_keyword !== undefined) node.eligible = { all_of: [closed(head, "eligible_keyword")] };
-  return { ...node, ...orderRules(rules) };
+  if (head.parameters.__eligible !== undefined) node.eligible = head.parameters.__eligible;
+  const ruled = orderRules(rules);
+  if (ruled.only_options !== undefined && node.menu_from === undefined) throw new CompileError("Only some Orders of a menu: the issue-orders must take its Orders from its army rule.");
+  return { ...node, ...ruled };
 }
 
 /**
@@ -237,6 +247,12 @@ function orderRules(rules: readonly CompileLeaf[]): Node {
       case "one-at-a-time": out.one_at_a_time = true; break;
       case "ineligible-state": states("ineligible_states", leaf); break;
       case "ends-on-state": states("ends_on", leaf); break;
+      case "only-orders": {
+        if (!Array.isArray(leaf.parameters.__options)) throw new CompileError(`The Orders ${JSON.stringify(leaf.parameters.orders)} are not all Orders of the faction's army rule.`);
+        if (out.only_options !== undefined) throw new CompileError("An officer's Orders are narrowed by one only-orders rule.");
+        out.only_options = leaf.parameters.__options;
+        break;
+      }
       default: throw new CompileError(`order-rule ${String(leaf.parameters.rule)} has no issue-orders field.`);
     }
   }
@@ -644,6 +660,8 @@ function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly n
       if (sentences.length !== 1) throw new CompileError(`${leaf.family_id} needs exactly one sentence after it, its own effect.`);
     } else if (ONE_OR_MORE_CONTAINERS.has(leaf.family_id)) {
       if (groups.length < 1) throw new CompileError(`${leaf.family_id} needs at least one option after it.`);
+    } else if (leaf.family_id === "issue-orders-open" && groups.length === 0) {
+      // An officer's Orders come from its faction's army rule (buildIssueOrders).
     } else if (groups.length < 2) {
       throw new CompileError(`${leaf.family_id} needs at least two options after it, one sentence each.`);
     }

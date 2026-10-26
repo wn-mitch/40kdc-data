@@ -3884,7 +3884,9 @@ class IssueOrdersEffect(TypedDict):
     ends_on: NotRequired[list[Literal["battle-shocked"]]]
     one_at_a_time: NotRequired[Literal[True]]
     benefit: NotRequired[KeywordPredicate]
-    options: list[Option5]
+    options: NotRequired[list[Option5]]
+    menu_from: NotRequired[EntityId]
+    only_options: NotRequired[list[EntityId]]
 
 
 class NamedRegionStateEffect(TypedDict):

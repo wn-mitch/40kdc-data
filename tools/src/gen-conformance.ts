@@ -2760,6 +2760,18 @@ function genEffectTranslation(): void {
       scope: { duration: "permanent" },
     },
     {
+      // An officer's datasheet issues one Order from its army rule's menu, limited to two of them.
+      id: "issue-orders-menu-from",
+      effect: {
+        type: "issue-orders",
+        count: 1,
+        eligible: { any_of: ["INFANTRY", "MOUNTED"] },
+        menu_from: "orders-menu-example",
+        only_options: ["take-aim", "fix-bayonets"],
+      },
+      scope: { duration: "permanent" },
+    },
+    {
       // An army-wide emitter: the aura is measured from any friendly model with the keywords.
       id: "aura-army-emitter-tiered-capped",
       effect: {

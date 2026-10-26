@@ -7808,19 +7808,66 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "tyranids",
     "detachment_id": "crusher-stampede",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "act-on-death",
+      "target": "event-object",
+      "modifier": {
+        "act": "fight",
+        "resolution": "after-attacking-unit-finishes",
+        "removal": "after-destroyed-model-fights",
+        "gate": {
+          "dice": "D6",
+          "threshold": 3,
+          "comparison": "gte",
+          "modifiers": []
+        },
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "attack-is",
+              "parameters": {
+                "attack_type": "melee"
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "happened",
+                  "parameters": {
+                    "subject": "this-model",
+                    "event": "selected",
+                    "filter": {
+                      "to": "fight"
+                    },
+                    "window": "phase"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
+    },
+    "source_digest": "a4450e67e766a912da0e8a7cb7cc7db2429a0ceeaea1036c392703f1c57ada8a"
   },
   {
     "ability_id": "floating-death-spore-mines-tyranids",
