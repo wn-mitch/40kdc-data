@@ -418,13 +418,16 @@ describe("Semantic authoring dice-roll@2 roll_var binding", () => {
     });
   });
 
-  it("folds several dice with a per-die success band into mortal wounds per success, and refuses any other effect", () => {
+  it("folds several dice with a per-die success band into mortal wounds per success, counts them for a healing amount, and refuses an effect with no quantity", () => {
     const roll = () => leaf("EVENT", "dice-roll", { dice: "D6", count: 6 }, 4);
     const band = () => leaf("CONDITION", "roll-result", { from: 5, to: 6 });
     expect(compiled([roll(), band(), leaf("EFFECT", "mortal-wounds", { recipient: "this-unit", count: "1" })]).mechanics.effect)
       .toEqual({ type: "mortal-wounds", target: "this-unit", modifier: { count: 1, per: "success", roll: { dice: 6, threshold: 5 } } });
-    // Rolling one die per something other than mortal wounds has no DSL shape: an error, not a guess.
-    expect(compileLeaves([roll(), band(), leaf("EFFECT", "regain-wounds", { subject: "this-model", amount: "1" }, 3)]).ok).toBe(false);
+    // A heal of 1 per success is a heal of as many wounds as there are successes.
+    expect(compiled([roll(), band(), leaf("EFFECT", "regain-wounds", { subject: "this-model", amount: "1" }, 3)]).mechanics.effect)
+      .toEqual({ type: "roll", dice: "6D6", roll_var: "result", effect: { type: "heal", target: "this-model", modifier: { amount: { roll_var: "result", successes_on: 5 } } } });
+    // A Command point gain takes no quantity, so a count of successes has no DSL shape there: an error, not a guess.
+    expect(compileLeaves([roll(), band(), leaf("EFFECT", "resource-gain", { pool: "command-point", amount: 1 }, 4)]).ok).toBe(false);
     expect(() => normalizeFingerprintParameters("dice-roll", { dice: "D6", count: 1 }, 4)).toThrow(/count/u);
   });
 

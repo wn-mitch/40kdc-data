@@ -932,7 +932,25 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   // Where an "Or:" group ends: another combinator, or a moment after the first effect (a later part).
   const leadingEffect = list.findIndex((leaf) => leaf.role === "EFFECT");
   const choiceBoundaries = [...combinators, ...triggerIndexes.filter((index) => leadingEffect !== -1 && index > leadingEffect)];
+  // The "Or:" markers of one stretch (no other combinator or later moment between them) make one choice.
+  const choices = new Set(combinators.filter((index) => list[index]!.parameters.choice === true));
+  const choiceLimits = choiceBoundaries.filter((index) => !choices.has(index));
+  const handledChoices = new Set<number>();
   for (const combinator of combinators) {
+    if (choices.has(combinator)) {
+      if (handledChoices.has(combinator)) continue;
+      const lower = Math.max(-1, ...choiceLimits.filter((index) => index < combinator));
+      const upper = Math.min(Number.POSITIVE_INFINITY, ...choiceLimits.filter((index) => index > combinator));
+      const markers = combinators.filter((index) => choices.has(index) && index > lower && index < upper);
+      for (const index of markers) handledChoices.add(index);
+      // A bound duration would sit inside the choice's options, which the choice does not carry (no split form yet).
+      if (planned.some((item) => item.index > lower && item.index < upper && boundDuration.has(item.index))) errors.push(CONFLICTING_DURATIONS);
+      else {
+        const problem = chooseBetweenGroups(planned, markers, choiceLimits);
+        if (problem) errors.push(problem);
+      }
+      continue;
+    }
     const clause = places[combinator]!.clause;
     const own = planned.filter((item) => places[item.index]!.clause === clause && !optionalSpends.has(item.leaf));
     // "(instead of more than 8\")" after a move-end that replaces the usual threshold: the move-end leaf consumes
@@ -1035,12 +1053,6 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
       else errors.push(`"Instead" after ${previous.leaf.family_id} must add 6" or 8" to Move; ${replacement.leaf.family_id} has no DSL fragment there.`);
       continue;
     }
-    // "X. Or: Y and Z" with no earlier effect of Y's kind: the player picks one group of effects.
-    if (!replaced && list[combinator]!.parameters.choice === true) {
-      const problem = chooseBetweenGroups(planned, combinator, choiceBoundaries.filter((index) => index !== combinator));
-      if (problem) errors.push(problem);
-      continue;
-    }
     if (!replaced) {
       // "It can move up to 6\" instead of up to 3\"": the default it replaces is another rule's,
       // printed after "instead of", so the clause's effect already says the new value.
@@ -1056,16 +1068,6 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
           if (problem !== null) errors.push(problem);
         }
       }
-      continue;
-    }
-    // "Re-roll Hit rolls of 1. Or: if …, re-roll Hit rolls": the player picks one of the two, each
-    // under its own conditions.
-    if (list[combinator]!.parameters.choice === true) {
-      // A bound duration would sit inside the choice's options, which the choice does not carry (no split form yet).
-      if (boundDuration.has(replaced.index) || boundDuration.has(replacement.index)) { errors.push(CONFLICTING_DURATIONS); continue; }
-      replaced.node = { type: "choice", options: [gated(replaced.gate, replaced.node), gated(replacement.gate, replacement.node)] };
-      replaced.gate = [];
-      planned.splice(planned.indexOf(replacement), 1);
       continue;
     }
     const alternative = allOf(replacement.gate.filter((node) => !isRollMarker(node)));

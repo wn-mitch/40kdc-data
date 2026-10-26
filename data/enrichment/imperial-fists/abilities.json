@@ -47,27 +47,34 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "460e8d7dca88ed24928e86147c54d1edbb5fdb94d524f7ebc692e9f7e2438e5f",
+    "source_digest": "80cd5be0e2a852eaa4acdc6704cf2e2031013032a3bac9fab311dfe1d992032b",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "imperial-fists",
     "detachment_id": "ceramite-sentinels",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "choice",
-      "choice_label": "Weapon ability",
       "options": [
         {
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "weapons": {
-              "type": "ranged"
-            },
+            "keywords": [
+              {
+                "keyword_id": "lethal-hits"
+              }
+            ]
+          }
+        },
+        {
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
+          "modifier": {
             "keywords": [
               {
                 "keyword_id": "sustained-hits",
@@ -79,56 +86,77 @@
           }
         },
         {
-          "type": "weapon-ability-grant",
-          "target": "this-unit",
-          "modifier": {
-            "weapons": {
-              "type": "ranged"
-            },
-            "keywords": [
-              {
-                "keyword_id": "lethal-hits"
-              }
-            ]
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "designated": "entrenched"
-              }
-            }
-          },
-          "effect": {
-            "type": "weapon-ability-grant",
-            "target": "this-unit",
-            "modifier": {
-              "weapons": {
-                "type": "ranged"
-              },
-              "keywords": [
-                {
-                  "keyword_id": "sustained-hits",
-                  "parameters": {
-                    "value": 1
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "this-unit",
+                  "filter": {
+                    "designated": "entrenched"
                   }
-                },
-                {
-                  "keyword_id": "lethal-hits"
                 }
-              ]
+              },
+              "effect": {
+                "type": "weapon-ability-grant",
+                "target": "this-unit",
+                "modifier": {
+                  "keywords": [
+                    {
+                      "keyword_id": "lethal-hits"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "this-unit",
+                  "filter": {
+                    "designated": "entrenched"
+                  }
+                }
+              },
+              "effect": {
+                "type": "weapon-ability-grant",
+                "target": "this-unit",
+                "modifier": {
+                  "keywords": [
+                    {
+                      "keyword_id": "sustained-hits",
+                      "parameters": {
+                        "value": 1
+                      }
+                    }
+                  ]
+                }
+              }
             }
-          }
+          ]
         }
       ]
     },
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "Select Sustained Hits 1 or Lethal Hits; an Entrenched unit gets both instead. Target must not have been selected to shoot this phase"
+    "community_notes": "Select Sustained Hits 1 or Lethal Hits; an Entrenched unit gets both instead. Target must not have been selected to shoot this phase",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "attack"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS ASTARTES"
+        ]
+      }
+    }
   },
   {
     "ability_id": "castellum-omnivox-ceramite-sentinels-imperial-fists",

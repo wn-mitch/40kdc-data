@@ -6468,7 +6468,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "41a72bd04a383f41ee61457fca59b2eb2e885516a9ca4743d7025785c50286da",
     "version": "2025-q3",
@@ -6479,19 +6479,38 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "mortal-wounds",
-      "target": "event-subject",
-      "modifier": {
-        "count": 1,
-        "per": "success",
-        "roll": {
-          "dice": 6,
-          "threshold": 4
-        }
+      "type": "roll",
+      "dice": "6D6",
+      "roll_var": "result",
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "mortal-wounds",
+            "target": "event-subject",
+            "modifier": {
+              "count": {
+                "roll_var": "result",
+                "successes_on": 4
+              }
+            }
+          },
+          {
+            "type": "heal",
+            "target": "this-unit",
+            "modifier": {
+              "amount": {
+                "roll_var": "result",
+                "successes_on": 4
+              },
+              "per": "unit"
+            }
+          }
+        ]
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "community_notes": "[APPROX] 1CP, once per battle round (not gated — no once-per-battle-round frequency exists). After an enemy unit fails a Battle-shock test, a CHAOS KNIGHTS unit within 12\" rolls 6D6: each 4+ deals that enemy unit 1 mortal wound. The paired heal (one model in your unit regains 1 lost wound per 4+) cannot share the same dice pool and is not modeled. Full rule in raw-text store.",
     "trigger": {
@@ -6502,43 +6521,11 @@
       },
       "subject": {
         "owner": "enemy"
-      },
-      "optional": true,
-      "condition": {
-        "operator": "or",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "command"
-            }
-          },
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
-          },
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "charge"
-            }
-          },
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
-          }
-        ]
       }
+    },
+    "usage": {
+      "frequency": "once-per-battle-round",
+      "per": "army"
     }
   },
   {

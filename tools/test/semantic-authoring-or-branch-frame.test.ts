@@ -277,3 +277,42 @@ describe("Semantic authoring antecedent frames on an Or: branch", () => {
     });
   });
 });
+
+describe("Semantic authoring \"Or:\" options as whole groups", () => {
+  const pick: Item = ["Or:", "instead", { choice: true }];
+  const stat = (wording: string, characteristics: string[], value: number, weaponType: string): Item =>
+    [wording, "characteristic-modifier", { subject: "this-unit", characteristics, operation: "improve", value, weapon_type: weaponType }];
+  const give = (wording: string, name: string, weaponType: string): Item => [wording, "weapon-ability-grant", { subject: "this-unit", weapon_type: weaponType, keyword: name }];
+
+  it("keeps an option's rider in that option, not applied beside the choice", () => {
+    const text = "The squad's shooting kit receives +2 S. Or: +2 S and AP, together with Hazardous.";
+    const effect = compiled(text, placed(text,
+      ["The squad's shooting kit receives", "weapon-property-scope", { subject: "this-unit", weapon_type: "ranged" }],
+      stat("+2 S", ["S"], 2, "ranged"),
+      pick,
+      stat("+2 S and AP", ["S", "AP"], 2, "ranged"),
+      give("Hazardous", "Hazardous", "ranged"),
+    ));
+    expect(effect.type).toBe("choice");
+    expect(effect.options).toHaveLength(2);
+    expect(effect.options[1].type).toBe("sequence");
+    expect(JSON.stringify(effect.options[1])).toContain("hazardous");
+    expect(JSON.stringify(effect.options[0])).not.toContain("hazardous");
+  });
+
+  it("makes one choice of three options from two markers, the third under its own condition", () => {
+    const text = "The squad's kit gains Precision. Or: Lance. Or: If the squad is entrenched, Precision and Lance.";
+    const effect = compiled(text, placed(text,
+      give("Precision", "Precision", "all"),
+      pick,
+      give("Lance", "Lance", "all"),
+      pick,
+      ["If the squad is entrenched", "designated-filter", { subject: "this-unit", tag: "entrenched", negated: false }],
+      give("Precision", "Precision", "all"),
+      give("Lance", "Lance", "all"),
+    ));
+    expect(effect.type).toBe("choice");
+    expect(effect.options.map((option: Record<string, unknown>) => option.type)).toEqual(["weapon-ability-grant", "weapon-ability-grant", "sequence"]);
+    for (const step of effect.options[2].steps) expect(step).toMatchObject({ type: "conditional", condition: { type: "matches", parameters: { filter: { designated: "entrenched" } } } });
+  });
+});

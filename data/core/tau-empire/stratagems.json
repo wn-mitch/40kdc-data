@@ -491,7 +491,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Battlesuit",
+        "Character"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "experimental-ammunition-experimental-prototype-cadre-tau-empire",
     "game_version": {
       "edition": "11th",

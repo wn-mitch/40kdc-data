@@ -41,6 +41,8 @@ const body = (items: Planned[]): Node => {
 export function perSuccess(planned: Planned[], banded: Planned[], dice: string, count: number, bound: boolean, perModel?: string, forEach?: Node): Node[] {
   if (dice !== "D6") throw new CompileError(`Rolling ${count} ${dice} has no DSL shape; only several D6 fold into a count per success.`);
   if (bound) throw new CompileError("A roll of several dice cannot also bind a roll_var.");
+  if (perModel === undefined && forEach === undefined && banded.some((item) => item.leaf.family_id !== "mortal-wounds")
+    && banded.every((item) => COUNTED_TYPES.has(String(item.node.type)))) return countedSuccesses(planned, banded, count);
   for (const item of banded) {
     const markers = item.gate.filter(isRollMarker);
     if (markers.length !== 1) throw new CompileError("One effect is gated by two result bands.");
@@ -65,8 +67,39 @@ export function perSuccess(planned: Planned[], banded: Planned[], dice: string, 
   return planned.map((item) => gated(item.gate, item.node));
 }
 
+/** Effects whose amount takes a quantity, so it can be the count of a roll's successes. */
+const COUNTED_TYPES = new Set(["mortal-wounds", "heal", "return-models", "destroy-models", "resource-gain", "resource-spend"]);
+
 /** The amount fields of an effect that can read a bound roll. */
 const AMOUNT_FIELDS = ["value", "count", "amount"];
+
+/**
+ * "Roll six D6. For each 4+, that enemy unit suffers 1 mortal wound and one model in your unit regains
+ * up to 1 lost wound": several effects done once per success, at least one of them not a mortal wound.
+ * The dice are rolled once as a `roll` step, and each effect's amount of 1 becomes the number of its
+ * dice that rolled the band's value or higher. Every banded effect must share that one band and an
+ * amount of 1; a band counted from the bottom face ("for each 1") has no success count.
+ */
+function countedSuccesses(planned: Planned[], banded: Planned[], count: number): Node[] {
+  const rollVar = "result";
+  const bands = banded.map((item) => item.gate.filter(isRollMarker));
+  if (bands.some((markers) => markers.length !== 1 || JSON.stringify(markers) !== JSON.stringify(bands[0]))) {
+    throw new CompileError("Effects done per success of one roll must share one result band.");
+  }
+  const band = bands[0]![0]!;
+  const from = Number(band.from);
+  if (from < 2 || from > 6 || Number(band.to ?? 6) !== 6) throw new CompileError("A success count reads a band from 2+ to 6 (\"for each 4+\").");
+  const counted = (item: Planned): Node => {
+    const modifier = item.node.modifier as Node | undefined;
+    const fields = modifier === undefined ? [] : AMOUNT_FIELDS.filter((field) => field in modifier);
+    if (fields.length !== 1 || Number(modifier![fields[0]!]) !== 1) throw new CompileError(`${item.leaf.family_id} done per success needs an amount of 1 to count successes with.`);
+    return gated(item.gate.filter((node) => !isRollMarker(node)), { ...item.node, modifier: { ...modifier, [fields[0]!]: { roll_var: rollVar, successes_on: from } } });
+  };
+  const inside = banded.map(counted);
+  const rolled: Node = { type: "roll", dice: `${count}D6`, roll_var: rollVar, effect: inside.length === 1 ? inside[0]! : { type: "sequence", steps: inside } };
+  const first = planned.indexOf(banded[0]!);
+  return planned.flatMap((item, at) => at === first ? [rolled] : banded.includes(item) ? [] : [gated(item.gate, item.node)]);
+}
 
 /** Rebuild an effect with each amount equal to the roll's dice read from the roll instead; null when none is. */
 function readRoll(node: Node, dice: string, rollVar: string): Node | null {

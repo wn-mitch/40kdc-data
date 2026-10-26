@@ -7230,26 +7230,25 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "d6b92251ae7265b21fb76e568bddb8794dfbabe940410a087a48017a38e9a795",
+    "source_digest": "3dcd43549da2ed28acc587a5187f9555ea8b65192fecfce68db9d31e68949e19",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "tau-empire",
     "detachment_id": "experimental-prototype-cadre",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "choice",
-      "choice_label": "Experimental Ammunition",
       "options": [
         {
           "type": "stat-modifier",
           "target": "this-unit",
           "modifier": {
             "stat": "S",
-            "operation": "add",
+            "operation": "improve",
             "value": 1,
             "weapons": {
               "type": "ranged"
@@ -7260,41 +7259,46 @@
           "type": "sequence",
           "steps": [
             {
-              "type": "stat-modifier",
-              "target": "this-unit",
-              "modifier": {
-                "stat": "S",
-                "operation": "add",
-                "value": 1,
-                "weapons": {
-                  "type": "ranged"
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "stat-modifier",
+                  "target": "this-unit",
+                  "modifier": {
+                    "stat": "S",
+                    "operation": "improve",
+                    "value": 1,
+                    "weapons": {
+                      "type": "ranged"
+                    }
+                  }
+                },
+                {
+                  "type": "stat-modifier",
+                  "target": "this-unit",
+                  "modifier": {
+                    "stat": "AP",
+                    "operation": "improve",
+                    "value": 1,
+                    "weapons": {
+                      "type": "ranged"
+                    }
+                  }
                 }
-              }
-            },
-            {
-              "type": "stat-modifier",
-              "target": "this-unit",
-              "modifier": {
-                "stat": "AP",
-                "operation": "improve",
-                "value": 1,
-                "weapons": {
-                  "type": "ranged"
-                }
-              }
+              ]
             },
             {
               "type": "weapon-ability-grant",
               "target": "this-unit",
               "modifier": {
-                "weapons": {
-                  "type": "ranged"
-                },
                 "keywords": [
                   {
                     "keyword_id": "hazardous"
                   }
-                ]
+                ],
+                "weapons": {
+                  "type": "ranged"
+                }
               }
             }
           ]
@@ -7309,6 +7313,19 @@
         "BATTLESUIT",
         "CHARACTER"
       ]
+    },
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "BATTLESUIT",
+          "CHARACTER"
+        ]
+      }
     }
   },
   {

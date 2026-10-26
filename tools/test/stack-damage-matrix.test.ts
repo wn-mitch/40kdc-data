@@ -205,11 +205,13 @@ describe("stack damage loadout search performance", () => {
     };
 
     // The Tiger Shark is not a BATTLESUIT, so The Arro'kon Protocol cannot target it. Guardian
-    // Drones penalise only attacks against the bearer's unit, never its own shooting.
+    // Drones penalise only attacks against the bearer's unit, never its own shooting. Experimental
+    // Ammunition targets only a BATTLESUIT CHARACTER unit, so it cannot either.
     const tigerShark = run(1).winner;
-    expect(tigerShark?.expectedDamage).toBeCloseTo(29.65277777777777, 12);
+    expect(tigerShark?.expectedDamage).toBeCloseTo(29.004629629629623, 12);
     expect(tigerShark?.stratagem?.id).not.toBe("the-arrokon-protocol-retaliation-cadre-tau-empire");
-    expect(run(2).winner?.expectedDamage).toBeCloseTo(29.65277777777777, 12);
+    expect(tigerShark?.stratagem?.id).not.toBe("experimental-ammunition-experimental-prototype-cadre-tau-empire");
+    expect(run(2).winner?.expectedDamage).toBeCloseTo(29.004629629629623, 12);
     const withBroadside = run(3);
     expect(withBroadside.candidateCounts).toMatchObject({
       bodyguards: 3,

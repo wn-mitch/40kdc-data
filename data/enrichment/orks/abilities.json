@@ -7488,79 +7488,51 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "1d1780594b0cc11d3d3cbbe585184d6f427bc52a28cd2324dfe921abc9ed26b5",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "all_of": [
-                  "ORKS"
-                ]
-              }
-            }
-          },
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "all_of": [
-                  "INFANTRY"
-                ]
-              }
+      "type": "choice",
+      "options": [
+        {
+          "type": "stat-modifier",
+          "target": "this-model",
+          "modifier": {
+            "stat": "A",
+            "operation": "improve",
+            "value": 1,
+            "weapons": {
+              "type": "melee"
             }
           }
-        ]
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "model-count",
+            "parameters": {
+              "subject": "this-unit",
+              "min": 11
+            }
+          },
+          "effect": {
             "type": "stat-modifier",
             "target": "this-model",
             "modifier": {
               "stat": "A",
-              "operation": "add",
-              "value": 1,
+              "operation": "improve",
+              "value": 2,
               "weapons": {
                 "type": "melee"
               }
             }
-          },
-          {
-            "type": "conditional",
-            "condition": {
-              "type": "model-count",
-              "parameters": {
-                "subject": "this-unit",
-                "min": 11
-              }
-            },
-            "effect": {
-              "type": "stat-modifier",
-              "target": "this-model",
-              "modifier": {
-                "stat": "A",
-                "operation": "add",
-                "value": 1,
-                "weapons": {
-                  "type": "melee"
-                }
-              }
-            }
           }
-        ]
-      }
+        }
+      ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "unit_ids": [],
     "ability_type": "enhancement",

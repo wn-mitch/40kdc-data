@@ -266,3 +266,30 @@ describe("a roll whose result an effect takes as its amount", () => {
     expect(result.ok ? [] : result.errors).toContainEqual(expect.stringMatching(/no result band/u));
   });
 });
+
+describe("Semantic authoring several dice counted per success", () => {
+  const base = () => authored("adeptus-mechanicus", "control-edict-adeptus-mechanicus");
+  // Fabricated shape: "Roll five D6. For each 4+, that unit suffers 1 mortal wound and your unit regains up to 1 lost wound."
+  const leaves = (heal: Record<string, unknown>) => ([
+    ["dice-roll", { dice: "D6", count: 5 }, 6],
+    ["roll-result", { from: 4 }, 2],
+    ["mortal-wounds", { recipient: "this-unit", count: "1" }, 5],
+    ["regain-wounds", heal, 4],
+  ] as const).map(([family, parameters, version]) => leaf(familyRole(family, version), family, parameters, version));
+
+  it("rolls once and counts the successes for every effect done per success", () => {
+    expect(compiled(leaves({ subject: "this-unit", amount: "1", per: "unit" })).mechanics.effect).toEqual({
+      type: "roll", dice: "5D6", roll_var: "result",
+      effect: { type: "sequence", steps: [
+        { type: "mortal-wounds", target: "this-unit", modifier: { count: { roll_var: "result", successes_on: 4 } } },
+        { type: "heal", target: "this-unit", modifier: { amount: { roll_var: "result", successes_on: 4 }, per: "unit" } },
+      ] },
+    });
+    expect(rendered(base(), leaves({ subject: "this-unit", amount: "1", per: "unit" }))).toContain("the number of those dice that rolled a 4+");
+  });
+
+  it("refuses an amount other than 1 per success, which a count of successes cannot scale", () => {
+    const result = compileLeaves(leaves({ subject: "this-unit", amount: "D3", per: "unit" }));
+    expect(result.ok ? [] : result.errors).toEqual([expect.stringContaining("needs an amount of 1")]);
+  });
+});

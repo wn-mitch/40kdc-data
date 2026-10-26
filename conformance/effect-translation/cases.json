@@ -17026,77 +17026,49 @@
   {
     "caseId": "ferocious-show-off-green-tide-orks#264",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "all_of": [
-                  "ORKS"
-                ]
-              }
-            }
-          },
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "all_of": [
-                  "INFANTRY"
-                ]
-              }
+      "type": "choice",
+      "options": [
+        {
+          "type": "stat-modifier",
+          "target": "this-model",
+          "modifier": {
+            "stat": "A",
+            "operation": "improve",
+            "value": 1,
+            "weapons": {
+              "type": "melee"
             }
           }
-        ]
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "model-count",
+            "parameters": {
+              "subject": "this-unit",
+              "min": 11
+            }
+          },
+          "effect": {
             "type": "stat-modifier",
             "target": "this-model",
             "modifier": {
               "stat": "A",
-              "operation": "add",
-              "value": 1,
+              "operation": "improve",
+              "value": 2,
               "weapons": {
                 "type": "melee"
               }
             }
-          },
-          {
-            "type": "conditional",
-            "condition": {
-              "type": "model-count",
-              "parameters": {
-                "subject": "this-unit",
-                "min": 11
-              }
-            },
-            "effect": {
-              "type": "stat-modifier",
-              "target": "this-model",
-              "modifier": {
-                "stat": "A",
-                "operation": "add",
-                "value": 1,
-                "weapons": {
-                  "type": "melee"
-                }
-              }
-            }
           }
-        ]
-      }
+        }
+      ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "expected": {
-      "text": "If the unit is an ORKS INFANTRY unit, for the rest of the battle:\n  -> Add 1 to the Attacks characteristic of melee weapons equipped by this model.\n  -> If the unit contains 11+ models, add 1 to the Attacks characteristic of melee weapons equipped by this model."
+      "text": "Select one of the following:\n  - Improve the Attacks characteristic of melee weapons equipped by this model by 1.\n  - If the unit contains 11+ models, improve the Attacks characteristic of melee weapons equipped by this model by 2."
     }
   },
   {
