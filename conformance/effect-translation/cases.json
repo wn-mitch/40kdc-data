@@ -2583,7 +2583,55 @@
     }
   },
   {
-    "caseId": "admired-leader-auxiliary-cadre-tau-empire#61",
+    "caseId": "adept-of-the-omnissiah-medusas-wrath-iron-hands#61",
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "event-object",
+      "modifier": {
+        "threshold": 5
+      }
+    },
+    "scope": {
+      "duration": "attack-sequence"
+    },
+    "applies_to": {
+      "all_of": [
+        "TECHMARINE"
+      ]
+    },
+    "usage": {
+      "frequency": "once-per-battle-round",
+      "per": "army"
+    },
+    "trigger": {
+      "event": "targets-selected",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "kind": "attack"
+      },
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS ASTARTES",
+          "VEHICLE"
+        ],
+        "within": {
+          "of": "this-unit",
+          "range": {
+            "inches": 6
+          }
+        }
+      },
+      "optional": true
+    },
+    "expected": {
+      "text": "When an enemy unit targets a friendly ADEPTUS ASTARTES VEHICLE unit within 6\" of the unit, you may use this ability, once per battle round per army, until that unit finishes resolving its attacks, that unit has the Feel No Pain 5+ ability.\nApplies to: units with TECHMARINE."
+    }
+  },
+  {
+    "caseId": "admired-leader-auxiliary-cadre-tau-empire#62",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -2662,7 +2710,7 @@
     }
   },
   {
-    "caseId": "adrenaline-junkies-orks#62",
+    "caseId": "adrenaline-junkies-orks#63",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -2737,7 +2785,7 @@
     }
   },
   {
-    "caseId": "adrenalised-onslaught-unending-swarm-tyranids#63",
+    "caseId": "adrenalised-onslaught-unending-swarm-tyranids#64",
     "effect": {
       "type": "move-modifier",
       "target": "this-unit",
@@ -2766,7 +2814,7 @@
     }
   },
   {
-    "caseId": "advance-and-claim-rapid-evisceration-emperors-children#64",
+    "caseId": "advance-and-claim-rapid-evisceration-emperors-children#65",
     "effect": {
       "type": "select-objective",
       "selector": {
@@ -2798,7 +2846,7 @@
     }
   },
   {
-    "caseId": "advanced-armour-tau-empire#65",
+    "caseId": "advanced-armour-tau-empire#66",
     "effect": {
       "type": "feel-no-pain",
       "target": "this-unit",
@@ -2815,7 +2863,7 @@
     }
   },
   {
-    "caseId": "advanced-guardian-drone-tau-empire#66",
+    "caseId": "advanced-guardian-drone-tau-empire#67",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -2842,7 +2890,7 @@
     }
   },
   {
-    "caseId": "advanced-quantum-shielding-necrons#67",
+    "caseId": "advanced-quantum-shielding-necrons#68",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -2877,7 +2925,7 @@
     }
   },
   {
-    "caseId": "advanced-scouting-tau-empire#68",
+    "caseId": "advanced-scouting-tau-empire#69",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -2900,28 +2948,6 @@
     },
     "expected": {
       "text": "During the Shooting phase, until the end of the turn, you can re-roll a failed Hit roll."
-    }
-  },
-  {
-    "caseId": "aegis-of-the-emperor-adeptus-custodes#69",
-    "effect": {
-      "type": "feel-no-pain",
-      "target": {
-        "owner": "friendly",
-        "all_of": [
-          "ADEPTUS CUSTODES"
-        ]
-      },
-      "modifier": {
-        "threshold": 5,
-        "against": "mortal"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "expected": {
-      "text": "All friendly ADEPTUS CUSTODES units have the Feel No Pain 5+ ability against mortal wounds."
     }
   },
   {

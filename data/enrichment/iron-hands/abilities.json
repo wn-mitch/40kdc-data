@@ -5,9 +5,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "2bb49ae72f5ddfafdca6072fd047f36e771430a2a82fd14d648bb8915f9e3b7f",
+    "source_digest": "8bd667d22eeeff5b7940fe554cf66c9fd828530818eb7ee294814ad87054e577",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -16,43 +16,41 @@
     "ability_type": "enhancement",
     "behavior": "reactive",
     "trigger": {
-      "event": "after-roll",
+      "event": "targets-selected",
       "subject": {
-        "owner": "friendly"
+        "owner": "enemy"
       },
       "filter": {
-        "roll": "save"
+        "kind": "attack"
       },
-      "proximity": {
-        "of": "this-model",
-        "range": {
-          "inches": 6
-        }
-      }
-    },
-    "usage": {
-      "frequency": "once-per-battle-round",
-      "per": "model"
-    },
-    "effect": {
-      "type": "stat-modifier",
-      "target": {
+      "object": {
         "owner": "friendly",
+        "all_of": [
+          "ADEPTUS ASTARTES",
+          "VEHICLE"
+        ],
         "within": {
+          "of": "this-unit",
           "range": {
             "inches": 6
           }
         }
       },
+      "optional": true
+    },
+    "usage": {
+      "frequency": "once-per-battle-round",
+      "per": "army"
+    },
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "event-object",
       "modifier": {
-        "stat": "D",
-        "operation": "set",
-        "value": 0,
-        "incoming": true
+        "threshold": 5
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "attack-sequence"
     },
     "applies_to": {
       "all_of": [

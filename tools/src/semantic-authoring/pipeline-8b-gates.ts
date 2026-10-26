@@ -165,6 +165,7 @@ const OUTSIDE_CRUNCHER_SCOPE: ReadonlyArray<{ reason: RegExp; why: string }> = [
   { reason: /^stat-modifier: operation "set" not supported$/u, why: "setting a characteristic has no single delta" },
   { reason: /^roll-result on "(hit|wound|save)": only a critical threshold on hit or wound rolls is modelled$/u, why: "fixed roll outcomes beyond a critical threshold are not modelled" },
   { reason: /^target "event-subject" is not resolved by the buff engine$/u, why: "the triggering unit is bound only at runtime" },
+  { reason: /^target "event-object" is not resolved by the buff engine$/u, why: "the unit the triggering action aimed at is bound only at runtime" },
   { reason: /^select-weapon: a bound weapon is not resolved by the buff engine$/u, why: "a chosen weapon is bound only at runtime" },
 ];
 

@@ -227,6 +227,12 @@ describe("pipeline-8b cruncher unsupported classification", () => {
       expect(classifyUnsupported(unsupported)).toEqual({ honestUnknown: 0, outsideDamagePath: 1, unrecognizedShape: 0 });
     });
 
+    it("reports the unit a triggering action aimed at as marked outside the cruncher's scope", () => {
+      const { unsupported } = effectToBuffs({ type: "feel-no-pain", target: "event-object", modifier: { threshold: 5 } }, source, ctx);
+      expect(unsupported.map((item) => item.reason)).toEqual(['target "event-object" is not resolved by the buff engine']);
+      expect(classifyUnsupported(unsupported)).toEqual({ honestUnknown: 0, outsideDamagePath: 1, unrecognizedShape: 0 });
+    });
+
     it("judges a friendly trigger subject as the matching unit sees it", () => {
       const bound = assumeEventSubjectMatches(filtered, effect);
       expect(bound.perspective).toBe("attacker");
