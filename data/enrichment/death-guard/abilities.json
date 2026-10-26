@@ -1757,32 +1757,59 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "17a669372fbc7251a521236020dda2a9574c171bd982c9f92c3837de68bb7bd1",
+    "source_digest": "71db4282ba527d20675223e8247fba33df83a1450cc54399fc0a87f5e9448025",
     "version": "2025-q3",
     "effect": {
-      "type": "set-up",
-      "target": "this-unit",
-      "modifier": {
-        "to": "battlefield",
-        "via": "deep-strike",
-        "min_enemy_distance": {
-          "inches": 8
-        },
-        "min_distance_from": {
-          "of": {
-            "owner": "enemy",
-            "designated": "AFFLICTED"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
           },
-          "range": {
-            "inches": 6
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
           }
+        ]
+      },
+      "effect": {
+        "type": "set-up",
+        "target": "this-unit",
+        "modifier": {
+          "to": "battlefield",
+          "away_from": [
+            {
+              "of": {
+                "owner": "enemy",
+                "designated": "afflicted"
+              },
+              "range": {
+                "inches": 6
+              }
+            },
+            {
+              "of": {
+                "owner": "enemy",
+                "not_designated": "afflicted"
+              },
+              "range": {
+                "inches": 8
+              }
+            }
+          ]
         }
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "unit_ids": [
       "deathshroud-terminators"
@@ -1792,8 +1819,16 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
       "event": "set-up",
-      "filter": {
-        "from": "deep-strike"
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "used",
+          "filter": {
+            "kind": "ability",
+            "id": "deep-strike"
+          },
+          "window": "event"
+        }
       }
     },
     "faction_id": "death-guard"
