@@ -918,7 +918,7 @@ function inheritedPostfixFilter(out: readonly CompileLeaf[], list: readonly Comp
 
 /** An effect bound to the units of the unit-filter right after it (compile-antecedent.ts postfixFilter). */
 function postfixRecipient(leaf: CompileLeaf | undefined): boolean {
-  return leaf !== undefined && leaf.role === "EFFECT" && leaf.parameters.subject_filter === undefined && Object.values(leaf.parameters).includes(FILTERED_UNITS);
+  return leaf !== undefined && (leaf.role === "EFFECT" || leaf.family_id === "chosen-option-grant") && leaf.parameters.subject_filter === undefined && Object.values(leaf.parameters).includes(FILTERED_UNITS);
 }
 
 /**

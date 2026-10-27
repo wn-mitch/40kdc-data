@@ -556,6 +556,8 @@ function namesObjectKeyword(leaves: readonly CompileLeaf[], momentIndex: number,
  */
 const ANY_UNIT_KEYS: Readonly<Record<string, readonly string[]>> = {
   "named-ability-grant": ["subject"], "named-ability-suppression": ["subject"], "named-ability-exchange": ["subject"],
+  // "That Vow is active for" + "friendly K units": the menu's holders are every unit the filter names.
+  "chosen-option-grant": ["holder"],
   "characteristic-modifier": ["subject"], "weapon-ability-grant": ["subject"], "weapon-ability-range": ["subject"], "keyword-grant": ["subject"], "feel-no-pain": ["subject"],
   "regain-wounds": ["subject"], "return-models": ["subject"], "eligibility-permission": ["subject", "into"], "core-ability-grant": ["subject"],
   "invulnerable-save": ["subject"], "ability-record-grant": ["subject"], "move-through": ["subject"],

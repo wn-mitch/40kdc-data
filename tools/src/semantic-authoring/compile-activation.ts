@@ -123,5 +123,32 @@ export function retargetMenu(node: unknown, holder: unknown): unknown {
   if (typeof holder === "object" && holder !== null && record.type === "attack-is") {
     return { operator: "and", operands: [record, { type: "matches", parameters: { filter: holder, subject: "attacker" } }] };
   }
-  return Object.fromEntries(Object.entries(record).map(([key, value]) => [key, UNIT_KEYS.has(key) && value === "this-unit" ? holder : retargetMenu(value, holder)]));
+  return Object.fromEntries(Object.entries(record).map(([key, value]) => {
+    if (UNIT_KEYS.has(key) && value === "this-unit") return [key, holder];
+    // A granted definition is the grantee's own ability: its "this unit" is each unit it is granted to, not the holder.
+    if (key === "definition") return [key, value];
+    // "That Vow is active for friendly K units" + "Friendly INFANTRY units have: …": the option's friendly
+    // units are the holders among them, so a keyword-only friendly filter narrows to the holder's keywords too.
+    if (UNIT_KEYS.has(key)) {
+      const narrowed = holderNarrowing(value, holder);
+      if (narrowed !== undefined) return [key, narrowed];
+    }
+    return [key, retargetMenu(value, holder)];
+  }));
+}
+
+/** Keys a keyword-only unit filter may hold: no range, designation or relation that names other units. */
+const KEYWORD_FILTER_KEYS = new Set(["owner", "all_of", "level"]);
+
+/**
+ * A friendly keyword-only filter inside a menu whose holder is a friendly keyword-only filter, joined
+ * with it (all_of of both); undefined for anything else, which stays as printed.
+ */
+function holderNarrowing(value: unknown, holder: unknown): Record<string, unknown> | undefined {
+  const keywordOnly = (filter: unknown): filter is { owner: string; all_of?: string[]; level?: string } =>
+    filter !== null && typeof filter === "object" && !Array.isArray(filter) && (filter as Record<string, unknown>).owner === "friendly"
+    && Object.keys(filter).every((key) => KEYWORD_FILTER_KEYS.has(key));
+  if (!keywordOnly(value) || !keywordOnly(holder) || holder.level !== undefined) return undefined;
+  const all_of = [...new Set([...(holder.all_of ?? []), ...(value.all_of ?? [])])];
+  return { ...value, ...(all_of.length > 0 ? { all_of } : {}) };
 }
