@@ -104,6 +104,7 @@
     "prepack": "npm run build && npm run copy:schemas",
     "pretest": "npm run codegen:data",
     "test": "vitest run",
+    "typecheck:test": "tsc -p tsconfig.test.json",
     "semantic-authoring": "tsx src/semantic-authoring/cli.ts",
     "semantic-authoring:init": "tsx src/semantic-authoring/cli.ts init",
     "semantic-authoring:refresh": "tsx src/semantic-authoring/cli.ts refresh",
