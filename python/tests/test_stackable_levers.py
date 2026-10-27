@@ -329,6 +329,94 @@ def test_boss_selection_stays_off_the_mob_it_leads() -> None:
     assert "fix-pick-a-mob#selected" not in levers
 
 
+def test_rule_gated_on_a_stance_option_binds_to_that_options_lever() -> None:
+    """A buffless option gets its own lever, so the rule gated on it still has one to require."""
+
+    def gated_on(option_id: str, effect: Any) -> dict[str, Any]:
+        return {
+            "type": "conditional",
+            "condition": {
+                "type": "rule-active",
+                "parameters": {"rule": {"ability_id": "fix-granted", "option_id": option_id}},
+            },
+            "effect": effect,
+        }
+
+    raw = army_raw()
+    for record in raw["abilities"]:
+        if record["ability_id"] == "fix-granted":
+            record["effect"]["options"].append(
+                {
+                    "id": "stable-hold",
+                    "name": "Hold",
+                    "effect": {
+                        "type": "move-modifier",
+                        "target": "this-unit",
+                        "modifier": {"applies_to_moves": ["normal"], "distance_bonus": 1},
+                    },
+                }
+            )
+    wound_plus = {
+        "type": "roll-modifier",
+        "target": "this-unit",
+        "modifier": {"roll": "wound", "operation": "add", "value": 1},
+    }
+    raw["abilities"] += [
+        ability(
+            "fix-surge",
+            "stratagem",
+            gated_on("stable-hold", hit_plus("this-unit")),
+            detachment_id="fix-det",
+        ),
+        ability(
+            "fix-edge", "stratagem", gated_on("stable-lethal", wound_plus), detachment_id="fix-det"
+        ),
+    ]
+    raw["detachments"][0]["stratagem_ids"] += ["fix-surge-s", "fix-edge-s"]
+    raw["stratagems"] += [
+        {
+            "id": f"fix-{name}-s",
+            "name": f"Fix {name.title()}",
+            "category": "detachment",
+            "detachment_id": "fix-det",
+            "cp_cost": 1,
+            "phases": ["fight"],
+            "ability_id": f"fix-{name}",
+            "game_version": VERSION,
+        }
+        for name in ("surge", "edge")
+    ]
+    army = Dataset(raw)
+    levers, _ = by_id(MOB, army)
+    surge = levers["fix-surge#stable-hold"]
+    assert surge["requiresOption"] == "fix-grant-rule>fix-granted#stable-hold"
+    assert surge["requiresLever"] == "detachment-stratagem:fix-surge"
+    hold = levers["fix-grant-rule>fix-granted#stable-hold"]
+    assert hold["label"] == "Fix Granted — Hold"
+    assert hold["buffs"] == []
+    assert hold["enabled"] is False
+    assert hold["group"] == "fix-grant-rule>fix-granted?stance"
+    assert levers["fix-edge#stable-lethal"]["requiresOption"] == (
+        "fix-grant-rule>fix-granted#stable-lethal"
+    )
+    # The boss cannot pick the stance, so the rules gated on it offer it nothing.
+    boss_levers, _ = by_id(BOSS, army)
+    assert not any(id_.startswith(("fix-surge#", "fix-edge#")) for id_ in boss_levers)
+    # A declared active rule is evaluated directly instead.
+    declared = army.stackable_buffs_for(
+        MOB,
+        {
+            "phase": "fight",
+            "activeRules": [{"ability_id": "fix-granted", "option_id": "stable-hold"}],
+        },
+    )["buffs"]
+    surge_strat = next(
+        lever for lever in declared if lever["id"] == "detachment-stratagem:fix-surge"
+    )
+    assert len(surge_strat["buffs"]) == 1
+    assert not any("requiresOption" in lever for lever in declared)
+
+
 def test_enhancement_for_a_character_at_its_points_one_per_bearer_none_to_epic_hero() -> None:
     levers, groups = by_id({**MOB, "attachedUnitIds": ["fix-boss"]})
     banner = levers["enhancement:fix-banner-e@fix-boss"]

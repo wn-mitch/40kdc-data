@@ -4,11 +4,12 @@ of a lever pool. :meth:`Dataset.stackable_buffs_for` assembles them with the uni
 
 Python mirror of ``tools/src/data/lever-providers.ts``. Levers are plain dicts with the TS
 camelCase keys (``id``, ``label``, ``buffs``, ``enabled``, ``source``, ``group``, ``cost``,
-``requires``, ``requiresLever``, ``raisesCap``).
+``requires``, ``requiresLever``, ``requiresOption``, ``raisesCap``).
 """
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from typing import TYPE_CHECKING, Any
 
 from wh40kdc.data.enhancement_eligibility import meets_enhancement_groups
@@ -21,20 +22,26 @@ Lever = dict[str, Any]
 
 
 class AbilityLevers:
-    """Levers one provider contributes, the pools they belong to, and the cap raises to resolve.
+    """Levers one provider contributes, the pools they belong to, and the cap raises and stance
+    option requirements to resolve.
 
     ``cap_raises`` maps ``id(lever)`` to the lever and its canonical capacity-raise
-    metadata. The TS map is keyed by the lever object, which remains alive in ``buffs``
-    until the owning stance group is resolved.
+    metadata; ``option_requirements`` maps ``id(lever)`` to the lever and the stance option
+    (``{"ability_id", "option_id"}``) it applies under. The TS maps are keyed by the lever
+    object, which remains alive in ``buffs`` until the owning stance group is resolved.
     """
 
     def __init__(self) -> None:
         self.buffs: list[Lever] = []
         self.groups: list[dict[str, Any]] = []
         self.cap_raises: dict[int, tuple[Lever, dict[str, Any]]] = {}
+        self.option_requirements: dict[int, tuple[Lever, dict[str, str]]] = {}
 
     def raise_cap(self, lever: Lever, raise_: dict[str, Any]) -> None:
         self.cap_raises[id(lever)] = (lever, raise_)
+
+    def require_option(self, lever: Lever, option: dict[str, str]) -> None:
+        self.option_requirements[id(lever)] = (lever, option)
 
 
 def combined_unit(
@@ -171,6 +178,8 @@ def ability_levers(
             )
         if act.get("capRaise"):
             out.raise_cap(lever, act["capRaise"])
+        if act.get("requiresOption"):
+            out.require_option(lever, act["requiresOption"])
         levers.append(lever)
     for grant in grants:
         held.add(grant["abilityId"])
@@ -190,6 +199,7 @@ def ability_levers(
             continue
         levers.extend(granted["buffs"])
         out.groups.extend(granted["groups"])
+        out.option_requirements.update(granted["optionRequirements"])
 
     if gate:
         if translation["applied"] or levers:
@@ -278,6 +288,7 @@ def enhancement_levers(
             out.buffs.extend(levers.buffs)
             out.groups.extend(levers.groups)
             out.cap_raises.update(levers.cap_raises)
+            out.option_requirements.update(levers.option_requirements)
         if len(out.buffs) > before:
             out.groups.append(
                 {"id": group, "label": f"Enhancement on {bearer.name}", "maxActivations": 1}
@@ -351,6 +362,7 @@ def granted_record_levers(
     translation = record.describe_buffs(held, ctx, "attacker")
     buffs: list[Lever] = []
     groups: dict[str, dict[str, Any]] = {}
+    option_requirements: dict[int, tuple[Lever, dict[str, str]]] = {}
     prefix = f"{provider['abilityId']}>"
     requires_lever = provider.get("requiresLever")
     dependency = {"requiresLever": requires_lever} if requires_lever else {}
@@ -382,7 +394,13 @@ def granted_record_levers(
             lever["group"] = group
         lever.update(dependency)
         buffs.append(lever)
-    return {"buffs": buffs, "groups": list(groups.values())}
+        if act.get("requiresOption"):
+            option_requirements[id(lever)] = (lever, act["requiresOption"])
+    return {
+        "buffs": buffs,
+        "groups": list(groups.values()),
+        "optionRequirements": option_requirements,
+    }
 
 
 def resolve_cap_raises(
@@ -411,3 +429,97 @@ def resolve_cap_raises(
             allocation = {key: value for key, value in raise_.items() if key != "ability"}
             out.append({**lever, "raisesCap": {**allocation, "group": group["id"]}})
     return out
+
+
+def resolve_option_requirements(
+    levers: list[Lever],
+    pending: dict[int, tuple[Lever, dict[str, str]]],
+    groups: list[dict[str, Any]],
+    option_label: Callable[[dict[str, str]], str],
+) -> list[Lever]:
+    """Bind each lever gated on a stance option to that option's lever, found by the owning
+    ability's immutable id and the option id. An option that gives no buff of its own has no
+    lever; it gets a buffless one in the stance's pool, so picking it still excludes the other
+    options. A lever whose stance pool is not available is dropped: the unit cannot pick that
+    option."""
+    added: list[Lever] = []
+
+    def option_lever(option: dict[str, str]) -> str | None:
+        group = next(
+            (
+                candidate
+                for candidate in groups
+                if candidate.get("abilityId") == option["ability_id"]
+                and candidate["id"].endswith("?stance")
+            ),
+            None,
+        )
+        if group is None:
+            return None
+        suffix = f"#{option['option_id']}"
+        found = next(
+            (
+                lever
+                for lever in [*levers, *added]
+                if lever.get("group") == group["id"] and lever["id"].endswith(suffix)
+            ),
+            None,
+        )
+        if found is not None:
+            return found["id"]
+        sibling = next(lever for lever in levers if lever.get("group") == group["id"])
+        sibling_id = sibling["id"]
+        lever_id = f"{sibling_id[: sibling_id.rfind('#')]}{suffix}"
+        synthesized: Lever = {
+            "id": lever_id,
+            "label": f"{group['label']} — {option_label(option)}",
+            "buffs": [],
+            "enabled": False,
+            "source": sibling["source"],
+            "group": group["id"],
+        }
+        if sibling.get("requiresLever"):
+            synthesized["requiresLever"] = sibling["requiresLever"]
+        added.append(synthesized)
+        return lever_id
+
+    resolved: list[Lever] = []
+    for lever in levers:
+        entry = pending.get(id(lever))
+        if entry is None or entry[0] is not lever:
+            resolved.append(lever)
+            continue
+        requires_option = option_lever(entry[1])
+        if requires_option is not None:
+            resolved.append({**lever, "requiresOption": requires_option})
+    return [*resolved, *added]
+
+
+def stance_option_name(effect: Any, option_id: str) -> str | None:
+    """The name of option ``option_id`` of a ``stance-select`` in ``effect``, if it has one."""
+    if isinstance(effect, list):
+        for item in effect:
+            found = stance_option_name(item, option_id)
+            if found:
+                return found
+        return None
+    if not isinstance(effect, dict):
+        return None
+    options = effect.get("options")
+    if effect.get("type") == "stance-select" and isinstance(options, list):
+        option = next(
+            (
+                candidate
+                for candidate in options
+                if isinstance(candidate, dict) and candidate.get("id") == option_id
+            ),
+            None,
+        )
+        name = option.get("name") if option is not None else None
+        if isinstance(name, str) and name:
+            return name
+    for value in effect.values():
+        found = stance_option_name(value, option_id)
+        if found:
+            return found
+    return None

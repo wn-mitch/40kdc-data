@@ -501,10 +501,11 @@ describe("abilities-resolver conformance corpus", () => {
           group: a.group ?? null,
           requires: a.requires ?? null,
           capRaise: a.capRaise ?? null,
+          requiresOption: a.requiresOption ?? null,
           buffs: a.buffs.map((b) => b.contribution),
         }));
-        // An expected lever omits `group`, `requires` and `capRaise` when it has none.
-        const want = (c.expected.activatable as Record<string, unknown>[]).map((e) => ({ group: null, requires: null, capRaise: null, ...e }));
+        // An expected lever omits `group`, `requires`, `capRaise` and `requiresOption` when it has none.
+        const want = (c.expected.activatable as Record<string, unknown>[]).map((e) => ({ group: null, requires: null, capRaise: null, requiresOption: null, ...e }));
         expect(
           acts,
           `activatable levers for ${c.abilityId} (${c.perspective ?? "attacker"})`,

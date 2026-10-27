@@ -434,7 +434,7 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
         # same lever set dice-pool-allocation produced; any other bound roll only scopes its
         # nested effect.
         if not enumerate_roll_allocation(
-            node, source, opts, out, _collect_gated_buffs, _label_for_buffs
+            node, source, opts, out, _collect_option_buffs, _label_for_buffs
         ):
             _walk(node.get("effect"), source, opts, out)
     elif node_type in UNSUPPORTED_SHAPE_REASONS:
@@ -1675,6 +1675,10 @@ def _translate_conditional(
             {"reason": POST_ATTACK_MOMENT, "effectFragment": node["_activation_source"]}
         )
         return
+    stance = _split_stance_option(condition) if opts["context"].get("activeRules") is None else None
+    if stance is not None:
+        _offer_stance_gated(node, stance, source, opts, out)
+        return
     split = (
         None
         if node.get("_activation_source") is not None
@@ -1722,6 +1726,87 @@ def _translate_conditional(
         return
     if verdict:
         _walk(effect, source, opts, out)
+
+
+def _stance_option_of(operand: Any) -> dict[str, str] | None:
+    """The stance option a ``rule-active`` condition names, if it names one."""
+    if (
+        not _is_object(operand)
+        or operand.get("type") != "rule-active"
+        or not _is_object(operand.get("parameters"))
+    ):
+        return None
+    rule = operand["parameters"].get("rule")
+    if (
+        _is_object(rule)
+        and isinstance(rule.get("ability_id"), str)
+        and isinstance(rule.get("option_id"), str)
+    ):
+        return {"ability_id": rule["ability_id"], "option_id": rule["option_id"]}
+    return None
+
+
+def _split_stance_option(
+    condition: dict[str, Any],
+) -> tuple[dict[str, str], dict[str, Any] | None] | None:
+    """A condition that is, or is an ``and`` with exactly one top-level operand that is,
+    ``rule-active`` on a stance option: the option and the other operands (None when there are
+    none)."""
+    option = _stance_option_of(condition)
+    if option is not None:
+        return option, None
+    operands = condition.get("operands")
+    if condition.get("operator") != "and" or not isinstance(operands, list):
+        return None
+    matches = [operand for operand in operands if _stance_option_of(operand) is not None]
+    if len(matches) != 1:
+        return None
+    rest = [operand for operand in operands if operand is not matches[0]]
+    option = _stance_option_of(matches[0])
+    assert option is not None
+    remainder = (
+        rest[0] if len(rest) == 1 and _is_object(rest[0]) else {"operator": "and", "operands": rest}
+    )
+    return option, remainder
+
+
+def _offer_stance_gated(
+    node: dict[str, Any],
+    stance: tuple[dict[str, str], dict[str, Any] | None],
+    source: BuffSource,
+    opts: dict[str, Any],
+    out: EffectTranslation,
+) -> None:
+    """A rule gated on a stance option the context does not declare follows the player's stance
+    pick: what the effect (under any remaining condition) gives becomes a lever requiring that
+    option. Buffs gated on the same option within one ability share one lever."""
+    requires_option, rest = stance
+    sub: EffectTranslation = {"applied": [], "unsupported": [], "activatable": []}
+    if rest is not None:
+        # The activation source rides on the node's private keys, so the copy keeps it.
+        _walk({**node, "condition": rest}, source, opts, sub)
+    else:
+        _walk(node.get("effect"), source, opts, sub)
+    out["unsupported"].extend(sub["unsupported"])
+    out["activatable"].extend(
+        {**lever, "requiresOption": requires_option} for lever in sub["activatable"]
+    )
+    if not sub["applied"]:
+        return
+    lever_id = f"{opts['abilityId']}#{requires_option['option_id']}"
+    existing = next((lever for lever in out["activatable"] if lever["id"] == lever_id), None)
+    if existing is not None:
+        existing["buffs"].extend(sub["applied"])
+        existing["label"] = f"{requires_option['option_id']}: {_label_for_buffs(existing['buffs'])}"
+        return
+    out["activatable"].append(
+        {
+            "id": lever_id,
+            "label": f"{requires_option['option_id']}: {_label_for_buffs(sub['applied'])}",
+            "buffs": sub["applied"],
+            "requiresOption": requires_option,
+        }
+    )
 
 
 def _translate_named_effect(
@@ -2027,8 +2112,7 @@ def _enumerate_choice(
     if not isinstance(max_choices, (int, float)) or isinstance(max_choices, bool):
         max_choices = 1
     for i, opt in enumerate(options):
-        buffs: list[Buff] = []
-        _collect_gated_buffs(opt, source, opts, {}, buffs, out["unsupported"])
+        buffs, requires_option = _collect_option_buffs(opt, source, opts, out["unsupported"])
         if not buffs:
             continue
         out["activatable"].append(
@@ -2036,6 +2120,7 @@ def _enumerate_choice(
                 "id": f"{opts['abilityId']}?{i}",
                 "label": _label_for_buffs(buffs),
                 "buffs": buffs,
+                **({"requiresOption": requires_option} if requires_option else {}),
                 "group": {
                     "id": f"{opts['abilityId']}?choice",
                     "maxActivations": max_choices,
@@ -2058,8 +2143,9 @@ def _enumerate_dice_pool(
     for opt in options:
         if not _is_object(opt):
             continue
-        buffs: list[Buff] = []
-        _collect_gated_buffs(opt.get("effect"), source, opts, {}, buffs, out["unsupported"])
+        buffs, requires_option = _collect_option_buffs(
+            opt.get("effect"), source, opts, out["unsupported"]
+        )
         if not buffs:
             continue
         opt_name = opt.get("name")
@@ -2069,6 +2155,7 @@ def _enumerate_dice_pool(
                 "id": f"{opts['abilityId']}#{name}",
                 "label": name,
                 "buffs": buffs,
+                **({"requiresOption": requires_option} if requires_option else {}),
                 "group": {"id": opts["abilityId"], "maxActivations": max_activations},
             }
         )
@@ -2144,8 +2231,9 @@ def _enumerate_named_options(
     for opt in options:
         if not _is_object(opt):
             continue
-        buffs: list[Buff] = []
-        _collect_gated_buffs(opt.get("effect"), source, opts, {}, buffs, out["unsupported"])
+        buffs, requires_option = _collect_option_buffs(
+            opt.get("effect"), source, opts, out["unsupported"]
+        )
         if not buffs:
             continue
         if node.get("type") == "stance-select":
@@ -2161,6 +2249,7 @@ def _enumerate_named_options(
                 "id": f"{opts['abilityId']}#{option_id}",
                 "label": name,
                 "buffs": buffs,
+                **({"requiresOption": requires_option} if requires_option else {}),
                 "group": {"id": group_id, "maxActivations": max_activations},
             }
         )
@@ -2213,8 +2302,9 @@ def _enumerate_menu_actions(
                 }
             )
             continue
-        buffs: list[Buff] = []
-        _collect_gated_buffs(action.get("effect"), source, opts, {}, buffs, out["unsupported"])
+        buffs, requires_option = _collect_option_buffs(
+            action.get("effect"), source, opts, out["unsupported"]
+        )
         if not buffs:
             continue
         label_value = action.get("label")
@@ -2244,6 +2334,8 @@ def _enumerate_menu_actions(
                 "id": f"{opts['abilityId']}?menu",
                 "maxActivations": cap,
             }
+        if requires_option:
+            lever["requiresOption"] = requires_option
         out["activatable"].append(lever)
 
 
@@ -2289,6 +2381,37 @@ def _enumerate_timing_gate(
         out["activatable"].append(lever)
 
 
+def _collect_option_buffs(
+    node: Any,
+    source: BuffSource,
+    opts: dict[str, Any],
+    diagnostics: list[dict[str, Any]],
+) -> tuple[list[Buff], dict[str, str] | None]:
+    """The buffs one activation gives, as :func:`_collect_gated_buffs` finds them, and the stance
+    option it requires. Buffs gated on a stance option the context does not declare make the
+    activation require that option when they are all it gives; mixed with ungated buffs, or gated
+    on different options, they are reported and left out."""
+    buffs: list[Buff] = []
+    stance: dict[str, list[Any]] = {"buffs": [], "options": []}
+    _collect_gated_buffs(node, source, opts, {}, buffs, diagnostics, stance)
+    if not stance["buffs"]:
+        return buffs, None
+    option = stance["options"][0]
+    single = all(
+        other["ability_id"] == option["ability_id"] and other["option_id"] == option["option_id"]
+        for other in stance["options"]
+    )
+    if not buffs and single:
+        return stance["buffs"], option
+    diagnostics.append(
+        {
+            "reason": "activation mixes stance-gated buffs with other buffs",
+            "effectFragment": node,
+        }
+    )
+    return buffs, None
+
+
 def _collect_gated_buffs(
     node: Any,
     source: BuffSource,
@@ -2296,10 +2419,14 @@ def _collect_gated_buffs(
     applicability: dict[str, Any],
     out_buffs: list[Buff],
     diagnostics: list[dict[str, Any]] | None = None,
+    stance: dict[str, list[Any]] | None = None,
 ) -> None:
     """Walk the body of a player gate, collecting the buffs it would
     contribute. Conditions are deferred to ``applicableWhen`` where
-    expressible; nested decisions and stochastic rolls are not modelled."""
+    expressible; nested decisions and stochastic rolls are not modelled.
+
+    With ``stance`` (``{"buffs", "options"}``), buffs gated on a stance option the context does
+    not declare go to ``stance["buffs"]`` and the option to ``stance["options"]``."""
     if not _is_object(node):
         return
     node_type = node.get("type")
@@ -2307,13 +2434,27 @@ def _collect_gated_buffs(
         condition = node.get("condition")
         if not _is_object(condition):
             return
+        split = (
+            _split_stance_option(condition)
+            if stance is not None and opts["context"].get("activeRules") is None
+            else None
+        )
+        if split is not None:
+            assert stance is not None
+            option, rest = split
+            stance["options"].append(option)
+            gated = {**node, "condition": rest} if rest is not None else node.get("effect")
+            _collect_gated_buffs(
+                gated, source, opts, applicability, stance["buffs"], diagnostics, stance
+            )
+            return
         app = _condition_to_applicability(
             condition, opts["perspective"], opts["context"].get("attackerToughness")
         )
         if app == "gate":
             # A nested timing gate: opting into the activation satisfies it.
             _collect_gated_buffs(
-                node.get("effect"), source, opts, applicability, out_buffs, diagnostics
+                node.get("effect"), source, opts, applicability, out_buffs, diagnostics, stance
             )
             return
         if app == "context":
@@ -2327,7 +2468,7 @@ def _collect_gated_buffs(
             )
             if verdict is True:
                 _collect_gated_buffs(
-                    node.get("effect"), source, opts, applicability, out_buffs, diagnostics
+                    node.get("effect"), source, opts, applicability, out_buffs, diagnostics, stance
                 )
             elif verdict == "unknown" and diagnostics is not None:
                 diagnostics.append(
@@ -2346,11 +2487,12 @@ def _collect_gated_buffs(
             _combine_applicability(applicability, app),
             out_buffs,
             diagnostics,
+            stance,
         )
         return
     if node_type in ("rules-bundle", "sequence"):
         for step in node.get("steps") or []:
-            _collect_gated_buffs(step, source, opts, applicability, out_buffs, diagnostics)
+            _collect_gated_buffs(step, source, opts, applicability, out_buffs, diagnostics, stance)
         return
     if node_type == "ability-part":
         part_opts = (
@@ -2368,6 +2510,7 @@ def _collect_gated_buffs(
                 applicability,
                 out_buffs,
                 diagnostics,
+                stance,
             )
         return
     if node_type in ("choice", "dice-pool-allocation", "dice-gated"):

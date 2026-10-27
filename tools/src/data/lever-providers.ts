@@ -4,7 +4,7 @@
  * lever pool. {@link Dataset.stackableBuffsFor} assembles them with the unit's own levers.
  */
 import type { BuffSource, EngineContext } from "../cruncher/buffs.js";
-import type { ActivatableBuff, EffectTranslation, UnsupportedFragment } from "../cruncher/from-dsl.js";
+import type { ActivatableBuff, EffectTranslation, StanceOptionRef, UnsupportedFragment } from "../cruncher/from-dsl.js";
 import type { Enhancement } from "../generated.js";
 import type { Dataset, StackableBuff, StackableBuffGroup } from "./dataset.js";
 import { meetsEnhancementGroups } from "./enhancement-eligibility.js";
@@ -71,6 +71,8 @@ export type AbilityLevers = {
   buffs: StackableBuff[];
   groups: StackableBuffGroup[];
   capRaises: Map<StackableBuff, CapacityRaise>;
+  /** Levers that apply only under a stance option, for {@link resolveOptionRequirements}. */
+  optionRequirements: Map<StackableBuff, StanceOptionRef>;
 };
 
 /**
@@ -102,7 +104,7 @@ export function abilityLevers(
   },
 ): AbilityLevers {
   const { ability, source, ctx, idBase, label, gate } = args;
-  const out: AbilityLevers = { buffs: [], groups: [], capRaises: new Map() };
+  const out: AbilityLevers = { buffs: [], groups: [], capRaises: new Map(), optionRequirements: new Map() };
   const translation = ability.describeBuffs(source, ctx, "attacker", args.rating);
   const grants = grantedRecordIds(translation).filter(({ abilityId }) => !args.held.has(abilityId));
   const levers: StackableBuff[] = [];
@@ -116,6 +118,7 @@ export function abilityLevers(
       }
     }
     if (act.capRaise) out.capRaises.set(lever, act.capRaise);
+    if (act.requiresOption) out.optionRequirements.set(lever, act.requiresOption);
     levers.push(lever);
   }
   for (const { abilityId } of grants) {
@@ -125,6 +128,7 @@ export function abilityLevers(
     levers.push(...granted.buffs);
     out.groups.push(...granted.groups);
     for (const [lever, raise] of granted.capRaises) out.capRaises.set(lever, raise);
+    for (const [lever, option] of granted.optionRequirements) out.optionRequirements.set(lever, option);
   }
 
   if (gate) {
@@ -148,7 +152,7 @@ export function enhancementLevers(
   ds: Dataset,
   args: { detachmentId: string | undefined; crunchedUnitId: string; bearers: readonly UnitView[]; ctx: EngineContext; factionId: string; held: Set<string> },
 ): AbilityLevers {
-  const out: AbilityLevers = { buffs: [], groups: [], capRaises: new Map() };
+  const out: AbilityLevers = { buffs: [], groups: [], capRaises: new Map(), optionRequirements: new Map() };
   if (!args.detachmentId) return out;
   const seen = new Set<string>();
   const offered = [...ds.enhancements].filter((enhancement) => {
@@ -174,6 +178,7 @@ export function enhancementLevers(
       out.buffs.push(...levers.buffs);
       out.groups.push(...levers.groups);
       for (const [lever, raise] of levers.capRaises) out.capRaises.set(lever, raise);
+      for (const [lever, option] of levers.optionRequirements) out.optionRequirements.set(lever, option);
     }
     if (out.buffs.length > before) out.groups.push({ id: group, label: `Enhancement on ${bearer.name}`, maxActivations: 1 });
   }
@@ -242,6 +247,7 @@ export function grantedRecordLevers(
   const buffs: StackableBuff[] = [];
   const groups = new Map<string, StackableBuffGroup>();
   const capRaises = new Map<StackableBuff, CapacityRaise>();
+  const optionRequirements = new Map<StackableBuff, StanceOptionRef>();
   const prefix = `${provider.abilityId}>`;
   const dependency = provider.requiresLever ? { requiresLever: provider.requiresLever } : {};
   if (applied.length > 0) {
@@ -263,8 +269,9 @@ export function grantedRecordLevers(
     };
     buffs.push(grantedLever);
     if (act.capRaise) capRaises.set(grantedLever, act.capRaise);
+    if (act.requiresOption) optionRequirements.set(grantedLever, act.requiresOption);
   }
-  return { buffs, groups: [...groups.values()], capRaises };
+  return { buffs, groups: [...groups.values()], capRaises, optionRequirements };
 }
 
 /**
@@ -284,4 +291,59 @@ export function resolveCapRaises(
     const { ability: _ability, ...allocation } = raise;
     return group ? [{ ...lever, raisesCap: { ...allocation, group: group.id } }] : [];
   });
+}
+
+/**
+ * Bind each lever gated on a stance option to that option's lever, found by the owning ability's
+ * immutable id and the option id. An option that gives no buff of its own has no lever; it gets a
+ * buffless one in the stance's pool, so picking it still excludes the other options. A lever whose
+ * stance pool is not available is dropped: the unit cannot pick that option.
+ */
+export function resolveOptionRequirements(
+  levers: StackableBuff[],
+  pending: Map<StackableBuff, StanceOptionRef>,
+  groups: readonly StackableBuffGroup[],
+  optionLabel: (option: StanceOptionRef) => string,
+): StackableBuff[] {
+  const added: StackableBuff[] = [];
+  const optionLever = (option: StanceOptionRef): string | undefined => {
+    const group = groups.find((candidate) => candidate.abilityId === option.ability_id && candidate.id.endsWith("?stance"));
+    if (!group) return undefined;
+    const suffix = `#${option.option_id}`;
+    const found = [...levers, ...added].find((lever) => lever.group === group.id && lever.id.endsWith(suffix));
+    if (found) return found.id;
+    const sibling = levers.find((lever) => lever.group === group.id)!;
+    const id = `${sibling.id.slice(0, sibling.id.lastIndexOf("#"))}${suffix}`;
+    added.push({ id, label: `${group.label} — ${optionLabel(option)}`, buffs: [], enabled: false, source: sibling.source, group: group.id, ...(sibling.requiresLever ? { requiresLever: sibling.requiresLever } : {}) });
+    return id;
+  };
+  const resolved = levers.flatMap((lever) => {
+    const option = pending.get(lever);
+    if (!option) return [lever];
+    const requiresOption = optionLever(option);
+    return requiresOption ? [{ ...lever, requiresOption }] : [];
+  });
+  return [...resolved, ...added];
+}
+
+/** The name of option `optionId` of a `stance-select` in `effect`, if it has one. */
+export function stanceOptionName(effect: unknown, optionId: string): string | undefined {
+  if (Array.isArray(effect)) {
+    for (const item of effect) {
+      const found = stanceOptionName(item, optionId);
+      if (found) return found;
+    }
+    return undefined;
+  }
+  if (effect === null || typeof effect !== "object") return undefined;
+  const node = effect as Record<string, unknown>;
+  if (node.type === "stance-select" && Array.isArray(node.options)) {
+    const option = node.options.find((candidate) => (candidate as { id?: unknown } | null)?.id === optionId) as { name?: unknown } | undefined;
+    if (typeof option?.name === "string" && option.name) return option.name;
+  }
+  for (const value of Object.values(node)) {
+    const found = stanceOptionName(value, optionId);
+    if (found) return found;
+  }
+  return undefined;
 }

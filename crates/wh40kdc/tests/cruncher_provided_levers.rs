@@ -279,6 +279,7 @@ fn an_added_selection_to_the_units_own_ability_is_a_cap_raise_with_no_buffs() {
                 ..Default::default()
             }),
             requires: None,
+            requires_option: None,
         }]
     );
     let uses = translate(&modifier("uses"), &own(), &shooting());

@@ -34,6 +34,20 @@ describe("lever search", () => {
     expect(searchLevers(space).selected).toEqual(["aura", "sustained"]);
   });
 
+  it("turns on the stance option a gated lever needs, swapping out the other option, and drops the gated lever with it", () => {
+    const values: Record<string, number> = { push: 0, hold: 3, surge: 5 };
+    const levers: SearchLever[] = [{ id: "push" }, { id: "hold" }, { id: "surge", requiresOption: "push" }];
+    const space: LeverSpace<Scored> = {
+      levers,
+      legal: (selected) => !(selected.includes("push") && selected.includes("hold")) && (!selected.includes("surge") || selected.includes("push")),
+      score: (selected) => ({ total: selected.reduce((sum, id) => sum + values[id]!, 0), selected: [...selected].sort() }),
+    };
+    expect(searchLevers(space).selected).toEqual(["push", "surge"]);
+    values.surge = 2;
+    expect(searchLevers(space).selected).toEqual(["hold"]);
+    expect(searchLevers(space)).toEqual(exhaustiveLevers(space));
+  });
+
   it("replaces the one usable Stratagem with a better one", () => {
     const space = additiveSpace({ first: 1, second: 4, rule: 2 }, [["first", "second"]]);
     expect(searchLevers(space)).toEqual(exhaustiveLevers(space));

@@ -464,6 +464,7 @@ pub(super) fn offer_lever(
             group: None,
             requires: Some(requires),
             cap_raise: None,
+            requires_option: None,
         });
     }
 }
@@ -545,6 +546,7 @@ pub(super) fn ability_modifier(node: &Obj, opts: &WalkOpts, out: &mut Out) {
         buffs: Vec::new(),
         group: None,
         requires: None,
+        requires_option: None,
         cap_raise: Some(super::CapRaise {
             ability: ability.to_string(),
             by: by as i64,
@@ -589,6 +591,7 @@ pub(super) fn stance_capacity(node: &Obj, opts: &WalkOpts, out: &mut Out) {
         buffs: Vec::new(),
         group: None,
         requires: None,
+        requires_option: None,
         cap_raise: Some(super::CapRaise {
             ability: ability.into(),
             by,

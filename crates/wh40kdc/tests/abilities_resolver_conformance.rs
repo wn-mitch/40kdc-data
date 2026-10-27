@@ -167,6 +167,7 @@ fn run_dsl_corpus(filename: &str) {
                         "groups": a.groups,
                         "requires": a.requires,
                         "capRaise": a.cap_raise,
+                        "requiresOption": a.requires_option,
                         "buffs": a.buffs.iter().map(|b| serde_json::to_value(&b.contribution).unwrap()).collect::<Vec<_>>(),
                     })
                 })
@@ -179,7 +180,7 @@ fn run_dsl_corpus(filename: &str) {
                     let mut e = e.clone();
                     // Optional independent caps and requirements are absent when unused.
                     let o = e.as_object_mut().unwrap();
-                    for key in ["group", "groups", "requires", "capRaise"] {
+                    for key in ["group", "groups", "requires", "capRaise", "requiresOption"] {
                         o.entry(key).or_insert(Value::Null);
                     }
                     e

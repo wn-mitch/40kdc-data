@@ -49,6 +49,7 @@ import { RAW_DATA } from "./bundle.generated.js";
 import { SHARE_REGISTRY } from "../share/registry.generated.js";
 import { resolveLayout, type ResolvedPiece } from "../terrain/resolve.js";
 import type { Buff, BuffSource, EngineContext } from "../cruncher/buffs.js";
+import type { StanceOptionRef } from "../cruncher/from-dsl.js";
 import { sameSnapshotValue } from "../cruncher/recipient-snapshots.js";
 import { historicalSnapshotAbilities } from "./recipient-snapshots.js";
 import {
@@ -58,6 +59,8 @@ import {
   sharedKeywordsLower,
   enhancementLevers,
   resolveCapRaises,
+  resolveOptionRequirements,
+  stanceOptionName,
   type AbilityLevers,
   type LeverCost,
   type CapacityRaise,
@@ -102,6 +105,8 @@ export type StackableBuff = {
   requires?: unknown[];
   /** Id of the lever this one needs on (the Stratagem or Enhancement that provides it). */
   requiresLever?: string;
+  /** Id of the stance option lever this one needs on (a rule that applies only under that option). */
+  requiresOption?: string;
   /** Turning the lever on raises the cap of the pool `group` by `by` instead of adding buffs. */
   raisesCap?: Omit<CapacityRaise, "ability"> & { group: string };
 };
@@ -683,10 +688,12 @@ export class Dataset {
     const buffs: StackableBuff[] = [];
     const groups: StackableBuffGroup[] = [];
     const capRaises = new Map<StackableBuff, CapacityRaise>();
+    const optionRequirements = new Map<StackableBuff, StanceOptionRef>();
     const take = (levers: AbilityLevers) => {
       buffs.push(...levers.buffs);
       for (const group of levers.groups) if (!groups.some((g) => g.id === group.id)) groups.push(group);
       for (const [lever, raise] of levers.capRaises) capRaises.set(lever, raise);
+      for (const [lever, option] of levers.optionRequirements) optionRequirements.set(lever, option);
     };
 
     const unit =
@@ -770,7 +777,11 @@ export class Dataset {
     // Enhancements a character in the combined unit could take from the detachment.
     take(enhancementLevers(this, { detachmentId: input.detachmentId, crunchedUnitId: input.unitId, bearers: combined, ctx, factionId, held }));
 
-    return { buffs: resolveCapRaises(buffs, capRaises, groups), groups };
+    const optionName = (option: StanceOptionRef) =>
+      stanceOptionName((this.abilities.getInFaction(option.ability_id, factionId) ?? this.abilities.getAny(option.ability_id))?.raw.effect, option.option_id)
+        ?? option.option_id;
+    const resolved = resolveOptionRequirements(resolveCapRaises(buffs, capRaises, groups), optionRequirements, groups, optionName);
+    return { buffs: resolved, groups };
   }
 
   /** Shared implementation for buffsFor / defensiveBuffsFor. */

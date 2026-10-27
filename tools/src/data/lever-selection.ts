@@ -1,7 +1,7 @@
 import type { StackableBuff, StackableBuffGroup } from "./dataset.js";
 
 /** The activation metadata needed to validate a complete proposed selection. */
-export type SelectableLever = Pick<StackableBuff, "id" | "group" | "groups" | "requiresLever" | "raisesCap">;
+export type SelectableLever = Pick<StackableBuff, "id" | "group" | "groups" | "requiresLever" | "requiresOption" | "raisesCap">;
 
 /**
  * Check every intersecting activation pool and provider dependency. Capacity raises
@@ -17,6 +17,7 @@ export function isLegalLeverSelection(
   const selected = levers.filter((lever) => selectedIds.has(lever.id));
   if (selected.length !== selectedIds.size) return false;
   if (selected.some((lever) => lever.requiresLever && !selectedIds.has(lever.requiresLever))) return false;
+  if (selected.some((lever) => lever.requiresOption && !selectedIds.has(lever.requiresOption))) return false;
   const pools = new Map(groups.map((group) => [group.id, group]));
   const members = new Map<string, SelectableLever[]>();
   for (const lever of selected) {

@@ -13,7 +13,14 @@ export interface SearchLever {
   id: string;
   enabled?: boolean;
   requiresLever?: string;
+  requiresOption?: string;
   raisesCap?: unknown;
+}
+
+/** The levers `lever` needs on: its provider and the stance option it applies under. */
+function requirementsOf(levers: readonly SearchLever[], id: string): string[] {
+  const lever = levers.find((candidate) => candidate.id === id);
+  return [lever?.requiresLever, lever?.requiresOption].filter((required): required is string => required !== undefined);
 }
 
 /** A stack's lever choices: which sets are legal and what each scores. */
@@ -30,8 +37,9 @@ const MAX_MOVES = 256;
 function withRequirements(levers: readonly SearchLever[], ids: readonly string[]): string[] {
   const output = [...ids];
   for (let index = 0; index < output.length; index++) {
-    const required = levers.find((lever) => lever.id === output[index])?.requiresLever;
-    if (required && !output.includes(required)) output.push(required);
+    for (const required of requirementsOf(levers, output[index])) {
+      if (!output.includes(required)) output.push(required);
+    }
   }
   return output;
 }
@@ -63,8 +71,7 @@ function selectionWithout(levers: readonly SearchLever[], selected: readonly str
   for (let changed = true; changed;) {
     changed = false;
     for (const id of selected) {
-      const required = levers.find((lever) => lever.id === id)?.requiresLever;
-      if (!dropped.has(id) && required && dropped.has(required)) {
+      if (!dropped.has(id) && requirementsOf(levers, id).some((required) => dropped.has(required))) {
         dropped.add(id);
         changed = true;
       }

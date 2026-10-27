@@ -574,7 +574,8 @@ class Dataset:
 
         A lever may also carry ``cost`` (``{"cp"}`` for a Stratagem, ``{"points"}`` for an
         Enhancement), ``requires`` (DSL fragments the player vouches for), ``requiresLever`` (the
-        lever providing it) and ``raisesCap`` (``{"group", "by"}``: it raises a pool's cap instead
+        lever providing it), ``requiresOption`` (the stance option lever it applies under) and
+        ``raisesCap`` (``{"group", "by"}``: it raises a pool's cap instead
         of adding buffs). Supporting units' levers are opt-in and name the supporting unit in
         their source's ``sourceUnitId``.
         """
@@ -586,12 +587,15 @@ class Dataset:
             combined_unit,
             enhancement_levers,
             resolve_cap_raises,
+            resolve_option_requirements,
             shared_keywords_lower,
+            stance_option_name,
         )
 
         buffs: list[dict[str, Any]] = []
         groups: list[dict[str, Any]] = []
         cap_raises: dict[int, Any] = {}
+        option_requirements: dict[int, Any] = {}
 
         def take(levers: AbilityLevers) -> None:
             buffs.extend(levers.buffs)
@@ -599,6 +603,7 @@ class Dataset:
                 if not any(g["id"] == group["id"] for g in groups):
                     groups.append(group)
             cap_raises.update(levers.cap_raises)
+            option_requirements.update(levers.option_requirements)
 
         unit_id = input.get("unitId") or ""
         unit, faction_id, combined = combined_unit(self, input)
@@ -685,7 +690,19 @@ class Dataset:
             )
         )
 
-        return {"buffs": resolve_cap_raises(buffs, cap_raises, groups), "groups": groups}
+        def option_name(option: dict[str, str]) -> str:
+            ability = self.abilities.get_in_faction(
+                option["ability_id"], faction_id
+            ) or self.abilities.get_any(option["ability_id"])
+            name = stance_option_name(
+                ability.raw.get("effect") if ability is not None else None, option["option_id"]
+            )
+            return name if name else option["option_id"]
+
+        resolved = resolve_option_requirements(
+            resolve_cap_raises(buffs, cap_raises, groups), option_requirements, groups, option_name
+        )
+        return {"buffs": resolved, "groups": groups}
 
     def _weapon_faction(self, input: dict[str, Any]) -> str | None:
         """The faction to scope ``weaponProfiles`` lookups by: the explicit

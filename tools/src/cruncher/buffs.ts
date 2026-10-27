@@ -311,7 +311,8 @@ export type EngineContext = {
   targetNeighbours?: readonly ScenarioNeighbour[];
   /**
    * Every rule active for the attack: a rule id, or one option or named definition of it. A
-   * supplied list is complete; undefined leaves `rule-active` "unknown".
+   * supplied list is complete; undefined leaves `rule-active` "unknown", except that a gate on a
+   * stance option becomes a lever requiring that option.
    */
   activeRules?: readonly ActiveRule[];
   /** Every region each unit is in. A supplied list is complete; undefined leaves `in-region` "unknown". */

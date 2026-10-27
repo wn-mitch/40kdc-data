@@ -23,6 +23,7 @@ mod applicability;
 mod attack_scope;
 pub(crate) mod conditions;
 mod damage_leaves;
+mod gated;
 mod js;
 mod leaves;
 mod levers;
@@ -90,6 +91,11 @@ pub struct ActivatableBuff {
     /// when the lever assumes nothing beyond the choice itself.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub requires: Option<Vec<Value>>,
+    /// The stance option the lever applies under: a `rule-active` gate on an option the
+    /// context's `active_rules` does not declare. The lever pool binds it to that option's own
+    /// lever.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub requires_option: Option<StanceOptionRef>,
 }
 
 /// An [`ActivatableBuff`] that raises another ability's lever cap: `ability` names that ability
@@ -139,6 +145,7 @@ pub(crate) struct Lever {
     group: Option<(String, i64)>,
     requires: Option<Vec<Value>>,
     cap_raise: Option<CapRaise>,
+    requires_option: Option<StanceOptionRef>,
 }
 
 /// The walk's sink, mirroring the TS `EffectTranslation` with JSON buffs.
@@ -292,6 +299,7 @@ fn finish(out: Out) -> EffectTranslation {
                 }),
                 groups: None,
                 cap_raise: l.cap_raise,
+                requires_option: l.requires_option,
                 requires: l.requires,
             })
             .collect(),
@@ -347,6 +355,7 @@ pub fn apply_activation(result: &mut EffectTranslation, ability_id: &str, activa
             group: None,
             groups: None,
             cap_raise: None,
+            requires_option: None,
             requires: None,
         });
     }
@@ -690,6 +699,7 @@ fn dispatch(node: &Obj, opts: &WalkOpts, out: &mut Out) {
                         group: None,
                         requires: Some(vec![requirement]),
                         cap_raise: None,
+                        requires_option: None,
                     });
                 }
             } else {

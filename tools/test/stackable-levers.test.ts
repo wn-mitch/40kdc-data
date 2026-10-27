@@ -168,6 +168,42 @@ describe("Dataset.stackableBuffsFor: costs and providers", () => {
     });
   });
 
+  it("binds a rule gated on a stance option to that option's lever, adding a buffless lever for an option with no buff", () => {
+    const raw = armyRaw();
+    const gatedOn = (optionId: string, effect: unknown) => ({
+      type: "conditional", condition: { type: "rule-active", parameters: { rule: { ability_id: "fix-granted", option_id: optionId } } }, effect,
+    });
+    raw.abilities = [
+      ...raw.abilities.map((record) => record.ability_id === "fix-granted" ? {
+        ...record,
+        effect: { ...(record.effect as object), options: [
+          ...(record.effect as { options: unknown[] }).options,
+          { id: "stable-hold", name: "Hold", effect: { type: "move-modifier", target: "this-unit", modifier: { applies_to_moves: ["normal"], distance_bonus: 1 } } },
+        ] },
+      } : record),
+      ability("fix-surge", "stratagem", gatedOn("stable-hold", hitPlus("this-unit")), { detachment_id: "fix-det" }),
+      ability("fix-edge", "stratagem", gatedOn("stable-lethal", { type: "roll-modifier", target: "this-unit", modifier: { roll: "wound", operation: "add", value: 1 } }), { detachment_id: "fix-det" }),
+    ] as never;
+    raw.detachments = [{ ...raw.detachments[0], stratagem_ids: [...raw.detachments[0].stratagem_ids!, "fix-surge-s", "fix-edge-s"] }] as never;
+    raw.stratagems = [
+      ...raw.stratagems,
+      { id: "fix-surge-s", name: "Fix Surge", category: "detachment", detachment_id: "fix-det", cp_cost: 1, phases: ["fight"], ability_id: "fix-surge", game_version: version },
+      { id: "fix-edge-s", name: "Fix Edge", category: "detachment", detachment_id: "fix-det", cp_cost: 1, phases: ["fight"], ability_id: "fix-edge", game_version: version },
+    ] as never;
+    const army = new Dataset(raw);
+    const levers = new Map(army.stackableBuffsFor(mob, { phase: "fight" }).buffs.map((lever) => [lever.id, lever]));
+    expect(levers.get("fix-surge#stable-hold")).toMatchObject({ requiresOption: "fix-grant-rule>fix-granted#stable-hold", requiresLever: "detachment-stratagem:fix-surge" });
+    expect(levers.get("fix-grant-rule>fix-granted#stable-hold")).toMatchObject({ label: "Fix Granted — Hold", buffs: [], enabled: false, group: "fix-grant-rule>fix-granted?stance" });
+    expect(levers.get("fix-edge#stable-lethal")).toMatchObject({ requiresOption: "fix-grant-rule>fix-granted#stable-lethal" });
+    // The boss cannot pick the stance, so the rules gated on it offer it nothing.
+    const boss = army.stackableBuffsFor({ unitId: "fix-boss", factionId: "orks", detachmentId: "fix-det" }, { phase: "fight" }).buffs.map((lever) => lever.id);
+    expect(boss.filter((id) => id.startsWith("fix-surge#") || id.startsWith("fix-edge#"))).toEqual([]);
+    // A declared active rule is evaluated directly instead.
+    const declared = army.stackableBuffsFor(mob, { phase: "fight", activeRules: [{ ability_id: "fix-granted", option_id: "stable-hold" }] }).buffs;
+    expect(declared.find((lever) => lever.id === "detachment-stratagem:fix-surge")!.buffs).toHaveLength(1);
+    expect(declared.some((lever) => lever.requiresOption !== undefined)).toBe(false);
+  });
+
   it("retains capacity providers inside granted records", () => {
     const raw = armyRaw();
     raw.abilities = raw.abilities.map((record) => record.ability_id === "fix-granted" ? {
