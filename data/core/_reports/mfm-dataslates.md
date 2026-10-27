@@ -15,10 +15,10 @@ dump confirmation.
 | wargear-options | 0 | 0 | 1346 | 0 |
 | leader-attachments | 0 | 0 | 283 | 8 |
 | enhancements | 0 | 0 | 890 | 0 |
-| detachments | 1 | 0 | 92 | 364 |
-| stratagems | 2 | 0 | 253 | 1058 |
-| abilities | 0 | 0 | 1712 | 2823 |
-| phase-mappings | 7 | 0 | 489 | 1085 |
+| detachments | 0 | 0 | 93 | 364 |
+| stratagems | 0 | 0 | 255 | 1058 |
+| abilities | 0 | 0 | 1715 | 2820 |
+| phase-mappings | 0 | 0 | 496 | 1085 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
 ## Abilities by faction
@@ -28,7 +28,7 @@ dump confirmation.
 | _core | 0 | 0 | 2 | 24 |
 | adepta-sororitas | 0 | 0 | 51 | 97 |
 | adeptus-astartes | 0 | 0 | 112 | 138 |
-| adeptus-custodes | 0 | 0 | 62 | 96 |
+| adeptus-custodes | 0 | 0 | 63 | 95 |
 | adeptus-mechanicus | 0 | 0 | 82 | 85 |
 | aeldari | 0 | 0 | 113 | 187 |
 | agents-of-the-imperium | 0 | 0 | 52 | 86 |
@@ -50,7 +50,7 @@ dump confirmation.
 | iron-hands | 0 | 0 | 4 | 7 |
 | leagues-of-votann | 0 | 0 | 59 | 96 |
 | necrons | 0 | 0 | 97 | 133 |
-| orks | 0 | 0 | 87 | 123 |
+| orks | 0 | 0 | 89 | 121 |
 | raven-guard | 0 | 0 | 4 | 7 |
 | salamanders | 0 | 0 | 5 | 6 |
 | space-wolves | 0 | 0 | 43 | 44 |
@@ -82,9 +82,9 @@ dump confirmation.
 | adeptus-astartes | verified | 112 |
 | adeptus-custodes | ambiguous-source | 1 |
 | adeptus-custodes | digest-differs | 4 |
-| adeptus-custodes | stub | 16 |
+| adeptus-custodes | stub | 15 |
 | adeptus-custodes | unpublished | 75 |
-| adeptus-custodes | verified | 62 |
+| adeptus-custodes | verified | 63 |
 | adeptus-mechanicus | digest-differs | 10 |
 | adeptus-mechanicus | stub | 17 |
 | adeptus-mechanicus | unpublished | 58 |
@@ -174,9 +174,9 @@ dump confirmation.
 | orks | ambiguous-source | 1 |
 | orks | digest-differs | 21 |
 | orks | no-source | 1 |
-| orks | stub | 12 |
+| orks | stub | 10 |
 | orks | unpublished | 88 |
-| orks | verified | 87 |
+| orks | verified | 89 |
 | raven-guard | stub | 1 |
 | raven-guard | unpublished | 6 |
 | raven-guard | verified | 4 |

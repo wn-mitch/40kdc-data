@@ -7235,19 +7235,24 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "emissaries-imperatus",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "weapon-grant",
+      "target": "this-model",
+      "modifier": {
+        "weapon_id": "auriferous-orb-emissaries-imperatus"
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "6e151eddd552f4a1e52f6b38c858c8f45a935a3981450708fc5203039893e4a7"
   },
   {
     "ability_id": "bane-of-abominations-guardians-of-the-throne-adeptus-custodes",

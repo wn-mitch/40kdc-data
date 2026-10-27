@@ -6739,7 +6739,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [],
     "faction_id": "orks",
@@ -6748,10 +6748,15 @@
     "scope": {
       "duration": "permanent"
     },
-    "stub": true,
     "effect": {
-      "type": "no-effect"
-    }
+      "type": "weapon-grant",
+      "target": "this-model",
+      "modifier": {
+        "weapon_id": "da-gobshot-thunderbuss-brute-bosses"
+      }
+    },
+    "behavior": "passive",
+    "source_digest": "ddca99419b97084519f17879a1ea884c15a1ad44d72671848534a2e78f950acf"
   },
   {
     "ability_id": "da-hunt-is-on-orks",
@@ -6808,7 +6813,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [],
     "faction_id": "orks",
@@ -6817,10 +6822,15 @@
     "scope": {
       "duration": "permanent"
     },
-    "stub": true,
     "effect": {
-      "type": "no-effect"
-    }
+      "type": "weapon-grant",
+      "target": "this-model",
+      "modifier": {
+        "weapon_id": "da-krunch-wurrband"
+      }
+    },
+    "behavior": "passive",
+    "source_digest": "acf5e88873f8bffaa46354e3b98786b8e595dddaf73a36d9d742253263ac5278"
   },
   {
     "ability_id": "dakka-dakka-dakka-orks",
