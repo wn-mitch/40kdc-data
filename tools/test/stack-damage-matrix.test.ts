@@ -91,6 +91,19 @@ describe("stack damage scenario", () => {
     expect(() => parseScenario({ targetStates: ["embarked"] })).toThrow("targetStates is malformed");
     expect(() => parseScenario({ attackerObjectives: [{ controller: "friendly" }] })).toThrow("attackerObjectives is malformed");
     expect(() => parseScenario([])).toThrow("must be a JSON object");
+    const neighbour = { keywords: ["BATTLELINE"], owner: "friendly", distanceInches: 3 };
+    expect(parseScenario({ attackerNeighbours: [neighbour] })).toEqual({ attackerNeighbours: [neighbour] });
+    expect(() => parseScenario({ attackerNeighbours: [{ ...neighbour, owner: "attacker" }] })).toThrow("attackerNeighbours is malformed");
+    expect(() => parseScenario({ targetNeighbours: [{ ...neighbour, distanceInches: -1 }] })).toThrow("targetNeighbours is malformed");
+    const declared = {
+      activeRules: ["example-rule", { ability_id: "example-doctrines", option_id: "assault" }],
+      attackerRegions: [{ ruleRegion: "flow-of-magic" }, { terrainArea: true, wholly: true }],
+      objectivesControlled: { attacker: 2, target: 1, total: 5 },
+    };
+    expect(parseScenario(declared)).toEqual(declared);
+    expect(() => parseScenario({ attackerRegions: [{ terrainArea: true, territory: "attacker" }] })).toThrow("attackerRegions is malformed");
+    expect(() => parseScenario({ objectivesControlled: { attacker: 4, target: 3, total: 5 } })).toThrow("objectivesControlled is malformed");
+    expect(() => parseScenario({ activeRules: [{ option_id: "assault" }] })).toThrow("activeRules is malformed");
   });
 
   it("states the crunch's own facts and lets the scenario declare the rest", () => {

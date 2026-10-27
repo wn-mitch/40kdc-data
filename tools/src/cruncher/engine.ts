@@ -13,6 +13,7 @@
 import type { Phase, Unit, Weapon } from "../generated.js";
 import {
   type Buff,
+  type BuffApplicability,
   type EngineContext,
   resolveBuffs,
   type ResolvedModifiers,
@@ -130,7 +131,20 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
   // Auto-inject weapon-keyword buffs from the attacker profile, then append
   // the caller-supplied stack. resolveBuffs deduplicates and ranks them.
   const profileBuffs = profileBuffsFor(input.attacker, ds, ctx);
-  const resolved = resolveBuffs([...profileBuffs, ...input.buffs], ctx);
+  const allBuffs = [...profileBuffs, ...input.buffs];
+  let resolved = resolveBuffs(allBuffs, ctx);
+  // A buff gated on the attack's Strength against the target's Toughness needs both, which the
+  // buffs themselves modify: take them from the stack without the comparison-gated buffs, then
+  // resolve again with them known. No comparison-gated buff feeds any comparison, which keeps a
+  // rule like "while S is below T, +1 S" from flipping itself off.
+  if (allBuffs.some((buff) => hasAttackComparison(buff.applicableWhen))) {
+    const toughness = input.target.unit.profiles.map((profile) => profile.T + resolved.toughnessMod.value);
+    ctx.attackStrength = evalStatValue(weaponProfile.stats.S) + resolved.strengthMod.value;
+    ctx.targetToughness = unitProfile.T + resolved.toughnessMod.value;
+    ctx.targetToughnessMax = Math.max(...toughness);
+    ctx.targetToughnessMin = Math.min(...toughness);
+    resolved = resolveBuffs(allBuffs, ctx);
+  }
 
   const stages: Stage[] = [];
 
@@ -592,3 +606,7 @@ function lazyEmbeddedDataset(): Dataset {
 }
 
 export type { Phase };
+
+function hasAttackComparison(gate: BuffApplicability | undefined): boolean {
+  return gate !== undefined && (gate.attackComparisons !== undefined || (gate.weaponRequirements ?? []).some(hasAttackComparison));
+}

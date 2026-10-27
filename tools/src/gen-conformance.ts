@@ -68,10 +68,13 @@ import {
 } from "./terrain/resolve.js";
 import { keystoneMeasurements, BOARD_INCHES } from "./terrain/keystones.js";
 import {
+  canonicalAttackCompareCases,
   canonicalHalfWeaponRangeCases,
+  canonicalScenarioCases,
   canonicalRecipientCases,
   canonicalWeaponScopeCases,
   HALF_WEAPON_RANGE_CASE_PREFIX,
+  SCENARIO_CASE_PREFIX,
   RECIPIENT_CASE_PREFIX,
 } from "./gen-conformance-cruncher-cases.js";
 
@@ -4205,7 +4208,7 @@ function genResolverDslCases(): void {
 
 /** Append fabricated direct-API cases without duplicating their stable identities on regen. */
 function genCanonicalCruncherCases(): void {
-  const appended = [...canonicalRecipientCases(), ...canonicalHalfWeaponRangeCases()];
+  const appended = [...canonicalRecipientCases(), ...canonicalHalfWeaponRangeCases(), ...canonicalScenarioCases()];
   for (const [filename, perspective] of [
     ["from-dsl.json", "attacker"],
     ["defensive-from-dsl.json", "target"],
@@ -4214,13 +4217,14 @@ function genCanonicalCruncherCases(): void {
     const corpus = JSON.parse(readFileSync(path, "utf8")) as { cases: Record<string, unknown>[] };
     corpus.cases = [
       ...corpus.cases.filter((row) => typeof row.caseId !== "string" ||
-        (!row.caseId.startsWith(RECIPIENT_CASE_PREFIX) && !row.caseId.startsWith(HALF_WEAPON_RANGE_CASE_PREFIX))),
+        (!row.caseId.startsWith(RECIPIENT_CASE_PREFIX) && !row.caseId.startsWith(HALF_WEAPON_RANGE_CASE_PREFIX) &&
+          !row.caseId.startsWith(SCENARIO_CASE_PREFIX))),
       ...appended.filter((row) => row.perspective === perspective),
     ];
     writeJson(path, corpus);
     console.log(`abilities-resolver/${filename}: ${corpus.cases.length} cases`);
   }
-  for (const { filename, value } of canonicalWeaponScopeCases(Dataset.embedded())) {
+  for (const { filename, value } of [...canonicalWeaponScopeCases(Dataset.embedded()), ...canonicalAttackCompareCases(Dataset.embedded())]) {
     writeJson(join(CONFORMANCE, "cruncher", filename), value);
   }
 }

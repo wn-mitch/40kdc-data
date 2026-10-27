@@ -106,7 +106,7 @@ export interface CoverageReport {
 
 /**
  * Build a permissive context for `phase` — every situational flag set so that
- * conditionals gated on stationary/charged/half-range/attachment can fire. We
+ * conditionals gated on stationary/charged/half-range/leading a unit can fire. We
  * want "could this ability *ever* produce a buff", not "does it fire right now".
  * Keyword-specific conditions (`target-has-keyword`) still evaluate `"unknown"`
  * since no concrete target exists; those surface in the reason histogram.
@@ -120,6 +120,9 @@ function permissiveContext(phase: Phase): EngineContext {
     attackerInCover: true,
     targetInCover: true,
     attackerAttached: true,
+    attackerAttachmentRole: "leader",
+    targetAttached: true,
+    targetAttachmentRole: "leader",
     attackerKeywords: [],
     targetKeywords: [],
   };

@@ -27,6 +27,10 @@ from wh40kdc.cruncher.buffs import (
     resolve_buffs,
 )
 from wh40kdc.cruncher.damage_roll import DamageOutcome, damage_roll, one_damage_reroll_gain
+from wh40kdc.cruncher.scenario_conditions import (
+    has_attack_comparison,
+    set_attack_characteristics,
+)
 from wh40kdc.data.dataset import Dataset
 
 EngineInput = dict[str, Any]
@@ -172,7 +176,20 @@ def crunch_model(
     # Auto-inject weapon-keyword buffs from the attacker profile, then append
     # the caller-supplied stack. resolve_buffs deduplicates and ranks them.
     profile_buffs = _profile_buffs_for(attacker, ds, ctx)
-    resolved = resolve_buffs([*profile_buffs, *input.get("buffs", [])], ctx)
+    all_buffs = [*profile_buffs, *input.get("buffs", [])]
+    resolved = resolve_buffs(all_buffs, ctx)
+    # A buff gated on the attack's Strength against the target's Toughness needs both, which the
+    # buffs themselves modify: take them from the stack without the comparison-gated buffs, then
+    # resolve again with them known. No comparison-gated buff feeds any comparison.
+    if any(has_attack_comparison(buff.get("applicableWhen")) for buff in all_buffs):
+        set_attack_characteristics(
+            ctx,
+            eval_stat_value(weapon_profile["stats"].get("S")) + resolved["strengthMod"]["value"],
+            [profile["T"] for profile in unit["profiles"]],
+            unit_profile["T"],
+            resolved["toughnessMod"]["value"],
+        )
+        resolved = resolve_buffs(all_buffs, ctx)
 
     stages: list[dict[str, Any]] = []
 

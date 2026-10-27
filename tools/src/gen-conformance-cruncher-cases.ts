@@ -5,6 +5,7 @@ import type { Trigger, UnitSelector } from "./generated.js";
 
 export const RECIPIENT_CASE_PREFIX = "canonical/recipient-snapshot/";
 export const HALF_WEAPON_RANGE_CASE_PREFIX = "canonical/half-weapon-range/";
+export const SCENARIO_CASE_PREFIX = "canonical/scenario/";
 
 interface DslInput {
   caseId: string;
@@ -103,6 +104,134 @@ export function canonicalHalfWeaponRangeCases() {
         requires: lever.requires ?? null, capRaise: lever.capRaise ?? null,
         buffs: lever.buffs.map((applied) => applied.contribution),
       })),
+    } };
+  });
+}
+
+/** The from-dsl row's expectation: contributions, reasons and levers, as every port projects them. */
+function dslExpectation(row: DslInput) {
+  const result = effectToBuffs(row.effect, row.source, row.context, row.perspective);
+  return { ...row, expected: {
+    applied: result.applied.map((applied) => applied.contribution),
+    unsupportedReasons: result.unsupported.map((item) => item.reason),
+    activatable: result.activatable.map((lever) => ({
+      id: lever.id, label: lever.label, group: lever.group ?? null,
+      requires: lever.requires ?? null, capRaise: lever.capRaise ?? null,
+      buffs: lever.buffs.map((applied) => applied.contribution),
+    })),
+  } };
+}
+
+/**
+ * Fabricated conditional buffs gated on declared scenario state: active rules, regions, objective
+ * control, combined-unit members, nearby units, and conjunctions that mix unit and attack predicates.
+ */
+export function canonicalScenarioCases() {
+  const source = { kind: "ability", abilityId: "fabricated-scenario", abilityKind: "unit" } as const;
+  const attached = { kind: "ability", abilityId: "fabricated-scenario", abilityKind: "attached", sourceUnitId: "leader" } as const;
+  const gated = (condition: unknown) => ({
+    type: "conditional", condition,
+    effect: { type: "roll-modifier", target: "this-unit", modifier: { roll: "hit", operation: "add", value: 1 } },
+  });
+  const defensive = (condition: unknown) => ({
+    type: "conditional", condition,
+    effect: { type: "roll-modifier", target: "attacker", modifier: { roll: "hit", operation: "subtract", value: 1 } },
+  });
+  const doctrine = { type: "rule-active", parameters: { rule: { ability_id: "example-doctrines", option_id: "assault" } } };
+  const ruleId = { type: "rule-active", parameters: { rule: "example-rule" } };
+  const region = { type: "in-region", parameters: { subject: "this-unit", region: { rule_region: { owner_faction: "example", region_id: "example-region" } } } };
+  const whollyTerrain = { type: "in-region", parameters: { subject: "this-unit", models: "every", region: { terrain_area: {} } } };
+  const yourTerritory = { type: "in-region", parameters: { region: { territory: "your-territory" } } };
+  const half = { type: "controls", parameters: { by: "friendly", proportion: { comparison: "gte", fraction: 0.5 } } };
+  const more = { type: "controls", parameters: { compare: { owner: "enemy", comparison: "gt" } } };
+  const leadingWith = { type: "attachment", parameters: { role: "leading", subject: "this-model", with: { all_of: ["EXAMPLE SQUAD"] } } };
+  const ledBy = { type: "attachment", parameters: { role: "led", with: { all_of: ["CHARACTER"] } } };
+  const near = { type: "matches", parameters: { filter: { within: { of: { all_of: ["BATTLELINE"], owner: "friendly" }, range: { inches: 6 } } } } };
+  const ranged = { type: "attack-is", parameters: { weapons: { type: "ranged" } } };
+  const sAboveT = { type: "attack-compare", parameters: { left: { of: "attacker", stat: "S" }, comparison: "gt", right: { of: "defender", stat: "T" } } };
+  const attacksAbove = { type: "attack-compare", parameters: { left: { of: "attacker", stat: "A" }, comparison: "gt", right: { value: 3 } } };
+  const members = (bodyguard: string[]) => [
+    { unitId: "leader", role: "leader" as const, keywords: ["CHARACTER"] },
+    { unitId: "squad", role: "bodyguard" as const, keywords: bodyguard },
+  ];
+  const neighbour = { keywords: ["BATTLELINE", "INFANTRY"], owner: "friendly" as const, distanceInches: 5 };
+  const inputs: Array<{ id: string; effect: unknown; context: Omit<EngineContext, "phase">; source?: DslInput["source"]; perspective?: DslInput["perspective"] }> = [
+    { id: "rule-active-option", effect: gated(doctrine), context: { activeRules: [{ ability_id: "example-doctrines", option_id: "assault" }] } },
+    { id: "rule-active-other-option", effect: gated(doctrine), context: { activeRules: [{ ability_id: "example-doctrines", option_id: "tactical" }] } },
+    { id: "rule-active-id-by-option", effect: gated(ruleId), context: { activeRules: [{ ability_id: "example-rule", definition_id: "one" }] } },
+    { id: "rule-active-undeclared", effect: gated(ruleId), context: {} },
+    { id: "in-region-rule-region", effect: gated(region), context: { attackerRegions: [{ ruleRegion: "example-region" }] } },
+    { id: "in-region-elsewhere", effect: gated(region), context: { attackerRegions: [{ ruleRegion: "other-region" }] } },
+    { id: "in-region-not-wholly", effect: gated(whollyTerrain), context: { attackerRegions: [{ terrainArea: true }] } },
+    { id: "in-region-wholly", effect: gated(whollyTerrain), context: { attackerRegions: [{ terrainArea: true, wholly: true }] } },
+    { id: "in-region-defender-territory", effect: defensive(yourTerritory), context: { targetRegions: [{ territory: "target" }] }, perspective: "target" },
+    { id: "controls-half", effect: gated(half), context: { objectivesControlled: { attacker: 3, target: 1, total: 6 } } },
+    { id: "controls-below-half", effect: gated(half), context: { objectivesControlled: { attacker: 2, target: 1, total: 6 } } },
+    { id: "controls-tied", effect: gated(more), context: { objectivesControlled: { attacker: 2, target: 2, total: 5 } } },
+    { id: "controls-defender-side", effect: defensive(half), context: { objectivesControlled: { attacker: 3, target: 1, total: 6 } }, perspective: "target" },
+    { id: "attachment-leading-with", effect: gated(leadingWith), context: { attackerMembers: members(["EXAMPLE SQUAD"]) }, source: attached },
+    { id: "attachment-leading-other", effect: gated(leadingWith), context: { attackerMembers: members(["OTHER SQUAD"]) }, source: attached },
+    { id: "attachment-with-flags-only", effect: gated(leadingWith), context: { attackerAttached: true, attachmentRoles: { leader: "leader" } }, source: attached },
+    { id: "attachment-led-by", effect: gated(ledBy), context: { attackerUnitId: "squad", attackerMembers: members([]) } },
+    { id: "neighbour-in-range", effect: gated(near), context: { attackerNeighbours: [neighbour] } },
+    { id: "neighbour-out-of-range", effect: gated(near), context: { attackerNeighbours: [{ ...neighbour, distanceInches: 7 }] } },
+    { id: "neighbour-undeclared", effect: gated(near), context: {} },
+    { id: "split-unit-and-weapon", effect: gated({ operator: "and", operands: [{ type: "phase-is", parameters: { phase: "shooting" } }, ranged] }), context: {} },
+    { id: "split-unit-false", effect: gated({ operator: "and", operands: [{ type: "phase-is", parameters: { phase: "fight" } }, ranged] }), context: {} },
+    { id: "split-nested-compare", effect: gated({ operator: "and", operands: [{ operator: "and", operands: [ruleId, sAboveT] }] }), context: { activeRules: ["example-rule"] } },
+    { id: "split-unknown-rest", effect: gated({ operator: "and", operands: [ruleId, sAboveT] }), context: {} },
+    { id: "attack-compare-unsupported-stat", effect: gated(attacksAbove), context: {} },
+  ];
+  return inputs.map((input) => dslExpectation({
+    caseId: `${SCENARIO_CASE_PREFIX}${input.id}`,
+    abilityId: source.abilityId,
+    source: input.source ?? source,
+    effect: input.effect,
+    context: { phase: "shooting", ...input.context },
+    perspective: input.perspective ?? "attacker",
+  }));
+}
+
+/**
+ * Pin the attack-comparison gate in the damage path: the attack's modified Strength against the
+ * target's Toughness, read after the Strength and Toughness the other buffs give.
+ */
+export function canonicalAttackCompareCases(ds: Dataset) {
+  const source = { kind: "ability", abilityId: "fabricated-attack-compare", abilityKind: "unit" } as const;
+  const woundBonus = (comparison: string, right: Record<string, unknown>) => ({
+    type: "conditional",
+    condition: { type: "attack-compare", parameters: { left: { of: "attacker", stat: "S" }, comparison, right } },
+    effect: { type: "roll-modifier", target: "this-unit", modifier: { roll: "wound", operation: "add", value: 1 } },
+  });
+  const above = woundBonus("gt", { of: "defender", stat: "T" });
+  const gatedStrength = {
+    type: "conditional",
+    condition: { type: "attack-compare", parameters: { left: { of: "attacker", stat: "S" }, comparison: "gte", right: { of: "defender", stat: "T" } } },
+    effect: { type: "stat-modifier", target: "this-unit", modifier: { stat: "S", operation: "add", value: 1 } },
+  };
+  const strength = { type: "stat-modifier", target: "this-unit", modifier: { stat: "S", operation: "add", value: 1 } };
+  const inputs: { id: string; effects: unknown[] }[] = [
+    { id: "s-equals-t-no-bonus", effects: [above] },
+    { id: "s-lifted-above-t", effects: [strength, above] },
+    { id: "s-below-value", effects: [woundBonus("lt", { value: 5 })] },
+    { id: "gated-strength-feeds-no-comparison", effects: [gatedStrength, above] },
+  ];
+  const weapon = ds.weapons.getAny("bolt-rifle");
+  const unit = ds.units.getAny("intercessor-squad");
+  if (!weapon || !unit) throw new Error("canonical attack-compare corpus requires bolt-rifle and intercessor-squad");
+  return inputs.map((row) => {
+    const context: EngineContext = { phase: "shooting", withinHalfRange: true, attackerStationary: false };
+    const buffs = row.effects.flatMap((effect) => {
+      const translated = effectToBuffs(effect, source, context);
+      if (translated.unsupported.length || translated.activatable.length) throw new Error(`canonical attack-compare ${row.id}: expected extracted buffs`);
+      return translated.applied;
+    });
+    const result = crunch({ attacker: { weapon: weapon.raw, profileIndex: 0 }, target: { unit: unit.raw, profileIndex: 0 }, modelsFiring: 5, context, buffs }, ds);
+    return { filename: `canonical-attack-compare-${row.id}.json`, value: {
+      name: `Canonical attack comparison: ${row.id}`,
+      attacker: { weaponId: weapon.id, profileIndex: 0 }, target: { unitId: unit.id, profileIndex: 0 },
+      modelsFiring: 5, context, buffs,
+      expected: { stages: Object.fromEntries(result.stages.map((stage) => [stage.name, Math.round(stage.expected * 1e4) / 1e4])) },
     } };
   });
 }

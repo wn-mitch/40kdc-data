@@ -104,6 +104,10 @@ pub(super) fn condition_to_applicability(
                 App::Context
             }
         }
+        Some("attack-compare") => match super::attack_scope::attack_comparison(params) {
+            Some(comparison) => when(json!({ "attackComparisons": [comparison] })),
+            None => App::Context,
+        },
         Some("attack-is") => {
             let Some(p) = params else {
                 return App::Context;
@@ -156,6 +160,13 @@ pub(super) fn combine(a: &Obj, b: &Obj) -> Obj {
             "weaponRequirements".into(),
             Value::Array(vec![Value::Object(a.clone()), Value::Object(b.clone())]),
         );
+    }
+    if let (Some(Value::Array(first)), Some(Value::Array(second))) =
+        (a.get("attackComparisons"), b.get("attackComparisons"))
+    {
+        let mut both = first.clone();
+        both.extend(second.iter().cloned());
+        out.insert("attackComparisons".into(), Value::Array(both));
     }
     if let Some(excluded) = b.get("excludedTargetKeywords").and_then(Value::as_array) {
         let mut union = a

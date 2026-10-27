@@ -144,6 +144,21 @@ export type BuffApplicability = {
   excludedWeaponName?: string;
   /** Additional conjunctive weapon predicates inherited from enclosing effects. */
   weaponRequirements?: BuffApplicability[];
+  /**
+   * Conjunctive comparisons of the attack's characteristics (the attack's Strength against the
+   * target's Toughness). A comparison whose characteristic the context lacks does not hold.
+   */
+  attackComparisons?: AttackComparison[];
+};
+
+/** One side of an {@link AttackComparison}: a characteristic of the attacking or the defending unit. */
+export type AttackStatOperand = { of: "attacker" | "defender"; stat: string; reduce?: "max" | "min" };
+
+/** The canonical `attack-compare` condition: `left` `comparison` `right`. */
+export type AttackComparison = {
+  left: AttackStatOperand;
+  comparison: "gt" | "gte" | "lt" | "lte" | "eq";
+  right: AttackStatOperand | { value: number };
 };
 
 /** A single buff: where it came from, when it applies, what it contributes. */
@@ -281,6 +296,28 @@ export type EngineContext = {
   attackerObjectives?: readonly ScenarioObjective[];
   targetObjectives?: readonly ScenarioObjective[];
   /**
+   * The other units near each unit of the attack. A supplied list is complete: a unit it omits is
+   * beyond every range a filter names. Undefined leaves proximity filters on other units "unknown".
+   */
+  attackerNeighbours?: readonly ScenarioNeighbour[];
+  targetNeighbours?: readonly ScenarioNeighbour[];
+  /**
+   * Every rule active for the attack: a rule id, or one option or named definition of it. A
+   * supplied list is complete; undefined leaves `rule-active` "unknown".
+   */
+  activeRules?: readonly ActiveRule[];
+  /** Every region each unit is in. A supplied list is complete; undefined leaves `in-region` "unknown". */
+  attackerRegions?: readonly ScenarioRegion[];
+  targetRegions?: readonly ScenarioRegion[];
+  /** Objectives each side controls, and how many there are. Drives `controls`; undefined leaves it "unknown". */
+  objectivesControlled?: { attacker: number; target: number; total: number };
+  /**
+   * Every unit of each combined unit, the unit itself included. Settles `attachment` roles and
+   * `with` filters; undefined leaves those to the attachment flags above.
+   */
+  attackerMembers?: readonly AttachedMember[];
+  targetMembers?: readonly AttachedMember[];
+  /**
    * Caller-attested trigger-time recipient evidence, not current membership.
    * Each entry preserves the ability source/sourceUnitId, exact canonical
    * trigger and selector, selectionPath JSON pointer, perspective,
@@ -292,6 +329,17 @@ export type EngineContext = {
    * identity remains distinct from unrelated effect guards.
    */
   recipientSnapshots?: readonly RecipientSnapshot[];
+  /** The attack's modified Strength. The engine supplies it; undefined fails `attackComparisons`. */
+  attackStrength?: number;
+  /**
+   * The target's modified Toughness: the attacked profile's, and the highest and lowest over the
+   * target's profiles for a `reduce` comparison. The engine supplies them.
+   */
+  targetToughness?: number;
+  targetToughnessMax?: number;
+  targetToughnessMin?: number;
+  /** The attacking unit's Toughness (its highest model's). Caller-supplied; undefined fails comparisons that read it. */
+  attackerToughness?: number;
 };
 
 /** A unit against its Starting Strength; below half implies below starting. */
@@ -316,6 +364,27 @@ export type ScenarioObjective = {
 };
 
 /** Back-compat alias — `resolveBuffs` accepts the shared engine context. */
+/** Another unit near one unit of the attack: its keywords, whose it is relative to that unit, and how far away it is. */
+export type ScenarioNeighbour = { keywords: readonly string[]; owner: "friendly" | "enemy"; distanceInches: number };
+
+/** A rule an army has active: its id, or one of its options or named definitions. */
+export type ActiveRule = string | { ability_id: string; option_id?: string; definition_id?: string };
+
+/**
+ * A region a unit is in: an army rule's region (by id), a terrain area, a side's territory or
+ * deployment zone. `wholly` says every model of the unit is in it.
+ */
+export type ScenarioRegion = {
+  ruleRegion?: string;
+  terrainArea?: boolean;
+  territory?: "attacker" | "target" | "no-mans-land";
+  deploymentZone?: "attacker" | "target";
+  wholly?: boolean;
+};
+
+/** One unit of a combined unit: its id, its role and its keywords. */
+export type AttachedMember = { unitId: string; role: "leader" | "bodyguard" | "support"; keywords: readonly string[] };
+
 export type ResolveContext = EngineContext;
 
 /** Read-out of a resolved buff stack, with provenance per field. */
@@ -424,7 +493,34 @@ function applies(buff: Buff, ctx: ResolveContext): boolean {
   }
   if (w.weaponName !== undefined && !ctx.weaponNames?.includes(w.weaponName)) return false;
   if (w.excludedWeaponName !== undefined && (ctx.weaponNames === undefined || ctx.weaponNames.includes(w.excludedWeaponName))) return false;
+  if (w.attackComparisons && !w.attackComparisons.every((comparison) => attackComparisonHolds(comparison, ctx))) return false;
   return true;
+}
+
+/** A characteristic an {@link AttackStatOperand} names, or undefined when the context lacks it. */
+function attackStat(operand: AttackStatOperand | { value: number }, ctx: ResolveContext): number | undefined {
+  if ("value" in operand) return operand.value;
+  if (operand.of === "attacker") {
+    if (operand.stat === "S" && operand.reduce === undefined) return ctx.attackStrength;
+    if (operand.stat === "T" && operand.reduce !== "min") return ctx.attackerToughness;
+    return undefined;
+  }
+  if (operand.stat !== "T") return undefined;
+  return operand.reduce === "max" ? ctx.targetToughnessMax : operand.reduce === "min" ? ctx.targetToughnessMin : ctx.targetToughness;
+}
+
+/** Whether an attack comparison holds; a missing characteristic does not establish it. */
+export function attackComparisonHolds(comparison: AttackComparison, ctx: ResolveContext): boolean {
+  const left = attackStat(comparison.left, ctx);
+  const right = attackStat(comparison.right, ctx);
+  if (left === undefined || right === undefined) return false;
+  switch (comparison.comparison) {
+    case "gt": return left > right;
+    case "gte": return left >= right;
+    case "lt": return left < right;
+    case "lte": return left <= right;
+    case "eq": return left === right;
+  }
 }
 
 /**
@@ -449,6 +545,7 @@ function liveBuffs(buffs: Buff[], ctx: ResolveContext): Buff[] {
     if (gate.weaponName !== undefined && !ctx.weaponNames?.includes(gate.weaponName)) return false;
     if (gate.excludedWeaponName !== undefined && (ctx.weaponNames === undefined || ctx.weaponNames.includes(gate.excludedWeaponName))) return false;
     if (gate.weaponRequirements?.some((required) => !gatesHold(required, refs, exclusions))) return false;
+    if (gate.attackComparisons && !gate.attackComparisons.every((comparison) => attackComparisonHolds(comparison, ctx))) return false;
     const selectors = exclusions ? gate.excludedWeaponKeywords : gate.weaponKeywords;
     if (selectors === undefined) return true;
     if (refs === undefined) return false;

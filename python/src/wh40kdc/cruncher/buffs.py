@@ -20,6 +20,8 @@ from __future__ import annotations
 import json
 from typing import Any
 
+from wh40kdc.cruncher.scenario_conditions import attack_comparisons_hold
+
 Buff = dict[str, Any]
 BuffSource = dict[str, Any]
 ResolvedModifiers = dict[str, Any]
@@ -48,7 +50,9 @@ ResolvedModifiers = dict[str, Any]
 #: ``closest``); ``attackerObjectives`` / ``targetObjectives`` (complete lists of objectives
 #: in control range, each ``{controller?, designations?, role?, homeOf?, territory?, name?}``
 #: with ``controller`` / ``homeOf`` / ``territory`` read from the attacking unit's player as
-#: ``attacker`` / ``target`` (plus ``none`` / ``no-mans-land``)).
+#: ``attacker`` / ``target`` (plus ``none`` / ``no-mans-land``)). The attack's characteristics,
+#: neighbours, active rules, regions, objective counts and combined-unit members are listed in
+#: :mod:`wh40kdc.cruncher.scenario_conditions`.
 EngineContext = dict[str, Any]
 
 #: Stable ordering used to break ties when multiple buffs claim the same field.
@@ -113,6 +117,8 @@ def _weapon_gate_holds(
         return False
     requirements = gate.get("weaponRequirements") or []
     if any(not _weapon_gate_holds(req, refs, ctx) for req in requirements):
+        return False
+    if not attack_comparisons_hold(gate, ctx):
         return False
     selectors = gate.get("weaponKeywords")
     if selectors is not None:
@@ -201,7 +207,7 @@ def _applies(buff: Buff, ctx: EngineContext) -> bool:
         and any(k in weapon_keywords for k in excluded_weapon_keywords)
     ):
         return False
-    return True
+    return attack_comparisons_hold(w, ctx)
 
 
 def _live_buffs(buffs: list[Buff], ctx: EngineContext) -> list[Buff]:

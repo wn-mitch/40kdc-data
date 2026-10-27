@@ -1,5 +1,5 @@
 import { keywordMatchesPredicate } from "../scope.js";
-import type { EngineContext, ScenarioObjective, UnitState } from "./buffs.js";
+import type { EngineContext, ScenarioNeighbour, ScenarioObjective, UnitState } from "./buffs.js";
 
 export type FilterVerdict = boolean | "unknown";
 
@@ -95,6 +95,12 @@ export function matchesUnitFilter(filter: unknown, context: EngineContext, side:
       }
       if (!isObject(range) || typeof range.inches !== "number" || context.distanceInches === undefined) unknown = true;
       else if (context.distanceInches > range.inches) return false;
+    } else if (key === "within" && isObject(value) && value.wholly !== true && isObject(value.of) && isNeighbourFilter(value.of)) {
+      const verdict = isObject(value.range) && typeof value.range.inches === "number" && Object.keys(value.range).length === 1
+        ? withinNeighbour(value.of, value.range.inches, side === "attacker" ? context.attackerNeighbours : context.targetNeighbours, side === abilitySide)
+        : "unknown";
+      if (verdict === false) return false;
+      if (verdict === "unknown") unknown = true;
     } else if (key === "level" && value === "unit") {
       continue;
     } else if (key === "level" && value === "model" && everyModelMatches && filter.attachment_role === undefined) {
@@ -177,6 +183,30 @@ function withinObjective(filter: Record<string, unknown>, objectives: readonly S
     if (verdict === "unknown") unknown = true;
   }
   return unknown ? "unknown" : false;
+}
+
+/** A `within.of` that names other units by keyword and owner. */
+function isNeighbourFilter(of: Record<string, unknown>): boolean {
+  return Object.keys(of).length > 0 && Object.entries(of).every(([key, value]) =>
+    key === "owner" ? value === "friendly" || value === "enemy" || value === "any"
+      : (key === "all_of" || key === "any_of" || key === "none_of" || key === "not_all_of") &&
+        Array.isArray(value) && value.every((item) => typeof item === "string"));
+}
+
+/**
+ * Whether a unit near the filtered unit meets a `within.of` filter within `inches`. The filter's
+ * owner is relative to the ability's side; a neighbour's owner is relative to the filtered unit, so
+ * they agree only when the ability belongs to the filtered unit's side.
+ */
+function withinNeighbour(of: Record<string, unknown>, inches: number, neighbours: readonly ScenarioNeighbour[] | undefined, sameSide: boolean): FilterVerdict {
+  if (neighbours === undefined) return "unknown";
+  const predicate: KeywordPredicate = {};
+  for (const key of ["all_of", "any_of", "none_of", "not_all_of"] as const) if (of[key] !== undefined) predicate[key] = of[key] as string[];
+  return neighbours.some((neighbour) => {
+    const owner = sameSide ? neighbour.owner : neighbour.owner === "friendly" ? "enemy" : "friendly";
+    if (of.owner !== undefined && of.owner !== "any" && of.owner !== owner) return false;
+    return neighbour.distanceInches <= inches && keywordMatchesPredicate(predicate, neighbour.keywords);
+  });
 }
 
 function isObject(value: unknown): value is Record<string, unknown> {

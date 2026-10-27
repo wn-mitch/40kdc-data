@@ -111,7 +111,7 @@ func buffApplies(buff map[string]any, ctx map[string]any) bool {
 	if w["unresolvedWeaponRef"] != nil {
 		return false
 	}
-	return true
+	return attackComparisonsHold(w, ctx)
 }
 
 // weaponKeywordRefMatches reports whether a weapon keyword ref meets a structured
@@ -224,6 +224,9 @@ func weaponGatesHold(gate map[string]any, refs []map[string]any, ctx map[string]
 		if !weaponGatesHold(requirement, refs, ctx, exclusions) {
 			return false
 		}
+	}
+	if !attackComparisonsHold(gate, ctx) {
+		return false
 	}
 	if !exclusions {
 		if legacy, ok := gate["weaponKeyword"].(string); ok && refs != nil {

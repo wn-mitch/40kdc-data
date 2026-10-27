@@ -63,3 +63,31 @@ describe("model-level keyword filters", () => {
     expect(effectToBuffs(effect, source, { ...combined, attackerModelKeywords: undefined }, "attacker").applied).toEqual([]);
   });
 });
+
+describe("matchesUnitFilter: proximity to other units", () => {
+  const nearBattleline = { within: { of: { all_of: ["ADEPTUS MECHANICUS", "BATTLELINE"], owner: "friendly" }, range: { inches: 6 } } };
+  const at = (neighbours: EngineContext["attackerNeighbours"], targetNeighbours?: EngineContext["targetNeighbours"]): EngineContext =>
+    ({ phase: "shooting", attackerNeighbours: neighbours, targetNeighbours });
+  const skitarii = { keywords: ["Adeptus Mechanicus", "Battleline", "Infantry"], owner: "friendly" as const, distanceInches: 5 };
+
+  it("holds for a matching friendly unit in range and fails beyond it", () => {
+    expect(matchesUnitFilter(nearBattleline, at([skitarii]), "attacker")).toBe(true);
+    expect(matchesUnitFilter(nearBattleline, at([{ ...skitarii, distanceInches: 7 }]), "attacker")).toBe(false);
+    expect(matchesUnitFilter(nearBattleline, at([{ ...skitarii, keywords: ["Adeptus Mechanicus", "Infantry"] }]), "attacker")).toBe(false);
+    expect(matchesUnitFilter(nearBattleline, at([]), "attacker")).toBe(false);
+    expect(matchesUnitFilter(nearBattleline, at(undefined), "attacker")).toBe("unknown");
+  });
+
+  it("reads the filter's owner from the ability's side, not the filtered unit's", () => {
+    // The defender's ability filters the attacker: a unit friendly to the attacker is an enemy to the ability.
+    const nearEnemy = { within: { of: { all_of: ["BATTLELINE"], owner: "enemy" }, range: { inches: 6 } } };
+    expect(matchesUnitFilter(nearEnemy, at([skitarii]), "attacker", "enemy")).toBe(true);
+    expect(matchesUnitFilter(nearBattleline, at([skitarii]), "attacker", "enemy")).toBe(false);
+    expect(matchesUnitFilter(nearBattleline, at(undefined, [skitarii]), "target")).toBe(true);
+  });
+
+  it("leaves wholly-within and non-inch ranges unresolved", () => {
+    expect(matchesUnitFilter({ within: { ...nearBattleline.within, wholly: true } }, at([skitarii]), "attacker")).toBe("unknown");
+    expect(matchesUnitFilter({ within: { ...nearBattleline.within, range: "engagement" } }, at([skitarii]), "attacker")).toBe("unknown");
+  });
+});

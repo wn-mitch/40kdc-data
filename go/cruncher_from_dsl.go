@@ -1815,28 +1815,7 @@ func translateConditional(node, source map[string]any, opts dslOpts, out *effect
 	}
 	if isWeaponScopedCondition(condition) {
 		if applicability, ok := conditionToApplicability(condition, opts.perspective).(map[string]any); ok {
-			sub := &effectTranslation{applied: []any{}, unsupported: []any{}, activatable: []any{}}
-			dslWalk(node["effect"], source, opts, sub)
-			for _, raw := range sub.applied {
-				if buff, ok := asMap(raw); ok {
-					out.applied = append(out.applied, applyApplicability(buff, applicability))
-				}
-			}
-			for _, raw := range sub.activatable {
-				lever, ok := asMap(raw)
-				if !ok {
-					continue
-				}
-				buffs := getList(lever, "buffs")
-				for i, buffRaw := range buffs {
-					if buff, ok := asMap(buffRaw); ok {
-						buffs[i] = applyApplicability(buff, applicability)
-					}
-				}
-				lever["buffs"] = buffs
-				out.activatable = append(out.activatable, lever)
-			}
-			out.unsupported = append(out.unsupported, sub.unsupported...)
+			walkWithApplicability(node["effect"], source, opts, applicability, out)
 			return
 		}
 	}
@@ -1854,6 +1833,19 @@ func translateConditional(node, source map[string]any, opts dslOpts, out *effect
 	var evalSource map[string]any
 	if !opts.grantedHolder {
 		evalSource = source
+	}
+	// An `and` mixing attack-scoped predicates with unit predicates: the unit
+	// predicates decide whether the effect applies, the rest gates its buffs.
+	if metadata == nil {
+		if applicability, rest, ok := splitAttackScoped(condition, opts.perspective); ok {
+			switch evaluateCondition(rest, opts.context, opts.perspective, evalSource) {
+			case false:
+				return
+			case true:
+				walkWithApplicability(node["effect"], source, opts, applicability, out)
+				return
+			}
+		}
 	}
 	verdict := evaluateCondition(evaluated, opts.context, opts.perspective, evalSource)
 	if verdict == nil {
@@ -1950,8 +1942,8 @@ func negatedWeaponApplicability(operands []any) any {
 	return map[string]any{"excludedWeaponKeywords": included}
 }
 
-// isWeaponScopedCondition reports an `attack-is` naming weapons, or its negation: the resolver
-// gates these per weapon.
+// isWeaponScopedCondition reports an `attack-is` naming weapons, or its negation, or an
+// `attack-compare`: the resolver gates these per attack.
 func isWeaponScopedCondition(condition map[string]any) bool {
 	if getStr(condition, "operator") == "not" {
 		operands, ok := asList(condition["operands"])
@@ -1960,6 +1952,9 @@ func isWeaponScopedCondition(condition map[string]any) bool {
 		}
 		operand, ok := asMap(operands[0])
 		return ok && operand["operator"] == nil && isWeaponScopedCondition(operand)
+	}
+	if getStr(condition, "type") == "attack-compare" {
+		return true
 	}
 	if getStr(condition, "type") != "attack-is" {
 		return false
@@ -2024,6 +2019,11 @@ func conditionToApplicability(condition map[string]any, perspective string) any 
 			}
 			return map[string]any{"requiresAttackerKeyword": kw}
 		}
+	case "attack-compare":
+		if comparison := attackComparison(params); comparison != nil {
+			return map[string]any{"attackComparisons": []any{comparison}}
+		}
+		return "context"
 	case "attack-is":
 		if params == nil || unhonorableNarrowing(params) != "" {
 			return "context"
@@ -2085,6 +2085,9 @@ func combineApplicability(a, b map[string]any) map[string]any {
 	}
 	if v := b["excludedWeaponKeywords"]; v != nil {
 		out["excludedWeaponKeywords"] = v
+	}
+	if bc := anyList(b["attackComparisons"]); b["attackComparisons"] != nil {
+		out["attackComparisons"] = append(append([]any{}, anyList(a["attackComparisons"])...), bc...)
 	}
 	if bx, ok := asList(b["excludedTargetKeywords"]); ok {
 		union := []any{}
@@ -2462,6 +2465,22 @@ func matchesUnitFilter(filter, ctx map[string]any, side, owner string) any {
 				}
 				continue
 			}
+			if of, ok := asMap(within["of"]); ok && of != nil && isNeighbourFilter(of) {
+				// Another unit named by keyword and owner: read from the unit's declared neighbours.
+				verdict := any(nil)
+				if rangeRef, ok := asMap(within["range"]); ok && len(rangeRef) == 1 {
+					if inches, ok := filterNumber(rangeRef["inches"]); ok {
+						verdict = withinNeighbour(of, inches, sideValue(ctx, side, "Neighbours"), side == abilitySide)
+					}
+				}
+				switch verdict {
+				case false:
+					return false
+				case nil:
+					unknown = true
+				}
+				continue
+			}
 			other := "attacker"
 			if side == "attacker" {
 				other = "defender"
@@ -2627,69 +2646,17 @@ func evaluateCondition(condition, ctx map[string]any, rest ...any) any {
 		}
 		return nil
 	case "attachment":
-		if params["with"] != nil {
+		return evaluateAttachment(params, ctx, perspective, source)
+	case "rule-active":
+		return evaluateRuleActive(params, ctx)
+	case "in-region":
+		side := conditionSide(params["subject"], perspective)
+		if side == "" {
 			return nil
 		}
-		subject := params["subject"]
-		explicitSide := ""
-		switch subject {
-		case "attacker":
-			explicitSide = "attacker"
-		case "defender":
-			explicitSide = "target"
-		default:
-			if subject != nil && subject != "this-model" && subject != "this-unit" && subject != "ability-unit" {
-				return nil
-			}
-		}
-		side := explicitSide
-		if side == "" {
-			side = perspective
-		}
-		var attached any
-		var role any
-		if side == "attacker" {
-			attached = ctx["attackerAttached"]
-			role = ctx["attackerAttachmentRole"]
-		} else {
-			attached = ctx["targetAttached"]
-			role = ctx["targetAttachmentRole"]
-		}
-		if explicitSide == "" && getStr(source, "kind") == "ability" &&
-			(getStr(source, "abilityKind") == "attached" || getStr(source, "abilityKind") == "support") {
-			if roles, ok := getMap(ctx, "attachmentRoles"); ok {
-				role = roles[getStr(source, "sourceUnitId")]
-			} else {
-				role = nil
-			}
-			if getStr(source, "abilityKind") == "attached" {
-				attached = true
-			} else if role == nil {
-				attached = nil
-			} else {
-				attached = true
-			}
-		}
-		if attached == false {
-			return false
-		}
-		switch params["role"] {
-		case "attached":
-			if attached == nil {
-				return nil
-			}
-			return attached == true
-		case "leading":
-			if role == nil {
-				return nil
-			}
-			return role == "leader"
-		case "led":
-			if role == "bodyguard" {
-				return true
-			}
-		}
-		return nil
+		return evaluateInRegion(params, ctx, side, perspectiveSide(perspective))
+	case "controls":
+		return evaluateControls(params, ctx, perspectiveSide(perspective))
 	case "matches":
 		filter, ok := getMap(params, "filter")
 		if !ok {

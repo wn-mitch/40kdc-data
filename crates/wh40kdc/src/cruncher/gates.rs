@@ -70,6 +70,9 @@ fn applies(buff: &Buff, ctx: &EngineContext) -> bool {
             return false;
         }
     }
+    if !super::attack_compare::comparisons_hold(w, ctx) {
+        return false;
+    }
     if let Some(max) = w.max_range_inches {
         if !ctx.distance_inches.is_some_and(|distance| distance <= max) {
             return false;
@@ -95,6 +98,9 @@ fn weapon_gate(
     keywords: &[&WeaponKeywordRef],
     exclusions: bool,
 ) -> bool {
+    if !super::attack_compare::comparisons_hold(w, ctx) {
+        return false;
+    }
     if w.weapon_name.as_ref().is_some_and(|want| {
         !ctx.weapon_names
             .as_ref()

@@ -31,6 +31,7 @@
  * @packageDocumentation
  */
 import type {
+  AttackComparison,
   Buff,
   BuffApplicability,
   BuffContribution,
@@ -41,6 +42,7 @@ import type {
 import type { Phase } from "../generated.js";
 import { bindEachRecipient, bindEventSubject, planSelection } from "./from-dsl-selection.js";
 import { matchesUnitFilter } from "./unit-filter.js";
+import { attachmentFromMembers, evaluateControls, evaluateInRegion, evaluateRuleActive } from "./scenario-conditions.js";
 import { RECIPIENT_SNAPSHOT_UNAVAILABLE, resolveRecipientSnapshots } from "./recipient-snapshots.js";
 import { resolveNamedWeaponBindings } from "./weapon-bindings.js";
 
@@ -1329,7 +1331,42 @@ function isWeaponScopedCondition(condition: Record<string, unknown>): boolean {
     const operand = condition.operands[0];
     return isObject(operand) && isWeaponScopedCondition(operand) && operand.operator === undefined;
   }
+  if (condition.type === "attack-compare") return true;
   return condition.type === "attack-is" && isObject(condition.parameters) && condition.parameters.weapons !== undefined;
+}
+
+/**
+ * An `and` whose operands mix attack-scoped predicates (a weapon, the attack's Strength against
+ * the target's Toughness) with predicates on the units: the attack-scoped operands as one buff
+ * gate, and the rest to evaluate. Nested `and`s flatten. Undefined when no operand is
+ * attack-scoped, when every operand is, or when an attack-scoped operand has no gate.
+ */
+function splitAttackScoped(
+  condition: Record<string, unknown>,
+  perspective: TranslationPerspective,
+): { applicability: BuffApplicability; rest: Record<string, unknown> } | undefined {
+  if (condition.operator !== "and" || !Array.isArray(condition.operands)) return undefined;
+  const operands: unknown[] = [];
+  const flatten = (list: unknown[]): void => {
+    for (const operand of list) {
+      if (isObject(operand) && operand.operator === "and" && Array.isArray(operand.operands)) flatten(operand.operands);
+      else operands.push(operand);
+    }
+  };
+  flatten(condition.operands);
+  let applicability: BuffApplicability = {};
+  const rest: unknown[] = [];
+  for (const operand of operands) {
+    if (!isObject(operand) || !isWeaponScopedCondition(operand)) {
+      rest.push(operand);
+      continue;
+    }
+    const gate = conditionToApplicability(operand, perspective);
+    if (typeof gate === "string") return undefined;
+    applicability = combineApplicability(applicability, gate);
+  }
+  if (rest.length === 0 || rest.length === operands.length) return undefined;
+  return { applicability, rest: rest.length === 1 && isObject(rest[0]) ? rest[0] : { operator: "and", operands: rest } };
 }
 
 function translateConditional(
@@ -1355,6 +1392,17 @@ function translateConditional(
   const activation = activationSources.get(node);
   if (activation && isPostOwnAttackMoment(activation.trigger)) {
     out.unsupported.push({ reason: POST_ATTACK_MOMENT, effectFragment: activation.fragment });
+    return;
+  }
+  const split = activation ? undefined : splitAttackScoped(condition, opts.perspective);
+  const restVerdict = split ? evaluateCondition(split.rest, opts.context, opts.perspective, opts.grantedHolder ? undefined : source) : "unknown";
+  if (split && restVerdict !== "unknown") {
+    if (!restVerdict) return;
+    const sub: EffectTranslation = { applied: [], unsupported: [], activatable: [] };
+    walk(effect, source, opts, sub);
+    out.applied.push(...sub.applied.map((buff) => applyApplicability(buff, split.applicability)));
+    out.activatable.push(...sub.activatable.map((lever) => ({ ...lever, buffs: lever.buffs.map((buff) => applyApplicability(buff, split.applicability)) })));
+    out.unsupported.push(...sub.unsupported);
     return;
   }
   const evaluated = activation && opts.duration !== undefined
@@ -1881,6 +1929,10 @@ function conditionToApplicability(
       if (params?.subject === "attacker") return { requiresAttackerKeyword: kw };
       return isBuffedUnit(params?.subject) ? perspective === "target" ? { requiresTargetKeyword: kw } : { requiresAttackerKeyword: kw } : "context";
     }
+    case "attack-compare": {
+      const comparison = attackComparison(params);
+      return comparison ? { attackComparisons: [comparison] } : "context";
+    }
     case "attack-is": {
       if (params == null || Object.keys(params).some((key) => key !== "attack_type" && key !== "weapons") || unhonorableNarrowing(params)) return "context";
       const phase: BuffApplicability | undefined = params.attack_type === "melee" ? { phases: ["fight"] } : params.attack_type === "ranged" ? { phases: ["shooting"] } : undefined;
@@ -1889,6 +1941,31 @@ function conditionToApplicability(
     default:
       return "context";
   }
+}
+
+/** A side of an attack comparison the engine supplies: the attack's S, or either unit's T. */
+function attackOperand(value: unknown): AttackComparison["right"] | undefined {
+  if (!isObject(value)) return undefined;
+  if (Object.keys(value).length === 1 && typeof value.value === "number") return { value: value.value };
+  const { of, stat, reduce } = value;
+  if (Object.keys(value).some((key) => key !== "of" && key !== "stat" && key !== "reduce")) return undefined;
+  if (reduce !== undefined && reduce !== "max" && reduce !== "min") return undefined;
+  const supported = of === "attacker"
+    ? (stat === "S" && reduce === undefined) || (stat === "T" && reduce !== "min")
+    : of === "defender" && stat === "T";
+  if (!supported || (of !== "attacker" && of !== "defender") || typeof stat !== "string") return undefined;
+  return reduce === undefined ? { of, stat } : { of, stat, reduce };
+}
+
+/** The canonical `attack-compare` parameters as a buff gate, or undefined when the engine cannot evaluate them. */
+function attackComparison(params: Record<string, unknown> | undefined): AttackComparison | undefined {
+  if (!params || Object.keys(params).some((key) => key !== "left" && key !== "comparison" && key !== "right")) return undefined;
+  const left = attackOperand(params.left);
+  const right = attackOperand(params.right);
+  const comparison = params.comparison;
+  if (!left || "value" in left || !right) return undefined;
+  if (comparison !== "gt" && comparison !== "gte" && comparison !== "lt" && comparison !== "lte" && comparison !== "eq") return undefined;
+  return { left, comparison, right };
 }
 
 /** Merge two applicabilities; `phases` intersect, the rest narrow. */
@@ -1904,6 +1981,7 @@ function combineApplicability(a: BuffApplicability, b: BuffApplicability): BuffA
   if (weaponFields.some((key) => key in a && key in b)) {
     out.weaponRequirements = [a, b];
   }
+  if (a.attackComparisons && b.attackComparisons) out.attackComparisons = [...a.attackComparisons, ...b.attackComparisons];
   if (b.excludedTargetKeywords) out.excludedTargetKeywords = [...new Set([...(a.excludedTargetKeywords ?? []), ...b.excludedTargetKeywords])];
   return out;
 }
@@ -2067,24 +2145,27 @@ function evaluateCondition(
     }
     case "attachment": {
       const params = isObject(condition.parameters) ? condition.parameters : {};
-      if (params.with !== undefined) return "unknown";
       const subject = params.subject;
       const explicitSide = subject === "attacker" ? "attacker" : subject === "defender" ? "target" : undefined;
       if (!explicitSide && subject != null && subject !== "this-model" && subject !== "this-unit" && subject !== "ability-unit") return "unknown";
+      const flags = attachmentFromFlags(params, ctx, perspective, source);
+      if (flags === false) return false;
       const side = explicitSide ?? (perspective === "attacker" ? "attacker" : "target");
-      let attached = side === "attacker" ? ctx.attackerAttached : ctx.targetAttached;
-      let role = side === "attacker" ? ctx.attackerAttachmentRole : ctx.targetAttachmentRole;
-      if (!explicitSide && source?.kind === "ability" && (source.abilityKind === "attached" || source.abilityKind === "support")) {
-        role = source.sourceUnitId === undefined ? undefined : ctx.attachmentRoles?.[source.sourceUnitId];
-        attached = source.abilityKind === "attached" ? true : role === undefined ? undefined : true;
-      }
-      if (attached === false) return false;
-      if (params.role === "attached") return attached ?? "unknown";
-      if (params.role === "leading") return role === undefined ? "unknown" : role === "leader";
-      // A bodyguard is known to be led; other combined-unit leadership needs more facts.
-      if (params.role === "led" && role === "bodyguard") return true;
-      return "unknown";
+      const sourced = !explicitSide && source?.kind === "ability" && (source.abilityKind === "attached" || source.abilityKind === "support");
+      const own = sourced ? source.sourceUnitId : side === "attacker" ? ctx.attackerUnitId : ctx.targetUnitId;
+      const members = attachmentFromMembers(params.role, params.with, side === "attacker" ? ctx.attackerMembers : ctx.targetMembers, own);
+      if (members !== "unknown") return members;
+      return params.with === undefined ? flags : "unknown";
     }
+    case "rule-active":
+      return evaluateRuleActive(isObject(condition.parameters) ? condition.parameters : {}, ctx);
+    case "in-region": {
+      const params = isObject(condition.parameters) ? condition.parameters : {};
+      const side = conditionSide(params.subject, perspective);
+      return side ? evaluateInRegion(params, ctx, side, perspective === "attacker" ? "attacker" : "target") : "unknown";
+    }
+    case "controls":
+      return evaluateControls(isObject(condition.parameters) ? condition.parameters : {}, ctx, perspective === "attacker" ? "attacker" : "target");
     case "matches": {
       const params = isObject(condition.parameters) ? condition.parameters : {};
       const side = conditionSide(params.subject, perspective);
@@ -2203,6 +2284,30 @@ function evaluateCondition(
  * don't get short-circuited propagate as `"unknown"` so the SPA can surface
  * the gap rather than collapsing it into a misleading false.
  */
+/** `attachment` from the attachment flags and roles alone; `with` filters are left to the members. */
+function attachmentFromFlags(
+  params: Record<string, unknown>,
+  ctx: EngineContext,
+  perspective: TranslationPerspective,
+  source?: BuffSource,
+): boolean | "unknown" {
+  const subject = params.subject;
+  const explicitSide = subject === "attacker" ? "attacker" : subject === "defender" ? "target" : undefined;
+  const side = explicitSide ?? (perspective === "attacker" ? "attacker" : "target");
+  let attached = side === "attacker" ? ctx.attackerAttached : ctx.targetAttached;
+  let role = side === "attacker" ? ctx.attackerAttachmentRole : ctx.targetAttachmentRole;
+  if (!explicitSide && source?.kind === "ability" && (source.abilityKind === "attached" || source.abilityKind === "support")) {
+    role = source.sourceUnitId === undefined ? undefined : ctx.attachmentRoles?.[source.sourceUnitId];
+    attached = source.abilityKind === "attached" ? true : role === undefined ? undefined : true;
+  }
+  if (attached === false) return false;
+  if (params.role === "attached") return attached ?? "unknown";
+  if (params.role === "leading") return role === undefined ? "unknown" : role === "leader";
+  // A bodyguard is known to be led; other combined-unit leadership needs more facts.
+  if (params.role === "led" && role === "bodyguard") return true;
+  return "unknown";
+}
+
 function evaluateCompound(
   operator: string,
   operands: unknown[],

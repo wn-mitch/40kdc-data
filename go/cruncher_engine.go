@@ -183,6 +183,28 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 	profBuffs := profileBuffsFor(attacker, ds, ctx)
 	allBuffs := append(append([]any{}, profBuffs...), getList(input, "buffs")...)
 	res := resolveBuffs(allBuffs, ctx)
+	// A buff gated on the attack's Strength against the target's Toughness needs both, which the
+	// buffs themselves modify: take them from the stack without the comparison-gated buffs, then
+	// resolve again with them known. No comparison-gated buff feeds any comparison, which keeps a
+	// rule like "while S is below T, +1 S" from flipping itself off.
+	if anyAttackComparison(allBuffs) {
+		printedS, err := evalStatValue(getMapOr(weaponProfile, "stats")["S"])
+		if err != nil {
+			return nil, nil, nil, err
+		}
+		highest, lowest := math.Inf(-1), math.Inf(1)
+		for _, raw := range unitProfiles {
+			profile, _ := asMap(raw)
+			toughness := numOr0(profile["T"]) + res.toughnessMod
+			highest = math.Max(highest, toughness)
+			lowest = math.Min(lowest, toughness)
+		}
+		ctx["attackStrength"] = printedS + res.strengthMod
+		ctx["targetToughness"] = numOr0(unitProfile["T"]) + res.toughnessMod
+		ctx["targetToughnessMax"] = highest
+		ctx["targetToughnessMin"] = lowest
+		res = resolveBuffs(allBuffs, ctx)
+	}
 
 	stats, _ := getMap(weaponProfile, "stats")
 	stages := []map[string]any{}
@@ -737,4 +759,15 @@ func fnpSurvivalFraction(f *fnpState) float64 {
 	}
 	pSucc := math.Max(0, math.Min(1, (7-f.threshold)/6))
 	return 1 - pSucc
+}
+
+// anyAttackComparison reports a buff gated on an attack comparison.
+func anyAttackComparison(buffs []any) bool {
+	for _, raw := range buffs {
+		buff, _ := asMap(raw)
+		if gate, ok := getMap(buff, "applicableWhen"); ok && hasAttackComparison(gate) {
+			return true
+		}
+	}
+	return false
 }

@@ -1,0 +1,67 @@
+{
+  "name": "Canonical attack comparison: s-lifted-above-t",
+  "attacker": {
+    "weaponId": "bolt-rifle",
+    "profileIndex": 0
+  },
+  "target": {
+    "unitId": "intercessor-squad",
+    "profileIndex": 0
+  },
+  "modelsFiring": 5,
+  "context": {
+    "phase": "shooting",
+    "withinHalfRange": true,
+    "attackerStationary": false
+  },
+  "buffs": [
+    {
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-attack-compare",
+        "abilityKind": "unit"
+      },
+      "contribution": {
+        "type": "strength-mod",
+        "value": 1
+      }
+    },
+    {
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-attack-compare",
+        "abilityKind": "unit"
+      },
+      "contribution": {
+        "type": "wound-mod",
+        "value": 1
+      },
+      "applicableWhen": {
+        "attackComparisons": [
+          {
+            "left": {
+              "of": "attacker",
+              "stat": "S"
+            },
+            "comparison": "gt",
+            "right": {
+              "of": "defender",
+              "stat": "T"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "expected": {
+    "stages": {
+      "attacks": 10,
+      "hits": 6.6667,
+      "wounds": 3.3333,
+      "unsaved": 1.6667,
+      "damage": 1.6667,
+      "after-fnp": 1.6667,
+      "models-killed": 0.8333
+    }
+  }
+}

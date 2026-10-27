@@ -37,7 +37,8 @@ export interface MatrixConfig {
 export type Scenario = Pick<EngineContext,
   | "battleRound" | "attackerTurn" | "attackerStrength" | "targetStrength" | "attackerDesignations"
   | "targetDesignations" | "attackerStates" | "targetStates" | "targetClosest" | "attackerObjectives"
-  | "targetObjectives" | "attackerGuided">;
+  | "targetObjectives" | "attackerGuided" | "attackerNeighbours" | "targetNeighbours" | "activeRules"
+  | "attackerRegions" | "targetRegions" | "objectivesControlled">;
 
 const STRENGTHS = ["full", "below-starting", "below-half"];
 const STATES = ["engaged", "battle-shocked", "hidden"];
@@ -53,6 +54,29 @@ const strings = (value: unknown) => Array.isArray(value) && value.every((item) =
 const objectives = (value: unknown) => Array.isArray(value) && value.every((objective) =>
   typeof objective === "object" && objective !== null && !Array.isArray(objective) &&
   Object.entries(objective).every(([key, field]) => OBJECTIVE_FIELDS[key]?.(field) === true));
+const neighbours = (value: unknown) => Array.isArray(value) && value.every((neighbour) =>
+  typeof neighbour === "object" && neighbour !== null && !Array.isArray(neighbour) &&
+  Object.keys(neighbour).every((key) => ["keywords", "owner", "distanceInches"].includes(key)) &&
+  strings(neighbour.keywords) && (neighbour.owner === "friendly" || neighbour.owner === "enemy") &&
+  typeof neighbour.distanceInches === "number" && neighbour.distanceInches >= 0);
+const isRecord = (value: unknown): value is Record<string, unknown> => typeof value === "object" && value !== null && !Array.isArray(value);
+const activeRules = (value: unknown) => Array.isArray(value) && value.every((rule) => typeof rule === "string" ||
+  (isRecord(rule) && typeof rule.ability_id === "string" && Object.keys(rule).length <= 2 &&
+    Object.entries(rule).every(([key, field]) => ["ability_id", "option_id", "definition_id"].includes(key) && typeof field === "string")));
+const REGION_FIELDS: Record<string, (value: unknown) => boolean> = {
+  ruleRegion: (value) => typeof value === "string",
+  terrainArea: (value) => value === true,
+  territory: (value) => value === "attacker" || value === "target" || value === "no-mans-land",
+  deploymentZone: (value) => value === "attacker" || value === "target",
+  wholly: (value) => typeof value === "boolean",
+};
+const regions = (value: unknown) => Array.isArray(value) && value.every((region) => isRecord(region) &&
+  Object.keys(region).filter((key) => key !== "wholly").length === 1 &&
+  Object.entries(region).every(([key, field]) => REGION_FIELDS[key]?.(field) === true));
+const count = (value: unknown) => Number.isInteger(value) && (value as number) >= 0;
+const control = (value: unknown) => isRecord(value) && Object.keys(value).length === 3 &&
+  count(value.attacker) && count(value.target) && count(value.total) &&
+  (value.attacker as number) + (value.target as number) <= (value.total as number);
 const SCENARIO_FIELDS: Record<keyof Scenario, (value: unknown) => boolean> = {
   battleRound: (value) => Number.isInteger(value) && (value as number) >= 1,
   attackerTurn: (value) => typeof value === "boolean",
@@ -66,6 +90,12 @@ const SCENARIO_FIELDS: Record<keyof Scenario, (value: unknown) => boolean> = {
   attackerObjectives: objectives,
   targetObjectives: objectives,
   attackerGuided: (value) => typeof value === "boolean",
+  attackerNeighbours: neighbours,
+  targetNeighbours: neighbours,
+  activeRules,
+  attackerRegions: regions,
+  targetRegions: regions,
+  objectivesControlled: control,
 };
 
 /** Parse a scenario declaration, rejecting unknown fields and malformed values. */

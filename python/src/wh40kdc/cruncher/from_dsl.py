@@ -30,6 +30,15 @@ from wh40kdc.cruncher.from_dsl_shapes import (
     scaled_to_cap,
     unsized_value_reason,
 )
+from wh40kdc.cruncher.scenario_conditions import (
+    attachment_from_members,
+    attack_comparison,
+    evaluate_controls,
+    evaluate_in_region,
+    evaluate_rule_active,
+    is_neighbour_filter,
+    within_neighbour,
+)
 from wh40kdc.cruncher.weapon_bindings import resolve_named_weapon_bindings
 from wh40kdc.scope import unit_matches_applies_to
 
@@ -1482,12 +1491,15 @@ def _translate_named_region_state(
 
 
 def _is_weapon_scoped_condition(condition: dict[str, Any]) -> bool:
-    """An ``attack-is`` naming weapons, or its negation: the resolver gates these per weapon."""
+    """An ``attack-is`` naming weapons, or its negation, or an ``attack-compare``: the resolver
+    gates these per attack."""
     if condition.get("operator") == "not":
         operands = condition.get("operands")
         if not isinstance(operands, list) or len(operands) != 1 or not _is_object(operands[0]):
             return False
         return operands[0].get("operator") is None and _is_weapon_scoped_condition(operands[0])
+    if condition.get("type") == "attack-compare":
+        return True
     params = condition.get("parameters")
     return (
         condition.get("type") == "attack-is"
@@ -1518,6 +1530,65 @@ def _negated_weapon_applicability(operands: list[Any]) -> Any:
     return {"excludedWeaponKeywords": included} if included else "context"
 
 
+def _split_attack_scoped(
+    condition: dict[str, Any], perspective: str
+) -> tuple[dict[str, Any], dict[str, Any]] | None:
+    """An ``and`` whose operands mix attack-scoped predicates (a weapon, the attack's Strength
+    against the target's Toughness) with predicates on the units: the attack-scoped operands as
+    one buff gate, and the rest to evaluate. Nested ``and``s flatten. None when no operand is
+    attack-scoped, when every operand is, or when an attack-scoped operand has no gate."""
+    if condition.get("operator") != "and" or not isinstance(condition.get("operands"), list):
+        return None
+    operands: list[Any] = []
+
+    def flatten(items: list[Any]) -> None:
+        for operand in items:
+            if (
+                _is_object(operand)
+                and operand.get("operator") == "and"
+                and isinstance(operand.get("operands"), list)
+            ):
+                flatten(operand["operands"])
+            else:
+                operands.append(operand)
+
+    flatten(condition["operands"])
+    applicability: dict[str, Any] = {}
+    rest: list[Any] = []
+    for operand in operands:
+        if not _is_object(operand) or not _is_weapon_scoped_condition(operand):
+            rest.append(operand)
+            continue
+        gate = _condition_to_applicability(operand, perspective)
+        if isinstance(gate, str):
+            return None
+        applicability = _combine_applicability(applicability, gate)
+    if not rest or len(rest) == len(operands):
+        return None
+    remainder = (
+        rest[0] if len(rest) == 1 and _is_object(rest[0]) else {"operator": "and", "operands": rest}
+    )
+    return applicability, remainder
+
+
+def _walk_gated(
+    effect: Any,
+    applicability: dict[str, Any],
+    source: BuffSource,
+    opts: dict[str, Any],
+    out: EffectTranslation,
+) -> None:
+    """Walk ``effect`` and attach ``applicability`` to every buff it yields."""
+    sub: EffectTranslation = {"applied": [], "unsupported": [], "activatable": []}
+    _walk(effect, source, opts, sub)
+    out["applied"].extend(_apply_applicability(b, applicability) for b in sub["applied"])
+    out["activatable"].extend(
+        {**lever, "buffs": [_apply_applicability(b, applicability) for b in lever["buffs"]]}
+        for lever in sub["activatable"]
+    )
+    out["unsupported"].extend(sub["unsupported"])
+
+
 def _translate_conditional(
     node: dict[str, Any], source: BuffSource, opts: dict[str, Any], out: EffectTranslation
 ) -> None:
@@ -1528,14 +1599,7 @@ def _translate_conditional(
     if _is_weapon_scoped_condition(condition):
         applicability = _condition_to_applicability(condition, opts["perspective"])
         if isinstance(applicability, dict):
-            sub: EffectTranslation = {"applied": [], "unsupported": [], "activatable": []}
-            _walk(effect, source, opts, sub)
-            out["applied"].extend(_apply_applicability(b, applicability) for b in sub["applied"])
-            out["activatable"].extend(
-                {**lever, "buffs": [_apply_applicability(b, applicability) for b in lever["buffs"]]}
-                for lever in sub["activatable"]
-            )
-            out["unsupported"].extend(sub["unsupported"])
+            _walk_gated(effect, applicability, source, opts, out)
             return
     if node.get("_activation_source") is not None and is_post_own_attack_moment(
         node.get("_activation_trigger")
@@ -1544,6 +1608,22 @@ def _translate_conditional(
             {"reason": POST_ATTACK_MOMENT, "effectFragment": node["_activation_source"]}
         )
         return
+    split = (
+        None
+        if node.get("_activation_source") is not None
+        else _split_attack_scoped(condition, opts["perspective"])
+    )
+    if split is not None:
+        rest_verdict = _evaluate_condition(
+            split[1],
+            opts["context"],
+            opts["perspective"],
+            None if opts.get("grantedHolder") else source,
+        )
+        if rest_verdict != "unknown":
+            if rest_verdict:
+                _walk_gated(effect, split[0], source, opts, out)
+            return
     evaluated = condition
     if node.get("_activation_source") is not None:
         evaluated = _elide_historical_clocks(condition, opts.get("duration"))
@@ -2352,6 +2432,9 @@ def _condition_to_applicability(condition: dict[str, Any], perspective: str) -> 
             if perspective == "target"
             else {"requiresAttackerKeyword": kw}
         )
+    if ctype == "attack-compare":
+        comparison = attack_comparison(params)
+        return {"attackComparisons": [comparison]} if comparison is not None else "context"
     if ctype == "attack-is":
         if (
             params is None
@@ -2360,7 +2443,8 @@ def _condition_to_applicability(condition: dict[str, Any], perspective: str) -> 
         ):
             return "context"
         applicability = combine_optional(
-            _attack_type_applicability(params), weapon_applicability(params)
+            _attack_type_applicability(params),
+            combine_optional(_weapon_type_applicability(params), weapon_applicability(params)),
         )
         return applicability if applicability is not None else "context"
     return "context"
@@ -2392,6 +2476,11 @@ def _combine_applicability(a: dict[str, Any], b: dict[str, Any]) -> dict[str, An
         out["weaponName"] = b["weaponName"]
     if b.get("weaponKeyword"):
         out["weaponKeyword"] = b["weaponKeyword"]
+    if b.get("attackComparisons") is not None:
+        out["attackComparisons"] = [
+            *(a.get("attackComparisons") or []),
+            *b["attackComparisons"],
+        ]
     if b.get("excludedTargetKeywords") is not None:
         out["excludedTargetKeywords"] = list(
             dict.fromkeys([*(a.get("excludedTargetKeywords") or []), *b["excludedTargetKeywords"]])
@@ -2687,6 +2776,22 @@ def _matches_unit_filter(
                 unknown = True
             elif distance > inches:
                 return False
+        elif (
+            key == "within"
+            and _is_object(value)
+            and value.get("wholly") is not True
+            and _is_object(value.get("of"))
+            and is_neighbour_filter(value["of"])
+        ):
+            verdict = within_neighbour(
+                value,
+                ctx.get("attackerNeighbours" if side == "attacker" else "targetNeighbours"),
+                side == ability_side,
+            )
+            if verdict is False:
+                return False
+            if verdict == "unknown":
+                unknown = True
         elif key == "level" and value == "unit":
             continue
         elif (
@@ -3076,8 +3181,6 @@ def _evaluate_condition(
         return ctx["attackerGuided"]
     if ctype == "attachment":
         p = params or {}
-        if p.get("with") is not None:
-            return "unknown"
         subject = p.get("subject")
         explicit_side = (
             "attacker" if subject == "attacker" else "target" if subject == "defender" else None
@@ -3089,29 +3192,84 @@ def _evaluate_condition(
             "ability-unit",
         ):
             return "unknown"
+        flags = _attachment_from_flags(p, ctx, perspective, source)
+        if flags is False:
+            return False
         side = explicit_side or ("attacker" if perspective == "attacker" else "target")
-        attached = ctx.get("attackerAttached" if side == "attacker" else "targetAttached")
-        role = ctx.get("attackerAttachmentRole" if side == "attacker" else "targetAttachmentRole")
-        if (
+        sourced = (
             explicit_side is None
             and source is not None
             and source.get("kind") == "ability"
             and source.get("abilityKind") in ("attached", "support")
-        ):
-            source_id = source.get("sourceUnitId")
-            roles = ctx.get("attachmentRoles")
-            role = roles.get(source_id) if _is_object(roles) and source_id is not None else None
-            attached = True if source.get("abilityKind") == "attached" else role is not None
-        if attached is False:
-            return False
-        wanted_role = p.get("role")
-        if wanted_role == "attached":
-            return "unknown" if attached is None else attached
-        if wanted_role == "leading":
-            return "unknown" if role is None else role == "leader"
-        if wanted_role == "led" and role == "bodyguard":
-            return True
-        return "unknown"
+        )
+        own = (
+            source.get("sourceUnitId")
+            if sourced and source is not None
+            else ctx.get("attackerUnitId" if side == "attacker" else "targetUnitId")
+        )
+        members = attachment_from_members(
+            p.get("role"),
+            p.get("with"),
+            ctx.get("attackerMembers" if side == "attacker" else "targetMembers"),
+            own,
+        )
+        if members != "unknown":
+            return members
+        return flags if p.get("with") is None else "unknown"
+    if ctype == "rule-active":
+        return evaluate_rule_active(params or {}, ctx)
+    if ctype == "in-region":
+        p = params or {}
+        side = _condition_side(p.get("subject"), perspective)
+        if side is None:
+            return "unknown"
+        return evaluate_in_region(
+            p, ctx, side, "attacker" if perspective == "attacker" else "target"
+        )
+    if ctype == "controls":
+        return evaluate_controls(
+            params or {}, ctx, "attacker" if perspective == "attacker" else "target"
+        )
+    return "unknown"
+
+
+def _attachment_from_flags(
+    p: dict[str, Any],
+    ctx: EngineContext,
+    perspective: str,
+    source: BuffSource | None,
+) -> bool | str:
+    """``attachment`` from the attachment flags and roles alone; ``with`` filters are left to the
+    members."""
+    subject = p.get("subject")
+    explicit_side = (
+        "attacker" if subject == "attacker" else "target" if subject == "defender" else None
+    )
+    side = explicit_side or ("attacker" if perspective == "attacker" else "target")
+    attached = ctx.get("attackerAttached" if side == "attacker" else "targetAttached")
+    role = ctx.get("attackerAttachmentRole" if side == "attacker" else "targetAttachmentRole")
+    if (
+        explicit_side is None
+        and source is not None
+        and source.get("kind") == "ability"
+        and source.get("abilityKind") in ("attached", "support")
+    ):
+        source_id = source.get("sourceUnitId")
+        roles = ctx.get("attachmentRoles")
+        role = roles.get(source_id) if _is_object(roles) and source_id is not None else None
+        attached = (
+            True if source.get("abilityKind") == "attached" or role is not None else None
+        )
+    if attached is False:
+        return False
+    wanted_role = p.get("role")
+    if wanted_role == "attached":
+        return "unknown" if attached is None else bool(attached)
+    if wanted_role == "leading":
+        return "unknown" if role is None else role == "leader"
+    # A bodyguard is known to be led; other combined-unit leadership needs more facts.
+    if wanted_role == "led" and role == "bodyguard":
+        return True
     return "unknown"
 
 

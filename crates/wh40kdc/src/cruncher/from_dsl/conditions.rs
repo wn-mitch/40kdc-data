@@ -8,6 +8,10 @@ use super::js::*;
 use super::TranslationPerspective;
 use crate::cruncher::buffs::{AbilityKind, BuffSource, EngineContext};
 use crate::cruncher::scenario::{has_designation, within_objective, UnitStrength};
+use crate::cruncher::scenario_conditions::{
+    attachment_from_flags, attachment_from_members, evaluate_controls, evaluate_in_region,
+    evaluate_rule_active, is_neighbour_filter, within_neighbour,
+};
 
 /// The buffed unit: the ability's own unit (or model), or the unit an aura is applied to.
 pub(super) fn is_buffed_unit(subject: Option<&Value>) -> bool {
@@ -117,60 +121,54 @@ pub(super) fn evaluate_condition_for_source(
         }
         Some("attachment") => {
             let subject = p.get("subject");
-            if p.get("with").is_some_and(|value| !value.is_null()) {
-                return None;
-            }
             let explicit_side = match subject.and_then(Value::as_str) {
                 Some("attacker") => Some(TranslationPerspective::Attacker),
                 Some("defender") => Some(TranslationPerspective::Target),
                 None | Some("this-model" | "this-unit" | "ability-unit") => None,
                 _ => return None,
             };
-            let side = explicit_side.unwrap_or(perspective);
-            let mut attached = if side == TranslationPerspective::Attacker {
-                ctx.attacker_attached
-            } else {
-                ctx.target_attached
-            };
-            let mut role = if side == TranslationPerspective::Attacker {
-                ctx.attacker_attachment_role
-            } else {
-                ctx.target_attachment_role
-            };
-            if explicit_side.is_none() {
-                if let Some(BuffSource::Ability {
-                    ability_kind,
-                    source_unit_id,
-                    ..
-                }) = source
-                {
-                    if matches!(ability_kind, AbilityKind::Attached | AbilityKind::Support) {
-                        role = source_unit_id
-                            .as_ref()
-                            .and_then(|id| ctx.attachment_roles.as_ref()?.get(id))
-                            .copied();
-                        attached = match ability_kind {
-                            AbilityKind::Attached => Some(true),
-                            AbilityKind::Support => role.map(|_| true),
-                            _ => unreachable!(),
-                        };
-                    }
-                }
-            }
-            if attached == Some(false) {
+            let flags = attachment_from_flags(p, ctx, perspective, source);
+            if flags == Some(false) {
                 return Some(false);
             }
-            match p.get("role").and_then(Value::as_str) {
-                Some("attached") => attached,
-                Some("leading") => {
-                    role.map(|role| role == crate::cruncher::buffs::AttachmentRole::Leader)
-                }
-                Some("led") if role == Some(crate::cruncher::buffs::AttachmentRole::Bodyguard) => {
-                    Some(true)
-                }
+            let side = explicit_side.unwrap_or(perspective);
+            let sourced = match (explicit_side, source) {
+                (
+                    None,
+                    Some(BuffSource::Ability {
+                        ability_kind: AbilityKind::Attached | AbilityKind::Support,
+                        source_unit_id,
+                        ..
+                    }),
+                ) => Some(source_unit_id.as_deref()),
                 _ => None,
+            };
+            let (own, members) = match side {
+                TranslationPerspective::Attacker => {
+                    (ctx.attacker_unit_id.as_deref(), &ctx.attacker_members)
+                }
+                TranslationPerspective::Target => {
+                    (ctx.target_unit_id.as_deref(), &ctx.target_members)
+                }
+            };
+            let with = p.get("with").filter(|value| !value.is_null());
+            match attachment_from_members(
+                p.get("role"),
+                with,
+                members.as_deref(),
+                sourced.unwrap_or(own),
+            ) {
+                Some(verdict) => Some(verdict),
+                None if with.is_none() => flags,
+                None => None,
             }
         }
+        Some("rule-active") => evaluate_rule_active(p, ctx),
+        Some("in-region") => {
+            let side = condition_side(p.get("subject"), perspective)?;
+            evaluate_in_region(p, ctx, side, perspective)
+        }
+        Some("controls") => evaluate_controls(p, ctx, perspective),
         Some("matches") => {
             let side = condition_side(p.get("subject"), perspective)?;
             // Ownership is relative to the side whose ability it is.
@@ -703,6 +701,28 @@ fn evaluate_filter(
                 let of = value.get("of").and_then(Value::as_str);
                 let measured = of == Some(other)
                     || (matches!(of, Some("this-unit" | "ability-unit")) && ability_side != side);
+                if let Some(neighbours_of) =
+                    object(value.get("of")).filter(|of| !measured && is_neighbour_filter(of))
+                {
+                    // Another unit named by keyword, within a fixed range of the filtered unit.
+                    let inches = object(value.get("range"))
+                        .filter(|range| range.len() == 1)
+                        .and_then(|range| range.get("inches"))
+                        .and_then(Value::as_f64);
+                    let neighbours = if side == TranslationPerspective::Attacker {
+                        ctx.attacker_neighbours.as_deref()
+                    } else {
+                        ctx.target_neighbours.as_deref()
+                    };
+                    match inches.and_then(|inches| {
+                        within_neighbour(neighbours_of, inches, neighbours, side == ability_side)
+                    }) {
+                        Some(false) => return Some(false),
+                        None => unknown = true,
+                        Some(true) => {}
+                    }
+                    continue;
+                }
                 if !measured {
                     unknown = true;
                     continue;

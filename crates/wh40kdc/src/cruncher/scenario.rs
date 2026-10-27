@@ -188,3 +188,78 @@ pub(crate) fn within_objective(
     }
     (!unknown).then_some(false)
 }
+
+/// Whose a neighbouring unit is, relative to the unit it is near.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "kebab-case")]
+pub enum NeighbourOwner {
+    Friendly,
+    Enemy,
+}
+
+/// Another unit near one unit of the attack: its keywords, whose it is relative to that unit,
+/// and how far away it is.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ScenarioNeighbour {
+    pub keywords: Vec<String>,
+    pub owner: NeighbourOwner,
+    pub distance_inches: f64,
+}
+
+/// A rule an army has active: its id, or one of its options or named definitions.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum ActiveRule {
+    Id(String),
+    Part {
+        ability_id: String,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        option_id: Option<String>,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        definition_id: Option<String>,
+    },
+}
+
+/// A region a unit is in: an army rule's region (by id), a terrain area, a side's territory or
+/// deployment zone. `wholly` says every model of the unit is in it.
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ScenarioRegion {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub rule_region: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub terrain_area: Option<bool>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub territory: Option<ObjectiveTerritory>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub deployment_zone: Option<ScenarioSide>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub wholly: Option<bool>,
+}
+
+/// Objectives each side controls, and how many there are.
+#[derive(Clone, Copy, Debug, PartialEq, Serialize, Deserialize)]
+pub struct ObjectivesControlled {
+    pub attacker: f64,
+    pub target: f64,
+    pub total: f64,
+}
+
+/// A unit's role in a combined unit.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "kebab-case")]
+pub enum MemberRole {
+    Leader,
+    Bodyguard,
+    Support,
+}
+
+/// One unit of a combined unit: its id, its role and its keywords.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct AttachedMember {
+    pub unit_id: String,
+    pub role: MemberRole,
+    pub keywords: Vec<String>,
+}

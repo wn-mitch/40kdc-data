@@ -20,6 +20,7 @@
 //! requirements for the player, rather than pretending that the engine resolved them.
 
 mod applicability;
+mod attack_scope;
 pub(crate) mod conditions;
 mod damage_leaves;
 mod js;

@@ -32,8 +32,10 @@
 //! ```
 
 pub mod allocation;
+mod attack_compare;
 pub mod attribution;
 pub mod buffs;
+mod context;
 mod damage_roll;
 pub mod engine;
 pub mod from_dsl;
@@ -42,14 +44,17 @@ mod gates;
 pub mod recipient_snapshots;
 mod resolved;
 pub mod scenario;
+mod scenario_conditions;
 mod weapon_bindings;
 
 pub use allocation::{allocate, allocate_model, AllocationError, AllocationOutput};
+pub use attack_compare::attack_comparison_holds;
 pub use attribution::{attribute_stages, AttributedStage, StageLift};
 pub use buffs::{
     resolve_buffs, AbilityKind, AttachmentRole, Buff, BuffApplicability, BuffContribution,
     BuffSource, EngineContext, RerollSubset, ResolvedModifiers, RollKind, WeaponKeywordRef,
 };
+pub use buffs::{AttackComparison, AttackOperand, AttackSide, AttackStatOperand, Comparison};
 pub use engine::{
     crunch, crunch_model, AttackModel, AttackProfileRef, CruncherError, EngineInput, EngineOutput,
     RollProbabilities, Stage, StageName, TargetProfileRef,
@@ -61,6 +66,7 @@ pub use from_dsl::{
 pub use from_keyword::buffs_from_keyword;
 pub use recipient_snapshots::RecipientSnapshot;
 pub use scenario::{
-    ModelWounds, ObjectiveController, ObjectiveTerritory, ScenarioObjective, ScenarioSide,
-    UnitState, UnitStrength,
+    ActiveRule, AttachedMember, MemberRole, ModelWounds, NeighbourOwner, ObjectiveController,
+    ObjectiveTerritory, ObjectivesControlled, ScenarioNeighbour, ScenarioObjective, ScenarioRegion,
+    ScenarioSide, UnitState, UnitStrength,
 };

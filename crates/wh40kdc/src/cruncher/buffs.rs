@@ -14,13 +14,16 @@ use serde_json::Value;
 
 use crate::Phase;
 
+pub use super::attack_compare::{
+    AttackComparison, AttackOperand, AttackSide, AttackStatOperand, Comparison, StatReduce,
+};
+pub use super::context::{AttachmentRole, EngineContext};
 use super::gates::live_buffs;
 pub use super::resolved::{
     CappedMod, CoverState, CritThresholds, ExtraKeywordEntry, FeelNoPainState, HighestMod,
     IgnoredRolls, InvulnerableState, RerollOne, RerollOneState, RerollState, Rerolls,
     ResolvedModifiers, SaveImproveState, SkillMods, SummedMod, ThresholdState,
 };
-use super::scenario::{ModelWounds, ScenarioObjective, UnitState, UnitStrength};
 
 /// Which side an ability buff was sourced from. Drives stable tie-breaking
 /// inside [`resolve_buffs`].
@@ -273,6 +276,10 @@ pub struct BuffApplicability {
     pub weapon_requirements: Option<Vec<BuffApplicability>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub excluded_weapon_keywords: Option<Vec<WeaponKeywordRef>>,
+    /// Conjunctive comparisons of the attack's characteristics (the attack's Strength against
+    /// the target's Toughness). A comparison whose characteristic the context lacks does not hold.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub attack_comparisons: Option<Vec<AttackComparison>>,
 }
 
 /// A single buff: where it came from, when it applies, what it contributes.
@@ -283,205 +290,6 @@ pub struct Buff {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub applicable_when: Option<BuffApplicability>,
     pub contribution: BuffContribution,
-}
-
-/// Actual membership in an attached unit, supplied by the caller's roster state.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
-#[serde(rename_all = "kebab-case")]
-pub enum AttachmentRole {
-    Leader,
-    Bodyguard,
-}
-
-/// Shared engine context. Carries the phase plus a few attacker/target flags
-/// the keyword translator and the resolver both need.
-#[derive(Clone, Debug, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct EngineContext {
-    pub phase: Phase,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub attacker_unit_id: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub target_unit_id: Option<String>,
-    /// Caller-attested event recipients, independent of current attachment state.
-    #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    pub recipient_snapshots: Vec<super::recipient_snapshots::RecipientSnapshot>,
-    /// The battle round. Drives `battle-round` and per-round range tables; `None` leaves them unknown.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub battle_round: Option<u32>,
-    /// It is the attacking unit's player's turn. Drives `player-turn-is`, read for the side whose
-    /// ability it is: "your turn" for a defensive ability is the opponent of the attacker.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub attacker_turn: Option<bool>,
-    /// Each unit against its Starting Strength. Drives `strength`; `None` leaves it unknown.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub attacker_strength: Option<UnitStrength>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub target_strength: Option<UnitStrength>,
-    /// The wounds of each unit's damaged (or only) model. Drives `wounds`; `None` leaves it unknown.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub attacker_wounds: Option<ModelWounds>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub target_wounds: Option<ModelWounds>,
-    /// Every designation each unit carries, matched case-insensitively. A supplied list is
-    /// complete; `None` leaves `designated` filters unknown.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub attacker_designations: Option<Vec<String>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub target_designations: Option<Vec<String>>,
-    /// Every listed state each unit is in. A supplied list is complete; `None` leaves those
-    /// `state` filters unknown. Both units of an attack are on the battlefield.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub attacker_states: Option<Vec<UnitState>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub target_states: Option<Vec<UnitState>>,
-    /// The target is the closest eligible target to the attacker. Drives `closest`.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub target_closest: Option<bool>,
-    /// Every objective each unit is within control range of. A supplied list is complete;
-    /// `None` leaves objective `within` filters unknown.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub attacker_objectives: Option<Vec<ScenarioObjective>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub target_objectives: Option<Vec<ScenarioObjective>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub attacker_attachment_role: Option<AttachmentRole>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub target_attachment_role: Option<AttachmentRole>,
-    /// Actual roles in the combined unit, keyed by source unit id.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub attachment_roles: Option<BTreeMap<String, AttachmentRole>>,
-    /// Attacker has not moved this turn — Heavy fires its +1 to hit.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub attacker_stationary: Option<bool>,
-    /// Attacker made a charge move this turn — drives a `happened` Charge-move condition.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub attacker_charged: Option<bool>,
-    /// Within half the weapon's range — Melta / Rapid Fire fire.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub within_half_range: Option<bool>,
-    /// Distance to the target in inches; drives `applicable_when.max_range_inches`.
-    /// Unset leaves range gates unsatisfied.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub distance_inches: Option<f64>,
-    /// Attacker benefits from cover (mostly informational).
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub attacker_in_cover: Option<bool>,
-    /// Target is in cover.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub target_in_cover: Option<bool>,
-    /// Attacker keywords (union of `unit.keywords + faction_keywords`), lower-cased.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub attacker_keywords: Option<Vec<String>>,
-    /// Target keywords (union of `unit.keywords + faction_keywords`), lower-cased.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub target_keywords: Option<Vec<String>>,
-    /// Keywords every model making the attack carries, lower-cased: the keywords and faction
-    /// keywords shared by the attacking datasheets. Resolves model-level keyword filters.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub attacker_model_keywords: Option<Vec<String>>,
-    /// Keywords every model of the target carries, lower-cased.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub target_model_keywords: Option<Vec<String>>,
-    /// Sub-phase timing flag consumed by the `timing-is` condition.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub timing: Option<String>,
-    /// The buffed unit is part of a combined ("attached") unit.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub attacker_attached: Option<bool>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub target_attached: Option<bool>,
-    /// The army's Army Faction id. Drives the `army-faction` condition; `None` leaves it unknown.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub army_faction: Option<String>,
-    /// The defending army's Army Faction id, for the `army-faction` condition of the target's own rules.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub target_army_faction: Option<String>,
-    /// The battle size being played (`incursion` / `strike-force` / `onslaught`). Drives the
-    /// `battle-size` condition; `None` leaves it unknown.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub battle_size: Option<String>,
-    /// The attacking unit is Guided (For the Greater Good: not an Observer, targeting a Spotted
-    /// unit). Drives the `guided` condition; `None` leaves it unknown.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub attacker_guided: Option<bool>,
-    /// Models in the attacking unit. Drives `model-count` on the attacker; `None` leaves it unknown.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub attacker_model_count: Option<u32>,
-    /// Models in the target unit. Drives `model-count` on the defender; `None` leaves it unknown.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub target_model_count: Option<u32>,
-    /// The wargear the attacking models' chosen loadout includes: by wargear id, how many of
-    /// those models carry it. A supplied map is complete, so an id it omits is carried by no
-    /// model. Drives `unit-wargear` on the attacker; `None` leaves it unknown.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub attacker_wargear: Option<BTreeMap<String, u32>>,
-    /// The target's counterpart of `attacker_wargear`.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub target_wargear: Option<BTreeMap<String, u32>>,
-    /// Lower-cased names of the attacking weapon and its profile. Drives
-    /// `applicable_when.weapon_name`; unknown names cannot satisfy a constraint.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub weapon_names: Option<Vec<String>>,
-    /// Catalog ids for unrated keyword matching. Rated selectors require
-    /// `weapon_keyword_refs`; live grants retain their full references.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub weapon_keywords: Option<Vec<String>>,
-    /// Printed keyword references, preserving ratings for canonical weapon selectors.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub weapon_keyword_refs: Option<Vec<WeaponKeywordRef>>,
-}
-
-impl EngineContext {
-    /// A context for `phase` with every optional flag unset (each gate it drives stays unknown).
-    pub fn new(phase: Phase) -> Self {
-        EngineContext {
-            phase,
-            attacker_unit_id: None,
-            target_unit_id: None,
-            recipient_snapshots: Vec::new(),
-            battle_round: None,
-            attacker_turn: None,
-            attacker_strength: None,
-            target_strength: None,
-            attacker_wounds: None,
-            target_wounds: None,
-            attacker_designations: None,
-            target_designations: None,
-            attacker_states: None,
-            target_states: None,
-            target_closest: None,
-            attacker_objectives: None,
-            target_objectives: None,
-            attacker_attachment_role: None,
-            target_attachment_role: None,
-            attachment_roles: None,
-            attacker_stationary: None,
-            attacker_charged: None,
-            within_half_range: None,
-            distance_inches: None,
-            attacker_in_cover: None,
-            target_in_cover: None,
-            attacker_keywords: None,
-            target_keywords: None,
-            attacker_model_keywords: None,
-            target_model_keywords: None,
-            timing: None,
-            attacker_attached: None,
-            target_attached: None,
-            army_faction: None,
-            target_army_faction: None,
-            battle_size: None,
-            attacker_guided: None,
-            attacker_model_count: None,
-            target_model_count: None,
-            attacker_wargear: None,
-            target_wargear: None,
-            weapon_names: None,
-            weapon_keywords: None,
-            weapon_keyword_refs: None,
-        }
-    }
 }
 
 /// Stable ordering used to break ties when multiple buffs claim the same field.

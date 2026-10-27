@@ -43,6 +43,14 @@ function freshWounds(unit: Unit): { remaining: number; starting: number } | unde
   return typeof wounds === "number" ? { remaining: wounds, starting: wounds } : undefined;
 }
 
+/** The attacking unit's Toughness: its Bodyguard's when it has one, as for an attack against it, else its highest model's. */
+function attackerToughness(spec: StackSpec): { attackerToughness?: number } {
+  const bodyguard = spec.members.filter((member) => member.role === "bodyguard");
+  const toughness = (bodyguard.length > 0 ? bodyguard : spec.members)
+    .flatMap((member) => (member.unit.raw.profiles ?? []).map((profile) => profile.T)).filter((t) => typeof t === "number");
+  return toughness.length > 0 ? { attackerToughness: Math.max(...toughness) } : {};
+}
+
 /**
  * The engine context of one stack member in a cell. The crunch fires every model at a full-strength
  * target in the attacker's own turn, so those facts are stated; the scenario declares the rest.
@@ -56,6 +64,7 @@ function contextForCell(factionId: string, target: ResolvedTarget, phase: Compar
     targetStrength: "full",
     ...(targetWounds ? { targetWounds } : {}),
     ...(member && freshWounds(member.unit.raw) ? { attackerWounds: freshWounds(member.unit.raw) } : {}),
+    ...attackerToughness(spec),
     ...scenario,
     phase,
     attackerStationary: phase === "shooting",
@@ -69,6 +78,7 @@ function contextForCell(factionId: string, target: ResolvedTarget, phase: Compar
     attackerModelKeywords: member ? unitKeywords([member]) : sharedKeywords(spec.members),
     attackerUnitId: member?.unit.id,
     attackerAttachmentRole: member ? (member.role === "bodyguard" ? "bodyguard" as const : "leader" as const) : undefined,
+    attackerMembers: spec.members.map((candidate) => ({ unitId: candidate.unit.id, role: candidate.role, keywords: unitKeywords([candidate]) })),
     attachmentRoles: Object.fromEntries(spec.members.map((candidate) => [candidate.unit.id, candidate.role === "bodyguard" ? "bodyguard" : "leader"] as const)),
     targetKeywords,
     targetModelKeywords: targetKeywords,

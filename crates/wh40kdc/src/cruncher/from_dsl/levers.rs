@@ -9,6 +9,7 @@ use serde_json::{json, Map, Value};
 use super::applicability::{
     apply_applicability, combine, condition_to_applicability, label_for_buffs, App,
 };
+use super::attack_scope::{is_weapon_scoped_condition, split_attack_scoped, walk_gated};
 use super::conditions::evaluate_condition_for_source;
 use super::js::*;
 use super::{walk, Lever, Out, WalkOpts, STOCHASTIC_DICE_GATED};
@@ -281,51 +282,18 @@ pub(crate) fn moment_gate_with_source(
     Some(gated)
 }
 
-/// An `attack-is` naming weapons, or its negation: the resolver gates these per weapon.
-fn is_weapon_scoped_condition(condition: &Obj) -> bool {
-    if is_str(condition, "operator", "not") {
-        return match condition
-            .get("operands")
-            .and_then(Value::as_array)
-            .map(Vec::as_slice)
-        {
-            Some([operand]) => operand.as_object().is_some_and(|operand| {
-                operand.get("operator").is_none() && is_weapon_scoped_condition(operand)
-            }),
-            _ => false,
-        };
-    }
-    is_str(condition, "type", "attack-is")
-        && object(condition.get("parameters")).is_some_and(|parameters| {
-            parameters
-                .get("weapons")
-                .is_some_and(|value| !value.is_null())
-        })
-}
-
 pub(super) fn conditional(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     let Some(condition) = object(node.get("condition")) else {
         return;
     };
     if is_weapon_scoped_condition(condition) {
         if let App::When(applicability) = condition_to_applicability(condition, opts.perspective) {
-            let mut sub = Out::default();
-            walk(node.get("effect").unwrap_or(&Value::Null), opts, &mut sub);
-            out.applied.extend(
-                sub.applied
-                    .into_iter()
-                    .map(|buff| apply_applicability(buff, &applicability)),
+            walk_gated(
+                node.get("effect").unwrap_or(&Value::Null),
+                &applicability,
+                opts,
+                out,
             );
-            out.activatable
-                .extend(sub.activatable.into_iter().map(|mut lever| {
-                    lever.buffs = lever
-                        .buffs
-                        .into_iter()
-                        .map(|buff| apply_applicability(buff, &applicability))
-                        .collect();
-                    lever
-                }));
-            out.unsupported.extend(sub.unsupported);
             return;
         }
     }
@@ -337,6 +305,25 @@ pub(super) fn conditional(node: &Obj, opts: &WalkOpts, out: &mut Out) {
             activation_fragment(node).unwrap_or(node),
         );
         return;
+    }
+    // An attack-scoped gate beside predicates on the units: the units decide whether the effect
+    // applies at all, and the attack-scoped gate rides on its buffs.
+    if !synthetic_timing_gate(node) {
+        if let Some((applicability, rest)) = split_attack_scoped(condition, opts.perspective) {
+            match evaluate_condition(&rest, opts) {
+                Some(true) => {
+                    walk_gated(
+                        node.get("effect").unwrap_or(&Value::Null),
+                        &applicability,
+                        opts,
+                        out,
+                    );
+                    return;
+                }
+                Some(false) => return,
+                None => {}
+            }
+        }
     }
     let evaluated = if synthetic_timing_gate(node) {
         opts.duration

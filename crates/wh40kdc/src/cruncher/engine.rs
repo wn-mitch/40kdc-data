@@ -15,6 +15,7 @@ use std::fmt;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
+use super::attack_compare::has_attack_comparison;
 use super::buffs::{
     resolve_buffs, Buff, EngineContext, FeelNoPainState, ResolvedModifiers, WeaponKeywordRef,
 };
@@ -313,7 +314,29 @@ pub fn crunch_model(
     // the caller-supplied stack. resolve_buffs deduplicates and ranks them.
     let mut all_buffs = profile_buffs_for(input.attacker, ds, &ctx);
     all_buffs.extend(input.buffs.iter().cloned());
-    let resolved = resolve_buffs(&all_buffs, &ctx);
+    let mut resolved = resolve_buffs(&all_buffs, &ctx);
+    // A buff gated on the attack's Strength against the target's Toughness needs both, which the
+    // buffs themselves modify: take them from the stack without the comparison-gated buffs, then
+    // resolve again with them known. No comparison-gated buff feeds any comparison, which keeps a
+    // rule like "while S is below T, +1 S" from flipping itself off.
+    if all_buffs
+        .iter()
+        .any(|buff| has_attack_comparison(buff.applicable_when.as_ref()))
+    {
+        let toughness_mod = resolved.toughness_mod.value;
+        let toughness = input
+            .target
+            .unit
+            .profiles
+            .iter()
+            .map(|profile| profile.t.get() as f64 + toughness_mod);
+        ctx.attack_strength =
+            Some(eval_stat_value(&weapon_profile.stats.s)? + resolved.strength_mod.value);
+        ctx.target_toughness = Some(unit_profile.t.get() as f64 + toughness_mod);
+        ctx.target_toughness_max = toughness.clone().reduce(f64::max);
+        ctx.target_toughness_min = toughness.reduce(f64::min);
+        resolved = resolve_buffs(&all_buffs, &ctx);
+    }
 
     let mut stages: Vec<Stage> = Vec::with_capacity(7);
 
