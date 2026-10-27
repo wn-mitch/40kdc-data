@@ -9260,7 +9260,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "bd2439e20b5adf4123941efaf2adafca1039dba983eecd1589a6e557e3c2b559",
     "version": "2025-q3",
@@ -9354,7 +9354,10 @@
             "level": "model"
           },
           "modifier": {
-            "ability": "spirit-guides",
+            "ability": {
+              "ability_id": "shepherds-of-the-dead-aeldari",
+              "definition_id": "spirit-guides"
+            },
             "definition": {
               "type": "ability-part",
               "name": "Spirit Guides",

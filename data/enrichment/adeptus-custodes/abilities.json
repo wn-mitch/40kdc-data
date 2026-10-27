@@ -484,7 +484,10 @@
                 ]
               },
               "modifier": {
-                "ability": "psychic-null",
+                "ability": {
+                  "ability_id": "daughters-of-the-abyss-adeptus-custodes",
+                  "definition_id": "psychic-null"
+                },
                 "definition": {
                   "type": "ability-part",
                   "name": "Psychic Null",

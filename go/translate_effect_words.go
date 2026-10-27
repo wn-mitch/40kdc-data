@@ -389,6 +389,15 @@ var abilityLabels = map[string]string{
 
 // abilityLabel is the display label for an ability id: a curated override, else Title Case.
 func abilityLabel(id any) string {
+	// A definition inside a record, or one option of a stance, names itself and its record.
+	if ref, ok := asMap(id); ok && ref != nil && ref["ability_id"] != nil {
+		if def, ok := ref["definition_id"]; ok {
+			return idLabel(ejstr(def)) + " (" + abilityLabel(ref["ability_id"]) + ")"
+		}
+		if opt, ok := ref["option_id"]; ok {
+			return idLabel(ejstr(opt)) + " (" + abilityLabel(ref["ability_id"]) + ")"
+		}
+	}
 	if l, ok := abilityLabels[ejstr(id)]; ok {
 		return l
 	}

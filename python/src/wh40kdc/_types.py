@@ -2894,7 +2894,7 @@ class AddOption(TypedDict):
 
 
 class Modifier14(TypedDict):
-    ability: EntityId | Ability1 | Ability2 | Ability3
+    ability: EntityId | StanceOptionRef | NamedAbilityRef | Ability1 | Ability2 | Ability3
     aspect: Literal[
         "uses",
         "range",

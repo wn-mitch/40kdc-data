@@ -242,7 +242,8 @@ const ASPECTS: Record<string, string> = {
 
 /** The ability an ability-modifier changes: a named one, the one a trigger used, or those reaching an audience. */
 function modifiedAbility(ref: unknown, subj: string, ctx: Ctx): string {
-  if (ref != null && typeof ref === "object") {
+  // A stance option or a definition inside another record is named like a record.
+  if (ref != null && typeof ref === "object" && !("ability_id" in ref)) {
     const r = ref as Record<string, unknown>;
     if (r.event === "used") return "that ability";
     if (typeof r.keyword === "string") return `each ${r.keyword} ability of ${subj}`;

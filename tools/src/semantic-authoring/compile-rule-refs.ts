@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import type { CompileLeaf } from "./compile-fragments.js";
 import type { UnitNameContext } from "./compile-unit-names.js";
+import { NAMED_RANGES } from "./named-ranges.js";
 
 /**
  * A leaf names a rule or ability as it is printed ("Reanimation Protocols", "Devastator Doctrine");
@@ -23,6 +24,15 @@ type Catalog = {
   /** Army-wide records whose issue-orders lists Orders of its own (Voice of Command). */
   orderMenus: string[];
 };
+
+/**
+ * Printed names of rules the current rules replace, by slug. Core Rules FAQ (MFM dump): the Tank Shock
+ * Stratagem is the Crushing Impact Stratagem.
+ */
+const RENAMED_RULES: Readonly<Record<string, string>> = { "tank-shock": "crushing-impact" };
+
+/** A printed name with its hyphens dropped ("Techno-sorcerous" and "Technosorcerous" are one name). */
+const loose = (name: string): string => name.replace(/-/gu, "");
 
 const DATA = new URL("../../../data/", import.meta.url);
 const catalogs = new Map<string, Catalog>();
@@ -115,7 +125,8 @@ function scopes(factionId: string): string[] {
 }
 
 /** The record id a printed rule or ability name stands for, or null when none or several do. */
-export function resolveRecordName(factionId: string, name: string): string | null {
+export function resolveRecordName(factionId: string, printed: string): string | null {
+  const name = RENAMED_RULES[printed] ?? printed;
   for (const faction of scopes(factionId)) {
     const catalog = catalogOf(faction);
     if (catalog.ids.has(name)) return name;
@@ -125,7 +136,20 @@ export function resolveRecordName(factionId: string, name: string): string | nul
     if (named.length === 1) return named[0]!;
     if (named.length > 1) return null;
   }
+  // Last, the one record whose printed name matches with hyphens ignored.
+  for (const faction of scopes(factionId)) {
+    const catalog = catalogOf(faction);
+    const named = [...catalog.byName].filter(([key]) => loose(key) === loose(name)).flatMap(([, ids]) => ids);
+    if (new Set(named).size === 1) return named[0]!;
+    if (named.length > 1) return null;
+  }
   return null;
+}
+
+/** The record whose aura range a printed named range ("Contagion Range") is, when that record is in scope. */
+function resolveNamedRange(factionId: string, name: string): string | null {
+  const range = Object.entries(NAMED_RANGES).find(([key]) => `${key}-range` === name)?.[1];
+  return range ? resolveRecordName(factionId, range.aura_of) : null;
 }
 
 /** The stance option a printed option name stands for, or null when none or several do. */
@@ -202,13 +226,24 @@ export function resolveRuleReferences(leaves: readonly CompileLeaf[], context?: 
     switch (leaf.family_id) {
       case "ability-record-grant":
       case "ability-activate":
-      case "ability-modifier":
       case "unit-has-ability": {
-        // An ability-modifier may name its ability by event, keyword or affected rule instead; those stay as written.
         const name = parameters.ability;
         if (typeof name !== "string") return leaf;
         const id = resolveRecordName(faction, name);
         return id && id !== name ? withParameter("ability", id) : leaf;
+      }
+      case "ability-modifier": {
+        // The changed ability is a record, one option of a stance or an Order, or an ability a record
+        // defines inside itself; one named by event, keyword or affected rule stays as written.
+        const name = parameters.ability;
+        if (typeof name !== "string") return leaf;
+        // "Add 3" to the Contagion Range" changes the range of the aura that range is.
+        const rule = resolveRule(faction, name) ?? resolveNamedRange(faction, name);
+        return rule && rule !== name ? withParameter("ability", rule) : leaf;
+      }
+      case "stratagem-cost": {
+        const id = parameters.id;
+        return typeof id === "string" && RENAMED_RULES[id] ? withParameter("id", RENAMED_RULES[id]) : leaf;
       }
       case "rule-state": {
         const name = parameters.rule;

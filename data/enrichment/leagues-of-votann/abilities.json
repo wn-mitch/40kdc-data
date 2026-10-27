@@ -4624,7 +4624,10 @@
         ]
       },
       "modifier": {
-        "ability": "firebase-control",
+        "ability": {
+          "ability_id": "mobile-sensor-relays-leagues-of-votann",
+          "definition_id": "firebase-control"
+        },
         "definition": {
           "type": "ability-part",
           "name": "Firebase Control",

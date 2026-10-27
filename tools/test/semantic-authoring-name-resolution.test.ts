@@ -21,6 +21,20 @@ describe("printed rule and ability names resolve to the records that print them"
     const leaf = refLeaf("ability-modifier", { subject: "this-unit", ability: "voice-of-command", aspect: "range", operation: "set", value: 24 }); // mfm:mirror keep — the bare name under test
     const [modifier] = resolveRuleReferences([leaf], { faction_id: "astra-militarum" });
     expect(modifier!.parameters.ability).toBe("voice-of-command-astra-militarum");
+    // A named range is the range of the aura that defines it.
+    const contagion = refLeaf("ability-modifier", { subject: "this-model", ability: "contagion-range", aspect: "range", operation: "add", value: 3 });
+    expect(resolveRuleReferences([contagion], { faction_id: "death-guard" })[0]!.parameters.ability).toBe("nurgles-gift-death-guard");
+    // A printed name the current rules replace (Core Rules FAQ), in an ability change and a Stratagem cost.
+    const tankShock = refLeaf("ability-modifier", { subject: "this-model", ability: "tank-shock", aspect: "uses", operation: "lift-limit", value: 1 });
+    expect(resolveRuleReferences([tankShock], { faction_id: "chaos-knights" })[0]!.parameters.ability).toBe("crushing-impact");
+    const cost = refLeaf("stratagem-cost", { of: "stratagem", operation: "set", amount: 0, applies_to: "targeting-this-unit", id: "tank-shock" });
+    expect(resolveRuleReferences([cost], { faction_id: "chaos-knights" })[0]!.parameters.id).toBe("crushing-impact");
+    // A printed hyphen the record's name lacks still names the one record.
+    expect(resolveRecordName("necrons", "techno-sorcerous-augmentations")).toBe("technosorcerous-augmentations-necrons");
+    // A doctrine is an option of its stance record, not a record of its own.
+    const doctrine = refLeaf("ability-modifier", { subject: "this-unit", ability: "assault-doctrine", aspect: "uses", operation: "add", value: 1 });
+    const [option] = resolveRuleReferences([doctrine], { faction_id: "adeptus-astartes" });
+    expect(option!.parameters.ability).toEqual({ ability_id: "combat-doctrines-adeptus-astartes", option_id: "assault-doctrine" });
     const byEvent = refLeaf("ability-modifier", { subject: "this-unit", ability: { event: "used" }, aspect: "uses", operation: "add", value: 1 });
     expect(resolveRuleReferences([byEvent], { faction_id: "astra-militarum" })).toEqual([byEvent]);
   });

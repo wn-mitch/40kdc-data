@@ -12645,7 +12645,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [],
     "faction_id": "necrons",
@@ -12655,7 +12655,7 @@
       "type": "ability-modifier",
       "target": "this-unit",
       "modifier": {
-        "ability": "techno-sorcerous-augmentations",
+        "ability": "technosorcerous-augmentations-necrons",
         "aspect": "selections",
         "operation": "add",
         "value": 1

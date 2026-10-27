@@ -178,7 +178,8 @@ pub(super) fn aspect_name(aspect: &str) -> String {
 
 /// The ability an ability-modifier changes: a named one, the one a trigger used, or those reaching an audience.
 pub(super) fn modified_ability(r: Option<&Value>, subj: &str, ctx: &Ctx) -> String {
-    if let Some(Value::Object(r)) = r {
+    // A stance option or a definition inside another record is named like a record.
+    if let Some(Value::Object(r)) = r.filter(|v| v.get("ability_id").is_none()) {
         if sv(r, "event") == Some("used") {
             return "that ability".to_string();
         }

@@ -15,10 +15,10 @@ dump confirmation.
 | wargear-options | 0 | 0 | 1346 | 0 |
 | leader-attachments | 0 | 0 | 283 | 8 |
 | enhancements | 0 | 0 | 890 | 0 |
-| detachments | 0 | 0 | 93 | 364 |
-| stratagems | 0 | 0 | 255 | 1058 |
-| abilities | 0 | 0 | 1715 | 2820 |
-| phase-mappings | 0 | 0 | 496 | 1085 |
+| detachments | 7 | 0 | 96 | 354 |
+| stratagems | 3 | 0 | 255 | 1055 |
+| abilities | 0 | 0 | 1733 | 2802 |
+| phase-mappings | 8 | 0 | 496 | 1077 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
 ## Abilities by faction
@@ -27,39 +27,39 @@ dump confirmation.
 |---|--:|--:|--:|--:|
 | _core | 0 | 0 | 2 | 24 |
 | adepta-sororitas | 0 | 0 | 51 | 97 |
-| adeptus-astartes | 0 | 0 | 112 | 138 |
+| adeptus-astartes | 0 | 0 | 115 | 135 |
 | adeptus-custodes | 0 | 0 | 63 | 95 |
 | adeptus-mechanicus | 0 | 0 | 82 | 85 |
-| aeldari | 0 | 0 | 113 | 187 |
+| aeldari | 0 | 0 | 114 | 186 |
 | agents-of-the-imperium | 0 | 0 | 52 | 86 |
 | astra-militarum | 0 | 0 | 98 | 153 |
 | black-templars | 0 | 0 | 24 | 39 |
 | blood-angels | 0 | 0 | 28 | 33 |
 | chaos-daemons | 0 | 0 | 80 | 115 |
-| chaos-knights | 0 | 0 | 34 | 76 |
+| chaos-knights | 0 | 0 | 35 | 75 |
 | chaos-space-marines | 0 | 0 | 100 | 181 |
 | dark-angels | 0 | 0 | 37 | 40 |
-| death-guard | 0 | 0 | 53 | 107 |
+| death-guard | 0 | 0 | 58 | 102 |
 | deathwatch | 0 | 0 | 16 | 20 |
 | drukhari | 0 | 0 | 38 | 126 |
 | emperors-children | 0 | 0 | 49 | 97 |
 | genestealer-cults | 0 | 0 | 50 | 97 |
 | grey-knights | 0 | 0 | 52 | 82 |
 | imperial-fists | 0 | 0 | 3 | 8 |
-| imperial-knights | 0 | 0 | 45 | 73 |
+| imperial-knights | 0 | 0 | 46 | 72 |
 | iron-hands | 0 | 0 | 4 | 7 |
 | leagues-of-votann | 0 | 0 | 59 | 96 |
-| necrons | 0 | 0 | 97 | 133 |
+| necrons | 0 | 0 | 98 | 132 |
 | orks | 0 | 0 | 89 | 121 |
-| raven-guard | 0 | 0 | 4 | 7 |
+| raven-guard | 0 | 0 | 5 | 6 |
 | salamanders | 0 | 0 | 5 | 6 |
 | space-wolves | 0 | 0 | 43 | 44 |
-| tau-empire | 0 | 0 | 62 | 104 |
-| thousand-sons | 0 | 0 | 47 | 111 |
+| tau-empire | 0 | 0 | 63 | 103 |
+| thousand-sons | 0 | 0 | 49 | 109 |
 | tyranids | 0 | 0 | 70 | 116 |
 | ultramarines | 0 | 0 | 5 | 6 |
-| white-scars | 0 | 0 | 3 | 8 |
-| world-eaters | 0 | 0 | 45 | 102 |
+| white-scars | 0 | 0 | 4 | 7 |
+| world-eaters | 0 | 0 | 46 | 101 |
 
 ## Ability verification outcomes
 
@@ -78,8 +78,8 @@ dump confirmation.
 | adeptus-astartes | digest-differs | 13 |
 | adeptus-astartes | no-source | 5 |
 | adeptus-astartes | stub | 22 |
-| adeptus-astartes | unpublished | 97 |
-| adeptus-astartes | verified | 112 |
+| adeptus-astartes | unpublished | 94 |
+| adeptus-astartes | verified | 115 |
 | adeptus-custodes | ambiguous-source | 1 |
 | adeptus-custodes | digest-differs | 4 |
 | adeptus-custodes | stub | 15 |
@@ -91,8 +91,8 @@ dump confirmation.
 | adeptus-mechanicus | verified | 82 |
 | aeldari | digest-differs | 9 |
 | aeldari | stub | 28 |
-| aeldari | unpublished | 150 |
-| aeldari | verified | 113 |
+| aeldari | unpublished | 149 |
+| aeldari | verified | 114 |
 | agents-of-the-imperium | ambiguous-source | 1 |
 | agents-of-the-imperium | digest-differs | 11 |
 | agents-of-the-imperium | stub | 18 |
@@ -116,8 +116,8 @@ dump confirmation.
 | chaos-daemons | unpublished | 94 |
 | chaos-daemons | verified | 80 |
 | chaos-knights | digest-differs | 5 |
-| chaos-knights | unpublished | 71 |
-| chaos-knights | verified | 34 |
+| chaos-knights | unpublished | 70 |
+| chaos-knights | verified | 35 |
 | chaos-space-marines | digest-differs | 19 |
 | chaos-space-marines | stub | 24 |
 | chaos-space-marines | unpublished | 138 |
@@ -129,8 +129,8 @@ dump confirmation.
 | dark-angels | verified | 37 |
 | death-guard | digest-differs | 5 |
 | death-guard | stub | 20 |
-| death-guard | unpublished | 82 |
-| death-guard | verified | 53 |
+| death-guard | unpublished | 77 |
+| death-guard | verified | 58 |
 | deathwatch | ambiguous-source | 1 |
 | deathwatch | digest-differs | 1 |
 | deathwatch | no-source | 1 |
@@ -157,8 +157,8 @@ dump confirmation.
 | imperial-fists | verified | 3 |
 | imperial-knights | digest-differs | 6 |
 | imperial-knights | stub | 15 |
-| imperial-knights | unpublished | 52 |
-| imperial-knights | verified | 45 |
+| imperial-knights | unpublished | 51 |
+| imperial-knights | verified | 46 |
 | iron-hands | digest-differs | 1 |
 | iron-hands | stub | 1 |
 | iron-hands | unpublished | 5 |
@@ -169,8 +169,8 @@ dump confirmation.
 | leagues-of-votann | verified | 59 |
 | necrons | digest-differs | 7 |
 | necrons | stub | 15 |
-| necrons | unpublished | 111 |
-| necrons | verified | 97 |
+| necrons | unpublished | 110 |
+| necrons | verified | 98 |
 | orks | ambiguous-source | 1 |
 | orks | digest-differs | 21 |
 | orks | no-source | 1 |
@@ -178,8 +178,8 @@ dump confirmation.
 | orks | unpublished | 88 |
 | orks | verified | 89 |
 | raven-guard | stub | 1 |
-| raven-guard | unpublished | 6 |
-| raven-guard | verified | 4 |
+| raven-guard | unpublished | 5 |
+| raven-guard | verified | 5 |
 | salamanders | digest-differs | 2 |
 | salamanders | stub | 3 |
 | salamanders | unpublished | 1 |
@@ -191,12 +191,12 @@ dump confirmation.
 | space-wolves | verified | 43 |
 | tau-empire | digest-differs | 5 |
 | tau-empire | stub | 3 |
-| tau-empire | unpublished | 96 |
-| tau-empire | verified | 62 |
+| tau-empire | unpublished | 95 |
+| tau-empire | verified | 63 |
 | thousand-sons | digest-differs | 8 |
 | thousand-sons | stub | 5 |
-| thousand-sons | unpublished | 98 |
-| thousand-sons | verified | 47 |
+| thousand-sons | unpublished | 96 |
+| thousand-sons | verified | 49 |
 | tyranids | digest-differs | 5 |
 | tyranids | stub | 19 |
 | tyranids | unpublished | 92 |
@@ -204,12 +204,12 @@ dump confirmation.
 | ultramarines | stub | 1 |
 | ultramarines | unpublished | 5 |
 | ultramarines | verified | 5 |
-| white-scars | unpublished | 8 |
-| white-scars | verified | 3 |
+| white-scars | unpublished | 7 |
+| white-scars | verified | 4 |
 | world-eaters | digest-differs | 4 |
 | world-eaters | stub | 2 |
-| world-eaters | unpublished | 96 |
-| world-eaters | verified | 45 |
+| world-eaters | unpublished | 95 |
+| world-eaters | verified | 46 |
 
 ## Weapon verification outcomes
 

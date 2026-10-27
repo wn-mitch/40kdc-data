@@ -3368,6 +3368,8 @@ export interface AbilityModifierEffect {
   modifier: {
     ability:
       | EntityId
+      | StanceOptionRef1
+      | NamedAbilityRef1
       | {
           affecting: UnitFilter;
         }
@@ -3418,6 +3420,20 @@ export interface AbilityModifierEffect {
     consumes_shared_use?: false;
   };
   scaling?: Scaling;
+}
+/**
+ * Stable reference to one option within its containing ability.
+ */
+export interface StanceOptionRef1 {
+  ability_id: EntityId;
+  option_id: EntityId;
+}
+/**
+ * Stable reference to a named ability definition owned by its containing ability.
+ */
+export interface NamedAbilityRef1 {
+  ability_id: EntityId;
+  definition_id: EntityId;
 }
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema

@@ -3800,7 +3800,10 @@
             ]
           },
           "modifier": {
-            "ability": "enhanced-augurs",
+            "ability": {
+              "ability_id": "noospheric-recon-adeptus-mechanicus",
+              "definition_id": "enhanced-augurs"
+            },
             "definition": {
               "type": "ability-part",
               "name": "Enhanced Augurs",

@@ -5,7 +5,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "a95e7bfca86869c1e78368993e9bddc9a85bfb8ceff0690a07238e6e7b2f6d2e",
     "version": "2025-q3",
@@ -13,7 +13,7 @@
       "type": "ability-modifier",
       "target": "this-model",
       "modifier": {
-        "ability": "contagion-range",
+        "ability": "nurgles-gift-death-guard",
         "aspect": "range",
         "operation": "add",
         "value": 3
@@ -4277,7 +4277,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "eb34e3abb4b3a2054a795577aa7cd591ee9bdfeae2ea16c0546cb457b614db0d",
     "version": "2025-q3",
@@ -4297,7 +4297,7 @@
         ]
       },
       "modifier": {
-        "ability": "contagion-range",
+        "ability": "nurgles-gift-death-guard",
         "aspect": "range",
         "operation": "add",
         "value": 3,
@@ -5293,7 +5293,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "6818e3923dcc42faa0c2f1b1036bc41112f0efa6718eafecc22b5d8d5c06bfe5",
     "version": "2025-q3",
@@ -5370,7 +5370,7 @@
               ]
             },
             "modifier": {
-              "ability": "contagion-range",
+              "ability": "nurgles-gift-death-guard",
               "aspect": "range",
               "operation": "add",
               "value": 3
@@ -6087,7 +6087,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [],
     "faction_id": "death-guard",
@@ -6097,7 +6097,7 @@
       "type": "ability-modifier",
       "target": "this-unit",
       "modifier": {
-        "ability": "contagion-range",
+        "ability": "nurgles-gift-death-guard",
         "aspect": "range",
         "operation": "add",
         "value": 3
@@ -7746,7 +7746,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [],
     "faction_id": "death-guard",
@@ -7759,7 +7759,7 @@
         "level": "model"
       },
       "modifier": {
-        "ability": "contagion-range",
+        "ability": "nurgles-gift-death-guard",
         "aspect": "range",
         "operation": "add",
         "value": 3

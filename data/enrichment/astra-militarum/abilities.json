@@ -7106,7 +7106,10 @@
             ]
           },
           "modifier": {
-            "ability": "signal-flares",
+            "ability": {
+              "ability_id": "designated-targets-astra-militarum",
+              "definition_id": "signal-flares"
+            },
             "definition": {
               "type": "ability-part",
               "name": "Signal Flares",

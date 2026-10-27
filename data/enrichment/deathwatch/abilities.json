@@ -1737,7 +1737,10 @@
                 ]
               },
               "modifier": {
-                "ability": "furor-tactics",
+                "ability": {
+                  "ability_id": "mission-tactics-deathwatch-support-deathwatch",
+                  "definition_id": "furor-tactics"
+                },
                 "definition": {
                   "type": "ability-part",
                   "name": "Furor Tactics",
@@ -1782,7 +1785,10 @@
                 ]
               },
               "modifier": {
-                "ability": "malleus-tactics",
+                "ability": {
+                  "ability_id": "mission-tactics-deathwatch-support-deathwatch",
+                  "definition_id": "malleus-tactics"
+                },
                 "definition": {
                   "type": "ability-part",
                   "name": "Malleus Tactics",
@@ -1824,7 +1830,10 @@
                 ]
               },
               "modifier": {
-                "ability": "purgatus-tactics",
+                "ability": {
+                  "ability_id": "mission-tactics-deathwatch-support-deathwatch",
+                  "definition_id": "purgatus-tactics"
+                },
                 "definition": {
                   "type": "ability-part",
                   "name": "Purgatus Tactics",

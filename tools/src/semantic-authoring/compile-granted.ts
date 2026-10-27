@@ -30,7 +30,8 @@ type Compile = (leaves: readonly CompileLeaf[], sourceText?: string) => Compiled
  * One compiled body as the header carries it: the granted ability's id (from its label), its part,
  * and the keyword filter a leading "… units only" narrows its holders by (`narrow`), if any.
  */
-export type GrantedBody = { ability?: string; part: Node; narrow?: Node };
+/** `ability` names the printed ability as one this record defines inside itself, when the record's id is known. */
+export type GrantedBody = { ability?: string | { ability_id: string; definition_id: string }; part: Node; narrow?: Node };
 
 const SELF_HOLDERS = new Set(["this-unit", "this-model"]);
 const BEHAVIOR_RANK = ["passive", "activated", "reactive", "aura"];
@@ -220,7 +221,8 @@ export function compileGranted(leaves: readonly CompileLeaf[], sourceText: strin
     bodyChecks.push(...compiled.checks);
     if (selfHeld(body.header) && compiled.mechanics.behavior) behaviors.push(compiled.mechanics.behavior);
     const list = granted.get(body.header) ?? [];
-    list.push({ ...(body.label ? { ability: slug(body.label) } : {}), part: bodyPart(body.label, compiled), ...(lead ? { narrow: lead.narrow } : {}) });
+    const ability = body.label ? (abilityId ? { ability_id: abilityId, definition_id: slug(body.label) } : slug(body.label)) : undefined;
+    list.push({ ...(ability ? { ability } : {}), part: bodyPart(body.label, compiled), ...(lead ? { narrow: lead.narrow } : {}) });
     granted.set(body.header, list);
   }
   };

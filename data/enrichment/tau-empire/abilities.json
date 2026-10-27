@@ -5686,7 +5686,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "3e2a7e9835fe73b65456a4799c1c6ac5b228347e7e4c18f1199e7461e129dc00",
     "version": "2025-q3",
@@ -5712,7 +5712,10 @@
                 ]
               },
               "modifier": {
-                "ability": "harnessed-alien-instincts",
+                "ability": {
+                  "ability_id": "integrated-command-structure-tau-empire",
+                  "definition_id": "harnessed-alien-instincts"
+                },
                 "definition": {
                   "type": "ability-part",
                   "name": "Harnessed Alien Instincts",
@@ -5813,7 +5816,10 @@
                 ]
               },
               "modifier": {
-                "ability": "localised-stealth-projectors",
+                "ability": {
+                  "ability_id": "integrated-command-structure-tau-empire",
+                  "definition_id": "localised-stealth-projectors"
+                },
                 "definition": {
                   "type": "ability-part",
                   "name": "Localised Stealth Projectors",

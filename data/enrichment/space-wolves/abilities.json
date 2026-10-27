@@ -4320,7 +4320,10 @@
         ]
       },
       "modifier": {
-        "ability": "countercharge",
+        "ability": {
+          "ability_id": "the-great-wolf-watches-space-wolves",
+          "definition_id": "countercharge"
+        },
         "definition": {
           "type": "ability-part",
           "name": "Countercharge",

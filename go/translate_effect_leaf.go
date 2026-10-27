@@ -518,7 +518,8 @@ var modelsWordRe = regexp.MustCompile(`\bmodels\b`)
 // modifiedAbility names the ability an ability-modifier changes: a named one,
 // the one a trigger used, or those reaching an audience.
 func modifiedAbility(ref any, subj string, ctx effCtx) string {
-	if r, ok := asMap(ref); ok && r != nil {
+	// A stance option or a definition inside another record is named like a record.
+	if r, ok := asMap(ref); ok && r != nil && r["ability_id"] == nil {
 		if r["event"] == "used" {
 			return "that ability"
 		}

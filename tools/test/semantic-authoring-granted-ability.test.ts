@@ -77,6 +77,15 @@ describe("Semantic authoring printed granted abilities", () => {
     expect(scope).toEqual({ duration: "permanent" });
   });
 
+  it("names a printed ability as a definition of its own record when the record's id is known", () => {
+    const leaves = placed(AURA_TEXT, WARDENS, header("have the following ability", "one"), label("Shade Ward (Aura", "Shade Ward"), ...auraBody);
+    const result = compileLeaves(leaves, AURA_TEXT, { abilityId: "gloom-pact-example" });
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    const effect = (result.mechanics as Record<string, any>).effect;
+    expect(effect.modifier.ability).toEqual({ ability_id: "gloom-pact-example", definition_id: "shade-ward" });
+    expect(createValidator().getSchema("https://40kdc.dev/schemas/enrichment/ability-dsl/effect.schema.json")!(effect)).toBe(true);
+  });
+
   it("keeps a self-held body's usage, moment and duration on its part, not on the record (S1)", () => {
     const result = compiled(rallyLeaves(), RALLY_TEXT);
     const { effect, behavior, usage, scope, trigger } = result.mechanics as Record<string, any>;

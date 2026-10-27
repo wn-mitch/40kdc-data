@@ -7671,7 +7671,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [],
     "faction_id": "adeptus-astartes",
@@ -7681,7 +7681,10 @@
       "type": "ability-modifier",
       "target": "this-unit",
       "modifier": {
-        "ability": "assault-doctrine",
+        "ability": {
+          "ability_id": "combat-doctrines-adeptus-astartes",
+          "option_id": "assault-doctrine"
+        },
         "aspect": "uses",
         "operation": "lift-limit",
         "value": 1
@@ -8630,7 +8633,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [],
     "faction_id": "adeptus-astartes",
@@ -8640,7 +8643,10 @@
       "type": "ability-modifier",
       "target": "this-unit",
       "modifier": {
-        "ability": "devastator-doctrine",
+        "ability": {
+          "ability_id": "combat-doctrines-adeptus-astartes",
+          "option_id": "devastator-doctrine"
+        },
         "aspect": "uses",
         "operation": "lift-limit",
         "value": 1
@@ -11926,7 +11932,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [],
     "faction_id": "adeptus-astartes",
@@ -11936,7 +11942,10 @@
       "type": "ability-modifier",
       "target": "this-unit",
       "modifier": {
-        "ability": "tactical-doctrine",
+        "ability": {
+          "ability_id": "combat-doctrines-adeptus-astartes",
+          "option_id": "tactical-doctrine"
+        },
         "aspect": "uses",
         "operation": "lift-limit",
         "value": 1

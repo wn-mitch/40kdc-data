@@ -825,7 +825,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "d6eff6823cc70058191a690ec5910915a6d27345f25972ccfb5e2f830a43dc16",
     "version": "2025-q3",
@@ -840,14 +840,14 @@
             "operation": "set",
             "amount": 0,
             "applies_to": "targeting-this-unit",
-            "id": "tank-shock"
+            "id": "crushing-impact"
           }
         },
         {
           "type": "ability-modifier",
           "target": "this-model",
           "modifier": {
-            "ability": "tank-shock",
+            "ability": "crushing-impact",
             "aspect": "uses",
             "operation": "lift-limit",
             "value": 1,
@@ -6688,7 +6688,7 @@
         "operation": "set",
         "amount": 0,
         "applies_to": "targeting-this-unit",
-        "id": "tank-shock"
+        "id": "crushing-impact"
       }
     },
     "scope": {

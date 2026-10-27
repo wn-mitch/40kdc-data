@@ -1192,6 +1192,14 @@
                       "$ref": "../../defs/common.schema.json#/$defs/entity-id"
                     },
                     {
+                      "$ref": "../../defs/common.schema.json#/$defs/stance-option-ref",
+                      "description": "One option of an option-bearing rule (a stance or Order)."
+                    },
+                    {
+                      "$ref": "../../defs/common.schema.json#/$defs/named-ability-ref",
+                      "description": "An ability a record defines inside itself."
+                    },
+                    {
                       "type": "object",
                       "additionalProperties": false,
                       "properties": {

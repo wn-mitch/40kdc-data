@@ -8162,7 +8162,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "25bd235728b876ae92aeb9614f5ef8b82c2662a2dca093680ce181ca8e17dd73",
     "version": "2025-q3",
@@ -8185,7 +8185,10 @@
             ]
           },
           "modifier": {
-            "ability": "terror-of-khorne",
+            "ability": {
+              "ability_id": "rampaging-terrors-world-eaters",
+              "definition_id": "terror-of-khorne"
+            },
             "definition": {
               "type": "ability-part",
               "name": "Terror of Khorne",

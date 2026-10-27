@@ -309,7 +309,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [],
     "faction_id": "raven-guard",
@@ -354,7 +354,10 @@
             ]
           },
           "modifier": {
-            "ability": "unparalleled-tactician",
+            "ability": {
+              "ability_id": "shadow-tactics-raven-guard",
+              "definition_id": "unparalleled-tactician"
+            },
             "definition": {
               "type": "ability-part",
               "name": "Unparalleled Tactician",

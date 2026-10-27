@@ -9839,7 +9839,10 @@
         ]
       },
       "modifier": {
-        "ability": "terrifying-presence",
+        "ability": {
+          "ability_id": "abject-fear-chaos-space-marines",
+          "definition_id": "terrifying-presence"
+        },
         "definition": {
           "type": "ability-part",
           "name": "Terrifying Presence",

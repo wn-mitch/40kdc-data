@@ -1190,6 +1190,14 @@ impl ::std::convert::TryFrom<::std::string::String> for AbilityInteractionsItemT
 ///          "$ref": "#/$defs/entity-id"
 ///        },
 ///        {
+///          "description": "One option of an option-bearing rule (a stance or Order).",
+///          "$ref": "#/$defs/stance-option-ref"
+///        },
+///        {
+///          "description": "An ability a record defines inside itself.",
+///          "$ref": "#/$defs/named-ability-ref"
+///        },
+///        {
 ///          "description": "Every ability of the target whose effect reaches units matching this filter.",
 ///          "type": "object",
 ///          "required": [
@@ -1376,6 +1384,14 @@ pub struct AbilityModifierEffectModifier {
 ///      "$ref": "#/$defs/entity-id"
 ///    },
 ///    {
+///      "description": "One option of an option-bearing rule (a stance or Order).",
+///      "$ref": "#/$defs/stance-option-ref"
+///    },
+///    {
+///      "description": "An ability a record defines inside itself.",
+///      "$ref": "#/$defs/named-ability-ref"
+///    },
+///    {
 ///      "description": "Every ability of the target whose effect reaches units matching this filter.",
 ///      "type": "object",
 ///      "required": [
@@ -1428,19 +1444,31 @@ pub struct AbilityModifierEffectModifier {
 #[serde(untagged, deny_unknown_fields)]
 pub enum AbilityModifierEffectModifierAbility {
     Variant0(EntityId),
-    Variant1 { affecting: UnitFilter },
-    Variant2 {
+    Variant1(StanceOptionRef),
+    Variant2(NamedAbilityRef),
+    Variant3 { affecting: UnitFilter },
+    Variant4 {
         event: ::serde_json::Value,
-        event_var: AbilityModifierEffectModifierAbilityVariant2EventVar,
+        event_var: AbilityModifierEffectModifierAbilityVariant4EventVar,
     },
-    Variant3 { keyword: AbilityModifierEffectModifierAbilityVariant3Keyword },
+    Variant5 { keyword: AbilityModifierEffectModifierAbilityVariant5Keyword },
 }
 impl ::std::convert::From<EntityId> for AbilityModifierEffectModifierAbility {
     fn from(value: EntityId) -> Self {
         Self::Variant0(value)
     }
 }
-///`AbilityModifierEffectModifierAbilityVariant2EventVar`
+impl ::std::convert::From<StanceOptionRef> for AbilityModifierEffectModifierAbility {
+    fn from(value: StanceOptionRef) -> Self {
+        Self::Variant1(value)
+    }
+}
+impl ::std::convert::From<NamedAbilityRef> for AbilityModifierEffectModifierAbility {
+    fn from(value: NamedAbilityRef) -> Self {
+        Self::Variant2(value)
+    }
+}
+///`AbilityModifierEffectModifierAbilityVariant4EventVar`
 ///
 /// <details><summary>JSON schema</summary>
 ///
@@ -1453,20 +1481,20 @@ impl ::std::convert::From<EntityId> for AbilityModifierEffectModifierAbility {
 /// </details>
 #[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 #[serde(transparent)]
-pub struct AbilityModifierEffectModifierAbilityVariant2EventVar(::std::string::String);
-impl ::std::ops::Deref for AbilityModifierEffectModifierAbilityVariant2EventVar {
+pub struct AbilityModifierEffectModifierAbilityVariant4EventVar(::std::string::String);
+impl ::std::ops::Deref for AbilityModifierEffectModifierAbilityVariant4EventVar {
     type Target = ::std::string::String;
     fn deref(&self) -> &::std::string::String {
         &self.0
     }
 }
-impl ::std::convert::From<AbilityModifierEffectModifierAbilityVariant2EventVar>
+impl ::std::convert::From<AbilityModifierEffectModifierAbilityVariant4EventVar>
 for ::std::string::String {
-    fn from(value: AbilityModifierEffectModifierAbilityVariant2EventVar) -> Self {
+    fn from(value: AbilityModifierEffectModifierAbilityVariant4EventVar) -> Self {
         value.0
     }
 }
-impl ::std::str::FromStr for AbilityModifierEffectModifierAbilityVariant2EventVar {
+impl ::std::str::FromStr for AbilityModifierEffectModifierAbilityVariant4EventVar {
     type Err = self::error::ConversionError;
     fn from_str(
         value: &str,
@@ -1478,7 +1506,7 @@ impl ::std::str::FromStr for AbilityModifierEffectModifierAbilityVariant2EventVa
     }
 }
 impl ::std::convert::TryFrom<&str>
-for AbilityModifierEffectModifierAbilityVariant2EventVar {
+for AbilityModifierEffectModifierAbilityVariant4EventVar {
     type Error = self::error::ConversionError;
     fn try_from(
         value: &str,
@@ -1487,7 +1515,7 @@ for AbilityModifierEffectModifierAbilityVariant2EventVar {
     }
 }
 impl ::std::convert::TryFrom<&::std::string::String>
-for AbilityModifierEffectModifierAbilityVariant2EventVar {
+for AbilityModifierEffectModifierAbilityVariant4EventVar {
     type Error = self::error::ConversionError;
     fn try_from(
         value: &::std::string::String,
@@ -1496,7 +1524,7 @@ for AbilityModifierEffectModifierAbilityVariant2EventVar {
     }
 }
 impl ::std::convert::TryFrom<::std::string::String>
-for AbilityModifierEffectModifierAbilityVariant2EventVar {
+for AbilityModifierEffectModifierAbilityVariant4EventVar {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,
@@ -1505,7 +1533,7 @@ for AbilityModifierEffectModifierAbilityVariant2EventVar {
     }
 }
 impl<'de> ::serde::Deserialize<'de>
-for AbilityModifierEffectModifierAbilityVariant2EventVar {
+for AbilityModifierEffectModifierAbilityVariant4EventVar {
     fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
     where
         D: ::serde::Deserializer<'de>,
@@ -1517,7 +1545,7 @@ for AbilityModifierEffectModifierAbilityVariant2EventVar {
             })
     }
 }
-///`AbilityModifierEffectModifierAbilityVariant3Keyword`
+///`AbilityModifierEffectModifierAbilityVariant5Keyword`
 ///
 /// <details><summary>JSON schema</summary>
 ///
@@ -1530,20 +1558,20 @@ for AbilityModifierEffectModifierAbilityVariant2EventVar {
 /// </details>
 #[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 #[serde(transparent)]
-pub struct AbilityModifierEffectModifierAbilityVariant3Keyword(::std::string::String);
-impl ::std::ops::Deref for AbilityModifierEffectModifierAbilityVariant3Keyword {
+pub struct AbilityModifierEffectModifierAbilityVariant5Keyword(::std::string::String);
+impl ::std::ops::Deref for AbilityModifierEffectModifierAbilityVariant5Keyword {
     type Target = ::std::string::String;
     fn deref(&self) -> &::std::string::String {
         &self.0
     }
 }
-impl ::std::convert::From<AbilityModifierEffectModifierAbilityVariant3Keyword>
+impl ::std::convert::From<AbilityModifierEffectModifierAbilityVariant5Keyword>
 for ::std::string::String {
-    fn from(value: AbilityModifierEffectModifierAbilityVariant3Keyword) -> Self {
+    fn from(value: AbilityModifierEffectModifierAbilityVariant5Keyword) -> Self {
         value.0
     }
 }
-impl ::std::str::FromStr for AbilityModifierEffectModifierAbilityVariant3Keyword {
+impl ::std::str::FromStr for AbilityModifierEffectModifierAbilityVariant5Keyword {
     type Err = self::error::ConversionError;
     fn from_str(
         value: &str,
@@ -1555,7 +1583,7 @@ impl ::std::str::FromStr for AbilityModifierEffectModifierAbilityVariant3Keyword
     }
 }
 impl ::std::convert::TryFrom<&str>
-for AbilityModifierEffectModifierAbilityVariant3Keyword {
+for AbilityModifierEffectModifierAbilityVariant5Keyword {
     type Error = self::error::ConversionError;
     fn try_from(
         value: &str,
@@ -1564,7 +1592,7 @@ for AbilityModifierEffectModifierAbilityVariant3Keyword {
     }
 }
 impl ::std::convert::TryFrom<&::std::string::String>
-for AbilityModifierEffectModifierAbilityVariant3Keyword {
+for AbilityModifierEffectModifierAbilityVariant5Keyword {
     type Error = self::error::ConversionError;
     fn try_from(
         value: &::std::string::String,
@@ -1573,7 +1601,7 @@ for AbilityModifierEffectModifierAbilityVariant3Keyword {
     }
 }
 impl ::std::convert::TryFrom<::std::string::String>
-for AbilityModifierEffectModifierAbilityVariant3Keyword {
+for AbilityModifierEffectModifierAbilityVariant5Keyword {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,
@@ -1582,7 +1610,7 @@ for AbilityModifierEffectModifierAbilityVariant3Keyword {
     }
 }
 impl<'de> ::serde::Deserialize<'de>
-for AbilityModifierEffectModifierAbilityVariant3Keyword {
+for AbilityModifierEffectModifierAbilityVariant5Keyword {
     fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
     where
         D: ::serde::Deserializer<'de>,

@@ -451,7 +451,8 @@ _ASPECTS = {
 
 def _modified_ability(ref: Any, subj: str, ctx: Ctx) -> str:
     """The ability an ability-modifier changes: named, the one a trigger used, or an audience's."""
-    if isinstance(ref, dict):
+    # A stance option or a definition inside another record is named like a record.
+    if isinstance(ref, dict) and "ability_id" not in ref:
         if ref.get("event") == "used":
             return "that ability"
         if isinstance(ref.get("keyword"), str):

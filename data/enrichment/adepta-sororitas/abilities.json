@@ -4079,7 +4079,10 @@
         ]
       },
       "modifier": {
-        "ability": "condemnatory-psalms",
+        "ability": {
+          "ability_id": "angelic-judgement-adepta-sororitas",
+          "definition_id": "condemnatory-psalms"
+        },
         "definition": {
           "type": "ability-part",
           "name": "Condemnatory Psalms",

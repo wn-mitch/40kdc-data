@@ -398,7 +398,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [],
     "faction_id": "white-scars",
@@ -455,7 +455,10 @@
                 ]
               },
               "modifier": {
-                "ability": "wrath-of-the-first-khan",
+                "ability": {
+                  "ability_id": "storm-swift-onslaught-white-scars",
+                  "definition_id": "wrath-of-the-first-khan"
+                },
                 "definition": {
                   "type": "ability-part",
                   "name": "Wrath of the First Khan",

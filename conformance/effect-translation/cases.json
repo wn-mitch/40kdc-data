@@ -959,7 +959,10 @@
         ]
       },
       "modifier": {
-        "ability": "terrifying-presence",
+        "ability": {
+          "ability_id": "abject-fear-chaos-space-marines",
+          "definition_id": "terrifying-presence"
+        },
         "definition": {
           "type": "ability-part",
           "name": "Terrifying Presence",
@@ -5176,7 +5179,10 @@
         ]
       },
       "modifier": {
-        "ability": "condemnatory-psalms",
+        "ability": {
+          "ability_id": "angelic-judgement-adepta-sororitas",
+          "definition_id": "condemnatory-psalms"
+        },
         "definition": {
           "type": "ability-part",
           "name": "Condemnatory Psalms",
@@ -7493,7 +7499,10 @@
       "type": "ability-modifier",
       "target": "this-unit",
       "modifier": {
-        "ability": "assault-doctrine",
+        "ability": {
+          "ability_id": "combat-doctrines-adeptus-astartes",
+          "option_id": "assault-doctrine"
+        },
         "aspect": "uses",
         "operation": "lift-limit",
         "value": 1
@@ -7503,7 +7512,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "The unit's Assault Doctrine ability has no limit on its number of uses."
+      "text": "The unit's Assault Doctrine (Combat Doctrines) ability has no limit on its number of uses."
     }
   },
   {
@@ -22106,7 +22115,10 @@
                 ]
               },
               "modifier": {
-                "ability": "wrath-of-the-first-khan",
+                "ability": {
+                  "ability_id": "storm-swift-onslaught-white-scars",
+                  "definition_id": "wrath-of-the-first-khan"
+                },
                 "definition": {
                   "type": "ability-part",
                   "name": "Wrath of the First Khan",
@@ -29869,7 +29881,10 @@
         ]
       },
       "modifier": {
-        "ability": "condemnatory-psalms",
+        "ability": {
+          "ability_id": "angelic-judgement-adepta-sororitas",
+          "definition_id": "condemnatory-psalms"
+        },
         "definition": {
           "type": "ability-part",
           "name": "Condemnatory Psalms",
@@ -31093,7 +31108,10 @@
             "level": "model"
           },
           "modifier": {
-            "ability": "spirit-guides",
+            "ability": {
+              "ability_id": "shepherds-of-the-dead-aeldari",
+              "definition_id": "spirit-guides"
+            },
             "definition": {
               "type": "ability-part",
               "name": "Spirit Guides",
