@@ -35,6 +35,7 @@ import { activationWindowCondition, allOf, ATTACK_EVENTS, attackTypeCondition, b
 import { bindBareFilterHits, bindBeforeFormHits, foldDestroyFilters, foldLeadingHitFilters, refuseBeforeFormAnaphors } from "./compile-weapon-qualified.js";
 import { refuseUnmovedEventSubject } from "./compile-moved-subject.js";
 import { refuseSuchFilters } from "./compile-such-filter.js";
+import { bindUsedSelections } from "./compile-used-selection.js";
 import { trigger, triggerLeaves, withDestroyedObject } from "./compile-triggers.js";
 import { bandRunClauses, bulletBreaks, commaItems, ordered, placements, plainLineBreaks, rawSentences, shapeSignature } from "./compile-placement.js";
 import { otherwiseElse, refuseOtherwiseGates } from "./compile-otherwise.js";
@@ -411,7 +412,8 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   try {
     // Reviewed "if it does" connectives are planned on the leaves as reviewed, before any fold (compile-connective-plan.ts).
     conditionOf = planConditionOf(leaves, sourceText);
-    leaves = foldAbilityUseRefresh(foldAbilityUseContext(leaves));
+    // "the selected VEHICLE model" after a use of a named ability, in a record that selects nothing itself (compile-used-selection.ts).
+    leaves = bindUsedSelections(foldAbilityUseRefresh(foldAbilityUseContext(leaves)));
     refuseBlastRating(leaves, sourceText);
     refuseStratagemTargetActivity(leaves);
     refuseUnboundIfItDoes(leaves, sourceText);
