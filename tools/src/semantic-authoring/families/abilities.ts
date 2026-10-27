@@ -298,4 +298,13 @@ export const ABILITY_EXTENSIONS: readonly FamilyExtension[] = [
       return { ...normalized, ability: { event: "used", event_var: eventVar } };
     },
   },
+  {
+    // "Add 1 to the number of Orders each **K** model from your army can issue": the modifier's
+    // holders are every model a unit-filter after it names (compile-unit-filters.ts postfixRecipient).
+    family: "ability-modifier",
+    version: 7,
+    description: "As the previous version, plus subject filtered-units: the units or models a unit-filter right after the modifier names (\"the number of Orders each K model from your army can issue\").",
+    schema: (previous) => withProperties(previous, { subject: widenedEnum(previous, "subject", [FILTERED_UNITS]) }),
+    normalize: (input, previous) => input.subject === FILTERED_UNITS ? standIn(input, "subject", "this-unit", previous) : previous(input),
+  },
 ];

@@ -632,8 +632,12 @@ export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: str
       // the filter is who attacks; the conditions between (bound to the attacker by
       // compile-antecedent.ts) stay ahead of the attack as gates on it.
       const at = attackOfFilter(list, index)!;
-      out.push(...list.slice(index + 1, at).filter((other) => other.family_id !== "unit-owner"));
-      out.push({ ...list[at]!, parameters: { ...list[at]!.parameters, attacker_filter: attackerFilter(leaf, list[at]!) } });
+      const between = list.slice(index + 1, at).filter((other) => other.family_id !== "unit-owner");
+      // "While a friendly X unit is affected by an Order, each time a model in that unit makes an
+      // attack": the designation narrows who attacks, as it narrows a filter's recipients below.
+      const named = withDesignation(leaf, between.filter((other) => filterDesignation(other, leaf)));
+      out.push(...between.filter((other) => !filterDesignation(other, leaf)));
+      out.push({ ...list[at]!, parameters: { ...list[at]!.parameters, attacker_filter: attackerFilter(named, list[at]!) } });
       index = at;
     } else if (isFilter(leaf) && attackerAfter(list[pastOwners(list, index, leaf)], leaf, selectionBefore(list, index))) {
       // "each time a friendly AELDARI model" + "makes an attack": who attacks. A model-level filter
