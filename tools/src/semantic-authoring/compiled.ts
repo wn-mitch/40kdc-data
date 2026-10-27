@@ -57,11 +57,56 @@ export function compilationInputsHash(db: DatabaseSync, abilityVersionId: number
     WHERE annotations.status = 'active' AND source_spans.ability_version_id = ?
     ORDER BY source_spans.fragment = '${NAME_FRAGMENT}', source_spans.start_byte, source_spans.end_byte, source_spans.fragment, annotations.fingerprint_id, annotations.authority_kind
   `).all(abilityVersionId);
+  return inputsHash(db, abilityVersionId, ability.source_hash, leaves);
+}
+
+type InputLeaf = { fragment: string; start_byte: number; end_byte: number; fingerprint_id: string; authority_kind: string };
+
+/**
+ * The inputs hash a source version had at `asOf`, undoing only family-version migrations: each
+ * active leaf a migration re-issued after `asOf` reads as the fingerprint it superseded (followed
+ * back through successive migrations), every other leaf as it stands. An approval recorded at
+ * `asOf` under this hash judged the same leaves in their earlier family versions.
+ */
+export function preMigrationInputsHash(db: DatabaseSync, abilityVersionId: number, asOf: string): string {
+  const ability = db.prepare("SELECT source_hash FROM abilities WHERE id = ?").get(abilityVersionId) as { source_hash: string } | undefined;
+  if (!ability) throw new RangeError(`Unknown ability version ${abilityVersionId}.`);
+  const rows = db.prepare(`
+    SELECT annotations.id, source_spans.fragment, source_spans.start_byte, source_spans.end_byte, annotations.fingerprint_id, annotations.authority_kind
+    FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id
+    WHERE annotations.status = 'active' AND source_spans.ability_version_id = ?
+  `).all(abilityVersionId) as Array<InputLeaf & { id: number }>;
+  const migrated = db.prepare(`
+    SELECT previous.id, previous.fingerprint_id FROM annotations AS current
+    JOIN annotation_batches ON annotation_batches.id = current.batch_id
+    JOIN annotations AS previous ON previous.id = current.supersedes_id
+    WHERE current.id = ? AND annotation_batches.operation = 'migration-family-versions' AND current.created_at > ?
+  `);
+  const leaves = rows.map(({ id, fragment, start_byte, end_byte, fingerprint_id, authority_kind }) => {
+    let at = id;
+    let fingerprint = fingerprint_id;
+    for (let previous = migrated.get(at, asOf) as { id: number; fingerprint_id: string } | undefined; previous; previous = migrated.get(at, asOf) as typeof previous) {
+      at = previous.id;
+      fingerprint = previous.fingerprint_id;
+    }
+    return { fragment, start_byte, end_byte, fingerprint_id: fingerprint, authority_kind };
+  });
+  // The same order compilationInputsHash's query gives.
+  const key = (leaf: InputLeaf): Array<number | string> => [leaf.fragment === NAME_FRAGMENT ? 1 : 0, leaf.start_byte, leaf.end_byte, leaf.fragment, leaf.fingerprint_id, leaf.authority_kind];
+  leaves.sort((left, right) => {
+    const a = key(left), b = key(right);
+    for (let index = 0; index < a.length; index += 1) if (a[index] !== b[index]) return a[index]! < b[index]! ? -1 : 1;
+    return 0;
+  });
+  return inputsHash(db, abilityVersionId, ability.source_hash, leaves);
+}
+
+function inputsHash(db: DatabaseSync, abilityVersionId: number, sourceHash: string, leaves: unknown[]): string {
   // The reviewed connectives compilation reads (connective-rows.ts) join the identity only when there
   // are any, so a source without one keeps the hash its approvals were recorded under.
   const connectives = reviewedConnectives(db, [abilityVersionId])
     .map(({ fragment, start_byte, end_byte, relation }) => ({ fragment, start_byte, end_byte, relation }));
-  return hashJson({ source_hash: ability.source_hash, leaves, ...(connectives.length > 0 ? { connectives } : {}) });
+  return hashJson({ source_hash: sourceHash, leaves, ...(connectives.length > 0 ? { connectives } : {}) });
 }
 
 export type CompiledEntryRow = {

@@ -83,7 +83,7 @@
     "ability_id": "battle-instincts-saga-of-the-great-wolf-space-wolves",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "type": "strategic-ploy",
     "external_refs": [
@@ -117,7 +117,7 @@
     "ability_id": "bestial-dominance-askars-wolfpack-space-wolves",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -207,7 +207,7 @@
     "ability_id": "bring-it-down-askars-wolfpack-space-wolves",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -245,7 +245,7 @@
     "ability_id": "champions-guidance-champions-of-fenris-space-wolves",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -313,7 +313,7 @@
     "ability_id": "co-ordinated-strike-saga-of-the-beastslayer-space-wolves",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -340,7 +340,7 @@
     "ability_id": "eye-of-the-pack-saga-of-the-great-wolf-space-wolves",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "type": "battle-tactic",
     "external_refs": [
@@ -393,7 +393,7 @@
     "ability_id": "fangs-of-the-pack-saga-of-the-great-wolf-space-wolves",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -416,7 +416,7 @@
     "ability_id": "fenrisian-ferocity-saga-of-the-great-wolf-space-wolves",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "type": "strategic-ploy",
     "external_refs": [
@@ -500,7 +500,7 @@
     "ability_id": "heroic-resolve-champions-of-fenris-space-wolves",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -538,7 +538,7 @@
     "ability_id": "impetuosity-saga-of-the-beastslayer-space-wolves",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -581,7 +581,7 @@
     "ability_id": "unbridled-feroicity-saga-of-the-beastslayer-space-wolves",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -615,7 +615,7 @@
     "ability_id": "wind-swift-evasion-stormlance-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -671,7 +671,7 @@
     "ability_id": "wolf-totems-saga-of-the-great-wolf-space-wolves",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     }
   }
 ]

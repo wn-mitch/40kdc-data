@@ -21,7 +21,7 @@
     "ability_id": "a-threat-ended-argent-assault-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -325,7 +325,7 @@
     "ability_id": "argent-wrath-sanctic-spearhead-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -398,7 +398,7 @@
     "ability_id": "aura-of-vengeance-argent-assault-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -433,7 +433,7 @@
     "ability_id": "blades-from-the-beyond-immaterial-interdiction-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -468,7 +468,7 @@
     "ability_id": "by-thought-alone-immaterial-interdiction-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -624,7 +624,7 @@
     "ability_id": "circle-of-sanctuary-banishers-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -696,7 +696,7 @@
     "ability_id": "combat-manifestation-brotherhood-strike-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -795,7 +795,7 @@
     "ability_id": "expeditious-exit-brotherhood-strike-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -840,7 +840,7 @@
     "ability_id": "fires-of-covenant-warpbane-task-force-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -904,7 +904,7 @@
     "ability_id": "focused-immolation-fires-of-purgation-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -987,7 +987,7 @@
     "ability_id": "force-wave-sanctic-spearhead-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1034,7 +1034,7 @@
     "ability_id": "forewarned-evasion-augurium-task-force-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1135,7 +1135,7 @@
     "ability_id": "grind-them-underfoot-hallowed-conclave-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1307,7 +1307,7 @@
     "ability_id": "mirage-of-echoes-augurium-task-force-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1477,7 +1477,7 @@
     "ability_id": "precognitive-strategies-hallowed-conclave-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1512,7 +1512,7 @@
     "ability_id": "psi-reactive-ammunition-crowes-sanctifiers-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1658,7 +1658,7 @@
     "ability_id": "redirected-strike-augurium-task-force-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1695,7 +1695,7 @@
     "ability_id": "redoubled-assault-sanctic-spearhead-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1731,7 +1731,7 @@
     "ability_id": "refusal-to-yield-crowes-sanctifiers-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1772,7 +1772,7 @@
     "ability_id": "repelling-sphere-warpbane-task-force-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1815,7 +1815,7 @@
     "ability_id": "responsive-displacement-immaterial-interdiction-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1984,7 +1984,7 @@
     "ability_id": "shadow-of-anarch-banishers-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2030,7 +2030,7 @@
     "ability_id": "shining-resolve-hallowed-conclave-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2067,7 +2067,7 @@
     "ability_id": "shining-veil-brotherhood-strike-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2102,7 +2102,7 @@
     "ability_id": "soul-locked-fires-of-purgation-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2137,7 +2137,7 @@
     "ability_id": "spiritsear-fires-of-purgation-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2176,7 +2176,7 @@
     "ability_id": "truesilver-aegis-argent-assault-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2283,7 +2283,7 @@
     "ability_id": "truesilver-will-sanctic-spearhead-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {

@@ -42,7 +42,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "42c35110fe7df9638f8c0364d9a4018ae650c7cfbe122f4f8b15cb9d718f25c6",
     "version": "2025-q3",
@@ -154,7 +154,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "c0269b2a93dbe580bebd53d7e86c17caef7144ebd21032677263964748cd0ddf",
     "version": "2025-q3",
@@ -235,7 +235,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "e4054ed35da4ad09adc667e62009a43280f2afa0523d44a353f0a310de9efd01",
     "version": "2025-q3",
@@ -786,7 +786,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "2111e0fb604ddaa4e4815ed26525bcd7020bf39ee73dfd19324be256e81afde4",
     "version": "2025-q3",
@@ -892,7 +892,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "162e611360cefd6bca994b0592a475828420fb4bcb9e305a85e52ee7b92f7a6a",
     "version": "2025-q3",
@@ -956,7 +956,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "82e20887b8f22e20a76f1169dca1a41aabef32b0ec6a44dbeebe80c56a42de61",
     "version": "2025-q3",
@@ -1049,7 +1049,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "eee299033e5db481ad917844a629ca0acdf5789f316ef86cf54ff05063699a5c",
     "version": "2025-q3",
@@ -1533,7 +1533,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "a89f0952fa759fbb3aed0501d07e8fe9fadd4e584c62d04c7781b169cdba8966",
     "version": "2025-q3",
@@ -1570,7 +1570,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "7e5929c56ef701ccc4bad5c0a7a6ca41a01c7db0b4756c7492c353edfc12c817",
     "version": "2025-q3",
@@ -1740,7 +1740,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "56ee28822b8b11d6b2be7c1cd8456f2793e0240d2d01644c3b7ca93c4df4d7cf",
     "version": "2025-q3",
@@ -1895,7 +1895,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "26535febc698c61b9a78e3ea65ad2f0da5ea1d0d499be89ec5bf6556627f69e3",
     "version": "2025-q3",
@@ -2485,7 +2485,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "caabafa0cd292adc28657c624180e389fde5068a4aab3bb1f09edcce066bda41",
     "version": "2025-q3",
@@ -2593,7 +2593,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "54e87cd517799e141ec8119b68500b59e09f614086b96cd5435042cc7237031e",
     "version": "2025-q3",
@@ -2697,7 +2697,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [],
     "faction_id": "space-wolves",
@@ -2775,7 +2775,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [],
     "faction_id": "space-wolves",
@@ -2835,7 +2835,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [
       "askars-wolfpack-blood-claws"
@@ -2874,7 +2874,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [],
     "faction_id": "space-wolves",
@@ -2961,7 +2961,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [],
     "faction_id": "space-wolves",
@@ -3012,7 +3012,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [],
     "faction_id": "space-wolves",
@@ -3076,7 +3076,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [],
     "faction_id": "space-wolves",
@@ -3133,7 +3133,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [],
     "faction_id": "space-wolves",
@@ -3215,7 +3215,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [],
     "faction_id": "space-wolves",
@@ -3254,7 +3254,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [],
     "faction_id": "space-wolves",
@@ -3302,7 +3302,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [],
     "faction_id": "space-wolves",
@@ -3584,7 +3584,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [],
     "faction_id": "space-wolves",
@@ -3725,7 +3725,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [],
     "faction_id": "space-wolves",
@@ -3784,7 +3784,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [],
     "faction_id": "space-wolves",
@@ -4101,7 +4101,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [
       "askars-wolfpack-wulfen"
@@ -4358,7 +4358,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [],
     "faction_id": "space-wolves",
@@ -4803,7 +4803,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [],
     "faction_id": "space-wolves",

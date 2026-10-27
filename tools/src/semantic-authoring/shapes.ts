@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 import type { DatabaseSync } from "node:sqlite";
 
 import { hashJson } from "../round4/hash.js";
-import { compilationInputsHash, compiledIdentity } from "./compiled.js";
+import { compilationInputsHash, compiledIdentity, preMigrationInputsHash } from "./compiled.js";
 import { compileLeaves, type CompileLeaf, type Compiled } from "./compile.js";
 import { coreCheckErrors } from "./core-checks.js";
 import { getCurrentCoverage } from "./coverage.js";
@@ -312,6 +312,58 @@ export async function approveShape(db: DatabaseSync, value: unknown, actor: Acto
 /** Refuse the compiled entry of each listed member until its leaves change. */
 export function rejectShapeMembers(db: DatabaseSync, value: unknown, actor: Actor): { batch_id: string; recorded: number } {
   return decide(db, value, "rejected", actor);
+}
+
+/**
+ * Carry each approval a family-version migration staled: a member whose approved entry was recorded
+ * under its pre-migration leaves, and whose current compilation is byte-identical to that entry
+ * (mechanics and core) and still renders without errors, gets the same approval under its current
+ * inputs. Any other change keeps the member stale for review.
+ */
+export function carryApprovals(db: DatabaseSync, actor: Actor, options: { factionId?: string } = {}): { batch_id: string | null; carried: number; checked: number } {
+  requireHuman(actor, "carry compiled approvals");
+  return withTransaction(db, () => {
+    const compileOptions = ownOptions(db);
+    const approvedOf = db.prepare("SELECT id, inputs_hash, mechanics_json, core_json, created_at FROM compiled_entries WHERE ability_version_id = ? AND status = 'approved'");
+    const member = db.prepare("INSERT INTO batch_members (batch_id, entity_kind, entity_id) VALUES (?, ?, ?)");
+    let batchId: string | null = null;
+    let carried = 0;
+    let checked = 0;
+    for (const source of tiledMembers(db, options.factionId?.trim() || null)) {
+      const approved = approvedOf.all(source.id) as Array<{ id: string; inputs_hash: string; mechanics_json: string; core_json: string | null; created_at: string }>;
+      if (approved.length === 0) continue;
+      const inputsHash = compilationInputsHash(db, source.id);
+      if (approved.some((entry) => entry.inputs_hash === inputsHash)) continue;
+      // The leaves each approval judged, with the migrations since it undone.
+      const prior = approved.find((entry) => entry.inputs_hash === preMigrationInputsHash(db, source.id, entry.created_at));
+      if (!prior) continue;
+      checked += 1;
+      const compiled = compileLeaves(source.leaves, source.source_text, compileOptions(source));
+      if (!compiled.ok) continue;
+      const identity = compiledIdentity(compiled.mechanics, compiled.core ?? null);
+      if (hashJson(identity) !== hashJson(compiledIdentity(JSON.parse(prior.mechanics_json), prior.core_json ? JSON.parse(prior.core_json) : null))) continue;
+      if (render(source.faction_id, source.ability_id, compiled).errors.length > 0) continue;
+      if (batchId === null) {
+        batchId = `batch_${randomUUID()}`;
+        db.prepare("INSERT INTO annotation_batches (id, operation, reviewer, created_at, metadata_json) VALUES (?, 'review', ?, ?, ?)")
+          .run(batchId, actor.reviewer, new Date().toISOString(), JSON.stringify({ action: "shape-approval-carried" }));
+      }
+      const entryId = `compiled_${hashJson({ ability_version_id: source.id, inputs_hash: inputsHash, mechanics: identity, status: "approved" })}`;
+      for (const entry of approved) {
+        db.prepare("UPDATE compiled_entries SET status = 'retracted' WHERE id = ?").run(entry.id);
+        member.run(batchId, "compiled-entry-replaced", entry.id);
+      }
+      db.prepare(`
+        INSERT INTO compiled_entries (id, ability_version_id, shape_signature, mechanics_json, core_json, inputs_hash, status, batch_id, created_at)
+        VALUES (?, ?, ?, ?, ?, ?, 'approved', ?, ?)
+        ON CONFLICT(id) DO UPDATE SET status = excluded.status, batch_id = excluded.batch_id
+      `).run(entryId, source.id, compiled.signature, JSON.stringify(compiled.mechanics), compiled.core ? JSON.stringify(compiled.core) : null, inputsHash, batchId, new Date().toISOString());
+      member.run(batchId, "compiled-entry-approved", entryId);
+      carried += 1;
+    }
+    if (batchId !== null) bumpWorkbenchRevision(db);
+    return { batch_id: batchId, carried, checked };
+  });
 }
 
 /** Text-keyed batch members this module owns. */
