@@ -68,6 +68,7 @@ import { bindEquippedCounts } from "./compile-equipped-count.js";
 import { foldAttackProperties } from "./compile-attack-properties.js";
 import { foldReturnedModelExclusions } from "./compile-returned-model-exclusions.js";
 import { foldModelState } from "./compile-model-state.js";
+import { foldStickyControl } from "./compile-sticky-control.js";
 import { foldSetUpLimits, foldSetUpPlacement, isForbiddenSetUp, isPlacedLimit } from "./compile-set-up-placement.js";
 import { foldCountScales, markCountedSubjects } from "./compile-count-scale.js";
 import { alternativeMoments, joinSegments, sentenceSegments, STRATAGEM_HEADER } from "./compile-segments.js";
@@ -362,7 +363,8 @@ function compileRecord(given: readonly CompileLeaf[], sourceText?: string, optio
   // "Those attacks" are named across the whole record before it splits into parts (compile-bound-attacks.ts).
   // "only within Engagement Range of …" folds onto the engaged state before filters attach to their neighbours (compile-engagement-exclusive.ts).
   let qualified: CompileLeaf[];
-  try { qualified = foldEngagementExclusive(given, sourceText); } catch (error) {
+  // "if this unit is controlling an objective, that objective is secured": the control test is the secured objective's own scope (compile-sticky-control.ts).
+  try { qualified = foldStickyControl(foldEngagementExclusive(given, sourceText), sourceText); } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature: shapeSignature(ordered(given), sourceText), errors: [error.message] };
   }
