@@ -272,7 +272,12 @@ fn weapon_profiles(weapon: &Weapon, dataset: &Dataset) -> Vec<XmlEl> {
                     .as_ref()
                     .map(|r| r.to_string())
                     .unwrap_or_else(|| "0".to_string());
-                fmt_move(&raw)
+                // An "N/A" range is printed as-is, without the inch mark.
+                if raw == "N/A" {
+                    raw
+                } else {
+                    fmt_move(&raw)
+                }
             } else {
                 "Melee".to_string()
             };

@@ -9,57 +9,57 @@ dump confirmation.
 | Entity | Promote | Demote | Kept | Untouched |
 |---|--:|--:|--:|--:|
 | units | 0 | 0 | 1097 | 6 |
-| weapons | 261 | 5 | 3130 | 138 |
+| weapons | 20 | 0 | 3393 | 123 |
 | wargear | 0 | 0 | 165 | 87 |
 | unit-compositions | 0 | 0 | 1063 | 0 |
 | wargear-options | 0 | 0 | 1346 | 0 |
 | leader-attachments | 0 | 0 | 283 | 8 |
 | enhancements | 0 | 0 | 890 | 0 |
-| detachments | 82 | 9 | 10 | 356 |
-| stratagems | 198 | 107 | 55 | 953 |
-| abilities | 120 | 1783 | 1573 | 1059 |
-| phase-mappings | 400 | 100 | 89 | 992 |
+| detachments | 0 | 0 | 92 | 365 |
+| stratagems | 0 | 0 | 253 | 1060 |
+| abilities | 0 | 0 | 1693 | 2842 |
+| phase-mappings | 0 | 0 | 489 | 1092 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
 ## Abilities by faction
 
 | Faction | Promote | Demote | Kept | Untouched |
 |---|--:|--:|--:|--:|
-| _core | 0 | 6 | 2 | 18 |
-| adepta-sororitas | 7 | 55 | 42 | 44 |
-| adeptus-astartes | 0 | 96 | 112 | 42 |
-| adeptus-custodes | 1 | 72 | 61 | 24 |
-| adeptus-mechanicus | 11 | 53 | 71 | 32 |
-| aeldari | 12 | 125 | 99 | 64 |
-| agents-of-the-imperium | 6 | 41 | 46 | 45 |
-| astra-militarum | 6 | 99 | 81 | 65 |
-| black-templars | 0 | 26 | 24 | 13 |
-| blood-angels | 1 | 21 | 27 | 12 |
-| chaos-daemons | 9 | 76 | 71 | 39 |
-| chaos-knights | 1 | 37 | 33 | 39 |
-| chaos-space-marines | 12 | 108 | 88 | 73 |
-| dark-angels | 0 | 21 | 37 | 19 |
-| death-guard | 6 | 62 | 47 | 45 |
-| deathwatch | 0 | 15 | 16 | 5 |
-| drukhari | 3 | 83 | 35 | 43 |
-| emperors-children | 4 | 51 | 45 | 46 |
-| genestealer-cults | 5 | 66 | 43 | 33 |
-| grey-knights | 4 | 67 | 48 | 15 |
-| imperial-fists | 0 | 4 | 3 | 4 |
-| imperial-knights | 2 | 41 | 43 | 32 |
-| iron-hands | 0 | 5 | 4 | 2 |
-| leagues-of-votann | 4 | 64 | 55 | 32 |
-| necrons | 3 | 91 | 92 | 44 |
-| orks | 2 | 81 | 85 | 42 |
-| raven-guard | 0 | 6 | 4 | 1 |
-| salamanders | 0 | 1 | 5 | 5 |
-| space-wolves | 0 | 31 | 43 | 13 |
-| tau-empire | 7 | 67 | 55 | 37 |
-| thousand-sons | 4 | 55 | 43 | 56 |
-| tyranids | 5 | 76 | 65 | 40 |
-| ultramarines | 0 | 5 | 5 | 1 |
-| white-scars | 0 | 8 | 3 | 0 |
-| world-eaters | 5 | 68 | 40 | 34 |
+| _core | 0 | 0 | 2 | 24 |
+| adepta-sororitas | 0 | 0 | 49 | 99 |
+| adeptus-astartes | 0 | 0 | 112 | 138 |
+| adeptus-custodes | 0 | 0 | 62 | 96 |
+| adeptus-mechanicus | 0 | 0 | 82 | 85 |
+| aeldari | 0 | 0 | 111 | 189 |
+| agents-of-the-imperium | 0 | 0 | 52 | 86 |
+| astra-militarum | 0 | 0 | 87 | 164 |
+| black-templars | 0 | 0 | 24 | 39 |
+| blood-angels | 0 | 0 | 28 | 33 |
+| chaos-daemons | 0 | 0 | 80 | 115 |
+| chaos-knights | 0 | 0 | 34 | 76 |
+| chaos-space-marines | 0 | 0 | 100 | 181 |
+| dark-angels | 0 | 0 | 37 | 40 |
+| death-guard | 0 | 0 | 53 | 107 |
+| deathwatch | 0 | 0 | 16 | 20 |
+| drukhari | 0 | 0 | 38 | 126 |
+| emperors-children | 0 | 0 | 49 | 97 |
+| genestealer-cults | 0 | 0 | 48 | 99 |
+| grey-knights | 0 | 0 | 52 | 82 |
+| imperial-fists | 0 | 0 | 3 | 8 |
+| imperial-knights | 0 | 0 | 45 | 73 |
+| iron-hands | 0 | 0 | 4 | 7 |
+| leagues-of-votann | 0 | 0 | 59 | 96 |
+| necrons | 0 | 0 | 95 | 135 |
+| orks | 0 | 0 | 87 | 123 |
+| raven-guard | 0 | 0 | 4 | 7 |
+| salamanders | 0 | 0 | 5 | 6 |
+| space-wolves | 0 | 0 | 43 | 44 |
+| tau-empire | 0 | 0 | 62 | 104 |
+| thousand-sons | 0 | 0 | 47 | 111 |
+| tyranids | 0 | 0 | 70 | 116 |
+| ultramarines | 0 | 0 | 5 | 6 |
+| white-scars | 0 | 0 | 3 | 8 |
+| world-eaters | 0 | 0 | 45 | 102 |
 
 ## Ability verification outcomes
 
@@ -216,7 +216,7 @@ dump confirmation.
 | Outcome | Records |
 |---|--:|
 | dangling-ref | 4 |
-| differs | 31 |
-| no-ref | 104 |
-| unmapped-keyword | 4 |
-| verified | 3391 |
+| differs | 18 |
+| no-ref | 99 |
+| unmapped-keyword | 2 |
+| verified | 3413 |

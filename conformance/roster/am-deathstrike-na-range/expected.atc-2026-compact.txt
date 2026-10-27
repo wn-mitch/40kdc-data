@@ -1,0 +1,16 @@
++++++++++++++++++++++++++++++++++++++++++++++++
++ PLAYER NAME: —
++ TEAM NAME: —
++ FACTIONS USED: Astra Militarum
++ DISPOSITION: Take And Hold
++ DETACHMENT: Combined Arms
++ ARMY POINTS: 185pts
++
++ WARLORD: Char1: Primaris Psyker
++ ENHANCEMENT: —
++ LEADER/SUPPORT: —
++ NUMBER OF UNITS: 2
++++++++++++++++++++++++++++++++++++++++++++++++
+
+Char1: 1x Primaris Psyker (60 pts): Force weapon, Laspistol, Psychic Maelstrom, Warlord
+1x Deathstrike (125 pts): Armoured tracks, Deathstrike missile, Heavy bolter

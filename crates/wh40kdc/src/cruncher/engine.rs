@@ -22,13 +22,21 @@ use super::buffs::{
 use super::damage_roll::{damage_roll, one_damage_reroll_gain, DamageRollInput};
 use super::from_keyword::buffs_from_keyword;
 use crate::data::Dataset;
-use crate::{KeywordList, StatValue, Unit, Weapon, WeaponProfilesItem, WeaponProfilesItemRange};
+use crate::{
+    KeywordList, StatValue, Unit, Weapon, WeaponProfilesItem, WeaponProfilesItemRange,
+    WeaponProfilesItemRangeString,
+};
 
 /// Whether a weapon profile is a melee profile (`range == "Melee"`). Mirror of
 /// the TS `isMeleeProfile`: 11e weapons can mix ranged and melee profiles, so
 /// melee/ranged is a per-profile property, not a weapon-level one.
 fn is_melee_profile(profile: &WeaponProfilesItem) -> bool {
-    matches!(&profile.range, Some(WeaponProfilesItemRange::String(s)) if s == "Melee")
+    matches!(
+        &profile.range,
+        Some(WeaponProfilesItemRange::String(
+            WeaponProfilesItemRangeString::Melee
+        ))
+    )
 }
 
 /// Whether a weapon profile may select this target under profile-level restrictions such as Hunter.

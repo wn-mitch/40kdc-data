@@ -9562,5 +9562,67 @@
         "id": "35af123f-9d9e-448a-8975-0fd5faef7135"
       }
     ]
+  },
+  {
+    "id": "combi-weapon-chosen",
+    "name": "Combi-weapon",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Combi-weapon",
+        "range": 24,
+        "stats": {
+          "A": 1,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "Infantry",
+              "threshold": 4
+            }
+          },
+          {
+            "keyword_id": "devastating-wounds"
+          },
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "31fc-c03a-7a50-f8f2"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "8284-661f-8e4c-9e65"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "cc61-d9ed-f24-e511"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6238e1cb-8255-4acb-8020-6e4f870019ae"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a7475c3d-9d81-423c-b920-b7f7ff602f00"
+      }
+    ]
   }
 ]

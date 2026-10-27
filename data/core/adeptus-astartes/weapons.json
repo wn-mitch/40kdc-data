@@ -7335,21 +7335,25 @@
         "name": "Stormtooth",
         "range": "Melee",
         "stats": {
-          "A": 5,
-          "WS": 2,
+          "A": 6,
           "S": 7,
           "AP": -3,
-          "D": 2
+          "D": 2,
+          "WS": 2
         },
         "keywords": [
           {
             "keyword_id": "anti",
             "parameters": {
-              "threshold": 4,
-              "required_target_keywords_any": [
-                "MONSTER",
-                "VEHICLE"
-              ]
+              "target_keyword": "Monster",
+              "threshold": 4
+            }
+          },
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "Vehicle",
+              "threshold": 4
             }
           },
           {
@@ -7360,12 +7364,16 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "ceb9-e596-79c1-8b34"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3fbe3943-d88c-4892-a278-e77ec02e0886"
       },
       {
         "namespace": "mfm",
@@ -14384,19 +14392,19 @@
         "range": "Melee",
         "stats": {
           "A": 8,
-          "WS": 2,
           "S": 5,
           "AP": -1,
-          "D": 2
+          "D": 2,
+          "WS": 2
         },
         "keywords": [
           {
             "keyword_id": "anti",
             "parameters": {
               "threshold": 2,
-              "required_target_keywords_any": [
-                "MONSTER",
-                "VEHICLE"
+              "excluded_target_keywords": [
+                "Monster",
+                "Vehicle"
               ]
             }
           }
@@ -14405,12 +14413,16 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "8776-76a3-a914-58e3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e94cbad9-a30e-4245-a231-ac5ed6d46575"
       },
       {
         "namespace": "mfm",
@@ -15324,20 +15336,14 @@
         },
         "keywords": [
           {
-            "keyword_id": "devastating-wounds",
-            "parameters": {
-              "excluded_target_keywords": [
-                "Monster",
-                "Vehicle"
-              ]
-            }
+            "keyword_id": "devastating-wounds"
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -22201,16 +22207,16 @@
         "range": 24,
         "stats": {
           "A": 12,
-          "BS": 3,
           "S": 6,
           "AP": -1,
-          "D": 1
+          "D": 1,
+          "BS": 3
         },
         "keywords": [
           {
             "keyword_id": "devastating-wounds",
             "parameters": {
-              "required_target_keywords_any": [
+              "excluded_target_keywords": [
                 "Monster",
                 "Vehicle"
               ]
@@ -22220,7 +22226,7 @@
             "keyword_id": "sustained-hits",
             "parameters": {
               "value": 2,
-              "required_target_keywords_any": [
+              "excluded_target_keywords": [
                 "Monster",
                 "Vehicle"
               ]
@@ -22232,8 +22238,14 @@
     "type": "ranged",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "12b766a5-a138-482e-acb7-1ef97c88f006"
+      }
+    ]
   },
   {
     "id": "las-talon-repulsor",

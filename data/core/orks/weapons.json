@@ -279,20 +279,14 @@
             "keyword_id": "anti",
             "parameters": {
               "target_keyword": "Monster",
-              "threshold": 4,
-              "required_target_keywords_any": [
-                "Monster"
-              ]
+              "threshold": 4
             }
           },
           {
             "keyword_id": "anti",
             "parameters": {
               "target_keyword": "Vehicle",
-              "threshold": 4,
-              "required_target_keywords_any": [
-                "Vehicle"
-              ]
+              "threshold": 4
             }
           }
         ]
@@ -300,7 +294,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -655,29 +649,23 @@
         },
         "keywords": [
           {
+            "keyword_id": "cleave",
+            "parameters": {
+              "value": 2
+            }
+          },
+          {
             "keyword_id": "anti",
             "parameters": {
               "target_keyword": "Monster",
-              "threshold": 4,
-              "required_target_keywords_any": [
-                "Monster"
-              ]
+              "threshold": 4
             }
           },
           {
             "keyword_id": "anti",
             "parameters": {
               "target_keyword": "Vehicle",
-              "threshold": 4,
-              "required_target_keywords_any": [
-                "Vehicle"
-              ]
-            }
-          },
-          {
-            "keyword_id": "cleave",
-            "parameters": {
-              "value": 2
+              "threshold": 4
             }
           }
         ]
@@ -685,12 +673,16 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "aecd-6ba5-5558-fee2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b3f9751b-9463-4919-b6cd-3c0e48d5da4e"
       }
     ]
   },
@@ -1138,39 +1130,37 @@
         },
         "keywords": [
           {
+            "keyword_id": "extra-attacks"
+          },
+          {
             "keyword_id": "anti",
             "parameters": {
               "target_keyword": "Monster",
-              "threshold": 4,
-              "required_target_keywords_any": [
-                "Monster"
-              ]
+              "threshold": 4
             }
           },
           {
             "keyword_id": "anti",
             "parameters": {
               "target_keyword": "Vehicle",
-              "threshold": 4,
-              "required_target_keywords_any": [
-                "Vehicle"
-              ]
+              "threshold": 4
             }
-          },
-          {
-            "keyword_id": "extra-attacks"
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "fbfa-f6a0-217b-655a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b4650cb1-9c11-4fa6-9451-f19ce9e5dd0b"
       },
       {
         "namespace": "mfm",
@@ -2753,20 +2743,14 @@
             "keyword_id": "anti",
             "parameters": {
               "target_keyword": "Monster",
-              "threshold": 4,
-              "required_target_keywords_any": [
-                "Monster"
-              ]
+              "threshold": 4
             }
           },
           {
             "keyword_id": "anti",
             "parameters": {
               "target_keyword": "Vehicle",
-              "threshold": 4,
-              "required_target_keywords_any": [
-                "Vehicle"
-              ]
+              "threshold": 4
             }
           }
         ]
@@ -2774,7 +2758,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -3869,20 +3853,14 @@
             "keyword_id": "anti",
             "parameters": {
               "target_keyword": "Monster",
-              "threshold": 4,
-              "required_target_keywords_any": [
-                "Monster"
-              ]
+              "threshold": 4
             }
           },
           {
             "keyword_id": "anti",
             "parameters": {
               "target_keyword": "Vehicle",
-              "threshold": 4,
-              "required_target_keywords_any": [
-                "Vehicle"
-              ]
+              "threshold": 4
             }
           }
         ]
@@ -3890,8 +3868,14 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "b3835fc0-af4a-40cd-9b08-a64b8b23349d"
+      }
+    ]
   },
   {
     "id": "psyko-gatler",
@@ -4948,46 +4932,13 @@
     "type": "melee",
     "profiles": [
       {
-        "name": "Standard",
-        "range": "Melee",
-        "stats": {
-          "A": 3,
-          "S": 7,
-          "AP": -2,
-          "D": 2,
-          "WS": 3
-        },
-        "keywords": [
-          {
-            "keyword_id": "anti",
-            "parameters": {
-              "target_keyword": "Monster",
-              "threshold": 4,
-              "required_target_keywords_any": [
-                "Monster"
-              ]
-            }
-          },
-          {
-            "keyword_id": "anti",
-            "parameters": {
-              "target_keyword": "Vehicle",
-              "threshold": 4,
-              "required_target_keywords_any": [
-                "Vehicle"
-              ]
-            }
-          }
-        ]
-      },
-      {
         "name": "Hunter",
         "range": "Melee",
         "stats": {
-          "A": 2,
-          "S": 14,
-          "AP": -3,
-          "D": 6,
+          "A": 3,
+          "S": 12,
+          "AP": -2,
+          "D": 3,
           "WS": 3
         },
         "keywords": [
@@ -5010,12 +4961,34 @@
             "Vehicle"
           ]
         }
+      },
+      {
+        "name": "Standard",
+        "range": "Melee",
+        "stats": {
+          "A": 3,
+          "S": 7,
+          "AP": -2,
+          "D": 2,
+          "WS": 3
+        },
+        "keywords": []
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "4682533f-2bea-4199-a336-53b1fd875e32"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5c38109b-b9f7-4b93-a7bf-9cb5210233ca"
+      }
+    ]
   },
   {
     "id": "smasha-gun",
@@ -5448,20 +5421,14 @@
             "keyword_id": "anti",
             "parameters": {
               "target_keyword": "Monster",
-              "threshold": 3,
-              "required_target_keywords_any": [
-                "Monster"
-              ]
+              "threshold": 3
             }
           },
           {
             "keyword_id": "anti",
             "parameters": {
               "target_keyword": "Vehicle",
-              "threshold": 3,
-              "required_target_keywords_any": [
-                "Vehicle"
-              ]
+              "threshold": 3
             }
           },
           {
@@ -5472,12 +5439,16 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "4dcd-5d7f-65c2-245b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "898479b5-d71e-4d4b-a8c3-93674f4c3599"
       },
       {
         "namespace": "mfm",
@@ -5552,46 +5523,10 @@
   {
     "id": "stikka",
     "name": "Stikka",
-    "type": "ranged",
+    "type": "melee",
     "profiles": [
       {
-        "name": "Ranged",
-        "range": 9,
-        "stats": {
-          "A": 1,
-          "S": 5,
-          "AP": -1,
-          "D": 2,
-          "BS": 5
-        },
-        "keywords": [
-          {
-            "keyword_id": "anti",
-            "parameters": {
-              "target_keyword": "Monster",
-              "threshold": 4,
-              "required_target_keywords_any": [
-                "Monster"
-              ]
-            }
-          },
-          {
-            "keyword_id": "anti",
-            "parameters": {
-              "target_keyword": "Vehicle",
-              "threshold": 4,
-              "required_target_keywords_any": [
-                "Vehicle"
-              ]
-            }
-          },
-          {
-            "keyword_id": "assault"
-          }
-        ]
-      },
-      {
-        "name": "Melee",
+        "name": "Stikka",
         "range": "Melee",
         "stats": {
           "A": 3,
@@ -5605,20 +5540,44 @@
             "keyword_id": "anti",
             "parameters": {
               "target_keyword": "Monster",
-              "threshold": 4,
-              "required_target_keywords_any": [
-                "Monster"
-              ]
+              "threshold": 4
             }
           },
           {
             "keyword_id": "anti",
             "parameters": {
               "target_keyword": "Vehicle",
-              "threshold": 4,
-              "required_target_keywords_any": [
-                "Vehicle"
-              ]
+              "threshold": 4
+            }
+          }
+        ]
+      },
+      {
+        "name": "Stikka",
+        "range": 9,
+        "stats": {
+          "A": 1,
+          "S": 5,
+          "AP": -1,
+          "D": 2,
+          "BS": 5
+        },
+        "keywords": [
+          {
+            "keyword_id": "assault"
+          },
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "Monster",
+              "threshold": 4
+            }
+          },
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "Vehicle",
+              "threshold": 4
             }
           }
         ]
@@ -5626,7 +5585,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -5636,6 +5595,10 @@
       {
         "namespace": "mfm",
         "id": "2e5a42cd-d0e6-4733-b7b2-e16bd5237164"
+      },
+      {
+        "namespace": "mfm",
+        "id": "949505d9-8f8a-4977-8acf-c49a13ea62ee"
       }
     ]
   },
@@ -5659,20 +5622,14 @@
             "keyword_id": "anti",
             "parameters": {
               "target_keyword": "Monster",
-              "threshold": 2,
-              "required_target_keywords_any": [
-                "Monster"
-              ]
+              "threshold": 2
             }
           },
           {
             "keyword_id": "anti",
             "parameters": {
               "target_keyword": "Vehicle",
-              "threshold": 2,
-              "required_target_keywords_any": [
-                "Vehicle"
-              ]
+              "threshold": 2
             }
           }
         ]
@@ -5680,7 +5637,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -5689,7 +5646,15 @@
       },
       {
         "namespace": "mfm",
+        "id": "568789c4-fb6f-4587-b518-f80584a36aa3"
+      },
+      {
+        "namespace": "mfm",
         "id": "8d49c005-678e-4676-9571-40e8efa84a0e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "dfcf5ab8-f577-4bc5-b8cb-0fae3febe49a"
       }
     ]
   },
@@ -5952,20 +5917,14 @@
             "keyword_id": "anti",
             "parameters": {
               "target_keyword": "Monster",
-              "threshold": 4,
-              "required_target_keywords_any": [
-                "Monster"
-              ]
+              "threshold": 4
             }
           },
           {
             "keyword_id": "anti",
             "parameters": {
               "target_keyword": "Vehicle",
-              "threshold": 4,
-              "required_target_keywords_any": [
-                "Vehicle"
-              ]
+              "threshold": 4
             }
           }
         ]
@@ -5973,12 +5932,20 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "mfm",
+        "id": "73acc893-44cf-4f6b-ac26-76b718bac483"
+      },
+      {
+        "namespace": "mfm",
         "id": "ace8ee94-7787-4a44-91d1-4600f127c9ad"
+      },
+      {
+        "namespace": "mfm",
+        "id": "eae4d42e-477d-434a-9f33-f7461c348b4e"
       }
     ]
   },
@@ -6074,9 +6041,9 @@
         "range": 48,
         "stats": {
           "A": 2,
-          "S": 10,
+          "S": 6,
           "AP": -2,
-          "D": "D6+1",
+          "D": "D3+3",
           "BS": 4
         },
         "keywords": [
@@ -6086,26 +6053,22 @@
               "target_keyword": "Fly",
               "threshold": 2
             }
-          },
-          {
-            "keyword_id": "devastating-wounds",
-            "parameters": {
-              "required_target_keywords_any": [
-                "Fly"
-              ]
-            }
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "8c70-6865-15de-27f1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "79549119-7004-41de-b357-776497ce63d5"
       },
       {
         "namespace": "mfm",
@@ -6829,7 +6792,7 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Zzap gun",
+        "name": "Zzap Gun",
         "range": 36,
         "stats": {
           "A": 2,
@@ -6843,20 +6806,26 @@
             "keyword_id": "anti",
             "parameters": {
               "target_keyword": "Monster",
-              "threshold": 4,
-              "required_target_keywords_any": [
-                "Monster"
-              ]
+              "threshold": 4
             }
           },
           {
             "keyword_id": "anti",
             "parameters": {
               "target_keyword": "Vehicle",
-              "threshold": 4,
-              "required_target_keywords_any": [
-                "Vehicle"
-              ]
+              "threshold": 4
+            }
+          },
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 2
+            }
+          },
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 2
             }
           },
           {
@@ -6867,25 +6836,13 @@
                 "Vehicle"
               ]
             }
-          },
-          {
-            "keyword_id": "rapid-fire",
-            "parameters": {
-              "value": 2
-            }
-          },
-          {
-            "keyword_id": "sustained-hits",
-            "parameters": {
-              "value": 2
-            }
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -6903,6 +6860,10 @@
       {
         "namespace": "mfm",
         "id": "0141da71-8e71-44ae-93b9-054b978f8e7d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "679cc29c-2a9f-4c8a-bbe5-7ee47b66209c"
       }
     ]
   },
@@ -9652,20 +9613,14 @@
             "keyword_id": "anti",
             "parameters": {
               "target_keyword": "Monster",
-              "threshold": 4,
-              "required_target_keywords_any": [
-                "Monster"
-              ]
+              "threshold": 4
             }
           },
           {
             "keyword_id": "anti",
             "parameters": {
               "target_keyword": "Vehicle",
-              "threshold": 4,
-              "required_target_keywords_any": [
-                "Vehicle"
-              ]
+              "threshold": 4
             }
           }
         ]
@@ -9673,7 +9628,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {

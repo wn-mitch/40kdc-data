@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { hunterKeywords, mapWeaponKeyword, type WeaponRecord } from "../src/mfm/gear-projection.js";
+import { hunterKeywords, mapWeaponKeyword, parseRange, type WeaponRecord } from "../src/mfm/gear-projection.js";
 import { reconcileWeaponStats, type CompRow, type OptionRow, type UnitRow } from "../src/mfm/weapon-stats.js";
 import type { CoreWeapon } from "../src/mfm/weapon-variants.js";
 
@@ -18,13 +18,25 @@ describe("mapWeaponKeyword: qualified and Hunter forms", () => {
   it("reads a qualifier as the keywords the target must have, or must not have", () => {
     expect(mapWeaponKeyword("LETHAL HITS: non-MONSTER/VEHICLE")).toEqual([{ keyword_id: "lethal-hits", parameters: { excluded_target_keywords: ["Monster", "Vehicle"] } }]);
     expect(mapWeaponKeyword("SUSTAINED HITS 2: INFANTRY")).toEqual([{ keyword_id: "sustained-hits", parameters: { value: 2, required_target_keywords_any: ["Infantry"] } }]);
-    // A negative Anti has no repo representation and stays unparsed.
-    expect(mapWeaponKeyword("ANTI-non-MONSTER/VEHICLE 2+")).toBeNull();
+    // A negative Anti critically wounds every target without the named keywords.
+    expect(mapWeaponKeyword("ANTI-non-MONSTER/VEHICLE 2+")).toEqual([{ keyword_id: "anti", parameters: { threshold: 2, excluded_target_keywords: ["Monster", "Vehicle"] } }]);
   });
 
   it("splits a Hunter profile's target keyword", () => {
     expect(hunterKeywords("**MONSTER/VEHICLE**")).toEqual(["Monster", "Vehicle"]);
     expect(hunterKeywords(null)).toEqual([]);
+  });
+
+  it("keeps a ranged profile printed with range N/A ranged, and refuses other text", () => {
+    // Engines treat every range but "Melee" as ranged, so N/A must not collapse to Melee.
+    expect(parseRange("N/A", "ranged")).toBe("N/A");
+    expect(parseRange('24"', "ranged")).toBe(24);
+    expect(parseRange("Melee", "ranged")).toBe("Melee");
+    expect(() => parseRange("Varies", "ranged")).toThrow(/unparseable range/);
+  });
+
+  it("maps a datasheet-specific keyword to its catalog entry", () => {
+    expect(mapWeaponKeyword("BLINDING LIGHT")).toEqual([{ keyword_id: "blinding-light" }]);
   });
 });
 
@@ -108,18 +120,19 @@ describe("reconcileWeaponStats", () => {
   });
 
   it("carries repo-authored keyword detail onto the dump line and refuses where it has nowhere to go", () => {
-    const qualified = { keyword_id: "anti", parameters: { target_keyword: "Monster", threshold: 4, required_target_keywords_any: ["Monster"] } };
+    // A rating that depends on battle size: no dump keyword name can print it.
+    const rated = { keyword_id: "sustained-hits", parameters: { value: { "strike-force": 2 } } } as never;
     const kept = reconcileWeaponStats({
-      weapons: [weapon("example-blade", blade(4, 4, [qualified]))],
+      weapons: [weapon("example-blade", blade(4, 4, [rated]))],
       units: [{ id: "squad-a", weapon_ids: ["example-blade"] }],
       ...empty,
-      dumpWeapons: new Map([["squad-a", [minted("example-blade", blade(4, 5, [{ keyword_id: "anti", parameters: { target_keyword: "Monster", threshold: 4 } }]))]]]),
+      dumpWeapons: new Map([["squad-a", [minted("example-blade", blade(4, 5, [{ keyword_id: "sustained-hits", parameters: { value: 1 } }]))]]]),
     });
-    expect(kept.weapons[0].profiles[0].keywords).toEqual([qualified]);
+    expect(kept.weapons[0].profiles[0].keywords).toEqual([rated]);
     expect(kept.weapons[0].profiles[0].stats.S).toBe(5);
 
     const refused = reconcileWeaponStats({
-      weapons: [weapon("example-blade", blade(4, 4, [qualified]))],
+      weapons: [weapon("example-blade", blade(4, 4, [rated]))],
       units: [{ id: "squad-a", weapon_ids: ["example-blade"] }],
       ...empty,
       dumpWeapons: new Map([["squad-a", [minted("example-blade", blade(4, 5))]]]),
@@ -127,6 +140,19 @@ describe("reconcileWeaponStats", () => {
     expect(refused.updated).toEqual([]);
     expect(refused.weapons[0].profiles[0].stats.S).toBe(4);
     expect(refused.refusals[0]).toContain("repo-authored");
+  });
+
+  it("takes the dump's target qualifiers over stale repo ones", () => {
+    const stale = { keyword_id: "devastating-wounds", parameters: { required_target_keywords_any: ["Monster", "Vehicle"] } };
+    const printed = { keyword_id: "devastating-wounds", parameters: { excluded_target_keywords: ["Monster", "Vehicle"] } };
+    const result = reconcileWeaponStats({
+      weapons: [weapon("example-blade", blade(4, 4, [stale]))],
+      units: [{ id: "squad-a", weapon_ids: ["example-blade"] }],
+      ...empty,
+      dumpWeapons: new Map([["squad-a", [minted("example-blade", blade(4, 4, [printed]))]]]),
+    });
+    expect(result.refusals).toEqual([]);
+    expect(result.weapons[0].profiles[0].keywords).toEqual([printed]);
   });
 
   it("adds a Hunter profile with its target restriction", () => {

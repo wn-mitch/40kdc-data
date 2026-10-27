@@ -24,7 +24,11 @@
           "range": {
             "oneOf": [
               { "type": "integer", "minimum": 0 },
-              { "type": "string", "const": "Melee" }
+              {
+                "type": "string",
+                "enum": ["Melee", "N/A"],
+                "description": "Melee, or N/A for a ranged profile whose datasheet prints no range (its reach comes from the weapon's own rule)."
+              }
             ]
           },
           "stats": {

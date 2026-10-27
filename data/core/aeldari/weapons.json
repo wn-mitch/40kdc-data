@@ -10392,13 +10392,23 @@
         "keywords": [
           {
             "keyword_id": "psychic"
+          },
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "threshold": 2,
+              "excluded_target_keywords": [
+                "Monster",
+                "Vehicle"
+              ]
+            }
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -10431,6 +10441,16 @@
             "keyword_id": "torrent"
           },
           {
+            "keyword_id": "anti",
+            "parameters": {
+              "threshold": 3,
+              "excluded_target_keywords": [
+                "Monster",
+                "Vehicle"
+              ]
+            }
+          },
+          {
             "keyword_id": "blast",
             "parameters": {
               "value": 1
@@ -10441,7 +10461,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {

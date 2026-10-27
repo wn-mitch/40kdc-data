@@ -998,11 +998,11 @@
     "type": "melee",
     "profiles": [
       {
-        "name": "Close combat weapon",
+        "name": "Close Combat Weapon",
         "range": "Melee",
         "stats": {
           "A": 3,
-          "S": 4,
+          "S": 5,
           "AP": 0,
           "D": 1,
           "WS": 3
@@ -1018,6 +1018,10 @@
       {
         "namespace": "bsdata",
         "id": "d0e-7460-ee7b-660f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0a8879b7-d022-48c4-951d-c2fa84f69d4f"
       },
       {
         "namespace": "mfm",

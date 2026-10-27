@@ -3316,13 +3316,13 @@
     "profiles": [
       {
         "name": "Deathstrike missile",
-        "range": "Melee",
+        "range": "N/A",
         "stats": {
           "A": "2D6",
           "S": 16,
           "AP": -4,
           "D": 1,
-          "WS": 2
+          "BS": 2
         },
         "keywords": [
           {
@@ -3339,12 +3339,16 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "e994-dc10-3f71-1f2b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "52ac0a4c-2b4d-42af-81be-333f83ef9e96"
       }
     ]
   },

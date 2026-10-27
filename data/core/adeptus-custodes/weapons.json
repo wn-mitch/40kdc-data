@@ -4376,5 +4376,51 @@
       "edition": "11th",
       "dataslate": "mfm-995"
     }
+  },
+  {
+    "id": "auriferous-orb-emissaries-imperatus",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "6a0d542d-d4be-48b0-b46d-d3dab0923096"
+      }
+    ],
+    "name": "Auriferous Orb",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Auriferous Orb",
+        "range": 12,
+        "stats": {
+          "A": 3,
+          "S": 1,
+          "AP": 0,
+          "D": 1,
+          "BS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "threshold": 2,
+              "excluded_target_keywords": [
+                "Monster",
+                "Vehicle"
+              ]
+            }
+          },
+          {
+            "keyword_id": "blinding-light"
+          },
+          {
+            "keyword_id": "devastating-wounds"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    }
   }
 ]

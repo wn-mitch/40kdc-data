@@ -386,8 +386,8 @@
         "range": 24,
         "stats": {
           "A": 1,
-          "S": 4,
-          "AP": 0,
+          "S": 5,
+          "AP": -1,
           "D": 1,
           "BS": 4
         },
@@ -423,6 +423,10 @@
       {
         "namespace": "bsdata",
         "id": "a4a1-10b-80d8-27f6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6238e1cb-8255-4acb-8020-6e4f870019ae"
       },
       {
         "namespace": "mfm",
@@ -2976,11 +2980,11 @@
     "type": "melee",
     "profiles": [
       {
-        "name": "Close combat weapon",
+        "name": "Close Combat Weapon",
         "range": "Melee",
         "stats": {
           "A": 3,
-          "S": 4,
+          "S": 5,
           "AP": 0,
           "D": 1,
           "WS": 3
@@ -2996,6 +3000,10 @@
       {
         "namespace": "bsdata",
         "id": "143e-34b8-38d6-2153"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0a8879b7-d022-48c4-951d-c2fa84f69d4f"
       },
       {
         "namespace": "mfm",

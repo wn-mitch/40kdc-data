@@ -78,7 +78,7 @@ export interface ReconcileResult {
 }
 
 /** Parameters the MFM keyword parser derives; anything else on a keyword is repo-authored. */
-const PARSED_PARAMETERS = new Set(["target_keyword", "threshold", "value"]);
+const PARSED_PARAMETERS = new Set(["target_keyword", "threshold", "value", "required_target_keywords_any", "excluded_target_keywords"]);
 
 function isRepoAuthored(keyword: Keyword): boolean {
   return Object.entries(keyword.parameters ?? {}).some(([key, value]) =>
@@ -279,10 +279,17 @@ function dumpWeaponsFor(dump: MfmDump, dir: string, units: readonly UnitRow[], w
     if (!datasheet) continue;
     const ctx = { dump, gv: (unit.game_version as WeaponRecord["game_version"] | undefined) ?? currentGameVersion(dump), warnings: [] as string[] };
     const minted: WeaponRecord[] = [];
+    // A limited-choice bundle can name an older item that shares a name with the one the
+    // datasheet's loadout fields (Strike Squad's "Close combat weapon" beside a Psilencer): the
+    // loadout's item is the datasheet's line, and the bundle names that weapon, not a second one.
+    const primary = new Set(wargearItemsForDatasheet(dump, datasheet.id, { includeLimited: false }).map((item) => item.id));
+    const primaryNames = new Set(wargearItemsForDatasheet(dump, datasheet.id, { includeLimited: false })
+      .map((item) => dump.enName(item)?.toLowerCase()).filter((name): name is string => !!name));
     for (const item of wargearItemsForDatasheet(dump, datasheet.id)) {
       if (item.wargearType !== "weapon") continue;
       const name = dump.enName(item);
       if (!name) continue;
+      if (!primary.has(item.id) && primaryNames.has(name.toLowerCase())) continue;
       try {
         minted.push(mintWeapon(ctx, item, nameToId(name), name));
       } catch (error) {

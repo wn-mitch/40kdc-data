@@ -2349,7 +2349,7 @@
       "accursed-weapon",
       "bolt-pistol-chosen",
       "boltgun-chosen",
-      "combi-weapon",
+      "combi-weapon-chosen",
       "paired-accursed-weapons-chosen",
       "plasma-pistol",
       "power-fist-chosen"
@@ -2384,7 +2384,7 @@
       },
       {
         "items": [
-          "combi-weapon"
+          "combi-weapon-chosen"
         ],
         "count": 4,
         "per_models": 10

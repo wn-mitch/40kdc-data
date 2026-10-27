@@ -522,7 +522,7 @@
         "bolt-pistol-chosen": 6,
         "boltgun-chosen": 4,
         "chaos-icon": 1,
-        "combi-weapon": 4,
+        "combi-weapon-chosen": 4,
         "paired-accursed-weapons-chosen": 2,
         "plasma-pistol": 4,
         "power-fist-chosen": 2
@@ -965,7 +965,7 @@
       "factionId": "adeptus-astartes",
       "modelCount": 10,
       "counts": {
-        "cyclone-missile-launcher": 2,
+        "cyclone-missile-launcher-terminator-squad": 2,
         "power-fist-terminator-squad": 10,
         "storm-bolter-terminator-squad": 10
       }

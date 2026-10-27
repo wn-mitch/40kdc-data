@@ -7,7 +7,7 @@ export interface GameVersion {
 
 export interface WeaponProfile {
   name: string;
-  range: number | "Melee";
+  range: number | "Melee" | "N/A";
   stats: {
     A: number | string;
     BS?: number | null;
@@ -64,6 +64,13 @@ export function mapWeaponKeyword(
     return [{ keyword_id: base[0].keyword_id, parameters: { ...base[0].parameters, [key]: keywords } }];
   }
   const lower = name.toLowerCase();
+  // "ANTI-non-MONSTER/VEHICLE 2+": Anti against every target without the named keywords.
+  const antiNot = lower.match(/^anti-non-([a-z/ ]+?)\s*(\d)\+$/);
+  if (antiNot) {
+    const excluded = antiNot[1].split("/").map((target) => target.trim()).filter(Boolean)
+      .map((target) => target.replace(/\b\w/g, (character) => character.toUpperCase()));
+    return [{ keyword_id: "anti", parameters: { threshold: Number(antiNot[2]), excluded_target_keywords: excluded } }];
+  }
   const anti = lower.match(/^anti-([a-z/ ]+?)\s*(\d)\+$/);
   if (anti) {
     const threshold = Number(anti[2]);
@@ -132,6 +139,7 @@ export function mapWeaponKeyword(
     "reverberating summons": "reverberating-summons",
     bubblechukka: "bubblechukka",
     "dead choppy": "dead-choppy",
+    "blinding light": "blinding-light",
     harpooned: "harpooned",
     hooked: "hooked",
     impaled: "impaled",
@@ -180,13 +188,14 @@ function parseArmourPenetration(value: string | null | undefined): number {
   return Number.isFinite(numeric) ? numeric : 0;
 }
 
-function parseRange(
+export function parseRange(
   value: string | null | undefined,
   type: string,
-): number | "Melee" {
+): number | "Melee" | "N/A" {
   if (type === "melee") return "Melee";
   const normalized = (value ?? "").trim();
   if (/melee/i.test(normalized)) return "Melee";
+  if (/^n\/a$/i.test(normalized)) return "N/A";
   const numeric = Number.parseInt(normalized.replace(/["”]/g, ""), 10);
   if (!Number.isFinite(numeric))
     throw new Error(`unparseable range "${value}"`);

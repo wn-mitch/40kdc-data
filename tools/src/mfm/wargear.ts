@@ -387,6 +387,7 @@ export function unitScopedResolver(
 export function wargearItemsForDatasheet(
   dump: MfmDump,
   datasheetId: string,
+  { includeLimited = true }: { includeLimited?: boolean } = {},
 ): readonly WargearItemRow[] {
   const wargearItems = dump.byId("wargear_item");
   const options = dump.byId("wargear_option");
@@ -430,6 +431,7 @@ export function wargearItemsForDatasheet(
     }
   }
 
+  if (!includeLimited) return [...found.values()];
   for (const set of dump.groupBy("limited_wargear_choice_set", "datasheetId").get(datasheetId) ?? []) {
     for (const choice of dump
       .groupBy("limited_wargear_choice", "limitedWargearChoiceSetId")

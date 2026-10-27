@@ -1,0 +1,15 @@
++++++++++++++++++++++++++++++++++++++++++++++++
++ LIST NAME: Deathstrike Battery
++ FACTION KEYWORD: Astra Militarum
++ DETACHMENT: Combined Arms
++ FORCE DISPOSITION: Take And Hold
++ TOTAL ARMY POINTS: 185pts
++ POINTS LIMIT: 2000pts
++
++ WARLORD: Char1: Primaris Psyker
++ ENHANCEMENT: —
++ NUMBER OF UNITS: 2
++++++++++++++++++++++++++++++++++++++++++++++++
+
+Char1: 1x Primaris Psyker (60 pts): Force weapon, Laspistol, Psychic Maelstrom, Warlord
+1x Deathstrike (125 pts): Armoured tracks, Deathstrike missile, Heavy bolter

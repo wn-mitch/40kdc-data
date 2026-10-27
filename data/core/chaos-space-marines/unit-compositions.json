@@ -1406,7 +1406,7 @@
             "weapon_ids": [
               "accursed-weapon",
               "bolt-pistol-chosen",
-              "combi-weapon"
+              "combi-weapon-chosen"
             ],
             "max_count": 4
           },
@@ -1432,7 +1432,7 @@
             "weapon_ids": [
               "accursed-weapon",
               "plasma-pistol",
-              "combi-weapon"
+              "combi-weapon-chosen"
             ],
             "max_count": 4
           },

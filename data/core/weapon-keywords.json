@@ -404,5 +404,15 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     }
+  },
+  {
+    "id": "blinding-light",
+    "name": "Blinding Light",
+    "required_parameters": [],
+    "effect": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   }
 ]

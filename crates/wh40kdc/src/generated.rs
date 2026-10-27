@@ -56730,8 +56730,12 @@ impl<'de> ::serde::Deserialize<'de> for WargearOptionModelConstraintModelName {
 ///                "minimum": 0.0
 ///              },
 ///              {
+///                "description": "Melee, or N/A for a ranged profile whose datasheet prints no range (its reach comes from the weapon's own rule).",
 ///                "type": "string",
-///                "const": "Melee"
+///                "enum": [
+///                  "Melee",
+///                  "N/A"
+///                ]
 ///              }
 ///            ]
 ///          },
@@ -57573,8 +57577,12 @@ impl<'de> ::serde::Deserialize<'de> for WeaponName {
 ///          "minimum": 0.0
 ///        },
 ///        {
+///          "description": "Melee, or N/A for a ranged profile whose datasheet prints no range (its reach comes from the weapon's own rule).",
 ///          "type": "string",
-///          "const": "Melee"
+///          "enum": [
+///            "Melee",
+///            "N/A"
+///          ]
 ///        }
 ///      ]
 ///    },
@@ -57755,8 +57763,12 @@ impl<'de> ::serde::Deserialize<'de> for WeaponProfilesItemName {
 ///      "minimum": 0.0
 ///    },
 ///    {
+///      "description": "Melee, or N/A for a ranged profile whose datasheet prints no range (its reach comes from the weapon's own rule).",
 ///      "type": "string",
-///      "const": "Melee"
+///      "enum": [
+///        "Melee",
+///        "N/A"
+///      ]
 ///    }
 ///  ]
 ///}
@@ -57766,7 +57778,45 @@ impl<'de> ::serde::Deserialize<'de> for WeaponProfilesItemName {
 #[serde(untagged)]
 pub enum WeaponProfilesItemRange {
     Integer(u64),
-    String(::std::string::String),
+    String(WeaponProfilesItemRangeString),
+}
+impl ::std::str::FromStr for WeaponProfilesItemRange {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if let Ok(v) = value.parse() {
+            Ok(Self::Integer(v))
+        } else if let Ok(v) = value.parse() {
+            Ok(Self::String(v))
+        } else {
+            Err("string conversion failed for all variants".into())
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for WeaponProfilesItemRange {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for WeaponProfilesItemRange {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for WeaponProfilesItemRange {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
 }
 impl ::std::fmt::Display for WeaponProfilesItemRange {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
@@ -57779,6 +57829,87 @@ impl ::std::fmt::Display for WeaponProfilesItemRange {
 impl ::std::convert::From<u64> for WeaponProfilesItemRange {
     fn from(value: u64) -> Self {
         Self::Integer(value)
+    }
+}
+impl ::std::convert::From<WeaponProfilesItemRangeString> for WeaponProfilesItemRange {
+    fn from(value: WeaponProfilesItemRangeString) -> Self {
+        Self::String(value)
+    }
+}
+///Melee, or N/A for a ranged profile whose datasheet prints no range (its reach comes from the weapon's own rule).
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Melee, or N/A for a ranged profile whose datasheet prints no range (its reach comes from the weapon's own rule).",
+///  "type": "string",
+///  "enum": [
+///    "Melee",
+///    "N/A"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum WeaponProfilesItemRangeString {
+    Melee,
+    #[serde(rename = "N/A")]
+    NA,
+}
+impl ::std::fmt::Display for WeaponProfilesItemRangeString {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Melee => f.write_str("Melee"),
+            Self::NA => f.write_str("N/A"),
+        }
+    }
+}
+impl ::std::str::FromStr for WeaponProfilesItemRangeString {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "Melee" => Ok(Self::Melee),
+            "N/A" => Ok(Self::NA),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for WeaponProfilesItemRangeString {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for WeaponProfilesItemRangeString {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for WeaponProfilesItemRangeString {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
     }
 }
 ///`WeaponProfilesItemStats`

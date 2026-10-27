@@ -1,5 +1,5 @@
 {
-  "version": 34,
+  "version": 35,
   "kinds": {
     "faction": [
       "adepta-sororitas",
@@ -5435,7 +5435,9 @@
       "twin-heavy-bolter-thunderhawk-gunship",
       "twin-lascannon-astraeus",
       "vaultswords-blade-champion",
-      "warpflamer-prism-of-zadophon-rubric-marines"
+      "warpflamer-prism-of-zadophon-rubric-marines",
+      "auriferous-orb-emissaries-imperatus",
+      "combi-weapon-chosen"
     ],
     "enhancement": [
       "a-chink-in-their-armour",

@@ -62,15 +62,15 @@
       }
     },
     "weapon": {
-      "entities": 3534,
-      "with_external_refs": 3445,
+      "entities": 3536,
+      "with_external_refs": 3450,
       "covered_entities_by_namespace": {
-        "bsdata": 2849,
-        "mfm": 3430
+        "bsdata": 2850,
+        "mfm": 3437
       },
       "references_by_namespace": {
-        "bsdata": 3573,
-        "mfm": 4675
+        "bsdata": 3576,
+        "mfm": 4698
       }
     },
     "wargear": {
@@ -1120,6 +1120,11 @@
         {
           "entity_type": "weapon",
           "id": "combi-weapon-chaos-vindicator",
+          "faction_id": "chaos-space-marines"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "combi-weapon-chosen",
           "faction_id": "chaos-space-marines"
         },
         {
@@ -3561,6 +3566,11 @@
         },
         {
           "entity_type": "weapon",
+          "id": "combi-weapon-chosen",
+          "faction_id": "chaos-space-marines"
+        },
+        {
+          "entity_type": "weapon",
           "id": "combi-weapon-sorcerer-in-terminator-armour",
           "faction_id": "chaos-space-marines"
         }
@@ -5708,6 +5718,11 @@
         {
           "entity_type": "weapon",
           "id": "combi-weapon-chaos-vindicator",
+          "faction_id": "chaos-space-marines"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "combi-weapon-chosen",
           "faction_id": "chaos-space-marines"
         },
         {
@@ -8280,6 +8295,16 @@
       "namespace": "mfm",
       "id": "0a8879b7-d022-48c4-951d-c2fa84f69d4f",
       "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "close-combat-weapon",
+          "faction_id": "grey-knights"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "close-combat-weapon-blightlord-terminators",
+          "faction_id": "death-guard"
+        },
         {
           "entity_type": "weapon",
           "id": "close-combat-weapon-chaos-bikers",
@@ -13696,6 +13721,11 @@
         {
           "entity_type": "weapon",
           "id": "combi-weapon",
+          "faction_id": "death-guard"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "combi-weapon",
           "faction_id": "emperors-children"
         },
         {
@@ -13756,6 +13786,11 @@
         {
           "entity_type": "weapon",
           "id": "combi-weapon-chaos-vindicator",
+          "faction_id": "chaos-space-marines"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "combi-weapon-chosen",
           "faction_id": "chaos-space-marines"
         },
         {
@@ -16549,6 +16584,11 @@
         {
           "entity_type": "weapon",
           "id": "combi-weapon-chaos-vindicator",
+          "faction_id": "chaos-space-marines"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "combi-weapon-chosen",
           "faction_id": "chaos-space-marines"
         },
         {

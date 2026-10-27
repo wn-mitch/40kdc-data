@@ -7,6 +7,6 @@
 | detachment | 0 | 0 |
 | enhancement | 0 | 339 |
 | stratagem | 0 | 545 |
-| weapon | 159 | 155 |
+| weapon | 4 | 132 |
 | wargear | 0 | 2 |
 

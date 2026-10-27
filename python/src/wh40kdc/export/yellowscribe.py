@@ -189,7 +189,13 @@ def _weapon_profiles(weapon: Any) -> list[_El]:
     out: list[_El] = []
     for i, p in enumerate(weapon.raw["profiles"]):
         stats = p["stats"]
-        rng = _fmt_move(p.get("range") if p.get("range") is not None else 0) if ranged else "Melee"
+        if not ranged:
+            rng = "Melee"
+        elif p.get("range") == "N/A":
+            # An "N/A" range is printed as-is, without the inch mark.
+            rng = "N/A"
+        else:
+            rng = _fmt_move(p.get("range") if p.get("range") is not None else 0)
         skill_name = "BS" if ranged else "WS"
         skill = stats.get("BS") if ranged else stats.get("WS")
         keywords = ", ".join(

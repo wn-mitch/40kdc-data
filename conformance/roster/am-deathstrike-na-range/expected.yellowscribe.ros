@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<roster id="roster0" name="Deathstrike Battery" gameSystemId="sys-352e-adc2-7639-d6a9" gameSystemName="Warhammer 40,000">
+  <forces>
+    <force id="force0" name="Astra Militarum" catalogueName="Astra Militarum">
+      <selections>
+        <selection id="unit0" name="Primaris Psyker" type="unit" number="1">
+          <profiles>
+            <profile name="Primaris Psyker" typeName="Unit">
+              <characteristics>
+                <characteristic name="M">6"</characteristic>
+                <characteristic name="T">3</characteristic>
+                <characteristic name="SV">5+</characteristic>
+                <characteristic name="W">3</characteristic>
+                <characteristic name="LD">7+</characteristic>
+                <characteristic name="OC">1</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Leader" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">The unit gains the Leader ability.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Malign Wardings (Psychic)" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">While this model is leading a unit, the unit has the Feel No Pain 4+ ability against Psychic Attacks.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Psychic Barrier (Psychic)" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">At the start of your opponent's Shooting phase, you may use this ability, until the end of the phase:
+  -&gt; Roll one D6:
+    - On 1: The unit suffers D3 mortal wounds.
+    - On 2-6: The unit has a 4+ invulnerable save.</characteristic>
+              </characteristics>
+            </profile>
+          </profiles>
+          <categories>
+            <category name="Faction: Astra Militarum"/>
+            <category name="Infantry"/>
+            <category name="Character"/>
+            <category name="Psyker"/>
+            <category name="Imperium"/>
+            <category name="Primaris Psyker"/>
+          </categories>
+          <selections>
+            <selection id="unit0-m0" name="Primaris Psyker" type="model" number="1">
+              <selections>
+                <selection id="unit0-m0-w0" name="Force weapon" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Force weapon" typeName="Melee Weapons">
+                      <characteristics>
+                        <characteristic name="Range">Melee</characteristic>
+                        <characteristic name="A">3</characteristic>
+                        <characteristic name="WS">4+</characteristic>
+                        <characteristic name="S">6</characteristic>
+                        <characteristic name="AP">-1</characteristic>
+                        <characteristic name="D">D3</characteristic>
+                        <characteristic name="Keywords">Psychic</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit0-m0-w1" name="Laspistol" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Laspistol" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">12"</characteristic>
+                        <characteristic name="A">1</characteristic>
+                        <characteristic name="BS">3+</characteristic>
+                        <characteristic name="S">3</characteristic>
+                        <characteristic name="AP">0</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords">Pistol</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit0-m0-w2" name="Psychic Maelstrom" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Witchfire" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">18"</characteristic>
+                        <characteristic name="A">D6</characteristic>
+                        <characteristic name="BS">3+</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-2</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords">Blast, Devastating Wounds, Psychic</characteristic>
+                      </characteristics>
+                    </profile>
+                    <profile name="Focused witchfire" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">18"</characteristic>
+                        <characteristic name="A">D6+1</characteristic>
+                        <characteristic name="BS">3+</characteristic>
+                        <characteristic name="S">6</characteristic>
+                        <characteristic name="AP">-2</characteristic>
+                        <characteristic name="D">2</characteristic>
+                        <characteristic name="Keywords">Blast, Devastating Wounds, Hazardous, Psychic</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+              </selections>
+            </selection>
+          </selections>
+        </selection>
+        <selection id="unit1" name="Deathstrike" type="unit" number="1">
+          <profiles>
+            <profile name="Deathstrike" typeName="Unit">
+              <characteristics>
+                <characteristic name="M">10"</characteristic>
+                <characteristic name="T">10</characteristic>
+                <characteristic name="SV">3+</characteristic>
+                <characteristic name="W">11</characteristic>
+                <characteristic name="LD">7+</characteristic>
+                <characteristic name="OC">3</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Deathstrike Missile" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">The first time this battle, during the Shooting phase, for the rest of the battle:
+  Select one of the following (Target Action):
+    - Place a deathstrike target marker anywhere.
+    - Move the deathstrike target marker.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Deadly Demise" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Before this model is removed from play:
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Damaged" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+              </characteristics>
+            </profile>
+          </profiles>
+          <categories>
+            <category name="Faction: Astra Militarum"/>
+            <category name="Vehicle"/>
+            <category name="Artillery"/>
+            <category name="Smoke"/>
+            <category name="Imperium"/>
+            <category name="Squadron"/>
+            <category name="Deathstrike"/>
+            <category name="Frame"/>
+          </categories>
+          <selections>
+            <selection id="unit1-m0" name="Deathstrike" type="model" number="1">
+              <selections>
+                <selection id="unit1-m0-w0" name="Armoured tracks" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Armoured tracks" typeName="Melee Weapons">
+                      <characteristics>
+                        <characteristic name="Range">Melee</characteristic>
+                        <characteristic name="A">3</characteristic>
+                        <characteristic name="WS">4+</characteristic>
+                        <characteristic name="S">6</characteristic>
+                        <characteristic name="AP">0</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords"></characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit1-m0-w1" name="Deathstrike missile" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Deathstrike missile" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">N/A</characteristic>
+                        <characteristic name="A">2D6</characteristic>
+                        <characteristic name="BS">2+</characteristic>
+                        <characteristic name="S">16</characteristic>
+                        <characteristic name="AP">-4</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords">Blast, One Shot, Plasma Warhead</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit1-m0-w2" name="Heavy bolter" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Heavy bolter" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">36"</characteristic>
+                        <characteristic name="A">3</characteristic>
+                        <characteristic name="BS">4+</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-1</characteristic>
+                        <characteristic name="D">2</characteristic>
+                        <characteristic name="Keywords">Sustained Hits 1</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+              </selections>
+            </selection>
+          </selections>
+        </selection>
+      </selections>
+    </force>
+  </forces>
+</roster>

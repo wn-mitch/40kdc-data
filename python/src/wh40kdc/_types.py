@@ -1707,7 +1707,7 @@ class WeaponScope(TypedDict):
 
 class Profile1(TypedDict):
     name: str
-    range: NotRequired[int | Literal["Melee"]]
+    range: NotRequired[int | Literal["Melee", "N/A"]]
     stats: Stats
     keywords: NotRequired[list[WeaponKeywordRef]]
     target_restrictions: NotRequired[TargetRestrictions | None]

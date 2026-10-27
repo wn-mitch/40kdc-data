@@ -7322,7 +7322,7 @@ export interface Weapon {
   profiles: [
     {
       name: string;
-      range?: number | "Melee";
+      range?: number | ("Melee" | "N/A");
       stats: {
         A: StatValue;
         BS?: number | null;
@@ -7346,7 +7346,7 @@ export interface Weapon {
     },
     ...{
       name: string;
-      range?: number | "Melee";
+      range?: number | ("Melee" | "N/A");
       stats: {
         A: StatValue;
         BS?: number | null;

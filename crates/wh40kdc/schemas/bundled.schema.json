@@ -4925,7 +4925,11 @@
                   },
                   {
                     "type": "string",
-                    "const": "Melee"
+                    "enum": [
+                      "Melee",
+                      "N/A"
+                    ],
+                    "description": "Melee, or N/A for a ranged profile whose datasheet prints no range (its reach comes from the weapon's own rule)."
                   }
                 ]
               },

@@ -906,7 +906,7 @@
       "boltgun-chosen"
     ],
     "replacement": [
-      "combi-weapon"
+      "combi-weapon-chosen"
     ],
     "model_constraint": {
       "model_name": "Chosen",
@@ -969,7 +969,7 @@
       "bolt-pistol-chosen"
     ],
     "replacement": [
-      "combi-weapon",
+      "combi-weapon-chosen",
       "plasma-pistol"
     ],
     "model_constraint": {
@@ -1078,7 +1078,7 @@
       "boltgun-chosen"
     ],
     "replacement": [
-      "combi-weapon"
+      "combi-weapon-chosen"
     ],
     "model_constraint": {
       "model_name": "Chosen Champion",
@@ -1140,7 +1140,7 @@
       "bolt-pistol-chosen"
     ],
     "replacement": [
-      "combi-weapon",
+      "combi-weapon-chosen",
       "plasma-pistol"
     ],
     "model_constraint": {
