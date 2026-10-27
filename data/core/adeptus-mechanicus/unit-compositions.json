@@ -1793,7 +1793,7 @@
         "max": 1,
         "default_weapon_ids": [
           "omnissian-staff",
-          "transonic-cannon"
+          "transonic-cannon-manipulus-skand"
         ]
       }
     ],
@@ -1823,8 +1823,8 @@
         "max": 1,
         "is_leader_model": true,
         "default_weapon_ids": [
-          "flechette-blaster",
-          "taser-goad"
+          "flechette-blaster-purge-corps-pteraxii-sterylizors",
+          "taser-goad-purge-corps-pteraxii-sterylizors"
         ]
       },
       {
@@ -1869,7 +1869,7 @@
         "is_leader_model": true,
         "default_weapon_ids": [
           "alphas-combat-artefact",
-          "mechanicus-pistol"
+          "mechanicus-pistol-purge-corps-skitarii-vanguard"
         ]
       },
       {

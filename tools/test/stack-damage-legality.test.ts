@@ -181,9 +181,9 @@ describe("Legionaries heavy melee allowance", () => {
     options,
     counts: new Map([
       ["heavy-melee-weapon", heavy],
-      ["boltgun", boltguns],
-      ["bolt-pistol", pistols],
-      ["close-combat-weapon", 10],
+      ["boltgun-legionaries", boltguns],
+      ["bolt-pistol-legionaries", pistols],
+      ["close-combat-weapon-legionaries", 10],
     ]),
     models: composition.models,
   });

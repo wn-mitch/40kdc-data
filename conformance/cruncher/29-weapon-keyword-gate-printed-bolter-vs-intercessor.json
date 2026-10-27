@@ -1,8 +1,8 @@
 {
-  "name": "bolt-rifle x5 vs intercessor within half range, a weapon-keyword gate on a printed keyword (Heavy) applies and one on an absent keyword (Lethal Hits) drops",
+  "name": "bolt-rifle (saturation) x5 vs intercessor within half range, a weapon-keyword gate on a printed keyword (Assault) applies and one on an absent keyword (Heavy) drops",
   "attacker": {
     "weaponId": "bolt-rifle",
-    "profileIndex": 0
+    "profileIndex": 1
   },
   "modelsFiring": 5,
   "target": {
@@ -22,16 +22,15 @@
       },
       "applicableWhen": {
         "weaponKeywords": [
-          { "keyword_id": "heavy" }
+          {
+            "keyword_id": "assault"
+          }
         ]
       },
       "contribution": {
         "type": "extra-keyword",
         "keywordRef": {
-          "keyword_id": "rapid-fire",
-          "parameters": {
-            "value": 1
-          }
+          "keyword_id": "lethal-hits"
         }
       }
     },
@@ -43,7 +42,9 @@
       },
       "applicableWhen": {
         "weaponKeywords": [
-          { "keyword_id": "lethal-hits" }
+          {
+            "keyword_id": "heavy"
+          }
         ]
       },
       "contribution": {
@@ -61,11 +62,11 @@
     "stages": {
       "attacks": 15,
       "hits": 10,
-      "wounds": 3.3333,
-      "unsaved": 1.6667,
-      "damage": 1.6667,
-      "after-fnp": 1.6667,
-      "models-killed": 0.8333
+      "wounds": 6.25,
+      "unsaved": 3.125,
+      "damage": 3.125,
+      "after-fnp": 3.125,
+      "models-killed": 1.5625
     }
   }
 }

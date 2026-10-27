@@ -28,7 +28,7 @@ func leverStages(t *testing.T, buffs []any) map[string]float64 {
 		t.Fatal("intercessor-squad missing")
 	}
 	stages, _, err := crunch(map[string]any{
-		"attacker":     map[string]any{"weapon": weapon.Raw, "profileIndex": 0.0},
+		"attacker":     map[string]any{"weapon": weapon.Raw, "profileIndex": 1.0}, // Saturation: A2 S5
 		"target":       map[string]any{"unit": unit.Raw, "profileIndex": 0.0},
 		"modelsFiring": 5.0,
 		"buffs":        buffs,
@@ -119,11 +119,11 @@ func TestLeversCritHitFiveWithLethalRaisesWounds(t *testing.T) {
 		"contribution": map[string]any{"type": "extra-keyword", "keywordRef": map[string]any{"keyword_id": "lethal-hits"}},
 	}
 	crit := effectToBuffs(map[string]any{"type": "roll-result", "target": "this-unit", "modifier": map[string]any{"roll": "hit", "critical_on": 5.0}}, leverSource(), shootingCtx(), "attacker").applied
-	// Crits on a 6 auto-wound; the other hits (3+ to 5) wound on a 5+ against T5.
-	if got, want := leverStages(t, []any{lethal})["wounds"], 10*(1.0/6)+10*(3.0/6)*(1.0/3); math.Abs(got-want) > 1e-6 {
+	// Crits on a 6 auto-wound; the other hits (3+ to 5) wound on a 4+ against T5.
+	if got, want := leverStages(t, []any{lethal})["wounds"], 10*(1.0/6)+10*(3.0/6)*(1.0/2); math.Abs(got-want) > 1e-6 {
 		t.Fatalf("wounds = %v, want %v", got, want)
 	}
-	if got, want := leverStages(t, append([]any{lethal}, crit...))["wounds"], 10*(2.0/6)+10*(2.0/6)*(1.0/3); math.Abs(got-want) > 1e-6 {
+	if got, want := leverStages(t, append([]any{lethal}, crit...))["wounds"], 10*(2.0/6)+10*(2.0/6)*(1.0/2); math.Abs(got-want) > 1e-6 {
 		t.Fatalf("wounds with crit 5+ = %v, want %v", got, want)
 	}
 }

@@ -2945,23 +2945,72 @@
         },
         "keywords": [
           {
+            "keyword_id": "close-quarters"
+          },
+          {
             "keyword_id": "anti",
             "parameters": {
               "target_keyword": "Infantry",
               "threshold": 2
             }
+          },
+          {
+            "keyword_id": "precision"
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "mfm",
         "id": "1a222cfc-f20a-473a-b353-92d26b903de5"
+      }
+    ]
+  },
+  {
+    "id": "spirit-vortex-coven-of-agonies-cronos",
+    "name": "Spirit vortex",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Spirit Vortex",
+        "range": 18,
+        "stats": {
+          "A": "D6",
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 1
+            }
+          },
+          {
+            "keyword_id": "ignores-cover"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "b68ff0b2-0876-4ff8-8e4b-277ae72ef230"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fb72893c-611b-44d5-96a3-c39631763dc0"
       }
     ]
   }

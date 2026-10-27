@@ -143,7 +143,7 @@
     "is_free": true,
     "replacement_choice": [
       [
-        "combi-weapon"
+        "combi-weapon-chaos-predator-annihilator"
       ],
       [
         "combi-bolter"
@@ -219,7 +219,7 @@
     "is_free": true,
     "replacement_choice": [
       [
-        "combi-weapon"
+        "combi-weapon-chaos-predator-destructor"
       ],
       [
         "combi-bolter"
@@ -302,7 +302,7 @@
     },
     "is_free": true,
     "replaces": [
-      "boltgun"
+      "boltgun-plague-marines"
     ],
     "replacement_choice": [
       [
@@ -355,7 +355,7 @@
     },
     "is_free": true,
     "replaces": [
-      "boltgun"
+      "boltgun-plague-marines"
     ],
     "replacement": [
       "plague-spewer"
@@ -375,7 +375,7 @@
     },
     "is_free": true,
     "replaces": [
-      "boltgun"
+      "boltgun-plague-marines"
     ],
     "replacement_choice": [
       [
@@ -409,7 +409,7 @@
     },
     "is_free": true,
     "replaces": [
-      "boltgun"
+      "boltgun-plague-marines"
     ],
     "replacement": [
       "blight-launcher"
@@ -748,13 +748,13 @@
         "combi-bolter"
       ],
       [
-        "combi-weapon"
+        "combi-weapon-chaos-rhino"
       ],
       [
         "havoc-launcher"
       ],
       [
-        "combi-weapon",
+        "combi-weapon-chaos-rhino",
         "havoc-launcher"
       ],
       [
@@ -784,7 +784,7 @@
       ],
       [
         "havoc-launcher",
-        "combi-weapon"
+        "combi-weapon-chaos-rhino"
       ]
     ],
     "model_constraint": {
@@ -805,7 +805,7 @@
         "combi-bolter"
       ],
       [
-        "combi-weapon"
+        "combi-weapon-chaos-land-raider"
       ]
     ],
     "model_constraint": {

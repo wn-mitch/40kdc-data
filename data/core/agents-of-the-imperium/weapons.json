@@ -392,7 +392,7 @@
         "name": "Hellfire Extremis",
         "range": 12,
         "stats": {
-          "A": "D6",
+          "A": 3,
           "S": 4,
           "AP": -1,
           "D": 1,
@@ -429,6 +429,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "206636ca-bfc4-48fb-b171-854985c6d698"
+      },
+      {
+        "namespace": "mfm",
         "id": "5ed26d70-fd5e-419d-8919-713196ca2bd8"
       }
     ]
@@ -439,11 +443,11 @@
     "type": "melee",
     "profiles": [
       {
-        "name": "Master-crafted power weapon",
+        "name": "Master-crafted Power Weapon",
         "range": "Melee",
         "stats": {
           "A": 6,
-          "S": 5,
+          "S": 6,
           "AP": -2,
           "D": 2,
           "WS": 2
@@ -459,6 +463,10 @@
       {
         "namespace": "bsdata",
         "id": "79aa-e495-e7b9-bdcb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b1de4907-cf00-4368-b71a-2aa98bba33c3"
       },
       {
         "namespace": "mfm",
@@ -801,7 +809,10 @@
             }
           },
           {
-            "keyword_id": "precision"
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 2
+            }
           },
           {
             "keyword_id": "torrent"
@@ -811,7 +822,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2009,13 +2020,20 @@
         "name": "Boltgun",
         "range": 24,
         "stats": {
-          "A": 2,
-          "S": 4,
-          "AP": 0,
+          "A": 1,
+          "S": 5,
+          "AP": -1,
           "D": 1,
           "BS": 3
         },
-        "keywords": []
+        "keywords": [
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
       }
     ],
     "game_version": {
@@ -2030,6 +2048,10 @@
       {
         "namespace": "mfm",
         "id": "7d1aa4c7-694d-4567-a433-11d6bc4c0f6e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e223e2fc-3141-4990-8cdb-d3bb61e784b8"
       }
     ]
   },
@@ -2039,11 +2061,11 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Stalker-pattern boltgun",
+        "name": "Stalker-pattern Boltgun",
         "range": 24,
         "stats": {
           "A": 1,
-          "S": 4,
+          "S": 5,
           "AP": -1,
           "D": 2,
           "BS": 3
@@ -2069,6 +2091,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "6083e060-bff1-48fc-a4d1-3b42733d1f53"
+      },
+      {
+        "namespace": "mfm",
         "id": "bd06b2c7-893a-45fa-a8c6-36c25ef876b0"
       }
     ]
@@ -2079,12 +2105,12 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Deathwatch shotgun",
+        "name": "Deathwatch Shotgun",
         "range": 18,
         "stats": {
           "A": 2,
           "S": 4,
-          "AP": 0,
+          "AP": -1,
           "D": 2,
           "BS": 3
         },
@@ -2107,6 +2133,10 @@
       {
         "namespace": "mfm",
         "id": "0acf101e-4e51-484d-903c-07b517d38f52"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5799eafa-5a05-4727-abbe-cdd1964920f5"
       }
     ]
   },
@@ -2116,26 +2146,32 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Frag cannon",
+        "name": "Frag Cannon",
         "range": 18,
         "stats": {
-          "A": "D3",
+          "A": 2,
           "S": 7,
-          "AP": -1,
+          "AP": -2,
           "D": 2,
-          "BS": 4
+          "BS": 3
         },
         "keywords": [
           {
-            "keyword_id": "blast"
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 1
+            }
           },
           {
             "keyword_id": "heavy"
           },
           {
+            "keyword_id": "lethal-hits"
+          },
+          {
             "keyword_id": "rapid-fire",
             "parameters": {
-              "value": "D3"
+              "value": 1
             }
           }
         ]
@@ -2152,6 +2188,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "b0a23878-ae7e-44ed-8fe3-9b9ae8878ae2"
+      },
+      {
+        "namespace": "mfm",
         "id": "db83b594-50b6-490b-a71a-88145130a055"
       }
     ]
@@ -2162,18 +2202,24 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Heavy bolter",
+        "name": "Bolt",
         "range": 36,
         "stats": {
           "A": 3,
           "S": 5,
           "AP": -1,
           "D": 2,
-          "BS": 4
+          "BS": 3
         },
         "keywords": [
           {
             "keyword_id": "heavy"
+          },
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 2
+            }
           },
           {
             "keyword_id": "sustained-hits",
@@ -2184,10 +2230,10 @@
         ]
       },
       {
-        "name": "Heavy flamer",
+        "name": "Infernus",
         "range": 12,
         "stats": {
-          "A": "D6",
+          "A": 3,
           "S": 5,
           "AP": -1,
           "D": 1,
@@ -2195,7 +2241,10 @@
         },
         "keywords": [
           {
-            "keyword_id": "ignores-cover"
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 1
+            }
           },
           {
             "keyword_id": "torrent"
@@ -2211,6 +2260,10 @@
       {
         "namespace": "bsdata",
         "id": "3e1b-5da1-e6d0-220f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0520da12-f522-4993-8ce4-f251b72b0056"
       },
       {
         "namespace": "mfm",
@@ -2586,21 +2639,21 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Special-issue bolt pistol",
+        "name": "Special-issue Bolt Pistol",
         "range": 18,
         "stats": {
           "A": 1,
-          "S": 4,
+          "S": 5,
           "AP": -1,
           "D": 1,
           "BS": 3
         },
         "keywords": [
           {
-            "keyword_id": "lethal-hits"
+            "keyword_id": "close-quarters"
           },
           {
-            "keyword_id": "pistol"
+            "keyword_id": "lethal-hits"
           },
           {
             "keyword_id": "precision"
@@ -2616,6 +2669,10 @@
       {
         "namespace": "bsdata",
         "id": "16ef-ec6b-7315-b169"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8b2e2e4b-0e70-42db-80a1-e64551cd39f7"
       },
       {
         "namespace": "mfm",
@@ -2731,7 +2788,7 @@
           "A": 2,
           "S": 7,
           "AP": -2,
-          "D": 1,
+          "D": 2,
           "BS": 3
         },
         "keywords": [
@@ -2739,7 +2796,10 @@
             "keyword_id": "assault"
           },
           {
-            "keyword_id": "heavy"
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 1
+            }
           }
         ]
       },
@@ -2761,7 +2821,10 @@
             "keyword_id": "hazardous"
           },
           {
-            "keyword_id": "heavy"
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 1
+            }
           }
         ]
       }
@@ -2771,6 +2834,10 @@
       "dataslate": "mfm-995"
     },
     "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "694341b5-fef0-4c57-b933-048229108bcd"
+      },
       {
         "namespace": "mfm",
         "id": "c0fd2834-64b4-458b-94d7-17f7bcd3b299"
@@ -3832,11 +3899,11 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Ranged",
+        "name": "Vigil Spear",
         "range": 24,
         "stats": {
           "A": 2,
-          "S": 4,
+          "S": 5,
           "AP": -1,
           "D": 2,
           "BS": 2
@@ -3844,13 +3911,13 @@
         "keywords": []
       },
       {
-        "name": "Melee",
+        "name": "Vigil Spear",
         "range": "Melee",
         "stats": {
           "A": 6,
           "S": 6,
           "AP": -2,
-          "D": "D3",
+          "D": 2,
           "WS": 2
         },
         "keywords": [
@@ -3872,6 +3939,10 @@
       {
         "namespace": "mfm",
         "id": "03e55197-ee10-45db-91ef-b4cf0b94cc75"
+      },
+      {
+        "namespace": "mfm",
+        "id": "52bc6733-4131-4089-a7c5-3b20505b688b"
       }
     ]
   },
@@ -4148,18 +4219,21 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Twin assault cannon",
+        "name": "Twin Assault Cannon",
         "range": 24,
         "stats": {
           "A": 6,
           "S": 6,
-          "AP": 0,
+          "AP": -2,
           "D": 1,
           "BS": 3
         },
         "keywords": [
           {
-            "keyword_id": "devastating-wounds"
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 1
+            }
           },
           {
             "keyword_id": "twin-linked"
@@ -4179,6 +4253,10 @@
       {
         "namespace": "mfm",
         "id": "00ff8bdc-208f-4c2e-b2af-cf4093ce754a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8515a505-ffba-4f2a-b1e6-89c974a2a110"
       }
     ]
   },
@@ -4188,10 +4266,10 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Blackstar rocket launcher",
+        "name": "Blackstar Rocket Launcher",
         "range": 30,
         "stats": {
-          "A": "D6+1",
+          "A": 4,
           "S": 5,
           "AP": 0,
           "D": 1,
@@ -4199,7 +4277,10 @@
         },
         "keywords": [
           {
-            "keyword_id": "blast"
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 1
+            }
           }
         ]
       }
@@ -4216,6 +4297,10 @@
       {
         "namespace": "mfm",
         "id": "8d0b4fd2-3433-41a1-a476-eee9896a60df"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f749d44e-8d0b-4eb8-9870-fe5cc52a8840"
       }
     ]
   },
@@ -4225,13 +4310,13 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Twin lascannon",
+        "name": "Twin Lascannon",
         "range": 48,
         "stats": {
           "A": 1,
           "S": 12,
           "AP": -3,
-          "D": "D6+1",
+          "D": "D3+3",
           "BS": 3
         },
         "keywords": [
@@ -4253,6 +4338,10 @@
       {
         "namespace": "mfm",
         "id": "5a97b1c7-565a-4d6c-be51-5e8fe08d6c34"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6a82b965-f977-4fcf-81ee-50ce4f82a262"
       }
     ]
   },
@@ -4412,7 +4501,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -4901,21 +4990,18 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Bolt pistol",
+        "name": "Bolt Pistol",
         "range": 12,
         "stats": {
           "A": 1,
-          "S": 4,
-          "AP": 0,
+          "S": 5,
+          "AP": -1,
           "D": 1,
           "BS": 3
         },
         "keywords": [
           {
-            "keyword_id": "lethal-hits"
-          },
-          {
-            "keyword_id": "pistol"
+            "keyword_id": "close-quarters"
           }
         ]
       }
@@ -4928,6 +5014,10 @@
       {
         "namespace": "mfm",
         "id": "81f316db-6f0a-4d77-95c4-d6596feb6ccd"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b15be5ab-1b1e-4c94-b631-808a9baf9124"
       }
     ]
   },
@@ -5311,33 +5401,57 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Combi-weapon",
-        "range": 24,
+        "name": "Damnatus",
+        "range": 12,
         "stats": {
           "A": 1,
-          "S": 4,
-          "AP": 0,
-          "D": 1,
-          "BS": 4
+          "S": 9,
+          "AP": -3,
+          "D": "D3+2",
+          "BS": 3
         },
         "keywords": [
           {
-            "keyword_id": "anti",
+            "keyword_id": "melta",
             "parameters": {
-              "target_keyword": "Infantry",
-              "threshold": 4
-            }
-          },
-          {
-            "keyword_id": "devastating-wounds"
-          },
-          {
-            "keyword_id": "rapid-fire",
-            "parameters": {
-              "value": 1
+              "value": 2
             }
           }
         ]
+      },
+      {
+        "name": "Infernus",
+        "range": 12,
+        "stats": {
+          "A": 3,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": null
+        },
+        "keywords": [
+          {
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 1
+            }
+          },
+          {
+            "keyword_id": "torrent"
+          }
+        ]
+      },
+      {
+        "name": "Purgatus",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 7,
+          "AP": -2,
+          "D": 2,
+          "BS": 3
+        },
+        "keywords": []
       }
     ],
     "game_version": {
@@ -5352,6 +5466,10 @@
       {
         "namespace": "mfm",
         "id": "a7475c3d-9d81-423c-b920-b7f7ff602f00"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f0f1be0d-001c-42ac-8e31-9f6549d8288c"
       }
     ]
   },
@@ -5411,10 +5529,10 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Frag cannon",
+        "name": "Frag Cannon",
         "range": 18,
         "stats": {
-          "A": "D3",
+          "A": 2,
           "S": 7,
           "AP": -2,
           "D": 2,
@@ -5422,7 +5540,10 @@
         },
         "keywords": [
           {
-            "keyword_id": "blast"
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 1
+            }
           },
           {
             "keyword_id": "heavy"
@@ -5433,7 +5554,7 @@
           {
             "keyword_id": "rapid-fire",
             "parameters": {
-              "value": "D3"
+              "value": 1
             }
           }
         ]
@@ -5451,6 +5572,10 @@
       {
         "namespace": "mfm",
         "id": "099c2b6a-df33-42bb-a8e9-8c76ec466e3c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a6b0687b-ec1f-4212-b40a-6e46be24d568"
       }
     ]
   },
@@ -5660,7 +5785,7 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Heavy bolter",
+        "name": "Bolt",
         "range": 36,
         "stats": {
           "A": 3,
@@ -5671,6 +5796,15 @@
         },
         "keywords": [
           {
+            "keyword_id": "heavy"
+          },
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 2
+            }
+          },
+          {
             "keyword_id": "sustained-hits",
             "parameters": {
               "value": 1
@@ -5679,10 +5813,10 @@
         ]
       },
       {
-        "name": "Heavy flamer",
+        "name": "Infernus",
         "range": 12,
         "stats": {
-          "A": "D6",
+          "A": 3,
           "S": 5,
           "AP": -1,
           "D": 1,
@@ -5690,7 +5824,10 @@
         },
         "keywords": [
           {
-            "keyword_id": "ignores-cover"
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 1
+            }
           },
           {
             "keyword_id": "torrent"
@@ -5710,6 +5847,10 @@
       {
         "namespace": "mfm",
         "id": "4be9ddea-7ea3-4310-8bbd-7209679d974c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cae6d846-970c-4ead-97f9-7dd7f26a9dc3"
       }
     ]
   },
@@ -5832,7 +5973,7 @@
         },
         "keywords": [
           {
-            "keyword_id": "pistol"
+            "keyword_id": "close-quarters"
           }
         ]
       },
@@ -5848,10 +5989,10 @@
         },
         "keywords": [
           {
-            "keyword_id": "hazardous"
+            "keyword_id": "close-quarters"
           },
           {
-            "keyword_id": "pistol"
+            "keyword_id": "hazardous"
           }
         ]
       }
@@ -5864,6 +6005,10 @@
       {
         "namespace": "mfm",
         "id": "2e9b7c68-3bb3-4693-a62a-cf03795652b2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b914825f-8346-4adc-a800-c2adcea73519"
       }
     ]
   },
@@ -5929,13 +6074,13 @@
     "type": "melee",
     "profiles": [
       {
-        "name": "Power weapon",
+        "name": "Power Weapon",
         "range": "Melee",
         "stats": {
           "A": 4,
           "S": 5,
           "AP": -2,
-          "D": 2,
+          "D": 1,
           "WS": 3
         },
         "keywords": [
@@ -5953,6 +6098,10 @@
       "dataslate": "mfm-995"
     },
     "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "23fef8da-3a64-48b5-88ed-b17e76b96124"
+      },
       {
         "namespace": "mfm",
         "id": "4302c8a3-32e7-4312-991a-74e5c3caf194"
@@ -6068,12 +6217,12 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Storm bolter",
+        "name": "Storm Bolter",
         "range": 24,
         "stats": {
           "A": 2,
-          "S": 4,
-          "AP": 0,
+          "S": 5,
+          "AP": -1,
           "D": 1,
           "BS": 3
         },
@@ -6099,6 +6248,10 @@
       {
         "namespace": "mfm",
         "id": "15cb7b56-d9d4-42c7-b6d0-d1864bb1539a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b36536c8-9815-4e4b-b581-49190c6c0896"
       }
     ]
   },
@@ -6108,12 +6261,12 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Storm bolter",
+        "name": "Storm Bolter",
         "range": 24,
         "stats": {
           "A": 2,
-          "S": 4,
-          "AP": 0,
+          "S": 5,
+          "AP": -1,
           "D": 1,
           "BS": 3
         },
@@ -6139,6 +6292,10 @@
       {
         "namespace": "mfm",
         "id": "15cb7b56-d9d4-42c7-b6d0-d1864bb1539a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b36536c8-9815-4e4b-b581-49190c6c0896"
       }
     ]
   },
@@ -6412,5 +6569,265 @@
       "edition": "11th",
       "dataslate": "mfm-995"
     }
+  },
+  {
+    "id": "agent-firearm-inquisitors-hand-inquisitorial-agents",
+    "name": "Agent’s Firearm",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Agent’s Firearm",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 4,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "0117-3fb8-aad2-c164"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b12b6978-dafd-4b7c-92a9-1b781b9681cb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c3e6b240-fccc-4b28-aa69-979eeed4fd5b"
+      }
+    ]
+  },
+  {
+    "id": "executioner-pistol-inquisitors-hand-eversor-assassin",
+    "name": "Executioner pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Executioner Pistol",
+        "range": 12,
+        "stats": {
+          "A": 4,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "precision"
+          },
+          {
+            "keyword_id": "close-quarters"
+          },
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "Infantry",
+              "threshold": 3
+            }
+          },
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 3
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "9b98-dff-2d9a-33cc"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c3d24b99-412b-46e3-b2d1-661d02dac5cb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cee9cf4d-c1ae-4cd1-9811-947426c293fd"
+      }
+    ]
+  },
+  {
+    "id": "grenade-launcher-aquila-kill-team",
+    "name": "Grenade Launcher",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Frag",
+        "range": 24,
+        "stats": {
+          "A": 4,
+          "S": 4,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      },
+      {
+        "name": "Krak",
+        "range": 24,
+        "stats": {
+          "A": 1,
+          "S": 10,
+          "AP": -2,
+          "D": 3,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "34e2db40-8bf2-4b48-9747-ea1794578fa8"
+      }
+    ]
+  },
+  {
+    "id": "heavy-bolter-inquisitors-hand-inquisitorial-agents",
+    "name": "Heavy bolter",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Heavy Bolter",
+        "range": 36,
+        "stats": {
+          "A": 3,
+          "S": 5,
+          "AP": -1,
+          "D": 2,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "heavy"
+          },
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "9011-f8c8-b4de-3a18"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5aa89cdc-f0e4-4e1a-a1b9-4ce4b6863243"
+      },
+      {
+        "namespace": "mfm",
+        "id": "80ce79f8-1b1c-415a-b1cc-0e6758108f0c"
+      }
+    ]
+  },
+  {
+    "id": "plasma-pistol-inquisitors-hand-inquisitorial-agents",
+    "name": "Plasma pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Standard",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 7,
+          "AP": -2,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      },
+      {
+        "name": "Supercharge",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 8,
+          "AP": -3,
+          "D": 2,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          },
+          {
+            "keyword_id": "hazardous"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "a5a3-42ef-826a-2408"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2ee2e039-4a18-4f15-bf4b-5a2235acc4ab"
+      },
+      {
+        "namespace": "mfm",
+        "id": "386eff79-b35f-43e3-bf06-cf7844452127"
+      }
+    ]
   }
 ]

@@ -294,7 +294,7 @@
     },
     "weapon_ids": [
       "bolt-pistol-khorne-berzerkers",
-      "chainblade",
+      "chainblade-khorne-berzerkers",
       "khornate-eviscerator",
       "plasma-pistol-khorne-berzerkers"
     ],
@@ -2230,8 +2230,8 @@
     },
     "weapon_ids": [
       "skullsmasher-and-mangler",
-      "autopistol",
-      "chainblade",
+      "autopistol-frenzied-reavers-jakhals",
+      "chainblade-frenzied-reavers-jakhals",
       "mauler-chainblade"
     ],
     "ability_ids": [
@@ -2294,9 +2294,9 @@
       "max": 10
     },
     "weapon_ids": [
-      "bolt-pistol",
+      "bolt-pistol-frenzied-reavers-khorne-berzerkers",
       "chainblade",
-      "plasma-pistol",
+      "plasma-pistol-frenzied-reavers-khorne-berzerkers",
       "khornate-eviscerator"
     ],
     "ability_ids": [
@@ -2362,7 +2362,7 @@
       "max": 1
     },
     "weapon_ids": [
-      "bolt-pistol",
+      "bolt-pistol-frenzied-reavers-master-of-executions",
       "axe-of-dismemberment"
     ],
     "ability_ids": [
@@ -2430,7 +2430,7 @@
       "max": 1
     },
     "weapon_ids": [
-      "hellforged-weapons",
+      "hellforged-weapons-vorrakh-lord-of-the-frenzied-reavers",
       "infernal-cannon"
     ],
     "ability_ids": [

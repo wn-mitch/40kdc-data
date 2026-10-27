@@ -255,7 +255,7 @@
         "range": 24,
         "stats": {
           "A": 2,
-          "S": 4,
+          "S": 5,
           "AP": -2,
           "D": 1,
           "BS": 3
@@ -272,7 +272,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -638,7 +638,7 @@
         "range": 24,
         "stats": {
           "A": 1,
-          "S": 4,
+          "S": 5,
           "AP": -2,
           "D": 1,
           "BS": 4
@@ -665,7 +665,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -926,8 +926,8 @@
         "range": 12,
         "stats": {
           "A": 1,
-          "S": 4,
-          "AP": -1,
+          "S": 5,
+          "AP": -2,
           "D": 1,
           "BS": 3
         },
@@ -940,7 +940,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -3058,7 +3058,7 @@
         "range": "Melee",
         "stats": {
           "A": 2,
-          "S": 4,
+          "S": 5,
           "AP": 0,
           "D": 1,
           "WS": 3
@@ -3082,6 +3082,10 @@
       {
         "namespace": "bsdata",
         "id": "c9d8-d87b-e74e-26f4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "315304a4-77a0-46bc-a482-fdf703ea6702"
       },
       {
         "namespace": "mfm",
@@ -3346,8 +3350,8 @@
         "range": 12,
         "stats": {
           "A": 1,
-          "S": 4,
-          "AP": -1,
+          "S": 5,
+          "AP": -2,
           "D": 1,
           "BS": 2
         },
@@ -3360,7 +3364,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -3383,8 +3387,8 @@
         "range": 12,
         "stats": {
           "A": 1,
-          "S": 4,
-          "AP": -1,
+          "S": 5,
+          "AP": -2,
           "D": 1,
           "BS": 2
         },
@@ -3397,7 +3401,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -3420,8 +3424,8 @@
         "range": 12,
         "stats": {
           "A": 1,
-          "S": 4,
-          "AP": -1,
+          "S": 5,
+          "AP": -2,
           "D": 1,
           "BS": 2
         },
@@ -3434,7 +3438,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -3457,8 +3461,8 @@
         "range": 12,
         "stats": {
           "A": 1,
-          "S": 4,
-          "AP": -1,
+          "S": 5,
+          "AP": -2,
           "D": 1,
           "BS": 2
         },
@@ -3471,7 +3475,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -3559,33 +3563,39 @@
         "name": "strike",
         "range": "Melee",
         "stats": {
-          "A": 6,
+          "A": 5,
           "S": 16,
           "AP": -3,
           "D": "D6+1",
           "WS": 3
-        }
+        },
+        "keywords": []
       },
       {
         "name": "sweep",
         "range": "Melee",
         "stats": {
-          "A": 12,
+          "A": 10,
           "S": 6,
           "AP": -2,
           "D": 1,
           "WS": 3
-        }
+        },
+        "keywords": []
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "636b-f3ef-1a09-d692"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c246eb5d-6087-4a57-a33d-6fe4d3eb2992"
       }
     ]
   },
@@ -3602,29 +3612,27 @@
           "S": 10,
           "AP": -1,
           "D": 3,
-          "BS": 4
+          "BS": 3
         },
         "keywords": [
           {
             "keyword_id": "blast"
-          },
-          {
-            "keyword_id": "rapid-fire",
-            "parameters": {
-              "value": 3
-            }
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "49ea-848f-4cd2-a3dc"
+      },
+      {
+        "namespace": "mfm",
+        "id": "20fad1dd-aa30-424d-b8f1-4c48e921f2af"
       }
     ]
   },
@@ -3670,19 +3678,12 @@
         "range": 48,
         "stats": {
           "A": 2,
-          "S": 12,
+          "S": 10,
           "AP": -2,
           "D": "D6+1",
-          "BS": 4
+          "BS": 3
         },
-        "keywords": [
-          {
-            "keyword_id": "rapid-fire",
-            "parameters": {
-              "value": 1
-            }
-          }
-        ]
+        "keywords": []
       },
       {
         "name": "frag",
@@ -3692,29 +3693,27 @@
           "S": 5,
           "AP": -1,
           "D": 1,
-          "BS": 4
+          "BS": 3
         },
         "keywords": [
           {
             "keyword_id": "blast"
-          },
-          {
-            "keyword_id": "rapid-fire",
-            "parameters": {
-              "value": 3
-            }
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "55b3-3624-8fa7-390e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7d185410-a8e1-4b49-8024-fb6ddd79f359"
       }
     ]
   },
@@ -3771,29 +3770,27 @@
           "S": 12,
           "AP": -3,
           "D": 3,
-          "BS": 4
+          "BS": 3
         },
         "keywords": [
           {
             "keyword_id": "blast"
-          },
-          {
-            "keyword_id": "rapid-fire",
-            "parameters": {
-              "value": 2
-            }
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "78be-1bfa-16ca-f674"
+      },
+      {
+        "namespace": "mfm",
+        "id": "956552e1-4b77-4b8b-adf2-31c2528e4f52"
       }
     ]
   },
@@ -3842,7 +3839,7 @@
         "name": "Electroscourge",
         "range": "Melee",
         "stats": {
-          "A": 7,
+          "A": 5,
           "S": 12,
           "AP": -2,
           "D": 2,
@@ -3850,25 +3847,29 @@
         },
         "keywords": [
           {
-            "keyword_id": "extra-attacks"
-          },
-          {
             "keyword_id": "sustained-hits",
             "parameters": {
               "value": 2
             }
+          },
+          {
+            "keyword_id": "extra-attacks"
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "fd72-4efb-3ef6-6368"
+      },
+      {
+        "namespace": "mfm",
+        "id": "97960942-6725-4b6e-873b-92dd9f44bdf7"
       }
     ]
   },
@@ -3885,26 +3886,23 @@
           "S": 12,
           "AP": -3,
           "D": "D6+1",
-          "BS": 4
+          "BS": 3
         },
-        "keywords": [
-          {
-            "keyword_id": "rapid-fire",
-            "parameters": {
-              "value": 1
-            }
-          }
-        ]
+        "keywords": []
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "a63d-1bb5-1779-21e2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "738dd9ef-8ba8-4392-b8c8-45350a7d5f3e"
       }
     ]
   },
@@ -3919,37 +3917,35 @@
         "stats": {
           "A": 4,
           "S": 9,
-          "AP": -1,
+          "AP": -2,
           "D": 3,
-          "BS": 4
+          "BS": 3
         },
         "keywords": [
-          {
-            "keyword_id": "devastating-wounds"
-          },
-          {
-            "keyword_id": "rapid-fire",
-            "parameters": {
-              "value": 2
-            }
-          },
           {
             "keyword_id": "sustained-hits",
             "parameters": {
               "value": 1
             }
+          },
+          {
+            "keyword_id": "devastating-wounds"
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "b069-6851-b6a8-3026"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b5fad1c4-844a-4147-9282-6b12da8aa2b6"
       }
     ]
   },
@@ -4564,5 +4560,226 @@
       "edition": "11th",
       "dataslate": "mfm-995"
     }
+  },
+  {
+    "id": "baleful-devolution-kaaskrek",
+    "name": "Baleful Devolution",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Baleful Devolution",
+        "range": 18,
+        "stats": {
+          "A": "D6",
+          "S": 9,
+          "AP": 0,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 1
+            }
+          },
+          {
+            "keyword_id": "psychic"
+          },
+          {
+            "keyword_id": "devastating-wounds"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "1a98-844f-f54b-f76c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "166242c9-acc7-4d13-954b-87bf8f2af72a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3a44f749-87db-4f7b-a744-bd36642d59f3"
+      }
+    ]
+  },
+  {
+    "id": "force-weapon-prism-of-zadophon-rubric-marines",
+    "name": "Force weapon",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Force Weapon",
+        "range": "Melee",
+        "stats": {
+          "A": 3,
+          "S": 6,
+          "AP": -1,
+          "D": "D3",
+          "WS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "psychic"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "5d06-5a71-fde7-a641"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "74f5-4553-6d71-b44c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c52850e6-dffe-46fd-ae33-44e909210cfc"
+      },
+      {
+        "namespace": "mfm",
+        "id": "feeba3a7-b5f5-4d66-a755-a8e578f9d8ab"
+      }
+    ]
+  },
+  {
+    "id": "inferno-bolt-pistol-prism-of-zadophon-rubric-marines",
+    "name": "Inferno bolt pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Inferno Bolt Pistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 4,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "74cc-9a0-13b0-6783"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "c70d-46dc-32da-b1a4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7fd35a8e-12b4-487f-986a-286f7cd2f3d3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b714400c-7389-49bd-9d70-b7c22b646f87"
+      }
+    ]
+  },
+  {
+    "id": "inferno-boltgun-rubric-marines",
+    "name": "Inferno boltgun",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Inferno boltgun",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 5,
+          "AP": -2,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "fffe-ede3-166a-f803"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6d59f053-dcb1-416d-ae11-61d7989197d2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f32c34a0-c975-4563-81c9-b73b96d8b75b"
+      }
+    ]
+  },
+  {
+    "id": "warpflamer-prism-of-zadophon-rubric-marines",
+    "name": "Warpflamer",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Warpflamer",
+        "range": 12,
+        "stats": {
+          "A": "D6",
+          "S": 4,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "torrent"
+          },
+          {
+            "keyword_id": "ignores-cover"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "2afa-364b-7daf-f95e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "38db2a21-3354-45ef-bba0-119a4bfdcc37"
+      },
+      {
+        "namespace": "mfm",
+        "id": "77210d97-a459-4e2e-813a-e875f32fe72e"
+      }
+    ]
   }
 ]

@@ -1,17 +1,17 @@
 [
   {
-    "name": "bolt-rifle x5 vs intercessor (vanilla, not stationary)",
+    "name": "bolt-rifle (saturation) x5 vs intercessor (vanilla, not stationary)",
     "cruncher_case": "01-bolter-vs-intercessor.json",
     "expected": {
-      "damageDealt": 1.1111111111111107,
-      "modelsDestroyed": 0.32580883311115844,
+      "damageDealt": 1.6666666666666672,
+      "modelsDestroyed": 0.5876687158122916,
       "modelsDestroyedDistribution": [
-        0.6928788322292367,
-        0.2886995134288487,
-        0.018156492836736184,
-        0.0002643122986714313,
-        8.489197092745623e-7,
-        2.86797199079244e-10
+        0.4845167486695373,
+        0.4457554087759743,
+        0.06728968605522534,
+        0.0024187076093583294,
+        0.000019432351733306228,
+        1.6538171687920194e-8
       ]
     }
   },
@@ -73,11 +73,11 @@
     "name": "devastating-wounds lascannon vs cultists with 5+ FNP all + 4+ FNP vs mortals",
     "cruncher_case": "10-fnp-vs-mortal-devastating-lascannon-vs-cultists.json",
     "expected": {
-      "damageDealt": 0.5207031448458059,
-      "modelsDestroyed": 0.5207031448458059,
+      "damageDealt": 0.5374688817761519,
+      "modelsDestroyed": 0.5374688817761519,
       "modelsDestroyedDistribution": [
-        0.47929685515419407,
-        0.5207031448458059,
+        0.46253111822384807,
+        0.5374688817761519,
         0,
         0,
         0,
@@ -139,18 +139,18 @@
     }
   },
   {
-    "name": "bolt-rifle x5 vs intercessor, critical hits on 5+ with Lethal Hits",
+    "name": "bolt-rifle (saturation) x5 vs intercessor, critical hits on 5+ with Lethal Hits",
     "cruncher_case": "24-crit-threshold-hit-5-lethal-bolter-vs-intercessor.json",
     "expected": {
-      "damageDealt": 2.2222222222222223,
-      "modelsDestroyed": 0.8618112995854258,
+      "damageDealt": 2.500000000000003,
+      "modelsDestroyed": 1.000244140625001,
       "modelsDestroyedDistribution": [
-        0.3124791394293037,
-        0.524341413101326,
-        0.15224121337922664,
-        0.010765770315260737,
-        0.00017217009455125173,
-        2.9368033185714584e-7
+        0.2440252304077152,
+        0.5318498611450202,
+        0.20439720153808613,
+        0.019311904907226576,
+        0.00041484832763671886,
+        9.5367431640625e-7
       ]
     }
   }

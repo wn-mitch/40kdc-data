@@ -420,7 +420,7 @@
           "diameter": 28.5
         },
         "default_weapon_ids": [
-          "close-combat-weapon",
+          "close-combat-weapon-corsair-voidscarred",
           "paired-hekatarii-blades",
           "shuriken-pistol"
         ]
@@ -435,7 +435,7 @@
           "diameter": 28.5
         },
         "default_weapon_ids": [
-          "close-combat-weapon",
+          "close-combat-weapon-corsair-voidscarred",
           "shuriken-pistol",
           "power-sword",
           "channeller-stones"
@@ -451,7 +451,7 @@
           "diameter": 28.5
         },
         "default_weapon_ids": [
-          "close-combat-weapon",
+          "close-combat-weapon-corsair-voidscarred",
           "shuriken-pistol",
           "witch-staff",
           "executioner"
@@ -4158,7 +4158,7 @@
           "diameter": 25
         },
         "default_weapon_ids": [
-          "shuriken-pistol",
+          "shuriken-pistol-spiritseer-kygharil",
           "witch-staff"
         ]
       }
@@ -4222,7 +4222,7 @@
         "is_leader_model": true,
         "default_weapon_ids": [
           "drakesteed-fangs-and-talons",
-          "laser-lance",
+          "laser-lance-dragon-knights",
           "solar-carbine"
         ]
       },
@@ -4233,7 +4233,7 @@
         "is_leader_model": false,
         "default_weapon_ids": [
           "drakesteed-fangs-and-talons",
-          "laser-lance",
+          "laser-lance-dragon-knights",
           "solar-carbine"
         ]
       }
@@ -4286,7 +4286,7 @@
           "drakolithe-once-per-battle-per-token",
           "drakolithe-once-per-battle-per-token",
           "drakesteed-fangs-and-talons",
-          "long-rifle",
+          "long-rifle-leystalker",
           "hunting-blades"
         ]
       }

@@ -335,8 +335,8 @@
         "range": 24,
         "stats": {
           "A": 2,
-          "S": 4,
-          "AP": 0,
+          "S": 5,
+          "AP": -1,
           "D": 1,
           "BS": 3
         },
@@ -355,7 +355,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -523,7 +523,7 @@
         "range": "Melee",
         "stats": {
           "A": 4,
-          "S": 4,
+          "S": 5,
           "AP": 0,
           "D": 1,
           "WS": 3
@@ -547,6 +547,10 @@
       {
         "namespace": "mfm",
         "id": "5c028938-8038-4744-9f5c-a60eca31e9a7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bd5e2be1-5040-4700-a4d3-553415c50209"
       }
     ]
   },
@@ -1221,8 +1225,8 @@
         "range": "Melee",
         "stats": {
           "A": 4,
-          "S": 4,
-          "AP": 0,
+          "S": 5,
+          "AP": -1,
           "D": 1,
           "WS": 3
         },
@@ -1235,7 +1239,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1299,8 +1303,8 @@
         "range": 12,
         "stats": {
           "A": 1,
-          "S": 4,
-          "AP": 0,
+          "S": 5,
+          "AP": -1,
           "D": 1,
           "BS": 3
         },
@@ -1316,7 +1320,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2779,8 +2783,8 @@
         "range": "Melee",
         "stats": {
           "A": 4,
-          "S": 4,
-          "AP": 0,
+          "S": 5,
+          "AP": -1,
           "D": 1,
           "WS": 3
         },
@@ -2793,7 +2797,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -3132,8 +3136,8 @@
         "range": "Melee",
         "stats": {
           "A": 3,
-          "S": 4,
-          "AP": 0,
+          "S": 5,
+          "AP": -1,
           "D": 1,
           "WS": 3
         },
@@ -3146,7 +3150,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -3373,33 +3377,47 @@
         "name": "strike",
         "range": "Melee",
         "stats": {
-          "A": 6,
+          "A": 5,
           "S": 16,
           "AP": -3,
           "D": "D6+1",
           "WS": 3
-        }
+        },
+        "keywords": [
+          {
+            "keyword_id": "lethal-hits"
+          }
+        ]
       },
       {
         "name": "sweep",
         "range": "Melee",
         "stats": {
-          "A": 12,
+          "A": 10,
           "S": 6,
           "AP": -2,
           "D": 1,
           "WS": 3
-        }
+        },
+        "keywords": [
+          {
+            "keyword_id": "lethal-hits"
+          }
+        ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "a314-6cdd-8d03-a9a2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9e5e7b64-2afa-47f9-b1bc-872a386b7931"
       }
     ]
   },
@@ -3416,29 +3434,30 @@
           "S": 10,
           "AP": -1,
           "D": 3,
-          "BS": 4
+          "BS": 3
         },
         "keywords": [
           {
-            "keyword_id": "blast"
+            "keyword_id": "lethal-hits"
           },
           {
-            "keyword_id": "rapid-fire",
-            "parameters": {
-              "value": 3
-            }
+            "keyword_id": "blast"
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "70b7-45e7-b09e-f02c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cbe1dde1-65e5-4b00-aabc-6ea47b35eb61"
       }
     ]
   },
@@ -3453,20 +3472,29 @@
         "stats": {
           "A": 6,
           "S": 6,
-          "AP": -2,
+          "AP": -1,
           "D": 2,
           "BS": 3
-        }
+        },
+        "keywords": [
+          {
+            "keyword_id": "lethal-hits"
+          }
+        ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "0c71-ae80-9ca3-856d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "95e5ec32-7c7a-40b0-a36d-1c9ceb7ba49b"
       }
     ]
   },
@@ -3480,17 +3508,14 @@
         "range": 48,
         "stats": {
           "A": 2,
-          "S": 12,
+          "S": 10,
           "AP": -2,
           "D": "D6+1",
-          "BS": 4
+          "BS": 3
         },
         "keywords": [
           {
-            "keyword_id": "rapid-fire",
-            "parameters": {
-              "value": 1
-            }
+            "keyword_id": "lethal-hits"
           }
         ]
       },
@@ -3502,29 +3527,30 @@
           "S": 5,
           "AP": -1,
           "D": 1,
-          "BS": 4
+          "BS": 3
         },
         "keywords": [
           {
             "keyword_id": "blast"
           },
           {
-            "keyword_id": "rapid-fire",
-            "parameters": {
-              "value": 3
-            }
+            "keyword_id": "lethal-hits"
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "e614-711a-eac2-6449"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2bf8dd90-d00f-459d-93cb-116b7b8d58ac"
       }
     ]
   },
@@ -3581,29 +3607,30 @@
           "S": 12,
           "AP": -3,
           "D": 3,
-          "BS": 4
+          "BS": 3
         },
         "keywords": [
           {
             "keyword_id": "blast"
           },
           {
-            "keyword_id": "rapid-fire",
-            "parameters": {
-              "value": 2
-            }
+            "keyword_id": "lethal-hits"
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "e134-a235-4f20-e9ac"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b4c5307f-97f3-475b-89d7-0a86b76d982c"
       }
     ]
   },
@@ -3620,19 +3647,16 @@
           "S": 9,
           "AP": -4,
           "D": "D6",
-          "BS": 4
+          "BS": 3
         },
         "keywords": [
+          {
+            "keyword_id": "lethal-hits"
+          },
           {
             "keyword_id": "melta",
             "parameters": {
               "value": 2
-            }
-          },
-          {
-            "keyword_id": "rapid-fire",
-            "parameters": {
-              "value": 1
             }
           }
         ]
@@ -3640,8 +3664,14 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "e350cf46-27dc-4e4a-a913-bd85ee2755de"
+      }
+    ]
   },
   {
     "id": "electroscourge",
@@ -3652,7 +3682,7 @@
         "name": "Electroscourge",
         "range": "Melee",
         "stats": {
-          "A": 7,
+          "A": 5,
           "S": 12,
           "AP": -2,
           "D": 2,
@@ -3660,25 +3690,29 @@
         },
         "keywords": [
           {
-            "keyword_id": "extra-attacks"
-          },
-          {
             "keyword_id": "sustained-hits",
             "parameters": {
               "value": 2
             }
+          },
+          {
+            "keyword_id": "extra-attacks"
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "476f-f40d-f78b-4aa1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "97960942-6725-4b6e-873b-92dd9f44bdf7"
       }
     ]
   },
@@ -3695,26 +3729,27 @@
           "S": 12,
           "AP": -3,
           "D": "D6+1",
-          "BS": 4
+          "BS": 3
         },
         "keywords": [
           {
-            "keyword_id": "rapid-fire",
-            "parameters": {
-              "value": 1
-            }
+            "keyword_id": "lethal-hits"
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "2029-1d85-9d1b-307e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e1850a7f-60cf-4801-af98-181046ca3a81"
       }
     ]
   },
@@ -3731,17 +3766,14 @@
           "S": 9,
           "AP": -1,
           "D": 3,
-          "BS": 4
+          "BS": 3
         },
         "keywords": [
           {
             "keyword_id": "devastating-wounds"
           },
           {
-            "keyword_id": "rapid-fire",
-            "parameters": {
-              "value": 2
-            }
+            "keyword_id": "lethal-hits"
           },
           {
             "keyword_id": "sustained-hits",
@@ -3754,12 +3786,16 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "ade6-0a87-9a51-fb2e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1857966e-b6f3-4c68-b12a-575216386abf"
       }
     ]
   },
@@ -3928,7 +3964,7 @@
     "type": "melee",
     "profiles": [
       {
-        "name": "Power fist",
+        "name": "Power Fist",
         "range": "Melee",
         "stats": {
           "A": 5,
@@ -3936,7 +3972,12 @@
           "AP": -2,
           "D": 2,
           "WS": 2
-        }
+        },
+        "keywords": [
+          {
+            "keyword_id": "lethal-hits"
+          }
+        ]
       }
     ],
     "game_version": {
@@ -3944,6 +3985,10 @@
       "dataslate": "mfm-995"
     },
     "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "1b6a380c-2829-46ba-9abb-bb8fca4d0140"
+      },
       {
         "namespace": "mfm",
         "id": "6267c763-c582-4e33-b165-a225fd6b610b"
@@ -4399,5 +4444,686 @@
       "edition": "11th",
       "dataslate": "mfm-995"
     }
+  },
+  {
+    "id": "blight-launcher-maggot-lords-plague-marines",
+    "name": "Blight launcher",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Blight Launcher",
+        "range": 24,
+        "stats": {
+          "A": "D3",
+          "S": 6,
+          "AP": -1,
+          "D": 2,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "lethal-hits"
+          },
+          {
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "bc73-389d-4684-51f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "543a5de1-cf53-4119-a488-bd73ee2d68fd"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5753901b-9394-4d88-bede-1f2640ac5dfd"
+      }
+    ]
+  },
+  {
+    "id": "boltgun-icon-bearer",
+    "name": "Boltgun",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Boltgun",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "lethal-hits"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "c812-9617-11b3-b804"
+      },
+      {
+        "namespace": "mfm",
+        "id": "78885519-073d-4d35-b16f-f2e7057db88a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c172b4e6-7568-4767-aa49-4c1a4ca35100"
+      }
+    ]
+  },
+  {
+    "id": "boltgun-plague-marines",
+    "name": "Boltgun",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Boltgun",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "lethal-hits"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "c812-9617-11b3-b804"
+      },
+      {
+        "namespace": "mfm",
+        "id": "78885519-073d-4d35-b16f-f2e7057db88a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c172b4e6-7568-4767-aa49-4c1a4ca35100"
+      }
+    ]
+  },
+  {
+    "id": "combi-weapon-chaos-land-raider",
+    "name": "Combi-weapon",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Combi-weapon",
+        "range": 24,
+        "stats": {
+          "A": 1,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "Infantry",
+              "threshold": 4
+            }
+          },
+          {
+            "keyword_id": "devastating-wounds"
+          },
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "53bf-7a8c-8895-f39f"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "a4a1-10b-80d8-27f6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6238e1cb-8255-4acb-8020-6e4f870019ae"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a7475c3d-9d81-423c-b920-b7f7ff602f00"
+      }
+    ]
+  },
+  {
+    "id": "combi-weapon-chaos-predator-annihilator",
+    "name": "Combi-weapon",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Combi-weapon",
+        "range": 24,
+        "stats": {
+          "A": 1,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "Infantry",
+              "threshold": 4
+            }
+          },
+          {
+            "keyword_id": "devastating-wounds"
+          },
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "53bf-7a8c-8895-f39f"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "a4a1-10b-80d8-27f6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6238e1cb-8255-4acb-8020-6e4f870019ae"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a7475c3d-9d81-423c-b920-b7f7ff602f00"
+      }
+    ]
+  },
+  {
+    "id": "combi-weapon-chaos-predator-destructor",
+    "name": "Combi-weapon",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Combi-weapon",
+        "range": 24,
+        "stats": {
+          "A": 1,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "Infantry",
+              "threshold": 4
+            }
+          },
+          {
+            "keyword_id": "devastating-wounds"
+          },
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "53bf-7a8c-8895-f39f"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "a4a1-10b-80d8-27f6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6238e1cb-8255-4acb-8020-6e4f870019ae"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a7475c3d-9d81-423c-b920-b7f7ff602f00"
+      }
+    ]
+  },
+  {
+    "id": "combi-weapon-chaos-rhino",
+    "name": "Combi-weapon",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Combi-weapon",
+        "range": 24,
+        "stats": {
+          "A": 1,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "Infantry",
+              "threshold": 4
+            }
+          },
+          {
+            "keyword_id": "devastating-wounds"
+          },
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "53bf-7a8c-8895-f39f"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "a4a1-10b-80d8-27f6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6238e1cb-8255-4acb-8020-6e4f870019ae"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a7475c3d-9d81-423c-b920-b7f7ff602f00"
+      }
+    ]
+  },
+  {
+    "id": "havoc-launcher-maggot-lords-chaos-rhino",
+    "name": "Havoc launcher",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Havoc Launcher",
+        "range": 48,
+        "stats": {
+          "A": "D6",
+          "S": 5,
+          "AP": 0,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "a226-a63a-597f-db94"
+      },
+      {
+        "namespace": "mfm",
+        "id": "88700154-eec4-47a7-8b4a-990422ac618b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9f845a28-36b3-4775-9eb9-d521bc3d7501"
+      }
+    ]
+  },
+  {
+    "id": "manreaper-maggot-lords-deathshroud-terminators",
+    "name": "Manreaper",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Strike",
+        "range": "Melee",
+        "stats": {
+          "A": 4,
+          "S": 8,
+          "AP": -2,
+          "D": 2,
+          "WS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "lethal-hits"
+          }
+        ]
+      },
+      {
+        "name": "Sweep",
+        "range": "Melee",
+        "stats": {
+          "A": 8,
+          "S": 4,
+          "AP": -1,
+          "D": 1,
+          "WS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "lethal-hits"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "9f5-6951-9996-f2a0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1744b2ea-9646-41c4-aaff-c6869840de9e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8b060c19-dabe-4036-b782-6b099b9ac7df"
+      }
+    ]
+  },
+  {
+    "id": "plague-knives-maggot-lords-plague-marines",
+    "name": "Plague knives",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Plague Knives",
+        "range": "Melee",
+        "stats": {
+          "A": 3,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "WS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "lethal-hits"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "e0e0-965d-717-2705"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8c09a71d-8e07-42d8-9a47-41421d9aae31"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f2ee5be1-7c2b-42e8-a35f-4ae3de3120c4"
+      }
+    ]
+  },
+  {
+    "id": "plaguespurt-gauntlet-maggot-lords-deathshroud-terminators",
+    "name": "Plaguespurt gauntlet",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Plaguespurt Gauntlet",
+        "range": 12,
+        "stats": {
+          "A": "D6",
+          "S": 3,
+          "AP": 0,
+          "D": 1,
+          "BS": null
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          },
+          {
+            "keyword_id": "ignores-cover"
+          },
+          {
+            "keyword_id": "torrent"
+          },
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "Infantry",
+              "threshold": 4
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "9155-c2d5-ad8f-9a93"
+      },
+      {
+        "namespace": "mfm",
+        "id": "91036d87-e33d-4404-8643-7f01c7d40bc3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a02867ca-781b-4c45-8733-6f2f6e3810a2"
+      }
+    ]
+  },
+  {
+    "id": "plasma-pistol-maggot-lords-plague-marines",
+    "name": "Plasma pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Standard",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 7,
+          "AP": -2,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      },
+      {
+        "name": "Supercharge",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 8,
+          "AP": -3,
+          "D": 2,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          },
+          {
+            "keyword_id": "hazardous"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "18aa-edc7-646c-296"
+      },
+      {
+        "namespace": "mfm",
+        "id": "79adf34c-bccb-4320-9db4-34c42b0dd669"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cd4fc067-30de-48dc-80e6-430cff3dbccf"
+      }
+    ]
+  },
+  {
+    "id": "plasma-pistol-septimol-fulg-maggot-lords-tallyman",
+    "name": "Plasma pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Standard",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 7,
+          "AP": -2,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      },
+      {
+        "name": "Supercharge",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 8,
+          "AP": -3,
+          "D": 2,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          },
+          {
+            "keyword_id": "hazardous"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "18aa-edc7-646c-296"
+      },
+      {
+        "namespace": "mfm",
+        "id": "79adf34c-bccb-4320-9db4-34c42b0dd669"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cd4fc067-30de-48dc-80e6-430cff3dbccf"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f512ec98-756a-452c-a594-551e2c6a235c"
+      }
+    ]
   }
 ]

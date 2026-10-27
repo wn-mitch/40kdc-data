@@ -306,7 +306,7 @@
       "max": 1
     },
     "weapon_ids": [
-      "vaultswords"
+      "vaultswords-blade-champion"
     ],
     "ability_ids": [
       "deep-strike",
@@ -488,7 +488,7 @@
     "weapon_ids": [
       "balistus-grenade-launcher",
       "castellan-axe",
-      "guardian-spear"
+      "guardian-spear-allarus-custodians"
     ],
     "ability_ids": [
       {
@@ -640,7 +640,8 @@
     "keywords": [
       "Infantry",
       "Imperium",
-      "Vigilator Squad"
+      "Vigilator Squad",
+      "Anathema Psykana"
     ],
     "faction_keywords": [
       "Anathema Psykana"
@@ -718,7 +719,8 @@
     "keywords": [
       "Infantry",
       "Imperium",
-      "Witchseeker Squad"
+      "Witchseeker Squad",
+      "Anathema Psykana"
     ],
     "faction_keywords": [
       "Anathema Psykana"
@@ -899,7 +901,7 @@
       "max": 3
     },
     "weapon_ids": [
-      "guardian-spear"
+      "guardian-spear-custodian-guard-sodality"
     ],
     "ability_ids": [
       "deep-strike",
@@ -1051,7 +1053,8 @@
       "Infantry",
       "Character",
       "Imperium",
-      "Knight-Centura"
+      "Knight-Centura",
+      "Anathema Psykana"
     ],
     "faction_keywords": [
       "Anathema Psykana"
@@ -1068,7 +1071,7 @@
       "executioner-greatblade-knight-centura",
       "master-crafted-boltgun",
       "master-crafted-flamer",
-      "gun-stock"
+      "gun-stock-knight-centura"
     ],
     "ability_ids": [
       "corner-the-quarry-adeptus-custodes",
@@ -1139,7 +1142,8 @@
       "Smoke",
       "Imperium",
       "Frame",
-      "Anathema Psykana Rhino"
+      "Anathema Psykana Rhino",
+      "Anathema Psykana"
     ],
     "faction_keywords": [
       "Anathema Psykana"
@@ -1334,7 +1338,7 @@
     },
     "weapon_ids": [
       "castellan-axe",
-      "guardian-spear"
+      "guardian-spear-custodian-wardens"
     ],
     "ability_ids": [
       "living-fortress-adeptus-custodes",
@@ -1900,7 +1904,8 @@
     "keywords": [
       "Infantry",
       "Imperium",
-      "Prosecutor Squad"
+      "Prosecutor Squad",
+      "Anathema Psykana"
     ],
     "faction_keywords": [
       "Anathema Psykana"
@@ -2156,7 +2161,7 @@
     },
     "weapon_ids": [
       "guardian-spear",
-      "balistus-grenade-launcher"
+      "balistus-grenade-launcher-gilded-blades-allarus-custodians"
     ],
     "ability_ids": [
       "from-golden-light-adeptus-custodes",
@@ -2288,7 +2293,7 @@
     },
     "weapon_ids": [
       "guardian-spear",
-      "castellan-axe"
+      "castellan-axe-gilded-blades-custodian-wardens"
     ],
     "ability_ids": [
       "divine-protection-adeptus-custodes"

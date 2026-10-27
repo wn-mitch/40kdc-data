@@ -35,13 +35,14 @@ fn gates(result: &EffectTranslation) -> Vec<Option<BuffApplicability>> {
         .collect()
 }
 
-/// Bolt rifles x5 against intercessors in the shooting phase: the expected value of `stage`.
+/// Bolt rifles (Saturation, A2 S5) x5 against intercessors in the shooting phase: the expected
+/// value of `stage`.
 fn stage(buffs: Vec<Buff>, stage: StageName) -> f64 {
     let ds = Dataset::embedded();
     let input = EngineInput {
         attacker: AttackProfileRef {
             weapon: ds.find_weapon("bolt-rifle").expect("bolt-rifle is bundled"),
-            profile_index: 0,
+            profile_index: 1,
         },
         target: TargetProfileRef {
             unit: ds
@@ -216,13 +217,13 @@ fn a_crit_hit_threshold_of_five_with_lethal_hits_raises_wounds() {
     )
     .applied;
     assert_eq!(crit.len(), 1);
-    // Crits on a 6 auto-wound; the other hits (3+ to 5) wound on a 5+ against T5.
+    // Crits on a 6 auto-wound; the other hits (3+ to 5) wound on a 4+ against T5.
     let base = stage(vec![lethal.clone()], StageName::Wounds);
-    assert!((base - (10.0 / 6.0 + 10.0 * (3.0 / 6.0) / 3.0)).abs() < 1e-6);
+    assert!((base - (10.0 / 6.0 + 10.0 * (3.0 / 6.0) / 2.0)).abs() < 1e-6);
     let mut buffs = vec![lethal];
     buffs.extend(crit);
     let lifted = stage(buffs, StageName::Wounds);
-    assert!((lifted - (10.0 * 2.0 / 6.0 + 10.0 * (2.0 / 6.0) / 3.0)).abs() < 1e-6);
+    assert!((lifted - (10.0 * 2.0 / 6.0 + 10.0 * (2.0 / 6.0) / 2.0)).abs() < 1e-6);
 }
 
 #[test]

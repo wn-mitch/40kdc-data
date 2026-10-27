@@ -64,14 +64,14 @@ describe("scoreLoadoutWeapons", () => {
     expect(seenContexts.every((received) => received === context)).toBe(true);
   });
 
-  const ranged = (id: string, pistol = false): Weapon => ({
+  const ranged = (id: string, pistol: boolean | "close-quarters" = false): Weapon => ({
     ...meleeWeapon(id),
     type: "ranged",
     profiles: [{
       name: "ranged",
       range: 24,
       stats: { A: 1, BS: 3, S: 4, AP: 0, D: 1 },
-      keywords: pistol ? [{ keyword_id: "pistol" }] : [],
+      keywords: pistol ? [{ keyword_id: pistol === true ? "pistol" : pistol }] : [],
     }],
   }) as Weapon;
   const shooting = (input: {
@@ -107,6 +107,16 @@ describe("scoreLoadoutWeapons", () => {
     expect(result.total).toBe(19);
     expect(fired(result)).toEqual([["cannon", 2], ["pistol", 3]]);
     expect(result.pistolChoice).toBe("per-model");
+  });
+
+  it("treats the 11e [Close-Quarters] keyword as the Pistol choice", () => {
+    const result = shooting({
+      modelCount: 1,
+      weapons: [[ranged("rifle"), 1], [ranged("bolt-pistol", "close-quarters"), 1]],
+      damage: { rifle: 2, "bolt-pistol": 3 },
+    });
+    expect(fired(result)).toEqual([["bolt-pistol", 1]]);
+    expect(result.total).toBe(3);
   });
 
   it("keeps the other ranged weapons on a tie", () => {

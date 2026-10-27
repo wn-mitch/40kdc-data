@@ -208,18 +208,24 @@ export function weaponReason(
   const refs = mfmRefs(record);
   if (refs.length === 0) return "no-ref";
   const items = dump.byId("wargear_item");
-  const item = refs.map((ref) => items.get(ref)).find((row) => !!row);
-  if (!item) return "dangling-ref";
-  const warnings: string[] = [];
-  let minted: WeaponRecord;
-  try {
-    minted = mintWeapon({ dump, gv: now, warnings }, item, String(record.id), String(record.name));
-  } catch {
-    return "unmintable";
-  }
-  // A keyword the mapper cannot express is a mechanic this comparison cannot check.
-  if (warnings.length > 0) return "unmapped-keyword";
-  return matches(record, minted) ? "verified" : "differs";
+  const live = refs.map((ref) => items.get(ref)).filter((row) => !!row);
+  if (live.length === 0) return "dangling-ref";
+  // One id can name the same weapon on several datasheets, and a Combat Patrol box may print an
+  // older line under the same item name: the record verifies when it equals any item it names.
+  const reasons = live.map((item): WeaponReason => {
+    const warnings: string[] = [];
+    let minted: WeaponRecord;
+    try {
+      minted = mintWeapon({ dump, gv: now, warnings }, item, String(record.id), String(record.name));
+    } catch {
+      return "unmintable";
+    }
+    // A keyword the mapper cannot express is a mechanic this comparison cannot check.
+    if (warnings.length > 0) return "unmapped-keyword";
+    return matches(record, minted) ? "verified" : "differs";
+  });
+  for (const reason of ["verified", "unmapped-keyword", "unmintable"] as const) if (reasons.includes(reason)) return reason;
+  return "differs";
 }
 
 export type AbilityReason = "verified" | "stub" | "no-source" | "ambiguous-source" | "digest-differs" | "unpublished";

@@ -5758,5 +5758,249 @@
       "edition": "11th",
       "dataslate": "mfm-995"
     }
+  },
+  {
+    "id": "airbursting-fragmentation-projector-commander-cloudspear",
+    "name": "Airbursting fragmentation projector",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Airbursting Fragmentation Projector",
+        "range": 24,
+        "stats": {
+          "A": "D6",
+          "S": 3,
+          "AP": 0,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 1
+            }
+          },
+          {
+            "keyword_id": "indirect-fire"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "437e-0e4a-5c90-dbef"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2067792e-637e-43a5-ac3d-f45ce4266933"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f69e8587-8231-4bcd-b342-6dde51fd2004"
+      }
+    ]
+  },
+  {
+    "id": "armoured-hull-sudden-dawn-cadre-devilfish",
+    "name": "Armoured hull",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Armoured Hull",
+        "range": "Melee",
+        "stats": {
+          "A": 3,
+          "S": 6,
+          "AP": 0,
+          "D": 1,
+          "WS": 5
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "c1a6-3a75-d0fb-ed95"
+      },
+      {
+        "namespace": "mfm",
+        "id": "30850b81-d67e-49ea-805e-7f66ade946dd"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7369b2e3-125a-482c-a2f3-97de1d5816d6"
+      }
+    ]
+  },
+  {
+    "id": "battlesuit-fists-commander-cloudspear",
+    "name": "Battlesuit fists",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Battlesuit Fists",
+        "range": "Melee",
+        "stats": {
+          "A": 3,
+          "S": 5,
+          "AP": 0,
+          "D": 1,
+          "WS": 4
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "d357-859f-3b61-42f1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9275bf35-f0c5-4b78-ae54-befa1e9aae19"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f2da5cec-7188-47db-a5c2-3896a54f4ac0"
+      }
+    ]
+  },
+  {
+    "id": "plasma-rifle-commander-cloudspear",
+    "name": "Plasma rifle",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Plasma Rifle",
+        "range": 18,
+        "stats": {
+          "A": 1,
+          "S": 8,
+          "AP": -3,
+          "D": 3,
+          "BS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "a9c5-8f1f-cbad-f1d3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "13b5a7d8-0e43-460a-95ee-445daa58cbc3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "869a5870-c5cc-4955-8381-9119f0aa953d"
+      }
+    ]
+  },
+  {
+    "id": "pulse-pistol-sudden-dawn-cadre-breacher-team",
+    "name": "Pulse pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Pulse Pistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 5,
+          "AP": 0,
+          "D": 1,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "4310-a1ce-dde7-70e3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "75692f4d-cb1f-4a0f-af4d-e71cac49f9be"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d84faf63-0c32-482a-95b7-4611ff16e681"
+      }
+    ]
+  },
+  {
+    "id": "pulse-pistol-sudden-dawn-cadre-pathfinder-team",
+    "name": "Pulse pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Pulse Pistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 5,
+          "AP": 0,
+          "D": 1,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "4310-a1ce-dde7-70e3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "343af19e-e1be-48ec-88b6-9ee499003c23"
+      },
+      {
+        "namespace": "mfm",
+        "id": "75692f4d-cb1f-4a0f-af4d-e71cac49f9be"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d84faf63-0c32-482a-95b7-4611ff16e681"
+      }
+    ]
   }
 ]

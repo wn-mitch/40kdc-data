@@ -120,7 +120,7 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "vaultswords"
+          "vaultswords-blade-champion"
         ]
       }
     ],
@@ -192,7 +192,7 @@
         },
         "default_weapon_ids": [
           "balistus-grenade-launcher",
-          "guardian-spear"
+          "guardian-spear-allarus-custodians"
         ]
       }
     ],
@@ -431,7 +431,7 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "guardian-spear"
+          "guardian-spear-custodian-guard-sodality"
         ]
       }
     ],
@@ -610,7 +610,7 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "guardian-spear"
+          "guardian-spear-custodian-wardens"
         ]
       }
     ],
@@ -1007,7 +1007,7 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "balistus-grenade-launcher",
+          "balistus-grenade-launcher-gilded-blades-allarus-custodians",
           "guardian-spear"
         ]
       }
@@ -1077,7 +1077,7 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "castellan-axe"
+          "castellan-axe-gilded-blades-custodian-wardens"
         ]
       },
       {

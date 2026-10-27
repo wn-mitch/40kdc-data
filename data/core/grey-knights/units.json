@@ -56,7 +56,7 @@
       "flamestorm-cannon",
       "hunter-killer-missile",
       "multi-melta",
-      "storm-bolter",
+      "storm-bolter-land-raider-redeemer",
       "twin-assault-cannon"
     ],
     "ability_ids": [
@@ -258,7 +258,7 @@
       "hunter-killer-missile",
       "hurricane-bolter",
       "multi-melta",
-      "storm-bolter",
+      "storm-bolter-land-raider-crusader",
       "twin-assault-cannon"
     ],
     "ability_ids": [
@@ -428,7 +428,7 @@
     "weapon_ids": [
       "armoured-tracks-razorback",
       "hunter-killer-missile",
-      "storm-bolter",
+      "storm-bolter-razorback",
       "twin-heavy-bolter",
       "twin-lascannon"
     ],
@@ -532,7 +532,7 @@
       "psilencer-purifier-squad",
       "psycannon-purifier-squad",
       "purifying-flame",
-      "storm-bolter"
+      "storm-bolter-purifier-squad"
     ],
     "ability_ids": [
       "sanctity-of-purpose-grey-knights",
@@ -819,7 +819,7 @@
     "weapon_ids": [
       "armoured-tracks-rhino",
       "hunter-killer-missile",
-      "storm-bolter"
+      "storm-bolter-rhino"
     ],
     "ability_ids": [
       {
@@ -990,7 +990,7 @@
       "dreadnought-combat-weapon",
       "heavy-flamer",
       "heavy-plasma-cannon",
-      "storm-bolter",
+      "storm-bolter-venerable-dreadnought",
       "twin-lascannon"
     ],
     "ability_ids": [
@@ -1151,7 +1151,7 @@
       "nemesis-force-weapon-strike-squad",
       "psilencer-strike-squad",
       "psycannon-strike-squad",
-      "storm-bolter"
+      "storm-bolter-strike-squad"
     ],
     "ability_ids": [
       "sanctifying-ritual-grey-knights",
@@ -1324,7 +1324,7 @@
     "weapon_ids": [
       "combi-weapon",
       "nemesis-force-weapon-brotherhood-librarian",
-      "storm-bolter",
+      "storm-bolter-brotherhood-librarian",
       "vortex-of-doom"
     ],
     "ability_ids": [
@@ -1497,7 +1497,7 @@
       "nemesis-force-weapon-purgation-squad",
       "psilencer-purgation-squad",
       "psycannon-purgation-squad",
-      "storm-bolter"
+      "storm-bolter-purgation-squad"
     ],
     "ability_ids": [
       "righteous-persecution-grey-knights",
@@ -1511,7 +1511,7 @@
     "points_provisional": false,
     "wargear_costs": [
       {
-        "item_id": "psycannon",
+        "item_id": "psycannon-purgation-squad",
         "cost": 5
       }
     ],
@@ -1688,7 +1688,7 @@
       "nemesis-force-weapon-interceptor-squad",
       "psilencer-interceptor-squad",
       "psycannon-interceptor-squad",
-      "storm-bolter"
+      "storm-bolter-interceptor-squad"
     ],
     "ability_ids": [
       "personal-teleporters-grey-knights",
@@ -1771,7 +1771,7 @@
     },
     "weapon_ids": [
       "crozius-arcanum",
-      "storm-bolter"
+      "storm-bolter-brotherhood-chaplain"
     ],
     "ability_ids": [
       "leader",
@@ -1990,7 +1990,7 @@
       "godhammer-lascannon",
       "hunter-killer-missile",
       "multi-melta",
-      "storm-bolter",
+      "storm-bolter-land-raider",
       "twin-heavy-bolter"
     ],
     "ability_ids": [
@@ -2166,7 +2166,7 @@
       "nemesis-force-weapon-brotherhood-terminator-squad",
       "psilencer-brotherhood-terminator-squad",
       "psycannon-brotherhood-terminator-squad",
-      "storm-bolter"
+      "storm-bolter-brotherhood-terminator-squad"
     ],
     "ability_ids": [
       "force-edge-grey-knights",
@@ -2188,7 +2188,7 @@
     "points_provisional": false,
     "wargear_costs": [
       {
-        "item_id": "psycannon",
+        "item_id": "psycannon-brotherhood-terminator-squad",
         "cost": 5
       }
     ],
@@ -2430,8 +2430,8 @@
       "max": 5
     },
     "weapon_ids": [
-      "nemesis-force-weapon",
-      "psycannon",
+      "nemesis-force-weapon-crowes-sanctifiers-brotherhood-terminator-squad",
+      "psycannon-crowes-sanctifiers-brotherhood-terminator-squad",
       "storm-bolter"
     ],
     "ability_ids": [
@@ -2499,8 +2499,8 @@
     "weapon_ids": [
       "ceramite-fists",
       "incinerator",
-      "nemesis-force-weapon",
-      "psycannon",
+      "nemesis-force-weapon-crowes-sanctifiers-strike-squad",
+      "psycannon-crowes-sanctifiers-strike-squad",
       "storm-bolter"
     ],
     "ability_ids": [
@@ -2638,8 +2638,8 @@
     },
     "weapon_ids": [
       "black-blade-of-antwyr",
-      "purifying-flame",
-      "storm-bolter"
+      "purifying-flame-sanctifiers-castellan-crowe",
+      "storm-bolter-sanctifiers-castellan-crowe"
     ],
     "ability_ids": [
       "foesight-sanctifiers-castellan-crowe-grey-knights"

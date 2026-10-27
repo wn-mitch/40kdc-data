@@ -86,13 +86,13 @@
                 </selection>
                 <selection id="unit0-m0-w2" name="Storm bolter" type="upgrade" number="1">
                   <profiles>
-                    <profile name="Storm bolter" typeName="Ranged Weapons">
+                    <profile name="Storm Bolter" typeName="Ranged Weapons">
                       <characteristics>
                         <characteristic name="Range">24"</characteristic>
                         <characteristic name="A">2</characteristic>
                         <characteristic name="BS">2+</characteristic>
-                        <characteristic name="S">4</characteristic>
-                        <characteristic name="AP">0</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-1</characteristic>
                         <characteristic name="D">1</characteristic>
                         <characteristic name="Keywords">Rapid Fire 2</characteristic>
                       </characteristics>
@@ -278,13 +278,13 @@ While the target is within range of an objective marker, you can re-roll the Wou
                 </selection>
                 <selection id="unit2-m0-w2" name="Storm bolter" type="upgrade" number="1">
                   <profiles>
-                    <profile name="Storm bolter" typeName="Ranged Weapons">
+                    <profile name="Storm Bolter" typeName="Ranged Weapons">
                       <characteristics>
                         <characteristic name="Range">24"</characteristic>
                         <characteristic name="A">2</characteristic>
                         <characteristic name="BS">3+</characteristic>
-                        <characteristic name="S">4</characteristic>
-                        <characteristic name="AP">0</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-1</characteristic>
                         <characteristic name="D">1</characteristic>
                         <characteristic name="Keywords">Rapid Fire 2</characteristic>
                       </characteristics>
@@ -327,13 +327,13 @@ While the target is within range of an objective marker, you can re-roll the Wou
                 </selection>
                 <selection id="unit2-m1-w2" name="Storm bolter" type="upgrade" number="9">
                   <profiles>
-                    <profile name="Storm bolter" typeName="Ranged Weapons">
+                    <profile name="Storm Bolter" typeName="Ranged Weapons">
                       <characteristics>
                         <characteristic name="Range">24"</characteristic>
                         <characteristic name="A">2</characteristic>
                         <characteristic name="BS">3+</characteristic>
-                        <characteristic name="S">4</characteristic>
-                        <characteristic name="AP">0</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-1</characteristic>
                         <characteristic name="D">1</characteristic>
                         <characteristic name="Keywords">Rapid Fire 2</characteristic>
                       </characteristics>

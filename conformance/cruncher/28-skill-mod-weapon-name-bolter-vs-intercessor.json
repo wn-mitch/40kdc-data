@@ -1,8 +1,8 @@
 {
-  "name": "bolt-rifle x5 vs intercessor, BS improved by 2 floors at 2+, an Attacks lift for another weapon is dropped",
+  "name": "bolt-rifle (saturation) x5 vs intercessor, BS improved by 2 floors at 2+, an Attacks lift for another weapon is dropped",
   "attacker": {
     "weaponId": "bolt-rifle",
-    "profileIndex": 0
+    "profileIndex": 1
   },
   "modelsFiring": 5,
   "target": {
@@ -70,11 +70,11 @@
     "stages": {
       "attacks": 15,
       "hits": 12.5,
-      "wounds": 4.1667,
-      "unsaved": 2.0833,
-      "damage": 2.0833,
-      "after-fnp": 2.0833,
-      "models-killed": 1.0417
+      "wounds": 6.25,
+      "unsaved": 3.125,
+      "damage": 3.125,
+      "after-fnp": 3.125,
+      "models-killed": 1.5625
     }
   }
 }

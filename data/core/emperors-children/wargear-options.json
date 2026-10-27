@@ -460,7 +460,7 @@
     },
     "is_free": true,
     "replaces": [
-      "bolt-pistol"
+      "bolt-pistol-infractors"
     ],
     "replacement": [
       "plasma-pistol-infractors"

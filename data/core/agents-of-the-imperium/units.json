@@ -1412,7 +1412,7 @@
       "stalker-bolt-rifle",
       "xenophase-blade",
       "knives-and-fists",
-      "grenade-launcher",
+      "grenade-launcher-aquila-kill-team",
       "deathwatch-marksman-bolt-carbine"
     ],
     "ability_ids": [
@@ -2902,7 +2902,7 @@
       "max": 1
     },
     "weapon_ids": [
-      "executioner-pistol",
+      "executioner-pistol-inquisitors-hand-eversor-assassin",
       "power-sword-and-neuro-gauntlet"
     ],
     "ability_ids": [
@@ -2966,11 +2966,11 @@
       "max": 6
     },
     "weapon_ids": [
-      "agent-firearm",
+      "agent-firearm-inquisitors-hand-inquisitorial-agents",
       "agents-implement",
       "mystic-stave",
-      "heavy-bolter",
-      "plasma-pistol"
+      "heavy-bolter-inquisitors-hand-inquisitorial-agents",
+      "plasma-pistol-inquisitors-hand-inquisitorial-agents"
     ],
     "ability_ids": [
       "loyal-to-the-cause-agents-of-the-imperium",

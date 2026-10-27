@@ -1,6 +1,6 @@
 [
   {
-    "name": "bolt-rifle x5 vs cultist mob, manual Anti-INFANTRY 5+ buff",
+    "name": "bolt-rifle (saturation) x5 vs cultist mob, manual Anti-INFANTRY 5+ buff",
     "cruncher_case": "05-anti-infantry-vs-cultist.json",
     "expected": [
       {
@@ -10,6 +10,7 @@
         "lifts": [],
         "residual": 0,
         "intrinsics": [
+          "rapid-fire",
           "anti"
         ]
       },
@@ -20,6 +21,7 @@
         "lifts": [],
         "residual": 0,
         "intrinsics": [
+          "rapid-fire",
           "anti"
         ]
       },
@@ -30,6 +32,7 @@
         "lifts": [],
         "residual": 0,
         "intrinsics": [
+          "rapid-fire",
           "anti"
         ]
       },
@@ -40,6 +43,7 @@
         "lifts": [],
         "residual": 0,
         "intrinsics": [
+          "rapid-fire",
           "anti"
         ]
       },
@@ -50,6 +54,7 @@
         "lifts": [],
         "residual": 0,
         "intrinsics": [
+          "rapid-fire",
           "anti"
         ]
       },
@@ -60,6 +65,7 @@
         "lifts": [],
         "residual": 0,
         "intrinsics": [
+          "rapid-fire",
           "anti"
         ]
       },
@@ -70,6 +76,7 @@
         "lifts": [],
         "residual": 0,
         "intrinsics": [
+          "rapid-fire",
           "anti"
         ]
       }

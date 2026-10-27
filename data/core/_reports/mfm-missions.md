@@ -1,4 +1,4 @@
-# MFM missions — APPLIED
+# MFM missions — DRY RUN
 
 Reconciles mission scoring-card numbers (vp/vp_per, vp_max, cumulative) from the
 GW MFM dump for both secondary cards and the 25 generic primary missions.

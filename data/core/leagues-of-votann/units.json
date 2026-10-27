@@ -2078,7 +2078,7 @@
       "max": 5
     },
     "weapon_ids": [
-      "exoarmour-grenade-launcher",
+      "exoarmour-grenade-launcher-bane-slayers-bulwark-einhyr-hearthguard",
       "graviton-hammer",
       "plasma-blade-gauntlet",
       "volkanite-disintegrator"
@@ -2145,13 +2145,13 @@
     },
     "weapon_ids": [
       "armoured-fists",
-      "autoch-pattern-bolt-pistol",
+      "autoch-pattern-bolt-pistol-bane-slayers-bulwark-hearthkyn-warriors",
       "hylas-auto-rifle",
       "ion-blaster",
       "magna-rail-rifle",
       "plasma-knife",
       "theyns-armaments",
-      "theyns-pistol"
+      "theyns-pistol-bane-slayers-bulwark-hearthkyn-warriors"
     ],
     "ability_ids": [
       "panspectral-scanning-bane-slayers-bulwark-hearthkyn-warriors-leagues-of-votann",

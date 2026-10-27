@@ -9,7 +9,7 @@
     },
     "is_free": true,
     "replacement": [
-      "storm-bolter"
+      "storm-bolter-land-raider-redeemer"
     ],
     "model_constraint": {
       "any_number": true
@@ -170,7 +170,7 @@
     },
     "is_free": true,
     "replacement": [
-      "storm-bolter"
+      "storm-bolter-land-raider-crusader"
     ],
     "model_constraint": {
       "any_number": true
@@ -248,7 +248,7 @@
     },
     "is_free": true,
     "replacement": [
-      "storm-bolter"
+      "storm-bolter-razorback"
     ],
     "model_constraint": {
       "any_number": true
@@ -280,7 +280,7 @@
     },
     "is_free": true,
     "replaces": [
-      "storm-bolter",
+      "storm-bolter-purifier-squad",
       "nemesis-force-weapon-purifier-squad"
     ],
     "replacement_choice": [
@@ -438,7 +438,7 @@
     },
     "is_free": true,
     "replacement": [
-      "storm-bolter"
+      "storm-bolter-rhino"
     ],
     "model_constraint": {
       "any_number": true
@@ -505,7 +505,7 @@
     },
     "is_free": true,
     "replaces": [
-      "storm-bolter"
+      "storm-bolter-venerable-dreadnought"
     ],
     "replacement": [
       "heavy-flamer"
@@ -524,7 +524,7 @@
     },
     "is_free": true,
     "replaces": [
-      "storm-bolter",
+      "storm-bolter-strike-squad",
       "nemesis-force-weapon-strike-squad"
     ],
     "replacement_choice": [
@@ -557,7 +557,7 @@
     "is_free": true,
     "replacement_choice": [
       [
-        "storm-bolter"
+        "storm-bolter-brotherhood-librarian"
       ],
       [
         "combi-weapon"
@@ -577,7 +577,7 @@
     },
     "is_free": true,
     "replaces": [
-      "storm-bolter",
+      "storm-bolter-purgation-squad",
       "nemesis-force-weapon-purgation-squad"
     ],
     "replacement_choice": [
@@ -636,7 +636,7 @@
     },
     "is_free": true,
     "replaces": [
-      "storm-bolter",
+      "storm-bolter-interceptor-squad",
       "nemesis-force-weapon-interceptor-squad"
     ],
     "replacement_choice": [
@@ -747,7 +747,7 @@
     },
     "is_free": true,
     "replacement": [
-      "storm-bolter"
+      "storm-bolter-land-raider"
     ],
     "model_constraint": {
       "any_number": true
@@ -795,7 +795,7 @@
     },
     "is_free": true,
     "replaces": [
-      "storm-bolter"
+      "storm-bolter-brotherhood-terminator-squad"
     ],
     "replacement_choice": [
       [
@@ -826,7 +826,7 @@
     },
     "is_free": true,
     "replaces": [
-      "storm-bolter"
+      "storm-bolter-brotherhood-terminator-squad"
     ],
     "replacement_choice": [
       [

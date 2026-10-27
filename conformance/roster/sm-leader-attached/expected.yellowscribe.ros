@@ -60,6 +60,17 @@ Add 1 to the Strength characteristic of melee weapons equipped by models in this
               <selections>
                 <selection id="unit0-m0-w0" name="Sword of the High Marshals" type="upgrade" number="1">
                   <profiles>
+                    <profile name="Strike" typeName="Melee Weapons">
+                      <characteristics>
+                        <characteristic name="Range">Melee</characteristic>
+                        <characteristic name="A">6</characteristic>
+                        <characteristic name="WS">2+</characteristic>
+                        <characteristic name="S">9</characteristic>
+                        <characteristic name="AP">-3</characteristic>
+                        <characteristic name="D">3</characteristic>
+                        <characteristic name="Keywords"></characteristic>
+                      </characteristics>
+                    </profile>
                     <profile name="Sweep" typeName="Melee Weapons">
                       <characteristics>
                         <characteristic name="Range">Melee</characteristic>
@@ -68,17 +79,6 @@ Add 1 to the Strength characteristic of melee weapons equipped by models in this
                         <characteristic name="S">6</characteristic>
                         <characteristic name="AP">-3</characteristic>
                         <characteristic name="D">1</characteristic>
-                        <characteristic name="Keywords"></characteristic>
-                      </characteristics>
-                    </profile>
-                    <profile name="Strike" typeName="Melee Weapons">
-                      <characteristics>
-                        <characteristic name="Range">Melee</characteristic>
-                        <characteristic name="A">6</characteristic>
-                        <characteristic name="WS">2+</characteristic>
-                        <characteristic name="S">8</characteristic>
-                        <characteristic name="AP">-3</characteristic>
-                        <characteristic name="D">3</characteristic>
                         <characteristic name="Keywords"></characteristic>
                       </characteristics>
                     </profile>
@@ -140,9 +140,9 @@ Add 1 to the Strength characteristic of melee weapons equipped by models in this
                     <profile name="Chainsword" typeName="Melee Weapons">
                       <characteristics>
                         <characteristic name="Range">Melee</characteristic>
-                        <characteristic name="A">5</characteristic>
+                        <characteristic name="A">4</characteristic>
                         <characteristic name="WS">3+</characteristic>
-                        <characteristic name="S">4</characteristic>
+                        <characteristic name="S">5</characteristic>
                         <characteristic name="AP">-1</characteristic>
                         <characteristic name="D">1</characteristic>
                         <characteristic name="Keywords"></characteristic>
@@ -174,9 +174,9 @@ Add 1 to the Strength characteristic of melee weapons equipped by models in this
                     <profile name="Chainsword" typeName="Melee Weapons">
                       <characteristics>
                         <characteristic name="Range">Melee</characteristic>
-                        <characteristic name="A">5</characteristic>
+                        <characteristic name="A">4</characteristic>
                         <characteristic name="WS">3+</characteristic>
-                        <characteristic name="S">4</characteristic>
+                        <characteristic name="S">5</characteristic>
                         <characteristic name="AP">-1</characteristic>
                         <characteristic name="D">1</characteristic>
                         <characteristic name="Keywords"></characteristic>

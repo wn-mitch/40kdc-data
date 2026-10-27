@@ -22,7 +22,7 @@
     "ability_id": "adaptive-strategy-gladius-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -257,7 +257,7 @@
     "ability_id": "wrath-and-ruin-forgefathers-seekers-salamanders",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     }
   }
 ]

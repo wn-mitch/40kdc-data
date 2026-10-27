@@ -40,7 +40,7 @@
       "wargear": [
         {
           "ref": {
-            "id": "chainblade",
+            "id": "chainblade-khorne-berzerkers",
             "raw_name": "Chainblade",
             "resolved": true,
             "candidates": []

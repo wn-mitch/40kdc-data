@@ -121,7 +121,7 @@
         },
         "default_weapon_ids": [
           "bolt-pistol-khorne-berzerkers",
-          "chainblade"
+          "chainblade-khorne-berzerkers"
         ]
       },
       {
@@ -130,7 +130,7 @@
         "max": 19,
         "default_weapon_ids": [
           "bolt-pistol-khorne-berzerkers",
-          "chainblade"
+          "chainblade-khorne-berzerkers"
         ],
         "is_leader_model": false,
         "base_size_mm": {
@@ -141,7 +141,7 @@
           {
             "name": "Khorne Berzerker",
             "weapon_ids": [
-              "chainblade",
+              "chainblade-khorne-berzerkers",
               "bolt-pistol-khorne-berzerkers"
             ],
             "max_count": 19
@@ -165,7 +165,7 @@
           {
             "name": "Khorne Berzerker w/ chainblade and plasma pistol",
             "weapon_ids": [
-              "chainblade",
+              "chainblade-khorne-berzerkers",
               "plasma-pistol-khorne-berzerkers"
             ],
             "max_count": 4
@@ -1197,8 +1197,8 @@
         "min": 7,
         "max": 7,
         "default_weapon_ids": [
-          "autopistol",
-          "chainblade"
+          "autopistol-frenzied-reavers-jakhals",
+          "chainblade-frenzied-reavers-jakhals"
         ]
       },
       {
@@ -1206,7 +1206,7 @@
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
-          "autopistol",
+          "autopistol-frenzied-reavers-jakhals",
           "mauler-chainblade"
         ]
       },
@@ -1215,8 +1215,8 @@
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
-          "autopistol",
-          "chainblade"
+          "autopistol-frenzied-reavers-jakhals",
+          "chainblade-frenzied-reavers-jakhals"
         ],
         "is_leader_model": true
       }
@@ -1261,7 +1261,7 @@
         "min": 5,
         "max": 5,
         "default_weapon_ids": [
-          "bolt-pistol",
+          "bolt-pistol-frenzied-reavers-khorne-berzerkers",
           "chainblade"
         ]
       },
@@ -1271,7 +1271,7 @@
         "max": 1,
         "default_weapon_ids": [
           "chainblade",
-          "plasma-pistol"
+          "plasma-pistol-frenzied-reavers-khorne-berzerkers"
         ],
         "is_leader_model": true
       },
@@ -1281,7 +1281,7 @@
         "max": 2,
         "default_weapon_ids": [
           "chainblade",
-          "plasma-pistol"
+          "plasma-pistol-frenzied-reavers-khorne-berzerkers"
         ]
       },
       {
@@ -1289,7 +1289,7 @@
         "min": 2,
         "max": 2,
         "default_weapon_ids": [
-          "bolt-pistol",
+          "bolt-pistol-frenzied-reavers-khorne-berzerkers",
           "khornate-eviscerator"
         ]
       }
@@ -1334,7 +1334,7 @@
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
-          "bolt-pistol",
+          "bolt-pistol-frenzied-reavers-master-of-executions",
           "axe-of-dismemberment"
         ],
         "is_leader_model": true
@@ -1365,7 +1365,7 @@
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
-          "hellforged-weapons",
+          "hellforged-weapons-vorrakh-lord-of-the-frenzied-reavers",
           "infernal-cannon"
         ]
       }

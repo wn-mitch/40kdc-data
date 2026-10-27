@@ -63,5 +63,5 @@ def test_base_loadout_is_legal_default(dataset: Any) -> None:
     options = dataset.wargear_options_of(bz.raw)
     assert base_loadout(bz.raw, 10, options) == {
         "bolt-pistol-khorne-berzerkers": 10,
-        "chainblade": 10,
+        "chainblade-khorne-berzerkers": 10,
     }

@@ -1,4 +1,4 @@
-# MFM seed-units — APPLIED
+# MFM seed-units — DRY RUN
 
 Skeleton units created for dump datasheets that had no repo entity.
 Points/wargear/composition/abilities are left empty for the enrichment passes.

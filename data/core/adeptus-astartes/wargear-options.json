@@ -140,7 +140,7 @@
     "is_free": true,
     "replaces": [
       "heavy-bolt-pistol",
-      "chainsword"
+      "chainsword-sword-brethren-squad"
     ],
     "replacement_choice": [
       [
@@ -148,12 +148,12 @@
         "plasma-pistol-sword-brethren-squad"
       ],
       [
-        "thunder-hammer",
+        "thunder-hammer-sword-brethren-squad",
         "plasma-pistol-sword-brethren-squad"
       ],
       [
         "hand-flamer",
-        "thunder-hammer"
+        "thunder-hammer-sword-brethren-squad"
       ],
       [
         "twin-lightning-claws"
@@ -177,14 +177,14 @@
     },
     "is_free": true,
     "replaces": [
-      "chainsword"
+      "chainsword-sword-brethren-squad"
     ],
     "replacement_choice": [
       [
         "master-crafted-power-weapon-sword-brethren-squad"
       ],
       [
-        "thunder-hammer"
+        "thunder-hammer-sword-brethren-squad"
       ]
     ],
     "model_constraint": {
@@ -308,7 +308,7 @@
     },
     "is_free": true,
     "replaces": [
-      "chainsword"
+      "chainsword-sternguard-veteran-squad"
     ],
     "replacement_choice": [
       [
@@ -340,7 +340,7 @@
         "pyrecannon-sternguard-veteran-squad"
       ],
       [
-        "heavy-bolter"
+        "heavy-bolter-sternguard-veteran-squad"
       ]
     ],
     "model_constraint": {
@@ -409,7 +409,7 @@
       "master-crafted-power-weapon-castellan"
     ],
     "replacement": [
-      "chainsword"
+      "chainsword-castellan"
     ],
     "model_constraint": {
       "any_number": true
@@ -528,7 +528,7 @@
       "twin-heavy-bolter-repulsor"
     ],
     "replacement": [
-      "twin-lascannon"
+      "twin-lascannon-repulsor"
     ],
     "model_constraint": {
       "any_number": true
@@ -603,12 +603,12 @@
     "is_free": true,
     "replaces": [
       "heavy-bolt-pistol-death-company-captain-with-jump-pack",
-      "chainsword"
+      "chainsword-death-company-captain-with-jump-pack"
     ],
     "replacement_choice": [
       [
         "power-fist-death-company-captain-with-jump-pack",
-        "plasma-pistol"
+        "plasma-pistol-death-company-captain-with-jump-pack"
       ],
       [
         "power-fist-death-company-captain-with-jump-pack",
@@ -623,7 +623,7 @@
         "hand-flamer"
       ],
       [
-        "plasma-pistol",
+        "plasma-pistol-death-company-captain-with-jump-pack",
         "relic-weapon"
       ]
     ],
@@ -648,7 +648,7 @@
         "hand-flamer"
       ],
       [
-        "plasma-pistol"
+        "plasma-pistol-death-company-captain-with-jump-pack"
       ],
       [
         "relic-shield"
@@ -668,7 +668,7 @@
     },
     "is_free": true,
     "replaces": [
-      "chainsword"
+      "chainsword-death-company-captain-with-jump-pack"
     ],
     "replacement_choice": [
       [
@@ -747,7 +747,7 @@
     "replacement": [
       "bolt-rifle",
       "combat-blade",
-      "grenade-launcher"
+      "grenade-launcher-death-company-marines"
     ],
     "model_constraint": {
       "per_n_models": 5
@@ -836,7 +836,7 @@
       "angelus-boltgun"
     ],
     "replacement": [
-      "inferno-pistol"
+      "inferno-pistol-sanguinary-guard"
     ],
     "model_constraint": {
       "per_n_models": 3
@@ -871,7 +871,7 @@
     },
     "is_free": true,
     "replacement": [
-      "storm-bolter"
+      "storm-bolter-baal-predator"
     ],
     "model_constraint": {
       "any_number": true
@@ -904,8 +904,8 @@
     "is_free": true,
     "replacement_choice": [
       [
-        "heavy-flamer",
-        "heavy-flamer"
+        "heavy-flamer-baal-predator",
+        "heavy-flamer-baal-predator"
       ],
       [
         "heavy-bolter",
@@ -1040,11 +1040,11 @@
     },
     "is_free": true,
     "replaces": [
-      "master-crafted-chainsword"
+      "master-crafted-chainsword-death-company-captain"
     ],
     "replacement_choice": [
       [
-        "relic-weapon"
+        "relic-weapon-death-company-captain"
       ],
       [
         "power-fist-death-company-captain"
@@ -1086,7 +1086,7 @@
       "heavy-bolter-ravenwing-darkshroud"
     ],
     "replacement": [
-      "assault-cannon"
+      "assault-cannon-ravenwing-darkshroud"
     ],
     "model_constraint": {
       "any_number": true
@@ -1142,17 +1142,17 @@
     },
     "is_free": true,
     "replaces": [
-      "storm-bolter"
+      "storm-bolter-deathwing-terminator-squad"
     ],
     "replacement_choice": [
       [
-        "assault-cannon"
+        "assault-cannon-deathwing-terminator-squad"
       ],
       [
-        "plasma-cannon"
+        "plasma-cannon-deathwing-terminator-squad"
       ],
       [
-        "heavy-flamer"
+        "heavy-flamer-deathwing-terminator-squad"
       ]
     ],
     "model_constraint": {
@@ -1191,10 +1191,10 @@
     ],
     "replacement_choice": [
       [
-        "power-weapon"
+        "power-weapon-deathwing-terminator-squad"
       ],
       [
-        "chainfist"
+        "chainfist-deathwing-terminator-squad"
       ]
     ],
     "model_constraint": {
@@ -1215,7 +1215,7 @@
       "power-fist"
     ],
     "replacement": [
-      "chainfist"
+      "chainfist-deathwing-terminator-squad"
     ],
     "model_constraint": {
       "model_name": "Deathwing Terminators",
@@ -1251,7 +1251,7 @@
       "heavy-bolter-land-speeder-vengeance"
     ],
     "replacement": [
-      "assault-cannon"
+      "assault-cannon-land-speeder-vengeance"
     ],
     "model_constraint": {
       "any_number": true
@@ -1267,7 +1267,7 @@
     },
     "is_free": true,
     "replaces": [
-      "twin-heavy-bolter"
+      "twin-heavy-bolter-nephilim-jetfighter"
     ],
     "replacement": [
       "nephilim-lascannons"
@@ -1422,7 +1422,7 @@
     },
     "is_free": true,
     "replaces": [
-      "melta-rifle"
+      "melta-rifle-indomitor-kill-team"
     ],
     "replacement": [
       "multi-melta-indomitor-kill-team"
@@ -1857,7 +1857,7 @@
     ],
     "replacement_choice": [
       [
-        "power-weapon"
+        "power-weapon-deathwatch-terminator-squad"
       ],
       [
         "chainfist"
@@ -1878,7 +1878,7 @@
     },
     "is_free": true,
     "replaces": [
-      "storm-bolter",
+      "storm-bolter-deathwatch-terminator-squad",
       "power-fist"
     ],
     "replacement_choice": [
@@ -1906,23 +1906,23 @@
     "is_free": true,
     "replaces": [
       "power-fist",
-      "storm-bolter"
+      "storm-bolter-deathwatch-terminator-squad"
     ],
     "replacement_choice": [
       [
         "chainfist",
-        "heavy-flamer"
+        "heavy-flamer-deathwatch-terminator-squad"
       ],
       [
         "storm-shield",
         "thunder-hammer-deathwatch-terminator-squad"
       ],
       [
-        "heavy-flamer",
-        "power-weapon"
+        "heavy-flamer-deathwatch-terminator-squad",
+        "power-weapon-deathwatch-terminator-squad"
       ],
       [
-        "assault-cannon",
+        "assault-cannon-deathwatch-terminator-squad",
         "chainfist"
       ],
       [
@@ -1934,7 +1934,7 @@
       ],
       [
         "plasma-cannon",
-        "power-weapon"
+        "power-weapon-deathwatch-terminator-squad"
       ]
     ],
     "model_constraint": {
@@ -1969,17 +1969,17 @@
     },
     "is_free": true,
     "replaces": [
-      "storm-bolter"
+      "storm-bolter-deathwatch-terminator-squad"
     ],
     "replacement_choice": [
       [
-        "heavy-flamer"
+        "heavy-flamer-deathwatch-terminator-squad"
       ],
       [
         "plasma-cannon"
       ],
       [
-        "assault-cannon"
+        "assault-cannon-deathwatch-terminator-squad"
       ]
     ],
     "model_constraint": {
@@ -2001,7 +2001,7 @@
     ],
     "replacement_choice": [
       [
-        "power-weapon"
+        "power-weapon-deathwatch-terminator-squad"
       ],
       [
         "cyclone-missile-launcher",
@@ -2009,7 +2009,7 @@
       ],
       [
         "cyclone-missile-launcher",
-        "power-weapon"
+        "power-weapon-deathwatch-terminator-squad"
       ],
       [
         "chainfist"
@@ -2268,7 +2268,7 @@
     "is_free": true,
     "replaces": [
       "special-issue-bolt-pistol-spectrus-kill-team",
-      "combat-knife"
+      "combat-knife-spectrus-kill-team"
     ],
     "replacement": [
       "ceramite-fists",
@@ -2582,7 +2582,7 @@
     },
     "is_free": true,
     "replaces": [
-      "chainsword",
+      "chainsword-captain-with-jump-pack",
       "heavy-bolt-pistol-captain-with-jump-pack"
     ],
     "replacement_choice": [
@@ -2648,7 +2648,7 @@
     },
     "is_free": true,
     "replaces": [
-      "chainsword"
+      "chainsword-captain-with-jump-pack"
     ],
     "replacement_choice": [
       [
@@ -2735,7 +2735,7 @@
       "combat-knife-scout-squad"
     ],
     "replacement": [
-      "chainsword"
+      "chainsword-scout-squad"
     ],
     "model_constraint": {
       "model_name": "Scout Sergeant",
@@ -2819,7 +2819,7 @@
     },
     "is_free": true,
     "replaces": [
-      "bolt-rifle",
+      "bolt-rifle-brutalis-dreadnought",
       "brutalis-fists"
     ],
     "replacement": [
@@ -3274,10 +3274,10 @@
     },
     "is_free": true,
     "replaces": [
-      "fragstorm-grenade-launcher"
+      "fragstorm-grenade-launcher-redemptor-dreadnought"
     ],
     "replacement": [
-      "storm-bolter"
+      "storm-bolter-redemptor-dreadnought"
     ],
     "model_constraint": {
       "any_number": true
@@ -3685,7 +3685,7 @@
     ],
     "replacement_choice": [
       [
-        "chainsword",
+        "chainsword-intercessor-squad",
         "power-weapon-intercessor-squad"
       ],
       [
@@ -3694,7 +3694,7 @@
       ],
       [
         "power-fist-intercessor-squad",
-        "chainsword"
+        "chainsword-intercessor-squad"
       ],
       [
         "thunder-hammer-intercessor-squad",
@@ -3713,7 +3713,7 @@
         "plasma-pistol-intercessor-squad"
       ],
       [
-        "chainsword",
+        "chainsword-intercessor-squad",
         "plasma-pistol-intercessor-squad"
       ],
       [
@@ -3721,12 +3721,12 @@
         "power-weapon-intercessor-squad"
       ],
       [
-        "chainsword",
-        "chainsword"
+        "chainsword-intercessor-squad",
+        "chainsword-intercessor-squad"
       ],
       [
         "thunder-hammer-intercessor-squad",
-        "chainsword"
+        "chainsword-intercessor-squad"
       ],
       [
         "power-weapon-intercessor-squad",
@@ -3737,7 +3737,7 @@
         "plasma-pistol-intercessor-squad"
       ],
       [
-        "chainsword",
+        "chainsword-intercessor-squad",
         "hand-flamer-intercessor-squad"
       ],
       [
@@ -3770,7 +3770,7 @@
         "power-weapon-intercessor-squad"
       ],
       [
-        "chainsword"
+        "chainsword-intercessor-squad"
       ],
       [
         "thunder-hammer-intercessor-squad"
@@ -3804,7 +3804,7 @@
         "hand-flamer-intercessor-squad"
       ],
       [
-        "chainsword"
+        "chainsword-intercessor-squad"
       ]
     ],
     "model_constraint": {
@@ -3838,10 +3838,10 @@
     },
     "is_free": true,
     "replaces": [
-      "twin-heavy-bolter"
+      "twin-heavy-bolter-astraeus"
     ],
     "replacement": [
-      "twin-lascannon"
+      "twin-lascannon-astraeus"
     ],
     "model_constraint": {
       "any_number": true
@@ -3995,7 +3995,7 @@
     },
     "is_free": true,
     "replaces": [
-      "special-issue-bolt-pistol"
+      "special-issue-bolt-pistol-lieutenant-in-phobos-armour"
     ],
     "replacement": [
       "master-crafted-bolt-carbine-lieutenant-in-phobos-armour"
@@ -4517,10 +4517,10 @@
     },
     "is_free": true,
     "replaces": [
-      "storm-bolter"
+      "storm-bolter-wulfen-dreadnought"
     ],
     "replacement": [
-      "heavy-flamer"
+      "heavy-flamer-wulfen-dreadnought"
     ],
     "model_constraint": {
       "any_number": true
@@ -4660,7 +4660,7 @@
         "plasma-gun"
       ],
       [
-        "instigator-bolt-carbine"
+        "instigator-bolt-carbine-wolf-scouts"
       ]
     ],
     "model_constraint": {
@@ -4679,7 +4679,7 @@
     "is_free": true,
     "replaces": [
       "plasma-pistol-wolf-scouts",
-      "combat-knife"
+      "combat-knife-wolf-scouts"
     ],
     "replacement": [
       "bolt-pistol",
@@ -4797,7 +4797,7 @@
       "melta-rifle"
     ],
     "replacement": [
-      "multi-melta"
+      "multi-melta-eradicator-squad-with-melta-rifles"
     ],
     "model_constraint": {
       "model_name": "Eradicator",
@@ -4817,7 +4817,7 @@
       "onslaught-gatling-cannon"
     ],
     "replacement": [
-      "multi-melta"
+      "multi-melta-invader-atvs"
     ],
     "model_constraint": {
       "any_number": true

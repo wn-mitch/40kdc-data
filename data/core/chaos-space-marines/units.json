@@ -199,7 +199,7 @@
     },
     "weapon_ids": [
       "combi-bolter",
-      "combi-weapon",
+      "combi-weapon-sorcerer-in-terminator-armour",
       "force-weapon",
       "infernal-gaze"
     ],
@@ -305,8 +305,8 @@
     "weapon_ids": [
       "accursed-weapon",
       "astartes-chainsword",
-      "bolt-pistol",
-      "boltgun",
+      "bolt-pistol-nemesis-claw",
+      "boltgun-nemesis-claw",
       "close-combat-weapon",
       "flamer",
       "heavy-bolter",
@@ -423,7 +423,7 @@
       "max": 1
     },
     "weapon_ids": [
-      "bolt-pistol",
+      "bolt-pistol-sorcerer",
       "force-weapon",
       "infernal-gaze"
     ],
@@ -629,7 +629,7 @@
       "max": 1
     },
     "weapon_ids": [
-      "bolt-pistol",
+      "bolt-pistol-master-of-possession",
       "rite-of-possession",
       "staff-of-possession"
     ],
@@ -884,7 +884,7 @@
       "accursed-weapon",
       "chainfist",
       "combi-bolter",
-      "combi-weapon",
+      "combi-weapon-chaos-terminator-squad",
       "heavy-flamer",
       "paired-accursed-weapons-chaos-terminator-squad",
       "power-fist",
@@ -1090,7 +1090,7 @@
     "weapon_ids": [
       "armoured-tracks",
       "combi-bolter",
-      "combi-weapon",
+      "combi-weapon-chaos-land-raider",
       "havoc-launcher",
       "soulshatter-lascannon",
       "twin-heavy-bolter"
@@ -1222,7 +1222,7 @@
       "max": 10
     },
     "weapon_ids": [
-      "hideous-mutations"
+      "hideous-mutations-possessed"
     ],
     "ability_ids": [
       "unholy-bloodshed-chaos-space-marines",
@@ -1412,7 +1412,7 @@
     },
     "weapon_ids": [
       "accursed-crozius",
-      "bolt-pistol",
+      "bolt-pistol-dark-apostle",
       "close-combat-weapon-dark-apostle"
     ],
     "ability_ids": [
@@ -1607,7 +1607,7 @@
     "weapon_ids": [
       "armoured-tracks-chaos-predator-annihilator",
       "combi-bolter",
-      "combi-weapon",
+      "combi-weapon-chaos-predator-annihilator",
       "havoc-launcher",
       "heavy-bolter-chaos-predator-annihilator",
       "lascannon",
@@ -1804,8 +1804,8 @@
     "weapon_ids": [
       "accursed-weapon",
       "astartes-chainsword-havocs",
-      "boltgun",
-      "close-combat-weapon",
+      "boltgun-havocs",
+      "close-combat-weapon-havocs",
       "flamer",
       "havoc-autocannon",
       "havoc-heavy-bolter",
@@ -1979,8 +1979,8 @@
     "weapon_ids": [
       "accursed-weapon",
       "astartes-chainsword",
-      "bolt-pistol",
-      "close-combat-weapon",
+      "bolt-pistol-raptors",
+      "close-combat-weapon-raptors",
       "flamer",
       "heavy-melee-weapon",
       "meltagun",
@@ -2086,7 +2086,7 @@
       "hades-lascannon",
       "electroscourge",
       "ectoplasma-destructor",
-      "magma-cutters"
+      "magma-cutters-defiler"
     ],
     "ability_ids": [
       "daemonforge-chaos-space-marines",
@@ -2202,7 +2202,7 @@
     "weapon_ids": [
       "armoured-tracks-chaos-predator-destructor",
       "combi-bolter",
-      "combi-weapon",
+      "combi-weapon-chaos-predator-destructor",
       "havoc-launcher",
       "heavy-bolter-chaos-predator-destructor",
       "lascannon",
@@ -2347,8 +2347,8 @@
     },
     "weapon_ids": [
       "accursed-weapon",
-      "bolt-pistol",
-      "boltgun",
+      "bolt-pistol-chosen",
+      "boltgun-chosen",
       "combi-weapon",
       "paired-accursed-weapons-chosen",
       "plasma-pistol",
@@ -2651,7 +2651,7 @@
     "weapon_ids": [
       "armoured-tracks-chaos-vindicator",
       "combi-bolter",
-      "combi-weapon",
+      "combi-weapon-chaos-vindicator",
       "demolisher-cannon",
       "havoc-launcher"
     ],
@@ -3051,8 +3051,8 @@
       "max": 10
     },
     "weapon_ids": [
-      "bolt-pistol",
-      "boltgun",
+      "bolt-pistol-red-corsairs-raiders",
+      "boltgun-red-corsairs-raiders",
       "hand-flamer",
       "meltagun",
       "power-fist",
@@ -3127,7 +3127,7 @@
     },
     "weapon_ids": [
       "axe-of-dismemberment",
-      "bolt-pistol"
+      "bolt-pistol-master-of-executions"
     ],
     "ability_ids": [
       "trophy-taker-chaos-space-marines",
@@ -3668,8 +3668,8 @@
     "weapon_ids": [
       "accursed-weapon",
       "astartes-chainsword",
-      "bolt-pistol",
-      "close-combat-weapon",
+      "bolt-pistol-chaos-bikers",
+      "close-combat-weapon-chaos-bikers",
       "combi-bolter",
       "combi-weapon",
       "flamer",
@@ -4090,7 +4090,7 @@
     "weapon_ids": [
       "armoured-tracks-chaos-rhino",
       "combi-bolter",
-      "combi-weapon",
+      "combi-weapon-chaos-rhino",
       "havoc-launcher"
     ],
     "ability_ids": [
@@ -4239,9 +4239,9 @@
       "accursed-weapon",
       "astartes-chainsword",
       "balefire-tome",
-      "bolt-pistol",
-      "boltgun",
-      "close-combat-weapon",
+      "bolt-pistol-legionaries",
+      "boltgun-legionaries",
+      "close-combat-weapon-legionaries",
       "flamer",
       "havoc-autocannon-legionaries",
       "heavy-bolter",
@@ -5260,8 +5260,8 @@
       "max": 1
     },
     "weapon_ids": [
-      "bolt-pistol",
-      "rite-of-possession",
+      "bolt-pistol-aranis-zarkan",
+      "rite-of-possession-aranis-zarkan",
       "staff-of-possession"
     ],
     "ability_ids": [
@@ -5329,9 +5329,9 @@
       "max": 10
     },
     "weapon_ids": [
-      "autopistol",
+      "autopistol-zarkans-daemonkin-cultist-mob",
       "blades-and-cudgels",
-      "bolt-pistol"
+      "bolt-pistol-zarkans-daemonkin-cultist-mob"
     ],
     "ability_ids": [
       "for-the-dark-gods-zarkans-daemonkin-cultist-mob-chaos-space-marines"
@@ -5396,12 +5396,12 @@
     },
     "weapon_ids": [
       "accursed-weapon",
-      "bolt-pistol",
+      "bolt-pistol-zarkans-daemonkin-legionaries",
       "boltgun",
       "fists-and-knives",
       "heavy-bolter",
       "meltagun",
-      "plasma-pistol"
+      "plasma-pistol-zarkans-daemonkin-legionaries"
     ],
     "ability_ids": [
       "veterans-of-the-long-war-zarkans-daemonkin-legionaries-chaos-space-marines",

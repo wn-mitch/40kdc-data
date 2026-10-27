@@ -167,7 +167,7 @@ describe("end-to-end: defensive FNP buff plumbed through crunch", () => {
   });
 
   it("damage-reduction buff trims damage per hit with a 'min 1' floor", () => {
-    const lascannon = ds.weapons.getAny("lascannon")!; // D = D6+1 → EV 4.5
+    const lascannon = ds.weapons.getAny("lascannon")!; // D = D3+3 → EV 5
     const knight = ds.units.find("Questoris Knight Magaera")!;
     const base: EngineInput = {
       attacker: { weapon: lascannon.raw, profileIndex: 0 },
@@ -188,17 +188,17 @@ describe("end-to-end: defensive FNP buff plumbed through crunch", () => {
     });
     const baseDamage = baseline.stages.find((s) => s.name === "damage")!.expected;
     const reducedDamage = reduced.stages.find((s) => s.name === "damage")!.expected;
-    // Per-hit damage drops from 4.5 to 3.5; ratio = 3.5/4.5.
-    expect(reducedDamage / baseDamage).toBeCloseTo(3.5 / 4.5, 4);
+    // Per-hit damage drops from 5 to 4; ratio = 4/5.
+    expect(reducedDamage / baseDamage).toBeCloseTo(4 / 5, 4);
   });
 
   it("damage-reduction floors at 1 even when reduction exceeds base damage", () => {
-    // Bolt rifle: D 1. With damage-reduction 2, damage per hit must clamp to 1,
+    // Bolt rifle (Saturation): D 1. With damage-reduction 2, damage per hit must clamp to 1,
     // not -1 or 0 — the "min 1" rule from the canonical damage-reduction text.
     const bolt = ds.weapons.getAny("bolt-rifle")!;
     const cultists = ds.units.find("Cultist Mob")!;
     const out = crunch({
-      attacker: { weapon: bolt.raw, profileIndex: 0 },
+      attacker: { weapon: bolt.raw, profileIndex: 1 },
       target: { unit: cultists.raw, profileIndex: 0 },
       modelsFiring: 1,
       buffs: [
@@ -427,7 +427,7 @@ describe("end-to-end: defensive FNP buff plumbed through crunch", () => {
     });
     const baseWounds = baseline.stages.find((s) => s.name === "wounds")!.expected;
     const toughWounds = tougher.stages.find((s) => s.name === "wounds")!.expected;
-    // S4 vs T3 = 3+; S4 vs T4 = 4+. So P drops from 4/6 → 3/6 = ratio 3/4.
-    expect(toughWounds / baseWounds).toBeCloseTo(3 / 4, 4);
+    // Bolt rifle (Focused Fire) S6: vs T3 = 2+; vs T4 = 3+. So P drops from 5/6 → 4/6 = ratio 4/5.
+    expect(toughWounds / baseWounds).toBeCloseTo(4 / 5, 4);
   });
 });

@@ -32,7 +32,7 @@ values and absent source relations clear them. Prose is never read or written.
 | iron-hands | 6 | 0 | 0 | 0 | 0 | 0 | 0 |
 | leagues-of-votann | 36 | 0 | 0 | 0 | 0 | 0 | 0 |
 | necrons | 44 | 0 | 0 | 0 | 0 | 0 | 0 |
-| orks | 40 | 0 | 0 | 0 | 1 | 1 | 0 |
+| orks | 40 | 0 | 0 | 0 | 0 | 0 | 0 |
 | raven-guard | 6 | 0 | 0 | 0 | 0 | 0 | 0 |
 | salamanders | 6 | 0 | 0 | 0 | 0 | 0 | 0 |
 | space-wolves | 12 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -42,15 +42,7 @@ values and absent source relations clear them. Prose is never read or written.
 | ultramarines | 6 | 0 | 0 | 0 | 0 | 0 | 0 |
 | white-scars | 6 | 0 | 0 | 0 | 0 | 0 | 0 |
 | world-eaters | 28 | 0 | 0 | 0 | 0 | 0 | 0 |
-| **TOTAL** | **890** | **0** | **0** | **0** | **1** | **1** | **0** |
-
-## orks
-
-**Eligibility changes:**
-- kill-kommanda-taktikal-brigade-orks: {"keyword_restrictions":null,"keyword_restriction_groups":[["Big Mek"],["Infantry","Warboss"]],"datasheet_restriction_groups":[{"unit_id":"big-mek"}]} → {"keyword_restrictions":null,"keyword_restriction_groups":[["Big Mek","Infantry"],["Infantry","Warboss"]],"datasheet_restriction_groups":[{"unit_id":"big-mek"}]}
-
-**exclusion_keywords changes:**
-- smoky-gubbinz-upgrade-kult-of-speed-orks: null → ["Aircraft"]
+| **TOTAL** | **890** | **0** | **0** | **0** | **0** | **0** | **0** |
 
 ## Enhancement seeds skipped (1)
 

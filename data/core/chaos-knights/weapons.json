@@ -1120,7 +1120,7 @@
         "name": "Darkflame lance",
         "range": 18,
         "stats": {
-          "A": "2D6",
+          "A": "D6+6",
           "S": 8,
           "AP": -1,
           "D": 2,
@@ -1128,22 +1128,26 @@
         },
         "keywords": [
           {
-            "keyword_id": "ignores-cover"
+            "keyword_id": "torrent"
           },
           {
-            "keyword_id": "torrent"
+            "keyword_id": "ignores-cover"
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "b4ca-3419-c219-f429"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9914c896-4ba5-425c-81fa-9dd1d17497a6"
       }
     ]
   },
@@ -1156,7 +1160,7 @@
         "name": "Terrorpulse missiles",
         "range": 36,
         "stats": {
-          "A": "2D6",
+          "A": "D6+6",
           "S": 8,
           "AP": -2,
           "D": 2,
@@ -1171,12 +1175,16 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "9e94-b7d4-ec7f-9163"
+      },
+      {
+        "namespace": "mfm",
+        "id": "908a474b-c060-4940-b8ff-d8b4f0ea20b5"
       }
     ]
   },
@@ -1255,12 +1263,22 @@
           "D": "D6+3",
           "BS": 2
         },
-        "keywords": []
+        "keywords": [
+          {
+            "keyword_id": "devastating-wounds",
+            "parameters": {
+              "required_target_keywords_any": [
+                "Monster",
+                "Vehicle"
+              ]
+            }
+          }
+        ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2408,6 +2426,9 @@
         },
         "keywords": [
           {
+            "keyword_id": "ignores-cover"
+          },
+          {
             "keyword_id": "devastating-wounds"
           }
         ]
@@ -2415,12 +2436,16 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "7f9d-c996-4304-d9ab"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2de09d58-bd59-428e-81f3-1b9d8e991fef"
       }
     ]
   },

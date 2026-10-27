@@ -85,8 +85,8 @@
         "range": 24,
         "stats": {
           "A": 2,
-          "S": 4,
-          "AP": 0,
+          "S": 5,
+          "AP": -1,
           "D": 1,
           "BS": 3
         },
@@ -107,6 +107,10 @@
     "external_refs": [
       {
         "namespace": "mfm",
+        "id": "46534af0-d99f-49aa-9374-5c1f3aa116f9"
+      },
+      {
+        "namespace": "mfm",
         "id": "67935177-b9ae-4697-b448-34fc9bc0c70e"
       }
     ]
@@ -121,8 +125,8 @@
         "range": 24,
         "stats": {
           "A": 1,
-          "S": 4,
-          "AP": 0,
+          "S": 5,
+          "AP": -1,
           "D": 1,
           "BS": 4
         },
@@ -154,6 +158,10 @@
       {
         "namespace": "bsdata",
         "id": "7d1a-fb5c-9d3b-fca8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6238e1cb-8255-4acb-8020-6e4f870019ae"
       },
       {
         "namespace": "mfm",
@@ -734,7 +742,7 @@
         "range": "Melee",
         "stats": {
           "A": 6,
-          "S": 4,
+          "S": 5,
           "AP": 0,
           "D": 1,
           "WS": 2
@@ -744,7 +752,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1079,8 +1087,8 @@
         "range": 24,
         "stats": {
           "A": 2,
-          "S": 4,
-          "AP": 0,
+          "S": 5,
+          "AP": -1,
           "D": 1,
           "BS": 3
         },
@@ -1093,7 +1101,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1571,7 +1579,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1778,8 +1786,8 @@
         "range": 12,
         "stats": {
           "A": 1,
-          "S": 4,
-          "AP": 0,
+          "S": 5,
+          "AP": -1,
           "D": 1,
           "BS": 2
         },
@@ -1802,6 +1810,10 @@
       {
         "namespace": "mfm",
         "id": "32dc85ab-06e6-4673-b59f-5697c1128f79"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e2979ad4-0801-4d5e-bd9c-0c7efaa230df"
       }
     ]
   },
@@ -1815,8 +1827,8 @@
         "range": 12,
         "stats": {
           "A": 1,
-          "S": 4,
-          "AP": 0,
+          "S": 5,
+          "AP": -1,
           "D": 1,
           "BS": 3
         },
@@ -1832,7 +1844,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1851,11 +1863,11 @@
     "type": "melee",
     "profiles": [
       {
-        "name": "Close combat weapon",
+        "name": "Close Combat Weapon",
         "range": "Melee",
         "stats": {
           "A": 3,
-          "S": 4,
+          "S": 5,
           "AP": 0,
           "D": 1,
           "WS": 3
@@ -1874,6 +1886,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "0a8879b7-d022-48c4-951d-c2fa84f69d4f"
+      },
+      {
+        "namespace": "mfm",
         "id": "0cd704db-446f-4192-9895-46de31e27ad1"
       }
     ]
@@ -1884,11 +1900,11 @@
     "type": "melee",
     "profiles": [
       {
-        "name": "Close combat weapon",
+        "name": "Close Combat Weapon",
         "range": "Melee",
         "stats": {
           "A": 3,
-          "S": 4,
+          "S": 5,
           "AP": 0,
           "D": 1,
           "WS": 3
@@ -1904,6 +1920,10 @@
       {
         "namespace": "bsdata",
         "id": "ab80-e71b-5a84-2852"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0a8879b7-d022-48c4-951d-c2fa84f69d4f"
       },
       {
         "namespace": "mfm",
@@ -2739,5 +2759,288 @@
       "edition": "11th",
       "dataslate": "mfm-995"
     }
+  },
+  {
+    "id": "bolt-pistol-flawless-blades",
+    "name": "Bolt pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Bolt pistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "pistol"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "3469-166f-44f3-51b8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0d67204a-bec8-4df0-aa83-ef83d01537c6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "29eaac84-a81c-471d-bfac-972cd68795ec"
+      }
+    ]
+  },
+  {
+    "id": "bolt-pistol-infractors",
+    "name": "Bolt pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Bolt pistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "pistol"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "3469-166f-44f3-51b8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0d67204a-bec8-4df0-aa83-ef83d01537c6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "29eaac84-a81c-471d-bfac-972cd68795ec"
+      }
+    ]
+  },
+  {
+    "id": "bolt-pistol-sorcerer",
+    "name": "Bolt pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Bolt pistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "pistol"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "3469-166f-44f3-51b8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0d67204a-bec8-4df0-aa83-ef83d01537c6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "29eaac84-a81c-471d-bfac-972cd68795ec"
+      }
+    ]
+  },
+  {
+    "id": "bolt-pistol-callous-blades-infractors",
+    "name": "Bolt pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Bolt Pistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "3469-166f-44f3-51b8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0d67204a-bec8-4df0-aa83-ef83d01537c6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1b6d2907-3eb6-4895-abdc-80ff5639e859"
+      }
+    ]
+  },
+  {
+    "id": "duelling-sabre-infractors",
+    "name": "Duelling sabre",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Duelling sabre",
+        "range": "Melee",
+        "stats": {
+          "A": 4,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "WS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "precision"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "6ab9-df1b-b1fb-8d20"
+      },
+      {
+        "namespace": "mfm",
+        "id": "34f936af-7822-437d-894e-fb07eab33945"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f876be00-3ba5-49bb-bc20-99aa9aebb7f8"
+      }
+    ]
+  },
+  {
+    "id": "power-fist-lord-kaphrael-of-the-callous-blades",
+    "name": "Power fist",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Power Fist",
+        "range": "Melee",
+        "stats": {
+          "A": 5,
+          "S": 8,
+          "AP": -2,
+          "D": 2,
+          "WS": 2
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "d2dc-a1d1-3834-ffb6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "165a6981-874b-4916-bdee-844ab9eb39fd"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6267c763-c582-4e33-b165-a225fd6b610b"
+      }
+    ]
+  },
+  {
+    "id": "power-sword-callous-blades-infractors",
+    "name": "Power sword",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Power Sword",
+        "range": "Melee",
+        "stats": {
+          "A": 4,
+          "S": 5,
+          "AP": -2,
+          "D": 1,
+          "WS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "precision"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "827e-b138-4935-e78a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9915aab8-dc0e-4eff-9dd1-65796e8fb844"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ff253138-99ed-4465-84d5-f5866df8ad2c"
+      }
+    ]
   }
 ]

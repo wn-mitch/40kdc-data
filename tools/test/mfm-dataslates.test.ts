@@ -1,4 +1,5 @@
-import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import * as path from "node:path";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -16,7 +17,10 @@ import {
   type ApprovedEntry,
   type FreshSource,
 } from "../src/mfm/dataslates/verdict.js";
-import { MfmDump } from "../src/mfm/loader.js";
+import { DEFAULT_DUMP_PATH, loadDump, MfmDump } from "../src/mfm/loader.js";
+import { runDataslates } from "../src/mfm/dataslates/run.js";
+import { REPO_ROOT } from "../src/mfm/repo-files.js";
+import { openWorkbenchReadOnly } from "../src/semantic-authoring/db.js";
 import { entryWithMechanics } from "../src/semantic-authoring/entries.js";
 
 const NOW = { edition: "11th", dataslate: "mfm-963" };
@@ -118,6 +122,26 @@ describe("weapon verification", () => {
     expect(stampAction({ edition: "11th", dataslate: "launch" }, off === "verified", NOW).action).toBe("demote");
   });
 
+  it("verifies a weapon equal to any of its live dump items, not only the first", () => {
+    // A Combat Patrol box prints an older line under the same item name; the record names both.
+    const record = { ...weaponRecord(-1), external_refs: [{ namespace: "mfm", id: "older" }, { namespace: "mfm", id: "item" }] };
+    const base = weaponDump();
+    const older = new MfmDump({
+      metadata: { data_version: 963 },
+      data: {
+        wargear_item: [...base.table("wargear_item"), { id: "older", wargearType: "weapon", localisations: { en: { name: "Fixture Gun" } } }],
+        wargear_item_profile: [
+          ...base.table("wargear_item_profile"),
+          { ...base.table("wargear_item_profile")[0], id: "older-shot", wargearItemId: "older", strength: "3" },
+        ],
+        wargear_item_profile_wargear_ability: base.table("wargear_item_profile_wargear_ability"),
+        wargear_ability: base.table("wargear_ability"),
+      } as never,
+    });
+    expect(weaponReason(older, record, NOW, weaponMatchesMinted)).toBe("verified");
+    expect(weaponReason(older, { ...record, external_refs: [{ namespace: "mfm", id: "older" }] }, NOW, weaponMatchesMinted)).toBe("differs");
+  });
+
   it("does not verify a weapon without a live dump ref", () => {
     const dump = weaponDump();
     expect(weaponReason(dump, { ...weaponRecord(-1), external_refs: [] }, NOW, weaponMatchesMinted)).toBe("no-ref");
@@ -204,4 +228,28 @@ describe("pass projections", () => {
     expect([...changedKeys(staged, file, unitId)].sort()).toEqual(["b", "c", "d"]);
     expect(changedKeys([], file, unitId).size).toBe(0);
   });
+});
+
+describe.skipIf(!existsSync(DEFAULT_DUMP_PATH))("dataslate stamps over the real dump", () => {
+  it("stamps every replicated copy of a stratagem alike, wherever its ability lives", () => {
+    const db = openWorkbenchReadOnly();
+    let report: ReturnType<typeof runDataslates>;
+    try {
+      report = runDataslates(loadDump(), { dataRoot: path.join(REPO_ROOT, "data"), dumpPath: DEFAULT_DUMP_PATH, db });
+    } finally {
+      db.close();
+    }
+    const projected = new Map(report.staged.map((write) => [path.resolve(write.path), write.value as { id: string; game_version: unknown }[]]));
+    const stamps = new Map<string, Set<string>>();
+    const coreDir = path.join(REPO_ROOT, "data", "core");
+    for (const dir of readdirSync(coreDir)) {
+      const file = path.join(coreDir, dir, "stratagems.json");
+      if (!existsSync(file)) continue;
+      const records = projected.get(file) ?? (JSON.parse(readFileSync(file, "utf8")) as { id: string; game_version: unknown }[]);
+      for (const record of records) {
+        (stamps.get(record.id) ?? stamps.set(record.id, new Set()).get(record.id)!).add(JSON.stringify(record.game_version));
+      }
+    }
+    expect([...stamps].filter(([, seen]) => seen.size > 1).map(([id]) => id)).toEqual([]);
+  }, 300_000);
 });

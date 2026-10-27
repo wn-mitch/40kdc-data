@@ -4293,7 +4293,7 @@
     },
     "is_free": true,
     "replaces": [
-      "lasgun"
+      "lasgun-cadian-recon-squad"
     ],
     "replacement_choice": [
       [
@@ -4335,7 +4335,7 @@
     ],
     "replacement_choice": [
       [
-        "melta-cannon"
+        "melta-cannon-hippogriff-afv"
       ],
       [
         "chiron-gatling-cannon"

@@ -8,7 +8,7 @@
         "name": "Supa-kannon",
         "range": 60,
         "stats": {
-          "A": "2D6",
+          "A": 8,
           "S": 12,
           "AP": -2,
           "D": 3,
@@ -16,7 +16,10 @@
         },
         "keywords": [
           {
-            "keyword_id": "blast"
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 1
+            }
           }
         ]
       }
@@ -36,6 +39,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "37e0e430-fed1-4f67-a2be-d5473cec93fb"
+      },
+      {
+        "namespace": "mfm",
         "id": "7b115539-38eb-4991-9a17-1b3b9f68fc1f"
       }
     ]
@@ -46,19 +53,7 @@
     "type": "melee",
     "profiles": [
       {
-        "name": "Sweep",
-        "range": "Melee",
-        "stats": {
-          "A": 18,
-          "S": 9,
-          "AP": -2,
-          "D": 3,
-          "WS": 3
-        },
-        "keywords": []
-      },
-      {
-        "name": "Strike",
+        "name": "Huge Tusks",
         "range": "Melee",
         "stats": {
           "A": 6,
@@ -69,7 +64,10 @@
         },
         "keywords": [
           {
-            "keyword_id": "lance"
+            "keyword_id": "cleave",
+            "parameters": {
+              "value": 2
+            }
           }
         ]
       }
@@ -82,6 +80,10 @@
       {
         "namespace": "bsdata",
         "id": "c0b1-a70b-89a0-a5f9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "32d2c569-80c4-4acf-b405-768cedc604f7"
       },
       {
         "namespace": "mfm",
@@ -124,22 +126,10 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Shell",
-        "range": 36,
-        "stats": {
-          "A": 1,
-          "S": 9,
-          "AP": -2,
-          "D": "D6",
-          "BS": 5
-        },
-        "keywords": []
-      },
-      {
         "name": "Frag",
         "range": 36,
         "stats": {
-          "A": "D6",
+          "A": 6,
           "S": 5,
           "AP": 0,
           "D": 1,
@@ -147,19 +137,51 @@
         },
         "keywords": [
           {
-            "keyword_id": "blast"
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 1
+            }
+          },
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 6
+            }
+          }
+        ]
+      },
+      {
+        "name": "Shell",
+        "range": 36,
+        "stats": {
+          "A": 2,
+          "S": 10,
+          "AP": -2,
+          "D": "D6+1",
+          "BS": 5
+        },
+        "keywords": [
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 2
+            }
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "b770-d969-e667-3e1a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6d686224-35b0-48ee-9cfb-ad20ab3fd40d"
       }
     ]
   },
@@ -246,7 +268,7 @@
         "name": "Beast Snagga Klaw",
         "range": "Melee",
         "stats": {
-          "A": 4,
+          "A": 3,
           "S": 10,
           "AP": -2,
           "D": 2,
@@ -292,6 +314,10 @@
       {
         "namespace": "bsdata",
         "id": "e9e3-3cff-1ff2-f9cc"
+      },
+      {
+        "namespace": "mfm",
+        "id": "17a2a6af-1b11-486c-8a2c-7f3169f14d07"
       },
       {
         "namespace": "mfm",
@@ -353,32 +379,13 @@
     "type": "melee",
     "profiles": [
       {
-        "name": "Standard",
-        "range": "Melee",
-        "stats": {
-          "A": 6,
-          "S": 6,
-          "AP": -1,
-          "D": 2,
-          "WS": 2
-        },
-        "keywords": [
-          {
-            "keyword_id": "cleave",
-            "parameters": {
-              "value": 1
-            }
-          }
-        ]
-      },
-      {
         "name": "Hunter",
         "range": "Melee",
         "stats": {
           "A": 6,
-          "S": 7,
+          "S": 12,
           "AP": -2,
-          "D": 2,
+          "D": "D6",
           "WS": 2
         },
         "keywords": [
@@ -401,11 +408,30 @@
             "Vehicle"
           ]
         }
+      },
+      {
+        "name": "Standard",
+        "range": "Melee",
+        "stats": {
+          "A": 6,
+          "S": 6,
+          "AP": -2,
+          "D": 2,
+          "WS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "cleave",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -415,6 +441,10 @@
       {
         "namespace": "mfm",
         "id": "7a43228d-b94e-445b-acc4-45e08f52750e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7b64d2e6-aaae-4a0a-8047-9b8a36476b6d"
       }
     ]
   },
@@ -424,7 +454,7 @@
     "type": "melee",
     "profiles": [
       {
-        "name": "Big Chompa’s jaws",
+        "name": "Big Chompa’s Jaws",
         "range": "Melee",
         "stats": {
           "A": 3,
@@ -435,7 +465,18 @@
         },
         "keywords": [
           {
-            "keyword_id": "devastating-wounds"
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "Monster",
+              "threshold": 3
+            }
+          },
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "Vehicle",
+              "threshold": 3
+            }
           },
           {
             "keyword_id": "extra-attacks"
@@ -451,6 +492,10 @@
       {
         "namespace": "bsdata",
         "id": "2ace-f88f-3405-d191"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0c92ce73-b292-41b1-ba4f-9069ff6fca23"
       },
       {
         "namespace": "mfm",
@@ -496,13 +541,26 @@
           "D": 2,
           "WS": 3
         },
-        "keywords": []
+        "keywords": [
+          {
+            "keyword_id": "cleave",
+            "parameters": {
+              "value": 2
+            }
+          }
+        ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "fe532899-1318-4088-ba37-7bc3c04ebb15"
+      }
+    ]
   },
   {
     "id": "big-choppa-kommandos",
@@ -559,13 +617,26 @@
           "D": 2,
           "WS": 3
         },
-        "keywords": []
+        "keywords": [
+          {
+            "keyword_id": "cleave",
+            "parameters": {
+              "value": 2
+            }
+          }
+        ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "908831b1-d900-413c-b4ef-f7690b8a3a60"
+      }
+    ]
   },
   {
     "id": "big-choppa-squighog-boyz",
@@ -688,7 +759,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -701,11 +772,35 @@
       },
       {
         "namespace": "mfm",
+        "id": "13d864b7-6d1b-4a31-9cc7-bc97bbf7fff4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "17ed1f66-107c-4997-83fd-61bc37dab04a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2df092a9-a024-44f2-9d82-1e1e02447c4a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "40e69e46-ce1d-4329-a091-fccd8ccf0f42"
+      },
+      {
+        "namespace": "mfm",
         "id": "5bf19019-4b39-4172-bfc3-0a777d232878"
       },
       {
         "namespace": "mfm",
         "id": "6d2798b0-e751-4515-ae4e-81ea6e173d67"
+      },
+      {
+        "namespace": "mfm",
+        "id": "acd0edf6-525b-4331-acf9-24ce6b7bdda1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c01fbd38-1385-40b2-b3ef-eb811d22f277"
       }
     ]
   },
@@ -724,13 +819,35 @@
           "D": 1,
           "BS": 5
         },
-        "keywords": []
+        "keywords": [
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 2
+            }
+          },
+          {
+            "keyword_id": "lethal-hits",
+            "parameters": {
+              "excluded_target_keywords": [
+                "Monster",
+                "Vehicle"
+              ]
+            }
+          }
+        ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "74626ef9-b8df-42a8-8141-c453badb372f"
+      }
+    ]
   },
   {
     "id": "big-shoota-warboss-in-mega-armour",
@@ -738,7 +855,7 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Big shoota",
+        "name": "Big Shoota",
         "range": 36,
         "stats": {
           "A": 3,
@@ -748,6 +865,15 @@
           "BS": 4
         },
         "keywords": [
+          {
+            "keyword_id": "lethal-hits",
+            "parameters": {
+              "excluded_target_keywords": [
+                "Monster",
+                "Vehicle"
+              ]
+            }
+          },
           {
             "keyword_id": "rapid-fire",
             "parameters": {
@@ -759,7 +885,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -785,17 +911,20 @@
           "S": 7,
           "AP": -2,
           "D": 2,
-          "BS": 5
+          "BS": 4
         },
         "keywords": [
           {
-            "keyword_id": "heavy"
+            "keyword_id": "lethal-hits",
+            "parameters": {
+              "excluded_target_keywords": [
+                "Monster",
+                "Vehicle"
+              ]
+            }
           },
           {
-            "keyword_id": "sustained-hits",
-            "parameters": {
-              "value": 1
-            }
+            "keyword_id": "ignores-cover"
           }
         ]
       }
@@ -812,6 +941,10 @@
       {
         "namespace": "mfm",
         "id": "6c421e93-540c-4c45-ba21-f7f1bbdb53f3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "864229cb-eaa3-4e76-814b-2b32b1335fe9"
       }
     ]
   },
@@ -833,6 +966,15 @@
         "keywords": [
           {
             "keyword_id": "assault"
+          },
+          {
+            "keyword_id": "lethal-hits",
+            "parameters": {
+              "excluded_target_keywords": [
+                "Monster",
+                "Vehicle"
+              ]
+            }
           }
         ]
       }
@@ -862,7 +1004,7 @@
         "range": "Melee",
         "stats": {
           "A": 2,
-          "S": 9,
+          "S": 8,
           "AP": -2,
           "D": 2,
           "WS": 4
@@ -881,6 +1023,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "5cf035a7-e37b-465c-8928-997340d84413"
+      },
+      {
+        "namespace": "mfm",
         "id": "dd08661e-7734-4b05-8301-ee99f98306f0"
       }
     ]
@@ -891,59 +1037,24 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Big bubble (1-2)",
+        "name": "Bubblechukka",
         "range": 48,
         "stats": {
-          "A": "2D6",
-          "S": 6,
-          "AP": -1,
+          "A": 8,
+          "S": 3,
+          "AP": -3,
           "D": 1,
           "BS": 4
         },
         "keywords": [
           {
-            "keyword_id": "blast"
+            "keyword_id": "lethal-hits"
           },
           {
-            "keyword_id": "bubblechukka"
-          }
-        ]
-      },
-      {
-        "name": "Wobbly bubble (3-4)",
-        "range": 48,
-        "stats": {
-          "A": "D6",
-          "S": 9,
-          "AP": -2,
-          "D": 3,
-          "BS": 4
-        },
-        "keywords": [
-          {
-            "keyword_id": "blast"
-          },
-          {
-            "keyword_id": "bubblechukka"
-          }
-        ]
-      },
-      {
-        "name": "Dense bubble (5-6)",
-        "range": 48,
-        "stats": {
-          "A": "D3",
-          "S": 12,
-          "AP": -3,
-          "D": "D6+3",
-          "BS": 4
-        },
-        "keywords": [
-          {
-            "keyword_id": "blast"
-          },
-          {
-            "keyword_id": "bubblechukka"
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 3
+            }
           }
         ]
       }
@@ -960,6 +1071,10 @@
       {
         "namespace": "mfm",
         "id": "519e63c8-c5ce-4029-9e09-83cff5524bbc"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5b939327-8e63-4fbc-bdf8-22162d1044ac"
       }
     ]
   },
@@ -972,7 +1087,7 @@
         "name": "Burna",
         "range": 12,
         "stats": {
-          "A": "D6",
+          "A": 3,
           "S": 4,
           "AP": 0,
           "D": 1,
@@ -980,25 +1095,29 @@
         },
         "keywords": [
           {
+            "keyword_id": "torrent"
+          },
+          {
             "keyword_id": "blast",
             "parameters": {
               "value": 1
             }
-          },
-          {
-            "keyword_id": "torrent"
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "8f0e-a9ba-1cfd-3106"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b8f4df3a-1c25-4165-9be8-aac5f34684a3"
       }
     ]
   },
@@ -1117,18 +1236,6 @@
     "type": "melee",
     "profiles": [
       {
-        "name": "Standard",
-        "range": "Melee",
-        "stats": {
-          "A": 3,
-          "S": 5,
-          "AP": -1,
-          "D": 1,
-          "WS": 3
-        },
-        "keywords": []
-      },
-      {
         "name": "Hunter",
         "range": "Melee",
         "stats": {
@@ -1158,12 +1265,30 @@
             "Vehicle"
           ]
         }
+      },
+      {
+        "name": "Standard",
+        "range": "Melee",
+        "stats": {
+          "A": 3,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "WS": 3
+        },
+        "keywords": []
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "df38f8db-242e-4029-9037-3bd5654ae900"
+      }
+    ]
   },
   {
     "id": "choppa-boyz",
@@ -1269,7 +1394,7 @@
         "name": "Choppa",
         "range": "Melee",
         "stats": {
-          "A": 3,
+          "A": 4,
           "S": 5,
           "AP": -1,
           "D": 1,
@@ -1280,8 +1405,14 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "2a52e451-4e8f-4611-95b3-74effba98ff9"
+      }
+    ]
   },
   {
     "id": "close-combat-weapon",
@@ -1509,7 +1640,7 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Deffstorm mega-shoota",
+        "name": "Aimed",
         "range": 36,
         "stats": {
           "A": 20,
@@ -1520,10 +1651,29 @@
         },
         "keywords": [
           {
-            "keyword_id": "rapid-fire",
+            "keyword_id": "lethal-hits",
             "parameters": {
-              "value": 10
+              "excluded_target_keywords": [
+                "Monster",
+                "Vehicle"
+              ]
             }
+          }
+        ]
+      },
+      {
+        "name": "Point Blank",
+        "range": 12,
+        "stats": {
+          "A": "3D6",
+          "S": 6,
+          "AP": -1,
+          "D": 1,
+          "BS": null
+        },
+        "keywords": [
+          {
+            "keyword_id": "torrent"
           }
         ]
       }
@@ -1536,6 +1686,10 @@
       {
         "namespace": "bsdata",
         "id": "75fe-1d78-6e54-db74"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b11e295b-0c07-4b05-a36a-205739c13886"
       },
       {
         "namespace": "mfm",
@@ -1552,7 +1706,7 @@
         "name": "Dread Klaws",
         "range": "Melee",
         "stats": {
-          "A": 4,
+          "A": 5,
           "S": 12,
           "AP": -2,
           "D": 3,
@@ -1560,7 +1714,10 @@
         },
         "keywords": [
           {
-            "keyword_id": "dead-choppy"
+            "keyword_id": "cleave",
+            "parameters": {
+              "value": 1
+            }
           }
         ]
       }
@@ -1573,6 +1730,10 @@
       {
         "namespace": "bsdata",
         "id": "7cfa-bba3-f906-b473"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5cc08704-8a47-4571-8561-323868c8c64b"
       },
       {
         "namespace": "mfm",
@@ -1589,7 +1750,7 @@
         "name": "Drilla",
         "range": "Melee",
         "stats": {
-          "A": 2,
+          "A": 3,
           "S": 12,
           "AP": -3,
           "D": 3,
@@ -1606,6 +1767,10 @@
       {
         "namespace": "bsdata",
         "id": "673b-c3e-6682-ae28"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a6184c33-8c53-44c6-bb56-295b9ff29545"
       },
       {
         "namespace": "mfm",
@@ -1659,10 +1824,10 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Eavy Lobba",
+        "name": "’Eavy Lobba",
         "range": 48,
         "stats": {
-          "A": "D6",
+          "A": 3,
           "S": 6,
           "AP": 0,
           "D": 2,
@@ -1683,12 +1848,20 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "6dae-573f-7f52-2213"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8c4443a5-f1ed-49f3-aa78-9148440643a2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c556f493-6d46-4b92-a495-afc2a3c774ee"
       },
       {
         "namespace": "mfm",
@@ -1776,12 +1949,16 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "f7a0-9f7-1729-97b5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3e6e4ec7-ef37-47f4-813b-94a60cc0a8ce"
       },
       {
         "namespace": "mfm",
@@ -1819,7 +1996,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1842,7 +2019,7 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "ranged",
+        "name": "Grabba Dragga",
         "range": 12,
         "stats": {
           "A": 1,
@@ -1853,15 +2030,15 @@
         },
         "keywords": [
           {
-            "keyword_id": "assault"
+            "keyword_id": "precision"
           },
           {
-            "keyword_id": "precision"
+            "keyword_id": "assault"
           }
         ]
       },
       {
-        "name": "melee",
+        "name": "Grabba Dragga",
         "range": "Melee",
         "stats": {
           "A": 6,
@@ -1873,6 +2050,12 @@
         "keywords": [
           {
             "keyword_id": "lance"
+          },
+          {
+            "keyword_id": "cleave",
+            "parameters": {
+              "value": 2
+            }
           }
         ]
       }
@@ -1889,6 +2072,10 @@
       {
         "namespace": "mfm",
         "id": "2e701bd7-89ac-4dcd-b53e-79f18f7267b1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7a0cc848-d58f-4cf8-9550-00ff87a9fffb"
       }
     ]
   },
@@ -1902,7 +2089,7 @@
         "range": "Melee",
         "stats": {
           "A": 2,
-          "S": 8,
+          "S": 10,
           "AP": -2,
           "D": 2,
           "WS": 3
@@ -1925,7 +2112,19 @@
       },
       {
         "namespace": "mfm",
+        "id": "32e7aa5c-752b-4315-9b6d-51bb39d52a45"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5174c49b-bda4-4fd9-8eae-5e262ad6f214"
+      },
+      {
+        "namespace": "mfm",
         "id": "93fcf0e9-7cdb-4706-b8c4-3d3cf6a8565d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bab77822-5525-452f-9592-df3d49401848"
       }
     ]
   },
@@ -1946,7 +2145,7 @@
         },
         "keywords": [
           {
-            "keyword_id": "pistol"
+            "keyword_id": "close-quarters"
           }
         ]
       }
@@ -1963,6 +2162,10 @@
       {
         "namespace": "mfm",
         "id": "9b7f013d-e411-4668-88fa-249910abaf21"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bd4f4fdd-d7e1-4a96-aa56-d17692cd3eee"
       }
     ]
   },
@@ -2005,28 +2208,54 @@
     "type": "melee",
     "profiles": [
       {
-        "name": "Gutrippa",
+        "name": "Hunter",
         "range": "Melee",
         "stats": {
           "A": 6,
-          "S": 7,
-          "AP": -1,
-          "D": 3,
+          "S": 12,
+          "AP": -2,
+          "D": "D6+1",
           "WS": 2
         },
         "keywords": [
           {
-            "keyword_id": "anti",
+            "keyword_id": "lethal-hits"
+          },
+          {
+            "keyword_id": "hunter",
             "parameters": {
-              "target_keyword": "Monster",
-              "threshold": 4
+              "target_keyword": "Monster"
             }
           },
           {
-            "keyword_id": "anti",
+            "keyword_id": "hunter",
             "parameters": {
-              "target_keyword": "Vehicle",
-              "threshold": 4
+              "target_keyword": "Vehicle"
+            }
+          }
+        ],
+        "target_restrictions": {
+          "required_keywords_any": [
+            "Monster",
+            "Vehicle"
+          ]
+        }
+      },
+      {
+        "name": "Standard",
+        "range": "Melee",
+        "stats": {
+          "A": 6,
+          "S": 9,
+          "AP": -2,
+          "D": 2,
+          "WS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "cleave",
+            "parameters": {
+              "value": 1
             }
           }
         ]
@@ -2040,6 +2269,10 @@
       {
         "namespace": "bsdata",
         "id": "2fec-7b95-a5df-f688"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0136f138-2a61-4176-adf4-e9963c00ceca"
       },
       {
         "namespace": "mfm",
@@ -2090,14 +2323,39 @@
     "type": "ranged",
     "profiles": [
       {
+        "name": "Frag",
+        "range": 36,
+        "stats": {
+          "A": 4,
+          "S": 5,
+          "AP": 0,
+          "D": 1,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 4
+            }
+          },
+          {
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 3
+            }
+          }
+        ]
+      },
+      {
         "name": "Shell",
         "range": 36,
         "stats": {
-          "A": 1,
+          "A": 2,
           "S": 10,
           "AP": -2,
-          "D": "D6",
-          "BS": 5
+          "D": "D6+1",
+          "BS": 4
         },
         "keywords": [
           {
@@ -2107,36 +2365,11 @@
             }
           }
         ]
-      },
-      {
-        "name": "Frag",
-        "range": 36,
-        "stats": {
-          "A": "D6+3",
-          "S": 6,
-          "AP": 0,
-          "D": 1,
-          "BS": 5
-        },
-        "keywords": [
-          {
-            "keyword_id": "blast",
-            "parameters": {
-              "value": 3
-            }
-          },
-          {
-            "keyword_id": "rapid-fire",
-            "parameters": {
-              "value": 4
-            }
-          }
-        ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2153,6 +2386,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "1d34880f-76a2-42b7-81a4-97818f5474e4"
+      },
+      {
+        "namespace": "mfm",
         "id": "98da6f28-42af-42c8-9949-15f2957520e0"
       },
       {
@@ -2164,43 +2401,43 @@
   {
     "id": "killa-jet",
     "name": "Killa Jet",
-    "type": "ranged",
+    "type": "melee",
     "profiles": [
       {
         "name": "Burna",
-        "range": 12,
+        "range": "Melee",
         "stats": {
-          "A": "D6",
+          "A": 3,
           "S": 5,
           "AP": -1,
           "D": 1,
-          "BS": null
+          "WS": 3
         },
         "keywords": [
           {
-            "keyword_id": "torrent"
+            "keyword_id": "extra-attacks"
           },
           {
-            "keyword_id": "ignores-cover"
+            "keyword_id": "cleave",
+            "parameters": {
+              "value": 1
+            }
           }
         ]
       },
       {
         "name": "Cutta",
-        "range": 12,
+        "range": "Melee",
         "stats": {
           "A": 1,
-          "S": 9,
-          "AP": -4,
-          "D": "D6",
-          "BS": 5
+          "S": 10,
+          "AP": -3,
+          "D": "D6+2",
+          "WS": 3
         },
         "keywords": [
           {
-            "keyword_id": "melta",
-            "parameters": {
-              "value": 2
-            }
+            "keyword_id": "extra-attacks"
           }
         ]
       }
@@ -2217,6 +2454,10 @@
       {
         "namespace": "mfm",
         "id": "6fbdce00-4b1d-4e28-9c64-06b591cc74e8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ee3f8ea2-90b2-43cd-abea-84ac66282ee1"
       }
     ]
   },
@@ -2229,13 +2470,19 @@
         "name": "Killkannon",
         "range": 24,
         "stats": {
-          "A": "D6+1",
-          "S": 9,
-          "AP": -2,
+          "A": 4,
+          "S": 6,
+          "AP": -3,
           "D": 2,
-          "BS": 5
+          "BS": 4
         },
         "keywords": [
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 4
+            }
+          },
           {
             "keyword_id": "anti",
             "parameters": {
@@ -2248,19 +2495,13 @@
             "parameters": {
               "value": 1
             }
-          },
-          {
-            "keyword_id": "rapid-fire",
-            "parameters": {
-              "value": 4
-            }
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2274,6 +2515,10 @@
       {
         "namespace": "mfm",
         "id": "1b155627-7228-4d76-a201-0caa55ef2c2a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fb605037-0fac-42a3-b058-92ac34fb6399"
       }
     ]
   },
@@ -2287,9 +2532,9 @@
         "range": "Melee",
         "stats": {
           "A": 3,
-          "S": 12,
-          "AP": -3,
-          "D": 2,
+          "S": 10,
+          "AP": -2,
+          "D": 3,
           "WS": 4
         },
         "keywords": []
@@ -2297,7 +2542,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2331,6 +2576,10 @@
       {
         "namespace": "mfm",
         "id": "a6d77d0b-4f37-4710-86e8-072c1f64ef5b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f53283a4-2670-421c-af16-4eb1b6404afa"
       }
     ]
   },
@@ -2344,9 +2593,9 @@
         "range": "Melee",
         "stats": {
           "A": 3,
-          "S": 12,
-          "AP": -3,
-          "D": 2,
+          "S": 10,
+          "AP": -2,
+          "D": 3,
           "WS": 4
         },
         "keywords": []
@@ -2354,12 +2603,16 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "a3d0-1971-d5df-1651"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fb964c48-7d16-4592-8beb-3856cddda258"
       }
     ]
   },
@@ -2398,28 +2651,23 @@
     "type": "melee",
     "profiles": [
       {
-        "name": "Sweep",
+        "name": "Klaw of Gork",
         "range": "Melee",
         "stats": {
-          "A": 15,
-          "S": 8,
-          "AP": -1,
-          "D": 2,
-          "WS": 3
-        },
-        "keywords": []
-      },
-      {
-        "name": "Strike",
-        "range": "Melee",
-        "stats": {
-          "A": 5,
+          "A": 6,
           "S": 18,
           "AP": -3,
           "D": 6,
           "WS": 3
         },
-        "keywords": []
+        "keywords": [
+          {
+            "keyword_id": "cleave",
+            "parameters": {
+              "value": 3
+            }
+          }
+        ]
       }
     ],
     "game_version": {
@@ -2433,6 +2681,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "c801ed83-4fef-48e0-9322-9445f4f31d50"
+      },
+      {
+        "namespace": "mfm",
         "id": "f20c2589-6c70-412c-8e27-261e1e91afaf"
       }
     ]
@@ -2443,28 +2695,23 @@
     "type": "melee",
     "profiles": [
       {
-        "name": "Sweep",
+        "name": "Klaw of Mork",
         "range": "Melee",
         "stats": {
-          "A": 12,
-          "S": 8,
-          "AP": -1,
-          "D": 2,
-          "WS": 3
-        },
-        "keywords": []
-      },
-      {
-        "name": "Strike",
-        "range": "Melee",
-        "stats": {
-          "A": 4,
+          "A": 5,
           "S": 18,
           "AP": -3,
           "D": 6,
           "WS": 3
         },
-        "keywords": []
+        "keywords": [
+          {
+            "keyword_id": "cleave",
+            "parameters": {
+              "value": 2
+            }
+          }
+        ]
       }
     ],
     "game_version": {
@@ -2475,6 +2722,10 @@
       {
         "namespace": "bsdata",
         "id": "4d14-52f3-b6dd-b10c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "70a96df0-3ab9-407d-b3bc-80a6144045f4"
       },
       {
         "namespace": "mfm",
@@ -2491,10 +2742,10 @@
         "name": "Knucklebustas",
         "range": "Melee",
         "stats": {
-          "A": 5,
+          "A": 4,
           "S": 5,
-          "AP": -1,
-          "D": 1,
+          "AP": -2,
+          "D": 2,
           "WS": 3
         },
         "keywords": [
@@ -2517,9 +2768,6 @@
                 "Vehicle"
               ]
             }
-          },
-          {
-            "keyword_id": "twin-linked"
           }
         ]
       }
@@ -2539,6 +2787,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "81ab68d3-a202-40b4-8d29-747a4e7093c6"
+      },
+      {
+        "namespace": "mfm",
         "id": "9493a87e-5bdd-4dac-a96a-2e085d8a1d41"
       }
     ]
@@ -2549,7 +2801,7 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Busta",
+        "name": "Busta Rokkit",
         "range": 24,
         "stats": {
           "A": 1,
@@ -2570,13 +2822,35 @@
           "D": 1,
           "BS": 5
         },
-        "keywords": []
+        "keywords": [
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 1
+            }
+          },
+          {
+            "keyword_id": "lethal-hits",
+            "parameters": {
+              "excluded_target_keywords": [
+                "Monster",
+                "Vehicle"
+              ]
+            }
+          }
+        ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "311e9d46-5431-4c7f-a051-c4f05ad78805"
+      }
+    ]
   },
   {
     "id": "kombi-weapon",
@@ -2648,12 +2922,16 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "ac6f-9310-e9ac-678"
+      },
+      {
+        "namespace": "mfm",
+        "id": "810fcda7-9473-44f8-9045-7c726a094b52"
       },
       {
         "namespace": "mfm",
@@ -2751,14 +3029,14 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Kustom mega-blasta",
+        "name": "Kustom Mega-blasta",
         "range": 24,
         "stats": {
           "A": 3,
           "S": 9,
           "AP": -2,
-          "D": "D6",
-          "BS": 5
+          "D": 3,
+          "BS": 4
         },
         "keywords": [
           {
@@ -2769,7 +3047,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2782,7 +3060,19 @@
       },
       {
         "namespace": "mfm",
+        "id": "147252ec-4614-4d8f-8038-628f2a78cd0a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5ebb148a-8035-481c-b85d-2c4d9062c7b2"
+      },
+      {
+        "namespace": "mfm",
         "id": "d25e0ee6-7b2b-48dd-8dfb-d6ade7f8b74c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f874696a-31d3-4c06-97b7-354ce44a82de"
       }
     ]
   },
@@ -2798,25 +3088,25 @@
           "A": "D3+1",
           "S": 12,
           "AP": -2,
-          "D": 3,
+          "D": 4,
           "BS": 4
         },
         "keywords": [
+          {
+            "keyword_id": "hazardous"
+          },
           {
             "keyword_id": "blast",
             "parameters": {
               "value": 1
             }
-          },
-          {
-            "keyword_id": "hazardous"
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2826,6 +3116,10 @@
       {
         "namespace": "mfm",
         "id": "37b7e06b-b1dc-473a-accc-9a8678b185a4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "755838c1-8886-4771-820c-fb7a4e53af21"
       }
     ]
   },
@@ -2835,18 +3129,18 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Kustom Mega-Slugga",
+        "name": "Kustom Mega-slugga",
         "range": 12,
         "stats": {
-          "A": "D3",
+          "A": 3,
           "S": 8,
           "AP": -2,
-          "D": "D6",
-          "BS": 5
+          "D": 3,
+          "BS": 4
         },
         "keywords": [
           {
-            "keyword_id": "blast"
+            "keyword_id": "close-quarters"
           },
           {
             "keyword_id": "hazardous"
@@ -2865,6 +3159,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "1099b1b4-678c-4959-b78e-dde4f006ca71"
+      },
+      {
+        "namespace": "mfm",
         "id": "62c60539-0d0a-40df-bfb7-7bc149259804"
       }
     ]
@@ -2875,21 +3173,24 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Kustom mega-zappa",
+        "name": "Kustom Mega-zappa",
         "range": 36,
         "stats": {
-          "A": "D6+3",
-          "S": 10,
+          "A": 3,
+          "S": 12,
           "AP": -2,
-          "D": "D6",
-          "BS": 5
+          "D": 4,
+          "BS": 4
         },
         "keywords": [
           {
-            "keyword_id": "blast"
+            "keyword_id": "hazardous"
           },
           {
-            "keyword_id": "hazardous"
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 1
+            }
           }
         ]
       }
@@ -2906,6 +3207,10 @@
       {
         "namespace": "mfm",
         "id": "667bc6ba-0abc-48dc-8a89-bfa5c3e1112a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "934e97fc-09d6-4b84-ae55-a3f8381f6d60"
       }
     ]
   },
@@ -2996,13 +3301,35 @@
           "D": 1,
           "BS": 5
         },
-        "keywords": []
+        "keywords": [
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 2
+            }
+          },
+          {
+            "keyword_id": "lethal-hits",
+            "parameters": {
+              "excluded_target_keywords": [
+                "Monster",
+                "Vehicle"
+              ]
+            }
+          }
+        ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "b3355c50-3cb8-49b5-a16a-00ba7e112835"
+      }
+    ]
   },
   {
     "id": "kustom-shoota-kommandos",
@@ -3040,12 +3367,16 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "8bba-d0bf-1102-2131"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cdb389da-80f7-4f1f-8433-1b916eb5cf04"
       }
     ]
   },
@@ -3104,12 +3435,16 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "8bba-d0bf-1102-2131"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7b91a90d-221e-4fae-8156-7d4b54395a81"
       }
     ]
   },
@@ -3122,28 +3457,28 @@
         "name": "Lobba",
         "range": 48,
         "stats": {
-          "A": "D6",
+          "A": 3,
           "S": 5,
           "AP": 0,
           "D": 1,
-          "BS": 5
+          "BS": 4
         },
         "keywords": [
+          {
+            "keyword_id": "indirect-fire"
+          },
           {
             "keyword_id": "blast",
             "parameters": {
               "value": 3
             }
-          },
-          {
-            "keyword_id": "indirect-fire"
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -3157,6 +3492,10 @@
       {
         "namespace": "mfm",
         "id": "01c49bf1-12c3-475a-9ee1-6dd3dcd04df1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ecde311b-aa4c-480d-879d-21f1e3f4d30d"
       }
     ]
   },
@@ -3175,12 +3514,19 @@
           "D": 10,
           "WS": 3
         },
-        "keywords": []
+        "keywords": [
+          {
+            "keyword_id": "cleave",
+            "parameters": {
+              "value": 4
+            }
+          }
+        ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -3190,6 +3536,10 @@
       {
         "namespace": "mfm",
         "id": "3e1bcc26-6650-48df-b9dc-816b8da9f119"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ef65a0d3-bc3a-4934-9131-495ea7089bb5"
       }
     ]
   },
@@ -3203,12 +3553,18 @@
         "range": 36,
         "stats": {
           "A": 12,
-          "BS": 5,
           "S": 6,
           "AP": -1,
-          "D": 1
+          "D": 1,
+          "BS": 5
         },
         "keywords": [
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 4
+            }
+          },
           {
             "keyword_id": "lethal-hits",
             "parameters": {
@@ -3217,23 +3573,18 @@
                 "Vehicle"
               ]
             }
-          },
-          {
-            "keyword_id": "rapid-fire",
-            "parameters": {
-              "value": 4
-            }
           }
         ]
       },
       {
         "name": "Point Blank",
-        "range": 12,
+        "range": 9,
         "stats": {
           "A": "2D6+2",
           "S": 6,
           "AP": -1,
-          "D": 1
+          "D": 1,
+          "BS": null
         },
         "keywords": [
           {
@@ -3247,12 +3598,16 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "4325-5811-1915-3c15"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3b6d6c45-df36-440e-b2bd-b754283e5f43"
       },
       {
         "namespace": "mfm",
@@ -3310,30 +3665,7 @@
         "range": "Melee",
         "stats": {
           "A": 3,
-          "S": 9,
-          "AP": -2,
-          "D": 2,
-          "WS": 4
-        },
-        "keywords": []
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
-  },
-  {
-    "id": "power-klaw-big-mek",
-    "name": "Power klaw",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Power klaw",
-        "range": "Melee",
-        "stats": {
-          "A": 4,
-          "S": 9,
+          "S": 10,
           "AP": -2,
           "D": 2,
           "WS": 3
@@ -3343,12 +3675,49 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "3c578164-aced-477e-9bf0-a37b157a43c2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d2e3a336-107b-4d7f-bdab-4e0d7e160f35"
+      }
+    ]
+  },
+  {
+    "id": "power-klaw-big-mek",
+    "name": "Power klaw",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Power Klaw",
+        "range": "Melee",
+        "stats": {
+          "A": 5,
+          "S": 10,
+          "AP": -2,
+          "D": 2,
+          "WS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "a325-d197-5553-a355"
+      },
+      {
+        "namespace": "mfm",
+        "id": "52dba711-ebdd-4d38-a1d9-e6349e87444c"
       }
     ]
   },
@@ -3358,11 +3727,11 @@
     "type": "melee",
     "profiles": [
       {
-        "name": "Power klaw",
+        "name": "Power Klaw",
         "range": "Melee",
         "stats": {
-          "A": 4,
-          "S": 9,
+          "A": 3,
+          "S": 10,
           "AP": -2,
           "D": 2,
           "WS": 3
@@ -3372,12 +3741,16 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "a325-d197-5553-a355"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c187a58b-c461-454f-a465-309a235530c6"
       }
     ]
   },
@@ -3394,15 +3767,21 @@
           "S": 10,
           "AP": -2,
           "D": 2,
-          "WS": 4
+          "WS": 3
         },
         "keywords": []
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "99391cc9-179d-4298-bddc-f8cb0bb2278a"
+      }
+    ]
   },
   {
     "id": "power-klaw-meganobz",
@@ -3443,26 +3822,30 @@
     "type": "melee",
     "profiles": [
       {
-        "name": "Power klaw",
+        "name": "Power Klaw",
         "range": "Melee",
         "stats": {
-          "A": 4,
-          "S": 10,
+          "A": 6,
+          "S": 12,
           "AP": -2,
           "D": 2,
-          "WS": 3
+          "WS": 2
         },
         "keywords": []
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "edac-a910-975a-d4fd"
+      },
+      {
+        "namespace": "mfm",
+        "id": "77ecc3de-0fac-4194-96e7-be4dc24620f0"
       }
     ]
   },
@@ -3516,7 +3899,7 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Psyko‑gatler",
+        "name": "Psyko-gatler",
         "range": 24,
         "stats": {
           "A": 12,
@@ -3527,12 +3910,21 @@
         },
         "keywords": [
           {
-            "keyword_id": "assault"
-          },
-          {
             "keyword_id": "sustained-hits",
             "parameters": {
               "value": 1
+            }
+          },
+          {
+            "keyword_id": "assault"
+          },
+          {
+            "keyword_id": "lethal-hits",
+            "parameters": {
+              "excluded_target_keywords": [
+                "Monster",
+                "Vehicle"
+              ]
             }
           }
         ]
@@ -3596,102 +3988,13 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Rokkit Launcha",
-        "range": 24,
-        "stats": {
-          "A": 2,
-          "S": 10,
-          "AP": -2,
-          "D": 3,
-          "BS": 5
-        },
-        "keywords": []
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
-  },
-  {
-    "id": "rokkit-launcha-deff-dread",
-    "name": "Rokkit launcha",
-    "type": "ranged",
-    "profiles": [
-      {
-        "name": "Rokkit launcha",
-        "range": 24,
-        "stats": {
-          "A": "D3",
-          "S": 9,
-          "AP": -2,
-          "D": 3,
-          "BS": 5
-        },
-        "keywords": [
-          {
-            "keyword_id": "blast"
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "80bc-5c89-4125-2253"
-      }
-    ]
-  },
-  {
-    "id": "rokkit-launcha-gorkanaut",
-    "name": "Rokkit launcha",
-    "type": "ranged",
-    "profiles": [
-      {
-        "name": "Rokkit launcha",
-        "range": 24,
-        "stats": {
-          "A": "D3",
-          "S": 9,
-          "AP": -2,
-          "D": 3,
-          "BS": 5
-        },
-        "keywords": [
-          {
-            "keyword_id": "blast"
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "80bc-5c89-4125-2253"
-      }
-    ]
-  },
-  {
-    "id": "rokkit-launcha-kommandos",
-    "name": "Rokkit Launcha",
-    "type": "ranged",
-    "profiles": [
-      {
         "name": "Blasta",
         "range": 24,
         "stats": {
           "A": 2,
-          "S": 9,
-          "AP": -2,
-          "D": 3,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
           "BS": 5
         },
         "keywords": [
@@ -3718,12 +4021,168 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "3ca6f9df-0e41-482c-9c41-2eace993ec5c"
+      }
+    ]
+  },
+  {
+    "id": "rokkit-launcha-deff-dread",
+    "name": "Rokkit launcha",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Blasta",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": 5
+        },
+        "keywords": [
+          {
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 2
+            }
+          }
+        ]
+      },
+      {
+        "name": "Busta",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 10,
+          "AP": -2,
+          "D": 3,
+          "BS": 5
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "80bc-5c89-4125-2253"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b5144970-0abf-40f2-bec5-b48948116371"
+      }
+    ]
+  },
+  {
+    "id": "rokkit-launcha-gorkanaut",
+    "name": "Rokkit launcha",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Blasta",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 5,
+          "AP": 0,
+          "D": 1,
+          "BS": 5
+        },
+        "keywords": [
+          {
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 2
+            }
+          }
+        ]
+      },
+      {
+        "name": "Busta",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 10,
+          "AP": -2,
+          "D": 3,
+          "BS": 5
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "80bc-5c89-4125-2253"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7ec1ad15-8046-4a3f-9271-c3f99da7298f"
+      }
+    ]
+  },
+  {
+    "id": "rokkit-launcha-kommandos",
+    "name": "Rokkit Launcha",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Blasta",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": 5
+        },
+        "keywords": [
+          {
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 2
+            }
+          }
+        ]
+      },
+      {
+        "name": "Busta",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 10,
+          "AP": -2,
+          "D": 3,
+          "BS": 5
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "80bc-5c89-4125-2253"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e558457d-893e-43a7-8d46-03bf7f4d5248"
       }
     ]
   },
@@ -3733,30 +4192,49 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Rokkit launcha",
+        "name": "Blasta",
         "range": 24,
         "stats": {
-          "A": "D3",
-          "S": 9,
-          "AP": -2,
-          "D": 3,
-          "BS": 5
+          "A": 2,
+          "S": 5,
+          "AP": 0,
+          "D": 1,
+          "BS": 4
         },
         "keywords": [
           {
-            "keyword_id": "blast"
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 2
+            }
           }
         ]
+      },
+      {
+        "name": "Busta",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 10,
+          "AP": -2,
+          "D": 3,
+          "BS": 4
+        },
+        "keywords": []
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "80bc-5c89-4125-2253"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d53a4651-848c-4bdd-b466-f1fe62a38132"
       }
     ]
   },
@@ -3824,7 +4302,7 @@
         "range": 12,
         "stats": {
           "A": 1,
-          "S": 9,
+          "S": 10,
           "AP": -2,
           "D": 3,
           "BS": 5
@@ -3838,8 +4316,14 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "f3519da7-61cc-41b2-b094-811e47f8ec25"
+      }
+    ]
   },
   {
     "id": "runtherd-tools",
@@ -4044,18 +4528,21 @@
         "name": "Shokk Attack Gun",
         "range": 60,
         "stats": {
-          "A": "D6+1",
-          "S": 9,
+          "A": "D3+3",
+          "S": 12,
           "AP": -4,
-          "D": "D6",
+          "D": "D6+1",
           "BS": 5
         },
         "keywords": [
           {
-            "keyword_id": "blast"
+            "keyword_id": "heavy"
           },
           {
-            "keyword_id": "heavy"
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 1
+            }
           }
         ]
       }
@@ -4068,6 +4555,10 @@
       {
         "namespace": "bsdata",
         "id": "5a62-fc16-4f10-8f80"
+      },
+      {
+        "namespace": "mfm",
+        "id": "03c12e32-d5e0-4dba-af36-3c7eae508b37"
       },
       {
         "namespace": "mfm",
@@ -4102,7 +4593,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -4156,6 +4647,15 @@
         },
         "keywords": [
           {
+            "keyword_id": "lethal-hits",
+            "parameters": {
+              "excluded_target_keywords": [
+                "Monster",
+                "Vehicle"
+              ]
+            }
+          },
+          {
             "keyword_id": "rapid-fire",
             "parameters": {
               "value": 1
@@ -4166,7 +4666,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -4190,20 +4690,26 @@
         "stats": {
           "A": 3,
           "S": 5,
-          "AP": -1,
+          "AP": 0,
           "D": 1,
           "BS": null
         },
         "keywords": [
           {
             "keyword_id": "torrent"
+          },
+          {
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 1
+            }
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -4213,6 +4719,14 @@
       {
         "namespace": "mfm",
         "id": "35e4d773-1c11-4635-9091-2c7ee5dc1a02"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4bf0bb8d-958e-46ce-b1f7-9c0819306065"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d10a1637-a145-4fd3-a6ff-174819b0cb5f"
       }
     ]
   },
@@ -4222,21 +4736,24 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Skorcha missile rack",
+        "name": "Skorcha Missile Rack",
         "range": 36,
         "stats": {
-          "A": "2D6",
+          "A": 6,
           "S": 5,
-          "AP": -1,
+          "AP": 0,
           "D": 1,
           "BS": 5
         },
         "keywords": [
           {
-            "keyword_id": "blast"
+            "keyword_id": "ignores-cover"
           },
           {
-            "keyword_id": "ignores-cover"
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 2
+            }
           }
         ]
       }
@@ -4249,6 +4766,10 @@
       {
         "namespace": "bsdata",
         "id": "fa1-d94-c71c-36c8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4242140c-e02c-4cb1-8939-294c5b553a0f"
       },
       {
         "namespace": "mfm",
@@ -4289,8 +4810,42 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "446c40e0-97d1-4e9f-8cb4-4053d4be8a87"
+      },
+      {
+        "namespace": "mfm",
+        "id": "46abf173-c1ce-4b29-a657-0ef30df3458a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5f71ec56-5cea-40c4-8bd5-00098e0f115e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "66020b4b-5ca7-45e5-828e-52c62d9502be"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6671a1f8-50ef-41fa-9022-b83bb8e3eed4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9278c5b2-c0c8-4d9d-afca-cc7ebbe46ce8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "da5f3910-5452-40b2-86c4-2ad3827196bc"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ed45541e-3d67-4614-8dee-9ef591caef78"
+      }
+    ]
   },
   {
     "id": "slugga-bigboss",
@@ -4309,6 +4864,15 @@
         },
         "keywords": [
           {
+            "keyword_id": "lethal-hits",
+            "parameters": {
+              "excluded_target_keywords": [
+                "Monster",
+                "Vehicle"
+              ]
+            }
+          },
+          {
             "keyword_id": "close-quarters"
           }
         ]
@@ -4316,7 +4880,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -4342,23 +4906,39 @@
           "S": 4,
           "AP": 0,
           "D": 1,
-          "BS": 4
+          "BS": 5
         },
         "keywords": [
           {
-            "keyword_id": "pistol"
+            "keyword_id": "precision"
+          },
+          {
+            "keyword_id": "lethal-hits",
+            "parameters": {
+              "excluded_target_keywords": [
+                "Monster",
+                "Vehicle"
+              ]
+            }
+          },
+          {
+            "keyword_id": "close-quarters"
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "b621-5929-fc60-ed8d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "af8b1958-f68d-4671-9b05-5a78301a0975"
       }
     ]
   },
@@ -4443,25 +5023,25 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Smasha gun",
+        "name": "Smasha Gun",
         "range": 48,
         "stats": {
-          "A": "D3",
-          "S": 9,
+          "A": 4,
+          "S": 6,
           "AP": -3,
-          "D": 4,
+          "D": 3,
           "BS": 4
         },
         "keywords": [
           {
-            "keyword_id": "blast"
+            "keyword_id": "ignores-cover"
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -4479,6 +5059,10 @@
       {
         "namespace": "mfm",
         "id": "54d8f88f-f220-41c7-a522-0d597378125b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "86ef36d6-c8c5-4e6c-8fa9-e656db06d77b"
       }
     ]
   },
@@ -4491,46 +5075,79 @@
         "name": "Smasha Gun",
         "range": 48,
         "stats": {
-          "A": "D3+1",
-          "S": 9,
+          "A": 4,
+          "S": 7,
           "AP": -3,
           "D": 3,
           "BS": 4
         },
         "keywords": [
           {
-            "keyword_id": "blast"
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 1
+            }
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "507e-5415-d6c5-f5f5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "65d5df46-9365-4259-b8c7-c2d64cb2c080"
       }
     ]
   },
   {
     "id": "snagga-klaw",
     "name": "Snagga Klaw",
-    "type": "melee",
+    "type": "ranged",
     "profiles": [
+      {
+        "name": "Snagga Klaw",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 7,
+          "AP": -2,
+          "D": 2,
+          "BS": 5
+        },
+        "keywords": [
+          {
+            "keyword_id": "precision"
+          },
+          {
+            "keyword_id": "assault"
+          }
+        ]
+      },
       {
         "name": "Snagga Klaw",
         "range": "Melee",
         "stats": {
-          "A": 4,
-          "S": 10,
+          "A": 5,
+          "S": 7,
           "AP": -2,
           "D": 2,
-          "WS": 3
+          "WS": 2
         },
-        "keywords": []
+        "keywords": [
+          {
+            "keyword_id": "cleave",
+            "parameters": {
+              "value": 2
+            }
+          }
+        ]
       }
     ],
     "game_version": {
@@ -4541,6 +5158,10 @@
       {
         "namespace": "bsdata",
         "id": "16de-5cec-d130-a916"
+      },
+      {
+        "namespace": "mfm",
+        "id": "54f9effc-e092-4726-9807-5398fbb83401"
       },
       {
         "namespace": "mfm",
@@ -4557,9 +5178,9 @@
         "name": "Cutta",
         "range": 12,
         "stats": {
-          "A": 3,
-          "S": 6,
-          "AP": -1,
+          "A": 1,
+          "S": 9,
+          "AP": -3,
           "D": "D3+2",
           "BS": 4
         },
@@ -4576,11 +5197,39 @@
         ]
       },
       {
+        "name": "Dakka",
+        "range": 24,
+        "stats": {
+          "A": 3,
+          "S": 6,
+          "AP": -1,
+          "D": 2,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "lethal-hits",
+            "parameters": {
+              "excluded_target_keywords": [
+                "Monster",
+                "Vehicle"
+              ]
+            }
+          },
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      },
+      {
         "name": "Kill Shot",
         "range": 36,
         "stats": {
           "A": 2,
-          "S": 6,
+          "S": 8,
           "AP": -2,
           "D": 2,
           "BS": 4
@@ -4594,12 +5243,16 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "f606-38ce-2ada-4fbd"
+      },
+      {
+        "namespace": "mfm",
+        "id": "511dd451-1f8a-4557-b29e-8bb33413a0d4"
       },
       {
         "namespace": "mfm",
@@ -4613,16 +5266,22 @@
     "type": "melee",
     "profiles": [
       {
-        "name": "Speeding bulk and flaming exhaust",
+        "name": "Speeding Bulk and Flaming Exhaust",
         "range": "Melee",
         "stats": {
-          "A": 6,
+          "A": 3,
           "S": 5,
           "AP": -1,
           "D": 1,
           "WS": 2
         },
         "keywords": [
+          {
+            "keyword_id": "cleave",
+            "parameters": {
+              "value": 1
+            }
+          },
           {
             "keyword_id": "extra-attacks"
           }
@@ -4637,6 +5296,10 @@
       {
         "namespace": "bsdata",
         "id": "6739-941d-5e71-b461"
+      },
+      {
+        "namespace": "mfm",
+        "id": "12963a2e-ced2-4f01-bd0a-e909a11bb00e"
       },
       {
         "namespace": "mfm",
@@ -4687,16 +5350,26 @@
     "type": "melee",
     "profiles": [
       {
-        "name": "Spinnin’ blades",
+        "name": "Spinnin’ Blades",
         "range": "Melee",
         "stats": {
-          "A": 6,
+          "A": 4,
           "S": 5,
-          "AP": 0,
+          "AP": -1,
           "D": 1,
           "WS": 3
         },
-        "keywords": []
+        "keywords": [
+          {
+            "keyword_id": "hazardous"
+          },
+          {
+            "keyword_id": "cleave",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
       }
     ],
     "game_version": {
@@ -4707,6 +5380,10 @@
       {
         "namespace": "bsdata",
         "id": "16ab-3dbd-57ed-34bb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7089b400-494b-400f-9ac4-32151d4e170a"
       },
       {
         "namespace": "mfm",
@@ -4825,6 +5502,18 @@
         },
         "keywords": [
           {
+            "keyword_id": "devastating-wounds",
+            "parameters": {
+              "required_target_keywords_any": [
+                "Monster",
+                "Vehicle"
+              ]
+            }
+          },
+          {
+            "keyword_id": "close-quarters"
+          },
+          {
             "keyword_id": "anti",
             "parameters": {
               "target_keyword": "Monster",
@@ -4832,7 +5521,11 @@
             }
           },
           {
-            "keyword_id": "pistol"
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "Vehicle",
+              "threshold": 4
+            }
           }
         ]
       }
@@ -4845,6 +5538,10 @@
       {
         "namespace": "bsdata",
         "id": "c1a7-616a-af3a-cdf9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3080b9b0-b6fd-4b3b-8f5a-b05f92d27f8b"
       },
       {
         "namespace": "mfm",
@@ -5089,7 +5786,23 @@
           "D": 2,
           "BS": 5
         },
-        "keywords": []
+        "keywords": [
+          {
+            "keyword_id": "lethal-hits",
+            "parameters": {
+              "excluded_target_keywords": [
+                "Monster",
+                "Vehicle"
+              ]
+            }
+          },
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
       },
       {
         "name": "Point Blank",
@@ -5110,7 +5823,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -5120,6 +5833,10 @@
       {
         "namespace": "mfm",
         "id": "71d101c9-8dda-4ebc-9a0a-7573256c4de3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f32dcf0f-ada4-497b-9b15-8c3722059729"
       }
     ]
   },
@@ -5132,25 +5849,25 @@
         "name": "Tankhammer",
         "range": "Melee",
         "stats": {
-          "A": 2,
-          "S": 7,
+          "A": 3,
+          "S": 12,
           "AP": -2,
           "D": 3,
-          "WS": 3
+          "WS": 4
         },
         "keywords": [
           {
-            "keyword_id": "devastating-wounds"
+            "keyword_id": "hazardous"
           },
           {
-            "keyword_id": "hazardous"
+            "keyword_id": "devastating-wounds"
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -5160,6 +5877,10 @@
       {
         "namespace": "bsdata",
         "id": "48d0-4d1b-64c5-bc20"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5faa3937-ff63-4bab-904d-1ccf29e20034"
       },
       {
         "namespace": "mfm",
@@ -5173,18 +5894,21 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Tellyport blasta",
+        "name": "Tellyport Blasta",
         "range": 12,
         "stats": {
-          "A": 3,
-          "S": 8,
-          "AP": -1,
+          "A": 6,
+          "S": 9,
+          "AP": -2,
           "D": 3,
-          "BS": 5
+          "BS": 4
         },
         "keywords": [
           {
-            "keyword_id": "blast"
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 1
+            }
           }
         ]
       }
@@ -5201,6 +5925,10 @@
       {
         "namespace": "mfm",
         "id": "0491679f-9b81-416a-b7d2-43ac4af390df"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5fdc34b6-ccde-4e72-8b67-623fcc39b116"
       }
     ]
   },
@@ -5213,7 +5941,7 @@
         "name": "Thump Gun",
         "range": 18,
         "stats": {
-          "A": "D3",
+          "A": 3,
           "S": 6,
           "AP": 0,
           "D": 2,
@@ -5246,7 +5974,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "ace8ee94-7787-4a44-91d1-4600f127c9ad"
+      }
+    ]
   },
   {
     "id": "tracks-and-wheels",
@@ -5291,25 +6025,22 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Traktor blasta",
-        "range": 36,
+        "name": "Traktor Blasta",
+        "range": 24,
         "stats": {
-          "A": 1,
-          "S": 10,
+          "A": 3,
+          "S": 6,
           "AP": -2,
-          "D": "D6+1",
-          "BS": 5
+          "D": "D3+3",
+          "BS": 4
         },
         "keywords": [
           {
             "keyword_id": "anti",
             "parameters": {
               "target_keyword": "Fly",
-              "threshold": 3
+              "threshold": 2
             }
-          },
-          {
-            "keyword_id": "devastating-wounds"
           }
         ]
       }
@@ -5322,6 +6053,10 @@
       {
         "namespace": "bsdata",
         "id": "6b75-9f52-e1fa-681b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9e160347-8acb-40d9-b636-42f51b5e3ab6"
       },
       {
         "namespace": "mfm",
@@ -5859,16 +6594,23 @@
     "type": "melee",
     "profiles": [
       {
-        "name": "Uge choppa",
+        "name": "’Uge Choppa",
         "range": "Melee",
         "stats": {
-          "A": 4,
+          "A": 5,
           "S": 12,
           "AP": -2,
-          "D": 2,
+          "D": 3,
           "WS": 2
         },
-        "keywords": []
+        "keywords": [
+          {
+            "keyword_id": "cleave",
+            "parameters": {
+              "value": 2
+            }
+          }
+        ]
       }
     ],
     "game_version": {
@@ -5882,6 +6624,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "86e3d3ac-bd4e-467e-bd4a-fbed95dc814d"
+      },
+      {
+        "namespace": "mfm",
         "id": "ba41e205-6a6c-4612-956b-1c1d501e08a5"
       }
     ]
@@ -5892,13 +6638,13 @@
     "type": "melee",
     "profiles": [
       {
-        "name": "Urty Syringe",
+        "name": "’Urty Syringe",
         "range": "Melee",
         "stats": {
           "A": 1,
           "S": 2,
           "AP": 0,
-          "D": 1,
+          "D": "D6",
           "WS": 3
         },
         "keywords": [
@@ -5910,10 +6656,15 @@
             }
           },
           {
-            "keyword_id": "extra-attacks"
+            "keyword_id": "devastating-wounds",
+            "parameters": {
+              "required_target_keywords_any": [
+                "Infantry"
+              ]
+            }
           },
           {
-            "keyword_id": "precision"
+            "keyword_id": "extra-attacks"
           }
         ]
       }
@@ -5926,6 +6677,10 @@
       {
         "namespace": "bsdata",
         "id": "14e-7f95-331e-8d6c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3876d6a3-bdbe-49c3-b487-39139a82695e"
       },
       {
         "namespace": "mfm",
@@ -5983,29 +6738,37 @@
           "S": 10,
           "AP": 0,
           "D": "D6",
-          "WS": 4
+          "WS": 3
         },
         "keywords": [
+          {
+            "keyword_id": "extra-attacks"
+          },
           {
             "keyword_id": "cleave",
             "parameters": {
               "value": 2
             }
-          },
-          {
-            "keyword_id": "extra-attacks"
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "3e1a-c27b-7ef-a2d6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5056d966-9c1b-4f75-a486-46f1488b6d3f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a8348f7b-75b5-47a4-af98-85bcd0741553"
       },
       {
         "namespace": "mfm",
@@ -6022,21 +6785,21 @@
         "name": "Wurrtower",
         "range": 24,
         "stats": {
-          "A": "D3",
+          "A": 1,
           "S": 12,
           "AP": -3,
-          "D": "D6",
+          "D": 6,
           "BS": null
         },
         "keywords": [
           {
-            "keyword_id": "hazardous"
+            "keyword_id": "torrent"
           },
           {
             "keyword_id": "psychic"
           },
           {
-            "keyword_id": "torrent"
+            "keyword_id": "hazardous"
           }
         ]
       }
@@ -6049,6 +6812,10 @@
       {
         "namespace": "bsdata",
         "id": "e28c-9fc3-d2d-5efb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "53b4522d-ecdf-4f80-86a1-8cbdd6575a86"
       },
       {
         "namespace": "mfm",
@@ -6452,10 +7219,13 @@
         },
         "keywords": [
           {
-            "keyword_id": "blast"
+            "keyword_id": "psychic"
           },
           {
-            "keyword_id": "psychic"
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 1
+            }
           }
         ]
       },
@@ -6630,7 +7400,10 @@
         },
         "keywords": [
           {
-            "keyword_id": "blast"
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 1
+            }
           },
           {
             "keyword_id": "torrent"
@@ -6648,6 +7421,10 @@
     "external_refs": [
       {
         "namespace": "mfm",
+        "id": "282062d5-74c6-4391-b23e-aff3d785f9f9"
+      },
+      {
+        "namespace": "mfm",
         "id": "ff95beae-4009-41c3-b81b-f3ced1146961"
       }
     ],
@@ -6655,7 +7432,7 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Kombi-rokkit",
+        "name": "Busta Rokkit",
         "range": 24,
         "stats": {
           "A": 1,
@@ -6663,7 +7440,36 @@
           "AP": -2,
           "D": 3,
           "BS": 5
-        }
+        },
+        "keywords": []
+      },
+      {
+        "name": "Shoota",
+        "range": 18,
+        "stats": {
+          "A": 2,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": 5
+        },
+        "keywords": [
+          {
+            "keyword_id": "lethal-hits",
+            "parameters": {
+              "excluded_target_keywords": [
+                "Monster",
+                "Vehicle"
+              ]
+            }
+          },
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
       }
     ],
     "game_version": {
@@ -6831,13 +7637,22 @@
         },
         "keywords": [
           {
-            "keyword_id": "assault"
-          },
-          {
             "keyword_id": "sustained-hits",
             "parameters": {
               "value": 1
             }
+          },
+          {
+            "keyword_id": "lethal-hits",
+            "parameters": {
+              "excluded_target_keywords": [
+                "Monster",
+                "Vehicle"
+              ]
+            }
+          },
+          {
+            "keyword_id": "assault"
           }
         ]
       },
@@ -6863,12 +7678,16 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     }
   },
   {
     "id": "spiked-ram",
     "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "06efdfae-29a1-4432-89c7-48b671a33bdc"
+      },
       {
         "namespace": "mfm",
         "id": "d8a9b501-afef-4413-8e0c-9dc3eabb37f4"
@@ -6881,10 +7700,10 @@
         "name": "Spiked Ram",
         "range": "Melee",
         "stats": {
-          "A": 4,
-          "S": 7,
-          "AP": -1,
-          "D": 2,
+          "A": 3,
+          "S": 6,
+          "AP": 0,
+          "D": 1,
           "WS": 3
         },
         "keywords": [
@@ -6933,6 +7752,14 @@
           },
           {
             "keyword_id": "assault"
+          },
+          {
+            "keyword_id": "devastating-wounds",
+            "parameters": {
+              "required_target_keywords_any": [
+                "Infantry"
+              ]
+            }
           }
         ]
       },
@@ -6948,6 +7775,12 @@
         },
         "keywords": [
           {
+            "keyword_id": "assault"
+          },
+          {
+            "keyword_id": "torrent"
+          },
+          {
             "keyword_id": "anti",
             "parameters": {
               "target_keyword": "Infantry",
@@ -6955,17 +7788,19 @@
             }
           },
           {
-            "keyword_id": "assault"
-          },
-          {
-            "keyword_id": "torrent"
+            "keyword_id": "devastating-wounds",
+            "parameters": {
+              "required_target_keywords_any": [
+                "Infantry"
+              ]
+            }
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -7035,6 +7870,15 @@
         },
         "keywords": [
           {
+            "keyword_id": "lethal-hits",
+            "parameters": {
+              "excluded_target_keywords": [
+                "Monster",
+                "Vehicle"
+              ]
+            }
+          },
+          {
             "keyword_id": "rapid-fire",
             "parameters": {
               "value": 4
@@ -7045,12 +7889,16 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     }
   },
   {
     "id": "crushin-bulk",
     "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "a4ff364f-c84e-49c5-b70d-b346c17a4d77"
+      },
       {
         "namespace": "mfm",
         "id": "b1fcf701-d3b4-4d6e-8623-ebad7b66656d"
@@ -7073,7 +7921,7 @@
           {
             "keyword_id": "cleave",
             "parameters": {
-              "value": 2
+              "value": 1
             }
           }
         ]
@@ -7124,13 +7972,22 @@
         "keywords": [
           {
             "keyword_id": "assault"
+          },
+          {
+            "keyword_id": "lethal-hits",
+            "parameters": {
+              "excluded_target_keywords": [
+                "Monster",
+                "Vehicle"
+              ]
+            }
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -7157,13 +8014,22 @@
         "keywords": [
           {
             "keyword_id": "assault"
+          },
+          {
+            "keyword_id": "lethal-hits",
+            "parameters": {
+              "excluded_target_keywords": [
+                "Monster",
+                "Vehicle"
+              ]
+            }
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -7257,7 +8123,10 @@
         },
         "keywords": [
           {
-            "keyword_id": "blast"
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 2
+            }
           }
         ]
       }
@@ -7287,12 +8156,24 @@
           "AP": -2,
           "D": 2,
           "WS": 2
-        }
+        },
+        "keywords": [
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 2,
+              "required_target_keywords_any": [
+                "Monster",
+                "Vehicle"
+              ]
+            }
+          }
+        ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -7350,6 +8231,15 @@
         },
         "keywords": [
           {
+            "keyword_id": "lethal-hits",
+            "parameters": {
+              "excluded_target_keywords": [
+                "Monster",
+                "Vehicle"
+              ]
+            }
+          },
+          {
             "keyword_id": "rapid-fire",
             "parameters": {
               "value": 1
@@ -7369,17 +8259,20 @@
         },
         "keywords": [
           {
-            "keyword_id": "blast"
+            "keyword_id": "torrent"
           },
           {
-            "keyword_id": "torrent"
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 1
+            }
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -7413,6 +8306,15 @@
         },
         "keywords": [
           {
+            "keyword_id": "lethal-hits",
+            "parameters": {
+              "excluded_target_keywords": [
+                "Monster",
+                "Vehicle"
+              ]
+            }
+          },
+          {
             "keyword_id": "rapid-fire",
             "parameters": {
               "value": 4
@@ -7423,7 +8325,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -7504,6 +8406,10 @@
       {
         "namespace": "mfm",
         "id": "1531c712-5d53-4e38-98e7-82a635107b69"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2551b28c-c207-456f-bbc9-87d4f233178c"
       }
     ],
     "name": "Saw Blades",
@@ -7513,9 +8419,9 @@
         "name": "Saw Blades",
         "range": "Melee",
         "stats": {
-          "A": 6,
-          "S": 10,
-          "AP": -2,
+          "A": 4,
+          "S": 7,
+          "AP": -1,
           "D": 2,
           "WS": 3
         },
@@ -7525,9 +8431,6 @@
             "parameters": {
               "value": 1
             }
-          },
-          {
-            "keyword_id": "extra-attacks"
           }
         ]
       }
@@ -7560,7 +8463,10 @@
         },
         "keywords": [
           {
-            "keyword_id": "blast"
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 1
+            }
           },
           {
             "keyword_id": "ignores-cover"
@@ -7582,7 +8488,8 @@
           "AP": -2,
           "D": 3,
           "BS": 4
-        }
+        },
+        "keywords": []
       },
       {
         "name": "Point Blank",
@@ -7596,10 +8503,13 @@
         },
         "keywords": [
           {
-            "keyword_id": "blast"
+            "keyword_id": "torrent"
           },
           {
-            "keyword_id": "torrent"
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 2
+            }
           }
         ]
       }
@@ -7612,17 +8522,39 @@
   {
     "id": "kustom-blasta-x",
     "name": "Kustom Blasta X",
-    "type": "ranged",
+    "type": "melee",
     "profiles": [
+      {
+        "name": "Kustom Blasta X",
+        "range": "Melee",
+        "stats": {
+          "A": 6,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "WS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "extra-attacks"
+          },
+          {
+            "keyword_id": "cleave",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      },
       {
         "name": "Gatler",
         "range": 24,
         "stats": {
           "A": 6,
-          "BS": 4,
-          "S": 8,
+          "S": 9,
           "AP": -2,
-          "D": 3
+          "D": 3,
+          "BS": 4
         },
         "keywords": [
           {
@@ -7635,12 +8567,18 @@
         "range": 18,
         "stats": {
           "A": 4,
-          "BS": 4,
           "S": 5,
           "AP": -1,
-          "D": 1
+          "D": 1,
+          "BS": 4
         },
         "keywords": [
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 2
+            }
+          },
           {
             "keyword_id": "lethal-hits",
             "parameters": {
@@ -7649,12 +8587,6 @@
                 "Vehicle"
               ]
             }
-          },
-          {
-            "keyword_id": "rapid-fire",
-            "parameters": {
-              "value": 2
-            }
           }
         ]
       },
@@ -7662,22 +8594,35 @@
         "name": "Skorcha",
         "range": 12,
         "stats": {
-          "A": "D6+1",
+          "A": 3,
           "S": 5,
           "AP": -1,
-          "D": 1
+          "D": 1,
+          "BS": null
         },
         "keywords": [
           {
             "keyword_id": "torrent"
+          },
+          {
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 1
+            }
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "6fabb023-507c-4354-9d74-8f5b4d612800"
+      }
+    ]
   },
   {
     "id": "moonchewa",
@@ -7774,7 +8719,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -7903,10 +8848,13 @@
         },
         "keywords": [
           {
-            "keyword_id": "blast"
+            "keyword_id": "ignores-cover"
           },
           {
-            "keyword_id": "ignores-cover"
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 1
+            }
           },
           {
             "keyword_id": "rapid-fire",
@@ -7945,13 +8893,16 @@
         },
         "keywords": [
           {
-            "keyword_id": "blast"
-          },
-          {
             "keyword_id": "hazardous"
           },
           {
             "keyword_id": "psychic"
+          },
+          {
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 1
+            }
           },
           {
             "keyword_id": "torrent"
@@ -8030,7 +8981,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "pre-launch-provisional"
     }
   },
   {
@@ -8082,12 +9033,23 @@
           "AP": 0,
           "D": 1,
           "BS": 5
-        }
+        },
+        "keywords": [
+          {
+            "keyword_id": "lethal-hits",
+            "parameters": {
+              "excluded_target_keywords": [
+                "Monster",
+                "Vehicle"
+              ]
+            }
+          }
+        ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -8141,6 +9103,15 @@
         },
         "keywords": [
           {
+            "keyword_id": "lethal-hits",
+            "parameters": {
+              "excluded_target_keywords": [
+                "Monster",
+                "Vehicle"
+              ]
+            }
+          },
+          {
             "keyword_id": "assault"
           }
         ]
@@ -8148,7 +9119,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -8234,6 +9205,12 @@
         },
         "keywords": [
           {
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 2
+            }
+          },
+          {
             "keyword_id": "torrent"
           }
         ]
@@ -8241,8 +9218,14 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "5fc26283-874a-4af4-b132-77356624a2cf"
+      }
+    ]
   },
   {
     "id": "burna-boyz-unit",
@@ -8277,7 +9260,7 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Busta",
+        "name": "Busta Rokkit",
         "range": 24,
         "stats": {
           "A": 1,
@@ -8298,13 +9281,35 @@
           "D": 1,
           "BS": 5
         },
-        "keywords": []
+        "keywords": [
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 1
+            }
+          },
+          {
+            "keyword_id": "lethal-hits",
+            "parameters": {
+              "excluded_target_keywords": [
+                "Monster",
+                "Vehicle"
+              ]
+            }
+          }
+        ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "43cc9253-27bf-404a-9520-e3fb5a1203ee"
+      }
+    ]
   },
   {
     "id": "kombi-skorcha-boyz",
@@ -8312,7 +9317,35 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Kombi-skorcha",
+        "name": "Shoota",
+        "range": 18,
+        "stats": {
+          "A": 2,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": 5
+        },
+        "keywords": [
+          {
+            "keyword_id": "lethal-hits",
+            "parameters": {
+              "excluded_target_keywords": [
+                "Monster",
+                "Vehicle"
+              ]
+            }
+          },
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      },
+      {
+        "name": "Skorcha",
         "range": 12,
         "stats": {
           "A": 3,
@@ -8324,14 +9357,26 @@
         "keywords": [
           {
             "keyword_id": "torrent"
+          },
+          {
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 1
+            }
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "62c8d1ba-5c55-4ff9-bc47-4393002da20a"
+      }
+    ]
   },
   {
     "id": "kustom-choppa-boyz",
@@ -8342,7 +9387,7 @@
         "name": "Kustom Choppa",
         "range": "Melee",
         "stats": {
-          "A": 3,
+          "A": 4,
           "S": 5,
           "AP": -2,
           "D": 2,
@@ -8353,8 +9398,14 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "58bc43b7-387a-4e0c-a725-9d8ea6221df4"
+      }
+    ]
   },
   {
     "id": "kustom-choppa-nobz",
@@ -8365,7 +9416,7 @@
         "name": "Kustom Choppa",
         "range": "Melee",
         "stats": {
-          "A": 3,
+          "A": 4,
           "S": 5,
           "AP": -2,
           "D": 2,
@@ -8376,8 +9427,14 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "c21d0878-5761-4c65-ba64-7ea8d8b82b76"
+      }
+    ]
   },
   {
     "id": "kustom-shoota-nobz",
@@ -8388,19 +9445,41 @@
         "name": "Kustom Shoota",
         "range": 18,
         "stats": {
-          "A": 8,
+          "A": 4,
           "S": 4,
           "AP": 0,
           "D": 1,
           "BS": 5
         },
-        "keywords": []
+        "keywords": [
+          {
+            "keyword_id": "lethal-hits",
+            "parameters": {
+              "excluded_target_keywords": [
+                "Monster",
+                "Vehicle"
+              ]
+            }
+          },
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 2
+            }
+          }
+        ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "53d4c1c5-7acc-4ff6-a140-c9c340aeeb39"
+      }
+    ]
   },
   {
     "id": "paired-kustom-krumpas",
@@ -8511,6 +9590,1666 @@
           },
           {
             "keyword_id": "precision"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "id": "big-choppa-bigboss",
+    "name": "Big choppa",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Big Choppa",
+        "range": "Melee",
+        "stats": {
+          "A": 5,
+          "S": 7,
+          "AP": -2,
+          "D": 2,
+          "WS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "precision"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "9960f4f4-dffd-4403-a08d-58dda0433084"
+      }
+    ]
+  },
+  {
+    "id": "butcha-boyz-hunta-rig",
+    "name": "Butcha Boyz",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Butcha Boyz",
+        "range": "Melee",
+        "stats": {
+          "A": 4,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "WS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "Monster",
+              "threshold": 4,
+              "required_target_keywords_any": [
+                "Monster"
+              ]
+            }
+          },
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "Vehicle",
+              "threshold": 4,
+              "required_target_keywords_any": [
+                "Vehicle"
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "fbfa-f6a0-217b-655a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b6052f0f-19bc-4dfe-8a92-ebd207ea7e2f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e6dd77d9-23d0-42f4-8a27-7911a5e4453f"
+      }
+    ]
+  },
+  {
+    "id": "choppa-kommandos",
+    "name": "Choppas",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Choppa",
+        "range": "Melee",
+        "stats": {
+          "A": 3,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "WS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "7b4ef34b-f5e2-4aad-909d-f9e642453333"
+      }
+    ]
+  },
+  {
+    "id": "choppa-stormboyz",
+    "name": "Choppas",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Choppa",
+        "range": "Melee",
+        "stats": {
+          "A": 3,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "WS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "1c8d7fec-ad75-4a64-b8c8-d99fe204803d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7b4ef34b-f5e2-4aad-909d-f9e642453333"
+      }
+    ]
+  },
+  {
+    "id": "choppa-warbikers",
+    "name": "Choppas",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Choppa",
+        "range": "Melee",
+        "stats": {
+          "A": 3,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "WS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "1d5b8be8-c8e0-4745-90b9-6c98f0502940"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7b4ef34b-f5e2-4aad-909d-f9e642453333"
+      }
+    ]
+  },
+  {
+    "id": "choppa-ardmob-wartrakk",
+    "name": "Choppas",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Choppas",
+        "range": "Melee",
+        "stats": {
+          "A": 6,
+          "S": 4,
+          "AP": -1,
+          "D": 1,
+          "WS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "c5889d53-fef1-4e25-a332-bdb3a485a646"
+      }
+    ]
+  },
+  {
+    "id": "choppa-deffkoptas",
+    "name": "Choppas",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Choppa",
+        "range": "Melee",
+        "stats": {
+          "A": 3,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "WS": 4
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "8c21a115-ea88-4bb4-b257-221ebb1e7c10"
+      }
+    ]
+  },
+  {
+    "id": "dual-big-shoota-morkanaut",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "233e5727-fb32-41a1-9a32-5b34cbdf064f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9cc79ab5-7be2-4060-b5da-06c528177ffa"
+      },
+      {
+        "namespace": "mfm",
+        "id": "becd3248-6ec9-4370-bb7c-4548fa52cfec"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cd6ff115-733f-49ef-b06e-085ec582feb0"
+      }
+    ],
+    "name": "Dual Big Shoota",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Dual Big Shoota",
+        "range": 36,
+        "stats": {
+          "A": 6,
+          "S": 5,
+          "AP": 0,
+          "D": 1,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 4
+            }
+          },
+          {
+            "keyword_id": "lethal-hits",
+            "parameters": {
+              "excluded_target_keywords": [
+                "Monster",
+                "Vehicle"
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "id": "dual-supa-shoota-burna-bommer",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "11783070-fe99-4f5e-8801-271d28d10858"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d8e95dad-dd6e-409e-b84a-62d3cfe5c49f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e64ee125-3676-496c-9d37-55c847807604"
+      }
+    ],
+    "name": "Dual Supa-shoota",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Dual Supa Shoota",
+        "range": 36,
+        "stats": {
+          "A": 8,
+          "S": 6,
+          "AP": -1,
+          "D": 1,
+          "BS": 5
+        },
+        "keywords": [
+          {
+            "keyword_id": "lethal-hits",
+            "parameters": {
+              "excluded_target_keywords": [
+                "Monster",
+                "Vehicle"
+              ]
+            }
+          },
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 4
+            }
+          },
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "id": "dual-supa-shoota-wazbom-blastajet",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "11783070-fe99-4f5e-8801-271d28d10858"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c8c77db6-57f0-4943-9be9-f83194b145f6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d8e95dad-dd6e-409e-b84a-62d3cfe5c49f"
+      }
+    ],
+    "name": "Dual Supa-shoota",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Dual Supa-shoota",
+        "range": 36,
+        "stats": {
+          "A": 8,
+          "S": 6,
+          "AP": -1,
+          "D": 1,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "lethal-hits",
+            "parameters": {
+              "excluded_target_keywords": [
+                "Monster",
+                "Vehicle"
+              ]
+            }
+          },
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 4
+            }
+          },
+          {
+            "keyword_id": "ignores-cover"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "id": "kombi-weapon-big-mek-in-mega-armour",
+    "name": "Kombi-weapon",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Kill Shot",
+        "range": 24,
+        "stats": {
+          "A": 1,
+          "S": 10,
+          "AP": -2,
+          "D": 3,
+          "BS": 4
+        },
+        "keywords": []
+      },
+      {
+        "name": "Point Blank",
+        "range": 12,
+        "stats": {
+          "A": 3,
+          "S": 5,
+          "AP": 0,
+          "D": 1,
+          "BS": null
+        },
+        "keywords": [
+          {
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 1
+            }
+          },
+          {
+            "keyword_id": "torrent"
+          }
+        ]
+      },
+      {
+        "name": "Shoota",
+        "range": 18,
+        "stats": {
+          "A": 2,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "lethal-hits",
+            "parameters": {
+              "excluded_target_keywords": [
+                "Monster",
+                "Vehicle"
+              ]
+            }
+          },
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "ac6f-9310-e9ac-678"
+      },
+      {
+        "namespace": "mfm",
+        "id": "aa36e918-3183-411d-b6b6-8fbbd478f852"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ff41269b-6fd7-4f08-96ff-13b446847349"
+      }
+    ]
+  },
+  {
+    "id": "kustom-choppa-bannernob",
+    "name": "Kustom Choppa",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Kustom Choppa",
+        "range": "Melee",
+        "stats": {
+          "A": 4,
+          "S": 5,
+          "AP": -2,
+          "D": 2,
+          "WS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "d034-cadd-41e5-dc21"
+      },
+      {
+        "namespace": "mfm",
+        "id": "03ea2707-0810-44ed-b6d6-4164459f5176"
+      },
+      {
+        "namespace": "mfm",
+        "id": "68e9958c-aa87-41dc-ba18-d381f63afd5e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6aadf3ad-1566-445f-8cbc-f7d3117f10ac"
+      }
+    ]
+  },
+  {
+    "id": "kustom-choppa-stormboyz",
+    "name": "Kustom Choppa",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Kustom Choppa",
+        "range": "Melee",
+        "stats": {
+          "A": 4,
+          "S": 5,
+          "AP": -2,
+          "D": 2,
+          "WS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "d034-cadd-41e5-dc21"
+      },
+      {
+        "namespace": "mfm",
+        "id": "03ea2707-0810-44ed-b6d6-4164459f5176"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1688b7f5-8599-4e1e-932b-ef6e9742fda1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "68e9958c-aa87-41dc-ba18-d381f63afd5e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6aadf3ad-1566-445f-8cbc-f7d3117f10ac"
+      }
+    ]
+  },
+  {
+    "id": "kustom-choppa-warbikers",
+    "name": "Kustom Choppa",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Kustom Choppa",
+        "range": "Melee",
+        "stats": {
+          "A": 4,
+          "S": 5,
+          "AP": -2,
+          "D": 2,
+          "WS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "d034-cadd-41e5-dc21"
+      },
+      {
+        "namespace": "mfm",
+        "id": "03ea2707-0810-44ed-b6d6-4164459f5176"
+      },
+      {
+        "namespace": "mfm",
+        "id": "62ea80d2-83dd-442b-b745-cdab3dd3d7ab"
+      },
+      {
+        "namespace": "mfm",
+        "id": "68e9958c-aa87-41dc-ba18-d381f63afd5e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6aadf3ad-1566-445f-8cbc-f7d3117f10ac"
+      }
+    ]
+  },
+  {
+    "id": "kustom-choppa-wartrakks",
+    "name": "Kustom Choppa",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Kustom Choppa",
+        "range": "Melee",
+        "stats": {
+          "A": 4,
+          "S": 5,
+          "AP": -2,
+          "D": 2,
+          "WS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "d034-cadd-41e5-dc21"
+      },
+      {
+        "namespace": "mfm",
+        "id": "03ea2707-0810-44ed-b6d6-4164459f5176"
+      },
+      {
+        "namespace": "mfm",
+        "id": "68e9958c-aa87-41dc-ba18-d381f63afd5e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6aadf3ad-1566-445f-8cbc-f7d3117f10ac"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ffddb227-217c-48f1-9f15-f3af305fe73a"
+      }
+    ]
+  },
+  {
+    "id": "kustom-choppa-warboss",
+    "name": "Kustom Choppa",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Kustom Choppa",
+        "range": "Melee",
+        "stats": {
+          "A": 6,
+          "S": 7,
+          "AP": -2,
+          "D": 2,
+          "WS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "cleave",
+            "parameters": {
+              "value": 2
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "d034-cadd-41e5-dc21"
+      },
+      {
+        "namespace": "mfm",
+        "id": "03ea2707-0810-44ed-b6d6-4164459f5176"
+      },
+      {
+        "namespace": "mfm",
+        "id": "68e9958c-aa87-41dc-ba18-d381f63afd5e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ce726a77-acc1-421b-a492-2db24fac1363"
+      }
+    ]
+  },
+  {
+    "id": "kustom-mega-blasta-deff-dread",
+    "name": "Kustom mega-blasta",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Kustom Mega-blasta",
+        "range": 24,
+        "stats": {
+          "A": 3,
+          "S": 9,
+          "AP": -2,
+          "D": 3,
+          "BS": 5
+        },
+        "keywords": [
+          {
+            "keyword_id": "hazardous"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "3a32-9786-f13e-4939"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "7242-bca9-a3c7-ba6a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "46addab1-3e88-4bf2-8064-420d3928d97f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d25e0ee6-7b2b-48dd-8dfb-d6ade7f8b74c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f874696a-31d3-4c06-97b7-354ce44a82de"
+      }
+    ]
+  },
+  {
+    "id": "kustom-mega-blasta-deffkoptas",
+    "name": "Kustom mega-blasta",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Kustom Mega-blasta",
+        "range": 24,
+        "stats": {
+          "A": 3,
+          "S": 9,
+          "AP": -2,
+          "D": 3,
+          "BS": 5
+        },
+        "keywords": [
+          {
+            "keyword_id": "hazardous"
+          },
+          {
+            "keyword_id": "lethal-hits"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "3a32-9786-f13e-4939"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "7242-bca9-a3c7-ba6a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "29d076ad-3e44-472c-af64-d43f92dfbf53"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d25e0ee6-7b2b-48dd-8dfb-d6ade7f8b74c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f874696a-31d3-4c06-97b7-354ce44a82de"
+      }
+    ]
+  },
+  {
+    "id": "kustom-shoota-warboss",
+    "name": "Kustom shoota",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Kustom Shoota",
+        "range": 18,
+        "stats": {
+          "A": 4,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": 5
+        },
+        "keywords": [
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 2
+            }
+          },
+          {
+            "keyword_id": "lethal-hits",
+            "parameters": {
+              "excluded_target_keywords": [
+                "Monster",
+                "Vehicle"
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "3d2f-5a70-0d67-bce8"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "8bba-d0bf-1102-2131"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0e795010-4e6e-40fe-8809-50bffa9ed7ac"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1f6cf7a2-e03b-4805-80e3-716c72747cea"
+      },
+      {
+        "namespace": "mfm",
+        "id": "526274e1-0f57-4659-b0ca-6a6dbd1f604c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "65a6939d-0f33-4dd4-a599-1ee0f0bbecec"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8d678f43-de93-42bf-9b61-634813e0695a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b0e508ab-83fc-4eae-a9fa-1cd6c859dfa0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b32e2989-b004-404d-af01-926e6aaef076"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cbc0e892-bcaf-4806-a724-e5a66707529d"
+      }
+    ]
+  },
+  {
+    "id": "kustom-shoota-wartrakks",
+    "name": "Kustom shoota",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Kustom Shoota",
+        "range": 18,
+        "stats": {
+          "A": 4,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": 5
+        },
+        "keywords": [
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 2
+            }
+          },
+          {
+            "keyword_id": "lethal-hits",
+            "parameters": {
+              "excluded_target_keywords": [
+                "Monster",
+                "Vehicle"
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "3d2f-5a70-0d67-bce8"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "8bba-d0bf-1102-2131"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0e795010-4e6e-40fe-8809-50bffa9ed7ac"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1f6cf7a2-e03b-4805-80e3-716c72747cea"
+      },
+      {
+        "namespace": "mfm",
+        "id": "526274e1-0f57-4659-b0ca-6a6dbd1f604c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "65a6939d-0f33-4dd4-a599-1ee0f0bbecec"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8d678f43-de93-42bf-9b61-634813e0695a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b0e508ab-83fc-4eae-a9fa-1cd6c859dfa0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b32e2989-b004-404d-af01-926e6aaef076"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cbc0e892-bcaf-4806-a724-e5a66707529d"
+      }
+    ]
+  },
+  {
+    "id": "kustom-shoota-big-mek-in-mega-armour",
+    "name": "Kustom shoota",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Aimed",
+        "range": 18,
+        "stats": {
+          "A": 4,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 2
+            }
+          },
+          {
+            "keyword_id": "lethal-hits",
+            "parameters": {
+              "excluded_target_keywords": [
+                "Monster",
+                "Vehicle"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Point Blank",
+        "range": 6,
+        "stats": {
+          "A": "D3+3",
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": null
+        },
+        "keywords": [
+          {
+            "keyword_id": "torrent"
+          },
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "3d2f-5a70-0d67-bce8"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "8bba-d0bf-1102-2131"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0e795010-4e6e-40fe-8809-50bffa9ed7ac"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1f6cf7a2-e03b-4805-80e3-716c72747cea"
+      },
+      {
+        "namespace": "mfm",
+        "id": "526274e1-0f57-4659-b0ca-6a6dbd1f604c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "583d2809-8ec0-4ec8-a91f-6d26975834ed"
+      },
+      {
+        "namespace": "mfm",
+        "id": "65a6939d-0f33-4dd4-a599-1ee0f0bbecec"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8d678f43-de93-42bf-9b61-634813e0695a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b0e508ab-83fc-4eae-a9fa-1cd6c859dfa0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b32e2989-b004-404d-af01-926e6aaef076"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cbc0e892-bcaf-4806-a724-e5a66707529d"
+      }
+    ]
+  },
+  {
+    "id": "multi-busta-launcha-wartrakks",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "70eb4164-581e-454b-a36d-2a28c6e9768c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "98a6fe81-17dc-4ca4-9474-9a392dda3b1c"
+      }
+    ],
+    "name": "Multi-busta Launcha",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Multi-busta Launcha",
+        "range": 24,
+        "stats": {
+          "A": "D3+3",
+          "S": 10,
+          "AP": -2,
+          "D": 3,
+          "BS": 5
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "id": "rokkit-launcha-deffkoptas",
+    "name": "Rokkit launcha",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Blasta",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": 5
+        },
+        "keywords": [
+          {
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 2
+            }
+          }
+        ]
+      },
+      {
+        "name": "Busta",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 10,
+          "AP": -2,
+          "D": 3,
+          "BS": 5
+        },
+        "keywords": [
+          {
+            "keyword_id": "lethal-hits"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "3f62-4655-f148-baff"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "44dd-ab41-a003-f560"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "80bc-5c89-4125-2253"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "8a55-0ff6-7e3d-1829"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3e0ae478-61a6-4da9-9897-aaf1454451c0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b31470fb-40d7-486a-8423-e4a3c4cdd36e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d92d83bc-00bf-438b-b105-3e9270f365ec"
+      },
+      {
+        "namespace": "mfm",
+        "id": "de678847-f48b-4d84-b06b-5ec45c119489"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f70fbe4c-a031-4eb4-ac52-4d96bee64d20"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fcbda1b6-22f4-4466-a97c-e8cff322bb30"
+      }
+    ]
+  },
+  {
+    "id": "rokkit-launcha-trukk",
+    "name": "Rokkit launcha",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Blasta",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": 5
+        },
+        "keywords": [
+          {
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 2
+            }
+          }
+        ]
+      },
+      {
+        "name": "Busta",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 10,
+          "AP": -2,
+          "D": 3,
+          "BS": 5
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "3f62-4655-f148-baff"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "44dd-ab41-a003-f560"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "80bc-5c89-4125-2253"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "8a55-0ff6-7e3d-1829"
+      },
+      {
+        "namespace": "mfm",
+        "id": "25213283-d58b-473c-82bd-7a9259d836a4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3e0ae478-61a6-4da9-9897-aaf1454451c0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b31470fb-40d7-486a-8423-e4a3c4cdd36e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "de678847-f48b-4d84-b06b-5ec45c119489"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f70fbe4c-a031-4eb4-ac52-4d96bee64d20"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fcbda1b6-22f4-4466-a97c-e8cff322bb30"
+      }
+    ]
+  },
+  {
+    "id": "rokkit-pistol-tankbustas",
+    "name": "Rokkit Pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Rokkit Pistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 10,
+          "AP": -2,
+          "D": 3,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "939e831f-bf14-494a-82b3-7012f4c2005e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f3519da7-61cc-41b2-b094-811e47f8ec25"
+      }
+    ]
+  },
+  {
+    "id": "scavenged-shivs-mek-gunz",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "4d576c65-a430-47f4-94a0-ff2d150ed3fb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7c9b900a-2fee-4f37-a7b7-bf8590c62923"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c3c54b3a-6525-4294-a0c9-e475be094439"
+      }
+    ],
+    "name": "Scavenged Shivs",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Scavenged Shivs",
+        "range": "Melee",
+        "stats": {
+          "A": 5,
+          "S": 2,
+          "AP": 0,
+          "D": 1,
+          "WS": 5
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "id": "shoota-bannernob",
+    "name": "Shoota",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Shoota",
+        "range": 18,
+        "stats": {
+          "A": 2,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": 5
+        },
+        "keywords": [
+          {
+            "keyword_id": "lethal-hits",
+            "parameters": {
+              "excluded_target_keywords": [
+                "Monster",
+                "Vehicle"
+              ]
+            }
+          },
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "64da-fae7-507d-8b18"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "b2ed-fcb0-cba1-63c4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "211fe272-623a-441d-ae25-83f37e738d96"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3fab525d-dc62-438f-9553-5d60b9723716"
+      },
+      {
+        "namespace": "mfm",
+        "id": "63fb9967-e186-4d03-966b-29cd86cc1a27"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a1571847-dd0a-43f7-b913-2499da8b5c7a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bafc16ed-c4c0-4c90-aad3-551429e2e2a9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bec3f5b4-f46a-4a1e-a60c-c91d3f3fa25c"
+      }
+    ]
+  },
+  {
+    "id": "shoota-boyz",
+    "name": "Shoota",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Shoota",
+        "range": 18,
+        "stats": {
+          "A": 2,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": 5
+        },
+        "keywords": [
+          {
+            "keyword_id": "lethal-hits",
+            "parameters": {
+              "excluded_target_keywords": [
+                "Monster",
+                "Vehicle"
+              ]
+            }
+          },
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "64da-fae7-507d-8b18"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "b2ed-fcb0-cba1-63c4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "211fe272-623a-441d-ae25-83f37e738d96"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3fab525d-dc62-438f-9553-5d60b9723716"
+      },
+      {
+        "namespace": "mfm",
+        "id": "63fb9967-e186-4d03-966b-29cd86cc1a27"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a1571847-dd0a-43f7-b913-2499da8b5c7a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bafc16ed-c4c0-4c90-aad3-551429e2e2a9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bec3f5b4-f46a-4a1e-a60c-c91d3f3fa25c"
+      }
+    ]
+  },
+  {
+    "id": "skorcha-stompa",
+    "name": "Skorcha",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Skorcha",
+        "range": 12,
+        "stats": {
+          "A": 3,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": null
+        },
+        "keywords": [
+          {
+            "keyword_id": "torrent"
+          },
+          {
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 2
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "7a18-2212-5898-1149"
+      },
+      {
+        "namespace": "mfm",
+        "id": "35e4d773-1c11-4635-9091-2c7ee5dc1a02"
+      },
+      {
+        "namespace": "mfm",
+        "id": "75e9fee8-52cd-47bb-b8bf-64beb377444d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d10a1637-a145-4fd3-a6ff-174819b0cb5f"
+      }
+    ]
+  },
+  {
+    "id": "da-krunch-wurrband",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "81c0a9d5-f165-465c-8ffa-9a508a4ce48b"
+      }
+    ],
+    "name": "Da Krunch",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Da Krunch",
+        "range": 24,
+        "stats": {
+          "A": 3,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "lethal-hits"
+          },
+          {
+            "keyword_id": "psychic"
+          },
+          {
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 3
+            }
+          },
+          {
+            "keyword_id": "hazardous"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "id": "da-gobshot-thunderbuss-brute-bosses",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "191ae704-6286-4051-9170-ef618224a61b"
+      }
+    ],
+    "name": "Da Gobshot Thunderbuss",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Da Gobshot Thunderbuss",
+        "range": 24,
+        "stats": {
+          "A": 6,
+          "S": 7,
+          "AP": -2,
+          "D": 2,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "lethal-hits",
+            "parameters": {
+              "excluded_target_keywords": [
+                "Monster",
+                "Vehicle"
+              ]
+            }
+          },
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 6
+            }
           }
         ]
       }

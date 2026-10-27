@@ -247,10 +247,10 @@
         "range": 12,
         "stats": {
           "A": 1,
-          "S": 4,
-          "AP": 0,
+          "S": 5,
+          "AP": -1,
           "D": 1,
-          "BS": 3
+          "BS": 4
         },
         "keywords": [
           {
@@ -275,6 +275,10 @@
       {
         "namespace": "mfm",
         "id": "0d67204a-bec8-4df0-aa83-ef83d01537c6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7fb6c70f-721c-4eec-96fb-90cca7c8120a"
       }
     ]
   },
@@ -846,8 +850,8 @@
         "range": 24,
         "stats": {
           "A": 2,
-          "S": 4,
-          "AP": 0,
+          "S": 5,
+          "AP": -1,
           "D": 1,
           "BS": 4
         },
@@ -863,7 +867,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -890,8 +894,8 @@
         "range": 24,
         "stats": {
           "A": 1,
-          "S": 4,
-          "AP": 0,
+          "S": 5,
+          "AP": -1,
           "D": 1,
           "BS": 4
         },
@@ -927,6 +931,10 @@
       {
         "namespace": "bsdata",
         "id": "d774-8e7d-6f5f-2ecd"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6238e1cb-8255-4acb-8020-6e4f870019ae"
       },
       {
         "namespace": "mfm",
@@ -3092,8 +3100,8 @@
         "range": 12,
         "stats": {
           "A": 1,
-          "S": 4,
-          "AP": 0,
+          "S": 5,
+          "AP": -1,
           "D": 1,
           "BS": 4
         },
@@ -3116,6 +3124,10 @@
       {
         "namespace": "mfm",
         "id": "36ee62a8-3b0e-486c-a941-10c7682f0d0f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7fb6c70f-721c-4eec-96fb-90cca7c8120a"
       }
     ]
   },
@@ -3748,5 +3760,323 @@
       "edition": "11th",
       "dataslate": "mfm-995"
     }
+  },
+  {
+    "id": "autopistol-frenzied-reavers-jakhals",
+    "name": "Autopistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Autopistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 3,
+          "AP": 0,
+          "D": 1,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "f70d-d0cb-5cb8-3be9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c4264e96-49d6-40d7-806f-c0c061bec825"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f58b3442-c065-4fd2-9414-507de928db2c"
+      }
+    ]
+  },
+  {
+    "id": "bolt-pistol-frenzied-reavers-khorne-berzerkers",
+    "name": "Bolt pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Bolt Pistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "c41d-61c0-3e59-01b5"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "e702-66b4-58f7-d28a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0d67204a-bec8-4df0-aa83-ef83d01537c6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "28a327ba-6258-4bea-9a30-b149263f916a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7fb6c70f-721c-4eec-96fb-90cca7c8120a"
+      }
+    ]
+  },
+  {
+    "id": "bolt-pistol-frenzied-reavers-master-of-executions",
+    "name": "Bolt pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Bolt Pistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "c41d-61c0-3e59-01b5"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "e702-66b4-58f7-d28a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0d67204a-bec8-4df0-aa83-ef83d01537c6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "16cc4eee-e643-467e-9e42-a9b45e55986d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7fb6c70f-721c-4eec-96fb-90cca7c8120a"
+      }
+    ]
+  },
+  {
+    "id": "chainblade-frenzied-reavers-jakhals",
+    "name": "Chainblade",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Chainblade",
+        "range": "Melee",
+        "stats": {
+          "A": 3,
+          "S": 3,
+          "AP": 0,
+          "D": 1,
+          "WS": 4
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "44b0-1947-ea4a-3005"
+      },
+      {
+        "namespace": "mfm",
+        "id": "38ccb5d8-e7cb-4843-89a3-5ae6bdb448f4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cf0803bd-3c75-491f-98dc-6f013374cab0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d2c3fc70-3a6a-49c2-9f0b-40133ff5e342"
+      }
+    ]
+  },
+  {
+    "id": "chainblade-khorne-berzerkers",
+    "name": "Chainblade",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Chainblade",
+        "range": "Melee",
+        "stats": {
+          "A": 4,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "WS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "44b0-1947-ea4a-3005"
+      },
+      {
+        "namespace": "mfm",
+        "id": "38ccb5d8-e7cb-4843-89a3-5ae6bdb448f4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cf0803bd-3c75-491f-98dc-6f013374cab0"
+      }
+    ]
+  },
+  {
+    "id": "hellforged-weapons-vorrakh-lord-of-the-frenzied-reavers",
+    "name": "Hellforged weapons",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Hellforged Weapons",
+        "range": "Melee",
+        "stats": {
+          "A": 16,
+          "S": 6,
+          "AP": -1,
+          "D": 1,
+          "WS": 2
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "3e4b-1a3a-8473-578c"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "3f51-baf4-2e6a-21f2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "51d62b2d-e83c-455e-9b71-39fe9fc7f9f5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a30dc852-1c1d-4e55-9d3c-3081c163bbac"
+      }
+    ]
+  },
+  {
+    "id": "plasma-pistol-frenzied-reavers-khorne-berzerkers",
+    "name": "Plasma pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Standard",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 7,
+          "AP": -2,
+          "D": 1,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      },
+      {
+        "name": "Supercharge",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 8,
+          "AP": -3,
+          "D": 2,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          },
+          {
+            "keyword_id": "hazardous"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "47e1-9e86-8a80-66e1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2e9b7c68-3bb3-4693-a62a-cf03795652b2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ef1dd5c2-6f6b-4e91-a72f-8e4473a6bbf3"
+      }
+    ]
   }
 ]

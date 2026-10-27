@@ -1297,7 +1297,7 @@
           "length": 92
         },
         "default_weapon_ids": [
-          "armoured-hull",
+          "armoured-hull-claw-of-ascension-achilles-ridgerunner",
           "missile-launcher",
           "twin-heavy-stubber"
         ]
@@ -1335,7 +1335,7 @@
           "length": 35.5
         },
         "default_weapon_ids": [
-          "power-weapon",
+          "power-weapon-claw-of-ascension-atalan-jackals",
           "stolen-firearms"
         ]
       },
@@ -1351,7 +1351,7 @@
         },
         "default_weapon_ids": [
           "mining-laser",
-          "stolen-blade",
+          "stolen-blade-claw-of-ascension-atalan-jackals",
           "stolen-firearms"
         ]
       },
@@ -1366,7 +1366,7 @@
           "length": 35.5
         },
         "default_weapon_ids": [
-          "stolen-blade",
+          "stolen-blade-claw-of-ascension-atalan-jackals",
           "stolen-firearms"
         ]
       }
@@ -1485,8 +1485,8 @@
           "length": 35.5
         },
         "default_weapon_ids": [
-          "autopistol",
-          "cult-sniper-rifle",
+          "autopistol-shanus-daskovian",
+          "cult-sniper-rifle-shanus-daskovian",
           "stolen-blade"
         ]
       }

@@ -53,14 +53,16 @@ describe("damageRoll", () => {
  */
 
 const ds = Dataset.embedded();
+/** The bolt rifle's Saturation profile: A2, BS 3+, S5. */
+const SATURATION = 1;
 
-function input(weaponId: string, modelsFiring: number, targetUnitId: string, buffs: Buff[], context: EngineInput["context"] = { phase: "shooting" }): EngineInput {
+function input(weaponId: string, modelsFiring: number, targetUnitId: string, buffs: Buff[], context: EngineInput["context"] = { phase: "shooting" }, profileIndex = 0): EngineInput {
   const weapon = ds.weapons.getAny(weaponId)!;
   const unit = ds.units.getAny(targetUnitId)!;
-  return { attacker: { weapon: weapon.raw, profileIndex: 0 }, target: { unit: unit.raw, profileIndex: 0 }, modelsFiring, buffs, context };
+  return { attacker: { weapon: weapon.raw, profileIndex }, target: { unit: unit.raw, profileIndex: 0 }, modelsFiring, buffs, context };
 }
 
-const stage = (buffs: Buff[], name: Stage["name"], at = input("bolt-rifle", 1, "intercessor-squad", buffs)) =>
+const stage = (buffs: Buff[], name: Stage["name"], at = input("bolt-rifle", 1, "intercessor-squad", buffs, undefined, SATURATION)) =>
   crunch(at, ds).stages.find((item) => item.name === name)!.expected;
 const one = (roll: "hit" | "wound" | "save" | "damage"): Buff => ({ source: { kind: "manual", label: `re-roll one ${roll}` }, contribution: { type: "reroll-one", roll } });
 const ones = (roll: "hit" | "wound"): Buff => ({ source: { kind: "manual", label: `re-roll ${roll} 1s` }, contribution: { type: "reroll", roll, subset: "ones" } });
@@ -96,7 +98,7 @@ function bruteChecks(dice: number, need: number, rerollOnes: boolean): number {
 }
 
 describe("Re-roll one Hit roll", () => {
-  // A bolt rifle has two attacks at BS 3+.
+  // A bolt rifle's Saturation profile has two attacks at BS 3+.
   it("re-rolls one failed die of the pool", () => {
     expect(stage([one("hit")], "hits")).toBeCloseTo(bruteChecks(2, 3, false), 12);
     expect(stage([], "hits")).toBeCloseTo(2 * (4 / 6), 12);
@@ -120,7 +122,7 @@ describe("Re-roll one Hit roll", () => {
 describe("Re-roll one Wound roll", () => {
   it("re-rolls one failed Wound roll among the hits", () => {
     const hits = stage([], "hits");
-    const detail = crunch(input("bolt-rifle", 1, "intercessor-squad", []), ds).stages.find((item) => item.name === "wounds")!.detail;
+    const detail = crunch(input("bolt-rifle", 1, "intercessor-squad", [], undefined, SATURATION), ds).stages.find((item) => item.name === "wounds")!.detail;
     const need = Number(/need (\d)\+/u.exec(detail)![1]);
     const fresh = (7 - need) / 6;
     // A failed Wound roll no other permission re-rolled is every failing face; one comes back as a fresh roll.

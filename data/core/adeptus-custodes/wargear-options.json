@@ -86,7 +86,7 @@
     },
     "is_free": true,
     "replaces": [
-      "guardian-spear"
+      "guardian-spear-allarus-custodians"
     ],
     "replacement_choice": [
       [
@@ -167,11 +167,11 @@
     "replacement_choice": [
       [
         "master-crafted-flamer",
-        "gun-stock"
+        "gun-stock-knight-centura"
       ],
       [
         "master-crafted-boltgun",
-        "gun-stock"
+        "gun-stock-knight-centura"
       ]
     ],
     "model_constraint": {
@@ -231,7 +231,7 @@
     },
     "is_free": true,
     "replaces": [
-      "guardian-spear"
+      "guardian-spear-custodian-wardens"
     ],
     "replacement": [
       "castellan-axe"

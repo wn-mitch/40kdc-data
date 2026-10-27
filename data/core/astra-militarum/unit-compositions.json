@@ -3705,7 +3705,7 @@
         "max": 1,
         "default_weapon_ids": [
           "close-combat-weapon-cadian-recon-squad",
-          "lasgun"
+          "lasgun-cadian-recon-squad"
         ]
       },
       {
@@ -3714,13 +3714,13 @@
         "max": 9,
         "default_weapon_ids": [
           "close-combat-weapon-cadian-recon-squad",
-          "lasgun"
+          "lasgun-cadian-recon-squad"
         ],
         "loadout_variants": [
           {
             "name": "Recon Trooper w/ Lasgun",
             "weapon_ids": [
-              "lasgun",
+              "lasgun-cadian-recon-squad",
               "close-combat-weapon-cadian-recon-squad"
             ],
             "max_count": 9
@@ -3736,7 +3736,7 @@
           {
             "name": "Recon Trooper w/ Vox-caster",
             "weapon_ids": [
-              "lasgun",
+              "lasgun-cadian-recon-squad",
               "close-combat-weapon-cadian-recon-squad",
               "vox-caster"
             ],
@@ -3877,10 +3877,10 @@
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
-          "chiron-gatling-cannon",
+          "chiron-gatling-cannon-commissar-graves",
           "prefectus-heavy-stubber",
           "prefectus-heavy-stubber",
-          "power-sword-and-manus-mortis",
+          "power-sword-and-manus-mortis-commissar-graves",
           "enforcer-crew",
           "armoured-hull-commissar-graves",
           "aquiline-prow"
@@ -4102,8 +4102,8 @@
           "diameter": 28.5
         },
         "default_weapon_ids": [
-          "plasma-pistol",
-          "power-weapon"
+          "plasma-pistol-draydens-lance-command-squad",
+          "power-weapon-draydens-lance-command-squad"
         ]
       },
       {
@@ -4130,8 +4130,8 @@
           "diameter": 28.5
         },
         "default_weapon_ids": [
-          "bolt-pistol",
-          "power-fist"
+          "bolt-pistol-draydens-lance-command-squad",
+          "power-fist-draydens-lance-command-squad"
         ]
       },
       {
@@ -4194,8 +4194,8 @@
           "diameter": 28.5
         },
         "default_weapon_ids": [
-          "chainsword",
-          "plasma-pistol"
+          "chainsword-draydens-lance-kasrkin",
+          "plasma-pistol-draydens-lance-kasrkin"
         ]
       },
       {
@@ -4236,7 +4236,7 @@
           "diameter": 28.5
         },
         "default_weapon_ids": [
-          "grenade-launcher",
+          "grenade-launcher-draydens-lance-kasrkin",
           "gun-stocks"
         ]
       },
@@ -4279,7 +4279,7 @@
         },
         "default_weapon_ids": [
           "gun-stocks",
-          "hot-shot-laspistol"
+          "hot-shot-laspistol-draydens-lance-kasrkin"
         ]
       },
       {
@@ -4293,7 +4293,7 @@
         },
         "default_weapon_ids": [
           "gun-stocks",
-          "plasma-gun"
+          "plasma-gun-draydens-lance-kasrkin"
         ]
       }
     ],

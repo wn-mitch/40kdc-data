@@ -13,7 +13,7 @@ const refLeaf = (familyId: string, parameters: Record<string, unknown>, role = "
 describe("printed rule and ability names resolve to the records that print them", () => {
   it("resolves a printed name to its faction-suffixed record", () => {
     expect(resolveRecordName("necrons", "reanimation-protocols")).toBe("reanimation-protocols-necrons");
-    const [activate] = resolveRuleReferences([refLeaf("ability-activate", { subject: "this-unit", ability: "reanimation-protocols" })], { faction_id: "necrons" });
+    const [activate] = resolveRuleReferences([refLeaf("ability-activate", { subject: "this-unit", ability: "reanimation-protocols" })], { faction_id: "necrons" }); // mfm:mirror keep — the bare name under test
     expect(activate!.parameters.ability).toBe("reanimation-protocols-necrons");
   });
 
@@ -33,7 +33,7 @@ describe("printed rule and ability names resolve to the records that print them"
     const unresolved = refLeaf("rule-active", { rule: "no-such-rule-anywhere" }, "CONDITION");
     expect(resolveRuleReferences([unresolved], { faction_id: "necrons" })).toEqual([unresolved]);
     // Without a faction there is nothing to resolve against.
-    const named = refLeaf("ability-activate", { subject: "this-unit", ability: "reanimation-protocols" });
+    const named = refLeaf("ability-activate", { subject: "this-unit", ability: "reanimation-protocols" }); // mfm:mirror keep — the bare name under test
     expect(resolveRuleReferences([named])).toEqual([named]);
   });
 

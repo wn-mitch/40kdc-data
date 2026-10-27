@@ -22,7 +22,7 @@
     "ability_id": "adaptive-strategy-gladius-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -158,7 +158,7 @@
     "ability_id": "birth-of-a-saga-champions-of-fenris-space-wolves",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -456,7 +456,7 @@
     "ability_id": "grimnars-command-saga-of-the-great-wolf-space-wolves",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "type": "strategic-ploy",
     "external_refs": [

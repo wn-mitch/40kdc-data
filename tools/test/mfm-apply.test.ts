@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
@@ -47,6 +47,16 @@ async function withCopiedData(run: (dataRoot: string) => Promise<void>): Promise
 const FULL_VALIDATION_TIMEOUT_MS = 120_000;
 
 describe("applyWrites — dry-run rehearsal fidelity", () => {
+  it("treats a staged file whose bytes already match disk as no change", async () => {
+    const log = vi.spyOn(console, "log").mockImplementation(() => {});
+    try {
+      await applyWrites([{ path: OPTS, value: readArr(OPTS) }], { write: false, label: "unchanged" });
+      expect(log.mock.calls.map((call) => String(call[0]))).toEqual(["[unchanged] no file changes to apply."]);
+    } finally {
+      log.mockRestore();
+    }
+  });
+
   it("rejects a schema-invalid projection in dry-run (the real faction_id bug)", async () => {
     // Drop the required faction_id from one option — exactly the latent defect the
     // rehearsal caught in runWargear's rebuilt options.

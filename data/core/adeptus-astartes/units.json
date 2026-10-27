@@ -308,7 +308,7 @@
     ],
     "wargear_costs": [
       {
-        "item_id": "cyclone-missile-launcher",
+        "item_id": "cyclone-missile-launcher-terminator-squad",
         "cost": 10
       }
     ]
@@ -359,7 +359,7 @@
     },
     "weapon_ids": [
       "combi-weapon",
-      "master-crafted-power-weapon",
+      "master-crafted-power-weapon-marshal",
       "plasma-pistol"
     ],
     "ability_ids": [
@@ -478,9 +478,9 @@
       "heavy-bolt-pistol",
       "master-crafted-power-weapon-sword-brethren-squad",
       "plasma-pistol-sword-brethren-squad",
-      "thunder-hammer",
+      "thunder-hammer-sword-brethren-squad",
       "twin-lightning-claws",
-      "chainsword",
+      "chainsword-sword-brethren-squad",
       "hand-flamer"
     ],
     "ability_ids": [
@@ -659,7 +659,7 @@
     },
     "weapon_ids": [
       "absolvor-bolt-pistol",
-      "crozius-arcanum",
+      "crozius-arcanum-execrator",
       "master-crafted-power-weapon-execrator",
       "hand-flamer"
     ],
@@ -757,8 +757,8 @@
       "artificer-firearm-sternguard-veteran-squad",
       "ceramite-fists-sternguard-veteran-squad",
       "bolt-pistol",
-      "chainsword",
-      "heavy-bolter"
+      "chainsword-sternguard-veteran-squad",
+      "heavy-bolter-sternguard-veteran-squad"
     ],
     "ability_ids": [
       "veteran-marksmen-adeptus-astartes"
@@ -772,7 +772,7 @@
     "wargear_budgets": [
       {
         "items": [
-          "heavy-bolter",
+          "heavy-bolter-sternguard-veteran-squad",
           "pyrecannon-sternguard-veteran-squad"
         ],
         "count": 1,
@@ -1072,7 +1072,7 @@
       "combi-weapon",
       "heavy-bolt-pistol-castellan",
       "master-crafted-power-weapon-castellan",
-      "chainsword"
+      "chainsword-castellan"
     ],
     "ability_ids": [
       "vehement-aggression-black-templars",
@@ -1729,7 +1729,7 @@
       "las-talon-repulsor",
       "twin-heavy-bolter-repulsor",
       "defensive-array",
-      "twin-lascannon"
+      "twin-lascannon-repulsor"
     ],
     "ability_ids": [
       {
@@ -2021,7 +2021,7 @@
     },
     "weapon_ids": [
       "absolvor-bolt-pistol",
-      "chainsword"
+      "chainsword-sanguinary-priest"
     ],
     "ability_ids": [
       "blood-chalice-blood-angels",
@@ -2099,10 +2099,10 @@
     "weapon_ids": [
       "hand-flamer",
       "heavy-bolt-pistol-death-company-captain-with-jump-pack",
-      "plasma-pistol",
+      "plasma-pistol-death-company-captain-with-jump-pack",
       "power-fist-death-company-captain-with-jump-pack",
       "relic-weapon",
-      "chainsword",
+      "chainsword-death-company-captain-with-jump-pack",
       "thunder-hammer"
     ],
     "ability_ids": [
@@ -2215,7 +2215,7 @@
       "chainsword",
       "bolt-rifle",
       "combat-blade",
-      "grenade-launcher"
+      "grenade-launcher-death-company-marines"
     ],
     "ability_ids": [
       "an-honourable-death-in-combat-blood-angels",
@@ -2474,7 +2474,7 @@
     },
     "weapon_ids": [
       "fury-of-the-ancients",
-      "plasma-pistol",
+      "plasma-pistol-chief-librarian-mephiston",
       "vitarus"
     ],
     "ability_ids": [
@@ -2812,7 +2812,7 @@
     },
     "weapon_ids": [
       "angelus-boltgun",
-      "inferno-pistol",
+      "inferno-pistol-sanguinary-guard",
       "encarmine-weapon"
     ],
     "ability_ids": [
@@ -2899,9 +2899,9 @@
       "baal-flamestorm-cannon",
       "heavy-bolter",
       "hunter-killer-missile",
-      "storm-bolter",
+      "storm-bolter-baal-predator",
       "twin-assault-cannon-baal-predator",
-      "heavy-flamer"
+      "heavy-flamer-baal-predator"
     ],
     "ability_ids": [
       "overcharged-engines-blood-angels",
@@ -3087,9 +3087,9 @@
     "weapon_ids": [
       "heavy-bolt-pistol-death-company-captain",
       "inferno-pistol-death-company-captain",
-      "master-crafted-chainsword",
+      "master-crafted-chainsword-death-company-captain",
       "power-fist-death-company-captain",
-      "relic-weapon"
+      "relic-weapon-death-company-captain"
     ],
     "ability_ids": [
       "black-rage-blood-angels",
@@ -3170,7 +3170,7 @@
       "max": 1
     },
     "weapon_ids": [
-      "assault-cannon",
+      "assault-cannon-ravenwing-darkshroud",
       "heavy-bolter-ravenwing-darkshroud",
       "armoured-hull"
     ],
@@ -3448,14 +3448,14 @@
       "max": 10
     },
     "weapon_ids": [
-      "assault-cannon",
-      "chainfist",
+      "assault-cannon-deathwing-terminator-squad",
+      "chainfist-deathwing-terminator-squad",
       "cyclone-missile-launcher",
-      "heavy-flamer",
-      "plasma-cannon",
+      "heavy-flamer-deathwing-terminator-squad",
+      "plasma-cannon-deathwing-terminator-squad",
       "power-fist",
-      "power-weapon",
-      "storm-bolter"
+      "power-weapon-deathwing-terminator-squad",
+      "storm-bolter-deathwing-terminator-squad"
     ],
     "ability_ids": [
       "deathwing-dark-angels",
@@ -3474,10 +3474,10 @@
     "wargear_budgets": [
       {
         "items": [
-          "assault-cannon",
+          "assault-cannon-deathwing-terminator-squad",
           "cyclone-missile-launcher",
-          "heavy-flamer",
-          "plasma-cannon"
+          "heavy-flamer-deathwing-terminator-squad",
+          "plasma-cannon-deathwing-terminator-squad"
         ],
         "count": 1,
         "per_models": 5
@@ -3731,7 +3731,7 @@
       "max": 1
     },
     "weapon_ids": [
-      "assault-cannon",
+      "assault-cannon-land-speeder-vengeance",
       "heavy-bolter-land-speeder-vengeance",
       "plasma-storm-battery",
       "armoured-hull"
@@ -3813,7 +3813,7 @@
       "avenger-mega-bolter",
       "blacksword-missiles",
       "nephilim-lascannons",
-      "twin-heavy-bolter"
+      "twin-heavy-bolter-nephilim-jetfighter"
     ],
     "ability_ids": [
       "lightning-fast-manoeuvres-dark-angels",
@@ -3895,7 +3895,7 @@
     },
     "weapon_ids": [
       "crozius-arcanum-and-power-weapon",
-      "heavy-bolt-pistol"
+      "heavy-bolt-pistol-asmodai"
     ],
     "ability_ids": [
       "exemplar-of-hate-dark-angels",
@@ -4383,7 +4383,7 @@
     },
     "weapon_ids": [
       "armoured-hull",
-      "hurricane-bolter",
+      "hurricane-bolter-ravenwing-dark-talon",
       "rift-cannon"
     ],
     "ability_ids": [
@@ -4638,7 +4638,7 @@
       "deathwatch-heavy-bolter",
       "flamestorm-gauntlets",
       "fragstorm-grenade-launcher",
-      "melta-rifle",
+      "melta-rifle-indomitor-kill-team",
       "multi-melta-indomitor-kill-team",
       "twin-power-fists",
       "ceramite-fists"
@@ -5205,14 +5205,14 @@
       "max": 10
     },
     "weapon_ids": [
-      "assault-cannon",
+      "assault-cannon-deathwatch-terminator-squad",
       "chainfist",
       "cyclone-missile-launcher",
-      "heavy-flamer",
+      "heavy-flamer-deathwatch-terminator-squad",
       "plasma-cannon",
       "power-fist",
-      "power-weapon",
-      "storm-bolter",
+      "power-weapon-deathwatch-terminator-squad",
+      "storm-bolter-deathwatch-terminator-squad",
       "thunder-hammer-deathwatch-terminator-squad",
       "twin-lightning-claws-deathwatch-terminator-squad"
     ],
@@ -5244,9 +5244,9 @@
     "wargear_budgets": [
       {
         "items": [
-          "assault-cannon",
+          "assault-cannon-deathwatch-terminator-squad",
           "cyclone-missile-launcher",
-          "heavy-flamer",
+          "heavy-flamer-deathwatch-terminator-squad",
           "plasma-cannon"
         ],
         "count": 3,
@@ -5424,7 +5424,7 @@
     "weapon_ids": [
       "bolt-pistol",
       "bolt-sniper-rifle",
-      "combat-knife",
+      "combat-knife-spectrus-kill-team",
       "deathwatch-bolt-carbine",
       "deathwatch-marksman-bolt-carbine",
       "deathwatch-occulus-bolt-carbine",
@@ -7402,7 +7402,7 @@
       "power-fist-captain-with-jump-pack",
       "relic-weapon-captain-with-jump-pack",
       "thunder-hammer-captain-with-jump-pack",
-      "chainsword"
+      "chainsword-captain-with-jump-pack"
     ],
     "ability_ids": [
       "angels-wrath-adeptus-astartes",
@@ -8001,7 +8001,7 @@
       "missile-launcher-scout-squad",
       "shotgun",
       "sniper-rifle",
-      "chainsword"
+      "chainsword-scout-squad"
     ],
     "ability_ids": [
       "infiltrators",
@@ -8174,7 +8174,7 @@
       "twin-heavy-bolter-brutalis-dreadnought",
       "twin-icarus-ironhail-heavy-stubber-brutalis-dreadnought",
       "twin-multi-melta-brutalis-dreadnought",
-      "bolt-rifle"
+      "bolt-rifle-brutalis-dreadnought"
     ],
     "ability_ids": [
       "brutalis-charge-adeptus-astartes",
@@ -8873,6 +8873,10 @@
         "required_detachment_id": "company-of-hunters"
       },
       {
+        "keyword": "Battleline",
+        "required_detachment_id": "darkflight-pursuit"
+      },
+      {
         "keyword": "Ravenwing",
         "required_faction_keyword": "Dark Angels"
       }
@@ -8982,7 +8986,7 @@
     ],
     "wargear_costs": [
       {
-        "item_id": "vengor-launcher",
+        "item_id": "vengor-launcher-desolation-squad",
         "cost": 5
       }
     ]
@@ -9246,8 +9250,8 @@
       "macro-plasma-incinerator",
       "onslaught-gatling-cannon",
       "redemptor-fist",
-      "fragstorm-grenade-launcher",
-      "storm-bolter"
+      "fragstorm-grenade-launcher-redemptor-dreadnought",
+      "storm-bolter-redemptor-dreadnought"
     ],
     "ability_ids": [
       "duty-eternal-adeptus-astartes",
@@ -10505,7 +10509,7 @@
       "thunder-hammer-intercessor-squad",
       "knives-and-fists",
       "grenade-launcher",
-      "chainsword"
+      "chainsword-intercessor-squad"
     ],
     "ability_ids": [
       "bolter-discipline-adeptus-astartes",
@@ -10585,9 +10589,9 @@
       "armoured-hull-astraeus",
       "ironhail-heavy-stubber",
       "plasma-eradicator",
-      "storm-bolter",
-      "twin-heavy-bolter",
-      "twin-lascannon",
+      "storm-bolter-astraeus",
+      "twin-heavy-bolter-astraeus",
+      "twin-lascannon-astraeus",
       "twin-macro-accelerator-cannon",
       "astareus-las-ripper"
     ],
@@ -10778,7 +10782,7 @@
       "lascannon",
       "thunderhawk-heavy-cannon",
       "turbo-laser-destructor",
-      "twin-heavy-bolter"
+      "twin-heavy-bolter-thunderhawk-gunship"
     ],
     "ability_ids": [
       "aerial-assault-adeptus-astartes",
@@ -11048,7 +11052,7 @@
       "armoured-feet",
       "ballistus-lascannon",
       "ballistus-missile-launcher",
-      "storm-bolter"
+      "storm-bolter-ballistus-dreadnought"
     ],
     "ability_ids": [
       "ballistus-strike-adeptus-astartes",
@@ -11304,7 +11308,7 @@
     "weapon_ids": [
       "master-crafted-bolt-carbine-lieutenant-in-phobos-armour",
       "monomolecular-combat-blades-lieutenant-in-phobos-armour",
-      "special-issue-bolt-pistol"
+      "special-issue-bolt-pistol-lieutenant-in-phobos-armour"
     ],
     "ability_ids": [
       "deep-strike",
@@ -11550,7 +11554,7 @@
       "incendium-cannon",
       "invictor-fist",
       "twin-ironhail-autocannon",
-      "ironhail-heavy-stubber"
+      "ironhail-heavy-stubber-invictor-tactical-warsuit"
     ],
     "ability_ids": [
       {
@@ -12878,8 +12882,8 @@
     "weapon_ids": [
       "fenrisian-great-axe",
       "great-wolf-claw",
-      "heavy-flamer",
-      "storm-bolter"
+      "heavy-flamer-wulfen-dreadnought",
+      "storm-bolter-wulfen-dreadnought"
     ],
     "ability_ids": [
       "bestial-rage-space-wolves",
@@ -13057,7 +13061,7 @@
     },
     "weapon_ids": [
       "assault-cannon-bjorn-the-fell-handed",
-      "heavy-flamer",
+      "heavy-flamer-bjorn-the-fell-handed",
       "helfrost-cannon",
       "multi-melta-bjorn-the-fell-handed",
       "trueclaw"
@@ -13322,14 +13326,14 @@
     },
     "weapon_ids": [
       "bolt-pistol",
-      "instigator-bolt-carbine",
+      "instigator-bolt-carbine-wolf-scouts",
       "plasma-gun",
       "plasma-pistol-wolf-scouts",
       "power-weapon",
       "runic-stave",
       "teeth-and-claws-wolf-scouts",
       "thunderclap",
-      "combat-knife"
+      "combat-knife-wolf-scouts"
     ],
     "ability_ids": [
       "deadly-stalkers-space-wolves",
@@ -13374,7 +13378,7 @@
       },
       {
         "items": [
-          "instigator-bolt-carbine"
+          "instigator-bolt-carbine-wolf-scouts"
         ],
         "count": 1,
         "per_models": 12
@@ -13522,9 +13526,9 @@
       "max": 1
     },
     "weapon_ids": [
-      "heavy-flamer",
+      "heavy-flamer-murderfang",
       "murderclaws",
-      "storm-bolter"
+      "storm-bolter-murderfang"
     ],
     "ability_ids": [
       "bestial-fury-space-wolves",
@@ -15020,7 +15024,7 @@
     },
     "weapon_ids": [
       "plasma-pistol",
-      "twin-bolt-rifle"
+      "twin-bolt-rifle-captain-on-bike"
     ],
     "game_version": {
       "edition": "11th",
@@ -15050,6 +15054,12 @@
       "into-the-fray-adeptus-astartes",
       "leader",
       "strategic-acumen-adeptus-astartes"
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Ravenwing",
+        "required_faction_keyword": "Dark Angels"
+      }
     ]
   },
   {
@@ -15086,7 +15096,7 @@
       "max": 1
     },
     "weapon_ids": [
-      "heavy-bolt-pistol",
+      "heavy-bolt-pistol-kaius-konorius",
       "severance-and-rebuke"
     ],
     "game_version": {
@@ -15192,7 +15202,7 @@
     },
     "weapon_ids": [
       "melta-rifle",
-      "multi-melta"
+      "multi-melta-eradicator-squad-with-melta-rifles"
     ],
     "ability_ids": [
       "total-obliteration-adeptus-astartes"
@@ -15268,16 +15278,22 @@
     "points_provisional": false,
     "weapon_ids": [
       "onslaught-gatling-cannon",
-      "multi-melta"
+      "multi-melta-invader-atvs"
     ],
     "wargear_costs": [
       {
-        "item_id": "multi-melta",
+        "item_id": "multi-melta-invader-atvs",
         "cost": 5
       }
     ],
     "ability_ids": [
       "aggressive-reconnaissance-adeptus-astartes"
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Ravenwing",
+        "required_faction_keyword": "Dark Angels"
+      }
     ]
   },
   {

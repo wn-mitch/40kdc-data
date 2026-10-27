@@ -2872,7 +2872,10 @@ mod tests {
             lo.counts.get("bolt-pistol-khorne-berzerkers").copied(),
             Some(10)
         );
-        assert_eq!(lo.counts.get("chainblade").copied(), Some(10));
+        assert_eq!(
+            lo.counts.get("chainblade-khorne-berzerkers").copied(),
+            Some(10)
+        );
         assert_eq!(lo.counts.get("plasma-pistol").copied(), None);
         assert_eq!(lo.counts.len(), 2);
         // The legal default validates clean (the maximal set is what gets edited).

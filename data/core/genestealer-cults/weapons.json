@@ -2796,5 +2796,193 @@
         "id": "f91b36e6-7bf0-4088-83fc-ab44609c3ff7"
       }
     ]
+  },
+  {
+    "id": "armoured-hull-claw-of-ascension-achilles-ridgerunner",
+    "name": "Armoured hull",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Armoured Hull",
+        "range": "Melee",
+        "stats": {
+          "A": 3,
+          "S": 5,
+          "AP": 0,
+          "D": 1,
+          "WS": 4
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "26646d4f-c9a2-447c-8bdd-d04d1df4bdf2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3fb8f047-b5d7-41cf-b4c8-26ddd50e3f86"
+      }
+    ]
+  },
+  {
+    "id": "autopistol-shanus-daskovian",
+    "name": "Autopistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Autopistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 3,
+          "AP": 0,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "c213-e6c4-7183-4041"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c4264e96-49d6-40d7-806f-c0c061bec825"
+      },
+      {
+        "namespace": "mfm",
+        "id": "efc8873b-c995-4067-8d4f-29fc41ceeb4b"
+      }
+    ]
+  },
+  {
+    "id": "cult-sniper-rifle-shanus-daskovian",
+    "name": "Cult sniper rifle",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Cult Sniper Rifle",
+        "range": 36,
+        "stats": {
+          "A": 1,
+          "S": 5,
+          "AP": -2,
+          "D": 3,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "precision"
+          },
+          {
+            "keyword_id": "heavy"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "71de-12da-5c48-e26a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "14dcd020-4f25-4945-a144-55f3c3679f33"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bd354aff-c2af-4c32-b032-0fb3912667e5"
+      }
+    ]
+  },
+  {
+    "id": "power-weapon-claw-of-ascension-atalan-jackals",
+    "name": "Power weapon",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Power Weapon",
+        "range": "Melee",
+        "stats": {
+          "A": 2,
+          "S": 4,
+          "AP": -2,
+          "D": 1,
+          "WS": 4
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "2195-33b6-2b93-3bcc"
+      },
+      {
+        "namespace": "mfm",
+        "id": "db9985b4-0263-4fe9-9290-da2e8727f821"
+      },
+      {
+        "namespace": "mfm",
+        "id": "eb33ed22-0cb9-42b0-afae-b7864fc4b74e"
+      }
+    ]
+  },
+  {
+    "id": "stolen-blade-claw-of-ascension-atalan-jackals",
+    "name": "Stolen Blade",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Stolen Blade",
+        "range": "Melee",
+        "stats": {
+          "A": 2,
+          "S": 3,
+          "AP": 0,
+          "D": 1,
+          "WS": 4
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "a13d21bf-a43f-4a28-8cb3-ae127fa3155d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d29f7b62-fb03-4a2f-8c5f-06a2c64b0fc0"
+      }
+    ]
   }
 ]

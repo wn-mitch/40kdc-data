@@ -415,7 +415,7 @@
     "points_provisional": false,
     "wargear_costs": [
       {
-        "item_id": "twin-cognis-lascannon",
+        "item_id": "twin-cognis-lascannon-ironstrider-ballistarii",
         "cost": 10
       }
     ],
@@ -3002,7 +3002,7 @@
     },
     "weapon_ids": [
       "omnissian-staff",
-      "transonic-cannon"
+      "transonic-cannon-manipulus-skand"
     ],
     "ability_ids": [
       "defend-the-divine-work-manipulus-skand-adeptus-mechanicus",
@@ -3067,9 +3067,9 @@
       "max": 5
     },
     "weapon_ids": [
-      "flechette-blaster",
+      "flechette-blaster-purge-corps-pteraxii-sterylizors",
       "phosphor-torch",
-      "taser-goad",
+      "taser-goad-purge-corps-pteraxii-sterylizors",
       "talons"
     ],
     "ability_ids": [
@@ -3147,12 +3147,12 @@
     },
     "wargear_costs": [
       {
-        "item_id": "phosphor-pistol",
+        "item_id": "phosphor-pistol-purge-corps-serberys-sulphurhounds",
         "cost": 1
       }
     ],
     "weapon_ids": [
-      "phosphor-pistol"
+      "phosphor-pistol-purge-corps-serberys-sulphurhounds"
     ],
     "external_refs": [
       {
@@ -3207,7 +3207,7 @@
       "plasma-caliver",
       "radium-carbine",
       "alphas-combat-artefact",
-      "mechanicus-pistol",
+      "mechanicus-pistol-purge-corps-skitarii-vanguard",
       "gun-stocks"
     ],
     "ability_ids": [

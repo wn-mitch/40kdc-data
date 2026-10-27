@@ -1,4 +1,4 @@
-# MFM seed-detachments — APPLIED
+# MFM seed-detachments — DRY RUN
 
 Source-backed matched-play detachment skeletons are created by default.
 Combat Patrol parents and their cost-0 enhancements remain opt-in.

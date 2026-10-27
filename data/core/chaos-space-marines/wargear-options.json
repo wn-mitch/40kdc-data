@@ -28,7 +28,7 @@
       "combi-bolter"
     ],
     "replacement": [
-      "combi-weapon"
+      "combi-weapon-sorcerer-in-terminator-armour"
     ],
     "model_constraint": {
       "any_number": true
@@ -44,7 +44,7 @@
     },
     "is_free": true,
     "replaces": [
-      "boltgun"
+      "boltgun-nemesis-claw"
     ],
     "replacement_choice": [
       [
@@ -94,7 +94,7 @@
     },
     "is_free": true,
     "replaces": [
-      "bolt-pistol"
+      "bolt-pistol-nemesis-claw"
     ],
     "replacement": [
       "plasma-pistol"
@@ -187,7 +187,7 @@
         "reaper-autocannon"
       ],
       [
-        "combi-weapon"
+        "combi-weapon-chaos-terminator-squad"
       ]
     ],
     "model_constraint": {
@@ -208,7 +208,7 @@
       "combi-bolter"
     ],
     "replacement": [
-      "combi-weapon"
+      "combi-weapon-chaos-terminator-squad"
     ],
     "model_constraint": {
       "model_name": "Terminator Champion",
@@ -329,7 +329,7 @@
         "combi-bolter"
       ],
       [
-        "combi-weapon"
+        "combi-weapon-chaos-land-raider"
       ]
     ],
     "model_constraint": {
@@ -404,7 +404,7 @@
     "is_free": true,
     "replacement_choice": [
       [
-        "combi-weapon"
+        "combi-weapon-chaos-predator-annihilator"
       ],
       [
         "combi-bolter"
@@ -478,7 +478,7 @@
         "power-fist"
       ],
       [
-        "boltgun"
+        "boltgun-havocs"
       ],
       [
         "plasma-pistol"
@@ -533,7 +533,7 @@
     },
     "is_free": true,
     "replaces": [
-      "bolt-pistol"
+      "bolt-pistol-raptors"
     ],
     "replacement": [
       "plasma-pistol"
@@ -577,11 +577,11 @@
     ],
     "replacement_choice": [
       [
-        "close-combat-weapon",
+        "close-combat-weapon-raptors",
         "flamer"
       ],
       [
-        "close-combat-weapon",
+        "close-combat-weapon-raptors",
         "meltagun"
       ],
       [
@@ -589,7 +589,7 @@
       ],
       [
         "plasma-gun",
-        "close-combat-weapon"
+        "close-combat-weapon-raptors"
       ]
     ],
     "model_constraint": {
@@ -607,7 +607,7 @@
     },
     "is_free": true,
     "replaces": [
-      "bolt-pistol"
+      "bolt-pistol-raptors"
     ],
     "replacement": [
       "plasma-pistol"
@@ -768,8 +768,8 @@
       "excruciator-cannon"
     ],
     "replacement": [
-      "magma-cutters",
-      "magma-cutters"
+      "magma-cutters-defiler",
+      "magma-cutters-defiler"
     ],
     "model_constraint": {
       "any_number": true
@@ -828,7 +828,7 @@
         "combi-bolter"
       ],
       [
-        "combi-weapon"
+        "combi-weapon-chaos-predator-destructor"
       ]
     ],
     "model_constraint": {
@@ -862,7 +862,7 @@
     },
     "is_free": true,
     "replaces": [
-      "bolt-pistol"
+      "bolt-pistol-chosen"
     ],
     "replacement": [
       "plasma-pistol"
@@ -882,7 +882,7 @@
     },
     "is_free": true,
     "replaces": [
-      "boltgun",
+      "boltgun-chosen",
       "accursed-weapon"
     ],
     "replacement": [
@@ -903,7 +903,7 @@
     },
     "is_free": true,
     "replaces": [
-      "boltgun"
+      "boltgun-chosen"
     ],
     "replacement": [
       "combi-weapon"
@@ -943,7 +943,7 @@
     },
     "is_free": true,
     "replaces": [
-      "bolt-pistol",
+      "bolt-pistol-chosen",
       "accursed-weapon"
     ],
     "replacement": [
@@ -965,8 +965,8 @@
     },
     "is_free": true,
     "replaces": [
-      "boltgun",
-      "bolt-pistol"
+      "boltgun-chosen",
+      "bolt-pistol-chosen"
     ],
     "replacement": [
       "combi-weapon",
@@ -987,8 +987,8 @@
     },
     "is_free": true,
     "replaces": [
-      "boltgun",
-      "bolt-pistol",
+      "boltgun-chosen",
+      "bolt-pistol-chosen",
       "accursed-weapon"
     ],
     "replacement": [
@@ -1010,7 +1010,7 @@
     },
     "is_free": true,
     "replaces": [
-      "bolt-pistol",
+      "bolt-pistol-chosen",
       "accursed-weapon"
     ],
     "replacement": [
@@ -1052,8 +1052,8 @@
     },
     "is_free": true,
     "replaces": [
-      "boltgun",
-      "bolt-pistol",
+      "boltgun-chosen",
+      "bolt-pistol-chosen",
       "accursed-weapon"
     ],
     "replacement": [
@@ -1075,7 +1075,7 @@
     },
     "is_free": true,
     "replaces": [
-      "boltgun"
+      "boltgun-chosen"
     ],
     "replacement": [
       "combi-weapon"
@@ -1095,7 +1095,7 @@
     },
     "is_free": true,
     "replaces": [
-      "bolt-pistol"
+      "bolt-pistol-chosen"
     ],
     "replacement": [
       "plasma-pistol"
@@ -1115,7 +1115,7 @@
     },
     "is_free": true,
     "replaces": [
-      "boltgun",
+      "boltgun-chosen",
       "accursed-weapon"
     ],
     "replacement": [
@@ -1136,8 +1136,8 @@
     },
     "is_free": true,
     "replaces": [
-      "boltgun",
-      "bolt-pistol"
+      "boltgun-chosen",
+      "bolt-pistol-chosen"
     ],
     "replacement": [
       "combi-weapon",
@@ -1293,7 +1293,7 @@
         "combi-bolter"
       ],
       [
-        "combi-weapon"
+        "combi-weapon-chaos-vindicator"
       ]
     ],
     "model_constraint": {
@@ -1444,7 +1444,7 @@
     },
     "is_free": true,
     "replaces": [
-      "boltgun"
+      "boltgun-red-corsairs-raiders"
     ],
     "replacement": [
       "meltagun"
@@ -1464,7 +1464,7 @@
     },
     "is_free": true,
     "replaces": [
-      "bolt-pistol"
+      "bolt-pistol-red-corsairs-raiders"
     ],
     "replacement": [
       "hand-flamer"
@@ -1899,7 +1899,7 @@
     },
     "is_free": true,
     "replaces": [
-      "bolt-pistol"
+      "bolt-pistol-chaos-bikers"
     ],
     "replacement_choice": [
       [
@@ -1964,7 +1964,7 @@
     },
     "is_free": true,
     "replaces": [
-      "bolt-pistol"
+      "bolt-pistol-chaos-bikers"
     ],
     "replacement": [
       "astartes-chainsword"
@@ -2071,7 +2071,7 @@
         "havoc-launcher"
       ],
       [
-        "combi-weapon",
+        "combi-weapon-chaos-rhino",
         "havoc-launcher"
       ]
     ],
@@ -2090,7 +2090,7 @@
     "is_free": true,
     "replacement_choice": [
       [
-        "combi-weapon"
+        "combi-weapon-chaos-rhino"
       ],
       [
         "havoc-launcher"
@@ -2104,7 +2104,7 @@
       ],
       [
         "havoc-launcher",
-        "combi-weapon"
+        "combi-weapon-chaos-rhino"
       ]
     ],
     "model_constraint": {
@@ -2138,7 +2138,7 @@
     },
     "is_free": true,
     "replaces": [
-      "boltgun"
+      "boltgun-legionaries"
     ],
     "replacement_choice": [
       [
@@ -2169,7 +2169,7 @@
     },
     "is_free": true,
     "replaces": [
-      "bolt-pistol"
+      "bolt-pistol-legionaries"
     ],
     "replacement_choice": [
       [
@@ -2200,8 +2200,8 @@
     },
     "is_free": true,
     "replaces": [
-      "bolt-pistol",
-      "boltgun"
+      "bolt-pistol-legionaries",
+      "boltgun-legionaries"
     ],
     "replacement_choice": [
       [
@@ -2261,7 +2261,7 @@
     },
     "is_free": true,
     "replaces": [
-      "boltgun"
+      "boltgun-legionaries"
     ],
     "replacement_choice": [
       [
@@ -2311,7 +2311,7 @@
     },
     "is_free": true,
     "replaces": [
-      "boltgun"
+      "boltgun-legionaries"
     ],
     "replacement": [
       "heavy-melee-weapon"
@@ -2331,7 +2331,7 @@
     },
     "is_free": true,
     "replaces": [
-      "boltgun"
+      "boltgun-legionaries"
     ],
     "replacement": [
       "balefire-tome"

@@ -90,7 +90,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "pre-launch-provisional"
     },
     "detachment_points": 2,
     "force_dispositions": [
@@ -305,7 +305,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "pre-launch-provisional"
     },
     "detachment_points": 1,
     "force_dispositions": [

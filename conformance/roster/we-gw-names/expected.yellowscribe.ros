@@ -52,7 +52,7 @@ Add one rolled D6 to your Blessings of Khorne for each Bloodshed points you have
                         <characteristic name="Range">Melee</characteristic>
                         <characteristic name="A">4</characteristic>
                         <characteristic name="WS">3+</characteristic>
-                        <characteristic name="S">4</characteristic>
+                        <characteristic name="S">5</characteristic>
                         <characteristic name="AP">-1</characteristic>
                         <characteristic name="D">1</characteristic>
                         <characteristic name="Keywords"></characteristic>
@@ -67,8 +67,8 @@ Add one rolled D6 to your Blessings of Khorne for each Bloodshed points you have
                         <characteristic name="Range">12"</characteristic>
                         <characteristic name="A">1</characteristic>
                         <characteristic name="BS">4+</characteristic>
-                        <characteristic name="S">4</characteristic>
-                        <characteristic name="AP">0</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-1</characteristic>
                         <characteristic name="D">1</characteristic>
                         <characteristic name="Keywords">Pistol</characteristic>
                       </characteristics>
@@ -203,8 +203,8 @@ Add one rolled D6 to your Blessings of Khorne for each Bloodshed points you have
                         <characteristic name="Range">24"</characteristic>
                         <characteristic name="A">2</characteristic>
                         <characteristic name="BS">4+</characteristic>
-                        <characteristic name="S">4</characteristic>
-                        <characteristic name="AP">0</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-1</characteristic>
                         <characteristic name="D">1</characteristic>
                         <characteristic name="Keywords">Rapid Fire 4</characteristic>
                       </characteristics>

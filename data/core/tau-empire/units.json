@@ -4135,9 +4135,9 @@
       "max": 1
     },
     "weapon_ids": [
-      "airbursting-fragmentation-projector",
-      "battlesuit-fists",
-      "plasma-rifle"
+      "airbursting-fragmentation-projector-commander-cloudspear",
+      "battlesuit-fists-commander-cloudspear",
+      "plasma-rifle-commander-cloudspear"
     ],
     "ability_ids": [
       "shield-drone-commander-cloudspear-tau-empire",
@@ -4205,7 +4205,7 @@
     "weapon_ids": [
       "gun-stocks",
       "pulse-blaster",
-      "pulse-pistol"
+      "pulse-pistol-sudden-dawn-cadre-breacher-team"
     ],
     "ability_ids": [
       "breach-and-clear-sudden-dawn-cadre-breacher-team-tau-empire"
@@ -4271,7 +4271,7 @@
     "weapon_ids": [
       "accelerator-burst-cannon",
       "twin-pulse-carbine",
-      "armoured-hull"
+      "armoured-hull-sudden-dawn-cadre-devilfish"
     ],
     "transport_capacity": {
       "capacity": 12
@@ -4334,7 +4334,7 @@
     "weapon_ids": [
       "gun-stocks",
       "pulse-carbine",
-      "pulse-pistol",
+      "pulse-pistol-sudden-dawn-cadre-pathfinder-team",
       "rail-rifle"
     ],
     "ability_ids": [

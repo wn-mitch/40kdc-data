@@ -103,6 +103,15 @@ export function runDataslates(dump: MfmDump, options: DataslatesOptions): Datasl
   const abilityVerdicts = gatherAbilityVerdicts(options, enrichment);
   const abilityOk = (faction: string, abilityId: unknown): boolean =>
     typeof abilityId === "string" && abilityVerdicts.get(scoped(faction, abilityId)) === "verified";
+  // Ability ids are unique across factions, so a chapter's replicated copy of a stratagem names an
+  // ability held in another faction dir: look it up wherever it lives, so every copy stamps alike.
+  const verifiedAbilityIds = new Set<string>();
+  for (const [dir, records] of enrichment) {
+    for (const record of records) {
+      if (typeof record.ability_id === "string" && abilityOk(dir, record.ability_id)) verifiedAbilityIds.add(record.ability_id);
+    }
+  }
+  const abilityOkAnywhere = (abilityId: unknown): boolean => typeof abilityId === "string" && verifiedAbilityIds.has(abilityId);
   const evidence: CoreEvidence = gatherCoreEvidence(dump, coreDir, coreDirs);
 
   const report: DataslatesReport = { current: now, counts: new Map(), abilityReasons: new Map(), weaponReasons: new Map(), staged: [] };
@@ -145,7 +154,7 @@ export function runDataslates(dump: MfmDump, options: DataslatesOptions): Datasl
     stampFile("detachments", dir, at("detachments.json"), (record) =>
       detachmentVerified(evidence.detachments.has(key(record.id)), detachmentRuleIds(record), (rule) => abilityOk(dir, rule)),
     );
-    stampFile("stratagems", dir, at("stratagems.json"), (record) => stratagemVerified(evidence, record, (id) => abilityOk(dir, id)));
+    stampFile("stratagems", dir, at("stratagems.json"), (record) => stratagemVerified(evidence, record, abilityOkAnywhere));
   }
   stampFile("stratagems", "(core)", path.join(coreDir, "stratagems.json"), (record) =>
     stratagemVerified(evidence, record, (id) => abilityOk(CORE_FACTION, id)),

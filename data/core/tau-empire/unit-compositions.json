@@ -2125,9 +2125,9 @@
           "diameter": 60
         },
         "default_weapon_ids": [
-          "airbursting-fragmentation-projector",
-          "battlesuit-fists",
-          "plasma-rifle"
+          "airbursting-fragmentation-projector-commander-cloudspear",
+          "battlesuit-fists-commander-cloudspear",
+          "plasma-rifle-commander-cloudspear"
         ]
       }
     ],
@@ -2163,7 +2163,7 @@
         "default_weapon_ids": [
           "gun-stocks",
           "pulse-blaster",
-          "pulse-pistol"
+          "pulse-pistol-sudden-dawn-cadre-breacher-team"
         ]
       },
       {
@@ -2178,7 +2178,7 @@
         "default_weapon_ids": [
           "gun-stocks",
           "pulse-blaster",
-          "pulse-pistol"
+          "pulse-pistol-sudden-dawn-cadre-breacher-team"
         ]
       }
     ],
@@ -2221,7 +2221,7 @@
         },
         "default_weapon_ids": [
           "accelerator-burst-cannon",
-          "armoured-hull",
+          "armoured-hull-sudden-dawn-cadre-devilfish",
           "twin-pulse-carbine"
         ]
       }
@@ -2258,7 +2258,7 @@
         "default_weapon_ids": [
           "gun-stocks",
           "pulse-carbine",
-          "pulse-pistol"
+          "pulse-pistol-sudden-dawn-cadre-pathfinder-team"
         ]
       },
       {
@@ -2272,7 +2272,7 @@
         },
         "default_weapon_ids": [
           "gun-stocks",
-          "pulse-pistol",
+          "pulse-pistol-sudden-dawn-cadre-pathfinder-team",
           "rail-rifle"
         ]
       },
@@ -2288,7 +2288,7 @@
         "default_weapon_ids": [
           "gun-stocks",
           "pulse-carbine",
-          "pulse-pistol"
+          "pulse-pistol-sudden-dawn-cadre-pathfinder-team"
         ]
       }
     ],

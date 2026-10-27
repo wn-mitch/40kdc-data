@@ -164,8 +164,8 @@
                         <characteristic name="Range">24"</characteristic>
                         <characteristic name="A">1</characteristic>
                         <characteristic name="BS">4+</characteristic>
-                        <characteristic name="S">4</characteristic>
-                        <characteristic name="AP">0</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-1</characteristic>
                         <characteristic name="D">1</characteristic>
                         <characteristic name="Keywords">Anti-Infantry 4+, Devastating Wounds, Rapid Fire 1</characteristic>
                       </characteristics>
@@ -183,8 +183,8 @@
                         <characteristic name="Range">24"</characteristic>
                         <characteristic name="A">1</characteristic>
                         <characteristic name="BS">4+</characteristic>
-                        <characteristic name="S">4</characteristic>
-                        <characteristic name="AP">0</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-1</characteristic>
                         <characteristic name="D">1</characteristic>
                         <characteristic name="Keywords">Anti-Infantry 4+, Devastating Wounds, Rapid Fire 1</characteristic>
                       </characteristics>
@@ -285,8 +285,8 @@
                         <characteristic name="Range">24"</characteristic>
                         <characteristic name="A">1</characteristic>
                         <characteristic name="BS">4+</characteristic>
-                        <characteristic name="S">4</characteristic>
-                        <characteristic name="AP">0</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-1</characteristic>
                         <characteristic name="D">1</characteristic>
                         <characteristic name="Keywords">Anti-Infantry 4+, Devastating Wounds, Rapid Fire 1</characteristic>
                       </characteristics>
@@ -361,8 +361,8 @@
                         <characteristic name="Range">24"</characteristic>
                         <characteristic name="A">1</characteristic>
                         <characteristic name="BS">4+</characteristic>
-                        <characteristic name="S">4</characteristic>
-                        <characteristic name="AP">0</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-1</characteristic>
                         <characteristic name="D">1</characteristic>
                         <characteristic name="Keywords">Anti-Infantry 4+, Devastating Wounds, Rapid Fire 1</characteristic>
                       </characteristics>
@@ -380,8 +380,8 @@
                         <characteristic name="Range">24"</characteristic>
                         <characteristic name="A">1</characteristic>
                         <characteristic name="BS">4+</characteristic>
-                        <characteristic name="S">4</characteristic>
-                        <characteristic name="AP">0</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-1</characteristic>
                         <characteristic name="D">1</characteristic>
                         <characteristic name="Keywords">Anti-Infantry 4+, Devastating Wounds, Rapid Fire 1</characteristic>
                       </characteristics>

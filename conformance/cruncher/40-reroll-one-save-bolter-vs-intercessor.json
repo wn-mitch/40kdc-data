@@ -1,8 +1,8 @@
 {
-  "name": "bolt-rifle x5 vs intercessor, defender re-rolls one saving throw",
+  "name": "bolt-rifle (saturation) x5 vs intercessor, defender re-rolls one saving throw",
   "attacker": {
     "weaponId": "bolt-rifle",
-    "profileIndex": 0
+    "profileIndex": 1
   },
   "modelsFiring": 5,
   "target": {
@@ -30,11 +30,11 @@
     "stages": {
       "attacks": 10,
       "hits": 6.6667,
-      "wounds": 2.2222,
-      "unsaved": 0.7222,
-      "damage": 0.7222,
-      "after-fnp": 0.7222,
-      "models-killed": 0.3611
+      "wounds": 3.3333,
+      "unsaved": 1.2188,
+      "damage": 1.2188,
+      "after-fnp": 1.2188,
+      "models-killed": 0.6094
     }
   }
 }

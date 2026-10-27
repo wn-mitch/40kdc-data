@@ -664,8 +664,8 @@
         "range": 24,
         "stats": {
           "A": 6,
-          "S": 4,
-          "AP": 0,
+          "S": 5,
+          "AP": -1,
           "D": 1,
           "BS": 3
         },
@@ -684,7 +684,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1607,8 +1607,8 @@
         "range": 24,
         "stats": {
           "A": 1,
-          "S": 4,
-          "AP": 0,
+          "S": 5,
+          "AP": -1,
           "D": 1,
           "BS": 4
         },
@@ -1640,6 +1640,10 @@
       {
         "namespace": "bsdata",
         "id": "a0ce-78-c636-3bc6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6238e1cb-8255-4acb-8020-6e4f870019ae"
       },
       {
         "namespace": "mfm",
@@ -3090,12 +3094,12 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Storm bolter",
+        "name": "Storm Bolter",
         "range": 24,
         "stats": {
           "A": 2,
-          "S": 4,
-          "AP": 0,
+          "S": 5,
+          "AP": -1,
           "D": 1,
           "BS": 2
         },
@@ -3117,6 +3121,10 @@
       {
         "namespace": "bsdata",
         "id": "18c1-d4b5-0ff0-4808"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0a1d7f66-82ae-4828-9ae3-d62a135b66d3"
       },
       {
         "namespace": "mfm",
@@ -3130,12 +3138,56 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Storm bolter",
+        "name": "Storm Bolter",
         "range": 24,
         "stats": {
           "A": 2,
-          "S": 4,
-          "AP": 0,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 2
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "18c1-d4b5-0ff0-4808"
+      },
+      {
+        "namespace": "mfm",
+        "id": "16ea02ec-fed3-4322-8651-890b5f46ef58"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b36536c8-9815-4e4b-b581-49190c6c0896"
+      }
+    ]
+  },
+  {
+    "id": "storm-bolter-castellan-crowe",
+    "name": "Storm bolter",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Storm Bolter",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 5,
+          "AP": -1,
           "D": 1,
           "BS": 2
         },
@@ -3160,43 +3212,7 @@
       },
       {
         "namespace": "mfm",
-        "id": "16ea02ec-fed3-4322-8651-890b5f46ef58"
-      }
-    ]
-  },
-  {
-    "id": "storm-bolter-castellan-crowe",
-    "name": "Storm bolter",
-    "type": "ranged",
-    "profiles": [
-      {
-        "name": "Storm bolter",
-        "range": 24,
-        "stats": {
-          "A": 2,
-          "S": 4,
-          "AP": 0,
-          "D": 1,
-          "BS": 2
-        },
-        "keywords": [
-          {
-            "keyword_id": "rapid-fire",
-            "parameters": {
-              "value": 2
-            }
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-995"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "18c1-d4b5-0ff0-4808"
+        "id": "0a1d7f66-82ae-4828-9ae3-d62a135b66d3"
       },
       {
         "namespace": "mfm",
@@ -3210,12 +3226,12 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Storm bolter",
+        "name": "Storm Bolter",
         "range": 24,
         "stats": {
           "A": 2,
-          "S": 4,
-          "AP": 0,
+          "S": 5,
+          "AP": -1,
           "D": 1,
           "BS": 2
         },
@@ -3237,6 +3253,10 @@
       {
         "namespace": "bsdata",
         "id": "18c1-d4b5-0ff0-4808"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0a1d7f66-82ae-4828-9ae3-d62a135b66d3"
       },
       {
         "namespace": "mfm",
@@ -3250,12 +3270,12 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Storm bolter",
+        "name": "Storm Bolter",
         "range": 24,
         "stats": {
           "A": 2,
-          "S": 4,
-          "AP": 0,
+          "S": 5,
+          "AP": -1,
           "D": 1,
           "BS": 2
         },
@@ -3280,6 +3300,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "0a1d7f66-82ae-4828-9ae3-d62a135b66d3"
+      },
+      {
+        "namespace": "mfm",
         "id": "16ea02ec-fed3-4322-8651-890b5f46ef58"
       }
     ]
@@ -3290,12 +3314,12 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Storm bolter",
+        "name": "Storm Bolter",
         "range": 24,
         "stats": {
           "A": 2,
-          "S": 4,
-          "AP": 0,
+          "S": 5,
+          "AP": -1,
           "D": 1,
           "BS": 2
         },
@@ -3317,6 +3341,10 @@
       {
         "namespace": "bsdata",
         "id": "18c1-d4b5-0ff0-4808"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0a1d7f66-82ae-4828-9ae3-d62a135b66d3"
       },
       {
         "namespace": "mfm",
@@ -3377,6 +3405,1013 @@
       {
         "namespace": "mfm",
         "id": "a083fa11-69f1-4894-950a-5cbce5fcd51b"
+      }
+    ]
+  },
+  {
+    "id": "nemesis-force-weapon-crowes-sanctifiers-brotherhood-terminator-squad",
+    "name": "Nemesis force weapon",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Nemesis Force Weapon",
+        "range": "Melee",
+        "stats": {
+          "A": 4,
+          "S": 6,
+          "AP": -2,
+          "D": 2,
+          "WS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "psychic"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "1cca-ad4-74e7-cd9e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "311afd75-1654-476d-99a3-b28d3153776b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cefaa5c1-5d80-43e4-8c32-3e1c6abcb266"
+      }
+    ]
+  },
+  {
+    "id": "nemesis-force-weapon-crowes-sanctifiers-strike-squad",
+    "name": "Nemesis force weapon",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Nemesis Force Weapon",
+        "range": "Melee",
+        "stats": {
+          "A": 3,
+          "S": 6,
+          "AP": -2,
+          "D": 2,
+          "WS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "psychic"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "1cca-ad4-74e7-cd9e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9144b84c-d636-4c45-acda-c71790a4a43b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cefaa5c1-5d80-43e4-8c32-3e1c6abcb266"
+      }
+    ]
+  },
+  {
+    "id": "psycannon-crowes-sanctifiers-brotherhood-terminator-squad",
+    "name": "Psycannon",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Psycannon",
+        "range": 24,
+        "stats": {
+          "A": 3,
+          "S": 8,
+          "AP": -1,
+          "D": 2,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "psychic"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "977f-fdd6-c09c-5def"
+      },
+      {
+        "namespace": "mfm",
+        "id": "341b2f45-94a6-4b9f-8138-6aa59cac5ad8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "56bfd29e-a116-46ca-9c7a-78b1831aeaf0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "784772e2-c6f7-4da1-95d1-0b9b2b985d9a"
+      }
+    ]
+  },
+  {
+    "id": "psycannon-crowes-sanctifiers-strike-squad",
+    "name": "Psycannon",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Psycannon",
+        "range": 24,
+        "stats": {
+          "A": 3,
+          "S": 8,
+          "AP": -1,
+          "D": 2,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "psychic"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "977f-fdd6-c09c-5def"
+      },
+      {
+        "namespace": "mfm",
+        "id": "56bfd29e-a116-46ca-9c7a-78b1831aeaf0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "784772e2-c6f7-4da1-95d1-0b9b2b985d9a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f573de75-0fed-4dc6-9c99-2c6a4030f81d"
+      }
+    ]
+  },
+  {
+    "id": "purifying-flame-sanctifiers-castellan-crowe",
+    "name": "Purifying Flame",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Purifying Flame",
+        "range": 18,
+        "stats": {
+          "A": 3,
+          "S": 4,
+          "AP": -2,
+          "D": 1,
+          "BS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "Infantry",
+              "threshold": 2
+            }
+          },
+          {
+            "keyword_id": "psychic"
+          },
+          {
+            "keyword_id": "ignores-cover"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "5734-ebde-ab2c-8796"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4518f749-62c0-4e4b-bd80-798ca17905b7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6acb795a-08a3-4b80-b0b9-38d5b5e68df9"
+      }
+    ]
+  },
+  {
+    "id": "storm-bolter-brotherhood-terminator-squad",
+    "name": "Storm bolter",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Storm Bolter",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 2
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "be2a-878d-7003-2f51"
+      },
+      {
+        "namespace": "mfm",
+        "id": "15cb7b56-d9d4-42c7-b6d0-d1864bb1539a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "26b6ed95-a521-40af-bca6-99b83b831a28"
+      },
+      {
+        "namespace": "mfm",
+        "id": "33e724fd-323b-46b5-97ae-ce7472faafa0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "43f00d57-a75b-4d74-b6fb-0c913e23d629"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b36536c8-9815-4e4b-b581-49190c6c0896"
+      }
+    ]
+  },
+  {
+    "id": "storm-bolter-interceptor-squad",
+    "name": "Storm bolter",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Storm Bolter",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 2
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "be2a-878d-7003-2f51"
+      },
+      {
+        "namespace": "mfm",
+        "id": "15cb7b56-d9d4-42c7-b6d0-d1864bb1539a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "26b6ed95-a521-40af-bca6-99b83b831a28"
+      },
+      {
+        "namespace": "mfm",
+        "id": "33e724fd-323b-46b5-97ae-ce7472faafa0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "43f00d57-a75b-4d74-b6fb-0c913e23d629"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b36536c8-9815-4e4b-b581-49190c6c0896"
+      }
+    ]
+  },
+  {
+    "id": "storm-bolter-land-raider",
+    "name": "Storm bolter",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Storm Bolter",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 2
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "be2a-878d-7003-2f51"
+      },
+      {
+        "namespace": "mfm",
+        "id": "15cb7b56-d9d4-42c7-b6d0-d1864bb1539a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "26b6ed95-a521-40af-bca6-99b83b831a28"
+      },
+      {
+        "namespace": "mfm",
+        "id": "33e724fd-323b-46b5-97ae-ce7472faafa0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "43f00d57-a75b-4d74-b6fb-0c913e23d629"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b36536c8-9815-4e4b-b581-49190c6c0896"
+      }
+    ]
+  },
+  {
+    "id": "storm-bolter-land-raider-crusader",
+    "name": "Storm bolter",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Storm Bolter",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 2
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "be2a-878d-7003-2f51"
+      },
+      {
+        "namespace": "mfm",
+        "id": "15cb7b56-d9d4-42c7-b6d0-d1864bb1539a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "26b6ed95-a521-40af-bca6-99b83b831a28"
+      },
+      {
+        "namespace": "mfm",
+        "id": "33e724fd-323b-46b5-97ae-ce7472faafa0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "43f00d57-a75b-4d74-b6fb-0c913e23d629"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b36536c8-9815-4e4b-b581-49190c6c0896"
+      }
+    ]
+  },
+  {
+    "id": "storm-bolter-land-raider-redeemer",
+    "name": "Storm bolter",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Storm Bolter",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 2
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "be2a-878d-7003-2f51"
+      },
+      {
+        "namespace": "mfm",
+        "id": "15cb7b56-d9d4-42c7-b6d0-d1864bb1539a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "26b6ed95-a521-40af-bca6-99b83b831a28"
+      },
+      {
+        "namespace": "mfm",
+        "id": "33e724fd-323b-46b5-97ae-ce7472faafa0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "43f00d57-a75b-4d74-b6fb-0c913e23d629"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b36536c8-9815-4e4b-b581-49190c6c0896"
+      }
+    ]
+  },
+  {
+    "id": "storm-bolter-purgation-squad",
+    "name": "Storm bolter",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Storm Bolter",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 2
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "be2a-878d-7003-2f51"
+      },
+      {
+        "namespace": "mfm",
+        "id": "15cb7b56-d9d4-42c7-b6d0-d1864bb1539a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "26b6ed95-a521-40af-bca6-99b83b831a28"
+      },
+      {
+        "namespace": "mfm",
+        "id": "33e724fd-323b-46b5-97ae-ce7472faafa0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "43f00d57-a75b-4d74-b6fb-0c913e23d629"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b36536c8-9815-4e4b-b581-49190c6c0896"
+      }
+    ]
+  },
+  {
+    "id": "storm-bolter-purifier-squad",
+    "name": "Storm bolter",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Storm Bolter",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 2
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "be2a-878d-7003-2f51"
+      },
+      {
+        "namespace": "mfm",
+        "id": "15cb7b56-d9d4-42c7-b6d0-d1864bb1539a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "26b6ed95-a521-40af-bca6-99b83b831a28"
+      },
+      {
+        "namespace": "mfm",
+        "id": "33e724fd-323b-46b5-97ae-ce7472faafa0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "43f00d57-a75b-4d74-b6fb-0c913e23d629"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b36536c8-9815-4e4b-b581-49190c6c0896"
+      }
+    ]
+  },
+  {
+    "id": "storm-bolter-razorback",
+    "name": "Storm bolter",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Storm Bolter",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 2
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "be2a-878d-7003-2f51"
+      },
+      {
+        "namespace": "mfm",
+        "id": "15cb7b56-d9d4-42c7-b6d0-d1864bb1539a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "26b6ed95-a521-40af-bca6-99b83b831a28"
+      },
+      {
+        "namespace": "mfm",
+        "id": "33e724fd-323b-46b5-97ae-ce7472faafa0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "43f00d57-a75b-4d74-b6fb-0c913e23d629"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b36536c8-9815-4e4b-b581-49190c6c0896"
+      }
+    ]
+  },
+  {
+    "id": "storm-bolter-rhino",
+    "name": "Storm bolter",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Storm Bolter",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 2
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "be2a-878d-7003-2f51"
+      },
+      {
+        "namespace": "mfm",
+        "id": "15cb7b56-d9d4-42c7-b6d0-d1864bb1539a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "26b6ed95-a521-40af-bca6-99b83b831a28"
+      },
+      {
+        "namespace": "mfm",
+        "id": "33e724fd-323b-46b5-97ae-ce7472faafa0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "43f00d57-a75b-4d74-b6fb-0c913e23d629"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b36536c8-9815-4e4b-b581-49190c6c0896"
+      }
+    ]
+  },
+  {
+    "id": "storm-bolter-strike-squad",
+    "name": "Storm bolter",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Storm Bolter",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 2
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "be2a-878d-7003-2f51"
+      },
+      {
+        "namespace": "mfm",
+        "id": "15cb7b56-d9d4-42c7-b6d0-d1864bb1539a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "26b6ed95-a521-40af-bca6-99b83b831a28"
+      },
+      {
+        "namespace": "mfm",
+        "id": "33e724fd-323b-46b5-97ae-ce7472faafa0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "43f00d57-a75b-4d74-b6fb-0c913e23d629"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b36536c8-9815-4e4b-b581-49190c6c0896"
+      }
+    ]
+  },
+  {
+    "id": "storm-bolter-venerable-dreadnought",
+    "name": "Storm bolter",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Storm Bolter",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 2
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "be2a-878d-7003-2f51"
+      },
+      {
+        "namespace": "mfm",
+        "id": "15cb7b56-d9d4-42c7-b6d0-d1864bb1539a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "26b6ed95-a521-40af-bca6-99b83b831a28"
+      },
+      {
+        "namespace": "mfm",
+        "id": "33e724fd-323b-46b5-97ae-ce7472faafa0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "43f00d57-a75b-4d74-b6fb-0c913e23d629"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b36536c8-9815-4e4b-b581-49190c6c0896"
+      }
+    ]
+  },
+  {
+    "id": "storm-bolter-brotherhood-chaplain",
+    "name": "Storm bolter",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Storm Bolter",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 2
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "be2a-878d-7003-2f51"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0a1d7f66-82ae-4828-9ae3-d62a135b66d3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "15cb7b56-d9d4-42c7-b6d0-d1864bb1539a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "26b6ed95-a521-40af-bca6-99b83b831a28"
+      },
+      {
+        "namespace": "mfm",
+        "id": "33e724fd-323b-46b5-97ae-ce7472faafa0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "43f00d57-a75b-4d74-b6fb-0c913e23d629"
+      }
+    ]
+  },
+  {
+    "id": "storm-bolter-brotherhood-librarian",
+    "name": "Storm bolter",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Storm Bolter",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 2
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "be2a-878d-7003-2f51"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0a1d7f66-82ae-4828-9ae3-d62a135b66d3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "15cb7b56-d9d4-42c7-b6d0-d1864bb1539a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "26b6ed95-a521-40af-bca6-99b83b831a28"
+      },
+      {
+        "namespace": "mfm",
+        "id": "33e724fd-323b-46b5-97ae-ce7472faafa0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "43f00d57-a75b-4d74-b6fb-0c913e23d629"
+      }
+    ]
+  },
+  {
+    "id": "storm-bolter-sanctifiers-castellan-crowe",
+    "name": "Storm bolter",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Storm Bolter",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 2
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "be2a-878d-7003-2f51"
+      },
+      {
+        "namespace": "mfm",
+        "id": "15cb7b56-d9d4-42c7-b6d0-d1864bb1539a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "26b6ed95-a521-40af-bca6-99b83b831a28"
+      },
+      {
+        "namespace": "mfm",
+        "id": "33e724fd-323b-46b5-97ae-ce7472faafa0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "43f00d57-a75b-4d74-b6fb-0c913e23d629"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bb7e859e-d047-4bb3-a4d1-16ff2bc68347"
       }
     ]
   }

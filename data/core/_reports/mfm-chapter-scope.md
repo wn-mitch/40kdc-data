@@ -1,4 +1,4 @@
-# MFM chapter-scope — APPLIED
+# MFM chapter-scope — DRY RUN
 
 Reconciles Space Marine chapter access in the shared adeptus-astartes pool
 from the GW MFM dump (issue #36): collapses Black Templars exclude-and-replace

@@ -6276,7 +6276,7 @@
     "points_provisional": false,
     "weapon_ids": [
       "close-combat-weapon-cadian-recon-squad",
-      "lasgun",
+      "lasgun-cadian-recon-squad",
       "laspistol-cadian-recon-squad",
       "missile-launcher-cadian-recon-squad",
       "plasma-gun",
@@ -6466,9 +6466,9 @@
     "is_legend": false,
     "points_provisional": false,
     "weapon_ids": [
-      "chiron-gatling-cannon",
+      "chiron-gatling-cannon-commissar-graves",
       "prefectus-heavy-stubber",
-      "power-sword-and-manus-mortis",
+      "power-sword-and-manus-mortis-commissar-graves",
       "enforcer-crew",
       "armoured-hull-commissar-graves"
     ],
@@ -6703,7 +6703,7 @@
       "vigilator-cannon",
       "heavy-stubber-hippogriff-afv",
       "armoured-hull-hippogriff-afv",
-      "melta-cannon",
+      "melta-cannon-hippogriff-afv",
       "chiron-gatling-cannon",
       "lascannon-hippogriff-afv",
       "meltagun-hippogriff-afv"
@@ -6854,12 +6854,12 @@
       "max": 4
     },
     "weapon_ids": [
-      "bolt-pistol",
+      "bolt-pistol-draydens-lance-command-squad",
       "gun-stocks",
       "lasgun",
-      "plasma-pistol",
-      "power-fist",
-      "power-weapon"
+      "plasma-pistol-draydens-lance-command-squad",
+      "power-fist-draydens-lance-command-squad",
+      "power-weapon-draydens-lance-command-squad"
     ],
     "ability_ids": [
       "medi-pack-draydens-lance-command-squad-astra-militarum",
@@ -6930,13 +6930,13 @@
       "flamer",
       "gun-stocks",
       "hot-shot-lasgun",
-      "hot-shot-laspistol",
+      "hot-shot-laspistol-draydens-lance-kasrkin",
       "hot-shot-marksman-rifle",
       "hot-shot-volley-gun",
-      "plasma-pistol",
-      "chainsword",
-      "grenade-launcher",
-      "plasma-gun"
+      "plasma-pistol-draydens-lance-kasrkin",
+      "chainsword-draydens-lance-kasrkin",
+      "grenade-launcher-draydens-lance-kasrkin",
+      "plasma-gun-draydens-lance-kasrkin"
     ],
     "ability_ids": [
       "warrior-elite-draydens-lance-kasrkin-astra-militarum",

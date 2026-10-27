@@ -82,11 +82,11 @@
     "stages": {
       "attacks": 10,
       "hits": 6.6667,
-      "wounds": 2.2222,
-      "unsaved": 1.1111,
-      "damage": 1.1111,
-      "after-fnp": 1.1111,
-      "models-killed": 0.5556
+      "wounds": 4.4444,
+      "unsaved": 2.2222,
+      "damage": 4.4444,
+      "after-fnp": 4.4444,
+      "models-killed": 2.2222
     }
   }
 }

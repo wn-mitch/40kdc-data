@@ -1,8 +1,8 @@
 {
-  "name": "bolt-rifle x5 vs cultist mob, manual Anti-Non-Vehicle 2+ buff (negated target matches)",
+  "name": "bolt-rifle (saturation) x5 vs cultist mob, manual Anti-Non-Vehicle 2+ buff (negated target matches)",
   "attacker": {
     "weaponId": "bolt-rifle",
-    "profileIndex": 0
+    "profileIndex": 1
   },
   "modelsFiring": 5,
   "target": {
@@ -25,7 +25,9 @@
         "keywordRef": {
           "keyword_id": "anti",
           "parameters": {
-            "excluded_target_keywords": ["VEHICLE"],
+            "excluded_target_keywords": [
+              "VEHICLE"
+            ],
             "threshold": 2
           }
         }

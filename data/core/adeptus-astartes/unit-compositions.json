@@ -153,7 +153,7 @@
         },
         "default_weapon_ids": [
           "plasma-pistol",
-          "master-crafted-power-weapon"
+          "master-crafted-power-weapon-marshal"
         ]
       }
     ],
@@ -188,14 +188,14 @@
         },
         "default_weapon_ids": [
           "heavy-bolt-pistol",
-          "chainsword"
+          "chainsword-sword-brethren-squad"
         ],
         "loadout_variants": [
           {
             "name": "Sword Brother",
             "weapon_ids": [
               "heavy-bolt-pistol",
-              "chainsword"
+              "chainsword-sword-brethren-squad"
             ]
           },
           {
@@ -398,7 +398,7 @@
         },
         "default_weapon_ids": [
           "absolvor-bolt-pistol",
-          "crozius-arcanum"
+          "crozius-arcanum-execrator"
         ]
       }
     ],
@@ -434,7 +434,7 @@
         "default_weapon_ids": [
           "artificer-firearm-sternguard-veteran-squad",
           "bolt-pistol",
-          "chainsword"
+          "chainsword-sternguard-veteran-squad"
         ]
       },
       {
@@ -920,7 +920,7 @@
         },
         "default_weapon_ids": [
           "absolvor-bolt-pistol",
-          "chainsword"
+          "chainsword-sanguinary-priest"
         ]
       }
     ],
@@ -955,7 +955,7 @@
         },
         "default_weapon_ids": [
           "heavy-bolt-pistol-death-company-captain-with-jump-pack",
-          "chainsword"
+          "chainsword-death-company-captain-with-jump-pack"
         ]
       }
     ],
@@ -1102,7 +1102,7 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "plasma-pistol",
+          "plasma-pistol-chief-librarian-mephiston",
           "fury-of-the-ancients",
           "vitarus"
         ]
@@ -1376,7 +1376,7 @@
         },
         "default_weapon_ids": [
           "heavy-bolt-pistol-death-company-captain",
-          "master-crafted-chainsword"
+          "master-crafted-chainsword-death-company-captain"
         ]
       }
     ],
@@ -1556,7 +1556,7 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "storm-bolter",
+          "storm-bolter-deathwing-terminator-squad",
           "power-fist"
         ]
       },
@@ -1571,7 +1571,7 @@
         },
         "default_weapon_ids": [
           "power-fist",
-          "storm-bolter"
+          "storm-bolter-deathwing-terminator-squad"
         ]
       }
     ],
@@ -1745,7 +1745,7 @@
         },
         "default_weapon_ids": [
           "armoured-hull",
-          "twin-heavy-bolter",
+          "twin-heavy-bolter-nephilim-jetfighter",
           "avenger-mega-bolter",
           "blacksword-missiles"
         ]
@@ -1781,7 +1781,7 @@
           "diameter": 50
         },
         "default_weapon_ids": [
-          "heavy-bolt-pistol",
+          "heavy-bolt-pistol-asmodai",
           "crozius-arcanum-and-power-weapon"
         ]
       }
@@ -2054,8 +2054,8 @@
         },
         "default_weapon_ids": [
           "rift-cannon",
-          "hurricane-bolter",
-          "hurricane-bolter",
+          "hurricane-bolter-ravenwing-dark-talon",
+          "hurricane-bolter-ravenwing-dark-talon",
           "armoured-hull"
         ]
       }
@@ -2193,7 +2193,7 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "melta-rifle",
+          "melta-rifle-indomitor-kill-team",
           "ceramite-fists",
           "bolt-pistol"
         ]
@@ -2618,7 +2618,7 @@
         },
         "default_weapon_ids": [
           "power-fist",
-          "storm-bolter"
+          "storm-bolter-deathwatch-terminator-squad"
         ]
       },
       {
@@ -2631,7 +2631,7 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "storm-bolter",
+          "storm-bolter-deathwatch-terminator-squad",
           "power-fist"
         ]
       }
@@ -2866,7 +2866,7 @@
         },
         "default_weapon_ids": [
           "special-issue-bolt-pistol-spectrus-kill-team",
-          "combat-knife"
+          "combat-knife-spectrus-kill-team"
         ]
       }
     ],
@@ -3797,7 +3797,7 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "chainsword",
+          "chainsword-captain-with-jump-pack",
           "heavy-bolt-pistol-captain-with-jump-pack"
         ]
       }
@@ -4223,7 +4223,7 @@
           "diameter": 90
         },
         "default_weapon_ids": [
-          "bolt-rifle",
+          "bolt-rifle-brutalis-dreadnought",
           "brutalis-fists",
           "twin-heavy-bolter-brutalis-dreadnought",
           "twin-icarus-ironhail-heavy-stubber-brutalis-dreadnought"
@@ -4807,7 +4807,7 @@
           "diameter": 90
         },
         "default_weapon_ids": [
-          "fragstorm-grenade-launcher",
+          "fragstorm-grenade-launcher-redemptor-dreadnought",
           "heavy-flamer-redemptor-dreadnought",
           "heavy-onslaught-gatling-cannon",
           "redemptor-fist"
@@ -5572,8 +5572,8 @@
           "astareus-las-ripper",
           "astareus-las-ripper",
           "ironhail-heavy-stubber",
-          "storm-bolter",
-          "twin-heavy-bolter",
+          "storm-bolter-astraeus",
+          "twin-heavy-bolter-astraeus",
           "twin-macro-accelerator-cannon"
         ]
       }
@@ -5650,10 +5650,10 @@
           "lascannon",
           "lascannon",
           "thunderhawk-heavy-cannon",
-          "twin-heavy-bolter",
-          "twin-heavy-bolter",
-          "twin-heavy-bolter",
-          "twin-heavy-bolter"
+          "twin-heavy-bolter-thunderhawk-gunship",
+          "twin-heavy-bolter-thunderhawk-gunship",
+          "twin-heavy-bolter-thunderhawk-gunship",
+          "twin-heavy-bolter-thunderhawk-gunship"
         ]
       }
     ],
@@ -5795,7 +5795,7 @@
           "armoured-feet",
           "ballistus-lascannon",
           "ballistus-missile-launcher",
-          "storm-bolter"
+          "storm-bolter-ballistus-dreadnought"
         ]
       }
     ],
@@ -5935,7 +5935,7 @@
         },
         "default_weapon_ids": [
           "monomolecular-combat-blades-lieutenant-in-phobos-armour",
-          "special-issue-bolt-pistol"
+          "special-issue-bolt-pistol-lieutenant-in-phobos-armour"
         ]
       }
     ],
@@ -6078,7 +6078,7 @@
           "heavy-bolter-invictor-tactical-warsuit",
           "incendium-cannon",
           "invictor-fist",
-          "ironhail-heavy-stubber"
+          "ironhail-heavy-stubber-invictor-tactical-warsuit"
         ]
       }
     ],
@@ -6825,7 +6825,7 @@
         },
         "default_weapon_ids": [
           "fenrisian-great-axe",
-          "storm-bolter",
+          "storm-bolter-wulfen-dreadnought",
           "great-wolf-claw"
         ]
       }
@@ -6904,7 +6904,7 @@
           "diameter": 60
         },
         "default_weapon_ids": [
-          "heavy-flamer",
+          "heavy-flamer-bjorn-the-fell-handed",
           "trueclaw",
           "assault-cannon-bjorn-the-fell-handed"
         ]
@@ -7021,7 +7021,7 @@
         "max": 9,
         "default_weapon_ids": [
           "plasma-pistol-wolf-scouts",
-          "combat-knife"
+          "combat-knife-wolf-scouts"
         ],
         "is_leader_model": false,
         "base_size_mm": {
@@ -7148,8 +7148,8 @@
           "diameter": 60
         },
         "default_weapon_ids": [
-          "storm-bolter",
-          "heavy-flamer",
+          "storm-bolter-murderfang",
+          "heavy-flamer-murderfang",
           "murderclaws"
         ]
       }
@@ -7422,7 +7422,7 @@
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
-          "heavy-bolt-pistol",
+          "heavy-bolt-pistol-kaius-konorius",
           "severance-and-rebuke"
         ]
       }
@@ -7454,7 +7454,7 @@
         "default_weapon_ids": [
           "heavy-bolt-pistol-captain-on-bike",
           "master-crafted-power-weapon-captain-on-bike",
-          "twin-bolt-rifle"
+          "twin-bolt-rifle-captain-on-bike"
         ]
       }
     ],

@@ -24,7 +24,8 @@ def _stages(
     intercessors = dataset.units.get_any("intercessor-squad").raw
     out = crunch(
         {
-            "attacker": {"weapon": bolt_rifle, "profileIndex": 0},
+            # Saturation: A2 S5.
+            "attacker": {"weapon": bolt_rifle, "profileIndex": 1},
             "target": {"unit": intercessors, "profileIndex": 0},
             "modelsFiring": 5,
             "buffs": buffs,
@@ -193,12 +194,12 @@ def test_crit_hit_threshold_five_with_lethal_hits_raises_wounds(dataset: Any) ->
         SOURCE,
         SHOOTING,
     )["applied"]
-    # Crits on a 6 auto-wound; the other hits (3+ to 5) wound on a 5+ against T5.
+    # Crits on a 6 auto-wound; the other hits (3+ to 5) wound on a 4+ against T5.
     assert _stages(dataset, [lethal])["wounds"] == pytest.approx(
-        10 * (1 / 6) + 10 * (3 / 6) * (1 / 3), abs=1e-6
+        10 * (1 / 6) + 10 * (3 / 6) * (1 / 2), abs=1e-6
     )
     assert _stages(dataset, [lethal, *crit])["wounds"] == pytest.approx(
-        10 * (2 / 6) + 10 * (2 / 6) * (1 / 3), abs=1e-6
+        10 * (2 / 6) + 10 * (2 / 6) * (1 / 2), abs=1e-6
     )
 
 

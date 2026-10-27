@@ -1,8 +1,8 @@
 {
-  "name": "bolt-rifle x5 vs cultists, two Save improvements sum to 3 and stop at the stricter 4+ cap",
+  "name": "bolt-rifle (saturation) x5 vs cultists, two Save improvements sum to 3 and stop at the stricter 4+ cap",
   "attacker": {
     "weaponId": "bolt-rifle",
-    "profileIndex": 0
+    "profileIndex": 1
   },
   "modelsFiring": 5,
   "target": {

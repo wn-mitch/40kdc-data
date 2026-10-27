@@ -37,16 +37,19 @@ describe("enhancement weapons minted from the dump's linked wargear profile", ()
     expect(byId({ minted: enhancements.minted, refusals: [] }, "eadbanger")).toBeUndefined();
   });
 
-  it("refuses 9114 because its printed Lethal Hits qualifier has no catalog entry", () => {
-    const refusal = enhancements.refusals.find((r) => r.source === "Da Gobshot Thunderbuss");
-    expect(refusal?.reason).toContain("LETHAL HITS: non-MONSTER/VEHICLE");
-    expect(enhancements.minted.some((m) => m.source === "Da Gobshot Thunderbuss")).toBe(false);
+  it("mints 9114 with its printed Lethal Hits qualifier as a target exclusion", () => {
+    expect(enhancements.refusals.find((r) => r.source === "Da Gobshot Thunderbuss")).toBeUndefined();
+    const minted = byId({ minted: enhancements.minted, refusals: [] }, "da-gobshot-thunderbuss-brute-bosses");
+    expect(minted?.weapon.profiles[0].keywords).toEqual([
+      { keyword_id: "lethal-hits", parameters: { excluded_target_keywords: ["Monster", "Vehicle"] } },
+      { keyword_id: "rapid-fire", parameters: { value: 6 } },
+    ]);
   });
 
-  it("refuses 9118 because BLAST 3 would be stored as plain Blast", () => {
-    const refusal = enhancements.refusals.find((r) => r.source === "Da Krunch");
-    expect(refusal?.reason).toContain("BLAST 3");
-    expect(enhancements.minted.some((m) => m.source === "Da Krunch")).toBe(false);
+  it("mints 9118 with its printed Blast rating", () => {
+    expect(enhancements.refusals.find((r) => r.source === "Da Krunch")).toBeUndefined();
+    const minted = byId({ minted: enhancements.minted, refusals: [] }, "da-krunch-wurrband");
+    expect(minted?.weapon.profiles[0].keywords).toContainEqual({ keyword_id: "blast", parameters: { value: 3 } });
   });
 
   it("mints a melee profile with WS and no BS", () => {
@@ -105,7 +108,7 @@ describe("drone weapons minted from the wargear profile", () => {
     });
   });
 
-  it("refuses a drone item whose profile carries a rated keyword", () => {
+  it("mints a drone item whose profile carries a rated keyword with the rating", () => {
     const payload = fixturePayload();
     const profile = payload.data.wargear_item_profile!.find((row) => (row.localisations as any).en.name === "Missile pod")!;
     const link = payload.data.wargear_item_profile_wargear_ability!.find((row) => row.wargearItemProfileId === profile.id);
@@ -115,8 +118,9 @@ describe("drone weapons minted from the wargear profile", () => {
     abilities.push(blast);
     payload.data.wargear_item_profile_wargear_ability!.push({ id: "fixture-link", displayOrder: 0, wargearItemProfileId: profile.id, wargearAbilityId: blast.id } as any);
     const result = mintDroneWeapons({ dump: new MfmDump(payload), gv: { ...CONFIRMED }, warnings: [] });
-    expect(result.minted.some((m) => m.source === "Missile Drone")).toBe(false);
-    expect(result.refusals.find((r) => r.source === "Missile Drone")?.reason).toContain("BLAST 3");
+    expect(result.refusals.find((r) => r.source === "Missile Drone")).toBeUndefined();
+    const drone = result.minted.find((m) => m.source === "Missile Drone");
+    expect(drone?.weapon.profiles[0].keywords).toEqual([{ keyword_id: "blast", parameters: { value: 3 } }]);
   });
 });
 

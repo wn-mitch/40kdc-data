@@ -2120,7 +2120,7 @@
     "weapon_ids": [
       "missile-launcher",
       "twin-heavy-stubber",
-      "armoured-hull"
+      "armoured-hull-claw-of-ascension-achilles-ridgerunner"
     ],
     "ability_ids": [
       "crossfire-claw-of-ascension-achilles-ridgerunner-genestealer-cults",
@@ -2195,9 +2195,9 @@
     },
     "weapon_ids": [
       "mining-laser",
-      "stolen-blade",
+      "stolen-blade-claw-of-ascension-atalan-jackals",
       "stolen-firearms",
-      "power-weapon"
+      "power-weapon-claw-of-ascension-atalan-jackals"
     ],
     "ability_ids": [
       "adaptable-fighters-genestealer-cults"
@@ -2316,8 +2316,8 @@
     },
     "weapon_ids": [
       "stolen-blade",
-      "autopistol",
-      "cult-sniper-rifle"
+      "autopistol-shanus-daskovian",
+      "cult-sniper-rifle-shanus-daskovian"
     ],
     "ability_ids": [
       "master-outrider-shanus-daskovian-genestealer-cults",

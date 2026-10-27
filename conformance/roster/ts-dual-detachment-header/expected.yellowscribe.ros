@@ -101,8 +101,8 @@
                         <characteristic name="Range">12"</characteristic>
                         <characteristic name="A">1</characteristic>
                         <characteristic name="BS">2+</characteristic>
-                        <characteristic name="S">4</characteristic>
-                        <characteristic name="AP">-1</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-2</characteristic>
                         <characteristic name="D">1</characteristic>
                         <characteristic name="Keywords">Pistol</characteristic>
                       </characteristics>

@@ -2396,7 +2396,7 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "executioner-pistol",
+          "executioner-pistol-inquisitors-hand-eversor-assassin",
           "power-sword-and-neuro-gauntlet"
         ]
       }
@@ -2432,7 +2432,7 @@
         },
         "default_weapon_ids": [
           "agents-implement",
-          "heavy-bolter"
+          "heavy-bolter-inquisitors-hand-inquisitorial-agents"
         ]
       },
       {
@@ -2445,7 +2445,7 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "agent-firearm",
+          "agent-firearm-inquisitors-hand-inquisitorial-agents",
           "agents-implement",
           "mystic-stave"
         ]
@@ -2460,8 +2460,8 @@
           "diameter": 25
         },
         "default_weapon_ids": [
-          "agent-firearm",
-          "plasma-pistol",
+          "agent-firearm-inquisitors-hand-inquisitorial-agents",
+          "plasma-pistol-inquisitors-hand-inquisitorial-agents",
           "agents-implement"
         ]
       },
@@ -2475,7 +2475,7 @@
           "diameter": 25
         },
         "default_weapon_ids": [
-          "agent-firearm",
+          "agent-firearm-inquisitors-hand-inquisitorial-agents",
           "agents-implement"
         ]
       }

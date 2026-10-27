@@ -91,7 +91,7 @@
     },
     "is_free": true,
     "replaces": [
-      "chainblade"
+      "chainblade-khorne-berzerkers"
     ],
     "replacement": [
       "khornate-eviscerator"

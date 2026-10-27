@@ -29,7 +29,7 @@ Only those two fields change; `game_version` is left for a later confirm pass.
 | iron-hands | 17 | 0 | 0 | 0 |
 | leagues-of-votann | 11 | 0 | 0 | 0 |
 | necrons | 13 | 0 | 0 | 0 |
-| orks | 15 | 0 | 0 | 0 |
+| orks | 16 | 0 | 0 | 0 |
 | raven-guard | 17 | 0 | 0 | 0 |
 | salamanders | 17 | 0 | 0 | 0 |
 | space-wolves | 20 | 0 | 0 | 0 |
@@ -39,9 +39,5 @@ Only those two fields change; `game_version` is left for a later confirm pass.
 | ultramarines | 17 | 0 | 0 | 0 |
 | white-scars | 17 | 0 | 0 | 0 |
 | world-eaters | 9 | 0 | 0 | 0 |
-| **TOTAL** | **456** | **0** | **0** | **0** |
-
-## New detachments in dump (no repo entity — author in a follow-up)
-
-- ardmob
+| **TOTAL** | **457** | **0** | **0** | **0** |
 

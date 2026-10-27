@@ -419,7 +419,7 @@
     },
     "is_free": true,
     "replaces": [
-      "inferno-boltgun"
+      "inferno-boltgun-rubric-marines"
     ],
     "replacement": [
       "soulreaper-cannon"
@@ -439,7 +439,7 @@
     },
     "is_free": true,
     "replaces": [
-      "inferno-boltgun"
+      "inferno-boltgun-rubric-marines"
     ],
     "replacement": [
       "warpflamer"

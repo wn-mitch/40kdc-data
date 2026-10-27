@@ -1,4 +1,4 @@
-# MFM stratagems — APPLIED
+# MFM stratagems — DRY RUN
 
 APPLIED (first-class dump columns): `cp_cost` ← cpCost, `player_turn` ← key,
 `type` ← category (fill-only), `category` ← detachmentId presence.
@@ -13,7 +13,7 @@ Avarice→command, Scriptural Prognosis→all-five), so authored phases win.
 | adepta-sororitas | 39 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | adeptus-astartes | 51 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | adeptus-custodes | 50 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| adeptus-mechanicus | 54 | 0 | 1 | 0 | 0 | 0 | 0 | 0 |
+| adeptus-mechanicus | 54 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | aeldari | 81 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | agents-of-the-imperium | 33 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | astra-militarum | 60 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -44,12 +44,7 @@ Avarice→command, Scriptural Prognosis→all-five), so authored phases win.
 | ultramarines | 8 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | white-scars | 8 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | world-eaters | 42 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| **TOTAL** | **1313** | **0** | **1** | **0** | **0** | **0** | **0** | **0** |
-
-## adeptus-mechanicus
-
-**Player-turn ← key (applied):**
-- overloaded-safeguards-lords-of-the-forge-adeptus-mechanicus: either → your-turn
+| **TOTAL** | **1313** | **0** | **0** | **0** | **0** | **0** | **0** | **0** |
 
 ## agents-of-the-imperium
 

@@ -370,7 +370,7 @@
         "max": 1,
         "default_weapon_ids": [
           "plague-knives-plague-marines",
-          "boltgun"
+          "boltgun-plague-marines"
         ],
         "is_leader_model": true,
         "base_size_mm": {
@@ -383,7 +383,7 @@
         "min": 4,
         "max": 9,
         "default_weapon_ids": [
-          "boltgun",
+          "boltgun-plague-marines",
           "plague-knives-plague-marines"
         ],
         "is_leader_model": false,
@@ -417,7 +417,7 @@
             "name": "Plague Marine w/ boltgun",
             "weapon_ids": [
               "plague-knives-plague-marines",
-              "boltgun"
+              "boltgun-plague-marines"
             ],
             "max_count": 9
           },
@@ -432,7 +432,7 @@
             "name": "Plague Marine w/ icon of despair",
             "weapon_ids": [
               "plague-knives-plague-marines",
-              "boltgun",
+              "boltgun-plague-marines",
               "icon-of-despair"
             ],
             "max_count": 1
@@ -1161,7 +1161,7 @@
         },
         "default_weapon_ids": [
           "plague-knife",
-          "boltgun"
+          "boltgun-icon-bearer"
         ]
       }
     ],
@@ -1452,7 +1452,7 @@
         "max": 1,
         "default_weapon_ids": [
           "armoured-tracks",
-          "havoc-launcher"
+          "havoc-launcher-maggot-lords-chaos-rhino"
         ]
       }
     ],
@@ -1486,8 +1486,8 @@
         "max": 1,
         "is_leader_model": true,
         "default_weapon_ids": [
-          "manreaper",
-          "plaguespurt-gauntlet"
+          "manreaper-maggot-lords-deathshroud-terminators",
+          "plaguespurt-gauntlet-maggot-lords-deathshroud-terminators"
         ]
       },
       {
@@ -1495,8 +1495,8 @@
         "min": 2,
         "max": 2,
         "default_weapon_ids": [
-          "manreaper",
-          "plaguespurt-gauntlet"
+          "manreaper-maggot-lords-deathshroud-terminators",
+          "plaguespurt-gauntlet-maggot-lords-deathshroud-terminators"
         ]
       }
     ],
@@ -1535,7 +1535,7 @@
         "max": 1,
         "is_leader_model": true,
         "default_weapon_ids": [
-          "plasma-pistol",
+          "plasma-pistol-maggot-lords-plague-marines",
           "power-fist"
         ]
       },
@@ -1545,8 +1545,8 @@
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
-          "blight-launcher",
-          "plague-knives"
+          "blight-launcher-maggot-lords-plague-marines",
+          "plague-knives-maggot-lords-plague-marines"
         ]
       },
       {
@@ -1555,7 +1555,7 @@
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
-          "plague-knives",
+          "plague-knives-maggot-lords-plague-marines",
           "plague-spewer"
         ]
       },
@@ -1566,7 +1566,7 @@
         "max": 4,
         "default_weapon_ids": [
           "boltgun",
-          "plague-knives"
+          "plague-knives-maggot-lords-plague-marines"
         ]
       }
     ],
@@ -1614,7 +1614,7 @@
         "max": 1,
         "default_weapon_ids": [
           "numerological-artefacts",
-          "plasma-pistol"
+          "plasma-pistol-septimol-fulg-maggot-lords-tallyman"
         ]
       }
     ],

@@ -53,9 +53,9 @@
       "hits": 6.6667,
       "wounds": 4.4444,
       "unsaved": 2.2222,
-      "damage": 2.2222,
-      "after-fnp": 2.2222,
-      "models-killed": 1.1111
+      "damage": 4.4444,
+      "after-fnp": 4.4444,
+      "models-killed": 2.2222
     }
   }
 }

@@ -2223,8 +2223,8 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "barblauncher",
-          "chitinous-claws-and-teeth"
+          "barblauncher-vardenghast-swarm-barbgaunts",
+          "chitinous-claws-and-teeth-vardenghast-swarm-barbgaunts"
         ]
       }
     ],
@@ -2259,7 +2259,7 @@
           "length": 92
         },
         "default_weapon_ids": [
-          "psychoclastic-torrent",
+          "psychoclastic-torrent-vardenghast-swarm-psychophage",
           "talons-and-betentacled-maw"
         ]
       }

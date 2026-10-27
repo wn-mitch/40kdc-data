@@ -1052,7 +1052,7 @@
     "weapon_ids": [
       "armoured-bulk-tesseract-vault",
       "tesla-spheres",
-      "tesla-sphere",
+      "tesla-sphere-tesseract-vault",
       "cosmic-fire",
       "times-arrow",
       "antimatter-meteor"
@@ -4284,7 +4284,7 @@
       "max": 1
     },
     "weapon_ids": [
-      "doomsday-blaster",
+      "doomsday-blaster-amonhotekhs-guard-canoptek-doomstalker",
       "twin-gauss-flayer",
       "doomstalker-limbs"
     ],

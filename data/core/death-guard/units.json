@@ -540,7 +540,7 @@
     "weapon_ids": [
       "armoured-tracks",
       "combi-bolter",
-      "combi-weapon",
+      "combi-weapon-chaos-predator-annihilator",
       "havoc-launcher",
       "heavy-bolter",
       "lascannon",
@@ -631,7 +631,7 @@
     "weapon_ids": [
       "armoured-tracks",
       "combi-bolter",
-      "combi-weapon",
+      "combi-weapon-chaos-predator-destructor",
       "havoc-launcher",
       "heavy-bolter",
       "lascannon",
@@ -978,7 +978,7 @@
     "weapon_ids": [
       "blight-launcher",
       "bolt-pistol",
-      "boltgun",
+      "boltgun-plague-marines",
       "bubotic-weapons",
       "heavy-plague-weapon",
       "meltagun",
@@ -2056,7 +2056,7 @@
     "weapon_ids": [
       "armoured-tracks",
       "combi-bolter",
-      "combi-weapon",
+      "combi-weapon-chaos-rhino",
       "havoc-launcher"
     ],
     "ability_ids": [
@@ -2148,7 +2148,7 @@
     "weapon_ids": [
       "armoured-tracks-chaos-land-raider",
       "combi-bolter",
-      "combi-weapon",
+      "combi-weapon-chaos-land-raider",
       "havoc-launcher",
       "soulshatter-lascannon",
       "twin-heavy-bolter"
@@ -2304,7 +2304,7 @@
       "max": 1
     },
     "weapon_ids": [
-      "boltgun",
+      "boltgun-icon-bearer",
       "plague-knife"
     ],
     "ability_ids": [
@@ -2571,7 +2571,7 @@
     },
     "weapon_ids": [
       "armoured-tracks",
-      "havoc-launcher"
+      "havoc-launcher-maggot-lords-chaos-rhino"
     ],
     "ability_ids": [],
     "transport_capacity": {
@@ -2631,8 +2631,8 @@
       "max": 3
     },
     "weapon_ids": [
-      "manreaper",
-      "plaguespurt-gauntlet"
+      "manreaper-maggot-lords-deathshroud-terminators",
+      "plaguespurt-gauntlet-maggot-lords-deathshroud-terminators"
     ],
     "ability_ids": [
       "obstinate-resistance-death-guard"
@@ -2697,12 +2697,12 @@
       "max": 7
     },
     "weapon_ids": [
-      "blight-launcher",
+      "blight-launcher-maggot-lords-plague-marines",
       "boltgun",
       "plague-spewer",
       "power-fist",
-      "plasma-pistol",
-      "plague-knives"
+      "plasma-pistol-maggot-lords-plague-marines",
+      "plague-knives-maggot-lords-plague-marines"
     ],
     "ability_ids": [
       "infused-with-the-blessings-of-nurgle-maggot-lords-plague-marines-death-guard"
@@ -2768,7 +2768,7 @@
     },
     "weapon_ids": [
       "numerological-artefacts",
-      "plasma-pistol"
+      "plasma-pistol-septimol-fulg-maggot-lords-tallyman"
     ],
     "ability_ids": [
       "malicious-calculations-septimol-fulg-maggot-lords-tallyman-death-guard",

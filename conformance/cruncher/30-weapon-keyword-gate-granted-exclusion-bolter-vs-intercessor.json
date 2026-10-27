@@ -1,8 +1,8 @@
 {
-  "name": "bolt-rifle x5 vs intercessor within half range, a granted Lethal Hits opens a Lethal Hits weapon-keyword gate; a buff excluding VEHICLE targets applies, one excluding INFANTRY targets drops",
+  "name": "bolt-rifle (saturation) x5 vs intercessor within half range, a granted Lethal Hits opens a Lethal Hits weapon-keyword gate; a buff excluding VEHICLE targets applies, one excluding INFANTRY targets drops",
   "attacker": {
     "weaponId": "bolt-rifle",
-    "profileIndex": 0
+    "profileIndex": 1
   },
   "modelsFiring": 5,
   "target": {
@@ -22,7 +22,9 @@
       },
       "applicableWhen": {
         "weaponKeywords": [
-          { "keyword_id": "lethal-hits" }
+          {
+            "keyword_id": "lethal-hits"
+          }
         ]
       },
       "contribution": {
@@ -85,11 +87,11 @@
     "stages": {
       "attacks": 15,
       "hits": 12.5,
-      "wounds": 5.8333,
-      "unsaved": 2.9167,
-      "damage": 2.9167,
-      "after-fnp": 2.9167,
-      "models-killed": 1.4583
+      "wounds": 7.5,
+      "unsaved": 3.75,
+      "damage": 3.75,
+      "after-fnp": 3.75,
+      "models-killed": 1.875
     }
   }
 }

@@ -13,7 +13,7 @@ const boltRifle = dataset.weapons.getAny("bolt-rifle")!.raw;
 const intercessors = dataset.units.getAny("intercessor-squad")!.raw;
 
 function stages(buffs: Buff[], context: EngineContext = shooting): Record<string, number> {
-  const out = crunch({ attacker: { weapon: boltRifle, profileIndex: 0 }, target: { unit: intercessors, profileIndex: 0 }, modelsFiring: 5, buffs, context });
+  const out = crunch({ attacker: { weapon: boltRifle, profileIndex: 1 }, target: { unit: intercessors, profileIndex: 0 }, modelsFiring: 5, buffs, context });
   return Object.fromEntries(out.stages.map((stage) => [stage.name, stage.expected]));
 }
 
@@ -78,9 +78,9 @@ describe("cruncher damage levers: DSL to engine", () => {
   it("a critical hit threshold of 5+ with Lethal Hits raises wounds against the same target", () => {
     const lethal: Buff = { source: { kind: "manual", label: "lethal" }, contribution: { type: "extra-keyword", keywordRef: { keyword_id: "lethal-hits" } } };
     const crit = effectToBuffs({ type: "roll-result", target: "this-unit", modifier: { roll: "hit", critical_on: 5 } }, source, shooting).applied;
-    // Crits on a 6 auto-wound; the other hits (3+ to 5) wound on a 5+ against T5.
-    expect(stages([lethal]).wounds).toBeCloseTo(10 * (1 / 6) + 10 * (3 / 6) * (1 / 3), 6);
-    expect(stages([lethal, ...crit]).wounds).toBeCloseTo(10 * (2 / 6) + 10 * (2 / 6) * (1 / 3), 6);
+    // Crits on a 6 auto-wound; the other hits (3+ to 5) wound on a 4+ against T5 (Saturation, S5).
+    expect(stages([lethal]).wounds).toBeCloseTo(10 * (1 / 6) + 10 * (3 / 6) * (1 / 2), 6);
+    expect(stages([lethal, ...crit]).wounds).toBeCloseTo(10 * (2 / 6) + 10 * (2 / 6) * (1 / 2), 6);
   });
 
   it("a weapon-named Attacks lift reaches only that weapon's attacks", () => {

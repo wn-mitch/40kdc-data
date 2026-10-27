@@ -158,7 +158,7 @@ Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
                         <characteristic name="S">5</characteristic>
                         <characteristic name="AP">-2</characteristic>
                         <characteristic name="D">1</characteristic>
-                        <characteristic name="Keywords">Anti-Infantry 2+, Precision, Torrent</characteristic>
+                        <characteristic name="Keywords">Anti-Infantry 2+, Blast 2, Torrent</characteristic>
                       </characteristics>
                     </profile>
                   </profiles>

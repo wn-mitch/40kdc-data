@@ -3350,5 +3350,167 @@
         "id": "92b5681c-fd05-4355-89ba-8813c16c6876"
       }
     ]
+  },
+  {
+    "id": "autoch-pattern-bolt-pistol-bane-slayers-bulwark-hearthkyn-warriors",
+    "name": "Autoch-pattern bolt pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Autoch-pattern Bolt Pistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "1f41-c120-4d44-a3ae"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "31fd-4b29-165b-4d32"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "4395-9d32-ee39-52d4"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "68ee-3933-b74b-fae0"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "72bf-750f-754e-e69b"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "7dac-8874-cc2a-0773"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "9d35-28a5-cd50-3924"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "dd59-d693-8751-7306"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "ddf4-b372-1a84-a3a8"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "f84f-3597-99d4-a082"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "fd3e-2bdd-bba4-ce14"
+      },
+      {
+        "namespace": "mfm",
+        "id": "233967b3-419b-4185-8356-524dce53c5e5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "799f27d7-b738-4f9d-a241-d8adcbb9bd72"
+      }
+    ]
+  },
+  {
+    "id": "exoarmour-grenade-launcher-bane-slayers-bulwark-einhyr-hearthguard",
+    "name": "Exoarmour grenade launcher",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Exoarmour Grenade Launcher",
+        "range": 24,
+        "stats": {
+          "A": "D3",
+          "S": 3,
+          "AP": 0,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "8a542174-84c3-4cbc-8b54-26250e8af1dd"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e42f3f78-3226-4335-bf1f-4a67f7e3767d"
+      }
+    ]
+  },
+  {
+    "id": "theyns-pistol-bane-slayers-bulwark-hearthkyn-warriors",
+    "name": "Theyn’s pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Theyn's Pistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 8,
+          "AP": -2,
+          "D": 1,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "8dd9-560b-6d2d-1f2b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3b002d1c-1aaa-459a-9618-bcd19b87469a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d441fc2e-b6b4-45d6-b545-57600bb7b9ad"
+      }
+    ]
   }
 ]

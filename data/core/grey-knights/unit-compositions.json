@@ -189,7 +189,7 @@
         "max": 1,
         "default_weapon_ids": [
           "nemesis-force-weapon-purifier-squad",
-          "storm-bolter",
+          "storm-bolter-purifier-squad",
           "purifying-flame"
         ],
         "is_leader_model": true,
@@ -203,7 +203,7 @@
         "min": 4,
         "max": 9,
         "default_weapon_ids": [
-          "storm-bolter",
+          "storm-bolter-purifier-squad",
           "purifying-flame",
           "nemesis-force-weapon-purifier-squad"
         ],
@@ -217,7 +217,7 @@
             "name": "Purifier",
             "weapon_ids": [
               "nemesis-force-weapon-purifier-squad",
-              "storm-bolter",
+              "storm-bolter-purifier-squad",
               "purifying-flame"
             ],
             "max_count": 9
@@ -391,7 +391,7 @@
           "draft": true
         },
         "default_weapon_ids": [
-          "storm-bolter",
+          "storm-bolter-rhino",
           "armoured-tracks-rhino"
         ]
       }
@@ -462,7 +462,7 @@
         },
         "default_weapon_ids": [
           "dreadnought-combat-weapon",
-          "storm-bolter",
+          "storm-bolter-venerable-dreadnought",
           "assault-cannon"
         ]
       }
@@ -529,7 +529,7 @@
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
-          "storm-bolter",
+          "storm-bolter-strike-squad",
           "nemesis-force-weapon-strike-squad"
         ],
         "is_leader_model": true,
@@ -543,7 +543,7 @@
         "min": 4,
         "max": 9,
         "default_weapon_ids": [
-          "storm-bolter",
+          "storm-bolter-strike-squad",
           "nemesis-force-weapon-strike-squad"
         ],
         "is_leader_model": false,
@@ -556,7 +556,7 @@
             "name": "Grey Knight",
             "weapon_ids": [
               "nemesis-force-weapon-strike-squad",
-              "storm-bolter"
+              "storm-bolter-strike-squad"
             ]
           },
           {
@@ -762,7 +762,7 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "storm-bolter",
+          "storm-bolter-purgation-squad",
           "nemesis-force-weapon-purgation-squad"
         ]
       },
@@ -771,7 +771,7 @@
         "min": 4,
         "max": 9,
         "default_weapon_ids": [
-          "storm-bolter",
+          "storm-bolter-purgation-squad",
           "nemesis-force-weapon-purgation-squad"
         ],
         "is_leader_model": false,
@@ -784,7 +784,7 @@
             "name": "Purgator",
             "weapon_ids": [
               "nemesis-force-weapon-purgation-squad",
-              "storm-bolter"
+              "storm-bolter-purgation-squad"
             ],
             "max_count": 9
           },
@@ -913,7 +913,7 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "storm-bolter",
+          "storm-bolter-interceptor-squad",
           "nemesis-force-weapon-interceptor-squad"
         ]
       },
@@ -922,7 +922,7 @@
         "min": 4,
         "max": 9,
         "default_weapon_ids": [
-          "storm-bolter",
+          "storm-bolter-interceptor-squad",
           "nemesis-force-weapon-interceptor-squad"
         ],
         "is_leader_model": false,
@@ -935,7 +935,7 @@
             "name": "Interceptor",
             "weapon_ids": [
               "nemesis-force-weapon-interceptor-squad",
-              "storm-bolter"
+              "storm-bolter-interceptor-squad"
             ],
             "max_count": 9
           },
@@ -1027,7 +1027,7 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "storm-bolter",
+          "storm-bolter-brotherhood-chaplain",
           "crozius-arcanum"
         ]
       }
@@ -1390,7 +1390,7 @@
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
-          "storm-bolter",
+          "storm-bolter-brotherhood-terminator-squad",
           "nemesis-force-weapon-brotherhood-terminator-squad"
         ],
         "is_leader_model": true,
@@ -1404,7 +1404,7 @@
         "min": 2,
         "max": 9,
         "default_weapon_ids": [
-          "storm-bolter",
+          "storm-bolter-brotherhood-terminator-squad",
           "nemesis-force-weapon-brotherhood-terminator-squad"
         ],
         "is_leader_model": false,
@@ -1417,7 +1417,7 @@
             "name": "Terminator",
             "weapon_ids": [
               "nemesis-force-weapon-brotherhood-terminator-squad",
-              "storm-bolter"
+              "storm-bolter-brotherhood-terminator-squad"
             ],
             "max_count": 9
           },
@@ -1425,7 +1425,7 @@
             "name": "Terminator with Ancient's Banner",
             "weapon_ids": [
               "nemesis-force-weapon-brotherhood-terminator-squad",
-              "storm-bolter"
+              "storm-bolter-brotherhood-terminator-squad"
             ],
             "max_count": 1
           },
@@ -1495,7 +1495,7 @@
         },
         "default_weapon_ids": [
           "nemesis-force-weapon-brotherhood-terminator-squad",
-          "storm-bolter"
+          "storm-bolter-brotherhood-terminator-squad"
         ]
       }
     ],
@@ -1729,7 +1729,7 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "nemesis-force-weapon",
+          "nemesis-force-weapon-crowes-sanctifiers-brotherhood-terminator-squad",
           "storm-bolter"
         ]
       },
@@ -1743,8 +1743,8 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "nemesis-force-weapon",
-          "psycannon"
+          "nemesis-force-weapon-crowes-sanctifiers-brotherhood-terminator-squad",
+          "psycannon-crowes-sanctifiers-brotherhood-terminator-squad"
         ]
       },
       {
@@ -1757,7 +1757,7 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "nemesis-force-weapon",
+          "nemesis-force-weapon-crowes-sanctifiers-brotherhood-terminator-squad",
           "storm-bolter"
         ]
       }
@@ -1817,7 +1817,7 @@
         },
         "default_weapon_ids": [
           "ceramite-fists",
-          "psycannon"
+          "psycannon-crowes-sanctifiers-strike-squad"
         ]
       },
       {
@@ -1830,7 +1830,7 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "nemesis-force-weapon",
+          "nemesis-force-weapon-crowes-sanctifiers-strike-squad",
           "storm-bolter"
         ]
       },
@@ -1844,7 +1844,7 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "nemesis-force-weapon",
+          "nemesis-force-weapon-crowes-sanctifiers-strike-squad",
           "storm-bolter"
         ]
       }
@@ -1931,8 +1931,8 @@
         },
         "default_weapon_ids": [
           "black-blade-of-antwyr",
-          "purifying-flame",
-          "storm-bolter"
+          "purifying-flame-sanctifiers-castellan-crowe",
+          "storm-bolter-sanctifiers-castellan-crowe"
         ]
       }
     ],

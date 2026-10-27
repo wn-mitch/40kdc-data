@@ -1582,7 +1582,7 @@
     "points_provisional": false,
     "wargear_costs": [
       {
-        "item_id": "dark-lance",
+        "item_id": "dark-lance-ravager",
         "cost": 5
       }
     ],
@@ -2203,7 +2203,7 @@
     "weapon_ids": [
       "spirit-leech-tentacles",
       "spirit-syphon",
-      "spirit-vortex"
+      "spirit-vortex-coven-of-agonies-cronos"
     ],
     "ability_ids": [
       "empowered-engines-drukhari",

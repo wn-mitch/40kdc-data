@@ -1,8 +1,8 @@
 {
-  "name": "bolt-rifle x5 vs intercessor, re-roll Hit rolls of 1 and one other failed Hit roll",
+  "name": "bolt-rifle (saturation) x5 vs intercessor, re-roll Hit rolls of 1 and one other failed Hit roll",
   "attacker": {
     "weaponId": "bolt-rifle",
-    "profileIndex": 0
+    "profileIndex": 1
   },
   "modelsFiring": 5,
   "target": {
@@ -41,11 +41,11 @@
     "stages": {
       "attacks": 10,
       "hits": 8.3368,
-      "wounds": 2.7789,
-      "unsaved": 1.3895,
-      "damage": 1.3895,
-      "after-fnp": 1.3895,
-      "models-killed": 0.6947
+      "wounds": 4.1684,
+      "unsaved": 2.0842,
+      "damage": 2.0842,
+      "after-fnp": 2.0842,
+      "models-killed": 1.0421
     }
   }
 }

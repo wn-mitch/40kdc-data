@@ -265,7 +265,7 @@ across implementations by the `conformance/share/` corpus.
   `npx tsx tools/src/ingest-mfm.ts <subcommand>` (coverage / dispositions /
   enhancements / points / wargear / wargear-budgets / composition-names /
   composition-tiers / attachment-role / stratagems / missions / cull-legends /
-  seed-units) — dry
+  seed-units / weapon-stats) — dry
   run + `_reports/mfm-*.md` report by default, `--write` to apply, unmatched rows
   to `_private/mfm/`. **`seed-units` is the only subcommand that CREATES new units**
   (skeleton id/name/profiles/points/keywords/role/model_count) for dump datasheets
@@ -283,7 +283,10 @@ across implementations by the `conformance/share/` corpus.
   the whole projected dataset (AJV + `integrity.ts`, the same checks as
   `npm run validate`) and **throws on any failure in either mode** — so a clean
   dry run guarantees a clean `--write`, and `--write` persists atomically
-  (all-or-nothing) only after validation passes. The loader/faction-map live in
+  (all-or-nothing) only after validation passes. `tools/test/mfm-dump-drift.test.ts`
+  runs every pass against the dump (skipped without it) and fails on any file a pass
+  would still change: apply the drift with `--write`, or fix the pass, rather than
+  letting it accumulate. The loader/faction-map live in
   `tools/src/mfm/`. Models 11e
   per-army-ordinal pricing via `unit_count_min`/`unit_count_max` on unit `points`.
   Numeric/structural fields land in the repo; GW prose stays in the dump (see

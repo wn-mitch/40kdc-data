@@ -106,7 +106,7 @@
         },
         "default_weapon_ids": [
           "agonising-energies",
-          "bolt-pistol",
+          "bolt-pistol-sorcerer",
           "force-weapon"
         ]
       }
@@ -646,7 +646,7 @@
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
-          "bolt-pistol",
+          "bolt-pistol-infractors",
           "power-sword-infractors"
         ],
         "is_leader_model": true,
@@ -660,8 +660,8 @@
         "min": 4,
         "max": 9,
         "default_weapon_ids": [
-          "bolt-pistol",
-          "duelling-sabre"
+          "bolt-pistol-infractors",
+          "duelling-sabre-infractors"
         ],
         "is_leader_model": false,
         "base_size_mm": {
@@ -751,7 +751,7 @@
         "min": 3,
         "max": 6,
         "default_weapon_ids": [
-          "bolt-pistol",
+          "bolt-pistol-flawless-blades",
           "blissblade"
         ],
         "is_leader_model": false,
@@ -830,8 +830,8 @@
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
-          "bolt-pistol",
-          "power-sword"
+          "bolt-pistol-callous-blades-infractors",
+          "power-sword-callous-blades-infractors"
         ],
         "is_leader_model": true,
         "base_size_mm": {
@@ -844,7 +844,7 @@
         "min": 9,
         "max": 9,
         "default_weapon_ids": [
-          "bolt-pistol",
+          "bolt-pistol-callous-blades-infractors",
           "duelling-sabre"
         ],
         "is_leader_model": false,
@@ -885,7 +885,7 @@
         "max": 1,
         "default_weapon_ids": [
           "phoenix-power-spear",
-          "power-fist"
+          "power-fist-lord-kaphrael-of-the-callous-blades"
         ],
         "is_leader_model": false,
         "base_size_mm": {

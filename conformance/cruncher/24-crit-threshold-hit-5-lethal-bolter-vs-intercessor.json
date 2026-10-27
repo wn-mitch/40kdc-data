@@ -1,8 +1,8 @@
 {
-  "name": "bolt-rifle x5 vs intercessor, critical hits on 5+ with Lethal Hits",
+  "name": "bolt-rifle (saturation) x5 vs intercessor, critical hits on 5+ with Lethal Hits",
   "attacker": {
     "weaponId": "bolt-rifle",
-    "profileIndex": 0
+    "profileIndex": 1
   },
   "modelsFiring": 5,
   "target": {
@@ -42,11 +42,11 @@
     "stages": {
       "attacks": 10,
       "hits": 6.6667,
-      "wounds": 4.4444,
-      "unsaved": 2.2222,
-      "damage": 2.2222,
-      "after-fnp": 2.2222,
-      "models-killed": 1.1111
+      "wounds": 5,
+      "unsaved": 2.5,
+      "damage": 2.5,
+      "after-fnp": 2.5,
+      "models-killed": 1.25
     }
   }
 }

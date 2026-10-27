@@ -3154,5 +3154,60 @@
         "id": "b9bf7afe-04ea-4ce9-9ef2-154a84620a2c"
       }
     ]
+  },
+  {
+    "id": "questoris-heavy-stubber-knight-destrier",
+    "name": "Questoris heavy stubber",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Questoris heavy stubber",
+        "range": 36,
+        "stats": {
+          "A": 6,
+          "S": 4,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "assault"
+          },
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 3
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "646c-5f7f-cd1c-d5c9"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "93c3-d64f-2d6e-ea"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "eedf-6059-a15-3c86"
+      },
+      {
+        "namespace": "mfm",
+        "id": "05803989-8811-432e-844b-bf0b91f90936"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ce239fbf-82f4-4889-a7a3-cc61dc7dfb20"
+      }
+    ]
   }
 ]

@@ -250,7 +250,7 @@ describe("baseLoadout — Khorne Berzerkers @ 10 (legal default)", () => {
     // Base weapons (never a replacement) only — none of the swap/add-on ids.
     expect(Object.fromEntries(lo.counts)).toEqual({
       "bolt-pistol-khorne-berzerkers": 10,
-      chainblade: 10,
+      "chainblade-khorne-berzerkers": 10,
     });
     // The legal default is itself valid (the maximal take-every-swap set is not).
     expect(validateLoadout(bz.raw, 10, options, lo.counts)).toEqual([]);

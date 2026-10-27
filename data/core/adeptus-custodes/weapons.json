@@ -5,18 +5,21 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Spiculus bolt launcher",
+        "name": "Spiculus Bolt Launcher",
         "range": 36,
         "stats": {
-          "A": "D6+3",
+          "A": 6,
           "S": 5,
-          "AP": 0,
+          "AP": -1,
           "D": 1,
           "BS": 2
         },
         "keywords": [
           {
-            "keyword_id": "blast"
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 2
+            }
           }
         ]
       }
@@ -33,6 +36,10 @@
       {
         "namespace": "mfm",
         "id": "7d5556b4-cb65-4fed-8b46-e0c8f1e682f1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "84539030-dad5-4b2e-ba82-6c6c8ed84684"
       }
     ]
   },
@@ -42,16 +49,23 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Iliastus accelerator culverin",
+        "name": "Iliastus Accelerator Culverin",
         "range": 48,
         "stats": {
-          "A": 4,
-          "S": 9,
+          "A": 3,
+          "S": 10,
           "AP": -1,
           "D": 3,
           "BS": 2
         },
-        "keywords": []
+        "keywords": [
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 3
+            }
+          }
+        ]
       }
     ],
     "game_version": {
@@ -65,6 +79,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "0a2d05b2-97c0-42b9-8a49-355c180fad86"
+      },
+      {
+        "namespace": "mfm",
         "id": "2e2af0e8-ba19-44ff-ad97-8be484cffb05"
       }
     ]
@@ -75,7 +93,7 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Arachnus storm cannon",
+        "name": "Arachnus Storm Cannon",
         "range": 24,
         "stats": {
           "A": 12,
@@ -87,6 +105,12 @@
         "keywords": [
           {
             "keyword_id": "devastating-wounds"
+          },
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 1
+            }
           }
         ]
       }
@@ -103,6 +127,10 @@
       {
         "namespace": "mfm",
         "id": "3eb928c8-392a-4d2f-a7e6-b4e746ad4df8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c86b687e-b6a3-4a5e-881f-671c2df8c7a7"
       }
     ]
   },
@@ -267,10 +295,10 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Lastrum storm bolter",
+        "name": "Lastrum Storm Bolter",
         "range": 24,
         "stats": {
-          "A": 2,
+          "A": 3,
           "S": 5,
           "AP": -1,
           "D": 1,
@@ -280,7 +308,7 @@
           {
             "keyword_id": "rapid-fire",
             "parameters": {
-              "value": 2
+              "value": 3
             }
           }
         ]
@@ -302,6 +330,18 @@
       {
         "namespace": "mfm",
         "id": "00229083-4697-4a6b-96a7-e09c526b8385"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7e102dd5-e6b1-492c-891e-9248304e237d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a3d31742-e7b7-4889-9286-07b909b13600"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d26f2f8d-693f-4da5-affd-d78333ad83f1"
       }
     ]
   },
@@ -646,13 +686,13 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Twin lastrum bolt cannon",
+        "name": "Twin Lastrum Bolt Cannon",
         "range": 36,
         "stats": {
           "A": 3,
           "S": 6,
-          "AP": -1,
-          "D": 1,
+          "AP": -2,
+          "D": 2,
           "BS": 2
         },
         "keywords": [
@@ -661,6 +701,9 @@
             "parameters": {
               "value": 1
             }
+          },
+          {
+            "keyword_id": "twin-linked"
           }
         ]
       }
@@ -684,7 +727,23 @@
       },
       {
         "namespace": "mfm",
+        "id": "1b832cd3-c333-4f9c-83a3-bd78a1cafd63"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2701a323-7cf1-46ad-adbc-6f54db0aeea6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6f8b1058-cc18-431e-8e7d-6be81b72823f"
+      },
+      {
+        "namespace": "mfm",
         "id": "a7ec504a-66cb-444c-9694-48d9c828ee78"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f005db41-8469-4755-a720-0c354a2c44df"
       }
     ]
   },
@@ -772,18 +831,24 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Balistus grenade launcher",
+        "name": "Balistus Grenade Launcher",
         "range": 18,
         "stats": {
-          "A": "D6",
-          "S": 4,
+          "A": 3,
+          "S": 5,
           "AP": -1,
           "D": 1,
           "BS": 2
         },
         "keywords": [
           {
-            "keyword_id": "blast"
+            "keyword_id": "assault"
+          },
+          {
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 1
+            }
           }
         ]
       }
@@ -800,6 +865,14 @@
       {
         "namespace": "mfm",
         "id": "2aa5eb61-30da-4c8f-9191-ec40f0e78da0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "48a8a83e-24d7-48d2-95e9-86ba55417183"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6652c71d-5ca1-43f3-b7d9-a0387f71f01a"
       }
     ]
   },
@@ -839,7 +912,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -878,11 +951,11 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Ranged",
+        "name": "Castellan Axe",
         "range": 24,
         "stats": {
           "A": 2,
-          "S": 4,
+          "S": 5,
           "AP": -1,
           "D": 2,
           "BS": 2
@@ -890,17 +963,23 @@
         "keywords": [
           {
             "keyword_id": "assault"
+          },
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 2
+            }
           }
         ]
       },
       {
-        "name": "Melee",
+        "name": "Castellan Axe",
         "range": "Melee",
         "stats": {
-          "A": 4,
-          "S": 9,
-          "AP": -1,
-          "D": 3,
+          "A": 3,
+          "S": 10,
+          "AP": -2,
+          "D": 4,
           "WS": 2
         },
         "keywords": []
@@ -908,7 +987,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -922,6 +1001,14 @@
       {
         "namespace": "bsdata",
         "id": "94b3-ef7f-f71f-c86e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3d0b9018-fe31-43a5-b47e-9c5c9363fd03"
+      },
+      {
+        "namespace": "mfm",
+        "id": "42cdfba4-9219-4c72-a284-07abfba8dc37"
       },
       {
         "namespace": "mfm",
@@ -972,20 +1059,16 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Salvo launcher",
+        "name": "Salvo Launcher",
         "range": 24,
         "stats": {
-          "A": 1,
+          "A": 2,
           "S": 10,
-          "AP": -3,
-          "D": "D6+1",
+          "AP": -2,
+          "D": "D3+2",
           "BS": 2
         },
-        "keywords": [
-          {
-            "keyword_id": "twin-linked"
-          }
-        ]
+        "keywords": []
       }
     ],
     "game_version": {
@@ -1000,6 +1083,14 @@
       {
         "namespace": "bsdata",
         "id": "267-1ad2-6f36-20c1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "05bf7de2-c546-4cb5-84ba-a4d2014d4380"
+      },
+      {
+        "namespace": "mfm",
+        "id": "50eba626-9b2f-4f3e-b62b-102fca56976c"
       },
       {
         "namespace": "mfm",
@@ -1060,11 +1151,11 @@
     "type": "melee",
     "profiles": [
       {
-        "name": "Interceptor lance",
+        "name": "Interceptor Lance",
         "range": "Melee",
         "stats": {
-          "A": 6,
-          "S": 7,
+          "A": 8,
+          "S": 8,
           "AP": -2,
           "D": 2,
           "WS": 2
@@ -1087,6 +1178,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "8868962e-d0ee-4ed7-8bc7-f9600aa81e71"
+      },
+      {
+        "namespace": "mfm",
         "id": "ebfaed9c-de5c-475a-92df-99486e41bc7e"
       }
     ]
@@ -1097,10 +1192,10 @@
     "type": "melee",
     "profiles": [
       {
-        "name": "Executioner greatblade",
+        "name": "Executioner Greatblade",
         "range": "Melee",
         "stats": {
-          "A": 2,
+          "A": 3,
           "S": 5,
           "AP": -2,
           "D": 2,
@@ -1115,7 +1210,12 @@
             }
           },
           {
-            "keyword_id": "devastating-wounds"
+            "keyword_id": "devastating-wounds",
+            "parameters": {
+              "required_target_keywords_any": [
+                "Psyker"
+              ]
+            }
           }
         ]
       }
@@ -1132,6 +1232,10 @@
       {
         "namespace": "bsdata",
         "id": "ce28-2f80-abc1-ac79"
+      },
+      {
+        "namespace": "mfm",
+        "id": "83ab3f7d-4bb8-412b-a674-02acc01c3c5c"
       },
       {
         "namespace": "mfm",
@@ -1230,12 +1334,12 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Arachnus magna-blaze cannon",
+        "name": "Arachnus Magna-blaze Cannon",
         "range": 48,
         "stats": {
           "A": 3,
           "S": 18,
-          "AP": -4,
+          "AP": -3,
           "D": "D6+6",
           "BS": 2
         },
@@ -1254,6 +1358,10 @@
       {
         "namespace": "mfm",
         "id": "108f05f1-c08a-4885-830f-dcefdd2b255f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7a9259fc-730e-4042-b4fe-92af85f7e046"
       }
     ]
   },
@@ -1263,13 +1371,13 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Arachnus heavy blaze cannon",
+        "name": "Arachnus Heavy Blaze Cannon",
         "range": 36,
         "stats": {
           "A": 4,
           "S": 12,
           "AP": -3,
-          "D": "D6+1",
+          "D": "D3+3",
           "BS": 2
         },
         "keywords": []
@@ -1291,14 +1399,34 @@
       {
         "namespace": "mfm",
         "id": "1a6d4733-db14-44ee-aa67-1e0fb24fc4f7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "547e7339-5cc7-46f4-944a-f253eb503a17"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9ac3f0be-f0b8-4105-bec3-cfac891dc590"
       }
     ]
   },
   {
     "id": "sentinel-blade",
     "name": "Sentinel blade",
-    "type": "ranged",
+    "type": "melee",
     "profiles": [
+      {
+        "name": "Melee",
+        "range": "Melee",
+        "stats": {
+          "A": 5,
+          "S": 6,
+          "AP": -2,
+          "D": 1,
+          "WS": 2
+        },
+        "keywords": []
+      },
       {
         "name": "Ranged",
         "range": 12,
@@ -1314,26 +1442,14 @@
             "keyword_id": "assault"
           },
           {
-            "keyword_id": "pistol"
+            "keyword_id": "close-quarters"
           }
         ]
-      },
-      {
-        "name": "Melee",
-        "range": "Melee",
-        "stats": {
-          "A": 5,
-          "S": 6,
-          "AP": -2,
-          "D": 1,
-          "WS": 2
-        },
-        "keywords": []
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1343,6 +1459,10 @@
       {
         "namespace": "mfm",
         "id": "37266675-c970-4e30-b207-1caab3f27358"
+      },
+      {
+        "namespace": "mfm",
+        "id": "965baf19-1d7f-476e-b50e-0f6ab9cbd90a"
       }
     ]
   },
@@ -1352,10 +1472,10 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Spiculus heavy bolt launcher",
+        "name": "Spiculus Heavy Bolt Launcher",
         "range": 36,
         "stats": {
-          "A": "D6+6",
+          "A": 8,
           "S": 7,
           "AP": -1,
           "D": 2,
@@ -1363,7 +1483,10 @@
         },
         "keywords": [
           {
-            "keyword_id": "blast"
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 2
+            }
           }
         ]
       }
@@ -1380,6 +1503,10 @@
       {
         "namespace": "mfm",
         "id": "4610135f-0813-40ad-9665-6a70ec1354cf"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5f4d3236-5b70-41ab-b990-e014dda15371"
       }
     ]
   },
@@ -1389,16 +1516,26 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Master-crafted boltgun",
+        "name": "Master-crafted Boltgun",
         "range": 24,
         "stats": {
-          "A": 1,
-          "S": 4,
-          "AP": 0,
+          "A": 2,
+          "S": 5,
+          "AP": -1,
           "D": 2,
           "BS": 2
         },
         "keywords": [
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "Psyker",
+              "threshold": 4
+            }
+          },
+          {
+            "keyword_id": "assault"
+          },
           {
             "keyword_id": "rapid-fire",
             "parameters": {
@@ -1410,7 +1547,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1420,6 +1557,10 @@
       {
         "namespace": "mfm",
         "id": "79d28bf4-87fb-4b58-99a2-0552a234f47b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8bbebf7d-1bae-4056-99cf-2cd7127c5fa4"
       }
     ]
   },
@@ -1429,12 +1570,12 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Storm bolter",
+        "name": "Storm Bolter",
         "range": 24,
         "stats": {
           "A": 2,
-          "S": 4,
-          "AP": 0,
+          "S": 5,
+          "AP": -1,
           "D": 1,
           "BS": 3
         },
@@ -1460,6 +1601,10 @@
       {
         "namespace": "mfm",
         "id": "15cb7b56-d9d4-42c7-b6d0-d1864bb1539a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "96cd512a-8c34-4aaa-9fbc-e3b18a73dc3a"
       }
     ]
   },
@@ -1469,13 +1614,13 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Hunter-killer missile",
+        "name": "Hunter-killer Missile",
         "range": 48,
         "stats": {
           "A": 1,
           "S": 14,
           "AP": -3,
-          "D": "D6",
+          "D": "D3+3",
           "BS": 2
         },
         "keywords": [
@@ -1493,6 +1638,10 @@
       {
         "namespace": "bsdata",
         "id": "f31f-9d97-dfba-b445"
+      },
+      {
+        "namespace": "mfm",
+        "id": "161af33f-1116-43e0-ad89-d7453c1382c0"
       },
       {
         "namespace": "mfm",
@@ -1543,13 +1692,13 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Lastrum bolt cannon",
+        "name": "Lastrum Bolt Cannon",
         "range": 36,
         "stats": {
           "A": 3,
           "S": 6,
-          "AP": -1,
-          "D": 1,
+          "AP": -2,
+          "D": 2,
           "BS": 2
         },
         "keywords": [
@@ -1574,6 +1723,10 @@
       {
         "namespace": "mfm",
         "id": "c55cf033-8aaf-451d-bb84-205f37be1d95"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d3bf0403-1708-43ee-986f-f53819d94d4e"
       }
     ]
   },
@@ -1583,11 +1736,11 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Adrathic devastator",
+        "name": "Adrathic Devastator",
         "range": 18,
         "stats": {
-          "A": 1,
-          "S": 7,
+          "A": 3,
+          "S": 8,
           "AP": -2,
           "D": 3,
           "BS": 2
@@ -1607,6 +1760,10 @@
       {
         "namespace": "mfm",
         "id": "bd07c0ee-9bfb-4f09-88ac-32081cf9e2ed"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c9a8e685-3735-4e44-94d6-a7782f1d307a"
       }
     ]
   },
@@ -1729,19 +1886,16 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Twin arachnus blaze cannon",
+        "name": "Twin Arachnus Blaze Cannon",
         "range": 24,
         "stats": {
-          "A": 8,
-          "S": 5,
-          "AP": -1,
-          "D": 1,
+          "A": 2,
+          "S": 10,
+          "AP": -3,
+          "D": "D3+2",
           "BS": 2
         },
         "keywords": [
-          {
-            "keyword_id": "devastating-wounds"
-          },
           {
             "keyword_id": "twin-linked"
           }
@@ -1760,6 +1914,14 @@
       {
         "namespace": "bsdata",
         "id": "c515-ed5-b39e-691a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0199ac5f-2a9a-4bf6-8835-33429a661aa9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "062fa7ad-d51b-4503-b6ff-bd1a85c2e811"
       },
       {
         "namespace": "mfm",
@@ -1869,18 +2031,21 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Infernus firepike",
+        "name": "Infernus Firepike",
         "range": 12,
         "stats": {
-          "A": "D6",
-          "S": 6,
+          "A": 3,
+          "S": 5,
           "AP": -1,
           "D": 1,
           "BS": null
         },
         "keywords": [
           {
-            "keyword_id": "ignores-cover"
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 2
+            }
           },
           {
             "keyword_id": "torrent"
@@ -1899,6 +2064,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "17eab7b0-39a0-4889-ab9d-624d014dee57"
+      },
+      {
+        "namespace": "mfm",
         "id": "6e9cae4d-08dc-4584-9432-3213bd03bd84"
       }
     ]
@@ -1913,9 +2082,9 @@
         "range": "Melee",
         "stats": {
           "A": 5,
-          "S": 8,
+          "S": 10,
           "AP": -2,
-          "D": 2,
+          "D": 3,
           "WS": 2
         },
         "keywords": []
@@ -1929,6 +2098,10 @@
       {
         "namespace": "bsdata",
         "id": "5ec7-5d19-a18b-25e4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "78963a96-63df-4efc-9aaf-8543828854b9"
       },
       {
         "namespace": "mfm",
@@ -1979,12 +2152,22 @@
         "range": 24,
         "stats": {
           "A": 1,
-          "S": 4,
-          "AP": 0,
+          "S": 5,
+          "AP": -1,
           "D": 1,
           "BS": 3
         },
         "keywords": [
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "Psyker",
+              "threshold": 4
+            }
+          },
+          {
+            "keyword_id": "assault"
+          },
           {
             "keyword_id": "rapid-fire",
             "parameters": {
@@ -2009,6 +2192,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "6429f6b7-d750-48a7-b50f-558d31d6cc74"
+      },
+      {
+        "namespace": "mfm",
         "id": "d9821879-c858-4701-aa27-36f98122943e"
       }
     ]
@@ -2023,14 +2210,20 @@
         "range": 24,
         "stats": {
           "A": 2,
-          "S": 5,
+          "S": 6,
           "AP": -2,
-          "D": 3,
+          "D": 2,
           "BS": 2
         },
         "keywords": [
           {
             "keyword_id": "assault"
+          },
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 2
+            }
           }
         ]
       }
@@ -2043,6 +2236,10 @@
       {
         "namespace": "bsdata",
         "id": "b330-bad6-ea21-ecb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "98e6efe7-abbd-4d9c-a6a3-3983e2c2d3a7"
       },
       {
         "namespace": "mfm",
@@ -2060,12 +2257,19 @@
         "range": "Melee",
         "stats": {
           "A": 6,
-          "S": 10,
-          "AP": -2,
-          "D": 3,
+          "S": 12,
+          "AP": -3,
+          "D": 4,
           "WS": 2
         },
-        "keywords": []
+        "keywords": [
+          {
+            "keyword_id": "cleave",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
       }
     ],
     "game_version": {
@@ -2076,6 +2280,10 @@
       {
         "namespace": "bsdata",
         "id": "5622-c756-d3e8-85ae"
+      },
+      {
+        "namespace": "mfm",
+        "id": "116ff9e9-0a2f-4cec-ba78-65c9b441eed8"
       },
       {
         "namespace": "mfm",
@@ -2237,11 +2445,11 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Ranged",
+        "name": "Castellan Axe",
         "range": 24,
         "stats": {
           "A": 2,
-          "S": 4,
+          "S": 5,
           "AP": -1,
           "D": 2,
           "BS": 2
@@ -2249,17 +2457,23 @@
         "keywords": [
           {
             "keyword_id": "assault"
+          },
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 2
+            }
           }
         ]
       },
       {
-        "name": "Melee",
+        "name": "Castellan Axe",
         "range": "Melee",
         "stats": {
-          "A": 6,
-          "S": 9,
-          "AP": -1,
-          "D": 3,
+          "A": 5,
+          "S": 10,
+          "AP": -2,
+          "D": 4,
           "WS": 2
         },
         "keywords": []
@@ -2267,7 +2481,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2277,20 +2491,36 @@
       {
         "namespace": "mfm",
         "id": "404aa3f4-304b-4561-ab94-848a84d75d05"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e2b50e24-4ecd-47c0-a94e-06eabb09a93b"
       }
     ]
   },
   {
     "id": "castellan-axe-shield-captain-in-allarus-terminator-armour",
     "name": "Castellan axe",
-    "type": "ranged",
+    "type": "melee",
     "profiles": [
       {
-        "name": "Ranged",
+        "name": "Castellan Axe",
+        "range": "Melee",
+        "stats": {
+          "A": 5,
+          "S": 10,
+          "AP": -2,
+          "D": 4,
+          "WS": 2
+        },
+        "keywords": []
+      },
+      {
+        "name": "Castellan Axe",
         "range": 24,
         "stats": {
           "A": 2,
-          "S": 4,
+          "S": 5,
           "AP": -1,
           "D": 2,
           "BS": 2
@@ -2298,30 +2528,28 @@
         "keywords": [
           {
             "keyword_id": "assault"
+          },
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 2
+            }
           }
         ]
-      },
-      {
-        "name": "Melee",
-        "range": "Melee",
-        "stats": {
-          "A": 6,
-          "S": 9,
-          "AP": -1,
-          "D": 3,
-          "WS": 2
-        },
-        "keywords": []
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "a576-b3a0-7198-2094"
+      },
+      {
+        "namespace": "mfm",
+        "id": "24b21363-cc07-4aa4-aced-71ea2e8bd7e4"
       },
       {
         "namespace": "mfm",
@@ -2372,10 +2600,10 @@
     "type": "melee",
     "profiles": [
       {
-        "name": "Executioner greatblade",
+        "name": "Executioner Greatblade",
         "range": "Melee",
         "stats": {
-          "A": 3,
+          "A": 4,
           "S": 5,
           "AP": -2,
           "D": 2,
@@ -2390,7 +2618,18 @@
             }
           },
           {
-            "keyword_id": "devastating-wounds"
+            "keyword_id": "cleave",
+            "parameters": {
+              "value": 1
+            }
+          },
+          {
+            "keyword_id": "devastating-wounds",
+            "parameters": {
+              "required_target_keywords_any": [
+                "Psyker"
+              ]
+            }
           }
         ]
       }
@@ -2406,6 +2645,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "0ad089d1-786d-4417-9585-4c9eaa603ede"
+      },
+      {
+        "namespace": "mfm",
         "id": "943b5523-a244-42c0-84c7-ec93e97b5a81"
       }
     ]
@@ -2413,14 +2656,33 @@
   {
     "id": "guardian-spear-shield-captain",
     "name": "Guardian spear",
-    "type": "ranged",
+    "type": "melee",
     "profiles": [
       {
-        "name": "Ranged",
+        "name": "Guardian Spear",
+        "range": "Melee",
+        "stats": {
+          "A": 8,
+          "S": 8,
+          "AP": -2,
+          "D": 2,
+          "WS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "cleave",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      },
+      {
+        "name": "Guardian Spear",
         "range": 24,
         "stats": {
           "A": 2,
-          "S": 4,
+          "S": 5,
           "AP": -1,
           "D": 2,
           "BS": 2
@@ -2428,25 +2690,19 @@
         "keywords": [
           {
             "keyword_id": "assault"
+          },
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 2
+            }
           }
         ]
-      },
-      {
-        "name": "Melee",
-        "range": "Melee",
-        "stats": {
-          "A": 7,
-          "S": 7,
-          "AP": -2,
-          "D": 2,
-          "WS": 2
-        },
-        "keywords": []
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2456,6 +2712,10 @@
       {
         "namespace": "mfm",
         "id": "10dd9142-3f32-44aa-b762-8db0dfce185e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "519da047-9df2-453b-9f87-7f4c32e241cd"
       }
     ]
   },
@@ -2465,11 +2725,11 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Ranged",
+        "name": "Guardian Spear",
         "range": 24,
         "stats": {
           "A": 2,
-          "S": 4,
+          "S": 5,
           "AP": -1,
           "D": 2,
           "BS": 2
@@ -2477,25 +2737,38 @@
         "keywords": [
           {
             "keyword_id": "assault"
+          },
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 2
+            }
           }
         ]
       },
       {
-        "name": "Melee",
+        "name": "Guardian Spear",
         "range": "Melee",
         "stats": {
-          "A": 7,
-          "S": 7,
+          "A": 8,
+          "S": 8,
           "AP": -2,
           "D": 2,
           "WS": 2
         },
-        "keywords": []
+        "keywords": [
+          {
+            "keyword_id": "cleave",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -2505,6 +2778,10 @@
       {
         "namespace": "mfm",
         "id": "10dd9142-3f32-44aa-b762-8db0dfce185e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4527378e-4f1f-49b1-8c3b-b8623655a265"
       }
     ]
   },
@@ -2559,11 +2836,11 @@
     "type": "melee",
     "profiles": [
       {
-        "name": "Interceptor lance",
+        "name": "Interceptor Lance",
         "range": "Melee",
         "stats": {
-          "A": 5,
-          "S": 7,
+          "A": 6,
+          "S": 8,
           "AP": -2,
           "D": 2,
           "WS": 2
@@ -2591,25 +2868,51 @@
       {
         "namespace": "mfm",
         "id": "34df57a9-5fbb-42cd-8c1e-38d881c15981"
+      },
+      {
+        "namespace": "mfm",
+        "id": "55ec77a0-4eff-4fed-9a3a-3570a68a0380"
       }
     ]
   },
   {
     "id": "pyrithite-spear-shield-captain",
     "name": "Pyrithite spear",
-    "type": "ranged",
+    "type": "melee",
     "profiles": [
       {
-        "name": "Ranged",
+        "name": "Pyrithite Spear",
+        "range": "Melee",
+        "stats": {
+          "A": 8,
+          "S": 8,
+          "AP": -2,
+          "D": 2,
+          "WS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "cleave",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      },
+      {
+        "name": "Pyrithite Spear",
         "range": 12,
         "stats": {
           "A": 1,
-          "S": 9,
-          "AP": -4,
-          "D": "D6",
+          "S": 10,
+          "AP": -3,
+          "D": "D3+2",
           "BS": 2
         },
         "keywords": [
+          {
+            "keyword_id": "assault"
+          },
           {
             "keyword_id": "melta",
             "parameters": {
@@ -2617,25 +2920,17 @@
             }
           }
         ]
-      },
-      {
-        "name": "Melee",
-        "range": "Melee",
-        "stats": {
-          "A": 7,
-          "S": 7,
-          "AP": -2,
-          "D": 2,
-          "WS": 2
-        },
-        "keywords": []
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "062f369e-5b0c-4ae0-b4b3-84f2e9c17496"
+      },
       {
         "namespace": "mfm",
         "id": "3858908a-25f1-4716-b472-b62367520d1e"
@@ -2915,7 +3210,10 @@
         },
         "keywords": [
           {
-            "keyword_id": "blast"
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 1
+            }
           },
           {
             "keyword_id": "torrent"
@@ -2958,13 +3256,23 @@
             "parameters": {
               "value": 4
             }
+          },
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 1,
+              "excluded_target_keywords": [
+                "Monster",
+                "Vehicle"
+              ]
+            }
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -3272,7 +3580,10 @@
             "keyword_id": "assault"
           },
           {
-            "keyword_id": "blast"
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 1
+            }
           },
           {
             "keyword_id": "torrent"
@@ -3308,7 +3619,10 @@
         },
         "keywords": [
           {
-            "keyword_id": "blast"
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 2
+            }
           },
           {
             "keyword_id": "torrent"
@@ -3347,7 +3661,10 @@
         },
         "keywords": [
           {
-            "keyword_id": "blast"
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 2
+            }
           },
           {
             "keyword_id": "torrent"
@@ -3373,13 +3690,23 @@
             "parameters": {
               "value": 1
             }
+          },
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 1,
+              "excluded_target_keywords": [
+                "Monster",
+                "Vehicle"
+              ]
+            }
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -3520,10 +3847,527 @@
             "keyword_id": "assault"
           },
           {
-            "keyword_id": "blast"
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 2
+            }
           },
           {
             "keyword_id": "torrent"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "id": "balistus-grenade-launcher-gilded-blades-allarus-custodians",
+    "name": "Balistus grenade launcher",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Balistus Grenade Launcher",
+        "range": 18,
+        "stats": {
+          "A": "D6",
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "4863-f443-2b45-e18b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2aa5eb61-30da-4c8f-9191-ec40f0e78da0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "48a8a83e-24d7-48d2-95e9-86ba55417183"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f651a6f2-afe4-4cbf-951e-0b1bb2125817"
+      }
+    ]
+  },
+  {
+    "id": "castellan-axe-gilded-blades-custodian-wardens",
+    "name": "Castellan axe",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Castellan Axe",
+        "range": 24,
+        "stats": {
+          "A": 1,
+          "S": 4,
+          "AP": -1,
+          "D": 2,
+          "BS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "assault"
+          }
+        ]
+      },
+      {
+        "name": "Castellan Axe",
+        "range": "Melee",
+        "stats": {
+          "A": 4,
+          "S": 9,
+          "AP": -1,
+          "D": 3,
+          "WS": 2
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "3b38-fa2c-6bc7-f457"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "696c-b986-138f-37d5"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "94b3-ef7f-f71f-c86e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3d0b9018-fe31-43a5-b47e-9c5c9363fd03"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4b5011e7-0b10-409c-923e-6ad25582a80f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "73baadc4-6e5f-404d-bdef-a16674cfaefe"
+      }
+    ]
+  },
+  {
+    "id": "guardian-spear-allarus-custodians",
+    "name": "Guardian spear",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Guardian Spear",
+        "range": "Melee",
+        "stats": {
+          "A": 6,
+          "S": 8,
+          "AP": -2,
+          "D": 2,
+          "WS": 2
+        },
+        "keywords": []
+      },
+      {
+        "name": "Guardian Spear",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 5,
+          "AP": -1,
+          "D": 2,
+          "BS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "assault"
+          },
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 2
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "8a20-8c22-9f1a-bfdc"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "9269-d5ba-f2a-c30f"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "ab4a-1a4f-5898-70db"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "e823-5718-f1b6-2702"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0aa7fb07-2d5f-407a-893b-48b8b4a62ce6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "12a98f44-11fb-4f0f-8f0b-bac50822d051"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3dbf03cb-6a24-41ee-b03f-70e41504cc53"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5398474a-3f3f-4042-b760-64448fd6f0ed"
+      }
+    ]
+  },
+  {
+    "id": "guardian-spear-custodian-guard-sodality",
+    "name": "Guardian spear",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Guardian Spear",
+        "range": "Melee",
+        "stats": {
+          "A": 6,
+          "S": 8,
+          "AP": -2,
+          "D": 2,
+          "WS": 2
+        },
+        "keywords": []
+      },
+      {
+        "name": "Guardian Spear",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 5,
+          "AP": -1,
+          "D": 2,
+          "BS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "assault"
+          },
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 2
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "8a20-8c22-9f1a-bfdc"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "9269-d5ba-f2a-c30f"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "ab4a-1a4f-5898-70db"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "e823-5718-f1b6-2702"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0aa7fb07-2d5f-407a-893b-48b8b4a62ce6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "12a98f44-11fb-4f0f-8f0b-bac50822d051"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3dbf03cb-6a24-41ee-b03f-70e41504cc53"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5398474a-3f3f-4042-b760-64448fd6f0ed"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7ef68f2c-4e0c-4618-b01c-d66278c649ec"
+      }
+    ]
+  },
+  {
+    "id": "guardian-spear-custodian-wardens",
+    "name": "Guardian spear",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Guardian Spear",
+        "range": "Melee",
+        "stats": {
+          "A": 6,
+          "S": 8,
+          "AP": -2,
+          "D": 2,
+          "WS": 2
+        },
+        "keywords": []
+      },
+      {
+        "name": "Guardian Spear",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 5,
+          "AP": -1,
+          "D": 2,
+          "BS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "assault"
+          },
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 2
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "8a20-8c22-9f1a-bfdc"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "9269-d5ba-f2a-c30f"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "ab4a-1a4f-5898-70db"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "e823-5718-f1b6-2702"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0aa7fb07-2d5f-407a-893b-48b8b4a62ce6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "12a98f44-11fb-4f0f-8f0b-bac50822d051"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3dbf03cb-6a24-41ee-b03f-70e41504cc53"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4f1508aa-6f87-4448-9c51-ae5cb6f9d0be"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5398474a-3f3f-4042-b760-64448fd6f0ed"
+      }
+    ]
+  },
+  {
+    "id": "gun-stock-knight-centura",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "2576842a-3866-454e-8bec-cf6c82c03ad3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3e37ef6b-248e-448f-a6cb-c10310d5d49e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "db23c461-7253-4479-84a9-8a3ebed1f556"
+      }
+    ],
+    "name": "Gun Stock",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Gun Stock",
+        "range": "Melee",
+        "stats": {
+          "A": 3,
+          "S": 3,
+          "AP": 0,
+          "D": 1,
+          "WS": 2
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "id": "vaultswords-blade-champion",
+    "name": "Vaultswords",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Behemor",
+        "range": "Melee",
+        "stats": {
+          "A": 5,
+          "S": 10,
+          "AP": -3,
+          "D": 3,
+          "WS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "devastating-wounds"
+          }
+        ]
+      },
+      {
+        "name": "Hurricanis",
+        "range": "Melee",
+        "stats": {
+          "A": 10,
+          "S": 6,
+          "AP": -2,
+          "D": 1,
+          "WS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "cleave",
+            "parameters": {
+              "value": 1
+            }
+          },
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      },
+      {
+        "name": "Victus",
+        "range": "Melee",
+        "stats": {
+          "A": 8,
+          "S": 8,
+          "AP": -3,
+          "D": 2,
+          "WS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "precision"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "f906-23b-58ce-a3df"
+      },
+      {
+        "namespace": "mfm",
+        "id": "21d1e7e6-74b6-427c-81b9-80605290e878"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8cf82640-c1be-4745-9613-1ee903c65198"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9de4ed7a-19a1-49ff-b7f6-78346a4f0ac9"
+      }
+    ]
+  },
+  {
+    "id": "emperors-light-guardians-of-the-throne",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "c16577be-0cf2-430d-9ec6-5182e7f28763"
+      }
+    ],
+    "name": "Emperor’s Light",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Emperor’s Light",
+        "range": "Melee",
+        "stats": {
+          "A": 3,
+          "S": 5,
+          "AP": -2,
+          "D": 2,
+          "WS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "extra-attacks"
           }
         ]
       }

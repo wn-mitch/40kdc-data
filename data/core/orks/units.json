@@ -353,7 +353,7 @@
       }
     ],
     "weapon_ids": [
-      "choppa",
+      "choppa-ardmob-wartrakk",
       "kustom-shoota",
       "rokkit-launcha"
     ],
@@ -557,9 +557,9 @@
       "max": 6
     },
     "weapon_ids": [
-      "choppa",
+      "choppa-warbikers",
       "dual-dakkagun",
-      "kustom-choppa",
+      "kustom-choppa-warbikers",
       "dual-kombi-rokkit"
     ],
     "ability_ids": [
@@ -575,6 +575,12 @@
       {
         "namespace": "mfm",
         "id": "99e837f4-ef82-488b-ad2f-0d27d5ddbead"
+      }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Battleline",
+        "required_detachment_id": "kult-of-speed"
       }
     ]
   },
@@ -642,11 +648,11 @@
       "max": 6
     },
     "weapon_ids": [
-      "kustom-mega-blasta",
+      "kustom-mega-blasta-deffkoptas",
       "slugga",
       "spinnin-blades",
-      "choppa",
-      "rokkit-launcha"
+      "choppa-deffkoptas",
+      "rokkit-launcha-deffkoptas"
     ],
     "ability_ids": [
       "deep-strike",
@@ -1156,7 +1162,7 @@
       "armoured-impact",
       "dual-wazbom-mega-kannon",
       "dual-tellyport-mega-blasta",
-      "dual-supa-shoota"
+      "dual-supa-shoota-wazbom-blastajet"
     ],
     "ability_ids": [
       {
@@ -1424,7 +1430,7 @@
       "kustom-mega-blasta",
       "kustom-mega-zappa",
       "rokkit-launcha-morkanaut",
-      "dual-big-shoota"
+      "dual-big-shoota-morkanaut"
     ],
     "ability_ids": [
       "big-an-shooty-orks",
@@ -1673,7 +1679,7 @@
     "weapon_ids": [
       "big-shoota",
       "mega-choppa",
-      "skorcha",
+      "skorcha-stompa",
       "supa-gatler",
       "deffkannon-and-supa-rokkits"
     ],
@@ -1853,7 +1859,7 @@
     },
     "weapon_ids": [
       "choppa-tankbustas",
-      "rokkit-pistol",
+      "rokkit-pistol-tankbustas",
       "smash-hammer",
       "busta-rokkit-launcha",
       "gitstikka"
@@ -1942,7 +1948,7 @@
       "big-choppa-kommandos",
       "breacha-ram",
       "burna-kommandos",
-      "choppa",
+      "choppa-kommandos",
       "kustom-shoota-kommandos",
       "power-klaw",
       "rokkit-launcha-kommandos",
@@ -2068,7 +2074,7 @@
       "choppa-boyz",
       "kustom-choppa-boyz",
       "power-klaw-boyz",
-      "shoota",
+      "shoota-boyz",
       "burna"
     ],
     "ability_ids": [
@@ -2142,7 +2148,7 @@
     "weapon_ids": [
       "dual-big-shoota",
       "spiked-ram",
-      "rokkit-launcha",
+      "rokkit-launcha-trukk",
       "grabbin-klaw",
       "buzzsaw"
     ],
@@ -2436,7 +2442,7 @@
       "kustom-mega-kannon",
       "smasha-gun-mek-gunz",
       "traktor-kannon",
-      "scavenged-shivs"
+      "scavenged-shivs-mek-gunz"
     ],
     "ability_ids": [
       "madcap-artillery-orks"
@@ -2518,10 +2524,10 @@
       "max": 10
     },
     "weapon_ids": [
-      "choppa",
+      "choppa-stormboyz",
       "power-klaw",
       "slugga",
-      "kustom-choppa"
+      "kustom-choppa-stormboyz"
     ],
     "ability_ids": [
       "rokkit-charge-orks",
@@ -2773,7 +2779,7 @@
     "weapon_ids": [
       "big-shoota",
       "dread-klaw",
-      "kustom-mega-blasta",
+      "kustom-mega-blasta-deff-dread",
       "rokkit-launcha-deff-dread",
       "skorcha",
       "extra-klaw"
@@ -3003,9 +3009,9 @@
     },
     "weapon_ids": [
       "killsaw",
-      "kombi-weapon",
+      "kombi-weapon-big-mek-in-mega-armour",
       "kustom-mega-blasta",
-      "kustom-shoota",
+      "kustom-shoota-big-mek-in-mega-armour",
       "power-klaw-big-mek-in-mega-armour",
       "tellyport-blasta"
     ],
@@ -3499,7 +3505,7 @@
     "conditional_keywords": [
       {
         "keyword": "Battleline",
-        "required_detachment_id": "dread-mob"
+        "required_detachment_id": "runt-swarm"
       }
     ],
     "external_refs": [
@@ -4010,7 +4016,7 @@
     ],
     "wargear_costs": [
       {
-        "item_id": "killsaw",
+        "item_id": "killsaw-meganobz",
         "cost": 5
       },
       {
@@ -4064,7 +4070,7 @@
       "skorcha-missile-rack",
       "armoured-impact",
       "dual-big-shoota",
-      "dual-supa-shoota"
+      "dual-supa-shoota-burna-bommer"
     ],
     "ability_ids": [
       "burna-bomb-orks",
@@ -4148,7 +4154,7 @@
       "max": 1
     },
     "weapon_ids": [
-      "butcha-boyz",
+      "butcha-boyz-hunta-rig",
       "eavy-lobba",
       "savage-horns-and-hooves",
       "saw-blades-hunta-rig",
@@ -4246,8 +4252,8 @@
     },
     "weapon_ids": [
       "power-klaw-warboss",
-      "kustom-choppa",
-      "kustom-shoota",
+      "kustom-choppa-warboss",
+      "kustom-shoota-warboss",
       "kombi-rokkit",
       "kombi-skorcha"
     ],
@@ -4321,8 +4327,8 @@
     "is_legend": false,
     "points_provisional": false,
     "weapon_ids": [
-      "shoota",
-      "kustom-choppa"
+      "shoota-bannernob",
+      "kustom-choppa-bannernob"
     ],
     "base_size_mm": {
       "shape": "round",
@@ -4474,7 +4480,7 @@
     "points_provisional": false,
     "weapon_ids": [
       "slugga-bigboss",
-      "big-choppa"
+      "big-choppa-bigboss"
     ],
     "base_size_mm": {
       "shape": "round",
@@ -4998,9 +5004,9 @@
     "is_legend": false,
     "points_provisional": false,
     "weapon_ids": [
-      "kustom-choppa",
-      "kustom-shoota",
-      "multi-busta-launcha"
+      "kustom-choppa-wartrakks",
+      "kustom-shoota-wartrakks",
+      "multi-busta-launcha-wartrakks"
     ],
     "ability_ids": [
       "bust-em-orks",

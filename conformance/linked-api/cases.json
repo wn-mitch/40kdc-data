@@ -114,7 +114,7 @@
       "thunder-hammer-intercessor-squad",
       "knives-and-fists",
       "grenade-launcher",
-      "chainsword"
+      "chainsword-intercessor-squad"
     ]
   },
   {
@@ -321,6 +321,7 @@
       "armoured-tracks-chaos-predator-destructor",
       "armoured-tracks-chaos-rhino",
       "autopistol",
+      "autopistol-frenzied-reavers-jakhals",
       "axe-of-dismemberment",
       "axe-of-khorne",
       "baleflamer",
@@ -329,10 +330,14 @@
       "blood-harpoon",
       "bloodflail",
       "bolt-pistol",
+      "bolt-pistol-frenzied-reavers-khorne-berzerkers",
+      "bolt-pistol-frenzied-reavers-master-of-executions",
       "bolt-pistol-khorne-berzerkers",
       "burning-roar",
       "chainblade",
+      "chainblade-frenzied-reavers-jakhals",
       "chainblade-goremongers",
+      "chainblade-khorne-berzerkers",
       "chainblades",
       "chainblades-eightbound",
       "chainblades-exalted-eightbound",
@@ -371,6 +376,7 @@
       "hellblade",
       "hellfire-breath",
       "hellforged-weapons",
+      "hellforged-weapons-vorrakh-lord-of-the-frenzied-reavers",
       "hideous-mutations",
       "ichor-cannon",
       "infernal-cannon",
@@ -390,6 +396,7 @@
       "paired-manglers",
       "plasma-cannon",
       "plasma-pistol",
+      "plasma-pistol-frenzied-reavers-khorne-berzerkers",
       "plasma-pistol-khorne-berzerkers",
       "power-fist",
       "power-scourge",
@@ -1304,7 +1311,7 @@
     },
     "comparison": "ordered",
     "expected": [
-      "Nob×1;Boy×9 => choppa-boyz:9,kombi-skorcha-boyz:1,kustom-choppa-boyz:1,shoota:9,slugga:9"
+      "Nob×1;Boy×9 => choppa-boyz:9,kombi-skorcha-boyz:1,kustom-choppa-boyz:1,shoota-boyz:9,slugga:9"
     ]
   },
   {
@@ -1328,7 +1335,7 @@
     },
     "comparison": "ordered",
     "expected": [
-      "Nob×2;Boy×18 => choppa-boyz:18,kombi-skorcha-boyz:2,kustom-choppa-boyz:2,shoota:18,slugga:18"
+      "Nob×2;Boy×18 => choppa-boyz:18,kombi-skorcha-boyz:2,kustom-choppa-boyz:2,shoota-boyz:18,slugga:18"
     ]
   },
   {

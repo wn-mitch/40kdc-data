@@ -640,13 +640,10 @@ describe("unit-scoped weapon profiles", () => {
       keywords: [],
     });
 
-    expect(
-      weapons.getInFaction("master-crafted-power-weapon", "adeptus-astartes")
-        ?.profiles[0],
-    ).toMatchObject({
-      stats: { A: 7, WS: 2 },
-      keywords: [{ keyword_id: "lethal-hits" }],
-    });
+    // The shared id keeps a different line (the Ancient in Terminator Armour's).
+    const shared = weapons.getInFaction("master-crafted-power-weapon", "adeptus-astartes")?.profiles[0];
+    expect(shared).toMatchObject({ stats: { A: 5, WS: 3 } });
+    expect(shared?.stats).not.toEqual(scoped?.profiles[0].stats);
   });
 });
 

@@ -1,8 +1,8 @@
 {
-  "name": "bolt-rifle x5 vs cultists whose Save is set to 4+ then improved by 1, no better than 3+",
+  "name": "bolt-rifle (saturation) x5 vs cultists whose Save is set to 4+ then improved by 1, no better than 3+",
   "attacker": {
     "weaponId": "bolt-rifle",
-    "profileIndex": 0
+    "profileIndex": 1
   },
   "modelsFiring": 5,
   "target": {

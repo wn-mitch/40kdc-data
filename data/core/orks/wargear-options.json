@@ -28,10 +28,10 @@
     },
     "is_free": true,
     "replaces": [
-      "rokkit-launcha"
+      "rokkit-launcha-deffkoptas"
     ],
     "replacement": [
-      "kustom-mega-blasta"
+      "kustom-mega-blasta-deffkoptas"
     ],
     "model_constraint": {
       "per_n_models": 3
@@ -120,7 +120,7 @@
     },
     "is_free": true,
     "replacement": [
-      "dual-supa-shoota"
+      "dual-supa-shoota-wazbom-blastajet"
     ],
     "model_constraint": {
       "any_number": true
@@ -259,7 +259,7 @@
     },
     "is_free": true,
     "replaces": [
-      "rokkit-pistol"
+      "rokkit-pistol-tankbustas"
     ],
     "replacement": [
       "smash-hammer"
@@ -318,7 +318,7 @@
     },
     "is_free": true,
     "replaces": [
-      "choppa"
+      "choppa-kommandos"
     ],
     "replacement_choice": [
       [
@@ -343,7 +343,7 @@
     },
     "is_free": true,
     "replaces": [
-      "choppa"
+      "choppa-kommandos"
     ],
     "replacement": [
       "breacha-ram"
@@ -439,7 +439,7 @@
     },
     "is_free": true,
     "replaces": [
-      "shoota"
+      "shoota-boyz"
     ],
     "replacement": [
       "rokkit-launcha-boyz"
@@ -459,7 +459,7 @@
     },
     "is_free": true,
     "replaces": [
-      "shoota"
+      "shoota-boyz"
     ],
     "replacement": [
       "burna"
@@ -479,7 +479,7 @@
     },
     "is_free": true,
     "replaces": [
-      "shoota"
+      "shoota-boyz"
     ],
     "replacement": [
       "big-shoota-boyz"
@@ -502,7 +502,7 @@
       "dual-big-shoota"
     ],
     "replacement": [
-      "rokkit-launcha"
+      "rokkit-launcha-trukk"
     ],
     "model_constraint": {
       "any_number": true
@@ -566,7 +566,7 @@
     },
     "is_free": true,
     "replaces": [
-      "kustom-choppa"
+      "kustom-choppa-stormboyz"
     ],
     "replacement": [
       "power-klaw"
@@ -596,7 +596,7 @@
         "rokkit-launcha-deff-dread"
       ],
       [
-        "kustom-mega-blasta"
+        "kustom-mega-blasta-deff-dread"
       ]
     ],
     "model_constraint": {
@@ -618,7 +618,7 @@
     ],
     "replacement_choice": [
       [
-        "kustom-mega-blasta"
+        "kustom-mega-blasta-deff-dread"
       ],
       [
         "rokkit-launcha-deff-dread"
@@ -657,14 +657,14 @@
     },
     "is_free": true,
     "replaces": [
-      "kustom-shoota"
+      "kustom-shoota-big-mek-in-mega-armour"
     ],
     "replacement_choice": [
       [
         "killsaw"
       ],
       [
-        "kombi-weapon"
+        "kombi-weapon-big-mek-in-mega-armour"
       ],
       [
         "kustom-mega-blasta"
@@ -918,7 +918,7 @@
     },
     "is_free": true,
     "replaces": [
-      "kustom-shoota"
+      "kustom-shoota-warboss"
     ],
     "replacement_choice": [
       [
@@ -942,7 +942,7 @@
     },
     "is_free": true,
     "replaces": [
-      "kustom-choppa"
+      "kustom-choppa-warboss"
     ],
     "replacement": [
       "power-klaw-warboss"

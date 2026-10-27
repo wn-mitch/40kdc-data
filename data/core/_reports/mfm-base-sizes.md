@@ -1,4 +1,4 @@
-# MFM base sizes — APPLIED
+# MFM base sizes — DRY RUN
 
 Reconciles unit `base_size_mm` from the dump's datasheet baseSize label,
 confident round/oval strings only (Hull/Flying/Unique, per-model, and

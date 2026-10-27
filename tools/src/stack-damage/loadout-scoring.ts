@@ -65,8 +65,9 @@ interface Candidate extends SelectedWeaponProfile {}
 
 type ProfileFilter = (profile: Weapon["profiles"][number]) => boolean;
 
+// 11e prints the Pistol rule as [Close-Quarters]; both keywords carry the one-or-the-other choice.
 const isPistolProfile: ProfileFilter = (profile) =>
-  (profile.keywords ?? []).some((keyword) => keyword.keyword_id === "pistol");
+  (profile.keywords ?? []).some((keyword) => keyword.keyword_id === "pistol" || keyword.keyword_id === "close-quarters");
 
 /** Big Guns Never Tire: an engaged Monster or Vehicle shoots its non-Pistol weapons at −1 to hit. */
 export const bigGunsHitModifier = (profile: Weapon["profiles"][number]): number => (isPistolProfile(profile) ? 0 : -1);

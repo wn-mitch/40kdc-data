@@ -1,4 +1,4 @@
-# MFM reissued refs
+# MFM reissued refs (dry run)
 
 Dead `mfm` refs moved to the same-named row a reissued publication prints. Refs with no
 reissued row are the content the dump retired; `mfm:mirror` removes those records.

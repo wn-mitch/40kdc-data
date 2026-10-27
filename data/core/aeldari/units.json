@@ -665,8 +665,7 @@
       "shuriken-pistol",
       "shuriken-rifle",
       "witch-staff",
-      "wraithcannon",
-      "close-combat-weapon"
+      "wraithcannon"
     ],
     "ability_ids": [
       {
@@ -6509,7 +6508,7 @@
     },
     "weapon_ids": [
       "witch-staff",
-      "shuriken-pistol"
+      "shuriken-pistol-spiritseer-kygharil"
     ],
     "ability_ids": [
       "spirit-mark-psychic-aeldari",
@@ -6677,7 +6676,7 @@
     },
     "weapon_ids": [
       "drakesteed-fangs-and-talons",
-      "laser-lance",
+      "laser-lance-dragon-knights",
       "solar-carbine"
     ],
     "ability_ids": [
@@ -6760,7 +6759,7 @@
     "weapon_ids": [
       "drakesteed-fangs-and-talons",
       "hunting-blades",
-      "long-rifle"
+      "long-rifle-leystalker"
     ],
     "ability_ids": [
       "battle-focus-aeldari",

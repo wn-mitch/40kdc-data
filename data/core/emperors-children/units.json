@@ -245,7 +245,7 @@
     },
     "weapon_ids": [
       "agonising-energies",
-      "bolt-pistol",
+      "bolt-pistol-sorcerer",
       "force-weapon"
     ],
     "ability_ids": [
@@ -1250,8 +1250,8 @@
       "max": 10
     },
     "weapon_ids": [
-      "bolt-pistol",
-      "duelling-sabre",
+      "bolt-pistol-infractors",
+      "duelling-sabre-infractors",
       "plasma-pistol-infractors",
       "power-sword-infractors",
       "rapture-lash-infractors"
@@ -1422,7 +1422,7 @@
     },
     "weapon_ids": [
       "blissblade",
-      "bolt-pistol"
+      "bolt-pistol-flawless-blades"
     ],
     "ability_ids": [
       "daemonic-patrons-emperors-children"
@@ -1551,8 +1551,8 @@
     },
     "weapon_ids": [
       "duelling-sabre",
-      "bolt-pistol",
-      "power-sword"
+      "bolt-pistol-callous-blades-infractors",
+      "power-sword-callous-blades-infractors"
     ],
     "ability_ids": [
       "excessive-assault-callous-blades-infractors-emperors-children",
@@ -1620,7 +1620,7 @@
     },
     "weapon_ids": [
       "phoenix-power-spear",
-      "power-fist"
+      "power-fist-lord-kaphrael-of-the-callous-blades"
     ],
     "ability_ids": [
       "peerless-killer-emperors-children"

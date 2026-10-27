@@ -1,4 +1,4 @@
-# MFM Legends cull — APPLIED
+# MFM Legends cull — DRY RUN
 
 Drops repo units absent from the live (non-Legends) dump and prunes their wargear-options,
 unit-compositions, leader-attachment refs, and now-orphaned weapons/wargear. Abilities follow

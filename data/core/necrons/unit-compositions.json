@@ -500,10 +500,10 @@
           "length": 92
         },
         "default_weapon_ids": [
-          "tesla-sphere",
-          "tesla-sphere",
-          "tesla-sphere",
-          "tesla-sphere",
+          "tesla-sphere-tesseract-vault",
+          "tesla-sphere-tesseract-vault",
+          "tesla-sphere-tesseract-vault",
+          "tesla-sphere-tesseract-vault",
           "armoured-bulk-tesseract-vault",
           "tesla-spheres"
         ]
@@ -2091,7 +2091,7 @@
           "diameter": 90
         },
         "default_weapon_ids": [
-          "doomsday-blaster",
+          "doomsday-blaster-amonhotekhs-guard-canoptek-doomstalker",
           "twin-gauss-flayer",
           "doomstalker-limbs"
         ]

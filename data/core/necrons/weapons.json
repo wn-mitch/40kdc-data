@@ -4585,5 +4585,100 @@
         "id": "01ea1565-fe03-4fb7-91da-0a9d0516eaa7"
       }
     ]
+  },
+  {
+    "id": "doomsday-blaster-amonhotekhs-guard-canoptek-doomstalker",
+    "name": "Doomsday blaster",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Doomsday Blaster",
+        "range": 48,
+        "stats": {
+          "A": "D6+1",
+          "S": 14,
+          "AP": -3,
+          "D": 3,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "heavy"
+          },
+          {
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "5edb-d0a-d124-1957"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1143b86b-a76b-4d1c-92b5-5ad2e508f6c7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fabaae60-6a46-46a4-ac0f-ab3a9ebcd521"
+      }
+    ]
+  },
+  {
+    "id": "tesla-sphere-tesseract-vault",
+    "name": "Tesla sphere",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Tesla sphere",
+        "range": 24,
+        "stats": {
+          "A": 6,
+          "S": 7,
+          "AP": 0,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 2
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "68e9-a3fc-4ef2-b655"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "e0a6-ce43-b479-de3b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4839a7ae-a78a-4b2b-bb8d-1044dcb05b81"
+      },
+      {
+        "namespace": "mfm",
+        "id": "786c9b00-198c-406c-8d79-e2d4dbd56203"
+      }
+    ]
   }
 ]

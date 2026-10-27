@@ -4643,5 +4643,235 @@
       "edition": "11th",
       "dataslate": "mfm-995"
     }
+  },
+  {
+    "id": "flechette-blaster-purge-corps-pteraxii-sterylizors",
+    "name": "Flechette blaster",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Flechette Blaster",
+        "range": 12,
+        "stats": {
+          "A": 5,
+          "S": 3,
+          "AP": 0,
+          "D": 1,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "4c80-8cea-7399-3163"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "54db-9ff3-de39-a227"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "b6b3-dbba-4eb0-ddbf"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "be9a-2160-1f3d-8ef3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "49a8ff66-0190-4958-bf0e-40e0473104a1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f3ad3178-aa29-4c3c-9a49-bf13d76ea63d"
+      }
+    ]
+  },
+  {
+    "id": "mechanicus-pistol-purge-corps-skitarii-vanguard",
+    "name": "Mechanicus pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Mechanicus Pistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 6,
+          "AP": -1,
+          "D": 1,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          },
+          {
+            "keyword_id": "devastating-wounds"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "2b1f-798d-9bca-4ad9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "266d545d-ff04-43aa-87d6-e6f7e2b9082f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d7133b25-68cf-48e5-99f2-7c6bb8fa14ca"
+      }
+    ]
+  },
+  {
+    "id": "phosphor-pistol-purge-corps-serberys-sulphurhounds",
+    "name": "Phosphor pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Phosphor Pistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "ignores-cover"
+          },
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "1062-eb26-46bd-17ac"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "5095-f151-792f-3ea8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8b51afac-e300-4949-bd38-9e8d4199aeca"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b1d7a186-e2a8-4675-bb68-13c5bab49a5c"
+      }
+    ]
+  },
+  {
+    "id": "taser-goad-purge-corps-pteraxii-sterylizors",
+    "name": "Taser goad",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Taser Goad",
+        "range": "Melee",
+        "stats": {
+          "A": 3,
+          "S": 6,
+          "AP": 0,
+          "D": 1,
+          "WS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 2
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "3312-a16b-d93-3038"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "d4c4-501a-5758-ab3b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "73411523-21ab-40c7-9f08-6b8e26940489"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a8347307-cd6a-4c47-8627-a5a26907597d"
+      }
+    ]
+  },
+  {
+    "id": "transonic-cannon-manipulus-skand",
+    "name": "Transonic cannon",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Transonic Cannon",
+        "range": 12,
+        "stats": {
+          "A": "D6",
+          "S": 4,
+          "AP": 0,
+          "D": 2,
+          "BS": null
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "7115-e9c6-3307-e8e4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cf198cf9-dadd-43d7-9513-6ab3ff704905"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f99351e0-3d3f-47b9-abd1-4035629d5bf5"
+      }
+    ]
   }
 ]

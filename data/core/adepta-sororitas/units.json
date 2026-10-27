@@ -1842,7 +1842,7 @@
     "points_provisional": false,
     "wargear_costs": [
       {
-        "item_id": "multi-melta",
+        "item_id": "multi-melta-paragon-warsuits",
         "cost": 10
       }
     ],
@@ -2468,7 +2468,7 @@
     ],
     "wargear_costs": [
       {
-        "item_id": "meltagun",
+        "item_id": "meltagun-dominion-squad",
         "cost": 5
       }
     ],

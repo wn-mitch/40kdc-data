@@ -10428,10 +10428,13 @@
         },
         "keywords": [
           {
-            "keyword_id": "blast"
+            "keyword_id": "torrent"
           },
           {
-            "keyword_id": "torrent"
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 1
+            }
           }
         ]
       }
@@ -10448,6 +10451,241 @@
       {
         "namespace": "mfm",
         "id": "365fa29f-59a8-4363-bfa3-4a4793b6a8ba"
+      }
+    ]
+  },
+  {
+    "id": "laser-lance-dragon-knights",
+    "name": "Laser lance",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Laser Lance",
+        "range": 6,
+        "stats": {
+          "A": 1,
+          "S": 6,
+          "AP": -2,
+          "D": 3,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "assault"
+          }
+        ]
+      },
+      {
+        "name": "Laser Lance",
+        "range": "Melee",
+        "stats": {
+          "A": 3,
+          "S": 6,
+          "AP": -2,
+          "D": 3,
+          "WS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "lance"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "40d8-da41-5ac1-1121"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "62f2-562f-ed0c-4cb5"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "ed99-c797-e408-1bfa"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0830cfcf-df7c-49a3-a0e7-2b162ac4a514"
+      },
+      {
+        "namespace": "mfm",
+        "id": "adab4a50-5b93-4dbf-afe9-17747ed09b46"
+      }
+    ]
+  },
+  {
+    "id": "long-rifle-leystalker",
+    "name": "Long rifle",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Long Rifle",
+        "range": 36,
+        "stats": {
+          "A": 2,
+          "S": 6,
+          "AP": -2,
+          "D": 3,
+          "BS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "devastating-wounds",
+            "parameters": {
+              "excluded_target_keywords": [
+                "Monster",
+                "Vehicle"
+              ]
+            }
+          },
+          {
+            "keyword_id": "precision"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "7854-58e5-3b6a-f90a"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "a042-2834-4886-3e66"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "ceb5-06b9-b0a1-20b7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0d8dbaa5-16c0-4b89-a89f-af79c8b90d99"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bedccbd3-7724-40f7-81f4-e8e31045a1e0"
+      }
+    ]
+  },
+  {
+    "id": "shuriken-pistol-spiritseer-kygharil",
+    "name": "Shuriken pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Shuriken Pistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 4,
+          "AP": -1,
+          "D": 1,
+          "BS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "assault"
+          },
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "1f44-f19-2abd-f1ac"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "2119-f4d4-2ece-31d9"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "3878-3965-4758-16b7"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "3992-6c24-5331-9100"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "3e10-daa7-73da-1ad2"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "62af-d73d-053c-dad9"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "6783-a483-98bc-4f87"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "6b13-b1b2-b1b2-a72e"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "6da9-98ba-21fd-4bf2"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "7115-869-942a-766c"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "8c4f-4f5e-a69d-e335"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "8f8f-983d-3283-262d"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "9c41-e9c2-5f62-7a76"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "adf0-d7bf-2033-6303"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "b022-c256-b6a3-e636"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "c7bb-1a7a-0b53-289c"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "ea69-fd60-7ad7-5a33"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "eb85-9e4d-2252-1641"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a63106c6-7db8-4726-bd19-e3fb0c349677"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e7190757-0c77-4fda-ba40-f0d70356a566"
       }
     ]
   }

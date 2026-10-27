@@ -390,7 +390,20 @@ export async function prepareWrites(
 
   const configuredRoot = path.resolve(opts.dataRoot ?? DATA_ROOT);
   const dataRoot = fs.realpathSync(configuredRoot);
-  const prepared = prepareStagedWrites(staged, configuredRoot, dataRoot, opts.label);
+  // A staged file whose bytes already match disk is no change: drop it, so a dry run
+  // reports only real drift.
+  const prepared = prepareStagedWrites(staged, configuredRoot, dataRoot, opts.label)
+    .filter((write) => fs.readFileSync(write.path, "utf8") !== write.text);
+  if (prepared.length === 0 && !opts.validateUnchanged) {
+    console.log(`[${opts.label}] no file changes to apply.`);
+    let used = false;
+    return {
+      commit(): void {
+        if (used) throw new Error(`[${opts.label}] prepared write commit already used.`);
+        used = true;
+      },
+    };
+  }
   const inputSnapshot = snapshotInputs(dataRoot);
   const inputHashes = inputSnapshot.hashes;
 

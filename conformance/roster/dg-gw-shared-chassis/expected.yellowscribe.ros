@@ -134,8 +134,8 @@
                         <characteristic name="Range">24"</characteristic>
                         <characteristic name="A">2</characteristic>
                         <characteristic name="BS">3+</characteristic>
-                        <characteristic name="S">4</characteristic>
-                        <characteristic name="AP">0</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-1</characteristic>
                         <characteristic name="D">1</characteristic>
                         <characteristic name="Keywords">Lethal Hits, Rapid Fire 2</characteristic>
                       </characteristics>

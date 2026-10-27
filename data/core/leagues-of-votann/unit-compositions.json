@@ -1342,7 +1342,7 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "exoarmour-grenade-launcher",
+          "exoarmour-grenade-launcher-bane-slayers-bulwark-einhyr-hearthguard",
           "graviton-hammer",
           "volkanite-disintegrator"
         ]
@@ -1357,7 +1357,7 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "exoarmour-grenade-launcher",
+          "exoarmour-grenade-launcher-bane-slayers-bulwark-einhyr-hearthguard",
           "plasma-blade-gauntlet",
           "volkanite-disintegrator"
         ]
@@ -1398,7 +1398,7 @@
           "diameter": 28.5
         },
         "default_weapon_ids": [
-          "autoch-pattern-bolt-pistol",
+          "autoch-pattern-bolt-pistol-bane-slayers-bulwark-hearthkyn-warriors",
           "plasma-knife"
         ]
       },
@@ -1413,7 +1413,7 @@
         },
         "default_weapon_ids": [
           "armoured-fists",
-          "autoch-pattern-bolt-pistol",
+          "autoch-pattern-bolt-pistol-bane-slayers-bulwark-hearthkyn-warriors",
           "hylas-auto-rifle"
         ]
       },
@@ -1428,7 +1428,7 @@
         },
         "default_weapon_ids": [
           "armoured-fists",
-          "autoch-pattern-bolt-pistol",
+          "autoch-pattern-bolt-pistol-bane-slayers-bulwark-hearthkyn-warriors",
           "magna-rail-rifle"
         ]
       },
@@ -1442,9 +1442,9 @@
           "diameter": 28.5
         },
         "default_weapon_ids": [
-          "autoch-pattern-bolt-pistol",
+          "autoch-pattern-bolt-pistol-bane-slayers-bulwark-hearthkyn-warriors",
           "theyns-armaments",
-          "theyns-pistol"
+          "theyns-pistol-bane-slayers-bulwark-hearthkyn-warriors"
         ]
       },
       {
@@ -1458,7 +1458,7 @@
         },
         "default_weapon_ids": [
           "armoured-fists",
-          "autoch-pattern-bolt-pistol",
+          "autoch-pattern-bolt-pistol-bane-slayers-bulwark-hearthkyn-warriors",
           "ion-blaster"
         ]
       }

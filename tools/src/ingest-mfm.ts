@@ -35,6 +35,10 @@
  *                 only reconcile existing units; this is the one that adds new ones.
  *                 Combat-Patrol-only datasheets are held back unless
  *                 --include-combat-patrol is passed.
+ *   weapon-stats  Reconcile each unit's weapons with the items its datasheet fields
+ *                 (profiles, stats, keywords, Hunter restrictions); a shared id whose
+ *                 datasheets disagree keeps the majority line and the rest get
+ *                 per-unit variants. Refuses rather than drop repo-authored detail.
  *
  * Every mutating subcommand is DRY RUN by default; pass --write to apply.
  *
@@ -111,6 +115,7 @@ import {
   runWeaponVariants,
   buildWeaponVariantsReport,
 } from "./mfm/weapon-variants.js";
+import { buildWeaponStatsReport, runWeaponStats } from "./mfm/weapon-stats.js";
 import {
   runConditionalKeywords,
   buildConditionalKeywordReport,
@@ -1535,6 +1540,18 @@ async function runWeaponVariantsCmd(
     console.log("DRY RUN — no files written. Re-run with --write to apply.");
 }
 
+async function runWeaponStatsCmd(dump: MfmDump, write: boolean, onlyDir?: string): Promise<void> {
+  const report = runWeaponStats(dump, onlyDir);
+  fs.mkdirSync(REPORT_DIR, { recursive: true });
+  const reportPath = path.join(REPORT_DIR, "mfm-weapon-stats.md");
+  fs.writeFileSync(reportPath, buildWeaponStatsReport(report));
+  const sum = (key: "updated" | "variants" | "refusals" | "unconfirmed") => report.dirs.reduce((total, dir) => total + dir[key].length, 0);
+  console.log(`Weapon-stats report → ${path.relative(REPO_ROOT, reportPath)}`);
+  console.log(`Updated ${sum("updated")}, variants +${sum("variants")}, refused ${sum("refusals")}, unconfirmed ${sum("unconfirmed")}.`);
+  await applyWrites(report.staged, { write, label: "weapon-stats" });
+  if (!write) console.log("DRY RUN — no files written. Re-run with --write to apply.");
+}
+
 /**
  * Append the weapons of inline profiles (enhancement and drone wargear) to each faction's
  * weapons.json. A weapon whose id already exists with other values is refused, not replaced.
@@ -1662,6 +1679,7 @@ export const INGEST_MFM_COMMANDS = [
   "seed-detachments",
   "allies",
   "weapon-variants",
+  "weapon-stats",
   "weapons",
   "external-refs",
   "dataslates",
@@ -1749,6 +1767,8 @@ export async function runIngestMfmCommand(
   else if (command === "allies") await runAlliesCmd(dump, options.write);
   else if (command === "weapon-variants")
     await runWeaponVariantsCmd(dump, options.write, options.onlyDir);
+  else if (command === "weapon-stats")
+    await runWeaponStatsCmd(dump, options.write, options.onlyDir);
   else if (command === "weapons") await runWeaponsCmd(dump, options.write);
   else if (command === "dataslates")
     await runDataslatesCmd(dump, options.write, options.dumpPath);

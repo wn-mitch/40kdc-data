@@ -5,7 +5,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "pre-launch-provisional"
     },
     "source_digest": "8bd667d22eeeff5b7940fe554cf66c9fd828530818eb7ee294814ad87054e577",
     "version": "2025-q3",
@@ -190,7 +190,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "pre-launch-provisional"
     },
     "source_digest": "2c96ff0862cc6ceb68aa93a17fe50a6727a5f2b1b6244181429ca6034d13a662",
     "version": "2025-q3",
@@ -382,7 +382,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "pre-launch-provisional"
     },
     "source_digest": "a60e1d167a6fb1ead0ceb5859b184ba7db84623ac13a6ba01bd77a5ba47ab98d",
     "version": "2025-q3",
@@ -440,7 +440,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "pre-launch-provisional"
     },
     "unit_ids": [],
     "faction_id": "iron-hands",
@@ -531,7 +531,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "pre-launch-provisional"
     },
     "unit_ids": [],
     "faction_id": "iron-hands",

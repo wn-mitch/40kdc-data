@@ -258,6 +258,16 @@ const MANUAL_DEFAULTS: Record<string, Record<string, Record<string, string[]>>> 
   },
 };
 
+/**
+ * A model's {@link MANUAL_DEFAULTS}, each id replaced by the unit's own stat variant
+ * (`${id}-${unitId}`) when the faction vocabulary holds one, as {@link unitScopedResolver}
+ * does for dump names.
+ */
+function manualDefaults(dir: string, unitId: string, rowName: string, validIds: ReadonlySet<string>): string[] {
+  return (MANUAL_DEFAULTS[dir]?.[unitId]?.[rowName] ?? []).map((id) =>
+    validIds.has(`${id}-${unitId}`) ? `${id}-${unitId}` : id);
+}
+
 /** True when `a` and `b` differ by at most one insertion/deletion/substitution. */
 export function withinEditDistance1(a: string, b: string): boolean {
   if (a === b) return true;
@@ -1989,7 +1999,7 @@ export function runWargear(dump: MfmDump, write: boolean, onlyDir?: string): War
           for (const m of comp.models) {
             const ids = derived.defaultsByModel.get(m.name);
             if (!ids?.length) continue;
-            const manual = MANUAL_DEFAULTS[dir]?.[id]?.[m.name] ?? [];
+            const manual = manualDefaults(dir, id, m.name, validIds);
             const expected = [...ids, ...manual.filter((itemId) => !ids.includes(itemId))];
             const cur = Array.isArray(m.default_weapon_ids) ? m.default_weapon_ids : [];
             if (!sameMultiset(cur, expected)) {
@@ -2141,10 +2151,10 @@ export function runWargear(dump: MfmDump, write: boolean, onlyDir?: string): War
     // (faction → unit → model → ids). Applied here, after the dump pass, so it lands
     // whether or not the dump matched the datasheet, and APPENDS to the model's
     // current default loadout — never dropping a derived or pre-existing weapon.
-    for (const [unitId, perModel] of Object.entries(MANUAL_DEFAULTS[dir] ?? {})) {
+    for (const unitId of Object.keys(MANUAL_DEFAULTS[dir] ?? {})) {
       for (const comp of compsByUnit.get(unitId) ?? []) {
         for (const m of comp.models) {
-          const add = perModel[m.name];
+          const add = manualDefaults(dir, unitId, m.name, validIds);
           if (!add?.length) continue;
           const cur = Array.isArray(m.default_weapon_ids) ? m.default_weapon_ids : [];
           const merged = [...cur, ...add.filter((x) => !cur.includes(x))];
@@ -2576,10 +2586,7 @@ export function runWargearCosts(dump: MfmDump, onlyDir?: string): WargearCostsRe
       matchedRepoIds.add(id);
       matched++;
 
-      const unitAliases = WEAPON_ALIASES_BY_UNIT[dir]?.[id];
-      const unitResolve = unitAliases
-        ? makeResolver(validIds, autoResolved, WEAPON_ALIASES[dir] ?? {}, unitAliases)
-        : resolve;
+      const unitResolve = unitScopedResolver(validIds, autoResolved, dir, id, resolve);
       const costs = pricedWargearItems(dump, ds.id!, unitResolve);
 
       const before = JSON.stringify(rec.wargear_costs ?? null);
@@ -2764,7 +2771,7 @@ export function runCompositionNames(dump: MfmDump, onlyDir?: string): CompNamesR
       // Reviewed always-on additions ride on top of the dump defaults, exactly
       // as runWargear applies them (a refresh must not drop a support turret).
       const withManual = (rowName: string, ids: string[] | undefined): string[] | undefined => {
-        const add = MANUAL_DEFAULTS[dir]?.[id]?.[rowName] ?? [];
+        const add = manualDefaults(dir, id, rowName, validIds);
         if (!ids?.length) return add.length ? [...add] : ids;
         return [...ids, ...add.filter((x) => !ids.includes(x))];
       };

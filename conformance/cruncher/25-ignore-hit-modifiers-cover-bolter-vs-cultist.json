@@ -1,8 +1,8 @@
 {
-  "name": "bolt-rifle x5 vs cultists in cover with -1 and +1 to hit, ignoring hit modifiers keeps only the +1",
+  "name": "bolt-rifle (saturation) x5 vs cultists in cover with -1 and +1 to hit, ignoring hit modifiers keeps only the +1",
   "attacker": {
     "weaponId": "bolt-rifle",
-    "profileIndex": 0
+    "profileIndex": 1
   },
   "modelsFiring": 5,
   "target": {

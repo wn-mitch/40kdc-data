@@ -845,7 +845,7 @@
       "close-combat-weapon-rubric-marines",
       "force-weapon-rubric-marines",
       "inferno-bolt-pistol",
-      "inferno-boltgun",
+      "inferno-boltgun-rubric-marines",
       "malefic-curse",
       "soulreaper-cannon",
       "warpflame-pistol",
@@ -2532,7 +2532,7 @@
       "max": 1
     },
     "weapon_ids": [
-      "baleful-devolution",
+      "baleful-devolution-kaaskrek",
       "force-stave"
     ],
     "ability_ids": [
@@ -2634,9 +2634,9 @@
       "soulreaper-cannon",
       "stocks-and-fists",
       "inferno-boltgun",
-      "warpflamer",
-      "force-weapon",
-      "inferno-bolt-pistol"
+      "warpflamer-prism-of-zadophon-rubric-marines",
+      "force-weapon-prism-of-zadophon-rubric-marines",
+      "inferno-bolt-pistol-prism-of-zadophon-rubric-marines"
     ],
     "ability_ids": [
       "bringers-of-change-prism-of-zadophon-rubric-marines-thousand-sons",

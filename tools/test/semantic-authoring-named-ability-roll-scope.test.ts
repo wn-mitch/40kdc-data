@@ -148,7 +148,7 @@ describe("Named ability's own dice (reroll v6, roll-modifier v7)", () => {
 
   it("refuses a bare reanimation-protocols id, which names no ability record", () => { // mfm:mirror keep — the bare id under test
     const list = placed(RP_TEXT, ["Each time this unit's Sample Aura activates", "event", { kind: "used", activity: "ability", id: "reanimation-protocols", subject: "this-unit" }], // mfm:mirror keep — the bare id under test
-      ["re-roll the dice", "reroll", { roll: { ability: "reanimation-protocols" }, subset: "all", weapon_type: "all" }]);
+      ["re-roll the dice", "reroll", { roll: { ability: "reanimation-protocols" }, subset: "all", weapon_type: "all" }]); // mfm:mirror keep — the bare id under test
     const result = compiled(list, RP_TEXT);
     expect(coreCheckErrors(DATA_ROOT, "their-number-is-legion-necrons", result.checks).join(" ")).toMatch(/reanimation-protocols is no ability record/);
   });

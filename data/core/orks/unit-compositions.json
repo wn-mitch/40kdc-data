@@ -78,7 +78,7 @@
         "min": 2,
         "max": 5,
         "default_weapon_ids": [
-          "choppa",
+          "choppa-warbikers",
           "dual-dakkagun"
         ],
         "is_leader_model": false,
@@ -99,7 +99,7 @@
           "length": 42
         },
         "default_weapon_ids": [
-          "kustom-choppa",
+          "kustom-choppa-warbikers",
           "dual-kombi-rokkit"
         ]
       }
@@ -154,8 +154,8 @@
           "length": 42
         },
         "default_weapon_ids": [
-          "choppa",
-          "rokkit-launcha",
+          "choppa-deffkoptas",
+          "rokkit-launcha-deffkoptas",
           "slugga",
           "spinnin-blades"
         ]
@@ -528,8 +528,8 @@
           "length": 109
         },
         "default_weapon_ids": [
-          "dual-big-shoota",
-          "dual-big-shoota",
+          "dual-big-shoota-morkanaut",
+          "dual-big-shoota-morkanaut",
           "klaw-of-mork",
           "kustom-mega-blasta",
           "kustom-mega-zappa",
@@ -700,7 +700,7 @@
           "big-shoota",
           "deffkannon-and-supa-rokkits",
           "mega-choppa",
-          "skorcha",
+          "skorcha-stompa",
           "supa-gatler"
         ]
       }
@@ -785,8 +785,8 @@
         },
         "default_weapon_ids": [
           "choppa-tankbustas",
-          "rokkit-pistol",
-          "rokkit-pistol"
+          "rokkit-pistol-tankbustas",
+          "rokkit-pistol-tankbustas"
         ]
       }
     ],
@@ -820,7 +820,7 @@
         "min": 9,
         "max": 9,
         "default_weapon_ids": [
-          "choppa",
+          "choppa-kommandos",
           "slugga"
         ],
         "is_leader_model": false,
@@ -839,7 +839,7 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "choppa",
+          "choppa-kommandos",
           "slugga"
         ]
       }
@@ -885,7 +885,7 @@
         "max": 18,
         "default_weapon_ids": [
           "choppa-boyz",
-          "shoota",
+          "shoota-boyz",
           "slugga"
         ],
         "is_leader_model": false
@@ -1050,7 +1050,7 @@
           "draft": true
         },
         "default_weapon_ids": [
-          "scavenged-shivs",
+          "scavenged-shivs-mek-gunz",
           "smasha-gun-mek-gunz"
         ]
       }
@@ -1098,7 +1098,7 @@
         "min": 4,
         "max": 9,
         "default_weapon_ids": [
-          "choppa",
+          "choppa-stormboyz",
           "slugga"
         ],
         "is_leader_model": false,
@@ -1117,7 +1117,7 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "kustom-choppa",
+          "kustom-choppa-stormboyz",
           "slugga"
         ]
       }
@@ -1385,7 +1385,7 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "kustom-shoota",
+          "kustom-shoota-big-mek-in-mega-armour",
           "power-klaw-big-mek-in-mega-armour"
         ]
       }
@@ -1954,7 +1954,7 @@
         "default_weapon_ids": [
           "armoured-impact",
           "dual-big-shoota",
-          "dual-supa-shoota"
+          "dual-supa-shoota-burna-bommer"
         ]
       }
     ],
@@ -1993,7 +1993,7 @@
           "stikka-kannon",
           "saw-blades-hunta-rig",
           "eavy-lobba",
-          "butcha-boyz"
+          "butcha-boyz-hunta-rig"
         ]
       }
     ],
@@ -2027,8 +2027,8 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "kustom-choppa",
-          "kustom-shoota"
+          "kustom-choppa-warboss",
+          "kustom-shoota-warboss"
         ]
       }
     ],
@@ -2057,8 +2057,8 @@
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
-          "shoota",
-          "kustom-choppa"
+          "shoota-bannernob",
+          "kustom-choppa-bannernob"
         ]
       }
     ],
@@ -2119,7 +2119,7 @@
         "max": 1,
         "default_weapon_ids": [
           "slugga-bigboss",
-          "big-choppa"
+          "big-choppa-bigboss"
         ]
       }
     ],
@@ -2353,7 +2353,7 @@
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
-          "choppa",
+          "choppa-ardmob-wartrakk",
           "kustom-shoota",
           "rokkit-launcha"
         ],
@@ -2457,9 +2457,9 @@
         "min": 1,
         "max": 2,
         "default_weapon_ids": [
-          "kustom-choppa",
-          "kustom-shoota",
-          "multi-busta-launcha"
+          "kustom-choppa-wartrakks",
+          "kustom-shoota-wartrakks",
+          "multi-busta-launcha-wartrakks"
         ],
         "is_leader_model": false
       }

@@ -1,4 +1,4 @@
-# MFM detachment fields — APPLIED
+# MFM detachment fields — DRY RUN
 
 Authoritative reconcile of `tags` (mutual-exclusivity unique keyword → slug)
 and `restrictions.required_keywords` (chapter-lock applicability keyword).
@@ -31,7 +31,7 @@ authored separately and is untouched.
 | iron-hands | 1 | 0 | 1 | 0 | 1 | 0 | 1 | 0 | 0 |
 | leagues-of-votann | 11 | 0 | 11 | 0 | 11 | 0 | 11 | 0 | 0 |
 | necrons | 13 | 0 | 13 | 0 | 13 | 0 | 12 | 0 | 0 |
-| orks | 15 | 0 | 15 | 0 | 15 | 0 | 15 | 0 | 0 |
+| orks | 16 | 0 | 16 | 0 | 16 | 0 | 16 | 0 | 0 |
 | raven-guard | 1 | 0 | 1 | 0 | 1 | 0 | 1 | 0 | 0 |
 | salamanders | 1 | 0 | 1 | 0 | 1 | 0 | 1 | 0 | 0 |
 | space-wolves | 4 | 0 | 4 | 0 | 4 | 0 | 4 | 0 | 0 |
@@ -41,5 +41,5 @@ authored separately and is untouched.
 | ultramarines | 1 | 0 | 1 | 0 | 1 | 0 | 1 | 0 | 0 |
 | white-scars | 1 | 0 | 1 | 0 | 1 | 0 | 1 | 0 | 0 |
 | world-eaters | 9 | 0 | 9 | 0 | 9 | 0 | 8 | 0 | 0 |
-| **TOTAL** | **280** | **0** | **280** | **0** | **280** | **0** | **272** | **0** | **0** |
+| **TOTAL** | **281** | **0** | **281** | **0** | **281** | **0** | **273** | **0** | **0** |
 
