@@ -4534,7 +4534,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "a5ba9dc52ab4366d3bb6f2f65170f61c4a427564d7e590d618e17e0f7ab83207",
     "version": "2025-q3",
@@ -4545,20 +4545,46 @@
     "ability_type": "enhancement",
     "behavior": "activated",
     "effect": {
-      "type": "ability-modifier",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "nurgles-gift-death-guard",
-        "aspect": "selections",
-        "operation": "add",
-        "value": 1,
-        "recipients": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "aura_of": "nurgles-gift-death-guard"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
             }
           }
+        ]
+      },
+      "effect": {
+        "type": "aura",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "range": {
+            "aura_of": "nurgles-gift-death-guard"
+          },
+          "effect": {
+            "type": "ability-activate",
+            "target": "recipient",
+            "modifier": {
+              "ability": "nurgles-gift-death-guard",
+              "select": {
+                "by": "player",
+                "option_var": "picked-option"
+              }
+            }
+          },
+          "eligible": {
+            "owner": "enemy"
+          },
+          "of": "this-unit"
         }
       }
     },
@@ -4570,7 +4596,13 @@
         "DEATH GUARD",
         "INFANTRY"
       ]
-    }
+    },
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "army"
+    },
+    "optional": true
   },
   {
     "ability_id": "nauseating-paroxysms-flyblown-host-death-guard",

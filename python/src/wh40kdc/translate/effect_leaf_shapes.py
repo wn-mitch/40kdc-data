@@ -148,7 +148,9 @@ def ability_activate(m: dict[str, Any], subj: str) -> str:
             )
             how = f"select {'one' if n == 1 else num_str(n)} {what} of {label}"
         join = "in place of" if m.get("exclusive") is True else "in addition to"
-        return f"{how} for {subj}, {join} any already active{consumed}"
+        # A bound pick is made once and shared by every unit the surrounding aura or loop reaches.
+        shared = " (picked once and shared)" if sel.get("option_var") is not None else ""
+        return f"{how}{shared} for {subj}, {join} any already active{consumed}"
     override = m.get("override")
     instead = ""
     if override is not None:

@@ -31687,6 +31687,71 @@
     }
   },
   {
+    "caseId": "death-guard-fidelity/host-of-the-hybridised-pox-paragons-of-putrescence-death-guard",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "aura",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "range": {
+            "aura_of": "nurgles-gift-death-guard"
+          },
+          "effect": {
+            "type": "ability-activate",
+            "target": "recipient",
+            "modifier": {
+              "ability": "nurgles-gift-death-guard",
+              "select": {
+                "by": "player",
+                "option_var": "picked-option"
+              }
+            }
+          },
+          "eligible": {
+            "owner": "enemy"
+          },
+          "of": "this-unit"
+        }
+      }
+    },
+    "scope": {
+      "duration": "battle"
+    },
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "army"
+    },
+    "applies_to": {
+      "all_of": [
+        "DEATH GUARD",
+        "INFANTRY"
+      ]
+    },
+    "optional": true,
+    "expected": {
+      "text": "You can: Once per battle per army, during the Command phase, in your turn, for the rest of the battle, while an enemy unit is within Contagion Range of this unit, select one option of Nurgle's Gift (Aura) (picked once and shared) for that unit, in addition to any already active.\nApplies to: units with DEATH GUARD, INFANTRY."
+    }
+  },
+  {
     "caseId": "imperial-knights-fidelity/heroes-of-legend-imperial-knights",
     "effect": {
       "type": "sequence",

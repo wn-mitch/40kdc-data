@@ -84,7 +84,7 @@ function anySideRegionGrant(leaf: CompileLeaf, body: Node, modifier: Node, eligi
 export function wrapAura(leaf: CompileLeaf, body: Node): Node {
   // A named range (aura-range@5 range_ref) arrives as the range-ref compile-named-range.ts built.
   const range = leaf.parameters.range_table ?? { inches: closed(leaf, "inches") };
-  const modifier: Node = { range, effect: body };
+  const modifier: Node = { range, effect: bindPicks(body) };
   // Version 3: a folded unit-filter (compile-unit-filters.ts) carries the keywords as `filter`.
   const filter = (leaf.parameters.filter ?? {}) as UnitFilter;
   const eligible = dslUnitFilter({ ...leaf, parameters: { ...filter, keywords: leaf.parameters.keywords ?? filter.keywords, side: closed(leaf, "side") } });
@@ -99,6 +99,29 @@ export function wrapAura(leaf: CompileLeaf, body: Node): Node {
   if (closed(leaf, "side") === "any") return anySideRegionGrant(leaf, body, modifier, eligible);
   return { type: "aura", target: closed(leaf, "side") === "friendly" ? "friendly-within-aura" : "enemy-within-aura", modifier };
 }
+
+/**
+ * An aura applies its body to each unit in range, but an option the ability picks ("select one
+ * Plague. Enemy units within range … have that Plague") is picked once: each activation's pick
+ * inside the body is bound, so every unit shares it.
+ */
+function bindPicks(node: unknown): Node {
+  const walk = (value: unknown): unknown => {
+    if (Array.isArray(value)) return value.map(walk);
+    if (value === null || typeof value !== "object") return value;
+    const record = Object.fromEntries(Object.entries(value).map(([key, item]) => [key, walk(item)])) as Node;
+    const modifier = record.modifier as Node | undefined;
+    const select = modifier?.select as Node | undefined;
+    if (record.type === "ability-activate" && select && select.option_var === undefined) {
+      return { ...record, modifier: { ...modifier, select: { ...select, option_var: PICKED_OPTION } } };
+    }
+    return record;
+  };
+  return walk(node) as Node;
+}
+
+/** The name an aura's shared pick is bound under. */
+const PICKED_OPTION = "picked-option";
 
 /** The inline definition is evaluated for each actual Leader holder, never its whole attached unit. */
 export function wrapLeaderTarget(leaf: CompileLeaf, body: Node): Node {

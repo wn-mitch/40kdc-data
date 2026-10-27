@@ -1245,6 +1245,7 @@ Select = TypedDict(
         "by": Literal["roll", "player"],
         "count": NotRequired[int],
         "from": NotRequired[list[FromItem]],
+        "option_var": NotRequired[str],
     },
 )
 

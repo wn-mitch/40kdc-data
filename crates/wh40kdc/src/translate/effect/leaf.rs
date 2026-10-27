@@ -550,7 +550,13 @@ fn ability_activate(m: &P, subj: &str) -> String {
         } else {
             "in addition to"
         };
-        return format!("{how} for {subj}, {join} any already active{consumed}");
+        // A bound pick is made once and shared by every unit the surrounding aura or loop reaches.
+        let shared = if nn(&sel, "option_var").is_some() {
+            " (picked once and shared)"
+        } else {
+            ""
+        };
+        return format!("{how}{shared} for {subj}, {join} any already active{consumed}");
     }
     let instead = nn(m, "override")
         .map(|o| {

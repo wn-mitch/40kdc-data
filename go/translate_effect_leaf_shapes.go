@@ -142,7 +142,12 @@ func abilityActivateLeaf(m map[string]any, subj string) string {
 		if m["exclusive"] == true {
 			join = "in place of"
 		}
-		return how + " for " + subj + ", " + join + " any already active" + consumed
+		// A bound pick is made once and shared by every unit the surrounding aura or loop reaches.
+		shared := ""
+		if sel["option_var"] != nil {
+			shared = " (picked once and shared)"
+		}
+		return how + shared + " for " + subj + ", " + join + " any already active" + consumed
 	}
 	instead := ""
 	if override, ok := asMap(m["override"]); ok && override != nil {

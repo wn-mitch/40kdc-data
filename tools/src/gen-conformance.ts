@@ -3396,7 +3396,7 @@ function genEffectTranslation(): void {
     ["agents-of-the-imperium", ["micromelta-rounds-veiled-blade-elimination-force-agents-of-the-imperium"]],
     ["chaos-daemons", ["harmonic-alignment-chaos-daemons"]],
     ["chaos-space-marines", ["enhanced-warriors-chaos-space-marines"]],
-    ["death-guard", ["tainted-narthecium-death-guard", "lord-of-the-death-guard"]],
+    ["death-guard", ["tainted-narthecium-death-guard", "lord-of-the-death-guard", "host-of-the-hybridised-pox-paragons-of-putrescence-death-guard"]],
     ["imperial-knights", ["heroes-of-legend-imperial-knights", "knightly-teachings-imperial-knights"]],
     ["leagues-of-votann", ["prioritised-efficiency-leagues-of-votann", "ruthless-reinvestment-leagues-of-votann"]],
     ["necrons", ["transdimensional-displacement-necrons"]],

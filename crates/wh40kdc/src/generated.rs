@@ -428,6 +428,10 @@ impl ::std::convert::TryFrom<::std::string::String> for AbilityAbilityType {
 ///          },
 ///          "minItems": 2,
 ///          "uniqueItems": true
+///        },
+///        "option_var": {
+///          "type": "string",
+///          "minLength": 1
 ///        }
 ///      },
 ///      "additionalProperties": false
@@ -665,6 +669,10 @@ pub struct AbilityActivateEffectModifierOverride {
 ///      },
 ///      "minItems": 2,
 ///      "uniqueItems": true
+///    },
+///    "option_var": {
+///      "type": "string",
+///      "minLength": 1
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -679,6 +687,8 @@ pub struct AbilityActivateEffectModifierSelect {
     pub count: ::std::option::Option<i64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub from: ::std::option::Option<Vec<AbilityActivateEffectModifierSelectFromItem>>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub option_var: ::std::option::Option<AbilityActivateEffectModifierSelectOptionVar>,
 }
 ///`AbilityActivateEffectModifierSelectBy`
 ///
@@ -821,6 +831,81 @@ for AbilityActivateEffectModifierSelectFromItem {
     }
 }
 impl<'de> ::serde::Deserialize<'de> for AbilityActivateEffectModifierSelectFromItem {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`AbilityActivateEffectModifierSelectOptionVar`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct AbilityActivateEffectModifierSelectOptionVar(::std::string::String);
+impl ::std::ops::Deref for AbilityActivateEffectModifierSelectOptionVar {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<AbilityActivateEffectModifierSelectOptionVar>
+for ::std::string::String {
+    fn from(value: AbilityActivateEffectModifierSelectOptionVar) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for AbilityActivateEffectModifierSelectOptionVar {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for AbilityActivateEffectModifierSelectOptionVar {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for AbilityActivateEffectModifierSelectOptionVar {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for AbilityActivateEffectModifierSelectOptionVar {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for AbilityActivateEffectModifierSelectOptionVar {
     fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
     where
         D: ::serde::Deserializer<'de>,
@@ -43911,7 +43996,7 @@ pub enum SimpleCondition {
 ///    },
 ///    {
 ///      "title": "ability-activate effect",
-///      "description": "[ability] Make a named ability resolve now, or make options of it active: option (one), options (two or more together) or all_options (every one). select: which option is picked now (by a fresh roll, or by the player; count: how many, from: only among these). exclusive: the activated options replace any already active; without it they join them. ignore_consumed: the option may be picked even if a once-per-battle selection already used it. override: the activation resolves with this amount instead of its own.",
+///      "description": "[ability] Make a named ability resolve now, or make options of it active: option (one), options (two or more together) or all_options (every one). select: which option is picked now (by a fresh roll, or by the player; count: how many, from: only among these; option_var: the pick is made once and bound under this name, so every unit a surrounding aura or loop applies it to shares it). exclusive: the activated options replace any already active; without it they join them. ignore_consumed: the option may be picked even if a once-per-battle selection already used it. override: the activation resolves with this amount instead of its own.",
 ///      "type": "object",
 ///      "required": [
 ///        "modifier",
@@ -44950,7 +45035,7 @@ pub enum SingleEffect {
     },
     /**ability-activate effect
 
-[ability] Make a named ability resolve now, or make options of it active: option (one), options (two or more together) or all_options (every one). select: which option is picked now (by a fresh roll, or by the player; count: how many, from: only among these). exclusive: the activated options replace any already active; without it they join them. ignore_consumed: the option may be picked even if a once-per-battle selection already used it. override: the activation resolves with this amount instead of its own.*/
+[ability] Make a named ability resolve now, or make options of it active: option (one), options (two or more together) or all_options (every one). select: which option is picked now (by a fresh roll, or by the player; count: how many, from: only among these; option_var: the pick is made once and bound under this name, so every unit a surrounding aura or loop applies it to shares it). exclusive: the activated options replace any already active; without it they join them. ignore_consumed: the option may be picked even if a once-per-battle selection already used it. override: the activation resolves with this amount instead of its own.*/
     #[serde(rename = "ability-activate")]
     AbilityActivate {
         modifier: AbilityActivateEffectModifier,
