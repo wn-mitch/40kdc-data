@@ -2,9 +2,9 @@ package wh40kdc
 
 import "math"
 
-// Buff-layer translation of the damage levers: weapon-name gates, WS/BS changes, a set Save,
-// critical thresholds (roll-result), ignored hit/wound modifiers, and the core abilities the buff
-// layer models on the unit being attacked (ability-grant). Mirror of the matching helpers in
+// Buff-layer translation of the damage levers: weapon-name gates, WS/BS changes, a set Save, set
+// weapon characteristics, critical thresholds (roll-result), ignored hit/wound modifiers, and the
+// core abilities the buff layer models on the unit being attacked (ability-grant). Mirror of the matching helpers in
 // tools/src/cruncher/from-dsl.ts.
 
 // criticalOnlyKeys are the modifier keys a critical-threshold-only roll-result may carry.
@@ -137,6 +137,31 @@ func translateSkillModifier(node, source, modifier map[string]any, stat string, 
 }
 
 // translateSaveSet handles a stat-modifier that sets the Save characteristic (defender-side).
+// translateStatSet lowers a set A, S, T or D. A, S and D on the buffed unit replace its weapons'
+// characteristic before modifiers; a set Toughness and a set Damage of incoming attacks are not
+// modelled.
+func translateStatSet(node, modifier map[string]any, stat string, isOnBuffedUnit bool, opts dslOpts, out *effectTranslation, emit func(map[string]any)) {
+	if stat == "T" {
+		out.unsupported = append(out.unsupported, unsup("stat-modifier T: setting the Toughness characteristic is not modelled", node))
+		return
+	}
+	if stat == "D" && classifyTarget(node) == "attacker" {
+		if opts.perspective == "target" {
+			out.unsupported = append(out.unsupported, unsup("stat-modifier D: setting the Damage of incoming attacks is not modelled", node))
+		}
+		return
+	}
+	if opts.perspective != "attacker" || !isOnBuffedUnit {
+		return
+	}
+	value := numericValue(modifier)
+	if math.IsNaN(value) || math.IsInf(value, 0) || value != math.Trunc(value) || value < 0 {
+		out.unsupported = append(out.unsupported, unsup("stat-modifier "+stat+": set value \""+jsStr(modifier["value"])+"\" is not a characteristic", node))
+		return
+	}
+	emit(map[string]any{"type": "stat-set", "stat": stat, "value": value})
+}
+
 func translateSaveSet(node, modifier map[string]any, isOnBuffedUnit bool, opts dslOpts, out *effectTranslation, emit func(map[string]any)) {
 	if opts.perspective != "target" {
 		out.unsupported = append(out.unsupported, unsup("stat-modifier Sv: defender-side stat; applies when the buffed unit is the target", node))

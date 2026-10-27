@@ -5094,6 +5094,157 @@
       }
     },
     {
+      "caseId": "stat-set/ap-on-bearer-melee",
+      "_comment": "An AP characteristic of -2 on the bearer's melee weapons is a stat-set with the profile's negative sign.",
+      "abilityId": "fabricated-set",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-set",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "AP",
+          "operation": "set",
+          "value": 2,
+          "weapons": {
+            "type": "melee"
+          }
+        }
+      },
+      "context": {
+        "phase": "fight"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "stat-set",
+            "stat": "AP",
+            "value": -2
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "stat-set/attacks-and-damage",
+      "_comment": "Set Attacks and Damage characteristics on the buffed unit lower to stat-set contributions.",
+      "abilityId": "fabricated-set",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-set",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "A",
+              "operation": "set",
+              "value": 6
+            }
+          },
+          {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "D",
+              "operation": "set",
+              "value": 3
+            }
+          }
+        ]
+      },
+      "context": {
+        "phase": "fight"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "stat-set",
+            "stat": "A",
+            "value": 6
+          },
+          {
+            "type": "stat-set",
+            "stat": "D",
+            "value": 3
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "stat-set/incoming-damage-unsupported",
+      "_comment": "Setting the Damage of attacks against the unit is defender-side and not modelled.",
+      "abilityId": "fabricated-set",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-set",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "D",
+          "operation": "set",
+          "value": 1,
+          "incoming": true
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "stat-modifier D: setting the Damage of incoming attacks is not modelled"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "stat-set/toughness-unsupported",
+      "_comment": "A set Toughness characteristic is not modelled.",
+      "abilityId": "fabricated-set",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-set",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "stat": "T",
+          "operation": "set",
+          "value": 3
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "stat-modifier T: setting the Toughness characteristic is not modelled"
+        ],
+        "activatable": []
+      }
+    },
+    {
       "caseId": "canonical/recipient-snapshot/attested-strength-after-detachment",
       "abilityId": "snapshot-example",
       "source": {

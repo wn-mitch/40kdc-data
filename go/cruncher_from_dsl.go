@@ -1511,8 +1511,8 @@ func translateStatModifier(node, source map[string]any, opts dslOpts, out *effec
 		return
 	}
 
-	// Setting the Save characteristic is defender-side; any other set stat outside A/S/T is off the
-	// damage path, and a set A/S/T has no single delta.
+	// Setting the Save characteristic is defender-side. A set A, S or D on the buffed unit replaces
+	// its weapons' characteristic before modifiers; other set stats are off the damage path.
 	if modifier["operation"] == "set" {
 		if stat == "Sv" {
 			translateSaveSet(node, modifier, isOnBuffedUnit, opts, out, emit)
@@ -1522,6 +1522,8 @@ func translateStatModifier(node, source map[string]any, opts dslOpts, out *effec
 			out.unsupported = append(out.unsupported, unsup("stat-modifier on \""+jsStr(modifier["stat"])+"\" is outside the damage path", node))
 			return
 		}
+		translateStatSet(node, modifier, stat, isOnBuffedUnit, opts, out, emit)
+		return
 	}
 
 	value, ok := signedValue(modifier)
@@ -1598,6 +1600,10 @@ func translateAPModifier(node, modifier map[string]any, opts dslOpts, out *effec
 			out.unsupported = append(out.unsupported, unsup("stat-modifier AP on the attacker: defender-side stat; applies when the buffed unit is the target", node))
 			return
 		}
+		if modifier["operation"] == "set" {
+			out.unsupported = append(out.unsupported, unsup("stat-modifier AP: setting the AP of incoming attacks is not modelled", node))
+			return
+		}
 		incoming, ok := apDelta(modifier)
 		if !ok {
 			out.unsupported = append(out.unsupported, unsup("stat-modifier AP: operation \""+jsStr(modifier["operation"])+"\" not supported", node))
@@ -1607,6 +1613,16 @@ func translateAPModifier(node, modifier map[string]any, opts dslOpts, out *effec
 		return
 	}
 	if opts.perspective != "attacker" || !appliesToBuffedUnit(node, "attacker") {
+		return
+	}
+	if modifier["operation"] == "set" {
+		// The DSL carries the AP magnitude ("an AP of -2" is value 2); the profile stores it negative.
+		magnitude := numericValue(modifier)
+		if math.IsNaN(magnitude) || math.IsInf(magnitude, 0) || magnitude != math.Trunc(magnitude) {
+			out.unsupported = append(out.unsupported, unsup("stat-modifier AP: set value \""+jsStr(modifier["value"])+"\" is not a characteristic", node))
+			return
+		}
+		emit(map[string]any{"type": "stat-set", "stat": "AP", "value": -math.Abs(magnitude)})
 		return
 	}
 	delta, ok := apDelta(modifier)
@@ -2184,6 +2200,8 @@ func describeContribution(c map[string]any) string {
 		return numStr(c["value"]) + "+ save"
 	case "save-improve":
 		return "Save improved by " + numStr(c["value"]) + " (no better than " + numStr(c["best"]) + "+)"
+	case "stat-set":
+		return getStr(c, "stat") + " " + numStr(c["value"])
 	}
 	return "cover"
 }

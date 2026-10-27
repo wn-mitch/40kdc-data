@@ -139,7 +139,7 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
   // rule like "while S is below T, +1 S" from flipping itself off.
   if (allBuffs.some((buff) => hasAttackComparison(buff.applicableWhen))) {
     const toughness = input.target.unit.profiles.map((profile) => profile.T + resolved.toughnessMod.value);
-    ctx.attackStrength = evalStatValue(weaponProfile.stats.S) + resolved.strengthMod.value;
+    ctx.attackStrength = (resolved.statSet.S?.value ?? evalStatValue(weaponProfile.stats.S)) + resolved.strengthMod.value;
     ctx.targetToughness = unitProfile.T + resolved.toughnessMod.value;
     ctx.targetToughnessMax = Math.max(...toughness);
     ctx.targetToughnessMin = Math.min(...toughness);
@@ -150,7 +150,8 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
 
   // 1. Attacks
   const isMelee = isMeleeProfile(weaponProfile);
-  const baseA = evalStatValue(weaponProfile.stats.A);
+  // A set characteristic replaces the profile's before any modifier applies.
+  const baseA = resolved.statSet.A?.value ?? evalStatValue(weaponProfile.stats.A);
   const attacksPerModel = baseA + resolved.attacksMod.value;
   const rapidFire = findKeyword(resolved, "rapid-fire");
   const halfRange = ctx.withinHalfRange === true;
@@ -224,7 +225,7 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
   stages.push({ name: "hits", expected: hits, detail: hitsDetail });
 
   // 3. Wounds
-  const S = evalStatValue(weaponProfile.stats.S) + resolved.strengthMod.value;
+  const S = (resolved.statSet.S?.value ?? evalStatValue(weaponProfile.stats.S)) + resolved.strengthMod.value;
   const T = unitProfile.T + resolved.toughnessMod.value;
   const stdWoundNeeded = woundThreshold(S, T);
   let antiThreshold = 7; // unreachable
@@ -277,7 +278,7 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
   // 4. Saves
   const apMod = resolved.apMod.value;
   // Worsening AP stops at 0.
-  const AP = Math.min(0, weaponProfile.stats.AP + apMod);
+  const AP = Math.min(0, (resolved.statSet.AP?.value ?? weaponProfile.stats.AP) + apMod);
   const saveMod = resolved.saveMod.value;
   const Sv0 = resolved.saveCharacteristic?.value ?? unitProfile.Sv;
   // A capped improvement never takes the Save past its cap, and never worsens a Save already
@@ -326,7 +327,8 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
   });
 
   // 5. Damage
-  const baseD = evalStatValue(weaponProfile.stats.D);
+  const statD = resolved.statSet.D?.value ?? weaponProfile.stats.D;
+  const baseD = evalStatValue(statD);
   const melta = findKeyword(resolved, "melta");
   const meltaBonus = melta && halfRange ? evalStatValue(melta.parameters?.value) : 0;
   const damageReduction = resolved.damageReduction.value;
@@ -337,7 +339,7 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
   // each Damage roll, as does a damage reroll.
   const damageReroll = resolved.rerolls.damage?.subset;
   const perAttack = damageRoll({
-    stat: weaponProfile.stats.D,
+    stat: statD,
     bonus: meltaBonus,
     modifier: resolved.damageMod.value,
     reduction: damageReduction,
@@ -386,7 +388,7 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
 
   const model: AttackModel = {
     modelsFiring: input.modelsFiring,
-    attacksStat: weaponProfile.stats.A,
+    attacksStat: resolved.statSet.A?.value ?? weaponProfile.stats.A,
     attacksBonus: resolved.attacksMod.value + blastExtraPerModel,
     rapidFireStat: rapidFire && halfRange ? rapidFire.parameters?.value : null,
     torrent,

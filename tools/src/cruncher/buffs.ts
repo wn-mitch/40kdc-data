@@ -80,6 +80,11 @@ export type BuffContribution =
    */
   | { type: "ap-mod"; value: number }
   /**
+   * Attacker-side: the weapon's A, S, AP or D characteristic becomes `value` before any modifier
+   * applies. AP is signed like the profile (`-2` is AP -2). The attacker's best set wins.
+   */
+  | { type: "stat-set"; stat: SetStat; value: number }
+  /**
    * Defender-side: subtract `value` from each unsaved damage point (floored at
    * 1 by the engine). Multiple sources do NOT stack in 10e — the largest
    * reduction wins. The corpus also encodes `"half"` and `"to-zero"`
@@ -114,6 +119,9 @@ export type BuffContribution =
    * Applies after any `save-characteristic` and before AP.
    */
   | { type: "save-improve"; value: number; best: number };
+
+/** Weapon characteristics a `stat-set` contribution can set. */
+export type SetStat = "A" | "S" | "AP" | "D";
 
 /** Optional gating; the resolver drops buffs whose gate fails. */
 export type BuffApplicability = {
@@ -411,6 +419,8 @@ export type ResolvedModifiers = {
   strengthMod: { value: number; sources: BuffSource[] };
   toughnessMod: { value: number; sources: BuffSource[] };
   apMod: { value: number; sources: BuffSource[] };
+  /** Ability-set weapon characteristics; an absent stat keeps the profile's value. */
+  statSet: Partial<Record<SetStat, { value: number; dominantSource: BuffSource }>>;
   /**
    * Defender-side damage reduction. Highest-wins (multiple sources do not
    * stack in 10e); the dominant source is the one whose value matches the
@@ -604,6 +614,7 @@ export function resolveBuffs(buffs: Buff[], ctx: ResolveContext): ResolvedModifi
     strengthMod: { value: 0, sources: [] },
     toughnessMod: { value: 0, sources: [] },
     apMod: { value: 0, sources: [] },
+    statSet: {},
     damageReduction: { value: 0, dominantSource: null },
     invulnerable: null,
     critThresholds: {},
@@ -694,6 +705,15 @@ export function resolveBuffs(buffs: Buff[], ctx: ResolveContext): ResolvedModifi
         out.apMod.value += c.value;
         out.apMod.sources.push(b.source);
         break;
+      case "stat-set": {
+        // The best set wins for the attacker: the highest A, S or D, the most negative AP.
+        const cur = out.statSet[c.stat];
+        const better = cur === undefined || (c.stat === "AP" ? c.value < cur.value : c.value > cur.value);
+        if (better || (c.value === cur.value && rank(b.source) < rank(cur.dominantSource))) {
+          out.statSet[c.stat] = { value: c.value, dominantSource: b.source };
+        }
+        break;
+      }
       case "damage-reduction":
         // Highest reduction wins (no stacking). Ties break by source rank so
         // an ability source is preferred over a manual one for provenance

@@ -230,6 +230,13 @@ pub(super) fn stat_modifier(node: &Obj, opts: &WalkOpts, out: &mut Out) {
                     );
                     return;
                 }
+                if is_str(m, "operation", "set") {
+                    out.unsupported(
+                        "stat-modifier AP: setting the AP of incoming attacks is not modelled",
+                        node,
+                    );
+                    return;
+                }
                 match ap_delta(m) {
                     Some(d) => emit(opts, out, &gate, json!({ "type": "ap-mod", "value": d })),
                     None => out.unsupported(unsupported_operation("AP"), node),
@@ -237,6 +244,26 @@ pub(super) fn stat_modifier(node: &Obj, opts: &WalkOpts, out: &mut Out) {
                 return;
             }
             if opts.perspective != Attacker || !applies_to_buffed_unit(node, Attacker) {
+                return;
+            }
+            if is_str(m, "operation", "set") {
+                // The DSL carries the AP magnitude ("an AP of -2" is value 2); the profile stores
+                // it negative.
+                match m.get("value").and_then(Value::as_f64) {
+                    Some(v) if v.fract() == 0.0 => emit(
+                        opts,
+                        out,
+                        &gate,
+                        json!({ "type": "stat-set", "stat": "AP", "value": -v.abs() }),
+                    ),
+                    _ => out.unsupported(
+                        format!(
+                            "stat-modifier AP: set value \"{}\" is not a characteristic",
+                            js_string(m.get("value"))
+                        ),
+                        node,
+                    ),
+                }
                 return;
             }
             match ap_delta(m) {
@@ -254,7 +281,8 @@ pub(super) fn stat_modifier(node: &Obj, opts: &WalkOpts, out: &mut Out) {
         }
         _ => {}
     }
-    if is_str(m, "operation", "set") && set_modifier(node, m, on_buffed, &gate, opts, out) {
+    if is_str(m, "operation", "set") {
+        set_modifier(node, m, on_buffed, &gate, opts, out);
         return;
     }
     let Some(value) = signed_value(m) else {

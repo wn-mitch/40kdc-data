@@ -271,6 +271,11 @@ fn describe_contribution(c: &Value) -> String {
             fmt_num(js_number(Some(v))),
             fmt_num(js_number(c.get("best")))
         ),
+        "stat-set" => format!(
+            "{} {}",
+            js_string(c.get("stat")),
+            fmt_num(js_number(Some(v)))
+        ),
         _ => "cover".to_string(),
     }
 }

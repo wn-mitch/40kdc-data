@@ -818,8 +818,8 @@ function translateStatModifier(
     return;
   }
 
-  // Setting the Save characteristic is defender-side; any other set stat outside A/S/T is off the
-  // damage path, and a set A/S/T has no single delta.
+  // Setting the Save characteristic is defender-side. A set A, S or D on the buffed unit replaces
+  // its weapons' characteristic before modifiers; other set stats are off the damage path.
   if (modifier.operation === "set") {
     if (stat === "Sv") {
       if (opts.perspective !== "target") {
@@ -837,6 +837,22 @@ function translateStatModifier(
       out.unsupported.push({ reason: `stat-modifier on "${String(stat)}" is outside the damage path`, effectFragment: node });
       return;
     }
+    if (stat === "T") {
+      out.unsupported.push({ reason: "stat-modifier T: setting the Toughness characteristic is not modelled", effectFragment: node });
+      return;
+    }
+    if (stat === "D" && classifyTarget(node) === "attacker") {
+      if (opts.perspective === "target") out.unsupported.push({ reason: "stat-modifier D: setting the Damage of incoming attacks is not modelled", effectFragment: node });
+      return;
+    }
+    if (opts.perspective !== "attacker" || !isOnBuffedUnit) return;
+    const setValue = typeof modifier.value === "number" ? modifier.value : NaN;
+    if (!Number.isInteger(setValue) || setValue < 0) {
+      out.unsupported.push({ reason: `stat-modifier ${stat}: set value "${String(modifier.value)}" is not a characteristic`, effectFragment: node });
+      return;
+    }
+    emit({ type: "stat-set", stat, value: setValue });
+    return;
   }
 
   const value = signedValue(modifier);
@@ -934,6 +950,10 @@ function translateApModifier(
       out.unsupported.push({ reason: "stat-modifier AP on the attacker: defender-side stat; applies when the buffed unit is the target", effectFragment: node });
       return;
     }
+    if (modifier.operation === "set") {
+      out.unsupported.push({ reason: "stat-modifier AP: setting the AP of incoming attacks is not modelled", effectFragment: node });
+      return;
+    }
     const incomingDelta = apDelta(modifier);
     if (incomingDelta === null) {
       out.unsupported.push({ reason: `stat-modifier AP: operation "${String(modifier.operation)}" not supported`, effectFragment: node });
@@ -943,6 +963,16 @@ function translateApModifier(
     return;
   }
   if (opts.perspective !== "attacker" || !appliesToBuffedUnit(node, "attacker")) return;
+  if (modifier.operation === "set") {
+    // The DSL carries the AP magnitude ("an AP of -2" is value 2); the profile stores it negative.
+    const magnitude = typeof modifier.value === "number" ? modifier.value : NaN;
+    if (!Number.isInteger(magnitude)) {
+      out.unsupported.push({ reason: `stat-modifier AP: set value "${String(modifier.value)}" is not a characteristic`, effectFragment: node });
+      return;
+    }
+    emit({ type: "stat-set", stat: "AP", value: -Math.abs(magnitude) });
+    return;
+  }
   const delta = apDelta(modifier);
   if (delta === null) {
     out.unsupported.push({
@@ -2062,6 +2092,8 @@ function describeContribution(c: BuffContribution): string {
       return `${c.value}+ save`;
     case "save-improve":
       return `Save improved by ${c.value} (no better than ${c.best}+)`;
+    case "stat-set":
+      return `${c.stat} ${c.value}`;
   }
 }
 

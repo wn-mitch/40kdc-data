@@ -303,9 +303,9 @@ pub(super) fn skill_modifier(
     );
 }
 
-/// A `stat-modifier` with `operation: "set"`. Setting the Save characteristic is defender-side;
-/// any other set stat outside A/S/T/D is off the damage path. Returns `false` for a set A/S/T/D,
-/// which falls through to the delta translation (and its unsupported-operation diagnostic).
+/// A `stat-modifier` with `operation: "set"`. Setting the Save characteristic is defender-side. A
+/// set A, S or D on the buffed unit replaces its weapons' characteristic before modifiers; other
+/// set stats are off the damage path. Always handles the node.
 pub(super) fn set_modifier(
     node: &Obj,
     m: &Obj,
@@ -313,7 +313,7 @@ pub(super) fn set_modifier(
     gate: &Option<Value>,
     opts: &WalkOpts,
     out: &mut Out,
-) -> bool {
+) {
     let stat = m.get("stat");
     match stat.and_then(Value::as_str) {
         Some("Sv") => {
@@ -322,11 +322,11 @@ pub(super) fn set_modifier(
                     "stat-modifier Sv: defender-side stat; applies when the buffed unit is the target",
                     node,
                 );
-                return true;
+                return;
             }
             let save = m.get("value").and_then(Value::as_f64).unwrap_or(f64::NAN);
             if !on_buffed {
-                return true;
+                return;
             }
             if d6_threshold(save) {
                 emit(
@@ -346,9 +346,41 @@ pub(super) fn set_modifier(
                     node,
                 );
             }
-            true
         }
-        Some("A" | "S" | "T" | "D") => false,
+        Some("T") => {
+            out.unsupported(
+                "stat-modifier T: setting the Toughness characteristic is not modelled",
+                node,
+            );
+        }
+        Some("D") if classify_target(node) == Side::Attacker => {
+            if opts.perspective == Target {
+                out.unsupported(
+                    "stat-modifier D: setting the Damage of incoming attacks is not modelled",
+                    node,
+                );
+            }
+        }
+        Some(set_stat @ ("A" | "S" | "D")) => {
+            if opts.perspective != Attacker || !on_buffed {
+                return;
+            }
+            match m.get("value").and_then(Value::as_f64) {
+                Some(v) if v.fract() == 0.0 && v >= 0.0 => emit(
+                    opts,
+                    out,
+                    gate,
+                    json!({ "type": "stat-set", "stat": set_stat, "value": v }),
+                ),
+                _ => out.unsupported(
+                    format!(
+                        "stat-modifier {set_stat}: set value \"{}\" is not a characteristic",
+                        js_string(m.get("value"))
+                    ),
+                    node,
+                ),
+            }
+        }
         _ => {
             out.unsupported(
                 format!(
@@ -357,7 +389,6 @@ pub(super) fn set_modifier(
                 ),
                 node,
             );
-            true
         }
     }
 }

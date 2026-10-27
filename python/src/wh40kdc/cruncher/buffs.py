@@ -279,6 +279,7 @@ def resolve_buffs(buffs: list[Buff], ctx: EngineContext) -> ResolvedModifiers:
         "strengthMod": {"value": 0, "sources": []},
         "toughnessMod": {"value": 0, "sources": []},
         "apMod": {"value": 0, "sources": []},
+        "statSet": {},
         "damageReduction": {"value": 0, "dominantSource": None},
         "invulnerable": None,
         # Lowest critical threshold granted per roll; absent rolls crit on a 6.
@@ -399,6 +400,16 @@ def resolve_buffs(buffs: list[Buff], ctx: EngineContext) -> ResolvedModifiers:
                 or (c["value"] == sc["value"] and _rank(source) < _rank(sc["dominantSource"]))
             ):
                 out["saveCharacteristic"] = {"value": c["value"], "dominantSource": source}
+        elif ctype == "stat-set":
+            # The best set wins for the attacker: the highest A, S or D, the most negative AP.
+            cur = out["statSet"].get(c["stat"])
+            better = cur is None or (
+                c["value"] < cur["value"] if c["stat"] == "AP" else c["value"] > cur["value"]
+            )
+            if better or (
+                c["value"] == cur["value"] and _rank(source) < _rank(cur["dominantSource"])
+            ):
+                out["statSet"][c["stat"]] = {"value": c["value"], "dominantSource": source}
         elif ctype == "save-improve":
             si = out["saveImprove"]
             if si is None:

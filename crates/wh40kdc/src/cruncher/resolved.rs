@@ -24,6 +24,8 @@ pub struct ResolvedModifiers {
     pub strength_mod: SummedMod,
     pub toughness_mod: SummedMod,
     pub ap_mod: SummedMod,
+    /// Ability-set weapon characteristics; an absent stat keeps the profile's value.
+    pub stat_set: StatSets,
     /// Defender-side damage reduction. Highest-wins (multiple sources do not
     /// stack in 10e); the dominant source is the one whose value matches the
     /// surviving reduction.
@@ -72,6 +74,15 @@ pub struct CritThresholds {
 pub struct IgnoredRolls {
     pub hit: Option<BuffSource>,
     pub wound: Option<BuffSource>,
+}
+
+/// The attacker's best `stat-set` per weapon characteristic.
+#[derive(Clone, Debug, Default)]
+pub struct StatSets {
+    pub a: Option<ThresholdState>,
+    pub s: Option<ThresholdState>,
+    pub ap: Option<ThresholdState>,
+    pub d: Option<ThresholdState>,
 }
 
 /// Summed `skill-mod` improvements per characteristic.

@@ -15,10 +15,10 @@ dump confirmation.
 | wargear-options | 0 | 0 | 1346 | 0 |
 | leader-attachments | 0 | 0 | 283 | 8 |
 | enhancements | 0 | 0 | 890 | 0 |
-| detachments | 7 | 0 | 96 | 354 |
-| stratagems | 3 | 0 | 255 | 1055 |
-| abilities | 0 | 0 | 1733 | 2802 |
-| phase-mappings | 8 | 0 | 496 | 1077 |
+| detachments | 0 | 0 | 103 | 354 |
+| stratagems | 0 | 0 | 258 | 1055 |
+| abilities | 0 | 0 | 1734 | 2801 |
+| phase-mappings | 1 | 0 | 504 | 1076 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
 ## Abilities by faction
@@ -41,7 +41,7 @@ dump confirmation.
 | dark-angels | 0 | 0 | 37 | 40 |
 | death-guard | 0 | 0 | 58 | 102 |
 | deathwatch | 0 | 0 | 16 | 20 |
-| drukhari | 0 | 0 | 38 | 126 |
+| drukhari | 0 | 0 | 39 | 125 |
 | emperors-children | 0 | 0 | 49 | 97 |
 | genestealer-cults | 0 | 0 | 50 | 97 |
 | grey-knights | 0 | 0 | 52 | 82 |
@@ -139,8 +139,8 @@ dump confirmation.
 | deathwatch | verified | 16 |
 | drukhari | digest-differs | 9 |
 | drukhari | stub | 20 |
-| drukhari | unpublished | 97 |
-| drukhari | verified | 38 |
+| drukhari | unpublished | 96 |
+| drukhari | verified | 39 |
 | emperors-children | digest-differs | 7 |
 | emperors-children | unpublished | 90 |
 | emperors-children | verified | 49 |

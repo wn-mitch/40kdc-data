@@ -17,7 +17,8 @@ use serde_json::Value;
 
 use super::attack_compare::has_attack_comparison;
 use super::buffs::{
-    resolve_buffs, Buff, EngineContext, FeelNoPainState, ResolvedModifiers, WeaponKeywordRef,
+    resolve_buffs, Buff, EngineContext, FeelNoPainState, ResolvedModifiers, ThresholdState,
+    WeaponKeywordRef,
 };
 use super::damage_roll::{damage_roll, one_damage_reroll_gain, DamageRollInput};
 use super::from_keyword::buffs_from_keyword;
@@ -338,8 +339,10 @@ pub fn crunch_model(
             .profiles
             .iter()
             .map(|profile| profile.t.get() as f64 + toughness_mod);
-        ctx.attack_strength =
-            Some(eval_stat_value(&weapon_profile.stats.s)? + resolved.strength_mod.value);
+        ctx.attack_strength = Some(
+            set_or_stat(&resolved.stat_set.s, &weapon_profile.stats.s)?
+                + resolved.strength_mod.value,
+        );
         ctx.target_toughness = Some(unit_profile.t.get() as f64 + toughness_mod);
         ctx.target_toughness_max = toughness.clone().reduce(f64::max);
         ctx.target_toughness_min = toughness.reduce(f64::min);
@@ -350,7 +353,8 @@ pub fn crunch_model(
 
     // 1. Attacks
     let is_melee = is_melee_profile(weapon_profile);
-    let base_a = eval_stat_value(&weapon_profile.stats.a)?;
+    // A set characteristic replaces the profile's before any modifier applies.
+    let base_a = set_or_stat(&resolved.stat_set.a, &weapon_profile.stats.a)?;
     let attacks_per_model = base_a + resolved.attacks_mod.value;
     let rapid_fire = find_extra_keyword(&resolved, "rapid-fire");
     let half_range = ctx.within_half_range == Some(true);
@@ -508,7 +512,8 @@ pub fn crunch_model(
     });
 
     // 3. Wounds
-    let s_val = eval_stat_value(&weapon_profile.stats.s)? + resolved.strength_mod.value;
+    let s_val =
+        set_or_stat(&resolved.stat_set.s, &weapon_profile.stats.s)? + resolved.strength_mod.value;
     let t_val = unit_profile.t.get() as f64 + resolved.toughness_mod.value;
     let std_wound_needed = wound_threshold(s_val, t_val);
     let mut anti_threshold: i64 = 7; // unreachable
@@ -622,7 +627,12 @@ pub fn crunch_model(
     // 4. Saves
     let ap_mod = resolved.ap_mod.value;
     // Worsening AP stops at 0.
-    let ap = (weapon_profile.stats.ap as f64 + ap_mod).min(0.0);
+    let base_ap = resolved
+        .stat_set
+        .ap
+        .as_ref()
+        .map_or(weapon_profile.stats.ap as f64, |set| set.value);
+    let ap = (base_ap + ap_mod).min(0.0);
     let save_mod = resolved.save_mod.value;
     let printed_sv = unit_profile.sv as f64;
     let sv0 = resolved
@@ -737,7 +747,13 @@ pub fn crunch_model(
     });
 
     // 5. Damage
-    let base_d = eval_stat_value(&weapon_profile.stats.d)?;
+    let set_d = resolved
+        .stat_set
+        .d
+        .as_ref()
+        .map(|set| StatValue::Integer(set.value as u64));
+    let stat_d = set_d.as_ref().unwrap_or(&weapon_profile.stats.d);
+    let base_d = eval_stat_value(stat_d)?;
     let melta = find_extra_keyword(&resolved, "melta");
     let melta_bonus = match (melta, half_range) {
         (Some(kw), true) => eval_param_value(parameter(kw, "value"))?,
@@ -751,7 +767,7 @@ pub fn crunch_model(
     // each Damage roll, as does a damage reroll.
     let damage_reroll = resolved.rerolls.damage.as_ref().map(|r| r.subset);
     let per_attack = damage_roll(&DamageRollInput {
-        stat: &weapon_profile.stats.d,
+        stat: stat_d,
         bonus: melta_bonus,
         modifier: resolved.damage_mod.value,
         reduction: damage_reduction,
@@ -852,7 +868,10 @@ pub fn crunch_model(
 
     let model = AttackModel {
         models_firing: input.models_firing,
-        attacks_stat: stat_to_value(&weapon_profile.stats.a),
+        attacks_stat: resolved.stat_set.a.as_ref().map_or_else(
+            || stat_to_value(&weapon_profile.stats.a),
+            |set| Value::from(set.value as u64),
+        ),
         attacks_bonus: resolved.attacks_mod.value + blast_extra_per_model,
         rapid_fire_stat: rapid_fire
             .filter(|_| half_range)
@@ -986,6 +1005,14 @@ fn parameter<'a>(kw: &'a WeaponKeywordRef, key: &str) -> Option<&'a Value> {
 /// Mean value of a stat (number or dice expression). Unrecognised strings
 /// return [`CruncherError::ParseStat`] — better to surface than to silently
 /// return 0 and produce a confidently wrong damage projection.
+/// A `stat-set` value when one applies, else the profile's characteristic.
+fn set_or_stat(set: &Option<ThresholdState>, stat: &StatValue) -> Result<f64, CruncherError> {
+    match set {
+        Some(set) => Ok(set.value),
+        None => eval_stat_value(stat),
+    }
+}
+
 fn eval_stat_value(v: &StatValue) -> Result<f64, CruncherError> {
     match v {
         StatValue::Integer(n) => Ok(*n as f64),

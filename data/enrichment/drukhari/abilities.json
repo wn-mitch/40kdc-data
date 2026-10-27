@@ -261,20 +261,40 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "7ce863c2f1d3d389d061116ab7f10e8f54093ea74b927bcc558bd09c250aa1b2",
     "version": "2025-q3",
     "effect": {
-      "type": "weapon-ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "keywords": [
-          {
-            "keyword_id": "lethal-hits"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "this-model",
+          "modifier": {
+            "stat": "AP",
+            "operation": "set",
+            "value": 2,
+            "weapons": {
+              "type": "melee"
+            }
           }
-        ]
-      }
+        },
+        {
+          "type": "weapon-ability-grant",
+          "target": "this-model",
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "lethal-hits"
+              }
+            ],
+            "weapons": {
+              "type": "melee"
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"

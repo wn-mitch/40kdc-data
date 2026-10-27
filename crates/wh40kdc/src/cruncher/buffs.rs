@@ -22,7 +22,7 @@ use super::gates::live_buffs;
 pub use super::resolved::{
     CappedMod, CoverState, CritThresholds, ExtraKeywordEntry, FeelNoPainState, HighestMod,
     IgnoredRolls, InvulnerableState, RerollOne, RerollOneState, RerollState, Rerolls,
-    ResolvedModifiers, SaveImproveState, SkillMods, SummedMod, ThresholdState,
+    ResolvedModifiers, SaveImproveState, SkillMods, StatSets, SummedMod, ThresholdState,
 };
 
 /// Which side an ability buff was sourced from. Drives stable tie-breaking
@@ -105,6 +105,16 @@ pub enum SkillStat {
     Ws,
     #[serde(rename = "BS")]
     Bs,
+}
+
+/// The weapon characteristic a `stat-set` sets.
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq, Serialize, Deserialize)]
+pub enum SetStat {
+    A,
+    S,
+    #[serde(rename = "AP")]
+    Ap,
+    D,
 }
 
 /// Re-roll scope. `AllFailures` strictly beats `Ones` when two reroll buffs
@@ -192,6 +202,13 @@ pub enum BuffContribution {
     /// defender's save (negative = more piercing), so a value of `-1` here
     /// makes the weapon one AP more piercing.
     ApMod {
+        value: f64,
+    },
+    /// Attacker-side: the weapon's A, S, AP or D characteristic becomes `value` before any
+    /// modifier applies. AP is signed like the profile (`-2` is AP -2). The attacker's best set
+    /// wins.
+    StatSet {
+        stat: SetStat,
         value: f64,
     },
     /// Defender-side: subtract `value` from each unsaved damage point (floored
@@ -465,6 +482,29 @@ pub fn resolve_buffs(buffs: &[Buff], ctx: &EngineContext) -> ResolvedModifiers {
             }
             BuffContribution::SaveCharacteristic { value } => {
                 take_lowest(&mut out.save_characteristic, *value, &b.source);
+            }
+            BuffContribution::StatSet { stat, value } => {
+                // The best set wins for the attacker: the highest A, S or D, the most negative AP.
+                let slot = match stat {
+                    SetStat::A => &mut out.stat_set.a,
+                    SetStat::S => &mut out.stat_set.s,
+                    SetStat::Ap => &mut out.stat_set.ap,
+                    SetStat::D => &mut out.stat_set.d,
+                };
+                let take = slot.as_ref().is_none_or(|cur| {
+                    let better = if *stat == SetStat::Ap {
+                        *value < cur.value
+                    } else {
+                        *value > cur.value
+                    };
+                    better || (*value == cur.value && rank(&b.source) < rank(&cur.dominant_source))
+                });
+                if take {
+                    *slot = Some(ThresholdState {
+                        value: *value,
+                        dominant_source: b.source.clone(),
+                    });
+                }
             }
             BuffContribution::SaveImprove { value, best } => match &mut out.save_improve {
                 None => {

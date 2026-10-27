@@ -427,6 +427,17 @@ type resolved struct {
 	// saveImprove sums capped Save improvements; best is the most restrictive (largest) cap.
 	// nil when none applies.
 	saveImprove *saveImproveState
+	// statSet holds the attacker's best set weapon characteristic per stat ("A", "S", "AP",
+	// "D"); an absent stat keeps the profile's value.
+	statSet map[string]rankedValue
+}
+
+// setOr returns the stat-set value for stat when one applies, else the profile's printed value.
+func (r *resolved) setOr(stat string, printed any) any {
+	if set, ok := r.statSet[stat]; ok {
+		return set.value
+	}
+	return printed
 }
 
 // saveImproveState is the summed save-improve read-out.
@@ -448,6 +459,7 @@ func resolveBuffs(buffs []any, ctx map[string]any) *resolved {
 		critThresholds:  map[string]rankedValue{},
 		ignoreModifiers: map[string]int{},
 		skillMod:        map[string]float64{"WS": 0, "BS": 0},
+		statSet:         map[string]rankedValue{},
 	}
 
 	var hitContribs, woundContribs []contribAcc
@@ -524,6 +536,14 @@ func resolveBuffs(buffs []any, ctx map[string]any) *resolved {
 			out.toughnessMod += val
 		case "ap-mod":
 			out.apMod += val
+		case "stat-set":
+			// The best set wins for the attacker: the highest A, S or D, the most negative AP.
+			stat := getStr(c, "stat")
+			cur, exists := out.statSet[stat]
+			better := !exists || (stat == "AP" && val < cur.value) || (stat != "AP" && val > cur.value)
+			if better || (val == cur.value && rankOf(source) < cur.rank) {
+				out.statSet[stat] = rankedValue{val, rankOf(source)}
+			}
 		case "damage-reduction":
 			if !out.damageReductionSet || val > out.damageReduction ||
 				(val == out.damageReduction && rankOf(source) < out.damageReductionRank) {

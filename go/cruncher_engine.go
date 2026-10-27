@@ -188,7 +188,7 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 	// resolve again with them known. No comparison-gated buff feeds any comparison, which keeps a
 	// rule like "while S is below T, +1 S" from flipping itself off.
 	if anyAttackComparison(allBuffs) {
-		printedS, err := evalStatValue(getMapOr(weaponProfile, "stats")["S"])
+		printedS, err := evalStatValue(res.setOr("S", getMapOr(weaponProfile, "stats")["S"]))
 		if err != nil {
 			return nil, nil, nil, err
 		}
@@ -213,7 +213,8 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 	isMelee := getStr(weaponProfile, "range") == "Melee"
 
 	// 1. Attacks
-	baseA, err := evalStatValue(stats["A"])
+	// A set characteristic replaces the profile's before any modifier applies.
+	baseA, err := evalStatValue(res.setOr("A", stats["A"]))
 	if err != nil {
 		return nil, nil, nil, err
 	}
@@ -314,7 +315,7 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 	stages = append(stages, stage("hits", hits))
 
 	// 3. Wounds
-	sBase, err := evalStatValue(stats["S"])
+	sBase, err := evalStatValue(res.setOr("S", stats["S"]))
 	if err != nil {
 		return nil, nil, nil, err
 	}
@@ -357,7 +358,7 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 
 	// 4. Saves
 	// Worsening AP stops at 0.
-	ap := math.Min(0, numOr0(stats["AP"])+res.apMod)
+	ap := math.Min(0, numOr0(res.setOr("AP", stats["AP"]))+res.apMod)
 	sv := numOr0(unitProfile["Sv"])
 	if res.saveCharacteristic != nil {
 		sv = res.saveCharacteristic.value
@@ -414,7 +415,8 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 	// 5. Damage
 	// Evaluated first so an unparseable D reports the stat-value error, matching
 	// the reference engine's order.
-	if _, err := evalStatValue(stats["D"]); err != nil {
+	statD := res.setOr("D", stats["D"])
+	if _, err := evalStatValue(statD); err != nil {
 		return nil, nil, nil, err
 	}
 	melta := res.findKeyword("melta")
@@ -434,7 +436,7 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 		damageReroll = e.subset
 	}
 	perAttack, err := damageRoll(damageRollInput{
-		stat:      stats["D"],
+		stat:      statD,
 		bonus:     meltaBonus,
 		modifier:  res.damageMod,
 		reduction: res.damageReduction,
@@ -484,7 +486,7 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 	}
 	model := &AttackModel{
 		ModelsFiring:    modelsFiring,
-		AttacksStat:     stats["A"],
+		AttacksStat:     res.setOr("A", stats["A"]),
 		AttacksBonus:    res.attacksMod + blastExtra,
 		RapidFireStat:   rapidFireStat,
 		Torrent:         torrent,

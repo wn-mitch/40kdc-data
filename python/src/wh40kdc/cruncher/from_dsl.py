@@ -884,8 +884,8 @@ def _translate_stat_modifier(
         emit({"type": "skill-mod", "stat": stat, "value": _intify(improvement + 0.0)})
         return
 
-    # Setting the Save characteristic is defender-side; any other set stat outside A/S/T is off
-    # the damage path, and a set A/S/T has no single delta.
+    # Setting the Save characteristic is defender-side. A set A, S or D on the buffed unit replaces
+    # its weapons' characteristic before modifiers; other set stats are off the damage path.
     if modifier.get("operation") == "set":
         if stat == "Sv":
             if opts["perspective"] != "target":
@@ -927,6 +927,44 @@ def _translate_stat_modifier(
                 }
             )
             return
+        if stat == "T":
+            out["unsupported"].append(
+                {
+                    "reason": (
+                        "stat-modifier T: setting the Toughness characteristic is not modelled"
+                    ),
+                    "effectFragment": node,
+                }
+            )
+            return
+        if stat == "D" and _classify_target(node) == "attacker":
+            if opts["perspective"] == "target":
+                out["unsupported"].append(
+                    {
+                        "reason": (
+                            "stat-modifier D: setting the Damage of incoming attacks "
+                            "is not modelled"
+                        ),
+                        "effectFragment": node,
+                    }
+                )
+            return
+        if opts["perspective"] != "attacker" or not is_on_buffed_unit:
+            return
+        set_value = _numeric_value(modifier)
+        if not (math.isfinite(set_value) and set_value.is_integer() and set_value >= 0):
+            out["unsupported"].append(
+                {
+                    "reason": (
+                        f'stat-modifier {stat}: set value "{_js_str(modifier.get("value"))}" '
+                        "is not a characteristic"
+                    ),
+                    "effectFragment": node,
+                }
+            )
+            return
+        emit({"type": "stat-set", "stat": stat, "value": int(set_value)})
+        return
 
     value = _signed_value(modifier)
     if value is None:
@@ -1041,6 +1079,16 @@ def _translate_ap_modifier(
                 }
             )
             return
+        if modifier.get("operation") == "set":
+            out["unsupported"].append(
+                {
+                    "reason": (
+                        "stat-modifier AP: setting the AP of incoming attacks is not modelled"
+                    ),
+                    "effectFragment": node,
+                }
+            )
+            return
         incoming_delta = _ap_delta(modifier)
         if incoming_delta is None:
             out["unsupported"].append(
@@ -1056,6 +1104,23 @@ def _translate_ap_modifier(
         emit({"type": "ap-mod", "value": incoming_delta})
         return
     if opts["perspective"] != "attacker" or not _applies_to_buffed_unit(node, "attacker"):
+        return
+    if modifier.get("operation") == "set":
+        # The DSL carries the AP magnitude ("an AP of -2" is value 2); the profile stores it
+        # negative.
+        magnitude = _numeric_value(modifier)
+        if not (math.isfinite(magnitude) and magnitude.is_integer()):
+            out["unsupported"].append(
+                {
+                    "reason": (
+                        f'stat-modifier AP: set value "{_js_str(modifier.get("value"))}" '
+                        "is not a characteristic"
+                    ),
+                    "effectFragment": node,
+                }
+            )
+            return
+        emit({"type": "stat-set", "stat": "AP", "value": -abs(int(magnitude))})
         return
     delta = _ap_delta(modifier)
     if delta is None:
@@ -2568,6 +2633,8 @@ def _describe_contribution(c: dict[str, Any]) -> str:
         return f"{_num_str(c['value'])}+ save"
     if ctype == "save-improve":
         return f"Save improved by {_num_str(c['value'])} (no better than {_num_str(c['best'])}+)"
+    if ctype == "stat-set":
+        return f"{c['stat']} {_num_str(c['value'])}"
     return "cover"
 
 

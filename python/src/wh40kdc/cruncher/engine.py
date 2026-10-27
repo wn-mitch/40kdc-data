@@ -184,7 +184,8 @@ def crunch_model(
     if any(has_attack_comparison(buff.get("applicableWhen")) for buff in all_buffs):
         set_attack_characteristics(
             ctx,
-            eval_stat_value(weapon_profile["stats"].get("S")) + resolved["strengthMod"]["value"],
+            _set_or_stat(resolved, "S", weapon_profile["stats"].get("S"))
+            + resolved["strengthMod"]["value"],
             [profile["T"] for profile in unit["profiles"]],
             unit_profile["T"],
             resolved["toughnessMod"]["value"],
@@ -197,7 +198,8 @@ def crunch_model(
     # Melee/ranged is per-profile (11e weapons mix profiles), not weapon-level.
     is_melee = weapon_profile.get("range") == "Melee"
     stats = weapon_profile["stats"]
-    base_a = eval_stat_value(stats.get("A"))
+    # A set characteristic replaces the profile's before any modifier applies.
+    base_a = _set_or_stat(resolved, "A", stats.get("A"))
     attacks_per_model = base_a + resolved["attacksMod"]["value"]
     rapid_fire = _find_keyword(resolved, "rapid-fire")
     half_range = ctx.get("withinHalfRange") is True
@@ -303,7 +305,7 @@ def crunch_model(
     stages.append({"name": "hits", "expected": hits, "detail": hits_detail})
 
     # 3. Wounds
-    s_stat = eval_stat_value(stats.get("S")) + resolved["strengthMod"]["value"]
+    s_stat = _set_or_stat(resolved, "S", stats.get("S")) + resolved["strengthMod"]["value"]
     t_stat = unit_profile["T"] + resolved["toughnessMod"]["value"]
     std_wound_needed = _wound_threshold(s_stat, t_stat)
     anti_threshold: float = 7
@@ -393,7 +395,8 @@ def crunch_model(
     # 4. Saves
     ap_mod = resolved["apMod"]["value"]
     # Worsening AP stops at 0.
-    ap = min(0, stats["AP"] + ap_mod)
+    set_ap = resolved["statSet"].get("AP")
+    ap = min(0, (set_ap["value"] if set_ap is not None else stats["AP"]) + ap_mod)
     save_mod = resolved["saveMod"]["value"]
     save_characteristic = resolved["saveCharacteristic"]
     sv0 = save_characteristic["value"] if save_characteristic is not None else unit_profile["Sv"]
@@ -470,7 +473,9 @@ def crunch_model(
     stages.append({"name": "unsaved", "expected": unsaved, "detail": "".join(detail_parts)})
 
     # 5. Damage
-    base_d = eval_stat_value(stats.get("D"))
+    set_d = resolved["statSet"].get("D")
+    stat_d = set_d["value"] if set_d is not None else stats.get("D")
+    base_d = eval_stat_value(stat_d)
     melta = _find_keyword(resolved, "melta")
     melta_bonus = (
         eval_stat_value((melta.get("parameters") or {}).get("value")) if melta and half_range else 0
@@ -483,7 +488,7 @@ def crunch_model(
     # each Damage roll, as does a damage reroll.
     damage_reroll = (resolved["rerolls"].get("damage") or {}).get("subset")
     per_attack = damage_roll(
-        stat=stats.get("D"),
+        stat=stat_d,
         bonus=melta_bonus,
         modifier=resolved["damageMod"]["value"],
         reduction=damage_reduction,
@@ -558,7 +563,9 @@ def crunch_model(
 
     model: AttackModel = {
         "modelsFiring": input["modelsFiring"],
-        "attacksStat": stats.get("A"),
+        "attacksStat": (
+            resolved["statSet"]["A"]["value"] if "A" in resolved["statSet"] else stats.get("A")
+        ),
         "attacksBonus": resolved["attacksMod"]["value"] + blast_extra,
         "rapidFireStat": (
             (rapid_fire.get("parameters") or {}).get("value") if rapid_fire and half_range else None
@@ -798,3 +805,9 @@ def _attacks_detail(models: float, per: float, rapid_fire: float, blast: float) 
     if blast:
         parts.append(f"+ Blast {_num_str(blast)}/model")
     return " ".join(parts)
+
+
+def _set_or_stat(resolved: dict[str, Any], stat: str, printed: Any) -> float:
+    """A ``stat-set`` value when one applies, else the profile's characteristic."""
+    set_stat = resolved["statSet"].get(stat)
+    return set_stat["value"] if set_stat is not None else eval_stat_value(printed)
