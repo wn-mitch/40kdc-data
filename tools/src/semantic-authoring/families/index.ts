@@ -19,6 +19,7 @@ import { REGISTRY_ORDER } from "./registry-order.js";
 import { ROLL_EXTENSIONS } from "./rolls.js";
 import { SELECTION_EXTENSIONS } from "./selections.js";
 import { SET_UP_EXTENSIONS } from "./set-up.js";
+import { TARGETING_ABILITY_EXTENSIONS } from "./targeting-ability.js";
 import { UNIT_ACTIVITY_EXTENSIONS } from "./unit-activity.js";
 import { UNIT_FILTER_EXTENSIONS } from "./unit-filters.js";
 import { UNIT_NAME_EXTENSIONS } from "./unit-names.js";
@@ -60,6 +61,7 @@ export const FAMILY_EXTENSIONS: readonly FamilyExtension[] = [
   ...APOSTROPHE_KEYWORD_EXTENSIONS,
   ...EVENT_USED_OBJECT_EXTENSIONS,
   ...COUNTS_AS_MOVED_EXTENSIONS,
+  ...TARGETING_ABILITY_EXTENSIONS,
 ];
 
 const extensionVersions = new Map<string, FamilyExtension>();

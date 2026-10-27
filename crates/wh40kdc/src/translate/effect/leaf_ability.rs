@@ -512,6 +512,21 @@ pub(super) fn targeting(m: &P, subj: &str, ctx: &Ctx) -> String {
         None => subj.to_string(),
     };
     let may = sv(m, "may");
+    // "That unit cannot be selected by the Noospheric Transference ability": one named ability's
+    // selection, by no named unit.
+    if let Some(ability) = nn(m, "ability") {
+        if jstr(m.get("kind")) == "ability" && nn(m, "by").is_none() && may != Some("redirect") {
+            let modal = match may {
+                Some("cannot-target") => "cannot",
+                Some("must-target") => "must",
+                _ => "can",
+            };
+            return format!(
+                "{whom} {modal} be selected by the {} ability",
+                ability_label(Some(ability))
+            );
+        }
+    }
     let verb = match may {
         Some("cannot-target") => "cannot target",
         Some("must-target") => "must target",
@@ -521,6 +536,9 @@ pub(super) fn targeting(m: &P, subj: &str, ctx: &Ctx) -> String {
     let kind = match nn(m, "stratagem") {
         Some(strat) if kind_key == "stratagem" => {
             format!(" with the {} Stratagem", ability_label(Some(strat)))
+        }
+        _ if kind_key == "ability" && nn(m, "ability").is_some() => {
+            format!(" with the {} ability", ability_label(nn(m, "ability")))
         }
         _ if has_weapon(m) => format!(" with {}", weapon_noun(m)),
         _ => match kind_key.as_str() {

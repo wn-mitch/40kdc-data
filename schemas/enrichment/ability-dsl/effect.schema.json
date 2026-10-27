@@ -1914,6 +1914,10 @@
                 "stratagem": {
                   "$ref": "../../defs/common.schema.json#/$defs/entity-id"
                 },
+                "ability": {
+                  "$ref": "../../defs/common.schema.json#/$defs/entity-id",
+                  "description": "kind ability: the one ability (its ability record id) whose selection this limits (\"that unit cannot be selected as part of the Noospheric Transference Detachment rule\")."
+                },
                 "only_if_none": {
                   "$ref": "../../defs/common.schema.json#/$defs/unit-filter"
                 },
@@ -1981,6 +1985,23 @@
                       },
                       "kind": {
                         "const": "stratagem"
+                      }
+                    },
+                    "required": [
+                      "kind"
+                    ]
+                  }
+                },
+                {
+                  "if": {
+                    "required": [
+                      "ability"
+                    ]
+                  },
+                  "then": {
+                    "properties": {
+                      "kind": {
+                        "const": "ability"
                       }
                     },
                     "required": [

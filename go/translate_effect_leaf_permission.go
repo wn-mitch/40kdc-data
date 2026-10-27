@@ -205,6 +205,18 @@ func targetingLeaf(m map[string]any, subj string, ctx effCtx) string {
 	} else if m["target"] != nil {
 		whom = effectSubject(m["target"], ctx)
 	}
+	// "That unit cannot be selected by the Noospheric Transference ability": one named ability's
+	// selection, by no named unit.
+	if m["kind"] == "ability" && m["ability"] != nil && m["by"] == nil && m["may"] != "redirect" {
+		modal := "can"
+		switch m["may"] {
+		case "cannot-target":
+			modal = "cannot"
+		case "must-target":
+			modal = "must"
+		}
+		return whom + " " + modal + " be selected by the " + abilityLabel(m["ability"]) + " ability"
+	}
 	verb := "can target"
 	switch m["may"] {
 	case "cannot-target":
@@ -215,6 +227,8 @@ func targetingLeaf(m map[string]any, subj string, ctx effCtx) string {
 	kind := targetKinds[ejstr(m["kind"])]
 	if m["kind"] == "stratagem" && m["stratagem"] != nil {
 		kind = " with the " + abilityLabel(m["stratagem"]) + " Stratagem"
+	} else if m["kind"] == "ability" && m["ability"] != nil {
+		kind = " with the " + abilityLabel(m["ability"]) + " ability"
 	} else if hasWeapon(m) {
 		kind = " with " + weaponNoun(m)
 	}

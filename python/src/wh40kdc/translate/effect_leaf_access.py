@@ -187,6 +187,16 @@ def targeting(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
     else:
         whom = subj
     may = m.get("may")
+    # "That unit cannot be selected by the Noospheric Transference ability": one named ability's
+    # selection, by no named unit.
+    if (
+        m.get("kind") == "ability"
+        and m.get("ability") is not None
+        and m.get("by") is None
+        and may != "redirect"
+    ):
+        modal = "cannot" if may == "cannot-target" else "must" if may == "must-target" else "can"
+        return f"{whom} {modal} be selected by the {ability_label(m['ability'])} ability"
     verb = (
         "cannot target"
         if may == "cannot-target"
@@ -196,6 +206,8 @@ def targeting(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
     )
     if m.get("kind") == "stratagem" and m.get("stratagem") is not None:
         kind = f" with the {ability_label(m['stratagem'])} Stratagem"
+    elif m.get("kind") == "ability" and m.get("ability") is not None:
+        kind = f" with the {ability_label(m['ability'])} ability"
     elif has_weapon(m):
         kind = f" with {weapon_noun(m)}"
     else:

@@ -654,6 +654,8 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
         const by = leaf.parameters.by === undefined ? undefined : unit(closed(leaf, "by"));
         const named: Node = {
           ...(leaf.parameters.stratagem !== undefined ? { stratagem: closed(leaf, "stratagem") } : {}),
+          // kind ability: the one ability whose selection this limits (families/targeting-ability.ts).
+          ...(leaf.parameters.ability !== undefined ? { ability: closed(leaf, "ability") } : {}),
           ...(leaf.parameters.except !== undefined ? { except: closed(leaf, "except") } : {}),
         };
         return { type: "targeting", target: structuredClone(by ?? targeted), modifier: { ...(by !== undefined ? { by } : {}), ...modifier, target: targeted, ...named } };

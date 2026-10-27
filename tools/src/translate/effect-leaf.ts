@@ -379,11 +379,17 @@ function targeting(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
   const who = (m.by != null ? effectSubject(m.by, ctx) : m.target != null ? subj : "units").replace(/^all /, "");
   const attacking = typeof m.by === "object" || who === "units" || isPlural(who) ? (/\bmodels\b/.test(who) ? "the attacking model" : "the attacking unit") : who;
   const whom = m.target === "every-eligible" ? "every eligible target" : m.target != null ? effectSubject(m.target, ctx) : subj;
+  // "That unit cannot be selected by the Noospheric Transference ability": one named ability's selection, by no named unit.
+  if (m.kind === "ability" && m.ability != null && m.by == null && m.may !== "redirect") {
+    return `${whom} ${m.may === "cannot-target" ? "cannot" : m.may === "must-target" ? "must" : "can"} be selected by the ${abilityLabel(m.ability)} ability`;
+  }
   const verb = m.may === "cannot-target" ? "cannot target" : m.may === "must-target" ? "must target" : "can target";
   const kind =
     m.kind === "stratagem" && m.stratagem != null
       ? ` with the ${abilityLabel(m.stratagem)} Stratagem`
-      : hasWeapon(m) ? ` with ${weaponNoun(m)}` : TARGET_KINDS[jstr(m.kind)] ?? "";
+      : m.kind === "ability" && m.ability != null
+        ? ` with the ${abilityLabel(m.ability)} ability`
+        : hasWeapon(m) ? ` with ${weaponNoun(m)}` : TARGET_KINDS[jstr(m.kind)] ?? "";
   const range = m.range == null ? "" : m.may === "cannot-target" ? ` unless ${attacking} is within ${rangePhrase(m.range)}` : ` within ${rangePhrase(m.range)}`;
   const unless = m.only_if_none != null ? `, unless there is no other eligible ${effectSubject(m.only_if_none, ctx).replace(/^all /, "").replace(/ units\b/, " unit")}` : "";
   if (m.may === "redirect") {
