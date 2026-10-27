@@ -2997,6 +2997,27 @@ class Modifier16(TypedDict):
     reach: NotRequired[RangeRef]
     stratagem: NotRequired[EntityId]
     counts_as_move: NotRequired[MovementKind]
+    counts_as_until: NotRequired[Literal["end-of-phase"]]
+    then_cannot: NotRequired[
+        list[
+            Literal[
+                "shoot",
+                "declare-charge",
+                "fight",
+                "start-action",
+                "embark",
+                "disembark",
+                "fall-back",
+                "advance",
+                "use-stratagem",
+                "issue-order",
+                "attempt-ritual",
+                "use-enhancement",
+                "move",
+                "observe",
+            ]
+        ]
+    ]
     consumes_shared_use: NotRequired[Literal[False]]
     weapons: NotRequired[list[WeaponScope]]
 
@@ -3017,6 +3038,7 @@ Modifier17 = TypedDict(
         "range": NotRequired[RangeRef],
         "kind": NotRequired[Literal["attack", "shoot", "fight", "charge", "stratagem", "ability"]],
         "stratagem": NotRequired[EntityId],
+        "ability": NotRequired[EntityId],
         "only_if_none": NotRequired[UnitFilter],
         "to": NotRequired[UnitRef],
         "if_eligible": NotRequired[Literal[True]],

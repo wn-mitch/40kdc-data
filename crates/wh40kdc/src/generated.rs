@@ -28274,6 +28274,12 @@ impl ::std::convert::TryFrom<::std::string::String> for Period {
 ///      "description": "Doing so counts as having made this move this turn (a disembark counting as a Normal move).",
 ///      "$ref": "#/$defs/movement-kind"
 ///    },
+///    "counts_as_until": {
+///      "description": "The counts_as_move status holds only until the end of the phase the subject used the permission in (\"counts as having made a Normal move that phase\"); absent, it holds for the turn. Needs counts_as_move.",
+///      "enum": [
+///        "end-of-phase"
+///      ]
+///    },
 ///    "despite": {
 ///      "type": "array",
 ///      "items": {
@@ -28306,6 +28312,30 @@ impl ::std::convert::TryFrom<::std::string::String> for Period {
 ///    "stratagem": {
 ///      "$ref": "#/$defs/entity-id"
 ///    },
+///    "then_cannot": {
+///      "description": "If the subject uses this permission, it cannot do these activities for the rest of the turn (\"if it does, it cannot declare a charge in the same turn\"). Only with allow true.",
+///      "type": "array",
+///      "items": {
+///        "enum": [
+///          "shoot",
+///          "declare-charge",
+///          "fight",
+///          "start-action",
+///          "embark",
+///          "disembark",
+///          "fall-back",
+///          "advance",
+///          "use-stratagem",
+///          "issue-order",
+///          "attempt-ritual",
+///          "use-enhancement",
+///          "move",
+///          "observe"
+///        ]
+///      },
+///      "minItems": 1,
+///      "uniqueItems": true
+///    },
 ///    "weapons": {
 ///      "description": "A shoot permission that allows only these weapons: any one of them.",
 ///      "type": "array",
@@ -28334,6 +28364,9 @@ pub struct PermissionEffectModifier {
     ///Doing so counts as having made this move this turn (a disembark counting as a Normal move).
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub counts_as_move: ::std::option::Option<MovementKind>,
+    ///The counts_as_move status holds only until the end of the phase the subject used the permission in ("counts as having made a Normal move that phase"); absent, it holds for the turn. Needs counts_as_move.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub counts_as_until: ::std::option::Option<PermissionEffectModifierCountsAsUntil>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub despite: ::std::option::Option<Vec<PermissionEffectModifierDespiteItem>>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -28345,6 +28378,9 @@ pub struct PermissionEffectModifier {
     pub reach: ::std::option::Option<RangeRef>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub stratagem: ::std::option::Option<EntityId>,
+    ///If the subject uses this permission, it cannot do these activities for the rest of the turn ("if it does, it cannot declare a charge in the same turn"). Only with allow true.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub then_cannot: ::std::option::Option<Vec<PermissionEffectModifierThenCannotItem>>,
     ///A shoot permission that allows only these weapons: any one of them.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub weapons: ::std::vec::Vec<WeaponScope>,
@@ -28683,6 +28719,79 @@ impl ::std::convert::TryFrom<::std::string::String> for PermissionEffectModifier
         value.parse()
     }
 }
+///The counts_as_move status holds only until the end of the phase the subject used the permission in ("counts as having made a Normal move that phase"); absent, it holds for the turn. Needs counts_as_move.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The counts_as_move status holds only until the end of the phase the subject used the permission in (\"counts as having made a Normal move that phase\"); absent, it holds for the turn. Needs counts_as_move.",
+///  "enum": [
+///    "end-of-phase"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum PermissionEffectModifierCountsAsUntil {
+    #[serde(rename = "end-of-phase")]
+    EndOfPhase,
+}
+impl ::std::fmt::Display for PermissionEffectModifierCountsAsUntil {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::EndOfPhase => f.write_str("end-of-phase"),
+        }
+    }
+}
+impl ::std::str::FromStr for PermissionEffectModifierCountsAsUntil {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "end-of-phase" => Ok(Self::EndOfPhase),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for PermissionEffectModifierCountsAsUntil {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for PermissionEffectModifierCountsAsUntil {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for PermissionEffectModifierCountsAsUntil {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
 ///`PermissionEffectModifierDespiteItem`
 ///
 /// <details><summary>JSON schema</summary>
@@ -28793,6 +28902,143 @@ for PermissionEffectModifierDespiteItem {
 }
 impl ::std::convert::TryFrom<::std::string::String>
 for PermissionEffectModifierDespiteItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`PermissionEffectModifierThenCannotItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "enum": [
+///    "shoot",
+///    "declare-charge",
+///    "fight",
+///    "start-action",
+///    "embark",
+///    "disembark",
+///    "fall-back",
+///    "advance",
+///    "use-stratagem",
+///    "issue-order",
+///    "attempt-ritual",
+///    "use-enhancement",
+///    "move",
+///    "observe"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum PermissionEffectModifierThenCannotItem {
+    #[serde(rename = "shoot")]
+    Shoot,
+    #[serde(rename = "declare-charge")]
+    DeclareCharge,
+    #[serde(rename = "fight")]
+    Fight,
+    #[serde(rename = "start-action")]
+    StartAction,
+    #[serde(rename = "embark")]
+    Embark,
+    #[serde(rename = "disembark")]
+    Disembark,
+    #[serde(rename = "fall-back")]
+    FallBack,
+    #[serde(rename = "advance")]
+    Advance,
+    #[serde(rename = "use-stratagem")]
+    UseStratagem,
+    #[serde(rename = "issue-order")]
+    IssueOrder,
+    #[serde(rename = "attempt-ritual")]
+    AttemptRitual,
+    #[serde(rename = "use-enhancement")]
+    UseEnhancement,
+    #[serde(rename = "move")]
+    Move,
+    #[serde(rename = "observe")]
+    Observe,
+}
+impl ::std::fmt::Display for PermissionEffectModifierThenCannotItem {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Shoot => f.write_str("shoot"),
+            Self::DeclareCharge => f.write_str("declare-charge"),
+            Self::Fight => f.write_str("fight"),
+            Self::StartAction => f.write_str("start-action"),
+            Self::Embark => f.write_str("embark"),
+            Self::Disembark => f.write_str("disembark"),
+            Self::FallBack => f.write_str("fall-back"),
+            Self::Advance => f.write_str("advance"),
+            Self::UseStratagem => f.write_str("use-stratagem"),
+            Self::IssueOrder => f.write_str("issue-order"),
+            Self::AttemptRitual => f.write_str("attempt-ritual"),
+            Self::UseEnhancement => f.write_str("use-enhancement"),
+            Self::Move => f.write_str("move"),
+            Self::Observe => f.write_str("observe"),
+        }
+    }
+}
+impl ::std::str::FromStr for PermissionEffectModifierThenCannotItem {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "shoot" => Ok(Self::Shoot),
+            "declare-charge" => Ok(Self::DeclareCharge),
+            "fight" => Ok(Self::Fight),
+            "start-action" => Ok(Self::StartAction),
+            "embark" => Ok(Self::Embark),
+            "disembark" => Ok(Self::Disembark),
+            "fall-back" => Ok(Self::FallBack),
+            "advance" => Ok(Self::Advance),
+            "use-stratagem" => Ok(Self::UseStratagem),
+            "issue-order" => Ok(Self::IssueOrder),
+            "attempt-ritual" => Ok(Self::AttemptRitual),
+            "use-enhancement" => Ok(Self::UseEnhancement),
+            "move" => Ok(Self::Move),
+            "observe" => Ok(Self::Observe),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for PermissionEffectModifierThenCannotItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for PermissionEffectModifierThenCannotItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for PermissionEffectModifierThenCannotItem {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,
@@ -48831,6 +49077,10 @@ impl<'de> ::serde::Deserialize<'de> for TargetProfileName {
 ///    "may"
 ///  ],
 ///  "properties": {
+///    "ability": {
+///      "description": "kind ability: the one ability (its ability record id) whose selection this limits (\"that unit cannot be selected as part of the Noospheric Transference Detachment rule\").",
+///      "$ref": "#/$defs/entity-id"
+///    },
 ///    "by": {
 ///      "$ref": "#/$defs/unit-ref"
 ///    },
@@ -48894,6 +49144,9 @@ impl<'de> ::serde::Deserialize<'de> for TargetProfileName {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct TargetingEffectModifier {
+    ///kind ability: the one ability (its ability record id) whose selection this limits ("that unit cannot be selected as part of the Noospheric Transference Detachment rule").
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub ability: ::std::option::Option<EntityId>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub by: ::std::option::Option<UnitRef>,
     ///cannot-target with Stratagems: Core Stratagems can still target it.

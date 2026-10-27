@@ -100,7 +100,8 @@
       },
       "subject": {
         "owner": "friendly"
-      }
+      },
+      "object": "this-unit"
     }
   },
   {
@@ -350,8 +351,10 @@
     "trigger": {
       "event": "used",
       "filter": {
-        "kind": "stratagem"
-      }
+        "kind": "stratagem",
+        "id": "fire-overwatch"
+      },
+      "object": "this-unit"
     }
   },
   {
@@ -591,7 +594,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "62c368799e92d7430d28c4480bf7b64f62fe282283a525dddcadc82d933c36b4",
     "version": "2025-q3",
@@ -689,12 +692,27 @@
                 "type": "sequence",
                 "steps": [
                   {
-                    "type": "stat-modifier",
-                    "target": "recipient",
+                    "type": "aura",
+                    "target": "friendly-within-aura",
                     "modifier": {
-                      "stat": "OC",
-                      "operation": "add",
-                      "value": 1
+                      "range": {
+                        "inches": 6
+                      },
+                      "effect": {
+                        "type": "stat-modifier",
+                        "target": "recipient",
+                        "modifier": {
+                          "stat": "OC",
+                          "operation": "add",
+                          "value": 1
+                        }
+                      },
+                      "eligible": {
+                        "owner": "friendly",
+                        "all_of": [
+                          "ADEPTUS MECHANICUS"
+                        ]
+                      }
                     }
                   },
                   {
@@ -1743,7 +1761,8 @@
       },
       "subject": {
         "owner": "friendly"
-      }
+      },
+      "object": "this-unit"
     }
   },
   {
@@ -4340,7 +4359,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "c3055d4e8dcbb0b2316694e89ea5e8fa6e32248ff92c0db986a99a8b30d29fe1",
     "version": "2025-q3",
@@ -4349,7 +4368,7 @@
     "faction_id": "adeptus-mechanicus",
     "detachment_id": "lords-of-the-forge",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -4359,8 +4378,8 @@
           "modifier": {
             "activity": "shoot",
             "allow": true,
-            "after": [
-              "fall-back"
+            "despite": [
+              "fell-back"
             ]
           }
         },
@@ -4370,20 +4389,35 @@
           "modifier": {
             "activity": "declare-charge",
             "allow": true,
-            "after": [
-              "fall-back"
+            "despite": [
+              "fell-back"
             ]
           }
         }
       ]
     },
     "scope": {
-      "duration": "turn"
+      "duration": "phase"
     },
     "applies_to": {
       "all_of": [
         "TECH-PRIEST"
       ]
+    },
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "move_types": [
+          "fall-back"
+        ],
+        "to": "move"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "TECH-PRIEST"
+        ]
+      }
     }
   },
   {
@@ -6659,19 +6693,82 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-mechanicus",
     "detachment_id": "haloscreed-battle-clade",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "all_of": [
+                      "HALO OVERRIDE"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "move",
+            "target": "this-unit",
+            "modifier": {
+              "move_type": "normal",
+              "distance": "D6"
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "all_of": [
+                  "HALO OVERRIDE"
+                ]
+              }
+            }
+          },
+          "effect": {
+            "type": "move",
+            "target": "this-unit",
+            "modifier": {
+              "move_type": "normal",
+              "distance": 6
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "move_types": [
+          "normal",
+          "advance",
+          "fall-back"
+        ]
+      }
+    },
+    "source_digest": "e138cfa53977fa423c11eaefc552b2d1674ee5592a25c3331a2b8cb5103d324b"
   },
   {
     "ability_id": "arch-negator-cohort-cybernetica-adeptus-mechanicus",
@@ -7221,7 +7318,8 @@
       "event": "used",
       "filter": {
         "kind": "stratagem"
-      }
+      },
+      "object": "this-unit"
     },
     "source_digest": "d4f951fd9959263a1a1ad6a65b2146167ce7300aff2477c7955299fdcf6f6b43"
   },
@@ -7262,7 +7360,8 @@
       "event": "used",
       "filter": {
         "kind": "stratagem"
-      }
+      },
+      "object": "this-model"
     },
     "source_digest": "e7d3b052543bbb51fc59416181def7ffccf5d74b002d78cb71a865eaab4d02b1"
   },
@@ -7901,19 +8000,51 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-mechanicus",
     "detachment_id": "haloscreed-battle-clade",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "wound",
+            "subset": "ones"
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "all_of": [
+                  "HALO OVERRIDE"
+                ]
+              }
+            }
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "subset": "ones"
+            }
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "activated",
+    "source_digest": "ef56000413111e2598da591634d384286a79caec5896315219a71a19b38183b6"
   },
   {
     "ability_id": "expedited-purge-protocol-skitarii-hunter-cohort-adeptus-mechanicus",
@@ -8025,19 +8156,80 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-mechanicus",
     "detachment_id": "haloscreed-battle-clade",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "all_of": [
+              "HALO OVERRIDE"
+            ]
+          }
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hazard",
+              "result_scope": "any-result"
+            }
+          },
+          {
+            "type": "permission",
+            "target": "this-unit",
+            "modifier": {
+              "activity": "shoot",
+              "allow": true,
+              "despite": [
+                "fell-back"
+              ]
+            }
+          },
+          {
+            "type": "permission",
+            "target": "this-unit",
+            "modifier": {
+              "activity": "declare-charge",
+              "allow": true,
+              "despite": [
+                "fell-back"
+              ]
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "move_types": [
+          "fall-back"
+        ],
+        "to": "move"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS MECHANICUS"
+        ]
+      }
+    },
+    "source_digest": "3ee55e75ff65bca2d45f24065bbbcd76b07e0477de3c9720663caf71cc818fd4"
   },
   {
     "ability_id": "imperative-overload-adeptus-mechanicus",
@@ -9708,19 +9900,56 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-mechanicus",
     "detachment_id": "haloscreed-battle-clade",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "attached",
+          "with": {
+            "all_of": [
+              "KASTELAN ROBOTS"
+            ]
+          }
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "keyword-grant",
+            "target": "this-unit",
+            "modifier": {
+              "keywords": [
+                "HALO OVERRIDE"
+              ]
+            }
+          },
+          {
+            "type": "targeting",
+            "target": "this-unit",
+            "modifier": {
+              "may": "cannot-target",
+              "kind": "ability",
+              "target": "this-unit",
+              "ability": "noospheric-transference-adeptus-mechanicus"
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "battle"
+    },
+    "behavior": "passive",
+    "source_digest": "fc038b4a5ba7053613b502041d08b4460144556b3d974bca5720adbc7195a96e"
   },
   {
     "ability_id": "tribute-of-emphatic-veneration-data-psalm-conclave-adeptus-mechanicus",

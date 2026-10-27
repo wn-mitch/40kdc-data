@@ -6829,7 +6829,8 @@
       "event": "used",
       "filter": {
         "kind": "stratagem"
-      }
+      },
+      "object": "this-unit"
     }
   },
   {

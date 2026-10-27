@@ -1816,8 +1816,10 @@
           "trigger": {
             "event": "used",
             "filter": {
-              "kind": "stratagem"
-            }
+              "kind": "stratagem",
+              "id": "heroic-intervention"
+            },
+            "object": "this-unit"
           },
           "effect": {
             "type": "conditional",
@@ -3530,19 +3532,8 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "controls",
-        "parameters": {
-          "count": {
-            "min": 1
-          }
-        }
-      },
-      "effect": {
-        "type": "objective-sticky",
-        "target": "this-unit"
-      }
+      "type": "objective-sticky",
+      "target": "this-unit"
     },
     "scope": {
       "duration": "permanent"

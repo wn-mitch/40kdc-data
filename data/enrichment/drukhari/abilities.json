@@ -3105,32 +3105,79 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "a7e339cf84c7607644071caddbb148bef18d563023334d1b412bf5fe3e68679d",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "strength",
-        "parameters": {
-          "below": "starting"
-        }
-      },
-      "effect": {
-        "type": "test",
-        "target": {
-          "owner": "enemy",
-          "within": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "aura",
+          "target": "enemy-within-aura",
+          "modifier": {
             "range": {
               "inches": 6
+            },
+            "effect": {
+              "type": "stat-modifier",
+              "target": "recipient",
+              "modifier": {
+                "stat": "Ld",
+                "operation": "worsen",
+                "value": 1
+              }
+            },
+            "eligible": {
+              "owner": "enemy"
             }
           }
         },
-        "modifier": {
-          "test": "battle-shock"
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "step-started",
+            "filter": {
+              "step": "battle-shock"
+            },
+            "condition": {
+              "type": "player-turn-is",
+              "parameters": {
+                "turn": "opponent-turn"
+              }
+            }
+          },
+          "effect": {
+            "type": "aura",
+            "target": "enemy-within-aura",
+            "modifier": {
+              "range": {
+                "inches": 6
+              },
+              "effect": {
+                "type": "conditional",
+                "condition": {
+                  "type": "strength",
+                  "parameters": {
+                    "subject": "recipient",
+                    "below": "starting"
+                  }
+                },
+                "effect": {
+                  "type": "test",
+                  "target": "recipient",
+                  "modifier": {
+                    "test": "battle-shock"
+                  }
+                }
+              },
+              "eligible": {
+                "owner": "enemy"
+              }
+            }
+          }
         }
-      }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -3139,7 +3186,7 @@
       "haemonculus"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "aura",
     "faction_id": "drukhari"
   },
   {
@@ -3446,6 +3493,7 @@
       "filter": {
         "kind": "stratagem"
       },
+      "object": "this-unit",
       "optional": true
     },
     "usage": {
@@ -6884,12 +6932,24 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "stat-modifier",
-          "target": "recipient",
+          "type": "aura",
+          "target": "enemy-within-aura",
           "modifier": {
-            "stat": "Ld",
-            "operation": "worsen",
-            "value": 1
+            "range": {
+              "inches": 6
+            },
+            "effect": {
+              "type": "stat-modifier",
+              "target": "recipient",
+              "modifier": {
+                "stat": "Ld",
+                "operation": "worsen",
+                "value": 1
+              }
+            },
+            "eligible": {
+              "owner": "enemy"
+            }
           }
         },
         {
@@ -6907,19 +6967,31 @@
             }
           },
           "effect": {
-            "type": "conditional",
-            "condition": {
-              "type": "strength",
-              "parameters": {
-                "subject": "recipient",
-                "below": "starting"
-              }
-            },
-            "effect": {
-              "type": "test",
-              "target": "recipient",
-              "modifier": {
-                "test": "battle-shock"
+            "type": "aura",
+            "target": "enemy-within-aura",
+            "modifier": {
+              "range": {
+                "inches": 6
+              },
+              "effect": {
+                "type": "conditional",
+                "condition": {
+                  "type": "strength",
+                  "parameters": {
+                    "subject": "recipient",
+                    "below": "starting"
+                  }
+                },
+                "effect": {
+                  "type": "test",
+                  "target": "recipient",
+                  "modifier": {
+                    "test": "battle-shock"
+                  }
+                }
+              },
+              "eligible": {
+                "owner": "enemy"
               }
             }
           }

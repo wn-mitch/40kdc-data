@@ -1199,8 +1199,10 @@
     "trigger": {
       "event": "used",
       "filter": {
-        "kind": "stratagem"
-      }
+        "kind": "stratagem",
+        "id": "heroic-intervention"
+      },
+      "object": "this-unit"
     }
   },
   {

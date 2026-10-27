@@ -1695,6 +1695,7 @@
       "filter": {
         "kind": "stratagem"
       },
+      "object": "this-unit",
       "optional": true
     },
     "usage": {
@@ -4965,8 +4966,10 @@
     "trigger": {
       "event": "used",
       "filter": {
-        "kind": "stratagem"
-      }
+        "kind": "stratagem",
+        "id": "heroic-intervention"
+      },
+      "object": "this-unit"
     },
     "source_digest": "055eb87f87acdb0e674426c81fa18d185e292b5c2970a235ac0e083876469a06"
   },
@@ -6015,8 +6018,10 @@
     "trigger": {
       "event": "used",
       "filter": {
-        "kind": "stratagem"
-      }
+        "kind": "stratagem",
+        "id": "fire-overwatch"
+      },
+      "object": "this-unit"
     },
     "source_digest": "544b10d47a920e949466cc728d96877810fb7d3c49d52a0b40d193fb5840c02e"
   },

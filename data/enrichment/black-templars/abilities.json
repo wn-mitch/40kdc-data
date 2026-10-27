@@ -659,58 +659,315 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "9e7f49a4dd74452cc744881680127e919668480316d33c87802fb86b473ce732",
+    "source_digest": "5832b8fef26e923505aff85b4d799f6a1cf412a2127e34c2f3f9fea1450e4985",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "re-roll",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "charge",
-              "subset": "all-failures"
-            }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "round-started",
+            "optional": true
           },
-          {
-            "type": "roll-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "wound",
-              "operation": "add",
-              "value": 1
-            }
-          },
-          {
-            "type": "weapon-ability-grant",
-            "target": "this-unit",
-            "modifier": {
-              "keywords": [
+          "duration": "battle",
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "battle-round",
+              "parameters": {
+                "min": 1,
+                "max": 1
+              }
+            },
+            "effect": {
+              "type": "stance-select",
+              "mode": "consumable",
+              "options": [
                 {
-                  "keyword_id": "precision"
+                  "id": "option-1",
+                  "name": "Abhor the Witch, Destroy the Witch",
+                  "effect": {
+                    "type": "conditional",
+                    "condition": {
+                      "operator": "and",
+                      "operands": [
+                        {
+                          "operator": "and",
+                          "operands": [
+                            {
+                              "type": "attack-is",
+                              "parameters": {
+                                "attack_type": "melee"
+                              }
+                            },
+                            {
+                              "type": "matches",
+                              "parameters": {
+                                "filter": {
+                                  "owner": "friendly",
+                                  "all_of": [
+                                    "ADEPTUS ASTARTES"
+                                  ]
+                                },
+                                "subject": "attacker"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "defender",
+                            "filter": {
+                              "all_of": [
+                                "PSYKER"
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "effect": {
+                      "type": "sequence",
+                      "steps": [
+                        {
+                          "type": "weapon-ability-grant",
+                          "target": {
+                            "owner": "friendly",
+                            "all_of": [
+                              "ADEPTUS ASTARTES"
+                            ]
+                          },
+                          "modifier": {
+                            "keywords": [
+                              {
+                                "keyword_id": "precision"
+                              }
+                            ],
+                            "weapons": {
+                              "type": "melee"
+                            }
+                          }
+                        },
+                        {
+                          "type": "weapon-ability-grant",
+                          "target": {
+                            "owner": "friendly",
+                            "all_of": [
+                              "ADEPTUS ASTARTES"
+                            ]
+                          },
+                          "modifier": {
+                            "keywords": [
+                              {
+                                "keyword_id": "lance"
+                              }
+                            ],
+                            "weapons": {
+                              "type": "melee"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "id": "option-2",
+                  "name": "Accept Any Challenge, No Matter the Odds",
+                  "effect": {
+                    "type": "conditional",
+                    "condition": {
+                      "operator": "and",
+                      "operands": [
+                        {
+                          "operator": "and",
+                          "operands": [
+                            {
+                              "type": "attack-is",
+                              "parameters": {
+                                "attack_type": "melee"
+                              }
+                            },
+                            {
+                              "type": "matches",
+                              "parameters": {
+                                "filter": {
+                                  "owner": "friendly",
+                                  "all_of": [
+                                    "ADEPTUS ASTARTES"
+                                  ]
+                                },
+                                "subject": "attacker"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "attack-compare",
+                          "parameters": {
+                            "left": {
+                              "of": "defender",
+                              "stat": "T"
+                            },
+                            "comparison": "gt",
+                            "right": {
+                              "of": "attacker",
+                              "stat": "S"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "effect": {
+                      "type": "roll-modifier",
+                      "target": {
+                        "owner": "friendly",
+                        "all_of": [
+                          "ADEPTUS ASTARTES"
+                        ]
+                      },
+                      "modifier": {
+                        "roll": "wound",
+                        "operation": "add",
+                        "value": 1
+                      }
+                    }
+                  }
+                },
+                {
+                  "id": "option-3",
+                  "name": "Uphold the Honour of the Emperor",
+                  "effect": {
+                    "type": "ability-grant",
+                    "target": {
+                      "owner": "friendly",
+                      "all_of": [
+                        "ADEPTUS ASTARTES",
+                        "INFANTRY"
+                      ]
+                    },
+                    "modifier": {
+                      "definition": {
+                        "type": "ability-part",
+                        "effect": {
+                          "type": "sequence",
+                          "steps": [
+                            {
+                              "type": "ability-part",
+                              "trigger": {
+                                "event": "phase-ended",
+                                "condition": {
+                                  "operator": "and",
+                                  "operands": [
+                                    {
+                                      "type": "phase-is",
+                                      "parameters": {
+                                        "phase": "movement"
+                                      }
+                                    },
+                                    {
+                                      "type": "player-turn-is",
+                                      "parameters": {
+                                        "turn": "your-turn"
+                                      }
+                                    }
+                                  ]
+                                }
+                              },
+                              "effect": {
+                                "type": "conditional",
+                                "condition": {
+                                  "type": "matches",
+                                  "parameters": {
+                                    "filter": {
+                                      "within": {
+                                        "of": {
+                                          "objective": {
+                                            "controlled_by": "friendly"
+                                          }
+                                        },
+                                        "range": "objective-control"
+                                      }
+                                    }
+                                  }
+                                },
+                                "effect": {
+                                  "type": "objective-sticky",
+                                  "target": "this-unit"
+                                }
+                              }
+                            },
+                            {
+                              "type": "ability-part",
+                              "trigger": {
+                                "event": "selected",
+                                "filter": {
+                                  "move_types": [
+                                    "advance"
+                                  ],
+                                  "to": "move"
+                                }
+                              },
+                              "effect": {
+                                "type": "permission",
+                                "target": "this-unit",
+                                "modifier": {
+                                  "activity": "start-action",
+                                  "allow": true,
+                                  "despite": [
+                                    "advanced"
+                                  ]
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
                 }
-              ]
+              ],
+              "min_choices": 1,
+              "max_choices": 1
             }
           }
-        ]
-      }
+        },
+        {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "army-rule",
+              "target": "this-unit",
+              "modifier": {
+                "rule": "composition",
+                "with": {
+                  "all_of": [
+                    "BLACK TEMPLARS"
+                  ]
+                }
+              }
+            },
+            {
+              "type": "army-rule",
+              "target": "this-unit",
+              "modifier": {
+                "rule": "single-chapter"
+              }
+            }
+          ]
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
     },
     "faction_id": "black-templars",
     "ability_type": "detachment",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "auto-generated from faction rule",
     "unit_ids": [],
     "detachment_id": "vow-sworn-crusaders"

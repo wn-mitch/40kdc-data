@@ -901,7 +901,8 @@
       "event": "used",
       "filter": {
         "kind": "stratagem"
-      }
+      },
+      "object": "this-unit"
     }
   },
   {
@@ -3581,7 +3582,8 @@
       "filter": {
         "kind": "stratagem",
         "id": "explosives"
-      }
+      },
+      "object": "this-model"
     }
   },
   {

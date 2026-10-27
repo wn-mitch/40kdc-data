@@ -3268,39 +3268,84 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "574c5c6cae7a8e3854cea667c659057c283fb8e759b4037eea7c6c03799afcd3",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "happened",
-        "parameters": {
-          "event": "move-ended",
-          "filter": {
-            "move_types": [
-              "charge"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "move-ended",
+                  "filter": {
+                    "move_types": [
+                      "charge"
+                    ]
+                  },
+                  "window": "turn"
+                }
+              }
             ]
           },
-          "window": "turn"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "weapon-ability-grant",
-            "target": "this-unit",
-            "modifier": {
-              "keywords": [
-                {
-                  "keyword_id": "lethal-hits"
+          "effect": {
+            "type": "choice",
+            "options": [
+              {
+                "type": "weapon-ability-grant",
+                "target": "this-unit",
+                "modifier": {
+                  "keywords": [
+                    {
+                      "keyword_id": "sustained-hits",
+                      "parameters": {
+                        "value": 1
+                      }
+                    }
+                  ],
+                  "weapons": {
+                    "type": "melee"
+                  }
                 }
-              ]
+              },
+              {
+                "type": "weapon-ability-grant",
+                "target": "this-unit",
+                "modifier": {
+                  "keywords": [
+                    {
+                      "keyword_id": "lethal-hits"
+                    }
+                  ],
+                  "weapons": {
+                    "type": "melee"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "happened",
+            "parameters": {
+              "event": "move-ended",
+              "filter": {
+                "move_types": [
+                  "charge"
+                ]
+              },
+              "window": "turn"
             }
           },
-          {
+          "effect": {
             "type": "weapon-ability-grant",
             "target": "this-unit",
             "modifier": {
@@ -3310,12 +3355,18 @@
                   "parameters": {
                     "value": 1
                   }
+                },
+                {
+                  "keyword_id": "lethal-hits"
                 }
-              ]
+              ],
+              "weapons": {
+                "type": "melee"
+              }
             }
           }
-        ]
-      }
+        }
+      ]
     },
     "scope": {
       "duration": "phase"
@@ -3324,9 +3375,15 @@
       "zephyrim-squad"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
+    "behavior": "reactive",
     "community_notes": "auto-generated, partial",
-    "faction_id": "adepta-sororitas"
+    "faction_id": "adepta-sororitas",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "fight"
+      }
+    }
   },
   {
     "ability_id": "righteous-awareness-adepta-sororitas",
@@ -9518,19 +9575,8 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "controls",
-        "parameters": {
-          "count": {
-            "min": 1
-          }
-        }
-      },
-      "effect": {
-        "type": "objective-sticky",
-        "target": "this-unit"
-      }
+      "type": "objective-sticky",
+      "target": "this-unit"
     },
     "scope": {
       "duration": "permanent"

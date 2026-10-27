@@ -933,9 +933,9 @@ describe('shared Chaos datasheets resolve to the army faction', () => {
 		for (const god of ['Slaanesh', 'Nurgle', 'Tzeentch']) {
 			expect(lr?.keywords).not.toContain(god);
 		}
-		// "Frame" is a model-build tag the dataset omits everywhere; it had leaked
-		// onto the WE vehicle copies only.
-		expect(lr?.keywords).not.toContain('Frame');
+		// FRAME is an 11th-edition keyword the MFM dump gives every Chaos Land
+		// Raider copy; it is not a god mark and survives the faction resolution.
+		expect(lr?.keywords).toContain('Frame');
 	});
 
 	it('stamps faction onto the datacard and scopes wargear for a shared chassis', () => {

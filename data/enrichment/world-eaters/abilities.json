@@ -9764,19 +9764,8 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "controls",
-        "parameters": {
-          "count": {
-            "min": 1
-          }
-        }
-      },
-      "effect": {
-        "type": "objective-sticky",
-        "target": "this-unit"
-      }
+      "type": "objective-sticky",
+      "target": "this-unit"
     },
     "scope": {
       "duration": "permanent"

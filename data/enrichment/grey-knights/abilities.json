@@ -176,6 +176,7 @@
       "filter": {
         "kind": "stratagem"
       },
+      "object": "this-unit",
       "optional": true
     },
     "usage": {
@@ -1688,7 +1689,7 @@
               },
               "effect": {
                 "type": "roll-modifier",
-                "target": "this-unit",
+                "target": "selected-unit",
                 "modifier": {
                   "roll": "charge",
                   "operation": "subtract",
@@ -5295,8 +5296,10 @@
     "trigger": {
       "event": "used",
       "filter": {
-        "kind": "stratagem"
-      }
+        "kind": "stratagem",
+        "id": "fire-overwatch"
+      },
+      "object": "this-unit"
     },
     "source_digest": "ed374c0cd956a5573ff766f4ae845e027af97de2cf222d98234cb0c218a95f26"
   },
@@ -6560,19 +6563,8 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "controls",
-        "parameters": {
-          "count": {
-            "min": 1
-          }
-        }
-      },
-      "effect": {
-        "type": "objective-sticky",
-        "target": "this-unit"
-      }
+      "type": "objective-sticky",
+      "target": "this-unit"
     },
     "scope": {
       "duration": "permanent"
@@ -7404,6 +7396,7 @@
       "filter": {
         "kind": "stratagem"
       },
+      "object": "this-unit",
       "optional": true
     },
     "usage": {

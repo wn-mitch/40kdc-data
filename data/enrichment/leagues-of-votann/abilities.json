@@ -106,6 +106,7 @@
       "filter": {
         "kind": "stratagem"
       },
+      "object": "this-unit",
       "optional": true
     },
     "usage": {
@@ -422,7 +423,8 @@
       "event": "used",
       "filter": {
         "kind": "stratagem"
-      }
+      },
+      "object": "this-unit"
     }
   },
   {
@@ -904,8 +906,10 @@
     "trigger": {
       "event": "used",
       "filter": {
-        "kind": "stratagem"
-      }
+        "kind": "stratagem",
+        "id": "fire-overwatch"
+      },
+      "object": "this-unit"
     }
   },
   {
@@ -2705,7 +2709,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "026df4630a4d4ccecbe668607468770390fe78607c574fdea285c180133d82d2",
     "version": "2025-q3",
@@ -2776,8 +2780,8 @@
                         {
                           "type": "ability-part",
                           "effect": {
-                            "type": "choice",
-                            "options": [
+                            "type": "sequence",
+                            "steps": [
                               {
                                 "type": "re-roll",
                                 "target": "this-unit",
@@ -5079,8 +5083,10 @@
     "trigger": {
       "event": "used",
       "filter": {
-        "kind": "stratagem"
+        "kind": "stratagem",
+        "id": "command-re-roll"
       },
+      "object": "this-unit",
       "optional": true
     },
     "usage": {
@@ -5544,7 +5550,7 @@
       ]
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "behavior": "reactive",
     "source_digest": "acab20ee54a9f52954e180e8c8d3cc8759b689a550adf044f2de8a5d90d28a80"
@@ -8431,19 +8437,107 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "delve-assault-shift",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "this-model",
+          "filter": {
+            "within": {
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "ARTILLERY",
+                  "LEAGUES OF VOTANN"
+                ]
+              },
+              "range": {
+                "inches": 3
+              }
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "ability-grant",
+            "target": "this-model",
+            "modifier": {
+              "ability": "lone-operative"
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "attack-is",
+                  "parameters": {
+                    "attack_type": "ranged"
+                  }
+                },
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "defender",
+                    "filter": {
+                      "owner": "enemy"
+                    }
+                  }
+                },
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "defender",
+                    "filter": {
+                      "visible": {
+                        "to": "this-model"
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "roll-modifier",
+              "target": {
+                "owner": "friendly",
+                "all_of": [
+                  "ARTILLERY",
+                  "LEAGUES OF VOTANN"
+                ],
+                "within": {
+                  "range": {
+                    "inches": 3
+                  },
+                  "of": "this-model"
+                }
+              },
+              "modifier": {
+                "roll": "hit",
+                "operation": "add",
+                "value": 1
+              }
+            }
+          }
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "3464261962b941ed22f8deb92ce6e1c181f319fd13c50dd35ba8f54917acc899"
   },
   {
     "ability_id": "rampart-crest-leagues-of-votann",
@@ -8652,29 +8746,18 @@
     "detachment_id": "bane-slayers-bulwark",
     "ability_type": "detachment",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "controls",
-        "parameters": {
-          "count": {
-            "min": 1
-          }
+      "type": "for-each-unit",
+      "selector": {
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "BANE-SLAYER'S BULWARK"
+          ]
         }
       },
       "effect": {
-        "type": "for-each-unit",
-        "selector": {
-          "filter": {
-            "owner": "friendly",
-            "all_of": [
-              "BANE-SLAYER'S BULWARK"
-            ]
-          }
-        },
-        "effect": {
-          "type": "objective-sticky",
-          "target": "recipient"
-        }
+        "type": "objective-sticky",
+        "target": "recipient"
       }
     },
     "scope": {

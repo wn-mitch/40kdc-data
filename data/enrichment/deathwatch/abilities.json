@@ -842,8 +842,10 @@
           "trigger": {
             "event": "used",
             "filter": {
-              "kind": "stratagem"
-            }
+              "kind": "stratagem",
+              "id": "rapid-ingress"
+            },
+            "object": "this-unit"
           },
           "effect": {
             "type": "cost-modifier",

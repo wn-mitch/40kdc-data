@@ -2178,8 +2178,10 @@
     "trigger": {
       "event": "used",
       "filter": {
-        "kind": "stratagem"
-      }
+        "kind": "stratagem",
+        "id": "fire-overwatch"
+      },
+      "object": "this-unit"
     }
   },
   {
@@ -7704,16 +7706,16 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "f819e9f944c76797f71e813bd272467e1a91ebf1eb0731c8864a38393d76cbb0",
+    "source_digest": "f17bba72470b59272d30539e4dc70122f4b5bfd0a184fe3168d4d2fb4dbcc0a7",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "astra-militarum",
     "detachment_id": "steel-hammer",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "stat-modifier",
       "target": "event-object",
@@ -7731,6 +7733,14 @@
         "ASTRA MILITARUM",
         "TECH-PRIEST ENGINSEER"
       ]
+    },
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "ability",
+        "id": "omnissiahs-blessing-astra-militarum"
+      },
+      "subject": "this-model"
     }
   },
   {
@@ -9609,9 +9619,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "75adf075d7e9dbc1fb6ad008ab956e5115e76e8f89d8392d82d683cee1d1f4c6",
+    "source_digest": "f88ca5dc1f1cd904b7ddc956fe1d8888492181ee91ba36b2c15e79d717b8ac44",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -9633,35 +9643,30 @@
             "level": "model"
           },
           "modifier": {
-            "ability": "voice-of-command-astra-militarum",
+            "ability": "voice-of-command",
             "aspect": "uses",
             "operation": "add",
             "value": 1
           }
         },
         {
-          "type": "conditional",
-          "condition": {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "designated": "affected-by-order"
-              }
-            }
+          "type": "re-roll",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "ASTRA MILITARUM"
+            ],
+            "designated": "affected-by-order"
           },
-          "effect": {
-            "type": "re-roll",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "hit",
-              "subset": "ones"
-            }
+          "modifier": {
+            "roll": "hit",
+            "subset": "ones"
           }
         }
       ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
@@ -14433,19 +14438,33 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "astra-militarum",
     "detachment_id": "mechanised-assault",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "permission",
+      "target": "this-unit",
+      "modifier": {
+        "activity": "disembark",
+        "allow": true,
+        "despite": [
+          "advanced"
+        ],
+        "counts_as_move": "normal",
+        "counts_as_until": "end-of-phase",
+        "then_cannot": [
+          "declare-charge"
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "d45c3b391dcbb0d0decf848ecb84aade85c66ee1e13678322387952d9bb66837"
   },
   {
     "ability_id": "veteran-crew-hammer-of-the-emperor-astra-militarum",

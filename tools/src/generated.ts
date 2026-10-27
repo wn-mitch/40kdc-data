@@ -4474,6 +4474,49 @@ export interface PermissionEffect {
       | "embark"
       | "pulse-jet";
     /**
+     * The counts_as_move status holds only until the end of the phase the subject used the permission in ("counts as having made a Normal move that phase"); absent, it holds for the turn. Needs counts_as_move.
+     */
+    counts_as_until?: "end-of-phase";
+    /**
+     * If the subject uses this permission, it cannot do these activities for the rest of the turn ("if it does, it cannot declare a charge in the same turn"). Only with allow true.
+     *
+     * @minItems 1
+     */
+    then_cannot?: [
+      (
+        | "shoot"
+        | "declare-charge"
+        | "fight"
+        | "start-action"
+        | "embark"
+        | "disembark"
+        | "fall-back"
+        | "advance"
+        | "use-stratagem"
+        | "issue-order"
+        | "attempt-ritual"
+        | "use-enhancement"
+        | "move"
+        | "observe"
+      ),
+      ...(
+        | "shoot"
+        | "declare-charge"
+        | "fight"
+        | "start-action"
+        | "embark"
+        | "disembark"
+        | "fall-back"
+        | "advance"
+        | "use-stratagem"
+        | "issue-order"
+        | "attempt-ritual"
+        | "use-enhancement"
+        | "move"
+        | "observe"
+      )[]
+    ];
+    /**
      * This use of the Stratagem does not count toward its once-per-phase limit for other units.
      */
     consumes_shared_use?: false;
@@ -4499,6 +4542,10 @@ export interface TargetingEffect {
     range?: RangeRef;
     kind?: "attack" | "shoot" | "fight" | "charge" | "stratagem" | "ability";
     stratagem?: EntityId;
+    /**
+     * Kebab-case identifier
+     */
+    ability?: string;
     only_if_none?: UnitFilter;
     /**
      * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.

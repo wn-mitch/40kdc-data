@@ -1611,19 +1611,8 @@
     "source_digest": "6dd39e54922d8b3b920afdf9505006c13a643cc855653adb2135873666dffc9a",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "controls",
-        "parameters": {
-          "count": {
-            "min": 1
-          }
-        }
-      },
-      "effect": {
-        "type": "objective-sticky",
-        "target": "this-unit"
-      }
+      "type": "objective-sticky",
+      "target": "this-unit"
     },
     "scope": {
       "duration": "permanent"
@@ -5776,8 +5765,10 @@
     "trigger": {
       "event": "used",
       "filter": {
-        "kind": "stratagem"
-      }
+        "kind": "stratagem",
+        "id": "crushing-impact"
+      },
+      "object": "this-unit"
     }
   },
   {
@@ -9888,73 +9879,51 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "e75077876caaa656877a79ccbcf7f5de909ab8dc88849c1f7959c27738e87076",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
+        "operator": "not",
         "operands": [
           {
-            "type": "matches",
+            "type": "visible",
             "parameters": {
-              "filter": {
-                "all_of": [
-                  "SPEED FREEKS"
-                ]
-              }
+              "subject": "defender",
+              "to": "attacker",
+              "fully": true,
+              "blocked_by": "this-unit"
             }
-          },
-          {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "matches",
-                "parameters": {
-                  "filter": {
-                    "all_of": [
-                      "AIRCRAFT"
-                    ]
-                  }
-                }
-              }
-            ]
           }
         ]
       },
       "effect": {
-        "type": "conditional",
-        "condition": {
-          "type": "visible",
-          "parameters": {
-            "subject": "defender",
-            "to": "attacker",
-            "fully": true,
-            "blocked_by": "this-unit"
-          }
-        },
-        "effect": {
-          "type": "rule-state",
-          "target": "defender",
-          "modifier": {
-            "direction": "granted",
-            "rule_kind": "core-rule",
-            "rule": "benefit-of-cover"
-          }
+        "type": "rule-state",
+        "target": "defender",
+        "modifier": {
+          "direction": "granted",
+          "rule_kind": "core-rule",
+          "rule": "benefit-of-cover"
         }
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "attack-sequence"
     },
     "unit_ids": [],
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "detachment_id": "kult-of-speed",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      }
+    }
   },
   {
     "ability_id": "sneaky-little-gitz-orks",
@@ -12296,19 +12265,8 @@
     "source_digest": "244ee60595f9c8faed2cb7e6d9b27a3a1649e6a06810b7835864a0f81a91309c",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "controls",
-        "parameters": {
-          "count": {
-            "min": 1
-          }
-        }
-      },
-      "effect": {
-        "type": "objective-sticky",
-        "target": "this-unit"
-      }
+      "type": "objective-sticky",
+      "target": "this-unit"
     },
     "scope": {
       "duration": "permanent"

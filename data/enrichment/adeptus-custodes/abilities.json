@@ -1299,6 +1299,7 @@
         "kind": "stratagem",
         "id": "insane-bravery"
       },
+      "object": "this-unit",
       "optional": true
     }
   },

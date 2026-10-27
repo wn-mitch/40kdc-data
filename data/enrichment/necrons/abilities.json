@@ -928,8 +928,10 @@
     "trigger": {
       "event": "used",
       "filter": {
-        "kind": "stratagem"
-      }
+        "kind": "stratagem",
+        "id": "fire-overwatch"
+      },
+      "object": "this-unit"
     }
   },
   {
@@ -4601,7 +4603,7 @@
               },
               "effect": {
                 "type": "roll-modifier",
-                "target": "this-unit",
+                "target": "selected-unit",
                 "modifier": {
                   "roll": "charge",
                   "operation": "subtract",
@@ -11411,7 +11413,8 @@
       },
       "subject": {
         "owner": "friendly"
-      }
+      },
+      "object": "this-unit"
     },
     "source_digest": "ae4b598756b065dfc158eaa014d55742092b32a856a6b2c860484b40d7e5c13f"
   },

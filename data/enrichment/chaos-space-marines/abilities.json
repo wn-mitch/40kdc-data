@@ -5975,52 +5975,88 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "afbceeb2b2b7f3dd3117011481353edbec91591abba94a3db3a10adc424a3972",
+    "source_digest": "d5dc95edec527a5512b7838afc023ecd54dc8475e0eafbd65d44192789cd20b5",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "chaos-space-marines",
     "detachment_id": "devotees-of-destruction",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "sequence",
       "steps": [
         {
-          "type": "re-roll",
-          "target": "this-unit",
-          "modifier": {
-            "roll": "dark-pact",
-            "result_scope": "any-result"
+          "type": "ability-part",
+          "trigger": {
+            "event": "used",
+            "filter": {
+              "kind": "dark-pact"
+            },
+            "optional": true
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "leadership",
+              "result_scope": "any-result"
+            }
           }
         },
         {
-          "type": "conditional",
-          "condition": {
-            "type": "happened",
-            "parameters": {
-              "event": "destroyed",
-              "object": "event-object",
-              "filter": {
-                "attack_type": "ranged"
-              },
-              "window": "event"
+          "type": "ability-part",
+          "trigger": {
+            "event": "attacks-resolved",
+            "filter": {
+              "kind": "shoot"
             }
           },
           "effect": {
             "type": "conditional",
             "condition": {
-              "type": "happened",
-              "parameters": {
-                "event": "used",
-                "subject": "this-unit",
-                "filter": {
-                  "kind": "dark-pact"
+              "operator": "and",
+              "operands": [
+                {
+                  "operator": "and",
+                  "operands": [
+                    {
+                      "type": "phase-is",
+                      "parameters": {
+                        "phase": "shooting"
+                      }
+                    },
+                    {
+                      "type": "player-turn-is",
+                      "parameters": {
+                        "turn": "your-turn"
+                      }
+                    }
+                  ]
                 },
-                "window": "phase"
-              }
+                {
+                  "type": "rule-active",
+                  "parameters": {
+                    "rule": "dark-pacts-chaos-space-marines"
+                  }
+                },
+                {
+                  "type": "happened",
+                  "parameters": {
+                    "event": "model-destroyed",
+                    "object": {
+                      "owner": "enemy",
+                      "level": "model"
+                    },
+                    "filter": {
+                      "by": "event-subject"
+                    },
+                    "window": "event"
+                  }
+                }
+              ]
             },
             "effect": {
               "type": "heal",
@@ -12126,19 +12162,8 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "controls",
-        "parameters": {
-          "count": {
-            "min": 1
-          }
-        }
-      },
-      "effect": {
-        "type": "objective-sticky",
-        "target": "this-unit"
-      }
+      "type": "objective-sticky",
+      "target": "this-unit"
     },
     "scope": {
       "duration": "permanent"

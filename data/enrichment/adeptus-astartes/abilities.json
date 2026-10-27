@@ -1608,92 +1608,81 @@
     "source_digest": "2d186079fad341ff62806f441d4f768469559e10585bdb309fa0c7b6671b4b66",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "controls",
-        "parameters": {
-          "count": {
-            "min": 1
-          }
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "ability-part",
-            "trigger": {
-              "event": "phase-ended",
-              "condition": {
-                "operator": "and",
-                "operands": [
-                  {
-                    "type": "phase-is",
-                    "parameters": {
-                      "phase": "movement"
-                    }
-                  },
-                  {
-                    "type": "player-turn-is",
-                    "parameters": {
-                      "turn": "your-turn"
-                    }
-                  }
-                ]
-              },
-              "optional": true
-            },
-            "effect": {
-              "type": "objective-sticky",
-              "target": "this-unit"
-            }
-          },
-          {
-            "type": "ability-part",
-            "trigger": {
-              "event": "selected",
-              "filter": {
-                "to": "fight"
-              },
-              "optional": true
-            },
-            "effect": {
-              "type": "sequence",
-              "steps": [
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "phase-ended",
+            "condition": {
+              "operator": "and",
+              "operands": [
                 {
-                  "type": "stat-modifier",
-                  "target": "this-unit",
-                  "modifier": {
-                    "stat": "A",
-                    "operation": "add",
-                    "value": 1,
-                    "weapons": {
-                      "type": "melee"
-                    }
+                  "type": "phase-is",
+                  "parameters": {
+                    "phase": "movement"
                   }
                 },
                 {
-                  "type": "stat-modifier",
-                  "target": "this-unit",
-                  "modifier": {
-                    "stat": "S",
-                    "operation": "add",
-                    "value": 1,
-                    "weapons": {
-                      "type": "melee"
-                    }
+                  "type": "player-turn-is",
+                  "parameters": {
+                    "turn": "your-turn"
                   }
                 }
               ]
             },
-            "usage": {
-              "frequency": "n-per-battle",
-              "count": 1,
-              "per": "army"
-            }
+            "optional": true
+          },
+          "effect": {
+            "type": "objective-sticky",
+            "target": "this-unit"
           }
-        ]
-      }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "selected",
+            "filter": {
+              "to": "fight"
+            },
+            "optional": true
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "stat-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "stat": "A",
+                  "operation": "add",
+                  "value": 1,
+                  "weapons": {
+                    "type": "melee"
+                  }
+                }
+              },
+              {
+                "type": "stat-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "stat": "S",
+                  "operation": "add",
+                  "value": 1,
+                  "weapons": {
+                    "type": "melee"
+                  }
+                }
+              }
+            ]
+          },
+          "usage": {
+            "frequency": "n-per-battle",
+            "count": 1,
+            "per": "army"
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -6505,8 +6494,10 @@
     "trigger": {
       "event": "used",
       "filter": {
-        "kind": "stratagem"
-      }
+        "kind": "stratagem",
+        "id": "heroic-intervention"
+      },
+      "object": "this-unit"
     },
     "source_digest": "6462a4ea01a4f91fceae0b695fad5acac997306d5c07eb37420fb15d20d8b09a"
   },
@@ -11053,19 +11044,8 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "controls",
-        "parameters": {
-          "count": {
-            "min": 1
-          }
-        }
-      },
-      "effect": {
-        "type": "objective-sticky",
-        "target": "this-unit"
-      }
+      "type": "objective-sticky",
+      "target": "this-unit"
     },
     "scope": {
       "duration": "permanent"

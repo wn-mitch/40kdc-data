@@ -5215,7 +5215,7 @@
             },
             "effect": {
               "type": "roll-modifier",
-              "target": "this-unit",
+              "target": "selected-unit",
               "modifier": {
                 "roll": "charge",
                 "operation": "subtract",

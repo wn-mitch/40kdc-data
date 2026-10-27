@@ -227,7 +227,57 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Mechanicus",
+        "Infantry"
+      ],
+      "excluded_keywords": [
+        "Kataphron"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": "event-subject",
+                  "range": {
+                    "inches": 8
+                  }
+                }
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "state": "engaged"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "analytical-divination-haloscreed-battle-clade-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
@@ -1060,7 +1110,57 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Mechanicus"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "operator": "or",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "fight"
+                      },
+                      "window": "phase"
+                    }
+                  },
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "shoot"
+                      },
+                      "window": "phase"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "eradication-protocols-haloscreed-battle-clade-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
@@ -1162,7 +1262,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Mechanicus"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "guided-retreat-haloscreed-battle-clade-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
@@ -1880,7 +1987,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Tech-Priest"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "overloaded-safeguards-lords-of-the-forge-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",

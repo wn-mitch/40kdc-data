@@ -96,7 +96,8 @@
       "event": "used",
       "filter": {
         "kind": "stratagem"
-      }
+      },
+      "object": "this-model"
     },
     "faction_id": "aeldari"
   },
@@ -1328,6 +1329,7 @@
       "filter": {
         "kind": "stratagem"
       },
+      "object": "this-unit",
       "optional": true
     },
     "usage": {
@@ -6773,6 +6775,7 @@
       "filter": {
         "kind": "stratagem"
       },
+      "object": "this-unit",
       "optional": true
     },
     "usage": {
@@ -15870,7 +15873,7 @@
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "behavior": "reactive",
     "source_digest": "aa21438e55cb065f09302df64e12ddc7e88dc320b2567e90c6fb758f675dfb2f"
@@ -16615,7 +16618,8 @@
       "event": "used",
       "filter": {
         "kind": "stratagem"
-      }
+      },
+      "object": "this-model"
     },
     "source_digest": "6af1c590f90f9ff6241990686ca37f21ac41f030c6299b9914fdcbdf1eaa6620"
   },

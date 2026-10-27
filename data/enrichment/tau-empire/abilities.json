@@ -163,7 +163,8 @@
       "event": "used",
       "filter": {
         "kind": "stratagem"
-      }
+      },
+      "object": "this-model"
     },
     "faction_id": "tau-empire"
   },
@@ -8144,7 +8145,8 @@
       "event": "used",
       "filter": {
         "kind": "stratagem"
-      }
+      },
+      "object": "this-unit"
     }
   },
   {

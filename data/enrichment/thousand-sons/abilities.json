@@ -2261,7 +2261,8 @@
       "event": "used",
       "filter": {
         "kind": "stratagem"
-      }
+      },
+      "object": "this-unit"
     },
     "usage": {
       "frequency": "once-per-turn",
