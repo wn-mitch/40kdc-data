@@ -10,8 +10,9 @@
 //! Two distinct "no constraint" forms, both deliberate:
 //!   - a `None`/absent filter has no resolvable scope and matches nothing (the
 //!     app renders no highlight rather than guess);
-//!   - an empty predicate matches every unit; empty predicate lists impose no
-//!     constraint.
+//!   - an empty predicate matches every unit. An empty `all_of` or `none_of`
+//!     list imposes no constraint; an empty `any_of` or `not_all_of` list
+//!     matches nothing.
 //!
 //! Mirrors `tools/src/scope.ts` (TS) and `wh40kdc.scope` (Python); pinned
 //! byte-for-byte across the ports by the `conformance/applies-to` corpus (bump
@@ -37,16 +38,18 @@ pub fn unit_matches_applies_to<'a>(
         .all_of
         .as_ref()
         .is_some_and(|list| !list.0.iter().all(|kw| owned.contains(&keyword_key(kw))))
-        || filter.any_of.as_ref().is_some_and(|list| {
-            !list.0.is_empty() && !list.0.iter().any(|kw| owned.contains(&keyword_key(kw)))
-        })
+        || filter
+            .any_of
+            .as_ref()
+            .is_some_and(|list| !list.0.iter().any(|kw| owned.contains(&keyword_key(kw))))
         || filter
             .none_of
             .as_ref()
             .is_some_and(|list| list.0.iter().any(|kw| owned.contains(&keyword_key(kw))))
-        || filter.not_all_of.as_ref().is_some_and(|list| {
-            !list.0.is_empty() && list.0.iter().all(|kw| owned.contains(&keyword_key(kw)))
-        })
+        || filter
+            .not_all_of
+            .as_ref()
+            .is_some_and(|list| list.0.iter().all(|kw| owned.contains(&keyword_key(kw))))
     {
         return false;
     }

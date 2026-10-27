@@ -78,10 +78,16 @@ fn canonical_static_predicates_normalize_keywords_and_empty_constraints() {
         Some(&filter),
         ["emperor's children", "vehicle", "character"]
     ));
-    let empty: KeywordPredicate = serde_json::from_value(serde_json::json!({
-        "all_of": [], "any_of": [], "none_of": [], "not_all_of": []
+    let unconstrained: KeywordPredicate = serde_json::from_value(serde_json::json!({
+        "all_of": [], "none_of": []
     }))
     .unwrap();
-    assert!(unit_matches_applies_to(Some(&empty), []));
+    assert!(unit_matches_applies_to(Some(&unconstrained), []));
+    // An empty any_of has nothing to match and an empty not_all_of is always complete.
+    for clause in ["any_of", "not_all_of"] {
+        let unsatisfiable: KeywordPredicate =
+            serde_json::from_value(serde_json::json!({ clause: [] })).unwrap();
+        assert!(!unit_matches_applies_to(Some(&unsatisfiable), ["INFANTRY"]));
+    }
     assert!(!unit_matches_applies_to(None, ["INFANTRY"]));
 }

@@ -73,6 +73,33 @@
     "expected": { "matchedIds": ["trooper", "tank"] }
   },
   {
+    "caseId": "empty-any-of-matches-nothing",
+    "applies_to": { "any_of": [] },
+    "units": [
+      { "id": "trooper", "keywords": ["Infantry"] },
+      { "id": "tank", "keywords": ["Vehicle"] }
+    ],
+    "expected": { "matchedIds": [] }
+  },
+  {
+    "caseId": "empty-not-all-of-matches-nothing",
+    "applies_to": { "not_all_of": [] },
+    "units": [
+      { "id": "trooper", "keywords": ["Infantry"] },
+      { "id": "tank", "keywords": ["Vehicle"] }
+    ],
+    "expected": { "matchedIds": [] }
+  },
+  {
+    "caseId": "empty-all-of-and-none-of-match-all",
+    "applies_to": { "all_of": [], "none_of": [] },
+    "units": [
+      { "id": "trooper", "keywords": ["Infantry"] },
+      { "id": "tank", "keywords": ["Vehicle"] }
+    ],
+    "expected": { "matchedIds": ["trooper", "tank"] }
+  },
+  {
     "caseId": "case-and-apostrophe-insensitive",
     "applies_to": { "all_of": ["INFANTRY", "T'AU EMPIRE"] },
     "units": [
