@@ -33,19 +33,27 @@ const RECIPIENT_LEAVES = new Set(["unit-filter", "unit-owner"]);
 
 /**
  * The first unclaimed keyword run after a frame, when only recipient leaves of the frame's fragment
- * sit between them and the wording between them has no sentence break. Anything else between them
- * (a duration, a condition, a roll) leaves the run unclaimed.
+ * sit between them and the wording between them has no sentence break; or when the frame's duration
+ * also sits between them and its colon opens a bulleted run. Anything else between them (a
+ * condition, a roll) leaves the run unclaimed.
  */
 function runAfter(list: readonly CompileLeaf[], index: number, runs: readonly number[][], claimed: ReadonlySet<number[]>, sourceText: string | undefined): number[] | undefined {
   const frame = list[index]!;
   const run = runs.find((candidate) => candidate[0]! > index && !claimed.has(candidate));
   if (!run) return undefined;
+  let durations = 0;
   for (let at = index + 1; at < run[0]!; at += 1) {
     const other = list[at]!;
-    if (other.fragment !== frame.fragment || !RECIPIENT_LEAVES.has(other.family_id)) return undefined;
+    if (other.fragment !== frame.fragment) return undefined;
+    if (other.role === "DURATION") durations += 1;
+    else if (!RECIPIENT_LEAVES.has(other.family_id)) return undefined;
   }
-  if (run[0]! > index + 1 && /[.;:]/u.test(between(sourceText, frame, list[run[0]!]!))) return undefined;
-  return run;
+  if (run[0]! === index + 1) return run;
+  const gap = between(sourceText, frame, list[run[0]!]!);
+  // "for that unit's weapons to gain until the end of the phase: ■ [A] ■ [B]": the frame's own
+  // duration may sit between it and a bulleted menu, whose colon opens the bullets, not a new sentence.
+  if (durations > 0) return /^[^.;:]*:\s*[■▪•][\s*[]*$/u.test(gap) ? run : undefined;
+  return /[.;:]/u.test(gap) ? undefined : run;
 }
 
 /** Carry the source-authorized Blast 1 rating into the catalog reference without defaulting other ratings. */
@@ -72,10 +80,18 @@ export function foldWeaponKeywords(input: readonly CompileLeaf[], sourceText?: s
   const { runs, claims, stepped } = claimRuns(list, sourceText);
   const folded = new Map<number, CompileLeaf>();
   const grants: Array<{ frame: number; run: number[] }> = [];
+  const recalled = new Set<number>();
   for (const [index, run] of claims) {
-    if (!run) throw new CompileError("A weapon-ability-grant without a keyword needs weapon-ability-keyword leaves to grant.");
-    grants.push({ frame: index, run });
     const leaf = list[index]!;
+    if (!run) {
+      // "select both abilities above to apply to …": every option of the menu before it.
+      const keywords = recalledMenu(list, index, folded);
+      if (!keywords) throw new CompileError("A weapon-ability-grant without a keyword needs weapon-ability-keyword leaves to grant.");
+      recalled.add(index - 1);
+      folded.set(index, { ...leaf, parameters: { ...leaf.parameters, keywords, keyword_choice: false } });
+      continue;
+    }
+    grants.push({ frame: index, run });
     const joiners = run.slice(1).map((at) => between(sourceText, list[at - 1]!, list[at]!));
     const isMenu = run.some((at) => forced.has(list[at]!));
     // A bulleted list's first item follows a bullet too ("the following: ■ [A] ■ [B]").
@@ -102,7 +118,30 @@ export function foldWeaponKeywords(input: readonly CompileLeaf[], sourceText?: s
   const claimed = new Set([...claims.values()]);
   if (runs.some((run) => !claimed.has(run))) throw new CompileError("A weapon-ability-keyword leaf has no weapon-ability-grant frame saying which weapons gain it.");
   const { consumed, merged } = foldGrantQualifiers(list, grants, folded, sourceText);
-  return list.flatMap((leaf, index) => (leaf.family_id === KEYWORD || consumed.has(index) || merged.has(index) ? [] : [folded.get(index) ?? leaf]));
+  return list.flatMap((leaf, index) => (leaf.family_id === KEYWORD || consumed.has(index) || merged.has(index) || recalled.has(index) ? [] : [folded.get(index) ?? leaf]));
+}
+
+/**
+ * The keywords a keyword-less frame takes from the menu before it, when a choice-open right before
+ * the frame picks as many of them as that menu offers ("select both abilities above", after "select
+ * one of the following abilities: ■ [A] ■ [B]"): every option, granted together. The menu is the
+ * nearest earlier folded grant that is a choice. Picking fewer than all of them is refused, since the
+ * folded grant can only hold the whole menu or one of it.
+ */
+function recalledMenu(list: readonly CompileLeaf[], index: number, folded: ReadonlyMap<number, CompileLeaf>): string[] | undefined {
+  const opener = list[index - 1];
+  if (opener?.family_id !== "choice-open" || opener.fragment !== list[index]!.fragment) return undefined;
+  const parameters = opener.parameters;
+  if (!Object.keys(parameters).every((key) => MENU_OPENER_PARAMETERS.has(key))) return undefined;
+  const count = parameters.min_choices;
+  if (typeof count !== "number" || count < 2 || parameters.max_choices !== count) return undefined;
+  const menu = [...folded.entries()].filter(([at, grant]) => at < index - 1 && grant.parameters.keyword_choice === true).at(-1)?.[1];
+  if (!menu) return undefined;
+  const keywords = menu.parameters.keywords as string[];
+  if (keywords.length !== count) {
+    throw new CompileError(`A choice-open picks ${count} of the ${keywords.length} weapon abilities of the menu before it; only all of them, or one, has a DSL shape.`);
+  }
+  return [...keywords];
 }
 
 /** Runs of keyword leaves with no other leaf between them, as index lists into `list`. */

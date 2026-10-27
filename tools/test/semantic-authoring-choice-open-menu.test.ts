@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { keywordRef } from "../src/semantic-authoring/compile-fragments.js";
-import { currentFamilyVersion } from "../src/semantic-authoring/contracts.js";
+import { currentFamilyVersion, familyRole } from "../src/semantic-authoring/contracts.js";
 import { checkEntry, entryWithMechanics } from "../src/semantic-authoring/entries.js";
 
 // Fabricated wording only. Keyword names are game keywords; everything else is invented. The
@@ -234,5 +234,57 @@ describe("Semantic authoring bulleted choice-open with a move option", () => {
   it("refuses the same options when the second one's move end has no bullet before it", () => {
     const flat = text.replaceAll("\n■ ", " and ");
     expect(failures(flat, leaves)).toEqual(["choice-open needs at least two options after it, one sentence each."]);
+  });
+});
+
+describe("Semantic authoring keyword menu recalled by a later choice", () => {
+  const leaf = (phrase: string, family: string, parameters: Record<string, unknown>): Piece => [phrase, familyRole(family, currentFamilyVersion(family)), family, parameters];
+  const melee = (phrase: string): Piece => leaf(phrase, "weapon-ability-grant", { subject: "this-unit", weapon_type: "melee" });
+  const phase = leaf("until the end of the phase", "duration", { endpoint: "end-of-phase" });
+  const text = (menu: string, pick: string) => "Each time this unit is selected to fight, select one of the following abilities for melee weapons equipped by models in this unit to gain until the end of the phase:\n"
+    + `${menu}\nIf this unit made a Charge move this turn, until the end of the phase, select ${pick} for melee weapons equipped by models in this unit to gain instead.`;
+  const pieces = (keywords: Piece[], pick: Piece): Piece[] => [
+    leaf("Each time this unit is selected to fight", "event", { kind: "selected", to: "fight" }),
+    leaf("select one of the following abilities", "choice-open", { min_choices: 1, max_choices: 1 }),
+    melee("for melee weapons equipped by models in this unit to gain"),
+    phase,
+    ...keywords,
+    leaf("If this unit made a Charge move this turn", "unit-activity", { activities: ["charged-this-turn"], subject: "this-unit", negated: false }),
+    phase,
+    pick,
+    melee("for melee weapons equipped by models in this unit to gain"),
+    leaf("instead", "instead", {}),
+  ];
+
+  it("grants every option of the menu above when the later choice picks all of them", () => {
+    const result = compiled(text("■ [LETHAL HITS]\n■ [DEVASTATING WOUNDS]", "both abilities above"), pieces(
+      [keyword("LETHAL HITS"), keyword("DEVASTATING WOUNDS")],
+      leaf("select both abilities above", "choice-open", { choice_label: "abilities above", min_choices: 2, max_choices: 2 }),
+    ));
+    const melee = { weapons: { type: "melee" } };
+    const charged = { type: "happened", parameters: { event: "move-ended", filter: { move_types: ["charge"] }, window: "turn" } };
+    expect(result.ok && result.mechanics.scope).toEqual({ duration: "phase" });
+    expect(result.ok && result.mechanics.effect).toEqual({ type: "sequence", steps: [
+      { type: "conditional", condition: { operator: "not", operands: [charged] }, effect: { type: "choice", options: [grant(["Lethal Hits"], melee), grant(["Devastating Wounds"], melee)] } },
+      { type: "conditional", condition: charged, effect: grant(["Lethal Hits", "Devastating Wounds"], melee) },
+    ] });
+  });
+
+  it("refuses a later choice that picks some but not all of the menu above", () => {
+    expect(failures(text("■ [LETHAL HITS]\n■ [DEVASTATING WOUNDS]\n■ [SUSTAINED HITS 1]", "two abilities above"), pieces(
+      [keyword("LETHAL HITS"), keyword("DEVASTATING WOUNDS"), keyword("SUSTAINED HITS 1", "Sustained Hits 1")],
+      leaf("select two abilities above", "choice-open", { choice_label: "abilities above", min_choices: 2, max_choices: 2 }),
+    )).join(" ")).toContain("picks 2 of the 3 weapon abilities");
+  });
+
+  it("leaves a menu unclaimed when a sentence ends between the frame's duration and the keywords", () => {
+    const unbulleted = "Each time this unit is selected to fight, select one of the following abilities for melee weapons equipped by models in this unit to gain until the end of the phase. It is [LETHAL HITS] or [DEVASTATING WOUNDS].";
+    expect(failures(unbulleted, [
+      leaf("Each time this unit is selected to fight", "event", { kind: "selected", to: "fight" }),
+      leaf("select one of the following abilities", "choice-open", { min_choices: 1, max_choices: 1 }),
+      melee("for melee weapons equipped by models in this unit to gain"),
+      phase,
+      keyword("LETHAL HITS"), keyword("DEVASTATING WOUNDS"),
+    ]).join(" ")).toContain("needs weapon-ability-keyword leaves");
   });
 });
