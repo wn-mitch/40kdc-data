@@ -202,7 +202,9 @@ export function resolveRuleReferences(leaves: readonly CompileLeaf[], context?: 
     switch (leaf.family_id) {
       case "ability-record-grant":
       case "ability-activate":
+      case "ability-modifier":
       case "unit-has-ability": {
+        // An ability-modifier may name its ability by event, keyword or affected rule instead; those stay as written.
         const name = parameters.ability;
         if (typeof name !== "string") return leaf;
         const id = resolveRecordName(faction, name);

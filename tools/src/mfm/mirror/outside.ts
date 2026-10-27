@@ -205,8 +205,10 @@ export function projectOutside(plan: MirrorPlan, snap: RepoSnapshot, opts: Outsi
   // Recorded TS outputs (inputs + results): rewriting an input id leaves the ids the result derives
   // from it ("<ability>#<option>") stale. They are re-recorded from their TS source, never rewritten.
   const RECORDED = /(^|\/)phase4[-_](cruncher|shapes)\.json$/;
+  // Copied verbatim from the enrichment records by gen:conformance: the records are the source to fix.
+  const DERIVED = /(^|\/)effect-translation\/cases\.json$/;
   for (const r of jsonRoots) {
-    for (const abs of walkFiles(path.join(root, r), [".json"], (x) => SKIP_DIRS.test(x) || GENERATED.test(x) || RECORDED.test(x) || /package(-lock)?\.json$|tsconfig|wrangler/.test(x))) {
+    for (const abs of walkFiles(path.join(root, r), [".json"], (x) => SKIP_DIRS.test(x) || GENERATED.test(x) || RECORDED.test(x) || DERIVED.test(x) || /package(-lock)?\.json$|tsconfig|wrangler/.test(x))) {
       const text = readFileSync(abs, "utf8");
       let parsed: unknown;
       try {

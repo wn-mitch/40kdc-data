@@ -17,6 +17,14 @@ describe("printed rule and ability names resolve to the records that print them"
     expect(activate!.parameters.ability).toBe("reanimation-protocols-necrons");
   });
 
+  it("resolves the ability an ability-modifier changes, and leaves a non-id reference as written", () => {
+    const leaf = refLeaf("ability-modifier", { subject: "this-unit", ability: "voice-of-command", aspect: "range", operation: "set", value: 24 }); // mfm:mirror keep — the bare name under test
+    const [modifier] = resolveRuleReferences([leaf], { faction_id: "astra-militarum" });
+    expect(modifier!.parameters.ability).toBe("voice-of-command-astra-militarum");
+    const byEvent = refLeaf("ability-modifier", { subject: "this-unit", ability: { event: "used" }, aspect: "uses", operation: "add", value: 1 });
+    expect(resolveRuleReferences([byEvent], { faction_id: "astra-militarum" })).toEqual([byEvent]);
+  });
+
   it("resolves a printed record name, with or without its leading article", () => {
     expect(resolveRecordName("chaos-daemons", "shadow-of-chaos")).toBe("the-shadow-of-chaos-chaos-daemons");
   });

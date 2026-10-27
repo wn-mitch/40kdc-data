@@ -914,7 +914,7 @@
           "type": "ability-modifier",
           "target": "this-model",
           "modifier": {
-            "ability": "voice-of-command",
+            "ability": "voice-of-command-astra-militarum",
             "aspect": "recipients",
             "operation": "add",
             "recipients": {
@@ -15737,7 +15737,7 @@
             "type": "ability-modifier",
             "target": "this-model",
             "modifier": {
-              "ability": "relics-of-the-matriarchs",
+              "ability": "relics-of-the-matriarchs-adepta-sororitas",
               "aspect": "selections",
               "operation": "set",
               "value": 1

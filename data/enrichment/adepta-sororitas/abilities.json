@@ -5479,7 +5479,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "595d567ec4907b4ffb007884f68f4247f7c91b382b837f2b2da182d68849e732",
     "version": "2025-q3",
@@ -5513,7 +5513,7 @@
           "type": "ability-modifier",
           "target": "recipient",
           "modifier": {
-            "ability": "acts-of-faith",
+            "ability": "acts-of-faith-adepta-sororitas",
             "aspect": "uses",
             "operation": "set",
             "value": 2
@@ -9513,7 +9513,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [
       "triumph-of-saint-katherine"
@@ -9545,7 +9545,7 @@
             "type": "ability-modifier",
             "target": "this-model",
             "modifier": {
-              "ability": "relics-of-the-matriarchs",
+              "ability": "relics-of-the-matriarchs-adepta-sororitas",
               "aspect": "selections",
               "operation": "set",
               "value": 1

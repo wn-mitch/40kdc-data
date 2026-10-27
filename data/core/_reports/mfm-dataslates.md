@@ -9,16 +9,16 @@ dump confirmation.
 | Entity | Promote | Demote | Kept | Untouched |
 |---|--:|--:|--:|--:|
 | units | 0 | 0 | 1097 | 6 |
-| weapons | 20 | 0 | 3393 | 123 |
+| weapons | 0 | 0 | 3413 | 123 |
 | wargear | 0 | 0 | 165 | 87 |
 | unit-compositions | 0 | 0 | 1063 | 0 |
 | wargear-options | 0 | 0 | 1346 | 0 |
 | leader-attachments | 0 | 0 | 283 | 8 |
 | enhancements | 0 | 0 | 890 | 0 |
-| detachments | 0 | 0 | 92 | 365 |
-| stratagems | 0 | 0 | 253 | 1060 |
-| abilities | 0 | 0 | 1693 | 2842 |
-| phase-mappings | 0 | 0 | 489 | 1092 |
+| detachments | 1 | 0 | 92 | 364 |
+| stratagems | 2 | 0 | 253 | 1058 |
+| abilities | 0 | 0 | 1712 | 2823 |
+| phase-mappings | 7 | 0 | 489 | 1085 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
 ## Abilities by faction
@@ -26,13 +26,13 @@ dump confirmation.
 | Faction | Promote | Demote | Kept | Untouched |
 |---|--:|--:|--:|--:|
 | _core | 0 | 0 | 2 | 24 |
-| adepta-sororitas | 0 | 0 | 49 | 99 |
+| adepta-sororitas | 0 | 0 | 51 | 97 |
 | adeptus-astartes | 0 | 0 | 112 | 138 |
 | adeptus-custodes | 0 | 0 | 62 | 96 |
 | adeptus-mechanicus | 0 | 0 | 82 | 85 |
-| aeldari | 0 | 0 | 111 | 189 |
+| aeldari | 0 | 0 | 113 | 187 |
 | agents-of-the-imperium | 0 | 0 | 52 | 86 |
-| astra-militarum | 0 | 0 | 87 | 164 |
+| astra-militarum | 0 | 0 | 98 | 153 |
 | black-templars | 0 | 0 | 24 | 39 |
 | blood-angels | 0 | 0 | 28 | 33 |
 | chaos-daemons | 0 | 0 | 80 | 115 |
@@ -43,13 +43,13 @@ dump confirmation.
 | deathwatch | 0 | 0 | 16 | 20 |
 | drukhari | 0 | 0 | 38 | 126 |
 | emperors-children | 0 | 0 | 49 | 97 |
-| genestealer-cults | 0 | 0 | 48 | 99 |
+| genestealer-cults | 0 | 0 | 50 | 97 |
 | grey-knights | 0 | 0 | 52 | 82 |
 | imperial-fists | 0 | 0 | 3 | 8 |
 | imperial-knights | 0 | 0 | 45 | 73 |
 | iron-hands | 0 | 0 | 4 | 7 |
 | leagues-of-votann | 0 | 0 | 59 | 96 |
-| necrons | 0 | 0 | 95 | 135 |
+| necrons | 0 | 0 | 97 | 133 |
 | orks | 0 | 0 | 87 | 123 |
 | raven-guard | 0 | 0 | 4 | 7 |
 | salamanders | 0 | 0 | 5 | 6 |
@@ -72,8 +72,8 @@ dump confirmation.
 | _core | verified | 2 |
 | adepta-sororitas | digest-differs | 8 |
 | adepta-sororitas | stub | 4 |
-| adepta-sororitas | unpublished | 87 |
-| adepta-sororitas | verified | 49 |
+| adepta-sororitas | unpublished | 85 |
+| adepta-sororitas | verified | 51 |
 | adeptus-astartes | ambiguous-source | 1 |
 | adeptus-astartes | digest-differs | 13 |
 | adeptus-astartes | no-source | 5 |
@@ -91,8 +91,8 @@ dump confirmation.
 | adeptus-mechanicus | verified | 82 |
 | aeldari | digest-differs | 9 |
 | aeldari | stub | 28 |
-| aeldari | unpublished | 152 |
-| aeldari | verified | 111 |
+| aeldari | unpublished | 150 |
+| aeldari | verified | 113 |
 | agents-of-the-imperium | ambiguous-source | 1 |
 | agents-of-the-imperium | digest-differs | 11 |
 | agents-of-the-imperium | stub | 18 |
@@ -100,8 +100,8 @@ dump confirmation.
 | agents-of-the-imperium | verified | 52 |
 | astra-militarum | digest-differs | 16 |
 | astra-militarum | stub | 17 |
-| astra-militarum | unpublished | 131 |
-| astra-militarum | verified | 87 |
+| astra-militarum | unpublished | 120 |
+| astra-militarum | verified | 98 |
 | black-templars | digest-differs | 1 |
 | black-templars | stub | 12 |
 | black-templars | unpublished | 26 |
@@ -146,8 +146,8 @@ dump confirmation.
 | emperors-children | verified | 49 |
 | genestealer-cults | digest-differs | 6 |
 | genestealer-cults | stub | 14 |
-| genestealer-cults | unpublished | 79 |
-| genestealer-cults | verified | 48 |
+| genestealer-cults | unpublished | 77 |
+| genestealer-cults | verified | 50 |
 | grey-knights | stub | 11 |
 | grey-knights | unpublished | 71 |
 | grey-knights | verified | 52 |
@@ -169,8 +169,8 @@ dump confirmation.
 | leagues-of-votann | verified | 59 |
 | necrons | digest-differs | 7 |
 | necrons | stub | 15 |
-| necrons | unpublished | 113 |
-| necrons | verified | 95 |
+| necrons | unpublished | 111 |
+| necrons | verified | 97 |
 | orks | ambiguous-source | 1 |
 | orks | digest-differs | 21 |
 | orks | no-source | 1 |

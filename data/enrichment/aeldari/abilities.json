@@ -12148,7 +12148,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [],
     "faction_id": "aeldari",
@@ -12158,7 +12158,7 @@
       "type": "ability-modifier",
       "target": "this-model",
       "modifier": {
-        "ability": "cruel-amusement",
+        "ability": "cruel-amusement-aeldari",
         "aspect": "selections",
         "operation": "set",
         "value": 2
@@ -12183,7 +12183,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [],
     "faction_id": "aeldari",
@@ -12206,7 +12206,7 @@
         "type": "ability-modifier",
         "target": "this-unit",
         "modifier": {
-          "ability": "dance-of-death",
+          "ability": "dance-of-death-aeldari",
           "aspect": "selections",
           "operation": "set",
           "value": 3

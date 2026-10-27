@@ -3650,7 +3650,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "74be20d332e231f86d0e8d05671fc0425420bec2253f9d382f34e2212eeaf682",
     "version": "2025-q3",
@@ -3674,7 +3674,7 @@
         "type": "ability-modifier",
         "target": "this-model",
         "modifier": {
-          "ability": "mechanical-augmentation",
+          "ability": "mechanical-augmentation-necrons",
           "aspect": "range",
           "operation": "add",
           "value": 3,
@@ -8748,7 +8748,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [
       "tesseract-vault"
@@ -8800,7 +8800,7 @@
               "type": "ability-modifier",
               "target": "this-model",
               "modifier": {
-                "ability": "powers-of-the-ctan",
+                "ability": "powers-of-the-ctan-necrons",
                 "aspect": "selections",
                 "operation": "set",
                 "value": 1

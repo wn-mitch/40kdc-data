@@ -675,7 +675,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "f6daeab5ad01106b8c4ae8164a16dad7c13ab3464a5e2537edc98bbcc9d76c3d",
     "version": "2025-q3",
@@ -693,7 +693,7 @@
           "type": "ability-modifier",
           "target": "this-model",
           "modifier": {
-            "ability": "cosmic-horror",
+            "ability": "cosmic-horror-genestealer-cults",
             "aspect": "range",
             "operation": "add",
             "value": 6
@@ -7149,7 +7149,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [
       "magus"
@@ -7171,7 +7171,7 @@
           "type": "ability-modifier",
           "target": "this-model",
           "modifier": {
-            "ability": "mind-control",
+            "ability": "mind-control-genestealer-cults",
             "aspect": "range",
             "operation": "add",
             "value": 6
