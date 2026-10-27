@@ -266,10 +266,13 @@ function eventPhrase(t: AbilityTrigger): string {
       const named = namedUsePhrase(f);
       if (named != null) {
         const verb = f.kind === "manoeuvre" ? "performs" : "uses";
+        if (f.kind === "stratagem" && t.object != null) return opponent ? `each time your opponent targets the unit with ${named}` : `when you target the unit with ${named}`;
         if (opponent) return `each time your opponent ${verb} ${named}`;
         if (t.subject == null && (f.kind === "ability" || f.kind === "stratagem")) return `when you use ${named}`;
         return `each time ${who} ${verb} ${named}`;
       }
+      // "When its unit is targeted with a Stratagem": the object is the unit the Stratagem is aimed at.
+      if (f.kind === "stratagem" && t.object != null) return opponent ? "each time your opponent targets the unit with a Stratagem" : "each time you target the unit with a Stratagem";
       if (f.kind === "stratagem") return opponent ? "each time your opponent uses a Stratagem" : "each time you use a Stratagem";
       if (opponent && f.kind === "ability" && f.id == null) return "each time your opponent uses an ability";
       if (f.kind === "ritual" && f.result === "success") return `each time ${who} manifests a Ritual`;

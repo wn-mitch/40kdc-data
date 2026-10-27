@@ -491,6 +491,12 @@ func triggerEventPhrase(t map[string]any) string {
 			if f["kind"] == "manoeuvre" {
 				verb = "performs"
 			}
+			if f["kind"] == "stratagem" && object != nil {
+				if opponent {
+					return "each time your opponent targets the unit with " + named
+				}
+				return "when you target the unit with " + named
+			}
 			if opponent {
 				return "each time your opponent " + verb + " " + named
 			}
@@ -500,6 +506,11 @@ func triggerEventPhrase(t map[string]any) string {
 			return "each time " + who + " " + verb + " " + named
 		}
 		switch {
+		// "When its unit is targeted with a Stratagem": the object is the unit the Stratagem is aimed at.
+		case f["kind"] == "stratagem" && object != nil && opponent:
+			return "each time your opponent targets the unit with a Stratagem"
+		case f["kind"] == "stratagem" && object != nil:
+			return "each time you target the unit with a Stratagem"
 		case f["kind"] == "stratagem" && opponent:
 			return "each time your opponent uses a Stratagem"
 		case f["kind"] == "stratagem":

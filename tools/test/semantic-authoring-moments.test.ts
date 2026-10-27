@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { inheritClauseBands } from "../src/semantic-authoring/compile-clause-band.js";
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { familyRole, normalizeFingerprintParameters, currentFamilyVersion } from "../src/semantic-authoring/contracts.js";
+import { describeAbility } from "../src/translate/effect.js";
 
 // semantic-authoring-event-used-object
 {
@@ -34,6 +35,40 @@ describe("event object on a used rule (the unit an Order is issued to)", () => {
     if (!result.ok) throw new Error(result.errors.join("; "));
     const mechanics = result.mechanics as Record<string, any>;
     expect(mechanics.trigger).toEqual({ event: "used", filter: { kind: "order" }, object: "this-unit" });
+  });
+});
+
+describe("event object on a used Stratagem (the unit the Stratagem targets)", () => {
+  const text = "Once per turn, when its squad is picked by a Stratagem, lower the CP cost of that use of that Stratagem by 1CP.";
+  const leaves = (event: Record<string, unknown>) => [
+    leaf(text, "its squad is picked by a Stratagem", "event", 35, normalize(event, 35)),
+    leaf(text, "lower the CP cost of that use of that Stratagem by 1CP", "stratagem-cost", 1, { of: "stratagem", operation: "decrease", amount: 1, applies_to: "the-triggering-use" }),
+  ];
+
+  it("keeps the targeted unit on the trigger and says so", () => {
+    const result = compileLeaves(leaves({ kind: "used", activity: "stratagem", object: "this-unit" }), text);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    const mechanics = result.mechanics as Record<string, any>;
+    expect(mechanics.trigger).toMatchObject({ event: "used", filter: { kind: "stratagem" }, object: "this-unit" });
+    const prose = describeAbility({ ability_id: "fabricated", name: "Fabricated", ...mechanics } as never);
+    expect(prose).toMatch(/^Each time you target the unit with a Stratagem, /);
+    expect(prose).not.toMatch(/use a Stratagem/i);
+  });
+
+  it("names a targeted Stratagem by name", () => {
+    const result = compileLeaves(leaves({ kind: "used", activity: "stratagem", id: "heroic-intervention", object: "this-unit" }), text);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    const mechanics = result.mechanics as Record<string, any>;
+    expect(mechanics.trigger).toMatchObject({ filter: { kind: "stratagem", id: "heroic-intervention" }, object: "this-unit" });
+    expect(describeAbility({ ability_id: "fabricated", name: "Fabricated", ...mechanics } as never)).toMatch(/^When you target the unit with the Heroic Intervention Stratagem, /);
+  });
+
+  it("still reads any Stratagem use when no object is named", () => {
+    const result = compileLeaves(leaves({ kind: "used", activity: "stratagem" }), text);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    const mechanics = result.mechanics as Record<string, any>;
+    expect(mechanics.trigger.object).toBeUndefined();
+    expect(describeAbility({ ability_id: "fabricated", name: "Fabricated", ...mechanics } as never)).toMatch(/each time you use a Stratagem/i);
   });
 });
 }

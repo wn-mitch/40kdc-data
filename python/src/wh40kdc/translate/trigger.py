@@ -406,11 +406,20 @@ def _event_phrase(t: AbilityTrigger) -> str:
         named = named_use_phrase(f)
         if named is not None:
             verb = "performs" if kind == "manoeuvre" else "uses"
+            if kind == "stratagem" and obj is not None:
+                if opponent:
+                    return f"each time your opponent targets the unit with {named}"
+                return f"when you target the unit with {named}"
             if opponent:
                 return f"each time your opponent {verb} {named}"
             if t.get("subject") is None and kind in ("ability", "stratagem"):
                 return f"when you use {named}"
             return f"each time {who} {verb} {named}"
+        # "When its unit is targeted with a Stratagem": the object is the unit it is aimed at.
+        if kind == "stratagem" and obj is not None:
+            if opponent:
+                return "each time your opponent targets the unit with a Stratagem"
+            return "each time you target the unit with a Stratagem"
         if kind == "stratagem":
             if opponent:
                 return "each time your opponent uses a Stratagem"

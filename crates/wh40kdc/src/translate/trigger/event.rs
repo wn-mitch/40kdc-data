@@ -604,6 +604,13 @@ pub(crate) fn event_phrase(t: &P) -> String {
                 } else {
                     "uses"
                 };
+                if is(f, "kind", "stratagem") && nn(t, "object").is_some() {
+                    return if opponent {
+                        format!("each time your opponent targets the unit with {named}")
+                    } else {
+                        format!("when you target the unit with {named}")
+                    };
+                }
                 if opponent {
                     return format!("each time your opponent {verb} {named}");
                 }
@@ -613,6 +620,14 @@ pub(crate) fn event_phrase(t: &P) -> String {
                     return format!("when you use {named}");
                 }
                 return format!("each time {who} {verb} {named}");
+            }
+            // "When its unit is targeted with a Stratagem": the object is the unit the Stratagem is aimed at.
+            if is(f, "kind", "stratagem") && nn(t, "object").is_some() {
+                return if opponent {
+                    "each time your opponent targets the unit with a Stratagem".to_string()
+                } else {
+                    "each time you target the unit with a Stratagem".to_string()
+                };
             }
             if is(f, "kind", "stratagem") {
                 return if opponent {
