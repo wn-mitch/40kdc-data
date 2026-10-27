@@ -74,6 +74,24 @@ _AS_IF = {
 }
 
 
+def _permission_weapons(m: dict[str, Any], plural: bool) -> str:
+    """The weapons a shoot permission allows, any one of them.
+
+    " with its sentry flamer or sentry grenade launcher": bare names read as the model's own
+    weapons; any other filter reads as a weapon noun.
+    """
+    scopes = m.get("weapons")
+    if not isinstance(scopes, list):
+        return ""
+    if all(
+        isinstance(sc, dict) and list(sc) == ["name"] and isinstance(sc["name"], str)
+        for sc in scopes
+    ):
+        own = "their" if plural else "its"
+        return f" with {own} {or_list([jstr(sc['name']) for sc in scopes])}"
+    return f" with {or_list([weapon_noun({'weapons': sc}) for sc in scopes])}"
+
+
 def permission(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
     it = "they" if subj.startswith("all ") or re.search(r" units\b", subj) else "it"
     activity = m.get("activity")
@@ -88,10 +106,11 @@ def permission(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
         )
         into = f" {prep} {none_of(effect_subject(m['into'], ctx))}"
     reach = f" from up to {range_phrase(m['reach'])} away" if m.get("reach") is not None else ""
+    weapons = _permission_weapons(m, is_plural(subj))
     if m.get("allow") is False:
-        s = f"{none_of(subj)} cannot {act}{into}"
+        s = f"{none_of(subj)} cannot {act}{weapons}{into}"
     else:
-        s = f"{subj} {v(subj, 'is')} eligible to {act}{into}{reach}"
+        s = f"{subj} {v(subj, 'is')} eligible to {act}{weapons}{into}{reach}"
     if isinstance(m.get("after"), list):
         s += (
             f" in a turn in which {it} "

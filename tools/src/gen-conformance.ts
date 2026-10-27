@@ -1939,6 +1939,10 @@ function genEffectTranslation(): void {
         const per = m.count_per_pool != null ? "@per-pool" : "";
         out.add(`pool-add-die@${kind}${per}`);
       }
+      // A shoot permission limited to named weapons renders its own weapon clause.
+      if (rec.type === "permission" && Array.isArray(m.weapons)) {
+        out.add("permission@weapons");
+      }
     }
     for (const key of [
       "effect",

@@ -343,6 +343,36 @@ pub(super) fn despite_phrase(d: &str) -> Option<&'static str> {
     })
 }
 
+/// " with its sentry flamer or sentry grenade launcher": the weapons a shoot permission allows, any
+/// one of them. Bare names read as the model's own weapons; any other filter reads as a weapon noun.
+fn permission_weapons(m: &P, plural: bool) -> String {
+    let Some(Value::Array(scopes)) = m.get("weapons") else {
+        return String::new();
+    };
+    let bare: Option<Vec<String>> = scopes
+        .iter()
+        .map(|scope| match scope {
+            Value::Object(o) if o.len() == 1 => {
+                o.get("name").and_then(Value::as_str).map(str::to_string)
+            }
+            _ => None,
+        })
+        .collect();
+    if let Some(names) = bare {
+        let own = if plural { "their" } else { "its" };
+        return format!(" with {own} {}", or_list(&names));
+    }
+    let nouns: Vec<String> = scopes
+        .iter()
+        .map(|scope| {
+            let mut holder = serde_json::Map::new();
+            holder.insert("weapons".to_string(), scope.clone());
+            weapon_noun(&holder)
+        })
+        .collect();
+    format!(" with {}", or_list(&nouns))
+}
+
 pub(super) fn permission(m: &P, subj: &str, ctx: &Ctx) -> String {
     let it = if subj.starts_with("all ") || has_word_end(subj, " units") {
         "they"
@@ -374,10 +404,14 @@ pub(super) fn permission(m: &P, subj: &str, ctx: &Ctx) -> String {
     let reach = nn(m, "reach")
         .map(|r| format!(" from up to {} away", range_phrase(Some(r))))
         .unwrap_or_default();
+    let weapons = permission_weapons(m, is_plural(subj));
     let mut s = if is_false(m, "allow") {
-        format!("{} cannot {act}{into}", none_of(subj))
+        format!("{} cannot {act}{weapons}{into}", none_of(subj))
     } else {
-        format!("{subj} {} eligible to {act}{into}{reach}", v(subj, "is"))
+        format!(
+            "{subj} {} eligible to {act}{weapons}{into}{reach}",
+            v(subj, "is")
+        )
     };
     if let Some(after) = map_arr(m, "after", |a| {
         let a = jv(a);

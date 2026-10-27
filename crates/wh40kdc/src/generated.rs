@@ -28241,6 +28241,14 @@ impl ::std::convert::TryFrom<::std::string::String> for Period {
 ///    },
 ///    "stratagem": {
 ///      "$ref": "#/$defs/entity-id"
+///    },
+///    "weapons": {
+///      "description": "A shoot permission that allows only these weapons: any one of them.",
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/weapon-scope"
+///      },
+///      "minItems": 1
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -28273,6 +28281,9 @@ pub struct PermissionEffectModifier {
     pub reach: ::std::option::Option<RangeRef>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub stratagem: ::std::option::Option<EntityId>,
+    ///A shoot permission that allows only these weapons: any one of them.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub weapons: ::std::vec::Vec<WeaponScope>,
 }
 ///`PermissionEffectModifierActivity`
 ///

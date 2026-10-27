@@ -322,3 +322,38 @@ describe("a While frame gates a later move-scoped part end to end", () => {
     expect(nodes(parts[0], (node) => node.type === "move-modifier" && node.modifier?.no_end_in_engagement === true)[0]!.modifier.applies_to_moves).toEqual(["normal"]);
   });
 });
+
+describe("eligibility-permission model_name and weapon_names", () => {
+  const base = { subject: "this-unit", activity: "shoot", allow: true };
+  const named = { ...base, model_name: "Squad Leader", weapon_names: ["Drone Blaster", "drone net"] };
+
+  it("normalizes names and refuses them at the version before", () => {
+    expect(normalize("eligibility-permission", named, 9)).toEqual({ ...base, model_name: "Squad Leader", weapon_names: ["drone blaster", "drone net"] });
+    expect(() => normalize("eligibility-permission", named, 8)).toThrow();
+  });
+
+  it("refuses a weapon limit off a shoot permission, a forbidding permission, a model's own models, and a repeated weapon", () => {
+    expect(() => normalize("eligibility-permission", { ...base, activity: "fight", weapon_names: ["drone net"] }, 9)).toThrow(/activity: shoot/);
+    expect(() => normalize("eligibility-permission", { ...base, allow: false, weapon_names: ["drone net"] }, 9)).toThrow(/allow: true/);
+    expect(() => normalize("eligibility-permission", { ...base, subject: "this-model", model_name: "Squad Leader" }, 9)).toThrow(/this-model/);
+    expect(() => normalize("eligibility-permission", { ...base, weapon_names: ["Drone net", "drone net"] }, 9)).toThrow(/twice/);
+    expect(() => normalize("eligibility-permission", { ...base, weapon_names: [] }, 9)).toThrow();
+  });
+
+  it("lowers to a model-level target in the unit and a list of weapon names", () => {
+    const text = "Once per battle, the Squad Leader can shoot with its drone blaster or drone net.";
+    const tree = compiled(text,
+      ["the Squad Leader can shoot with its drone blaster or drone net", "eligibility-permission", normalize("eligibility-permission", named, 9)]);
+    expect(nodes(tree, (node) => node.type === "permission")).toEqual([{
+      type: "permission",
+      target: { level: "model", member_of: "this-unit", model_names: ["Squad Leader"] },
+      modifier: { activity: "shoot", allow: true, weapons: [{ name: "drone blaster" }, { name: "drone net" }] },
+    }]);
+  });
+
+  it("keeps a permission without names unchanged", () => {
+    const text = "This unit can shoot.";
+    const tree = compiled(text, ["This unit can shoot", "eligibility-permission", base]);
+    expect(nodes(tree, (node) => node.type === "permission")).toEqual([{ type: "permission", target: "this-unit", modifier: { activity: "shoot", allow: true } }]);
+  });
+});

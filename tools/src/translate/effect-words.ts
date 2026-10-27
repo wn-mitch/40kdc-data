@@ -125,7 +125,7 @@ export function testName(test: unknown): string {
 
 /** Does a subject noun phrase take a plural verb? (`enemy units within 6"`, `all friendly units`). */
 export function isPlural(subj: string): boolean {
-  return / (units|models)\b/.test(subj) || /^all /.test(subj) || /^targets /.test(subj);
+  return /(^| )(units|models)\b/.test(subj) || /^all /.test(subj) || /^targets /.test(subj);
 }
 
 const PLURAL_VERBS: Record<string, string> = {

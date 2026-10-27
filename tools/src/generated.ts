@@ -4456,6 +4456,12 @@ export interface PermissionEffect {
      * This use of the Stratagem does not count toward its once-per-phase limit for other units.
      */
     consumes_shared_use?: false;
+    /**
+     * A shoot permission that allows only these weapons: any one of them.
+     *
+     * @minItems 1
+     */
+    weapons?: [WeaponScope, ...WeaponScope[]];
   };
   scaling?: Scaling;
 }

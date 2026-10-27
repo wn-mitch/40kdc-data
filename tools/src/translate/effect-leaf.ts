@@ -320,7 +320,8 @@ function permission(m: Record<string, unknown>, subj: string, ctx: Ctx): string 
       : ACTIVITIES[jstr(m.activity)] ?? jstr(m.activity);
   const into = m.into != null ? ` ${m.activity === "shoot" ? "at" : m.activity === "declare-charge" ? "against" : "into"} ${noneOf(effectSubject(m.into, ctx))}` : "";
   const reach = m.reach != null ? ` from up to ${rangePhrase(m.reach)} away` : "";
-  let s = m.allow === false ? `${noneOf(subj)} cannot ${act}${into}` : `${subj} ${v(subj, "is")} eligible to ${act}${into}${reach}`;
+  const weapons = permissionWeapons(m, isPlural(subj));
+  let s = m.allow === false ? `${noneOf(subj)} cannot ${act}${weapons}${into}` : `${subj} ${v(subj, "is")} eligible to ${act}${weapons}${into}${reach}`;
   if (Array.isArray(m.after)) s += ` in a turn in which ${it} ${orList((m.after as unknown[]).map((a) => AFTER[jstr(a)] ?? jstr(a)))}`;
   if (Array.isArray(m.despite)) {
     const clauses = (m.despite as unknown[]).map((d) => {
@@ -336,6 +337,19 @@ function permission(m: Record<string, unknown>, subj: string, ctx: Ctx): string 
   if (m.counts_as_move != null) s += `; if ${it} ${it === "they" ? "do" : "does"}, ${it} ${it === "they" ? "count" : "counts"} as having made ${movedPhrase(m.counts_as_move)} this turn`;
   if (m.consumes_shared_use === false) s += "; this use does not count toward that Stratagem's once-per-phase limit for other units";
   return s;
+}
+
+/**
+ * " with its sentry flamer or sentry grenade launcher": the weapons a shoot permission allows, any
+ * one of them. Bare names read as the model's own weapons; any other filter reads as a weapon noun.
+ */
+function permissionWeapons(m: Record<string, unknown>, plural: boolean): string {
+  if (!Array.isArray(m.weapons)) return "";
+  const scopes = m.weapons as Record<string, unknown>[];
+  if (scopes.every((scope) => Object.keys(scope).length === 1 && typeof scope.name === "string")) {
+    return ` with ${plural ? "their" : "its"} ${orList(scopes.map((scope) => jstr(scope.name)))}`;
+  }
+  return ` with ${orList(scopes.map((scope) => weaponNoun({ weapons: scope })))}`;
 }
 
 const TARGET_KINDS: Record<string, string> = {

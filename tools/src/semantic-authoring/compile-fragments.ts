@@ -606,8 +606,12 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
       const despite = leaf.parameters.despite as string[] | undefined;
       const asIf = leaf.parameters.as_if;
       const stratagem = leaf.parameters.stratagem;
+      const modelName = leaf.parameters.model_name as string | undefined;
+      const weaponNames = leaf.parameters.weapon_names as string[] | undefined;
+      const subject = target(leaf.parameters.subject);
       return {
-        type: "permission", target: target(leaf.parameters.subject),
+        // "The Tempestor Aquilon": the subject's models with that profile name.
+        type: "permission", target: modelName === undefined ? subject : { level: "model", member_of: subject, model_names: [modelName] },
         modifier: {
           activity: closed(leaf, "activity"), allow: closed(leaf, "allow"),
           ...(despite && despite.length > 0 ? { despite } : {}),
@@ -620,6 +624,8 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
           ...(leaf.parameters.into !== undefined ? { into: permissionDestination(leaf) } : {}),
           // A folded counts-as-moved leaf (compile-counts-as-moved.ts): the units count as having made this move.
           ...(leaf.parameters.counts_as_move !== undefined ? { counts_as_move: closed(leaf, "counts_as_move") } : {}),
+          // "with its sentry flamer, sentry grenade launcher or sentry hot-shot volley gun": any one of these weapons.
+          ...(weaponNames !== undefined ? { weapons: weaponNames.map((name) => ({ name })) } : {}),
         },
       };
     }

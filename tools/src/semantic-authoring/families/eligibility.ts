@@ -79,6 +79,46 @@ const FIGHT_REACH_AND_NEXT: FamilyExtension = {
   },
 };
 
+/**
+ * "The Tempestor Aquilon can shoot with its sentry weapon (its sentry flamer, sentry grenade
+ * launcher or sentry hot-shot volley gun)". model_name narrows the subject unit to its models with
+ * that profile name; weapon_names are the weapons a shoot permission allows, any one of them, as
+ * their datasheets print them.
+ */
+const NAMED_MODEL_AND_WEAPONS: FamilyExtension = {
+  family: "eligibility-permission",
+  version: 9,
+  description: "As the previous version, plus model_name (only the subject's models with this profile name, \"the Tempestor Aquilon\") and weapon_names (a shoot permission allows only these weapons, any one of them, as their datasheets print them). Both need allow true; model_name needs a unit subject.",
+  schema: (previous) => withProperties(previous, {
+    model_name: optional({ type: "string", minLength: 1 }),
+    weapon_names: optional({ type: "array", minItems: 1, uniqueItems: true, items: { type: "string", minLength: 1 }, "x-only-when": { activity: ["shoot"] } }),
+  }),
+  normalize: (input, previous) => {
+    if (input.model_name === undefined && input.weapon_names === undefined) return previous(input);
+    const { model_name: modelName, weapon_names: weaponNames, ...rest } = input;
+    if (rest.allow !== true) throw new TypeError("eligibility-permission.model_name and weapon_names need allow: true.");
+    const normalized = previous(rest);
+    const added: Record<string, unknown> = {};
+    if (modelName !== undefined) {
+      // Only a unit has models to pick from.
+      if (normalized.subject === "this-model") throw new TypeError("eligibility-permission.model_name picks models of a unit; its subject cannot be this-model.");
+      if (typeof modelName !== "string" || modelName.trim().length === 0) throw new TypeError("eligibility-permission.model_name is the model's profile name as its datasheet prints it.");
+      added.model_name = modelName.trim();
+    }
+    if (weaponNames !== undefined) {
+      if (normalized.activity !== "shoot") throw new TypeError("eligibility-permission.weapon_names apply only to activity: shoot.");
+      if (!Array.isArray(weaponNames) || weaponNames.length === 0) throw new TypeError("eligibility-permission.weapon_names lists at least one weapon.");
+      const names = weaponNames.map((name) => {
+        if (typeof name !== "string" || name.trim().length === 0) throw new TypeError("eligibility-permission.weapon_names are weapon names as their datasheets print them.");
+        return name.trim().toLowerCase();
+      });
+      if (new Set(names).size !== names.length) throw new TypeError("eligibility-permission.weapon_names lists a weapon twice.");
+      added.weapon_names = names;
+    }
+    return { ...normalized, ...added };
+  },
+};
+
 export const ELIGIBILITY_EXTENSIONS: readonly FamilyExtension[] = [
   /**
    * Permission binding: a permission to end within Engagement Range of the enemy unit that the same
@@ -144,6 +184,7 @@ export const ELIGIBILITY_EXTENSIONS: readonly FamilyExtension[] = [
     normalize: (input, previous) => input.subject === FILTERED_UNITS ? standIn(input, "subject", "this-unit", previous) : previous(input),
   },
   FIGHT_REACH_AND_NEXT,
+  NAMED_MODEL_AND_WEAPONS,
   /**
    * Transport eligibility: "one friendly TRANSPORT that it is able to embark within". The subject
    * (a unit, possibly an earlier leaf's unit) is eligible to embark within the named Transport, by

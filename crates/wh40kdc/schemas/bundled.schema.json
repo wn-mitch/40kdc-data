@@ -8573,6 +8573,14 @@
                 "consumes_shared_use": {
                   "const": false,
                   "description": "This use of the Stratagem does not count toward its once-per-phase limit for other units."
+                },
+                "weapons": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "$ref": "#/$defs/weapon-scope"
+                  },
+                  "description": "A shoot permission that allows only these weapons: any one of them."
                 }
               },
               "required": [

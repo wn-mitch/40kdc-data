@@ -2992,6 +2992,7 @@ class Modifier16(TypedDict):
     stratagem: NotRequired[EntityId]
     counts_as_move: NotRequired[MovementKind]
     consumes_shared_use: NotRequired[Literal[False]]
+    weapons: NotRequired[list[WeaponScope]]
 
 
 class SingleEffect13(TypedDict):

@@ -205,7 +205,7 @@ func testName(test any) string {
 	return titleCase(t)
 }
 
-var pluralUnitsRe = regexp.MustCompile(` (units|models)\b`)
+var pluralUnitsRe = regexp.MustCompile(`(^| )(units|models)\b`)
 var unitsWordRe = regexp.MustCompile(` units\b`)
 
 // isPlural reports whether a subject noun phrase takes a plural verb.

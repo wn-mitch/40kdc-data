@@ -1068,17 +1068,33 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "da08c3dbeed9101c7958f88b3ebe415ff7f5b2a1ee7447e27c545443987cbf77",
+    "source_digest": "d989c9613ba7894ade4ffb3ddffeb9c1e3c9491fbf5b30bae62c65d32449f10d",
     "version": "2025-q3",
     "effect": {
       "type": "permission",
-      "target": "this-model",
+      "target": {
+        "level": "model",
+        "member_of": "this-unit",
+        "model_names": [
+          "Tempestor Aquilon"
+        ]
+      },
       "modifier": {
         "activity": "shoot",
         "allow": true,
-        "as_if": "shooting-phase"
+        "weapons": [
+          {
+            "name": "sentry flamer"
+          },
+          {
+            "name": "sentry grenade launcher"
+          },
+          {
+            "name": "sentry hot‐shot volley gun"
+          }
+        ]
       }
     },
     "scope": {
@@ -1092,8 +1108,16 @@
     "community_notes": "[APPROX] only the Tempestor Aquilon shoots, and only with its sentry weapon (sentry flamer / sentry grenade launcher / sentry hotshot volley gun), as if it were your Shooting phase",
     "trigger": {
       "event": "set-up",
-      "filter": {
-        "from": "deep-strike"
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "used",
+          "filter": {
+            "kind": "ability",
+            "id": "deep-strike"
+          },
+          "window": "event"
+        }
       }
     },
     "faction_id": "astra-militarum"

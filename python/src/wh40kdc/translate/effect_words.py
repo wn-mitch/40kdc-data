@@ -154,7 +154,7 @@ test_name.__test__ = False  # type: ignore[attr-defined]  # not a pytest test
 def is_plural(subj: str) -> bool:
     """Does a subject noun phrase take a plural verb?"""
     return (
-        bool(re.search(r" (units|models)\b", subj))
+        bool(re.search(r"(^| )(units|models)\b", subj))
         or subj.startswith("all ")
         or subj.startswith("targets ")
     )

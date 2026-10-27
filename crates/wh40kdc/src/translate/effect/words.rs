@@ -120,8 +120,10 @@ pub(crate) fn test_name(test: Option<&Value>) -> String {
 
 /// Does a subject noun phrase take a plural verb? (`enemy units within 6"`, `all friendly units`).
 pub(crate) fn is_plural(subj: &str) -> bool {
-    has_word_end(subj, " units")
-        || has_word_end(subj, " models")
+    // `/(^| )(units|models)\b/`: a leading space lets a subject that opens on the noun match.
+    let spaced = format!(" {subj}");
+    has_word_end(&spaced, " units")
+        || has_word_end(&spaced, " models")
         || subj.starts_with("all ")
         || subj.starts_with("targets ")
 }

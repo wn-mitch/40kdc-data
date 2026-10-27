@@ -37,6 +37,38 @@ func lookupOr(table map[string]string, key string) string {
 	return key
 }
 
+// permissionWeapons renders " with its sentry flamer or sentry grenade launcher": the weapons a
+// shoot permission allows, any one of them. Bare names read as the model's own weapons; any other
+// filter reads as a weapon noun.
+func permissionWeapons(m map[string]any, plural bool) string {
+	scopes, ok := asList(m["weapons"])
+	if !ok {
+		return ""
+	}
+	names := make([]string, 0, len(scopes))
+	for _, scope := range scopes {
+		o, isMap := scope.(map[string]any)
+		name, isName := o["name"].(string)
+		if !isMap || len(o) != 1 || !isName {
+			names = nil
+			break
+		}
+		names = append(names, name)
+	}
+	if names != nil {
+		own := "its"
+		if plural {
+			own = "their"
+		}
+		return " with " + own + " " + orList(names)
+	}
+	nouns := make([]string, len(scopes))
+	for i, scope := range scopes {
+		nouns[i] = weaponNoun(map[string]any{"weapons": scope})
+	}
+	return " with " + orList(nouns)
+}
+
 func permissionLeaf(m map[string]any, subj string, ctx effCtx) string {
 	it := "it"
 	if strings.HasPrefix(subj, "all ") || unitsWordRe.MatchString(subj) {
@@ -60,11 +92,12 @@ func permissionLeaf(m map[string]any, subj string, ctx effCtx) string {
 	if m["reach"] != nil {
 		reach = " from up to " + rangePhrase(m["reach"]) + " away"
 	}
+	weapons := permissionWeapons(m, isPlural(subj))
 	var s string
 	if m["allow"] == false {
-		s = noneOf(subj) + " cannot " + act + into
+		s = noneOf(subj) + " cannot " + act + weapons + into
 	} else {
-		s = subj + " " + ev(subj, "is") + " eligible to " + act + into + reach
+		s = subj + " " + ev(subj, "is") + " eligible to " + act + weapons + into + reach
 	}
 	if after, ok := asList(m["after"]); ok {
 		parts := make([]string, len(after))

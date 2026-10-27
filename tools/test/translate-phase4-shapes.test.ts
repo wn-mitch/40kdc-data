@@ -87,6 +87,20 @@ describe("describer: movement", () => {
     );
   });
 
+  it("names the weapons a shoot permission allows, with the subject's own pronoun", () => {
+    const leader = { level: "model", member_of: "this-unit", model_names: ["Squad Leader"] };
+    expect(render(leaf("permission", { activity: "shoot", allow: true, weapons: [{ name: "drone blaster" }, { name: "drone net" }] }, leader))).toBe(
+      "Models named Squad Leader in the unit are eligible to shoot with their drone blaster or drone net.",
+    );
+    expect(render(leaf("permission", { activity: "shoot", allow: true, weapons: [{ name: "drone net" }] }, "this-model"))).toBe(
+      "This model is eligible to shoot with its drone net.",
+    );
+    // A filter that is not a bare name reads as a weapon noun.
+    expect(render(leaf("permission", { activity: "shoot", allow: true, weapons: [{ type: "ranged", name: "drone net" }] }, "this-model"))).toBe(
+      "This model is eligible to shoot with ranged drone net weapons.",
+    );
+  });
+
   it("renders typed pass-through items and the moved-over predicate", () => {
     expect(render(leaf("move-modifier", { applies_to_moves: ["charge"], passthrough: [{ kind: "models", excluding: ["MONSTER", "VEHICLE"] }, { kind: "terrain", height: "up-to-4" }] }))).toBe(
       'The unit can move over models (excluding MONSTER and VEHICLE models) and terrain features 4" or lower as though they were not there, during its Charge moves.',
