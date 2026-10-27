@@ -9,6 +9,9 @@ import { initializeWorkbench } from "../src/semantic-authoring/db.js";
 import type { Embedder } from "../src/semantic-authoring/embeddings.js";
 import { dismissLeafProposal, listLeafProposals, runLeafProposals, type ProposalSettings } from "../src/semantic-authoring/leaf-proposals.js";
 import { askModelAboutClusters } from "../src/semantic-authoring/leaf-proposals-llm.js";
+import { mutualKnnClusters, topK, vote } from "../src/semantic-authoring/leaf-knn.js";
+import { keywordsIn, predicateProposal } from "../src/semantic-authoring/leaf-predicate-rules.js";
+import { currentFamilyVersion } from "../src/semantic-authoring/contracts.js";
 
 import { refreshSources } from "../src/semantic-authoring/source.js";
 import { confirmSurface } from "./semantic-authoring-human.js";
@@ -213,5 +216,92 @@ describe("Semantic authoring leaf proposal tables", () => {
       VALUES (1, 0, 's', 's', 'partial', '[]', 0, 1, 0, 'open')`).run()).not.toThrow();
     // The run history survives; only the rebuildable proposals are dropped.
     expect(db.prepare("SELECT count(*) AS n FROM leaf_proposal_runs").get()).toEqual({ n: 1 });
+  });
+});
+
+const unit = (...values: number[]) => {
+  const length = Math.hypot(...values);
+  return new Float32Array(values.map((value) => value / length));
+};
+
+describe("Semantic authoring leaf kNN", () => {
+  it("ranks neighbours by similarity, keeping pool order on ties, and can skip the query itself", () => {
+    const pool = [unit(1, 0), unit(0, 1), unit(1, 0), unit(1, 1)];
+    expect(topK(unit(1, 0), pool, 3).map((item) => item.index)).toEqual([0, 2, 3]);
+    expect(topK(pool[0]!, pool, 2, 0).map((item) => item.index)).toEqual([2, 3]);
+  });
+
+  it("weights votes by similarity and reports the closest example of the winner", () => {
+    const items = ["reroll", "grant", "grant"];
+    const result = vote([{ index: 0, sim: 0.9 }, { index: 1, sim: 0.5 }, { index: 2, sim: 0.6 }], items, (item) => item);
+    // Two weaker grant neighbours outvote one closer re-roll: 1.1 against 0.9.
+    expect(result).toMatchObject({ label: "grant", best: { index: 2, sim: 0.6 } });
+    expect(result!.share).toBeCloseTo(1.1 / 2);
+  });
+
+  it("breaks an even vote toward the closer example, not toward map order", () => {
+    const items = ["a", "b"];
+    expect(vote([{ index: 0, sim: 0.5 }, { index: 1, sim: 0.5 }], items, (item) => item)!.label).toBe("a");
+    expect(vote([{ index: 1, sim: 0.7 }, { index: 0, sim: 0.3 }, { index: 0, sim: 0.4 }], ["a", "b"], (item) => item)!.label).toBe("b");
+    expect(vote([], items, (item) => item)).toBeNull();
+  });
+
+  it("does not let a bridge between two tight groups merge them", () => {
+    // Two tight groups on the x and y axes, and one wording halfway between.
+    const vectors = [unit(1, 0.02), unit(1, 0.04), unit(1, 0.06), unit(0.02, 1), unit(0.04, 1), unit(0.06, 1), unit(1, 1)];
+    const clusters = mutualKnnClusters(vectors, 2, 0.5);
+    expect(clusters.map((cluster) => cluster.members)).toEqual([[0, 1, 2], [3, 4, 5], [6]]);
+    // The medoid is the member most like the rest of its group.
+    expect(clusters[0]!.medoid).toBe(1);
+  });
+
+  it("links nothing below the similarity floor", () => {
+    expect(mutualKnnClusters([unit(1, 0), unit(0, 1)], 1, 0.5).map((cluster) => cluster.members)).toEqual([[0], [1]]);
+  });
+});
+
+// Fabricated keywords and wording only.
+const index = new Map(["Monster", "Vehicle", "Fly", "Character", "Stellar Wardens", "Wardens"].map((keyword) => [keyword.toUpperCase(), keyword]));
+
+describe("Semantic authoring predicate proposals from the wording", () => {
+  it("finds core keywords whatever their case, preferring the longest", () => {
+    expect(keywordsIn("that targets a Monster or **VEHICLE** unit", index)).toEqual(["MONSTER", "VEHICLE"]);
+    expect(keywordsIn("that targets a STELLAR WARDENS unit", index)).toEqual(["STELLAR WARDENS"]);
+  });
+
+  it("proposes the keyword a targeted unit must have, negated where the words say not", () => {
+    expect(predicateProposal("that targets a Monster or Vehicle unit", index)).toMatchObject({
+      family_id: "unit-keyword", parameters: { keywords: ["MONSTER", "VEHICLE"], subject: "target", negated: false },
+    });
+    expect(predicateProposal("that target is a **MONSTER** or **VEHICLE** unit", index)).toMatchObject({ family_id: "unit-keyword", parameters: { keywords: ["MONSTER", "VEHICLE"] } });
+    expect(predicateProposal("that targets a unit that cannot FLY", index)).toMatchObject({
+      family_id: "unit-keyword", parameters: { keywords: ["FLY"], subject: "target", negated: true },
+    });
+  });
+
+  it("proposes states and marks, including this model on the battlefield", () => {
+    expect(predicateProposal("If this model is on the battlefield", index)).toMatchObject({
+      family_id: "unit-state", family_version: currentFamilyVersion("unit-state"), parameters: { states: ["on-battlefield"], subject: "this-model", negated: false },
+    });
+    expect(predicateProposal("that targets a unit that is not Below Half-strength", index)).toMatchObject({
+      family_id: "unit-state", parameters: { states: ["below-half-strength"], subject: "target", negated: true },
+    });
+    expect(predicateProposal("that targets a Spotted unit", index)).toMatchObject({ family_id: "unit-mark", parameters: { mark: "spotted", subject: "target" } });
+  });
+
+  it("proposes nothing for capitals that are not unit keywords, for effects, or for long composed wording", () => {
+    expect(predicateProposal("that targets a GIZMO unit", index)).toBeNull();
+    expect(predicateProposal("that targets an enemy unit", index)).toBeNull();
+    expect(predicateProposal("add 1 to the Hit roll", index)).toBeNull();
+    expect(predicateProposal("that targets a MONSTER unit, add 1 to the Hit roll and re-roll the Wound roll for every attack this unit makes", index)).toBeNull();
+    // Two families fully stated at once is composed wording, not one leaf.
+    expect(predicateProposal("that targets a MONSTER unit that is Battle-shocked", index)).toBeNull();
+    // Words the leaf cannot hold (a model count, attachment, an event, an effect) mean it is not this leaf.
+    expect(predicateProposal("that targets a Monster unit containing 5 or more models", index)).toBeNull();
+    expect(predicateProposal("While a CHARACTER model is leading this unit", index)).toBeNull();
+    expect(predicateProposal("when an enemy unit targets a friendly MONSTER unit", index)).toBeNull();
+    expect(predicateProposal("that target a MONSTER/VEHICLE unit can re-roll wound rolls", index)).toBeNull();
+    expect(predicateProposal("that targets the closest eligible target within 18", index)).toBeNull();
+    expect(predicateProposal("that targets an enemy unit that is more than 12\" away", index)).toMatchObject({ family_id: "unit-position", parameters: { kind: "beyond", inches: 12 } });
   });
 });

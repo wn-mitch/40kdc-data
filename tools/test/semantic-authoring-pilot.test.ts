@@ -1,17 +1,24 @@
 import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
+import type { DatabaseSync as DatabaseType } from "node:sqlite";
 
 import type { Questions, SystemOneResult } from "@typesafe-ai/sdk";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { hashJson } from "../src/round4/hash.js";
-import { openWorkbench } from "../src/semantic-authoring/db.js";
+import { initializeWorkbench, openWorkbench } from "../src/semantic-authoring/db.js";
+import type { Embedder } from "../src/semantic-authoring/embeddings.js";
 import type { JevClient } from "../src/semantic-authoring/jev-core.js";
+import { runLeafProposals, type ProposalSettings } from "../src/semantic-authoring/leaf-proposals.js";
 import type { ModelReply } from "../src/semantic-authoring/leaf-proposals-llm.js";
 import { planPilotStep, reportPilotStep, runPilotStep, type PilotStepOptions } from "../src/semantic-authoring/pilot.js";
+import { selectPilotSample } from "../src/semantic-authoring/pilot-sample.js";
+import { refreshSources } from "../src/semantic-authoring/source.js";
 import { applyAnnotationBatch, markPilotReviewed } from "./semantic-authoring-human.js";
 import { currentFamilyVersion } from "../src/semantic-authoring/contracts.js";
+
 
 // Fabricated fixture prose only; nothing here is published source text.
 const PHRASE = "Re-roll a Hit roll of 1";
@@ -82,28 +89,28 @@ function digest(path: string): string {
   return createHash("sha256").update(readFileSync(path)).digest("hex");
 }
 
-beforeEach(() => {
-  root = mkdtempSync(join(tmpdir(), "semantic-authoring-pilot-"));
-  dbPath = join(root, "copy", "workbench.sqlite");
-  mkdirSync(join(root, "copy"), { recursive: true });
-  previous = process.env.SEMANTIC_AUTHORING_ARTIFACT_DIR;
-  process.env.SEMANTIC_AUTHORING_ARTIFACT_DIR = join(root, "artifacts");
-  modelCalls = 0;
-  jevCalls = 0;
-  const ids = insertAbilities(4);
-  writeFileSync(join(root, "sample.json"), JSON.stringify({
-    seed: 1, generated_at: "x", target_size: 4, factions_represented: 1, strata: [],
-    abilities: ids.map((id, index) => ({ ability_version_id: id, faction_id: "fixture", ability_id: `ability-${index}`, cluster: index % 2, untiled_spans: 1 })),
-  }));
-});
-
-afterEach(() => {
-  if (previous === undefined) delete process.env.SEMANTIC_AUTHORING_ARTIFACT_DIR;
-  else process.env.SEMANTIC_AUTHORING_ARTIFACT_DIR = previous;
-  rmSync(root, { recursive: true, force: true });
-});
-
 describe("Semantic authoring pilot step", () => {
+  beforeEach(() => {
+    root = mkdtempSync(join(tmpdir(), "semantic-authoring-pilot-"));
+    dbPath = join(root, "copy", "workbench.sqlite");
+    mkdirSync(join(root, "copy"), { recursive: true });
+    previous = process.env.SEMANTIC_AUTHORING_ARTIFACT_DIR;
+    process.env.SEMANTIC_AUTHORING_ARTIFACT_DIR = join(root, "artifacts");
+    modelCalls = 0;
+    jevCalls = 0;
+    const ids = insertAbilities(4);
+    writeFileSync(join(root, "sample.json"), JSON.stringify({
+      seed: 1, generated_at: "x", target_size: 4, factions_represented: 1, strata: [],
+      abilities: ids.map((id, index) => ({ ability_version_id: id, faction_id: "fixture", ability_id: `ability-${index}`, cluster: index % 2, untiled_spans: 1 })),
+    }));
+  });
+
+  afterEach(() => {
+    if (previous === undefined) delete process.env.SEMANTIC_AUTHORING_ARTIFACT_DIR;
+    else process.env.SEMANTIC_AUTHORING_ARTIFACT_DIR = previous;
+    rmSync(root, { recursive: true, force: true });
+  });
+
   it("refuses the live workbench before opening it", async () => {
     const live = resolve(import.meta.dirname, "../../_private/round5c/workbench.sqlite");
     await expect(runPilotStep(options("live", { dbPath: live, next: 1 }))).rejects.toMatchObject({ code: "LIVE_DATABASE_REFUSED" });
@@ -181,5 +188,94 @@ describe("Semantic authoring pilot step", () => {
     // With the step reviewed, the next step may start.
     await expect(runPilotStep(options("fib-5", { next: 2 }))).resolves.toMatchObject({ step: "fib-5" });
     expect(evaluated.jev_parameters).toEqual({ agreed: 6, asked: 6 });
+  });
+});
+
+// selectPilotSample: the stratified sample a pilot step labels.
+
+type DatabaseSync = DatabaseType;
+const DatabaseSyncCtor = createRequire(import.meta.url)("node:sqlite").DatabaseSync as { new (path: string): DatabaseType };
+
+const roots: string[] = [];
+afterEach(() => {
+  for (const root of roots.splice(0)) rmSync(root, { recursive: true, force: true });
+});
+
+/** Bag-of-words vectors: wordings sharing words are alike (from semantic-authoring-leaf-proposals.test.ts). */
+function wordsEmbedder(): Embedder {
+  const dims = 128;
+  return {
+    model: "fixture-words",
+    async embed(texts: readonly string[]) {
+      return texts.map((text) => {
+        const vector = new Float32Array(dims);
+        for (const word of text.toLowerCase().match(/[\p{L}\p{N}]+/gu) ?? []) {
+          let hash = 0;
+          for (const char of word) hash = (hash * 31 + char.codePointAt(0)!) % dims;
+          vector[hash] += 1;
+        }
+        const length = Math.hypot(...vector) || 1;
+        return vector.map((value) => value / length);
+      });
+    },
+  };
+}
+
+const SETTINGS: ProposalSettings = { k: 5, direct_sim: 0.6, direct_share: 0.6, cluster_k: 3, cluster_sim: 0.6 };
+const FACTIONS = ["fixture-alpha", "fixture-beta", "fixture-gamma", "fixture-delta", "fixture-epsilon", "fixture-zeta"];
+
+/** Two abilities per faction sharing one made-up untiled phrase (so each faction forms its own
+ * residue cluster), decided nowhere — nothing here is a real leaf family's wording. */
+function fixture(): DatabaseSync {
+  const root = mkdtempSync(join(tmpdir(), "semantic-authoring-pilot-"));
+  roots.push(root);
+  for (const faction of FACTIONS) {
+    writeFileSync(join(root, `${faction}.json`), JSON.stringify([
+      { faction_id: faction, ability_id: `${faction}-first`, raw_text: `A wobbling gizmo hums near the ${faction} standard.` },
+      { faction_id: faction, ability_id: `${faction}-second`, raw_text: `A wobbling gizmo hums near the ${faction} banner.` },
+    ]));
+  }
+  const db = new DatabaseSyncCtor(":memory:") as DatabaseSync;
+  initializeWorkbench(db);
+  refreshSources(db, root);
+  return db;
+}
+
+describe("pilot-sample", () => {
+  it("is deterministic for a fixed seed and stratifies across factions and clusters", async () => {
+    const db = fixture();
+    try {
+      await runLeafProposals(db, wordsEmbedder(), SETTINGS);
+
+      const first = selectPilotSample(db, { seed: 7, targetSize: 8, topClusters: 4 });
+      const second = selectPilotSample(db, { seed: 7, targetSize: 8, topClusters: 4 });
+      // `generated_at` is a real timestamp and legitimately differs between calls.
+      expect({ ...second, generated_at: null }).toEqual({ ...first, generated_at: null });
+
+      expect(first.abilities.length).toBeGreaterThan(0);
+      expect(first.abilities.length).toBeLessThanOrEqual(8);
+      expect(first.factions_represented).toBeGreaterThan(1);
+      const clustersRepresented = new Set(first.abilities.map((a) => a.cluster));
+      expect(clustersRepresented.size).toBeGreaterThan(1);
+      // No duplicate abilities in one sample.
+      const ids = first.abilities.map((a) => a.ability_version_id);
+      expect(new Set(ids).size).toBe(ids.length);
+
+      const differentSeed = selectPilotSample(db, { seed: 99, targetSize: 8, topClusters: 4 });
+      expect(differentSeed.abilities.map((a) => a.ability_id)).not.toEqual(first.abilities.map((a) => a.ability_id));
+    } finally {
+      db.close();
+    }
+  });
+
+  it("caps the sample at the corpus size when the target exceeds available residue", async () => {
+    const db = fixture();
+    try {
+      await runLeafProposals(db, wordsEmbedder(), SETTINGS);
+      const sample = selectPilotSample(db, { seed: 1, targetSize: 1000, topClusters: 4 });
+      expect(sample.abilities.length).toBe(FACTIONS.length * 2);
+    } finally {
+      db.close();
+    }
   });
 });

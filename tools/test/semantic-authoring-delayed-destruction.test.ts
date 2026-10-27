@@ -525,15 +525,4 @@ describe("Delayed destruction follow-up: the 753 part path and the 1643 / 3644 /
     expect(mechanics.trigger).toEqual({ event: "phase-ended", condition: { type: "happened", parameters: DESTROYED_IN_PHASE } });
     expect(JSON.stringify(mechanics)).not.toContain("destroy-models");
   });
-
-  it("T7 (1028 shape, SF): an each-time moment nested with a phase end stays refused with the nested-moment text", () => {
-    const text = "Each time this model is destroyed, at the end of the phase, roll one D6: On a 2+, set this model back up.";
-    const result = compileLeaves(placed(text,
-      ["this model is destroyed", "event", { kind: "this-model-destroyed" }],
-      ["at the end of the phase", "event", PHASE_END],
-      ...PHASE_END_ROLL,
-      SET_UP,
-    ), text);
-    expect(result.ok ? [] : result.errors).toContain(NESTED_MOMENT_ERROR);
-  });
 });

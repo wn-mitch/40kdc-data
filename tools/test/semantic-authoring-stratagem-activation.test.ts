@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 import type { CompileLeaf } from "../src/semantic-authoring/compile-fragments.js";
 import { compileStratagemActivation } from "../src/semantic-authoring/compile-stratagem-activation.js";
 import { trigger } from "../src/semantic-authoring/compile-triggers.js";
+import { assertKnownKeywords } from "../src/semantic-authoring/core-keywords.js";
+import { rewriteStratagemSpan, stratagemWhenWindow } from "../src/semantic-authoring/stratagem-rules.js";
 
 function leaf(family_id: string, role: CompileLeaf["role"], parameters: Record<string, unknown>, start_byte: number, fragment = "WHEN"): CompileLeaf {
   return { family_id, family_version: 1, role, parameters, start_byte, end_byte: start_byte + 1, fragment };
@@ -94,5 +96,30 @@ describe("isolated reviewed Stratagem activation", () => {
         },
       },
     });
+  });
+});
+
+// Fabricated fixture phrasing only.
+describe("Semantic authoring Stratagem conventions", () => {
+  it("reads a WHEN line that names only a phase as a use window, and nothing longer", () => {
+    expect(stratagemWhenWindow("End of the Fight phase.")).toEqual({ your_phases: [], opponent_phases: [], either_phases: ["fight"] });
+    expect(stratagemWhenWindow("Your opponent's Shooting phase.")).toEqual({ your_phases: [], opponent_phases: ["shooting"], either_phases: [] });
+    expect(stratagemWhenWindow("Your Command phase.")).toEqual({ your_phases: ["command"], opponent_phases: [], either_phases: [] });
+    // A trigger in the WHEN line is not a bare window.
+    expect(stratagemWhenWindow("Your opponent's Shooting phase, just after an enemy unit has selected its targets.")).toBeNull();
+  });
+
+  it("makes a Stratagem's \"your unit\" its target unless the text selects a unit, and leaves other abilities alone", () => {
+    const span = { status: "EXISTING", role: "EFFECT", family_id: "make-move", family_version: 2, parameters: { subject: "selected-unit", move_type: "fall-back" } };
+    const context = { sourceType: "stratagem", fragment: "EFFECT", exactText: "Your unit can make a Fall Back move", abilitySelects: false };
+    expect(rewriteStratagemSpan(span, context).span.parameters).toEqual({ subject: "this-unit", move_type: "fall-back" });
+    expect(rewriteStratagemSpan(span, { ...context, abilitySelects: true }).rewrites).toEqual([]);
+    expect(rewriteStratagemSpan(span, { ...context, sourceType: "unit" }).span).toBe(span);
+  });
+
+  it("accepts a keyword phrase that splits into keywords units carry, and refuses one that does not", () => {
+    const index = new Map([["ADEPTUS ASTARTES", "Adeptus Astartes"], ["INFANTRY", "Infantry"]]);
+    expect(() => assertKnownKeywords("stratagem-target", { keywords: ["ADEPTUS ASTARTES INFANTRY"], excluded_keywords: [] }, index)).not.toThrow();
+    expect(() => assertKnownKeywords("stratagem-target", { keywords: ["ADEPTUS ASTARTES BIKERS"], excluded_keywords: [] }, index)).toThrow(/BIKERS/u);
   });
 });

@@ -13,6 +13,7 @@ import { selectObjectiveInline } from "../src/translate/effect-bind.js";
  * resource-action-menu's actions read their trigger from ordinary `event` leaves (version 9's
  * general owner/move_types/to/action_kind filters) and their eligibility from ordinary
  * unit-keyword/select-unit leaves in the action's own group — not a closed vocabulary of its own.
+ * The aura-emitter compiler (an aura opened inside a stance option, or with an optional use) is here too.
  */
 
 const dataRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../../data/enrichment");
@@ -42,6 +43,9 @@ function rendered(base: Record<string, unknown>, leaves: CompileLeaf[]): string 
   expect(check.errors).toEqual([]);
   return check.rendered_text!;
 }
+
+type Node = Record<string, unknown>;
+const compiledEffect = (leaves: CompileLeaf[]): Node => compiled(leaves).mechanics.effect as Node;
 
 describe("Semantic authoring risk-reward compiler", () => {
   const base = () => authored("adeptus-mechanicus", "control-edict-adeptus-mechanicus");
@@ -400,3 +404,83 @@ describe("Semantic authoring select-objective compiler", () => {
     expect(text).not.toMatch(/at least one objective marker/iu);
   });
 });
+
+
+describe("Semantic authoring aura-emitter compiler", () => {
+  it("keeps consumable option auras disjoint for Titanic's conditional radius", () => {
+    const effect = compiledEffect([
+      leaf("EFFECT", "stance-select-open", { scope: "army", mode: "consumable" }, "A", 1),
+      leaf("EVENT", "named-option", { label: "Rite Alpha" }, "B", 3),
+      leaf("CONDITION", "aura-emitter", { side: "friendly", keywords: ["WORLD EATERS"], any_keywords: ["MONSTER", "TITANIC"] }, "B", 1),
+      leaf("CONDITION", "unit-filter", { side: "friendly", any_keywords: ["JAKHALS", "GOREMONGERS"] }, "B", 16),
+      leaf("CONDITION", "aura-range", { inches: 6, conditional_range: { inches: 9, keywords: ["TITANIC"] } }, "B", 4),
+      leaf("CONDITION", "unit-keyword", { keywords: ["TITANIC"], subject: "this-model" }, "B", 1),
+      leaf("EFFECT", "fights-first", { subject: "this-unit" }, "B", 1),
+      leaf("EVENT", "named-option", { label: "Rite Beta" }, "C", 3),
+      leaf("CONDITION", "aura-emitter", { side: "friendly", keywords: ["WORLD EATERS"], any_keywords: ["MONSTER", "TITANIC"] }, "C", 1),
+      leaf("CONDITION", "unit-filter", { side: "friendly", any_keywords: ["JAKHALS", "GOREMONGERS"] }, "C", 16),
+      leaf("CONDITION", "aura-range", { inches: 6, conditional_range: { inches: 9, keywords: ["TITANIC"] } }, "C", 4),
+      leaf("CONDITION", "unit-keyword", { keywords: ["TITANIC"], subject: "this-model" }, "C", 1),
+      leaf("EFFECT", "fights-first", { subject: "this-unit" }, "C", 1),
+    ]);
+    expect(effect.type).toBe("stance-select");
+    const options = effect.options as Node[];
+    expect(options).toHaveLength(2);
+    for (const option of options) {
+      const optionEffect = option.effect as Node;
+      expect(optionEffect.type).toBe("sequence");
+      const steps = optionEffect.steps as Node[];
+      expect(steps.map((step) => step.type)).toEqual(["aura", "aura"]);
+      expect((steps[0]!.modifier as Node).range).toEqual({ inches: 6 });
+      expect((steps[1]!.modifier as Node).range).toEqual({ inches: 9 });
+      expect((steps[0]!.modifier as Node).emitter_filter).toMatchObject({
+        owner: "friendly", all_of: ["WORLD EATERS"], any_of: ["MONSTER", "TITANIC"], none_of: ["TITANIC"],
+      });
+      expect((steps[1]!.modifier as Node).emitter_filter).toMatchObject({
+        owner: "friendly", all_of: ["WORLD EATERS", "TITANIC"], any_of: ["MONSTER", "TITANIC"],
+      });
+    }
+  });
+
+  // "within 6\" of this unit" is measured from any model of the unit; before, the wrap lost it and
+  // the aura read as measured from this model.
+  it.each([
+    ["this-unit", "this-unit"],
+    ["this-model", undefined],
+  ])("keeps an aura measured from %s", (of, expected) => {
+    const effect = compiledEffect([
+      leaf("CONDITION", "unit-filter", { side: "friendly", any_keywords: ["JAKHALS", "GOREMONGERS"] }, "A", 16),
+      leaf("CONDITION", "aura-range", { inches: 6, of }, "A", 3),
+      leaf("EFFECT", "fights-first", { subject: "this-unit" }, "A", 1),
+    ]);
+    expect(effect.type).toBe("aura");
+    expect((effect.modifier as Node).of).toBe(expected);
+  });
+
+  // "you can use this ability" on a limited or triggered ability is the ability's use, and the aura is
+  // what that use sets up; a bare "you can re-roll" inside an aura is a permission, not a use.
+  describe("behavior of an aura with an optional use", () => {
+    const aura = (fragment: string) => [
+      leaf("CONDITION", "unit-filter", { side: "friendly", any_keywords: ["JAKHALS", "GOREMONGERS"] }, fragment, 16),
+      leaf("CONDITION", "aura-range", { inches: 6, of: "this-unit" }, fragment, 3),
+      leaf("RESTRICTION", "optional-use", { who: "you" }, fragment, 2),
+      leaf("EFFECT", "fights-first", { subject: "this-unit" }, fragment, 1),
+    ];
+    function behavior(leaves: CompileLeaf[]): unknown {
+      const result = compileLeaves(leaves);
+      if (!result.ok) throw new Error(result.errors.join("; "));
+      return result.mechanics.behavior;
+    }
+
+    it("is activated when a usage limit bounds the use", () => {
+      expect(behavior([leaf("RESTRICTION", "usage-limit", { frequency: "once-per-battle", per: "army" }, "A", 5), ...aura("A")])).toBe("activated");
+    });
+    it("is reactive when a trigger offers the use", () => {
+      expect(behavior([leaf("EVENT", "event", { kind: "phase-start", phase: "command", turn: "either" }, "A", 33), ...aura("A")])).toBe("reactive");
+    });
+    it("stays an aura when the optional use is only a permission inside it", () => {
+      expect(behavior(aura("A"))).toBe("aura");
+    });
+  });
+});
+
