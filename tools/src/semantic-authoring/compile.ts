@@ -34,6 +34,7 @@ import { withDesignationExpiry } from "./compile-designation-expiry.js";
 import { activationWindowCondition, allOf, ATTACK_EVENTS, attackTypeCondition, bindDesignationSubjects, condition, duration, foldHitFilters, negate, targetRestrictions } from "./compile-conditions.js";
 import { bindBareFilterHits, bindBeforeFormHits, foldDestroyFilters, foldLeadingHitFilters, refuseBeforeFormAnaphors } from "./compile-weapon-qualified.js";
 import { refuseUnmovedEventSubject } from "./compile-moved-subject.js";
+import { refuseSuchFilters } from "./compile-such-filter.js";
 import { trigger, triggerLeaves, withDestroyedObject } from "./compile-triggers.js";
 import { bandRunClauses, bulletBreaks, commaItems, ordered, placements, plainLineBreaks, rawSentences, shapeSignature } from "./compile-placement.js";
 import { otherwiseElse, refuseOtherwiseGates } from "./compile-otherwise.js";
@@ -56,6 +57,7 @@ import { foldWarlordTests, gatesTriggerOnWarlord } from "./compile-warlord-test.
 import { foldEngagementExclusive } from "./compile-engagement-exclusive.js";
 import { applyHolderAllowance, foldHolderAbilities } from "./compile-holder-abilities.js";
 import { destroyedFilterObject, wrapModelAura, groupMembership } from "./compile-model-level.js";
+import { auraPart, namesUnboundRecipient } from "./compile-aura-parts.js";
 import { bindTargetedTarget, namesSelection, onAttackedTarget } from "./compile-targeting-history.js";
 import { dropRedundantMenuOpeners, foldWeaponKeywords, refuseBlastRating } from "./compile-weapon-keywords.js";
 import { foldWeaponScopes, hoistWeaponRecipients } from "./compile-weapon-scopes.js";
@@ -370,7 +372,7 @@ function compileRecord(given: readonly CompileLeaf[], sourceText?: string, optio
   }
   // A before-form hit names its unit by the unit-filter after it, so its later "that unit" binds to that unit (compile-weapon-qualified.ts).
   // Optional-spend pairing is checked over the whole record: a spend in one sentence can pair with a read in another.
-  try { leaves = bindBeforeFormHits(leaves, sourceText); leaves = bindBareFilterHits(leaves, sourceText); checkOptionalCosts(leaves, sourceText); refuseBeforeFormAnaphors(leaves); refuseUnmovedEventSubject(leaves); } catch (error) {
+  try { leaves = bindBeforeFormHits(leaves, sourceText); leaves = bindBareFilterHits(leaves, sourceText); checkOptionalCosts(leaves, sourceText); refuseBeforeFormAnaphors(leaves); refuseUnmovedEventSubject(leaves); refuseSuchFilters(leaves, sourceText); } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature: shapeSignature(ordered(leaves), sourceText), errors: [error.message] };
   }
@@ -1384,6 +1386,8 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     steps = merged;
   }
   let body: Node | null = steps.length === 1 ? steps[0]! : { type: "sequence", steps };
+  // The first part before any wrap: a part list below keeps a wrapped first part whole (an aura's, a selection's).
+  const unwrapped = body;
   const scopeDuration = split ? "permanent" : (durations[0] ?? "permanent");
   // "If an enemy unit within 8\" of this unit is below Starting Strength": a gate on each unit an
   // aura or a for-each reaches holds per recipient, inside the wrap, not once around it.
@@ -1454,7 +1458,9 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     if (body && afterLoop.length) body = { type: "sequence", steps: [body, ...afterLoop.map((item) => gated(item.gate, item.node))] };
   }
   if (!body) return { ok: false, signature, errors };
-  if (auraLeaf) { const aura: CompileLeaf = auraLeaf; body = attempt(() => aura.parameters.model_recipient !== undefined ? wrapModelAura(aura, body!, triggers) : wrapAura(aura, body!)); }
+  // With later parts, the aura wraps the first part only when that part names its recipient (compile-aura-parts.ts).
+  const auraFirst = auraLeaf !== null && (partStarts.length === 0 || namesUnboundRecipient(unwrapped));
+  if (auraLeaf && auraFirst) { const aura: CompileLeaf = auraLeaf; body = attempt(() => aura.parameters.model_recipient !== undefined ? wrapModelAura(aura, body!, triggers) : wrapAura(aura, body!)); }
   if (leaderLeaf) { const leader = leaderLeaf; body = attempt(() => wrapLeaderTarget(leader, body!)); }
   if (!body) return { ok: false, signature, errors };
   // A refusal here returns at once: the errors list was already checked above, so a later attempt() error would be dropped.
@@ -1549,7 +1555,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   if (windowHead) { windowHead.trigger = entryTrigger; entryTrigger = null; }
   if (partStarts.length) {
     // The first part fires on the ability's leading moment, if it has one; each later part on its own.
-    const first = steps;
+    const first = auraFirst ? [body!] : steps;
     const partSteps: Node[] = entryTrigger ? [{ type: "ability-part", trigger: entryTrigger, effect: body }] : first;
     // "The first time the bearer's unit destroys an enemy unit": a usage limit right before a later
     // part's moment, after an earlier effect, limits only that part.
@@ -1559,10 +1565,21 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     const under = entryTrigger ? new Set([...momentsUnderUse(list, triggerIndexes, partStarts, firstEffectIndex, sourceText, durations.length), ...afterDestruction]) : new Set<number>();
     under.delete(usagePart);
     const nestedSteps: Node[] = [];
-    partStarts.forEach((part, position) => {
+    // "In addition, … if such an enemy unit is …, it must …": a later part about the aura's recipient holds for each unit in the aura.
+    const rawEffects: Node[] = partStarts.map((_, position) => {
       const own = pieces[position + 1]!;
+      return own.length === 1 ? own[0]! : { type: "sequence", steps: own };
+    });
+    // "each time a friendly X unit within 9\" of the bearer fails a test, …": an aura no part's effect names the recipient of
+    // describes a moment's unit, which a part's trigger cannot hold here, so its range would be dropped.
+    if (auraLeaf && !auraFirst && !rawEffects.some(namesUnboundRecipient)) {
+      return { ok: false, signature, errors: [...errors, "An aura in an ability with several moments reaches no effect's recipient; its range would be dropped."] };
+    }
+    const partEffects = partStarts.map((part, position) => attempt(() => auraPart(auraLeaf, rawEffects[position]!, part.moments.map((index) => moments[index]!))));
+    if (partEffects.some((effect) => effect === null)) return { ok: false, signature, errors };
+    partStarts.forEach((part, position) => {
       const node: Node = {
-        type: "ability-part", trigger: asTrigger(part.moments.map((index) => moments[index]!)), effect: own.length === 1 ? own[0]! : { type: "sequence", steps: own },
+        type: "ability-part", trigger: asTrigger(part.moments.map((index) => moments[index]!)), effect: partEffects[position]!,
         ...(position === usagePart ? { usage: usages[0] } : {}),
         ...(connective.optionalParts.has(position + 1) ? { optional: true } : {}),
         ...(partPeriods[position] ? { duration: partPeriods[position] } : {}),
