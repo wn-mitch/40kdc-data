@@ -1999,6 +1999,7 @@ function genEffectTranslation(): void {
     if (a.raw.applies_to != null) entry.applies_to = a.raw.applies_to;
     if (a.raw.usage != null) entry.usage = a.raw.usage;
     if (a.raw.trigger != null) entry.trigger = a.raw.trigger;
+    if (a.raw.optional === true) entry.optional = true;
     entry.expected = {
       text: describeAbility({
         effect: a.raw.effect as Effect,
@@ -2006,6 +2007,7 @@ function genEffectTranslation(): void {
         usage: a.raw.usage as AbilityUsage | undefined,
         trigger: a.raw.trigger as AbilityTrigger | undefined,
         applies_to: a.raw.applies_to,
+        optional: a.raw.optional,
       }),
     };
     cases.push(entry);
@@ -3480,6 +3482,7 @@ function genEffectTranslation(): void {
         ...(raw.trigger ? { trigger: raw.trigger } : {}),
         ...(raw.usage ? { usage: raw.usage } : {}),
         ...(raw.applies_to != null ? { applies_to: raw.applies_to } : {}),
+        ...(raw.optional === true ? { optional: true } : {}),
         expected: { text: describeAbility(raw as Parameters<typeof describeAbility>[0]) },
       });
     }

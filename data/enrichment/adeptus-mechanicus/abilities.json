@@ -457,7 +457,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "adeptus-mechanicus"
+    "faction_id": "adeptus-mechanicus",
+    "optional": true
   },
   {
     "ability_id": "galvanic-field-adeptus-mechanicus",
@@ -2736,7 +2737,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "adeptus-mechanicus"
+    "faction_id": "adeptus-mechanicus",
+    "optional": true
   },
   {
     "ability_id": "line-breakers-adeptus-mechanicus",
@@ -6891,7 +6893,8 @@
       "frequency": "once-per-phase",
       "per": "model"
     },
-    "source_digest": "a42e9385cc434beb1e87bc3418bbb04707e723321c6728994aa937175dc8fbb8"
+    "source_digest": "a42e9385cc434beb1e87bc3418bbb04707e723321c6728994aa937175dc8fbb8",
+    "optional": true
   },
   {
     "ability_id": "auto-divinatory-targeting-cohort-cybernetica-adeptus-mechanicus",

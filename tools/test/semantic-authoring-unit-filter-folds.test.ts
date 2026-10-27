@@ -357,7 +357,7 @@ describe("Semantic authoring select-unit side and exclusion fold", () => {
     // The select's scope equals the exclusion's side; the selection keeps both.
     const text = "Command phase. Select one enemy unit (excluding Beta units). That unit must take a test.";
     const result = selectionOf(text, SELECT_WINDOW, ["Select one", "select-unit", { scope: "enemy", distance: "any", visible: false }],
-      ["(excluding Beta units)", "unit-filter", { side: "enemy", excluded_keywords: ["BETA"] }], ["That unit must take a test", ...SELECT_TEST.slice(1)]);
+      ["(excluding Beta units)", "unit-filter", { side: "enemy", excluded_keywords: ["BETA"] }], ["That unit must take a test", SELECT_TEST[1], SELECT_TEST[2]]);
     expect(result.ok).toBe(true);
     const selector = selectorOf(result);
     expect(selector).toMatchObject({ filter: { owner: "enemy", none_of: ["BETA"] }, count: { min: 1, max: 1 } });

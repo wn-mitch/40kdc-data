@@ -11,7 +11,7 @@ import { describeCondition, describeEffect, type Effect } from "../src/translate
  * modifier under a weapon-property scope. Fabricated wording only.
  */
 
-type Item = [string, string, Record<string, unknown>];
+type Item = readonly [string, string, Record<string, unknown>];
 
 /** Leaves on their own wording in `text`, in order (fabricated wording, not rules text). */
 function placed(text: string, ...items: Item[]): CompileLeaf[] {

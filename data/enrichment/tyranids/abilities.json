@@ -8949,7 +8949,8 @@
       "frequency": "once-per-turn",
       "per": "model"
     },
-    "source_digest": "aa0da386a8ef913bfd1ae423d778194f8b40870b77bdeecec006393fad6f2f83"
+    "source_digest": "aa0da386a8ef913bfd1ae423d778194f8b40870b77bdeecec006393fad6f2f83",
+    "optional": true
   },
   {
     "ability_id": "piercing-talons-unending-swarm-tyranids",

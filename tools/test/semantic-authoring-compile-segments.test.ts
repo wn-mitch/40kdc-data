@@ -5,6 +5,10 @@ import { sentenceSegments } from "../src/semantic-authoring/compile-segments.js"
 import { currentFamilyVersion, familyRole } from "../src/semantic-authoring/contracts.js";
 import { isOutsideDamagePath } from "../src/semantic-authoring/pipeline-8b-gates.js";
 import { effectToBuffs } from "../src/cruncher/from-dsl.js";
+import type { EngineContext } from "../src/cruncher/index.js";
+
+/** No phase or battle state is known; the gate classifies effects without one. */
+const NO_CONTEXT = {} as EngineContext;
 
 /** Leaves on their own wording in `text`, in order (fabricated wording, not rules text). */
 function placed(text: string, ...items: Array<[string, string, Record<string, unknown>]>): CompileLeaf[] {
@@ -194,7 +198,7 @@ describe("Semantic authoring moments in a row within a later part", () => {
 
 describe("Semantic authoring crunch gate: effects off the damage path", () => {
   const unsupported = (effect: Record<string, unknown>) =>
-    effectToBuffs(effect, { kind: "ability", abilityId: "fixture", abilityKind: "unit" }, {}).unsupported;
+    effectToBuffs(effect, { kind: "ability", abilityId: "fixture", abilityKind: "unit" }, NO_CONTEXT).unsupported;
 
   it("does not count a Stratagem cost or a use-count lift as an unrecognised shape", () => {
     const cost = unsupported({ type: "cost-modifier", target: "this-unit", modifier: { of: "stratagem", operation: "decrease", amount: 1 } });
@@ -219,7 +223,7 @@ describe("Semantic authoring crunch gate: effects off the damage path", () => {
     const range = unsupported({ type: "ability-modifier", target: "this-unit", modifier: { ability: "some-aura", aspect: "range", operation: "add", value: 3 } });
     expect(range.length).toBeGreaterThan(0);
     expect(range.every(isOutsideDamagePath)).toBe(true);
-    const selections = effectToBuffs({ type: "stance-selection-capacity", target: "this-unit", modifier: { ability_id: "some-menu", allocation: "choose-one-option", additional_selections: 1 } }, { kind: "ability", abilityId: "fixture", abilityKind: "unit" }, {});
+    const selections = effectToBuffs({ type: "stance-selection-capacity", target: "this-unit", modifier: { ability_id: "some-menu", allocation: "choose-one-option", additional_selections: 1 } }, { kind: "ability", abilityId: "fixture", abilityKind: "unit" }, NO_CONTEXT);
     expect(selections.unsupported).toEqual([]);
     expect(selections.activatable.map((lever) => lever.capRaise)).toEqual([{ ability: "some-menu", by: 1, allocation: "choose-one-option" }]);
   });

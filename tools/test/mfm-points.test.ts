@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { MfmDump } from "../src/mfm/loader.js";
 import { deriveDatasheet, routeChapterTwin } from "../src/mfm/points.js";
+import { partialDump } from "./mfm-fixture.js";
 
 /**
  * Points derivation: composition.points × Σ(miniature max) for the tier size,
@@ -17,7 +18,7 @@ function mk(parts: {
 }): MfmDump {
   const lo = (m: number | [number, number]) => (Array.isArray(m) ? m[0] : m);
   const hi = (m: number | [number, number]) => (Array.isArray(m) ? m[1] : m);
-  return new MfmDump({
+  return partialDump({
     data: {
       unit_composition: parts.comps.map((c, i) => ({
         id: c.id,

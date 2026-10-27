@@ -49,7 +49,8 @@ describe("activation diagnostics", () => {
     const trigger = { event: "battle-started", condition: { type: "attachment", parameters: { subject: "this-model", role: "leading" } } };
     const effect = { type: "stat-modifier", target: "this-unit", modifier: { stat: "S", operation: "add", value: 1 } };
     const part = { type: "ability-part", name: "Example activation", trigger, effect };
-    const result = effectToBuffs({ type: "choice", options: [momentGate(trigger, effect, part)] }, own, {});
+    // No phase or battle state is known: the activation gate must report itself unevaluable.
+    const result = effectToBuffs({ type: "choice", options: [momentGate(trigger, effect, part)] }, own, {} as EngineContext);
     expect(result.unsupported).toEqual([{ reason: "activation condition cannot be evaluated against current context", effectFragment: part }]);
     expect(JSON.stringify(result.unsupported)).not.toContain("timing-is");
   });
@@ -167,11 +168,12 @@ describe("unit selections as levers", () => {
         effect: { type: "stat-modifier", target: "recipient", modifier: { stat: "S", operation: "add", value: 1, weapons: { type: "melee" } } } },
     }] as never;
     const ability = new Dataset(raw).abilities.get("snapshot-example")!;
-    for (const context of [
-      { ...fight, attackerAttached: true, attackerAttachmentRole: "bodyguard" as const, attachmentRoles: { source: "leader" as const } },
+    const contexts: EngineContext[] = [
+      { ...fight, attackerAttached: true, attackerAttachmentRole: "bodyguard", attachmentRoles: { source: "leader" } },
       { ...fight, attackerAttached: false, attachmentRoles: {} },
-      { ...fight, attackerAttached: true, attackerAttachmentRole: "leader" as const, attachmentRoles: { source: "bodyguard" as const } },
-    ]) {
+      { ...fight, attackerAttached: true, attackerAttachmentRole: "leader", attachmentRoles: { source: "bodyguard" } },
+    ];
+    for (const context of contexts) {
       const result = ability.describeBuffs({ ...own, abilityId: "snapshot-example" }, context);
       expect(result.applied).toEqual([]);
       expect(result.activatable).toEqual([]);

@@ -1281,7 +1281,8 @@
     "ability_type": "unit",
     "behavior": "activated",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "aeldari"
+    "faction_id": "aeldari",
+    "optional": true
   },
   {
     "ability_id": "path-of-command-aeldari",
@@ -1607,7 +1608,8 @@
     "ability_type": "unit",
     "behavior": "activated",
     "community_notes": "auto-generated, partial",
-    "faction_id": "aeldari"
+    "faction_id": "aeldari",
+    "optional": true
   },
   {
     "ability_id": "tactical-acumen-aeldari",
@@ -1976,7 +1978,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "aeldari"
+    "faction_id": "aeldari",
+    "optional": true
   },
   {
     "ability_id": "runes-of-battle-aeldari",
@@ -2899,7 +2902,8 @@
     "usage": {
       "frequency": "once-per-phase",
       "per": "unit"
-    }
+    },
+    "optional": true
   },
   {
     "ability_id": "misfortune-aeldari",
@@ -5063,7 +5067,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "aeldari"
+    "faction_id": "aeldari",
+    "optional": true
   },
   {
     "ability_id": "sadistic-raiders-aeldari",
@@ -6306,7 +6311,8 @@
     "ability_type": "unit",
     "behavior": "activated",
     "community_notes": "auto-generated, partial",
-    "faction_id": "aeldari"
+    "faction_id": "aeldari",
+    "optional": true
   },
   {
     "ability_id": "path-of-the-outcast-aeldari",
@@ -7632,7 +7638,8 @@
     "usage": {
       "frequency": "once-per-turn",
       "per": "unit"
-    }
+    },
+    "optional": true
   },
   {
     "ability_id": "rapid-embarkation-aeldari",
@@ -12654,7 +12661,8 @@
       "frequency": "once-per-battle-round",
       "per": "model"
     },
-    "source_digest": "07d275b998cc78058494ac63113eec52d32857474ef504362cfb17565c412b49"
+    "source_digest": "07d275b998cc78058494ac63113eec52d32857474ef504362cfb17565c412b49",
+    "optional": true
   },
   {
     "ability_id": "graceful-warriors-aeldari",
@@ -14650,7 +14658,8 @@
       "frequency": "once-per-battle-round",
       "per": "model"
     },
-    "source_digest": "075793f100f63399790ac5ceadf69613b33f29a04c162bc44a87724367604d1c"
+    "source_digest": "075793f100f63399790ac5ceadf69613b33f29a04c162bc44a87724367604d1c",
+    "optional": true
   },
   {
     "ability_id": "psychic-communion-warlock-aeldari",

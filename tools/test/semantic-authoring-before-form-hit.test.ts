@@ -7,6 +7,7 @@ import { wrapForEachUnit } from "../src/semantic-authoring/compile-wrappers.js";
 import { currentFamilyVersion, familyRole } from "../src/semantic-authoring/contracts.js";
 import { createValidator } from "../src/schema-loader.js";
 import { describeAbility } from "../src/translate/index.js";
+import { expectRefused } from "./semantic-authoring-connective-fixture.js";
 
 /** A registered designation, so a designate-target compiles (compile-wrappers.ts designationIdFor). */
 const FIXTURE_RULE_NAME = "A Trap Well Laid";
@@ -91,7 +92,7 @@ describe("a selection's hit eligibility (S1, S2)", () => {
       ["hit by one or more of those attacks", "hit-by-attacks", { subject: "selected-unit" }],
       ["made with its Doomweaver", "attack-filter", { weapon_name: "Doomweaver" }],
       ["that enemy unit is pinned", "apply-mark", { subject: "antecedent", tag: "pinned" }]), text, { name: FIXTURE_RULE_NAME });
-    expect(result.ok).toBe(false);
+    expectRefused(result);
     // The bound-pair check in compile.ts refuses any eligibility on a pair before the pair branch is reached.
     expect(result.errors.join(" ")).toMatch(/not bound with it yet/u);
   });
@@ -175,21 +176,21 @@ describe("a before-form hit binds the unit it hit (B)", () => {
   it("refuses a before-form hit with no unit-filter after it", () => {
     const without = leaves().filter((leaf) => leaf.family_id !== "unit-filter");
     const result = compileLeaves(without, text, { name: FIXTURE_RULE_NAME });
-    expect(result.ok).toBe(false);
+    expectRefused(result);
     expect(result.errors.join(" ")).toMatch(/before-form/u);
   });
 
   it("refuses a before-form hit with window phase", () => {
     const phased = leaves().map((leaf) => leaf.family_id === "hit-by-attacks" ? { ...leaf, parameters: { ...leaf.parameters, window: "phase" } } : leaf);
     const result = compileLeaves(phased, text, { name: FIXTURE_RULE_NAME });
-    expect(result.ok).toBe(false);
+    expectRefused(result);
     expect(result.errors.join(" ")).toMatch(/before-form/u);
   });
 
   it("refuses a that-unit anaphor in another part, which the binder cannot reach", () => {
     const split = leaves().map((leaf) => leaf.family_id === "characteristic-modifier" ? { ...leaf, fragment: "OTHER" } : leaf);
     const result = compileLeaves(split, text, { name: FIXTURE_RULE_NAME });
-    expect(result.ok).toBe(false);
+    expectRefused(result);
     expect(result.errors.join(" ")).toMatch(/characteristic-modifier at byte \d+ is in another part/u);
   });
 
@@ -276,7 +277,7 @@ describe("before-form hit guards and shapes", () => {
       ["that enemy unit is pinned", "apply-mark", { subject: "antecedent", tag: "pinned" }],
       ["enemy INFANTRY unit", "unit-filter", { side: "enemy", keywords: ["INFANTRY"] }],
       ["that unit must take a Battle-shock test", "test", { target: "antecedent", test: "battle-shock" }]), text, { name: FIXTURE_RULE_NAME });
-    expect(result.ok).toBe(false);
+    expectRefused(result);
     expect(result.errors.join(" ")).toMatch(/followed by another unit-filter in its part/u);
   });
 
@@ -317,7 +318,7 @@ describe("a hit eligibility over two unbound selections", () => {
       ["hit by one or more of those attacks", "hit-by-attacks", { subject: "selected-unit" }],
       ["made with its Doomweaver", "attack-filter", { weapon_name: "Doomweaver" }],
       ["that enemy unit is pinned", "apply-mark", { subject: "antecedent", tag: "pinned" }]), text, { name: FIXTURE_RULE_NAME });
-    expect(result.ok).toBe(false);
+    expectRefused(result);
     expect(result.errors.join(" ")).toMatch(/More than one unit is selected/u);
   });
 });

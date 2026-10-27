@@ -1,9 +1,9 @@
-import type { CompileLeaf } from "../src/semantic-authoring/compile.js";
+import type { CompileLeaf, Compiled } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { attachConnectives } from "../src/semantic-authoring/leaf-view.js";
 
 /** One leaf: its wording in the text, family, parameters and (optionally) fragment. */
-export type Item = [string, string, Record<string, unknown>, string?];
+export type Item = readonly [string, string, Record<string, unknown>, string?];
 
 /** Leaves on their own wording in `text`, in order (fabricated wording, not rules text). The fourth item is the fragment. */
 export function placed(text: string, ...items: Item[]): CompileLeaf[] {
@@ -30,4 +30,14 @@ export function annotated(text: string, leaves: CompileLeaf[], connectives: Arra
     if (start < 0) throw new Error(`"${surface}" is not in the text`);
     return { fragment: fragment ?? "RAW_TEXT", start_byte: start, end_byte: start + Buffer.byteLength(surface, "utf8"), surface, relation: relation ?? "condition-of" };
   }));
+}
+
+/** Asserts the compile succeeded (failing with its errors otherwise) and narrows to the compiled record. */
+export function expectCompiled(result: Compiled): asserts result is Extract<Compiled, { ok: true }> {
+  if (!result.ok) throw new Error(`expected a compiled record, got errors: ${result.errors.join("; ")}`);
+}
+
+/** Asserts the compile was refused and narrows to its errors. */
+export function expectRefused(result: Compiled): asserts result is Extract<Compiled, { ok: false }> {
+  if (result.ok) throw new Error("expected the compile to be refused, but it compiled");
 }

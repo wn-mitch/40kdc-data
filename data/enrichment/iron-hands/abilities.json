@@ -644,6 +644,7 @@
       "duration": "until-next-command-phase"
     },
     "behavior": "activated",
-    "source_digest": "a3bc1c4df42f942457446cde04c14651b932fecb3b40c03e75c921a26c40c8b7"
+    "source_digest": "a3bc1c4df42f942457446cde04c14651b932fecb3b40c03e75c921a26c40c8b7",
+    "optional": true
   }
 ]

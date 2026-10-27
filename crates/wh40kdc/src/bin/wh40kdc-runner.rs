@@ -29,7 +29,8 @@ use wh40kdc::scoring::{
 };
 use wh40kdc::share::{decode_share_token, encode_share_token, ShareList};
 use wh40kdc::{
-    describe_ability_parts, describe_scoring_card, normalize_name, Dataset, Phase, SecondaryCard,
+    describe_ability_parts_with_optional, describe_scoring_card, normalize_name, Dataset, Phase,
+    SecondaryCard,
 };
 
 // ---------------------------------------------------------------------------
@@ -1341,13 +1342,15 @@ fn handle_translate_effect(args: &Value) -> Value {
         .get("trigger")
         .filter(|v| !v.is_null())
         .and_then(|v| serde_json::from_value(v.clone()).ok());
+    let optional = args.get("optional") == Some(&Value::Bool(true));
     ok_value(json!({
-        "text": describe_ability_parts(
+        "text": describe_ability_parts_with_optional(
             &effect,
             scope.as_ref(),
             applies_to.as_ref(),
             usage.as_ref(),
             trigger.as_ref(),
+            optional,
         )
     }))
 }

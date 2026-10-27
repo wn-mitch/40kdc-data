@@ -7423,6 +7423,10 @@ export interface AbilityDSLEntry {
    * How this ability interacts with the game flow — not a runtime predicate
    */
   behavior?: "passive" | "activated" | "reactive" | "aura";
+  /**
+   * The player chooses whether to use this ability, which has no trigger. Absent when the ability always applies, when a trigger decides when it is used, or for a Stratagem, which is always the player's choice.
+   */
+  optional?: true;
   effect: AbilityEffect1;
   trigger?: AbilityTrigger;
   scope: AbilityScope;

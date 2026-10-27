@@ -215,6 +215,6 @@ describe("Semantic authoring roll-outcome predicate (closes the roll-result cove
   it("renders readable describer English", () => {
     const preview = previewLeaf({ family_id: "roll-outcome", family_version: 1, parameters: { roll: "wound", result: "critical" } });
     expect(preview.problem).toBeNull();
-    expect(preview.text.length).toBeGreaterThan(0);
+    expect(preview.text?.length ?? 0).toBeGreaterThan(0);
   });
 });

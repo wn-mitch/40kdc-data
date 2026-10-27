@@ -8,6 +8,7 @@ import { keywordRef } from "../src/semantic-authoring/compile-fragments.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { foldWeaponKeywords } from "../src/semantic-authoring/compile-weapon-keywords.js";
 import { checkEntry, entryWithMechanics } from "../src/semantic-authoring/entries.js";
+import { expectCompiled } from "./semantic-authoring-connective-fixture.js";
 
 /**
  * Batch 2 (grants & ability control): core-ability-grant, keyword-grant, weapon-grant,
@@ -250,7 +251,7 @@ describe("Semantic authoring weapon-ability grants with recipient leaves between
 
   it("compiles the folded grant to a model-level recipient", () => {
     const result = compileLeaves(placed(text, [...frame("antecedent")], [...recipient], [...owner], [...keyword]), text);
-    expect(result.ok).toBe(true);
+    expectCompiled(result);
     expect(result.mechanics.effect).toMatchObject({ type: "weapon-ability-grant", modifier: { keywords: [{ keyword_id: "ignores-cover" }], weapons: { type: "ranged" } } });
   });
 
@@ -286,7 +287,7 @@ describe("Semantic authoring grant and activation shapes from the wave-10 record
       ["Re-roll Advance rolls made for", "reroll", { roll: "advance", subset: "all", weapon_type: "all", subject: "antecedent" }],
       ["FOO units", "unit-filter", { side: "friendly", keywords: ["FOO"] }],
       ["from your army", "unit-owner", { owner: "friendly" }]), text);
-    expect(result.ok).toBe(true);
+    expectCompiled(result);
     expect(result.mechanics.effect).toEqual({ type: "re-roll", target: { owner: "friendly", all_of: ["FOO"] }, modifier: { roll: "advance", result_scope: "any-result" } });
   });
 
@@ -296,7 +297,7 @@ describe("Semantic authoring grant and activation shapes from the wave-10 record
       ["Choose one Blessing of Khorne", "choice-open", { min_choices: 1, max_choices: 1 }],
       ["That Blessing of Khorne is active for", "ability-activate", { subject: "antecedent", ability: "blessing-of-khorne", chosen: true, additive: true }],
       ["friendly FOO units", "unit-filter", { side: "friendly", keywords: ["FOO"] }]), text);
-    expect(result.ok).toBe(true);
+    expectCompiled(result);
     expect(result.mechanics.effect).toEqual({ type: "ability-activate", target: { owner: "friendly", all_of: ["FOO"] }, modifier: { ability: "blessing-of-khorne", select: { by: "player" } } });
   });
 
@@ -312,7 +313,7 @@ describe("Semantic authoring grant and activation shapes from the wave-10 record
       ["weapons equipped by", "weapon-ability-grant", { subject: "antecedent", weapon_type: "all" }],
       ["FOO units", "unit-filter", { side: "friendly", keywords: ["FOO"] }],
       ["Lethal Hits", "weapon-ability-keyword", { keyword: "Lethal Hits" }]), text);
-    expect(result.ok).toBe(true);
+    expectCompiled(result);
     const options = (result.mechanics.effect as { options: Array<{ target: unknown }> }).options;
     expect(options).toHaveLength(2);
     expect(options.map((option) => option.target)).toEqual([{ owner: "friendly", all_of: ["FOO"] }, { owner: "friendly", all_of: ["FOO"] }]);
@@ -324,7 +325,7 @@ describe("Semantic authoring grant and activation shapes from the wave-10 record
       ["Psychic weapons equipped by", "weapon-ability-grant", { subject: "antecedent", weapon_type: "all", weapon_keyword: "Psychic" }],
       ["FOO models", "unit-filter", { side: "friendly", keywords: ["FOO"], level: "model" }],
       ["Ignores Cover", "weapon-ability-keyword", { keyword: "Ignores Cover" }]), text);
-    expect(result.ok).toBe(true);
+    expectCompiled(result);
     expect(result.mechanics.effect).toEqual({ type: "weapon-ability-grant", target: { owner: "friendly", all_of: ["FOO"], level: "model" }, modifier: { keywords: [{ keyword_id: "ignores-cover" }], weapons: { keyword: { keyword_id: "psychic" } } } });
   });
 });
@@ -342,7 +343,7 @@ describe("Semantic authoring keyword menus under a one-of opener (fabricated wor
   it("folds a one-of opener over an or-joined pair into a choice of two grants (the 9637 shape)", () => {
     const text = "Each time the bearer is selected to shoot, select either the Lethal Hits or Sustained Hits 1 ability. Until those attacks are resolved, ranged weapons equipped by the bearer have the selected ability.";
     const result = compileLeaves(placed(text, [...menu], [...alpha], [...beta], [...until], [...frame]), text);
-    expect(result.ok).toBe(true);
+    expectCompiled(result);
     const grant = (ability: string) => ({ type: "weapon-ability-grant", target: "this-model", modifier: { keywords: [keywordRef(ability)], weapons: { type: "ranged" } } });
     expect(result.mechanics.effect).toEqual({ type: "choice", options: [grant("Lethal Hits"), grant("Sustained Hits 1")], choice_label: "Alpha or Beta ability" });
     expect(result.mechanics.scope).toEqual({ duration: "attack-sequence" });
@@ -358,7 +359,7 @@ describe("Semantic authoring keyword menus under a one-of opener (fabricated wor
       ["Sustained Hits 3", "weapon-ability-keyword", { keyword: "Sustained Hits 3" }],
       ["Until the end of the phase", "duration", { endpoint: "end-of-phase" }],
       ["this model's Bolt of Change has that ability", "weapon-ability-grant", { subject: "this-model", weapon_type: "ranged", weapon_name: "Bolt of Change" }]), text);
-    expect(result.ok).toBe(true);
+    expectCompiled(result);
     const options = (choiceOf(result.mechanics.effect) as { options: Array<{ modifier: { keywords: unknown[] } }> }).options;
     expect(options.map((option) => option.modifier.keywords)).toEqual([[{ keyword_id: "ignores-cover" }], [{ keyword_id: "lethal-hits" }], [{ keyword_id: "sustained-hits", parameters: { value: 3 } }]]);
   });
@@ -372,7 +373,7 @@ describe("Semantic authoring keyword menus under a one-of opener (fabricated wor
       ["melee weapons equipped by models in that unit have that ability", "weapon-ability-grant", { subject: "this-unit", weapon_type: "melee" }],
       ["Lethal Hits", "weapon-ability-keyword", { keyword: "Lethal Hits" }],
       ["Sustained Hits 1", "weapon-ability-keyword", { keyword: "Sustained Hits 1" }]), text);
-    expect(result.ok).toBe(true);
+    expectCompiled(result);
     expect(result.mechanics.effect).toMatchObject({ type: "choice", options: [{ type: "weapon-ability-grant" }, { type: "weapon-ability-grant" }] });
     expect(JSON.stringify(result.mechanics.trigger)).not.toContain("attacks-resolved");
     expect(result.mechanics.scope).toEqual({ duration: "attack-sequence" });
@@ -389,7 +390,7 @@ describe("Semantic authoring keyword menus under a one-of opener (fabricated wor
       ["Sustained Hits 3", "weapon-ability-keyword", { keyword: "Sustained Hits 3" }],
       ["Until the end of the phase", "duration", { endpoint: "end-of-phase" }],
       ["weapons equipped by models in that unit have that selected ability", "weapon-ability-grant", { subject: "this-unit", weapon_type: "all" }]), text);
-    expect(result.ok).toBe(true);
+    expectCompiled(result);
     const options = (choiceOf(result.mechanics.effect) as { options: Array<{ modifier: { keywords: unknown[] } }> }).options;
     expect(options.map((option) => option.modifier.keywords)).toEqual([[{ keyword_id: "ignores-cover" }], [{ keyword_id: "lethal-hits" }], [{ keyword_id: "sustained-hits", parameters: { value: 3 } }]]);
   });
@@ -438,7 +439,7 @@ describe("Semantic authoring keyword menus under a one-of opener (fabricated wor
       ["Sustained Hits 3", "weapon-ability-keyword", { keyword: "Sustained Hits 3" }],
       ["Until the end of the phase", "duration", { endpoint: "end-of-phase" }],
       ["this model's Bolt of Change has that ability", "weapon-ability-grant", { subject: "this-model", weapon_type: "ranged", weapon_name: "Bolt of Change" }]), text);
-    expect(result.ok).toBe(true);
+    expectCompiled(result);
     expect((choiceOf(result.mechanics.effect) as { options: unknown[] }).options).toHaveLength(3);
   });
 
@@ -456,7 +457,7 @@ describe("Semantic authoring keyword menus under a one-of opener (fabricated wor
       [...alpha], [...beta],
       ["Until the end of the phase", "duration", { endpoint: "end-of-phase" }],
       ["ranged weapons equipped by models in your unit have the picked ability", "weapon-ability-grant", { subject: "this-unit", weapon_type: "ranged" }]), text);
-    expect(result.ok).toBe(true);
+    expectCompiled(result);
     const grant = (ability: string) => ({ type: "weapon-ability-grant", target: "this-unit", modifier: { keywords: [keywordRef(ability)], weapons: { type: "ranged" } } });
     expect(result.mechanics.effect).toMatchObject({ type: "conditional" });
     expect(choiceOf(result.mechanics.effect)).toEqual({ type: "choice", options: [grant("Lethal Hits"), grant("Sustained Hits 1")], choice_label: "Lethal Hits or Sustained Hits 1 ability" });

@@ -394,7 +394,10 @@ describe("Battlemaster read-only projector", () => {
       "synthetic.tts",
       canonicalTemplates(),
     );
-    const existingLayouts: TerrainLayout[] = [
+    // Data-file records carry `source` and other fields the resolver types omit;
+    // the merge reads `source`.
+    type Sourced<T> = T & { source: string; [field: string]: unknown };
+    const existingLayouts: Sourced<TerrainLayout>[] = [
       {
         ...projection.terrain_layouts[0]!,
         name: "Superseded layout",
@@ -409,7 +412,7 @@ describe("Battlemaster read-only projector", () => {
         game_version: { edition: "11th", dataslate: "pre-launch-provisional" },
       },
     ];
-    const existingTemplates: TerrainTemplate[] = [
+    const existingTemplates: Sourced<TerrainTemplate>[] = [
       {
         id: "bm-old-composite",
         name: "Stale Battlemaster template",

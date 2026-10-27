@@ -280,7 +280,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "tau-empire"
+    "faction_id": "tau-empire",
+    "optional": true
   },
   {
     "ability_id": "gun-drone-tau-empire",
@@ -1768,7 +1769,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "tau-empire"
+    "faction_id": "tau-empire",
+    "optional": true
   },
   {
     "ability_id": "titan-killer-tau-empire",
@@ -2324,7 +2326,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "tau-empire"
+    "faction_id": "tau-empire",
+    "optional": true
   },
   {
     "ability_id": "missile-drone-tau-empire",
@@ -4034,7 +4037,8 @@
     "ability_type": "unit",
     "behavior": "activated",
     "community_notes": "auto-generated, partial",
-    "faction_id": "tau-empire"
+    "faction_id": "tau-empire",
+    "optional": true
   },
   {
     "ability_id": "precise-targeting-tau-empire",
@@ -5678,7 +5682,8 @@
     "scope": {
       "duration": "permanent"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "optional": true
   },
   {
     "ability_id": "integrated-command-structure-tau-empire",
@@ -9576,7 +9581,8 @@
         "T’AU EMPIRE"
       ]
     },
-    "community_notes": "In your Command phase, one Kroot or Vespid Stingwings unit within 12\" gets improved Leadership (encoded as -1, lower is better) and +1 Objective Control until the start of your next Command phase. Kroot models cannot take this."
+    "community_notes": "In your Command phase, one Kroot or Vespid Stingwings unit within 12\" gets improved Leadership (encoded as -1, lower is better) and +1 Objective Control until the start of your next Command phase. Kroot models cannot take this.",
+    "optional": true
   },
   {
     "ability_id": "earth-caste-modifications-sudden-dawn-cadre-tau-empire",
@@ -10368,6 +10374,7 @@
       "duration": "permanent"
     },
     "behavior": "activated",
-    "source_digest": "61e10e3e8ec8f70cfb2e0fb35a9fc6a3406397993798f0bbd286b027a8e2df8a"
+    "source_digest": "61e10e3e8ec8f70cfb2e0fb35a9fc6a3406397993798f0bbd286b027a8e2df8a",
+    "optional": true
   }
 ]

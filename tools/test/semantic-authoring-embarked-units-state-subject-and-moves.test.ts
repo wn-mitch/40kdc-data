@@ -1,10 +1,17 @@
 import { describe, expect, it } from "vitest";
 
-import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
+import { compileLeaves, type CompileLeaf, type CorePatch } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { familyExtension } from "../src/semantic-authoring/families/index.js";
 import { claimedByEmbarkedState } from "../src/semantic-authoring/compile-embarked-exclusion.js";
 import { mergeStackedFilters } from "../src/semantic-authoring/compile-unit-filters.js";
+
+/** The one target restriction a compiled core patch carries (a list is a test failure). */
+function oneRestriction(core: CorePatch | undefined): Record<string, unknown> | undefined {
+  const restrictions = core?.target_restrictions;
+  if (Array.isArray(restrictions)) throw new Error("expected a single target restriction, got a list");
+  return restrictions;
+}
 
 /** The family versions the extensions under test create. */
 const EMBARKED_UNITS_STATE_SUBJECT_AND_MOVES_VERSIONS: ReadonlySet<string> = new Set(["unit-filter@14", "make-move@6", "eligibility-permission@7", "unit-state@16"]);
@@ -263,7 +270,7 @@ describe("a Transport target and the unit embarked within it", () => {
   it("still merges two stacked filters that no embarked state follows", () => {
     const result = compileLeaves(placed(TEXT, ...items([])), TEXT);
     if (!result.ok) throw new Error(result.errors.join("; "));
-    expect(result.core?.target_restrictions?.required_keywords).toEqual(["ALPHA", "BATTLELINE", "TRANSPORT"]);
+    expect(oneRestriction(result.core)?.required_keywords).toEqual(["ALPHA", "BATTLELINE", "TRANSPORT"]);
   });
 
   it("keeps the filters apart under both spellings of the state's subject (before and after antecedent binding)", () => {
@@ -286,8 +293,8 @@ describe("a Transport target and the unit embarked within it", () => {
     const text = TEXT.replace(" Add 1", " (excluding Battle-shocked units). Add 1");
     const result = compileLeaves(placed(text, ...items([STATE, ["(excluding Battle-shocked units)", "unit-filter", { side: "friendly", states: ["not-battle-shocked"] }, "TARGET"]])), text);
     if (!result.ok) throw new Error(result.errors.join("; "));
-    expect(result.core?.target_restrictions?.eligibility).toEqual({ type: "matches", parameters: { subject: { owner: "friendly", all_of: ["ALPHA", "BATTLELINE"], not_states: ["battle-shocked"], embarked_in: "this-unit" }, filter: { state: "embarked" } } });
-    expect(result.core?.target_restrictions?.required_keywords).toEqual(["ALPHA", "TRANSPORT"]);
+    expect(oneRestriction(result.core)?.eligibility).toEqual({ type: "matches", parameters: { subject: { owner: "friendly", all_of: ["ALPHA", "BATTLELINE"], not_states: ["battle-shocked"], embarked_in: "this-unit" }, filter: { state: "embarked" } } });
+    expect(oneRestriction(result.core)?.required_keywords).toEqual(["ALPHA", "TRANSPORT"]);
   });
 
   it("refuses a trailing filter that requires anything: it has no shape", () => {

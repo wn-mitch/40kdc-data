@@ -438,7 +438,7 @@ describe("Semantic authoring embark destination: a bound selection pair whose in
   });
 
   it("refuses an embark permission in the pair that names the bearer rather than the outer unit", () => {
-    const bearer = ["This unit can embark within that TRANSPORT", "eligibility-permission", { subject: "this-unit", activity: "embark", allow: true, into: "selection" }, "EFFECT"];
+    const bearer: Item = ["This unit can embark within that TRANSPORT", "eligibility-permission", { subject: "this-unit", activity: "embark", allow: true, into: "selection" }, "EFFECT"];
     const bearerText = text.replace("That ALPHA unit can embark within that TRANSPORT", "This unit can embark within that TRANSPORT");
     expect(refused(bearerText, outer, alpha, inner, transport, ...candidate, bearer)).toMatch(/not bound with it yet/u);
   });
@@ -503,7 +503,7 @@ describe("Semantic authoring embark destination: the bound pair of the enhanceme
 
   it("compiles the outer gate, the inner candidates, and the permission between the two selections, once per model", () => {
     const json = compiled(text, ...items);
-    const parsed = JSON.parse(json) as { usage: unknown; effect: { effect: { selector: { bind_as: string; eligibility: unknown }; effect: { selector: { bind_as: string; eligibility: { operands: unknown[] } }; effect: unknown } } }; usage: unknown };
+    const parsed = JSON.parse(json) as { usage: unknown; effect: { effect: { selector: { bind_as: string; eligibility: unknown }; effect: { selector: { bind_as: string; eligibility: { operands: unknown[] } }; effect: unknown } } } };
     expect(parsed.usage).toEqual({ frequency: "once-per-turn", per: "model" });
     expect(parsed.effect.effect.selector.bind_as).toBe("outer");
     expect(parsed.effect.effect.selector.eligibility).toBeDefined();

@@ -159,6 +159,11 @@ pub mod error {
 ///    "name": {
 ///      "type": "string"
 ///    },
+///    "optional": {
+///      "description": "The player chooses whether to use this ability, which has no trigger. Absent when the ability always applies, when a trigger decides when it is used, or for a Stratagem, which is always the player's choice.",
+///      "type": "boolean",
+///      "const": true
+///    },
 ///    "scope": {
 ///      "$ref": "#/$defs/scope"
 ///    },
@@ -231,6 +236,9 @@ pub struct Ability {
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub interactions: ::std::vec::Vec<AbilityInteractionsItem>,
     pub name: ::std::string::String,
+    ///The player chooses whether to use this ability, which has no trigger. Absent when the ability always applies, when a trigger decides when it is used, or for a Stratagem, which is always the player's choice.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub optional: ::std::option::Option<bool>,
     pub scope: Scope,
     ///SHA-256 of the NORMALISED printed rule this annotation was authored against — one-way, so the rule text itself stays outside this repository. Normalisation (defined once in tools/src/source-digest.ts) casefolds, folds Unicode, keeps the rule-significant operators + - = < > / % and replaces other punctuation with spaces, so reprint noise and quote style leave the digest unchanged while a changed value or an added condition changes it. Optional: absent means the source was never fingerprinted, which `npm run audit:source-digest` reports as untracked rather than current. Records source-content identity, not release history — consumers must not select, order or supersede abilities by it.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]

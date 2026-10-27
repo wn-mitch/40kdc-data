@@ -1363,7 +1363,8 @@
     "ability_type": "unit",
     "behavior": "activated",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "chaos-knights"
+    "faction_id": "chaos-knights",
+    "optional": true
   },
   {
     "ability_id": "dark-fervour-chaos-knights",
@@ -2576,7 +2577,8 @@
     "usage": {
       "frequency": "once-per-battle-round",
       "per": "army"
-    }
+    },
+    "optional": true
   },
   {
     "ability_id": "soul-spoor-auspicator-upgrade-hunting-warpack-chaos-knights",
@@ -3259,7 +3261,8 @@
     "scope": {
       "duration": "permanent"
     },
-    "community_notes": "Chaos Knights model only. Re-roll Advance and Charge rolls for the bearer's unit."
+    "community_notes": "Chaos Knights model only. Re-roll Advance and Charge rolls for the bearer's unit.",
+    "optional": true
   },
   {
     "ability_id": "octagram-of-conjuration-helhunt-lance-chaos-knights",

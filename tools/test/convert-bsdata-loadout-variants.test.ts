@@ -251,7 +251,9 @@ describe("BSData loadout variant projection", () => {
         { id: "gun", external_refs: [{ namespace: "bsdata", id: "gun" }] },
         { id: "heavy-blade" },
       ], "troopers", [], nodes);
-      return { issues, variants: rows[0].loadout_variants };
+      const variants = rows[0].loadout_variants;
+      if (variants !== undefined && !Array.isArray(variants)) throw new Error("loadout_variants is not an array");
+      return { issues, variants };
     };
     expect(project("blade-profile")).toEqual({
       issues: [],

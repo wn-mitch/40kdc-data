@@ -12,6 +12,7 @@ import {
 } from "../src/mfm/wargear.js";
 import { mintWeapon } from "../src/mfm/gear-projection.js";
 import { resolveMfmWeaponEntityId } from "../src/mfm/weapon-variants.js";
+import { partialDump } from "./mfm-fixture.js";
 
 /**
  * A hand-built minimal dump exercising the full derivation: two model types
@@ -21,7 +22,7 @@ import { resolveMfmWeaponEntityId } from "../src/mfm/weapon-variants.js";
  */
 describe("mintWeapon", () => {
   it("projects a source weapon profile into the core schema shape", () => {
-    const dump = new MfmDump({
+    const dump = partialDump({
       data: {
         wargear_item: [
           {
@@ -116,7 +117,7 @@ function fixtureDump(): MfmDump {
     wargearType: "weapon",
     localisations: { en: { name } },
   });
-  return new MfmDump({
+  return partialDump({
     data: {
       miniature: [
         {
@@ -311,7 +312,7 @@ const resolve = (name: string) => {
 
 describe("wargearItemsForDatasheet", () => {
   it("collects selectable non-weapon equipment from datasheet loadout paths", () => {
-    const dump = new MfmDump({
+    const dump = partialDump({
       data: {
         wargear_item: [
           {
@@ -428,7 +429,7 @@ function crossProductDump(): MfmDump {
     wargearItemId: string,
     loadoutChoiceId: string,
   ) => ({ id, count: 1, wargearItemId, loadoutChoiceId });
-  return new MfmDump({
+  return partialDump({
     data: {
       miniature: [
         {
@@ -626,7 +627,7 @@ function deathCompanyDump(): MfmDump {
       );
     }
   }
-  return new MfmDump({
+  return partialDump({
     data: {
       miniature: [
         {
@@ -901,7 +902,7 @@ function perSlotDump(): MfmDump {
     wargearItemId: string,
     loadoutChoiceId: string,
   ) => ({ id, count: 1, wargearItemId, loadoutChoiceId });
-  return new MfmDump({
+  return partialDump({
     data: {
       miniature: [
         {
@@ -1196,7 +1197,7 @@ describe("deriveDefaults quantity rule + heterogeneity guard (option-group model
       .replace(/^-|-$/g, "");
   // deriveWargear touches the choice/limit tables; provide empty defaults.
   const mkDump = (data: Record<string, unknown[]>) =>
-    new MfmDump({
+    partialDump({
       data: {
         loadout_choice_set: [],
         loadout_choice: [],
@@ -1469,7 +1470,7 @@ describe("deriveWargear per-model swaps and ratio caps", () => {
   // "Trooper" with an uncapped swap (any number) and a swap that is governed by
   // a 1-per-5 wargear_limit (the ratio is the only per-option cap source).
   function dump(): MfmDump {
-    return new MfmDump({
+    return partialDump({
       data: {
         miniature: [
           {
@@ -1862,7 +1863,7 @@ describe("limitedSetBudgets — per-item duplicate cap capture", () => {
     }>,
     defaultModelCount?: number,
   ) =>
-    new MfmDump({
+    partialDump({
       data: {
         wargear_item: [
           {
@@ -2017,7 +2018,7 @@ describe("limitedSetBudgets — choice bundles, copy counts, and exclusions", ()
   it("a multi-item choice scales the cap: choiceLimit counts picks, not copies", () => {
     // Wolf Guard Terminators: one choice = [assault cannon + power fist],
     // limit (5,1)/(10,2) — two picks at 10 models legally sum to FOUR items.
-    const dump = new MfmDump({
+    const dump = partialDump({
       data: {
         wargear_item: [
           {
@@ -2080,7 +2081,7 @@ describe("limitedSetBudgets — choice bundles, copy counts, and exclusions", ()
   });
 
   it("an item-row count: 2 scales the cap (the Seraphim 2-hand-flamer swap)", () => {
-    const dump = new MfmDump({
+    const dump = partialDump({
       data: {
         wargear_item: [
           {
@@ -2147,7 +2148,7 @@ describe("limitedSetBudgets — choice bundles, copy counts, and exclusions", ()
   it("excludes derived-default items from the budget (the boltgun+simulacrum class)", () => {
     // The choice retains the model's default boltgun ("that model's boltgun cannot
     // be replaced") — counting it would make every STOCK squad flag.
-    const dump = new MfmDump({
+    const dump = partialDump({
       data: {
         wargear_item: [
           {
@@ -2220,7 +2221,7 @@ describe("limitedSetBudgets — choice bundles, copy counts, and exclusions", ()
   });
 
   it("excludes items shared with another limited set (the Kommandos close-combat-weapon)", () => {
-    const dump = new MfmDump({
+    const dump = partialDump({
       data: {
         wargear_item: [
           {
@@ -2311,7 +2312,7 @@ describe("limitedSetBudgets — choice bundles, copy counts, and exclusions", ()
   });
 
   it("excludes items another model type's option adds (the Plague champion plasma gun)", () => {
-    const dump = new MfmDump({
+    const dump = partialDump({
       data: {
         wargear_item: [
           {
@@ -2398,7 +2399,7 @@ describe("limitedSetBudgets — choice bundles, copy counts, and exclusions", ()
   });
 
   it("excludes items an uncapped option adds (the Boyz any-number shoota ccw)", () => {
-    const dump = new MfmDump({
+    const dump = partialDump({
       data: {
         wargear_item: [
           {
@@ -2485,7 +2486,7 @@ describe("limitedSetBudgets — choice bundles, copy counts, and exclusions", ()
     // the enforcement). A WE Terminator branch [chainfist + combi-weapon] is the
     // set's own chainfist pick with the free combi-bolter swap alongside — NOT
     // an ungoverned path, so chainfist must stay policed.
-    const dump = new MfmDump({
+    const dump = partialDump({
       data: {
         wargear_item: [
           {
@@ -2554,7 +2555,7 @@ describe("limitedSetBudgets — choice bundles, copy counts, and exclusions", ()
     // record AND a lone-swap record of the same miniature; per-record
     // per_n_models caps then stack the single allowance. The summed budget is
     // the only correct enforcement there.
-    const dump = new MfmDump({
+    const dump = partialDump({
       data: {
         wargear_item: [
           {
@@ -2628,7 +2629,7 @@ describe("limitedSetBudgets — choice bundles, copy counts, and exclusions", ()
   });
 
   it("drops a set whose every item is excluded", () => {
-    const dump = new MfmDump({
+    const dump = partialDump({
       data: {
         wargear_item: [
           {

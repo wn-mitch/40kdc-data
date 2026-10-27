@@ -3369,7 +3369,8 @@
       "duration": "until-next-command-phase"
     },
     "behavior": "activated",
-    "source_digest": "b27b2d96e2fb92921b592884e312ad4676b242cd26108eb367c4cdf060c09c6d"
+    "source_digest": "b27b2d96e2fb92921b592884e312ad4676b242cd26108eb367c4cdf060c09c6d",
+    "optional": true
   },
   {
     "ability_id": "transhuman-strategist-blood-angels",
@@ -3489,7 +3490,8 @@
       "count": 1,
       "per": "army"
     },
-    "source_digest": "9f1983a6f8bcf3d6ec7d21ce7c37d630f5311edcbdc59f6e033d54949fe5afbd"
+    "source_digest": "9f1983a6f8bcf3d6ec7d21ce7c37d630f5311edcbdc59f6e033d54949fe5afbd",
+    "optional": true
   },
   {
     "ability_id": "measured-strategist-angelic-inheritors-blood-angels",

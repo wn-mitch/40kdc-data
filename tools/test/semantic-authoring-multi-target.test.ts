@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, familyRole } from "../src/semantic-authoring/contracts.js";
 import { createValidator } from "../src/schema-loader.js";
+import { expectCompiled } from "./semantic-authoring-connective-fixture.js";
 
 type Item = [wording: string, family: string, parameters: Record<string, unknown>, fragment: string];
 
@@ -418,7 +419,7 @@ describe("Semantic authoring Stratagems with several targets: a unit named only 
     const result = compileLeaves(placed(loose, ...when,
       ["Until the end of the phase", "duration", { endpoint: "end-of-phase" }, "EFFECT"],
       ["have a 5+ invulnerable save", "invulnerable-save", { subject: "antecedent", threshold: 5 }, "EFFECT"]), loose);
-    expect(result.ok).toBe(true);
+    expectCompiled(result);
     expect(Array.isArray(result.core?.target_restrictions)).toBe(false);
   });
 });

@@ -152,9 +152,14 @@ describe("AbilityView.getBuffs (M1 stub)", () => {
 });
 
 describe("Dataset.buffsFor", () => {
+  // No unit is selected: only the weapon profiles contribute. `EligibilityInput`
+  // types `unitId` as required, so the unit-less input goes through `unknown`.
+  const weaponsOnly = (weaponProfiles: { weaponId: string; profileIndex: number }[]) =>
+    ({ weaponProfiles }) as unknown as Parameters<Dataset["buffsFor"]>[0];
+
   it("collects buffs from the weapon profile keywords on the input", () => {
     const buffs = ds.buffsFor(
-      { weaponProfiles: [{ weaponId: "bolt-rifle", profileIndex: 0 }] },
+      weaponsOnly([{ weaponId: "bolt-rifle", profileIndex: 0 }]),
       { ...baseCtx, attackerStationary: true },
     );
     // Focused Fire: Heavy's +1 to hit and Rapid Fire 1.
@@ -165,9 +170,7 @@ describe("Dataset.buffsFor", () => {
   });
 
   it("applies target-keyword gates through linked buff APIs", () => {
-    const input = {
-      weaponProfiles: [{ weaponId: "big-shoota", profileIndex: 0 }],
-    };
+    const input = weaponsOnly([{ weaponId: "big-shoota", profileIndex: 0 }]);
     const matches = ds.buffsFor(input, { ...baseCtx, targetKeywords: ["infantry"] });
     expect(matches.some((buff) =>
       buff.contribution.type === "extra-keyword"
@@ -189,7 +192,7 @@ describe("Dataset.buffsFor", () => {
 
   it("skips unknown weapon ids without throwing", () => {
     const buffs = ds.buffsFor(
-      { weaponProfiles: [{ weaponId: "no-such-weapon", profileIndex: 0 }] },
+      weaponsOnly([{ weaponId: "no-such-weapon", profileIndex: 0 }]),
       baseCtx,
     );
     expect(buffs).toEqual([]);

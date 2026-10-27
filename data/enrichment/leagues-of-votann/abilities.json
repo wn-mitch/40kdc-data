@@ -502,7 +502,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "leagues-of-votann"
+    "faction_id": "leagues-of-votann",
+    "optional": true
   },
   {
     "ability_id": "destabilising-quakes-leagues-of-votann",
@@ -1025,7 +1026,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "leagues-of-votann"
+    "faction_id": "leagues-of-votann",
+    "optional": true
   },
   {
     "ability_id": "grudge-fuelled-fortitude-leagues-of-votann",
@@ -1618,7 +1620,8 @@
       "frequency": "once-per-turn",
       "per": "unit"
     },
-    "faction_id": "leagues-of-votann"
+    "faction_id": "leagues-of-votann",
+    "optional": true
   },
   {
     "ability_id": "grim-efficiency-leagues-of-votann",
@@ -3807,7 +3810,8 @@
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "optional": true
   },
   {
     "ability_id": "avatars-of-the-ancestors-leagues-of-votann",
@@ -7571,7 +7575,8 @@
       "count": 1,
       "per": "model"
     },
-    "source_digest": "a0ca6cd31a8913fa0f178a47552eedcc734fd0d95f461222e886020184a83e73"
+    "source_digest": "a0ca6cd31a8913fa0f178a47552eedcc734fd0d95f461222e886020184a83e73",
+    "optional": true
   },
   {
     "ability_id": "new-horizons-mercenary-oathband-leagues-of-votann",
@@ -8104,7 +8109,8 @@
       "duration": "resolution"
     },
     "behavior": "activated",
-    "source_digest": "dd1a09bff7ba323f031fec6d54a1b812773f98009caefdb632d9c13134e9f1a9"
+    "source_digest": "dd1a09bff7ba323f031fec6d54a1b812773f98009caefdb632d9c13134e9f1a9",
+    "optional": true
   },
   {
     "ability_id": "preventative-purge-hearthfyre-arsenal-leagues-of-votann",

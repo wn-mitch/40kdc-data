@@ -73,7 +73,7 @@ export function weaponMatchesMinted(
 // ── abilities ──
 
 /** The mechanics fields publication writes; a published record equals its compiled entry on all of them. */
-export const MECHANICS_FIELDS = ["effect", "scope", "behavior", "trigger", "usage", "applies_to"] as const;
+export const MECHANICS_FIELDS = ["effect", "scope", "behavior", "optional", "trigger", "usage", "applies_to"] as const;
 
 /** The dump prose an ability's record must be digested from. */
 export interface FreshSource {

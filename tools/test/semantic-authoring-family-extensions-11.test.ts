@@ -207,7 +207,7 @@ describe("a condition on each unit a filter names", () => {
       ["+1 A", "characteristic-modifier", { characteristics: ["A"], operation: "improve", value: 1 }],
       ["This unit has +1 Move", "characteristic-modifier", { subject: "this-unit", characteristics: ["M"], operation: "add", value: 1 }]), text, { name: FIXTURE_RULE_NAME });
     if (!result.ok) throw new Error(result.errors.join("; "));
-    const steps = (result.mechanics as { effect: { steps: Array<Record<string, unknown>> } }).effect.steps;
+    const steps = (result.mechanics as unknown as { effect: { steps: Array<Record<string, unknown>> } }).effect.steps;
     expect(steps[0]).toMatchObject({ type: "conditional", condition: { type: "matches", parameters: { subject: "recipient", filter: { within: { of: { objective: {} }, range: "objective-control" } } } }, effect: { target: { owner: "friendly", all_of: ["GRAVIS"] } } });
     expect(steps[1]).toMatchObject({ type: "stat-modifier", target: "this-unit" });
   });
@@ -220,7 +220,7 @@ describe("wave-4 review fixes", () => {
   };
   const stratagem = (when: string, target: string, effect: string) => ({ when, target, effect, text: `${when}\n${target}\n${effect}` });
   const across = (s: ReturnType<typeof stratagem>, when: Array<[string, string, Record<string, unknown>]>, target: Array<[string, string, Record<string, unknown>]>, effect: Array<[string, string, Record<string, unknown>]>) => {
-    const shift = (leaves: CompileLeaf[], by: number) => leaves.map((leaf) => ({ ...leaf, start_byte: leaf.start_byte + by, end_byte: leaf.end_byte + by }));
+    const shift = (leaves: CompileLeaf[], by: number) => leaves.map((leaf) => ({ ...leaf, start_byte: leaf.start_byte + by, end_byte: leaf.end_byte === undefined ? undefined : leaf.end_byte + by }));
     const t = Buffer.byteLength(s.when) + 1;
     const e = t + Buffer.byteLength(s.target) + 1;
     return [...placed(s.when, "WHEN", ...when), ...shift(placed(s.target, "TARGET", ...target), t), ...shift(placed(s.effect, "EFFECT", ...effect), e)];

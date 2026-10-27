@@ -205,6 +205,8 @@ export interface AbilityLike {
   trigger?: AbilityTriggerSpec | null;
   usage?: AbilityUsage | AbilityUsage[] | null;
   applies_to?: AbilityAppliesTo | null;
+  /** The player chooses whether to use this triggerless ability. */
+  optional?: boolean | null;
 }
 
 const CONTAINER_TYPES = new Set([
@@ -1056,7 +1058,9 @@ function assembleSentence(parts: string[]): string {
  * carries no rules prose.
  */
 export function describeAbility(a: AbilityLike): string {
-  const core = a.effect ? renderTopLevel(a.effect, a.scope, a.usage, a.trigger) : "";
+  const rendered = a.effect ? renderTopLevel(a.effect, a.scope, a.usage, a.trigger) : "";
+  // An optional ability is the player's choice, unless its text already opens with that choice.
+  const core = a.optional === true && rendered && !rendered.startsWith("You can ") ? `You can: ${rendered}` : rendered;
   const applies = describeAppliesTo(a.applies_to);
   return [core, applies].filter(Boolean).join("\n");
 }

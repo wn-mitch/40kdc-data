@@ -538,7 +538,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "adepta-sororitas"
+    "faction_id": "adepta-sororitas",
+    "optional": true
   },
   {
     "ability_id": "simulacrum-imperialis-adepta-sororitas",
@@ -2258,7 +2259,8 @@
     "ability_type": "unit",
     "behavior": "activated",
     "community_notes": "auto-generated, partial",
-    "faction_id": "adepta-sororitas"
+    "faction_id": "adepta-sororitas",
+    "optional": true
   },
   {
     "ability_id": "impetuous-fervour-adepta-sororitas",
@@ -2408,7 +2410,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "adepta-sororitas"
+    "faction_id": "adepta-sororitas",
+    "optional": true
   },
   {
     "ability_id": "holy-judgement-adepta-sororitas",
@@ -3178,7 +3181,8 @@
       "frequency": "n-per-battle",
       "count": 1,
       "per": "unit"
-    }
+    },
+    "optional": true
   },
   {
     "ability_id": "holy-mission-adepta-sororitas",
@@ -3598,7 +3602,8 @@
     "ability_type": "unit",
     "behavior": "activated",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "adepta-sororitas"
+    "faction_id": "adepta-sororitas",
+    "optional": true
   },
   {
     "ability_id": "lifewards-adepta-sororitas",
@@ -8768,7 +8773,8 @@
         "ADEPTA SORORITAS"
       ]
     },
-    "community_notes": "Each time a model in the bearer's unit makes an attack, you can ignore modifiers to that attack's BS/WS and/or modifiers to the Hit roll."
+    "community_notes": "Each time a model in the bearer's unit makes an attack, you can ignore modifiers to that attack's BS/WS and/or modifiers to the Hit roll.",
+    "optional": true
   },
   {
     "ability_id": "mark-of-devotion-champions-of-faith-adepta-sororitas",
@@ -9287,7 +9293,8 @@
         "ADEPTA SORORITAS"
       ]
     },
-    "community_notes": "In your Movement phase, select one enemy unit within 12\" of the bearer; it must take a Battle-shock test. If the test is failed, you gain 1 Miracle dice (rider not encoded)."
+    "community_notes": "In your Movement phase, select one enemy unit within 12\" of the bearer; it must take a Battle-shock test. If the test is failed, you gain 1 Miracle dice (rider not encoded).",
+    "optional": true
   },
   {
     "ability_id": "triptych-of-the-macharian-crusade-army-of-faith-adepta-sororitas",

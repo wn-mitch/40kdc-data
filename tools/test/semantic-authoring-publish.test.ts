@@ -147,7 +147,7 @@ function buildFixture(): Fixture {
 function cloneAsPublishing(db: DatabaseSync, sourceBatchId: string, targetBatchId: string): { manifest: Record<string, unknown> } {
   const source = db.prepare("SELECT faction_id, manifest_json, created_at FROM publication_batches WHERE id = ?")
     .get(sourceBatchId) as { faction_id: string; manifest_json: string; created_at: string };
-  const manifest = { ...(JSON.parse(source.manifest_json) as Record<string, unknown>), batch_id: targetBatchId };
+  const manifest: Record<string, unknown> = { ...(JSON.parse(source.manifest_json) as Record<string, unknown>), batch_id: targetBatchId };
   delete manifest.receipt;
   delete manifest.failure;
   const previewHash = hashJson(manifest);

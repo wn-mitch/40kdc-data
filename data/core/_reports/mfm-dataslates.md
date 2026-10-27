@@ -17,8 +17,8 @@ dump confirmation.
 | enhancements | 0 | 0 | 890 | 0 |
 | detachments | 0 | 0 | 103 | 354 |
 | stratagems | 0 | 0 | 258 | 1055 |
-| abilities | 0 | 0 | 1734 | 2801 |
-| phase-mappings | 1 | 0 | 504 | 1076 |
+| abilities | 0 | 0 | 1735 | 2800 |
+| phase-mappings | 1 | 0 | 505 | 1075 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
 ## Abilities by faction
@@ -32,7 +32,7 @@ dump confirmation.
 | adeptus-mechanicus | 0 | 0 | 82 | 85 |
 | aeldari | 0 | 0 | 114 | 186 |
 | agents-of-the-imperium | 0 | 0 | 52 | 86 |
-| astra-militarum | 0 | 0 | 98 | 153 |
+| astra-militarum | 0 | 0 | 99 | 152 |
 | black-templars | 0 | 0 | 24 | 39 |
 | blood-angels | 0 | 0 | 28 | 33 |
 | chaos-daemons | 0 | 0 | 80 | 115 |
@@ -98,10 +98,10 @@ dump confirmation.
 | agents-of-the-imperium | stub | 18 |
 | agents-of-the-imperium | unpublished | 56 |
 | agents-of-the-imperium | verified | 52 |
-| astra-militarum | digest-differs | 16 |
+| astra-militarum | digest-differs | 15 |
 | astra-militarum | stub | 17 |
 | astra-militarum | unpublished | 120 |
-| astra-militarum | verified | 98 |
+| astra-militarum | verified | 99 |
 | black-templars | digest-differs | 1 |
 | black-templars | stub | 12 |
 | black-templars | unpublished | 26 |

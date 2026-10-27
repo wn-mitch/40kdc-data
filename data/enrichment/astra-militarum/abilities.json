@@ -3414,9 +3414,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "01768791c118fd9a4b256f05ee639cef3e259b7f626b80c7c7800d7b07db392b",
+    "source_digest": "e00e34ac9ee573e397593f98def894c464209189f948a25c21b255802992450e",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -3466,7 +3466,8 @@
     "ability_type": "unit",
     "behavior": "activated",
     "community_notes": "defensive ability (skipped for damage calc)",
-    "faction_id": "astra-militarum"
+    "faction_id": "astra-militarum",
+    "optional": true
   },
   {
     "ability_id": "gung-ho-command-astra-militarum",
@@ -6224,7 +6225,8 @@
       "frequency": "once-per-turn",
       "per": "unit"
     },
-    "faction_id": "astra-militarum"
+    "faction_id": "astra-militarum",
+    "optional": true
   },
   {
     "ability_id": "remote-mine-astra-militarum",
@@ -7701,7 +7703,8 @@
         "TITANIC",
         "CHARACTER"
       ]
-    }
+    },
+    "optional": true
   },
   {
     "ability_id": "engine-speaker-steel-hammer-astra-militarum",

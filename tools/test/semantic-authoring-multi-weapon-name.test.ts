@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
+import type { WeaponNameContext } from "../src/semantic-authoring/compile-weapon-names.js";
 import type { WeaponCatalog } from "../src/semantic-authoring/weapon-catalog.js";
 
 /**
@@ -38,7 +39,7 @@ const OWN: WeaponCatalog["faction"] = [
   { name: "Fab lance of dawn", type: "melee" }, { name: "Fab caster", type: "ranged" },
 ];
 const UNIT = { faction_id: "fab", source_type: "unit", catalog: { faction: FACTION, own: OWN } };
-const STRATAGEM = { faction_id: "fab", source_type: "stratagem", catalog: { faction: FACTION } };
+const STRATAGEM: WeaponNameContext = { faction_id: "fab", source_type: "stratagem", catalog: { faction: FACTION } };
 
 function mechanicsOf(list: CompileLeaf[], text: string, weapons = STRATAGEM): Record<string, any> {
   const result = compileLeaves(list, text, { weapons });

@@ -2691,8 +2691,9 @@
         "T’AU EMPIRE"
       ]
     },
+    "optional": true,
     "expected": {
-      "text": "During the Command phase, in your turn, until the start of your next Command phase:\n  -> Select one friendly unit with the KROOT or VESPID STINGWINGS keyword within 12\" of this model:\n    -> Improve that unit's Leadership characteristic by 1.\n    -> Improve that unit's Objective Control characteristic by 1.\nApplies to: units with T’AU EMPIRE."
+      "text": "You can: During the Command phase, in your turn, until the start of your next Command phase:\n  -> Select one friendly unit with the KROOT or VESPID STINGWINGS keyword within 12\" of this model:\n    -> Improve that unit's Leadership characteristic by 1.\n    -> Improve that unit's Objective Control characteristic by 1.\nApplies to: units with T’AU EMPIRE."
     }
   },
   {
@@ -4638,8 +4639,9 @@
     "scope": {
       "duration": "permanent"
     },
+    "optional": true,
     "expected": {
-      "text": "During the Command phase, in your turn, return D3 destroyed DAMNED models (excluding CHARACTER models) to the unit, each with its full wounds remaining."
+      "text": "You can: During the Command phase, in your turn, return D3 destroyed DAMNED models (excluding CHARACTER models) to the unit, each with its full wounds remaining."
     }
   },
   {
@@ -4924,8 +4926,9 @@
       "frequency": "once-per-turn",
       "per": "unit"
     },
+    "optional": true,
     "expected": {
-      "text": "Once per turn per unit:\n  -> Spend 1 YP.\n  Select one of the following:\n    - One of the unit's Hit rolls counts as 6.\n    - One of the unit's Wound rolls counts as 6.\n    - One of the unit's saving throw rolls counts as 6."
+      "text": "You can: Once per turn per unit:\n  -> Spend 1 YP.\n  Select one of the following:\n    - One of the unit's Hit rolls counts as 6.\n    - One of the unit's Wound rolls counts as 6.\n    - One of the unit's saving throw rolls counts as 6."
     }
   },
   {
@@ -6007,8 +6010,9 @@
     "scope": {
       "duration": "permanent"
     },
+    "optional": true,
     "expected": {
-      "text": "During the Command phase, in your turn, while this model is on the battlefield, return 1 destroyed model (excluding CHARACTER models) to the unit, each with its full wounds remaining."
+      "text": "You can: During the Command phase, in your turn, while this model is on the battlefield, return 1 destroyed model (excluding CHARACTER models) to the unit, each with its full wounds remaining."
     }
   },
   {
@@ -7511,8 +7515,9 @@
     "scope": {
       "duration": "permanent"
     },
+    "optional": true,
     "expected": {
-      "text": "The unit's Assault Doctrine (Combat Doctrines) ability has no limit on its number of uses."
+      "text": "You can: The unit's Assault Doctrine (Combat Doctrines) ability has no limit on its number of uses."
     }
   },
   {
@@ -7592,8 +7597,9 @@
     "scope": {
       "duration": "until-next-command-phase"
     },
+    "optional": true,
     "expected": {
-      "text": "During the Command phase, in your turn, until the start of your next Command phase:\n  -> Select one enemy unit:\n    -> That unit is marked as assemblage of might.\n    -> While the target is tagged assemblage of might, all friendly ADEPTUS CUSTODES CHARACTER models get +1 to Wound rolls."
+      "text": "You can: During the Command phase, in your turn, until the start of your next Command phase:\n  -> Select one enemy unit:\n    -> That unit is marked as assemblage of might.\n    -> While the target is tagged assemblage of might, all friendly ADEPTUS CUSTODES CHARACTER models get +1 to Wound rolls."
     }
   },
   {
@@ -8038,8 +8044,9 @@
     "scope": {
       "duration": "phase"
     },
+    "optional": true,
     "expected": {
-      "text": "During the Shooting phase, in your turn, until the end of the phase:\n  -> Select one enemy unit visible to this model if the selected unit is within 18\" of the unit: that unit cannot benefit from Cover."
+      "text": "You can: During the Shooting phase, in your turn, until the end of the phase:\n  -> Select one enemy unit visible to this model if the selected unit is within 18\" of the unit: that unit cannot benefit from Cover."
     }
   },
   {
@@ -9841,8 +9848,9 @@
         "THOUSAND SONS"
       ]
     },
+    "optional": true,
     "expected": {
-      "text": "During the Command phase, in your turn:\n  -> Select one friendly THOUSAND SONS VEHICLE model if the selected unit is within 6\" of this model: that model regains up to D3 lost wounds.\nApplies to: units with THOUSAND SONS."
+      "text": "You can: During the Command phase, in your turn:\n  -> Select one friendly THOUSAND SONS VEHICLE model if the selected unit is within 6\" of this model: that model regains up to D3 lost wounds.\nApplies to: units with THOUSAND SONS."
     }
   },
   {
@@ -10381,8 +10389,9 @@
     "scope": {
       "duration": "until-next-command-phase"
     },
+    "optional": true,
     "expected": {
-      "text": "During the Command phase, in your turn, until the start of your next Command phase:\n  -> Select one friendly GREY KNIGHTS VEHICLE model if the selected unit is within 3\" of this model (each model can be selected for this ability at most once per turn across your army):\n    -> That model regains up to D3 lost wounds.\n    -> That model gets +1 to Hit rolls."
+      "text": "You can: During the Command phase, in your turn, until the start of your next Command phase:\n  -> Select one friendly GREY KNIGHTS VEHICLE model if the selected unit is within 3\" of this model (each model can be selected for this ability at most once per turn across your army):\n    -> That model regains up to D3 lost wounds.\n    -> That model gets +1 to Hit rolls."
     }
   },
   {
@@ -25628,8 +25637,9 @@
     "scope": {
       "duration": "until-next-command-phase"
     },
+    "optional": true,
     "expected": {
-      "text": "During the Command phase, in your turn, until the start of your next Command phase:\n  -> Select one friendly GREY KNIGHTS VEHICLE model if the selected unit is within 3\" of this model (each model can be selected for this ability at most once per turn across your army):\n    -> That model regains up to D3 lost wounds.\n    -> That model gets +1 to Hit rolls."
+      "text": "You can: During the Command phase, in your turn, until the start of your next Command phase:\n  -> Select one friendly GREY KNIGHTS VEHICLE model if the selected unit is within 3\" of this model (each model can be selected for this ability at most once per turn across your army):\n    -> That model regains up to D3 lost wounds.\n    -> That model gets +1 to Hit rolls."
     }
   },
   {
@@ -25998,8 +26008,9 @@
     "scope": {
       "duration": "permanent"
     },
+    "optional": true,
     "expected": {
-      "text": "While making melee attacks against MONSTER or VEHICLE targets:\n  -> You can re-roll the Hit roll for attacks made by this model.\n  -> You can re-roll the Wound roll for attacks made by this model.\n  -> You can re-roll the Damage roll for attacks made by this model."
+      "text": "You can: While making melee attacks against MONSTER or VEHICLE targets:\n  -> You can re-roll the Hit roll for attacks made by this model.\n  -> You can re-roll the Wound roll for attacks made by this model.\n  -> You can re-roll the Damage roll for attacks made by this model."
     }
   },
   {
@@ -27534,8 +27545,9 @@
     "scope": {
       "duration": "permanent"
     },
+    "optional": true,
     "expected": {
-      "text": "During the Command phase, in your turn, while this model is on the battlefield, return D3 destroyed models (excluding CHARACTER models) to the unit, each with its full wounds remaining."
+      "text": "You can: During the Command phase, in your turn, while this model is on the battlefield, return D3 destroyed models (excluding CHARACTER models) to the unit, each with its full wounds remaining."
     }
   },
   {
@@ -28747,8 +28759,9 @@
     "scope": {
       "duration": "permanent"
     },
+    "optional": true,
     "expected": {
-      "text": "While making ranged attacks:\n  -> You can re-roll a Hit roll of 1.\n  -> You can re-roll a Wound roll of 1.\n  -> If the target unit has destroyed 1+ friendly ADEPTA SORORITAS units this battle, the unit gets +1 to Hit rolls.\n  -> If the target unit has destroyed 1+ friendly ADEPTA SORORITAS units this battle, the unit gets +1 to Wound rolls."
+      "text": "You can: While making ranged attacks:\n  -> You can re-roll a Hit roll of 1.\n  -> You can re-roll a Wound roll of 1.\n  -> If the target unit has destroyed 1+ friendly ADEPTA SORORITAS units this battle, the unit gets +1 to Hit rolls.\n  -> If the target unit has destroyed 1+ friendly ADEPTA SORORITAS units this battle, the unit gets +1 to Wound rolls."
     }
   },
   {
@@ -28874,8 +28887,9 @@
     "scope": {
       "duration": "permanent"
     },
+    "optional": true,
     "expected": {
-      "text": "Select one of the following:\n  - You can re-roll the Charge roll.\n  - You can re-roll the Advance roll."
+      "text": "You can: Select one of the following:\n  - You can re-roll the Charge roll.\n  - You can re-roll the Advance roll."
     }
   },
   {
@@ -29415,8 +29429,9 @@
       "count": 1,
       "per": "unit"
     },
+    "optional": true,
     "expected": {
-      "text": "Once per battle per unit, during the Fight phase, until the end of the phase:\n  -> Improve the Attacks characteristic of melee weapons equipped by this model by 3.\n  -> Improve the Strength characteristic of melee weapons equipped by this model by 3."
+      "text": "You can: Once per battle per unit, during the Fight phase, until the end of the phase:\n  -> Improve the Attacks characteristic of melee weapons equipped by this model by 3.\n  -> Improve the Strength characteristic of melee weapons equipped by this model by 3."
     }
   },
   {
@@ -31234,8 +31249,9 @@
     "scope": {
       "duration": "permanent"
     },
+    "optional": true,
     "expected": {
-      "text": "While this model is leading a unit, during the Command phase, in your turn, return D3 destroyed Bodyguard models to the unit, each with its full wounds remaining."
+      "text": "You can: While this model is leading a unit, during the Command phase, in your turn, return D3 destroyed Bodyguard models to the unit, each with its full wounds remaining."
     }
   },
   {
@@ -31342,8 +31358,9 @@
     "scope": {
       "duration": "permanent"
     },
+    "optional": true,
     "expected": {
-      "text": "While this model is leading a unit, during the Command phase, in your turn, return 1 destroyed Bodyguard model to the unit, each with its full wounds remaining."
+      "text": "You can: While this model is leading a unit, during the Command phase, in your turn, return 1 destroyed Bodyguard model to the unit, each with its full wounds remaining."
     }
   },
   {
@@ -33442,8 +33459,9 @@
     "scope": {
       "duration": "permanent"
     },
+    "optional": true,
     "expected": {
-      "text": "While this model is leading a unit, during the Command phase, in your turn, return 1 destroyed Bodyguard model to the unit, each with its full wounds remaining."
+      "text": "You can: While this model is leading a unit, during the Command phase, in your turn, return 1 destroyed Bodyguard model to the unit, each with its full wounds remaining."
     }
   },
   {

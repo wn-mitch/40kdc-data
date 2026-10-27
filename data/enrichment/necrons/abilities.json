@@ -4021,7 +4021,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "necrons"
+    "faction_id": "necrons",
+    "optional": true
   },
   {
     "ability_id": "canoptek-retinue-necrons",
@@ -4624,7 +4625,8 @@
     "ability_type": "unit",
     "behavior": "activated",
     "community_notes": "[APPROX] Selection is restricted to an enemy unit within 18\" of and visible to this model; that 18\"/visibility restriction is not encoded, and the mark's until-your-next-Movement-phase window is modeled as one battle round. Pinned debuff (−2 Move, −2 to Charge rolls) mirrors the grav-pinned encoding. Full rule in raw-text store.",
-    "faction_id": "necrons"
+    "faction_id": "necrons",
+    "optional": true
   },
   {
     "ability_id": "obelisk-node-control-necrons",

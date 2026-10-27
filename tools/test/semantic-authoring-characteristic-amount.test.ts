@@ -8,6 +8,7 @@ import { effect } from "../src/semantic-authoring/compile-fragments.js";
 import { bindCharacteristicAmounts, bindCharacteristicFloors } from "../src/semantic-authoring/compile-characteristic-amount.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { checkEntry, entryWithMechanics } from "../src/semantic-authoring/entries.js";
+import { expectCompiled } from "./semantic-authoring-connective-fixture.js";
 
 /**
  * A characteristic change written without its amount, a recipient filter, then the amount
@@ -56,7 +57,7 @@ describe("Semantic authoring characteristic-amount parameter values", () => {
 describe("Semantic authoring characteristic amounts after a recipient filter", () => {
   it("gives the amount to the change before the recipient filter", () => {
     const result = compileLeaves(placedIn(text, [...change], [...recipient], [...owner], [...amount("by 2", 2)]), text);
-    expect(result.ok).toBe(true);
+    expectCompiled(result);
     expect(result.mechanics.effect).toEqual({
       type: "stat-modifier",
       target: { owner: "friendly", all_of: ["FOO BAR", "BAZ QUX"], level: "model" },
@@ -67,7 +68,7 @@ describe("Semantic authoring characteristic amounts after a recipient filter", (
   it("binds a dice amount and lowers it as the string, which the DSL entry validates", () => {
     const diceText = text.replace("by 2", "by D6+1");
     const result = compileLeaves(placedIn(diceText, [...change], [...recipient], [...owner], [...amount("by D6+1", "D6+1")]), diceText);
-    expect(result.ok).toBe(true);
+    expectCompiled(result);
     expect((result.mechanics.effect as { modifier: { value: unknown } }).modifier.value).toBe("D6+1");
     const base = authored("adeptus-mechanicus", "control-edict-adeptus-mechanicus");
     const check = checkEntry(entryWithMechanics(base, result.mechanics));

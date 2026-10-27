@@ -158,7 +158,7 @@ describe("Semantic authoring external Luna transport", () => {
       expect(sent.length).toBeLessThan(13);
       expect(sent).toEqual(rows.slice(1, 1 + sent.length).map((row) => row.abilityId));
       // The budget covers the abilities; the fixed instructions and family registry sit outside it.
-      const fixedBytes = Buffer.byteLength(canonicalize({ ...prepared.request, abilities: [] }), "utf8");
+      const fixedBytes = Buffer.byteLength(canonicalize({ ...preparedRequest(prepared), abilities: [] }), "utf8");
       expect(Buffer.byteLength(canonicalize(prepared.request), "utf8") - fixedBytes).toBeLessThanOrEqual(48 * 1024);
       expect(readFileSync(prepared.request_path, "utf8")).toBe(serializeLunaRequest(prepared.request as Parameters<typeof serializeLunaRequest>[0]));
       for (const ability of request.abilities) {
@@ -346,7 +346,7 @@ describe("Semantic authoring external Luna transport", () => {
     // while a region that does overlap is kept untouched.
     const ability = {
       id: 1, faction_id: "fixture", ability_id: "covered", source_hash: "x".repeat(64),
-      source_text: "Re-roll a Hit roll of 1 and gain a glimmer token.", fragments_json: "[]",
+      source_text: "Re-roll a Hit roll of 1 and gain a glimmer token.", fragments_json: "[]", source_type: "unit",
     };
     const configured = [{
       ability_version_id: 1, faction_id: "fixture", ability_id: "covered", source_hash: ability.source_hash,

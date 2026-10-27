@@ -454,7 +454,8 @@
     "ability_type": "unit",
     "behavior": "activated",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "black-templars"
+    "faction_id": "black-templars",
+    "optional": true
   },
   {
     "ability_id": "pious-fervour-black-templars",
@@ -1362,7 +1363,8 @@
       "duration": "phase"
     },
     "behavior": "activated",
-    "source_digest": "3e9cb01a2c603175cd33867f2e173549418dfaeebc03a6c89f1306f7e7fbf8f9"
+    "source_digest": "3e9cb01a2c603175cd33867f2e173549418dfaeebc03a6c89f1306f7e7fbf8f9",
+    "optional": true
   },
   {
     "ability_id": "blade-of-detestation-marshals-household-black-templars",

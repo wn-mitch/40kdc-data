@@ -18,7 +18,7 @@ import { CorePublicationError, projectCore, type CoreProjection, type CoreRow } 
  * gate judges the bytes publication would validate.
  */
 
-const OPTIONAL_MECHANICS_FIELDS = ["behavior", "trigger", "usage", "applies_to"] as const;
+const OPTIONAL_MECHANICS_FIELDS = ["behavior", "optional", "trigger", "usage", "applies_to"] as const;
 const DIFF_FIELDS = ["effect", "scope", ...OPTIONAL_MECHANICS_FIELDS, "source_digest", "game_version"] as const;
 
 export class PublicationError extends Error {

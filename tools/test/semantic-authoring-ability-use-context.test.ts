@@ -75,17 +75,22 @@ describe("context-bound ability selection replacement", () => {
   });
 
   it("keeps ability identity and actor identity independent in the history guard", () => {
+    /** The first operand of a compound condition node. */
+    const firstOperand = (node: Record<string, unknown>): { parameters: Record<string, unknown> } => {
+      if (!Array.isArray(node.operands)) throw new Error("condition has no operands");
+      return node.operands[0];
+    };
     const { leaves } = example();
     const history = leaves.find((leaf) => leaf.family_id === "ability-use-history")!;
     const sameAbilityOtherActor = abilityUseCondition(history)!;
     expect(sameAbilityOtherActor).toEqual({ operator: "not", operands: [{ type: "happened", parameters: { event: "used", subject: { owner: "friendly", level: "model", excluding: { event_var: "test-use" } }, filter: { kind: "ability", same_rule_as: { event_var: "test-use" } }, window: "turn" } }] });
     const sameActor = abilityUseCondition({ ...history, parameters: { ...history.parameters, actor: "same" } })!;
-    expect(sameActor.operands[0].parameters.subject).toEqual({ event_var: "test-use" });
+    expect(firstOperand(sameActor).parameters.subject).toEqual({ event_var: "test-use" });
     const anyAbility = abilityUseCondition({ ...history, parameters: { ...history.parameters, ability: "any" } })!;
-    expect(anyAbility.operands[0].parameters.filter).toEqual({ kind: "ability" });
+    expect(firstOperand(anyAbility).parameters.filter).toEqual({ kind: "ability" });
     const anyActor = abilityUseCondition({ ...history, parameters: { ...history.parameters, actor: "any" } })!;
-    expect(anyActor.operands[0].parameters.subject).toEqual({ owner: "friendly", level: "model" });
-    expect(nodes(compiled(), "happened")).toContainEqual(sameAbilityOtherActor.operands[0]);
+    expect(firstOperand(anyActor).parameters.subject).toEqual({ owner: "friendly", level: "model" });
+    expect(nodes(compiled(), "happened")).toContainEqual(firstOperand(sameAbilityOtherActor));
   });
 
   it("retains up-to-zero cardinality, exact origin, any-applier exclusion, alternative army reach and recipient lifetime", () => {

@@ -8,6 +8,7 @@ import {
   runEnhancements,
 } from "../src/mfm/enhancements.js";
 import type { DatasheetUnitResolver } from "../src/mfm/enhancement-datasheets.js";
+import { partialDump } from "./mfm-fixture.js";
 
 /**
  * Enhancement matching keys on the mirrored id (`<name>-<detachment>-<faction>`). The dump
@@ -17,7 +18,7 @@ import type { DatasheetUnitResolver } from "../src/mfm/enhancement-datasheets.js
  * buildEnhCanon therefore slugs the RAW name (regression guard for the import miss).
  */
 function dump(): MfmDump {
-  return new MfmDump({
+  return partialDump({
     metadata: { data_version: 963 },
     data: {
       faction_keyword: [{ id: "fk-ac", parentFactionKeywordId: null, localisations: { en: { name: "Adeptus Custodes" } } }],
@@ -92,7 +93,7 @@ describe("buildEnhCanon", () => {
  *   - datasheet_restriction_groups ← datasheet-scoped groups, by repo unit id
  */
 function fieldsDump(): MfmDump {
-  return new MfmDump({
+  return partialDump({
     metadata: { data_version: 963 },
     data: {
       publication: [{ id: "p", factionKeywordId: "fk-as", isCombatPatrol: false, isLegends: false, isCoreRules: false, localisations: { en: { name: "Codex" } } }],
@@ -164,7 +165,7 @@ describe("buildEnhFieldCanon", () => {
   });
 
   it("names a placeholder DNU group by the bearer the printed rule names, and refuses an unmapped one", () => {
-    const dump = new MfmDump({
+    const dump = partialDump({
       metadata: { data_version: 963 },
       data: {
         publication: [{ id: "p", factionKeywordId: "fk-nec", isCombatPatrol: false, isLegends: false, isCoreRules: false, localisations: { en: { name: "Codex" } } }],
@@ -207,7 +208,7 @@ describe("buildEnhFieldCanon", () => {
 
   it("drops a datasheet no core unit carries beside other groups, and refuses it alone or when ambiguous", () => {
     const base = fieldsDump();
-    const dump = new MfmDump({
+    const dump = partialDump({
       metadata: { data_version: 963 },
       data: {
         ...base.tables,
@@ -245,7 +246,7 @@ describe("rules-text eligibility overrides", () => {
   // Fabricated rows under the two MFM ids the overrides key on; names and keywords are the overridden labels.
   function overrideDump(): MfmDump {
     const base = fieldsDump();
-    return new MfmDump({
+    return partialDump({
       metadata: { data_version: 963 },
       data: {
         ...base.tables,

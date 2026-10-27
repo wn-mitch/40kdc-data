@@ -1597,7 +1597,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "dark-angels"
+    "faction_id": "dark-angels",
+    "optional": true
   },
   {
     "ability_id": "exemplar-of-hate-dark-angels",
@@ -4084,7 +4085,8 @@
       "duration": "until-next-command-phase"
     },
     "behavior": "activated",
-    "source_digest": "052f60cdfb40f5edd83ec07dbd82eac0b9ff9ff0440607c12a1588c96f773463"
+    "source_digest": "052f60cdfb40f5edd83ec07dbd82eac0b9ff9ff0440607c12a1588c96f773463",
+    "optional": true
   },
   {
     "ability_id": "the-deathwing-the-vengeful-brethren-dark-angels",

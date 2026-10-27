@@ -741,7 +741,8 @@
       "frequency": "n-per-battle",
       "count": 1,
       "per": "unit"
-    }
+    },
+    "optional": true
   },
   {
     "ability_id": "siege-shield-thousand-sons",
@@ -1241,7 +1242,8 @@
       "frequency": "once-per-turn",
       "per": "unit"
     },
-    "faction_id": "thousand-sons"
+    "faction_id": "thousand-sons",
+    "optional": true
   },
   {
     "ability_id": "prophesied-doom-thousand-sons",
@@ -2180,7 +2182,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "thousand-sons"
+    "faction_id": "thousand-sons",
+    "optional": true
   },
   {
     "ability_id": "herd-banner-thousand-sons",
@@ -2640,7 +2643,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "thousand-sons"
+    "faction_id": "thousand-sons",
+    "optional": true
   },
   {
     "ability_id": "marked-by-fate-thousand-sons",
@@ -8838,7 +8842,8 @@
         "THOUSAND SONS"
       ]
     },
-    "community_notes": "In your Command phase, one friendly Thousand Sons Vehicle model within 6\" regains up to D3 lost wounds."
+    "community_notes": "In your Command phase, one friendly Thousand Sons Vehicle model within 6\" regains up to D3 lost wounds.",
+    "optional": true
   },
   {
     "ability_id": "warp-cursed-runemaster-warpforged-cabal-thousand-sons",

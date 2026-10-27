@@ -2,6 +2,7 @@ import { describe, it, expect, beforeAll } from "vitest";
 import * as fs from "node:fs";
 import { DEFAULT_DUMP_PATH, loadDump, MfmDump } from "../src/mfm/loader.js";
 import { buildMatchupCanon, runMissionMatchups } from "../src/mfm/mission-matchups.js";
+import { partialDump } from "./mfm-fixture.js";
 
 /**
  * WS5 mission-matchup reconcile. The canon derivation (force_disposition_mission
@@ -13,7 +14,7 @@ import { buildMatchupCanon, runMissionMatchups } from "../src/mfm/mission-matchu
  */
 
 function fixture(): MfmDump {
-  return new MfmDump({
+  return partialDump({
     data: {
       force_disposition: [
         { id: "fd-th", localisations: { en: { name: "Take and Hold" } } },
@@ -53,7 +54,7 @@ describe("mission-matchup canon derivation (synthetic)", () => {
   });
 
   it("collects an unresolvable dump row rather than emitting a partial record", () => {
-    const dump = new MfmDump({
+    const dump = partialDump({
       data: {
         force_disposition: [{ id: "fd-th", localisations: { en: { name: "Take and Hold" } } }],
         primary_mission: [{ id: "pm-1", localisations: { en: { name: "Battlefield Dominance" } } }],

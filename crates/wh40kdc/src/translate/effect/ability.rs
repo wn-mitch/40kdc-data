@@ -205,7 +205,7 @@ pub fn describe_applies_to(filter: Option<&KeywordPredicate>) -> String {
 }
 
 /// Compose the full ability print: woven effect sentence + an optional `Applies to:` line.
-/// The single assembler used by both [`describe_ability`] and the runner's `translate_effect` op.
+/// Renders as a non-optional ability; see [`describe_ability_parts_with_optional`].
 pub fn describe_ability_parts(
     e: &EffectNode,
     scope: Option<&Scope>,
@@ -213,12 +213,32 @@ pub fn describe_ability_parts(
     usage: Option<&AbilityUsage>,
     trigger: Option<&AbilityTrigger>,
 ) -> String {
-    let base = render_top_level(
+    describe_ability_parts_with_optional(e, scope, applies_to, usage, trigger, false)
+}
+
+/// [`describe_ability_parts`] with the record's `optional`: an ability the player chooses to use
+/// gains a leading `You can: `. The single assembler used by both [`describe_ability`] and the
+/// runner's `translate_effect` op.
+pub fn describe_ability_parts_with_optional(
+    e: &EffectNode,
+    scope: Option<&Scope>,
+    applies_to: Option<&KeywordPredicate>,
+    usage: Option<&AbilityUsage>,
+    trigger: Option<&AbilityTrigger>,
+    optional: bool,
+) -> String {
+    let rendered = render_top_level(
         &to_value(e),
         scope.map(to_value).as_ref(),
         usage.map(to_value).as_ref(),
         trigger.map(to_value).as_ref(),
     );
+    // An optional ability is the player's choice, unless its text already opens with that choice.
+    let base = if optional && !rendered.is_empty() && !rendered.starts_with("You can ") {
+        format!("You can: {rendered}")
+    } else {
+        rendered
+    };
     let applies = describe_applies_to(applies_to);
     [base, applies]
         .into_iter()
@@ -229,11 +249,12 @@ pub fn describe_ability_parts(
 
 /// Full generated text for an ability. Mirrors `describeAbility`.
 pub fn describe_ability(a: &Ability) -> String {
-    describe_ability_parts(
+    describe_ability_parts_with_optional(
         &a.effect,
         Some(&a.scope),
         a.applies_to.as_ref(),
         a.usage.as_ref(),
         a.trigger.as_ref(),
+        a.optional == Some(true),
     )
 }

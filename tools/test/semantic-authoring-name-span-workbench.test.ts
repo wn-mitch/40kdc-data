@@ -184,7 +184,7 @@ describe("Semantic authoring NAME spans in the workbench", () => {
       });
       expect(report.failed).toEqual([]);
       const span = value.db.prepare("SELECT span_id FROM annotations WHERE status = 'active'").get() as { span_id: number };
-      expect(span.span_id).toBe(value.db.prepare("SELECT id FROM source_spans WHERE start_byte = ? AND end_byte = ?").get(first, end).id);
+      expect(span.span_id).toBe((value.db.prepare("SELECT id FROM source_spans WHERE start_byte = ? AND end_byte = ?").get(first, end) as { id: number }).id);
     } finally {
       value.db.close();
     }

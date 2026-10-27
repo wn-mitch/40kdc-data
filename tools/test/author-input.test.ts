@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { resolveSource } from "../src/author-input.js";
+import { resolveSource, type ArchiveIndex } from "../src/author-input.js";
 
 // A fake archive index reproducing the real "Simulacrum Imperialis" collision:
 // the same ability name on a Sororitas (AS) and an Agents (AoI) "Sanctifiers"
 // datasheet, with different rules. The join must pick by faction.
-const archive = {
+const archive: ArchiveIndex = {
   factionCode: (kebab: string) => ({ "adepta sororitas": "AS", "agents of the imperium": "AoI" })[kebab.replace(/-/g, " ")],
   datasheetsFor: (unitName: string, code: string) =>
     unitName.toLowerCase() === "sanctifiers" ? [`ds-${code}`] : [],

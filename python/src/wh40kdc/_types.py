@@ -2253,6 +2253,7 @@ class Ability(TypedDict):
         Literal["core", "faction", "detachment", "unit", "enhancement", "stratagem"]
     ]
     behavior: NotRequired[Literal["passive", "activated", "reactive", "aura"]]
+    optional: NotRequired[Literal[True]]
     effect: Effect
     trigger: NotRequired[AbilityTrigger]
     scope: Scope

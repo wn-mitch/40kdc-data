@@ -348,7 +348,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "death-guard"
+    "faction_id": "death-guard",
+    "optional": true
   },
   {
     "ability_id": "sevenfold-chant-death-guard",
@@ -1421,7 +1422,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "death-guard"
+    "faction_id": "death-guard",
+    "optional": true
   },
   {
     "ability_id": "inflamed-infections-death-guard",
@@ -2156,7 +2158,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "death-guard"
+    "faction_id": "death-guard",
+    "optional": true
   },
   {
     "ability_id": "tocsin-of-misery-death-guard",
@@ -8056,7 +8059,8 @@
       "frequency": "once-per-battle-round",
       "per": "model"
     },
-    "source_digest": "58fb47d7db8ad313c4f9c18bb3ac8b5c98ce9f1a1d17efa9a07f97895a92c4ec"
+    "source_digest": "58fb47d7db8ad313c4f9c18bb3ac8b5c98ce9f1a1d17efa9a07f97895a92c4ec",
+    "optional": true
   },
   {
     "ability_id": "sickening-horror-maggot-lords-death-guard",
@@ -8734,7 +8738,8 @@
       "duration": "permanent"
     },
     "behavior": "activated",
-    "source_digest": "4b7b95fa67ea8e03d4c14f9823dd6c9d9e67300751a27795ca2a42435d352502"
+    "source_digest": "4b7b95fa67ea8e03d4c14f9823dd6c9d9e67300751a27795ca2a42435d352502",
+    "optional": true
   },
   {
     "ability_id": "visions-of-virulence-champions-of-contagion-death-guard",

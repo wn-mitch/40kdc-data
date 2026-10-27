@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 import { DEFAULT_DUMP_PATH, loadDump, MfmDump } from "../src/mfm/loader.js";
 import { CORE_DIR } from "../src/mfm/repo-files.js";
 import { deriveWargear, limitedSetBudgets, runCompositionNames } from "../src/mfm/wargear.js";
+import { partialDump } from "./mfm-fixture.js";
 
 /**
  * A Legionaries-shaped dump: the champion and the troopers can each swap their
@@ -27,7 +28,7 @@ function flatCapDump(flatLimit: number, limitedMini = "m-troop", troopSword = tr
   const baseOption = (id: string, group: string, inputType: string, defaultValue: number) => ({
     id, wargearItemId: "wi-bolter", wargearOptionGroupId: group, inputType, defaultValue, points: 0, displayOrder: 1,
   });
-  return new MfmDump({
+  return partialDump({
     data: {
       miniature: [
         { id: "m-champ", displayOrder: 0, localisations: { en: { name: "Champion" } } },
@@ -116,11 +117,12 @@ function tieredDump(wingmanSizes = true): MfmDump {
     choice("lcs-wing", "w-gun", "wi-gun"),
     choice("lcs-wing", "w-shield", "wi-shield"),
   ];
-  const sizes = [
+  type Size = { id: string; isDefault: boolean; displayOrder: number; rows: [miniatureId: string, count: number][] };
+  const sizes: Size[] = [
     { id: "uc-1", isDefault: true, displayOrder: 1, rows: [["m-lead", 1], ["m-wing", 0]] },
-    ...(wingmanSizes ? [{ id: "uc-3", isDefault: false, displayOrder: 2, rows: [["m-lead", 1], ["m-wing", 2]] }] : []),
-  ] as const;
-  return new MfmDump({
+    ...(wingmanSizes ? [{ id: "uc-3", isDefault: false, displayOrder: 2, rows: [["m-lead", 1], ["m-wing", 2]] } satisfies Size] : []),
+  ];
+  return partialDump({
     data: {
       miniature: [
         { id: "m-lead", displayOrder: 0, localisations: { en: { name: "Leader" } } },

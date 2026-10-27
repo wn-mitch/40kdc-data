@@ -3,6 +3,7 @@ import { inheritClauseBands } from "../src/semantic-authoring/compile-clause-ban
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { familyRole, normalizeFingerprintParameters, currentFamilyVersion } from "../src/semantic-authoring/contracts.js";
 import { describeAbility } from "../src/translate/effect.js";
+import { expectRefused } from "./semantic-authoring-connective-fixture.js";
 
 // semantic-authoring-event-used-object
 {
@@ -393,7 +394,7 @@ describe("Optional spend before a designated selection (compile.ts designatedSpe
       ["improve the Armour Penetration characteristic by 2", "characteristic-modifier", { subject: "attack", characteristics: ["AP"], operation: "improve", value: 2, weapon_type: "ranged" }],
     );
     const result = compileLeaves(leaves, text, { name: FIXTURE_RULE_NAME });
-    expect(result.ok).toBe(false);
+    expectRefused(result);
     expect(result.errors.join(" ")).toContain("not every effect is limited to attacks against it");
   });
 });
@@ -477,7 +478,7 @@ describe("Parenthesised 'or' replaces a test modifier (7100 shape)", () => {
   it("refuses an instead whose this-unit condition is worded as another unit", () => {
     const text = "Each enemy unit must take a Battle-shock test, subtracting 1 from that test (or subtracting 2 if that unit is a PSYKER).";
     const result = compileLeaves(bearerLeaves(text, "if that unit is a PSYKER"), text, { name: FIXTURE_RULE_NAME });
-    expect(result.ok).toBe(false);
+    expectRefused(result);
     expect(result.errors.join(" ")).toContain("another unit's test");
   });
 });

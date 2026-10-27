@@ -4,6 +4,7 @@ import { compileLeaves } from "../src/semantic-authoring/compile.js";
 import { bindMatchedPools } from "../src/semantic-authoring/compile-matched-set.js";
 import type { CompileLeaf } from "../src/semantic-authoring/compile-fragments.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
+import { expectCompiled } from "./semantic-authoring-connective-fixture.js";
 
 // Fabricated wording only: the sets are "those ALPHA units" style references, not rules prose.
 let at = 0;
@@ -24,9 +25,9 @@ describe("Semantic authoring matched sets (those X units)", () => {
   it("select-one-of-those (9762 shape) selects with the pool's keywords and range, as an authored select does", () => {
     const pointing = compileLeaves([poolSource(["THOUSAND SONS", "VEHICLE"]), selectFriendly(), those(["VEHICLE"]), mortal()]);
     const authored = compileLeaves([poolSource(["THOUSAND SONS", "VEHICLE"]), leaf("select-unit", { scope: "friendly", distance: "within", inches: 6, visible: false }), leaf("unit-filter", { side: "friendly", keywords: ["THOUSAND SONS", "VEHICLE"] }), mortal()]);
-    expect(pointing.ok).toBe(true);
+    expectCompiled(pointing);
     expect(pointing).toEqual(authored);
-    const selector = (pointing as { mechanics: { effect: { effect: { selector: Record<string, unknown> } } } }).mechanics.effect.effect.selector;
+    const selector = (pointing as unknown as { mechanics: { effect: { effect: { selector: Record<string, unknown> } } } }).mechanics.effect.effect.selector;
     expect(selector.filter).toEqual({ owner: "friendly", all_of: ["THOUSAND SONS", "VEHICLE"], within: { range: { inches: 6 }, of: "this-model" } });
     expect(selector).not.toHaveProperty("reference");
     expect(selector.count).toEqual({ min: 1, max: 1 });
@@ -140,8 +141,8 @@ describe("Semantic authoring matched sets (those X units)", () => {
   it("carries the source's excluded keywords into the selection as the pool's none_of", () => {
     const source = leaf("unit-position", { kind: "within", inches: 6, subject: "this-model", of: "matching-unit", of_side: "friendly", of_keywords: ["ALPHA"], of_excluded_keywords: ["DAMNED"], negated: false });
     const result = compileLeaves([source, selectFriendly(), those(["ALPHA"]), mortal()]);
-    expect(result.ok).toBe(true);
-    const selector = (result as { mechanics: { effect: { effect: { selector: Record<string, unknown> } } } }).mechanics.effect.effect.selector;
+    expectCompiled(result);
+    const selector = (result as unknown as { mechanics: { effect: { effect: { selector: Record<string, unknown> } } } }).mechanics.effect.effect.selector;
     expect(selector.filter).toMatchObject({ none_of: ["DAMNED"], all_of: ["ALPHA"] });
   });
 

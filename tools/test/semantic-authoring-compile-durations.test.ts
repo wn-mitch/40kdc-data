@@ -292,7 +292,7 @@ describe("a no-roll and its add-6 fold into one move", () => {
 function withTail(id: number, tail: string, items: Array<[string, string, Record<string, unknown>]>): { leaves: CompileLeaf[]; text: string } {
   const { leaves, source_text } = fixture(id);
   const offset = Buffer.byteLength(source_text, "utf8");
-  const extra = placed(tail, ...items).map((leaf) => ({ ...leaf, start_byte: leaf.start_byte + offset, end_byte: leaf.end_byte + offset }));
+  const extra = placed(tail, ...items).map((leaf) => ({ ...leaf, start_byte: leaf.start_byte + offset, end_byte: leaf.end_byte === undefined ? undefined : leaf.end_byte + offset }));
   return { leaves: [...leaves, ...extra], text: source_text + tail };
 }
 

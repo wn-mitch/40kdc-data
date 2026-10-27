@@ -366,7 +366,7 @@ describe("collectDanglingAbilityReferences", () => {
 
 describe("runDanglingRefsAudit", () => {
   let root: string;
-  let previousExitCode: number | string | undefined;
+  let previousExitCode: typeof process.exitCode;
 
   beforeEach(() => {
     root = setupDataRoot();

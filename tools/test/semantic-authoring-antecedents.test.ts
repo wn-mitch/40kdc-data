@@ -11,6 +11,7 @@ import { currentFamilyVersion, familyRole, normalizeFingerprintParameters, REVIE
 import { ANTECEDENT_KEYS, antecedentVersion } from "../src/semantic-authoring/antecedent-families.js";
 import { mapToLatest } from "../src/semantic-authoring/family-versions.js";
 import { checkEntry, entryWithMechanics } from "../src/semantic-authoring/entries.js";
+import { expectCompiled } from "./semantic-authoring-connective-fixture.js";
 
 let at = 0;
 function leaf(family_id: string, parameters: Record<string, unknown>): CompileLeaf {
@@ -173,7 +174,7 @@ describe("Semantic authoring a filter after a characteristic change, and a later
 
   it("gives the roll the Move change's filter, not this unit", () => {
     const result = compileLeaves(moveLeaves(moveText), moveText);
-    expect(result.ok).toBe(true);
+    expectCompiled(result);
     const flat = (node: Record<string, any>): Array<Record<string, any>> => node.type === "sequence" ? node.steps.flatMap(flat) : [node];
     const changes = flat(result.mechanics.effect as Record<string, any>);
     expect(changes.map((change) => change.type)).toEqual(["stat-modifier", "roll-modifier", "roll-modifier"]);

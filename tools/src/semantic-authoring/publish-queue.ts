@@ -17,7 +17,7 @@ import { canonicalTarget, coreStratagemFile } from "./publish-core.js";
 export type PublishableEntry = { entry_id: string; ability_id: string; shape_signature: string; changes: string[] };
 export type PublishableFaction = { faction_id: string; entries: PublishableEntry[] };
 
-const FIELDS = ["effect", "scope", "behavior", "trigger", "usage", "applies_to"] as const;
+const FIELDS = ["effect", "scope", "behavior", "optional", "trigger", "usage", "applies_to"] as const;
 
 const coreFiles = new Map<string, Array<Record<string, unknown>> | null>();
 let keywords: Map<string, string> | null = null;

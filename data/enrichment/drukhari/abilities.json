@@ -3117,7 +3117,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "drukhari"
+    "faction_id": "drukhari",
+    "optional": true
   },
   {
     "ability_id": "fear-incarnate-drukhari",
@@ -10628,7 +10629,8 @@
       "duration": "permanent"
     },
     "behavior": "activated",
-    "source_digest": "c5c8abaf70ba79dd9edc3b280ab37178064d510961ff2bf178ce23e992374d16"
+    "source_digest": "c5c8abaf70ba79dd9edc3b280ab37178064d510961ff2bf178ce23e992374d16",
+    "optional": true
   },
   {
     "ability_id": "webway-walker-reapers-wager-drukhari",

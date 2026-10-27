@@ -9,8 +9,8 @@ use std::path::PathBuf;
 
 use serde_json::Value;
 use wh40kdc::{
-    describe_ability_parts, describe_scoring_card, AbilityTrigger, AbilityUsage, Dataset,
-    EffectNode, KeywordPredicate, Scope,
+    describe_ability_parts_with_optional, describe_scoring_card, AbilityTrigger, AbilityUsage,
+    Dataset, EffectNode, KeywordPredicate, Scope,
 };
 
 fn corpus(path: &str) -> Value {
@@ -41,12 +41,13 @@ fn effect_translation_matches_goldens() {
         let id = case["caseId"].as_str().expect("caseId");
         let effect: EffectNode = serde_json::from_value(case["effect"].clone())
             .unwrap_or_else(|e| panic!("{id}: effect does not parse: {e}"));
-        let text = describe_ability_parts(
+        let text = describe_ability_parts_with_optional(
             &effect,
             part::<Scope>(case, "scope").as_ref(),
             part::<KeywordPredicate>(case, "applies_to").as_ref(),
             part::<AbilityUsage>(case, "usage").as_ref(),
             part::<AbilityTrigger>(case, "trigger").as_ref(),
+            case["optional"] == Value::Bool(true),
         );
         let expected = case["expected"]["text"].as_str().expect("expected.text");
         if text != expected {

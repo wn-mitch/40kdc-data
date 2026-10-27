@@ -137,7 +137,7 @@ describe("Dataset.stackableBuffsFor: costs and providers", () => {
   it("preserves intersecting usage pools when an ability record is granted", () => {
     const raw = armyRaw();
     raw.abilities = raw.abilities.map((record) => record.ability_id === "fix-granted"
-      ? { ...record, usage: { frequency: "once-per-battle" } }
+      ? { ...record, usage: { frequency: "n-per-battle" as const, count: 1 } }
       : record);
     const result = new Dataset(raw).stackableBuffsFor(mob, { phase: "fight" });
     const lever = result.buffs.find((candidate) => candidate.id === "fix-grant-rule>fix-granted#stable-lethal")!;

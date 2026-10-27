@@ -22,7 +22,7 @@
             </profile>
             <profile name="Glimpse of Eternity (Psychic)" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Once per turn per unit:
+                <characteristic name="Description">You can: Once per turn per unit:
   Select one of the following:
     - One of the unit's Hit rolls counts as 6.
     - One of the unit's Wound rolls counts as 6.

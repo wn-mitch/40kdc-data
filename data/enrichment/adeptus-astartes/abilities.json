@@ -1070,7 +1070,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "adeptus-astartes"
+    "faction_id": "adeptus-astartes",
+    "optional": true
   },
   {
     "ability_id": "blackwing-mantle-adeptus-astartes",
@@ -1427,7 +1428,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "adeptus-astartes"
+    "faction_id": "adeptus-astartes",
+    "optional": true
   },
   {
     "ability_id": "siege-captain-adeptus-astartes",
@@ -1795,7 +1797,8 @@
     "ability_type": "unit",
     "behavior": "activated",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "adeptus-astartes"
+    "faction_id": "adeptus-astartes",
+    "optional": true
   },
   {
     "ability_id": "supreme-commander-adeptus-astartes",
@@ -3274,7 +3277,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "adeptus-astartes"
+    "faction_id": "adeptus-astartes",
+    "optional": true
   },
   {
     "ability_id": "hammer-of-wrath-adeptus-astartes",
@@ -4090,7 +4094,8 @@
     "ability_type": "unit",
     "behavior": "activated",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "adeptus-astartes"
+    "faction_id": "adeptus-astartes",
+    "optional": true
   },
   {
     "ability_id": "ballistus-strike-adeptus-astartes",
@@ -7694,7 +7699,8 @@
       "duration": "permanent"
     },
     "behavior": "activated",
-    "source_digest": "b07d3bb248e7c72f327af7c99717904ab882309bb6873e6894c9c1ec96e8c2a6"
+    "source_digest": "b07d3bb248e7c72f327af7c99717904ab882309bb6873e6894c9c1ec96e8c2a6",
+    "optional": true
   },
   {
     "ability_id": "blessings-of-the-omnissiah-adeptus-astartes",
@@ -8656,7 +8662,8 @@
       "duration": "permanent"
     },
     "behavior": "activated",
-    "source_digest": "41b127aa6590102f82245fcbdd3c9eb7b1218817353d4b6f76ba58070b5a74c0"
+    "source_digest": "41b127aa6590102f82245fcbdd3c9eb7b1218817353d4b6f76ba58070b5a74c0",
+    "optional": true
   },
   {
     "ability_id": "divinator-class-auspexes-adeptus-astartes",
@@ -10489,7 +10496,8 @@
       "duration": "until-next-command-phase"
     },
     "behavior": "activated",
-    "source_digest": "6ce24dfc31bfc0d904e785b643390a42c19bc3f20603d1b7a0f017c0a4502b1f"
+    "source_digest": "6ce24dfc31bfc0d904e785b643390a42c19bc3f20603d1b7a0f017c0a4502b1f",
+    "optional": true
   },
   {
     "ability_id": "masterful-tactics-tactical-brethren-adeptus-astartes",
@@ -11540,7 +11548,8 @@
       "duration": "until-next-command-phase"
     },
     "behavior": "activated",
-    "source_digest": "b27b2d96e2fb92921b592884e312ad4676b242cd26108eb367c4cdf060c09c6d"
+    "source_digest": "b27b2d96e2fb92921b592884e312ad4676b242cd26108eb367c4cdf060c09c6d",
+    "optional": true
   },
   {
     "ability_id": "strike-from-the-shadows-phobos-shock-force-adeptus-astartes",
@@ -11955,7 +11964,8 @@
       "duration": "permanent"
     },
     "behavior": "activated",
-    "source_digest": "db591dd6192bbcfa551deeccd42c60d83206ad1dbd887064a0a7e340e83a9b04"
+    "source_digest": "db591dd6192bbcfa551deeccd42c60d83206ad1dbd887064a0a7e340e83a9b04",
+    "optional": true
   },
   {
     "ability_id": "tactical-withdrawal-phobos-shadow-force-adeptus-astartes",
@@ -13160,7 +13170,8 @@
       "duration": "permanent"
     },
     "behavior": "activated",
-    "source_digest": "0c45726f649f71d210154bea2f86077f03d4b00d7ac630163ca2668785d9919f"
+    "source_digest": "0c45726f649f71d210154bea2f86077f03d4b00d7ac630163ca2668785d9919f",
+    "optional": true
   },
   {
     "ability_id": "furious-assault-upgrade-assault-brethren-adeptus-astartes",
@@ -13551,7 +13562,8 @@
       "duration": "permanent"
     },
     "behavior": "activated",
-    "source_digest": "077a390b0dc07320dc0e9fe6121be084a58dd9933faf0fd3732c4f3cd2bb96c1"
+    "source_digest": "077a390b0dc07320dc0e9fe6121be084a58dd9933faf0fd3732c4f3cd2bb96c1",
+    "optional": true
   },
   {
     "ability_id": "master-forged-firearms-devastator-brethren-adeptus-astartes",

@@ -3,12 +3,13 @@ import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, familyRole } from "../src/semantic-authoring/contracts.js";
 import { bindBareFilterHits } from "../src/semantic-authoring/compile-weapon-qualified.js";
+import { expectCompiled, expectRefused } from "./semantic-authoring-connective-fixture.js";
 
 /** A registered designation, so a designate-target compiles (compile-wrappers.ts designationIdFor). */
 const FIXTURE_RULE_NAME = "A Trap Well Laid";
 
 /** Leaves on their own wording in `text`, in order (fabricated wording, not rules text). */
-function placed(text: string, ...items: Array<[string, string, Record<string, unknown>]>): CompileLeaf[] {
+function placed(text: string, ...items: Array<readonly [string, string, Record<string, unknown>]>): CompileLeaf[] {
   const bytes = Buffer.from(text, "utf8");
   let from = 0;
   return items.map(([wording, family, parameters]) => {
@@ -26,7 +27,7 @@ function effectOf(list: CompileLeaf[], text: string): Record<string, any> {
   return (result.mechanics as unknown as Record<string, any>).effect;
 }
 
-const rangedAttack = (wording: string): [string, string, Record<string, unknown>] => [wording, "attack", { direction: "makes", unit: "this-unit", attack_type: "ranged" }];
+const rangedAttack = (wording: string): readonly [string, string, Record<string, unknown>] => [wording, "attack", { direction: "makes", unit: "this-unit", attack_type: "ranged" }];
 
 describe("Semantic authoring properties of an attack with conditions on its target", () => {
   it("grants keywords after an attack and its target filter to the attack, gated on the target", () => {
@@ -98,7 +99,7 @@ describe("Semantic authoring properties of an attack with conditions on its targ
 
 /** Leaves on their own wording in `text`, in order (fabricated wording, not rules text). */
 const reroll = (roll: string, weaponType = "all"): Record<string, unknown> => ({ roll, subset: "all", weapon_type: weaponType, count: 1 });
-const FRIENDLY_VEHICLES: Array<[string, string, Record<string, unknown>]> = [
+const FRIENDLY_VEHICLES: Array<readonly [string, string, Record<string, unknown>]> = [
   ["Friendly ALPHA VEHICLE units", "unit-filter", { side: "friendly", keywords: ["ALPHA", "VEHICLE"] }],
   ["(excluding WALKER units)", "unit-filter", { side: "friendly", excluded_keywords: ["WALKER"] }],
 ];
@@ -115,8 +116,8 @@ describe("Semantic authoring attack-filter frame over subjectless rolls", () => 
       ["ranged attacks can:", "attack-filter", { attack_type: "ranged" }],
       ["Re-roll one hit roll.", "reroll", reroll("hit")],
       ["Re-roll one wound roll.", "reroll", reroll("wound")]));
-    expect(result.ok).toBe(true);
-    const steps = (result as { mechanics: { effect: { steps: Array<{ target: unknown; modifier: { roll: string; weapons?: { type?: string } } }> } } }).mechanics.effect.steps;
+    expectCompiled(result);
+    const steps = (result as unknown as { mechanics: { effect: { steps: Array<{ target: unknown; modifier: { roll: string; weapons?: { type?: string } } }> } } }).mechanics.effect.steps;
     expect(steps.map((step) => step.modifier.weapons?.type)).toEqual(["ranged", "ranged"]);
     expect(steps.map((step) => step.modifier.roll)).toEqual(["hit", "wound"]);
     // Each roll's recipient is the filter's units, exclusion included, not the attack's target.
@@ -363,7 +364,7 @@ describe("Semantic authoring attack-filter frame over subjectless rolls", () => 
     it("refuses a hit-by condition with no 'that unit' after it", () => {
       const text = "In your Shooting phase, after this model has shot, each enemy INFANTRY unit was hit by one or more of those attacks made with a zap cannon.";
       const result = compileLeaves(placed(text, SHOOTING, AFTER_SHOT, INFANTRY, HIT_BY, ZAP), text);
-      expect(result.ok).toBe(false);
+      expectRefused(result);
       expect(result.errors?.join(" ")).toContain("needs a 'that unit' after it");
     });
 

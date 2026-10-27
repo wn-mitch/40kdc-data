@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { checkEntry, entryWithMechanics } from "../src/semantic-authoring/entries.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
+import { expectCompiled } from "./semantic-authoring-connective-fixture.js";
 
 /**
  * Psychic levels: the psychic-level cost of each "**Name (psychic level N)**" heading (a spend of N
@@ -70,7 +71,7 @@ describe("Semantic authoring psychic-level cost", () => {
     const text = "**Alpha Hex (psychic level 2)**\nIn your Shooting phase, roll one D6 (psychic). On a 4+, this unit has +1 Sv.";
     const result = compiled(text, [cost("psychic level 2", 2), shooting, ...psychicTest, sv]);
     expect(result.ok).toBe(true);
-    const part = (result as { mechanics: { effect: Record<string, unknown> } }).mechanics.effect;
+    const part = (result as unknown as { mechanics: { effect: Record<string, unknown> } }).mechanics.effect;
     expect(part.type).toBe("ability-part");
     expect(spendOf(part)).toEqual({ type: "resource-spend", target: "this-unit", modifier: { pool: "psychic-level", amount: 2, label: "Psychic Level" } });
     expect(JSON.stringify(part.effect)).toContain("stat-modifier");
@@ -79,8 +80,8 @@ describe("Semantic authoring psychic-level cost", () => {
   it("gives each psychic heading its own cost, and keeps a leaf in the ability it sits under", () => {
     const text = "**Alpha Hex (psychic level 2)**\nIn your Shooting phase, roll one D6 (psychic). On a 4+, this unit has +1 Sv.\n**Beta Ward (psychic level 1)**\nroll one D6 (psychic). On a 4+, this unit has +1 Sv.";
     const result = compiled(text, [cost("psychic level 2", 2), shooting, ...psychicTest, sv, cost("psychic level 1", 1), ...psychicTest, sv]);
-    expect(result.ok).toBe(true);
-    const effect = (result as { mechanics: { effect: { type: string; steps: Array<Record<string, unknown>> } } }).mechanics.effect;
+    expectCompiled(result);
+    const effect = (result as unknown as { mechanics: { effect: { type: string; steps: Array<Record<string, unknown>> } } }).mechanics.effect;
     expect(effect.type).toBe("sequence");
     expect(effect.steps.map((step) => spendOf(step).modifier.amount)).toEqual([2, 1]);
     // The shooting window belongs to the first ability only.
@@ -123,7 +124,7 @@ describe("Semantic authoring psychic-level cost", () => {
     const result = compiled(text, [cost("psychic level 2", 2), shooting, ...psychicTest, sv]);
     expect(result.ok).toBe(true);
     const original = { ability_id: "fabricated-alpha-hex", name: "Fabricated Alpha Hex", ...FABRICATED_ENTRY };
-    const checked = checkEntry(entryWithMechanics(original, (result as { mechanics: Parameters<typeof entryWithMechanics>[1] }).mechanics));
+    const checked = checkEntry(entryWithMechanics(original, (result as unknown as { mechanics: Parameters<typeof entryWithMechanics>[1] }).mechanics));
     expect(checked.errors).toEqual([]);
     expect(checked.rendered_text).not.toBeNull();
   });
@@ -143,7 +144,7 @@ describe("Semantic authoring characteristic-set v6 psyker-level setter", () => {
     const text = "This model has psyker level 2.";
     const result = compileLeaves([setterAt(text, "has psyker level 2", { subject: "this-model", characteristic: "psyker-level", value: 2 })], text);
     expect(result.ok).toBe(true);
-    const mechanics = (result as { mechanics: { effect: Record<string, unknown> } }).mechanics;
+    const mechanics = (result as unknown as { mechanics: { effect: Record<string, unknown> } }).mechanics;
     expect(mechanics.effect).toMatchObject({ type: "stat-modifier", target: "this-model", modifier: { stat: "psyker-level", operation: "set", value: 2 } });
     expect((mechanics.effect.modifier as Record<string, unknown>).weapon_type).toBeUndefined();
   });
@@ -153,8 +154,8 @@ describe("Semantic authoring characteristic-set v6 psyker-level setter", () => {
     expect(parsed).toEqual({ subject: "this-model", values: [{ characteristic: "psyker-level", value: 2 }, { characteristic: "M", value: 7 }] });
     const text = "This model has psyker level 2 and a Move characteristic of 7.";
     const result = compileLeaves([setterAt(text, "psyker level 2", parsed)], text);
-    expect(result.ok).toBe(true);
-    const steps = (result as { mechanics: { effect: { type: string; steps: Array<{ modifier: Record<string, unknown> }> } } }).mechanics.effect;
+    expectCompiled(result);
+    const steps = (result as unknown as { mechanics: { effect: { type: string; steps: Array<{ modifier: Record<string, unknown> }> } } }).mechanics.effect;
     expect(steps.type).toBe("sequence");
     expect(steps.steps.map((step) => step.modifier.stat)).toEqual(["psyker-level", "M"]);
   });
@@ -216,7 +217,7 @@ describe("Semantic authoring psychic-level follow-up shapes (fabricated)", () =>
       body(text, "this unit has +1 Ld", "characteristic-modifier", { subject: "this-unit", characteristics: ["Ld"], operation: "improve", value: 1, weapon_type: "all" }),
     ], text, { name });
     expect(result.ok ? [] : (result as { errors: string[] }).errors).toEqual([]);
-    const json = JSON.stringify((result as { mechanics: unknown }).mechanics);
+    const json = JSON.stringify((result as unknown as { mechanics: unknown }).mechanics);
     expect(json).toContain('"stat":"psyker-level"');
     expect(json).toContain('"value":3');
   });
@@ -242,6 +243,6 @@ describe("Semantic authoring psychic-level follow-up shapes (fabricated)", () =>
       body(text, "have +6 Range", "characteristic-modifier", { characteristics: ["Range"], operation: "improve", value: 6 }),
     ], text, { name });
     expect(result.ok ? [] : (result as { errors: string[] }).errors).toEqual([]);
-    expect(JSON.stringify((result as { mechanics: unknown }).mechanics)).toContain('"stat":"Range"');
+    expect(JSON.stringify((result as unknown as { mechanics: unknown }).mechanics)).toContain('"stat":"Range"');
   });
 });

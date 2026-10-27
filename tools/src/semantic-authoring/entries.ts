@@ -32,6 +32,8 @@ export type Mechanics = {
   effect: Record<string, unknown>;
   scope: Record<string, unknown>;
   behavior: string | null;
+  /** The player chooses whether to use this triggerless, non-Stratagem ability. */
+  optional?: true;
   trigger?: unknown | null;
   usage?: unknown | null;
   applies_to?: unknown | null;
@@ -143,6 +145,9 @@ export function entryWithMechanics(original: Record<string, unknown>, mechanics:
   if (Object.hasOwn(original, "community_notes")) entry.community_notes = original.community_notes;
   else delete entry.community_notes;
   if (mechanics.behavior === null) delete entry.behavior;
+  // The leaves decide whether the use is optional, so a compile without the flag clears it.
+  if (mechanics.optional === true) entry.optional = true;
+  else delete entry.optional;
   return entry;
 }
 

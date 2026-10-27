@@ -6756,7 +6756,8 @@
         "EMPEROR’S CHILDREN"
       ]
     },
-    "community_notes": "While the bearer's unit is your army's Favoured Champions, also add 1 to the Objective Control characteristic of its models; the rider is not encoded."
+    "community_notes": "While the bearer's unit is your army's Favoured Champions, also add 1 to the Objective Control characteristic of its models; the rider is not encoded.",
+    "optional": true
   },
   {
     "ability_id": "slayer-of-champions-slaaneshs-chosen-emperors-children",
@@ -7452,7 +7453,8 @@
         "INFANTRY"
       ]
     },
-    "community_notes": "In your Movement phase, one friendly Emperor's Children Transport in Strategic Reserves treats the battle round as one higher for arrival purposes."
+    "community_notes": "In your Movement phase, one friendly Emperor's Children Transport in Strategic Reserves treats the battle round as one higher for arrival purposes.",
+    "optional": true
   },
   {
     "ability_id": "spearhead-striker-rapid-evisceration-emperors-children",
@@ -8084,7 +8086,8 @@
         "EMPEROR’S CHILDREN"
       ]
     },
-    "community_notes": "Also ignores modifiers to the attack's Weapon Skill characteristic."
+    "community_notes": "Also ignores modifiers to the attack's Weapon Skill characteristic.",
+    "optional": true
   },
   {
     "ability_id": "exalted-patron-court-of-the-phoenician-emperors-children",

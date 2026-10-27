@@ -61,9 +61,8 @@ describe("Semantic authoring named-region-state compiler", () => {
       default_branch: { kind: "reroll", roll: "wound", subset: "ones", weapon_keyword: "Psychic", optional: false },
       qualified_branch: { kind: "roll-modifier", roll: "wound", operation: "add", value: 1, weapon_keyword: "Psychic", optional: false },
     });
-    if (!result.ok) throw new Error(result.errors.join("; "));
     expect(effectOk(result.mechanics.effect), JSON.stringify(effectOk.errors)).toBe(true);
-    const effect = result.mechanics.effect as NamedRegionStateEffect;
+    const effect = result.mechanics.effect as unknown as NamedRegionStateEffect;
     const { modifier } = effect;
     const { producer, consumer } = modifier;
     expect(producer.baseline).toEqual([{ region: { territory: "your-deployment-zone" }, duration: "permanent" }]);
@@ -92,8 +91,7 @@ describe("Semantic authoring named-region-state compiler", () => {
       default_branch: { kind: "reroll", roll: "hit", subset: "ones", optional: false },
       qualified_branch: { kind: "reroll", roll: "hit", subset: "any", optional: true },
     });
-    if (!result.ok) throw new Error(result.errors.join("; "));
-    const effect = result.mechanics.effect as NamedRegionStateEffect;
+    const effect = result.mechanics.effect as unknown as NamedRegionStateEffect;
     const { producer, consumer } = effect.modifier;
     expect(producer.additive_extensions).toEqual([
       { kind: "unit-proximity", filter: { owner: "friendly", all_of: ["PURIFIER SQUAD"] }, range: { inches: 6 } },
@@ -130,7 +128,7 @@ describe("Semantic authoring named-region-state compiler", () => {
   ])("lowers $name independently", ({ recipe, baseline, phases }) => {
     const result = compiled({ ...PARAMETERS, ...recipe }, 3);
     expect(effectOk(result.mechanics.effect), JSON.stringify(effectOk.errors)).toBe(true);
-    const effect = result.mechanics.effect as NamedRegionStateEffect;
+    const effect = result.mechanics.effect as unknown as NamedRegionStateEffect;
     const { producer } = effect.modifier;
     expect(producer.baseline).toEqual(baseline);
     if (typeof phases === "number") expect(producer.phase_extensions).toHaveLength(phases);

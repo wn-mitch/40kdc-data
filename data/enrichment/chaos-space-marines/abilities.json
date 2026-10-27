@@ -374,7 +374,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "chaos-space-marines"
+    "faction_id": "chaos-space-marines",
+    "optional": true
   },
   {
     "ability_id": "death-hex-chaos-space-marines",
@@ -1148,7 +1149,8 @@
       "frequency": "n-per-battle",
       "count": 1,
       "per": "unit"
-    }
+    },
+    "optional": true
   },
   {
     "ability_id": "corrupt-machine-spirits-chaos-space-marines",
@@ -1418,7 +1420,8 @@
     "ability_type": "unit",
     "behavior": "activated",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "chaos-space-marines"
+    "faction_id": "chaos-space-marines",
+    "optional": true
   },
   {
     "ability_id": "cursed-flames-chaos-space-marines",
@@ -2084,7 +2087,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "chaos-space-marines"
+    "faction_id": "chaos-space-marines",
+    "optional": true
   },
   {
     "ability_id": "malevolent-locus-chaos-space-marines",
@@ -3863,7 +3867,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "chaos-space-marines"
+    "faction_id": "chaos-space-marines",
+    "optional": true
   },
   {
     "ability_id": "self-repair-chaos-space-marines",
@@ -5037,7 +5042,8 @@
       "frequency": "once-per-turn",
       "per": "unit"
     },
-    "faction_id": "chaos-space-marines"
+    "faction_id": "chaos-space-marines",
+    "optional": true
   },
   {
     "ability_id": "chirurgeon-chaos-space-marines",
@@ -9987,7 +9993,8 @@
       "duration": "permanent"
     },
     "behavior": "activated",
-    "source_digest": "57c3c02c8166066fa8ba1a6abed59f135e3a445270a3c3cf5909bad62e057e1e"
+    "source_digest": "57c3c02c8166066fa8ba1a6abed59f135e3a445270a3c3cf5909bad62e057e1e",
+    "optional": true
   },
   {
     "ability_id": "at-the-tyrants-command-hurons-marauders-chaos-space-marines",
@@ -13172,7 +13179,8 @@
       "frequency": "once-per-turn",
       "per": "model"
     },
-    "source_digest": "9d56c30c3d91199e7a24cf2b521b1634b20b49f14b7d89727e1f1bd3f6823ab9"
+    "source_digest": "9d56c30c3d91199e7a24cf2b521b1634b20b49f14b7d89727e1f1bd3f6823ab9",
+    "optional": true
   },
   {
     "ability_id": "mark-of-the-hound-renegade-raiders-chaos-space-marines",

@@ -3459,7 +3459,8 @@
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "optional": true
   },
   {
     "ability_id": "possessed-lord-world-eaters",
@@ -5734,7 +5735,8 @@
       "frequency": "n-per-battle",
       "count": 1,
       "per": "army"
-    }
+    },
+    "optional": true
   },
   {
     "ability_id": "gateways-to-glory-vessels-of-wrath-world-eaters",

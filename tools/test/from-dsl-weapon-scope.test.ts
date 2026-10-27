@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { effectToBuffs } from "../src/cruncher/from-dsl.js";
-import { crunch, type Buff, type BuffSource } from "../src/cruncher/index.js";
+import { crunch, type Buff, type BuffSource, type EngineContext } from "../src/cruncher/index.js";
 import type { Unit, Weapon } from "../src/generated.js";
 
 const source: BuffSource = { kind: "ability", abilityId: "fabricated-weapon-scope", abilityKind: "unit" };
@@ -61,6 +61,8 @@ describe("effectToBuffs: weapon-scoped conditions", () => {
 });
 
 describe("effectToBuffs: a weapon a selection binds by name", () => {
+  // No phase or battle state is known: these fragments translate without one.
+  const noContext = {} as EngineContext;
   const bound = (scope: Record<string, unknown>) => ({
     type: "sequence",
     steps: [
@@ -70,7 +72,7 @@ describe("effectToBuffs: a weapon a selection binds by name", () => {
   });
 
   it("applies the effects naming the bound weapon to that weapon only", () => {
-    const { applied, unsupported } = effectToBuffs(bound({ name: "example blaster" }), source, {});
+    const { applied, unsupported } = effectToBuffs(bound({ name: "example blaster" }), source, noContext);
     expect(unsupported).toEqual([]);
     expect(applied).toEqual([{ source, contribution: { type: "attacks-mod", value: 1 }, applicableWhen: { weaponName: "example blaster" } }]);
     expect(hits(gun("example blaster", []), applied)).toBeGreaterThan(hits(gun("example blaster", []), []));
@@ -78,7 +80,7 @@ describe("effectToBuffs: a weapon a selection binds by name", () => {
   });
 
   it("keeps a selection that does not name its weapon unresolved: the player picks among several", () => {
-    const { applied, unsupported } = effectToBuffs(bound({ type: "ranged" }), source, {});
+    const { applied, unsupported } = effectToBuffs(bound({ type: "ranged" }), source, noContext);
     expect(applied).toEqual([]);
     expect(unsupported.map((item) => item.reason)).toEqual([
       "select-weapon: a bound weapon is not resolved by the buff engine",

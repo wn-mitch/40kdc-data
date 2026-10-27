@@ -1597,7 +1597,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "chaos-daemons"
+    "faction_id": "chaos-daemons",
+    "optional": true
   },
   {
     "ability_id": "discordant-disruption-chaos-daemons",
@@ -4380,7 +4381,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "chaos-daemons"
+    "faction_id": "chaos-daemons",
+    "optional": true
   },
   {
     "ability_id": "prey-of-the-blood-god-chaos-daemons",
@@ -5132,7 +5134,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "chaos-daemons"
+    "faction_id": "chaos-daemons",
+    "optional": true
   },
   {
     "ability_id": "disease-of-mirth-chaos-daemons",

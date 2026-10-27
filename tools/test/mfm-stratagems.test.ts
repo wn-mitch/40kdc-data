@@ -6,6 +6,7 @@ import { CORE_DIR } from "../src/mfm/repo-files.js";
 import { nameToId, detachmentScopedId } from "../src/converters/id-generator.js";
 import { buildStratCanon, runStratagems, deriveTrigger, namesEitherTurnPhase, type StratagemCanon } from "../src/mfm/stratagems.js";
 import { seedStratagems } from "../src/mfm/seed-stratagems.js";
+import { partialDump } from "./mfm-fixture.js";
 
 /**
  * WS4 stratagem field reconcile. The canon derivation (dump row → first-class
@@ -18,7 +19,7 @@ import { seedStratagems } from "../src/mfm/seed-stratagems.js";
 /** Minimal synthetic dump: a detachment-scoped battle tactic, a core stratagem
  *  with a null category, and a detachment-scoped opponent-turn epic deed. */
 function fixture(): MfmDump {
-  return new MfmDump({
+  return partialDump({
     data: {
       // A codex publication places the detachment's stratagems in its faction; the core one is Core Rules'.
       faction_keyword: [{ id: "fk-sm", parentFactionKeywordId: null, localisations: { en: { name: "Adeptus Astartes" } } }],
@@ -63,7 +64,7 @@ function fixture(): MfmDump {
 describe("rules-text player_turn override", () => {
   it("follows the card's own WHEN where the dump key says either player", () => {
     const base = fixture();
-    const dump = new MfmDump({
+    const dump = partialDump({
       data: {
         ...base.tables,
         stratagem: [{

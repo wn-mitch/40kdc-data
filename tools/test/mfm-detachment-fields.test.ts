@@ -14,6 +14,7 @@ import {
   type DetFieldsReport,
   type DirDetFieldResult,
 } from "../src/mfm/detachment-fields.js";
+import { partialDump } from "./mfm-fixture.js";
 
 /**
  * WS2 detachment-field reconcile. The derivation helpers are unit-tested with
@@ -24,7 +25,7 @@ import {
 /** Minimal synthetic dump: a chapter-locked detachment, a roster-wide one, an
  *  umbrella (parent-keyword) broadening, and a unique-keyword tag. */
 function fixture(): MfmDump {
-  return new MfmDump({
+  return partialDump({
     data: {
       faction_keyword: [
         { id: "fk-astartes", localisations: { en: { name: "Adeptus Astartes" } } },
@@ -81,7 +82,7 @@ describe("detachment-field derivation (synthetic)", () => {
   });
 
   it("collects an unresolved faction-keyword id rather than emitting a null label", () => {
-    const d = new MfmDump({
+    const d = partialDump({
       data: {
         faction_keyword: [{ id: "fk-astartes", localisations: { en: { name: "Adeptus Astartes" } } }],
         publication: [{ id: "pub", factionKeywordId: "fk-astartes" }],
@@ -126,7 +127,7 @@ describe("authoritative detachment field reconciliation", () => {
 
 
 describe("detachment datasheet lists (synthetic)", () => {
-  const dump = new MfmDump({
+  const dump = partialDump({
     data: {
       datasheet: [
         { id: "ds-yv", localisations: { en: { name: "Yvraine" } } },
@@ -182,7 +183,7 @@ describe("detachment datasheet lists (synthetic)", () => {
 
 describe("detachment-rule id derivation (synthetic)", () => {
   it("gives each dump rule the mirrored id (<name>-<faction>), sorted and de-duplicated", () => {
-    const dump = new MfmDump({
+    const dump = partialDump({
       data: {
         faction_keyword: [{ id: "fk", parentFactionKeywordId: null, localisations: { en: { name: "Legiones Daemonica" } } }],
         publication: [{ id: "p", factionKeywordId: "fk", isCombatPatrol: false, isLegends: false, isCoreRules: false, localisations: { en: { name: "Codex" } } }],
@@ -199,7 +200,7 @@ describe("detachment-rule id derivation (synthetic)", () => {
   });
 
   it("returns an empty list when the detachment has no dump rule", () => {
-    const dump = new MfmDump({
+    const dump = partialDump({
       data: { detachment: [{ id: "d", localisations: { en: { name: "X" } } }], detachment_rule: [] },
     });
     expect(ruleIdsForDetachment(dump, "d")).toEqual([]);

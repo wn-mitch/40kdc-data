@@ -124,7 +124,7 @@ function render(factionId: string, abilityId: string, compiled: Compiled): { aut
   const entry = entryWithMechanics(original, compiled.mechanics);
   const check = checkEntry(entry);
   check.errors.push(...coreCheckErrors(semanticAuthoringDataRoot(), abilityId, compiled.checks));
-  const fields = ["effect", "scope", "behavior", "trigger", "usage"] as const;
+  const fields = ["effect", "scope", "behavior", "optional", "trigger", "usage"] as const;
   const differs = fields.some((field) => hashJson(original[field] ?? null) !== hashJson(entry[field] ?? null));
   return { authored, compiled: check.rendered_text, errors: check.errors, differs };
 }

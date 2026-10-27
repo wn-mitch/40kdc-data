@@ -22,6 +22,13 @@ function opt(p: Partial<WargearOption>): WargearOption {
   return { id: "x", unit_id: "u", game_version: GV, ...p } as WargearOption;
 }
 
+/** A `replacement_choice` of one single-id group per id; the schema needs two or more. */
+function oneEach(ids: string[]): NonNullable<WargearOption["replacement_choice"]> {
+  const [a, b, ...rest] = ids;
+  if (a === undefined || b === undefined) throw new Error("replacement_choice needs at least two choices");
+  return [[a], [b], ...rest.map((id): [string] => [id])];
+}
+
 describe("optionCap", () => {
   it("per_n_models floors model_count / n", () => {
     expect(optionCap(opt({ model_constraint: { per_n_models: 5 } }), 10)).toBe(
@@ -849,8 +856,8 @@ describe("groupLoadout", () => {
     const ranged = ["r0", "r1", "r2", "r3", "r4", "r5"];
     const melee = ["m0", "m1", "m2", "m3", "m4", "m5"];
     const options = [
-      opt({ replaces: ["gun"], replacement_choice: ranged.map((id) => [id]), model_constraint: { any_number: true } }),
-      opt({ replaces: ["knife"], replacement_choice: melee.map((id) => [id]), model_constraint: { any_number: true } }),
+      opt({ replaces: ["gun"], replacement_choice: oneEach(ranged), model_constraint: { any_number: true } }),
+      opt({ replaces: ["knife"], replacement_choice: oneEach(melee), model_constraint: { any_number: true } }),
     ];
     const models = [{ name: "Trooper", min: 10, max: 10, default_weapon_ids: ["gun", "knife"] }];
     const bag = (meleeTwos: number) => new Map<string, number>([

@@ -1552,7 +1552,8 @@
     "ability_type": "unit",
     "behavior": "activated",
     "community_notes": "auto-generated, partial",
-    "faction_id": "adeptus-custodes"
+    "faction_id": "adeptus-custodes",
+    "optional": true
   },
   {
     "ability_id": "captain-general-adeptus-custodes",
@@ -2269,7 +2270,8 @@
     },
     "scope": {
       "duration": "until-next-command-phase"
-    }
+    },
+    "optional": true
   },
   {
     "ability_id": "moritoi-ancients-adeptus-custodes",
@@ -3653,7 +3655,8 @@
         "ANATHEMA PSYKANA"
       ]
     },
-    "community_notes": "In your Command phase, select one enemy unit within 12\" of the bearer; that unit must take a Battle-shock test."
+    "community_notes": "In your Command phase, select one enemy unit within 12\" of the bearer; that unit must take a Battle-shock test.",
+    "optional": true
   },
   {
     "ability_id": "oblivion-knight-null-maiden-vigil-adeptus-custodes",
@@ -4269,7 +4272,8 @@
       "count": 1,
       "per": "unit"
     },
-    "source_digest": "e1757b9daea3f79f90d5d2e0586b7aef936b264d9c2c9870d854fc14f594099e"
+    "source_digest": "e1757b9daea3f79f90d5d2e0586b7aef936b264d9c2c9870d854fc14f594099e",
+    "optional": true
   },
   {
     "ability_id": "assault-vehicle-adeptus-custodes",
@@ -4976,7 +4980,8 @@
       "duration": "until-next-command-phase"
     },
     "behavior": "activated",
-    "source_digest": "380e8d65eaac881c10977f1df8622745fbada3ed33587ed5eb583902d744ba31"
+    "source_digest": "380e8d65eaac881c10977f1df8622745fbada3ed33587ed5eb583902d744ba31",
+    "optional": true
   },
   {
     "ability_id": "instruments-of-the-emperors-wrath-adeptus-custodes",
@@ -5758,7 +5763,8 @@
       "frequency": "once-per-battle-round",
       "per": "unit"
     },
-    "source_digest": "fd4677db7854224431e1ea21dcf212dca48724b7c49b77607574474f2c9a3d46"
+    "source_digest": "fd4677db7854224431e1ea21dcf212dca48724b7c49b77607574474f2c9a3d46",
+    "optional": true
   },
   {
     "ability_id": "mobile-hunter-adeptus-custodes",

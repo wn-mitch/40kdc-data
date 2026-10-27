@@ -10,6 +10,7 @@ import { CompileError } from "../src/semantic-authoring/compile-fragments.js";
 import { trigger, triggerLeaves } from "../src/semantic-authoring/compile-triggers.js";
 import { TRIGGER_ROLL_KINDS } from "../src/semantic-authoring/dice-families.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
+import { expectCompiled } from "./semantic-authoring-connective-fixture.js";
 
 // Fabricated wording only; no GW rule prose.
 
@@ -280,7 +281,7 @@ describe("a menu action whose trigger is a list moment (compile-containers path)
 
   it("lowers the action's when to one trigger per listed roll kind, in canonical order", () => {
     const result = compileLeaves(menu({ kind: "after-roll", rolls: ["wound", "hit"] }), MENU_TEXT);
-    expect(result.ok, result.ok ? "" : result.errors.join("; ")).toBe(true);
+    expectCompiled(result);
     const action = (result.mechanics as unknown as { effect: { actions: Array<{ when: unknown[] }> } }).effect.actions[0]!;
     expect(action.when).toEqual([
       { event: "after-roll", filter: { roll: "hit" } },

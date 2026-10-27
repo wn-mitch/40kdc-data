@@ -177,7 +177,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "agents-of-the-imperium"
+    "faction_id": "agents-of-the-imperium",
+    "optional": true
   },
   {
     "ability_id": "simulacrum-imperialis-agents-of-the-imperium",
@@ -862,7 +863,8 @@
     "ability_type": "unit",
     "behavior": "activated",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "agents-of-the-imperium"
+    "faction_id": "agents-of-the-imperium",
+    "optional": true
   },
   {
     "ability_id": "power-of-the-rosette-agents-of-the-imperium",
@@ -1093,7 +1095,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "agents-of-the-imperium"
+    "faction_id": "agents-of-the-imperium",
+    "optional": true
   },
   {
     "ability_id": "rites-of-teleportation-agents-of-the-imperium",
@@ -1245,7 +1248,8 @@
     "ability_type": "unit",
     "behavior": "activated",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "agents-of-the-imperium"
+    "faction_id": "agents-of-the-imperium",
+    "optional": true
   },
   {
     "ability_id": "death-to-the-alien-agents-of-the-imperium",
@@ -2880,7 +2884,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "agents-of-the-imperium"
+    "faction_id": "agents-of-the-imperium",
+    "optional": true
   },
   {
     "ability_id": "defenders-of-the-faith-agents-of-the-imperium",
@@ -3168,7 +3173,8 @@
       "frequency": "n-per-battle",
       "count": 1,
       "per": "unit"
-    }
+    },
+    "optional": true
   },
   {
     "ability_id": "holy-hatred-agents-of-the-imperium",
@@ -5901,7 +5907,8 @@
       "frequency": "once-per-battle-round",
       "per": "model"
     },
-    "source_digest": "3413d2f6f5d08d9f9ba252883355ae0b63139b8cb73be1e4833e64b2a0b07491"
+    "source_digest": "3413d2f6f5d08d9f9ba252883355ae0b63139b8cb73be1e4833e64b2a0b07491",
+    "optional": true
   },
   {
     "ability_id": "formidable-resolve-ordo-malleus-daemon-hunters-agents-of-the-imperium",

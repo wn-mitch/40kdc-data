@@ -103,7 +103,7 @@ describe("terrain (embedded catalog + layout resolution)", () => {
   it("places Take vs Recon objectives on their marked terrain areas", () => {
     const layout = dataset.terrainLayouts.get("bm-take-vs-recon-01")!;
     const markers = Object.fromEntries(
-      layout.pieces
+      (layout.pieces ?? [])
         .filter((piece) => piece.is_objective)
         .map((piece) => [
           piece.id,

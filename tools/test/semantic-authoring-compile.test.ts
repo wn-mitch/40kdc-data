@@ -68,7 +68,7 @@ describe("Semantic authoring leaf compiler", () => {
     expect(effect.selector).toMatchObject({ count: { min: 0, max: { incursion: 1, "strike-force": 2, onslaught: 3 } }, eligibility: { type: expect.any(String) } });
     expect(effect.effect.modifier).toMatchObject({ arrives: "next-movement-phase", allow_first_round: true });
     // The eligibility is the selection's, not a gate on the whole ability.
-    expect(result.mechanics.condition).toBeUndefined();
+    expect((result.mechanics as Record<string, unknown>).condition).toBeUndefined();
     expect(rendered(authored("adeptus-mechanicus", "control-edict-adeptus-mechanicus"), leavesOf8561()).length).toBeGreaterThan(0);
   });
 

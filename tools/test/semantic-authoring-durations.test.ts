@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters as normalizeAt, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { expiryTrail } from "../src/translate/expiry.js";
+import { expectRefused } from "./semantic-authoring-connective-fixture.js";
 
 /** Leaves on their own wording in `text`, in order (fabricated wording, not rules text). */
 function placed(text: string, ...items: Array<[string, string, Record<string, unknown>]>): CompileLeaf[] {
@@ -125,7 +126,7 @@ describe("duration@4 phase-edge endpoints: scope.duration", () => {
     for (const parameters of refused) {
       const { text, leaves } = withDuration(parameters);
       const result = resultOf(leaves, text);
-      expect(result.ok).toBe(false);
+      expectRefused(result);
       expect(result.errors.join(" ")).toContain(`Duration ${parameters.endpoint} ${parameters.phase} ${parameters.turn} has no DSL scope yet.`);
     }
   });
@@ -142,7 +143,7 @@ describe("duration@4 phase-edge endpoints: scope.duration", () => {
       ["until the end of your next Fight phase", "duration", { endpoint: "end-of-next-phase", phase: "fight", turn: "your" }],
       ["Until the end of your next Shooting phase", "duration", { endpoint: "end-of-next-phase", phase: "shooting", turn: "your" }],
     ), text);
-    expect(result.ok).toBe(false);
+    expectRefused(result);
     expect(result.errors).toContain("Conflicting durations.");
   });
 
@@ -187,7 +188,7 @@ describe("duration@4 phase-edge endpoints: scope.duration", () => {
       ["until the attacking unit has resolved all of its attacks", "duration", { endpoint: "end-of-attack-sequence" }],
       ["When the attacking unit has resolved all of its attacks", "event", { kind: "attacks-resolved" }],
     ), text);
-    expect(result.ok).toBe(false);
+    expectRefused(result);
     expect(result.errors).toContain("A moment ends the ability with no effect after it.");
     expect(result.errors).toContain("An effect names \"that unit\", but no select-unit leaf says which unit.");
   });

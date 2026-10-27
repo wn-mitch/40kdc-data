@@ -130,7 +130,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "grey-knights"
+    "faction_id": "grey-knights",
+    "optional": true
   },
   {
     "ability_id": "warrior-strategist-grey-knights",
@@ -1235,7 +1236,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "grey-knights"
+    "faction_id": "grey-knights",
+    "optional": true
   },
   {
     "ability_id": "guardians-of-the-machine-grey-knights",
@@ -2093,7 +2095,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "grey-knights"
+    "faction_id": "grey-knights",
+    "optional": true
   },
   {
     "ability_id": "ancients-banner-grey-knights",

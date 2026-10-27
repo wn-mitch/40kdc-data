@@ -31,8 +31,9 @@ mod subject;
 mod words;
 
 pub use ability::{
-    describe_ability, describe_ability_parts, describe_applies_to, describe_effect,
-    describe_effect_inline, describe_effect_with_scope, describe_scope,
+    describe_ability, describe_ability_parts, describe_ability_parts_with_optional,
+    describe_applies_to, describe_effect, describe_effect_inline, describe_effect_with_scope,
+    describe_scope,
 };
 
 use std::sync::OnceLock;

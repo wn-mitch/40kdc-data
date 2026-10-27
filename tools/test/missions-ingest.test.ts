@@ -10,6 +10,7 @@ import {
   reconcileMissionEntities,
   type DumpScoring,
 } from "../src/mfm/missions.js";
+import { partialDump } from "./mfm-fixture.js";
 
 /**
  * The missions ingest pulls dump-authoritative scoring numbers into the repo's
@@ -23,7 +24,7 @@ import {
  * A synthetic dump keeps both runnable without _private/dump.json.
  */
 function dump(): MfmDump {
-  return new MfmDump({
+  return partialDump({
     data: {
       // one secondary (two OR-tiers under one objective; higher tier flagged mutex)
       secondary_mission: [{ id: "sm1", localisations: { en: { name: "Beacon" } } }],
@@ -125,10 +126,10 @@ describe("reconcileCard", () => {
     const card = {
       id: "engage",
       awards: [
-        { vp: 2, mode: "fixed" },
-        { vp: 9, mode: "fixed" },
-        { vp: 3, mode: "tactical" },
-        { vp: 9, mode: "tactical" },
+        { vp: 2, mode: "fixed" as const },
+        { vp: 9, mode: "fixed" as const },
+        { vp: 3, mode: "tactical" as const },
+        { vp: 9, mode: "tactical" as const },
       ],
     };
     reconcileCard(card, rows(
@@ -158,7 +159,7 @@ describe("reconcileCard", () => {
  */
 describe("missionEntityCanon (synthetic)", () => {
   it("maps a generic primary mission to its pack source + caps, excluding reskins", () => {
-    const dump = new MfmDump({
+    const dump = partialDump({
       data: {
         mission_pack: [
           {

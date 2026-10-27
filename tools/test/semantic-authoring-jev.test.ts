@@ -18,6 +18,16 @@ import type { PilotAbility } from "../src/semantic-authoring/pilot-sample.js";
 import { refreshSources } from "../src/semantic-authoring/source.js";
 import { confirmSurface } from "./semantic-authoring-human.js";
 
+/** The request a Jev client receives. */
+type JevRequest = Parameters<JevClient["systemOne"]>[0];
+
+/**
+ * A fake Jev client. jev-core only awaits `systemOne`, so a plain Promise stands in
+ * for the SDK's `APIPromise`, whose response accessors the code never reads.
+ */
+const fakeJev = (client: { systemOne: (request: JevRequest) => Promise<SystemOneResult<Questions>> }): JevClient =>
+  client as unknown as JevClient;
+
 // Fabricated wording only; no GW rule prose.
 
 type DatabaseSync = DatabaseType;
@@ -60,7 +70,7 @@ function emptyDb(): DatabaseSync {
  */
 function scriptedClient(script: Record<string, { choice?: string; confidence?: number; noul?: number }>) {
   const calls: Array<{ prompt: string; state: unknown }> = [];
-  const client: JevClient = {
+  const client = fakeJev({
     async systemOne(request) {
       calls.push({ prompt: (request.questions as Questions).answer.instructions as string, state: request.state });
       const prompt = (request.questions as Questions).answer.instructions as string;
@@ -76,7 +86,7 @@ function scriptedClient(script: Record<string, { choice?: string; confidence?: n
         usage,
       } as unknown as SystemOneResult<Questions>;
     },
-  };
+  });
   return { client, calls };
 }
 
@@ -160,7 +170,7 @@ describe("Jev proposer", () => {
 describe("Jev request failures", () => {
   const failing = (status: number) => {
     let calls = 0;
-    const client: JevClient = { async systemOne() { calls += 1; throw Object.assign(new Error(`HTTP ${status}`), { status }); } };
+    const client = fakeJev({ async systemOne() { calls += 1; throw Object.assign(new Error(`HTTP ${status}`), { status }); } });
     return { client, calls: () => calls };
   };
   const ask = (client: JevClient) => askChoiceRanked(client, 1000, new JevBudget(1), "span:1", "family", { phrase: "x" }, "Which?", { a: "A", b: "B" });
@@ -183,7 +193,7 @@ describe("Jev request failures", () => {
  * "not a leaf" for that piece, which every test here already treats as an acceptable outcome. */
 function narrowedClient(script: Record<string, { choice: string; confidence?: number }>) {
   const calls: string[] = [];
-  const client: JevClient = {
+  const client = fakeJev({
     async systemOne(request) {
       const question = (request.questions as Questions).answer as { type: string; criteria?: Record<string, unknown>; instructions?: unknown };
       const prompt = question.instructions as string;
@@ -203,7 +213,7 @@ function narrowedClient(script: Record<string, { choice: string; confidence?: nu
         usage: { input_tokens: 400, output_tokens: 15 },
       } as unknown as SystemOneResult<Questions>;
     },
-  };
+  });
   return { client, calls };
 }
 
@@ -338,7 +348,7 @@ const FACTION = "fixture-faction";
 /** Always answers "battle-round" (a real, closed, single-value option of the decided seed
  * family) to any family choice, and "none of these" for any role that doesn't offer it. */
 function turnStartClient(): JevClient {
-  return {
+  return fakeJev({
     async systemOne(request) {
       const question = (request.questions as Questions).answer as { type: string; criteria?: Record<string, unknown> };
       const criteria = question.criteria ?? {};
@@ -351,7 +361,7 @@ function turnStartClient(): JevClient {
         usage: { input_tokens: 300, output_tokens: 10 },
       } as unknown as SystemOneResult<Questions>;
     },
-  };
+  });
 }
 
 function fixture(): { db: DatabaseSync; sample: PilotAbility[] } {
@@ -400,7 +410,7 @@ describe("Jev v2 stamp-and-spread rounds", () => {
       // A client that always answers a role/family combination this fixture's registry can't
       // actually compile as a leaf on its own — this pins "compile-fragment validation gates
       // the stamp" rather than asserting it never happens for any input (too broad a claim).
-      const brokenClient: JevClient = {
+      const brokenClient = fakeJev({
         async systemOne(request) {
           const question = (request.questions as Questions).answer as { type: string; criteria?: Record<string, unknown> };
           const criteria = question.criteria ?? {};
@@ -414,7 +424,7 @@ describe("Jev v2 stamp-and-spread rounds", () => {
             usage: { input_tokens: 300, output_tokens: 10 },
           } as unknown as SystemOneResult<Questions>;
         },
-      };
+      });
       const result = await runJevV2Rounds(db, wordsEmbedder(), brokenClient, sample, { segmentationThreshold: 0.99, confidenceFloor: 0.6, maxRounds: 2 });
       // Whatever got asked, either nothing validated (0 stamps) or only fragments that truly do
       // compile were stamped — either way the run completes without throwing.

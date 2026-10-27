@@ -865,7 +865,8 @@
     "ability_type": "unit",
     "behavior": "activated",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "imperial-knights"
+    "faction_id": "imperial-knights",
+    "optional": true
   },
   {
     "ability_id": "protection-protocols-imperial-knights",
@@ -1354,7 +1355,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "imperial-knights"
+    "faction_id": "imperial-knights",
+    "optional": true
   },
   {
     "ability_id": "suppression-protocols-imperial-knights",
@@ -5104,7 +5106,8 @@
       "duration": "permanent"
     },
     "behavior": "activated",
-    "source_digest": "5d0666579fd032a31e073f1b9288238ce6a6640a3b3691d87ff86a8dbb9acea3"
+    "source_digest": "5d0666579fd032a31e073f1b9288238ce6a6640a3b3691d87ff86a8dbb9acea3",
+    "optional": true
   },
   {
     "ability_id": "exemplars-wisdom-spearhead-at-arms-imperial-knights",
@@ -5316,7 +5319,8 @@
       "duration": "permanent"
     },
     "behavior": "activated",
-    "source_digest": "f121c81afbcdeded4621841479807869ba0377ae36b37210d994bc9dd174438d"
+    "source_digest": "f121c81afbcdeded4621841479807869ba0377ae36b37210d994bc9dd174438d",
+    "optional": true
   },
   {
     "ability_id": "herald-of-triumph-questoris-companions-imperial-knights",
@@ -5853,7 +5857,8 @@
       "duration": "permanent"
     },
     "behavior": "activated",
-    "source_digest": "1b99b04ac6a7d7f6af103b20b473e98d128465fd1e7bad81c1d509259e51fcbb"
+    "source_digest": "1b99b04ac6a7d7f6af103b20b473e98d128465fd1e7bad81c1d509259e51fcbb",
+    "optional": true
   },
   {
     "ability_id": "moment-of-glory-questoris-companions-imperial-knights",
@@ -6699,7 +6704,8 @@
       "frequency": "once-per-turn",
       "per": "model"
     },
-    "source_digest": "a8f07862a9d846f30af97dade024334ac32c2204aa09c293c3af0570a5e33ce4"
+    "source_digest": "a8f07862a9d846f30af97dade024334ac32c2204aa09c293c3af0570a5e33ce4",
+    "optional": true
   },
   {
     "ability_id": "virtue-of-courage-spearhead-at-arms-imperial-knights",

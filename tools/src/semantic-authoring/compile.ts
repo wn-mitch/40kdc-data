@@ -1622,6 +1622,9 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
       // stratagem (it has a phase window or a TARGET), which a player always chooses to use. An
       // aura-range leaf always reads as an aura, ahead of any of those.
       behavior,
+      // An optional use of the whole ability, which no trigger times and which is not a
+      // Stratagem (always the player's choice), renders as the player's choice.
+      ...(optional && behavior === "activated" && !stratagem ? { optional: true as const } : {}),
       trigger: snapshot.trigger as typeof entryTrigger,
       ...(usages.length ? { usage: usages[0] } : {}),
     },

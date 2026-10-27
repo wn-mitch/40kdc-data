@@ -4,8 +4,11 @@ import { fileURLToPath } from "node:url";
 import { MfmDump, type MfmDumpInit } from "../src/mfm/loader.js";
 import { DRONE_WARGEAR_ITEMS, mintDroneWeapons, mintEnhancementWeapons, type WeaponMintResult } from "../src/mfm/enhancement-weapons.js";
 import type { MintContext, WeaponRecord } from "../src/mfm/gear-projection.js";
-import { CONFIRMED } from "../src/mfm/wargear.js";
 import { CORE_DIR } from "../src/mfm/repo-files.js";
+import { partialDump } from "./mfm-fixture.js";
+
+/** The game_version stamp minted records carry; these tests do not assert on it. */
+const CONFIRMED: MintContext["gv"] = { edition: "11th", dataslate: "launch" };
 
 // Dump rows for the six enhancements that link to a wargear-item profile, and the four drone
 // wargear items. Names and numbers only (tools/test/fixtures/mfm-gear-subset.json).
@@ -15,7 +18,7 @@ const fixturePayload = (): MfmDumpInit => JSON.parse(fs.readFileSync(FIXTURE, "u
 const hasWeaponsFile = (dir: string): boolean => dir !== "deathwatch";
 
 function mint(payload: MfmDumpInit = fixturePayload()): { ctx: MintContext; enhancements: WeaponMintResult; drones: WeaponMintResult } {
-  const ctx: MintContext = { dump: new MfmDump(payload), gv: { ...CONFIRMED }, warnings: [] };
+  const ctx: MintContext = { dump: partialDump(payload), gv: { ...CONFIRMED }, warnings: [] };
   return { ctx, enhancements: mintEnhancementWeapons(ctx, { hasWeaponsFile }), drones: mintDroneWeapons(ctx) };
 }
 
@@ -77,7 +80,7 @@ describe("enhancement weapons minted from the dump's linked wargear profile", ()
     const payload = fixturePayload();
     const item = payload.data.wargear_item!.find((row) => (row.localisations as any).en.name === "The Thief of Secrets")!;
     (item.localisations as any).en.name = "Thief";
-    const result = mintEnhancementWeapons({ dump: new MfmDump(payload), gv: { ...CONFIRMED }, warnings: [] }, { hasWeaponsFile });
+    const result = mintEnhancementWeapons({ dump: partialDump(payload), gv: { ...CONFIRMED }, warnings: [] }, { hasWeaponsFile });
     expect(result.minted.some((m) => m.source === "The Thief of Secrets")).toBe(false);
     expect(result.refusals.find((r) => r.source === "The Thief of Secrets")?.reason).toContain("not the enhancement's name");
   });
@@ -117,7 +120,7 @@ describe("drone weapons minted from the wargear profile", () => {
     const blast = { id: "fixture-blast-3", localisations: { en: { name: "BLAST 3" } } } as any;
     abilities.push(blast);
     payload.data.wargear_item_profile_wargear_ability!.push({ id: "fixture-link", displayOrder: 0, wargearItemProfileId: profile.id, wargearAbilityId: blast.id } as any);
-    const result = mintDroneWeapons({ dump: new MfmDump(payload), gv: { ...CONFIRMED }, warnings: [] });
+    const result = mintDroneWeapons({ dump: partialDump(payload), gv: { ...CONFIRMED }, warnings: [] });
     expect(result.refusals.find((r) => r.source === "Missile Drone")).toBeUndefined();
     const drone = result.minted.find((m) => m.source === "Missile Drone");
     expect(drone?.weapon.profiles[0].keywords).toEqual([{ keyword_id: "blast", parameters: { value: 3 } }]);

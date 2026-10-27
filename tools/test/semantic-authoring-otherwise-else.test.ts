@@ -7,6 +7,7 @@ import {
 } from "../src/semantic-authoring/compile-otherwise.js";
 import { rawSentences } from "../src/semantic-authoring/compile-placement.js";
 import { describeCondition } from "../src/translate/condition.js";
+import { expectCompiled } from "./semantic-authoring-connective-fixture.js";
 
 // Fabricated wording only. Every piece is an EFFECT-fragment leaf unless it says otherwise, so the
 // sentence breaks come from the punctuation in the text (compile-placement.ts), as in the real shapes.
@@ -258,7 +259,7 @@ describe("an Otherwise after a phase-and-selection head (7005 shape, with a bear
       ["you can return one destroyed model", "return-models", { subject: "antecedent", count: 1 }],
       ["Otherwise", "otherwise", {}],
       ["one model in that unit regains up to D3 lost wounds", "regain-wounds", { subject: "antecedent", amount: "D3" }]);
-    expect(result.ok, result.ok ? "" : result.errors.join("; ")).toBe(true);
+    expectCompiled(result);
     const effect = (result.mechanics as unknown as Node).effect as Node;
     // The head (phase window and selection) gates the whole ability: the Otherwise branch sits inside it.
     expect(effect.type).toBe("conditional");
@@ -290,7 +291,7 @@ describe("an eligibility permission after an Otherwise sentence (2498 shape)", (
 
   it("compiles, and the trailing permission carries no engaged term from the Otherwise pair", () => {
     const result = compile(text, ...pieces);
-    expect(result.ok, result.ok ? "" : result.errors.join("; ")).toBe(true);
+    expectCompiled(result);
     const steps = ((result.mechanics as unknown as Node).effect as Node).steps as Node[];
     expect(steps[2]).toMatchObject({ type: "permission" });
     expect(JSON.stringify(steps[2])).not.toMatch(/engaged/u);

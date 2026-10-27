@@ -7,7 +7,7 @@ import { dslUnitFilter, foldUnitFilters, mergeStackedFilters } from "../src/sema
 import { describeCondition } from "../src/translate/condition.js";
 
 /** Leaves on their own wording in `text`, in order (fabricated wording, not rules text). */
-function placed(text: string, ...items: Array<[string, string, Record<string, unknown>]>): CompileLeaf[] {
+function placed(text: string, ...items: Array<readonly [string, string, Record<string, unknown>]>): CompileLeaf[] {
   const bytes = Buffer.from(text, "utf8");
   let from = 0;
   return items.map(([wording, family, parameters]) => {
@@ -230,7 +230,7 @@ describe("Semantic authoring re-authored Charge-move selections (records 1400, 3
   // written so it fails on the code before the change, except the regression guards.
 
   /** Leaves placed on their own wording in `text`, normalized as the family registry reads them. */
-  function placed(text: string, ...items: Array<[string, string, Record<string, unknown>, string?]>): CompileLeaf[] {
+  function placed(text: string, ...items: Array<readonly [string, string, Record<string, unknown>, string?]>): CompileLeaf[] {
     const bytes = Buffer.from(text, "utf8");
     let from = 0;
     return items.map(([wording, family, parameters, fragment]) => {
@@ -416,7 +416,7 @@ describe("Semantic authoring re-authored Charge-move selections (records 1400, 3
     });
 
     const attack = "Your Shooting phase or the Fight phase, when a friendly hidden SAMPLE SCOUTS unit is selected to attack.\nThat SAMPLE SCOUTS unit.\nYour unit's attacks have: +1 S. [Lethal Hits].";
-    const attackLeaves = (middle: Array<[string, string, Record<string, unknown>]>) => placed(attack,
+    const attackLeaves = (middle: Array<readonly [string, string, Record<string, unknown>]>) => placed(attack,
       ["Your Shooting phase or the Fight phase", "use-window", { your_phases: ["shooting"], opponent_phases: [], either_phases: ["fight"] }],
       ["friendly hidden SAMPLE SCOUTS unit", "unit-filter", { side: "friendly", keywords: ["SAMPLE SCOUTS"], states: ["hidden"] }],
       ["selected to attack", "event", { kind: "selected", to: "attack" }],

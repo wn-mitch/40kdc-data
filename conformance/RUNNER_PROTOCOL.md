@@ -238,7 +238,9 @@ Humanizes an Ability-DSL `effect` tree (plus an optional `scope` and optional
 `applies_to`) into the generated plain-English approximation — the dataset's
 "ability.print()". The `effect` is embedded in the request verbatim (no dataset
 lookup, so parity is independent of duplicate-ability-id resolution); `scope`
-and `applies_to` may each be omitted or `null`. Response value is
+and `applies_to` may each be omitted or `null`. An optional `optional: true`
+(the ability record's `optional`) marks the ability as the player's choice: its
+text gains a leading `You can: `. Response value is
 `{"text": "<multi-line ASCII string>"}` — container nodes render block-style
 with two-space indentation and an ASCII `-> ` arrow, the scope renders as a
 `Scope: …. Duration: ….` line, and a present `applies_to` filter renders as a

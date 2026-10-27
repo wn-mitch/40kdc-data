@@ -385,11 +385,14 @@ def _assemble_sentence(parts: list[str]) -> str:
 def describe_ability(a: dict[str, Any]) -> str:
     """Full natural-English text for an ability (effect + woven duration, plus a trailing
     ``Applies to:`` line when a curated filter is present)."""
-    core = (
+    rendered = (
         _render_top_level(a["effect"], a.get("scope"), a.get("usage"), a.get("trigger"))
         if a.get("effect")
         else ""
     )
+    # An optional ability is the player's choice, unless its text already opens with that choice.
+    optional = a.get("optional") is True and rendered and not rendered.startswith("You can ")
+    core = f"You can: {rendered}" if optional else rendered
     applies = describe_applies_to(a.get("applies_to"))
     return "\n".join(p for p in (core, applies) if p)
 

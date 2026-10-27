@@ -481,6 +481,20 @@ describe("Semantic authoring aura-emitter compiler", () => {
     it("stays an aura when the optional use is only a permission inside it", () => {
       expect(behavior(aura("A"))).toBe("aura");
     });
+
+    // Only a use of the whole ability that no trigger times is the player's choice to render.
+    function optional(leaves: CompileLeaf[]): unknown {
+      const result = compileLeaves(leaves);
+      if (!result.ok) throw new Error(result.errors.join("; "));
+      return result.mechanics.optional;
+    }
+    it("marks a limited optional use as optional", () => {
+      expect(optional([leaf("RESTRICTION", "usage-limit", { frequency: "once-per-battle", per: "army" }, "A", 5), ...aura("A")])).toBe(true);
+    });
+    it("leaves a triggered or permission-only use unmarked", () => {
+      expect(optional([leaf("EVENT", "event", { kind: "phase-start", phase: "command", turn: "either" }, "A", 33), ...aura("A")])).toBeUndefined();
+      expect(optional(aura("A"))).toBeUndefined();
+    });
   });
 });
 

@@ -6,6 +6,7 @@ import {
   dispositionIdMap,
   runDispositions,
 } from "../src/mfm/dispositions.js";
+import { partialDump } from "./mfm-fixture.js";
 
 /**
  * Canon-building joins the dump's detachment / disposition / per-faction DP-cost
@@ -14,7 +15,7 @@ import {
  * the override map keys on the resolved dir.
  */
 function dump(): MfmDump {
-  return new MfmDump({
+  return partialDump({
     data: {
       force_disposition: [
         { id: "fd-pth", localisations: { en: { name: "Purge the Foe" } } },
@@ -48,9 +49,11 @@ function dump(): MfmDump {
         { detachmentId: "det-zerk", forceDispositionId: "fd-pth" },
         { detachmentId: "det-storm", forceDispositionId: "fd-tah" },
       ],
+      // The current dump's override table is empty (typed `[]`); the reader still
+      // honours a row, so the fixture supplies one through an untyped cast.
       detachment_faction_detachment_points_cost: [
         { detachmentId: "det-storm", factionKeywordId: "fk-bt", detachmentPointsCost: 2 },
-      ],
+      ] as unknown as [],
     },
   });
 }

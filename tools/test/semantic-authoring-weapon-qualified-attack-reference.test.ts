@@ -4,6 +4,7 @@ import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compi
 import { foldDestroyFilters, foldLeadingHitFilters } from "../src/semantic-authoring/compile-weapon-qualified.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { describeTrigger } from "../src/translate/trigger.js";
+import { expectRefused } from "./semantic-authoring-connective-fixture.js";
 
 /** Leaves on their own wording in `text`, in order (the fabricated-wording style of semantic-authoring-targeted). */
 function placed(text: string, ...items: Array<[string, string, Record<string, unknown>]>): CompileLeaf[] {
@@ -141,7 +142,7 @@ describe("Semantic authoring weapon-qualified attack reference (wave 10)", () =>
       ["add 1 to the Wound roll", "roll-modifier", { roll: "wound", operation: "add", value: 1 }],
     );
     const shooting = compileLeaves(with_({ weapon_name: "Gloomhound cannon", shooting_type: "indirect" }), text);
-    expect(shooting.ok).toBe(false);
+    expectRefused(shooting);
     expect(shooting.errors.join(" ")).toMatch(/names shooting_type; the DSL hit filter has no shooting_type/u);
     const negated = compileLeaves(with_({ weapon_name: "Gloomhound cannon", negated: true }), text);
     expect(negated.ok).toBe(false);
@@ -198,7 +199,7 @@ describe("Semantic authoring weapon-qualified attack reference (wave 10)", () =>
       ["add 1 to the Wound roll", "roll-modifier", { roll: "wound", operation: "add", value: 1 }],
     ), text);
     const shooting = destroy({ weapon_name: "quake cannon", shooting_type: "indirect" });
-    expect(shooting.ok).toBe(false);
+    expectRefused(shooting);
     expect(shooting.errors.join(" ")).toMatch(/can name only/u);
     expect(destroy({ weapon_name: "quake cannon", negated: true }).ok).toBe(false);
 
@@ -207,7 +208,7 @@ describe("Semantic authoring weapon-qualified attack reference (wave 10)", () =>
       ["destroys an enemy model", "event", { kind: "model-destroyed", object_owner: "enemy" }],
       ["add 1 to the Wound roll", "roll-modifier", { roll: "wound", operation: "add", value: 1 }],
     ), text);
-    expect(noDestroyer.ok).toBe(false);
+    expectRefused(noDestroyer);
     expect(noDestroyer.errors.join(" ")).toMatch(/names its destroyer/u);
 
     // The gap is the same-attack timing only: an attacks-resolved moment with a subject does not refuse the destruction.
@@ -228,7 +229,7 @@ describe("Semantic authoring weapon-qualified attack reference (wave 10)", () =>
       ["after all of that attack's attacks have been resolved", "event", { kind: "attacks-resolved", action_kind: "attack" }],
       ["add 1 to the Wound roll", "roll-modifier", { roll: "wound", operation: "add", value: 1 }],
     ), soul);
-    expect(gap.ok).toBe(false);
+    expectRefused(gap);
     expect(gap.errors.join(" ")).toMatch(/DSL gap/u);
   });
 

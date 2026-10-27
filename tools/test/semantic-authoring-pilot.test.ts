@@ -19,6 +19,16 @@ import { refreshSources } from "../src/semantic-authoring/source.js";
 import { applyAnnotationBatch, markPilotReviewed } from "./semantic-authoring-human.js";
 import { currentFamilyVersion } from "../src/semantic-authoring/contracts.js";
 
+/** The request a Jev client receives. */
+type JevRequest = Parameters<JevClient["systemOne"]>[0];
+
+/**
+ * A fake Jev client. jev-core only awaits `systemOne`, so a plain Promise stands in
+ * for the SDK's `APIPromise`, whose response accessors the code never reads.
+ */
+const fakeJev = (client: { systemOne: (request: JevRequest) => Promise<SystemOneResult<Questions>> }): JevClient =>
+  client as unknown as JevClient;
+
 
 // Fabricated fixture prose only; nothing here is published source text.
 const PHRASE = "Re-roll a Hit roll of 1";
@@ -66,7 +76,7 @@ async function deepseekCall(_instructions: string, requestText: string): Promise
 }
 
 /** Jev stand-in: picks reroll for the family, and the matching closed parameters. */
-const jevClient: JevClient = {
+const jevClient = fakeJev({
   async systemOne(request) {
     jevCalls += 1;
     const questions = request.questions as Record<string, { type: string; criteria?: Record<string, unknown> }>;
@@ -79,7 +89,7 @@ const jevClient: JevClient = {
     }
     return { model: "jev-latest", answers, usage: { input_tokens: 500, output_tokens: 5 } } as unknown as SystemOneResult<Questions>;
   },
-};
+});
 
 function options(step: string, extra: Partial<PilotStepOptions> = {}): PilotStepOptions {
   return { step, dbPath, artifactDirectory: join(root, "artifacts"), samplePath: join(root, "sample.json"), exclude: [], deepseekCall, jevClient, spendCapUsd: 1, ...extra };

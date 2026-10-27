@@ -4,6 +4,7 @@ import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compi
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { familyExtension } from "../src/semantic-authoring/families/index.js";
 import { describeCondition } from "../src/translate/condition.js";
+import { expectRefused } from "./semantic-authoring-connective-fixture.js";
 
 /** The family versions the extensions under test create. */
 const EVERY_MODEL_POSITION_VERSIONS: ReadonlySet<string> = new Set(["unit-position@23"]);
@@ -158,7 +159,7 @@ describe("unit-position models every: compiled shapes", () => {
     const result = compileLeaves(placed(text,
       ["Each model in this unit is within 3\" of this unit, wholly.", "unit-position", { kind: "within", inches: 3, of: "this-unit", subject: "this-unit", negated: false, models: "every", wholly: true }],
     ), text);
-    expect(result.ok).toBe(false);
+    expectRefused(result);
     expect(result.errors.join(" ")).toContain("cannot combine with wholly");
   });
 });

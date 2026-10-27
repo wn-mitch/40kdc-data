@@ -56,6 +56,7 @@ function rosterOf(units: RosterUnit[]): Roster {
     source: { format: "listforge", generated_by: null },
     faction_id: "adepta-sororitas",
     detachments: [],
+    force_disposition: null,
     battle_size: null,
     points: { declared_limit: null, detachment_cap: null, total_reported: null, total_computed: 0 },
     units,
@@ -74,6 +75,7 @@ function leaderUnit(leaderId: string, bodyguardId: string): RosterUnit {
   const u = rosterUnit(leaderId);
   u.leader_attachment = {
     bodyguard_ref: { id: bodyguardId, raw_name: bodyguardId, resolved: true, candidates: [] },
+    role: "leader",
     provisional: true,
   };
   return u;
@@ -228,6 +230,7 @@ function worldEatersRoster(units: RosterUnit[]): Roster {
     source: { format: "listforge", generated_by: null },
     faction_id: "world-eaters",
     detachments: [],
+    force_disposition: null,
     battle_size: null,
     points: { declared_limit: null, detachment_cap: null, total_reported: null, total_computed: 0 },
     units,

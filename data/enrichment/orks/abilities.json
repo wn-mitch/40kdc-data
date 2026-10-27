@@ -135,7 +135,8 @@
     "ability_type": "unit",
     "behavior": "activated",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "optional": true
   },
   {
     "ability_id": "deff-from-above-orks",
@@ -3538,7 +3539,8 @@
     "ability_type": "unit",
     "behavior": "activated",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "optional": true
   },
   {
     "ability_id": "full-throttle-orks",
@@ -5379,7 +5381,8 @@
     "ability_type": "unit",
     "behavior": "activated",
     "community_notes": "The activated behavior carries the rule's optional choice to place this unit in Strategic Reserves. The phase scope is the closest canonical action window for a generic Command-phase ability; it does not assert that the Strategic Reserves placement expires at phase end.",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "optional": true
   },
   {
     "ability_id": "spiteful-power-trip-orks",
@@ -6731,7 +6734,8 @@
       "frequency": "n-per-battle",
       "count": 1,
       "per": "army"
-    }
+    },
+    "optional": true
   },
   {
     "ability_id": "da-gobshot-thunderbuss-brute-bosses-orks",
@@ -12046,7 +12050,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "optional": true
   },
   {
     "ability_id": "nazdregs-know-wotz-orks",

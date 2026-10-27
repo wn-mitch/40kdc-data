@@ -298,6 +298,10 @@ func describeAbility(a map[string]any) string {
 		scope, _ := asMap(a["scope"])
 		core = renderTopLevel(e, scope, a["usage"], a["trigger"])
 	}
+	// An optional ability is the player's choice, unless its text already opens with that choice.
+	if a["optional"] == true && core != "" && !strings.HasPrefix(core, "You can ") {
+		core = "You can: " + core
+	}
 	applies, _ := asMap(a["applies_to"])
 	return joinNonEmpty([]string{core, describeAppliesTo(applies)}, "\n")
 }

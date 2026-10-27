@@ -1135,6 +1135,7 @@ function handleTranslateEffect(args: unknown): RunnerResponse {
     usage?: unknown;
     trigger?: unknown;
     applies_to?: unknown;
+    optional?: unknown;
   };
   if (typeof a.effect !== "object" || a.effect === null) {
     return err("INVALID_INPUT", {
@@ -1164,6 +1165,7 @@ function handleTranslateEffect(args: unknown): RunnerResponse {
       ...(usage ? { usage } : {}),
       ...(trigger ? { trigger } : {}),
       ...(appliesTo ? { applies_to: appliesTo } : {}),
+      ...(a.optional === true ? { optional: true } : {}),
     }),
   });
 }

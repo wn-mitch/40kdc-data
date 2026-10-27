@@ -516,7 +516,8 @@
     "usage": {
       "frequency": "once-per-phase",
       "per": "model"
-    }
+    },
+    "optional": true
   },
   {
     "ability_id": "planted-explosives-genestealer-cults",
@@ -1304,7 +1305,8 @@
     "ability_type": "unit",
     "behavior": "activated",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "genestealer-cults"
+    "faction_id": "genestealer-cults",
+    "optional": true
   },
   {
     "ability_id": "spotter-genestealer-cults",

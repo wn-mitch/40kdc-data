@@ -145,7 +145,7 @@ describe("an officer's Orders from its army rule's menu", () => {
       eligible: { any_of: ["SQUAD", "TANK"] },
       only_options: ["duty-and-honour", "fix-bayonets"],
     });
-    expect(describeAbility({ ability_id: "orders-example", name: "Orders", ...(mechanics as Record<string, unknown>) })).toBe(
+    expect(describeAbility({ name: "Orders", ...(mechanics as Record<string, unknown>) })).toBe(
       "This model can issue up to 2 Orders from Voice of Command to eligible friendly units with the SQUAD or TANK keyword, only Duty and Honour or Fix Bayonets.",
     );
   });

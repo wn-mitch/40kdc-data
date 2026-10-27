@@ -45,6 +45,8 @@ const lostModel: Item = ["a model in the squad was destroyed", "event", { kind: 
 const attacks: Item = ["each time it makes an attack", "attack", { direction: "makes", unit: "this-unit", attack_type: "any" }];
 const sharper: Item = ["improve the Armour Penetration of that attack by 1", "characteristic-modifier", { subject: "attack", characteristics: ["AP"], operation: "improve", value: 1, weapon_type: "all" }];
 const pact: Item = ["your squad invokes its pact", "event", { kind: "used", activity: "contract" }];
+/** The item placed in a Stratagem fragment. */
+const inPart = ([wording, family, parameters]: Item, fragment: string): Item => [wording, family, parameters, fragment];
 
 describe("connective condition-of after a permission", () => {
   describe("a reviewed condition-of after a bare permission", () => {
@@ -129,7 +131,7 @@ describe("connective condition-of after a permission", () => {
       ["Your shooting phase", "use-window", { your_phases: ["shooting"], opponent_phases: [], either_phases: [] }, "WHEN"],
       ["One", "stratagem-target", { count: "one" }, "TARGET"], ["squad from your army", "unit-filter", { side: "friendly" }, "TARGET"],
       ["Your squad can relocate 5 inches", "make-move", { subject: "this-unit", move_type: "normal", distance: 5 }, "EFFECT"],
-      [...untilTurnEnds, "EFFECT"] as Item, [...barred, "EFFECT"] as Item);
+      inPart(untilTurnEnds, "EFFECT"), inPart(barred, "EFFECT"));
 
     it("nests the permission and its consequents in one optional part", () => {
       const { effect } = mechanicsOf(TEXT, annotated(TEXT, leaves(), [{ surface: "If it does", fragment: "EFFECT" }]));
@@ -309,7 +311,7 @@ describe("connective condition-of before a moment (history)", () => {
       ["Your shooting phase", "use-window", { your_phases: ["shooting"], opponent_phases: [], either_phases: [] }, "WHEN"],
       ["One", "stratagem-target", { count: "one" }, "TARGET"], ["squad from your army", "unit-filter", { side: "friendly" }, "TARGET"],
       ["Until the end of the phase", "duration", { endpoint: "end-of-phase" }, "EFFECT"],
-      [...pact, "EFFECT"] as Item, [...attacks, "EFFECT"] as Item, [...sharper, "EFFECT"] as Item);
+      inPart(pact, "EFFECT"), inPart(attacks, "EFFECT"), inPart(sharper, "EFFECT"));
 
     it("is a phase-long modifier gated on the use having happened this phase", () => {
       const annotatedLeaves = annotated(TEXT, leaves(), [{ surface: "if", after: "EFFECT", fragment: "EFFECT" }]);

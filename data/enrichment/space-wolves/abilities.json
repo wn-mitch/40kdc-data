@@ -2368,7 +2368,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "space-wolves"
+    "faction_id": "space-wolves",
+    "optional": true
   },
   {
     "ability_id": "thunderous-charge-space-wolves",
