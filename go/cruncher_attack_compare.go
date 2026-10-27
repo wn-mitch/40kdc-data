@@ -128,8 +128,11 @@ func attackOperand(raw any) map[string]any {
 }
 
 // attackComparison is the canonical `attack-compare` parameters as a buff-gate
-// comparison, or nil when the engine cannot evaluate them.
-func attackComparison(params map[string]any) map[string]any {
+// comparison, or nil when the engine cannot evaluate them. ownToughness is the
+// attacking unit's Toughness when the translation knows it (the ability
+// belongs to the attacker), else nil: the gate then carries it as a value, so
+// it holds on any crunch whatever context the caller passes.
+func attackComparison(params map[string]any, ownToughness any) map[string]any {
 	if params == nil {
 		return nil
 	}
@@ -151,7 +154,22 @@ func attackComparison(params map[string]any) map[string]any {
 	default:
 		return nil
 	}
-	return map[string]any{"left": left, "comparison": params["comparison"], "right": right}
+	bind := func(operand map[string]any) map[string]any {
+		if _, literal := operand["value"]; ownToughness != nil && !literal && operand["of"] == "attacker" && operand["stat"] == "T" {
+			return map[string]any{"value": ownToughness}
+		}
+		return operand
+	}
+	return map[string]any{"left": bind(left), "comparison": params["comparison"], "right": bind(right)}
+}
+
+// ownToughness is the attacking unit's Toughness on the context, or nil when
+// the context does not carry one.
+func ownToughness(ctx map[string]any) any {
+	if t := ctx["attackerToughness"]; isNumber(t) {
+		return t
+	}
+	return nil
 }
 
 // splitAttackScoped splits an `and` whose operands mix attack-scoped
@@ -160,7 +178,7 @@ func attackComparison(params map[string]any) map[string]any {
 // and the rest to evaluate. Nested `and`s flatten. ok is false when no operand
 // is attack-scoped, when every operand is, or when an attack-scoped operand
 // has no gate.
-func splitAttackScoped(condition map[string]any, perspective string) (applicability, rest map[string]any, ok bool) {
+func splitAttackScoped(condition map[string]any, perspective string, ownToughness any) (applicability, rest map[string]any, ok bool) {
 	top, isList := asList(condition["operands"])
 	if condition["operator"] != "and" || !isList {
 		return nil, nil, false
@@ -187,7 +205,7 @@ func splitAttackScoped(condition map[string]any, perspective string) (applicabil
 			remaining = append(remaining, operand)
 			continue
 		}
-		gate, isGate := conditionToApplicability(scoped, perspective).(map[string]any)
+		gate, isGate := conditionToApplicability(scoped, perspective, ownToughness).(map[string]any)
 		if !isGate {
 			return nil, nil, false
 		}

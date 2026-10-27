@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { Dataset } from "../src/data/index.js";
 import { resolveBuffs, type EngineContext } from "../src/cruncher/buffs.js";
+import { crunch } from "../src/cruncher/index.js";
+import { combinedToughness } from "../src/data/lever-providers.js";
 
 const ds = Dataset.embedded();
 
@@ -176,5 +178,38 @@ describe("Berzerker Warband detachment buffs", () => {
       // Melee only: nothing reaches a shooting attack.
       expect(resolveBuffs(rage!.buffs, { phase: "shooting" }).attacksMod.value).toBe(0);
     }
+  });
+});
+
+describe("Dataset.stackableBuffsFor: the unit's own Toughness in a comparison", () => {
+  // Slayer of Tyrants: melee attacks against a unit with a higher T than this unit's have +1 to wound.
+  const allarus = ds.units.getInFaction("allarus-custodians", "adeptus-custodes")!;
+  const axe = ds.weapons.getInFaction("castellan-axe", "adeptus-custodes")!;
+  const melee = axe.raw.profiles.findIndex((profile) => profile.range === "Melee");
+  const woundMod = (targetId: string) => {
+    // The caller's crunch context names no attacker Toughness: the lever carries it.
+    const context: EngineContext = { phase: "fight" };
+    const { buffs } = ds.stackableBuffsFor({ unitId: allarus.id, factionId: "adeptus-custodes" }, context);
+    const chosen = buffs.filter((lever) => lever.enabled && lever.id.includes("slayer-of-tyrants")).flatMap((lever) => lever.buffs);
+    expect(chosen.length).toBeGreaterThan(0);
+    const target = ds.units.getAny(targetId)!;
+    return crunch({ attacker: { weapon: axe.raw, profileIndex: melee }, target: { unit: target.raw, profileIndex: 0 }, modelsFiring: 1, buffs: chosen, context }, ds)
+      .resolved.woundMod.value;
+  };
+
+  it("fires against a higher Toughness and not against an equal or lower one", () => {
+    expect(allarus.raw.profiles[0].T).toBe(7);
+    expect(melee).toBeGreaterThanOrEqual(0);
+    expect(woundMod("land-raider")).toBe(1);
+    expect(woundMod("allarus-custodians")).toBe(0);
+    expect(woundMod("custodian-wardens")).toBe(0);
+  });
+
+  it("reads an attached unit's Toughness from its Bodyguard, not the tougher Leader", () => {
+    const ghazghkull = ds.units.getAny("ghazghkull-thraka")!;
+    const meganobz = ds.units.getAny("meganobz")!;
+    expect(combinedToughness([ghazghkull, meganobz])).toBe(6);
+    expect(combinedToughness([ghazghkull])).toBe(10);
+    expect(combinedToughness([ghazghkull, meganobz], { "ghazghkull-thraka": "bodyguard", meganobz: "leader" })).toBe(10);
   });
 });

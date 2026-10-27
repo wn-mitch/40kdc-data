@@ -1344,6 +1344,7 @@ function isWeaponScopedCondition(condition: Record<string, unknown>): boolean {
 function splitAttackScoped(
   condition: Record<string, unknown>,
   perspective: TranslationPerspective,
+  ownToughness?: number,
 ): { applicability: BuffApplicability; rest: Record<string, unknown> } | undefined {
   if (condition.operator !== "and" || !Array.isArray(condition.operands)) return undefined;
   const operands: unknown[] = [];
@@ -1361,7 +1362,7 @@ function splitAttackScoped(
       rest.push(operand);
       continue;
     }
-    const gate = conditionToApplicability(operand, perspective);
+    const gate = conditionToApplicability(operand, perspective, ownToughness);
     if (typeof gate === "string") return undefined;
     applicability = combineApplicability(applicability, gate);
   }
@@ -1379,7 +1380,7 @@ function translateConditional(
   const effect = node.effect;
   if (!isObject(condition)) return;
   if (isWeaponScopedCondition(condition)) {
-    const applicability = conditionToApplicability(condition, opts.perspective);
+    const applicability = conditionToApplicability(condition, opts.perspective, opts.context.attackerToughness);
     if (typeof applicability !== "string") {
       const sub: EffectTranslation = { applied: [], unsupported: [], activatable: [] };
       walk(effect, source, opts, sub);
@@ -1394,7 +1395,7 @@ function translateConditional(
     out.unsupported.push({ reason: POST_ATTACK_MOMENT, effectFragment: activation.fragment });
     return;
   }
-  const split = activation ? undefined : splitAttackScoped(condition, opts.perspective);
+  const split = activation ? undefined : splitAttackScoped(condition, opts.perspective, opts.context.attackerToughness);
   const restVerdict = split ? evaluateCondition(split.rest, opts.context, opts.perspective, opts.grantedHolder ? undefined : source) : "unknown";
   if (split && restVerdict !== "unknown") {
     if (!restVerdict) return;
@@ -1798,7 +1799,7 @@ function collectGatedBuffs(
     case "conditional": {
       const condition = node.condition;
       if (!isObject(condition)) return;
-      const app = conditionToApplicability(condition, opts.perspective);
+      const app = conditionToApplicability(condition, opts.perspective, opts.context.attackerToughness);
       if (app === "gate") {
         // A nested timing gate: opting into the activation satisfies it, so
         // keep descending without adding a constraint.
@@ -1898,6 +1899,7 @@ function negatedWeaponApplicability(operands: unknown[]): BuffApplicability | "c
 function conditionToApplicability(
   condition: Record<string, unknown>,
   perspective: TranslationPerspective,
+  ownToughness?: number,
 ): BuffApplicability | "context" | "gate" {
   if (typeof condition.operator === "string" && Array.isArray(condition.operands)) {
     if (condition.operator === "not") return negatedWeaponApplicability(condition.operands);
@@ -1905,7 +1907,7 @@ function conditionToApplicability(
     let merged: BuffApplicability = {};
     for (const operand of condition.operands) {
       if (!isObject(operand)) return "context";
-      const a = conditionToApplicability(operand, perspective);
+      const a = conditionToApplicability(operand, perspective, ownToughness);
       if (a === "gate") continue; // timing operand: satisfied by opting in.
       if (a === "context") return "context";
       merged = combineApplicability(merged, a);
@@ -1930,7 +1932,7 @@ function conditionToApplicability(
       return isBuffedUnit(params?.subject) ? perspective === "target" ? { requiresTargetKeyword: kw } : { requiresAttackerKeyword: kw } : "context";
     }
     case "attack-compare": {
-      const comparison = attackComparison(params);
+      const comparison = attackComparison(params, perspective === "attacker" ? ownToughness : undefined);
       return comparison ? { attackComparisons: [comparison] } : "context";
     }
     case "attack-is": {
@@ -1957,15 +1959,22 @@ function attackOperand(value: unknown): AttackComparison["right"] | undefined {
   return reduce === undefined ? { of, stat } : { of, stat, reduce };
 }
 
-/** The canonical `attack-compare` parameters as a buff gate, or undefined when the engine cannot evaluate them. */
-function attackComparison(params: Record<string, unknown> | undefined): AttackComparison | undefined {
+/**
+ * The canonical `attack-compare` parameters as a buff gate, or undefined when the engine cannot
+ * evaluate them. `ownToughness` is the attacking unit's Toughness when the translation knows it
+ * (the ability belongs to the attacker): the gate then carries it as a value, so it holds on any
+ * crunch whatever context the caller passes.
+ */
+function attackComparison(params: Record<string, unknown> | undefined, ownToughness?: number): AttackComparison | undefined {
   if (!params || Object.keys(params).some((key) => key !== "left" && key !== "comparison" && key !== "right")) return undefined;
   const left = attackOperand(params.left);
   const right = attackOperand(params.right);
   const comparison = params.comparison;
   if (!left || "value" in left || !right) return undefined;
   if (comparison !== "gt" && comparison !== "gte" && comparison !== "lt" && comparison !== "lte" && comparison !== "eq") return undefined;
-  return { left, comparison, right };
+  const bind = (operand: AttackComparison["right"]): AttackComparison["right"] =>
+    ownToughness !== undefined && !("value" in operand) && operand.of === "attacker" && operand.stat === "T" ? { value: ownToughness } : operand;
+  return { left: bind(left), comparison, right: bind(right) };
 }
 
 /** Merge two applicabilities; `phases` intersect, the rest narrow. */

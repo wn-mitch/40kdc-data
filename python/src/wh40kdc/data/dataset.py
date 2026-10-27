@@ -582,6 +582,7 @@ class Dataset:
             AbilityLevers,
             ability_levers,
             combined_keywords_lower,
+            combined_toughness,
             combined_unit,
             enhancement_levers,
             resolve_cap_raises,
@@ -610,6 +611,8 @@ class Dataset:
             ctx["attackerKeywords"] = combined_keywords_lower(combined)
         if ctx.get("attackerModelKeywords") is None and combined:
             ctx["attackerModelKeywords"] = shared_keywords_lower(combined)
+        if ctx.get("attackerToughness") is None:
+            ctx["attackerToughness"] = combined_toughness(combined, input.get("attachmentRoles"))
 
         # Intrinsic weapon-profile keywords — always on. Weapon ids are
         # shared across factions with divergent stats, so resolve within the
@@ -712,7 +715,11 @@ class Dataset:
         self, input: dict[str, Any], context: dict[str, Any], perspective: str
     ) -> list[dict[str, Any]]:
         """Shared implementation for buffs_for / defensive_buffs_for."""
-        from wh40kdc.data.lever_providers import combined_keywords_lower, shared_keywords_lower
+        from wh40kdc.data.lever_providers import (
+            combined_keywords_lower,
+            combined_toughness,
+            shared_keywords_lower,
+        )
 
         out: list[dict[str, Any]] = []
         unit = (
@@ -768,6 +775,11 @@ class Dataset:
                     roles
                     if context.get("attachmentRoles") is None
                     else context["attachmentRoles"]
+                ),
+                "attackerToughness": (
+                    combined_toughness(combined, roles if isinstance(roles, dict) else None)
+                    if context.get("attackerToughness") is None
+                    else context["attackerToughness"]
                 ),
             }
         else:

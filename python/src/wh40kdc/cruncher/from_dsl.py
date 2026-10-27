@@ -1531,7 +1531,7 @@ def _negated_weapon_applicability(operands: list[Any]) -> Any:
 
 
 def _split_attack_scoped(
-    condition: dict[str, Any], perspective: str
+    condition: dict[str, Any], perspective: str, own_toughness: Any = None
 ) -> tuple[dict[str, Any], dict[str, Any]] | None:
     """An ``and`` whose operands mix attack-scoped predicates (a weapon, the attack's Strength
     against the target's Toughness) with predicates on the units: the attack-scoped operands as
@@ -1559,7 +1559,7 @@ def _split_attack_scoped(
         if not _is_object(operand) or not _is_weapon_scoped_condition(operand):
             rest.append(operand)
             continue
-        gate = _condition_to_applicability(operand, perspective)
+        gate = _condition_to_applicability(operand, perspective, own_toughness)
         if isinstance(gate, str):
             return None
         applicability = _combine_applicability(applicability, gate)
@@ -1597,7 +1597,9 @@ def _translate_conditional(
     if not _is_object(condition):
         return
     if _is_weapon_scoped_condition(condition):
-        applicability = _condition_to_applicability(condition, opts["perspective"])
+        applicability = _condition_to_applicability(
+            condition, opts["perspective"], opts["context"].get("attackerToughness")
+        )
         if isinstance(applicability, dict):
             _walk_gated(effect, applicability, source, opts, out)
             return
@@ -1611,7 +1613,9 @@ def _translate_conditional(
     split = (
         None
         if node.get("_activation_source") is not None
-        else _split_attack_scoped(condition, opts["perspective"])
+        else _split_attack_scoped(
+            condition, opts["perspective"], opts["context"].get("attackerToughness")
+        )
     )
     if split is not None:
         rest_verdict = _evaluate_condition(
@@ -2238,7 +2242,9 @@ def _collect_gated_buffs(
         condition = node.get("condition")
         if not _is_object(condition):
             return
-        app = _condition_to_applicability(condition, opts["perspective"])
+        app = _condition_to_applicability(
+            condition, opts["perspective"], opts["context"].get("attackerToughness")
+        )
         if app == "gate":
             # A nested timing gate: opting into the activation satisfies it.
             _collect_gated_buffs(
@@ -2385,10 +2391,14 @@ def _extract_timing(condition: dict[str, Any]) -> str | None:
     return None
 
 
-def _condition_to_applicability(condition: dict[str, Any], perspective: str) -> Any:
+def _condition_to_applicability(
+    condition: dict[str, Any], perspective: str, own_toughness: Any = None
+) -> Any:
     """Translate a condition into a buff applicability the resolver can gate
     on. Returns ``"gate"`` for a player-controlled timing, or ``"context"``
-    when the condition has no declarative buff representation."""
+    when the condition has no declarative buff representation. Under the
+    attacker perspective, ``own_toughness`` binds the attacker's Toughness in
+    an attack comparison."""
     if isinstance(condition.get("operator"), str) and isinstance(condition.get("operands"), list):
         if condition["operator"] == "not":
             return _negated_weapon_applicability(condition["operands"])
@@ -2398,7 +2408,7 @@ def _condition_to_applicability(condition: dict[str, Any], perspective: str) -> 
         for operand in condition["operands"]:
             if not _is_object(operand):
                 return "context"
-            a = _condition_to_applicability(operand, perspective)
+            a = _condition_to_applicability(operand, perspective, own_toughness)
             if a == "gate":
                 continue  # timing operand: satisfied by opting in.
             if a == "context":
@@ -2433,7 +2443,7 @@ def _condition_to_applicability(condition: dict[str, Any], perspective: str) -> 
             else {"requiresAttackerKeyword": kw}
         )
     if ctype == "attack-compare":
-        comparison = attack_comparison(params)
+        comparison = attack_comparison(params, own_toughness if perspective == "attacker" else None)
         return {"attackComparisons": [comparison]} if comparison is not None else "context"
     if ctype == "attack-is":
         if (

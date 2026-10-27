@@ -153,6 +153,18 @@ func runDSLCorpus(t *testing.T, filename string) {
 			t.Errorf("%s (%s) unsupportedReasons = %s, want %s", abilityID, perspective, got, want)
 		}
 
+		// Each applied buff's gate (null when ungated), pinned on the rows that carry it.
+		if expected["applicableWhen"] != nil {
+			var gates []any
+			for _, b := range result.applied {
+				bm, _ := asMap(b)
+				gates = append(gates, bm["applicableWhen"])
+			}
+			if got, want := canon(t, orEmpty(gates)), canon(t, expected["applicableWhen"]); got != want {
+				t.Errorf("%s (%s) applicableWhen = %s, want %s", abilityID, perspective, got, want)
+			}
+		}
+
 		if expected["activatable"] != nil {
 			var acts []any
 			for _, aAny := range result.activatable {

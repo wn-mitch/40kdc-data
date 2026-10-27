@@ -380,3 +380,56 @@ def test_model_level_keyword_recipient_reads_every_models_keywords() -> None:
     assert buffs_of(led, "fix-orks-models") != []
     assert buffs_of(led, "fix-character-models") == []
     assert buffs_of({"unitId": "fix-boss", "factionId": "orks"}, "fix-character-models") != []
+
+
+def _slayer_wound_mod(dataset: Any, target_id: str) -> int:
+    """The wound modifier Allarus Custodians' melee lever gives against ``target_id`` when the
+    caller's crunch context names no attacker Toughness: the lever carries the unit's own."""
+    from wh40kdc.cruncher import crunch
+
+    allarus = dataset.units.get_in_faction("allarus-custodians", "adeptus-custodes")
+    axe = dataset.weapons.get_in_faction("castellan-axe", "adeptus-custodes")
+    melee = next(i for i, p in enumerate(axe.raw["profiles"]) if p.get("range") == "Melee")
+    context = {"phase": "fight"}
+    levers = dataset.stackable_buffs_for(
+        {"unitId": allarus.id, "factionId": "adeptus-custodes"}, context
+    )["buffs"]
+    chosen = [
+        buff
+        for lever in levers
+        if lever["enabled"] and "slayer-of-tyrants" in lever["id"]
+        for buff in lever["buffs"]
+    ]
+    assert chosen
+    target = dataset.units.get_any(target_id)
+    out = crunch(
+        {
+            "attacker": {"weapon": axe.raw, "profileIndex": melee},
+            "target": {"unit": target.raw, "profileIndex": 0},
+            "modelsFiring": 1,
+            "buffs": chosen,
+            "context": context,
+        },
+        dataset,
+    )
+    return int(out["resolved"]["woundMod"]["value"])
+
+
+def test_own_toughness_comparison_fires_only_against_a_higher_toughness(dataset: Any) -> None:
+    allarus = dataset.units.get_in_faction("allarus-custodians", "adeptus-custodes")
+    assert allarus.raw["profiles"][0]["T"] == 7
+    assert _slayer_wound_mod(dataset, "land-raider") == 1
+    assert _slayer_wound_mod(dataset, "allarus-custodians") == 0
+    assert _slayer_wound_mod(dataset, "custodian-wardens") == 0
+
+
+def test_combined_toughness_reads_the_bodyguard_not_the_tougher_leader(dataset: Any) -> None:
+    from wh40kdc.data.lever_providers import combined_toughness
+
+    ghazghkull = dataset.units.get_any("ghazghkull-thraka")
+    meganobz = dataset.units.get_any("meganobz")
+    assert combined_toughness([ghazghkull, meganobz]) == 6
+    assert combined_toughness([ghazghkull]) == 10
+    roles = {"ghazghkull-thraka": "bodyguard", "meganobz": "leader"}
+    assert combined_toughness([ghazghkull, meganobz], roles) == 10
+    assert combined_toughness([]) is None

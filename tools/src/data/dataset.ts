@@ -54,6 +54,7 @@ import { historicalSnapshotAbilities } from "./recipient-snapshots.js";
 import {
   abilityLevers,
   combinedKeywordsLower,
+  combinedToughness,
   sharedKeywordsLower,
   enhancementLevers,
   resolveCapRaises,
@@ -711,6 +712,7 @@ export class Dataset {
       armyFaction: context.armyFaction ?? factionId,
       attackerAttachmentRole: context.attackerAttachmentRole ?? input.attachmentRoles?.[input.unitId],
       attachmentRoles: context.attachmentRoles ?? input.attachmentRoles,
+      attackerToughness: context.attackerToughness ?? combinedToughness(combined, input.attachmentRoles),
     };
 
     // Intrinsic weapon-profile keywords — always on. Weapon ids are shared
@@ -804,6 +806,7 @@ export class Dataset {
       attackerKeywords: context.attackerKeywords ?? keywords,
       attackerModelKeywords: context.attackerModelKeywords ?? modelKeywords,
       attachmentRoles: context.attachmentRoles ?? input.attachmentRoles,
+      attackerToughness: context.attackerToughness ?? combinedToughness(combined, input.attachmentRoles),
     } : {
       ...context,
       targetAttached: context.targetAttached ?? attached,

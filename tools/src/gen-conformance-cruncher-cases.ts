@@ -150,12 +150,23 @@ export function canonicalScenarioCases() {
   const ranged = { type: "attack-is", parameters: { weapons: { type: "ranged" } } };
   const sAboveT = { type: "attack-compare", parameters: { left: { of: "attacker", stat: "S" }, comparison: "gt", right: { of: "defender", stat: "T" } } };
   const attacksAbove = { type: "attack-compare", parameters: { left: { of: "attacker", stat: "A" }, comparison: "gt", right: { value: 3 } } };
+  const woundGated = (condition: unknown) => ({
+    type: "conditional", condition,
+    effect: { type: "roll-modifier", target: "this-unit", modifier: { roll: "wound", operation: "add", value: 1 } },
+  });
+  // Slayer of Tyrants: melee attacks against a unit with a higher Toughness than this unit's.
+  const tougherTarget = { operator: "and", operands: [
+    { type: "attack-is", parameters: { attack_type: "melee" } },
+    { type: "attack-compare", parameters: { left: { of: "defender", stat: "T" }, comparison: "gt", right: { of: "attacker", stat: "T" } } },
+  ] };
+  // A defender's rule naming the attacker's Toughness: the translation cannot know it.
+  const enemyWeaker = { type: "attack-compare", parameters: { left: { of: "attacker", stat: "T" }, comparison: "lt", right: { of: "defender", stat: "T" } } };
   const members = (bodyguard: string[]) => [
     { unitId: "leader", role: "leader" as const, keywords: ["CHARACTER"] },
     { unitId: "squad", role: "bodyguard" as const, keywords: bodyguard },
   ];
   const neighbour = { keywords: ["BATTLELINE", "INFANTRY"], owner: "friendly" as const, distanceInches: 5 };
-  const inputs: Array<{ id: string; effect: unknown; context: Omit<EngineContext, "phase">; source?: DslInput["source"]; perspective?: DslInput["perspective"] }> = [
+  const inputs: Array<{ id: string; effect: unknown; context: Partial<EngineContext>; source?: DslInput["source"]; perspective?: DslInput["perspective"] }> = [
     { id: "rule-active-option", effect: gated(doctrine), context: { activeRules: [{ ability_id: "example-doctrines", option_id: "assault" }] } },
     { id: "rule-active-other-option", effect: gated(doctrine), context: { activeRules: [{ ability_id: "example-doctrines", option_id: "tactical" }] } },
     { id: "rule-active-id-by-option", effect: gated(ruleId), context: { activeRules: [{ ability_id: "example-rule", definition_id: "one" }] } },
@@ -181,15 +192,24 @@ export function canonicalScenarioCases() {
     { id: "split-nested-compare", effect: gated({ operator: "and", operands: [{ operator: "and", operands: [ruleId, sAboveT] }] }), context: { activeRules: ["example-rule"] } },
     { id: "split-unknown-rest", effect: gated({ operator: "and", operands: [ruleId, sAboveT] }), context: {} },
     { id: "attack-compare-unsupported-stat", effect: gated(attacksAbove), context: {} },
+    { id: "own-toughness-bound", effect: woundGated(tougherTarget), context: { phase: "fight", attackerToughness: 7 } },
+    { id: "own-toughness-unbound", effect: woundGated(tougherTarget), context: { phase: "fight" } },
+    { id: "own-toughness-defender-unbound", effect: defensive(enemyWeaker), context: { attackerToughness: 7 }, perspective: "target" },
   ];
-  return inputs.map((input) => dslExpectation({
+  return inputs.map((input) => withGates(dslExpectation({
     caseId: `${SCENARIO_CASE_PREFIX}${input.id}`,
     abilityId: source.abilityId,
     source: input.source ?? source,
     effect: input.effect,
-    context: { phase: "shooting", ...input.context },
+    context: { phase: input.context.phase ?? "shooting", ...input.context },
     perspective: input.perspective ?? "attacker",
-  }));
+  })));
+}
+
+/** Pin each applied buff's gate as well: these rows exist to fix how a condition becomes a gate. */
+function withGates<T extends DslInput & { expected: Record<string, unknown> }>(row: T): T {
+  const result = effectToBuffs(row.effect, row.source, row.context, row.perspective);
+  return { ...row, expected: { ...row.expected, applicableWhen: result.applied.map((buff) => buff.applicableWhen ?? null) } };
 }
 
 /**

@@ -1189,7 +1189,7 @@ func collectGatedBuffs(node any, source map[string]any, opts dslOpts, applicabil
 		if !ok {
 			return
 		}
-		app := conditionToApplicability(condition, opts.perspective)
+		app := conditionToApplicability(condition, opts.perspective, ownToughness(opts.context))
 		switch a := app.(type) {
 		case string:
 			if a == "gate" {
@@ -1814,7 +1814,7 @@ func translateConditional(node, source map[string]any, opts dslOpts, out *effect
 		return
 	}
 	if isWeaponScopedCondition(condition) {
-		if applicability, ok := conditionToApplicability(condition, opts.perspective).(map[string]any); ok {
+		if applicability, ok := conditionToApplicability(condition, opts.perspective, ownToughness(opts.context)).(map[string]any); ok {
 			walkWithApplicability(node["effect"], source, opts, applicability, out)
 			return
 		}
@@ -1837,7 +1837,7 @@ func translateConditional(node, source map[string]any, opts dslOpts, out *effect
 	// An `and` mixing attack-scoped predicates with unit predicates: the unit
 	// predicates decide whether the effect applies, the rest gates its buffs.
 	if metadata == nil {
-		if applicability, rest, ok := splitAttackScoped(condition, opts.perspective); ok {
+		if applicability, rest, ok := splitAttackScoped(condition, opts.perspective, ownToughness(opts.context)); ok {
 			switch evaluateCondition(rest, opts.context, opts.perspective, evalSource) {
 			case false:
 				return
@@ -1963,7 +1963,7 @@ func isWeaponScopedCondition(condition map[string]any) bool {
 	return ok && params["weapons"] != nil
 }
 
-func conditionToApplicability(condition map[string]any, perspective string) any {
+func conditionToApplicability(condition map[string]any, perspective string, ownToughness any) any {
 	if op, ok := condition["operator"].(string); ok {
 		if operands, ok := asList(condition["operands"]); ok {
 			if op == "not" {
@@ -1978,7 +1978,7 @@ func conditionToApplicability(condition map[string]any, perspective string) any 
 				if !ok {
 					return "context"
 				}
-				a := conditionToApplicability(operand, perspective)
+				a := conditionToApplicability(operand, perspective, ownToughness)
 				if a == "gate" {
 					continue
 				}
@@ -2020,7 +2020,11 @@ func conditionToApplicability(condition map[string]any, perspective string) any 
 			return map[string]any{"requiresAttackerKeyword": kw}
 		}
 	case "attack-compare":
-		if comparison := attackComparison(params); comparison != nil {
+		// The holder's own Toughness binds only when the ability belongs to the attacker.
+		if perspective != "attacker" {
+			ownToughness = nil
+		}
+		if comparison := attackComparison(params, ownToughness); comparison != nil {
 			return map[string]any{"attackComparisons": []any{comparison}}
 		}
 		return "context"

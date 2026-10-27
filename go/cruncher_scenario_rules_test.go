@@ -96,7 +96,7 @@ func TestAttackCompareParsesOnlyEngineSuppliedOperands(t *testing.T) {
 	parse := func(left, right map[string]any) any {
 		return conditionToApplicability(map[string]any{"type": "attack-compare", "parameters": map[string]any{
 			"left": left, "comparison": "lt", "right": right,
-		}}, "attacker")
+		}}, "attacker", nil)
 	}
 	T := map[string]any{"of": "defender", "stat": "T"}
 	if got := parse(map[string]any{"of": "attacker", "stat": "S"}, T); got == "context" {
@@ -269,5 +269,68 @@ func TestWithinNeighbourFlipsOwnerAcrossSides(t *testing.T) {
 	}
 	if got := matchesUnitFilter(filter, map[string]any{}, "target", "friendly"); got != nil {
 		t.Errorf("undeclared neighbours must be unknown, got %v", got)
+	}
+}
+
+func TestCombinedToughnessIsTheBodyguards(t *testing.T) {
+	unit := func(id, role string, toughness ...float64) *UnitView {
+		profiles := []any{}
+		for _, value := range toughness {
+			profiles = append(profiles, map[string]any{"T": value})
+		}
+		raw := map[string]any{"id": id, "profiles": profiles}
+		if role != "" {
+			raw["attachment_role"] = role
+		}
+		return &UnitView{Raw: raw}
+	}
+	leader := unit("captain", "leader", 6)
+	bodyguard := unit("squad", "", 4, 3)
+	if got, ok := combinedToughness([]*UnitView{leader, bodyguard}, nil); !ok || got != 4 {
+		t.Errorf("leader T6 over bodyguard T4/T3 = %v (%v), want 4", got, ok)
+	}
+	// The roles map wins over the datasheet: a datasheet leader fielded as the bodyguard counts.
+	roles := map[string]any{"captain": "bodyguard", "squad": "support"}
+	if got, ok := combinedToughness([]*UnitView{leader, bodyguard}, roles); !ok || got != 6 {
+		t.Errorf("roles override = %v (%v), want 6", got, ok)
+	}
+	// With no bodyguard, every unit counts.
+	if got, ok := combinedToughness([]*UnitView{leader, unit("ancient", "support", 7)}, nil); !ok || got != 7 {
+		t.Errorf("no bodyguard = %v (%v), want 7", got, ok)
+	}
+	if _, ok := combinedToughness([]*UnitView{unit("blank", "")}, nil); ok {
+		t.Error("a unit printing no Toughness must leave it absent")
+	}
+
+	// Real datasheets: a T6 Terminator Captain attached to a T5 Intercessor squad.
+	combined := EmbeddedDataset().combinedUnit(map[string]any{
+		"unitId": "intercessor-squad", "factionId": "adeptus-astartes",
+		"attachedUnitIds": []any{"captain-in-terminator-armour"},
+	})
+	if got, ok := combinedToughness(combined, nil); len(combined) != 2 || !ok || got != 5 {
+		t.Errorf("intercessors led by a terminator captain = %v (%v, %d units), want 5", got, ok, len(combined))
+	}
+}
+
+func TestAttackCompareBindsOnlyTheAttackersOwnToughness(t *testing.T) {
+	params := map[string]any{
+		"left": map[string]any{"of": "defender", "stat": "T"}, "comparison": "gt",
+		"right": map[string]any{"of": "attacker", "stat": "T"},
+	}
+	condition := map[string]any{"type": "attack-compare", "parameters": params}
+	bound, _ := asMap(getList(conditionToApplicability(condition, "attacker", 5.0).(map[string]any), "attackComparisons")[0])
+	if right, _ := asMap(bound["right"]); right["value"] != 5.0 {
+		t.Errorf("attacker perspective right = %#v, want {value: 5}", bound["right"])
+	}
+	unbound, _ := asMap(getList(conditionToApplicability(condition, "target", 5.0).(map[string]any), "attackComparisons")[0])
+	if right, _ := asMap(unbound["right"]); right["of"] != "attacker" || right["value"] != nil {
+		t.Errorf("target perspective right = %#v, want the attacker T operand", unbound["right"])
+	}
+	// A literal on the left stays unsupported even with a bound Toughness.
+	literal := map[string]any{"type": "attack-compare", "parameters": map[string]any{
+		"left": map[string]any{"value": 4.0}, "comparison": "gt", "right": map[string]any{"of": "attacker", "stat": "T"},
+	}}
+	if got := conditionToApplicability(literal, "attacker", 5.0); got != "context" {
+		t.Errorf("literal left = %#v, want context", got)
 	}
 }

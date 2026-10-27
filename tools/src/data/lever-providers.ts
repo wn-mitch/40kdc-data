@@ -30,6 +30,20 @@ export function sharedKeywordsLower(units: readonly UnitView[]): string[] {
 }
 
 /**
+ * The Toughness of a (combined) unit: its Bodyguard's when Leaders or Support units are attached,
+ * as for an attack against it, taking the highest model's. `roles` (unit id → role) wins over the
+ * datasheet's own `attachment_role`. Undefined when no unit prints a Toughness.
+ */
+export function combinedToughness(units: readonly UnitView[], roles?: Readonly<Record<string, string>>): number | undefined {
+  const role = (unit: UnitView) => roles?.[unit.id] ?? unit.raw.attachment_role;
+  const bodyguard = units.filter((unit) => role(unit) !== "leader" && role(unit) !== "support");
+  const toughness = (bodyguard.length > 0 ? bodyguard : units)
+    .flatMap((unit) => (unit.raw.profiles ?? []).map((profile) => profile.T))
+    .filter((t): t is number => typeof t === "number");
+  return toughness.length > 0 ? Math.max(...toughness) : undefined;
+}
+
+/**
  * Whether `bearer` can take `enhancement` under the Select Enhancements rules the roster validator
  * enforces: a CHARACTER (or an Upgrade), not an EPIC HERO, with a model that may take
  * Enhancements, meeting one eligibility group (its keywords, or its datasheet and keywords) and

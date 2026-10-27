@@ -266,6 +266,12 @@ func (ds *Dataset) collectBuffs(input, context map[string]any, perspective strin
 	if perspective == "attacker" && ctx["attackerUnitId"] == nil {
 		ctx["attackerUnitId"] = getStr(input, "unitId")
 	}
+	if perspective == "attacker" && ctx["attackerToughness"] == nil {
+		roles, _ := getMap(input, "attachmentRoles")
+		if toughness, ok := combinedToughness(ds.combinedUnit(input), roles); ok {
+			ctx["attackerToughness"] = toughness
+		}
+	}
 	if perspective == "target" && ctx["targetUnitId"] == nil {
 		ctx["targetUnitId"] = getStr(input, "unitId")
 	}
@@ -322,6 +328,73 @@ func (ds *Dataset) collectBuffs(input, context map[string]any, perspective strin
 		out = append(out, ability.describeRatedBuffs(bs, ctx, perspective, rating, hasRating).applied...)
 	}
 	return out
+}
+
+// combinedUnit is the input unit (faction-scoped when the input names a
+// faction) followed by its attached units, resolved within the same faction.
+func (ds *Dataset) combinedUnit(input map[string]any) []*UnitView {
+	var unit *UnitView
+	found := false
+	factionID := getStr(input, "factionId")
+	if factionID != "" {
+		unit, found = ds.Units.GetInFaction(getStr(input, "unitId"), factionID)
+	}
+	if !found {
+		unit, found = ds.Units.GetAny(getStr(input, "unitId"))
+	}
+	combined := []*UnitView{}
+	if found {
+		combined = append(combined, unit)
+		if factionID == "" {
+			factionID = unit.FactionID()
+		}
+	}
+	for _, id := range getStrList(input, "attachedUnitIds") {
+		member, ok := (*UnitView)(nil), false
+		if factionID != "" {
+			member, ok = ds.Units.GetInFaction(id, factionID)
+		}
+		if !ok {
+			member, ok = ds.Units.GetAny(id)
+		}
+		if ok {
+			combined = append(combined, member)
+		}
+	}
+	return combined
+}
+
+// combinedToughness is the Toughness of a (combined) unit: its Bodyguard's
+// when Leaders or Support units are attached, as for an attack against it,
+// taking the highest model's. roles (unit id -> role) wins over the
+// datasheet's own attachment_role. ok is false when no unit prints a
+// Toughness.
+func combinedToughness(units []*UnitView, roles map[string]any) (float64, bool) {
+	role := func(unit *UnitView) string {
+		if r, ok := roles[unit.ID()].(string); ok {
+			return r
+		}
+		return getStr(unit.Raw, "attachment_role")
+	}
+	bodyguard := []*UnitView{}
+	for _, unit := range units {
+		if r := role(unit); r != "leader" && r != "support" {
+			bodyguard = append(bodyguard, unit)
+		}
+	}
+	if len(bodyguard) == 0 {
+		bodyguard = units
+	}
+	highest, found := 0.0, false
+	for _, unit := range bodyguard {
+		for _, profileAny := range getList(unit.Raw, "profiles") {
+			profile, _ := asMap(profileAny)
+			if t, ok := profile["T"].(float64); ok && (!found || t > highest) {
+				highest, found = t, true
+			}
+		}
+	}
+	return highest, found
 }
 
 func (ds *Dataset) buffsFor(input, context map[string]any) []any {

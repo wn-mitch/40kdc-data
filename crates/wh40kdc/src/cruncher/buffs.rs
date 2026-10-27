@@ -17,7 +17,7 @@ use crate::Phase;
 pub use super::attack_compare::{
     AttackComparison, AttackOperand, AttackSide, AttackStatOperand, Comparison, StatReduce,
 };
-pub use super::context::{AttachmentRole, EngineContext};
+pub use super::context::{combined_toughness, AttachmentRole, EngineContext};
 use super::gates::live_buffs;
 pub use super::resolved::{
     CappedMod, CoverState, CritThresholds, ExtraKeywordEntry, FeelNoPainState, HighestMod,

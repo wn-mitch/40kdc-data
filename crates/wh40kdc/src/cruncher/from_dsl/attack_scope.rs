@@ -42,6 +42,7 @@ pub(super) fn is_weapon_scoped_condition(condition: &Obj) -> bool {
 pub(super) fn split_attack_scoped(
     condition: &Obj,
     perspective: TranslationPerspective,
+    own_toughness: Option<f64>,
 ) -> Option<(Obj, Obj)> {
     fn flatten<'a>(operands: &'a [Value], into: &mut Vec<&'a Value>) {
         for operand in operands {
@@ -66,7 +67,7 @@ pub(super) fn split_attack_scoped(
             .filter(|o| is_weapon_scoped_condition(o))
         {
             None => rest.push((*operand).clone()),
-            Some(scoped) => match condition_to_applicability(scoped, perspective) {
+            Some(scoped) => match condition_to_applicability(scoped, perspective, own_toughness) {
                 App::When(gate) => applicability = combine(&applicability, &gate),
                 App::Gate | App::Context => return None,
             },
@@ -146,8 +147,10 @@ fn attack_operand(value: Option<&Value>) -> Option<Value> {
 }
 
 /// The canonical `attack-compare` parameters as a buff gate, or `None` when the engine cannot
-/// evaluate them.
-pub(super) fn attack_comparison(params: Option<&Obj>) -> Option<Value> {
+/// evaluate them. `own_toughness` is the attacking unit's Toughness when the translation knows it
+/// (the ability belongs to the attacker): the gate then carries it as a value, so it holds on any
+/// crunch whatever context the caller passes.
+pub(super) fn attack_comparison(params: Option<&Obj>, own_toughness: Option<f64>) -> Option<Value> {
     let params = params?;
     if params
         .keys()
@@ -164,5 +167,14 @@ pub(super) fn attack_comparison(params: Option<&Obj>) -> Option<Value> {
     if !matches!(comparison, "gt" | "gte" | "lt" | "lte" | "eq") {
         return None;
     }
-    Some(json!({ "left": left, "comparison": comparison, "right": right }))
+    let bind = |operand: Value| match own_toughness {
+        Some(t)
+            if operand.get("of") == Some(&json!("attacker"))
+                && operand.get("stat") == Some(&json!("T")) =>
+        {
+            json!({ "value": t })
+        }
+        _ => operand,
+    };
+    Some(json!({ "left": bind(left), "comparison": comparison, "right": bind(right) }))
 }

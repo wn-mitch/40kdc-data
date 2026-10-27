@@ -72,6 +72,25 @@ def combined_keywords_lower(units: list[UnitView]) -> list[str]:
     return list(out)
 
 
+def combined_toughness(units: list[UnitView], roles: dict[str, Any] | None = None) -> Any:
+    """The Toughness of a (combined) unit: its Bodyguard's when Leaders or Support units are
+    attached, as for an attack against it, taking the highest model's. ``roles`` (unit id → role)
+    wins over the datasheet's own ``attachment_role``. None when no unit prints a Toughness."""
+
+    def role(unit: UnitView) -> Any:
+        given = roles.get(unit.id) if isinstance(roles, dict) else None
+        return given if given is not None else unit.raw.get("attachment_role")
+
+    bodyguard = [unit for unit in units if role(unit) not in ("leader", "support")]
+    toughness = [
+        profile.get("T")
+        for unit in (bodyguard or units)
+        for profile in unit.raw.get("profiles") or []
+    ]
+    numbers = [t for t in toughness if isinstance(t, (int, float)) and not isinstance(t, bool)]
+    return max(numbers) if numbers else None
+
+
 def shared_keywords_lower(units: list[UnitView]) -> list[str]:
     """Lower-cased keywords and faction keywords every one of the units carries.
 

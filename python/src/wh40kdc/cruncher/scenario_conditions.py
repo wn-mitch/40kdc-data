@@ -96,9 +96,11 @@ def _attack_operand(value: Any) -> dict[str, Any] | None:
     )
 
 
-def attack_comparison(params: Any) -> dict[str, Any] | None:
+def attack_comparison(params: Any, own_toughness: Any = None) -> dict[str, Any] | None:
     """Canonical ``attack-compare`` parameters as a gate entry, or None when the engine cannot
-    evaluate them."""
+    evaluate them. ``own_toughness`` is the attacking unit's Toughness when the translation knows
+    it (the ability belongs to the attacker): the gate then carries it as a value, so it holds on
+    any crunch whatever context the caller passes."""
     if not _is_object(params) or any(k not in ("left", "comparison", "right") for k in params):
         return None
     left = _attack_operand(params.get("left"))
@@ -108,7 +110,18 @@ def attack_comparison(params: Any) -> dict[str, Any] | None:
         return None
     if comparison not in _COMPARISONS:
         return None
-    return {"left": left, "comparison": comparison, "right": right}
+
+    def bind(operand: dict[str, Any]) -> dict[str, Any]:
+        if (
+            own_toughness is not None
+            and "value" not in operand
+            and operand.get("of") == "attacker"
+            and operand.get("stat") == "T"
+        ):
+            return {"value": own_toughness}
+        return operand
+
+    return {"left": bind(left), "comparison": comparison, "right": bind(right)}
 
 
 def _attack_stat(operand: dict[str, Any], ctx: dict[str, Any]) -> Any:

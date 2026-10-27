@@ -1064,7 +1064,10 @@
           }
         ],
         "unsupportedReasons": [],
-        "activatable": []
+        "activatable": [],
+        "applicableWhen": [
+          null
+        ]
       }
     },
     {
@@ -1109,7 +1112,75 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
-        "activatable": []
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/own-toughness-defender-unbound",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "attack-compare",
+          "parameters": {
+            "left": {
+              "of": "attacker",
+              "stat": "T"
+            },
+            "comparison": "lt",
+            "right": {
+              "of": "defender",
+              "stat": "T"
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "attacker",
+          "modifier": {
+            "roll": "hit",
+            "operation": "subtract",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerToughness": 7
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": -1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": [
+          {
+            "attackComparisons": [
+              {
+                "left": {
+                  "of": "attacker",
+                  "stat": "T"
+                },
+                "comparison": "lt",
+                "right": {
+                  "of": "defender",
+                  "stat": "T"
+                }
+              }
+            ]
+          }
+        ]
       }
     }
   ]

@@ -53,7 +53,8 @@ pub enum Comparison {
 /// The canonical `attack-compare` condition: `left` `comparison` `right`.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct AttackComparison {
-    pub left: AttackStatOperand,
+    /// A value only where the translation bound the ability holder's own Toughness.
+    pub left: AttackOperand,
     pub comparison: Comparison,
     pub right: AttackOperand,
 }
@@ -77,11 +78,11 @@ fn attack_stat(operand: &AttackStatOperand, ctx: &EngineContext) -> Option<f64> 
 
 /// Whether an attack comparison holds; a missing characteristic does not establish it.
 pub fn attack_comparison_holds(comparison: &AttackComparison, ctx: &EngineContext) -> bool {
-    let right = match &comparison.right {
+    let side = |operand: &AttackOperand| match operand {
         AttackOperand::Stat(operand) => attack_stat(operand, ctx),
         AttackOperand::Value { value } => Some(*value),
     };
-    let (Some(left), Some(right)) = (attack_stat(&comparison.left, ctx), right) else {
+    let (Some(left), Some(right)) = (side(&comparison.left), side(&comparison.right)) else {
         return false;
     };
     match comparison.comparison {

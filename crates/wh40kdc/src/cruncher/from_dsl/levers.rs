@@ -287,7 +287,9 @@ pub(super) fn conditional(node: &Obj, opts: &WalkOpts, out: &mut Out) {
         return;
     };
     if is_weapon_scoped_condition(condition) {
-        if let App::When(applicability) = condition_to_applicability(condition, opts.perspective) {
+        if let App::When(applicability) =
+            condition_to_applicability(condition, opts.perspective, opts.context.attacker_toughness)
+        {
             walk_gated(
                 node.get("effect").unwrap_or(&Value::Null),
                 &applicability,
@@ -309,7 +311,9 @@ pub(super) fn conditional(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     // An attack-scoped gate beside predicates on the units: the units decide whether the effect
     // applies at all, and the attack-scoped gate rides on its buffs.
     if !synthetic_timing_gate(node) {
-        if let Some((applicability, rest)) = split_attack_scoped(condition, opts.perspective) {
+        if let Some((applicability, rest)) =
+            split_attack_scoped(condition, opts.perspective, opts.context.attacker_toughness)
+        {
             match evaluate_condition(&rest, opts) {
                 Some(true) => {
                     walk_gated(
@@ -720,7 +724,11 @@ fn collect_gated_buffs(
                 return;
             };
             let effect = n.get("effect").unwrap_or(&Value::Null);
-            match condition_to_applicability(condition, opts.perspective) {
+            match condition_to_applicability(
+                condition,
+                opts.perspective,
+                opts.context.attacker_toughness,
+            ) {
                 // A nested timing gate: opting into the activation satisfies it.
                 App::Gate => collect_gated_buffs(effect, opts, app, out_buffs, diagnostics),
                 // No declarative gate: descend only when the context says it is active.

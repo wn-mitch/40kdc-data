@@ -141,6 +141,20 @@ fn run_dsl_corpus(filename: &str) {
                 json!(reasons)
             ));
         }
+        // Each applied buff's gate (null when ungated), pinned on the rows that carry it.
+        if let Some(want) = expected.get("applicableWhen") {
+            let got: Vec<Value> = result
+                .applied
+                .iter()
+                .map(|b| serde_json::to_value(&b.applicable_when).unwrap())
+                .collect();
+            if norm(&json!(got)) != norm(want) {
+                failures.push(format!(
+                    "{label} applicableWhen\n  want: {want}\n  got:  {}",
+                    json!(got)
+                ));
+            }
+        }
         if let Some(want) = expected.get("activatable") {
             let got: Vec<Value> = result
                 .activatable

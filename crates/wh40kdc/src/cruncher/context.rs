@@ -266,3 +266,66 @@ impl EngineContext {
         }
     }
 }
+
+/// The Toughness of a (combined) unit: its Bodyguard's when Leaders or Support units are attached,
+/// as for an attack against it, taking the highest model's. `roles` (unit id → role) wins over the
+/// datasheet's own `attachment_role`. `None` when no unit prints a Toughness. Mirrors
+/// `combinedToughness` in `tools/src/data/lever-providers.ts`; a caller sets
+/// [`EngineContext::attacker_toughness`] from it.
+pub fn combined_toughness(
+    units: &[&crate::Unit],
+    roles: Option<&BTreeMap<String, AttachmentRole>>,
+) -> Option<f64> {
+    use crate::UnitAttachmentRole;
+    let attached = |unit: &crate::Unit| match roles.and_then(|roles| roles.get(unit.id.as_str())) {
+        Some(role) => *role == AttachmentRole::Leader,
+        None => matches!(
+            unit.attachment_role,
+            Some(UnitAttachmentRole::Leader | UnitAttachmentRole::Support)
+        ),
+    };
+    let bodyguard: Vec<&crate::Unit> = units.iter().copied().filter(|u| !attached(u)).collect();
+    let pool = if bodyguard.is_empty() {
+        units
+    } else {
+        &bodyguard[..]
+    };
+    pool.iter()
+        .flat_map(|unit| unit.profiles.iter().map(|profile| profile.t.get() as f64))
+        .reduce(f64::max)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::data::Dataset;
+
+    #[test]
+    fn combined_toughness_reads_the_bodyguard_not_a_tougher_leader() {
+        let ds = Dataset::embedded();
+        // A T5 Leader attached to a T3 Bodyguard.
+        let leader = ds.units.get_any("junith-eruita").expect("leader");
+        let bodyguard = ds.units.get_any("battle-sisters-squad").expect("bodyguard");
+        assert_eq!(leader.profiles.iter().map(|p| p.t.get()).max(), Some(5));
+        assert_eq!(bodyguard.profiles.iter().map(|p| p.t.get()).max(), Some(3));
+        let units = [leader, bodyguard];
+
+        // The datasheet's attachment_role marks the Leader.
+        assert_eq!(combined_toughness(&units, None), Some(3.0));
+        // The roster's roles agree.
+        let roles = BTreeMap::from([
+            ("junith-eruita".to_string(), AttachmentRole::Leader),
+            (
+                "battle-sisters-squad".to_string(),
+                AttachmentRole::Bodyguard,
+            ),
+        ]);
+        assert_eq!(combined_toughness(&units, Some(&roles)), Some(3.0));
+        // The roles map wins over the datasheet: with the Leader recorded as Bodyguard, its T counts.
+        let roles = BTreeMap::from([("junith-eruita".to_string(), AttachmentRole::Bodyguard)]);
+        assert_eq!(combined_toughness(&units, Some(&roles)), Some(5.0));
+        // No Bodyguard at all: every unit counts.
+        assert_eq!(combined_toughness(&[leader], None), Some(5.0));
+        assert_eq!(combined_toughness(&[], None), None);
+    }
+}

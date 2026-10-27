@@ -156,7 +156,7 @@ export type AttackStatOperand = { of: "attacker" | "defender"; stat: string; red
 
 /** The canonical `attack-compare` condition: `left` `comparison` `right`. */
 export type AttackComparison = {
-  left: AttackStatOperand;
+  left: AttackStatOperand | { value: number };
   comparison: "gt" | "gte" | "lt" | "lte" | "eq";
   right: AttackStatOperand | { value: number };
 };

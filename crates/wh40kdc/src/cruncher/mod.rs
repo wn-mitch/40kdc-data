@@ -51,8 +51,9 @@ pub use allocation::{allocate, allocate_model, AllocationError, AllocationOutput
 pub use attack_compare::attack_comparison_holds;
 pub use attribution::{attribute_stages, AttributedStage, StageLift};
 pub use buffs::{
-    resolve_buffs, AbilityKind, AttachmentRole, Buff, BuffApplicability, BuffContribution,
-    BuffSource, EngineContext, RerollSubset, ResolvedModifiers, RollKind, WeaponKeywordRef,
+    combined_toughness, resolve_buffs, AbilityKind, AttachmentRole, Buff, BuffApplicability,
+    BuffContribution, BuffSource, EngineContext, RerollSubset, ResolvedModifiers, RollKind,
+    WeaponKeywordRef,
 };
 pub use buffs::{AttackComparison, AttackOperand, AttackSide, AttackStatOperand, Comparison};
 pub use engine::{

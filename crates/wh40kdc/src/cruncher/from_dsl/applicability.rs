@@ -57,6 +57,7 @@ fn negated_weapon_applicability(operands: &[Value]) -> App {
 pub(super) fn condition_to_applicability(
     condition: &Obj,
     perspective: super::TranslationPerspective,
+    own_toughness: Option<f64>,
 ) -> App {
     if condition.get("operator").is_some_and(Value::is_string) {
         if let Some(operands) = condition.get("operands").and_then(Value::as_array) {
@@ -71,7 +72,7 @@ pub(super) fn condition_to_applicability(
                 let Some(o) = operand.as_object() else {
                     return App::Context;
                 };
-                match condition_to_applicability(o, perspective) {
+                match condition_to_applicability(o, perspective, own_toughness) {
                     App::Gate => {}
                     App::Context => return App::Context,
                     App::When(a) => merged = combine(&merged, &a),
@@ -104,7 +105,10 @@ pub(super) fn condition_to_applicability(
                 App::Context
             }
         }
-        Some("attack-compare") => match super::attack_scope::attack_comparison(params) {
+        Some("attack-compare") => match super::attack_scope::attack_comparison(
+            params,
+            own_toughness.filter(|_| perspective == super::TranslationPerspective::Attacker),
+        ) {
             Some(comparison) => when(json!({ "attackComparisons": [comparison] })),
             None => App::Context,
         },
