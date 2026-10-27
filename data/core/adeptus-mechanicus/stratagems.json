@@ -1878,7 +1878,7 @@
     "phases": [
       "movement"
     ],
-    "player_turn": "either",
+    "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
     "ability_id": "overloaded-safeguards-lords-of-the-forge-adeptus-mechanicus",

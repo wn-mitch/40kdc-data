@@ -568,6 +568,9 @@
         "namespace": "mfm",
         "id": "94c08bd8-7e2a-4ffc-8377-1243a0d091fc"
       }
+    ],
+    "exclusion_keywords": [
+      "Aircraft"
     ]
   },
   {
@@ -912,7 +915,8 @@
     "max_targets": 1,
     "keyword_restriction_groups": [
       [
-        "Big Mek"
+        "Big Mek",
+        "Infantry"
       ],
       [
         "Infantry",

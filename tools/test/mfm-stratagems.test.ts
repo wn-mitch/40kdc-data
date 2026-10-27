@@ -60,6 +60,27 @@ function fixture(): MfmDump {
   });
 }
 
+describe("rules-text player_turn override", () => {
+  it("follows the card's own WHEN where the dump key says either player", () => {
+    const base = fixture();
+    const dump = new MfmDump({
+      data: {
+        ...base.tables,
+        stratagem: [{
+          id: "55efd318-ef65-4419-b499-d9dadbd42886",
+          key: "eitherPlayer",
+          category: null,
+          cpCost: "1",
+          detachmentId: "d1",
+          localisations: { en: { name: "Fabricated Safeguards", whenRules: "Your Movement phase." } },
+        }],
+      },
+    } as never);
+    const [canon] = [...buildStratCanon(dump).values()];
+    expect(canon!.player_turn).toBe("your-turn");
+  });
+});
+
 describe("stratagem canon derivation (synthetic)", () => {
   const canon = buildStratCanon(fixture());
 

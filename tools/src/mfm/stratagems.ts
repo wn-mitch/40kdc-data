@@ -57,6 +57,15 @@ type PlayerTurn = "your-turn" | "opponent-turn" | "either";
 type StratType = "battle-tactic" | "strategic-ploy" | "epic-deed" | "wargear";
 type StratCategory = "core" | "detachment";
 
+/**
+ * Stratagems whose dump `key` disagrees with the dump's own whenRules for the same record; core
+ * follows the rules text, one entry per stratagem, keyed by the MFM stratagem id.
+ */
+export const RULES_TEXT_PLAYER_TURN: Readonly<Record<string, PlayerTurn>> = {
+  // Overloaded Safeguards: key eitherPlayer (and all five phases in stratagem_phase); the card prints "Your Movement phase".
+  "55efd318-ef65-4419-b499-d9dadbd42886": "your-turn",
+};
+
 /** Dump `stratagem.key` → the repo `player_turn` enum. A first-class column. */
 const KEY_TO_TURN: Record<string, PlayerTurn> = {
   yourTurn: "your-turn",
@@ -184,7 +193,7 @@ export function buildStratCanon(dump: MfmDump): Map<string, StratagemCanon> {
     m.set(id, {
       cp_cost: Number.isFinite(cp as number) ? (cp as number) : null,
       phases_review: phases,
-      player_turn: overridden ? "either" : keyTurn,
+      player_turn: RULES_TEXT_PLAYER_TURN[s.id] ?? (overridden ? "either" : keyTurn),
       ...(overridden ? { turn_key_overridden: overridden } : {}),
       type: (row.category && CATEGORY_TO_TYPE[row.category]) || null,
       category: row.detachmentId ? "detachment" : "core",

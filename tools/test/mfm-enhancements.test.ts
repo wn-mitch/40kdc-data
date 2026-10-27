@@ -241,6 +241,53 @@ describe("buildEnhFieldCanon", () => {
   });
 });
 
+describe("rules-text eligibility overrides", () => {
+  // Fabricated rows under the two MFM ids the overrides key on; names and keywords are the overridden labels.
+  function overrideDump(): MfmDump {
+    const base = fieldsDump();
+    return new MfmDump({
+      metadata: { data_version: 963 },
+      data: {
+        ...base.tables,
+        keyword: [
+          { id: "k-inf", localisations: { en: { name: "Infantry" } } },
+          { id: "k-mek", localisations: { en: { name: "Big Mek" } } },
+          { id: "k-boss", localisations: { en: { name: "Warboss" } } },
+          { id: "k-sf", localisations: { en: { name: "Speed Freeks" } } },
+        ],
+        enhancement: [
+          { id: "2de8b6d3-68fc-4c7b-a499-0bff89ab1e06", detachmentId: "det", enhancementType: "miniature", limit: 1, basePointsCost: 20, localisations: { en: { name: "Kommanda Relic" } } },
+          { id: "94c08bd8-7e2a-4ffc-8377-1243a0d091fc", detachmentId: "det", enhancementType: "upgrade", limit: 3, basePointsCost: 10, localisations: { en: { name: "Gubbinz Relic" } } },
+        ],
+        enhancement_required_keyword_group: [
+          { id: "g-k1", enhancementId: "2de8b6d3-68fc-4c7b-a499-0bff89ab1e06", datasheetId: null },
+          { id: "g-k2", enhancementId: "2de8b6d3-68fc-4c7b-a499-0bff89ab1e06", datasheetId: null },
+          { id: "g-s1", enhancementId: "94c08bd8-7e2a-4ffc-8377-1243a0d091fc", datasheetId: null },
+        ],
+        enhancement_required_keyword_group_keyword: [
+          { enhancementRequiredKeywordGroupId: "g-k1", keywordId: "k-mek" },
+          { enhancementRequiredKeywordGroupId: "g-k2", keywordId: "k-inf" },
+          { enhancementRequiredKeywordGroupId: "g-k2", keywordId: "k-boss" },
+          { enhancementRequiredKeywordGroupId: "g-s1", keywordId: "k-sf" },
+        ],
+        enhancement_required_keyword_group_faction_keyword: [],
+        enhancement_excluded_keyword: [],
+      },
+    });
+  }
+
+  it("narrows the bare Big Mek group to Big Mek Infantry, as the card prints", () => {
+    const [kommanda] = [...buildEnhFieldCanon(overrideDump(), units).values()].filter((f) => f.keyword_restriction_groups?.flat().includes("Warboss"));
+    expect(kommanda!.keyword_restriction_groups).toEqual([["Big Mek", "Infantry"], ["Infantry", "Warboss"]]);
+  });
+
+  it("adds the Aircraft exclusion the card prints", () => {
+    const [gubbinz] = [...buildEnhFieldCanon(overrideDump(), units).values()].filter((f) => f.upgrade_tag);
+    expect(gubbinz!.keyword_restrictions).toEqual(["Speed Freeks"]);
+    expect(gubbinz!.exclusion_keywords).toEqual(["Aircraft"]);
+  });
+});
+
 describe("authoritative enhancement eligibility", () => {
   it("replaces contradictory stale fields with the single source group", () => {
     const fields = buildEnhFieldCanon(fieldsDump(), units).get("plain-relic-chorus-of-condemnation-adepta-sororitas")!;

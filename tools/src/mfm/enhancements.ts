@@ -31,6 +31,7 @@ import {
   type DatasheetUnitResolver,
   sameDatasheetGroups,
 } from "./enhancement-datasheets.js";
+import { RULES_TEXT_ELIGIBILITY } from "./enhancement-overrides.js";
 
 
 
@@ -362,17 +363,21 @@ export function buildEnhFieldCanon(dump: MfmDump, unitIdOf: DatasheetUnitResolve
       }
     }
 
+    // The dump's own rules text wins over its eligibility rows where the two disagree.
+    const override = RULES_TEXT_ELIGIBILITY[e.id];
+    const keywordGroups = override?.keyword_restriction_groups ?? distinctGroupSets;
+    const keywordUnion = override?.keyword_restriction_groups ? [...new Set(keywordGroups.flat())].sort((a, b) => a.localeCompare(b)) : union;
     out.set(id, {
       upgrade_tag: e.enhancementType === "upgrade",
       max_targets: typeof e.limit === "number" ? e.limit : 1,
-      exclusion_keywords,
-      keyword_restrictions: union.length ? union : null,
-      keyword_restriction_groups: distinctGroupSets.length ? distinctGroupSets : null,
+      exclusion_keywords: override?.exclusion_keywords ?? exclusion_keywords,
+      keyword_restrictions: keywordUnion.length ? keywordUnion : null,
+      keyword_restriction_groups: keywordGroups.length ? keywordGroups : null,
       datasheet_restriction_groups: canonicalDatasheetGroups(datasheetGroups),
       attachment_bodyguard_ids: attachmentBodyguardIds.size
         ? [...attachmentBodyguardIds].sort((a, b) => a.localeCompare(b))
         : null,
-      keywordRestrictionsAmbiguous: distinctGroupSets.length > 1,
+      keywordRestrictionsAmbiguous: keywordGroups.length > 1,
       unresolvedKeywordIds: [...new Set(unresolved)],
     });
   }
