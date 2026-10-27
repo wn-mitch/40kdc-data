@@ -167,15 +167,15 @@ def ability_levers(
         lever = lever_from_activatable(act, f"{ability.name} — {act['label']}", source)
         if requires_lever:
             lever["requiresLever"] = requires_lever
-        group = act.get("group")
-        if group and not any(g["id"] == group["id"] for g in out.groups):
-            out.groups.append(
-                {
-                    **group,
-                    "label": ability.name,
-                    "abilityId": ability.id,
-                }
-            )
+        for group in [*([act["group"]] if act.get("group") else []), *(act.get("groups") or [])]:
+            if not any(g["id"] == group["id"] for g in out.groups):
+                out.groups.append(
+                    {
+                        **group,
+                        "label": ability.name,
+                        "abilityId": ability.id,
+                    }
+                )
         if act.get("capRaise"):
             out.raise_cap(lever, act["capRaise"])
         if act.get("requiresOption"):
@@ -199,6 +199,7 @@ def ability_levers(
             continue
         levers.extend(granted["buffs"])
         out.groups.extend(granted["groups"])
+        out.cap_raises.update(granted["capRaises"])
         out.option_requirements.update(granted["optionRequirements"])
 
     if gate:
@@ -297,7 +298,8 @@ def enhancement_levers(
 
 
 def lever_from_activatable(act: dict[str, Any], label: str, source: dict[str, Any]) -> Lever:
-    """A lever from a translator activatable; ``group`` keeps the activatable's pool id."""
+    """A lever from a translator activatable, keeping its primary pool and every intersecting
+    parent activation pool."""
     lever: Lever = {
         "id": act["id"],
         "label": label,
@@ -307,6 +309,8 @@ def lever_from_activatable(act: dict[str, Any], label: str, source: dict[str, An
     }
     if act.get("group"):
         lever["group"] = act["group"]["id"]
+    if act.get("groups"):
+        lever["groups"] = [group["id"] for group in act["groups"]]
     if act.get("requires") is not None:
         lever["requires"] = act["requires"]
     return lever
@@ -362,6 +366,7 @@ def granted_record_levers(
     translation = record.describe_buffs(held, ctx, "attacker")
     buffs: list[Lever] = []
     groups: dict[str, dict[str, Any]] = {}
+    cap_raises: dict[int, tuple[Lever, dict[str, Any]]] = {}
     option_requirements: dict[int, tuple[Lever, dict[str, str]]] = {}
     prefix = f"{provider['abilityId']}>"
     requires_lever = provider.get("requiresLever")
@@ -380,25 +385,31 @@ def granted_record_levers(
     for act in translation["activatable"]:
         lever = lever_from_activatable(act, f"{record.name} — {act['label']}", provider["source"])
         lever["id"] = f"{prefix}{act['id']}"
-        if act.get("group"):
-            group = f"{prefix}{act['group']['id']}"
+        for parent in [*([act["group"]] if act.get("group") else []), *(act.get("groups") or [])]:
+            group = f"{prefix}{parent['id']}"
             groups.setdefault(
                 group,
                 {
-                    **act["group"],
+                    **parent,
                     "id": group,
                     "label": record.name,
                     "abilityId": record.id,
                 },
             )
-            lever["group"] = group
+        if act.get("group"):
+            lever["group"] = f"{prefix}{act['group']['id']}"
+        if act.get("groups"):
+            lever["groups"] = [f"{prefix}{parent['id']}" for parent in act["groups"]]
         lever.update(dependency)
         buffs.append(lever)
+        if act.get("capRaise"):
+            cap_raises[id(lever)] = (lever, act["capRaise"])
         if act.get("requiresOption"):
             option_requirements[id(lever)] = (lever, act["requiresOption"])
     return {
         "buffs": buffs,
         "groups": list(groups.values()),
+        "capRaises": cap_raises,
         "optionRequirements": option_requirements,
     }
 

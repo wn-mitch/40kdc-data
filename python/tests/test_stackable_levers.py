@@ -329,6 +329,60 @@ def test_boss_selection_stays_off_the_mob_it_leads() -> None:
     assert "fix-pick-a-mob#selected" not in levers
 
 
+def _with_granted_effect(wrap: Any) -> Dataset:
+    raw = army_raw()
+    raw["abilities"] = [
+        {**record, **wrap(record)} if record["ability_id"] == "fix-granted" else record
+        for record in raw["abilities"]
+    ]
+    return Dataset(raw)
+
+
+def test_granted_record_keeps_its_intersecting_usage_pools() -> None:
+    ds = _with_granted_effect(lambda record: {"usage": {"frequency": "n-per-battle", "count": 1}})
+    result = ds.stackable_buffs_for(MOB, {"phase": "fight"})
+    levers = {b["id"]: b for b in result["buffs"]}
+    lever = levers["fix-grant-rule>fix-granted#stable-lethal"]
+    assert lever["group"] == "fix-grant-rule>fix-granted?stance"
+    assert "fix-grant-rule>fix-granted?usage" in lever["groups"]
+    assert {
+        "id": "fix-grant-rule>fix-granted?usage",
+        "abilityId": "fix-granted",
+        "label": "Fix Granted",
+        "maxActivations": 1,
+    } in result["groups"]
+
+
+def test_granted_record_keeps_its_capacity_providers() -> None:
+    option = {"ability_id": "fix-granted", "option_id": "stable-lethal"}
+    ds = _with_granted_effect(
+        lambda record: {
+            "effect": {
+                "type": "sequence",
+                "steps": [
+                    record["effect"],
+                    {
+                        "type": "stance-selection-capacity",
+                        "modifier": {
+                            "ability_id": "fix-granted",
+                            "additional_selections": 1,
+                            "allocation": "choose-one-option",
+                            "options": [option],
+                        },
+                    },
+                ],
+            }
+        }
+    )
+    levers = {b["id"]: b for b in ds.stackable_buffs_for(MOB, {"phase": "fight"})["buffs"]}
+    assert levers["fix-grant-rule>fix-granted#cap"]["raisesCap"] == {
+        "group": "fix-grant-rule>fix-granted?stance",
+        "by": 1,
+        "allocation": "choose-one-option",
+        "options": [option],
+    }
+
+
 def test_rule_gated_on_a_stance_option_binds_to_that_options_lever() -> None:
     """A buffless option gets its own lever, so the rule gated on it still has one to require."""
 
